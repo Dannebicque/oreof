@@ -11,13 +11,48 @@
 <div class="row justify-content-center">
     <div class="col-8">
         {% if parcoursArray|length > 0 %}
-            <ul>
                 {% for p in parcoursArray %}
-                    <li>
-                        ID : {{ p.id }} - Sigle : {{ p.sigle }}
-                    </li>
+                    <div class="col-12 border border-primary rounded my-4">
+                        <div class="row p-2 mt-1">
+                            <div class="col-8">
+                                <a 
+                                    href="{{ path('app_parcours_show', {id: p.id}) }}"
+                                    class="text-primary font-weight-bold"
+                                >
+                                    {{ p.libelle }}
+                                </a>
+                            </div>
+                            <div class="col-4">
+                                <span class="text-end">
+                                    Sigle : {{ p.sigle }}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="row p-2 mt-2">
+                            {% if 'objectifsParcours' in resultArrayBadge[loop.index0] %}
+                                <div class="col">
+                                    <span class="bg-success p-2 text-white">
+                                        Objectifs du parcours
+                                    </span>
+                                </div>
+                            {% endif %}
+                            {% if 'poursuitesEtudes' in resultArrayBadge[loop.index0] %}
+                                <div class="col">
+                                    <span class="bg-success p-2 text-white">
+                                        Poursuite d'études
+                                    </span> 
+                                </div>
+                            {% endif %}
+                            {% if 'contenuFormation' in resultArrayBadge[loop.index0] %}
+                                <div class="col">
+                                    <span class="bg-success p-2 text-white">
+                                        Contenu de la formation
+                                    </span>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
                 {% endfor %}
-            </ul>
         {% else %}
             <h1 class="fs-4 my-2 text-dark">
                 Aucun parcours trouvé pour le mot-clé fourni...

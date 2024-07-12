@@ -29,11 +29,43 @@ class SearchController extends AbstractController
         $request = Request::createFromGlobals();
         $keyword_1 = $request->query->get('keyword_1');
 
+        $resultArrayBadge = [];
         $parcoursArray = $entityManager->getRepository(Parcours::class)->findWithKeyword($keyword_1);
+
+        for($i = 0; $i < count($parcoursArray); $i++){
+            $textContains = [];
+            if(
+                mb_strstr(
+                    mb_strtoupper($parcoursArray[$i]['contenuFormation']),
+                    mb_strtoupper($keyword_1))
+                !== false
+            ){
+                $textContains[] = 'contenuFormation';
+            }
+            if(
+                mb_strstr(
+                    mb_strtoupper($parcoursArray[$i]['poursuitesEtudes']),
+                    mb_strtoupper($keyword_1))
+                !== false
+            ){
+                $textContains[] = 'poursuitesEtudes';
+            }
+            if(
+                mb_strstr(
+                    mb_strtoupper($parcoursArray[$i]['objectifsParcours']),
+                    mb_strtoupper($keyword_1))
+                !== false
+            ){
+                $textContains[] = 'objectifsParcours';
+            }
+
+            $resultArrayBadge[] = $textContains;
+        }
 
         return $this->render('search/search_result.html.twig', [
             'keyword_1' => $keyword_1,
-            'parcoursArray' => $parcoursArray
+            'parcoursArray' => $parcoursArray,
+            'resultArrayBadge' => $resultArrayBadge
         ]);
     }
 }
