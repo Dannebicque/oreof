@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.29.36](https://github.com/Dannebicque/oreof/compare/v1.29.35...v1.29.36) (2024-07-12)
+
+
+### Features
+
+* reouverture fiche matière + process simplifié ([2cb4406](https://github.com/Dannebicque/oreof/commit/2cb4406da5b702f79d9ecc0971f926b9bed56a23))
+
 ### [1.29.35](https://github.com/Dannebicque/oreof/compare/v1.29.34...v1.29.35) (2024-07-12)
 
 
