@@ -49,6 +49,7 @@ class HistoriqueExtension extends AbstractExtension
         if ($historique instanceof HistoriqueParcours) {
             return
                 ['%parcours%' => $historique->getParcours()?->getDisplay(),
+                    '%date%' => $historique->getDate()?->format('d/m/Y'),
                  '%formation%' => $historique->getParcours()?->getFormation()?->getDisplayLong()];
         }
 

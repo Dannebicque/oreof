@@ -13,11 +13,7 @@ use App\Classes\JsonReponse;
 use App\Classes\verif\ParcoursValide;
 use App\DTO\ProcessData;
 use App\Entity\DpeParcours;
-use App\Entity\Parcours;
-use App\Entity\User;
 use App\Events\HistoriqueParcoursEvent;
-use App\Repository\DpeParcoursRepository;
-use App\Repository\ParcoursRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use http\Exception\RuntimeException;
 use Psr\EventDispatcher\EventDispatcherInterface;
@@ -63,11 +59,13 @@ class ParcoursProcess extends AbstractProcess
         return $processData;
     }
 
-    public function valideParcours(DpeParcours $dpeParcours, UserInterface $user, $process, $etape, $request): Response
+    public function valideParcours(DpeParcours $dpeParcours, UserInterface $user, $process, $etape, $request, ?string $fileName = null): Response
     {
-        $this->dpeParcoursWorkflow->apply($dpeParcours, $process['canValide'], ['motif' => $request->request->get('argumentaire', ''), 'date' => $request->request->get('date', '')]);
+        $this->dpeParcoursWorkflow->apply($dpeParcours, $process['canValide'], [
+            'motif' => $request->request->get('argumentaire', ''),
+            'date' => $request->request->get('date', '')]);
         $this->entityManager->flush();
-        return $this->dispatchEventParcours($dpeParcours, $user, $etape, $request, 'valide');
+        return $this->dispatchEventParcours($dpeParcours, $user, $etape, $request, 'valide', $fileName);
     }
 
     public function reserveParcours(DpeParcours $dpeParcours, UserInterface $user, $process, $etape, $request): Response
@@ -77,9 +75,9 @@ class ParcoursProcess extends AbstractProcess
         return $this->dispatchEventParcours($dpeParcours, $user, $etape, $request, 'reserve');
     }
 
-    private function dispatchEventParcours(DpeParcours $dpeParcours, UserInterface $user, string $etape, Request $request, string $etat): Response
+    private function dispatchEventParcours(DpeParcours $dpeParcours, UserInterface $user, string $etape, Request $request, string $etat, ?string $fileName = null): Response
     {
-        $histoEvent = new HistoriqueParcoursEvent($dpeParcours->getParcours(), $user, $etape, $etat, $request);
+        $histoEvent = new HistoriqueParcoursEvent($dpeParcours->getParcours(), $user, $etape, $etat, $request, $fileName);
         $this->eventDispatcher->dispatch($histoEvent, HistoriqueParcoursEvent::ADD_HISTORIQUE_PARCOURS);
         return JsonReponse::success($this->translator->trans('parcours.'.$etat.'.' . $etape . '.flash.success', [], 'process'));
     }
