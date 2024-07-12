@@ -29,7 +29,7 @@ final class FicheMatiereManageComponent extends AbstractController
         'en_cours_redaction' => 'fiche_matiere',
         'soumis_central' => 'soumis_central',
         'valide_pour_publication' => 'valide_pour_publication',
-        'publie' => 'publie',
+//        'publie' => 'publie',
     ];
     use DefaultActionTrait;
 
@@ -99,10 +99,10 @@ final class FicheMatiereManageComponent extends AbstractController
     public function postMount(): void
     {
         $this->getHistorique();
-        $lastHistorique = $this->historiqueFicheMatiereRepository->findOneBy(['ficheMatiere' => $this->ficheMatiere], ['created' => 'DESC']);
-        if ($lastHistorique !== null && $lastHistorique->getEtape() === 'rouvrir_fiche_matiere') {
-            $this->hasDemande = true;
-        }
+//        $lastHistorique = $this->historiqueFicheMatiereRepository->findOneBy(['ficheMatiere' => $this->ficheMatiere], ['created' => 'DESC']);
+//        if ($lastHistorique !== null && $lastHistorique->getEtape() === 'rouvrir_fiche_matiere') {
+//          //  $this->hasDemande = true;
+//        }
 
         // dépend du type et de l'étape...
         $place = $this->getPlace();

@@ -97,10 +97,8 @@ class FicheMatiereController extends AbstractController
         VersioningFicheMatiere $ficheMatiereVersioningService
     ): Response {
         $formation = $ficheMatiere->getParcours()?->getFormation();
-//        if ($formation === null) {
-//            throw new RuntimeException('Formation non trouvée');
-//        }
 
+//todo: supprimer la partie version pas utilisée sur les fiches
         $bccs = [];
         foreach ($ficheMatiere->getCompetences() as $competence) {
             if (!array_key_exists($competence->getBlocCompetence()?->getId(), $bccs)) {

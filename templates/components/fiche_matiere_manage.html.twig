@@ -29,7 +29,9 @@
                                     {% if isPlace('fiche', this.ficheMatiere, key) %}
                                         {% set class = 'btn-info' %}
                                     {% else %}
-                                        {% set class =  hasHistorique(this.ficheMatiere, key, this.historiques) %}
+                                        {% if isPass('fiche', this.ficheMatiere, key) %}
+                                            {% set class =  hasHistorique(this.ficheMatiere, key, this.historiques) %}
+                                        {% endif %}
                                     {% endif %}
                                     <button class="btn btn-sm btn-icon btn-icon-only {{ class }} ms-1" type="button"
                                             data-controller="tooltip" data-tooltip-placement-value="bottom"
@@ -54,9 +56,6 @@
                 <div class="col-12">
                     <div class="row mt-2">
                         {% if this.process[this.etape] is defined %}
-                            {#                            {% if #}
-                            {#                                (is_granted('CAN_EC_VALIDATE_MY', this.ficheMatiere) or is_granted('CAN_FORMATION_VALIDATE_ALL') or is_granted('CAN_PARCOURS_VALIDATE_MY', this.ficheMatiere)) #}
-                            {#                            %} #}
                             {% if this.process[this.etape].transition == 'publie' or this.process[this.etape].transition == 'transmis_pour_publication' %}
                                 <div class="col-2 d-grid">
                                     <button class="btn btn-sm btn-success d-block">
@@ -64,8 +63,7 @@
                                     </button>
                                 </div>
                                 <div class="col-4 d-grid">
-
-                                    {% if not this.hasDemande %}
+{#                                    {% if not this.hasDemande %}#}
                                         <button class="btn btn-sm d-block btn-outline-warning"
                                                 type="button"
                                                 {{ stimulus_controller('modal', {
@@ -84,41 +82,74 @@
                                         >
                                             <i class="fal fa-question"></i> {{ ('demande.reouverture')|trans({}, 'process') }}
                                         </button>
-                                    {% endif %}
+{#                                    {% endif %}#}
                                 </div>
                             {% else %}
-                                {% if this.process[this.etape].hasValid %}
-                                    <div class="col-2 d-grid">
-                                        {% if this.hasDemande %}
-                                            <button class="btn btn-sm d-block btn-outline-warning"
-                                                    type="button"
-                                                    {{ stimulus_controller('modal', {
-                                                        size: 'lg',
-                                                        nomEvenement: 'refreshPage',
-                                                        modalTitle: ('demande.reouverture.clore.title')|trans({}, 'process'),
-                                                        modalUrl: path('app_fiche_matiere_validation_demande_cloture', {
-                                                            id:this.ficheMatiere.id,
-                                                        }) }) }}
-                                                    data-action="click->modal#openModal"
-                                                    data-controller="tooltip"
-                                                    data-tooltip-placement-value="bottom"
+                                {% if
+                                    ((is_granted('CAN_EC_VALIDATE_MY', this.ficheMatiere) or is_granted('CAN_PARCOURS_VALIDATE_MY', this.ficheMatiere))  and  this.process[this.etape].transition == 'en_cours_redaction') or is_granted('ROLE_SES') %}
+                                    {% if this.process[this.etape].hasValid %}
+                                        <div class="col-2 d-grid">
+{#                                            {% if this.hasDemande %}#}
+{#                                                <button class="btn btn-sm d-block btn-outline-warning"#}
+{#                                                        type="button"#}
+{#                                                        {{ stimulus_controller('modal', {#}
+{#                                                            size: 'lg',#}
+{#                                                            nomEvenement: 'refreshPage',#}
+{#                                                            modalTitle: ('demande.reouverture.clore.title')|trans({}, 'process'),#}
+{#                                                            modalUrl: path('app_fiche_matiere_validation_demande_cloture', {#}
+{#                                                                id:this.ficheMatiere.id,#}
+{#                                                            }) }) }}#}
+{#                                                        data-action="click->modal#openModal"#}
+{#                                                        data-controller="tooltip"#}
+{#                                                        data-tooltip-placement-value="bottom"#}
 
-                                                    aria-label="{{ ('demande.reouverture.clore')|trans({}, 'process') }}"
-                                                    data-bs-original-title="{{ ('demande.reouverture.clore')|trans({}, 'process') }}"
-                                            >
-                                                <i class="fal fa-close"></i> {{ ('demande.reouverture.clore')|trans({}, 'process') }}
-                                            </button>
-                                        {% else %}
-                                            <button class="btn btn-sm d-block btn-outline-success"
-                                                    type="button"
+{#                                                        aria-label="{{ ('demande.reouverture.clore')|trans({}, 'process') }}"#}
+{#                                                        data-bs-original-title="{{ ('demande.reouverture.clore')|trans({}, 'process') }}"#}
+{#                                                >#}
+{#                                                    <i class="fal fa-close"></i> {{ ('demande.reouverture.clore')|trans({}, 'process') }}#}
+{#                                                </button>#}
+{#                                            {% else %}#}
+                                                <button class="btn btn-sm d-block btn-outline-success"
+                                                        type="button"
+                                                        {{ stimulus_controller('modal', {
+                                                            size: 'lg',
+                                                            updateComponent: {
+                                                                id: 'mention_manage',
+                                                                event: 'mention_manage:valide'
+                                                            },
+                                                            modalTitle: ('validation.valider.'~this.etape~'.title')|trans({}, 'process'),
+                                                            modalUrl: path('app_validation_valide', {
+                                                                etape:this.etape,
+                                                                id:this.ficheMatiere.id,
+                                                                type:'ficheMatiere'
+                                                            }) }) }}
+                                                        data-action="click->modal#openModal"
+                                                        data-controller="tooltip"
+                                                        data-tooltip-placement-value="bottom"
+
+                                                        aria-label="{{ ('validation.valider.'~this.etape)|trans({}, 'process') }}"
+                                                        data-bs-original-title="{{ ('validation.valider.'~this.etape)|trans({}, 'process') }}"
+                                                >
+                                                    <i class="fal fa-check"></i> {{ ('validation.valider.'~this.etape)|trans({}, 'process') }}
+                                                </button>
+{#                                            {% endif %}#}
+                                        </div>
+                                    {% else %}
+                                        <div class="col-2 d-grid">
+                                        </div>
+                                    {% endif %}
+                                    {% if this.process[this.etape].hasReserve %}
+                                        <div class="col-2 d-grid">
+                                            <button
+                                                    class="btn btn-sm d-block btn-outline-warning"
                                                     {{ stimulus_controller('modal', {
                                                         size: 'lg',
                                                         updateComponent: {
                                                             id: 'mention_manage',
-                                                            event: 'mention_manage:valide'
+                                                            event: 'mention_manage:reserve'
                                                         },
-                                                        modalTitle: ('validation.valider.'~this.etape~'.title')|trans({}, 'process'),
-                                                        modalUrl: path('app_validation_valide', {
+                                                        modalTitle: ('validation.reserve.'~this.etape~'.title')|trans({}, 'process'),
+                                                        modalUrl: path('app_validation_reserve', {
                                                             etape:this.etape,
                                                             id:this.ficheMatiere.id,
                                                             type:'ficheMatiere'
@@ -126,79 +157,56 @@
                                                     data-action="click->modal#openModal"
                                                     data-controller="tooltip"
                                                     data-tooltip-placement-value="bottom"
-
-                                                    aria-label="{{ ('validation.valider.'~this.etape)|trans({}, 'process') }}"
-                                                    data-bs-original-title="{{ ('validation.valider.'~this.etape)|trans({}, 'process') }}"
-                                            >
-                                                <i class="fal fa-check"></i> {{ ('validation.valider.'~this.etape)|trans({}, 'process') }}
+                                                    aria-label="{{ ('validation.reserve.'~this.etape)|trans({}, 'process') }}"
+                                                    data-bs-original-title="{{ ('validation.reserve.'~this.etape)|trans({}, 'process') }}"
+                                                    type="button">
+                                                <i class="fal fa-circle-exclamation-check"></i> {{ ('validation.reserve.'~this.etape)|trans({}, 'process') }}
                                             </button>
+                                        </div>
+                                    {% else %}
+                                        <div class="col-2 d-grid">
+                                        </div>
+
+                                    {% endif %}
+                                    {% if this.process[this.etape].hasRefuse %}
+                                        <div class="col-2 d-grid">
+                                            <button class="btn btn-sm d-block btn-outline-danger"
+                                                    type="button"
+                                                    {{ stimulus_controller('modal', {
+                                                        size: 'lg',
+                                                        updateComponent: {
+                                                            id: 'mention_manage',
+                                                            event: 'mention_manage:refuse'
+                                                        },
+                                                        modalTitle: ('validation.refuser.'~this.etape~'.title')|trans({}, 'process'),
+                                                        modalUrl: path('app_validation_refuse', {
+                                                            etape:this.etape,
+                                                            id:this.ficheMatiere.id,
+                                                            type:'ficheMatiere'
+                                                        }) }) }}
+                                                    data-action="click->modal#openModal"
+                                                    data-controller="tooltip"
+                                                    data-tooltip-placement-value="bottom"
+                                                    aria-label="{{ ('validation.refuser.'~this.etape)|trans({}, 'process') }}"
+                                                    data-bs-original-title="{{ ('validation.refuser.'~this.etape)|trans({}, 'process') }}"
+                                            >
+                                                <i class="fal fa-ban"></i> {{ ('validation.refuser.'~this.etape)|trans({}, 'process') }}
+                                            </button>
+                                        </div>
+                                    {% else %}
+                                        <div class="col-2 d-grid">
+                                        </div>
+                                    {% endif %}
+                                {% else %}
+                                    <div class="col-4 d-grid">
+                                        {% if this.process[this.etape].transition == 'transmis_ses' %}
+                                            <button class="btn btn-muted">En cours de validation central</button>
                                         {% endif %}
                                     </div>
-                                {% else %}
-                                    <div class="col-2 d-grid">
-                                    </div>
-                                {% endif %}
-                                {% if this.process[this.etape].hasReserve %}
-                                    <div class="col-2 d-grid">
-                                        <button
-                                                class="btn btn-sm d-block btn-outline-warning"
-                                                {{ stimulus_controller('modal', {
-                                                    size: 'lg',
-                                                    updateComponent: {
-                                                        id: 'mention_manage',
-                                                        event: 'mention_manage:reserve'
-                                                    },
-                                                    modalTitle: ('validation.reserve.'~this.etape~'.title')|trans({}, 'process'),
-                                                    modalUrl: path('app_validation_reserve', {
-                                                        etape:this.etape,
-                                                        id:this.ficheMatiere.id,
-                                                        type:'ficheMatiere'
-                                                    }) }) }}
-                                                data-action="click->modal#openModal"
-                                                data-controller="tooltip"
-                                                data-tooltip-placement-value="bottom"
-                                                aria-label="{{ ('validation.reserve.'~this.etape)|trans({}, 'process') }}"
-                                                data-bs-original-title="{{ ('validation.reserve.'~this.etape)|trans({}, 'process') }}"
-                                                type="button">
-                                            <i class="fal fa-circle-exclamation-check"></i> {{ ('validation.reserve.'~this.etape)|trans({}, 'process') }}
-                                        </button>
-                                    </div>
-                                {% else %}
-                                    <div class="col-2 d-grid">
-                                    </div>
-
-                                {% endif %}
-                                {% if this.process[this.etape].hasRefuse %}
-                                    <div class="col-2 d-grid">
-                                        <button class="btn btn-sm d-block btn-outline-danger"
-                                                type="button"
-                                                {{ stimulus_controller('modal', {
-                                                    size: 'lg',
-                                                    updateComponent: {
-                                                        id: 'mention_manage',
-                                                        event: 'mention_manage:refuse'
-                                                    },
-                                                    modalTitle: ('validation.refuser.'~this.etape~'.title')|trans({}, 'process'),
-                                                    modalUrl: path('app_validation_refuse', {
-                                                        etape:this.etape,
-                                                        id:this.ficheMatiere.id,
-                                                        type:'ficheMatiere'
-                                                    }) }) }}
-                                                data-action="click->modal#openModal"
-                                                data-controller="tooltip"
-                                                data-tooltip-placement-value="bottom"
-                                                aria-label="{{ ('validation.refuser.'~this.etape)|trans({}, 'process') }}"
-                                                data-bs-original-title="{{ ('validation.refuser.'~this.etape)|trans({}, 'process') }}"
-                                        >
-                                            <i class="fal fa-ban"></i> {{ ('validation.refuser.'~this.etape)|trans({}, 'process') }}
-                                        </button>
-                                    </div>
-                                {% else %}
                                     <div class="col-2 d-grid">
                                     </div>
                                 {% endif %}
                             {% endif %}
-
                         {% endif %}
 
                         <div class="col-6 d-flex justify-content-center">
