@@ -75,7 +75,7 @@ class ParcoursProcess extends AbstractProcess
         return $this->dispatchEventParcours($dpeParcours, $user, $etape, $request, 'reserve');
     }
 
-    private function dispatchEventParcours(DpeParcours $dpeParcours, UserInterface $user, string $etape, Request $request, string $etat, string $fileName = null): Response
+    private function dispatchEventParcours(DpeParcours $dpeParcours, UserInterface $user, string $etape, Request $request, string $etat, ?string $fileName = null): Response
     {
         $histoEvent = new HistoriqueParcoursEvent($dpeParcours->getParcours(), $user, $etape, $etat, $request, $fileName);
         $this->eventDispatcher->dispatch($histoEvent, HistoriqueParcoursEvent::ADD_HISTORIQUE_PARCOURS);
