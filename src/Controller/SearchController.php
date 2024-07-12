@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\FicheMatiere;
 use App\Entity\Parcours;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -67,7 +68,14 @@ class SearchController extends AbstractController
                 $textContains[] = 'resultatsAttendus';
             }
 
-            $resultArrayBadge[] = $textContains;
+            $parcours = $entityManager->getRepository(Parcours::class)->findOneById($parcoursArray[$i]['id']);
+            $linkedFicheMatiere = $entityManager->getRepository(FicheMatiere::class)->findForParcoursWithKeyword($parcours, $keyword_1);
+
+            $resultArrayBadge[] = 
+            [
+                ...$textContains, 
+                'fichesMatieres' => [...$linkedFicheMatiere]
+            ];
         }
 
         return $this->render('search/search_result.html.twig', [
