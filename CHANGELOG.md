@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.29.38](https://github.com/Dannebicque/oreof/compare/v1.29.37...v1.29.38) (2024-07-13)
+
+
+### Features
+
+* Ajout dans l'historique du changement de RF à la validation ([6bc7ba0](https://github.com/Dannebicque/oreof/commit/6bc7ba04201ee48baf0bd8726127332d832b5de7))
+
 ### [1.29.37](https://github.com/Dannebicque/oreof/compare/v1.29.36...v1.29.37) (2024-07-13)
 
 
