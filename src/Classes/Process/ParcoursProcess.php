@@ -14,6 +14,7 @@ use App\Classes\verif\ParcoursValide;
 use App\DTO\ProcessData;
 use App\Entity\DpeParcours;
 use App\Events\HistoriqueParcoursEvent;
+use App\Utils\Tools;
 use Doctrine\ORM\EntityManagerInterface;
 use http\Exception\RuntimeException;
 use Psr\EventDispatcher\EventDispatcherInterface;
@@ -61,11 +62,72 @@ class ParcoursProcess extends AbstractProcess
 
     public function valideParcours(DpeParcours $dpeParcours, UserInterface $user, $process, $etape, $request, ?string $fileName = null): Response
     {
-        $this->dpeParcoursWorkflow->apply($dpeParcours, $process['canValide'], [
-            'motif' => $request->request->get('argumentaire', ''),
-            'date' => $request->request->get('date', '')]);
+
+        $valid = $process['canValide'];
+        $motifs = [];
+
+        if ($request->request->has('date')) {
+            $motifs['date'] = Tools::convertDate($request->request->get('date'));
+        }
+
+        if ($request->request->has('argumentaire')) {
+            $motifs['motif'] = $request->request->get('argumentaire', '');
+        }
+
+        if ($request->request->has('acceptationDirecte')) {
+            $motifs['acceptationDirecte'] = $request->request->get('acceptationDirecte') === 'acceptationDirecte';
+            $valid = 'valider_cfvu';
+        }
+
+        if ($request->request->has('sousReserveConseil')) {
+            $motifs['sousReserveConseil'] = (bool)$request->request->get('sousReserveConseil');
+            $valid = 'valider_reserve_conseil_cfvu';
+        }
+
+        if ($request->request->has('sousReserveModifications')) {
+            $motifs['sousReserveModifications'] = (bool)$request->request->get('sousReserveModifications');
+            $valid = 'valider_reserve_cfvu';
+
+            if ($request->request->has('argumentaire_sousReserveModifications')) {
+                $motifs['argumentaire_sousReserveModifications'] = $request->request->get('argumentaire_sousReserveModifications');
+            }
+        }
+
+
+        $this->dpeParcoursWorkflow->apply($dpeParcours, $valid, $motifs);
         $this->entityManager->flush();
         return $this->dispatchEventParcours($dpeParcours, $user, $etape, $request, 'valide', $fileName);
+    }
+
+    public function refuseParcours(DpeParcours $dpeParcours, UserInterface $user, $process, $etape, $request): Response
+    {
+        $reponse = $this->dispatchEventParcours($dpeParcours, $user, $etape, $request, 'refuse');
+
+        $motifs = [];
+        $refus = $process['canRefuse'];
+
+        if ($request->request->has('date')) {
+            $motifs['date'] = Tools::convertDate($request->request->get('date'));
+        }
+
+        if ($request->request->has('etatRefus')) {
+            $motifs['etatRefus'] = $request->request->get('etatRefus');
+
+            if ($motifs['etatRefus'] === 'projetRefusDefinitif') {
+                $refus = 'refuser_definitif_cfvu';
+            } elseif ($motifs['etatRefus'] === 'projetARevoir') {
+                $refus = 'refuser_revoir_cfvu';
+            }
+
+            if ($request->request->has('argumentaire')) {
+                $motifs['motif'] = $request->request->get('argumentaire');
+            }
+        }
+
+        $this->dpeParcoursWorkflow->apply($dpeParcours, $refus, $motifs);
+        $this->entityManager->flush();
+
+        return $reponse;
     }
 
     public function reserveParcours(DpeParcours $dpeParcours, UserInterface $user, $process, $etape, $request): Response

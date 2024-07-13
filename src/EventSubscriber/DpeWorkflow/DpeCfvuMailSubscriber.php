@@ -27,18 +27,19 @@ class DpeCfvuMailSubscriber extends AbstractDpeMailSubscriber implements EventSu
         protected ComposanteRepository $composanteRepository,
         protected FormationRepository  $formationRepository,
         protected Mailer               $myMailer
-    ) {
+    )
+    {
     }
 
     public static function getSubscribedEvents(): array
     {
         return [
-            'workflow.dpe.transition.refuser_definitif_cfvu' => 'onRefuseCfvu',
-            'workflow.dpe.transition.refuser_revoir_cfvu' => 'onRefuseCfvu',
-            'workflow.dpe.transition.valider_reserve_cfvu' => 'onValideCfvu',
-            'workflow.dpe.transition.valider_reserve_conseil_cfvu' => 'onValideCfvu',
-            'workflow.dpe.transition.valider_reserve_central_cfvu' => 'onValideCfvu',
-            'workflow.dpe.transition.valider_cfvu' => 'onValideCfvu',
+//            'workflow.dpe.transition.refuser_definitif_cfvu' => 'onRefuseCfvu',
+//            'workflow.dpe.transition.refuser_revoir_cfvu' => 'onRefuseCfvu',
+//            'workflow.dpe.transition.valider_reserve_cfvu' => 'onValideCfvu',
+//            'workflow.dpe.transition.valider_reserve_conseil_cfvu' => 'onValideCfvu',
+//            'workflow.dpe.transition.valider_reserve_central_cfvu' => 'onValideCfvu',
+//            'workflow.dpe.transition.valider_cfvu' => 'onValideCfvu',
 
             'workflow.dpeParcours.transition.refuser_definitif_cfvu' => 'onRefuseCfvu',
             'workflow.dpeParcours.transition.refuser_revoir_cfvu' => 'onRefuseCfvu',
@@ -76,12 +77,13 @@ class DpeCfvuMailSubscriber extends AbstractDpeMailSubscriber implements EventSu
 
     public function onValideCfvu(Event $event): void
     {
-        if ($event->getSubject() instanceof Formation) {
-            $formation = $event->getSubject();
-        } elseif($event->getSubject() instanceof DpeParcours) {
-            $formation = $event->getSubject()->getParcours()->getFormation();
+        $formation = $event->getSubject()->getParcours()->getFormation();
+        $parcours = $event->getSubject()->getParcours();
+
+        if ($parcours->isParcoursDefaut()) {
+            $titre = 'Votre formation a été validée par la CFVU';
         } else {
-            return;
+            $titre = 'Un parcours de votre formation a été validé par la CFVU';
         }
 
         $dpe = $formation->getComposantePorteuse()?->getResponsableDpe();
@@ -92,6 +94,7 @@ class DpeCfvuMailSubscriber extends AbstractDpeMailSubscriber implements EventSu
             [
                 'dpe' => $dpe,
                 'formation' => $formation,
+                'parcours' => $parcours,
                 'context' => $event->getContext(),
             ]
         );
@@ -100,7 +103,7 @@ class DpeCfvuMailSubscriber extends AbstractDpeMailSubscriber implements EventSu
                 $dpe?->getEmail(),
                 $formation->getResponsableMention()?->getEmail(),
                 $formation->getCoResponsable()?->getEmail()],
-            '[ORéOF]  Votre formation a été validée par la CFVU'
+            '[ORéOF]  '.$titre
         );
     }
 }
