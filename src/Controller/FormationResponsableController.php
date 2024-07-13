@@ -6,6 +6,7 @@ use App\Classes\JsonReponse;
 use App\Classes\MyGotenbergPdf;
 use App\DTO\ChangeRf;
 use App\Entity\Formation;
+use App\Entity\HistoriqueFormation;
 use App\Enums\EtatDemandeChangeRfEnum;
 use App\Enums\TypeRfEnum;
 use App\Events\NotifCentreFormationEvent;
@@ -161,8 +162,9 @@ class FormationResponsableController extends BaseController
             foreach ($demandes as $idDemande) {
                 $demande = $changeRfRepository->find($idDemande);
                 if ($demande !== null) {
+                    $dateCfvu = Tools::convertDate($request->request->get('dateCFVU'));
                     $demande->setEtatDemande(EtatDemandeChangeRfEnum::VALIDE);
-                    $demande->setDateValidationCfvu(Tools::convertDate($request->request->get('dateCFVU')));
+                    $demande->setDateValidationCfvu($dateCfvu);
                     $demande->setFichierPv($nomFichier);
                     $formation = $demande->getFormation();
 
@@ -172,10 +174,12 @@ class FormationResponsableController extends BaseController
                     }
 
                     if ($demande->getTypeRf() === TypeRfEnum::RF) {
+                        $type = 'change_rf';
                         $droits = ['ROLE_RESP_FORMATION'];
                         $formation->setResponsableMention(null);
                     } else {
                         $droits = ['ROLE_CO_RESP_FORMATION'];
+                        $type = 'change_rf_co';
                         $formation->setCoResponsable(null);
                     }
 
@@ -192,6 +196,21 @@ class FormationResponsableController extends BaseController
                     if ($demande->getAncienResponsable() !== null) {
                         $eventDispatcher->dispatch(new NotifCentreFormationEvent($demande->getFormation(), $demande->getAncienResponsable(), $droits), NotifCentreFormationEvent::NOTIF_REMOVE_CENTRE_FORMATION);
                     }
+
+                    $histo = new HistoriqueFormation();
+                    $histo->setFormation($formation);
+                    $histo->setEtape($type);
+                    $histo->setUser($this->getUser());
+                    $histo->setEtat('valide'); //todo: on pourrait avoir déjà une entreé en attente avcec un PV ou un laisser-passer
+                    $histo->setDate($dateCfvu);
+                    $histo->setComplements([
+                        'ancien' => $demande->getAncienResponsable() !== null ? $demande->getAncienResponsable()->getDisplay() : 'Avant aucun (co) responsable',
+                        'nouveau' => $demande->getNouveauResponsable() !== null ? $demande->getNouveauResponsable()->getDisplay() : 'Aucun (co) responsable',
+                        'fichier' => $nomFichier
+                    ]);
+                    $this->entityManager->persist($histo);
+
+
                     $this->entityManager->flush();
                 }
             }

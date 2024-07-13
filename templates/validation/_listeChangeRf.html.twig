@@ -67,7 +67,15 @@
                     {{ demande.etatDemande|badgeEnum }}
                 </td>
                 <td>
-                    {#            <a href="{{ path('formation_demande', {id: demande.id}) }}" class="btn btn-primary">Voir</a> #}
+                    <a href="{{ path('app_formation_show',{'slug': demande.formation.slug}) }}"
+                       class="btn btn-sm text-info"
+                       data-bs-toggle="tooltip"
+                       data-bs-placement="bottom"
+                       title="Voir la formation"
+                    >
+                        <i class="{{ iconShow }}"></i>
+                        <span> Voir</span>
+                    </a>
                 </td>
             </tr>
             <tr>
@@ -75,7 +83,9 @@
                 <td colspan="5">
                     {{ demande.commentaire }}
                 </td>
-                <td></td>
+                <td>
+
+                </td>
             </tr>
         {% else %}
             <tr>
