@@ -9,12 +9,6 @@
         {% set objet = this.formation %}
     {% endif %}
 
-    {# todo: se base sur le DPE pour le process, indépendant pour chaque parcours. Comment on gére la formation ? somme des parcours ?
-
-    - Mettre un bouton pour valider si versioniong ouvert ou reprendre soumettre si ouvert avec CFVU => selon état dans DPE et dans le cas d'une CFVU faire une nvouelle version ?
-        - la validation niveau formation implique l'évolution de tous ses parcours/ Car de toute façon possible que si tous les parcours son OK ? ou validation partielle de quelques parcours dans une formatioin ?
-        - gestion de la version dans l'historique, publication selon la bonne version ? ne pas mettre à jour le json ?
-    #}
     <div class="card mb-3">
         <div class="card-body">
             <div class="row">
@@ -538,7 +532,7 @@
                         <div class="col-12  mt-2">
                             <div class="alert alert-info">
                                 Une demande de modification est en attente de validation par la CFVU. Remplacement
-                                de {{ demande.ancienResponsable.display }} par {{ demande.nouveauResponsable.display }}.
+                                de {{ demande.ancienResponsable != null ?  demande.ancienResponsable.display : 'non défini' }} par {{ demande.nouveauResponsable != null ? demande.nouveauResponsable.display : 'non défini' }}.
                                 <a href="{{ path('app_formation_change_rf_suppression', {demande:demande.id}) }}"
                                    class="text-danger"><i class="{{ iconDelete }}"></i> Annuler la demande ?</a>
                             </div>

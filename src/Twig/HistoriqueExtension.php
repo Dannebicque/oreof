@@ -70,6 +70,10 @@ class HistoriqueExtension extends AbstractExtension
 
     public function etapeIcone(string $etape, string $process = 'formation'): string
     {
+        if ($etape === 'change_rf_co' || $etape === 'change_rf') {
+            return 'fal fa-repeat';
+        }
+
         if ($process === 'formation' || $process === 'parcours') {
             return $this->validationProcess->getEtapeCle($etape, 'icon');
         }

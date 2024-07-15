@@ -279,10 +279,7 @@ framework:
                 reserver_fiche_ses:
                     from: 'soumis_central'
                     to: 'en_cours_redaction'
-                valider_fiche_pour_publication:
-                    from: 'valide_pour_publication'
-                    to: 'publie'
                 rouvrir_fiche_matiere:
-                    from: 'publie'
+                    from: 'valide_pour_publication'
                     to: 'en_cours_redaction'
 

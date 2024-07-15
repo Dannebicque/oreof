@@ -30,6 +30,7 @@ class GlobalVoter extends Voter
         private WorkflowInterface       $dpeWorkflow,
         private WorkflowInterface       $parcoursWorkflow,
         private WorkflowInterface       $dpeParcoursWorkflow,
+        private WorkflowInterface       $ficheWorkflow,
         private readonly Security       $security,
         private readonly RoleRepository $roleRepository,
     ) {
@@ -301,9 +302,8 @@ class GlobalVoter extends Voter
             ($subject->getParcours()?->getFormation()?->getComposantePorteuse() === $centre->getComposante() &&
                 in_array('Gestionnaire', $centre->getDroits()))
         ) {
-            return true;
+            return $this->ficheWorkflow->can($subject, 'valider_fiche_compo');
         }
-
 
         return false;
     }

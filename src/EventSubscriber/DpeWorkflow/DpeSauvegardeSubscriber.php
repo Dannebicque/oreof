@@ -33,6 +33,7 @@ class DpeSauvegardeSubscriber implements EventSubscriberInterface
         return [
             'workflow.dpe.transition.valider_cfvu' => 'onValideCfvu',//todo: plus OK
             'workflow.dpeParcours.transition.valider_cfvu' => 'onValideCfvu',//todo: peut être en amont sur l'entrée
+            //todo: ajouter sur réserve ?
         ];
     }
 

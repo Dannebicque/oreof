@@ -72,6 +72,8 @@ class FormationProcess extends AbstractProcess
 
         $valid = $process['canValide'];
 
+        //todo: une partie plus utile ?
+
         if ($request->request->has('date')) {
             $motifs['date'] = Tools::convertDate($request->request->get('date'));
         }

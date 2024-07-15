@@ -35,7 +35,11 @@
             <div class="row g-0">
                 <div class="col">
                     <div class="d-flex align-items-center lh-1-25">
-                        {% if histo.etape == 'laisserPasser' %}
+                        {% if histo.etape == 'change_rf' %}
+                            Changement du responsable de formation : {{ histo.complements.ancien }} &rarr; {{ histo.complements.nouveau }}
+                        {% elseif histo.etape == 'change_rf_co' %}
+                            Changement du co-responsable de formation : {{ histo.complements.ancien }} &rarr; {{ histo.complements.nouveau }}
+                        {% elseif histo.etape == 'laisserPasser' %}
                             {{ ('historique.laisserPasser.conseil')|trans(histo|etapeParams(type), 'process') }}
                         {% else %}
                             {{ ('historique.'~histo.etape|etapeLabel(type))|trans(histo|etapeParams(type), 'process') }}
