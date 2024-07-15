@@ -341,7 +341,7 @@ class FicheMatiereRepository extends ServiceEntityRepository
     public function findForParcoursWithKeyword(Parcours $parcours, string $keyword){
         $qb = $this->createQueryBuilder('fm');
 
-        $qb = $qb->select('fm.id, fm.description, fm.objectifs')
+        $qb = $qb->select('fm.id, fm.description, fm.objectifs, fm.slug')
             ->where(
                 $qb->expr()->like('UPPER(fm.description)', 'UPPER(:keyword)')
             )

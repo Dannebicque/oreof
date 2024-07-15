@@ -1,5 +1,15 @@
 {% extends 'base.html.twig' %}
 
+{% block stylesheets %}
+{{ parent() }}
+
+<style>
+a.fiche-matiere-search-link span {
+    text-decoration: underline;
+}
+</style>
+{% endblock %}
+
 {% block content %}
 
 <h1 class="small-title fs-3 mb-4">Résultats de la recherche</h1>
@@ -57,22 +67,52 @@
                         %}
                         {% set nbFichesMatieres = resultArrayBadge[loop.index0]['fichesMatieres']|length %}
                         <div class="col mb-2">
-                            <span class="font-weight-bold ms-3 pb-2">
-                                {{ 
-                                    nbFichesMatieres > 1 
-                                    ? nbFichesMatieres ~ ' fiches matières associées' 
-                                    : nbFichesMatieres ~ ' fiche matière associée' }}
-                            </span>
+                            <a href="#" class="fiche-matiere-search-link" data-bs-toggle="modal" data-bs-target="#associatedFicheMatiereModal">
+                                <span class="font-weight-bold ms-3 pb-2 text-dark">
+                                    {{ 
+                                        nbFichesMatieres > 1 
+                                        ? nbFichesMatieres ~ ' fiches matières associées' 
+                                        : nbFichesMatieres ~ ' fiche matière associée' }}
+                                </span>
+                            </a>
                         </div>
                         {% endif %}
                     </div>
                 {% endfor %}
         {% else %}
-            <h1 class="fs-4 my-2 text-dark">
+            <h1 class="fs-4 mt-4 text-dark text-center">
                 Aucun parcours trouvé pour le mot-clé fourni...
             </h1>
         {% endif %}
     </div>
 </div>
+
+<div class="modal" id="associatedFicheMatiereModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="titre-modale-recherche">
+                    Fiches matières associées
+                </h5>
+            </div>
+            <div class="modal-body" id="associated-fiche-matiere-modal-body">
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-bs-dismiss="modal" class="btn btn-primary">
+                    Fermer
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+
+<script src="{{ asset('search/search.js') }}"></script>
 
 {% endblock %}

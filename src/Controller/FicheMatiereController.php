@@ -28,6 +28,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Jfcherng\Diff\DiffHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor;
@@ -341,6 +342,25 @@ class FicheMatiereController extends AbstractController
             ]);
             return $this->redirectToRoute('app_fiche_matiere_show', ['slug' => $ficheMatiere->getSlug()]);
         }
+    }
+
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route('/search/{parcours}/{keyword}')]
+    public function getFicheMatiereForParcoursAndKeyword(
+        Parcours $parcours,
+        string $keyword = "",
+        EntityManagerInterface $entityManager
+    ){
+        $associatedFicheMatiere = $entityManager
+            ->getRepository(FicheMatiere::class)
+            ->findForParcoursWithKeyword($parcours, $keyword);
+
+        return new JsonResponse(
+            $associatedFicheMatiere, 
+            200, 
+            ['Content-Type' => 'application/json'],
+            false
+        );
     }
 
 }
