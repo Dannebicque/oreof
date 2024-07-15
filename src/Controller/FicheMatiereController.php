@@ -343,7 +343,7 @@ class FicheMatiereController extends AbstractController
     }
 
     #[IsGranted('ROLE_ADMIN')]
-    #[Route('/search/{parcours}/{keyword}', name: 'app_fiche_matiere_search')]
+    #[Route('/recherche/parcours/{parcours}/{keyword}', name: 'app_fiche_matiere_search')]
     public function getFicheMatiereForParcoursAndKeyword(
         Parcours $parcours,
         string $keyword = "",

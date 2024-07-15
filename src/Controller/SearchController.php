@@ -14,7 +14,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class SearchController extends AbstractController
 {
     #[IsGranted('ROLE_ADMIN')]
-    #[Route('/search', name: 'app_search')]
+    #[Route('/recherche/parcours', name: 'app_search')]
     public function index(): Response
     {
         return $this->render('search/index.html.twig', [
@@ -23,7 +23,7 @@ class SearchController extends AbstractController
     }
 
     #[IsGranted('ROLE_ADMIN')]
-    #[Route('/search/keyword', name: 'app_search_action')]
+    #[Route('/recherche/parcours/mot_cle', name: 'app_search_action')]
     public function searchWithKeyword(
         EntityManagerInterface $entityManager
     ){
