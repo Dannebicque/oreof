@@ -7,6 +7,28 @@
 a.fiche-matiere-search-link span {
     text-decoration: underline;
 }
+
+.spinning-icon {
+    font-size: 3.75em;
+    animation-name: spinning;
+    animation-duration: 1.5s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+}
+
+.modal-body ul li {
+    text-align: start;
+}
+
+@keyframes spinning {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
 </style>
 {% endblock %}
 
@@ -18,7 +40,9 @@ a.fiche-matiere-search-link span {
     {{ keyword_1 is not empty ? 'Mot-clé : ' ~ keyword_1 : 'Aucun mot-clé renseigné.' }}
 </p>
 
-<div class="row justify-content-center">
+<div class="row justify-content-center" id="rootListElement"
+     data-fiche-matiere-url="{{ absolute_url(path('app_fiche_matiere_show', {slug: 'µ#+'})) }}"
+>
     <div class="col-8">
         {% if parcoursArray|length > 0 %}
                 {% for p in parcoursArray %}
@@ -67,8 +91,17 @@ a.fiche-matiere-search-link span {
                         %}
                         {% set nbFichesMatieres = resultArrayBadge[loop.index0]['fichesMatieres']|length %}
                         <div class="col mb-2">
-                            <a href="#" class="fiche-matiere-search-link" data-bs-toggle="modal" data-bs-target="#associatedFicheMatiereModal">
-                                <span class="font-weight-bold ms-3 pb-2 text-dark">
+                            <a href="#" class="fiche-matiere-search-link" 
+                               data-bs-toggle="modal" 
+                               data-bs-target="#associatedFicheMatiereModal"
+                            >
+                                <span 
+                                    class="font-weight-bold ms-3 pb-2 text-dark"
+                                    data-fetch-url="{{ absolute_url(path('app_fiche_matiere_search', 
+                                            { parcours: p.id, keyword: keyword_1}))
+                                    }}"
+                                    data-number-associated-fiches-matieres="{{ nbFichesMatieres }}"
+                                >
                                     {{ 
                                         nbFichesMatieres > 1 
                                         ? nbFichesMatieres ~ ' fiches matières associées' 
@@ -92,10 +125,10 @@ a.fiche-matiere-search-link span {
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="titre-modale-recherche">
-                    Fiches matières associées
+                    
                 </h5>
             </div>
-            <div class="modal-body" id="associated-fiche-matiere-modal-body">
+            <div class="modal-body text-center" id="associated-fiche-matiere-modal-body">
                 
             </div>
             <div class="modal-footer">
