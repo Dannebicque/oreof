@@ -30,6 +30,15 @@ class SearchController extends AbstractController
         $request = Request::createFromGlobals();
         $keyword_1 = $request->query->get('keyword_1');
 
+        if(!isset($keyword_1) || empty($keyword_1)|| mb_strlen($keyword_1) <= 2){
+            $this->addFlash('toast', [
+                'type' => 'error',
+                'text' => 'Le mot-clé fourni doit faire au moins 3 caractères.'
+            ]);
+
+            return $this->redirectToRoute('app_search');
+        }
+
         $resultArrayBadge = [];
         $parcoursArray = $entityManager->getRepository(Parcours::class)->findWithKeyword($keyword_1);
 
