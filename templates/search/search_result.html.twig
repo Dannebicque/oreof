@@ -55,9 +55,13 @@
                         {% if resultArrayBadge[loop.index0]['fichesMatieres'] is defined 
                               and resultArrayBadge[loop.index0]['fichesMatieres']|length > 0
                         %}
+                        {% set nbFichesMatieres = resultArrayBadge[loop.index0]['fichesMatieres']|length %}
                         <div class="col mb-2">
                             <span class="font-weight-bold ms-3 pb-2">
-                                {{ resultArrayBadge[loop.index0]['fichesMatieres']|length ~ ' fiches matières associées' }}
+                                {{ 
+                                    nbFichesMatieres > 1 
+                                    ? nbFichesMatieres ~ ' fiches matières associées' 
+                                    : nbFichesMatieres ~ ' fiche matière associée' }}
                             </span>
                         </div>
                         {% endif %}
