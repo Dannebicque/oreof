@@ -40,6 +40,16 @@ a.fiche-matiere-search-link span {
     {{ keyword_1 is not empty ? 'Mot-clé : ' ~ keyword_1 : 'Aucun mot-clé renseigné.' }}
 </p>
 
+{% if parcoursArray|length > 0 %}
+<p class="fs-3 text-primary text-center mt-5">
+    {{ 
+       parcoursArray|length >= 2 
+       ? parcoursArray|length ~ ' parcours contiennent le mot-clé saisi en description'
+       : parcoursArray|length ~ ' parcours contient le mot-clé saisi en description'
+    }} 
+</p>
+{% endif %}
+
 <div class="row justify-content-center" id="rootListElement"
      data-fiche-matiere-url="{{ absolute_url(path('app_fiche_matiere_show', {slug: 'µ#+'})) }}"
 >
