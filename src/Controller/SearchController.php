@@ -10,6 +10,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use App\Utils\Tools;
+
 
 class SearchController extends AbstractController
 {
@@ -46,32 +48,32 @@ class SearchController extends AbstractController
             $textContains = [];
             if(
                 mb_strstr(
-                    mb_strtoupper($parcoursArray[$i]['contenuFormation']),
-                    mb_strtoupper($keyword_1))
+                    mb_strtoupper(Tools::removeAccent($parcoursArray[$i]['contenuFormation'])),
+                    mb_strtoupper(Tools::removeAccent($keyword_1)))
                 !== false
             ){
                 $textContains[] = 'contenuFormation';
             }
             if(
                 mb_strstr(
-                    mb_strtoupper($parcoursArray[$i]['poursuitesEtudes']),
-                    mb_strtoupper($keyword_1))
+                    mb_strtoupper(Tools::removeAccent($parcoursArray[$i]['poursuitesEtudes'])),
+                    mb_strtoupper(Tools::removeAccent($keyword_1)))
                 !== false
             ){
                 $textContains[] = 'poursuitesEtudes';
             }
             if(
                 mb_strstr(
-                    mb_strtoupper($parcoursArray[$i]['objectifsParcours']),
-                    mb_strtoupper($keyword_1))
+                    mb_strtoupper(Tools::removeAccent($parcoursArray[$i]['objectifsParcours'])),
+                    mb_strtoupper(Tools::removeAccent($keyword_1)))
                 !== false
             ){
                 $textContains[] = 'objectifsParcours';
             }
             if(
                 mb_strstr(
-                    mb_strtoupper($parcoursArray[$i]['resultatsAttendus']),
-                    mb_strtoupper($keyword_1))
+                    mb_strtoupper(Tools::removeAccent($parcoursArray[$i]['resultatsAttendus'])),
+                    mb_strtoupper(Tools::removeAccent($keyword_1)))
                 !== false
             ){
                 $textContains[] = 'resultatsAttendus';
