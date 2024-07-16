@@ -42,7 +42,10 @@ class SearchController extends AbstractController
         }
 
         $resultArrayBadge = [];
+        $isParcoursParDefautArray = [];
+
         $parcoursArray = $entityManager->getRepository(Parcours::class)->findWithKeyword($keyword_1);
+        $parcoursParDefautArray = $entityManager->getRepository(Parcours::class)->findWithKeywordForDefaultParcours($keyword_1);
 
         for($i = 0; $i < count($parcoursArray); $i++){
             $textContains = [];
@@ -59,20 +62,62 @@ class SearchController extends AbstractController
                 $textContains[] = 'resultatsAttendus';
             }
 
-            $parcours = $entityManager->getRepository(Parcours::class)->findOneById($parcoursArray[$i]['id']);
-            $linkedFicheMatiere = $entityManager->getRepository(FicheMatiere::class)->findForParcoursWithKeyword($parcours, $keyword_1);
+            $parcours = $entityManager
+                ->getRepository(Parcours::class)
+                ->findOneById($parcoursArray[$i]['parcours_id']);
+
+            $linkedFicheMatiere = $entityManager
+                ->getRepository(FicheMatiere::class)
+                ->findForParcoursWithKeyword($parcours, $keyword_1);
 
             $resultArrayBadge[] = 
             [
                 ...$textContains, 
                 'fichesMatieres' => [...$linkedFicheMatiere]
             ];
+
+            $isParcoursParDefautArray[] = $parcoursArray[$i]['parcours_libelle'] === Parcours::PARCOURS_DEFAUT;
+        }
+
+        for($j = 0; $j < count($parcoursParDefautArray); $j++){
+            $textContainsDefault = [];
+            if($this->isStringContainingText($keyword_1, $parcoursParDefautArray[$j]['contenuFormation'])){
+                $textContainsDefault[] = 'contenuFormation';
+            }
+            if($this->isStringContainingText($keyword_1, $parcoursParDefautArray[$j]['resultatsAttendus'])){
+                $textContainsDefault[] = 'resultatsAttendus';
+            }
+            if($this->isStringContainingText($keyword_1, $parcoursParDefautArray[$j]['objectifsFormation'])){
+                $textContainsDefault[] = 'objectifsFormation';
+            }
+            if($this->isStringContainingText($keyword_1, $parcoursParDefautArray[$j]['poursuitesEtudes'])){
+                $textContainsDefault[] = 'poursuitesEtudes';
+            }
+
+            $parcoursDefaut = $entityManager
+                ->getRepository(Parcours::class)
+                ->findOneById($parcoursParDefautArray[$j]['parcours_id']);
+
+            $linkedFicheMatiereDefault = $entityManager
+                ->getRepository(FicheMatiere::class)
+                ->findForParcoursWithKeyword($parcoursDefaut, $keyword_1);
+
+            $resultArrayBadge[] = [
+                ...$textContainsDefault,
+                'fichesMatieres' => [...$linkedFicheMatiereDefault]
+            ];
+
+            $isParcoursParDefautArray[] = $parcoursParDefautArray[$j]['parcours_libelle'] === Parcours::PARCOURS_DEFAUT;
         }
 
         return $this->render('search/search_result.html.twig', [
             'keyword_1' => $keyword_1,
-            'parcoursArray' => $parcoursArray,
-            'resultArrayBadge' => $resultArrayBadge
+            'parcoursArray' => [
+                ...$parcoursArray,
+                ...$parcoursParDefautArray
+            ],
+            'resultArrayBadge' => $resultArrayBadge,
+            'isParcoursDefautArray' => $isParcoursParDefautArray 
         ]);
     }
 

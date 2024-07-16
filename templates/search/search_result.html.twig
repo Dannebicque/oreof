@@ -58,19 +58,35 @@ a.fiche-matiere-search-link span {
                 {% for p in parcoursArray %}
                     <div class="col-12 border border-primary rounded my-4">
                         <div class="row p-2 mt-1">
-                            <div class="col-8">
-                                <a 
-                                    href="{{ path('app_parcours_show', {id: p.id}) }}"
-                                    class="text-primary font-weight-bold"
-                                >
-                                    {{ p.libelle }}
-                                </a>
-                            </div>
-                            <div class="col-4">
-                                <span class="text-end">
-                                    Sigle : {{ p.sigle }}
-                                </span>
-                            </div>
+                            {% if isParcoursDefautArray[loop.index0] == true %}
+                                <div class="col-8">
+                                    <a 
+                                        href="{{ path('app_formation_show', {slug: p.formation_slug}) }}"
+                                        class="text-primary font-weight-bold"
+                                    >
+                                        {{ p.formation_slug }}
+                                    </a>
+                                </div>
+                                <div class="col-4">
+                                    <span class="text-end">
+                                        Sigle : {{ p.formation_sigle }}
+                                    </span>
+                                </div>
+                            {% else %}
+                                <div class="col-8">
+                                    <a 
+                                        href="{{ path('app_parcours_show', {id: p.parcours_id}) }}"
+                                        class="text-primary font-weight-bold"
+                                    >
+                                        {{ p.parcours_libelle }}
+                                    </a>
+                                </div>
+                                <div class="col-4">
+                                    <span class="text-end">
+                                        Sigle : {{ p.parcours_sigle }}
+                                    </span>
+                                </div>
+                            {% endif %}                            
                         </div>
                         <div class="row p-2 mt-2">
                             <div>
@@ -94,6 +110,11 @@ a.fiche-matiere-search-link span {
                                         Résultats attendus
                                     </span>
                                 {% endif %}
+                                {% if 'objectifsFormation' in resultArrayBadge[loop.index0] %}
+                                    <span class="badge rounded-pill text-bg-secondary">
+                                        Objectifs de la formation
+                                    </span>
+                                {% endif %}
                             </div>
                         </div>
                         {% if resultArrayBadge[loop.index0]['fichesMatieres'] is defined 
@@ -108,7 +129,7 @@ a.fiche-matiere-search-link span {
                                 <span 
                                     class="font-weight-bold ms-3 pb-2 text-dark"
                                     data-fetch-url="{{ absolute_url(path('app_fiche_matiere_search', 
-                                            { parcours: p.id, keyword: keyword_1}))
+                                            { parcours: p.parcours_id, keyword: keyword_1}))
                                     }}"
                                     data-number-associated-fiches-matieres="{{ nbFichesMatieres }}"
                                 >
