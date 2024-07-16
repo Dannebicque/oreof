@@ -244,4 +244,26 @@ class ParcoursRepository extends ServiceEntityRepository
 
         return $qb->getQuery()->getResult();
     }
+
+    public function findWithKeywordForDefaultParcours(string $keyword){
+        $qb = $this->createQueryBuilder('p');
+
+        $qb = $qb
+            ->join('p.formation', 'f', 'WITH', 'f.id = p.formation')
+            ->select('f.id, f.contenuFormation, f.resultatsAttendus, f.objectifsFormation, p.poursuitesEtudes')
+            ->where(
+                $qb->expr()->like('UPPER(f.contenuFormation)', 'UPPER(:keyword)')
+            )
+            ->orWhere(
+                $qb->expr()->like('UPPER(f.resultatsAttendus)', 'UPPER(:keyword)')
+            )
+            ->orWhere(
+                $qb->expr()->like('UPPER(f.objectifsFormation)', 'UPPER(keyword)')
+            )->orWhere(
+                $qb->expr()->like('UPPER(p.poursuitesEtudes)', 'UPPER(keyword)')
+            )
+            ->setParameter('keyword', '%' . $keyword . '%');
+
+            return $qb->getQuery()->getResult();
+    }
 }

@@ -46,36 +46,16 @@ class SearchController extends AbstractController
 
         for($i = 0; $i < count($parcoursArray); $i++){
             $textContains = [];
-            if(
-                mb_strstr(
-                    mb_strtoupper(Tools::removeAccent($parcoursArray[$i]['contenuFormation'])),
-                    mb_strtoupper(Tools::removeAccent($keyword_1)))
-                !== false
-            ){
+            if( $this->isStringContainingText($keyword_1, $parcoursArray[$i]['contenuFormation'])) {
                 $textContains[] = 'contenuFormation';
             }
-            if(
-                mb_strstr(
-                    mb_strtoupper(Tools::removeAccent($parcoursArray[$i]['poursuitesEtudes'])),
-                    mb_strtoupper(Tools::removeAccent($keyword_1)))
-                !== false
-            ){
+            if( $this->isStringContainingText($keyword_1, $parcoursArray[$i]['poursuitesEtudes'])) {
                 $textContains[] = 'poursuitesEtudes';
             }
-            if(
-                mb_strstr(
-                    mb_strtoupper(Tools::removeAccent($parcoursArray[$i]['objectifsParcours'])),
-                    mb_strtoupper(Tools::removeAccent($keyword_1)))
-                !== false
-            ){
+            if( $this->isStringContainingText($keyword_1, $parcoursArray[$i]['objectifsParcours'])) {
                 $textContains[] = 'objectifsParcours';
             }
-            if(
-                mb_strstr(
-                    mb_strtoupper(Tools::removeAccent($parcoursArray[$i]['resultatsAttendus'])),
-                    mb_strtoupper(Tools::removeAccent($keyword_1)))
-                !== false
-            ){
+            if( $this->isStringContainingText($keyword_1, $parcoursArray[$i]['resultatsAttendus'])) {
                 $textContains[] = 'resultatsAttendus';
             }
 
@@ -94,5 +74,18 @@ class SearchController extends AbstractController
             'parcoursArray' => $parcoursArray,
             'resultArrayBadge' => $resultArrayBadge
         ]);
+    }
+
+    private function isStringContainingText(string $needle, string|null $haystack) : bool {
+        if($haystack !== null){
+            return
+                mb_strstr(
+                    mb_strtoupper(Tools::removeAccent($haystack)),
+                    mb_strtoupper(Tools::removeAccent($needle))
+                );
+        }
+        else {
+            return false;
+        }
     }
 }
