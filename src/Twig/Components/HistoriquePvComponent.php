@@ -15,6 +15,9 @@ final class HistoriquePvComponent
 
     #[PostMount]
     public function postMount() {
+        if ($this->parcours === null) {
+            return;
+        }
         $historique = $this->parcours->getHistoriqueParcours();
         foreach ($historique as $h) {
            if ($h->getEtape() === 'conseil') {
