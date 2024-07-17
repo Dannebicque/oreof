@@ -560,7 +560,7 @@ class LicenceMcccVersion extends AbstractLicenceMccc
             $this->excelWriter->writeCellXY(self::COL_RESP_EC, $ligne, '', ['wrap' => true]);
             $this->lignesEcColorees[] = $ligne;
         } elseif ($ec->getNatureUeEc() !== null && $ec->getNatureUeEc()->isChoix() === true && $ec->getEcParent() === null) {
-            $this->excelWriter->writeCellXY(self::COL_INTITULE_EC, $ligne, $ec->getLibelle() . ' (EC à choix restreint, choisir une parmis les choix ci-dessous)', ['wrap' => true]);
+            $this->excelWriter->writeCellXY(self::COL_INTITULE_EC, $ligne, $ec->getLibelle() . ' (EC à choix restreint, choisir un parmi les choix ci-dessous)', ['wrap' => true]);
             $this->excelWriter->writeCellXY(self::COL_INTITULE_EC_EN, $ligne, '', ['wrap' => true]);
             $this->excelWriter->writeCellXY(self::COL_RESP_EC, $ligne, '', ['wrap' => true]);
             $this->lignesEcColorees[] = $ligne;
