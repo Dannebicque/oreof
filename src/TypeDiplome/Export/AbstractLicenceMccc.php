@@ -98,12 +98,12 @@ class AbstractLicenceMccc
             $this->excelWriter->unMergeCells('G11:I11');
             $this->excelWriter->unMergeCells('G13:I13');
 
-            $this->excelWriter->unMergeCells('G5:L5');
-            $this->excelWriter->unMergeCells('G6:L6');
-            $this->excelWriter->unMergeCells('G7:L7');
-            $this->excelWriter->unMergeCells('G9:L9');
-            $this->excelWriter->unMergeCells('G11:L11');
-            $this->excelWriter->unMergeCells('G13:L13');
+            $this->excelWriter->unMergeCells('J5:L5');
+            $this->excelWriter->unMergeCells('J6:L6');
+            $this->excelWriter->unMergeCells('J7:L7');
+            $this->excelWriter->unMergeCells('J9:L9');
+            $this->excelWriter->unMergeCells('J11:L11');
+            $this->excelWriter->unMergeCells('J13:L13');
 
             $this->excelWriter->copyFromCellToCell('G5', 'N5');
             $this->excelWriter->copyFromCellToCell('J5', 'S5');
@@ -126,12 +126,12 @@ class AbstractLicenceMccc
             //suppression des colonnes
             $this->excelWriter->removeColumn('F', 5);
             $this->excelWriter->mergeCells('D15:H16');
-            $this->excelWriter->mergeCells('I5:L5');
-            $this->excelWriter->mergeCells('I6:L6');
-            $this->excelWriter->mergeCells('I7:L7');
-            $this->excelWriter->mergeCells('I9:L9');
-            $this->excelWriter->mergeCells('I11:L11');
-            $this->excelWriter->mergeCells('I13:L13');
+            $this->excelWriter->mergeCells('G5:L5');
+            $this->excelWriter->mergeCells('G6:L6');
+            $this->excelWriter->mergeCells('G7:L7');
+            $this->excelWriter->mergeCells('G9:L9');
+            $this->excelWriter->mergeCells('G11:L11');
+            $this->excelWriter->mergeCells('G13:L13');
 
             $style = ['alignment' => [
                 'horizontal' => Alignment::HORIZONTAL_RIGHT,
@@ -144,12 +144,12 @@ class AbstractLicenceMccc
             $this->excelWriter->cellStyle('I11', $style);
             $this->excelWriter->cellStyle('I13', $style);
 
-            $this->excelWriter->mergeCells('N5:S5');
-            $this->excelWriter->mergeCells('N6:S6');
-            $this->excelWriter->mergeCells('N7:S7');
-            $this->excelWriter->mergeCells('N9:S9');
-            $this->excelWriter->mergeCells('N11:S11');
-            $this->excelWriter->mergeCells('N13:S13');
+            $this->excelWriter->mergeCells('N5:Q5');
+            $this->excelWriter->mergeCells('N6:Q6');
+            $this->excelWriter->mergeCells('N7:Q7');
+            $this->excelWriter->mergeCells('N9:Q9');
+            $this->excelWriter->mergeCells('N11:Q11');
+            $this->excelWriter->mergeCells('N13:Q13');
 
             foreach ($this->lignesSemestre as $ligneSemestre) {
                 $ligneSemestre--;
