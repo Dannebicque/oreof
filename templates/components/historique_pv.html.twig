@@ -6,7 +6,7 @@
                 {{ stimulus_controller('modal', {
                     size: 'lg',
                     modalTitle: 'deposer.le.pv.title'|trans({}, 'process'),
-                    modalUrl: path('app_deposer_pv_conseil', {formation:formation.id}) }) }}
+                    modalUrl: path('app_deposer_pv_conseil', {parcours:this.parcours.id}) }) }}
                 data-action="click->modal#openModal"
                 class="btn btn-outline-warning btn-sm ms-1"
                 data-size="lg"
