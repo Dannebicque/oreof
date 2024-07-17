@@ -23,6 +23,7 @@ class BadgeDpeExtension extends AbstractExtension
     {
         return [
             new TwigFilter('badgeDpe', [$this, 'badgeDpe'], ['is_safe' => ['html']]),
+            new TwigFilter('badgeStep', [$this, 'badgeStep'], ['is_safe' => ['html']]),
             new TwigFilter('badgeEtatComposante', [$this, 'badgeEtatComposante'], ['is_safe' => ['html']]),
             new TwigFilter('badgeFormation', [$this, 'badgeFormation'], ['is_safe' => ['html']]),
             new TwigFilter('badgeEc', [$this, 'badgeEc'], ['is_safe' => ['html']]),
@@ -111,6 +112,11 @@ class BadgeDpeExtension extends AbstractExtension
     public function badgeDpe(array $etatsDpe): string
     {
         return $this->displayDpeBadge($etatsDpe);
+    }
+
+    public function badgeStep(bool $etatsDpe): string
+    {
+        return $etatsDpe ? '<span class="badge bg-success me-1">Complet</span>' : '<span class="badge bg-warning me-1">Incomplet</span>';
     }
 
     public function badgeFiche(array $etatFiche): string
