@@ -141,6 +141,10 @@ bouton pour valider/invalide les étapes successives #}
                                 Soumis CFVU
                             </option>
                             <option value="valide_a_publier"
+                                    {% if params['etatDpe'] is defined and params['etatDpe'] == 'valide_pour_publication' %}selected{% endif %}>
+                                Validé CFVU
+                            </option>
+                            <option value="valide_a_publier"
                                     {% if params['etatDpe'] is defined and params['etatDpe'] == 'valide_a_publier' %}selected{% endif %}>
                                 Validé pour publication
                             </option>
