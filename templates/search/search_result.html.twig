@@ -29,6 +29,14 @@ a.fiche-matiere-search-link span {
     }
 }
 
+#newSearchField::placeholder {
+    color: black;
+}
+
+#newSearchField:focus { 
+    border-color: black;
+}
+
 </style>
 {% endblock %}
 
@@ -49,6 +57,27 @@ a.fiche-matiere-search-link span {
     }} 
 </p>
 {% endif %}
+
+<div class="row justify-content-center my-5">
+    <div class="col-8 col-md-6 col-lg-4 justify-content-center">
+        <form action="{{ path('app_search_action') }}">
+            <input 
+                type="text" 
+                placeholder="Nouvelle recherche..." 
+                id="newSearchField"
+                class="form-control"
+                name="keyword_1"
+            >
+            <div class="row justify-content-center">
+                <div class="col-10 col-md-8 col-lg-5 text-center">
+                    <button class="btn btn-sm btn-primary border border-white rounded mt-3">
+                        Rechercher
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
 
 <div class="row justify-content-center" id="rootListElement"
      data-fiche-matiere-url="{{ absolute_url(path('app_fiche_matiere_show', {slug: 'µ#+'})) }}"
