@@ -86,7 +86,7 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
         ?DateTimeInterface $dateConseil = null,
         string $fichier
     ): string {
-        return $this->licenceMcccVersion->exportAndSaveExcelLicenceMccc($anneeUniversitaire, $parcours, $dir, $dateCfvu, $dateConseil, true, $fichier);
+        return $this->licenceMcccVersion->exportAndSaveExcelLicenceMccc($anneeUniversitaire, $parcours, $dir, $fichier, $dateCfvu, $dateConseil, true);
     }
 
     public function exportPdfMccc(

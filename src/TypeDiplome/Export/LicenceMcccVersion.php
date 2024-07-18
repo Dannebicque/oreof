@@ -442,10 +442,10 @@ class LicenceMcccVersion extends AbstractLicenceMccc
         CampagneCollecte   $anneeUniversitaire,
         Parcours           $parcours,
         string             $dir,
+        string $fichier,
         ?DateTimeInterface $dateCfvu = null,
         ?DateTimeInterface $dateConseil = null,
-        bool               $versionFull = true,
-        string $fichier
+        bool               $versionFull = true
     ): string {
         $this->genereExcelLicenceMccc($anneeUniversitaire, $parcours, $dateCfvu, $dateConseil, $versionFull);
         $date = new \DateTime();

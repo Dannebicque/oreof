@@ -50,7 +50,7 @@ class LicenceMccc extends AbstractLicenceMccc
         protected ExcelWriter             $excelWriter,
         protected TypeEpreuveRepository             $typeEpreuveRepository
     ) {
-
+        parent::__construct($excelWriter);
         $this->dir = $kernel->getProjectDir() . '/public';
 
     }
