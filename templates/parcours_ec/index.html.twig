@@ -45,15 +45,34 @@
 {% endblock %}
 
 {% block breadcrumb %}
-    {{ include('communs/_breadcrumb.html.twig', {liens:[
-        {href: path('app_parcours_index'), title: 'Liste des parcours'},
-        {href: path('app_formation_edit', {slug:parcours.formation.slug}), title: 'Formation : '~parcours.formation
-        .display},
-        {href: path('app_parcours_edit', {id:parcours.id}), title: 'Parcours : '~parcours.libelle},
-    ]}) }}
+    {% if parcours.parcoursDefaut == true %}
+        {{ include('communs/_breadcrumb.html.twig', {liens:[
+            {href: path('app_parcours_index'), title: 'Liste des parcours'},
+            {href: path('app_formation_edit', {slug:parcours.formation.slug}), title: 'Formation : '~parcours.formation
+            .display}
+        ]}) }}
+    {% else %}
+        {{ include('communs/_breadcrumb.html.twig', {liens:[
+            {href: path('app_parcours_index'), title: 'Liste des parcours'},
+            {href: path('app_formation_edit', {slug:parcours.formation.slug}), title: 'Formation : '~parcours.formation
+            .display},
+            {href: path('app_parcours_edit', {id:parcours.id}), title: 'Parcours : '~parcours.libelle},
+        ]}) }}
+    {% endif %}
 {% endblock %}
 
 {% block bouton_header %}
+    {% if parcours.parcoursDefaut == true %}
+        <a href="{{ path('app_formation_edit', {slug:parcours.formation.slug}) }}"
+           class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+           data-bs-toggle="tooltip"
+           data-bs-placement="bottom"
+           title="Retour à la formation"
+        >
+            <i class="{{ iconBack }}"></i>
+            <span> Retour à la formation</span>
+        </a>
+    {% else %}
     <a href="{{ path('app_parcours_edit', {id:parcours.id}) }}"
        class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
        data-bs-toggle="tooltip"
@@ -63,4 +82,5 @@
         <i class="{{ iconBack }}"></i>
         <span> Retour au parcours</span>
     </a>
+    {% endif %}
 {% endblock %}
