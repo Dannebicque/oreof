@@ -12,9 +12,11 @@
     <th class="font-weight-bold">Fiche</th>
     <th class="font-weight-bold">Type EC</th>
     <th class="font-weight-bold">ECTS</th>
-    <th class="font-weight-bold">MCCC</th>
     <th class="font-weight-bold">BCC</th>
     <th class="font-weight-bold">Vol. Horaire</th>
+    <th class="font-weight-bold">MCCC</th>
+
+
 </tr>
 {# todo: améliorer l'affichage et reprendre les éléments comme CalculStructure... #}
 {% for ec in tabEcs[semParc.ordre][ue.id] %}
@@ -87,16 +89,6 @@
             }) }}
         </td>
         <td>
-            {{ component('badge_mccc', {
-                elementConstitutif: ec,
-                parcours: parcours,
-                ue: ue,
-                editable: true,
-                deplacer: true,
-                texte: true
-            }) }}
-        </td>
-        <td>
             {{ component('badge_bcc', {
                 elementConstitutif: ec,
                 parcours: parcours,
@@ -115,27 +107,18 @@
                 deplacer: true,
                 texte: true
             }) }}
-
-            {#                                    <button#}
-
-            {#                                            {{ stimulus_controller('modal', {#}
-            {#                                                size: 'lg',#}
-            {#                                                modalTitle: 'Volumes Horaires',#}
-            {#                                                modalUrl: path('app_element_constitutif_structure',{'id': ec.id, parcours:parcours.id}) }) }}#}
-
-            {#                                            data-action="click->modal#openModal"#}
-            {#                                            class="btn btn-sm btn-outline-info"#}
-            {#                                            data-size="lg"#}
-            {#                                            data-bs-toggle="tooltip"#}
-            {#                                            data-bs-placement="bottom"#}
-            {#                                            title="Volumes Horaires"#}
-            {#                                    >#}
-            {#                                        <i class="fal fa-clock"></i>#}
-            {#                                        <span class="badge bg-{% if ec.etatStructure == 'Complet' %}success{% else %}warning{% endif %}">#}
-            {#                            {{ ec.etatStructure }}#}
-            {#                        </span>#}
-            {#                                    </button>#}
         </td>
+        <td>
+            {{ component('badge_mccc', {
+                elementConstitutif: ec,
+                parcours: parcours,
+                ue: ue,
+                editable: true,
+                deplacer: true,
+                texte: true
+            }) }}
+        </td>
+
     </tr>
     {% if ec.ficheMatiere != null and ec.ficheMatiere.parcours != null and not (ec.ficheMatiere.parcours.id == parcours.id and raccrocheSem == false and raccrocheUe == false) %}
         <tr>
@@ -160,28 +143,6 @@
                 {#                                        <button class="btn text-primary">Recopier les ECTS  <i class="fal fa-question-circle ms-1" data-controller="tooltip" #}
                 {#                                                                                               data-tooltip-placement-value="bottom" #}
                 {#                                                                                               title="{{ 'parcours_ec.helps.recopieEcts'|trans({}, 'help') }}"></i></button> #}
-            </td>
-
-            <td>
-                <div class="form-check mb-2">
-                    <input class="form-check-input" type="checkbox"
-                           id="synchroMccc"
-                           name="synchroMccc"
-                            {{ stimulus_action('parcours--ec', 'synchro', 'change', {
-                                ec:ec.id,
-                                type:'synchroMccc'
-                            }) }}
-                            {% if ec.synchroMccc == true %}checked{% endif %}
-                    >
-                    <label class="form-check-label"
-                           for="synchroMccc"> Raccrocher les MCCC
-                        <i class="fal fa-question-circle ms-1" data-controller="tooltip"
-                           data-tooltip-placement-value="bottom"
-                           title="{{ 'parcours_ec.helps.synchroMccc'|trans({}, 'help') }}"></i></label>
-                </div>
-                {#                                        <button class="btn text-primary">Recopier les MCCC  <i class="fal fa-question-circle ms-1" data-controller="tooltip" #}
-                {#                                                                                               data-tooltip-placement-value="bottom" #}
-                {#                                                                                               title="{{ 'parcours_ec.helps.recopieMccc'|trans({}, 'help') }}"></i></button> #}
             </td>
             <td>
                 <div class="form-check mb-2">
@@ -225,6 +186,27 @@
                 {#                                        <button class="btn text-primary">Recopier les Heures  <i class="fal fa-question-circle ms-1" data-controller="tooltip" #}
                 {#                                                                                               data-tooltip-placement-value="bottom" #}
                 {#                                                                                               title="{{ 'parcours_ec.helps.recopieHeures'|trans({}, 'help') }}"></i></button> #}
+            </td>
+            <td>
+                <div class="form-check mb-2">
+                    <input class="form-check-input" type="checkbox"
+                           id="synchroMccc"
+                           name="synchroMccc"
+                            {{ stimulus_action('parcours--ec', 'synchro', 'change', {
+                                ec:ec.id,
+                                type:'synchroMccc'
+                            }) }}
+                            {% if ec.synchroMccc == true %}checked{% endif %}
+                    >
+                    <label class="form-check-label"
+                           for="synchroMccc"> Raccrocher les MCCC
+                        <i class="fal fa-question-circle ms-1" data-controller="tooltip"
+                           data-tooltip-placement-value="bottom"
+                           title="{{ 'parcours_ec.helps.synchroMccc'|trans({}, 'help') }}"></i></label>
+                </div>
+                {#                                        <button class="btn text-primary">Recopier les MCCC  <i class="fal fa-question-circle ms-1" data-controller="tooltip" #}
+                {#                                                                                               data-tooltip-placement-value="bottom" #}
+                {#                                                                                               title="{{ 'parcours_ec.helps.recopieMccc'|trans({}, 'help') }}"></i></button> #}
             </td>
         </tr>
     {% endif %}

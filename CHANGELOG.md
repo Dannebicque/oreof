@@ -2,6 +2,33 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.29.40](https://github.com/Dannebicque/oreof/compare/v1.29.39...v1.29.40) (2024-07-17)
+
+
+### Features
+
+* PV sur plusieurs étapes ([9cf3cc7](https://github.com/Dannebicque/oreof/commit/9cf3cc7d5a031af5928c9fed31e3e5571440c56f))
+
+
+### Bug Fixes
+
+* Ordre des colonnes ([af0a52e](https://github.com/Dannebicque/oreof/commit/af0a52e90a729d8a1f9638dfa020af0a084d5843))
+* PV historique ([dec8b7e](https://github.com/Dannebicque/oreof/commit/dec8b7ee818e7bd47a2523a747ff699901942dce))
+
+### [1.29.39](https://github.com/Dannebicque/oreof/compare/v1.29.38...v1.29.39) (2024-07-17)
+
+
+### Features
+
+* Ajout indicateur validation ([0286765](https://github.com/Dannebicque/oreof/commit/028676532c119eb26171c12f2fcd490508df982e))
+
+
+### Bug Fixes
+
+* ajout d'une phrase sur CCI dans modèle export MCCC Excel ([a4dee3b](https://github.com/Dannebicque/oreof/commit/a4dee3bb3d2de05b5066d4307a48188faea0fe7f))
+* excel, cellules fusionnées ([e03bae7](https://github.com/Dannebicque/oreof/commit/e03bae74e3de306bf45f72960e2d72d893ce888c))
+* typo ([d7af470](https://github.com/Dannebicque/oreof/commit/d7af470370e1b37264bb1e4191203558ddf346aa))
+
 ### [1.29.38](https://github.com/Dannebicque/oreof/compare/v1.29.37...v1.29.38) (2024-07-13)
 
 

@@ -8,6 +8,8 @@ use App\Classes\Process\FormationProcess;
 use App\Classes\ValidationProcess;
 use App\Entity\Formation;
 use App\Entity\HistoriqueFormation;
+use App\Entity\HistoriqueParcours;
+use App\Entity\Parcours;
 use App\Events\HistoriqueFormationEvent;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
@@ -23,20 +25,20 @@ class PvConseilController extends AbstractController
 {
     public const EMAIL_CENTRAL = 'cfvu-secretariat@univ-reims.fr'; //todo: a mettre sur établissement ?
 
-    #[Route('/pv/conseil/{formation}', name: 'app_deposer_pv_conseil')]
+    #[Route('/pv/conseil/{parcours}', name: 'app_deposer_pv_conseil')]
     public function index(
         Mailer $myMailer,
         KernelInterface $kernel,
         EntityManagerInterface $entityManager,
         TranslatorInterface $translator,
         Request $request,
-        Formation $formation,
+        Parcours $parcours,
     ): Response
     {
         if ($request->isMethod('POST')) {
             $dir = $kernel->getProjectDir().'/public/uploads/conseils/';
-            $histo = new HistoriqueFormation();
-            $histo->setFormation($formation);
+            $histo = new HistoriqueParcours();
+            $histo->setParcours($parcours);
             $histo->setDate(new DateTime());
             $histo->setUser($this->getUser());
             $histo->setEtape('conseil');
@@ -63,17 +65,17 @@ class PvConseilController extends AbstractController
             $myMailer->initEmail();
             $myMailer->setTemplate(
                 'mails/workflow/formation/conseil_pv_depose.html.twig',
-                ['formation' => $formation]
-            );
+                ['parcours' => $parcours]
+            ); //todo: revoir le texte du mail si avec ou sans parcours
             $myMailer->sendMessage(
                 [self::EMAIL_CENTRAL],
-                '[ORéOF]  Le PV de conseil a été déposé pour la formation '.$formation->getDisplayLong()
+                '[ORéOF]  Le PV de conseil a été déposé pour le parcours '.$parcours->getLibelle()
             );
 
             return JsonReponse::success($translator->trans('deposer.pv.flash.success', [], 'process'));
         }
         return $this->render('pv_conseil/_index.html.twig', [
-            'formation' => $formation,
+            'parcours' => $parcours,
         ]);
     }
 }

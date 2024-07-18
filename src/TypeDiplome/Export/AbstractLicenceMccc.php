@@ -126,12 +126,12 @@ class AbstractLicenceMccc
             //suppression des colonnes
             $this->excelWriter->removeColumn('F', 5);
             $this->excelWriter->mergeCells('D15:H16');
-            $this->excelWriter->mergeCells('I5:L5');
-            $this->excelWriter->mergeCells('I6:L6');
-            $this->excelWriter->mergeCells('I7:L7');
-            $this->excelWriter->mergeCells('I9:L9');
-            $this->excelWriter->mergeCells('I11:L11');
-            $this->excelWriter->mergeCells('I13:L13');
+            $this->excelWriter->mergeCells('G5:L5');
+            $this->excelWriter->mergeCells('G6:L6');
+            $this->excelWriter->mergeCells('G7:L7');
+            $this->excelWriter->mergeCells('G9:L9');
+            $this->excelWriter->mergeCells('G11:L11');
+            $this->excelWriter->mergeCells('G13:L13');
 
             $style = ['alignment' => [
                 'horizontal' => Alignment::HORIZONTAL_RIGHT,
