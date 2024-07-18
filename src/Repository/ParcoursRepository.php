@@ -230,9 +230,10 @@ class ParcoursRepository extends ServiceEntityRepository
                     'p.id AS parcours_id', 'p.libelle AS parcours_libelle',
                     'p.sigle AS parcours_sigle', 'p.objectifsParcours',
                     'p.poursuitesEtudes', 'p.contenuFormation',
-                    'p.resultatsAttendus'
+                    'p.resultatsAttendus', 'f.id AS formation_id'
                 ]
             )
+            ->join('p.formation', 'f', 'WITH', 'p.formation = f.id')
             ->where(
                 $qb->expr()->like('UPPER(p.objectifsParcours)', 'UPPER(:keyword)')
             )

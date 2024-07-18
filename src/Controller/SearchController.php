@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\FicheMatiere;
+use App\Entity\Formation;
 use App\Entity\Parcours;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -70,10 +71,16 @@ class SearchController extends AbstractController
                 ->getRepository(FicheMatiere::class)
                 ->findForParcoursWithKeyword($parcours, $keyword_1);
 
+            $libelleMention = $entityManager
+                ->getRepository(Formation::class)
+                ->findOneById($parcoursArray[$i]['formation_id'])
+                ->getDisplayLong() ?? "";
+
             $resultArrayBadge[] = 
             [
                 ...$textContains, 
-                'fichesMatieres' => [...$linkedFicheMatiere]
+                'fichesMatieres' => [...$linkedFicheMatiere],
+                'libelleMention' => $libelleMention 
             ];
 
             $isParcoursParDefautArray[] = $parcoursArray[$i]['parcours_libelle'] === Parcours::PARCOURS_DEFAUT;
@@ -102,9 +109,15 @@ class SearchController extends AbstractController
                 ->getRepository(FicheMatiere::class)
                 ->findForParcoursWithKeyword($parcoursDefaut, $keyword_1);
 
+            $libelleMentionParDefaut = $entityManager
+                ->getRepository(Formation::class)
+                ->findOneById($parcoursParDefautArray[$j]['formation_id'])
+                ->getDisplayLong() ?? "";
+
             $resultArrayBadge[] = [
                 ...$textContainsDefault,
-                'fichesMatieres' => [...$linkedFicheMatiereDefault]
+                'fichesMatieres' => [...$linkedFicheMatiereDefault],
+                'libelleMention' => $libelleMentionParDefaut
             ];
 
             $isParcoursParDefautArray[] = $parcoursParDefautArray[$j]['parcours_libelle'] === Parcours::PARCOURS_DEFAUT;

@@ -64,7 +64,7 @@ a.fiche-matiere-search-link span {
                                         href="{{ path('app_formation_show', {slug: p.formation_slug}) }}"
                                         class="text-primary font-weight-bold"
                                     >
-                                        {{ p.formation_slug }}
+                                        {{ resultArrayBadge[loop.index0]['libelleMention'] }}
                                     </a>
                                 </div>
                                 <div class="col-4">
@@ -78,6 +78,7 @@ a.fiche-matiere-search-link span {
                                         href="{{ path('app_parcours_show', {id: p.parcours_id}) }}"
                                         class="text-primary font-weight-bold"
                                     >
+                                        {{ resultArrayBadge[loop.index0]['libelleMention'] }}
                                         {{ p.parcours_libelle }}
                                     </a>
                                 </div>
