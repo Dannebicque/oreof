@@ -61,6 +61,11 @@ class VersioningParcoursCommand extends Command
             name: 'dpe-only-cfvu-valid',
             mode: InputOption::VALUE_NONE,
             description: 'Sauvegarde tous les parcours qui sont validés CFVU (dernier état à "valide_a_publier").',
+        )
+        ->addOption(
+            name: 'with-skip-option',
+            mode: InputOption::VALUE_NONE,
+            description: "Ne sauvegarde pas une version de parcours, si la dernière version est validée CFVU"
         );
     }
 
@@ -72,6 +77,8 @@ class VersioningParcoursCommand extends Command
 
         $dpeFullDatabase = $input->getOption('dpe-full-database');
         $dpeOnlyCfvuValid = $input->getOption('dpe-only-cfvu-valid');
+
+        $withSkipOption = $input->getOption('with-skip-option');
 
         if($dpeFullDatabase){
             $io->writeln("Sauvegarde de tous les parcours en cours...");
@@ -124,27 +131,39 @@ class VersioningParcoursCommand extends Command
                 fn($p) => $p->getDpeParcours()->last()->getEtatValidation() === ['valide_a_publier' => 1]
             );
 
-            $nombreParcoursValides = count($parcoursArray);
-            $io->writeln("\nIl y a {$nombreParcoursValides} validés à sauvegarder.");
-
-            $io->progressStart($nombreParcoursValides);
-            foreach($parcoursArray as $parcoursCfvu){
-                $this->versioningParcours->saveVersionOfParcours(
-                    parcours: $parcoursCfvu, 
-                    now: new DateTimeImmutable(), 
-                    isCfvu: true
-                );
-                $io->progressAdvance(1);
+            if($withSkipOption){
+                $parcoursArray = array_filter(
+                    $parcoursArray,
+                    fn($p) => count(
+                        $this->entityManager
+                            ->getRepository(ParcoursVersioning::class)
+                            ->findLastCfvuVersion($p)
+                        ) < 1
+                ); 
             }
-            $io->progressFinish();
 
+            $nombreParcoursValides = count($parcoursArray);
+
+            if($nombreParcoursValides > 0){
+                $io->writeln("\nIl y a {$nombreParcoursValides} validés à sauvegarder.");
+                $io->progressStart($nombreParcoursValides);
+                foreach($parcoursArray as $parcoursCfvu){
+                    $this->versioningParcours->saveVersionOfParcours(
+                        parcours: $parcoursCfvu, 
+                        now: new DateTimeImmutable(), 
+                        isCfvu: true
+                    );
+                    $io->progressAdvance(1);
+                }
+                $io->progressFinish();
+            }
             // Log
             $now = new DateTimeImmutable();
             $dateHeure = $now->format('d-m-Y_H-i-s');
-
             $io->writeln('Enregistrement en base de données...');
+            // Save into database
             $this->entityManager->flush();
-            $log = "[{$dateHeure}] Tous les parcours CFVU ont correctement été versionnés en JSON.\n";
+            $log = "[{$dateHeure}] Tous les parcours CFVU (total : {$nombreParcoursValides}) ont correctement été versionnés en JSON.\n";
             $this->filesystem->appendToFile(__DIR__ . "/../../versioning_json/success_log/global_save_parcours_cfvu_success.log", $log);
 
             $io->success('Sauvegarde des parcours validés en CFVU reussie !');
