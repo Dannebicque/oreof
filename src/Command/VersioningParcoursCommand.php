@@ -56,6 +56,11 @@ class VersioningParcoursCommand extends Command
             name: 'dpe-full-database', 
             mode: InputOption::VALUE_NONE,
             description: 'Sauvegarde tous les parcours de la base de données en JSON'
+        )
+        ->addOption(
+            name: 'dpe-only-cfvu-valid',
+            mode: InputOption::VALUE_NONE,
+            description: 'Sauvegarde tous les parcours qui sont validés CFVU (dernier état à "valide_a_publier").',
         );
     }
 
@@ -64,7 +69,9 @@ class VersioningParcoursCommand extends Command
         ini_set('memory_limit', '2048M');
 
         $io = new SymfonyStyle($input, $output);
+
         $dpeFullDatabase = $input->getOption('dpe-full-database');
+        $dpeOnlyCfvuValid = $input->getOption('dpe-only-cfvu-valid');
 
         if($dpeFullDatabase){
             $io->writeln("Sauvegarde de tous les parcours en cours...");
@@ -98,8 +105,54 @@ class VersioningParcoursCommand extends Command
                 $this->filesystem->appendToFile(__DIR__ . "/../../versioning_json/error_log/global_save_parcours_error.log", $logTxt);
             }
         }
+
+        if($dpeOnlyCfvuValid){
+            $io->writeln("\nSauvegarde des parcours validés en CFVU...");
+
+            $dpe = $this->entityManager->getRepository(CampagneCollecte::class)->findOneBy(['defaut' => true]);
+            $parcoursArray = $this->entityManager->getRepository(Parcours::class)->findAllParcoursForDpe($dpe);
+
+            // Exclusion des MEEF
+            $parcoursArray = array_filter(
+                $parcoursArray, 
+                fn($p) => $p->getFormation()->getTypeDiplome()->getLibelleCourt() !== "MEEF"
+            );
+
+            // Sélection des parcours validés ("valide_a_publier")
+            $parcoursArray = array_filter(
+                $parcoursArray,
+                fn($p) => $p->getDpeParcours()->last()->getEtatValidation() === ['valide_a_publier' => 1]
+            );
+
+            $nombreParcoursValides = count($parcoursArray);
+            $io->writeln("\nIl y a {$nombreParcoursValides} validés à sauvegarder.");
+
+            $io->progressStart($nombreParcoursValides);
+            foreach($parcoursArray as $parcoursCfvu){
+                $this->versioningParcours->saveVersionOfParcours(
+                    parcours: $parcoursCfvu, 
+                    now: new DateTimeImmutable(), 
+                    isCfvu: true
+                );
+                $io->progressAdvance(1);
+            }
+            $io->progressFinish();
+
+            // Log
+            $now = new DateTimeImmutable();
+            $dateHeure = $now->format('d-m-Y_H-i-s');
+
+            $io->writeln('Enregistrement en base de données...');
+            $this->entityManager->flush();
+            $log = "[{$dateHeure}] Tous les parcours CFVU ont correctement été versionnés en JSON.\n";
+            $this->filesystem->appendToFile(__DIR__ . "/../../versioning_json/success_log/global_save_parcours_cfvu_success.log", $log);
+
+            $io->success('Sauvegarde des parcours validés en CFVU reussie !');
+
+            return Command::SUCCESS;
+        }
         
-        $io->warning("Option de la commande non reconnue. Choix possibles : ['dpe-full-database']");
+        $io->warning("Option de la commande non reconnue. Choix possibles : ['dpe-full-database', 'dpe-only-cfvu-valid']");
         return Command::INVALID;
     }
 
