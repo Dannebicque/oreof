@@ -12,6 +12,7 @@ namespace App\Classes\Export;
 use App\Classes\Excel\ExcelWriter;
 use App\Entity\CampagneCollecte;
 use App\Enums\RegimeInscriptionEnum;
+use App\Repository\DpeParcoursRepository;
 use App\Repository\FormationRepository;
 use App\Utils\Tools;
 use DateTime;
@@ -26,6 +27,7 @@ class ExportSynthese
     public function __construct(
         protected ExcelWriter         $excelWriter,
         KernelInterface               $kernel,
+        protected DpeParcoursRepository $dpeParcoursRepository,
         protected FormationRepository $formationRepository,
     ) {
         $this->dir = $kernel->getProjectDir() . '/public/temp/';
@@ -75,10 +77,10 @@ class ExportSynthese
 
 
     private function prepareExportBrut(
-        CampagneCollecte $anneeUniversitaire,
+        CampagneCollecte $campagneCollecte,
     ): void {
-        $formations = $this->formationRepository->findBySearch('', $anneeUniversitaire, []);
-        $this->excelWriter->nouveauFichier('Export Régimes');
+        $dpeParcours = $this->dpeParcoursRepository->findBy(['campagneCollecte' => $campagneCollecte]);
+        $this->excelWriter->nouveauFichier('Export Offre de formation');
         $this->excelWriter->setActiveSheetIndex(0);
 
         $this->excelWriter->writeCellXY(1, 1, 'Composante');
@@ -126,18 +128,27 @@ class ExportSynthese
 
 
         $ligne = 2;
-        foreach ($formations as $formation) {
+        foreach ($dpeParcours as $parc) {
+
+            $parcours = $parc->getParcours();
+            if ($parcours === null) {
+                continue;
+            }
+            $formation = $parcours->getFormation();
+            if ($formation === null) {
+                continue;
+            }
+
             //Composante	Type de diplôme	mention	parcours	état	remplissage	nom responsable
             $this->excelWriter->writeCellXY(1, $ligne, $formation->getComposantePorteuse()?->getLibelle());
             $this->excelWriter->writeCellXY(2, $ligne, $formation->getTypeDiplome()?->getLibelle());
             $this->excelWriter->writeCellXY(3, $ligne, $formation->getDisplay());
-            if ($formation->isHasParcours()) {
-                $this->excelWriter->writeCellXY(4, $ligne, $formation->getParcours()->count() . ' parcours');
+            if ($parcours->isParcoursDefaut()) {
+                $this->excelWriter->writeCellXY(4, $ligne, '');
             } else {
-                $this->excelWriter->writeCellXY(4, $ligne, 'Pas de parcours');
+                $this->excelWriter->writeCellXY(4, $ligne, $parcours->getLibelle());
             }
-            $this->excelWriter->writeCellXY(4, $ligne, '');
-            $this->excelWriter->writeCellXY(5, $ligne, array_key_first($formation->getEtatDpe()));
+            $this->excelWriter->writeCellXY(5, $ligne, array_key_first($parc->getEtatValidation()));
             $this->excelWriter->writeCellXY(6, $ligne, number_format($formation->getRemplissage()->calcul() / 100, 2), [
                 'pourcentage' => 'pourcentage',
             ]);
@@ -159,18 +170,18 @@ class ExportSynthese
                 $i++;
             }
 
-            $ligne++;
-            foreach ($formation->getParcours() as $parcours) {
-                if ($parcours->isParcoursDefaut() === false) {
-                    $this->excelWriter->writeCellXY(1, $ligne, $formation->getComposantePorteuse()?->getLibelle());
-                    $this->excelWriter->writeCellXY(2, $ligne, $formation->getTypeDiplome()?->getLibelle());
-                    $this->excelWriter->writeCellXY(3, $ligne, $formation->getDisplay());
-                    $this->excelWriter->writeCellXY(4, $ligne, $parcours->getLibelle());
-                    $this->excelWriter->writeCellXY(5, $ligne, array_key_first($parcours->getEtatParcours()));
-                    $this->excelWriter->writeCellXY(6, $ligne, number_format($parcours->getRemplissage()->calcul() / 100, 2), [
-                        'pourcentage' => 'pourcentage',
-                    ]);
-                    $this->excelWriter->writeCellXY(7, $ligne, $parcours->getRespParcours()?->getDisplay());
+           // $ligne++;
+           // foreach ($formation->getParcours() as $parcours) {
+               // if ($parcours->isParcoursDefaut() === false) {
+//                    $this->excelWriter->writeCellXY(1, $ligne, $formation->getComposantePorteuse()?->getLibelle());
+//                    $this->excelWriter->writeCellXY(2, $ligne, $formation->getTypeDiplome()?->getLibelle());
+//                    $this->excelWriter->writeCellXY(3, $ligne, $formation->getDisplay());
+//                    $this->excelWriter->writeCellXY(4, $ligne, $parcours->getLibelle());
+//                    $this->excelWriter->writeCellXY(5, $ligne, array_key_first($parcours->getEtatParcours()));
+//                    $this->excelWriter->writeCellXY(6, $ligne, number_format($parcours->getRemplissage()->calcul() / 100, 2), [
+//                        'pourcentage' => 'pourcentage',
+//                    ]);
+//                    $this->excelWriter->writeCellXY(7, $ligne, $parcours->getRespParcours()?->getDisplay());
 
                     $this->excelWriter->writeCellXY(15, $ligne, $parcours->getSigle());
                     $this->excelWriter->writeCellXY(16, $ligne, $parcours->getContenuFormation());
@@ -204,8 +215,8 @@ class ExportSynthese
                         $i++;
                     }
                     $ligne++;
-                }
-            }
+               // }
+           // }
         }
         $this->fileName = Tools::FileName('OF Brut - ' . (new DateTime())->format('d-m-Y-H-i'), 30);
     }
