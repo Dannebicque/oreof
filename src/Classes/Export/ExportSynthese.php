@@ -10,6 +10,7 @@
 namespace App\Classes\Export;
 
 use App\Classes\Excel\ExcelWriter;
+use App\Classes\GetHistorique;
 use App\Entity\CampagneCollecte;
 use App\Enums\RegimeInscriptionEnum;
 use App\Repository\DpeParcoursRepository;
@@ -28,6 +29,7 @@ class ExportSynthese
         protected ExcelWriter         $excelWriter,
         KernelInterface               $kernel,
         protected DpeParcoursRepository $dpeParcoursRepository,
+        protected GetHistorique         $getHistorique,
         protected FormationRepository $formationRepository,
     ) {
         $this->dir = $kernel->getProjectDir() . '/public/temp/';
@@ -119,10 +121,12 @@ class ExportSynthese
         $this->excelWriter->writeCellXY(33, 1, 'P debouches');
         $this->excelWriter->writeCellXY(34, 1, 'P modalitesAlternance');
         $this->excelWriter->writeCellXY(35, 1, 'P coordSecretariat');
+        $this->excelWriter->writeCellXY(36, 1, 'Type de parcours');
+        $this->excelWriter->writeCellXY(37, 1, 'Dernier Histo.');
 
         $i = 0;
         foreach (RegimeInscriptionEnum::cases() as $regime) {
-            $this->excelWriter->writeCellXY(35 + $i, 1, $regime->value);
+            $this->excelWriter->writeCellXY(38 + $i, 1, $regime->value);
             $i++;
         }
 
@@ -163,7 +167,7 @@ class ExportSynthese
             $i = 0;
             foreach (RegimeInscriptionEnum::cases() as $regime) {
                 if (in_array($regime, $formation->getRegimeInscription())) {
-                    $this->excelWriter->writeCellXY(35 + $i, $ligne, 'X', [
+                    $this->excelWriter->writeCellXY(38 + $i, $ligne, 'X', [
                         'style' => 'HORIZONTAL_CENTER'
                     ]);
                 }
@@ -204,11 +208,15 @@ class ExportSynthese
                     $this->excelWriter->writeCellXY(33, $ligne, $parcours->getDebouches());
                     $this->excelWriter->writeCellXY(34, $ligne, $parcours->getModalitesAlternance());
                     $this->excelWriter->writeCellXY(35, $ligne, $parcours->getCoordSecretariat());
+                    $this->excelWriter->writeCellXY(36, $ligne, $parcours->getTypeParcours()?->libelle());
+//                    $lastHisto = $this->getHistorique->getHistoriqueParcours($parcours);
+//            $this->excelWriter->writeCellXY(37, $ligne, $parcours->getTypeParcours()?->libelle());
+
 
                     $i = 0;
                     foreach (RegimeInscriptionEnum::cases() as $regime) {
                         if (in_array($regime, $parcours->getRegimeInscription())) {
-                            $this->excelWriter->writeCellXY(35 + $i, $ligne, 'X', [
+                            $this->excelWriter->writeCellXY(38 + $i, $ligne, 'X', [
                                 'style' => 'HORIZONTAL_CENTER'
                             ]);
                         }

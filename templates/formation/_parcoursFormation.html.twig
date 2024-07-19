@@ -17,7 +17,7 @@
                     <td>{{ parcours.libelle }} {{ parcours.typeParcours|badgeTypeParcours }}</td>
                     <td>{{ parcours.localisation != null ? parcours.localisation.libelle : 'Non défini' }}</td>
                     <td>{{ parcours.respParcours != null ? parcours.respParcours.display : 'Non défini' }}</td>
-                    <td>{{ dpesParcours[parcours.id].etatValidation|badgeDpe }} {{ parcours.withCfvu == true ? '<span class="badge bg-warning">CFVU</span>' : '' }}</td>
+                    <td>{{ dpesParcours[parcours.id].etatValidation|badgeDpe }}</td>
                     <td>
                         {{ parcours.remplissage|remplissage }}
                     </td>
