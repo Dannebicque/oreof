@@ -442,15 +442,23 @@ class ParcoursController extends BaseController
     #[Route('/{parcours}/versioning/maquette_iframe', 'app_versioning_parcours_maquette_iframe')]
     public function getValidatedMaquetteIframe(
         Parcours $parcours,
-        VersioningParcours $versioningParcours
+        VersioningParcours $versioningParcours,
+        EntityManagerInterface $entityManager
     ){
-        // À modifier, pour garder la version CFVU
-        $lastVersion = $parcours->getParcoursVersionings()->last();
-        $dto = $versioningParcours->loadParcoursFromVersion($lastVersion)['dto'];
+        $lastVersion = $entityManager
+            ->getRepository(ParcoursVersioning::class)
+            ->findLastCfvuVersion($parcours)[0] ?? false;
 
-        return $this->render('parcours/maquette_iframe.html.twig', [
-            'parcours' => $dto
-        ]);
+        if($lastVersion){
+            $dto = $versioningParcours->loadParcoursFromVersion($lastVersion)['dto'];
+    
+            return $this->render('parcours/maquette_iframe.html.twig', [
+                'parcours' => $dto
+            ]);
+        }
+        else {
+            return new JsonResponse(['error' => 'Data not found.']);
+        }
     }
 
     #[Route('/{parcours}/export-xml-lheo', name: 'app_parcours_export_xml_lheo')]
