@@ -217,9 +217,9 @@ class ExcelWriter
         }
     }
 
-    public function mergeCells(string $cells): void
+    public function mergeCells(string $cells, string $behaviour = Worksheet::MERGE_CELL_CONTENT_EMPTY): void
     {
-        $this->sheet->mergeCells($cells);
+        $this->sheet->mergeCells($cells, $behaviour);
     }
 
     public function borderBottomCellsRange(int $col1, int $lig1, int $col2, int $lig2, array $array)

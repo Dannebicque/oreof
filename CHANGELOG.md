@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.29.41](https://github.com/Dannebicque/oreof/compare/v1.29.40...v1.29.41) (2024-07-19)
+
+
+### Bug Fixes
+
+* excel simplifié ([c78a84c](https://github.com/Dannebicque/oreof/commit/c78a84c4bbbc528a95b39d70766a899cc8ff9337))
+* Export brut à partir de Dpe ([035e971](https://github.com/Dannebicque/oreof/commit/035e971ebef4b6f5577d81e0941d4e8c6f40a1fa))
+* Export version simplifiée ([ce831f3](https://github.com/Dannebicque/oreof/commit/ce831f3cd41f7b76cccff4d8d38adf1acd002b4d))
+* libellé vide sur EC ([5c007f6](https://github.com/Dannebicque/oreof/commit/5c007f6f4f6c85b8c9bdbef1012e253ba5d7fdac))
+* manque une étape sur le filtre ([30f6b97](https://github.com/Dannebicque/oreof/commit/30f6b97e8a926267fc6a920fc515c0ce3d94a376))
+* manque une étape sur le filtre ([b3750c9](https://github.com/Dannebicque/oreof/commit/b3750c99b615f1048a7a39388451c874603f3f25))
+* PV historique ([8f7d877](https://github.com/Dannebicque/oreof/commit/8f7d877835f1748946f7cb521db5800cb3644291))
+* retour sur vérification maquette ([253c65c](https://github.com/Dannebicque/oreof/commit/253c65c6407d079611221c7f0b157eb9df50333a))
+
 ### [1.29.40](https://github.com/Dannebicque/oreof/compare/v1.29.39...v1.29.40) (2024-07-17)
 
 

@@ -9,8 +9,10 @@
 
 namespace App\TypeDiplome\Export;
 
+use App\Classes\Excel\ExcelWriter;
 use DateTimeInterface;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 class AbstractLicenceMccc
 {
@@ -79,6 +81,11 @@ class AbstractLicenceMccc
 
     private string $dir;
 
+    public function __construct(
+        protected ExcelWriter             $excelWriter,
+    ) {
+    }
+
     protected function getTypeEpreuves(): void
     {
         $epreuves = $this->typeEpreuveRepository->findAll();
@@ -105,17 +112,17 @@ class AbstractLicenceMccc
             $this->excelWriter->unMergeCells('J11:L11');
             $this->excelWriter->unMergeCells('J13:L13');
 
-            $this->excelWriter->copyFromCellToCell('G5', 'N5');
+          //  $this->excelWriter->copyFromCellToCell('G5', 'M5');
             $this->excelWriter->copyFromCellToCell('J5', 'S5');
-            $this->excelWriter->copyFromCellToCell('G6', 'N6');
+          //  $this->excelWriter->copyFromCellToCell('G6', 'M6');
             $this->excelWriter->copyFromCellToCell('J6', 'S6');
-            $this->excelWriter->copyFromCellToCell('G7', 'N7');
+          //  $this->excelWriter->copyFromCellToCell('G7', 'M7');
             $this->excelWriter->copyFromCellToCell('J7', 'S7');
-            $this->excelWriter->copyFromCellToCell('G9', 'N9');
+          //  $this->excelWriter->copyFromCellToCell('G9', 'M9');
             $this->excelWriter->copyFromCellToCell('J9', 'S9');
-            $this->excelWriter->copyFromCellToCell('G11', 'N11');
+           // $this->excelWriter->copyFromCellToCell('G11', 'M11');
             $this->excelWriter->copyFromCellToCell('J11', 'S11');
-            $this->excelWriter->copyFromCellToCell('G13', 'N13');
+          //  $this->excelWriter->copyFromCellToCell('G13', 'M13');
             $this->excelWriter->copyFromCellToCell('J13', 'S13');
 
             $this->excelWriter->unMergeCells('D15:M16');
@@ -133,23 +140,30 @@ class AbstractLicenceMccc
             $this->excelWriter->mergeCells('G11:L11');
             $this->excelWriter->mergeCells('G13:L13');
 
+            $this->excelWriter->writeCellName('G5', 'Type de formation :');
+            $this->excelWriter->writeCellName('G6', 'Intitulé de la mention (Spécialité pour les BUT) :');
+            $this->excelWriter->writeCellName('G7', 'Intitulé du parcours (si existant) :');
+            $this->excelWriter->writeCellName('G9', 'Année d\'études :');
+            $this->excelWriter->writeCellName('G11', 'Composante :');
+            $this->excelWriter->writeCellName('G13', 'Site de formation :');
+
             $style = ['alignment' => [
                 'horizontal' => Alignment::HORIZONTAL_RIGHT,
             ]];
 
-            $this->excelWriter->cellStyle('I5', $style);
-            $this->excelWriter->cellStyle('I6', $style);
-            $this->excelWriter->cellStyle('I7', $style);
-            $this->excelWriter->cellStyle('I9', $style);
-            $this->excelWriter->cellStyle('I11', $style);
-            $this->excelWriter->cellStyle('I13', $style);
+            $this->excelWriter->cellStyle('G5', $style);
+            $this->excelWriter->cellStyle('G6', $style);
+            $this->excelWriter->cellStyle('G7', $style);
+            $this->excelWriter->cellStyle('G9', $style);
+            $this->excelWriter->cellStyle('G11', $style);
+            $this->excelWriter->cellStyle('G13', $style);
 
-            $this->excelWriter->mergeCells('N5:Q5');
-            $this->excelWriter->mergeCells('N6:Q6');
-            $this->excelWriter->mergeCells('N7:Q7');
-            $this->excelWriter->mergeCells('N9:Q9');
-            $this->excelWriter->mergeCells('N11:Q11');
-            $this->excelWriter->mergeCells('N13:Q13');
+            $this->excelWriter->mergeCells('N5:S5');
+            $this->excelWriter->mergeCells('N6:S6');
+            $this->excelWriter->mergeCells('N7:S7');
+            $this->excelWriter->mergeCells('N9:S9');
+            $this->excelWriter->mergeCells('N11:S11');
+            $this->excelWriter->mergeCells('N13:S13');
 
             foreach ($this->lignesSemestre as $ligneSemestre) {
                 $ligneSemestre--;
