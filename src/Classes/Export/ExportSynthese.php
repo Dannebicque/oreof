@@ -209,8 +209,7 @@ class ExportSynthese
                     $this->excelWriter->writeCellXY(34, $ligne, $parcours->getModalitesAlternance());
                     $this->excelWriter->writeCellXY(35, $ligne, $parcours->getCoordSecretariat());
                     $this->excelWriter->writeCellXY(36, $ligne, $parcours->getTypeParcours()?->libelle());
-//                    $lastHisto = $this->getHistorique->getHistoriqueParcours($parcours);
-//            $this->excelWriter->writeCellXY(37, $ligne, $parcours->getTypeParcours()?->libelle());
+            $this->excelWriter->writeCellXY(37, $ligne, $parc->getEtatReconduction()->value);
 
 
                     $i = 0;
