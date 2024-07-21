@@ -392,12 +392,12 @@ class LicenceMcccVersion extends AbstractLicenceMccc
         $this->excelWriter->removeSheetByIndex(0);
 
         if ($formation->isHasParcours() === true) {
-            $texte = $formation->gettypeDiplome()?->getLibelleCourt() . ' ' . $parcours->getDisplay();
+            $texte = $formation->gettypeDiplome()?->getLibelleCourt() . ' ' . $parcours->getSigle().' '.$parcours->getSigle();
         } else {
-            $texte = $formation->gettypeDiplome()?->getLibelleCourt() . ' ' . $formation->getDisplay();
+            $texte = $formation->gettypeDiplome()?->getLibelleCourt() . ' ' . $formation->getSigle();
         }
 
-        $this->fileName = Tools::FileName('MCCC - ' . $anneeUniversitaire->getLibelle() . ' - ' . $texte, 50);
+        $this->fileName = Tools::FileName('MCCC-version-' . $anneeUniversitaire->getLibelle() . ' - ' . $texte, 50);
     }
 
     public function exportExcelLicenceMccc(
