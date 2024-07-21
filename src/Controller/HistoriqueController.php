@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Classes\GetDpeParcours;
 use App\Classes\GetHistorique;
 use App\Classes\JsonReponse;
 use App\Classes\Process\FicheMatiereProcess;
@@ -12,6 +13,9 @@ use App\Classes\ValidationProcessFicheMatiere;
 use App\Entity\FicheMatiere;
 use App\Entity\Formation;
 use App\Entity\Historique;
+use App\Entity\HistoriqueFicheMatiere;
+use App\Entity\HistoriqueFormation;
+use App\Entity\HistoriqueParcours;
 use App\Entity\Parcours;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -102,21 +106,49 @@ class HistoriqueController extends AbstractController
         $etape = $historique->getEtape();
 
         $process = $this->validationProcess->getEtape($etape);
-        $objet = $historique->getFormation();
 
-        if ($objet === null) {
-            return JsonReponse::error('Formation non trouvée');
+
+        if ($historique instanceof HistoriqueParcours) {
+            $parcours = $historique->getParcours();
+            if ($parcours === null) {
+                return JsonReponse::error('Parcours non trouvé');
+            }
+            $objet = GetDpeParcours::getFromParcours($parcours);
+            if ($objet === null) {
+                return JsonReponse::error('Parcours non trouvé');
+            }
+            $processData = $this->parcoursProcess->etatParcours($objet, $process);
+
+            if ($etape === 'cfvu') {
+                $laisserPasser = $getHistorique->getHistoriqueParcoursLastStep($objet, 'conseil');
+            }
+
+
+            if ($request->isMethod('POST')) {
+                return $this->parcoursProcess->editParcours($historique, $this->getUser(), $etape, $request);
+            }
+        } elseif ($historique instanceof HistoriqueFormation) {
+            //todo: a supprimer dès bascule full parcours
+            $objet = $historique->getFormation();
+            if ($objet === null) {
+                return JsonReponse::error('Formation non trouvée');
+            }
+            $processData = $this->formationProcess->etatFormation($objet, $process);
+
+            if ($etape === 'cfvu') {
+                $laisserPasser = $getHistorique->getHistoriqueFormationLastStep($objet, 'conseil');
+            }
+
+
+            if ($request->isMethod('POST')) {
+                return $this->formationProcess->editFormation($historique, $this->getUser(), $etape, $request);
+            }
         }
 
-        if ($etape === 'cfvu') {
-            $laisserPasser = $getHistorique->getHistoriqueFormationLastStep($objet, 'conseil');
-        }
 
-        $processData = $this->formationProcess->etatFormation($objet, $process);
 
-        if ($request->isMethod('POST')) {
-            return $this->formationProcess->editFormation($historique, $this->getUser(), $etape, $request);
-        }
+
+
 
         return $this->render('historique/_edit.html.twig', [
             'process' => $process,

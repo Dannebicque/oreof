@@ -53,4 +53,15 @@ class HistoriqueFormationRepository extends ServiceEntityRepository
 
         return count($data) > 0 ? $data[0] : null;
     }
+
+    public function findBeforDate(\DateTime $param) : array
+    {
+        return $this->createQueryBuilder('h')
+            ->innerJoin('h.formation', 'f')
+            ->addSelect('f')
+            ->where('h.created <= :date')
+            ->setParameter('date', $param)
+            ->getQuery()
+            ->getResult();
+    }
 }
