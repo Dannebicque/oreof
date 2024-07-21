@@ -430,7 +430,7 @@ class ElementConstitutifController extends AbstractController
             }
 
             $elementConstitutif->genereCode();
-            $elementConstitutifRepository->save($elementConstitutif, true);
+            $entityManager->flush();
 
             return $this->json(true);
         }
