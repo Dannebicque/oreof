@@ -457,7 +457,9 @@ class ParcoursController extends BaseController
             ]);
         }
         else {
-            return new JsonResponse(['error' => 'Data not found.']);
+            return $this->render('parcours/maquette_iframe.html.twig', [
+                'parcours' => false
+            ]);
         }
     }
 
