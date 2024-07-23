@@ -67,7 +67,7 @@
                                             {% if ec.ficheMatiere != null and
                                                 ec.ficheMatiere.parcours != null and
                                                 ec.ficheMatiere.parcours.id == parcours.id %}
-                                                {% if competence.ficheMatieress.contains(ec.ficheMatiere) %}
+                                                {% if competence.ficheMatieress is defined and competence.ficheMatieress.contains(ec.ficheMatiere) %}
                                                     {% set checked = "X" %}
                                                 {% endif %}
                                             {% else %}
@@ -99,7 +99,7 @@
                                                 {% if ec.ficheMatiere != null and
                                                     ec.ficheMatiere.parcours != null and
                                                     ec.ficheMatiere.parcours.id == parcours.id %}
-                                                    {% if competence.ficheMatieress.contains(ec.ficheMatiere) %}
+                                                    {% if competence.ficheMatieress is defined and competence.ficheMatieress.contains(ec.ficheMatiere) %}
                                                         {% set checked = "X" %}
                                                     {% endif %}
                                                 {% else %}

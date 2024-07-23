@@ -30,12 +30,10 @@ class ElementConstitutifType extends AbstractType
         $isAdmin = $options['isAdmin'];
 
         if ($isAdmin) {
-            $builder->add('ordre', IntegerType::class, [
-            ])
-            ->add('code', TextType::class, [
-                'required' => false,
-            ])
-            ;
+            $builder
+                ->add('ordre', IntegerType::class, [])
+                ->add('code', TextType::class, [
+                'required' => false]);
         }
 
         $builder

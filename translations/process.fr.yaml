@@ -353,9 +353,9 @@ refuse.validation.fiche_matiere.ses.helps.argumentaire.help: refuse.validation.f
 btn.validation.fiche_matiere.ses.refuse: 'Refuser les fiches EC/matière'
 formation.edit.valide.cfvu.flash.success: 'Modification enregistrée pour la validation par la CFVU'
 ficheMatiere.reserve.soumis_central.flash.success: ficheMatiere.reserve.soumis_central.flash.success
-demande.reouverture.ses.alerte: demande.reouverture.ses.alerte
-demande.reouverture.ses.label: demande.reouverture.ses.label
-demande.reouverture.ses.help: demande.reouverture.ses.help
+demande.reouverture.ses.alerte: 'Vous avez demandé la réouverture du projet DPE pour y apporter des modifications.'
+demande.reouverture.ses.label: 'Précisez le type de réouverture souhaitée :'
+demande.reouverture.ses.help: ' '
 demande.reouverture.modification.ses.sans_cfvu.label: 'Demande de réouverture sans passage en CFVU'
 demande.reouverture.modification.ses.sans_cfvu.help: 'Les modifications apportées à la formation ne nécessitent pas de passage en CFVU'
 demande.reouverture.modification.ses.avec_cfvu.label: 'Demande de réouverture avec passage en CFVU'

@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.29.42](https://github.com/Dannebicque/oreof/compare/v1.29.41...v1.29.42) (2024-07-23)
+
+
+### Features
+
+* refonte du process de validation parcours/mentions ([d841364](https://github.com/Dannebicque/oreof/commit/d841364f4aab38b05ed93e8df7dd15c33d45d421))
+
+
+### Bug Fixes
+
+* contrôler les BCC si pas de fiche ([f0f474c](https://github.com/Dannebicque/oreof/commit/f0f474cee8c8c3b7db7171125137d3982a1d319c))
+* Export brut à partir de Dpe ([0c00247](https://github.com/Dannebicque/oreof/commit/0c0024791c78e0fcb5b2117440e7e62dc4d19300))
+* Export brut à partir de Dpe ([a08ad47](https://github.com/Dannebicque/oreof/commit/a08ad4727ee3271ade1d6e3c61818f59a105859a))
+* Export brut à partir de Dpe ([c966a33](https://github.com/Dannebicque/oreof/commit/c966a33038171624c46b6f34b03973b1cb95d373))
+* historique depuis parcours pour édition ([700a00f](https://github.com/Dannebicque/oreof/commit/700a00f8b45ca6f55fe2e0982a3224fde182f4e3))
+* nommage des fichiers exportés ([08c3f4e](https://github.com/Dannebicque/oreof/commit/08c3f4e326bea76f9333129154a5dd82318d39bc))
+* Numérotation EC + Ec enfants ([fd83d76](https://github.com/Dannebicque/oreof/commit/fd83d763c8454c61e3bb225ca0e220ac7c7e3bf7))
+
 ### [1.29.41](https://github.com/Dannebicque/oreof/compare/v1.29.40...v1.29.41) (2024-07-19)
 
 

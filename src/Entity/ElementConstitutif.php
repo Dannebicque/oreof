@@ -456,6 +456,10 @@ class ElementConstitutif
     {
         if ($this->ecParent === null) {
             $this->setCode('EC ' . $this->ordre);
+            //numéroter les enfants
+            foreach ($this->ecEnfants as $ecEnfant) {
+                $ecEnfant->genereCode();
+            }
         } else {
             $this->setCode('EC ' . $this->ecParent->getOrdre() . '.' . chr($this->ordre + 64));
         }

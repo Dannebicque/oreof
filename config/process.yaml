@@ -130,7 +130,7 @@ process:
     canRefuse: 'refuser_definitif_cfvu'
     canReserve: 'valider_reserve_cfvu'
   publication:
-    page: 'formation'
+    page: 'parcours'
     icon: 'fa-bullhorn'
     label: 'validation.publication'
     hasValid: true
