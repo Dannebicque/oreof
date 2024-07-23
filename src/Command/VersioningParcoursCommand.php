@@ -139,31 +139,42 @@ class VersioningParcoursCommand extends Command
 
             $nombreParcoursValides = count($parcoursArray);
 
-            if($nombreParcoursValides > 0){
-                $io->writeln("\nIl y a {$nombreParcoursValides} validés à sauvegarder.");
-                $io->progressStart($nombreParcoursValides);
-                foreach($parcoursArray as $parcoursCfvu){
-                    $this->versioningParcours->saveVersionOfParcours(
-                        parcours: $parcoursCfvu, 
-                        now: new DateTimeImmutable(), 
-                        isCfvu: true
-                    );
-                    $io->progressAdvance(1);
-                }
-                $io->progressFinish();
+            try {
+                if($nombreParcoursValides > 0){
+                    $io->writeln("\nIl y a {$nombreParcoursValides} validés à sauvegarder.");
+                    $io->progressStart($nombreParcoursValides);
+                        foreach($parcoursArray as $parcoursCfvu){
+                            $this->versioningParcours->saveVersionOfParcours(
+                                parcours: $parcoursCfvu, 
+                                now: new DateTimeImmutable(), 
+                                isCfvu: true
+                            );
+                            $io->progressAdvance(1);
+                        }
+                        $io->progressFinish();
+                    }
+                    // Log
+                    $now = new DateTimeImmutable();
+                    $dateHeure = $now->format('d-m-Y_H-i-s');
+                    $io->writeln('Enregistrement en base de données...');
+                    // Save into database
+                    $this->entityManager->flush();
+                    $log = "[{$dateHeure}] Tous les parcours CFVU (total : {$nombreParcoursValides}) ont correctement été versionnés en JSON.\n";
+                    $this->filesystem->appendToFile(__DIR__ . "/../../versioning_json/success_log/global_save_parcours_cfvu_success.log", $log);
+
+                    $io->success('Sauvegarde des parcours validés en CFVU reussie !');
+
+                    return Command::SUCCESS;
+            }catch(\Exception $e){
+                $io->error("Une erreur est survenue : " . $e->getMessage());
+                $now = new DateTimeImmutable('now');
+                $dateHeure = $now->format('d-m-Y_H-i-s');
+                // Affichage de l'erreur dans les logs - Log error
+                $logTxt = "[{$dateHeure}] Le versioning global des parcours a rencontré une erreur.\n{$e->getMessage()}\n";
+                $this->filesystem->appendToFile(__DIR__ . "/../../versioning_json/error_log/global_save_parcours_error.log", $logTxt);
+
+                return Command::FAILURE;
             }
-            // Log
-            $now = new DateTimeImmutable();
-            $dateHeure = $now->format('d-m-Y_H-i-s');
-            $io->writeln('Enregistrement en base de données...');
-            // Save into database
-            $this->entityManager->flush();
-            $log = "[{$dateHeure}] Tous les parcours CFVU (total : {$nombreParcoursValides}) ont correctement été versionnés en JSON.\n";
-            $this->filesystem->appendToFile(__DIR__ . "/../../versioning_json/success_log/global_save_parcours_cfvu_success.log", $log);
-
-            $io->success('Sauvegarde des parcours validés en CFVU reussie !');
-
-            return Command::SUCCESS;
         }
         
         $io->warning("Option de la commande non reconnue. Choix possibles : ['dpe-full-database', 'dpe-only-cfvu-valid']");
