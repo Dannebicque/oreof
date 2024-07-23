@@ -11,6 +11,8 @@ namespace App\Entity;
 
 use App\Classes\verif\ParcoursValide;
 use App\DTO\Remplissage;
+use App\DTO\StatsFichesMatieres;
+use App\DTO\StatsFichesMatieresParcours;
 use App\Entity\Traits\LifeCycleTrait;
 use App\Enums\ModaliteEnseignementEnum;
 use App\Enums\NiveauLangueEnum;
@@ -203,6 +205,9 @@ class Parcours
 
     #[ORM\Column(nullable: true)]
     private ?array $remplissage = [];
+
+    #[ORM\Column(nullable: true)]
+    private ?array $etatsFichesMatieres = [];
 
     #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: ElementConstitutif::class)]
     private Collection $elementConstitutifs;
@@ -1020,11 +1025,55 @@ class Parcours
         return $this;
     }
 
+
     #[ORM\PreFlush]
     public function updateRemplissage(PreFlushEventArgs $args): void
     {
         $remplissage = $this->remplissageBrut();
         $this->setRemplissage($remplissage);
+    }
+
+    public function getEtatsFichesMatieres(): StatsFichesMatieresParcours
+    {
+        $etatsFichesMatieres = new StatsFichesMatieresParcours($this);
+
+        if ($this->etatsFichesMatieres !== null &&
+            count($this->etatsFichesMatieres) > 0
+            && array_key_exists('nbFiches', $this->etatsFichesMatieres)
+            && array_key_exists('nbFichesValidees', $this->etatsFichesMatieres)
+            && array_key_exists('nbFichesNonValideesSes', $this->etatsFichesMatieres)
+            && array_key_exists('nbFichesCompletes', $this->etatsFichesMatieres)
+            && array_key_exists('nbFichesPubliees', $this->etatsFichesMatieres)
+            && array_key_exists('nbFichesNonValidees', $this->etatsFichesMatieres)) {
+
+            $etatsFichesMatieres->nbFiches = $this->etatsFichesMatieres['nbFiches'];
+            $etatsFichesMatieres->nbFichesValidees = $this->etatsFichesMatieres['nbFichesValidees'];
+            $etatsFichesMatieres->nbFichesNonValideesSes = $this->etatsFichesMatieres['nbFichesNonValideesSes'];
+            $etatsFichesMatieres->nbFichesCompletes = $this->etatsFichesMatieres['nbFichesCompletes'];
+            $etatsFichesMatieres->nbFichesNonValidees = $this->etatsFichesMatieres['nbFichesNonValidees'];
+            $etatsFichesMatieres->nbFichesPubliees = $this->etatsFichesMatieres['nbFichesPubliees'];
+
+        }
+
+        return $etatsFichesMatieres;
+    }
+
+    public function setEtatsFichesMatieres(?StatsFichesMatieresParcours $etatsFichesMatieres = null): static
+    {
+        if (null === $etatsFichesMatieres) {
+           return $this;
+        }
+
+        $this->etatsFichesMatieres = [
+            'nbFiches' => $etatsFichesMatieres->nbFiches,
+            'nbFichesValidees' => $etatsFichesMatieres->nbFichesValidees,
+            'nbFichesNonValideesSes' => $etatsFichesMatieres->nbFichesNonValideesSes,
+            'nbFichesCompletes' => $etatsFichesMatieres->nbFichesCompletes,
+            'nbFichesNonValidees' => $etatsFichesMatieres->nbFichesNonValidees,
+            'nbFichesPubliees' => $etatsFichesMatieres->nbFichesPubliees,
+        ];
+
+        return $this;
     }
 
     /**

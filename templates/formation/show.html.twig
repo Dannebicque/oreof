@@ -61,14 +61,13 @@
 
 {% block content %}
 
-    {{ component('mention_manage', {formation:formation, type:'formation'}) }}
+    {{ include('formation/_process.html.twig') }}
 
     {% if is_granted('ROLE_SES') or is_granted('CAN_ETABLISSEMENT_SCOLARITE_ALL') or is_granted('CAN_FORMATION_SCOLARITE_MY', formation) %}
-    {{ include('formation/_gestion.html.twig', {formation: formation}) }}
-    {# Versioning pour les parcours par défaut #}
-    {% if formation.isHasParcours == false and formation.parcours|length == 1 %}   
-        {{ include('formation/_manage_versioning_parcours.html.twig', {parcours: formation.parcours[0]}) }}
-    {% endif %}
+        {# Versioning pour les parcours par défaut #}
+        {% if formation.isHasParcours == false and formation.parcours|length == 1 %}
+            {{ include('formation/_manage_versioning_parcours.html.twig', {parcours: formation.parcours[0]}) }}
+        {% endif %}
         {% if is_granted('ROLE_ADMIN') %}
             {{ include('formation/_manage_versioning_formation.html.twig') }}
         {% endif %}

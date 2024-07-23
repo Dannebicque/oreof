@@ -10,6 +10,7 @@
 namespace App\Twig;
 
 use App\Classes\GetDpeParcours;
+use App\Entity\DpeParcours;
 use App\Entity\FicheMatiere;
 use App\Entity\Formation;
 use App\Entity\Parcours;
@@ -65,7 +66,6 @@ class WorkflowExtension extends AbstractExtension
     public function isPlace(string $workflow, Parcours|FicheMatiere|Formation $entity, string $place): bool
     {
         $actualPlaces = $this->getPlacesFromEntity($entity, $workflow);
-
         if ($actualPlaces === false) {
             return false;
         }
@@ -74,17 +74,17 @@ class WorkflowExtension extends AbstractExtension
             return true;
         }
 
-        if (array_key_exists('soumis_dpe_composante', $actualPlaces) && $entity instanceof Formation && $place === 'dpe') {
+        if (array_key_exists('soumis_dpe_composante', $actualPlaces) && ($entity instanceof Formation || $entity instanceof Parcours) && $place === 'dpe') {
             return true;
         }
 
-        if (array_key_exists('soumis_conseil', $actualPlaces) && $entity instanceof Formation && $place === 'conseil') {
+        if (array_key_exists('soumis_conseil', $actualPlaces) && ($entity instanceof Formation || $entity instanceof Parcours) && $place === 'conseil') {
             return true;
         }
 
         if (
-            (array_key_exists('soumis_central', $actualPlaces) && $entity instanceof Formation && ($place === 'ses' || $place === 'vp')) ||
-            (array_key_exists('soumis_vp', $actualPlaces) && $entity instanceof Formation && ($place === 'ses' || $place === 'vp'))) {
+            (array_key_exists('soumis_central', $actualPlaces) && ($entity instanceof Formation || $entity instanceof Parcours) && ($place === 'ses' || $place === 'vp')) ||
+            (array_key_exists('soumis_vp', $actualPlaces) && ($entity instanceof Formation || $entity instanceof Parcours) && ($place === 'ses' || $place === 'vp'))) {
             //todo: sur cette phase SES et VP sont confondus
             return true;
         }
@@ -95,7 +95,12 @@ class WorkflowExtension extends AbstractExtension
         }
 
         if (
-            array_key_exists('valide_pour_publication', $actualPlaces) && $entity instanceof Formation && $place === 'publication') {
+            array_key_exists('valide_pour_publication', $actualPlaces) && ($entity instanceof Formation || $entity instanceof Parcours ) && $place === 'publication') {
+            return true;
+        }
+
+        if (
+            array_key_exists('valide_a_publier', $actualPlaces) && ($entity instanceof Formation || $entity instanceof Parcours ) && $place === 'publication') {
             return true;
         }
 

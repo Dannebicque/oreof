@@ -78,6 +78,17 @@ class ProcessValidationController extends BaseController
                 }
                 break;
             case 'parcours':
+                //upload
+                $fileName = '';
+                if ($request->files->has('file') && $request->files->get('file') !== null) {
+                    $file = $request->files->get('file');
+                    $fileName = md5(uniqid('', true)) . '.' . $file->guessExtension();
+                    $file->move(
+                        $this->dir,
+                        $fileName
+                    );
+                }
+
                 $process = $this->validationProcess->getEtape($etape);
                 $objet = $parcoursRepository->find($id);
 
@@ -85,10 +96,16 @@ class ProcessValidationController extends BaseController
                     return JsonReponse::error('Parcours non trouvé');
                 }
 
-                $processData = $this->parcoursProcess->etatParcours($objet, $process);
+                $parcours = GetDpeParcours::getFromParcours($objet);
+
+                if ($parcours === null) {
+                    return JsonReponse::error('Parcours non trouvé');
+                }
+
+                $processData = $this->parcoursProcess->etatParcours($parcours, $process);
 
                 if ($request->isMethod('POST')) {
-                    return $this->parcoursProcess->valideParcours($objet, $this->getUser(), $process, $etape, $request);
+                    return $this->parcoursProcess->valideParcours($parcours, $this->getUser(), $process, $etape, $request, $fileName);
                 }
 
                 break;
@@ -153,10 +170,16 @@ class ProcessValidationController extends BaseController
                     return JsonReponse::error('Parcours non trouvé');
                 }
 
-                $processData = $this->parcoursProcess->etatParcours($objet, $process);
+                $parcours = GetDpeParcours::getFromParcours($objet);
+
+                if ($parcours === null) {
+                    return JsonReponse::error('Parcours non trouvé');
+                }
+
+                $processData = $this->parcoursProcess->etatParcours($parcours, $process);
 
                 if ($request->isMethod('POST')) {
-                    return $this->parcoursProcess->refuseParcours($objet, $this->getUser(), $process, $etape, $request);
+                    return $this->parcoursProcess->refuseParcours($parcours, $this->getUser(), $process, $etape, $request);
                 }
                 break;
             case 'ficheMatiere':
@@ -213,10 +236,16 @@ class ProcessValidationController extends BaseController
                     return JsonReponse::error('Parcours non trouvé');
                 }
 
-                $processData = $this->parcoursProcess->etatParcours($objet, $process);
+                $parcours = GetDpeParcours::getFromParcours($objet);
+
+                if ($parcours === null) {
+                    return JsonReponse::error('Parcours non trouvé');
+                }
+
+                $processData = $this->parcoursProcess->etatParcours($parcours, $process);
 
                 if ($request->isMethod('POST')) {
-                    return $this->parcoursProcess->reserveParcours($objet, $this->getUser(), $process, $etape, $request);
+                    return $this->parcoursProcess->reserveParcours($parcours, $this->getUser(), $process, $etape, $request);
                 }
                 break;
             case 'ficheMatiere':
@@ -529,7 +558,7 @@ class ProcessValidationController extends BaseController
                 //réouverture directe sans sauvegarde ou avec sauvegarde selon le choix
                 if ($data['demandeReouverture'] === 'MODIFICATION_SANS_CFVU') {
 
-                    $dpe->setEtatValidation(['soumis_central' => 1]); //un état de processus différent pour connaitre le branchement ensuite
+                    $dpe->setEtatValidation(['soumis_conseil' => 1]); //un état de processus différent pour connaitre le branchement ensuite
                     $dpe->setEtatReconduction(TypeModificationDpeEnum::MODIFICATION_TEXTE);
                     $histoEvent = new HistoriqueParcoursEvent($parcours, $this->getUser(), 'soumis_central', 'valide', $request);
                     $this->eventDispatcher->dispatch($histoEvent, HistoriqueParcoursEvent::ADD_HISTORIQUE_PARCOURS);
@@ -582,6 +611,7 @@ class ProcessValidationController extends BaseController
     }
 
     #[Route('/demande/reouverture/cloture', name: 'app_validation_demande_reouverture_cloture')]
+    /** @deprecated('plus nécessaire revient sur le process, uniquement si pas de MCCC/Maquette pour signaler les modifs avant publication') */
     public function demandeReouvertureCloture(
         DpeParcoursRepository  $dpeParcoursRepository,
         ParcoursRepository  $parcoursRepository,

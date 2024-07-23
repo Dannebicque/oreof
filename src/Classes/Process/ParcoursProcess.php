@@ -13,6 +13,10 @@ use App\Classes\JsonReponse;
 use App\Classes\verif\ParcoursValide;
 use App\DTO\ProcessData;
 use App\Entity\DpeParcours;
+use App\Entity\Historique;
+use App\Entity\HistoriqueFormation;
+use App\Entity\HistoriqueParcours;
+use App\Events\HistoriqueFormationEditEvent;
 use App\Events\HistoriqueParcoursEvent;
 use App\Utils\Tools;
 use Doctrine\ORM\EntityManagerInterface;
@@ -142,5 +146,18 @@ class ParcoursProcess extends AbstractProcess
         $histoEvent = new HistoriqueParcoursEvent($dpeParcours->getParcours(), $user, $etape, $etat, $request, $fileName);
         $this->eventDispatcher->dispatch($histoEvent, HistoriqueParcoursEvent::ADD_HISTORIQUE_PARCOURS);
         return JsonReponse::success($this->translator->trans('parcours.'.$etat.'.' . $etape . '.flash.success', [], 'process'));
+    }
+
+    public function editParcours(Historique $historique, ?UserInterface $user, string $etape, Request $request)
+    {
+        $reponse = $this->dispatchEventEditParcours($historique, $user, $etape, $request, 'valide');
+        return $reponse;
+    }
+
+    private function dispatchEventEditParcours(HistoriqueParcours $historiqueParcours, UserInterface $user, $etape, $request, string $etat): Response
+    {
+        $histoEvent = new HistoriqueParcoursEditEvent($historiqueParcours, $user, $etape, $etat, $request);
+        $this->eventDispatcher->dispatch($histoEvent, HistoriqueParcoursEditEvent::EDIT_HISTORIQUE_PARCOURS);
+        return JsonReponse::success($this->translator->trans('parcours.edit.' . $etat . '.' . $etape . '.flash.success', [], 'process'));
     }
 }

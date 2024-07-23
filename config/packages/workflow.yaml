@@ -122,7 +122,7 @@ framework:
                 - 'refuse_definitif_cfvu'
                 - 'valide_a_publier'
                 - 'publie'
-                - 'valide_pour_publication'
+                - 'valide_cfvu'
                 - 'soumis_conseil_reserve'
             transitions:
                 initialiser:
@@ -191,12 +191,12 @@ framework:
                     to: 'soumis_conseil_reserve' #todo mais on court-circuite le retour directement vers valider publicatio
                 valider_reserve_central_cfvu:
                     from: 'soumis_conseil_reserve'
-                    to: 'valide_pour_publication'
+                    to: 'valide_cfvu'
                 valider_cfvu:
                     from: 'soumis_cfvu'
-                    to: 'valide_pour_publication' #todo: renommer en valide_cfvu
+                    to: 'valide_cfvu' #todo: renommer en valide_cfvu => etait valide_pour_publication
                 valider_publication:
-                    from: 'valide_pour_publication' #todo: renommer en valide_cfvu
+                    from: 'valide_cfvu' #todo: renommer en valide_cfvu etait valide_pour_publication
                     to: 'valide_a_publier'
                 publier:
                     from: 'valide_a_publier'
