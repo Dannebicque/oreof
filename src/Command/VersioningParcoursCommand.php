@@ -24,6 +24,7 @@ use DateTimeImmutable;
 use App\Entity\ParcoursVersioning;
 use App\Service\VersioningParcours;
 use App\TypeDiplome\TypeDiplomeRegistry;
+use DateTime;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
 
@@ -129,18 +130,12 @@ class VersioningParcoursCommand extends Command
             $parcoursArray = array_filter(
                 $parcoursArray,
                 fn($p) => $p->getDpeParcours()->last()->getEtatValidation() === ['valide_a_publier' => 1]
+                          && 
+                            ((new DateTime())->getTimestamp() 
+                            - $p->getDpeParcours()->last()->getCreated()->getTimestamp()
+                            ) <= 86400                           
+                            // Différence entre les deux dates inférieure à un jour (86400 secondes)
             );
-
-            if($withSkipOption){
-                $parcoursArray = array_filter(
-                    $parcoursArray,
-                    fn($p) => count(
-                        $this->entityManager
-                            ->getRepository(ParcoursVersioning::class)
-                            ->findLastCfvuVersion($p)
-                        ) < 1
-                ); 
-            }
 
             $nombreParcoursValides = count($parcoursArray);
 
