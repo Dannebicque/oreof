@@ -50,6 +50,9 @@
         </th>
         <th>Lieu</th>
         <th>Etat</th>
+        <th>BCC</th>
+        <th>MCCC</th>
+        <th>PV</th>
         <th>Remplissage</th>
         <th></th>
     </tr>
@@ -79,7 +82,16 @@
             <td>{{ parcour.libelle }} {{ parcour.typeParcours|badgeTypeParcours }}</td>
             <td>{{ parcour.localisation != null ? parcour.localisation.libelle : 'Non défini' }}</td>
             <td>
-                {{ parcour.etatParcours|badgeDpe }}
+                {{ parcour.etatDpeParcours|badgeDpe }}
+            </td>
+            <td>
+                {{ parcour.etatStep(3)|badgeStep }}
+            </td>
+            <td>
+                {{ parcour.etatStep(4)|badgeStep }}
+            </td>
+            <td>
+                {{ component('historique_pv', {parcours:parcour}) }}
             </td>
             <td>
                 {{ parcour.remplissage|remplissage }}
