@@ -393,3 +393,4 @@ historique:
   fiche_matiere:
     rouvrir_fiche_matiere: 'Demande de réouverture de la fiche EC/matière'
 fiche_matiere.demande.reouverture.ses.alerte : 'Vous avez demandé la réouverture de la fiche EC/matière pour y apporter des modifications.'
+supprimer.historique: 'Supprimer l''historique'
