@@ -382,7 +382,25 @@
                                 {% endif %}
                             </div>
                             <div class="col-3 d-grid">
-
+                                {% if parcours.isParcoursDefaut == true %}
+                                    <button
+                                            href="#"
+                                            {{ stimulus_controller('modal', {
+                                                size: 'lg',
+                                                modalTitle: 'formation.change_rf.title'|trans({}, 'form'),
+                                                nomEvenement: 'refreshStep',
+                                                modalUrl: path('app_formation_change_rf', {formation: parcours.formation.id}) }) }}
+                                            data-action="click->modal#openModal"
+                                            data-size="lg"
+                                            class="btn btn-sm btn-outline-warning"
+                                            data-bs-toggle="tooltip"
+                                            data-bs-placement="bottom"
+                                            title="{{ 'formation.change_rf.title'|trans({}, 'form') }}"
+                                    >
+                                        <i class="fal fa-repeat"></i>
+                                        <span> {{ 'formation.change_rf.label'|trans({}, 'form') }}</span>
+                                    </button>
+                                {% endif %}
                             </div>
                             <div class="col-3 d-grid">
                                 <button class="btn btn-sm btn-outline-info d-block">Gérer les versions</button>

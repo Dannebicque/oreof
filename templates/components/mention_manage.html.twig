@@ -73,25 +73,6 @@
                 <div class="col-12">
                     <div class="row mt-2">
                         <div class="col-2 d-grid">
-                            <button
-                                    href="#"
-                                    {{ stimulus_controller('modal', {
-                                        size: 'lg',
-                                        modalTitle: 'formation.change_rf.title'|trans({}, 'form'),
-                                        nomEvenement: 'refreshStep',
-                                        modalUrl: path('app_formation_change_rf', {formation: formation.id}) }) }}
-                                    data-action="click->modal#openModal"
-                                    data-size="lg"
-                                    class="btn btn-sm btn-outline-warning"
-                                    data-bs-toggle="tooltip"
-                                    data-bs-placement="bottom"
-                                    title="{{ 'formation.change_rf.title'|trans({}, 'form') }}"
-                            >
-                                <i class="fal fa-repeat"></i>
-                                <span> {{ 'formation.change_rf.label'|trans({}, 'form') }}</span>
-                            </button>
-                        </div>
-                        <div class="col-2 d-grid">
                             {% if not this.hasDemande %}
                                 <button class="btn btn-sm d-block btn-outline-warning"
                                         type="button"
@@ -133,7 +114,25 @@
                                         <i class="fal fa-close"></i> {{ ('demande.reouverture.clore')|trans({}, 'process') }}
                                     </button>
                             {% endif %}
-
+                        </div>
+                        <div class="col-2 d-grid">
+                            <button
+                                    href="#"
+                                    {{ stimulus_controller('modal', {
+                                        size: 'lg',
+                                        modalTitle: 'formation.change_rf.title'|trans({}, 'form'),
+                                        nomEvenement: 'refreshStep',
+                                        modalUrl: path('app_formation_change_rf', {formation: formation.id}) }) }}
+                                    data-action="click->modal#openModal"
+                                    data-size="lg"
+                                    class="btn btn-sm btn-outline-warning"
+                                    data-bs-toggle="tooltip"
+                                    data-bs-placement="bottom"
+                                    title="{{ 'formation.change_rf.title'|trans({}, 'form') }}"
+                            >
+                                <i class="fal fa-repeat"></i>
+                                <span> {{ 'formation.change_rf.label'|trans({}, 'form') }}</span>
+                            </button>
                         </div>
                         <div class="col-2 d-grid">
                             {% if is_granted('ROLE_SES') or is_granted('CAN_ETABLISSEMENT_SCOLARITE_ALL') or is_granted('CAN_FORMATION_SCOLARITE_MY', formation) %}

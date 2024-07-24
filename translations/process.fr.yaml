@@ -38,7 +38,7 @@ validation.cfvu.valide.helps.commentaire.cas.sous.reserve.modifications.argument
 validation.cfvu.valide.cas.acceptation.non.directe.soumis_cfvu: 'Validation du projet DPE "formation" SOUS RESERVE :'
 valide.validation.cfvu.helps.acceptation.non.directe.help: ' '
 formation.valide.cfvu.flash.success: 'Validation de la formation par la CFVU'
-historique.validation.cfvu: 'Validation de la CFVU'
+historique.validation.cfvu: 'Validation de la CFVU du %date%'
 historique.validation.vp: 'Visa des VP'
 validation.publication.valide.alerte: 'La validation  entraîne la publication de la formation à la date indiquée.'
 btn.validation.publication.valide: 'A publier'
