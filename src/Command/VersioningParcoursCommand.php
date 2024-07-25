@@ -2,6 +2,7 @@
 
 namespace App\Command;
 
+use App\Classes\GetHistorique;
 use App\Entity\CampagneCollecte;
 use App\Entity\Parcours;
 use Doctrine\ORM\EntityManagerInterface;
@@ -38,17 +39,20 @@ class VersioningParcoursCommand extends Command
     private EntityManagerInterface $entityManager;
     private Filesystem $filesystem;
     private VersioningParcours $versioningParcours;
+    private GetHistorique $getHistorique;
 
     public function __construct(
         EntityManagerInterface $entityManager,
         Filesystem $filesystem,
-        VersioningParcours $versioningParcours
+        VersioningParcours $versioningParcours,
+        GetHistorique $getHistorique
     )
     {
         parent::__construct();
         $this->entityManager = $entityManager;
         $this->filesystem = $filesystem;
         $this->versioningParcours = $versioningParcours;
+        $this->getHistorique = $getHistorique;
     }
 
     protected function configure(): void
@@ -129,19 +133,34 @@ class VersioningParcoursCommand extends Command
             // Sélection des parcours validés ("valide_a_publier")
             $parcoursArray = array_filter(
                 $parcoursArray,
-                fn($p) => $p->getDpeParcours()->last()->getEtatValidation() === ['valide_a_publier' => 1]
-                          && 
-                            ((new DateTime())->getTimestamp() 
-                            - $p->getDpeParcours()->last()->getCreated()->getTimestamp()
-                            ) <= 86400                           
-                            // Différence entre les deux dates inférieure à un jour (86400 secondes)
+                function($p) {
+                    $dateHistoriquePublication = $this->getHistorique
+                        ->getHistoriqueParcoursLastStep(
+                            $p->getDpeParcours()->last(), 'publication'
+                        )?->getDate();
+                    $dateHistoriqueValide = $this->getHistorique
+                        ->getHistoriqueParcoursLastStep(
+                            $p->getDpeParcours()->last(), 'valide_a_publier'
+                        )?->getDate();
+                    $today = new DateTime('now');
+                    $dateFormat = "d-m-Y";
+                    if(
+                        $today->format($dateFormat) === $dateHistoriquePublication?->format($dateFormat)
+                        || $today->format($dateFormat) === $dateHistoriqueValide?->format($dateFormat)
+                    ){
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
+                }  
             );
 
             $nombreParcoursValides = count($parcoursArray);
 
             try {
                 if($nombreParcoursValides > 0){
-                    $io->writeln("\nIl y a {$nombreParcoursValides} validés à sauvegarder.");
+                    $io->writeln("\nIl y a {$nombreParcoursValides} parcours validés à sauvegarder.");
                     $io->progressStart($nombreParcoursValides);
                         foreach($parcoursArray as $parcoursCfvu){
                             $this->versioningParcours->saveVersionOfParcours(
