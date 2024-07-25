@@ -1,5 +1,9 @@
 {% extends 'base.html.twig' %}
 
+{% block header %}
+    Résultats de la recherche
+{% endblock %}
+
 {% block stylesheets %}
 {{ parent() }}
 
@@ -41,8 +45,6 @@ a.fiche-matiere-search-link span {
 {% endblock %}
 
 {% block content %}
-
-<h1 class="small-title fs-3 mb-4">Résultats de la recherche</h1>
 
 <p class="fs-3 text-dark text-center mt-5">
     {{ keyword_1 is not empty ? 'Mot-clé : ' ~ keyword_1 : 'Aucun mot-clé renseigné.' }}
