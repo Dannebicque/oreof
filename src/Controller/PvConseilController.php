@@ -37,11 +37,11 @@ class PvConseilController extends AbstractController
     {
         if ($request->isMethod('POST')) {
             $dir = $kernel->getProjectDir().'/public/uploads/conseils/';
-            $histo = new HistoriqueParcours();
+            $histo = new HistoriqueParcours(); //todo: mettre à jour si laisser_passer déjà existant
             $histo->setParcours($parcours);
             $histo->setDate(new DateTime());
             $histo->setUser($this->getUser());
-            $histo->setEtape('conseil');
+            $histo->setEtape('soumis_conseil');
             $histo->setEtat('valide');
 
             //upload

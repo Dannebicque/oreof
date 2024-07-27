@@ -20,7 +20,7 @@ final class HistoriquePvComponent
         }
         $historique = $this->parcours->getHistoriqueParcours();
         foreach ($historique as $h) {
-           if ($h->getEtape() === 'conseil') {
+           if ($h->getEtape() === 'soumis_conseil' || $h->getEtape() === 'conseil') {//état conseil avant, les deux pour compatibilité
                if (array_key_exists('fichier', $h->getComplements())) {
                      $this->hasPv = true;
                      $this->fichier = $h->getComplements()['fichier'];

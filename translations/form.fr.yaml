@@ -486,7 +486,7 @@ change_rf_formation:
     typeRf:
       label: 'la demande concerne le responsable ou Co-Responsale de la formation'
 formation.change_rf.title: 'Changer le responsable ou le co-responsable de la formation'
-formation.change_rf.label: 'Changer resp. co-resp. formation'
+formation.change_rf.label: 'Changer co/resp. formation'
 type_diplome:
   labels:
     hasMemoire:

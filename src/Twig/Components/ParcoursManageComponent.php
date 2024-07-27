@@ -4,6 +4,7 @@ namespace App\Twig\Components;
 
 use App\Classes\GetDpeParcours;
 use App\Classes\ValidationProcess;
+use App\Entity\DpeParcours;
 use App\Entity\FicheMatiere;
 use App\Entity\Formation;
 use App\Entity\Parcours;
@@ -16,6 +17,7 @@ use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Workflow\WorkflowInterface;
 use Symfony\UX\LiveComponent\Attribute\AsLiveComponent;
+use Symfony\UX\LiveComponent\Attribute\LiveArg;
 use Symfony\UX\LiveComponent\Attribute\LiveListener;
 use Symfony\UX\LiveComponent\Attribute\LiveProp;
 use Symfony\UX\LiveComponent\DefaultActionTrait;
@@ -27,7 +29,7 @@ final class ParcoursManageComponent extends AbstractController
     public const TAB = [
         'initialisation_dpe' => 'formation',
         'autorisation_saisie' => null,
-        'en_cours_redaction' => null,
+        'en_cours_redaction' => 'parcours',
         'soumis_parcours' => 'parcours_rf',
         'valide_parcours_rf' => 'formation',
         'soumis_rf' => 'formation',
@@ -42,6 +44,7 @@ final class ParcoursManageComponent extends AbstractController
         'soumis_central' => 'ses',
         'ses' => 'ses',
         'soumis_vp' => 'vp',
+        'valide_cfvu' => 'cfvu',
         'cfvu' => 'cfvu',
         'publication' => 'publication',
         'soumis_cfvu' => 'cfvu',
@@ -55,6 +58,10 @@ final class ParcoursManageComponent extends AbstractController
     public const TAB_PROCESS = [
         'ouverture_ses_ss_cfvu' => 0,
         'cloture_ses_ss_cfvu' => 0,
+        'soumis_parcours' => 0,
+        'en_cours_redaction' => 0,
+        'soumis_dpe_composante' => 3,
+        'soumis_conseil' => 4,
         'parcours' => 0,
         'parcours_rf' => 1,
         'formation' => 2,
@@ -62,6 +69,8 @@ final class ParcoursManageComponent extends AbstractController
         'conseil' => 4,
         'ses' => 5,
         'soumis_central' => 5,
+        'valide_cfvu' => 6,
+        'soumis_cfvu' => 6,
         'cfvu' => 6,
         'publication' => 7
     ];
@@ -78,20 +87,16 @@ final class ParcoursManageComponent extends AbstractController
     public array $historiques = [];
 
     #[LiveProp]
-    public ?FicheMatiere $ficheMatiere = null;
-
-    #[LiveProp]
     public ?TypeDiplome $typeDiplome;
 
-    public string $etape = '';
     public string $place = '';
-    public bool $hasDemande = true;
 
-    #[LiveProp]
-    public string $type = 'parcours';
+    public bool $hasDemande = true;
 
     #[LiveProp(writable: true)]
     public string $event = 'none';
+
+    public DpeParcours $dpeParcours;
 
     public function __construct(
         private readonly HistoriqueFormationRepository $historiqueFormationRepository,
@@ -103,53 +108,49 @@ final class ParcoursManageComponent extends AbstractController
         $this->process = $this->validationProcess->getProcess();
     }
 
-    #[LiveListener('mention_manage:valide')]
-    public function valide(): void
-    {
-        $this->place = $this->getPlace($this->type);
-        $this->etape = self::TAB[$this->place] ?? $this->type;
-        $this->getHistorique();
-        $this->event = 'valide';
 
-        $this->redirige();
-    }
 
     public function redirige(): Response
     {
-        // si niveau parcours, formation ou composante, une fois validé => On redirige vers le show.
-        if ($this->type === 'parcours') {
+        if ($this->parcours->isParcoursDefaut() === false) {
             return $this->redirectToRoute('app_parcours_show', [
                 'id' => $this->parcours->getId()
-            ]); //uniquement si RF ou DPE
+            ]);
         }
 
         return $this->redirectToRoute('app_formation_show', [
             'slug' => $this->formation->getSlug()
-        ]); //uniquement si RF ou DPE
+        ]);
     }
 
     #[LiveListener('mention_manage:edit')]
     public function edit(): void
     {
-        $this->place = $this->getPlace($this->type);
-        $this->etape = self::TAB[$this->place] ?? $this->type;
+        $this->place = $this->getPlace();
         $this->event = 'edit';
     }
 
-    #[LiveListener('mention_manage:refuse')]
+    #[LiveListener('mention_manage:valider')]
+    public function valide(): void
+    {
+        $this->place = $this->getPlace();
+        $this->getHistorique();
+        $this->event = 'valide';
+        $this->redirige();
+    }
+
+    #[LiveListener('mention_manage:refuser')]
     public function refuse(): void
     {
-        $this->place = $this->getPlace($this->type);
-        $this->etape = self::TAB[$this->place] ?? $this->type;
+        $this->place = $this->getPlace();
         $this->getHistorique();
         $this->event = 'refuse';
     }
 
-    #[LiveListener('mention_manage:reserve')]
+    #[LiveListener('mention_manage:reserver')]
     public function reserve(): void
     {
-        $this->place = $this->getPlace($this->type);
-        $this->etape = self::TAB[$this->place] ?? $this->type;
+        $this->place = $this->getPlace();
         $this->getHistorique();
         $this->event = 'reserve';
     }
@@ -158,14 +159,14 @@ final class ParcoursManageComponent extends AbstractController
     {
         $historiques = $this->historiqueFormationRepository->findBy(['formation' => $this->parcours->getFormation()], ['created' => 'ASC']);
         foreach ($historiques as $historique) {
-            if (self::TAB_PROCESS[$historique->getEtape()] < self::TAB_PROCESS[self::TAB[$this->etape]]) {
+            if (self::TAB_PROCESS[$historique->getEtape()] < self::TAB_PROCESS[self::TAB[$this->place]]) {
                 $this->historiques[$historique->getEtape()] = $historique;
             }
         }
         $historiques = $this->historiqueParcoursRepository->findBy(['parcours' => $this->parcours], ['created' => 'ASC']);
 
         foreach ($historiques as $historique) {
-            if (self::TAB_PROCESS[$historique->getEtape()] < self::TAB_PROCESS[self::TAB[$this->etape]]) {
+            if (self::TAB_PROCESS[$historique->getEtape()] < self::TAB_PROCESS[self::TAB[$this->place]]) {
                 $this->historiques[$historique->getEtape()] = $historique;
             }
         }
@@ -175,22 +176,15 @@ final class ParcoursManageComponent extends AbstractController
     #[PostMount]
     public function postMount(): void
     {
-        if ($this->type === 'parcours' && $this->parcours !== null) {
+        $this->dpeParcours = GetDpeParcours::getFromParcours($this->parcours);
+
             $this->typeDiplome = $this->parcours?->getFormation()?->getTypeDiplome();
             $this->formation = $this->parcours?->getFormation();
-            $this->place = $this->getPlace($this->type);
-            $this->hasDemande =
-                GetDpeParcours::getFromParcours($this->parcours)?->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_TEXTE || GetDpeParcours::getFromParcours($this->parcours)?->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_MCCC_TEXTE || GetDpeParcours::getFromParcours($this->parcours)?->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_MCCC;
-        } elseif ($this->type === 'ficheMatiere') {
-            $this->typeDiplome = $this->ficheMatiere->getParcours()?->getFormation()?->getTypeDiplome();
-            $this->parcours = $this->ficheMatiere->getParcours();
-            $this->formation = $this->parcours->getFormation();
-        }
-        $this->etape = self::TAB[$this->place] ?? $this->type;
+            $this->place = $this->getPlace();
+            $this->hasDemande = false;
+//                GetDpeParcours::getFromParcours($this->parcours)?->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_TEXTE || GetDpeParcours::getFromParcours($this->parcours)?->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_MCCC_TEXTE || GetDpeParcours::getFromParcours($this->parcours)?->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_MCCC; //todo selon l'état du process???
+
         $this->getHistorique();
-
-        // dépend du type et de l'étape...
-
     }
 
     public function dateHistorique(string $transition): string
@@ -204,17 +198,16 @@ final class ParcoursManageComponent extends AbstractController
 
     private function getWorkflow(): WorkflowInterface
     {
-        //un seul workflow celui du DpeParcours
         return $this->dpeParcoursWorkflow;
     }
 
-    private function getPlace(string $type): string
+    private function getPlace(): string
     {
-        $objet = GetDpeParcours::getFromParcours($this->parcours);
-        if (null === $objet) {
+
+        if (null === $this->dpeParcours) {
             return 'initialisation_dpe';
         }
 
-        return array_keys($this->getWorkflow()->getMarking($objet)->getPlaces())[0];
+        return array_keys($this->getWorkflow()->getMarking($this->dpeParcours)->getPlaces())[0];
     }
 }

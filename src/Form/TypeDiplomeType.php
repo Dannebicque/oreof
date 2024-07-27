@@ -75,10 +75,11 @@ class TypeDiplomeType extends AbstractType
                 'choices' => $this->typeDiplomeRegistry->getChoices(),
             ])
             ->add('debutSemestreFlexible')
-            ->add('hasMemoire')
-            ->add('hasStage')
-            ->add('hasSituationPro')
-            ->add('hasProjet');
+            ->add('hasMemoire', YesNoType::class)
+            ->add('hasStage', YesNoType::class)
+            ->add('hasSituationPro', YesNoType::class)
+            ->add('hasProjet', YesNoType::class)
+            ->add('ectsObligatoireSurEc', YesNoType::class, ['empty_data' => true]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

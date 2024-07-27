@@ -64,10 +64,10 @@ class ParcoursProcess extends AbstractProcess
         return $processData;
     }
 
-    public function valideParcours(DpeParcours $dpeParcours, UserInterface $user, $process, $etape, $request, ?string $fileName = null): Response
+    public function valideParcours(DpeParcours $dpeParcours, UserInterface $user, string $transition, $etape, $request, ?string $fileName = null): Response
     {
 
-        $valid = $process['canValide'];
+        $valid = $transition;
         $motifs = [];
 
         if ($request->request->has('date')) {
@@ -103,12 +103,12 @@ class ParcoursProcess extends AbstractProcess
         return $this->dispatchEventParcours($dpeParcours, $user, $etape, $request, 'valide', $fileName);
     }
 
-    public function refuseParcours(DpeParcours $dpeParcours, UserInterface $user, $process, $etape, $request): Response
+    public function refuseParcours(DpeParcours $dpeParcours, UserInterface $user, string $transition, $etape, $request): Response
     {
         $reponse = $this->dispatchEventParcours($dpeParcours, $user, $etape, $request, 'refuse');
 
         $motifs = [];
-        $refus = $process['canRefuse'];
+        $refus = $transition;
 
         if ($request->request->has('date')) {
             $motifs['date'] = Tools::convertDate($request->request->get('date'));
@@ -134,9 +134,9 @@ class ParcoursProcess extends AbstractProcess
         return $reponse;
     }
 
-    public function reserveParcours(DpeParcours $dpeParcours, UserInterface $user, $process, $etape, $request): Response
+    public function reserveParcours(DpeParcours $dpeParcours, UserInterface $user, string $transition, $etape, $request): Response
     {
-        $this->dpeParcoursWorkflow->apply($dpeParcours, $process['canReserve'], ['motif' => $request->request->get('argumentaire')]);
+        $this->dpeParcoursWorkflow->apply($dpeParcours, $transition, ['motif' => $request->request->get('argumentaire')]);
         $this->entityManager->flush();
         return $this->dispatchEventParcours($dpeParcours, $user, $etape, $request, 'reserve');
     }

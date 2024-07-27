@@ -77,8 +77,10 @@ class ParcoursController extends BaseController
     }
 
     #[Route('/', name: 'app_parcours_index', methods: ['GET'])]
+    /** @deprecated  */
     public function index(): Response
     {
+
         return $this->render('parcours/index.html.twig');
     }
 

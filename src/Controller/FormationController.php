@@ -12,6 +12,7 @@ namespace App\Controller;
 use App\Classes\CalculStructureParcours;
 use App\Classes\GetDpeParcours;
 use App\Classes\GetFormations;
+use App\Classes\MentionProcess;
 use App\Classes\verif\FormationState;
 use App\Classes\verif\ParcoursState;
 use App\DTO\StatsFichesMatieres;
@@ -86,6 +87,7 @@ class FormationController extends BaseController
         MentionRepository     $mentionRepository,
         ComposanteRepository  $composanteRepository,
         TypeDiplomeRepository $typeDiplomeRepository,
+        MentionProcess                $validationProcess,
         Request               $request,
     ): Response {
         $isCfvu = false;
@@ -104,6 +106,7 @@ class FormationController extends BaseController
             'typeDiplomes' => $typeDiplomeRepository->findBy([], ['libelle' => 'ASC']),
             'params' => $request->query->all(),
             'isCfvu' => false,
+            'process' => $validationProcess->getProcess()
         ]);
     }
 

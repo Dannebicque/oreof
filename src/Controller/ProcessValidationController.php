@@ -26,6 +26,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Workflow\WorkflowInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class ProcessValidationController extends BaseController
@@ -44,7 +45,7 @@ class ProcessValidationController extends BaseController
         $this->dir = $kernel->getProjectDir().'/public/uploads/conseils/';
     }
 
-    #[Route('/validation/valide/{etape}', name: 'app_validation_valide')]
+    #[Route('/validation/valide/{etape}', name: 'app_validation_valider')]
     public function valide(
         GetHistorique       $getHistorique,
         ParcoursRepository  $parcoursRepository,
@@ -54,29 +55,32 @@ class ProcessValidationController extends BaseController
         Request             $request
     ): Response {
         $type = $request->query->get('type');
+        $transition = $request->query->get('transition');
         $id = $request->query->get('id');
+        $process = $this->validationProcess->getEtape($etape);
+        $meta = $this->validationProcess->getMetaFromTransition($transition);
 
 
         $laisserPasser = false;
         switch ($type) {
-            case 'formation':
-                $process = $this->validationProcess->getEtape($etape);
-                $objet = $formationRepository->find($id);
-
-                if ($objet === null) {
-                    return JsonReponse::error('Formation non trouvée');
-                }
-
-                if ($etape === 'cfvu') {
-                    $laisserPasser = $getHistorique->getHistoriqueFormationLastStep($objet, 'conseil');
-                }
-
-                $processData = $this->formationProcess->etatFormation($objet, $process);
-
-                if ($request->isMethod('POST')) {
-                    return $this->formationProcess->valideFormation($objet, $this->getUser(), $process, $etape, $request);
-                }
-                break;
+            //            case 'formation':
+            //                $process = $this->validationProcess->getEtape($etape);
+            //                $objet = $formationRepository->find($id);
+            //
+            //                if ($objet === null) {
+            //                    return JsonReponse::error('Formation non trouvée');
+            //                }
+            //
+            //                if ($etape === 'cfvu') {
+            //                    $laisserPasser = $getHistorique->getHistoriqueFormationLastStep($objet, 'conseil');
+            //                }
+            //
+            //                $processData = $this->formationProcess->etatFormation($objet, $process);
+            //
+            //                if ($request->isMethod('POST')) {
+            //                    return $this->formationProcess->valideFormation($objet, $this->getUser(), $process, $etape, $request);
+            //                }
+            //                break;
             case 'parcours':
                 //upload
                 $fileName = '';
@@ -102,10 +106,10 @@ class ProcessValidationController extends BaseController
                     return JsonReponse::error('Parcours non trouvé');
                 }
 
-                $processData = $this->parcoursProcess->etatParcours($parcours, $process);
+                $processData = $this->parcoursProcess->etatParcours($parcours, $process);//todo: process??
 
                 if ($request->isMethod('POST')) {
-                    return $this->parcoursProcess->valideParcours($parcours, $this->getUser(), $process, $etape, $request, $fileName);
+                    return $this->parcoursProcess->valideParcours($parcours, $this->getUser(), $transition, $etape, $request, $fileName);
                 }
 
                 break;
@@ -134,10 +138,12 @@ class ProcessValidationController extends BaseController
             'etape' => $etape,
             'processData' => $processData ?? null,
             'laisserPasser' => $laisserPasser,
+            'meta' => $meta,
+            'transition' => $transition,
         ]);
     }
 
-    #[Route('/validation/refuse/{etape}', name: 'app_validation_refuse')]
+    #[Route('/validation/refuse/{etape}', name: 'app_validation_refuser')]
     public function refuse(
         ParcoursRepository  $parcoursRepository,
         FormationRepository $formationRepository,
@@ -145,24 +151,25 @@ class ProcessValidationController extends BaseController
         Request             $request
     ): Response {
         $type = $request->query->get('type');
+        $transition = $request->query->get('transition');
         $id = $request->query->get('id');
-
         $process = $this->validationProcess->getEtape($etape);
+        $meta = $this->validationProcess->getMetaFromTransition($transition);
 
         switch ($type) {
-            case 'formation':
-                $objet = $formationRepository->find($id);
-
-                if ($objet === null) {
-                    return JsonReponse::error('Formation non trouvée');
-                }
-
-                $processData = $this->formationProcess->etatFormation($objet, $process);
-
-                if ($request->isMethod('POST')) {
-                    return $this->formationProcess->refuseFormation($objet, $this->getUser(), $process, $etape, $request);
-                }
-                break;
+            //            case 'formation':
+            //                $objet = $formationRepository->find($id);
+            //
+            //                if ($objet === null) {
+            //                    return JsonReponse::error('Formation non trouvée');
+            //                }
+            //
+            //                $processData = $this->formationProcess->etatFormation($objet, $process);
+            //
+            //                if ($request->isMethod('POST')) {
+            //                    return $this->formationProcess->refuseFormation($objet, $this->getUser(), $process, $etape, $request);
+            //                }
+            //                break;
             case 'parcours':
                 $objet = $parcoursRepository->find($id);
 
@@ -176,10 +183,10 @@ class ProcessValidationController extends BaseController
                     return JsonReponse::error('Parcours non trouvé');
                 }
 
-                $processData = $this->parcoursProcess->etatParcours($parcours, $process);
+                $processData = $this->parcoursProcess->etatParcours($parcours, $process);//todo: process?
 
                 if ($request->isMethod('POST')) {
-                    return $this->parcoursProcess->refuseParcours($parcours, $this->getUser(), $process, $etape, $request);
+                    return $this->parcoursProcess->refuseParcours($parcours, $this->getUser(), $transition, $etape, $request);
                 }
                 break;
             case 'ficheMatiere':
@@ -199,10 +206,12 @@ class ProcessValidationController extends BaseController
             'etape' => $etape,
             'objet' => $objet,
             'processData' => $processData ?? null,
+            'meta' => $meta,
+            'transition' => $transition
         ]);
     }
 
-    #[Route('/validation/reserve/{etape}', name: 'app_validation_reserve')]
+    #[Route('/validation/reserve/{etape}', name: 'app_validation_reserver')]
     public function reserve(
         FicheMatiereRepository $ficheMatiereRepository,
         ParcoursRepository  $parcoursRepository,
@@ -211,24 +220,25 @@ class ProcessValidationController extends BaseController
         Request             $request
     ): Response {
         $type = $request->query->get('type');
+        $transition = $request->query->get('transition');
         $id = $request->query->get('id');
-
         $process = $this->validationProcess->getEtape($etape);
+        $meta = $this->validationProcess->getMetaFromTransition($transition);
 
         switch ($type) {
-            case 'formation':
-                $objet = $formationRepository->find($id);
-
-                if ($objet === null) {
-                    return JsonReponse::error('Formation non trouvée');
-                }
-
-                $processData = $this->formationProcess->etatFormation($objet, $process);
-
-                if ($request->isMethod('POST')) {
-                    return $this->formationProcess->reserveFormation($objet, $this->getUser(), $process, $etape, $request);
-                }
-                break;
+            //            case 'formation':
+            //                $objet = $formationRepository->find($id);
+            //
+            //                if ($objet === null) {
+            //                    return JsonReponse::error('Formation non trouvée');
+            //                }
+            //
+            //                $processData = $this->formationProcess->etatFormation($objet, $process);
+            //
+            //                if ($request->isMethod('POST')) {
+            //                    return $this->formationProcess->reserveFormation($objet, $this->getUser(), $process, $etape, $request);
+            //                }
+            //                break;
             case 'parcours':
                 $objet = $parcoursRepository->find($id);
 
@@ -242,10 +252,10 @@ class ProcessValidationController extends BaseController
                     return JsonReponse::error('Parcours non trouvé');
                 }
 
-                $processData = $this->parcoursProcess->etatParcours($parcours, $process);
+                $processData = $this->parcoursProcess->etatParcours($parcours, $process);//todo: process?
 
                 if ($request->isMethod('POST')) {
-                    return $this->parcoursProcess->reserveParcours($parcours, $this->getUser(), $process, $etape, $request);
+                    return $this->parcoursProcess->reserveParcours($parcours, $this->getUser(), $transition, $etape, $request);
                 }
                 break;
             case 'ficheMatiere':
@@ -272,6 +282,8 @@ class ProcessValidationController extends BaseController
             'type' => $type,
             'id' => $id,
             'etape' => $etape,
+            'transition' => $transition,
+            'meta' => $meta
         ]);
     }
 
@@ -286,7 +298,8 @@ class ProcessValidationController extends BaseController
     ) {
         if ($request->isMethod('POST')) {
             $data = $request->request->all();
-            $process = $this->validationProcess->getEtape($data['etat']);
+            $place = $data['etat'];
+
             //mise à jour du workflow
             switch ($type) {
                 case 'formation':
@@ -302,7 +315,7 @@ class ProcessValidationController extends BaseController
                         if ($dpe === null) {
                             return JsonReponse::error('Formation non trouvée');
                         }
-                        $dpe->setEtatValidation([$process['transition'] => 1]);
+                        $dpe->setEtatValidation([$place => 1]);
                         $histoEvent = new HistoriqueFormationEvent($objet, $this->getUser(), $data['etat'], 'valide', $request);
                         $this->eventDispatcher->dispatch($histoEvent, HistoriqueFormationEvent::ADD_HISTORIQUE_FORMATION);
                         $this->entityManager->flush();
@@ -311,15 +324,17 @@ class ProcessValidationController extends BaseController
 
                     break;
                 case 'parcours':
+                    //récupérer la transition de départ en fonction de la place selectionnée
+
                     $objet = $parcoursRepository->find($id);
                     $dpe = $dpeParcoursRepository->findOneBy(['parcours' => $objet, 'campagneCollecte' => $this->getDpe()]);
                     if ($objet === null) {
                         return JsonReponse::error('Parcours non trouvé');
                     }
 
-                    $dpe->setEtatValidation([$process['transition'] => 1]);
+                    $dpe->setEtatValidation([$place => 1]);
                     //mettre à jour l'historique
-                    $histoEvent = new HistoriqueParcoursEvent($objet, $this->getUser(), $data['etat'], 'valide', $request);
+                    $histoEvent = new HistoriqueParcoursEvent($objet, $this->getUser(), $place, 'valide', $request);
                     $this->eventDispatcher->dispatch($histoEvent, HistoriqueParcoursEvent::ADD_HISTORIQUE_PARCOURS);
                     $this->entityManager->flush();
                     return JsonReponse::success('Validation modifiée');
