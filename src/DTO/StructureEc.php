@@ -52,9 +52,13 @@ class StructureEc
     private bool $withBcc = true;
 
     public function __construct(
-        ElementConstitutif $elementConstitutif, ?Parcours $parcours, bool $isBut = false, bool $withEcts = true, bool $withBcc = true)
-    {
-        if($parcours){
+        ElementConstitutif $elementConstitutif,
+        ?Parcours $parcours,
+        bool $isBut = false,
+        bool $withEcts = true,
+        bool $withBcc = true
+    ) {
+        if($parcours) {
             $getElement = new GetElementConstitutif($elementConstitutif, $parcours);
             $this->withEcts = $withEcts;
             $this->withBcc = $withBcc;
@@ -73,7 +77,14 @@ class StructureEc
         }
 
         if ($this->withBcc && $parcours) {
-            $this->bccs = $getElement->getBccs()?->toArray();
+            $bccs = $getElement->getBccs()?->toArray();
+            if ($bccs !== null) {
+                foreach ($bccs as $bcc) {
+                    $this->bccs[$bcc->getCode()] = $bcc;
+                }
+            } else {
+                $this->bccs = [];
+            }
         }
     }
 

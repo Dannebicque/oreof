@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Classes\CalculStructureParcours;
 use App\Classes\Export\ExportBcc;
 use App\Classes\MyGotenbergPdf;
 use App\Entity\Parcours;
@@ -28,14 +29,17 @@ class CompetenceExportController extends AbstractController
 
     #[Route('/competence/export/croise/{parcours}', name: 'app_competence_export_croise')]
     public function croise(
+        CalculStructureParcours $calculStructureParcours,
         MyGotenbergPdf $myGotenbergPdf,
         Parcours       $parcours
     ): Response
     {
         $formation = $parcours->getFormation();
+        $dto = $calculStructureParcours->calcul($parcours, false, true);
         return $myGotenbergPdf->render('pdf/bcc_export_croise.html.twig', [
             'formation' => $formation,
             'parcours' => $parcours,
+            'dto' => $dto,
             'titre' => 'BCC croisé du parcours ',
         ], 'BCC Croisé du parcours_' . $parcours->getDisplay() . '<br>' . $formation->getDisplayLong());
     }
