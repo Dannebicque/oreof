@@ -4,6 +4,12 @@
     {% set id = this.parcours.id %}
     {% set objet = this.parcours %}
 
+    {% if parcours.isParcoursDefaut == true %}
+    {% set prefix = 'formation' %}
+    {% else %}
+    {% set prefix = 'parcours' %}
+    {% endif %}
+
     <div class="card mb-3">
         <div class="card-body">
             <div class="row">
@@ -56,8 +62,8 @@
                                 {% else %}
                                     <button class="btn btn-sm btn-icon btn-icon-only {{ class }} ms-1" type="button"
                                             data-controller="tooltip" data-tooltip-placement-value="bottom"
-                                            aria-label="{{ (etape.label~'.'~class)|trans({}, 'process') }}"
-                                            data-bs-original-title="{{ (etape.label~'.'~class)|trans({}, 'process') }}"
+                                            aria-label="{{ (prefix~'.'~etape.label~'.'~class)|trans({}, 'process') }}"
+                                            data-bs-original-title="{{ (prefix~'.'~etape.label~'.'~class)|trans({}, 'process') }}"
                                     >
                                         <i class="fal {{ etape.icon }}"></i>
                                     </button>
@@ -118,10 +124,10 @@
                                                             data-controller="tooltip"
                                                             data-tooltip-placement-value="bottom"
 
-                                                            aria-label="{{ ('validation.'~keyTrans)|trans({}, 'process') }}"
-                                                            data-bs-original-title="{{ ('validation.'~keyTrans)|trans({}, 'process') }}"
+                                                            aria-label="{{ ('title.validation.'~prefix~'.'~keyTrans)|trans({}, 'process') }}"
+                                                            data-bs-original-title="{{ ('title.validation.'~prefix~'.'~keyTrans)|trans({}, 'process') }}"
                                                     >
-                                                        <i class="fal {{ transition.meta.icon }}"></i> {{ ('validation.'~keyTrans)|trans({}, 'process') }}
+                                                        <i class="fal {{ transition.meta.icon }}"></i> {{ ('btn.validation.'~prefix~'.'~keyTrans)|trans({}, 'process') }}
                                                     </button>
                                                 </div>
                                             {% else %}

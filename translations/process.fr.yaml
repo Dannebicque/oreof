@@ -46,56 +46,55 @@ historique.validation.publication: 'Visa de publication'
 
 reserve.validation.dpe.helps.date.help: ' '
 formation.reserve.dpe.flash.success: 'Réserves sur la formation émises'
-validation.parcours.soumis_rf: validation.parcours.soumis_rf
-validation.parcours.en_cours_redaction: validation.parcours.en_cours_redaction
-validation.parcours.soumis_parcours: validation.parcours.soumis_parcours
-validation.cfvu.valide_a_publier: validation.cfvu.valide_a_publier
-validation.formation.autorisation_saisie: validation.formation.autorisation_saisie
 validation.valider.formation.title: 'Validation du projet DPE "formation" par le responsable de formation'
 validation.valider.formation: 'Valider et soumettre la formation'
 
 #Step Parcours
-validation.valider_parcours.title: 'Soumettre le projet DPE "parcours"'
-validation.valider_parcours: 'Soumettre le parcours'
-validation.parcours.btn-info: 'Parcours en cours de rédaction'
-validation.parcours.btn-success: 'Parcours transmis'
+parcours.validation.valider_parcours.title: 'Soumettre le projet DPE "parcours"'
+parcours.validation.valider_parcours: 'Soumettre le parcours'
+parcours.validation.parcours.btn-muted: 'Parcours en cours de rédaction'
+parcours.validation.parcours.btn-info: 'Parcours en cours de rédaction'
+parcours.validation.parcours.btn-success: 'Parcours transmis'
 
 #Step parcours par RF
-validation.parcours_rf.btn-info: 'Parcours soumis au RF'
-validation.parcours_rf.btn-warning: 'Réserves sur le parcours émises par le RF'
-validation.parcours_rf.btn-success: 'Parcours validé par le RF'
+parcours.validation.parcours_rf.btn-info: 'Parcours soumis au RF'
+parcours.validation.parcours_rf.btn-warning: 'Réserves sur le parcours émises par le RF'
+parcours.validation.parcours_rf.btn-success: 'Parcours validé par le RF'
 
 #Step DPE
-validation.dpe.btn-info: 'Parcours soumis au DPE'
-validation.dpe.btn-warning: 'Réserves sur le parcours émises par le DPE'
-validation.dpe.btn-danger: 'Parcours refusé par le DPE'
-validation.dpe.btn-success: 'Parcours validé par le DPE'
+parcours.validation.dpe.btn-info: 'Parcours soumis au DPE'
+parcours.validation.dpe.btn-warning: 'Réserves sur le parcours émises par le DPE'
+parcours.validation.dpe.btn-danger: 'Parcours refusé par le DPE'
+parcours.validation.dpe.btn-success: 'Parcours validé par le DPE'
 
 #Step conseil
-validation.conseil.btn-info: 'Parcours soumis au conseil de composante'
-validation.conseil.btn-warning: 'Réserves sur le parcours émises par le conseil de composante'
-validation.conseil.btn-danger: 'Parcours refusé par le conseil de composante'
-validation.conseil.btn-success: 'Parcours validé par le conseil de composante'
+parcours.validation.conseil.btn-info: 'Parcours soumis au conseil de composante'
+parcours.validation.conseil.btn-warning: 'Réserves sur le parcours émises par le conseil de composante'
+parcours.validation.conseil.btn-danger: 'Parcours refusé par le conseil de composante'
+parcours.validation.conseil.btn-success: 'Parcours validé par le conseil de composante'
+btn.validation.parcours.valider_conseil: 'Valider et transmettre le parcours/formation'
+btn.validation.parcours.refuser_conseil: 'Refuser le parcours/formation'
+btn.validation.parcours.reserver_conseil: 'Emettre des réserves'
 
 #Step SES
-validation.ses.btn-info: 'Parcours soumis au SES'
-validation.ses.btn-warning: 'Réserves sur le parcours émises par le SES'
-validation.ses.btn-danger: 'Parcours refusé par le SES'
-validation.ses.btn-success: 'Parcours validé par le SES'
+parcours.validation.ses.btn-info: 'Parcours soumis au SES'
+parcours.validation.ses.btn-warning: 'Réserves sur le parcours émises par le SES'
+parcours.validation.ses.btn-danger: 'Parcours refusé par le SES'
+parcours.validation.ses.btn-success: 'Parcours validé par le SES'
 
 #Step CFVU
-soumis.cfvu.btn-info: 'Parcours soumis à la CFVU'
-soumis.cfvu.btn-warning: 'Réserves sur le parcours émises par la CFVU'
-soumis.cfvu.btn-danger: 'Parcours refusé par la CFVU'
-soumis.cfvu.btn-success: 'Parcours validé par la CFVU'
+parcours.soumis.cfvu.btn-info: 'Parcours soumis à la CFVU'
+parcours.soumis.cfvu.btn-warning: 'Réserves sur le parcours émises par la CFVU'
+parcours.soumis.cfvu.btn-danger: 'Parcours refusé par la CFVU'
+parcours.soumis.cfvu.btn-success: 'Parcours validé par la CFVU'
 
 #Step relecture avant publication
-relecture.avant_publication.btn-info: 'Parcours transmis pour relecture avant publication'
-relecture.avant_publication.btn-success: 'Parcours validé pour publication'
+parcours.relecture.avant_publication.btn-info: 'Parcours transmis pour relecture avant publication'
+parcours.relecture.avant_publication.btn-success: 'Parcours validé pour publication'
 
 #Step publication
-validation.publication.btn-info: 'Parcours validé en attente de publication'
-validation.publication.btn-success: 'Parcours publié'
+parcours.validation.publication.btn-info: 'Parcours validé en attente de publication'
+parcours.validation.publication.btn-success: 'Parcours publié'
 
 validation.valider.soumis_dpe_composante.title: 'Validation du projet DPE par le responsable DPE'
 validation.valider.soumis_dpe_composante: 'Valider et transmettre'
