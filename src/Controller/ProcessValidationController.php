@@ -47,9 +47,7 @@ class ProcessValidationController extends BaseController
 
     #[Route('/validation/valide/{etape}', name: 'app_validation_valider')]
     public function valide(
-        GetHistorique       $getHistorique,
         ParcoursRepository  $parcoursRepository,
-        FormationRepository $formationRepository,
         FicheMatiereRepository $ficheMatiereRepository,
         string              $etape,
         Request             $request
@@ -63,24 +61,6 @@ class ProcessValidationController extends BaseController
 
         $laisserPasser = false;
         switch ($type) {
-            //            case 'formation':
-            //                $process = $this->validationProcess->getEtape($etape);
-            //                $objet = $formationRepository->find($id);
-            //
-            //                if ($objet === null) {
-            //                    return JsonReponse::error('Formation non trouvée');
-            //                }
-            //
-            //                if ($etape === 'cfvu') {
-            //                    $laisserPasser = $getHistorique->getHistoriqueFormationLastStep($objet, 'conseil');
-            //                }
-            //
-            //                $processData = $this->formationProcess->etatFormation($objet, $process);
-            //
-            //                if ($request->isMethod('POST')) {
-            //                    return $this->formationProcess->valideFormation($objet, $this->getUser(), $process, $etape, $request);
-            //                }
-            //                break;
             case 'parcours':
                 //upload
                 $fileName = '';

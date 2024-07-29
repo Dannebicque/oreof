@@ -113,7 +113,7 @@
                                                                     event: 'mention_manage:'~key,
                                                                     event_type: key
                                                                 },
-                                                                modalTitle: ('validation.valider.'~keyTrans~'.title')|trans({}, 'process'),
+                                                                modalTitle: ('validation.valider.'~prefix~'.'~keyTrans~'.title')|trans({}, 'process'),
                                                                 modalUrl: path('app_validation_'~key, {
                                                                     etape:this.place,
                                                                     transition:keyTrans,

@@ -58,8 +58,6 @@ class HistoriqueSubscriber implements EventSubscriberInterface
             HistoriqueFormationEditEvent::EDIT_HISTORIQUE_FORMATION => 'editHistoriqueFormation',
             HistoriqueParcoursEvent::ADD_HISTORIQUE_PARCOURS => 'createHistoriqueParcours',
             HistoriqueFicheMatiereEvent::ADD_HISTORIQUE_FICHE_MATIERE => 'createHistoriqueFicheMatiere',
-
-
         ];
     }
 
@@ -181,7 +179,7 @@ class HistoriqueSubscriber implements EventSubscriberInterface
             }
         }
 
-        if ($fileName !== null) {
+        if ($fileName !== null && $fileName !== '') {
             $tab['fichier'] = $fileName;
         }
 

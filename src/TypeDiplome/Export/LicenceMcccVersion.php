@@ -66,7 +66,7 @@ class LicenceMcccVersion extends AbstractLicenceMccc
         ?DateTimeInterface $dateCfvu = null,
         ?DateTimeInterface $dateConseil = null,
         bool               $versionFull = true
-    ): void {
+    ): bool {
         $this->getTypeEpreuves();
         $this->versionFull = $versionFull;
         $formation = $parcours->getFormation();
@@ -82,6 +82,8 @@ class LicenceMcccVersion extends AbstractLicenceMccc
         $structureDifferencesParcours = $this->versioningParcours->getStructureDifferencesBetweenParcoursAndLastVersion($parcours);
         if ($structureDifferencesParcours !== null) {
             $diffStructure = (new VersioningStructure($structureDifferencesParcours, $dto))->calculDiff();
+        } else {
+            return false;
         }
 
         $this->excelWriter->createFromTemplate('Annexe_MCCC.xlsx');
@@ -398,6 +400,7 @@ class LicenceMcccVersion extends AbstractLicenceMccc
         }
 
         $this->fileName = Tools::FileName('MCCC-version-' . $anneeUniversitaire->getLibelle() . ' - ' . $texte, 50);
+        return true;
     }
 
     public function exportExcelLicenceMccc(
@@ -406,8 +409,11 @@ class LicenceMcccVersion extends AbstractLicenceMccc
         ?DateTimeInterface $dateCfvu = null,
         ?DateTimeInterface $dateConseil = null,
         bool               $versionFull = true,
-    ): StreamedResponse {
-        $this->genereExcelLicenceMccc($anneeUniversitaire, $parcours, $dateCfvu, $dateConseil, $versionFull);
+    ): StreamedResponse | false {
+        $rep = $this->genereExcelLicenceMccc($anneeUniversitaire, $parcours, $dateCfvu, $dateConseil, $versionFull);
+        if ($rep === false) {
+            return false;
+        }
         return $this->excelWriter->genereFichier($this->fileName);
     }
 
@@ -446,9 +452,11 @@ class LicenceMcccVersion extends AbstractLicenceMccc
         ?DateTimeInterface $dateCfvu = null,
         ?DateTimeInterface $dateConseil = null,
         bool               $versionFull = true
-    ): string {
-        $this->genereExcelLicenceMccc($anneeUniversitaire, $parcours, $dateCfvu, $dateConseil, $versionFull);
-        $date = new \DateTime();
+    ): string|false {
+        $rep = $this->genereExcelLicenceMccc($anneeUniversitaire, $parcours, $dateCfvu, $dateConseil, $versionFull);
+        if ($rep === false) {
+            return false;
+        }
         $this->fileName = $fichier;
         $this->excelWriter->saveFichier($this->fileName, $dir);
         return $this->fileName . '.xlsx';
