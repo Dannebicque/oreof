@@ -153,7 +153,7 @@ class WorkflowExtension extends AbstractExtension
         return false;
     }
 
-    public function isPublie(Parcours|Formation $entity, string $type): bool
+    public function isPublie(Parcours|Formation $entity, string $type = 'parcours'): bool
     {
         if ($type === 'formation') {
             $dpeParcours = GetDpeParcours::getFromFormation($entity); //todo: comment gérer depuis Formation?

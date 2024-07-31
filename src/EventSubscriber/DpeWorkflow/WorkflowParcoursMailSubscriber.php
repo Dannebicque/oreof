@@ -1,24 +1,22 @@
 <?php
 /*
- * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
- * @file /Users/davidannebicque/Sites/oreof/src/EventSubscriber/WorkflowDpeMailSubscriber.php
+ * Copyright (c) 2024. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/EventSubscriber/DpeWorkflow/WorkflowParcoursMailSubscriber.php
  * @author davidannebicque
  * @project oreof
- * @lastUpdate 17/03/2023 22:08
+ * @lastUpdate 16/10/2023 10:52
  */
 
-namespace App\EventSubscriber;
+namespace App\EventSubscriber\DpeWorkflow;
 
 use App\Classes\Mailer;
-use App\Entity\Formation;
-use App\Entity\Parcours;
 use App\Repository\ComposanteRepository;
 use App\Repository\FormationRepository;
 use App\Repository\UserRepository;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Workflow\Event\Event;
 
-class WorkflowParcoursMailSubscriber implements EventSubscriberInterface
+class WorkflowParcoursMailSubscriber extends AbstractDpeMailSubscriber implements EventSubscriberInterface
 {
     public function __construct(
         protected UserRepository       $userRepository,
@@ -31,9 +29,9 @@ class WorkflowParcoursMailSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            'workflow.parcours.transition.valider_parcours' => 'onValideParcours',
-            'workflow.parcours.transition.valider_rf' => 'onValideRf',
-            'workflow.parcours.transition.reserver_rf' => 'onReserveRf',
+            'workflow.dpeParcours.transition.valider_parcours' => 'onValideParcours',
+            'workflow.dpeParcours.transition.valider_rf' => 'onValideRf',
+            'workflow.dpeParcours.transition.reserver_rf' => 'onReserveRf',
 
         ];
     }
@@ -43,64 +41,59 @@ class WorkflowParcoursMailSubscriber implements EventSubscriberInterface
      */
     public function onValideParcours(Event $event): void
     {
-        /** @var Parcours $parcours */
-        $parcours = $event->getSubject();
-        $formation = $parcours->getFormation();
-
-        if ($formation === null) {
+        $data = $this->getDataFromEvent($event);
+        if ($data === null) {
             return;
         }
+
         //todo: check si le responsable de formation accepte le mail
         $this->myMailer->initEmail();
         $this->myMailer->setTemplate(
             'mails/workflow/parcours/valide_parcours.html.twig',
-            ['parcours' => $parcours, 'formation' => $formation]
+             $this->getData()
         );
         $this->myMailer->sendMessage(
-            [$formation->getResponsableMention()?->getEmail(), $formation->getCoResponsable()?->getEmail()],
+            [$this->formation->getResponsableMention()?->getEmail(), $this->formation->getCoResponsable()?->getEmail()],
             '[ORéOF]  Un parcours de votre formation a été soumis à validation'
         );
     }
 
     public function onValideRf(Event $event)
     {
-        /** @var Parcours $parcours */
-        $parcours = $event->getSubject();
-        $formation = $parcours->getFormation();
-
-        if ($formation === null) {
+        $data = $this->getDataFromEvent($event);
+        if ($data === null) {
             return;
         }
+
         //todo: check si le responsable de formation accepte le mail
         $this->myMailer->initEmail();
         $this->myMailer->setTemplate(
             'mails/workflow/parcours/valide_rf.html.twig',
-            ['parcours' => $parcours, 'formation' => $formation]
+            $this->getData()
         );
         $this->myMailer->sendMessage(
-            [$parcours->getRespParcours()?->getEmail(), $parcours->getCoResponsable()?->getEmail()],
+            [$this->parcours->getRespParcours()?->getEmail(), $this->parcours->getCoResponsable()?->getEmail()],
             '[ORéOF]  Votre parcours a été validé par le responsable de formation'
         );
     }
 
     public function onReserveRf(Event $event)
     {
-        /** @var Parcours $parcours */
-        $parcours = $event->getSubject();
-        $formation = $parcours->getFormation();
-        $context = $event->getContext();
-
-        if ($formation === null) {
+        $data = $this->getDataFromEvent($event);
+        if ($data === null) {
             return;
         }
+        $context = $event->getContext();
+
         //todo: check si le responsable de formation accepte le mail
         $this->myMailer->initEmail();
         $this->myMailer->setTemplate(
             'mails/workflow/parcours/reserve_rf.html.twig',
-            ['parcours' => $parcours, 'formation' => $formation, 'motif' => $context['motif']]
+            array_merge($this->getData(),
+            ['motif' => $context['motif']])
         );
         $this->myMailer->sendMessage(
-            [$parcours->getRespParcours()?->getEmail(), $parcours->getCoResponsable()?->getEmail()],
+            [$this->parcours->getRespParcours()?->getEmail(), $this->parcours->getCoResponsable()?->getEmail()],
             '[ORéOF]  Votre parcours a reçu des réserves de la part du responsable de formation'
         );
     }

@@ -89,7 +89,7 @@ class ProcessValidationController extends BaseController
                 $processData = $this->parcoursProcess->etatParcours($parcours, $process);//todo: process??
 
                 if ($request->isMethod('POST')) {
-                    return $this->parcoursProcess->valideParcours($parcours, $this->getUser(), $transition, $etape, $request, $fileName);
+                    return $this->parcoursProcess->valideParcours($parcours, $this->getUser(), $transition, $request, $fileName);
                 }
 
                 break;
@@ -235,7 +235,7 @@ class ProcessValidationController extends BaseController
                 $processData = $this->parcoursProcess->etatParcours($parcours, $process);//todo: process?
 
                 if ($request->isMethod('POST')) {
-                    return $this->parcoursProcess->reserveParcours($parcours, $this->getUser(), $transition, $etape, $request);
+                    return $this->parcoursProcess->reserveParcours($parcours, $this->getUser(), $transition, $request);
                 }
                 break;
             case 'ficheMatiere':
@@ -387,7 +387,7 @@ class ProcessValidationController extends BaseController
             $processData = $this->parcoursProcess->etatParcours($dpe, $process);
 
             if ($request->isMethod('POST')) {
-                $this->parcoursProcess->valideParcours($dpe, $this->getUser(), $process, $etape, $request, $fileName);
+                $this->parcoursProcess->valideParcours($dpe, $this->getUser(), $process, $request, $fileName);
             }
         }
 
@@ -439,7 +439,7 @@ class ProcessValidationController extends BaseController
             $processData = $this->parcoursProcess->etatParcours($dpe, $process);
 
             if ($request->isMethod('POST')) {
-                $this->parcoursProcess->refuseParcours($dpe, $this->getUser(), $process, $etape, $request);
+                $this->parcoursProcess->refuseParcours($dpe, $this->getUser(), $process, $request);
             }
         }
 
@@ -490,7 +490,7 @@ class ProcessValidationController extends BaseController
             $processData = $this->parcoursProcess->etatParcours($dpe, $process);
 
             if ($request->isMethod('POST')) {
-                $this->parcoursProcess->reserveParcours($dpe, $this->getUser(), $process, $etape, $request);
+                $this->parcoursProcess->reserveParcours($dpe, $this->getUser(), $process, $request);
             }
         }
 
@@ -658,7 +658,7 @@ class ProcessValidationController extends BaseController
                     $process = $this->validationProcess->getEtape('ses');
                     $this->parcoursProcess->etatParcours($dpe, $process);
                     $dpe->setEtatReconduction(TypeModificationDpeEnum::OUVERT);
-                    $this->parcoursProcess->valideParcours($dpe, $this->getUser(), $process, 'ses', $request);
+                    $this->parcoursProcess->valideParcours($dpe, $this->getUser(), $process, $request);
 
                     //                    $parcours->getDpeParcours()?->first()->setEtatValidation(['central' => 1]); //un état de processus différent pour connaitre le branchement ensuite
                     //                    $formation->getDpe()?->getDpeParcours()->first()->setEtatValidation(['soumis_central' => 1]);

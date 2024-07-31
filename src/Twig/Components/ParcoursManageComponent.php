@@ -44,7 +44,7 @@ final class ParcoursManageComponent extends AbstractController
         'soumis_central' => 'ses',
         'ses' => 'ses',
         'soumis_vp' => 'vp',
-        'valide_cfvu' => 'cfvu',
+        'valide_cfvu' => 'valide_cfvu',
         'cfvu' => 'cfvu',
         'publication' => 'publication',
         'soumis_cfvu' => 'cfvu',
@@ -170,7 +170,6 @@ final class ParcoursManageComponent extends AbstractController
                 $this->historiques[$historique->getEtape()] = $historique;
             }
         }
-
     }
 
     #[PostMount]

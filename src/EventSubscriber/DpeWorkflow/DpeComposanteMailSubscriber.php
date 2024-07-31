@@ -11,7 +11,6 @@ namespace App\EventSubscriber\DpeWorkflow;
 
 use App\Classes\GetHistorique;
 use App\Classes\Mailer;
-use App\Entity\Formation;
 use App\Repository\ComposanteRepository;
 use App\Repository\FormationRepository;
 use App\Repository\UserRepository;
@@ -32,40 +31,46 @@ class DpeComposanteMailSubscriber extends AbstractDpeMailSubscriber implements E
     public static function getSubscribedEvents(): array
     {
         return [
-            'workflow.dpe.transition.valide_rf' => 'onValideRf',
-            'workflow.dpe.transition.refuser_dpe_composante' => 'onRefuseDpeComposante',
-            'workflow.dpe.transition.reserver_dpe_composante' => 'onReserveDpeComposante',
-            'workflow.dpe.transition.refuser_conseil' => 'onRefuseConseil',
-            'workflow.dpe.transition.valider_conseil' => 'onValideConseil',
-            'workflow.dpe.transition.reserver_conseil' => 'onReserveConseil',
+            'workflow.dpeParcours.transition.valider_rf' => 'onValideRf',
+            //todo: ajouter valider DPE pour prévenir RF et RP?
+            'workflow.dpeParcours.transition.refuser_dpe_composante' => 'onRefuseDpeComposante',
+            'workflow.dpeParcours.transition.reserver_dpe_composante' => 'onReserveDpeComposante',
+            'workflow.dpeParcours.transition.refuser_conseil' => 'onRefuseConseil',
+            'workflow.dpeParcours.transition.valider_conseil' => 'onValideConseil', //todo: ajouter un état pour prévenir RF et RP?
+            'workflow.dpeParcours.transition.reserver_conseil' => 'onReserveConseil',
         ];
     }
 
     public function onRefuseConseil(Event $event): void
     {
         //mail au RF
-        /** @var Formation $formation */
-        $formation = $event->getSubject();
+        $data = $this->getDataFromEvent($event);
+        if ($data === null) {
+            return;
+        }
         $context = $event->getContext();
 
         //todo: check si le responsable de formation accepte le mail
         $this->myMailer->initEmail();
         $this->myMailer->setTemplate(
             'mails/workflow/formation/refuse_conseil_composante.html.twig',
-            ['formation' => $formation, 'motif' => $context['motif']]
+            array_merge($this->getData(), ['motif' => $context['motif']])
         );
+
+        $titre = $this->hasParcours ?
+            'Votre parcours ' . $this->parcours->getLibelle().' de la formation '.$this->formation->getDisplay(). ' a été refusé par le conseil de votre composante' :
+            'Votre formation ' . $this->formation->getDisplay(). ' a été refusée par le conseil de votre composante';
+
         $this->myMailer->sendMessage(
-            [$formation->getResponsableMention()?->getEmail(), $formation->getCoResponsable()?->getEmail()],
-            '[ORéOF]  Votre formation a été refusée par le conseil de votre composante'
+            $this->getDestinataires(),
+            '[ORéOF]  '.$titre
         );
     }
 
     public function onValideConseil(Event $event): void
     {
-        /** @var Formation $formation */
-        $formation = $event->getSubject();
-
-        if ($formation === null) {
+        $data = $this->getDataFromEvent($event);
+        if ($data === null) {
             return;
         }
         //todo: check si le responsable de formation accepte le mail
@@ -73,118 +78,125 @@ class DpeComposanteMailSubscriber extends AbstractDpeMailSubscriber implements E
         $this->myMailer->initEmail();
         $this->myMailer->setTemplate(
             'mails/workflow/formation/valide_conseil_composante.html.twig',
+            array_merge($this->getData(),
             [
-                'formation' => $formation,
-                'composante' => $formation->getComposantePorteuse(),
-                'historique' => $this->getHistorique->getHistoriqueFormationLastStep($formation, 'conseil')
-            ]
+                'composante' => $this->formation->getComposantePorteuse(),
+                'historique' => $this->getHistorique->getHistoriqueParcoursLastStep($this->dpeParcours, 'soumis_conseil')
+            ])
         );
+
+        $titre = $this->hasParcours ?
+            'Votre parcours ' . $this->parcours->getLibelle().' de la formation '.$this->formation->getDisplay(). ' a été validé par le conseil de la composante' :
+            'Votre formation ' . $this->formation->getDisplay(). ' a été validée par le conseil de la composante';
 
         $this->myMailer->sendMessage(
-            [self::EMAIL_CENTRAL],
-            '[ORéOF]  La formation ' . $formation->getDisplayLong() . ' a été validé par le conseil de la composante'
+            [self::EMAIL_CENTRAL, 'oreof@univ-reims.fr'],
+            '[ORéOF]  '.$titre
         );
-
-        // mail aux VP
-        //suspendu sur cette phase 1
-//        $vps = $this->userRepository->findByRole('ROLE_VP');
-//        foreach ($vps as $vp) {
-//            $this->myMailer->initEmail();
-//            $this->myMailer->setTemplate(
-//                'mails/workflow/formation/valide_conseil_composante.html.twig',
-//                [
-//                    'formation' => $formation,
-//                    'composante' => $formation->getComposantePorteuse()
-//                ]
-//            );
-//            $this->myMailer->sendMessage(
-//                [$vp->getEmail()],
-//                '[ORéOF]  La formation ' . $formation->getDisplayLong().' a été validé par le conseil de la composante'
-//            );
-//        }
     }
 
     public function onReserveDpeComposante(Event $event): void
     {
-        //mail au RF
-        /** @var Formation $formation */
-        $formation = $event->getSubject();
+        $data = $this->getDataFromEvent($event);
+        if ($data === null) {
+            return;
+        }
         $context = $event->getContext();
 
         //todo: check si le responsable de formation accepte le mail
         $this->myMailer->initEmail();
         $this->myMailer->setTemplate(
             'mails/workflow/formation/reserve_dpe_composante.html.twig',
-            ['formation' => $formation, 'motif' => $context['motif']]
+            array_merge($this->getData(), ['motif' => $context['motif']])
         );
+
+        $titre = $this->hasParcours ?
+            'Votre parcours ' . $this->parcours->getLibelle().' de la formation '.$this->formation->getDisplay(). ' a reçu des réserves de la part du DPE de votre composante' :
+            'Votre formation ' . $this->formation->getDisplay(). ' a reçu des réserves de la part du DPE de votre composante';
+
         $this->myMailer->sendMessage(
-            [$formation->getResponsableMention()?->getEmail(), $formation->getCoResponsable()?->getEmail()],
-            '[ORéOF]  Votre formation a reçu des réserves de la part du DPE de votre composante'
+            $this->getDestinataires(),
+            '[ORéOF]  '.$titre
         );
     }
 
     public function onReserveConseil(Event $event): void
     {
         //mail au RF
-        /** @var Formation $formation */
-        $formation = $event->getSubject();
+        $data = $this->getDataFromEvent($event);
+        if ($data === null) {
+            return;
+        }
         $context = $event->getContext();
 
         //todo: check si le responsable de formation accepte le mail
         $this->myMailer->initEmail();
         $this->myMailer->setTemplate(
             'mails/workflow/formation/reserve_conseil_composante.html.twig',
-            ['formation' => $formation, 'motif' => $context['motif']]
+            array_merge($this->getData(), ['motif' => $context['motif']])
         );
+
+        $titre = $this->hasParcours ?
+            'Votre parcours ' . $this->parcours->getLibelle().' de la formation '.$this->formation->getDisplay(). ' a reçu des réserves du conseil de votre composante' :
+            'Votre formation ' . $this->formation->getDisplay(). ' a reçu des réserves du conseil de votre composante';
+
         $this->myMailer->sendMessage(
-            [$formation->getResponsableMention()?->getEmail(), $formation->getCoResponsable()?->getEmail()],
-            '[ORéOF]  Votre formation a reçu des réserves du conseil de votre composante'
+            $this->getDestinataires(),
+            '[ORéOF] '.$titre
         );
     }
 
     public function onRefuseDpeComposante(Event $event): void
     {
         //mail au RF
-        /** @var Formation $formation */
-        $formation = $event->getSubject();
+        $data = $this->getDataFromEvent($event);
+        if ($data === null) {
+            return;
+        }
         $context = $event->getContext();
 
         //todo: check si le responsable de formation accepte le mail
         $this->myMailer->initEmail();
         $this->myMailer->setTemplate(
             'mails/workflow/formation/refuse_dpe_composante.html.twig',
-            ['formation' => $formation, 'motif' => $context['motif']]
+            array_merge($this->getData(), ['motif' => $context['motif']])
         );
+
+        $titre = $this->hasParcours ?
+            'Votre parcours ' . $this->parcours->getLibelle().' de la formation '.$this->formation->getDisplay(). ' a été refusé par le DPE de votre composante' :
+            'Votre formation ' . $this->formation->getDisplay(). ' a été refusée par le DPE de votre composante';
+
         $this->myMailer->sendMessage(
-            [$formation->getResponsableMention()?->getEmail(), $formation->getCoResponsable()?->getEmail()],
-            '[ORéOF]  Votre formation a été refusée par le DPE de votre composante'
+            $this->getDestinataires(),
+            '[ORéOF]  '.$titre
         );
     }
 
     public function onValideRf(Event $event): void
     {
-        /** @var Formation $formation */
-        $formation = $event->getSubject();
-
-        if ($formation === null) {
+        $data = $this->getDataFromEvent($event);
+        if ($data === null) {
             return;
         }
+
         //todo: check si le responsable de formation accepte le mail
-        $dpe = $formation->getComposantePorteuse()?->getResponsableDpe();
 
-        if ($dpe === null) {
-            return;
-        }
 
         $this->myMailer->initEmail();
         $this->myMailer->setTemplate(
             'mails/workflow/formation/valide_rf.html.twig',
-            ['formation' => $formation, 'dpe' => $dpe]
+            $this->getData()
         );
 
+        $titre = $this->hasParcours ?
+            'Le parcours ' . $this->parcours->getLibelle().' de la formation '.$this->formation->getDisplay(). ' a été validé par son responsable' :
+            'La formation ' . $this->formation->getDisplay(). ' a été validée par son responsable';
+
         $this->myMailer->sendMessage(
-            [$dpe->getEmail()],
-            '[ORéOF]  Une formation a été validé par son responsable'
+            [$this->responsableDpe->getEmail()], //on ajoute le RP?
+            '[ORéOF]  '.$titre
         );
     }
+
+
 }
