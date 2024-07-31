@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.30.0](https://github.com/Dannebicque/oreof/compare/v1.29.42...v1.30.0) (2024-07-31)
+
+
+### Features
+
+* Ajout bouton changement de RF si pas de parcours ([19a6cf4](https://github.com/Dannebicque/oreof/commit/19a6cf400db5887bb17eb4ec4767e85c5f549c8d))
+* Ajout d'indicateurs sur liste des parcours ([d771e61](https://github.com/Dannebicque/oreof/commit/d771e6120e1f6b6453bf19c5c0ae0eab3d2dcb1e))
+* Ajout d'information dans la maquette JSON ([4f4d17e](https://github.com/Dannebicque/oreof/commit/4f4d17eaca0cf7653134e86b320b4e8a0814c2d9))
+* optioon sur type de diplôme ([ba0ced8](https://github.com/Dannebicque/oreof/commit/ba0ced8f085567b86521a9ab201c5effd1821a08))
+* refonte process validation, diverses corrections d'affichages sur formations, ... ([cb1861d](https://github.com/Dannebicque/oreof/commit/cb1861dcda205ffc40a25682ea8326a5b8447bd7))
+* Suppression d'une entrée dans l'historique ([be362ef](https://github.com/Dannebicque/oreof/commit/be362ef650665ad34458b011807fbc529378056b))
+* traduction si parcours ou formation ([13cf9a5](https://github.com/Dannebicque/oreof/commit/13cf9a52eaa7c622071b0f0c9401525b4e0c410f))
+
+
+### Bug Fixes
+
+* BCC sur tableau croisé ([56bb5d2](https://github.com/Dannebicque/oreof/commit/56bb5d2e9c38e15ca4d5253508cd1cb48a56c4fb))
+* traduction sur le process + étape si pas de parcours ([b028ad7](https://github.com/Dannebicque/oreof/commit/b028ad724d67f65f2c169de492bf7e5bbcc90977))
+* traduction sur le process + étape si pas de parcours + harmonisation des clés du workflow ([1205ab6](https://github.com/Dannebicque/oreof/commit/1205ab62aebc318af6c69df7a55fdc8156e01187))
+
 ### [1.29.42](https://github.com/Dannebicque/oreof/compare/v1.29.41...v1.29.42) (2024-07-23)
 
 
