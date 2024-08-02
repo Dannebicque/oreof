@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.30.5](https://github.com/Dannebicque/oreof/compare/v1.30.4...v1.30.5) (2024-08-02)
+
+
+### Bug Fixes
+
+* tailles boutons formation ([86a25d6](https://github.com/Dannebicque/oreof/commit/86a25d689cb8e76fb46a247d4689728a3085d986))
+* textes ([5bfb440](https://github.com/Dannebicque/oreof/commit/5bfb4408bbf97e6c4c97e4cdcd2216c1901abbaa))
+
 ### [1.30.4](https://github.com/Dannebicque/oreof/compare/v1.30.3...v1.30.4) (2024-08-02)
 
 
