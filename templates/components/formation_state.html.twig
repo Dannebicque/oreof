@@ -5,7 +5,7 @@
             <button class="btn btn-sm btn-icon btn-icon-only {{ class.color }} ms-1" type="button"
                     data-controller="tooltip" data-tooltip-placement-value="bottom"
                     aria-label="{{ etape.label|trans({}, 'process') }}"
-                    data-bs-original-title="{{ etape.label|trans({}, 'process') }}"
+                    data-bs-original-title="{{ (etape.label~'.'~class.color)|trans({}, 'process') }}"
             >
                 <i class="fal {{ etape.icon }}"></i>
             </button>

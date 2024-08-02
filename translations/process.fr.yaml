@@ -528,3 +528,25 @@ relecture:
 soumis:
   cfvu:
     timeline: 'Validation par la CFVU'
+
+# Boutons sur tableau de bord/mentions
+validation.fiche_matiere.btn-info: 'Une ou plusieurs fiches matières/EC en attente de validation'
+validation.fiche_matiere.btn-warning: 'Une ou plusieurs fiches matières/EC avec des réserves'
+validation.fiche_matiere.btn-danger: 'Une ou plusieurs fiches matières/EC refusées'
+validation.fiche_matiere.btn-succcess: 'Toutes les fiches matières/EC validées'
+validation.parcours.btn-info: 'Un ou plusieurs parcours en attente de validation'
+validation.parcours.btn-warning: 'Un ou plusieurs parcours avec des réserves'
+validation.parcours.btn-danger: 'Un ou plusieurs parcours refusé'
+validation.parcours.btn-succcess: 'Tous les parcours validés'
+validation.formation.btn-info: 'Formation incomplète (description, sigle, responsable,...)'
+validation.formation.btn-warning: 'Formation avec des réserves'
+validation.formation.btn-danger: 'Formation refusée'
+validation.formation.btn-succcess: 'Formation validée'
+validation.change_rf.btn-info: 'Une ou plusieurs demande de change de responsable de formation en attente de validation'
+validation.change_rf.btn-warning: 'Une ou plusieurs demande de change de responsable de formation avec des réserves'
+validation.change_rf.btn-danger: 'Une ou plusieurs demande de change de responsable de formation refusée'
+validation.change_rf.btn-succcess: 'Pas de demande de change de responsable de formation en attente'
+validation.publication.btn-info: 'DPE en attente de publication, ou avec des modifications en attente de validation'
+validation.publication.btn-warning: 'DPE avec des réserves'
+validation.publication.btn-danger: 'DPE refusé'
+validation.publication.btn-succcess: 'DPE publié'

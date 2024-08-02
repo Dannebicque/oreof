@@ -279,7 +279,7 @@ framework:
 #                        type: valider
 #                        btn: success
 #                        icon: fa-check
-                valide_rf:
+                valider_rf:
                     from: 'soumis_parcours'
                     to: 'soumis_dpe_composante'
                     metadata:
@@ -300,7 +300,7 @@ framework:
                         type: refuser
                         btn: danger
                         icon: fa-ban
-                valide_dpe_composante:
+                valider_dpe_composante:
                     from: 'soumis_dpe_composante'
                     to: 'soumis_conseil'
                     metadata:
