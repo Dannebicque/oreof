@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.30.4](https://github.com/Dannebicque/oreof/compare/v1.30.3...v1.30.4) (2024-08-02)
+
+
+### Bug Fixes
+
+* bug des listes ([b5b4892](https://github.com/Dannebicque/oreof/commit/b5b4892b6c865731b32bb95bf54b0d10de6733c7))
+
 ### [1.30.3](https://github.com/Dannebicque/oreof/compare/v1.30.2...v1.30.3) (2024-08-02)
 
 
