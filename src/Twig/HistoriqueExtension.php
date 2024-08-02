@@ -20,25 +20,38 @@ use Twig\TwigFilter;
 class HistoriqueExtension extends AbstractExtension
 {
     private array $process;
+    private array $traductions = [
+        'conseil' => 'soumis_conseil',
+        'publication' => 'valide_a_publier',
+        'cfvu' => 'soumis_cfvu',
+        'ses' => 'soumis_central',
+        'dpe' => 'soumis_dpe_composante',
+        'parcours' => 'en_cours_redaction',
+        'parcours_rf' => 'soumis_parcours',
+    ];
 
     public function __construct(
-        private ValidationProcess $validationProcess,
+        private ValidationProcess             $validationProcess,
         private ValidationProcessFicheMatiere $validationProcessFicheMatiere,
-    ) {
+    )
+    {
     }
 
     public function getFilters(): array
     {
         return [
-                new TwigFilter('etapeLabel', [$this, 'etapeLabel']),
-                new TwigFilter('etapeParams', [$this, 'etapeParams']),
-                new TwigFilter('etapeIcone', [$this, 'etapeIcone']),
-            ];
+            new TwigFilter('etapeLabel', [$this, 'etapeLabel']),
+            new TwigFilter('etapeParams', [$this, 'etapeParams']),
+            new TwigFilter('etapeIcone', [$this, 'etapeIcone']),
+        ];
     }
 
     public function etapeLabel(string $etape, string $process = 'formation'): string
     {
         if ($process === 'formation' || $process === 'parcours') {
+            if (array_key_exists($etape, $this->traductions)) {
+                $etape = $this->traductions[$etape];
+            }
             return $this->validationProcess->getEtapeCle($etape, 'label');
         }
         return $this->validationProcessFicheMatiere->getEtapeCle($etape, 'label');
@@ -50,7 +63,7 @@ class HistoriqueExtension extends AbstractExtension
             return
                 ['%parcours%' => $historique->getParcours()?->getDisplay(),
                     '%date%' => $historique->getDate()?->format('d/m/Y'),
-                 '%formation%' => $historique->getParcours()?->getFormation()?->getDisplayLong()];
+                    '%formation%' => $historique->getParcours()?->getFormation()?->getDisplayLong()];
         }
 
         if ($historique instanceof HistoriqueFormation) {
@@ -75,6 +88,9 @@ class HistoriqueExtension extends AbstractExtension
         }
 
         if ($process === 'formation' || $process === 'parcours') {
+            if (array_key_exists($etape, $this->traductions)) {
+                $etape = $this->traductions[$etape];
+            }
             return $this->validationProcess->getEtapeCle($etape, 'icon');
         }
         return $this->validationProcessFicheMatiere->getEtapeCle($etape, 'icon');
