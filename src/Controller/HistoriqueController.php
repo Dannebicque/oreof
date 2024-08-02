@@ -14,6 +14,7 @@ use App\Entity\Historique;
 use App\Entity\HistoriqueFormation;
 use App\Entity\HistoriqueParcours;
 use App\Entity\Parcours;
+use App\Twig\HistoriqueExtension;
 use App\Utils\JsonRequest;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -102,6 +103,9 @@ class HistoriqueController extends BaseController
     ): Response {
         $type = get_class($historique);
         $etape = $historique->getEtape();
+        if (array_key_exists($etape, HistoriqueExtension::TRADUCTIONS)) {
+            $etape = HistoriqueExtension::TRADUCTIONS[$etape];
+        }
 
         $process = $this->validationProcess->getEtape($etape);
 

@@ -20,9 +20,9 @@ use Twig\TwigFilter;
 class HistoriqueExtension extends AbstractExtension
 {
     private array $process;
-    private array $traductions = [
+    public const TRADUCTIONS = [
         'conseil' => 'soumis_conseil',
-        'publication' => 'valide_a_publier',
+        'publication' => 'valide_cfvu',
         'cfvu' => 'soumis_cfvu',
         'ses' => 'soumis_central',
         'dpe' => 'soumis_dpe_composante',
@@ -49,8 +49,8 @@ class HistoriqueExtension extends AbstractExtension
     public function etapeLabel(string $etape, string $process = 'formation'): string
     {
         if ($process === 'formation' || $process === 'parcours') {
-            if (array_key_exists($etape, $this->traductions)) {
-                $etape = $this->traductions[$etape];
+            if (array_key_exists($etape, self::TRADUCTIONS)) {
+                $etape = self::TRADUCTIONS[$etape];
             }
             return $this->validationProcess->getEtapeCle($etape, 'label');
         }
@@ -88,8 +88,8 @@ class HistoriqueExtension extends AbstractExtension
         }
 
         if ($process === 'formation' || $process === 'parcours') {
-            if (array_key_exists($etape, $this->traductions)) {
-                $etape = $this->traductions[$etape];
+            if (array_key_exists($etape, self::TRADUCTIONS)) {
+                $etape = self::TRADUCTIONS[$etape];
             }
             return $this->validationProcess->getEtapeCle($etape, 'icon');
         }

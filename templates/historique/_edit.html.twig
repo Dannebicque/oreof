@@ -6,7 +6,7 @@
 <form action="{{ path('app_historique_edit', {historique: historique.id}) }}" method="post"
       enctype="multipart/form-data">
 
-    {% if process.hasDate %}
+    {% if process.hasDate is defined and process.hasDate %}
         <div>
             <label for="date" class="form-label">{{ ('valide.'~process.label~'.date.label')|trans({}, 'process') }}
                 <span class="required"></span> <i
@@ -23,7 +23,7 @@
         </div>
     {% endif %}
 
-    {% if etape == 'cfvu' %}
+    {% if etape == 'soumis_cfvu' %}
         {# regarder si dans l'historique on à un laissez-passer sur le conseil  #}
         {% if laisserPasser is defined and laisserPasser != false %}
             {% if laisserPasser.etat == 'laisserPasser' %}
@@ -44,7 +44,7 @@
         {% endif %}
     {% endif %}
 
-    {% if process.hasUpload %}
+    {% if process.hasUpload is defined and process.hasUpload %}
         <div>
             <label for="file" class="form-label">{{ ('valide.'~process.label~'.fichier.label')|trans({}, 'process') }}
                 <i class="fal fa-question-circle ms-1"

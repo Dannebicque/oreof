@@ -30,7 +30,7 @@ process:
     showOn: false
     transition: 'soumis_conseil'
   change_rf:
-    icon: 'fa-users'
+    icon: 'fa-person-chalkboard'
     label: 'validation.change_rf'
     isTimeline: false
     transition: 'soumis_cfvu'
