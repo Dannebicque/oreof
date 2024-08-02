@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.30.2](https://github.com/Dannebicque/oreof/compare/v1.30.1...v1.30.2) (2024-08-02)
+
+
+### Bug Fixes
+
+* traduction sur le process + étape si pas de parcours + harmonisation des clés du workflow ([d91e946](https://github.com/Dannebicque/oreof/commit/d91e9461f0dfc5450d716799a920662b69298ab6))
+
 ### [1.30.1](https://github.com/Dannebicque/oreof/compare/v1.30.0...v1.30.1) (2024-08-02)
 
 
