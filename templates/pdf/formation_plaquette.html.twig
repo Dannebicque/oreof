@@ -1,0 +1,19 @@
+{% extends 'pdf/base-pdf-wk.html.twig' %}
+
+{% block content %}
+    <div class="row">
+        {% for parcours in formation.parcours %}
+            {% for key, rubrique in rubriques|filter(rubrique => rubrique != null) %}
+                {% if key != 'structure' %}
+                    <h2>{{ key|trans({}, 'communication') }}</h2>
+                    {{ include('typeDiplome/formation/_'~key~'.html.twig') }}
+                {% else %}
+                    {{ render(controller('App\\Controller\\StructureShowController::licence', {
+                        parcours: formation.parcours[0].id,
+                        hasLastVersion: hasLastVersion ?? false,
+                    })) }}
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
+    </div>
+{% endblock %}

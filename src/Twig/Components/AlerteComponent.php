@@ -22,6 +22,7 @@ final class AlerteComponent extends AbstractController
     {
         return match ($this->type) {
             'info' => 'fa-info-circle',
+            'help' => 'fa-circle-question',
             'success' => 'fa-check-circle',
             'warning' => 'fa-exclamation-circle',
             'danger' => 'fa-times-circle',

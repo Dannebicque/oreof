@@ -65,8 +65,16 @@ class MyGotenbergPdf
             $title = $context['titre'];
         }
 
+        if ($this->options['withTemplate'] === true) {
+            if (array_key_exists('composante', $context) && $context['composante'] !== null) {
+                $this->options['composante'] = $context['composante'];
+            }
+        }
+
+
         $request = Gotenberg::chromium('http://localhost:3000')
             ->emulatePrintMediaType()
+            ->printBackground()
             ->assets(
                 Stream::path($this->basePath . '/images/logo_urca.png'),
                 Stream::path($this->basePath . '/build/print.css'),
@@ -95,9 +103,7 @@ class MyGotenbergPdf
 
     private function generateHtml(string $template, array $context = [])
     {
-        $context = array_merge($context, ['baseUrl' => $this->options['baseUrl']]);
-
-
+        $context = array_merge($context, $this->options);
         return $this->twig->render($template, $context);
     }
 
@@ -107,8 +113,10 @@ class MyGotenbergPdf
             'isRemoteEnabled' => true,
             'attachment' => true,
             'baseUrl' => $this->basePath,
+            'withTemplate' => false,
             'landscape' => false,
             'paperSize' => 'A4',
+            'composante' => null,
         ]);
     }
 
@@ -134,9 +142,14 @@ class MyGotenbergPdf
 
     private function getFooter(): string
     {
-        return $this->twig->render('pdf/footer.html.twig', [
-            'baseUrl' => $this->options['baseUrl'],
+        if ($this->options['withTemplate']) {
+            $imageData = file_get_contents($this->options['baseUrl'] . '/images/vague_urca.jpg');
+            $base64Image = base64_encode($imageData);
+            return $this->twig->render('pdf/footer.html.twig', array_merge($this->options, ['image' => $base64Image]));
+        }
 
-        ]);
+        return $this->twig->render('pdf/footer.html.twig',
+            $this->options,
+        );
     }
 }

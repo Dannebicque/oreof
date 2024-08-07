@@ -160,7 +160,7 @@
                         <li class="border-left-parcours border-left-parcours-{{ loop.index }}">
                             <a class="nav-link p-2" href="#descriptif_{{ parcours.id }}">
                                 <i class="fal fa-chevron-right"></i>
-                                Descriptif de la formation
+                                Descriptif du parcours
                             </a>
                         </li>
                         <li class="border-left-parcours border-left-parcours-{{ loop.index }}">
@@ -265,6 +265,16 @@
     >
         <i class="{{ iconDownload }}"></i>
         <span> Fiche descriptive (PDF)</span>
+    </a>
+
+    <a href="{{ path('app_plaquette_formation_export', {slug:formation.slug}) }}"
+       class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+       data-bs-toggle="tooltip"
+       data-bs-placement="bottom"
+       title="Télécharger la plaquette en PDF"
+    >
+        <i class="{{ iconDownload }}"></i>
+        <span> Plaquette (PDF)</span>
     </a>
 
     {% if is_granted('CAN_FORMATION_EDIT_MY', formation) %}

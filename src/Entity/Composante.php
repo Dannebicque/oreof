@@ -13,6 +13,7 @@ use App\DTO\Remplissage;
 use App\Repository\ComposanteRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -21,6 +22,21 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
 #[ORM\Entity(repositoryClass: ComposanteRepository::class)]
 class Composante
 {
+    public const RUBRIQUES = [
+        'identiteFormation' => 1,
+        'localisationFormation' => 2,
+        'presentationFormation' => 3,
+        'presentationParcours' => 4,
+        'descriptifParcours' => 5,
+        'localisationParcours' => 6,
+        'competences' => 7,
+        'structure' => 8,
+        'admission' => 9,
+        'inscription' => 10,
+        'etApres' => 11,
+        'contacts' => 12,
+    ];
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -95,6 +111,9 @@ class Composante
 
     #[ORM\OneToMany(mappedBy: 'composanteParent', targetEntity: self::class)]
     private Collection $composantes;
+
+    #[ORM\Column(nullable: true)]
+    private ?array $plaquette_rubriques = [];
 
     public function __construct()
     {
@@ -438,6 +457,23 @@ class Composante
                 $composante->setComposanteParent(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getPlaquetteRubriques(): ?array
+    {
+        $rubriques = $this->plaquette_rubriques ?? [];
+        $rubriques = array_merge(self::RUBRIQUES, $rubriques);
+        //trier selon les valeurs
+        asort($rubriques);
+
+        return $rubriques;
+    }
+
+    public function setPlaquetteRubriques(?array $plaquette_rubriques): static
+    {
+        $this->plaquette_rubriques = $plaquette_rubriques;
 
         return $this;
     }

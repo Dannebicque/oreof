@@ -501,6 +501,23 @@
                             </ul>
                         </li>
                     {% endif %}
+
+                    {% if is_granted('CAN_COMPOSANTE_SHOW_MY', app.user) %}
+                    <li>
+                        <a href="#gestion_offre_formation" data-href="gestion_offre_formation">
+                            <i class="fal fa-book icon"></i>
+                            <span class="label">Communication</span>
+                        </a>
+                        <ul id="gestion_offre_formation">
+                            <li>
+                                <a href="{{ path('app_plaquette') }}">
+                                    <i class="fal fa-random icon"></i>
+                                    <span class="label">Configurer les plaquettes</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    {% endif %}
                 </ul>
             </div>
             <!-- Menu End -->
