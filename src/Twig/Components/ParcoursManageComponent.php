@@ -159,7 +159,7 @@ final class ParcoursManageComponent extends AbstractController
     {
         $historiques = $this->historiqueFormationRepository->findBy(['formation' => $this->parcours->getFormation()], ['created' => 'ASC']);
         foreach ($historiques as $historique) {
-            if (self::TAB_PROCESS[$historique->getEtape()] < self::TAB_PROCESS[self::TAB[$this->place]]) {
+            if ($historique->getChangeRf() === null && self::TAB_PROCESS[$historique->getEtape()] < self::TAB_PROCESS[self::TAB[$this->place]]) {
                 $this->historiques[$historique->getEtape()] = $historique;
             }
         }
