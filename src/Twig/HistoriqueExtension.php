@@ -10,6 +10,7 @@
 namespace App\Twig;
 
 use App\Classes\ValidationProcess;
+use App\Classes\ValidationProcessChangeRf;
 use App\Classes\ValidationProcessFicheMatiere;
 use App\Entity\HistoriqueFicheMatiere;
 use App\Entity\HistoriqueFormation;
@@ -32,9 +33,9 @@ class HistoriqueExtension extends AbstractExtension
 
     public function __construct(
         private ValidationProcess             $validationProcess,
+        private ValidationProcessChangeRf    $validationProcessChangeRf,
         private ValidationProcessFicheMatiere $validationProcessFicheMatiere,
-    )
-    {
+    ) {
     }
 
     public function getFilters(): array
@@ -48,12 +49,20 @@ class HistoriqueExtension extends AbstractExtension
 
     public function etapeLabel(string $etape, string $process = 'formation'): string
     {
+        if (str_starts_with($etape,'changeRf.')) {
+            $etape = str_replace('changeRf.', '', $etape);
+            return 'changeRf.'.$this->validationProcessChangeRf->getEtapeCle($etape, 'label');
+        }
+
         if ($process === 'formation' || $process === 'parcours') {
             if (array_key_exists($etape, self::TRADUCTIONS)) {
                 $etape = self::TRADUCTIONS[$etape];
             }
             return $this->validationProcess->getEtapeCle($etape, 'label');
         }
+
+
+
         return $this->validationProcessFicheMatiere->getEtapeCle($etape, 'label');
     }
 
@@ -83,6 +92,11 @@ class HistoriqueExtension extends AbstractExtension
 
     public function etapeIcone(string $etape, string $process = 'formation'): string
     {
+        if (str_starts_with($etape,'changeRf.')) {
+//            $etape = str_replace('changeRf.', '', $etape);
+            return 'fal fa-repeat';
+        }
+
         if ($etape === 'change_rf_co' || $etape === 'change_rf') {
             return 'fal fa-repeat';
         }

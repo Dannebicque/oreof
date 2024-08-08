@@ -9,18 +9,22 @@
 
 namespace App\EventSubscriber\DpeWorkflow;
 
+use App\Entity\ChangeRf;
 use App\Entity\DpeParcours;
 use App\Entity\Formation;
 use App\Entity\Parcours;
 use App\Entity\User;
+use Symfony\Component\Workflow\Event\Event;
 
 class AbstractDpeMailSubscriber
 {
     public const EMAIL_CENTRAL = 'cfvu-secretariat@univ-reims.fr'; //todo: a mettre sur établissement ?
+    public const EMAIL_OREOF = 'oreof@univ-reims.fr'; //todo: a mettre sur établissement ?
 
     protected ?DpeParcours $dpeParcours;
     protected ?Parcours $parcours;
     protected ?Formation $formation;
+    protected ?ChangeRf $demande;
     protected ?User $responsableDpe;
     protected ?bool $hasParcours = false;
 
@@ -54,6 +58,29 @@ class AbstractDpeMailSubscriber
         return true;
     }
 
+    protected function getDataFromChangeRfEvent($event)
+    {
+        $this->demande = $event->getSubject();
+
+        if (null === $this->demande) {
+            return null;
+        }
+
+        $this->formation = $this->demande->getFormation();
+
+        if (null === $this->formation) {
+            return null;
+        }
+
+        $this->responsableDpe = $this->formation->getComposantePorteuse()?->getResponsableDpe();
+
+        if (null === $this->responsableDpe) {
+            return null;
+        }
+
+        return true;
+    }
+
     protected function getData(): array
     {
         return [
@@ -62,6 +89,15 @@ class AbstractDpeMailSubscriber
             'formation'   => $this->formation,
             'responsableDpe' => $this->responsableDpe,
             'hasParcours' => $this->hasParcours,
+        ];
+    }
+
+    protected function getDataChangeRf(): array
+    {
+        return [
+            'formation'   => $this->formation,
+            'responsableDpe' => $this->responsableDpe,
+            'demande' => $this->demande,
         ];
     }
 

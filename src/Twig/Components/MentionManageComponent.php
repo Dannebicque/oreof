@@ -98,50 +98,6 @@ final class MentionManageComponent extends AbstractController
         $this->process = $this->validationProcess->getProcess();
     }
 
-//    #[LiveListener('mention_manage:valide')]
-//    public function valide(): void
-//    {
-//        $this->place = $this->getPlace($this->type);
-//        $this->etape = self::TAB[$this->place] ?? $this->type;
-//        $this->getHistorique();
-//        $this->event = 'valide';
-//
-//        $this->redirige();
-//    }
-
-//    public function redirige(): Response
-//    {
-//        return $this->redirectToRoute('app_formation_show', [
-//            'slug' => $this->formation->getSlug()
-//        ]); //uniquement si RF ou DPE
-//    }
-//
-//    #[LiveListener('mention_manage:edit')]
-//    public function edit(): void
-//    {
-//        $this->place = $this->getPlace($this->type);
-//        $this->etape = self::TAB[$this->place] ?? $this->type;
-//        $this->event = 'edit';
-//    }
-
-//    #[LiveListener('mention_manage:refuse')]
-//    public function refuse(): void
-//    {
-//        $this->place = $this->getPlace($this->type);
-//        $this->etape = self::TAB[$this->place] ?? $this->type;
-//        $this->getHistorique();
-//        $this->event = 'refuse';
-//    }
-//
-//    #[LiveListener('mention_manage:reserve')]
-//    public function reserve(): void
-//    {
-//        $this->place = $this->getPlace($this->type);
-//        $this->etape = self::TAB[$this->place] ?? $this->type;
-//        $this->getHistorique();
-//        $this->event = 'reserve';
-//    }
-
     private function getHistorique(): void
     {
         $historiques = $this->historiqueFormationRepository->findBy(['formation' => $this->formation], ['created' => 'ASC']);
@@ -165,9 +121,6 @@ final class MentionManageComponent extends AbstractController
 
         $this->etape = self::TAB[$this->place] ?? $this->type;
         $this->getHistorique();
-
-        // dépend du type et de l'étape...
-
     }
 
     public function dateHistorique(string $transition): string

@@ -4,14 +4,12 @@ namespace App\Controller;
 
 use App\Classes\Excel\ExcelWriter;
 use App\Classes\ValidationProcess;
+use App\Classes\ValidationProcessChangeRf;
 use App\Classes\ValidationProcessFicheMatiere;
 use App\Entity\Composante;
-use App\Enums\EtatDemandeChangeRfEnum;
 use App\Repository\ChangeRfRepository;
 use App\Repository\ComposanteRepository;
 use App\Repository\FicheMatiereRepository;
-use App\Repository\FormationRepository;
-
 use App\Repository\ParcoursRepository;
 use App\Utils\Tools;
 use DateTime;
@@ -78,6 +76,7 @@ class ValidationController extends BaseController
     public function wizard(
         Request $request,
         ValidationProcessFicheMatiere    $validationProcessFicheMatiere,
+        ValidationProcessChangeRf    $validationProcessChangeRf,
         ValidationProcess    $validationProcess,
         ComposanteRepository $composanteRepository,
     ): Response {
@@ -110,7 +109,7 @@ class ValidationController extends BaseController
             case 'changeRf':
                 return $this->render('validation/_changeRf.html.twig', [
                     'composantes' => $composanteRepository->findAll(),
-                    'types_validation' => EtatDemandeChangeRfEnum::cases()
+                    'types_validation' => $validationProcessChangeRf->getProcess()
                 ]);
         }
     }
@@ -174,6 +173,7 @@ class ValidationController extends BaseController
 
     #[Route('/validation/liste-change-rf', name: 'app_validation_formation_liste_changerf')]
     public function listeChangeRf(
+        ValidationProcessChangeRf    $validationProcess,
         ChangeRfRepository $changeRfRepository,
         ComposanteRepository $composanteRepository,
         Request              $request

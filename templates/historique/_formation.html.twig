@@ -26,8 +26,8 @@
         {% set color='warning' %}
     {% endif %}
     <div class="row g-0 align-items-center mb-2"
-    {{ stimulus_controller('historique') }}
-    {{ stimulus_target('historique', 'entreeHistorique') }}
+            {{ stimulus_controller('historique') }}
+            {{ stimulus_target('historique', 'entreeHistorique') }}
     >
         <div class="col-auto">
             <div class="border border-{{ color }} sw-5 sh-5 rounded-xl d-flex justify-content-center align-items-center">
@@ -101,8 +101,21 @@
                 </div>
 
             </div>
-            {% if histo.commentaire is defined or histo.complements.fichier is defined %}
+            {% if histo.commentaire is defined or histo.complements.fichier is defined or (histo.changeRf is defined and histo.changeRf != null) %}
                 <div class="row">
+                    {% if histo.changeRf is defined and histo.changeRf != null %}
+                        <div class="col-auto">
+                            <p class="small">
+                                {% if histo.changeRf.typeRf.value == 'RF' %}
+                                    Changement du responsable de formation : {{ histo.changeRf.ancienResponsable != null ? histo.changeRf.ancienResponsable.display : 'Pas de responsable' }} &rarr; {{ histo.changeRf.nouveauResponsable != null ? histo.changeRf.nouveauResponsable.display : 'Pas de responsable' }}
+                                {% elseif histo.changeRf.typeRf.value == 'CORF' %}
+                                    Changement du co-responsable de formation : {{ histo.changeRf.ancienResponsable != null ? histo.changeRf.ancienResponsable.display : 'Pas de co-responsable' }} &rarr; {{ histo.changeRf.nouveauResponsable != null ? histo.changeRf.nouveauResponsable.display : 'Pas de co-responsable' }}
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </p>
+                        </div>
+                    {% endif %}
                     {% if histo.commentaire is defined %}
                         <div class="col-auto">
                             <p>{{ histo.commentaire|raw }}</p>
@@ -116,6 +129,8 @@
                     {% endif %}
                 </div>
             {% endif %}
+
+
         </div>
     </div>
 {% else %}

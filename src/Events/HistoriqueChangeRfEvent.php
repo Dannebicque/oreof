@@ -9,32 +9,29 @@
 
 namespace App\Events;
 
+use App\Entity\ChangeRf;
 use App\Entity\Formation;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class HistoriqueFormationEvent extends AbstractHistoriqueEvent
+class HistoriqueChangeRfEvent extends AbstractHistoriqueEvent
 {
-    public const ADD_HISTORIQUE_FORMATION = 'add.historique.formation';
-    public const ADD_HISTORIQUE_FORMATION_CHANGE_RF = 'add.historique.formation.change_rf';
+    public const ADD_HISTORIQUE_CHANGE_RF = 'add.historique.formation.change_rf';
 
-    private Formation $formation;
+    private ChangeRf $changeRf;
     private ?string $fileName;
 
-    /**
-     * @param Formation $formation
-     */
-    public function __construct(Formation $formation, UserInterface $user, string $etape, string $etat, Request $request, ?string $fileName = null)
+    public function __construct(ChangeRf $changeRf, UserInterface $user, string $etape, string $etat, Request $request, ?string $fileName = null)
     {
         parent::__construct($user, $etape, $etat, $request);
 
-        $this->formation = $formation;
+        $this->changeRf = $changeRf;
         $this->fileName = $fileName;
     }
 
-    public function getFormation(): Formation
+    public function getChangeRf(): ChangeRf
     {
-        return $this->formation;
+        return $this->changeRf;
     }
 
     public function getFileName(): ?string

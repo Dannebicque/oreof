@@ -27,6 +27,8 @@ class FormationStateComponent
     public function __construct(
         #[Target('dpeParcours')]
         private readonly WorkflowInterface             $dpeParcoursWorkflow,
+        #[Target('changeRf')]
+        private readonly WorkflowInterface             $changeRfWorkflow,
     ) {
     }
 
@@ -151,14 +153,18 @@ class FormationStateComponent
         //            orange - réserve sur le RF ou sans PV associé
         //            vert - RF est validé CFVU avec PV
         foreach ($this->formation->getChangeRves() as $changeRf) {
-            if ($changeRf->getEtatDemande() === EtatDemandeChangeRfEnum::EN_ATTENTE) {
-                return EtatProcessMentionEnum::WIP;
-            }
+            $place = array_keys($this->changeRfWorkflow->getMarking($changeRf)->getPlaces())[0];
 
-            if ($changeRf->getEtatDemande() === EtatDemandeChangeRfEnum::REFUSE || $changeRf->getFichierPv() === null) {
+            if ($place === 'reserve_cfvu' || $place === 'attente_pv') {
                 //voir si PV passe dans l'historique
                 return EtatProcessMentionEnum::RESERVE;
             }
+
+            if ($place !== 'effectuee') {
+                return EtatProcessMentionEnum::WIP;
+            }
+
+
         }
 
         return EtatProcessMentionEnum::COMPLETE;

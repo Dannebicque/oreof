@@ -555,3 +555,67 @@ validation.publication.btn-warning: 'DPE avec des réserves'
 validation.publication.btn-danger: 'DPE refusé'
 validation.publication.btn-success: 'DPE publié'
 validation.publication.btn-muted: 'Aucune formation ou parcours à l''état de publication'
+
+btn.validation.changeRf.valider_conseil: 'Valider et transmettre au SES'
+btn.validation.changeRf.valider_ses: 'Valider et transmettre à la CFVU'
+btn.validation.changeRf.reserver_ses: 'Emettre des réserves'
+btn.validation.changeRf.valider_cfvu_avec_pv: 'Valider CFVU et effectuer le changement'
+btn.validation.changeRf.valider_cfvu_attente_pv: 'Valider CFVU sous réserve de PV'
+btn.validation.changeRf.reserver_cfvu: 'Emettre des réserves'
+
+# Demande change RF soumise Conseil
+changeRf.validation.soumis_conseil.btn-muted: 'Validation Conseil de composante indisponible'
+changeRf.validation.soumis_conseil.btn-info: 'Demande de changement de responsable de formation initialisée en attente de conseil de composante'
+changeRf.validation.soumis_conseil.btn-warning: 'Demande de changement de responsable de formation initialisée avec des réserves ou en attente de PV'
+changeRf.validation.soumis_conseil.btn-danger: 'Demande de changement de responsable de formation initialisée refusée'
+changeRf.validation.soumis_conseil.btn-success: 'Demande de changement de responsable de formation validée par le conseil de composante'
+
+# Demande change RF soumise SES
+changeRf.validation.soumis_ses.btn-muted: 'Validation SES indisponible'
+changeRf.validation.soumis_ses.btn-info: 'Demande de changement de responsable de formation en attente de validation par le SES'
+changeRf.validation.soumis_ses.btn-warning: 'Demande de changement de responsable de formation avec des réserves par le SES'
+changeRf.validation.soumis_ses.btn-danger: 'Demande de changement de responsable de formation refusée par le SES'
+changeRf.validation.soumis_ses.btn-success: 'Demande de changement de responsable de formation validée par le SES'
+
+# Demande change RF soumise CFVU
+changeRf.validation.soumis_cfvu.btn-muted: 'Validation CFVU indisponible'
+changeRf.validation.soumis_cfvu.btn-info: 'Demande de changement de responsable de formation en attente de validation par la CFVU'
+changeRf.validation.soumis_cfvu.btn-warning: 'Demande de changement de responsable de formation avec des réserves par la CFVU ou en attente de PV'
+changeRf.validation.soumis_cfvu.btn-danger: 'Demande de changement de responsable de formation refusée par la CFVU'
+changeRf.validation.soumis_cfvu.btn-success: 'Demande de changement de responsable de formation validée par la CFVU'
+
+validation.valider.changeRf.valider_conseil.title: 'Validation de la demande de changement de responsable de formation par le conseil de composante'
+validation.valider.changeRf.valider_ses.title: 'Validation de la demande de changement de responsable de formation par le SES'
+validation.valider.changeRf.reserver_ses.title: 'Emettre des réserves sur la demande de changement de responsable de formation'
+
+valide:
+  change_rf:
+    date:
+      conseil_composante:
+        label: 'Date du conseil de composante'
+    attente:
+      fichier:
+        label: 'Pièce justifiant la demande de changement de responsable de formation (PV, relevé de décision, délibération) :'
+validation:
+  soumis_conseil:
+    valide:
+      laisserPasser:
+        soumis_conseil: 'Demande de laissez-passer, le conseil de composante ne pouvant avoir lieu avant le passage en CFVU.'
+
+changeRf:
+  valide:
+    soumis_conseil:
+      flash:
+        success: 'Demande de changement de responsable de formation validée par le conseil de composante'
+
+
+btn.changeRf.validation.soumis_conseil.valide: 'Valider et transmettre au SES'
+btn.changeRf.validation.soumis_ses.valide: 'Valider et transmettre à la CFVU'
+btn.changeRf.validation.soumis_cfvu.valide: 'Valider CFVU et effectuer le changement'
+historique.changeRf.validation.soumis_conseil: 'Validation demande changement RF par le conseil de composante du %date%'
+historique.changeRf.validation.soumis_ses: 'Validation demande changement RF du SES'
+historique.changeRf.validation.soumis_cfvu: 'Validation demande changement RF par la CFVU du %date%'
+soumis.cfvu: 'Soumis CFVU'
+relecture.avant_publication: 'Relecture avant publication'
+validation.soumis_ses: 'Soumis SES'
+validation.soumis_cfvu: 'Soumis CFVU'

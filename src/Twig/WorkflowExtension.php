@@ -10,6 +10,7 @@
 namespace App\Twig;
 
 use App\Classes\GetDpeParcours;
+use App\Entity\ChangeRf;
 use App\Entity\DpeParcours;
 use App\Entity\FicheMatiere;
 use App\Entity\Formation;
@@ -26,6 +27,8 @@ class WorkflowExtension extends AbstractExtension
         private readonly WorkflowInterface $ficheWorkflow,
         #[Target('dpeParcours')]
         private readonly WorkflowInterface $dpeParcoursWorkflow,
+        #[Target('changeRf')]
+        private readonly WorkflowInterface $changeRfWorkflow,
     ) {
     }
 
@@ -43,7 +46,7 @@ class WorkflowExtension extends AbstractExtension
     }
 
     public function hasHistorique(
-        Parcours|FicheMatiere|Formation $entity,
+        Parcours|FicheMatiere|Formation|ChangeRf $entity,
         string                $key,
         array                 $historique
     ): string {
@@ -60,7 +63,7 @@ class WorkflowExtension extends AbstractExtension
         return 'btn-muted';
     }
 
-    public function isPlace(string $workflow, Parcours|FicheMatiere|Formation $entity, string $place): bool
+    public function isPlace(string $workflow, Parcours|FicheMatiere|Formation|ChangeRf $entity, string $place): bool
     {
         $actualPlaces = $this->getPlacesFromEntity($entity, $workflow);
         if ($actualPlaces === false) {
@@ -180,10 +183,11 @@ class WorkflowExtension extends AbstractExtension
             'dpe' => $this->dpeParcoursWorkflow,
             'parcours' => $this->dpeParcoursWorkflow,
             'fiche' => $this->ficheWorkflow,
+            'changeRf' => $this->changeRfWorkflow,
         };
     }
 
-    private function getPlacesFromEntity(Formation|Parcours|FicheMatiere $entity, string $workflow): array|false
+    private function getPlacesFromEntity(Formation|Parcours|FicheMatiere|ChangeRf $entity, string $workflow): array|false
     {
         if ($entity instanceof Parcours) {
             $dpeParcours = GetDpeParcours::getFromParcours($entity);
@@ -204,7 +208,7 @@ class WorkflowExtension extends AbstractExtension
         return $actualPlaces;
     }
 
-    public function hasTransitions(DpeParcours $dpeParcours, string $worflow = 'parcours'): array
+    public function hasTransitions(DpeParcours|ChangeRf $dpeParcours, string $worflow = 'parcours'): array
     {
         $data['valider'] = [];
         $data['reserver'] = [];

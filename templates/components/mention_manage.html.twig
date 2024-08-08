@@ -217,20 +217,24 @@
                             {% endif %}
                         </div>
                     </div>
-                    {% for demande in formation.changeRves|filter(demande => demande.etatDemande.value == 'EN_ATTENTE') %}
-                        <div class="col-12  mt-2">
-                            <div class="alert alert-info">
-                                Une demande de modification est en attente de validation par la CFVU. Remplacement
-                                de {{ demande.ancienResponsable != null ?  demande.ancienResponsable.display : 'non défini' }}
-                                par {{ demande.nouveauResponsable != null ? demande.nouveauResponsable.display : 'non défini' }}
-                                .
-                                <a href="{{ path('app_formation_change_rf_suppression', {demande:demande.id}) }}"
-                                   class="text-danger"><i class="{{ iconDelete }}"></i> Annuler la demande ?</a>
-                            </div>
-                        </div>
-                    {% endfor %}
+
                 </div>
             </div>
         </div>
     </div>
+
+    <twig:ChangeRfState formation="{{ this.formation }}" />
+
+{#    {% for demande in formation.changeRves|filter(demande => demande.etatDemande.value == 'EN_ATTENTE') %}#}
+{#        <div class="col-12  mt-2">#}
+{#            <div class="alert alert-info">#}
+{#                Une demande de modification est en attente de validation par la CFVU. Remplacement#}
+{#                de {{ demande.ancienResponsable != null ?  demande.ancienResponsable.display : 'non défini' }}#}
+{#                par {{ demande.nouveauResponsable != null ? demande.nouveauResponsable.display : 'non défini' }}#}
+{#                .#}
+{#                <a href="{{ path('app_formation_change_rf_suppression', {demande:demande.id}) }}"#}
+{#                   class="text-danger"><i class="{{ iconDelete }}"></i> Annuler la demande ?</a>#}
+{#            </div>#}
+{#        </div>#}
+{#    {% endfor %}#}
 </div>

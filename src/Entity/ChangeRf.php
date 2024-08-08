@@ -5,6 +5,8 @@ namespace App\Entity;
 use App\Enums\EtatDemandeChangeRfEnum;
 use App\Enums\TypeRfEnum;
 use App\Repository\ChangeRfRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -22,8 +24,8 @@ class ChangeRf
     #[ORM\Column(length: 20, enumType: TypeRfEnum::class)]
     private ?TypeRfEnum $typeRf = null;
 
-    #[ORM\Column(length: 20, enumType: EtatDemandeChangeRfEnum::class)]
-    private ?EtatDemandeChangeRfEnum $etatDemande = null;
+    #[ORM\Column(nullable: true)]
+    private ?array $etatDemande = [];
 
     #[ORM\ManyToOne]
     private ?User $nouveauResponsable = null;
@@ -43,10 +45,19 @@ class ChangeRf
     #[ORM\Column(length: 50, nullable: true)]
     private ?string $fichier_pv = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $laisserPasser = null;
+
+    /**
+     * @var Collection<int, HistoriqueFormation>
+     */
+    #[ORM\OneToMany(mappedBy: 'changeRf', targetEntity: HistoriqueFormation::class)]
+    private Collection $historiqueFormations;
+
     public function __construct()
     {
-        $this->etatDemande = EtatDemandeChangeRfEnum::EN_ATTENTE;
         $this->typeRf = TypeRfEnum::RF;
+        $this->historiqueFormations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -66,12 +77,12 @@ class ChangeRf
         return $this;
     }
 
-    public function getEtatDemande(): ?EtatDemandeChangeRfEnum
+    public function getEtatDemande(): ?array
     {
-        return $this->etatDemande;
+        return $this->etatDemande ?? [];
     }
 
-    public function setEtatDemande(EtatDemandeChangeRfEnum $etatDemande): static
+    public function setEtatDemande(array $etatDemande): static
     {
         $this->etatDemande = $etatDemande;
 
@@ -158,6 +169,48 @@ class ChangeRf
     public function setFichierPv(?string $fichier_pv): static
     {
         $this->fichier_pv = $fichier_pv;
+
+        return $this;
+    }
+
+    public function isLaisserPasser(): ?bool
+    {
+        return $this->laisserPasser;
+    }
+
+    public function setLaisserPasser(?bool $laisserPasser): static
+    {
+        $this->laisserPasser = $laisserPasser;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, HistoriqueFormation>
+     */
+    public function getHistoriqueFormations(): Collection
+    {
+        return $this->historiqueFormations;
+    }
+
+    public function addHistoriqueFormation(HistoriqueFormation $historiqueFormation): static
+    {
+        if (!$this->historiqueFormations->contains($historiqueFormation)) {
+            $this->historiqueFormations->add($historiqueFormation);
+            $historiqueFormation->setChangeRf($this);
+        }
+
+        return $this;
+    }
+
+    public function removeHistoriqueFormation(HistoriqueFormation $historiqueFormation): static
+    {
+        if ($this->historiqueFormations->removeElement($historiqueFormation)) {
+            // set the owning side to null (unless already changed)
+            if ($historiqueFormation->getChangeRf() === $this) {
+                $historiqueFormation->setChangeRf(null);
+            }
+        }
 
         return $this;
     }

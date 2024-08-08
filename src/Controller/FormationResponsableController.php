@@ -4,13 +4,13 @@ namespace App\Controller;
 
 use App\Classes\JsonReponse;
 use App\Classes\MyGotenbergPdf;
+use App\Classes\Process\ChangeRfProcess;
+use App\Classes\ValidationProcessChangeRf;
 use App\DTO\ChangeRf;
 use App\Entity\Formation;
 use App\Entity\HistoriqueFormation;
-use App\Enums\EtatDemandeChangeRfEnum;
 use App\Enums\TypeRfEnum;
 use App\Events\NotifCentreFormationEvent;
-use App\Events\UserEvent;
 use App\Form\ChangeRfFormationType;
 use App\Repository\ChangeRfRepository;
 use App\Repository\ComposanteRepository;
@@ -22,11 +22,15 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Workflow\WorkflowInterface;
 
 class FormationResponsableController extends BaseController
 {
     public function __construct(
-        private EntityManagerInterface $entityManager
+        private readonly EntityManagerInterface $entityManager,
+        private readonly WorkflowInterface $changeRfWorkflow,
+        private readonly ValidationProcessChangeRf $validationProcess,
+        private readonly ChangeRfProcess $changeRfProcess,
     ) {
     }
 
@@ -58,6 +62,9 @@ class FormationResponsableController extends BaseController
             $newRf->setTypeRf($datas->getTypeRf());
             $newRf->setCommentaire($commentaire);
             $newRf->setDateDemande(new \DateTime());
+            //initialiser le marking du workflow
+            $this->changeRfWorkflow->apply($newRf, 'effectuer_demande');
+
             if ($newRf->getTypeRf() === TypeRfEnum::RF) {
                 $newRf->setAncienResponsable($formation->getResponsableMention());
             } else {
@@ -145,7 +152,7 @@ class FormationResponsableController extends BaseController
         string $etape,
         Request $request
     ): Response {
-
+//todo: sans doute deprecated ??
         if ($request->isMethod('POST')) {
             $dir = $kernel->getProjectDir() . '/public/uploads/change_rf/pv/';
             $demandes = explode(',', $request->request->get('demandes'));
@@ -199,13 +206,12 @@ class FormationResponsableController extends BaseController
 
                     $histo = new HistoriqueFormation();
                     $histo->setFormation($formation);
+                    $histo->setChangeRf($demande);
                     $histo->setEtape($type);
                     $histo->setUser($this->getUser());
-                    $histo->setEtat('valide'); //todo: on pourrait avoir déjà une entreé en attente avcec un PV ou un laisser-passer
+                    $histo->setEtat('valide');
                     $histo->setDate($dateCfvu);
                     $histo->setComplements([
-                        'ancien' => $demande->getAncienResponsable() !== null ? $demande->getAncienResponsable()->getDisplay() : 'Avant aucun (co) responsable',
-                        'nouveau' => $demande->getNouveauResponsable() !== null ? $demande->getNouveauResponsable()->getDisplay() : 'Aucun (co) responsable',
                         'fichier' => $nomFichier
                     ]);
                     $this->entityManager->persist($histo);
@@ -222,6 +228,85 @@ class FormationResponsableController extends BaseController
         return $this->render('formation_responsable/_valide_confirm_form.html.twig', [
             'etape' => $etape,
             'sDemandes' => $request->query->get('demandes'),
+        ]);
+    }
+
+    #[Route(
+        '/formation/change-responsable/validation-demande/{transition}/{etape}/{demande}',
+        name: 'app_validation_change_rf_valider'
+    )]
+    public function validationChangeRf(
+        Request $request,
+        string $transition,
+        string $etape,
+        \App\Entity\ChangeRf $demande,
+    ): Response {
+
+        if ($demande === null) {
+            return JsonReponse::error('Demande non trouvée');
+        }
+
+        $meta = $this->validationProcess->getMetaFromTransition($transition);
+
+        //upload
+        $fileName = '';
+        if ($request->files->has('file') && $request->files->get('file') !== null) {
+            $file = $request->files->get('file');
+            $fileName = md5(uniqid('', true)) . '.' . $file->guessExtension();
+            $file->move(
+                $this->dir,
+                $fileName
+            );
+        }
+
+        $process = $this->validationProcess->getEtape($etape);
+        $processData = $this->changeRfProcess->etatChangeRf($demande, $process);
+
+        if ($request->isMethod('POST')) {
+            return $this->changeRfProcess->valideChangeRf($demande, $this->getUser(), $transition, $request, $fileName);
+        }
+
+        return $this->render('formation_responsable/_valide.html.twig', [
+            'demande' => $demande,
+            'process' => $process,
+            'etape' => $etape,
+            'processData' => $processData ?? null,
+            'meta' => $meta,
+            'transition' => $transition,
+        ]);
+    }
+
+    #[Route(
+        '/formation/change-responsable/validation-demande/{transition}/{etape}/{demande}',
+        name: 'app_validation_change_rf_reserver'
+    )]
+    public function reserverChangeRf(
+        Request $request,
+        string $transition,
+        string $etape,
+        \App\Entity\ChangeRf $demande,
+    ): Response {
+
+        if ($demande === null) {
+            return JsonReponse::error('Demande non trouvée');
+        }
+
+        $meta = $this->validationProcess->getMetaFromTransition($transition);
+
+        $process = $this->validationProcess->getEtape($etape);
+        $processData = $this->changeRfProcess->etatChangeRf($demande, $process);
+
+        if ($request->isMethod('POST')) {
+            return $this->changeRfProcess->reserveChangeRf($demande, $this->getUser(), $transition, $request);
+        }
+
+        return $this->render('formation_responsable/_reserve.html.twig', [
+            'demande' => $demande,
+            'process' => $process,
+            'etape' => $etape,
+            'processData' => $processData ?? null,
+            'meta' => $meta,
+            'transition' => $transition,
         ]);
     }
 }
