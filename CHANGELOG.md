@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.31.0](https://github.com/Dannebicque/oreof/compare/v1.30.7...v1.31.0) (2024-08-08)
+
+
+### Features
+
+* gestion des plaquettes avec ordre des rubriques+génération du PDF pour une formation ([6405d1e](https://github.com/Dannebicque/oreof/commit/6405d1e8c9727a0e409bad9aeb0922f8ae6f87f7))
+* Process pour la gestion des demandes de changement de RF ([325e8dc](https://github.com/Dannebicque/oreof/commit/325e8dc3377c47dfbde9bd07a899fdd8d4a8b987))
+
+
+### Bug Fixes
+
+* Modification de l'historique ([90ead79](https://github.com/Dannebicque/oreof/commit/90ead79c56a14633b7025ff7f7dba804f0e20f2c))
+
 ### [1.30.7](https://github.com/Dannebicque/oreof/compare/v1.30.6...v1.30.7) (2024-08-02)
 
 
