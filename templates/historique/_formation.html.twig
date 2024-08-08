@@ -62,7 +62,7 @@
                 {% if is_granted('ROLE_SES') %}
                     <div class="col-auto">
                         {% if
-                            (histo.etape == 'cfvu' or histo.etape=='conseil') %}
+                            (histo.etape == 'cfvu' or histo.etape=='conseil' or histo.etape == 'soumis_cfvu' or histo.etape=='soumis_conseil') %}
                             <button class="btn text-warning"
                                     type="button"
                                     {{ stimulus_controller('modal', {

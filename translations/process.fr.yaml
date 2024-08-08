@@ -517,7 +517,7 @@ fiche_matiere.demande.reouverture.label: 'Je confirme la demande de réouverture
 fiche_matiere.demande.reouverture.help: 'Confirmer la demande de réouverture.'
 historique:
   relecture:
-    avant_publication: 'Relecture avant publication. Publié le %date%'
+    avant_publication: 'Relecture avant publication. Visé pour publication le %date%'
   fiche_matiere:
     rouvrir_fiche_matiere: 'Demande de réouverture de la fiche EC/matière'
 fiche_matiere.demande.reouverture.ses.alerte : 'Vous avez demandé la réouverture de la fiche EC/matière pour y apporter des modifications.'

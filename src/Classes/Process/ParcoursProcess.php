@@ -14,13 +14,11 @@ use App\Classes\verif\ParcoursValide;
 use App\DTO\ProcessData;
 use App\Entity\DpeParcours;
 use App\Entity\Historique;
-use App\Entity\HistoriqueFormation;
 use App\Entity\HistoriqueParcours;
-use App\Events\HistoriqueFormationEditEvent;
+use App\Events\HistoriqueParcoursEditEvent;
 use App\Events\HistoriqueParcoursEvent;
 use App\Utils\Tools;
 use Doctrine\ORM\EntityManagerInterface;
-use http\Exception\RuntimeException;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -152,7 +150,7 @@ class ParcoursProcess extends AbstractProcess
         return JsonReponse::success($this->translator->trans('parcours.'.$etat.'.' . $place . '.flash.success', [], 'process'));
     }
 
-    public function editParcours(Historique $historique, ?UserInterface $user, string $transition, Request $request)
+    public function editParcours(HistoriqueParcours $historique, UserInterface $user, string $transition, Request $request)
     {
         $reponse = $this->dispatchEventEditParcours($historique, $user, $transition, $request, 'valide');
         return $reponse;

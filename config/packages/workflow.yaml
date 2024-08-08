@@ -1,7 +1,7 @@
 #bin/console workflow:dump dpe | dot -Tpng -o dpe.png
 framework:
     workflows:
-        dpe:
+        dpe: # todo: Deprecated a retirer
             type: 'workflow'
             marking_store:
                 type: 'method'
@@ -192,6 +192,8 @@ framework:
                         icon: 'fa-people-line'
                         label: 'validation.conseil'
                         isTimeline: true
+                        hasDate: true
+                        hasUpload: true
                 refuse_conseil:
                     metadata:
                         process: false
@@ -209,6 +211,7 @@ framework:
                         process: true
                         icon: 'fa-shield-check'
                         label: 'soumis.cfvu'
+                        hasDate: true
                        # hasValid:
                        #     - sousReserveModifications
                        #     - sousReserveConseil
@@ -481,7 +484,7 @@ framework:
                         type: reserver
                         btn: warning
                         icon: fa-circle-exclamation-check
-        parcours:
+        parcours: # todo: Deprecated a retirer
             type: 'workflow'
             marking_store:
                 type: 'method'
@@ -512,7 +515,7 @@ framework:
                 valider_rf:
                     from: 'soumis_parcours'
                     to: 'valide_parcours_rf'
-        composante:
+        composante: # todo: Deprecated pas utilisé ?
             type: 'workflow'
             marking_store:
                 type: 'method'
@@ -543,6 +546,32 @@ framework:
                 property: 'etatFiche'
             supports:
                 - App\Entity\FicheMatiere
+            initial_marking: 'en_cours_redaction'
+            places:
+                - 'en_cours_redaction'
+                - 'soumis_central'
+                - 'valide_pour_publication'
+                - 'publie'
+            transitions:
+                valider_fiche_compo:
+                    from: 'en_cours_redaction'
+                    to: 'soumis_central'
+                valider_fiche_ses:
+                    from: 'soumis_central'
+                    to: 'valide_pour_publication'
+                reserver_fiche_ses:
+                    from: 'soumis_central'
+                    to: 'en_cours_redaction'
+                rouvrir_fiche_matiere:
+                    from: 'valide_pour_publication'
+                    to: 'en_cours_redaction'
+        changeRf:
+            type: 'workflow'
+            marking_store:
+                type: 'method'
+                property: 'etatDemande'
+            supports:
+                - App\Entity\ChangeRf
             initial_marking: 'en_cours_redaction'
             places:
                 - 'en_cours_redaction'

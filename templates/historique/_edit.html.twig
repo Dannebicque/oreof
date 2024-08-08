@@ -23,7 +23,7 @@
         </div>
     {% endif %}
 
-    {% if etape == 'soumis_cfvu' %}
+    {% if etape == 'soumis_cfvu' or etape == 'cfvu' %}
         {# regarder si dans l'historique on à un laissez-passer sur le conseil  #}
         {% if laisserPasser is defined and laisserPasser != false %}
             {% if laisserPasser.etat == 'laisserPasser' %}
@@ -90,8 +90,8 @@
     <div class="mt-2">
         <button type="submit" class="btn btn-success"
                 {{ stimulus_action('base','sauvegardeFormModal', 'click') }}
-                data-action="live#emit"
-                data-event="valide"
+{#                data-action="live#emit"#}
+{#                data-event="valide"#}
         >
             <i class="fal fa-floppy-disk"></i>
             {{ ('btn.'~process.label~'.valide')|trans({}, 'process') }}

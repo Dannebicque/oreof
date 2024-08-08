@@ -33,16 +33,15 @@ export default class extends Controller {
       })
       .then(async () => {
         this.modal.hide()
-
+        document.querySelectorAll('.modal-backdrop').forEach((e) => {
+          e.remove()
+        })
         // tester si l'objet json updateComponent n'est pas vide et contient les clés id et event
         if (Object.keys(this.updateComponent).length > 0 && this.updateComponent.id && this.updateComponent.event) {
+          // todo: ne fonctionne pas avec le refresh ? recharger la page plus simple en attendant ?
           const element = document.getElementById(this.updateComponent.id);
-          console.log(element)
-          console.log(this.updateComponent)
           element.addEventListener('live:connect', (e) => {
             const { component } = e.detail;
-            console.log(e.detail)
-            console.log(component)
             component.emit(this.updateComponent.event)
           });
 
