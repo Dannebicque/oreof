@@ -48,6 +48,46 @@ class DpeParcoursRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function findByComposanteAndCampagneAndTypeValidation(Composante $composante, CampagneCollecte $campagneCollecte, string $typeValidation): array
+    {
+        $query = $this->createQueryBuilder('d')
+            ->innerJoin('d.formation', 'f')
+            ->addSelect('f')
+            ->innerJoin(Mention::class, 'm', 'WITH', 'f.mention = m.id')
+            ->where('d.campagneCollecte = :campagneCollecte')
+            ->andWhere('f.composantePorteuse = :composante')
+            ->setParameter('campagneCollecte', $campagneCollecte)
+            ->setParameter('composante', $composante)
+            ->orderBy('f.typeDiplome', 'ASC')
+            ->andWhere("JSON_CONTAINS(d.etatValidation, :etatDpe) = 1")
+            ->setParameter('etatDpe', json_encode([$typeValidation => 1]))
+            ->addOrderBy('m.libelle', 'ASC')
+            ->addOrderBy('f.mentionTexte', 'ASC')
+        ;
+
+        return $query->getQuery()
+            ->getResult();
+    }
+
+    public function findByCampagneAndTypeValidation(CampagneCollecte $campagneCollecte, string $typeValidation): array
+    {
+        $query = $this->createQueryBuilder('d')
+            ->innerJoin('d.formation', 'f')
+            ->addSelect('f')
+            ->innerJoin(Mention::class, 'm', 'WITH', 'f.mention = m.id')
+            ->where('d.campagneCollecte = :campagneCollecte')
+            ->setParameter('campagneCollecte', $campagneCollecte)
+            ->orderBy('f.typeDiplome', 'ASC')
+            ->andWhere("JSON_CONTAINS(d.etatValidation, :etatDpe) = 1")
+            ->setParameter('etatDpe', json_encode([$typeValidation => 1]))
+            ->addOrderBy('m.libelle', 'ASC')
+            ->addOrderBy('f.mentionTexte', 'ASC')
+        ;
+
+        return $query->getQuery()
+            ->getResult();
+    }
+
     public function duplicateParcours(CampagneCollecte $campagneCollectePrecedente, CampagneCollecte $campagneCollecte): void
     {
         $parcours = $this->findBy(['campagneCollecte' => $campagneCollectePrecedente]);

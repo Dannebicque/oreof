@@ -122,10 +122,10 @@ class ParcoursProcess extends AbstractProcess
             } elseif ($motifs['etatRefus'] === 'projetARevoir') {
                 $refus = 'refuser_revoir_cfvu';
             }
+        }
 
-            if ($request->request->has('argumentaire')) {
-                $motifs['motif'] = $request->request->get('argumentaire');
-            }
+        if ($request->request->has('argumentaire')) {
+            $motifs['motif'] = $request->request->get('argumentaire');
         }
 
         $this->dpeParcoursWorkflow->apply($dpeParcours, $refus, $motifs);
@@ -137,7 +137,6 @@ class ParcoursProcess extends AbstractProcess
     public function reserveParcours(DpeParcours $dpeParcours, UserInterface $user, string|array $transition, $request): Response
     {
         $place = array_keys($this->dpeParcoursWorkflow->getMarking($dpeParcours)->getPlaces())[0];
-
         $this->dpeParcoursWorkflow->apply($dpeParcours, $transition, ['motif' => $request->request->get('argumentaire')]);
         $this->entityManager->flush();
         return $this->dispatchEventParcours($dpeParcours, $user, $place, $request, 'reserve');

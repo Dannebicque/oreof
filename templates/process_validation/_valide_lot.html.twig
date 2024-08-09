@@ -3,11 +3,11 @@
     message: (process.label~'.valide.alerte')|trans({}, 'process')|nl2br|raw
 }) }}
 
-<form action="{{ path('app_validation_valide_lot', {etape:etape}) }}" method="post"
+<form action="{{ path('app_validation_valider_lot', {etape:etape, transition: transition}) }}" method="post"
       enctype="multipart/form-data">
     <input type="hidden" name="parcours" value="{{ sParcours }}">
 
-    {% if process.hasDate %}
+    {% if process.hasDate is defined and process.hasDate == true %}
         <div>
             <label for="date" class="form-label">{{ ('valide.'~process.label~'.date.label')|trans({}, 'process') }}
                 <span class="required"></span> <i
@@ -27,7 +27,7 @@
 {#        {{ include('process_validation/_check'~etape|capitalize~'.html.twig') }}#}
 {#    {% endif %}#}
 
-    {% if etape == 'cfvu' %}
+    {% if etape == 'cfvu' or etape == 'soumis_cfvu' %}
 
         {# regarder si dans l'historique on à un laissez-passer sur le conseil  #}
 {#        {% if laisserPasser is defined and laisserPasser != false %}#}

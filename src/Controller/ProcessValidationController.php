@@ -166,7 +166,7 @@ class ProcessValidationController extends BaseController
                 $processData = $this->parcoursProcess->etatParcours($parcours, $process);//todo: process?
 
                 if ($request->isMethod('POST')) {
-                    return $this->parcoursProcess->refuseParcours($parcours, $this->getUser(), $transition, $etape, $request);
+                    return $this->parcoursProcess->refuseParcours($parcours, $this->getUser(), $transition, $request);
                 }
                 break;
             case 'ficheMatiere':
@@ -331,11 +331,11 @@ class ProcessValidationController extends BaseController
         ]);
     }
 
-    #[Route('/validation/valide-lot/{etape}', name: 'app_validation_valide_lot')]
+    #[Route('/validation/valide-lot/{etape}/{transition}', name: 'app_validation_valider_lot')]
     public function valideLot(
         DpeParcoursRepository $dpeParcoursRepository,
-        ParcoursRepository $parcoursRepository,
         string              $etape,
+        string              $transition,
         Request             $request
     ): Response {
         $fileName = null;
@@ -361,12 +361,9 @@ class ProcessValidationController extends BaseController
         $tParcours = [];
 
         foreach ($allParcours as $id) {
-            $objet = $parcoursRepository->find($id);
+           // $objet = $dpeParcoursRepository->find($id);
 
-            if ($objet === null) {
-                return JsonReponse::error('Parcours non trouvé');
-            }
-            $dpe = $dpeParcoursRepository->findLastDpeForParcours($objet);
+            $dpe = $dpeParcoursRepository->find($id);
             if ($dpe === null) {
                 return JsonReponse::error('Parcours non trouvé');
             }
@@ -387,7 +384,7 @@ class ProcessValidationController extends BaseController
             $processData = $this->parcoursProcess->etatParcours($dpe, $process);
 
             if ($request->isMethod('POST')) {
-                $this->parcoursProcess->valideParcours($dpe, $this->getUser(), $process, $request, $fileName);
+                $this->parcoursProcess->valideParcours($dpe, $this->getUser(), $transition, $request, $fileName);
             }
         }
 
@@ -404,16 +401,17 @@ class ProcessValidationController extends BaseController
             'type' => 'lot',
             'id' => $id,
             'etape' => $etape,
+            'transition' => $transition,
             'processData' => $processData ?? null,
             'laisserPasser' => $laisserPasser,
         ]);
     }
 
-    #[Route('/validation/refuse-lot/{etape}', name: 'app_validation_refuse_lot')]
+    #[Route('/validation/refuse-lot/{etape}/{transition}', name: 'app_validation_refuser_lot')]
     public function refuseLot(
         DpeParcoursRepository $dpeParcoursRepository,
-        ParcoursRepository $parcoursRepository,
         string              $etape,
+        string              $transition,
         Request             $request
     ): Response {
         if ($request->isMethod('POST')) {
@@ -426,12 +424,7 @@ class ProcessValidationController extends BaseController
         $process = $this->validationProcess->getEtape($etape);
         $tParcours = [];
         foreach ($allParcours as $id) {
-            $objet = $parcoursRepository->find($id);
-
-            if ($objet === null) {
-                return JsonReponse::error('Formation non trouvée');
-            }
-            $dpe = $dpeParcoursRepository->findLastDpeForParcours($objet);
+            $dpe = $dpeParcoursRepository->find($id);
             if ($dpe === null) {
                 return JsonReponse::error('Parcours non trouvé');
             }
@@ -439,7 +432,7 @@ class ProcessValidationController extends BaseController
             $processData = $this->parcoursProcess->etatParcours($dpe, $process);
 
             if ($request->isMethod('POST')) {
-                $this->parcoursProcess->refuseParcours($dpe, $this->getUser(), $process, $request);
+                $this->parcoursProcess->refuseParcours($dpe, $this->getUser(), $transition, $request);
             }
         }
 
@@ -455,42 +448,38 @@ class ProcessValidationController extends BaseController
             'type' => 'lot',
             'id' => $id,
             'etape' => $etape,
-            'objet' => $objet,
+            'transition' => $transition,
+            'objet' => $dpe,
             'processData' => $processData ?? null,
         ]);
     }
 
-    #[Route('/validation/reserve-lot/{etape}', name: 'app_validation_reserve_lot')]
+    #[Route('/validation/reserve-lot/{etape}/{transition}', name: 'app_validation_reserver_lot')]
     public function reserveLot(
         DpeParcoursRepository $dpeParcoursRepository,
-        ParcoursRepository $parcoursRepository,
         string              $etape,
+        string              $transition,
         Request             $request
     ): Response {
         if ($request->isMethod('POST')) {
             $sParcours = $request->request->get('parcours');
         } else {
-            $sParcours = $request->query->get('formations');
+            $sParcours = $request->query->get('parcours');
         }
         $allParcours = explode(',', $sParcours);
 
         $process = $this->validationProcess->getEtape($etape);
         $tParcours = [];
         foreach ($allParcours as $id) {
-            $objet = $parcoursRepository->find($id);
-
-            if ($objet === null) {
-                return JsonReponse::error('Parcours non trouvé');
-            }
-            $dpe = $dpeParcoursRepository->findLastDpeForParcours($objet);
+            $dpe = $dpeParcoursRepository->find($id);
             if ($dpe === null) {
                 return JsonReponse::error('Parcours non trouvé');
             }
-            $tParcours[] = $objet;
+            $tParcours[] = $dpe;
             $processData = $this->parcoursProcess->etatParcours($dpe, $process);
 
             if ($request->isMethod('POST')) {
-                $this->parcoursProcess->reserveParcours($dpe, $this->getUser(), $process, $request);
+                $this->parcoursProcess->reserveParcours($dpe, $this->getUser(), $transition, $request);
             }
         }
 
@@ -503,7 +492,8 @@ class ProcessValidationController extends BaseController
             'formations' => $tParcours,
             'sParcours' => $sParcours,
             'process' => $process,
-            'objet' => $objet,
+            'transition' => $transition,
+            'objet' => $dpe,
             'processData' => $processData ?? null,
             'type' => 'lot',
             'id' => $id,
