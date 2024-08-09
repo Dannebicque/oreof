@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.31.1](https://github.com/Dannebicque/oreof/compare/v1.31.0...v1.31.1) (2024-08-09)
+
+
+### Bug Fixes
+
+* Gestion des validations en lot ([e070631](https://github.com/Dannebicque/oreof/commit/e070631a568013a9842c7e72f05e9b05600ef324))
+* historique sur parcours ([bcc90c2](https://github.com/Dannebicque/oreof/commit/bcc90c28aba0209ec1e430d24df9bc3343c96c41))
+
 ## [1.31.0](https://github.com/Dannebicque/oreof/compare/v1.30.7...v1.31.0) (2024-08-08)
 
 
