@@ -125,23 +125,18 @@ class VersioningParcours
         ];
     }
 
-    private function getLastVersion(Parcours $parcours): void
+    private function getLastVersion(Parcours $parcours): ParcoursVersioning|null
     {
         $lastVersion = $this->entityManager->getRepository(ParcoursVersioning::class)->findLastVersion($parcours);
-        $lastVersion = count($lastVersion) > 0 ? $lastVersion[0] : null;
-        if($lastVersion) {
-            $this->hasLastVersion = true;
-        }
+        return count($lastVersion) > 0 ? $lastVersion[0] : null;
     }
 
     public function getDifferencesBetweenParcoursAndLastVersion(Parcours $parcours): array
     {
         $textDifferences = [];
 
-        $this->getLastVersion($parcours);
-        if($this->hasLastVersion) {
-            $lastVersion = $this->entityManager->getRepository(ParcoursVersioning::class)->findLastVersion($parcours);
-            $lastVersion = $lastVersion[0];
+        if($this->hasLastVersion($parcours)) {
+            $lastVersion = $this->getLastVersion($parcours);
             // Configuration du calcul des différences
             $rendererName = 'Combined';
             $differOptions = [
@@ -395,8 +390,7 @@ class VersioningParcours
 
     public function hasLastVersion(Parcours $parcours): bool
     {
-        $this->getLastVersion($parcours);
-        return $this->hasLastVersion ?? false;
+        return $this->getLastVersion($parcours) !== null;
     }
 
     public function loadJsonCfvu(Parcours $parcours, ParcoursVersioning $lastVersion) : ?string
