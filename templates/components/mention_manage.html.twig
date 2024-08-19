@@ -40,26 +40,11 @@
                                 {% endfor %}
                             </div>
                         </div>
-                        <div class="col-{{ col_process }} d-flex align-items-center justify-content-center">
-                            {% for key, etape in this.process %}
-                                {% if (etape.showOn is defined and etape.showOn != false) or etape.showOn is not defined %}
-                                    {% set class = 'btn-muted' %}
-                                    {% if (this.type == 'formation' and isPlace('dpe', this.formation, key)) %}
-                                        {% set class = 'btn-info' %}
-                                    {% else %}
-                                        {% set class =  this.stateProcess(key) %}
-                                    {% endif %}
+                            {{ component('formation_state', {
+                                process: this.process,
+                                formation: this.formation,
+                                class: 'col-'~ col_process ~' d-flex align-items-center justify-content-center'}) }}
 
-                                    <button class="btn btn-sm btn-icon btn-icon-only {{ class.color }} ms-1" type="button"
-                                            data-controller="tooltip" data-tooltip-placement-value="bottom"
-                                            aria-label="{{ etape.label|trans({}, 'process') }}"
-                                            data-bs-original-title="{{ etape.label|trans({}, 'process') }}"
-                                    >
-                                        <i class="fal {{ etape.icon }}"></i>
-                                    </button>
-                                {% endif %}
-                            {% endfor %}
-                        </div>
                     </div>
                 </div>
             </div>
@@ -67,12 +52,55 @@
             <div class="row mt-2">
                 <div class="col-12">
                     <div class="text-extra-small fw-medium text-muted text-center text-divider mb-2">
-                        Gestion de la formation
+                        Actions
                     </div>
                 </div>
                 <div class="col-12">
                     <div class="row mt-2">
-                        <div class="col-2 d-grid">
+                        <div class="col-3 d-grid">
+                            {% if not this.hasDemande %}
+                                <button class="btn btn-sm d-block btn-outline-warning"
+                                        type="button"
+                                        {#                                        {{ stimulus_controller('modal', {#}
+                                        {#                                            size: 'lg',#}
+                                        {#                                            nomEvenement: 'refreshPage',#}
+                                        {#                                            modalTitle: ('demande.reouverture.title')|trans({}, 'process'),#}
+                                        {#                                            modalUrl: path('app_validation_demande_reouverture', {#}
+                                        {#                                                id:formation.parcours[0].id,#}
+                                        {#                                                type:'parcours'#}
+                                        {#                                            }) }) }}#}
+                                        data-action="click->modal#openModal"
+                                        data-controller="tooltip"
+                                        data-tooltip-placement-value="bottom"
+
+                                        aria-label="{{ ('demande.reouverture')|trans({}, 'process') }}"
+                                        data-bs-original-title="{{ ('demande.reouverture')|trans({}, 'process') }}"
+                                >
+                                    <i class="fal fa-question"></i> {{ ('demande.reouverture')|trans({}, 'process') }}
+                                </button>
+                            {% else %}
+                                <button class="btn btn-sm d-block btn-outline-success"
+                                        type="button"
+                                        {#                                            {{ stimulus_controller('modal', {#}
+                                        {#                                                size: 'lg',#}
+                                        {#                                                nomEvenement: 'refreshPage',#}
+                                        {#                                                modalTitle: ('demande.reouverture.clore.title')|trans({}, 'process'),#}
+                                        {#                                                modalUrl: path('app_validation_demande_reouverture_cloture', {#}
+                                        {#                                                    id:formation.parcours[0].id,#}
+                                        {#                                                    type:'parcours'#}
+                                        {#                                                }) }) }}#}
+                                        data-action="click->modal#openModal"
+                                        data-controller="tooltip"
+                                        data-tooltip-placement-value="bottom"
+
+                                        aria-label="{{ ('demande.reouverture.clore')|trans({}, 'process') }}"
+                                        data-bs-original-title="{{ ('demande.reouverture.clore')|trans({}, 'process') }}"
+                                >
+                                    {{ ('demande.reouverture.clore')|trans({}, 'process') }}
+                                </button>
+                            {% endif %}
+                        </div>
+                        <div class="col-3 d-grid">
                             <button
                                     href="#"
                                     {{ stimulus_controller('modal', {
@@ -91,65 +119,8 @@
                                 <span> {{ 'formation.change_rf.label'|trans({}, 'form') }}</span>
                             </button>
                         </div>
-                        <div class="col-2 d-grid">
-                            {% if not this.hasDemande %}
-                                <button class="btn btn-sm d-block btn-outline-warning"
-                                        type="button"
-{#                                        {{ stimulus_controller('modal', {#}
-{#                                            size: 'lg',#}
-{#                                            nomEvenement: 'refreshPage',#}
-{#                                            modalTitle: ('demande.reouverture.title')|trans({}, 'process'),#}
-{#                                            modalUrl: path('app_validation_demande_reouverture', {#}
-{#                                                id:formation.parcours[0].id,#}
-{#                                                type:'parcours'#}
-{#                                            }) }) }}#}
-                                        data-action="click->modal#openModal"
-                                        data-controller="tooltip"
-                                        data-tooltip-placement-value="bottom"
 
-                                        aria-label="{{ ('demande.reouverture')|trans({}, 'process') }}"
-                                        data-bs-original-title="{{ ('demande.reouverture')|trans({}, 'process') }}"
-                                >
-                                    <i class="fal fa-question"></i> {{ ('demande.reouverture')|trans({}, 'process') }}
-                                </button>
-                            {% else %}
-                                    <button class="btn btn-sm d-block btn-outline-warning"
-                                            type="button"
-{#                                            {{ stimulus_controller('modal', {#}
-{#                                                size: 'lg',#}
-{#                                                nomEvenement: 'refreshPage',#}
-{#                                                modalTitle: ('demande.reouverture.clore.title')|trans({}, 'process'),#}
-{#                                                modalUrl: path('app_validation_demande_reouverture_cloture', {#}
-{#                                                    id:formation.parcours[0].id,#}
-{#                                                    type:'parcours'#}
-{#                                                }) }) }}#}
-                                            data-action="click->modal#openModal"
-                                            data-controller="tooltip"
-                                            data-tooltip-placement-value="bottom"
-
-                                            aria-label="{{ ('demande.reouverture.clore')|trans({}, 'process') }}"
-                                            data-bs-original-title="{{ ('demande.reouverture.clore')|trans({}, 'process') }}"
-                                    >
-                                        <i class="fal fa-close"></i> {{ ('demande.reouverture.clore')|trans({}, 'process') }}
-                                    </button>
-                            {% endif %}
-
-                        </div>
-                        <div class="col-2 d-grid">
-                            {% if is_granted('ROLE_SES') or is_granted('CAN_ETABLISSEMENT_SCOLARITE_ALL') or is_granted('CAN_FORMATION_SCOLARITE_MY', formation) %}
-                                <a href="{{ path('app_codification_index', {formation: formation.id}) }}"
-                                   class="btn btn-sm btn-outline-info">Gérer les versions</a>
-                            {% endif %}
-                        </div>
-                        <div class="col-2 d-grid">
-                            {% if is_granted('ROLE_SES') or is_granted('CAN_ETABLISSEMENT_SCOLARITE_ALL') or is_granted('CAN_FORMATION_SCOLARITE_MY', formation) %}
-                                <a href="{{ path('app_codification_index', {formation: formation.id}) }}"
-                                   class="btn btn-sm btn-outline-info">Gérer la codification</a>
-                            {% endif %}
-                        </div>
-
-                        <div class="col-4 d-flex justify-content-center">
-
+                        <div class="col-6 d-flex justify-content-start">
                             <a
                                     href="{{ path('fiche_matiere_valide_formation', {formation: this.formation.id}) }}"
                                     class="btn btn-outline-success btn-sm"
@@ -175,9 +146,38 @@
                                 <i class="fas fa-check"></i>
                                 <span> Vérifier la saisie</span>
                             </button>
-                            {% if isPass('dpe', formation, 'soumis_conseil') %}
-                                {{ component('historique_pv', {formation:formation}) }}
+{#                            {% if isPass('dpe', formation, 'soumis_conseil') %}#}
+                            {# todo: plus utile ici ? mais permettre le dépôt global #}
+{#                                {{ component('historique_pv', {formation:formation}) }}#}
+{#                            {% endif %}#}
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-2">
+                <div class="col-12">
+                    <div class="text-extra-small fw-medium text-muted text-center text-divider mb-2">
+                        Gestion de la formation
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="row mt-2">
+                        <div class="col-3 d-grid">
+                            {% if is_granted('ROLE_SES') or is_granted('CAN_ETABLISSEMENT_SCOLARITE_ALL') or is_granted('CAN_FORMATION_SCOLARITE_MY', formation) %}
+                                <a href="{{ path('app_codification_index', {formation: formation.id}) }}"
+                                   class="btn btn-sm btn-outline-info">Gérer les versions</a>
                             {% endif %}
+                        </div>
+                        <div class="col-3 d-grid">
+                            {% if is_granted('ROLE_SES') or is_granted('CAN_ETABLISSEMENT_SCOLARITE_ALL') or is_granted('CAN_FORMATION_SCOLARITE_MY', formation) %}
+                                <a href="{{ path('app_codification_index', {formation: formation.id}) }}"
+                                   class="btn btn-sm btn-outline-info">Gérer la codification</a>
+                            {% endif %}
+                        </div>
+                        <div class="col-2"></div>
+                        <div class="col-4 d-flex justify-content-end">
                             <button class="btn btn-sm btn-icon btn-icon-only btn-outline-info ms-1" type="button"
                                     {{ stimulus_controller('modal', {
                                         size: 'large',
@@ -217,20 +217,24 @@
                             {% endif %}
                         </div>
                     </div>
-                    {% for demande in formation.changeRves|filter(demande => demande.etatDemande.value == 'EN_ATTENTE') %}
-                        <div class="col-12  mt-2">
-                            <div class="alert alert-info">
-                                Une demande de modification est en attente de validation par la CFVU. Remplacement
-                                de {{ demande.ancienResponsable != null ?  demande.ancienResponsable.display : 'non défini' }}
-                                par {{ demande.nouveauResponsable != null ? demande.nouveauResponsable.display : 'non défini' }}
-                                .
-                                <a href="{{ path('app_formation_change_rf_suppression', {demande:demande.id}) }}"
-                                   class="text-danger"><i class="{{ iconDelete }}"></i> Annuler la demande ?</a>
-                            </div>
-                        </div>
-                    {% endfor %}
+
                 </div>
             </div>
         </div>
     </div>
+
+    <twig:ChangeRfState formation="{{ this.formation }}" />
+
+{#    {% for demande in formation.changeRves|filter(demande => demande.etatDemande.value == 'EN_ATTENTE') %}#}
+{#        <div class="col-12  mt-2">#}
+{#            <div class="alert alert-info">#}
+{#                Une demande de modification est en attente de validation par la CFVU. Remplacement#}
+{#                de {{ demande.ancienResponsable != null ?  demande.ancienResponsable.display : 'non défini' }}#}
+{#                par {{ demande.nouveauResponsable != null ? demande.nouveauResponsable.display : 'non défini' }}#}
+{#                .#}
+{#                <a href="{{ path('app_formation_change_rf_suppression', {demande:demande.id}) }}"#}
+{#                   class="text-danger"><i class="{{ iconDelete }}"></i> Annuler la demande ?</a>#}
+{#            </div>#}
+{#        </div>#}
+{#    {% endfor %}#}
 </div>

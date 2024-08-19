@@ -66,11 +66,11 @@ class DpeSauvegardeSubscriber implements EventSubscriberInterface
             throw new \Exception('Aucune campagne de collecte n\'est définie pour ce diplôme');
         }
 
-        $fichier = Tools::FileName('MCCC - ' . $dpe->getAnneeUniversitaire()?->getLibelle() . ' - ' . $parcours->getId().'-v'.$dpeParcours->getVersion(), 50);
-        $dpeParcours->updateMinorVersion();
-        $this->entityManager->flush();
 
-        $typeDiplome->exportExcelAndSaveVersionMccc(
+        $fichier = Tools::FileName('MCCC - ' . $dpe->getAnneeUniversitaire()?->getLibelle() . ' - ' . $parcours->getId().'-v'.$dpeParcours->getVersion(), 50);
+
+
+        $export = $typeDiplome->exportExcelAndSaveVersionMccc(
             $dpe,
             $parcours,
             $this->dir,
@@ -78,5 +78,10 @@ class DpeSauvegardeSubscriber implements EventSubscriberInterface
             null,
             $fichier
         );
+
+        if ($export !== false) {
+            $dpeParcours->updateMinorVersion();
+            $this->entityManager->flush();
+        }
     }
 }

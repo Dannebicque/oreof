@@ -12,6 +12,8 @@ namespace App\Controller;
 use App\Classes\CalculStructureParcours;
 use App\Classes\GetDpeParcours;
 use App\Classes\GetFormations;
+use App\Classes\MentionProcess;
+use App\Classes\ValidationProcess;
 use App\Classes\verif\FormationState;
 use App\Classes\verif\ParcoursState;
 use App\DTO\StatsFichesMatieres;
@@ -61,7 +63,8 @@ class FormationController extends BaseController
         ComposanteRepository  $composanteRepository,
         TypeDiplomeRepository $typeDiplomeRepository,
         FormationRepository   $formationRepository,
-        Request               $request
+        Request               $request,
+        ValidationProcess     $validationProcess
     ) {
         $q = $request->query->get('q') ?? null;
 
@@ -77,6 +80,7 @@ class FormationController extends BaseController
             'typeDiplomes' => $typeDiplomeRepository->findBy([], ['libelle' => 'ASC']),
             'params' => $request->query->all(),
             'isCfvu' => $isCfvu ?? false,
+            'process' => $validationProcess->getProcess()
         ]);
     }
 
@@ -86,6 +90,7 @@ class FormationController extends BaseController
         MentionRepository     $mentionRepository,
         ComposanteRepository  $composanteRepository,
         TypeDiplomeRepository $typeDiplomeRepository,
+        MentionProcess                $validationProcess,
         Request               $request,
     ): Response {
         $isCfvu = false;
@@ -104,6 +109,7 @@ class FormationController extends BaseController
             'typeDiplomes' => $typeDiplomeRepository->findBy([], ['libelle' => 'ASC']),
             'params' => $request->query->all(),
             'isCfvu' => false,
+            'process' => $validationProcess->getProcess()
         ]);
     }
 
@@ -179,6 +185,7 @@ class FormationController extends BaseController
 
     #[Route('/liste/{composante}', name: 'app_formation_liste_composante', methods: ['GET'])]
     public function listeComposante(
+        MentionProcess        $validationProcess,
         MentionRepository     $mentionRepository,
         TypeDiplomeRepository $typeDiplomeRepository,
         ComposanteRepository  $composanteRepository,
@@ -202,6 +209,7 @@ class FormationController extends BaseController
             'composantes' => $composanteRepository->findPorteuse(),
             'typeDiplomes' => $typeDiplomeRepository->findAll(),
             'mentions' => $mentionRepository->findAll(),
+            'process' => $validationProcess->getProcess()
         ]);
     }
 

@@ -4,8 +4,8 @@
 }) }}
 
 
-<form action="{{ path('app_validation_refuse_lot', {etape:etape}) }}" method="post">
-    <input type="hidden" name="formations" value="{{ sFormations }}">
+<form action="{{ path('app_validation_refuser_lot', {etape:etape, transition: transition}) }}" method="post">
+    <input type="hidden" name="parcours" value="{{ sParcours }}">
 
     {% if process.hasDate %}
         <div>

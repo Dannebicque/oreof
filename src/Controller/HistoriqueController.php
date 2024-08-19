@@ -5,24 +5,23 @@ namespace App\Controller;
 use App\Classes\GetDpeParcours;
 use App\Classes\GetHistorique;
 use App\Classes\JsonReponse;
-use App\Classes\Process\FicheMatiereProcess;
 use App\Classes\Process\FormationProcess;
 use App\Classes\Process\ParcoursProcess;
 use App\Classes\ValidationProcess;
-use App\Classes\ValidationProcessFicheMatiere;
 use App\Entity\FicheMatiere;
 use App\Entity\Formation;
 use App\Entity\Historique;
-use App\Entity\HistoriqueFicheMatiere;
 use App\Entity\HistoriqueFormation;
 use App\Entity\HistoriqueParcours;
 use App\Entity\Parcours;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Twig\HistoriqueExtension;
+use App\Utils\JsonRequest;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-class HistoriqueController extends AbstractController
+class HistoriqueController extends BaseController
 {
     public function __construct(
         private readonly ValidationProcess        $validationProcess,
@@ -104,6 +103,9 @@ class HistoriqueController extends AbstractController
     ): Response {
         $type = get_class($historique);
         $etape = $historique->getEtape();
+        if (array_key_exists($etape, HistoriqueExtension::TRADUCTIONS)) {
+            $etape = HistoriqueExtension::TRADUCTIONS[$etape];
+        }
 
         $process = $this->validationProcess->getEtape($etape);
 
@@ -145,11 +147,6 @@ class HistoriqueController extends AbstractController
             }
         }
 
-
-
-
-
-
         return $this->render('historique/_edit.html.twig', [
             'process' => $process,
             'type' => $type,
@@ -158,5 +155,20 @@ class HistoriqueController extends AbstractController
             'historique' => $historique,
             'laisserPasser' => $laisserPasser ?? null
         ]);
+    }
+
+    #[Route('/historique/delete/{historique}', name: 'app_historique_delete', methods: ['POST'])]
+    public function delete(
+        EntityManagerInterface $entityManager,
+        Request $request,
+        Historique $historique): Response
+    {
+        if ($this->isCsrfTokenValid('delete' . $historique->getId(), $request->request->get('_token'))) {
+            $entityManager->remove($historique);
+            $entityManager->flush();
+            return JsonReponse::success('Historique supprimé');
+        }
+
+        return JsonReponse::error('Erreur lors de la suppression');
     }
 }

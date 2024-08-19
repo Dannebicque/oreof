@@ -30,8 +30,8 @@
                         >
                             <option value="">Choisir l'état</option>
                             <option value="all">Tous les états</option>
-                            {% for type in types_validation %}
-                                <option value="{{ type.name }}">{{ type.libelle }}</option>
+                            {% for value, type in types_validation %}
+                                <option value="{{ value }}">{{ type.label|trans({}, 'process') }}</option>
                             {% endfor %}
                         </select>
                     </div>

@@ -83,7 +83,7 @@
                                         <div class="text-muted text-small d-md-none">Actions</div>
                                         {% if (is_granted('CAN_FORMATION_VALIDATE_MY', formation) and workflow_can
                                             (formation,
-                                            'valide_rf')) %}
+                                            'valider_rf')) %}
                                             <button
                                                     {{ stimulus_controller('modal', {
                                                         size: 'lg',
@@ -120,7 +120,7 @@
                                             </button>
                                         {% elseif is_granted('CAN_COMPOSANTE_VALIDATE_ALL', formation.composantePorteuse) and
                                             workflow_can
-                                            (formation, 'valide_dpe_composante') %}
+                                            (formation, 'valider_dpe_composante') %}
                                             <button
                                                     {{ stimulus_controller('modal', {
                                                         size: 'lg',

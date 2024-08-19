@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    {{ component('alerte', {
+        type: 'help',
+        message: 'Vous pouvez réorganiser les rubriques en les déplaçant dans la liste ci-dessous. Vous pouvez masquer une rubrique en cliquant sur l\'oeil barré. Les modifcations sont enregistrées automatiquement. Les plaquettes de la composante seront générées selon cette configuration.'
+    }) }}
+
+    <h2 class="small-title">Choix et ordre des rubriques</h2>
+    <div class="card" {{ stimulus_controller('plaquette', {
+        urlRubriques: path('app_plaquette_rubriques', {composante: composante.id}),
+        urlSauvegarde: path('app_plaquette_sauvegarde', {composante: composante.id}),
+    }) }}>
+        <div class="card-title"></div>
+        <div class="card-body" {{ stimulus_target('plaquette', 'listeRubriques') }}>
+
+
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block header %}
+    Configuration plaquette : {{ composante.libelle }}
+{% endblock %}
+
+{% block breadcrumb %}
+    {{ include('communs/_breadcrumb.html.twig', {liens:[
+        {
+            href:'',
+            title: 'Formations',
+        },
+
+    ]}) }}
+{% endblock %}
+
+{% block bouton_header %}
+
+{% endblock %}

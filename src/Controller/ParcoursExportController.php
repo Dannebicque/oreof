@@ -79,6 +79,10 @@ class ParcoursExportController extends AbstractController
             'path' => $this->generateUrl('app_parcours_export_maquette_json', ['parcours' => $parcours->getId()], UrlGeneratorInterface::ABSOLUTE_URL),
             'id' => $parcours->getId(),
             'formationId' => $parcours->getFormation()?->getId(),
+            'formation' => $parcours->getFormation()?->getDisplay(),
+            'parcours' => $parcours->isParcoursDefaut() ? '' : $parcours->getLibelle(),
+            'typeDiplome' => $typeDiplome->getLibelle(),
+            'composante' => $parcours->getFormation()?->getComposantePorteuse()?->getLibelle(),
             'volumes'=> [
                 'CM'=> [
                     'presentiel'=> $dto->heuresEctsFormation->sommeFormationCmPres,

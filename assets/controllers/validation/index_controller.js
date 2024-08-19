@@ -39,7 +39,19 @@ export default class extends Controller {
     }
   }
 
-  async valide(event) {
+  async valider(event) {
+    this._valideChoix(event)
+  }
+
+  async refuser(event) {
+    this._valideChoix(event)
+  }
+
+  async reserver(event) {
+    this._valideChoix(event)
+  }
+
+  async _valideChoix(event) {
     const liste = document.querySelectorAll('.check-all:checked')
     if (liste.length === 0) {
       this.actionTarget.innerHTML = ''

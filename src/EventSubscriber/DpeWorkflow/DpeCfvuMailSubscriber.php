@@ -84,6 +84,7 @@ class DpeCfvuMailSubscriber extends AbstractDpeMailSubscriber implements EventSu
             $titre = 'Votre formation a été validée par la CFVU';
         } else {
             $titre = 'Un parcours de votre formation a été validé par la CFVU';
+            //todo: gérer les destinataires parcours
         }
 
         $dpe = $formation->getComposantePorteuse()?->getResponsableDpe();
@@ -102,7 +103,7 @@ class DpeCfvuMailSubscriber extends AbstractDpeMailSubscriber implements EventSu
             [
                 $dpe?->getEmail(),
                 $formation->getResponsableMention()?->getEmail(),
-                $formation->getCoResponsable()?->getEmail()],
+                $formation->getCoResponsable()?->getEmail()], //todo: ajouter le RP à chaque fois si parcours
             '[ORéOF]  '.$titre
         );
     }

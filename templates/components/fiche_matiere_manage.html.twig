@@ -118,7 +118,7 @@
                                                                 event: 'mention_manage:valide'
                                                             },
                                                             modalTitle: ('validation.valider.'~this.etape~'.title')|trans({}, 'process'),
-                                                            modalUrl: path('app_validation_valide', {
+                                                            modalUrl: path('app_validation_valider', {
                                                                 etape:this.etape,
                                                                 id:this.ficheMatiere.id,
                                                                 type:'ficheMatiere'
@@ -149,7 +149,7 @@
                                                             event: 'mention_manage:reserve'
                                                         },
                                                         modalTitle: ('validation.reserve.'~this.etape~'.title')|trans({}, 'process'),
-                                                        modalUrl: path('app_validation_reserve', {
+                                                        modalUrl: path('app_validation_reserver', {
                                                             etape:this.etape,
                                                             id:this.ficheMatiere.id,
                                                             type:'ficheMatiere'
@@ -179,7 +179,7 @@
                                                             event: 'mention_manage:refuse'
                                                         },
                                                         modalTitle: ('validation.refuser.'~this.etape~'.title')|trans({}, 'process'),
-                                                        modalUrl: path('app_validation_refuse', {
+                                                        modalUrl: path('app_validation_refuser', {
                                                             etape:this.etape,
                                                             id:this.ficheMatiere.id,
                                                             type:'ficheMatiere'

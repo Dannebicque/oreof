@@ -9,6 +9,7 @@
         <th>Stage ?</th>
         <th>Situation Pro. ?</th>
         <th>Projet ?</th>
+        <th>ECTS Obli. ?</th>
         <th></th>
     </tr>
     </thead>
@@ -23,6 +24,7 @@
             <td>{{ type_diplome.hasStage|badgeBoolean }}</td>
             <td>{{ type_diplome.hasSituationPro|badgeBoolean }}</td>
             <td>{{ type_diplome.hasProjet|badgeBoolean }}</td>
+            <td>{{ type_diplome.ectsObligatoireSurEc|badgeBoolean }}</td>
             <td class="text-end">
                 <button
                         {{ stimulus_controller('modal', {

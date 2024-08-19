@@ -14,13 +14,11 @@ use App\Classes\verif\ParcoursValide;
 use App\DTO\ProcessData;
 use App\Entity\DpeParcours;
 use App\Entity\Historique;
-use App\Entity\HistoriqueFormation;
 use App\Entity\HistoriqueParcours;
-use App\Events\HistoriqueFormationEditEvent;
+use App\Events\HistoriqueParcoursEditEvent;
 use App\Events\HistoriqueParcoursEvent;
 use App\Utils\Tools;
 use Doctrine\ORM\EntityManagerInterface;
-use http\Exception\RuntimeException;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -64,11 +62,11 @@ class ParcoursProcess extends AbstractProcess
         return $processData;
     }
 
-    public function valideParcours(DpeParcours $dpeParcours, UserInterface $user, $process, $etape, $request, ?string $fileName = null): Response
+    public function valideParcours(DpeParcours $dpeParcours, UserInterface $user, string|array $transition, $request, ?string $fileName = null): Response
     {
-
-        $valid = $process['canValide'];
+        $valid = $transition;
         $motifs = [];
+        $place = array_keys($this->dpeParcoursWorkflow->getMarking($dpeParcours)->getPlaces())[0];
 
         if ($request->request->has('date')) {
             $motifs['date'] = Tools::convertDate($request->request->get('date'));
@@ -97,18 +95,20 @@ class ParcoursProcess extends AbstractProcess
             }
         }
 
-
         $this->dpeParcoursWorkflow->apply($dpeParcours, $valid, $motifs);
         $this->entityManager->flush();
-        return $this->dispatchEventParcours($dpeParcours, $user, $etape, $request, 'valide', $fileName);
+
+        return $this->dispatchEventParcours($dpeParcours, $user, $place, $request, 'valide', $fileName);
     }
 
-    public function refuseParcours(DpeParcours $dpeParcours, UserInterface $user, $process, $etape, $request): Response
+    public function refuseParcours(DpeParcours $dpeParcours, UserInterface $user, string|array $transition, $request): Response
     {
-        $reponse = $this->dispatchEventParcours($dpeParcours, $user, $etape, $request, 'refuse');
+        $place = array_keys($this->dpeParcoursWorkflow->getMarking($dpeParcours)->getPlaces())[0];
+
+        $reponse = $this->dispatchEventParcours($dpeParcours, $user, $place, $request, 'refuse');
 
         $motifs = [];
-        $refus = $process['canRefuse'];
+        $refus = $transition;
 
         if ($request->request->has('date')) {
             $motifs['date'] = Tools::convertDate($request->request->get('date'));
@@ -122,10 +122,10 @@ class ParcoursProcess extends AbstractProcess
             } elseif ($motifs['etatRefus'] === 'projetARevoir') {
                 $refus = 'refuser_revoir_cfvu';
             }
+        }
 
-            if ($request->request->has('argumentaire')) {
-                $motifs['motif'] = $request->request->get('argumentaire');
-            }
+        if ($request->request->has('argumentaire')) {
+            $motifs['motif'] = $request->request->get('argumentaire');
         }
 
         $this->dpeParcoursWorkflow->apply($dpeParcours, $refus, $motifs);
@@ -134,30 +134,31 @@ class ParcoursProcess extends AbstractProcess
         return $reponse;
     }
 
-    public function reserveParcours(DpeParcours $dpeParcours, UserInterface $user, $process, $etape, $request): Response
+    public function reserveParcours(DpeParcours $dpeParcours, UserInterface $user, string|array $transition, $request): Response
     {
-        $this->dpeParcoursWorkflow->apply($dpeParcours, $process['canReserve'], ['motif' => $request->request->get('argumentaire')]);
+        $place = array_keys($this->dpeParcoursWorkflow->getMarking($dpeParcours)->getPlaces())[0];
+        $this->dpeParcoursWorkflow->apply($dpeParcours, $transition, ['motif' => $request->request->get('argumentaire')]);
         $this->entityManager->flush();
-        return $this->dispatchEventParcours($dpeParcours, $user, $etape, $request, 'reserve');
+        return $this->dispatchEventParcours($dpeParcours, $user, $place, $request, 'reserve');
     }
 
-    private function dispatchEventParcours(DpeParcours $dpeParcours, UserInterface $user, string $etape, Request $request, string $etat, ?string $fileName = null): Response
+    private function dispatchEventParcours(DpeParcours $dpeParcours, UserInterface $user, string $place, Request $request, string $etat, ?string $fileName = null): Response
     {
-        $histoEvent = new HistoriqueParcoursEvent($dpeParcours->getParcours(), $user, $etape, $etat, $request, $fileName);
+        $histoEvent = new HistoriqueParcoursEvent($dpeParcours->getParcours(), $user, $place, $etat, $request, $fileName);
         $this->eventDispatcher->dispatch($histoEvent, HistoriqueParcoursEvent::ADD_HISTORIQUE_PARCOURS);
-        return JsonReponse::success($this->translator->trans('parcours.'.$etat.'.' . $etape . '.flash.success', [], 'process'));
+        return JsonReponse::success($this->translator->trans('parcours.'.$etat.'.' . $place . '.flash.success', [], 'process'));
     }
 
-    public function editParcours(Historique $historique, ?UserInterface $user, string $etape, Request $request)
+    public function editParcours(HistoriqueParcours $historique, UserInterface $user, string $transition, Request $request)
     {
-        $reponse = $this->dispatchEventEditParcours($historique, $user, $etape, $request, 'valide');
+        $reponse = $this->dispatchEventEditParcours($historique, $user, $transition, $request, 'valide');
         return $reponse;
     }
 
-    private function dispatchEventEditParcours(HistoriqueParcours $historiqueParcours, UserInterface $user, $etape, $request, string $etat): Response
+    private function dispatchEventEditParcours(HistoriqueParcours $historiqueParcours, UserInterface $user, string $transition, $request, string $etat): Response
     {
-        $histoEvent = new HistoriqueParcoursEditEvent($historiqueParcours, $user, $etape, $etat, $request);
+        $histoEvent = new HistoriqueParcoursEditEvent($historiqueParcours, $user, $transition, $etat, $request);
         $this->eventDispatcher->dispatch($histoEvent, HistoriqueParcoursEditEvent::EDIT_HISTORIQUE_PARCOURS);
-        return JsonReponse::success($this->translator->trans('parcours.edit.' . $etat . '.' . $etape . '.flash.success', [], 'process'));
+        return JsonReponse::success($this->translator->trans('parcours.edit.' . $etat . '.' . $transition . '.flash.success', [], 'process'));
     }
 }

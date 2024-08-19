@@ -19,7 +19,7 @@ class HistoriqueParcoursEvent extends AbstractHistoriqueEvent
     public const ADD_HISTORIQUE_PARCOURS = 'add.historique.parcours';
 
     private Parcours $parcours;
-    private ?string $fileName;
+    private ?string $fileName = '';
 
     public function __construct(Parcours $parcours, UserInterface $user, string $etape, string $etat, Request $request, ?string $fileName = null)
     {

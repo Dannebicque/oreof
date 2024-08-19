@@ -106,6 +106,9 @@ class TypeDiplome
     #[ORM\Column(nullable: true)]
     private ?bool $codifIntermediaire = false;
 
+    #[ORM\Column]
+    private ?bool $ectsObligatoireSurEc = true;
+
     public function __construct()
     {
         $this->formations = new ArrayCollection();
@@ -564,6 +567,18 @@ class TypeDiplome
     public function setCodifIntermediaire(?bool $codifIntermediaire): static
     {
         $this->codifIntermediaire = $codifIntermediaire;
+
+        return $this;
+    }
+
+    public function isEctsObligatoireSurEc(): ?bool
+    {
+        return $this->ectsObligatoireSurEc ?? true;
+    }
+
+    public function setEctsObligatoireSurEc(bool $ectsObligatoireSurEc): static
+    {
+        $this->ectsObligatoireSurEc = $ectsObligatoireSurEc;
 
         return $this;
     }

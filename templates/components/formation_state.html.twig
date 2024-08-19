@@ -1,0 +1,14 @@
+<div class="{{ this.class }}">
+    {% for key, etape in this.process %}
+        {% if (etape.showOn is defined and etape.showOn != false) or etape.showOn is not defined %}
+            {% set class =  this.stateProcess(key) %}
+            <button class="btn btn-sm btn-icon btn-icon-only {{ class.color }} ms-1" type="button"
+                    data-controller="tooltip" data-tooltip-placement-value="bottom"
+                    aria-label="{{ etape.label|trans({}, 'process') }}"
+                    data-bs-original-title="{{ (etape.label~'.'~class.color)|trans({}, 'process') }}"
+            >
+                <i class="fal {{ etape.icon }}"></i>
+            </button>
+        {% endif %}
+    {% endfor %}
+</div>

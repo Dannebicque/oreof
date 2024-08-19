@@ -486,4 +486,16 @@ change_rf_formation:
     typeRf:
       label: 'la demande concerne le responsable ou Co-Responsale de la formation'
 formation.change_rf.title: 'Changer le responsable ou le co-responsable de la formation'
-formation.change_rf.label: 'Changer resp. co-resp. formation'
+formation.change_rf.label: 'Changer co/resp. formation'
+type_diplome:
+  labels:
+    hasMemoire:
+      label: 'La formation prévoit-elle un TER/Mémoire de recherche ?'
+    hasStage:
+      label: 'La formation prévoit-elle un stage ?'
+    hasSituationPro:
+      label: 'La formation prévoit-elle de la mise en situation professionnelle ?'
+    hasProjet:
+      label: 'La formation prévoit-elle un projet tutoré ?'
+    ectsObligatoireSurEc:
+      label: 'Les ECTS sont-ils obligatoires sur les EC ?'

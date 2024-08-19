@@ -3,8 +3,13 @@
 {% block content %}
     <p>Bonjour,</p>
 
-    <p>Le conseil de la composante <strong>{{ composante.libelle }}</strong> vient de valider la formation
-        <strong>{{ formation.displayLong }}</strong>.</p>
+    <p>Le conseil de la composante <strong>{{ composante.libelle }}</strong> vient de valider
+    {% if hasParcours == true %}
+        le parcours <strong>{{ parcours.libelle }}</strong> de la formation <strong>{{ formation.displayLong }}</strong>
+    {% else %}
+        la formation <strong>{{ formation.displayLong }}</strong>
+    {% endif %}
+    </p>
 
     {% if historique != null %}
         {# tester si PV ou laisser passer et indiquer? #}

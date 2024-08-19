@@ -10,15 +10,33 @@
 namespace App\Classes;
 
 use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\Workflow\WorkflowInterface;
 use Symfony\Component\Yaml\Yaml;
 
 class ValidationProcess extends AbstractValidationProcess
 {
-    public function __construct(KernelInterface $kernel,)
+    public function __construct(protected WorkflowInterface $dpeParcoursWorkflow)
     {
-        $file = $kernel->getContainer()->getParameter('kernel.project_dir') . '/config/process.yaml';
+        $places = $dpeParcoursWorkflow->getDefinition()->getPlaces();
+        $data = [];
+        foreach ($places as $place) {
+            $meta = $dpeParcoursWorkflow->getMetadataStore()->getPlaceMetadata($place);
+            if (array_key_exists('process', $meta) && (bool)$meta['process'] === true) {
+                $data[$place] = $meta;
+            }
+        }
+        $this->process = $data;
+    }
 
-        $data = Yaml::parseFile($file);
-        $this->process = $data['process'];
+    public function getMetaFromTransition(string $transition): array
+    {
+        $transitions = $this->dpeParcoursWorkflow->getDefinition()->getTransitions();
+        foreach ($transitions as $trans) {
+            if ($trans->getName() === $transition) {
+                return $this->dpeParcoursWorkflow->getMetadataStore()->getTransitionMetadata($trans);
+            }
+        }
+
+        return [];
     }
 }

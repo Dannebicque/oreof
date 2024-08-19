@@ -13,7 +13,7 @@ process:
     transition: 'en_cours_redaction'
     canValide: ''
     check: true
-  parcours:
+  parcours: #OK
     page: 'parcours'
     icon: 'fa-paper-plane'
     label: 'validation.parcours'
@@ -27,7 +27,7 @@ process:
     transition: 'en_cours_redaction'
     canValide: 'valider_parcours'
     check: true
-  parcours_rf:
+  parcours_rf: #OK
     page: 'parcours'
     icon: 'fa-memo-circle-check'
     label: 'validation.parcours_rf'
@@ -42,7 +42,7 @@ process:
     canValide: 'valider_rf'
     canReserve: 'reserver_rf'
     check: true
-  formation:
+  formation: #todo: plus utile ?
     page: 'formation'
     icon: 'fa-file-circle-check'
     label: 'validation.formation'
@@ -56,7 +56,7 @@ process:
     transition: 'en_cours_redaction'
     canValide: 'valide_rf'
     check: true
-  dpe:
+  dpe: #OK
     page: 'formation'
     icon: 'fa-check-to-slot'
     label: 'validation.dpe'
@@ -70,7 +70,7 @@ process:
     canValide: 'valide_dpe_composante'
     canRefuse: 'refuser_dpe_composante'
     canReserve: 'reserver_dpe_composante'
-  conseil:
+  conseil: #OK
     page: 'formation'
     icon: 'fa-people-line'
     label: 'validation.conseil'
@@ -84,7 +84,7 @@ process:
     canValide: 'valider_conseil'
     canRefuse: 'refuser_conseil'
     canReserve: 'reserver_conseil'
-  ses:
+  ses: #OK
     page: 'formation'
     icon: 'fa-school-circle-check'
     label: 'validation.ses'
@@ -112,7 +112,7 @@ process:
     canValide: 'valider_central'
     canRefuse: 'refuser_central'
     canReserve: 'reserver_central'
-  cfvu:
+  cfvu: #OK
     page: 'formation'
     icon: 'fa-stamp'
     label: 'validation.cfvu'
@@ -129,7 +129,7 @@ process:
     canValide: 'valider_cfvu'
     canRefuse: 'refuser_definitif_cfvu'
     canReserve: 'valider_reserve_cfvu'
-  publication:
+  publication: #OK
     page: 'parcours'
     icon: 'fa-bullhorn'
     label: 'validation.publication'
