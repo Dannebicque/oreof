@@ -310,10 +310,10 @@ HTML;
             . $terMemoire
             . "<br><br>"
             . $maquetteIframe
-             . "<h3>Maquette de la formation</h3>"
-             . "<a href=\"$maquettePdf\" target=\"_blank\">Maquette et modalités de contrôle de la formation au format PDF</a>"
             . "<h3>Calendrier universitaire</h3>"
-            . $calendrierUniversitaire;
+            . $calendrierUniversitaire
+            . "<h3>Maquette de la formation</h3>"
+            . "<a href=\"$maquettePdf\" target=\"_blank\">Maquette et modalités de contrôle de la formation au format PDF</a>";
 
         // Informations pratiques
         $informationsPratiques = "";
