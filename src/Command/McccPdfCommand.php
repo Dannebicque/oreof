@@ -211,6 +211,10 @@ class McccPdfCommand extends Command
 
                 $directoryPath = __DIR__ . "/../../mccc-export";
 
+                if($this->fs->exists([$directoryPath . "/old-version"]) === false){
+                    $this->fs->mkdir($directoryPath . "/old-version");
+                }
+
                 foreach($parcoursArray as $p){
                     $fileNamePdf = "MCCC-Parcours-{$p->getId()}-{$dpe->getAnnee()}.pdf";
                     $fileNameSimplifiePdf = "MCCC-Parcours-{$p->getId()}-{$dpe->getAnnee()}-simplifie.pdf";
