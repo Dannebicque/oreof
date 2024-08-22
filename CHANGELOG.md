@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.31.2](https://github.com/Dannebicque/oreof/compare/v1.31.1...v1.31.2) (2024-08-22)
+
+
+### Bug Fixes
+
+* Ne plus exporter les semestres non dispensés dans le Json ([2485713](https://github.com/Dannebicque/oreof/commit/248571305b836285a02b48f4862477e3951adf3a))
+
 ### [1.31.1](https://github.com/Dannebicque/oreof/compare/v1.31.0...v1.31.1) (2024-08-09)
 
 
