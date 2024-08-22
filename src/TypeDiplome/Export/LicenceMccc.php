@@ -562,8 +562,10 @@ class LicenceMccc extends AbstractLicenceMccc
 
             // BCC
             $texte = [];
-            foreach ($structureEc->bccs as $comp) {
-                $texte[] = $comp->getCode();
+            if(isset($structureEc->bccs)){
+                foreach ($structureEc->bccs as $comp) {
+                    $texte[] = $comp->getCode();
+                }
             }
 
             //suppression des doublons

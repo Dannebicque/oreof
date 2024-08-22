@@ -124,7 +124,9 @@ class McccPdfCommand extends Command
 
             $io->writeln("\nCommande pour générer les exports 'MCCC' au format PDF, de tous les parcours valides.\n");
 
-            $parcoursArray = $this->entityManager->getRepository(Parcours::class)->findAll();
+            $anneeDpe = $this->entityManager->getRepository(CampagneCollecte::class)->findOneBy(['defaut' => 1]);
+            $parcoursArray = $this->entityManager->getRepository(Parcours::class)->findAllParcoursForDpe($anneeDpe);
+
             $parcoursArray = array_filter(
                 $parcoursArray,
                 fn($p) => 
@@ -138,33 +140,69 @@ class McccPdfCommand extends Command
             );
 
             $nombreParcoursValides = count($parcoursArray);
-
             $io->writeln("Il y a {$nombreParcoursValides} parcours valides, à exporter.");
-
-            $anneeDpe = $this->entityManager->getRepository(CampagneCollecte::class)->findOneBy(['defaut' => 1]);
-
             $io->progressStart($nombreParcoursValides);
+
             foreach($parcoursArray as $parcours){
+                $directoryPath = __DIR__ . "/../../mccc-export";
+
+                if($this->fs->exists([$directoryPath . "/old-version"]) === false){
+                    $this->fs->mkdir($directoryPath . "/old-version");
+                }
+                
+                $fileNamePdf = "MCCC-Parcours-{$parcours->getId()}-{$anneeDpe->getAnnee()}.pdf";
+                $fileNameSimplifiePdf = "MCCC-Parcours-{$parcours->getId()}-{$anneeDpe->getAnnee()}-simplifie.pdf";
+                // Si les fichiers PDF de MCCC existent déjà (précédente validation)
+                // On les sauvegarde dans un dossier 'old-version'
+                $now = (new DateTime())->format("d-m-Y_H-i-s");
+                if($this->fs->exists($directoryPath . "/" . $fileNamePdf)){
+                    $this->fs->rename($directoryPath . "/" . $fileNamePdf, $directoryPath . "/old-version/{$now}-{$fileNamePdf}");
+                }   
+                if($this->fs->exists($directoryPath . "/" . $fileNameSimplifiePdf)){
+                    $this->fs->rename($directoryPath . "/" . $fileNameSimplifiePdf, $directoryPath . "/old-version/{$now}-{$fileNameSimplifiePdf}");
+                }
+
                 $typeDiplome = $parcours->getTypeDiplome()->getLibelleCourt();
                 if($typeDiplome !== "BUT"){
-                    $pdf = $this->licenceMccc->exportPdfLicenceMccc(
+                    $pdfFull = $this->licenceMccc->exportPdfLicenceMccc(
                         anneeUniversitaire: $anneeDpe,
                         parcours : $parcours,
+                        versionFull: true
+                    );
+                    $pdfSimplifie = $this->licenceMccc->exportPdfLicenceMccc(
+                        anneeUniversitaire: $anneeDpe,
+                        parcours: $parcours,
+                        versionFull: false
+                    );
+                    $this->fs->appendToFile(
+                        $directoryPath . "/" . $fileNamePdf,
+                        $pdfFull
+                    );
+                    $this->fs->appendToFile(
+                        $directoryPath . "/" . $fileNameSimplifiePdf,
+                        $pdfSimplifie
                     );
                 }
                 elseif($typeDiplome === "BUT"){
-                    $pdf = $this->butMccc->exportPdfbutMccc(
+                    $pdfFull = $this->butMccc->exportPdfbutMccc(
                         anneeUniversitaire: $anneeDpe,
-                        parcours: $parcours
+                        parcours: $parcours,
+                        versionFull: true
+                    );
+                    $pdfSimplifie = $this->butMccc->exportPdfbutMccc(
+                        anneeUniversitaire: $anneeDpe,
+                        parcours: $parcours,
+                        versionFull: false
+                    );
+                    $this->fs->appendToFile(
+                        $directoryPath . "/" . $fileNamePdf, 
+                        $pdfFull
+                    );
+                    $this->fs->appendToFile(
+                        $directoryPath . "/" . $fileNameSimplifiePdf,
+                        $pdfSimplifie
                     );
                 }
-
-                // $fileName = "MCC-Parcours-{$parcours->getId()}-" . Tools::slug($parcours->getLibelle()) . "-" . $anneeDpe->getAnnee() . ".pdf";
-                $fileName = "MCCC-Parcours-{$parcours->getId()}-{$anneeDpe->getAnnee()}.pdf";
-
-                $this->fs->appendToFile(
-                    __DIR__ . "/../../mccc-export/" . $fileName, $pdf
-                );
                 $io->progressAdvance(1);
             }
             $io->progressFinish();
