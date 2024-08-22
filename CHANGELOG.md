@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.31.3](https://github.com/Dannebicque/oreof/compare/v1.31.2...v1.31.3) (2024-08-22)
+
+
+### Bug Fixes
+
+* Affichage des parcours BUT ([6b8d939](https://github.com/Dannebicque/oreof/commit/6b8d9390e2230041b13a9a5c708e4323578911e5))
+
 ### [1.31.2](https://github.com/Dannebicque/oreof/compare/v1.31.1...v1.31.2) (2024-08-22)
 
 
