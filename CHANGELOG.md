@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.31.4](https://github.com/Dannebicque/oreof/compare/v1.31.3...v1.31.4) (2024-08-23)
+
+
+### Bug Fixes
+
+* correction des niveau RNCP selon la nouvelle codification ([2b5a7a9](https://github.com/Dannebicque/oreof/commit/2b5a7a93419110014602f4443d44bc3c2c23f5c8))
+
 ### [1.31.3](https://github.com/Dannebicque/oreof/compare/v1.31.2...v1.31.3) (2024-08-22)
 
 
