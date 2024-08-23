@@ -1,5 +1,7 @@
 <div{{ attributes }}>
     {% if this.demandes|length > 0 %}
+    <section class="scroll-section" id="identite_formation">
+        <h3 class="small-title">Demandes de changement de (co-) responsable </h3>
         <div class="card mb-3">
             <div class="card-body">
                 <div class="row align-items-center">
@@ -97,5 +99,6 @@
                 </div>
             </div>
         </div>
+    </section>
     {% endif %}
 </div>
