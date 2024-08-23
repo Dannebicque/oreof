@@ -43,9 +43,9 @@ enum NiveauFormationEnum: int
             //            self::NIVEAU_I => 'niveau I (supérieur à la maîtrise)',
             self::NIVEAU_3 => 'Niveau 3 (CAP, BEP, CFPA du premier degré)',
             self::NIVEAU_4 => 'Niveau 4 (BP, BT, baccalauréat ou équivalent)',
-            self::NIVEAU_5 => 'Niveau 5 (BTS, DUT, bac +2)',
-            self::NIVEAU_6 => 'Niveau 6 (grade de licence, bac + 3)',
-            self::NIVEAU_7 => 'Niveau 7 (grade de master, bac +5)',
+            self::NIVEAU_5 => 'Niveau 5 (bac +2, BTS, DUT ou équivalent)',
+            self::NIVEAU_6 => 'Niveau 6 (bac +3, licence, LP, BUT ou équivalent)',
+            self::NIVEAU_7 => 'Niveau 7 (bac +5, master ou équivalent)',
             self::NIVEAU_8 => 'Niveau 8 (doctorat)',
             default => 'Inconnu',
         };
