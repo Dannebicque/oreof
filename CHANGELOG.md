@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.31.8](https://github.com/Dannebicque/oreof/compare/v1.31.7...v1.31.8) (2024-08-26)
+
+
+### Bug Fixes
+
+* Affichage du parcours sur historique niveau formation ([ecbd60a](https://github.com/Dannebicque/oreof/commit/ecbd60ac5a7d1db552d583705e81169e95c3e33f))
+
 ### [1.31.7](https://github.com/Dannebicque/oreof/compare/v1.31.6...v1.31.7) (2024-08-26)
 
 
