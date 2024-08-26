@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.31.5](https://github.com/Dannebicque/oreof/compare/v1.31.4...v1.31.5) (2024-08-26)
+
+
+### Bug Fixes
+
+* affichage BUT ([30a5e83](https://github.com/Dannebicque/oreof/commit/30a5e8337371730e5897221d53b0b278649d23a5))
+* badge change RF ([937a822](https://github.com/Dannebicque/oreof/commit/937a822cd62569a3aab6eb08b4a6c9ec054cc6cb))
+* badge du workflow + textes ([bd8d829](https://github.com/Dannebicque/oreof/commit/bd8d8292c67c8c3cdde0cce97d0443ad2d6e4252))
+* correction des niveau RNCP selon la nouvelle codification ([c6b0afe](https://github.com/Dannebicque/oreof/commit/c6b0afe7c3fd052eab288b5bf187ef33a33d9ce1))
+* infos vides dans copie du mail SES ([01903d3](https://github.com/Dannebicque/oreof/commit/01903d3e6bc6129804f023bb40758a8ffc5bba54))
+* titre bloc changement de rf ([3bc11a2](https://github.com/Dannebicque/oreof/commit/3bc11a21dcf4a43545b3b7fc1d39799a33984187))
+
 ### [1.31.4](https://github.com/Dannebicque/oreof/compare/v1.31.3...v1.31.4) (2024-08-23)
 
 
