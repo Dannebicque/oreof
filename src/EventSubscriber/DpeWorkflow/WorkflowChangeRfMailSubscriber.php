@@ -97,6 +97,7 @@ class WorkflowChangeRfMailSubscriber extends AbstractDpeMailSubscriber implement
     public function onValiderCfvu(Event $event): void
     {
         $data = $this->getDataFromChangeRfEvent($event);
+        $context = $event->getContext();
         if ($data === null) {
             return;
         }
@@ -104,7 +105,7 @@ class WorkflowChangeRfMailSubscriber extends AbstractDpeMailSubscriber implement
         $this->myMailer->initEmail();
         $this->myMailer->setTemplate(
             'mails/workflow/changerf/valider_cfvu_avec_pv.html.twig',
-            $this->getDataChangeRf()
+            array_merge($this->getDataChangeRf(), ['dateCfvu' => $context['date'],])
         );
         $this->myMailer->sendMessage(
             [$this->responsableDpe->getEmail(), $this->formation->getResponsableMention()?->getEmail()],
@@ -115,6 +116,7 @@ class WorkflowChangeRfMailSubscriber extends AbstractDpeMailSubscriber implement
     public function onValiderCfvuAttentePv(Event $event): void
     {
         $data = $this->getDataFromChangeRfEvent($event);
+        $context = $event->getContext();
         if ($data === null) {
             return;
         }
@@ -122,7 +124,7 @@ class WorkflowChangeRfMailSubscriber extends AbstractDpeMailSubscriber implement
         $this->myMailer->initEmail();
         $this->myMailer->setTemplate(
             'mails/workflow/changerf/valider_cfvu_attente_pv.html.twig',
-            $this->getDataChangeRf()
+            array_merge($this->getDataChangeRf(), ['dateCfvu' => $context['date'],])
         );
         $this->myMailer->sendMessage(
             [$this->responsableDpe->getEmail(), $this->formation->getResponsableMention()?->getEmail()],
@@ -141,7 +143,7 @@ class WorkflowChangeRfMailSubscriber extends AbstractDpeMailSubscriber implement
         $this->myMailer->initEmail();
         $this->myMailer->setTemplate(
             'mails/workflow/changerf/reserver_cfvu.html.twig',
-            array_merge($this->getDataChangeRf(), ['motif' => $context['motif']])
+            array_merge($this->getDataChangeRf(), ['motif' => $context['motif'], 'dateCfvu' => $context['date']])
         );
         $this->myMailer->sendMessage(
             [$this->responsableDpe->getEmail()],
