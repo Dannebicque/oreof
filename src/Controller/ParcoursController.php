@@ -440,7 +440,6 @@ class ParcoursController extends BaseController
         ]);
     }
 
-    #[IsGranted('ROLE_ADMIN')]
     #[Route('/{parcours}/versioning/maquette_iframe', 'app_versioning_parcours_maquette_iframe')]
     public function getValidatedMaquetteIframe(
         Parcours $parcours,
