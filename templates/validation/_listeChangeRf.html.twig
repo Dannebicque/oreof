@@ -64,7 +64,7 @@
                     {{ demande.dateDemande|date('d/m/Y H:i') }}
                 </td>
                 <td>
-                    {{ demande.etatDemande|badgeEnum }}
+                    {{ demande.etatDemande|badgeChangeRf }}
                 </td>
                 <td>
                     <a href="{{ path('app_formation_show',{'slug': demande.formation.slug}) }}"

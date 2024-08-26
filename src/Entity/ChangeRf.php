@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-use App\Enums\EtatDemandeChangeRfEnum;
 use App\Enums\TypeRfEnum;
 use App\Repository\ChangeRfRepository;
 use Doctrine\Common\Collections\ArrayCollection;
