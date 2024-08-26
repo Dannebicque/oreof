@@ -34,3 +34,6 @@ phpstan.neon
 ### EXPORT MCCC PDF ###
 mccc-export/
 public/temp/*
+
+### Script de publication ###
+publication-cron/
