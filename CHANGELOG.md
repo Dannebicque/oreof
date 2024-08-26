@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.31.9](https://github.com/Dannebicque/oreof/compare/v1.31.8...v1.31.9) (2024-08-26)
+
+
+### Bug Fixes
+
+* mail Change RF, typo, date CFVU ([c763fda](https://github.com/Dannebicque/oreof/commit/c763fda9f9f24f5591e9dab6eb0a47d33d7f90d6))
+* mail SES, typo ([cf4d151](https://github.com/Dannebicque/oreof/commit/cf4d1519d927b2a69d0d890651f5db2a82d372c3))
+
 ### [1.31.8](https://github.com/Dannebicque/oreof/compare/v1.31.7...v1.31.8) (2024-08-26)
 
 
