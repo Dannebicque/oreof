@@ -7,7 +7,7 @@
         -Erreur-
     {% endif %}
 </h2>
-{# todo: si niveau formation avec parcours historique par parcours ? ou préciser le parcours ? #}
+
 {% for histo in historiques %}
     {% if histo.etat == 'valide' %}
         {% set color='success' %}
@@ -37,7 +37,11 @@
         <div class="col ps-3">
             <div class="row g-0">
                 <div class="col">
+                    {% if histo|isParcours and type=='formation' %}
+                        <span class="fw-bold">Parcours : {{ histo.parcours.libelle }}</span><br>
+                    {% endif %}
                     <div class="d-flex align-items-center lh-1-25">
+
                         {% if histo.etape == 'change_rf' %}
                             Changement du responsable de formation : {{ histo.complements.ancien }} &rarr; {{ histo.complements.nouveau }}
                         {% elseif histo.etape == 'change_rf_co' %}
