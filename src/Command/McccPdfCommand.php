@@ -96,18 +96,29 @@ class McccPdfCommand extends Command
                 $io->writeln("\n" . $parcours->getFormation()->getDisplayLong());
 
                 $anneeDpe = $this->entityManager->getRepository(CampagneCollecte::class)->findOneBy(['defaut' => 1]);
-                $pdf = $this->licenceMccc->exportPdfLicenceMccc(
-                    anneeUniversitaire: $anneeDpe,
-                    parcours : $parcours,
-                );
+                $typeDiplomeParcours = $parcours->getFormation()->getTypeDiplome()->getLibelleCourt();
+
+                if($typeDiplomeParcours !== "BUT"){
+                    $pdf = $this->licenceMccc->exportPdfLicenceMccc(
+                        anneeUniversitaire: $anneeDpe,
+                        parcours : $parcours,
+                    );
+                }
+                elseif($typeDiplomeParcours === "BUT"){
+                    $pdf = $this->butMccc->exportPdfbutMccc(
+                        anneeUniversitaire: $anneeDpe,
+                        parcours: $parcours
+                    );
+                }
                 
                 // $fileName = "MCCC - " . $anneeDpe->getAnnee() . " - " . $parcours->getFormation()->getSlug() ?? '---';
                 // $fileName = "MCC-Parcours-{$parcours->getId()}-" . Tools::slug($parcours->getLibelle()) . "-" . $anneeDpe->getAnnee() . ".pdf";
                 
                 $fileName = "MCCC-Parcours-{$parcours->getId()}-{$anneeDpe->getAnnee()}.pdf";
+                $now = (new DateTime())->format("d-m-Y_H-i-s");
 
                 $this->fs->appendToFile(
-                    __DIR__ . "/../../mccc-export/" . $fileName,
+                    __DIR__ . "/../../export/" . $now . "-" . $fileName,
                     $pdf
                 );
 
