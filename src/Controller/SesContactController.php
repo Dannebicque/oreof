@@ -58,6 +58,9 @@ class SesContactController extends AbstractController
                 'message' => $request->request->get('message'),
                 'destinataires' => $this->getUsers($request->request->all()['destinataires']),
                 'cc' => $this->getUsers($request->request->all()['replyTo'] ?? []),
+                'formation' => $formation ?? null,
+                'parcours' => $parcours ?? null,
+                'expediteur' => $this->getUser(),
             ]);
             $mailer->sendMessage(
                 [new Address(Mailer::MAIL_GENERIC, 'ORéOF')],

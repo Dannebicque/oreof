@@ -59,6 +59,10 @@ enum EtatDpeEnum: string
     case valide_pour_publication = 'valide_pour_publication';
     case soumis_conseil_reserve = 'soumis_conseil_reserve';
     case initialisation_parcours = 'initialisation_parcours';
+    case en_cours_redaction_ss_cfvu = 'en_cours_redaction_ss_cfvu';
+    case soumis_central_sans_cfvu = 'soumis_central_sans_cfvu';
+    case soumis_central_reserve_cfvu = 'soumis_central_reserve_cfvu';
+    case soumis_dpe_composante_reserve_cfvu = 'soumis_dpe_composante_reserve_cfvu';
 
 
     public function libelle(): string
@@ -91,7 +95,11 @@ enum EtatDpeEnum: string
             self::valide_cfvu => 'Validé CFVU',
             self::publie => 'Publié',
             self::valide_pour_publication => 'Validé CFVU', //todo: renommer en valide_cfvu
-            self::soumis_conseil_reserve => 'Soumis Conseil réservé',
+            self::soumis_conseil_reserve => 'Validé CFVU sous réserve de PV',
+            self::en_cours_redaction_ss_cfvu => 'Modification en cours sans CFVU',
+            self::soumis_central_sans_cfvu => 'Soumis SES sans CFVU',
+            self::soumis_central_reserve_cfvu => 'Soumis SES avec réserve du PV',
+            self::soumis_dpe_composante_reserve_cfvu => 'Validé CFVU sous réserve de modification',
         };
     }
 
@@ -99,8 +107,8 @@ enum EtatDpeEnum: string
     {
         return match ($this) {
             self::initialisation_dpe, self::initialisation_ec, self::initialisation_parcours => 'secondary',
-            self::autorisation_saisie, self::en_cours_redaction, self::reserve_parcours_rf => 'warning',
-            self::soumis_rf, self::soumis_ec, self::soumis_dpe_composante, self::soumis_conseil, self::soumis_central, self::soumis_vp, self::soumis_cfvu, self::soumis_conseil_reserve, self::soumis_parcours, self::valide_parcours_rf => 'info',
+            self::soumis_conseil_reserve, self::autorisation_saisie, self::en_cours_redaction,self::en_cours_redaction_ss_cfvu, self::reserve_parcours_rf => 'warning',
+            self::soumis_rf, self::soumis_ec, self::soumis_dpe_composante, self::soumis_conseil, self::soumis_central, self::soumis_vp, self::soumis_cfvu,  self::soumis_parcours, self::valide_parcours_rf, self::soumis_central_sans_cfvu, self::soumis_central_reserve_cfvu, self::soumis_dpe_composante_reserve_cfvu => 'info',
             self::refuse_rf, self::refuse_ec, self::refuse_dpe_composante, self::refuse_conseil, self::refuse_central, self::refuse_definitif_cfvu => 'danger',
             self::valide_a_publier, self::valide_cfvu, self::publie, self::valide_pour_publication, self::transmis_rf, self::transmis_dpe  => 'success',
         };

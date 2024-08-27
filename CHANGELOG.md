@@ -2,6 +2,54 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.31.9](https://github.com/Dannebicque/oreof/compare/v1.31.8...v1.31.9) (2024-08-26)
+
+
+### Bug Fixes
+
+* mail Change RF, typo, date CFVU ([c763fda](https://github.com/Dannebicque/oreof/commit/c763fda9f9f24f5591e9dab6eb0a47d33d7f90d6))
+* mail SES, typo ([cf4d151](https://github.com/Dannebicque/oreof/commit/cf4d1519d927b2a69d0d890651f5db2a82d372c3))
+
+### [1.31.8](https://github.com/Dannebicque/oreof/compare/v1.31.7...v1.31.8) (2024-08-26)
+
+
+### Bug Fixes
+
+* Affichage du parcours sur historique niveau formation ([ecbd60a](https://github.com/Dannebicque/oreof/commit/ecbd60ac5a7d1db552d583705e81169e95c3e33f))
+
+### [1.31.7](https://github.com/Dannebicque/oreof/compare/v1.31.6...v1.31.7) (2024-08-26)
+
+
+### Bug Fixes
+
+* si PV déposé après laisser passer remplacer l'historique d'origine + date ([876f912](https://github.com/Dannebicque/oreof/commit/876f912eeb4f429483cbc1b778b945a876932a6c))
+
+### [1.31.6](https://github.com/Dannebicque/oreof/compare/v1.31.5...v1.31.6) (2024-08-26)
+
+
+### Bug Fixes
+
+* si PV déposé après laisser passer remplacer l'historique d'origine + date ([e0dd279](https://github.com/Dannebicque/oreof/commit/e0dd2793924e3f91d8f12b6832472a849d0f3b27))
+
+### [1.31.5](https://github.com/Dannebicque/oreof/compare/v1.31.4...v1.31.5) (2024-08-26)
+
+
+### Bug Fixes
+
+* affichage BUT ([30a5e83](https://github.com/Dannebicque/oreof/commit/30a5e8337371730e5897221d53b0b278649d23a5))
+* badge change RF ([937a822](https://github.com/Dannebicque/oreof/commit/937a822cd62569a3aab6eb08b4a6c9ec054cc6cb))
+* badge du workflow + textes ([bd8d829](https://github.com/Dannebicque/oreof/commit/bd8d8292c67c8c3cdde0cce97d0443ad2d6e4252))
+* correction des niveau RNCP selon la nouvelle codification ([c6b0afe](https://github.com/Dannebicque/oreof/commit/c6b0afe7c3fd052eab288b5bf187ef33a33d9ce1))
+* infos vides dans copie du mail SES ([01903d3](https://github.com/Dannebicque/oreof/commit/01903d3e6bc6129804f023bb40758a8ffc5bba54))
+* titre bloc changement de rf ([3bc11a2](https://github.com/Dannebicque/oreof/commit/3bc11a21dcf4a43545b3b7fc1d39799a33984187))
+
+### [1.31.4](https://github.com/Dannebicque/oreof/compare/v1.31.3...v1.31.4) (2024-08-23)
+
+
+### Bug Fixes
+
+* correction des niveau RNCP selon la nouvelle codification ([2b5a7a9](https://github.com/Dannebicque/oreof/commit/2b5a7a93419110014602f4443d44bc3c2c23f5c8))
+
 ### [1.31.3](https://github.com/Dannebicque/oreof/compare/v1.31.2...v1.31.3) (2024-08-22)
 
 

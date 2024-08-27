@@ -34,13 +34,6 @@ class DpeCfvuMailSubscriber extends AbstractDpeMailSubscriber implements EventSu
     public static function getSubscribedEvents(): array
     {
         return [
-//            'workflow.dpe.transition.refuser_definitif_cfvu' => 'onRefuseCfvu',
-//            'workflow.dpe.transition.refuser_revoir_cfvu' => 'onRefuseCfvu',
-//            'workflow.dpe.transition.valider_reserve_cfvu' => 'onValideCfvu',
-//            'workflow.dpe.transition.valider_reserve_conseil_cfvu' => 'onValideCfvu',
-//            'workflow.dpe.transition.valider_reserve_central_cfvu' => 'onValideCfvu',
-//            'workflow.dpe.transition.valider_cfvu' => 'onValideCfvu',
-
             'workflow.dpeParcours.transition.refuser_definitif_cfvu' => 'onRefuseCfvu',
             'workflow.dpeParcours.transition.refuser_revoir_cfvu' => 'onRefuseCfvu',
             'workflow.dpeParcours.transition.valider_reserve_cfvu' => 'onValideCfvu',

@@ -3,11 +3,10 @@
 {% block content %}
     <p>Bonjour,</p>
 
-    <p>Le PV, qui était manquant, pour la demande de changement de {% if demande.typeRf.value == 'RF' %}responsable{% else %}co-repsonsale{% endif%} de la
-        formation <strong>{{ formation.displayLong }}</strong> vient d'être déposé.</p>
+    <p>Le PV, qui était manquant, pour la demande de changement de {% if demande.typeRf.value == 'RF' %}responsable{% else %}co-responsale{% endif%} de la formation <strong>{{ formation.displayLong }}</strong> vient d'être déposé.</p>
 
     <p>
-        Modification de <strong>{{ demande.ancienResponsable != null ? demande.ancienResponsable.display : 'Pas de responsable' }}</strong> par <strong>{{ demande.nouveauResponsable != null ? demande.nouveauResponsable.display : 'Pas de responsable' }}</strong>.
+        Remplacement de <strong>{{ demande.ancienResponsable != null ? demande.ancienResponsable.display : 'Pas de responsable' }}</strong> par <strong>{{ demande.nouveauResponsable != null ? demande.nouveauResponsable.display : 'Pas de responsable' }}</strong>.
     </p>
 
 {% endblock %}

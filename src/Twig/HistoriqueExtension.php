@@ -44,7 +44,13 @@ class HistoriqueExtension extends AbstractExtension
             new TwigFilter('etapeLabel', [$this, 'etapeLabel']),
             new TwigFilter('etapeParams', [$this, 'etapeParams']),
             new TwigFilter('etapeIcone', [$this, 'etapeIcone']),
+            new TwigFilter('isParcours', [$this, 'isParcours']),
         ];
+    }
+
+    public function isParcours(HistoriqueParcours|HistoriqueFormation|HistoriqueFicheMatiere $historique): bool
+    {
+        return $historique instanceof HistoriqueParcours;
     }
 
     public function etapeLabel(string $etape, string $process = 'formation'): string
