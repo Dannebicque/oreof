@@ -8,9 +8,10 @@ use App\Entity\DpeParcours;
 use App\Entity\HistoriqueParcours;
 use App\Entity\Parcours;
 use App\Entity\User;
-use App\Enums\TypeModificationDpeEnum;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -39,7 +40,7 @@ class PublishValidParcoursCommand extends Command
         EntityManagerInterface $entityManager,
         WorkflowInterface $dpeParcoursWorkflow,
         GetHistorique $getHistorique,
-        Filesystem $filesystem
+        Filesystem $filesystem,
     )
     {
         parent::__construct();
@@ -55,6 +56,10 @@ class PublishValidParcoursCommand extends Command
             name: 'date-is-today', 
             mode: InputOption::VALUE_NONE, 
             description: "Met à jour le workflow et l'historique pour les parcours à publier aujourd'hui"
+        )->addOption(
+            name: 'export-missing',
+            mode: InputOption::VALUE_NONE,
+            description: "Exporte dans un fichier CSV les parcours qui ne sont pas encore valides"
         );
     }
 
@@ -65,6 +70,8 @@ class PublishValidParcoursCommand extends Command
         $io = new SymfonyStyle($input, $output);
         
         $dateIsToday = $input->getOption('date-is-today');
+
+        $exportMissing = $input->getOption('export-missing');
 
         if ($dateIsToday) {
             $io->writeln("Récupération des parcours à publier aujourd'hui...");
@@ -132,6 +139,57 @@ class PublishValidParcoursCommand extends Command
 
                 return Command::FAILURE;
             }       
+        }
+        if($exportMissing){
+            $dpe = $this->entityManager
+                ->getRepository(CampagneCollecte::class)
+                ->findOneBy(['defaut' => true]);
+            
+            $parcoursArray = $this->entityManager
+                ->getRepository(Parcours::class)
+                ->findAllParcoursForDpe($dpe);
+
+            // On garde ceux qui ne sont pas à l'état "valide_a_publier"
+            $parcoursArray = array_filter(
+                $parcoursArray, 
+                function($p) {
+                    $lastDpe = $p->getDpeParcours()->last();
+                    return $lastDpe instanceof DpeParcours
+                        && $lastDpe->getEtatValidation() !== ["valide_a_publier" => 1];
+                }
+            );
+
+            $nombreParcours = count($parcoursArray);
+            $io->writeln("Il y a {$nombreParcours} qui ne sont pas encore validés");
+
+            $exportExcel = array_map(function($parcours) {
+                return [
+                    $parcours->getFormation()->getDisplayLong() . " " . $parcours->getDisplay(),
+                    $parcours->getSigle() ?? '---',
+                    $parcours->getId(),
+                    $parcours->getDpeParcours()->last()->getEtatValidation() 
+                    ? array_keys($parcours->getDpeParcours()->last()->getEtatValidation())[0]
+                    : "---"
+                ];
+            }, $parcoursArray);
+
+            $exportExcel = [['Libellé du Parcours', 'Sigle', 'Identifiant', "État"], ...$exportExcel];
+
+            $io->writeln("Export Excel en cours...");
+
+            $spreadsheet = new Spreadsheet();
+            $activeWorksheet = $spreadsheet->getActiveSheet();
+            $activeWorksheet->fromArray($exportExcel);
+
+            $now = (new DateTime())->format('d-m-Y_H-i-s');
+            $filename = __DIR__ . "/../../export/{$now}-Parcours-non-valides.xlsx";
+
+            $writer = new Xlsx($spreadsheet);
+            $writer->save($filename);
+
+            $io->success('Export généré !');
+
+            return Command::SUCCESS;
         }
     }
 }
