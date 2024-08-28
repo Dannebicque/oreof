@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.31.10](https://github.com/Dannebicque/oreof/compare/v1.31.9...v1.31.10) (2024-08-28)
+
+
+### Bug Fixes
+
+* Affichage du PV sur validation ([82fd43b](https://github.com/Dannebicque/oreof/commit/82fd43b314907dbab52e4c8e9c6b782fda7d36c2))
+
 ### [1.31.9](https://github.com/Dannebicque/oreof/compare/v1.31.8...v1.31.9) (2024-08-26)
 
 
