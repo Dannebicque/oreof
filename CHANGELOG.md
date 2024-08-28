@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.31.11](https://github.com/Dannebicque/oreof/compare/v1.31.10...v1.31.11) (2024-08-28)
+
+
+### Bug Fixes
+
+* init bcc ([ed42a65](https://github.com/Dannebicque/oreof/commit/ed42a65f10b21764747cca30cb515e571e97f69d))
+
 ### [1.31.10](https://github.com/Dannebicque/oreof/compare/v1.31.9...v1.31.10) (2024-08-28)
 
 
