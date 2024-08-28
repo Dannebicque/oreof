@@ -46,7 +46,7 @@ class StructureEc
     public ?string $typeMccc = null;
 
     #[Groups(['DTO_json_versioning'])]
-    public ?array $bccs;
+    public ?array $bccs = [];
 
     private bool $withEcts = true;
     private bool $withBcc = true;
