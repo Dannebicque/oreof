@@ -191,4 +191,15 @@ class ButTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInterface
     ): string {
         return $this->butMccc->exportAndSaveExcelbutMccc($anneeUniversitaire, $parcours, $dir, $dateCfvu, $dateConseil, $versionFull);
     }
+
+    public function exportExcelAndSaveVersionMccc(
+        CampagneCollecte   $anneeUniversitaire,
+        Parcours           $parcours,
+        string $dir,
+        ?DateTimeInterface $dateCfvu = null,
+        ?DateTimeInterface $dateConseil = null,
+        string $fichier
+    ): string {
+        return $this->butMccc->exportAndSaveExcelbutMccc($anneeUniversitaire, $parcours, $dir, $dateCfvu, $dateConseil, false);
+    }
 }
