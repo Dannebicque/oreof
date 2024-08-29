@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.31.12](https://github.com/Dannebicque/oreof/compare/v1.31.11...v1.31.12) (2024-08-28)
+
+
+### Bug Fixes
+
+* export ([5b2318f](https://github.com/Dannebicque/oreof/commit/5b2318fac03f4c13bfff607af54752298551d402))
+
+### [1.31.11](https://github.com/Dannebicque/oreof/compare/v1.31.10...v1.31.11) (2024-08-28)
+
+
+### Bug Fixes
+
+* init bcc ([ed42a65](https://github.com/Dannebicque/oreof/commit/ed42a65f10b21764747cca30cb515e571e97f69d))
+
+### [1.31.10](https://github.com/Dannebicque/oreof/compare/v1.31.9...v1.31.10) (2024-08-28)
+
+
+### Bug Fixes
+
+* Affichage du PV sur validation ([82fd43b](https://github.com/Dannebicque/oreof/commit/82fd43b314907dbab52e4c8e9c6b782fda7d36c2))
+
 ### [1.31.9](https://github.com/Dannebicque/oreof/compare/v1.31.8...v1.31.9) (2024-08-26)
 
 

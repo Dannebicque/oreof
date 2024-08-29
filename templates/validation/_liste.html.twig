@@ -24,7 +24,7 @@
             <th>Etat</th>
             <th>BCC</th>
             <th>Maquette</th>
-            {% if etape == 'cfvu' or etape == 'publication' %}
+            {% if etape == 'cfvu' or etape == 'publication' or etape == 'valide_cfvu' or etape == 'soumis_cfvu' %}
                 <th>Conseil ?</th>
             {% endif %}
             <th>Remplissage</th>
@@ -83,7 +83,7 @@
                 <td>
                     {{ parcours.etatStep(4)|badgeStep }}
                 </td>
-                {% if etape == 'cfvu' or etape == 'publication' %}
+                {% if etape == 'cfvu' or etape == 'publication' or etape == 'valide_cfvu' or etape == 'soumis_cfvu' %}
                     <td>
                         {{ component('historique_pv', {parcours:parcours}) }}
                     </td>
