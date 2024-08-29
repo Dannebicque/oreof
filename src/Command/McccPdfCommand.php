@@ -79,7 +79,7 @@ class McccPdfCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        ini_set('memory_limit', '3000M');
+        ini_set('memory_limit', '3500M');
 
         $io = new SymfonyStyle($input, $output);
         
