@@ -4,6 +4,7 @@ namespace App\Command;
 
 use App\Classes\GetHistorique;
 use App\Entity\CampagneCollecte;
+use App\Entity\DpeParcours;
 use App\Entity\Parcours;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -58,14 +59,14 @@ class VersioningParcoursCommand extends Command
     protected function configure(): void
     {
         $this->addOption(
-            name: 'dpe-full-database', 
+            name: 'dpe-full-valid-database', 
             mode: InputOption::VALUE_NONE,
             description: 'Sauvegarde tous les parcours de la base de données en JSON'
         )
         ->addOption(
             name: 'dpe-only-cfvu-valid',
             mode: InputOption::VALUE_NONE,
-            description: 'Sauvegarde tous les parcours qui sont validés CFVU (dernier état à "valide_a_publier").',
+            description: "Sauvegarde tous les parcours qui sont validés CFVU (dernier état à \"valide_a_publier\"). et la date est aujourd'hui",
         )
         ->addOption(
             name: 'with-skip-option',
@@ -80,28 +81,33 @@ class VersioningParcoursCommand extends Command
 
         $io = new SymfonyStyle($input, $output);
 
-        $dpeFullDatabase = $input->getOption('dpe-full-database');
+        $dpeFullDatabase = $input->getOption('dpe-full-valid-database');
         $dpeOnlyCfvuValid = $input->getOption('dpe-only-cfvu-valid');
 
         $withSkipOption = $input->getOption('with-skip-option');
 
         if($dpeFullDatabase){
-            $io->writeln("Sauvegarde de tous les parcours en cours...");
+            $io->writeln("Sauvegarde de tous les parcours valides en cours...");
             $dpe = $this->entityManager->getRepository(CampagneCollecte::class)->findOneBy(['defaut' => true]);
             $parcoursArray = $this->entityManager->getRepository(Parcours::class)->findAllParcoursForDpe($dpe);
             $parcoursArray = array_filter(
                 $parcoursArray, 
                 fn($parcours) => $parcours->getFormation()->getTypeDiplome()->getLibelleCourt() !== "MEEF"
             );
-            $io->progressStart(count($parcoursArray));
+            $parcoursArray = array_filter($parcoursArray, 
+                fn($p) => $p->getDpeParcours()->last() instanceof DpeParcours
+                    && $p->getDpeParcours()->last() === ["valide_a_publier" => 1]
+            );
+            $nombreParcours = count($parcoursArray);
+            $io->progressStart($nombreParcours);
             try{
                 foreach($parcoursArray as $parcours){
-                    $this->versioningParcours->saveVersionOfParcours($parcours, new DateTimeImmutable());
+                    $this->versioningParcours->saveVersionOfParcours($parcours, new DateTimeImmutable(), isCfvu: true);
                     $io->progressAdvance();
                 }
                 $now = new DateTimeImmutable('now');
                 $dateHeure = $now->format('d-m-Y_H-i-s');
-                $logTxt = "[{$dateHeure}] Tous les parcours ont correctement été versionnés en JSON.\n";
+                $logTxt = "[{$dateHeure}] Tous les parcours ont correctement été versionnés en JSON. (Total : {$nombreParcours})\n";
                 $io->writeln("\nEnregistrement en base de données...");
                 $this->entityManager->flush();
                 $this->filesystem->appendToFile(__DIR__ . "/../../versioning_json/success_log/global_save_parcours_success.log", $logTxt);
