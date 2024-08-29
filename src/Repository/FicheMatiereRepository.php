@@ -337,4 +337,18 @@ class FicheMatiereRepository extends ServiceEntityRepository
 
         return $qb->getQuery()->getResult();
     }
+
+    public function findForParcoursWithKeyword(Parcours $parcours, string $keyword){
+        $qb = $this->createQueryBuilder('fm');
+
+        $qb = $qb->select('fm.id, fm.description, fm.objectifs, fm.slug, fm.libelle')
+            ->where(
+                $qb->expr()->like('UPPER(fm.description)', 'UPPER(:keyword)')
+            )
+            ->join('fm.parcours', 'p', 'WITH', 'fm.parcours = :parcours')
+            ->setParameter('keyword', '%' . $keyword . '%')
+            ->setParameter('parcours', $parcours);
+
+        return $qb->getQuery()->getResult();
+    }
 }

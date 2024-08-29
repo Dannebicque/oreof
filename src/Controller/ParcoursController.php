@@ -440,6 +440,30 @@ class ParcoursController extends BaseController
         ]);
     }
 
+    #[Route('/{parcours}/versioning/maquette_iframe', 'app_versioning_parcours_maquette_iframe')]
+    public function getValidatedMaquetteIframe(
+        Parcours $parcours,
+        VersioningParcours $versioningParcours,
+        EntityManagerInterface $entityManager
+    ){
+        $lastVersion = $entityManager
+            ->getRepository(ParcoursVersioning::class)
+            ->findLastCfvuVersion($parcours)[0] ?? false;
+
+        if($lastVersion){
+            $dto = $versioningParcours->loadParcoursFromVersion($lastVersion)['dto'];
+    
+            return $this->render('parcours/maquette_iframe.html.twig', [
+                'parcours' => $dto
+            ]);
+        }
+        else {
+            return $this->render('parcours/maquette_iframe.html.twig', [
+                'parcours' => false
+            ]);
+        }
+    }
+
     #[Route('/{parcours}/export-xml-lheo', name: 'app_parcours_export_xml_lheo')]
     public function getXmlLheoFromParcours(Parcours $parcours, LheoXML $lheoXML): Response
     {
@@ -683,5 +707,44 @@ class ParcoursController extends BaseController
         return $this->render('lheo/list.html.twig', [
             'errorArray' => $errorArray
         ]);
+    }
+
+    #[IsGranted("ROLE_ADMIN")]
+    #[Route('/{idParcours}/mccc/export/pdf', 'app_parcours_valid_mccc_pdf_export')]
+    public function getMcccAsPdfForParcours(
+        int $idParcours,
+        EntityManagerInterface $entityManager
+    ) : Response|JsonResponse {  
+
+        if(is_integer($idParcours) === false){
+            throw $this->createNotFoundException();
+        }
+
+        $dpe = $entityManager->getRepository(CampagneCollecte::class)->findOneBy(['defaut' => 1]);
+        $annee = $dpe->getAnnee();
+ 
+        try{
+            $file = file_get_contents(__DIR__ . "/../../mccc-export/MCCC-Parcours-{$idParcours}-{$annee}.pdf");
+            if($file){
+                return new Response(
+                    $file,
+                    200, 
+                    [
+                        'Content-Type' => 'application/pdf'
+                    ]
+                );
+            }
+        }
+        catch(\Exception $error) {
+            return new Response(
+                json_encode(
+                    ['error' => "Le parcours n'a pas été trouvé"]
+                ), 
+                404,
+                [
+                    'Content-Type' => 'application/json'
+                ]
+            ) ;
+        }
     }
 }

@@ -67,7 +67,7 @@
                         zone: 'descriptif',
                     }) }}
                     #}
-                    {{ include('typeDiplome/formation/_descriptif.html.twig', {parcours: parcours}) }}
+                    {{ include('typeDiplome/formation/_descriptifParcours.html.twig', {parcours: parcours}) }}
                 </div>
             </div>
         </section>
@@ -221,7 +221,7 @@
                                 zone: 'descriptif_'~ parcours.id,
                             }) }}
                             #}
-                            {{ include('typeDiplome/formation/_descriptif.html.twig', {parcours:parcours}) }}
+                            {{ include('typeDiplome/formation/_descriptifParcours.html.twig', {parcours:parcours}) }}
                         </div>
                     </div>
                 </section>
