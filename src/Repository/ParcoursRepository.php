@@ -14,6 +14,7 @@ use App\Entity\Composante;
 use App\Entity\Formation;
 use App\Entity\Mention;
 use App\Entity\Parcours;
+use App\Entity\TypeDiplome;
 use App\Entity\User;
 use App\Enums\EtatDpeEnum;
 use App\Enums\TypeModificationDpeEnum;
@@ -216,5 +217,71 @@ class ParcoursRepository extends ServiceEntityRepository
 
         return $query->getQuery()
             ->getResult();
+    }
+
+    public function findWithKeyword(string $keyword) {
+        $qb = $this->createQueryBuilder('p');
+
+        $parcoursParDefaut = Parcours::PARCOURS_DEFAUT;
+
+        $qb = $qb
+            ->select(
+                [
+                    'p.id AS parcours_id', 'p.libelle AS parcours_libelle',
+                    'p.sigle AS parcours_sigle', 'p.objectifsParcours',
+                    'p.poursuitesEtudes', 'p.contenuFormation',
+                    'p.resultatsAttendus', 'f.id AS formation_id'
+                ]
+            )
+            ->join('p.formation', 'f', 'WITH', 'p.formation = f.id')
+            ->where(
+                $qb->expr()->like('UPPER(p.objectifsParcours)', 'UPPER(:keyword)')
+            )
+            ->orWhere(
+                $qb->expr()->like('UPPER(p.poursuitesEtudes)', 'UPPER(:keyword)')
+            )
+            ->orWhere(
+                $qb->expr()->like('UPPER(p.contenuFormation)', 'UPPER(:keyword)')
+            )
+            ->orWhere(
+                $qb->expr()->like('UPPER(p.resultatsAttendus)', 'UPPER(:keyword)')
+            )
+            ->andWhere("p.libelle != :parcoursParDefaut")
+            ->setParameter('parcoursParDefaut', $parcoursParDefaut)
+            ->setParameter('keyword', '%' . $keyword . '%');
+
+        return $qb->getQuery()->getResult();
+    }
+
+    public function findWithKeywordForDefaultParcours(string $keyword){
+        $qb = $this->createQueryBuilder('p');
+
+        $parcoursParDefaut = Parcours::PARCOURS_DEFAUT;
+
+        $qb = $qb
+            ->join('p.formation', 'f', 'WITH', 'f.id = p.formation')
+            ->select(
+                [
+                    'f.id AS formation_id', 'f.slug AS formation_slug', 'p.id AS parcours_id', 
+                    'f.contenuFormation', 'f.resultatsAttendus', 'f.objectifsFormation', 
+                    'p.poursuitesEtudes', 'p.libelle AS parcours_libelle', 'f.sigle AS formation_sigle'
+                ]
+            )
+            ->where(
+                $qb->expr()->like('UPPER(f.contenuFormation)', 'UPPER(:keyword)')
+            )
+            ->orWhere(
+                $qb->expr()->like('UPPER(f.resultatsAttendus)', 'UPPER(:keyword)')
+            )
+            ->orWhere(
+                $qb->expr()->like('UPPER(f.objectifsFormation)', 'UPPER(:keyword)')
+            )->orWhere(
+                $qb->expr()->like('UPPER(p.poursuitesEtudes)', 'UPPER(:keyword)')
+            )
+            ->andWhere('p.libelle = :parcoursParDefaut')
+            ->setParameter('parcoursParDefaut', $parcoursParDefaut)
+            ->setParameter('keyword', '%' . $keyword . '%');
+
+            return $qb->getQuery()->getResult();
     }
 }

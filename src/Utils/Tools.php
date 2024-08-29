@@ -13,6 +13,8 @@ use DateTime;
 use DateTimeInterface;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 use function Symfony\Component\String\u;
+use Transliterator;
+
 
 abstract class Tools
 {
@@ -113,4 +115,13 @@ abstract class Tools
         return $number.'ème';
     }
 
+
+    public static function removeAccent(string|null $inputString){
+        if($inputString !== null){
+            $rules = "À > A; Ç > C; É > E; È > E; é > e; è > e; à > a; â > a; ô > o; ù > u; î > i; :: NFC;";
+            $transliterator = Transliterator::createFromRules($rules);
+    
+            return $transliterator->transliterate($inputString);
+        }
+    }
 }

@@ -26,3 +26,17 @@ yarn-error.log
 ###> phpstan/phpstan ###
 phpstan.neon
 ###< phpstan/phpstan ###
+
+
+### TEST CONFIG ###
+.env.local.old
+
+### EXPORT MCCC PDF ###
+mccc-export/
+public/temp/*
+
+### Script de publication ###
+publication-cron/
+
+### Dossier d'export
+export/

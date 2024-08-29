@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+
+{% block header %}
+    Téléchargement des rapports de changements
+{% endblock %}
+
+{% block content %}
+
+<h1 class="text-primary">
+    Liste des composantes pour générer les rapports des changements
+</h1>
+
+<div class="row justify-content-center mt-5">
+    <div class="col-8 mt-2">
+        {% for c in composantes %}
+            <div class="row border border-primary rounded my-4 ms-2 py-4">
+                <span class="text-dark fs-5">
+                    {{ c.libelle }}
+                <span>
+                <a href="{{ path('export_pdf_synthese_modification_composante', {composante_id: c.id}) }}">
+                    <button 
+                        class="btn btn-sm btn-primary rounded border border-dark text-white text-center ms-5 fw-bold" 
+                        role="button"
+                    >
+                        Télécharger le rapport
+                    </button>
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}
