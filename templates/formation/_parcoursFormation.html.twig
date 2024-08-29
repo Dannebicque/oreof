@@ -86,6 +86,11 @@
                 </tr>
             {% endfor %}
             {% else %}
+                {% if formation.parcours|length == 0  %}
+                    <tr class="bg-warning text-white">
+                        <td colspan="9">Formation non initialisée, pas de parcours ou de parcours par défaut.</td>
+                    </tr>
+                    {% else %}
             {% set parcours = formation.parcours[0] %}
             <tr>
                 <td>{{ formation.display }}</td>
@@ -154,6 +159,7 @@
                     {% endif %}
                 </td>
             </tr>
+            {% endif %}
             {% endif %}
             </tbody>
         </table>
