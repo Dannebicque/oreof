@@ -81,12 +81,12 @@ class VersioningParcoursCommand extends Command
 
         $io = new SymfonyStyle($input, $output);
 
-        $dpeFullDatabase = $input->getOption('dpe-full-valid-database');
+        $dpeFullValidDatabase = $input->getOption('dpe-full-valid-database');
         $dpeOnlyCfvuValid = $input->getOption('dpe-only-cfvu-valid');
 
         $withSkipOption = $input->getOption('with-skip-option');
 
-        if($dpeFullDatabase){
+        if($dpeFullValidDatabase){
             $io->writeln("Sauvegarde de tous les parcours valides en cours...");
             $dpe = $this->entityManager->getRepository(CampagneCollecte::class)->findOneBy(['defaut' => true]);
             $parcoursArray = $this->entityManager->getRepository(Parcours::class)->findAllParcoursForDpe($dpe);
@@ -96,7 +96,7 @@ class VersioningParcoursCommand extends Command
             );
             $parcoursArray = array_filter($parcoursArray, 
                 fn($p) => $p->getDpeParcours()->last() instanceof DpeParcours
-                    && $p->getDpeParcours()->last() === ["valide_a_publier" => 1]
+                    && $p->getDpeParcours()->last()->getEtatValidation() === ["valide_a_publier" => 1]
             );
             $nombreParcours = count($parcoursArray);
             $io->progressStart($nombreParcours);
