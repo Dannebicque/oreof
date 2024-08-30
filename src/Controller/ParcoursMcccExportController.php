@@ -155,7 +155,7 @@ class ParcoursMcccExportController extends BaseController
         $fileName .= ".pdf";
 
         try {
-            $pdf = file_get_contents(__DIR__ . "/../../mccc-export/{$fileName}");
+            $pdf = file_get_contents(__DIR__ . "/../../public/mccc-export/{$fileName}");
         }catch(\Exception $e){
             throw $this->createNotFoundException("Le fichier demandé n'a pas été trouvé");
         }
