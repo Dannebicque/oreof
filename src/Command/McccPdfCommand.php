@@ -80,7 +80,7 @@ class McccPdfCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        ini_set('memory_limit', '3500M');
+        ini_set('memory_limit', '3000M');
 
         $io = new SymfonyStyle($input, $output);
         
@@ -164,8 +164,8 @@ class McccPdfCommand extends Command
                 
                 $dpeParcours = GetDpeParcours::getFromParcours($parcours);
 
-                $dateConseil = $this->getHistorique->getHistoriqueParcoursLastStep($dpeParcours, 'conseil')->getDate();
-                $dateCfvu = $this->getHistorique->getHistoriqueParcoursLastStep($dpeParcours, 'valide_cfvu')->getDate();
+                $dateConseil = $this->getHistorique->getHistoriqueParcoursLastStep($dpeParcours, 'soumis_conseil')->getDate();
+                $dateCfvu = $this->getHistorique->getHistoriqueParcoursLastStep($dpeParcours, 'soumis_cfvu')->getDate();
 
                 $fileNamePdf = "MCCC-Parcours-{$parcours->getId()}-{$anneeDpe->getAnnee()}.pdf";
                 $fileNameSimplifiePdf = "MCCC-Parcours-{$parcours->getId()}-{$anneeDpe->getAnnee()}-simplifie.pdf";

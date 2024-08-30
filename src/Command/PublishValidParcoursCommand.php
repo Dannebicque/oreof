@@ -2,6 +2,7 @@
 
 namespace App\Command;
 
+use App\Classes\GetDpeParcours;
 use App\Classes\GetHistorique;
 use App\Entity\CampagneCollecte;
 use App\Entity\DpeParcours;
@@ -58,7 +59,7 @@ class PublishValidParcoursCommand extends Command
             description: "Met à jour le workflow et l'historique pour les parcours à publier aujourd'hui"
         )->addOption(
             name: 'export-missing',
-            mode: InputOption::VALUE_NONE,
+            mode: InputOption::VALUE_REQUIRED,
             description: "Exporte dans un fichier CSV les parcours qui ne sont pas encore valides"
         );
     }
@@ -141,6 +142,10 @@ class PublishValidParcoursCommand extends Command
             }       
         }
         if($exportMissing){
+            if(in_array($exportMissing, ['not-valid', 'no-cfvu-date', 'no-conseil-date']) === false){
+                $io->warning("Option invalide : ({$exportMissing}) - Options disponibles : ['not-valid', 'no-cfvu-date', 'no-conseil-date']");
+                return Command::INVALID;
+            }
             $dpe = $this->entityManager
                 ->getRepository(CampagneCollecte::class)
                 ->findOneBy(['defaut' => true]);
@@ -149,18 +154,52 @@ class PublishValidParcoursCommand extends Command
                 ->getRepository(Parcours::class)
                 ->findAllParcoursForDpe($dpe);
 
-            // On garde ceux qui ne sont pas à l'état "valide_a_publier"
-            $parcoursArray = array_filter(
-                $parcoursArray, 
-                function($p) {
-                    $lastDpe = $p->getDpeParcours()->last();
-                    return $lastDpe instanceof DpeParcours
-                        && $lastDpe->getEtatValidation() !== ["valide_a_publier" => 1];
-                }
-            );
+            if($exportMissing === "not-valid"){
+                // On garde ceux qui ne sont pas à l'état "valide_a_publier"
+                $parcoursArray = array_filter(
+                    $parcoursArray, 
+                    function($p) {
+                        $lastDpe = $p->getDpeParcours()->last();
+                        return $lastDpe instanceof DpeParcours
+                            && $lastDpe->getEtatValidation() !== ["valide_a_publier" => 1];
+                    }
+                );
+                $exportName = "non-valides";
+            }
+            elseif($exportMissing === "no-cfvu-date") {
+                $parcoursArray = array_filter(
+                    $parcoursArray,
+                    function($p) {
+                        $dpeParcours = GetDpeParcours::getFromParcours($p);
+                        $historiqueCfvu = $this->getHistorique
+                            ->getHistoriqueParcoursLastStep($dpeParcours, 'soumis_cfvu')
+                            ?->getDate() === null;
+                        $isValide = $p->getDpeParcours()->last() instanceof DpeParcours
+                        && $p->getDpeParcours()->last()->getEtatValidation() === ["valide_a_publier" => 1];
+                        return $historiqueCfvu && $isValide;
+                    }
+                );
+                $exportName = "valides-aucune-date-cfvu";
+            }
+            elseif($exportMissing === "no-conseil-date"){
+                $parcoursArray = array_filter(
+                    $parcoursArray,
+                    function($p) {
+                        $dpeParcours = GetDpeParcours::getFromParcours($p);
+                        $historiqueConseil = $this->getHistorique
+                        ->getHistoriqueParcoursLastStep($dpeParcours, 'soumis_conseil')
+                        ?->getDate() === null;
+                        $isValideAPublier = $p
+                            ->getDpeParcours()->last() instanceof DpeParcours 
+                            && $p->getDpeParcours()->last()->getEtatValidation() === ["valide_a_publier" => 1] ;
+                        return $historiqueConseil && $isValideAPublier;
+                    }
+                );
+                $exportName = "valides-aucune-date-de-conseil";
+            }   
 
             $nombreParcours = count($parcoursArray);
-            $io->writeln("Il y a {$nombreParcours} qui ne sont pas encore validés");
+            $io->writeln("Il y a {$nombreParcours} parcours qui ne sont pas encore validés");
 
             $exportExcel = array_map(function($parcours) {
                 return [
@@ -182,10 +221,10 @@ class PublishValidParcoursCommand extends Command
             $activeWorksheet->fromArray($exportExcel);
 
             $now = (new DateTime())->format('d-m-Y_H-i-s');
-            $filename = __DIR__ . "/../../export/{$now}-Parcours-non-valides.xlsx";
+            $fileName = __DIR__ . "/../../export/{$now}-Parcours-{$exportName}.xlsx";
 
             $writer = new Xlsx($spreadsheet);
-            $writer->save($filename);
+            $writer->save($fileName);
 
             $io->success('Export généré !');
 
