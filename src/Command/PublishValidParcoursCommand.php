@@ -90,7 +90,7 @@ class PublishValidParcoursCommand extends Command
                 function($p) use ($today) {
                     $dateHistoriqueValide = $this->getHistorique
                         ->getHistoriqueParcoursLastStep(
-                            $p->getDpeParcours()->last(), 'valide_a_publier'
+                            $p->getDpeParcours()->last(), 'valide_cfvu'
                         )?->getDate();
 
                     $dateFormat = "d-m-Y";
