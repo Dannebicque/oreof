@@ -41,13 +41,20 @@ input[name='keyword_1']::placeholder {
                     </div>
                 </div>
             </div>
-            <div class="d-flex col-12 justify-content-center">
-                <button 
-                    type="submit"
-                    class="btn btn-primary btn-small border border-light rounded mt-5"
-                >
-                    Rechercher
-                </button>
+            <div class="row justify-content-center">
+                <div class="col-6 col-md-4 col-lg-3 col-xl-2">
+                    {{ include('search/search_type.html.twig') }}
+                </div>
+            <div>
+            <div class="row justify-content-center">
+                <div class="col-6 col-md-5 col-lg-4 col-xl-3 text-start">
+                    <button 
+                        type="submit"
+                        class="btn btn-primary btn-small border border-light rounded mt-5"
+                    >
+                        Rechercher
+                    </button>
+                </div>
             </div>
         </form>
     </div>
