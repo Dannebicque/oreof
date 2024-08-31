@@ -71,7 +71,12 @@ a.fiche-matiere-search-link span {
                 name="keyword_1"
             >
             <div class="row justify-content-center">
-                <div class="col-10 col-md-8 col-lg-5 text-center">
+                <div class="col-10 col-md-8 col-lg-6 col-xl-4">
+                    {{ include('search/search_type.html.twig') }}
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-10 col-md-8 col-lg-5 text-start">
                     <button class="btn btn-sm btn-primary border border-white rounded mt-3">
                         Rechercher
                     </button>
