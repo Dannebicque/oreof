@@ -72,7 +72,8 @@ final class ParcoursManageComponent extends AbstractController
         'valide_cfvu' => 7,
         'soumis_cfvu' => 6,
         'cfvu' => 6,
-        'publication' => 8
+        'publication' => 8,
+        'publie' => 8
     ];
 
     use DefaultActionTrait;
