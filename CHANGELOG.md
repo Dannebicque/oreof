@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.31.14](https://github.com/Dannebicque/oreof/compare/v1.31.13...v1.31.14) (2024-09-02)
+
+
+### Bug Fixes
+
+* etat publie ([b45180f](https://github.com/Dannebicque/oreof/commit/b45180f0b2031530ce088d176305ee340e0bef52))
+* etat publie ([d859dff](https://github.com/Dannebicque/oreof/commit/d859dfffc3d10fad6b04f69cd6c50fd673ff0e27))
+* historique publication ([da37133](https://github.com/Dannebicque/oreof/commit/da371331d110f65c37fb904c428d2bda3207bc95))
+* mise ne page excel, taille des cellules du parcours ([59b324b](https://github.com/Dannebicque/oreof/commit/59b324b285f6219adefea5724ac99648a6a511d6))
+* processus de publication ([954a868](https://github.com/Dannebicque/oreof/commit/954a868676748ead6122e99c545cf71b1b33b136))
+* template localisation pour version de formation ([942d8c1](https://github.com/Dannebicque/oreof/commit/942d8c1e89d3d1269f21a9ca2c1a6ac0c6799604))
+
 ### [1.31.13](https://github.com/Dannebicque/oreof/compare/v1.31.12...v1.31.13) (2024-09-02)
 
 
