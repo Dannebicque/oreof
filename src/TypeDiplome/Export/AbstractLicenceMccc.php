@@ -106,8 +106,8 @@ class AbstractLicenceMccc
             $this->excelWriter->unMergeCells('G13:I13');
 
             $this->excelWriter->unMergeCells('J5:L5');
-            $this->excelWriter->unMergeCells('J6:L6');
-            $this->excelWriter->unMergeCells('J7:L7');
+            $this->excelWriter->unMergeCells('J6:V6');
+            $this->excelWriter->unMergeCells('J7:V7');
             $this->excelWriter->unMergeCells('J9:L9');
             $this->excelWriter->unMergeCells('J11:L11');
             $this->excelWriter->unMergeCells('J13:L13');
@@ -159,8 +159,8 @@ class AbstractLicenceMccc
             $this->excelWriter->cellStyle('G13', $style);
 
             $this->excelWriter->mergeCells('N5:S5');
-            $this->excelWriter->mergeCells('N6:S6');
-            $this->excelWriter->mergeCells('N7:S7');
+            $this->excelWriter->mergeCells('N6:Y6');
+            $this->excelWriter->mergeCells('N7:Y7');
             $this->excelWriter->mergeCells('N9:S9');
             $this->excelWriter->mergeCells('N11:S11');
             $this->excelWriter->mergeCells('N13:S13');

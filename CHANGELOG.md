@@ -2,6 +2,37 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.31.13](https://github.com/Dannebicque/oreof/compare/v1.31.12...v1.31.13) (2024-09-02)
+
+
+### Features
+
+* Génération PDF ([8575ee0](https://github.com/Dannebicque/oreof/commit/8575ee035677216a0b1788c143cf019c2483784d))
+
+
+### Bug Fixes
+
+* 'composante' pdf reports downloads security ([62db3cf](https://github.com/Dannebicque/oreof/commit/62db3cf039188d71b40d6b36ab17255e88d0d108))
+* 'parcours' list to insert (JSON) ([90e9d74](https://github.com/Dannebicque/oreof/commit/90e9d7427a8b4749e3bd72c897b7916450bb684d))
+* chargement des différences versioning ([fb09a5e](https://github.com/Dannebicque/oreof/commit/fb09a5e0accbf1ee39e849739769ebeb380c28cf))
+* code UE enfant maquette iframe versioning ([d7a7b6b](https://github.com/Dannebicque/oreof/commit/d7a7b6bcf0ab220abcdf2ccde4f185fd3f76443b))
+* date comparison for versioning command ([ab81832](https://github.com/Dannebicque/oreof/commit/ab8183226128fd7105dab6d1b973df203a96492b))
+* empty apogee code for ELP ([8b99e34](https://github.com/Dannebicque/oreof/commit/8b99e3407e17603099fa74884fff3f72f57e5bd0))
+* génération des PDF (MCCC) de tous les parcours valides ([5ec6b1f](https://github.com/Dannebicque/oreof/commit/5ec6b1f899b9887b37913f10d506b147c2fffdf2))
+* inversion maquette PDF et calendrier LHEO XML ([a48e277](https://github.com/Dannebicque/oreof/commit/a48e277c8b89fc6d93a1e64df764c5ea013d99d0))
+* mise ne page excel, taille des cellules du parcours ([4f8e047](https://github.com/Dannebicque/oreof/commit/4f8e047ed61339e1b3a8de0ed7bfcee4a2b63c43))
+* Parcours-Formation si pas au moins un parcours de configuré ([860670b](https://github.com/Dannebicque/oreof/commit/860670b9a517a486199b5fac29c0ad818be9c309))
+* PDF filename for export (McccPdfCommand) ([19541e4](https://github.com/Dannebicque/oreof/commit/19541e4d74cb3b52738109ebdf766e53f0ae2417))
+* préparation à l'insertion ([74ce2f9](https://github.com/Dannebicque/oreof/commit/74ce2f92b65960e80853709b24ecb51c206203fa))
+* rendering error message if no version for iframe 'maquette' ([52a5b74](https://github.com/Dannebicque/oreof/commit/52a5b748745b5d018d8092c31ce8b05ca1a94ec5))
+* Search Button in 'Offre de formation' (homepage) ([eadb6f4](https://github.com/Dannebicque/oreof/commit/eadb6f4da78aed1b37b5783423386419c7aee911))
+* search result interface ([0da7a96](https://github.com/Dannebicque/oreof/commit/0da7a964e4a2fd02e48573e7b51d320f801ab9d9))
+* Search tool - page title ([3af3318](https://github.com/Dannebicque/oreof/commit/3af331847509639791dff2f1710b17a5413b0ebd))
+* search tool - remove accent for research ([14bf25c](https://github.com/Dannebicque/oreof/commit/14bf25ce0c8922f48fb23a7d0b04651f384a4a0e))
+* search tool interface ([2d92daf](https://github.com/Dannebicque/oreof/commit/2d92daf3487adf091c5aa53c8169cfdaf282e6b6))
+* template _descriptif (versioning) ([5a9065e](https://github.com/Dannebicque/oreof/commit/5a9065e590f1dc274fb26f95b6f4e69d6476b828))
+* text for associated 'fiche matiere' (search tool) ([04cc258](https://github.com/Dannebicque/oreof/commit/04cc2587ff48a90a3e86942caf06ce479113f819))
+
 ### [1.31.12](https://github.com/Dannebicque/oreof/compare/v1.31.11...v1.31.12) (2024-08-28)
 
 
