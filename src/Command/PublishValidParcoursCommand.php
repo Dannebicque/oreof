@@ -83,7 +83,13 @@ class PublishValidParcoursCommand extends Command
 
             $parcoursArray = $this->entityManager->getRepository(Parcours::class)
                 ->findAllParcoursForDpe($dpe);
-                
+            
+            $parcoursArray = array_filter(
+                $parcoursArray,
+                fn($p) => $p->getDpeParcours()->last() instanceof DpeParcours
+                    && $p->getDpeParcours()->last()?->getEtatValidation() === ["valide_a_publier" => 1]
+            );
+
             // Récupération des parcours à publier aujourd'hui
             $parcoursArray = array_filter(
                 $parcoursArray,

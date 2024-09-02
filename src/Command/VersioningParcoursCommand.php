@@ -64,7 +64,7 @@ class VersioningParcoursCommand extends Command
             description: 'Sauvegarde tous les parcours de la base de données en JSON'
         )
         ->addOption(
-            name: 'dpe-only-cfvu-valid',
+            name: 'dpe-today-cfvu-valid',
             mode: InputOption::VALUE_NONE,
             description: "Sauvegarde tous les parcours qui sont validés CFVU (dernier état à \"valide_a_publier\"). et la date est aujourd'hui",
         )
@@ -82,7 +82,7 @@ class VersioningParcoursCommand extends Command
         $io = new SymfonyStyle($input, $output);
 
         $dpeFullValidDatabase = $input->getOption('dpe-full-valid-database');
-        $dpeOnlyCfvuValid = $input->getOption('dpe-only-cfvu-valid');
+        $dpeTodayCfvuValid = $input->getOption('dpe-today-cfvu-valid');
 
         $withSkipOption = $input->getOption('with-skip-option');
 
@@ -124,7 +124,7 @@ class VersioningParcoursCommand extends Command
             }
         }
 
-        if($dpeOnlyCfvuValid){
+        if($dpeTodayCfvuValid){
             $io->writeln("\nSauvegarde des parcours validés en CFVU...");
 
             $dpe = $this->entityManager->getRepository(CampagneCollecte::class)->findOneBy(['defaut' => true]);
@@ -142,23 +142,13 @@ class VersioningParcoursCommand extends Command
                 function($p) {
                     $dateHistoriquePublication = $this->getHistorique
                         ->getHistoriqueParcoursLastStep(
-                            $p->getDpeParcours()->last(), 'publication'
+                            $p->getDpeParcours()->last(), 'publie'
                         )?->getDate();
-                    $dateHistoriqueValide = $this->getHistorique
-                        ->getHistoriqueParcoursLastStep(
-                            $p->getDpeParcours()->last(), 'valide_a_publier'
-                        )?->getDate();
+
                     $today = new DateTime('now');
                     $dateFormat = "d-m-Y";
-                    if(
-                        $today->format($dateFormat) === $dateHistoriquePublication?->format($dateFormat)
-                        || $today->format($dateFormat) === $dateHistoriqueValide?->format($dateFormat)
-                    ){
-                        return true;
-                    }
-                    else {
-                        return false;
-                    }
+    
+                    return $today->format($dateFormat) === $dateHistoriquePublication?->format($dateFormat);
                 }  
             );
 
