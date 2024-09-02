@@ -41,7 +41,6 @@
                         <span class="fw-bold">Parcours : {{ histo.parcours.libelle }}</span><br>
                     {% endif %}
                     <div class="d-flex align-items-center lh-1-25">
-
                         {% if histo.etape == 'change_rf' %}
                             Changement du responsable de formation : {{ histo.complements.ancien }} &rarr; {{ histo.complements.nouveau }}
                         {% elseif histo.etape == 'change_rf_co' %}

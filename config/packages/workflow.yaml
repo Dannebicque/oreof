@@ -237,7 +237,9 @@ framework:
         publie:
           metadata:
             process: false
-
+            icon: 'fa-bullhorn'
+            label: 'publie'
+            isTimeline: false
         soumis_conseil_reserve:
           metadata:
             process: false

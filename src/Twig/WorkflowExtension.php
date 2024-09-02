@@ -171,7 +171,7 @@ class WorkflowExtension extends AbstractExtension
 
         $places = $this->getWorkflow('dpe')->getMarking($dpeParcours)->getPlaces();
         if (count($places) > 0) {
-            return str_starts_with(array_keys($places)[0], 'publie');
+            return str_starts_with(array_keys($places)[0], 'valide_a_publier');
         }
 
         return false;
