@@ -29,6 +29,7 @@ class HistoriqueExtension extends AbstractExtension
         'dpe' => 'soumis_dpe_composante',
         'parcours' => 'en_cours_redaction',
         'parcours_rf' => 'soumis_parcours',
+        'publie' => 'publie',
     ];
 
     public function __construct(
