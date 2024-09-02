@@ -72,7 +72,7 @@ class McccPdfCommand extends Command
             mode: InputOption::VALUE_NONE,
             description: "Génère tous les PDF des MCCC pour tous les parcours validés ('valide_a_publier')"
         )->addOption(
-            name: 'generate-cfvu-valid',
+            name: 'generate-today-cfvu-valid',
             mode: InputOption::VALUE_NONE,
             description: "Génère les PDF des MCCC pour les parcours qui ont été validés le jour même ('valide_a_publier')"
         );
@@ -80,7 +80,7 @@ class McccPdfCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        ini_set('memory_limit', '3000M');
+        ini_set('memory_limit', '3500M');
 
         $io = new SymfonyStyle($input, $output);
         
@@ -88,7 +88,7 @@ class McccPdfCommand extends Command
 
         $generateAllParcours = $input->getOption("generate-all-parcours");
 
-        $generateCfvuValid = $input->getOption('generate-cfvu-valid');
+        $generateTodayCfvuValid = $input->getOption('generate-today-cfvu-valid');
 
         if($generateParcours){
             $parcours = $this->entityManager->getRepository(Parcours::class)->findOneById($generateParcours);
@@ -235,7 +235,7 @@ class McccPdfCommand extends Command
             $io->success("Tous les exports MCCC au format PDF ont été générés.");
 
             return Command::SUCCESS;
-        } elseif($generateCfvuValid){
+        } elseif($generateTodayCfvuValid){
             // Récupération des parcours
             $dpe = $this->entityManager->getRepository(CampagneCollecte::class)->findOneBy(['defaut' => 1]);
             $parcoursArray = $this->entityManager->getRepository(Parcours::class)->findAllParcoursForDpe($dpe);
@@ -246,23 +246,14 @@ class McccPdfCommand extends Command
                     $lastDpe = $parcours->getDpeParcours()->last();
 
                     $dateHistoriquePublication = $this->getHistorique
-                        ->getHistoriqueParcoursLastStep($lastDpe, 'publication')
+                        ->getHistoriqueParcoursLastStep($lastDpe, 'publie')
                         ?->getDate();
-                    $dateHistoriqueValide = $this->getHistorique
-                        ->getHistoriqueParcoursLastStep($lastDpe, 'valide_a_publier')
-                        ?->getDate();
-                    
+                                        
                     $dateFormat = 'd-m-Y';
                     $today = new DateTime();
 
-                    if(
-                        $today->format($dateFormat) === $dateHistoriquePublication?->format($dateFormat)
-                        || $today->format($dateFormat) === $dateHistoriqueValide?->format($dateFormat)
-                    ){  
-                        return true;
-                    } else {
-                        return false;
-                    }
+                    return $today->format($dateFormat) === $dateHistoriquePublication?->format($dateFormat); 
+                        
                 }
             );
 
@@ -292,8 +283,8 @@ class McccPdfCommand extends Command
                     }
 
                     $dpeParcours = GetDpeParcours::getFromParcours($p);
-                    $dateConseil = $this->getHistorique->getHistoriqueParcoursLastStep($dpeParcours, 'soumis_conseil')->getDate();
-                    $dateCfvu = $this->getHistorique->getHistoriqueParcoursLastStep($dpeParcours, 'soumis_cfvu')->getDate();
+                    $dateConseil = $this->getHistorique->getHistoriqueParcoursLastStep($dpeParcours, 'soumis_conseil')?->getDate();
+                    $dateCfvu = $this->getHistorique->getHistoriqueParcoursLastStep($dpeParcours, 'soumis_cfvu')?->getDate();
 
                     // Sauvegarde de la version actuelle en PDF
                     $typeDiplome = $p->getTypeDiplome()->getLibelleCourt();
