@@ -142,7 +142,7 @@ class VersioningParcoursCommand extends Command
                 function($p) {
                     $dateHistoriquePublication = $this->getHistorique
                         ->getHistoriqueParcoursLastStep(
-                            $p->getDpeParcours()->last(), 'publie'
+                            $p->getDpeParcours()->last(), 'valide_a_publier'
                         )?->getDate();
 
                     $today = new DateTime('now');
