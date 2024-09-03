@@ -192,7 +192,7 @@ class VersioningParcoursCommand extends Command
             }
         }
         
-        $io->warning("Option de la commande non reconnue. Choix possibles : ['dpe-full-database', 'dpe-only-cfvu-valid']");
+        $io->warning("Option de la commande non reconnue. Choix possibles : ['dpe-full-valid-database', 'dpe-today-cfvu-valid']");
         return Command::INVALID;
     }
 
