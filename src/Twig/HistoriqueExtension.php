@@ -29,6 +29,7 @@ class HistoriqueExtension extends AbstractExtension
         'dpe' => 'soumis_dpe_composante',
         'parcours' => 'en_cours_redaction',
         'parcours_rf' => 'soumis_parcours',
+        'publie' => 'publie',
     ];
 
     public function __construct(
@@ -55,9 +56,14 @@ class HistoriqueExtension extends AbstractExtension
 
     public function etapeLabel(string $etape, string $process = 'formation'): string
     {
-        if (str_starts_with($etape,'changeRf.')) {
+        if (str_starts_with($etape, 'changeRf.')) {
             $etape = str_replace('changeRf.', '', $etape);
             return 'changeRf.'.$this->validationProcessChangeRf->getEtapeCle($etape, 'label');
+        }
+
+        if (str_starts_with($etape, 'publie')) {
+            //            $etape = str_replace('changeRf.', '', $etape);
+            return 'publie';
         }
 
         if ($process === 'formation' || $process === 'parcours') {
@@ -98,13 +104,18 @@ class HistoriqueExtension extends AbstractExtension
 
     public function etapeIcone(string $etape, string $process = 'formation'): string
     {
-        if (str_starts_with($etape,'changeRf.')) {
-//            $etape = str_replace('changeRf.', '', $etape);
+        if (str_starts_with($etape, 'changeRf.')) {
+            //            $etape = str_replace('changeRf.', '', $etape);
             return 'fal fa-repeat';
         }
 
         if ($etape === 'change_rf_co' || $etape === 'change_rf') {
             return 'fal fa-repeat';
+        }
+
+        if (str_starts_with($etape, 'publie')) {
+            //            $etape = str_replace('changeRf.', '', $etape);
+            return 'fal fa-bullhorn';
         }
 
         if ($process === 'formation' || $process === 'parcours') {
