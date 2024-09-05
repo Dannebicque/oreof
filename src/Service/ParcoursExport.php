@@ -1,111 +1,72 @@
 <?php
-/*
- * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
- * @file /Users/davidannebicque/Sites/oreof/src/Controller/FormationExportController.php
- * @author davidannebicque
- * @project oreof
- * @lastUpdate 17/03/2023 22:08
- */
 
-namespace App\Controller;
+namespace App\Service;
 
 use App\Classes\CalculStructureParcours;
-use App\Classes\MyGotenbergPdf;
 use App\DTO\StructureEc;
+use App\DTO\StructureParcours;
 use App\DTO\StructureUe;
+use App\Entity\FicheMatiere;
 use App\Entity\Parcours;
-use App\Entity\ParcoursVersioning;
-use App\Repository\TypeEpreuveRepository;
-use App\Service\ParcoursExport;
-use App\Service\VersioningParcours;
-use App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException;
+use App\Entity\TypeDiplome;
 use App\Utils\CleanTexte;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Twig\Error\LoaderError;
-use Twig\Error\RuntimeError;
-use Twig\Error\SyntaxError;
 
-class ParcoursExportController extends AbstractController
-{
+class ParcoursExport {
+
+    private EntityManagerInterface $entityManager;
+
+    private CalculStructureParcours $calculStructureParcours;
+    
+    private UrlGeneratorInterface $router;
+
     public function __construct(
-        private readonly MyGotenbergPdf $myPdf
-    ) {
+        EntityManagerInterface $entityManager,
+        CalculStructureParcours $calculStructureParcours,
+        UrlGeneratorInterface $router
+    ){
+        $this->entityManager = $entityManager;
+        $this->calculStructureParcours = $calculStructureParcours;
+        $this->router = $router;
     }
 
-    /**
-     * @throws SyntaxError
-     * @throws RuntimeError
-     * @throws LoaderError
-     * @throws TypeDiplomeNotFoundException
-     * @throws Exception
-     */
-    #[Route('/parcours/{parcours}/export-pdf', name: 'app_parcours_export')]
-    public function export(
-        Parcours                $parcours,
-        CalculStructureParcours $calculStructureParcours
-    ): Response {
+    public function exportLastValidVersionMaquetteJson(
+        StructureParcours $dto,
+        Parcours $parcours
+    ){
+        $typeDiplome = $parcours->getFormation()?->getTypeDiplome();
+
+        return $this->getMaquetteJson($dto, $parcours, $typeDiplome, true);
+    }
+
+    public function exportMaquetteJson(Parcours $parcours) {
+
         $typeDiplome = $parcours->getFormation()?->getTypeDiplome();
 
         if (null === $typeDiplome) {
             throw new Exception('Type de diplôme non trouvé');
         }
 
-        return $this->myPdf->render('pdf/parcours.html.twig', [
-            'formation' => $parcours->getFormation(),
-            'typeDiplome' => $typeDiplome,
-            'parcours' => $parcours,
-            'hasParcours' => $parcours->getFormation()?->isHasParcours(),
-            'titre' => 'Détails du parcours ' . $parcours->getDisplay(),
-            'dto' => $calculStructureParcours->calcul($parcours)
-        ], 'Parcours_' . $parcours->getDisplay());
+        $dto = $this->calculStructureParcours->calcul($parcours);
+
+        return $this->getMaquetteJson($dto, $parcours, $typeDiplome)        ;
     }
 
-    #[Route('/parcours/{parcours}/maquette/validee_cfvu/export-json')]
-    public function exportMaquetteValideeJson(
+    private function getMaquetteJson(
+        StructureParcours $dto,
         Parcours $parcours,
-        ParcoursExport $parcoursExport,
-        VersioningParcours $versioningParcours,
-        EntityManagerInterface $entityManager
-    ) : Response {
-        $lastCfvuVersion = $entityManager
-            ->getRepository(ParcoursVersioning::class)
-            ->findLastCfvuVersion($parcours);
-
-        if(count($lastCfvuVersion) === 0){
-            return $this->json(["error" => "no valid version available"]);
-        }
-
-        $versionData = $versioningParcours->loadParcoursFromVersion($lastCfvuVersion[0]);
-
-        $json = $parcoursExport->exportLastValidVersionMaquetteJson(
-            $versionData['dto'],
-            $versionData['parcours']
-        );
-
-        return $this->json($json);
-    }   
-
-    #[Route('/parcours/{parcours}/maquette/export-json', name: 'app_parcours_export_maquette_json')]
-    public function exportMaquetteJson(
-        Parcours                $parcours,
-        CalculStructureParcours $calculStructureParcours
-    ): Response {
-        $typeDiplome = $parcours->getFormation()?->getTypeDiplome();
-
-        if (null === $typeDiplome) {
-            throw new Exception('Type de diplôme non trouvé');
-        }
-
-        $dto = $calculStructureParcours->calcul($parcours);
-
+        TypeDiplome $typeDiplome,
+        bool $isVersioning = false
+    ){
         $data = [
-            'path' => $this->generateUrl('app_parcours_export_maquette_json', ['parcours' => $parcours->getId()], UrlGeneratorInterface::ABSOLUTE_URL),
+            // 'path' => $this->router->generate(
+            //     'app_parcours_export_maquette_json',
+            //     ['parcours' => $parcours->getId()],
+            //     UrlGeneratorInterface::ABSOLUTE_URL
+            // ),
             'id' => $parcours->getId(),
             'formationId' => $parcours->getFormation()?->getId(),
             'formation' => $parcours->getFormation()?->getDisplay(),
@@ -130,6 +91,14 @@ class ParcoursExportController extends AbstractController
             'ects' => $dto->heuresEctsFormation->sommeFormationEcts,
             'semestres' => []
         ];
+
+        if($parcours->getId() !== null){
+           $data['path'] = $this->router->generate(
+                'app_parcours_export_maquette_json',
+                ['parcours' => $parcours->getId()],
+                UrlGeneratorInterface::ABSOLUTE_URL
+           );
+        }
 
         foreach ($dto->semestres as $ordre => $sem) {
             if ($sem->semestre->isNonDispense() === false) {
@@ -179,7 +148,7 @@ class ParcoursExportController extends AbstractController
                     if ($ue->ue->getNatureUeEc()?->isLibre()) {
                         $tUe['ects'] = $ue->ue->getEcts() ?? 0.0;
                         $tUe['description_libre_choix'] = $ue->ue->getDescriptionUeLibre();
-                    } elseif ($ue->ue->getNatureUeEc()?->isChoix()) {
+                    } elseif ($ue->ue->getNatureUeEc()?->isChoix() || count($ue->uesEnfants()) > 0) {
                         $tUe['description_libre_choix'] = $ue->ue->getDescriptionUeLibre();
                         $tUe['UesEnfants'] = [];
                         $nb = 0;
@@ -212,30 +181,32 @@ class ParcoursExportController extends AbstractController
 
                             $nb++;
                             $tUe['nbChoix'] = $nb;
-                            $tUeEnfant['ec'] = $this->getEcFromUe($ueEnfant);
+                            $tUeEnfant['ec'] = $this->getEcFromUe($ueEnfant, $isVersioning);
                             $tUe['UesEnfants'][] = $tUeEnfant;
                         }
                     } else {
                         $tUe['ects'] = $ue->heuresEctsUe->sommeUeEcts;
-                        $tUe['ec'] = $this->getEcFromUe($ue);
+                        $tUe['ec'] = $this->getEcFromUe($ue, $isVersioning);
                     }
                     $semestre['ues'][] = $tUe;
                 }
-
+                if($isVersioning){
+                    usort($semestre['ues'], fn($ueA, $ueB) => $ueA['ordre'] <=> $ueB['ordre']);
+                }
                 $data['semestres'][] = $semestre;
             }
         }
 
-        return $this->json($data);
+        return $data;
     }
 
-    private function getEcFromUe(StructureUe $ue): array
+    private function getEcFromUe(StructureUe $ue, bool $isVersioning = false): array
     {
         $tEcs = [];
         foreach ($ue->elementConstitutifs as $ec) {
             if ($ec->elementConstitutif->getNatureUeEc()?->isLibre()) {
                 $tEcs['description_libre_choix'] =  $ec->elementConstitutif->getTexteEcLibre();
-            } elseif ($ec->elementConstitutif->getNatureUeEc()?->isChoix()) {
+            } elseif ($ec->elementConstitutif->getNatureUeEc()?->isChoix() || count($ec->elementsConstitutifsEnfants) > 0) {
                 $tEc['ordre'] = $ec->elementConstitutif->getOrdre();
                 $tEc['numero'] = $ec->elementConstitutif->getCode();
                 $tEc['libelle'] = $ec->elementConstitutif?->getFicheMatiere()?->getLibelle() ?? '-';
@@ -243,24 +214,34 @@ class ParcoursExportController extends AbstractController
                 $tEc['description_libre_choix'] =  $ec->elementConstitutif->getTexteEcLibre();
                 $nb = 0;
                 foreach ($ec->elementsConstitutifsEnfants as $ecEnfant) {
-                    $tEc['ecsEnfants'][] = $this->getEc($ecEnfant);
+                    $tEc['ecsEnfants'][] = $this->getEc($ecEnfant, $isVersioning);
                     $nb++;
                 }
                 $tEc['nbChoix'] =  $nb;
 
                 $tEcs[] = $tEc;
             } else {
-                $tEcs[] = $this->getEc($ec);
+                $tEcs[] = $this->getEc($ec, $isVersioning);
             }
         }
         return $tEcs;
     }
 
-    private function getEc(StructureEc $ec): array
+    private function getEc(StructureEc $ec, bool $isVersioning = false): array
     {
-        if ($ec->elementConstitutif->getFicheMatiere() !== null &&
-            (array_key_exists('publie', $ec->elementConstitutif->getFicheMatiere()->getEtatFiche()) ||
-            array_key_exists('valide_pour_publication', $ec->elementConstitutif->getFicheMatiere()->getEtatFiche()))
+
+        $ficheMatiere = $ec->elementConstitutif->getFicheMatiere();
+        if($isVersioning){  
+            $ficheMatiere = $this->entityManager
+                ->getRepository(FicheMatiere::class)
+                ->findOneBy([
+                    'slug' => $ec->elementConstitutif->getFicheMatiere()?->getSlug()
+                ]);
+        }
+
+        if ($ficheMatiere !== null &&
+            (array_key_exists('publie', $ficheMatiere->getEtatFiche()) ||
+            array_key_exists('valide_pour_publication', $ficheMatiere->getEtatFiche()))
         ) {
             $valide = true;
         } else {
@@ -271,7 +252,7 @@ class ParcoursExportController extends AbstractController
             $libelle = $ec->elementConstitutif->getTexteEcLibre();
             $ecLibre = true;
         } else {
-            $libelle = $ec->elementConstitutif->getFicheMatiere()?->getLibelle() ?? '-';
+            $libelle = $ficheMatiere?->getLibelle() ?? '-';
             $ecLibre = false;
         }
 
@@ -283,17 +264,18 @@ class ParcoursExportController extends AbstractController
             'valide_date' => new DateTime(),
             'numero'=> $ec->elementConstitutif->getCode(),
             'libelle'=> $libelle,
-            'libelle_anglais' => $ec->elementConstitutif->getFicheMatiere()?->getLibelleAnglais() ?? '-',
-            'sigle'=> $ec->elementConstitutif->getFicheMatiere()?->getSigle() ?? '-', "",
+            'libelle_anglais' => $ficheMatiere?->getLibelleAnglais() ?? '-',
+            'sigle'=> $ficheMatiere?->getSigle() ?? '-', "",
+            'fiche_matiere_slug' => $ficheMatiere?->getSlug(),
             'enseignant_referent' => [
-                'nom'=> $ec->elementConstitutif->getFicheMatiere()?->getResponsableFicheMatiere()?->getDisplay() ?? '-',
-                'email'=> $ec->elementConstitutif->getFicheMatiere()?->getResponsableFicheMatiere()?->getEmail() ?? '-'
+                'nom'=> $ficheMatiere?->getResponsableFicheMatiere()?->getDisplay() ?? '-',
+                'email'=> $ficheMatiere?->getResponsableFicheMatiere()?->getEmail() ?? '-'
             ],
-            'description' => CleanTexte::cleanTextArea($ec->elementConstitutif->getFicheMatiere()?->getDescription()) ?? '-',
-            'objectifs' => CleanTexte::cleanTextArea($ec->elementConstitutif->getFicheMatiere()?->getObjectifs()) ?? '-',
-            'modalite_enseignement'=> $ec->elementConstitutif->getFicheMatiere()?->getModaliteEnseignement()->value ?? '-',
-            'langues_supports' => $ec->elementConstitutif->getFicheMatiere()?->getLanguesSupportsArray() ?? [],
-            'langues_dispense_cours' => $ec->elementConstitutif->getFicheMatiere()?->getLanguesDispenseArray() ?? [],
+            'description' => CleanTexte::cleanTextArea($ficheMatiere?->getDescription()) ?? '-',
+            'objectifs' => CleanTexte::cleanTextArea($ficheMatiere?->getObjectifs()) ?? '-',
+            'modalite_enseignement'=> $ficheMatiere?->getModaliteEnseignement()->value ?? '-',
+            'langues_supports' => $ficheMatiere?->getLanguesSupportsArray() ?? [],
+            'langues_dispense_cours' => $ficheMatiere?->getLanguesDispenseArray() ?? [],
             'ects'=> $ec->heuresEctsEc->ects,
             'volumes'=> [
                 'CM'=> [
