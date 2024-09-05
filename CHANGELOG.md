@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.31.17](https://github.com/Dannebicque/oreof/compare/v1.31.16...v1.31.17) (2024-09-05)
+
+
+### Bug Fixes
+
+* UE si non existante dans export ([2f9b35a](https://github.com/Dannebicque/oreof/commit/2f9b35a3c8489e288cbf084faf1f091f27bdf31d))
+
 ### [1.31.16](https://github.com/Dannebicque/oreof/compare/v1.31.15...v1.31.16) (2024-09-05)
 
 
