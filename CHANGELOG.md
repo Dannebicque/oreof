@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.31.16](https://github.com/Dannebicque/oreof/compare/v1.31.15...v1.31.16) (2024-09-05)
+
+
+### Bug Fixes
+
+* historique publication ([c407b69](https://github.com/Dannebicque/oreof/commit/c407b69f5d6f55d69ea3eb785ec7027d16231d1e))
+* historique publication ([2d6a731](https://github.com/Dannebicque/oreof/commit/2d6a731cbb69637463b93706025aa242e4e2d7f3))
+* MCCC si synchro ([de8d0da](https://github.com/Dannebicque/oreof/commit/de8d0da9860fc623477cce565855f6a0424dd77d))
+
 ### [1.31.15](https://github.com/Dannebicque/oreof/compare/v1.31.14...v1.31.15) (2024-09-02)
 
 
