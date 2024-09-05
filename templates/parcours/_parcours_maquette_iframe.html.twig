@@ -37,7 +37,7 @@
                                 {# Espacement en cascade pour les UE, EC et leurs enfants #}
                                 {% set paddingCascadeValue = 1.15 %}
                                 {% set paddingCascade = 0 %}
-                                {% for ue in semestre.ues %}
+                                {% for ue in semestre.ues|sort((ueA, ueB) => ueA.ordre <=> ueB.ordre) %}
                                     {{ include('parcours/_maquette_iframe_UE.html.twig', 
                                         {
                                             ue: ue,
