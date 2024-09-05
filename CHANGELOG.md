@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.31.18](https://github.com/Dannebicque/oreof/compare/v1.31.17...v1.31.18) (2024-09-05)
+
 ### [1.31.17](https://github.com/Dannebicque/oreof/compare/v1.31.16...v1.31.17) (2024-09-05)
 
 
