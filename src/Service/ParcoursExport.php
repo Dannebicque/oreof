@@ -62,11 +62,6 @@ class ParcoursExport {
         bool $isVersioning = false
     ){
         $data = [
-            // 'path' => $this->router->generate(
-            //     'app_parcours_export_maquette_json',
-            //     ['parcours' => $parcours->getId()],
-            //     UrlGeneratorInterface::ABSOLUTE_URL
-            // ),
             'id' => $parcours->getId(),
             'formationId' => $parcours->getFormation()?->getId(),
             'formation' => $parcours->getFormation()?->getDisplay(),
@@ -91,6 +86,14 @@ class ParcoursExport {
             'ects' => $dto->heuresEctsFormation->sommeFormationEcts,
             'semestres' => []
         ];
+
+        if(!$isVersioning){
+            $data['path'] = $this->router->generate(
+                'app_parcours_export_maquette_json',
+                ['parcours' => $parcours->getId()],
+                UrlGeneratorInterface::ABSOLUTE_URL
+            );
+        }
 
         if($parcours->getId() !== null){
            $data['path'] = $this->router->generate(
