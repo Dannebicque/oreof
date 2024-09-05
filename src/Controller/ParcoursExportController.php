@@ -66,7 +66,7 @@ class ParcoursExportController extends AbstractController
         ], 'Parcours_' . $parcours->getDisplay());
     }
 
-    #[Route('/parcours/{parcours}/maquette/validee_cfvu/export-json')]
+    #[Route('/parcours/{parcours}/maquette/validee_cfvu/export-json', name: 'app_parcours_export_maquette_json_validee_cfvu')]
     public function exportMaquetteValideeJson(
         Parcours $parcours,
         ParcoursExport $parcoursExport,
@@ -82,10 +82,14 @@ class ParcoursExportController extends AbstractController
         }
 
         $versionData = $versioningParcours->loadParcoursFromVersion($lastCfvuVersion[0]);
+        $parcours_id = $lastCfvuVersion[0]->getParcours()->getId();
+        $formation_id = $lastCfvuVersion[0]->getParcours()->getFormation()->getId();
 
         $json = $parcoursExport->exportLastValidVersionMaquetteJson(
             $versionData['dto'],
-            $versionData['parcours']
+            $versionData['parcours'],
+            $parcours_id,
+            $formation_id
         );
 
         return $this->json($json);

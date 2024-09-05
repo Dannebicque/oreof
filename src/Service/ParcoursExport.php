@@ -35,11 +35,13 @@ class ParcoursExport {
 
     public function exportLastValidVersionMaquetteJson(
         StructureParcours $dto,
-        Parcours $parcours
+        Parcours $parcours,
+        int $parcours_id = null,
+        int $formation_id = null
     ){
         $typeDiplome = $parcours->getFormation()?->getTypeDiplome();
 
-        return $this->getMaquetteJson($dto, $parcours, $typeDiplome, true);
+        return $this->getMaquetteJson($dto, $parcours, $typeDiplome, true, $parcours_id, $formation_id);
     }
 
     public function exportMaquetteJson(Parcours $parcours) {
@@ -59,7 +61,9 @@ class ParcoursExport {
         StructureParcours $dto,
         Parcours $parcours,
         TypeDiplome $typeDiplome,
-        bool $isVersioning = false
+        bool $isVersioning = false,
+        int $parcours_id = null,
+        int $formation_id = null
     ){
         $data = [
             'id' => $parcours->getId(),
@@ -93,6 +97,18 @@ class ParcoursExport {
                 ['parcours' => $parcours->getId()],
                 UrlGeneratorInterface::ABSOLUTE_URL
             );
+            $data['id'] = $parcours->getId();
+            $data['formationId'] = $parcours->getFormation()?->getId();
+        }
+
+        if($isVersioning){
+            $data['path'] = $this->router->generate(
+                'app_parcours_export_maquette_json_validee_cfvu',
+                ['parcours' => $parcours_id],
+                UrlGeneratorInterface::ABSOLUTE_URL
+            );
+            $data['id'] = $parcours_id;
+            $data['formationId'] = $formation_id;
         }
 
         if($parcours->getId() !== null){
