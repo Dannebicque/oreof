@@ -63,6 +63,10 @@ class GetElementConstitutif
             return $this->elementConstitutif->getFicheMatiere()?->getMcccs();
         }
 
+        if ($this->elementConstitutif->getEcParent() !== null && $this->elementConstitutif->getEcParent()->isMcccEnfantsIdentique()) {
+            return $this->elementConstitutif->getEcParent()?->getMcccs();
+        }
+
         if ($this->elementConstitutif->isSynchroMccc() === true && $this->isRaccroche() === true) {
             return $this->getElementConstitutif()->getMcccs();
         }

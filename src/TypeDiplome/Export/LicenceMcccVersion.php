@@ -50,7 +50,7 @@ class LicenceMcccVersion extends AbstractLicenceMccc
         protected ExcelWriter             $excelWriter,
         protected TypeEpreuveRepository   $typeEpreuveRepository
     ) {
-
+        parent::__construct($excelWriter);
         $this->dir = $kernel->getProjectDir() . '/public';
 
     }
@@ -76,7 +76,6 @@ class LicenceMcccVersion extends AbstractLicenceMccc
         }
 
         $dto = $this->calculStructureParcours->calcul($parcours);
-        $totalFormation = $dto->heuresEctsFormation;
 
         // version
         $structureDifferencesParcours = $this->versioningParcours->getStructureDifferencesBetweenParcoursAndLastVersion($parcours);
