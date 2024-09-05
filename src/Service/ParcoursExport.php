@@ -248,11 +248,11 @@ class ParcoursExport {
             $valide = false;
         }
 
-        if ($ec->elementConstitutif->getNatureUeEc()?->isLibre()) {
+        if ($ec->elementConstitutif->getNatureUeEc()?->isLibre() && !$isVersioning) {
             $libelle = $ec->elementConstitutif->getTexteEcLibre();
             $ecLibre = true;
         } else {
-            $libelle = $ficheMatiere?->getLibelle() ?? '-';
+            $libelle = $ficheMatiere?->getLibelle() ?? $ec->elementConstitutif->getLibelle() ?? $ec->elementConstitutif->display() ?? '-';
             $ecLibre = false;
         }
 
