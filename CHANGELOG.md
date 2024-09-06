@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.31.20](https://github.com/Dannebicque/oreof/compare/v1.31.19...v1.31.20) (2024-09-06)
+
+
+### Bug Fixes
+
+* Double niveau d'enfant sur UE ([271a4e5](https://github.com/Dannebicque/oreof/commit/271a4e5a9f01507bdf37eba0d43b14bd9a419e76))
+
 ### [1.31.19](https://github.com/Dannebicque/oreof/compare/v1.31.18...v1.31.19) (2024-09-06)
 
 
