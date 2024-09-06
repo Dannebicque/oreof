@@ -351,4 +351,22 @@ class FicheMatiereRepository extends ServiceEntityRepository
 
         return $qb->getQuery()->getResult();
     }
+
+    public function findCountForKeyword(string $keyword) : array {
+        $qb = $this->createQueryBuilder('fm');
+
+        $qb = $qb->select('COUNT(fm.id) AS nombre_total')
+            ->where(
+                $qb->expr()->like('UPPER(fm.description)', 'UPPER(:keyword)')
+            )
+            ->orWhere(
+                $qb->expr()->like('UPPER(fm.objectifs)', 'UPPER(:keyword)')
+            )
+            ->setParameter('keyword', '%' . $keyword . '%')
+        ->getQuery()
+        ->getResult();
+
+        return $qb;
+
+    }
 }
