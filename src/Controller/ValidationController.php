@@ -161,7 +161,7 @@ class ValidationController extends BaseController
         return $this->render('validation/_liste.html.twig', [
             'process' => $process,
             'allparcours' => $allparcours,
-            'composantes' => $composantes,
+          //  'composantes' => $composantes,
             'etape' => $typeValidation ?? null,
         ]);
     }
