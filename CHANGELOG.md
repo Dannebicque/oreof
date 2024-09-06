@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.31.19](https://github.com/Dannebicque/oreof/compare/v1.31.18...v1.31.19) (2024-09-06)
+
+
+### Bug Fixes
+
+* fix temporaire pour accès aux formations sans parcours. A améliorer ([096afc2](https://github.com/Dannebicque/oreof/commit/096afc2871b7f80c3734c5b1d27a3774dba596d2))
+
 ### [1.31.18](https://github.com/Dannebicque/oreof/compare/v1.31.17...v1.31.18) (2024-09-05)
 
 ### [1.31.17](https://github.com/Dannebicque/oreof/compare/v1.31.16...v1.31.17) (2024-09-05)
