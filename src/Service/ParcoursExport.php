@@ -14,6 +14,7 @@ use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Workflow\WorkflowInterface;
 
 class ParcoursExport {
 
@@ -23,14 +24,18 @@ class ParcoursExport {
     
     private UrlGeneratorInterface $router;
 
+    private WorkflowInterface $ficheWorkflow;
+
     public function __construct(
         EntityManagerInterface $entityManager,
         CalculStructureParcours $calculStructureParcours,
-        UrlGeneratorInterface $router
+        UrlGeneratorInterface $router,
+        WorkflowInterface $ficheWorkflow
     ){
         $this->entityManager = $entityManager;
         $this->calculStructureParcours = $calculStructureParcours;
         $this->router = $router;
+        $this->ficheWorkflow = $ficheWorkflow;
     }
 
     public function exportLastValidVersionMaquetteJson(
@@ -256,6 +261,13 @@ class ParcoursExport {
                 ->findOneBy([
                     'slug' => $ec->elementConstitutif->getFicheMatiere()?->getSlug()
                 ]);
+            if($ficheMatiere){
+                $ficheMatiere = $this->ficheWorkflow
+                    ->getMarking($ficheMatiere)
+                    ->getPlaces() === ["publie" => 1]
+                ? $ficheMatiere
+                :null;
+            }
         }
 
         if ($ficheMatiere !== null &&
