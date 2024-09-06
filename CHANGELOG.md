@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.31.23](https://github.com/Dannebicque/oreof/compare/v1.31.22...v1.31.23) (2024-09-06)
+
+
+### Features
+
+* Affichage CFVU ([ebfbb15](https://github.com/Dannebicque/oreof/commit/ebfbb156a9519ea446c715435a2f4c1a4ce25116))
+
+
+### Bug Fixes
+
+* Date par défaut si vide ([e85cc6b](https://github.com/Dannebicque/oreof/commit/e85cc6b94e2aa0289af13ad665f94cdd3c415684))
+* PV déposé/laisser passer ([bbf47e3](https://github.com/Dannebicque/oreof/commit/bbf47e3e22c7aa788ca3785a3f57b29f16475745))
+
 ### [1.31.22](https://github.com/Dannebicque/oreof/compare/v1.31.21...v1.31.22) (2024-09-06)
 
 
