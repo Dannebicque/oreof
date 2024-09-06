@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.31.21](https://github.com/Dannebicque/oreof/compare/v1.31.20...v1.31.21) (2024-09-06)
+
+
+### Bug Fixes
+
+* Affichage CFVU ([4545587](https://github.com/Dannebicque/oreof/commit/4545587c4347541c7909d4bec337f2836af4bfa6))
+* process validation ([c75c7f0](https://github.com/Dannebicque/oreof/commit/c75c7f0ad8aeddc33f8f9adbbd05a4eff1b12779))
+* TypeDiplome avec EC ou MCCC facultatifs ([e55fca0](https://github.com/Dannebicque/oreof/commit/e55fca08ca2f2e8a149ffc632df8ddb7e825a6af))
+
 ### [1.31.20](https://github.com/Dannebicque/oreof/compare/v1.31.19...v1.31.20) (2024-09-06)
 
 
