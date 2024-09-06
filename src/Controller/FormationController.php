@@ -64,7 +64,7 @@ class FormationController extends BaseController
         TypeDiplomeRepository $typeDiplomeRepository,
         FormationRepository   $formationRepository,
         Request               $request,
-        ValidationProcess     $validationProcess
+        MentionProcess     $validationProcess
     ) {
         $q = $request->query->get('q') ?? null;
 

@@ -239,22 +239,12 @@ bouton pour valider/invalide les étapes successives #}
                         {{ formation.remplissage|remplissage }}
                     </td>
                     <td class="text-end">
-{#                        {% if formation.hasParcours and formation.parcours|length > 0 %}#}
-{#                            <button class="btn btn-sm btn-outline-primary"#}
-{#                                    {{ stimulus_action('structure--formation', 'afficherParcours', 'click', {formation:formation.id}) }}#}
-{#                            >#}
-{#                                <i class="fal fa-caret-right"></i>#}
-{#                                Voir les parcours ({{ formation.parcours|length }})#}
-{#                            </button>#}
-{#                        {% else %}#}
                             <button class="btn btn-sm btn-outline-primary"
                                     {{ stimulus_action('structure--formation', 'afficherParcours', 'click', {formation:formation.id}) }}
                             >
                                 <i class="fal fa-caret-right"></i>
                                 Voir les détails
                             </button>
-{#                        {% endif %}#}
-
                         <a href="{{ path('app_formation_show',{'slug': formation.slug}) }}"
                            class="btn btn-sm text-info"
                            data-bs-toggle="tooltip"
