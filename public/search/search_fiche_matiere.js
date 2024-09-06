@@ -1,0 +1,1 @@
+console.log('Fiche Matiere Search JS loaded.');

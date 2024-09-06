@@ -7,6 +7,11 @@
 {% block stylesheets %}
 {{ parent() }}
 
+{% if typeRecherche == 'ficheMatiere' %}
+    <link rel="stylesheet" href="{{ asset('search/search.css') }}">
+{% endif %}
+
+
 <style>
 a.fiche-matiere-search-link span {
     text-decoration: underline;
@@ -81,12 +86,12 @@ a.fiche-matiere-search-link span {
                 name="keyword_1"
             >
             <div class="row justify-content-center">
-                <div class="col-10 col-md-8 col-lg-6 col-xl-4">
+                <div class="d-flex col-10 col-md-8 col-lg-6 col-xl-4 justify-content-center">
                     {{ include('search/search_type.html.twig') }}
                 </div>
             </div>
             <div class="row justify-content-center">
-                <div class="col-10 col-md-8 col-lg-5 text-start">
+                <div class="col-10 col-md-8 col-lg-5 text-center">
                     <button class="btn btn-sm btn-primary border border-white rounded mt-3">
                         Rechercher
                     </button>
@@ -108,6 +113,10 @@ a.fiche-matiere-search-link span {
 {% block javascripts %}
 {{ parent() }}
 
-<script src="{{ asset('search/search.js') }}"></script>
+{% if typeRecherche == 'parcours' %}
+    <script src="{{ asset('search/search_parcours.js') }}"></script>
+{% elseif typeRecherche == 'ficheMatiere' %}
+    <script src="{{ asset('search/search_fiche_matiere.js') }}"></script>
+{% endif %}
 
 {% endblock %}
