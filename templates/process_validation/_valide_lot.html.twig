@@ -107,7 +107,7 @@
 
     {% endif %}
 
-    {% if process.hasUpload %}
+    {% if process.hasUpload is defined and process.hasUpload == true %}
         <div>
             <label for="file" class="form-label">{{ ('valide.'~process.label~'.fichier.label')|trans({}, 'process') }}
                 <i class="fal fa-question-circle ms-1"
