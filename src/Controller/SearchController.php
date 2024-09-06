@@ -170,4 +170,16 @@ class SearchController extends AbstractController
             return false;
         }
     }
+
+    #[Route('/recherche/fiche_matiere/{page}/{mot_cle}', name: 'app_search_fiche_matiere_pagination')]
+    public function searchFicheMatiereForKeywordAndPage(
+        int $page,
+        string $mot_cle,
+        EntityManagerInterface $entityManager
+    ){
+        $data = $entityManager->getRepository(FicheMatiere::class)
+                ->findFicheMatiereWithKeywordAndPagination($mot_cle, $page);
+
+        return $this->json($data);
+    }
 }
