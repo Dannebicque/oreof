@@ -120,11 +120,15 @@ class Ue
     /**
      * @var ?int $semestreOrdre Fix l'affichage du versioning
      */
-    public function display(?Parcours $parcours = null, ?int $semestreOrdre = null): string
+    public function display(?Parcours $parcours = null, ?int $semestreOrdre = null, bool $subsubniveau = false, string $subniveau = ''): string
     {
         if ($this->ueParent === null) {
             $ordreue = $this->ordre;
         } else {
+            if ($subsubniveau === true) {
+                return $subniveau . '.' . chr($this->ordre + 64);
+            }
+
             $ordreue = $this->ueParent->ordre . '.' . chr($this->ordre + 64);
         }
 
