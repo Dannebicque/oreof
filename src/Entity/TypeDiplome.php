@@ -108,6 +108,8 @@ class TypeDiplome
 
     #[ORM\Column]
     private ?bool $ectsObligatoireSurEc = true;
+    #[ORM\Column]
+    private ?bool $mcccObligatoireSurEc = true;
 
     public function __construct()
     {
@@ -582,4 +584,16 @@ class TypeDiplome
 
         return $this;
     }
+
+    public function getMcccObligatoireSurEc(): ?bool
+    {
+        return $this->mcccObligatoireSurEc ?? true;
+    }
+
+    public function setMcccObligatoireSurEc(?bool $mcccObligatoireSurEc): void
+    {
+        $this->mcccObligatoireSurEc = $mcccObligatoireSurEc;
+    }
+
+
 }
