@@ -50,7 +50,7 @@ class LicenceMcccVersion extends AbstractLicenceMccc
         protected ExcelWriter             $excelWriter,
         protected TypeEpreuveRepository   $typeEpreuveRepository
     ) {
-
+        parent::__construct($excelWriter);
         $this->dir = $kernel->getProjectDir() . '/public';
 
     }
@@ -76,7 +76,6 @@ class LicenceMcccVersion extends AbstractLicenceMccc
         }
 
         $dto = $this->calculStructureParcours->calcul($parcours);
-        $totalFormation = $dto->heuresEctsFormation;
 
         // version
         $structureDifferencesParcours = $this->versioningParcours->getStructureDifferencesBetweenParcoursAndLastVersion($parcours);
@@ -175,6 +174,7 @@ class LicenceMcccVersion extends AbstractLicenceMccc
                     $totalAnnee->addSemestre($semestre->heuresEctsSemestre);
                     $totalAnneeOriginal->addSemestreDiff($diffSemestre['heuresEctsSemestre']);
                     $debutSemestre = $ligne;
+
                     foreach ($semestre->ues as $ordUe => $ue) { //todo: changement ici avec modif du DTO ? un impact ?
                         $diffUe = $diffSemestre['ues'][$ordUe];
                         //UE
@@ -272,6 +272,16 @@ class LicenceMcccVersion extends AbstractLicenceMccc
                             }
                         }
                     }
+
+//                    //traitement des UE supprimés
+//                    foreach ($diffSemestre['ues'] as $ordreUe => $ue) {
+//                        if (!in_array($ordreUe, $tabEcAffiches)) {
+//                            //EC supprimé
+//                            $ligne = $this->afficheEcSupprime($ligne, $ece);
+//                        }
+//                    }
+
+
                     $ligne = $this->afficheSommeSemestre($ligne, $semestre, $diffSemestre);
 
                     $this->excelWriter->mergeCellsCaR(self::COL_SEMESTRE, $debutSemestre, self::COL_SEMESTRE, $ligne - 1);

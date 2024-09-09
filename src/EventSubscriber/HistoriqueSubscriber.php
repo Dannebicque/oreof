@@ -299,7 +299,7 @@ class HistoriqueSubscriber implements EventSubscriberInterface
 
     private function getDateTime(Request $request): ?DateTimeInterface
     {
-        if ($request->request->has('date')) {
+        if ($request->request->has('date') && $request->request->get('date') !== null) {
             $date = Tools::convertDate($request->request->get('date'));
         } else {
             $date = null;

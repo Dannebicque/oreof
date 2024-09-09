@@ -107,6 +107,39 @@ class CalculStructureParcours
                                         $dtoUeEnfant->addEc($dtoEc);
                                     }
                                 }
+
+                                // -------------------------------
+                                // Deuxieme niveau d'UE enfant $ueEnfant
+                                // -------------------------------
+                                foreach ($ueEnfant->getUeEnfants() as $ueEnfant2) {
+                                    $display2 = $ueEnfant2->display($parcours, subsubniveau: true, subniveau: $display);
+                                    $ueOrigineEnfant2 = $ueEnfant2;
+                                    if ($ueEnfant2 !== null && $ueEnfant2->getUeRaccrochee() !== null) {
+                                        $ueEnfant2 = $ueEnfant2->getUeRaccrochee()->getUe();
+                                        $raccrocheUeEnfant2 = true;
+                                    } else {
+                                        $raccrocheUeEnfant2 = $raccrocheUeEnfant;
+                                    }
+
+                                    if ($ueEnfant2 !== null) {
+                                        $dtoUeEnfant2 = new StructureUe($ueEnfant2, $raccrocheUeEnfant2, $display2, $ueOrigineEnfant2 ?? null, $withEcts, $withBcc);
+                                        $ecsUeEnfant2 = $this->elementConstitutifRepository->getByUe($ueEnfant2);
+                                        foreach ($ecsUeEnfant2 as $elementConstitutif) {
+                                            if ($elementConstitutif !== null && $elementConstitutif->getEcParent() === null) {
+                                                $dtoEc = new StructureEc($elementConstitutif, $parcours, false, $withEcts, $withBcc);
+                                                $dtoStructure->statsFichesMatieresParcours->addEc($elementConstitutif, $raccrocheUeEnfant2);
+                                                foreach ($elementConstitutif->getEcEnfants() as $elementConstitutifEnfant) {
+                                                    $dtoEcEnfant = new StructureEc($elementConstitutifEnfant, $parcours, false, $withEcts, $withBcc);
+                                                    $dtoStructure->statsFichesMatieresParcours->addEc($elementConstitutifEnfant, $raccrocheUeEnfant2);
+                                                    $dtoEc->addEcEnfant($elementConstitutifEnfant->getId(), $dtoEcEnfant);
+                                                }
+                                                $dtoUeEnfant2->addEc($dtoEc);
+                                            }
+                                        }
+                                        $dtoUeEnfant->addUeEnfant($ueOrigineEnfant2->getOrdre(), $dtoUeEnfant2);
+                                    }
+                                }
+
                                 $dtoUe->addUeEnfant($ueOrigineEnfant->getOrdre(), $dtoUeEnfant);
                             }
                         }

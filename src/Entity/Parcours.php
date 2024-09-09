@@ -201,6 +201,7 @@ class Parcours
     private Collection $parcoursEnfants;
 
     #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: HistoriqueParcours::class)]
+    #[ORM\OrderBy(['created' => 'DESC'])]
     private Collection $historiqueParcours;
 
     #[ORM\Column(nullable: true)]

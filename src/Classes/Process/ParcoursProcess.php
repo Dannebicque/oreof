@@ -67,6 +67,7 @@ class ParcoursProcess extends AbstractProcess
         $valid = $transition;
         $motifs = [];
         $place = array_keys($this->dpeParcoursWorkflow->getMarking($dpeParcours)->getPlaces())[0];
+        $reponse = $this->dispatchEventParcours($dpeParcours, $user, $place, $request, 'valide', $fileName);
 
         if ($request->request->has('date')) {
             $motifs['date'] = Tools::convertDate($request->request->get('date'));
@@ -98,13 +99,12 @@ class ParcoursProcess extends AbstractProcess
         $this->dpeParcoursWorkflow->apply($dpeParcours, $valid, $motifs);
         $this->entityManager->flush();
 
-        return $this->dispatchEventParcours($dpeParcours, $user, $place, $request, 'valide', $fileName);
+        return $reponse;
     }
 
     public function refuseParcours(DpeParcours $dpeParcours, UserInterface $user, string|array $transition, $request): Response
     {
         $place = array_keys($this->dpeParcoursWorkflow->getMarking($dpeParcours)->getPlaces())[0];
-
         $reponse = $this->dispatchEventParcours($dpeParcours, $user, $place, $request, 'refuse');
 
         $motifs = [];

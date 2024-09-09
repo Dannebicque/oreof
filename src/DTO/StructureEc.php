@@ -73,7 +73,6 @@ class StructureEc
             $this->heuresEctsEc->addEc($getElement->getElementConstitutifHeures(), $isBut);
             $this->heuresEctsEc->addEcts($getElement->getEcts());
             $this->mcccs = $getElement->getMcccsCollection()?->toArray();
-
         }
 
         if ($this->withBcc && $parcours) {

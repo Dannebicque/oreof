@@ -82,6 +82,10 @@ class ProcessValidationController extends BaseController
 
                 $parcours = GetDpeParcours::getFromParcours($objet);
 
+                //                if ($etape === 'cfvu') {
+                //                    $laisserPasser = $getHistorique->getHistoriqueFormationLastStep($objet, 'conseil');
+                //                }
+
                 if ($parcours === null) {
                     return JsonReponse::error('Parcours non trouvé');
                 }

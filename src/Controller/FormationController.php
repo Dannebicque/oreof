@@ -28,6 +28,7 @@ use App\Form\FormationDemandeType;
 use App\Form\FormationSesType;
 use App\Repository\ComposanteRepository;
 use App\Repository\DomaineRepository;
+use App\Repository\DpeParcoursRepository;
 use App\Repository\FormationRepository;
 use App\Repository\MentionRepository;
 use App\Repository\RoleRepository;
@@ -59,28 +60,16 @@ class FormationController extends BaseController
 
     #[Route('/liste-cfvu', name: 'app_formation_liste_cfvu', methods: ['GET'])]
     public function listeCfvu(
-        MentionRepository     $mentionRepository,
-        ComposanteRepository  $composanteRepository,
-        TypeDiplomeRepository $typeDiplomeRepository,
-        FormationRepository   $formationRepository,
-        Request               $request,
-        ValidationProcess     $validationProcess
+        DpeParcoursRepository $dpeParcoursRepository,
     ) {
-        $q = $request->query->get('q') ?? null;
-
         if ($this->isGranted('CAN_ETABLISSEMENT_CONSEILLER_ALL')) {
-            $formationsCfvu = $formationRepository->findBySearchAndCfvu($q, $this->getDpe(), $request->query->all());
-            $isCfvu = true;
+            $allparcours = $dpeParcoursRepository->findByCampagneAndTypeValidation($this->getDpe(), 'soumis_cfvu');
         }
 
-        return $this->render('formation/_liste.html.twig', [
-            'formations' => $formationsCfvu,
-            'mentions' => $mentionRepository->findBy([], ['libelle' => 'ASC']),
-            'composantes' => $composanteRepository->findPorteuse(),
-            'typeDiplomes' => $typeDiplomeRepository->findBy([], ['libelle' => 'ASC']),
-            'params' => $request->query->all(),
-            'isCfvu' => $isCfvu ?? false,
-            'process' => $validationProcess->getProcess()
+        return $this->render('validation/_liste.html.twig', [
+            'allparcours' => $allparcours,
+            'etape' => 'cfvu',
+            'isCfvu' => true,
         ]);
     }
 

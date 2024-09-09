@@ -150,19 +150,27 @@ class GlobalVoter extends Voter
 
     private function canAccessFormation(Formation $subject, mixed $centre): bool
     {
-        //        $canEdit = false;
-        //        if (
-        //            $subject->getResponsableMention() === $this->user ||
-        //            $subject->getCoResponsable() === $this->user ||
-        //            $this->formation === $centre->getUser
-        //
-        //        ) {
-        //todo: ou vérifier que le droit permet d'éditer ?
-        $canEdit = $this->dpeWorkflow->can($subject, 'autoriser') || $this->dpeWorkflow->can($subject, 'valider_rf');
-        //        }
-        //
+        //Vérifier les parcours en partant de Formation et de DpeParcours. Si pas de parcours autoriser
+
+        if ($subject->getParcours()->count() === 0)
+        {
+            //todo: en attendant
+            return true;
+        }
 
 
+
+
+//        $canEdit = false;
+//        if (
+//            $subject->getResponsableMention() === $this->user ||
+//            $subject->getCoResponsable() === $this->user
+//            //$this->formation === $centre->getUser
+//
+//        ) {
+//            //todo: ou vérifier que le droit permet d'éditer ?
+            $canEdit = $this->dpeWorkflow->can($subject, 'autoriser') || $this->dpeWorkflow->can($subject, 'valider_rf');
+//        }
         if ($this->security->isGranted('ROLE_SES')) {
             $canEdit =
                 $this->dpeWorkflow->can($subject, 'autoriser') ||
@@ -177,6 +185,7 @@ class GlobalVoter extends Voter
                 $this->dpeWorkflow->can($subject, 'valider_rf') ||
                 $this->dpeWorkflow->can($subject, 'valider_dpe_composante') ||
                 $this->dpeWorkflow->can($subject, 'valider_conseil');
+            //todo: cas si pas de parcours ?
         }
 
         $centre = $centre->getFormation() === $subject || $centre->getComposante() === $subject->getComposantePorteuse();
