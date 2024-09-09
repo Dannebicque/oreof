@@ -119,7 +119,7 @@ class ApiSiteWebController extends AbstractController
             ];
         }
 
-        dump("Nombre de parcours affichés : {$countParcours}");exit;
+        // dump("Nombre de parcours affichés : {$countParcours}");exit;
 
         return new JsonResponse($dataJSON);
     }
