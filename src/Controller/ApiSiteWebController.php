@@ -87,7 +87,8 @@ class ApiSiteWebController extends AbstractController
         GetHistorique $getHistorique,
         VersioningParcours $versioningParcours
     ){
-        
+        ini_set('memory_limit', '256M');
+
         $dataJSON = [];
         $formationArray = $entityManager->getRepository(Formation::class)->findAll();
         $countParcours = 0;
