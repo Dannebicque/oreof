@@ -4,8 +4,12 @@ namespace App\Controller;
 
 use App\Classes\GetHistorique;
 use App\Entity\DpeParcours;
+use App\Entity\Formation;
+use App\Entity\ParcoursVersioning;
 use App\Repository\FormationRepository;
+use App\Service\VersioningParcours;
 use DateTime;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -75,5 +79,48 @@ class ApiSiteWebController extends AbstractController
 
 
         return new JsonResponse($data);
+    }
+
+    #[Route('/api/site/web/versioning_json', name: 'api_site_web_versioning_json')]
+    public function indexVersioningJson(
+        EntityManagerInterface $entityManager,
+        GetHistorique $getHistorique,
+        VersioningParcours $versioningParcours
+    ){
+        
+        $dataJSON = [];
+        $formationArray = $entityManager->getRepository(Formation::class)->findAll();
+        $countParcours = 0;
+
+        foreach($formationArray as $formation){
+            $tParcours = [];
+            foreach($formation->getParcours() as $parcours){
+                $lastVersion = $entityManager->getRepository(ParcoursVersioning::class)
+                    ->findLastCfvuVersion($parcours);
+                if(count($lastVersion) > 0){
+                    $lastVersionData = $versioningParcours->loadParcoursFromVersion($lastVersion[0]);
+                    $tParcours[] = [
+                        'id' => $parcours->getId(),
+                        'libelle' => $lastVersionData['parcours']->getDisplay(),
+                        'url' => $this->generateUrl(
+                            'app_parcours_export_json_urca_cfvu_valid', 
+                            ['parcoursVersion' => $lastVersion[0]->getId()], 
+                            UrlGenerator::ABSOLUTE_URL
+                        )
+                    ];
+                    ++$countParcours;
+                }
+            }
+            $dataJSON[] = [
+                'id' => $formation->getId(),
+                'libelle' => $formation->getDisplayLong(),
+                'parcours' => $tParcours,
+                'dateValidation' => $getHistorique->getHistoriqueFormationLastStep($formation, 'publication')?->getDate()?->format('Y-m-d H:i:s') ?? null,
+            ];
+        }
+
+        dump("Nombre de parcours affichés : {$countParcours}");exit;
+
+        return new JsonResponse($dataJSON);
     }
 }
