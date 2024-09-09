@@ -262,9 +262,11 @@ class ParcoursExport {
                     'slug' => $ec->elementConstitutif->getFicheMatiere()?->getSlug()
                 ]);
             if($ficheMatiere){
-                $ficheMatiere = $this->ficheWorkflow
+                $etatWorkflow = $this->ficheWorkflow
                     ->getMarking($ficheMatiere)
-                    ->getPlaces() === ["publie" => 1]
+                    ->getPlaces();
+                $ficheMatiere = $etatWorkflow === ["publie" => 1] 
+                || $etatWorkflow === ['valide_pour_publication' => 1]
                 ? $ficheMatiere
                 :null;
             }
