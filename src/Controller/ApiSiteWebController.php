@@ -7,14 +7,17 @@ use App\Entity\DpeParcours;
 use App\Entity\Formation;
 use App\Entity\ParcoursVersioning;
 use App\Repository\FormationRepository;
+use App\Service\ApiJsonExport;
 use App\Service\VersioningParcours;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGenerator;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class ApiSiteWebController extends AbstractController
 {
@@ -81,47 +84,45 @@ class ApiSiteWebController extends AbstractController
         return new JsonResponse($data);
     }
 
-    #[Route('/api/site/web/versioning_json', name: 'api_site_web_versioning_json')]
+    #[Route('/api/site/web/versioning_json/', name: 'api_site_web_versioning_json')]
     public function indexVersioningJson(
-        EntityManagerInterface $entityManager,
-        GetHistorique $getHistorique,
-        VersioningParcours $versioningParcours
-    ){
-        ini_set('memory_limit', '256M');
+        ApiJsonExport $apiJsonExport,
+        Filesystem $fs
+    ) : Response {
+        ini_set('memory_limit', '1024M');
 
-        $dataJSON = [];
-        $formationArray = $entityManager->getRepository(Formation::class)->findAll();
-        $countParcours = 0;
+        $filename = "api_json_urca_versioning.json";
+        $path = __DIR__ . "/../../public/api_json/";
 
-        foreach($formationArray as $formation){
-            $tParcours = [];
-            foreach($formation->getParcours() as $parcours){
-                $lastVersion = $entityManager->getRepository(ParcoursVersioning::class)
-                    ->findLastCfvuVersion($parcours);
-                if(count($lastVersion) > 0){
-                    $lastVersionData = $versioningParcours->loadParcoursFromVersion($lastVersion[0]);
-                    $tParcours[] = [
-                        'id' => $parcours->getId(),
-                        'libelle' => $lastVersionData['parcours']->getDisplay(),
-                        'url' => $this->generateUrl(
-                            'app_parcours_export_json_urca_cfvu_valid', 
-                            ['parcoursVersion' => $lastVersion[0]->getId()], 
-                            UrlGenerator::ABSOLUTE_URL
-                        )
-                    ];
-                    ++$countParcours;
-                }
-            }
-            $dataJSON[] = [
-                'id' => $formation->getId(),
-                'libelle' => $formation->getDisplayLong(),
-                'parcours' => $tParcours,
-                'dateValidation' => $getHistorique->getHistoriqueFormationLastStep($formation, 'publication')?->getDate()?->format('Y-m-d H:i:s') ?? null,
-            ];
+        if($fs->exists($path . $filename) === true){
+            $api = file_get_contents($path . $filename);
+            return new JsonResponse($api, json: true);
         }
 
-        // dump("Nombre de parcours affichés : {$countParcours}");exit;
+        $apiJson = $apiJsonExport->generateApiVersioning();
+        $fs->appendToFile($path . $filename, json_encode($apiJson));
 
-        return new JsonResponse($dataJSON);
+        return new JsonResponse($apiJson);
+    }
+
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route('/api/site/web/versioning_json/renew')]
+    public function apiVersioningJsonRenew(
+        ApiJsonExport $apiJsonExport,
+        Filesystem $fs
+    ) : Response {
+        ini_set('memory_limit', '1024M');
+
+        $filename = "api_json_urca_versioning.json";
+        $path = __DIR__ . "/../../public/api_json/";
+
+        if($fs->exists($path . $filename)){
+            $now = (new DateTime())->format('d-m-Y_H-i');
+            $fs->rename($path . $filename, $path . $now . "-" .  $filename);
+            $apiJson = $apiJsonExport->generateApiVersioning();
+            $fs->appendToFile($path . $filename, json_encode($apiJson));
+        }
+
+        return $this->redirectToRoute("api_site_web_versioning_json");
     }
 }
