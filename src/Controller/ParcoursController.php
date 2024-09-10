@@ -815,13 +815,17 @@ class ParcoursController extends BaseController
         $typeF = [];
         $typeF[] = $typeDiplome?->getLibelle() ?? '-';
 
-        // if ($parcours->getTypeParcours() === TypeParcoursEnum::TYPE_PARCOURS_CPI) {
-        //     $typeF[] = 'Diplômes d’ingénieur / CMI / CPI';
-        // } elseif ($parcours->getTypeParcours() === TypeParcoursEnum::TYPE_PARCOURS_LAS1) {
-        //     $typeF[] = 'Licence Accès Santé';
-        // } elseif ($parcours->getTypeParcours() === TypeParcoursEnum::TYPE_PARCOURS_LAS23) {
-        //     $typeF[] = 'Licence Accès Santé';
-        // }
+        $typeParcours = $entityManager->getRepository(Parcours::class)
+            ->findOneById($parcoursVersion->getParcours()->getId())
+            ->getTypeParcours();
+
+        if ($typeParcours === TypeParcoursEnum::TYPE_PARCOURS_CPI) {
+            $typeF[] = 'Diplômes d’ingénieur / CMI / CPI';
+        } elseif ($typeParcours === TypeParcoursEnum::TYPE_PARCOURS_LAS1) {
+            $typeF[] = 'Licence Accès Santé';
+        } elseif ($typeParcours === TypeParcoursEnum::TYPE_PARCOURS_LAS23) {
+            $typeF[] = 'Licence Accès Santé';
+        }
 
         $data = [
             'description' => "",
