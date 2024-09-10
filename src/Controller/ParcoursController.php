@@ -748,11 +748,21 @@ class ParcoursController extends BaseController
         }
     }
 
-    #[Route('/{parcoursVersion}/export-json-urca/cfvu_valid', name: 'app_parcours_export_json_urca_cfvu_valid')]
+    #[Route('/{parcours}/export-json-urca/cfvu_valid', name: 'app_parcours_export_json_urca_cfvu_valid')]
     public function getJsonExportUrcaCfvuValid(
-        ParcoursVersioning $parcoursVersion,
+        Parcours $parcours,
+        EntityManagerInterface $entityManager,
         VersioningParcours $versioningParcours
     ): Response {
+
+        $parcoursVersion = $entityManager
+            ->getRepository(ParcoursVersioning::class)
+            ->findLastCfvuVersion($parcours);
+        if(count($parcoursVersion) === 0){
+            throw $this->createNotFoundException('Version not found.');
+        }
+
+        $parcoursVersion = $parcoursVersion[0];
 
         $versionData = $versioningParcours->loadParcoursFromVersion($parcoursVersion);
         $parcoursVersionData = $versionData['parcours'];

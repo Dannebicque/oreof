@@ -47,7 +47,7 @@ class ApiJsonExport {
                         'libelle' => $lastVersionData['parcours']->getDisplay(),
                         'url' => $this->router->generate(
                             'app_parcours_export_json_urca_cfvu_valid', 
-                            ['parcoursVersion' => $lastVersion[0]->getId()], 
+                            ['parcours' => $lastVersion[0]->getParcours()->getId()], 
                             UrlGeneratorInterface::ABSOLUTE_URL
                         )
                     ];
