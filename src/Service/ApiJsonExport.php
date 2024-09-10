@@ -32,6 +32,7 @@ class ApiJsonExport {
     }
 
     public function generateApiVersioning(
+        string $hostname,
         SymfonyStyle $io = null
     ){
         $dataJSON = [];
@@ -46,6 +47,8 @@ class ApiJsonExport {
             $io->progressStart($countProgress);
         }
         
+        $urlPrefix = "https://" . $hostname;
+
         foreach($formationArray as $formation){
             $tParcours = [];
             foreach($formation->getParcours() as $parcours){
@@ -56,10 +59,10 @@ class ApiJsonExport {
                     $tParcours[] = [
                         'id' => $parcours->getId(),
                         'libelle' => $lastVersionData['parcours']->getDisplay(),
-                        'url' => $this->router->generate(
+                        'url' => $urlPrefix . $this->router->generate(
                             'app_parcours_export_json_urca_cfvu_valid', 
                             ['parcours' => $lastVersion[0]->getParcours()->getId()], 
-                            UrlGeneratorInterface::ABSOLUTE_URL
+                            UrlGeneratorInterface::ABSOLUTE_PATH
                         )
                     ];
                     ++$countParcours;
