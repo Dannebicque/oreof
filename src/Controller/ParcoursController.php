@@ -796,10 +796,16 @@ class ParcoursController extends BaseController
         $faculteEcoleInstitut = ["-"];
         // Si on a au niveau du parcours
         if($parcoursVersionData->getComposanteInscription()?->getLibelle() !== null) {
-            if ($parcoursVersionData->getComposanteInscription()?->getComposanteParent() === null) {
+            
+            $composanteInscriptionParent = $entityManager->getRepository(Parcours::class)
+                ->findOneById($parcoursVersion->getParcours()->getId())
+                ->getComposanteInscription()
+                ?->getComposanteParent();
+
+            if ($composanteInscriptionParent === null) {
                 $faculteEcoleInstitut = [$parcoursVersionData->getComposanteInscription()?->getLibelle()];
             } else {
-                // $faculteEcoleInstitut = [$parcours->getComposanteInscription()?->getComposanteParent()?->getLibelle()];
+                $faculteEcoleInstitut = [$composanteInscriptionParent->getLibelle()];
             }
         }
         // Sinon, on prend les composantes d'inscription de la formation
