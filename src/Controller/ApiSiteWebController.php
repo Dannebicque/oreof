@@ -86,11 +86,8 @@ class ApiSiteWebController extends AbstractController
 
     #[Route('/api/site/web/versioning_json/', name: 'api_site_web_versioning_json')]
     public function indexVersioningJson(
-        ApiJsonExport $apiJsonExport,
         Filesystem $fs
     ) : Response {
-        ini_set('memory_limit', '2500M');
-        ini_set('max_execution_time', '300');
 
         $filename = "api_json_urca_versioning.json";
         $path = __DIR__ . "/../../public/api_json/";
@@ -100,31 +97,7 @@ class ApiSiteWebController extends AbstractController
             return new JsonResponse($api, json: true);
         }
 
-        $apiJson = $apiJsonExport->generateApiVersioning();
-        $fs->appendToFile($path . $filename, json_encode($apiJson));
-
-        return new JsonResponse($apiJson);
+        return new JsonResponse(["error" => "API File does not exist."]);
     }
 
-    #[IsGranted('ROLE_ADMIN')]
-    #[Route('/api/site/web/versioning_json/renew')]
-    public function apiVersioningJsonRenew(
-        ApiJsonExport $apiJsonExport,
-        Filesystem $fs
-    ) : Response {
-        ini_set('memory_limit', '2500M');
-        ini_set('max_execution_time', '300');
-
-        $filename = "api_json_urca_versioning.json";
-        $path = __DIR__ . "/../../public/api_json/";
-
-        if($fs->exists($path . $filename)){
-            $now = (new DateTime())->format('d-m-Y_H-i');
-            $fs->rename($path . $filename, $path . $now . "-" .  $filename);
-            $apiJson = $apiJsonExport->generateApiVersioning();
-            $fs->appendToFile($path . $filename, json_encode($apiJson));
-        }
-
-        return $this->redirectToRoute("api_site_web_versioning_json");
-    }
 }

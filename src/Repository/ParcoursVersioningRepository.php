@@ -42,6 +42,12 @@ class ParcoursVersioningRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function countSavedParcours(){
+        return $this->createQueryBuilder('pv')
+            ->select("count(DISTINCT (pv.parcours)) AS nb_parcours")
+            ->getQuery()->getResult();
+    }
+
 //    /**
 //     * @return ParcoursVersioning[] Returns an array of ParcoursVersioning objects
 //     */

@@ -6,6 +6,7 @@ use App\Classes\GetHistorique;
 use App\Entity\Formation;
 use App\Entity\ParcoursVersioning;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class ApiJsonExport {
@@ -30,11 +31,21 @@ class ApiJsonExport {
         $this->router = $router;
     }
 
-    public function generateApiVersioning(){
+    public function generateApiVersioning(
+        SymfonyStyle $io = null
+    ){
         $dataJSON = [];
         $formationArray = $this->entityManager->getRepository(Formation::class)->findAll();
         $countParcours = 0;
 
+        $countProgress = $this->entityManager
+            ->getRepository(ParcoursVersioning::class)
+            ->countSavedParcours()[0]['nb_parcours'];
+
+        if($io){
+            $io->progressStart($countProgress);
+        }
+        
         foreach($formationArray as $formation){
             $tParcours = [];
             foreach($formation->getParcours() as $parcours){
@@ -52,6 +63,9 @@ class ApiJsonExport {
                         )
                     ];
                     ++$countParcours;
+                    if($io){
+                        $io->progressAdvance();
+                    }
                 }
             }
             $dataJSON[] = [
@@ -63,6 +77,10 @@ class ApiJsonExport {
                     ?->getDate()
                     ?->format('Y-m-d H:i:s') ?? null,
             ];
+        }
+
+        if($io){
+            $io->progressFinish();
         }
 
         return $dataJSON;
