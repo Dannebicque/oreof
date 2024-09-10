@@ -89,7 +89,8 @@ class ApiSiteWebController extends AbstractController
         ApiJsonExport $apiJsonExport,
         Filesystem $fs
     ) : Response {
-        ini_set('memory_limit', '1024M');
+        ini_set('memory_limit', '1500M');
+        ini_set('max_execution_time', '120');
 
         $filename = "api_json_urca_versioning.json";
         $path = __DIR__ . "/../../public/api_json/";
