@@ -241,8 +241,8 @@ class FicheMatiereController extends AbstractController
         return $this->json(false);
     }
 
-    #[Route('/{ec}/{parcours}/maquette_iframe', name: 'app_fiche_matiere_maquette_iframe')]
-    public function getMaquetteIframe(ElementConstitutif $ec, Parcours $parcours) : Response {
+    #[Route('/{ec}/{parcours}/{ects}/maquette_iframe', name: 'app_fiche_matiere_maquette_iframe')]
+    public function getMaquetteIframe(ElementConstitutif $ec, Parcours $parcours, float $ects) : Response {
         $ficheMatiere = $ec->getFicheMatiere();
 
         return $this->render('fiche_matiere/maquette_iframe.html.twig', [
@@ -250,7 +250,8 @@ class FicheMatiereController extends AbstractController
             'typeDiplome' => $ficheMatiere->getParcours()?->getFormation()?->getTypeDiplome(),
             'formation' => $ficheMatiere->getParcours()?->getFormation(),
             'maquetteOrigineURL' => $parcours ? $this->generateUrl('app_parcours_maquette_iframe', ['parcours' => $parcours->getId()]) : "#",
-            'element_constitutif' => $ec
+            'element_constitutif' => $ec,
+            'ects' => $ects
         ]);
     }
 

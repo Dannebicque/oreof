@@ -351,4 +351,47 @@ class FicheMatiereRepository extends ServiceEntityRepository
 
         return $qb->getQuery()->getResult();
     }
+
+    public function findCountForKeyword(string $keyword) : array {
+        $qb = $this->createQueryBuilder('fm');
+
+        $qb = $qb->select('COUNT(fm.id) AS nombre_total')
+            ->where(
+                $qb->expr()->like('UPPER(fm.description)', 'UPPER(:keyword)')
+            )
+            ->orWhere(
+                $qb->expr()->like('UPPER(fm.objectifs)', 'UPPER(:keyword)')
+            )
+            ->setParameter('keyword', '%' . $keyword . '%')
+        ->getQuery()
+        ->getResult();
+
+        return $qb;
+
+    }
+
+    public function findFicheMatiereWithKeywordAndPagination(string $keyword, int $pageNumber) : array {
+        $qb = $this->createQueryBuilder('fm');
+
+        $qb = $qb->select(
+            [
+                'fm.id AS fiche_matiere_id', 'fm.slug AS fiche_matiere_slug',
+                'p.id AS parcours_id', 'p.libelle AS parcours_libelle' 
+            ]
+        )
+        ->join('fm.parcours', 'p', 'WITH', 'fm.parcours = p.id')
+        ->where(
+            $qb->expr()->like('UPPER(fm.description)', 'UPPER(:keyword)')
+        )
+        ->orWhere(
+            $qb->expr()->like('UPPER(fm.objectifs)', 'UPPER(:keyword)')
+        )
+        ->setParameter('keyword', '%' . $keyword . '%')
+        ->setFirstResult($pageNumber * 30)
+        ->setMaxResults(30)
+        ->getQuery()
+        ->getResult();
+
+        return $qb;
+    }
 }

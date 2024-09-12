@@ -20,6 +20,8 @@ input[name='keyword_1']::placeholder {
 
 {% block content %}
 
+{% set typeRecherche = 'parcours' %}
+
 <div class="row justify-content-center mt-5">
     <div class="col-8 mt-5 mb-3">
         <form action="{{ path('app_search_action') }}">

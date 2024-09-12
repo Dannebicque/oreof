@@ -40,3 +40,6 @@ publication-cron/
 
 ### Dossier d'export
 export/
+
+### API JSON Versioning ###
+public/api_json/
