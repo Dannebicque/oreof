@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.31.25](https://github.com/Dannebicque/oreof/compare/v1.31.24...v1.31.25) (2024-09-13)
+
+
+### Features
+
+* Plaquette ([71afa03](https://github.com/Dannebicque/oreof/commit/71afa032f039cf0c5d2dce4ce0b1bbea18c3db0f))
+
 ### [1.31.24](https://github.com/Dannebicque/oreof/compare/v1.31.23...v1.31.24) (2024-09-13)
 
 
