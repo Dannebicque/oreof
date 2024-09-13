@@ -376,7 +376,8 @@ class FicheMatiereRepository extends ServiceEntityRepository
         $qb = $qb->select(
             [
                 'fm.id AS fiche_matiere_id', 'fm.slug AS fiche_matiere_slug',
-                'p.id AS parcours_id', 'p.libelle AS parcours_libelle' 
+                'fm.libelle AS fiche_matiere_libelle', 'p.id AS parcours_id',
+                'p.libelle AS parcours_libelle' 
             ]
         )
         ->join('fm.parcours', 'p', 'WITH', 'fm.parcours = p.id')

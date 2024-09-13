@@ -1,3 +1,10 @@
+<div
+    id="dataFicheMatiereSearch"
+    data-nb-fiches-total="{{ nombreTotal }}"
+    data-keyword="{{ keyword_1 }}"
+    data-fetch-url="{{ path('app_search_fiche_matiere_pagination', {page: 1234567890, mot_cle: 'µ#+'}) }}"
+    class="d-none">
+</div>
 {% if nombreTotal > 30 %}
     <div class="row justify-content-center">
         <div class="d-flex col-3 col-md-2 col-xl-1 justify-content-center">
@@ -11,3 +18,8 @@
         </div>
     </div>
 {% endif %}
+<div class="row justify-content-center">
+    <div class="col-8 rootNodeForFicheMatiereList">
+    
+    </div>
+</div>
