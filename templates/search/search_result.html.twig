@@ -7,6 +7,11 @@
 {% block stylesheets %}
 {{ parent() }}
 
+{% if typeRecherche == 'ficheMatiere' %}
+    <link rel="stylesheet" href="{{ asset('search/search.css') }}">
+{% endif %}
+
+
 <style>
 a.fiche-matiere-search-link span {
     text-decoration: underline;
@@ -50,12 +55,22 @@ a.fiche-matiere-search-link span {
     {{ keyword_1 is not empty ? 'Mot-clé : ' ~ keyword_1 : 'Aucun mot-clé renseigné.' }}
 </p>
 
-{% if parcoursArray|length > 0 %}
+{% if typeRecherche == 'parcours' and parcoursArray|length > 0 %}
 <p class="fs-3 text-primary text-center mt-5">
     {{ 
        parcoursArray|length >= 2 
        ? parcoursArray|length ~ ' parcours contiennent le mot-clé saisi en description'
        : parcoursArray|length ~ ' parcours contient le mot-clé saisi en description'
+    }} 
+</p>
+{% endif %}
+
+{% if typeRecherche == 'ficheMatiere' %}
+<p class="fs-3 text-primary text-center mt-5">
+    {{ 
+       nombreTotal >= 2 
+       ? nombreTotal ~ ' fiches matières contiennent le mot-clé saisi en description'
+       : nombreTotal ~ ' fiche matière contient le mot-clé saisi en description'
     }} 
 </p>
 {% endif %}
@@ -71,12 +86,12 @@ a.fiche-matiere-search-link span {
                 name="keyword_1"
             >
             <div class="row justify-content-center">
-                <div class="col-10 col-md-8 col-lg-6 col-xl-4">
+                <div class="d-flex col-10 col-md-8 col-lg-6 col-xl-4 justify-content-center">
                     {{ include('search/search_type.html.twig') }}
                 </div>
             </div>
             <div class="row justify-content-center">
-                <div class="col-10 col-md-8 col-lg-5 text-start">
+                <div class="col-10 col-md-8 col-lg-5 text-center">
                     <button class="btn btn-sm btn-primary border border-white rounded mt-3">
                         Rechercher
                     </button>
@@ -86,127 +101,11 @@ a.fiche-matiere-search-link span {
     </div>
 </div>
 
-<div class="row justify-content-center" id="rootListElement"
-     data-fiche-matiere-url="{{ absolute_url(path('app_fiche_matiere_show', {slug: 'µ#+'})) }}"
->
-    <div class="col-8">
-        {% if parcoursArray|length > 0 %}
-                {% for p in parcoursArray %}
-                    <div class="col-12 border border-primary rounded my-4">
-                        <div class="row p-2 mt-1">
-                            {% if isParcoursDefautArray[loop.index0] == true %}
-                                <div class="col-8">
-                                    <a 
-                                        href="{{ path('app_formation_show', {slug: p.formation_slug}) }}"
-                                        class="text-primary font-weight-bold"
-                                    >
-                                        {{ resultArrayBadge[loop.index0]['libelleMention'] }}
-                                    </a>
-                                </div>
-                                <div class="col-4">
-                                    <span class="text-end">
-                                        Sigle : {{ p.formation_sigle }}
-                                    </span>
-                                </div>
-                            {% else %}
-                                <div class="col-8">
-                                    <a 
-                                        href="{{ path('app_parcours_show', {id: p.parcours_id}) }}"
-                                        class="text-primary font-weight-bold"
-                                    >
-                                        {{ resultArrayBadge[loop.index0]['libelleMention'] }}
-                                        {{ p.parcours_libelle }}
-                                    </a>
-                                </div>
-                                <div class="col-4">
-                                    <span class="text-end">
-                                        Sigle : {{ p.parcours_sigle }}
-                                    </span>
-                                </div>
-                            {% endif %}                            
-                        </div>
-                        <div class="row p-2 mt-2">
-                            <div>
-                                {% if 'objectifsParcours' in resultArrayBadge[loop.index0] %}
-                                    <span class="badge rounded-pill text-bg-success">
-                                        Objectifs du parcours
-                                    </span>
-                                {% endif %}
-                                {% if 'poursuitesEtudes' in resultArrayBadge[loop.index0] %}
-                                    <span class="badge rounded-pill text-bg-warning">
-                                        Poursuite d'études
-                                    </span> 
-                                {% endif %}
-                                {% if 'contenuFormation' in resultArrayBadge[loop.index0] %}
-                                    <span class="badge rounded-pill text-bg-primary">
-                                        Contenu de la formation
-                                    </span>
-                                {% endif %}
-                                {% if 'resultatsAttendus' in resultArrayBadge[loop.index0] %}
-                                    <span class="badge rounded-pill text-bg-info">
-                                        Résultats attendus
-                                    </span>
-                                {% endif %}
-                                {% if 'objectifsFormation' in resultArrayBadge[loop.index0] %}
-                                    <span class="badge rounded-pill text-bg-secondary">
-                                        Objectifs de la formation
-                                    </span>
-                                {% endif %}
-                            </div>
-                        </div>
-                        {% if resultArrayBadge[loop.index0]['fichesMatieres'] is defined 
-                              and resultArrayBadge[loop.index0]['fichesMatieres']|length > 0
-                        %}
-                        {% set nbFichesMatieres = resultArrayBadge[loop.index0]['fichesMatieres']|length %}
-                        <div class="col mb-2">
-                            <a href="#" class="fiche-matiere-search-link" 
-                               data-bs-toggle="modal" 
-                               data-bs-target="#associatedFicheMatiereModal"
-                            >
-                                <span 
-                                    class="font-weight-bold ms-3 pb-2 text-dark"
-                                    data-fetch-url="{{ absolute_url(path('app_fiche_matiere_search', 
-                                            { parcours: p.parcours_id, keyword: keyword_1}))
-                                    }}"
-                                    data-number-associated-fiches-matieres="{{ nbFichesMatieres }}"
-                                >
-                                    {{ 
-                                        nbFichesMatieres > 1 
-                                        ? nbFichesMatieres ~ ' fiches matières associées' 
-                                        : nbFichesMatieres ~ ' fiche matière associée' }}
-                                </span>
-                            </a>
-                        </div>
-                        {% endif %}
-                    </div>
-                {% endfor %}
-        {% else %}
-            <h1 class="fs-4 mt-4 text-dark text-center">
-                Aucun parcours trouvé pour le mot-clé fourni...
-            </h1>
-        {% endif %}
-    </div>
-</div>
-
-<div class="modal" id="associatedFicheMatiereModal">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="titre-modale-recherche">
-                    
-                </h5>
-            </div>
-            <div class="modal-body text-center" id="associated-fiche-matiere-modal-body">
-                
-            </div>
-            <div class="modal-footer">
-                <button type="button" data-bs-dismiss="modal" class="btn btn-primary">
-                    Fermer
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
+{% if typeRecherche == 'parcours' %}
+    {{ include('search/search_result_parcours.html.twig') }}
+{% elseif typeRecherche == 'ficheMatiere' %}
+    {{ include('search/search_result_fiche_matiere.html.twig') }}
+{% endif %}
 
 
 {% endblock %}
@@ -214,6 +113,10 @@ a.fiche-matiere-search-link span {
 {% block javascripts %}
 {{ parent() }}
 
-<script src="{{ asset('search/search.js') }}"></script>
+{% if typeRecherche == 'parcours' %}
+    <script src="{{ asset('search/search_parcours.js') }}"></script>
+{% elseif typeRecherche == 'ficheMatiere' %}
+    <script src="{{ asset('search/search_fiche_matiere.js') }}"></script>
+{% endif %}
 
 {% endblock %}

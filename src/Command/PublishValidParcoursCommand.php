@@ -120,7 +120,7 @@ class PublishValidParcoursCommand extends Command
                         $historiqueParcours->setParcours($p);
                         $historiqueParcours->setDate($now);
                         $historiqueParcours->setUser($adminUser);
-                        $historiqueParcours->setEtape('publie');
+                        $historiqueParcours->setEtape('valide_a_publier');
                         $historiqueParcours->setEtat('valide');
 
                         $dpeParcours = $p->getDpeParcours()->last();

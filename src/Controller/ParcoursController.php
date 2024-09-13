@@ -747,4 +747,109 @@ class ParcoursController extends BaseController
             ) ;
         }
     }
+
+    #[Route('/{parcours}/export-json-urca/cfvu_valid', name: 'app_parcours_export_json_urca_cfvu_valid')]
+    public function getJsonExportUrcaCfvuValid(
+        Parcours $parcours,
+        EntityManagerInterface $entityManager,
+        VersioningParcours $versioningParcours
+    ): Response {
+
+        $parcoursVersion = $entityManager
+            ->getRepository(ParcoursVersioning::class)
+            ->findLastCfvuVersion($parcours);
+        if(count($parcoursVersion) === 0){
+            throw $this->createNotFoundException('Version not found.');
+        }
+
+        $parcoursVersion = $parcoursVersion[0];
+
+        $versionData = $versioningParcours->loadParcoursFromVersion($parcoursVersion);
+        $parcoursVersionData = $versionData['parcours'];
+        $dtoVersionData = $versionData['dto'];
+
+
+        $typeDiplome = $parcoursVersionData->getFormation()?->getTypeDiplome();
+        $ects = $dtoVersionData->heuresEctsFormation->sommeFormationEcts;
+
+        // Gestion de la localisation
+        // Vide par défaut : -
+        $localisationMetadata = ["-"];
+        // Si l'on a une ville sur le parcours
+        if($parcoursVersionData->getLocalisation()?->getLibelle() !== null) {
+            $localisationMetadata = [$parcoursVersionData->getLocalisation()?->getLibelle()];
+        }
+        // Sinon on prend au niveau de la composante
+        else {
+            $villeArray = $parcoursVersionData->getFormation()?->getLocalisationMention()?->toArray();
+            if(count($villeArray) > 0) {
+                $localisationMetadata = array_map(
+                    fn ($ville) => $ville->getLibelle(),
+                    $villeArray
+                );
+            }
+        }
+
+        // Gestion de 'faculte-ecole-institut'
+        // ---> Il peut y avoir plusieurs composantes d'inscription au niveau de la formation
+        // "-" par défaut
+        $faculteEcoleInstitut = ["-"];
+        // Si on a au niveau du parcours
+        if($parcoursVersionData->getComposanteInscription()?->getLibelle() !== null) {
+            
+            $composanteInscriptionParent = $entityManager->getRepository(Parcours::class)
+                ->findOneById($parcoursVersion->getParcours()->getId())
+                ->getComposanteInscription()
+                ?->getComposanteParent();
+
+            if ($composanteInscriptionParent === null) {
+                $faculteEcoleInstitut = [$parcoursVersionData->getComposanteInscription()?->getLibelle()];
+            } else {
+                $faculteEcoleInstitut = [$composanteInscriptionParent->getLibelle()];
+            }
+        }
+        // Sinon, on prend les composantes d'inscription de la formation
+        else {
+            if(count($parcoursVersionData->getFormation()?->getComposantesInscription()->toArray()) > 0) {
+                $faculteEcoleInstitut = array_map(
+                    fn ($composanteInscription) => $composanteInscription->getLibelle(),
+                    $parcoursVersionData->getFormation()?->getComposantesInscription()->toArray()
+                );
+            }
+        }
+
+        $typeF = [];
+        $typeF[] = $typeDiplome?->getLibelle() ?? '-';
+
+        $typeParcours = $entityManager->getRepository(Parcours::class)
+            ->findOneById($parcoursVersion->getParcours()->getId())
+            ->getTypeParcours();
+
+        if ($typeParcours === TypeParcoursEnum::TYPE_PARCOURS_CPI) {
+            $typeF[] = 'Diplômes d’ingénieur / CMI / CPI';
+        } elseif ($typeParcours === TypeParcoursEnum::TYPE_PARCOURS_LAS1) {
+            $typeF[] = 'Licence Accès Santé';
+        } elseif ($typeParcours === TypeParcoursEnum::TYPE_PARCOURS_LAS23) {
+            $typeF[] = 'Licence Accès Santé';
+        }
+
+        $data = [
+            'description' => "",
+            'ects' => $ects ?? 0,
+            'metadata' => [
+                'domaine' => $parcoursVersionData->getFormation()?->getDomaine()?->getLibelle() ?? '-',
+                'type-formation' => $typeF,
+                'localisation' => $localisationMetadata,
+                'faculte-ecole-institut' => $faculteEcoleInstitut,
+                'public-concerne' => $parcoursVersionData->getRegimeInscription() ?? [], //Certains sont des tableaux, d'autres en JSON
+                'niveau-francais' => $parcoursVersionData->getNiveauFrancais()?->libelle() ?? '-',
+            ],
+            'xml-lheo' => $this->generateUrl('app_parcours_export_xml_lheo', ['parcours' => $parcoursVersion->getParcours()->getId()], UrlGenerator::ABSOLUTE_URL),
+            // 'fiche-pdf' => $this->generateUrl('app_parcours_export', ['parcours' => $parcours->getId()], UrlGenerator::ABSOLUTE_URL),
+            'maquette-pdf' => $this->generateUrl('app_parcours_mccc_export_cfvu_valid', ['parcours' => $parcoursVersion->getParcours()->getId(), 'format' => 'simplifie'], UrlGenerator::ABSOLUTE_URL),
+            'maquette-json' => $this->generateUrl('app_parcours_export_maquette_json_validee_cfvu', ['parcours' => $parcoursVersion->getParcours()->getId()], UrlGenerator::ABSOLUTE_URL),
+        ];
+
+        return new JsonResponse($data);
+    }
 }

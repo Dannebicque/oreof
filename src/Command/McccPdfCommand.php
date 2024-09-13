@@ -246,7 +246,7 @@ class McccPdfCommand extends Command
                     $lastDpe = $parcours->getDpeParcours()->last();
 
                     $dateHistoriquePublication = $this->getHistorique
-                        ->getHistoriqueParcoursLastStep($lastDpe, 'publie')
+                        ->getHistoriqueParcoursLastStep($lastDpe, 'valide_a_publier')
                         ?->getDate();
                                         
                     $dateFormat = 'd-m-Y';

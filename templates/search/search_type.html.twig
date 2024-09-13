@@ -2,7 +2,7 @@
     <div class="form-check">
         <input class="form-check-input" type="radio" 
             name="searchType" value="parcours" 
-            id="searchParcours" checked
+            id="searchParcours" {{ typeRecherche == 'parcours' ? 'checked' : '' }}
         >
         <label class="form-check-label text-dark" for="searchParcours">
             Parcours
@@ -12,6 +12,7 @@
         <input class="form-check-input" type="radio" 
             name="searchType" value="ficheMatiere" 
             id="searchFicheMatiere"
+            {{ typeRecherche == 'ficheMatiere' ? 'checked' : ''}}
         >
         <label class="form-check-label text-dark" for="searchFicheMatiere">
             Fiche matière

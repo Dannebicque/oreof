@@ -31,7 +31,7 @@
             {% if workflow_has_marked_place(ec.elementConstitutif.ficheMatiere, 'publie') or workflow_has_marked_place(ec.elementConstitutif.ficheMatiere, 'valide_pour_publication') %}
                 <a href="{{ path(
                     'app_fiche_matiere_maquette_iframe',
-                    { ec: ec.elementConstitutif.id, parcours: parcours.parcours.id }
+                    { ec: ec.elementConstitutif.id, parcours: parcours.parcours.id, ects: ec.heuresEctsEc.ects }
                 ) }}">
              <span>
             EC {{ IsEcEnfant ? indexEC ~ '.' ~ alphabet|slice((indexECEnfant - 1), 1) : indexEC }} -
