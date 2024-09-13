@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.31.24](https://github.com/Dannebicque/oreof/compare/v1.31.23...v1.31.24) (2024-09-13)
+
+
+### Features
+
+* Accès parcours ([949e615](https://github.com/Dannebicque/oreof/commit/949e615014c33497e337b0061e141d42d1776755))
+
 ### [1.31.23](https://github.com/Dannebicque/oreof/compare/v1.31.22...v1.31.23) (2024-09-06)
 
 
