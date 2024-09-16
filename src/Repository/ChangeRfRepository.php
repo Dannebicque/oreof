@@ -36,8 +36,8 @@ class ChangeRfRepository extends ServiceEntityRepository
                 ->innerJoin('c.formation', 'f')
                 ->andWhere('f.composantePorteuse = :composante')
                 ->setParameter('composante', $composante)
-                ->andWhere('c.etatDemande = :typeValidation')
-                ->setParameter('typeValidation', $etat)
+                ->andWhere("JSON_CONTAINS(c.etatDemande, :typeValidation) = 1")
+                ->setParameter('typeValidation', json_encode([$etat => 1]))
                 ->orderBy('c.dateDemande', 'DESC');
         }
 
