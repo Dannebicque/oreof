@@ -37,10 +37,15 @@ document.addEventListener('DOMContentLoaded', async (e) => {
 
 
 async function displayResult(fetchUrl, pageNumber, keyword, parcoursViewUrl, ficheMatiereViewUrl){
+    emptyResultList();
+    displayLoadingIcon();
     let url = configureFetchUrl(fetchUrl, pageNumber, keyword);
     let result = await fetchResultPage(url);
-    updateDomWithResult(result, parcoursViewUrl, ficheMatiereViewUrl);
-    updatePageLabel(pageNumber);
+    if(result){
+        hideLoadingIcon();
+        updateDomWithResult(result, parcoursViewUrl, ficheMatiereViewUrl);
+        updatePageLabel(pageNumber);
+    }
 }
 
 function updatePageLabel(pageNumber){
@@ -62,11 +67,7 @@ function configureFetchUrl(baseUrl, pageNumber, keyword){
 }
 
 function updateDomWithResult(jsonResult, parcoursViewUrl, ficheMatiereViewUrl){
-    let rootNode = document.querySelector(".rootNodeForFicheMatiereList");
-
-    while(rootNode.hasChildNodes()){
-        rootNode.removeChild(rootNode.firstChild);
-    }    
+    let rootNode = document.querySelector(".rootNodeForFicheMatiereList");  
 
     jsonResult.forEach(fiche => {
         let row = document.createElement('div');
@@ -98,6 +99,24 @@ function updateDomWithResult(jsonResult, parcoursViewUrl, ficheMatiereViewUrl){
 
         rootNode.appendChild(row);
     });
+}
+
+function displayLoadingIcon(){
+    let loadingIcon = document.createElement('i');
+    loadingIcon.className = "fa-duotone fa-spinner spinning-icon mt-4";
+    let rootNode = document.querySelector('.loading-icon')
+    rootNode.appendChild(loadingIcon);
+}
+
+function hideLoadingIcon(){
+    document.querySelector('.spinning-icon').remove();
+}
+
+function emptyResultList(){
+    let rootNode = document.querySelector(".rootNodeForFicheMatiereList");
+    while(rootNode.hasChildNodes()){
+        rootNode.removeChild(rootNode.firstChild);
+    }   
 }
 
 
