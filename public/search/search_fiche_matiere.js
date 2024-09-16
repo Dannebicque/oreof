@@ -102,6 +102,7 @@ function updateDomWithResult(jsonResult, parcoursViewUrl, ficheMatiereViewUrl){
 }
 
 function displayLoadingIcon(){
+    hideLoadingIcon();
     let loadingIcon = document.createElement('i');
     loadingIcon.className = "fa-duotone fa-spinner spinning-icon mt-4";
     let rootNode = document.querySelector('.loading-icon')
@@ -109,7 +110,9 @@ function displayLoadingIcon(){
 }
 
 function hideLoadingIcon(){
-    document.querySelector('.spinning-icon').remove();
+    if(document.querySelector('.spinning-icon')){
+        document.querySelector('.spinning-icon').remove();
+    }
 }
 
 function emptyResultList(){
