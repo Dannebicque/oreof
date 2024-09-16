@@ -43,7 +43,7 @@ async function displayResult(fetchUrl, pageNumber, keyword, parcoursViewUrl, fic
     let result = await fetchResultPage(url);
     if(result){
         hideLoadingIcon();
-        updateDomWithResult(result, parcoursViewUrl, ficheMatiereViewUrl);
+        updateDomWithResult(result, parcoursViewUrl, ficheMatiereViewUrl, keyword);
         updatePageLabel(pageNumber);
     }
 }
@@ -66,7 +66,7 @@ function configureFetchUrl(baseUrl, pageNumber, keyword){
     return url;
 }
 
-function updateDomWithResult(jsonResult, parcoursViewUrl, ficheMatiereViewUrl){
+function updateDomWithResult(jsonResult, parcoursViewUrl, ficheMatiereViewUrl, keyword){
     let rootNode = document.querySelector(".rootNodeForFicheMatiereList");  
 
     jsonResult.forEach(fiche => {
@@ -76,10 +76,28 @@ function updateDomWithResult(jsonResult, parcoursViewUrl, ficheMatiereViewUrl){
         let ficheMatiereTitle = document.createElement('div');
         ficheMatiereTitle.classList.add('col-4');
         
+        let ficheMatiereTitleDiv = document.createElement('div');
+        ficheMatiereTitleDiv.classList.add('col-12');
+
         let ficheMatiereLibelle = document.createElement('a');
         ficheMatiereLibelle.textContent = fiche.fiche_matiere_libelle;
         ficheMatiereLibelle.setAttribute('href', ficheMatiereViewUrl.replace("%C2%B5%25%24%C2%A3", fiche.fiche_matiere_slug));
-        ficheMatiereTitle.appendChild(ficheMatiereLibelle);
+        ficheMatiereTitleDiv.appendChild(ficheMatiereLibelle);
+
+        let ficheMatierePillDiv = document.createElement('div');
+        ficheMatierePillDiv.classList.add('col-12', 'mt-3');
+
+        ficheMatiereTitle.appendChild(ficheMatiereTitleDiv);
+        ficheMatiereTitle.appendChild(ficheMatierePillDiv);
+
+        if(isStringContainingText(fiche.fiche_matiere_objectifs, keyword)){
+            let objectifsPill = displayBadge('Objectifs', 'warning');
+            ficheMatierePillDiv.appendChild(objectifsPill);
+        }
+        if(isStringContainingText(fiche.fiche_matiere_description, keyword)){
+            let descriptionPill = displayBadge('Description', 'info');
+            ficheMatierePillDiv.appendChild(descriptionPill);
+        }
 
         let parcoursTitle = document.createElement('div');
         parcoursTitle.classList.add('col-8');
@@ -120,6 +138,24 @@ function emptyResultList(){
     while(rootNode.hasChildNodes()){
         rootNode.removeChild(rootNode.firstChild);
     }   
+}
+
+function isStringContainingText(string, needle){
+    if(string){
+        return string.toUpperCase().includes(
+            needle.toUpperCase()
+        );
+    }
+
+    return false;
+}
+
+function displayBadge(text, color){
+    let pill = document.createElement('span');
+    pill.classList.add('badge', 'rounded-pill', `text-bg-${color}`);
+    pill.textContent = text;
+
+    return pill;
 }
 
 
