@@ -8,14 +8,13 @@ document.addEventListener('DOMContentLoaded', async (e) => {
     let keyword = dataObject.getAttribute('data-keyword');
     let fetchUrl = dataObject.getAttribute('data-fetch-url');
     let parcoursViewUrl = dataObject.getAttribute('data-parcours-view-url');
-
-    console.log(fetchUrl);
+    let ficheMatiereViewUrl = dataObject.getAttribute('data-fiche-matiere-view-url');
 
     let buttonPageRight = document.querySelector('i.button-page-right');
     let buttonPageLeft = document.querySelector('i.button-page-left');
 
     // Affichage du résultat pour la page 1
-    await displayResult(fetchUrl, currentPage, keyword, parcoursViewUrl);
+    await displayResult(fetchUrl, currentPage, keyword, parcoursViewUrl, ficheMatiereViewUrl);
 
     /**
      * Navigation vers la page souhaitée
@@ -23,24 +22,24 @@ document.addEventListener('DOMContentLoaded', async (e) => {
     buttonPageLeft.addEventListener('click', async e => {
         if(currentPage > 1){
             currentPage -= 1;
-            await displayResult(fetchUrl, currentPage, keyword, parcoursViewUrl);
+            await displayResult(fetchUrl, currentPage, keyword, parcoursViewUrl, ficheMatiereViewUrl);
         }
     })
 
     buttonPageRight.addEventListener('click', async e => {
         if(currentPage < totalPageNumber){
             currentPage += 1;
-            await displayResult(fetchUrl, currentPage, keyword, parcoursViewUrl);
+            await displayResult(fetchUrl, currentPage, keyword, parcoursViewUrl, ficheMatiereViewUrl);
         }
     });
     /*************************************/
 });
 
 
-async function displayResult(fetchUrl, pageNumber, keyword, parcoursViewUrl){
+async function displayResult(fetchUrl, pageNumber, keyword, parcoursViewUrl, ficheMatiereViewUrl){
     let url = configureFetchUrl(fetchUrl, pageNumber, keyword);
     let result = await fetchResultPage(url);
-    updateDomWithResult(result, parcoursViewUrl);
+    updateDomWithResult(result, parcoursViewUrl, ficheMatiereViewUrl);
     updatePageLabel(pageNumber);
 }
 
@@ -62,7 +61,7 @@ function configureFetchUrl(baseUrl, pageNumber, keyword){
     return url;
 }
 
-function updateDomWithResult(jsonResult, parcoursViewUrl){
+function updateDomWithResult(jsonResult, parcoursViewUrl, ficheMatiereViewUrl){
     let rootNode = document.querySelector(".rootNodeForFicheMatiereList");
 
     while(rootNode.hasChildNodes()){
@@ -73,9 +72,13 @@ function updateDomWithResult(jsonResult, parcoursViewUrl){
         let row = document.createElement('div');
         row.classList.add("row", "my-3", "py-3", "px-2", "border", "border-primary", "rounded");
 
-        let title = document.createElement('div');
-        title.classList.add('col-4');
-        title.textContent = fiche.fiche_matiere_libelle;
+        let ficheMatiereTitle = document.createElement('div');
+        ficheMatiereTitle.classList.add('col-4');
+        
+        let ficheMatiereLibelle = document.createElement('a');
+        ficheMatiereLibelle.textContent = fiche.fiche_matiere_libelle;
+        ficheMatiereLibelle.setAttribute('href', ficheMatiereViewUrl.replace("%C2%B5%25%24%C2%A3", fiche.fiche_matiere_slug));
+        ficheMatiereTitle.appendChild(ficheMatiereLibelle);
 
         let parcoursTitle = document.createElement('div');
         parcoursTitle.classList.add('col-8');
@@ -85,12 +88,13 @@ function updateDomWithResult(jsonResult, parcoursViewUrl){
             ${fiche.type_diplome_libelle ? fiche.type_diplome_libelle + " - " : ""}
             ${fiche.mention_libelle} - ${fiche.parcours_libelle} ${fiche.parcours_sigle ? '(' + fiche.parcours_sigle + ')' : ''}
         `;
+        parcoursLibelle.classList.add('text-primary', 'font-weight-bold');
         parcoursLibelle.setAttribute('href', parcoursViewUrl.replace("%C2%B5%25%24%C2%A3", fiche.parcours_id));
 
         parcoursTitle.appendChild(parcoursLibelle);
 
         row.appendChild(parcoursTitle);
-        row.appendChild(title);
+        row.appendChild(ficheMatiereTitle);
 
         rootNode.appendChild(row);
     });
