@@ -117,9 +117,7 @@ class FormationResponsableController extends BaseController
         ComposanteRepository $composanteRepository
     ): Response {
 
-        $demandes = $changeRfRepository->findBy([
-            'etatDemande' => EtatChangeRfEnum::soumis_cfvu
-        ], ['dateDemande' => 'DESC']);
+        $demandes = $changeRfRepository->findByTypeValidation(EtatChangeRfEnum::soumis_cfvu->value);
 
         $composantes = $composanteRepository->findAll();
         $tDemandes = [];
