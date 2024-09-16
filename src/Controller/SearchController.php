@@ -232,6 +232,11 @@ class SearchController extends AbstractController
             }
         }
 
+        $activeWorksheet->getColumnDimension('A')->setAutoSize(true);
+        $activeWorksheet->getColumnDimension('B')->setAutoSize(true);
+        $activeWorksheet->getColumnDimension('C')->setAutoSize(true);
+
+
         $now = (new DateTime())->format('d-m-Y');
         $path = __DIR__ . "/../../public/temp/";
         $filename =  "Export-recherche-fiche-matiere.xlsx";

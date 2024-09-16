@@ -20,6 +20,16 @@
         </div>
     </div>
 {% endif %}
+{% if nombreTotal > 1 %}
+<div class="row justify-content-center">
+    <div class="col-6 col-md-4 col-lg-3 col-xl-2 text-center my-5">
+        <a href="{{ path('app_search_fiche_matiere_export_excel', {mot_cle: keyword_1}) }}">
+            <button class="btn btn-sm btn-primary">
+                Télécharger les résultats
+            </button>
+        </a>
+    </div>
+</div>
 <div class="row justify-content-center">
     <div class="col-12 text-center loading-icon">
         <!-- Loading Icon -->
@@ -28,3 +38,4 @@
     
     </div>
 </div>
+{% endif %}

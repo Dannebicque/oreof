@@ -13,26 +13,28 @@ document.addEventListener('DOMContentLoaded', async (e) => {
     let buttonPageRight = document.querySelector('i.button-page-right');
     let buttonPageLeft = document.querySelector('i.button-page-left');
 
-    // Affichage du résultat pour la page 1
-    await displayResult(fetchUrl, currentPage, keyword, parcoursViewUrl, ficheMatiereViewUrl);
+    if(totalNumber > 1){
+        // Affichage du résultat pour la page 1
+        await displayResult(fetchUrl, currentPage, keyword, parcoursViewUrl, ficheMatiereViewUrl);
+        /**
+         * Navigation vers la page souhaitée
+         */
+        buttonPageLeft.addEventListener('click', async e => {
+            if(currentPage > 1){
+                currentPage -= 1;
+                await displayResult(fetchUrl, currentPage, keyword, parcoursViewUrl, ficheMatiereViewUrl);
+            }
+        })
+    
+        buttonPageRight.addEventListener('click', async e => {
+            if(currentPage < totalPageNumber){
+                currentPage += 1;
+                await displayResult(fetchUrl, currentPage, keyword, parcoursViewUrl, ficheMatiereViewUrl);
+            }
+        });
+        /*************************************/
+    }
 
-    /**
-     * Navigation vers la page souhaitée
-     */
-    buttonPageLeft.addEventListener('click', async e => {
-        if(currentPage > 1){
-            currentPage -= 1;
-            await displayResult(fetchUrl, currentPage, keyword, parcoursViewUrl, ficheMatiereViewUrl);
-        }
-    })
-
-    buttonPageRight.addEventListener('click', async e => {
-        if(currentPage < totalPageNumber){
-            currentPage += 1;
-            await displayResult(fetchUrl, currentPage, keyword, parcoursViewUrl, ficheMatiereViewUrl);
-        }
-    });
-    /*************************************/
 });
 
 
