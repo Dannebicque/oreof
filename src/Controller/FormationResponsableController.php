@@ -9,6 +9,7 @@ use App\Classes\ValidationProcessChangeRf;
 use App\DTO\ChangeRf;
 use App\Entity\Formation;
 use App\Entity\HistoriqueFormation;
+use App\Enums\EtatChangeRfEnum;
 use App\Enums\TypeRfEnum;
 use App\Events\NotifCentreFormationEvent;
 use App\Form\ChangeRfFormationType;
@@ -101,7 +102,7 @@ class FormationResponsableController extends BaseController
     ): Response {
 
         $demandes = $changeRfRepository->findBy([
-            'etatDemande' => EtatDemandeChangeRfEnum::EN_ATTENTE
+            'etatDemande' => EtatChangeRfEnum::soumis_ses
         ], ['dateDemande' => 'DESC']);
 
         return $this->render('formation_responsable/liste.html.twig', [
@@ -117,7 +118,7 @@ class FormationResponsableController extends BaseController
     ): Response {
 
         $demandes = $changeRfRepository->findBy([
-            'etatDemande' => EtatDemandeChangeRfEnum::EN_ATTENTE
+            'etatDemande' => EtatChangeRfEnum::soumis_cfvu
         ], ['dateDemande' => 'DESC']);
 
         $composantes = $composanteRepository->findAll();
