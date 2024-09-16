@@ -179,7 +179,7 @@ class ValidationController extends BaseController
             if ($request->query->get('composante') === 'all' && $typeValidation === 'all') {
                 $demandes = $changeRfRepository->findBy([], ['dateDemande' => 'DESC']);
             } elseif ($request->query->get('composante') === 'all' && $typeValidation !== 'all') {
-                $demandes = $changeRfRepository->findByEtatDemande($typeValidation);
+                $demandes = $changeRfRepository->findByTypeValidation($typeValidation);
             } else {
                 $composante = $composanteRepository->find($request->query->get('composante'));
                 if (!$composante) {

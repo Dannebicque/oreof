@@ -22,7 +22,7 @@ class ChangeRfRepository extends ServiceEntityRepository
         parent::__construct($registry, ChangeRf::class);
     }
 
-    public function findByComposanteTypeValidation(Composante $composante, ?string $etat)
+    public function findByComposanteTypeValidation(Composante $composante, ?string $etat): array
     {
         if ($etat === null || $etat === 'all') {
             $qb = $this->createQueryBuilder('c')
@@ -36,6 +36,24 @@ class ChangeRfRepository extends ServiceEntityRepository
                 ->innerJoin('c.formation', 'f')
                 ->andWhere('f.composantePorteuse = :composante')
                 ->setParameter('composante', $composante)
+                ->andWhere("JSON_CONTAINS(c.etatDemande, :typeValidation) = 1")
+                ->setParameter('typeValidation', json_encode([$etat => 1]))
+                ->orderBy('c.dateDemande', 'DESC');
+        }
+
+        return $qb->getQuery()->getResult();
+    }
+
+    public function findByTypeValidation(?string $etat): array
+    {
+        if ($etat === null || $etat === 'all') {
+            $qb = $this->createQueryBuilder('c')
+                ->innerJoin('c.formation', 'f')
+                ->orderBy('c.dateDemande', 'DESC')
+            ;
+        } else {
+            $qb = $this->createQueryBuilder('c')
+                ->innerJoin('c.formation', 'f')
                 ->andWhere("JSON_CONTAINS(c.etatDemande, :typeValidation) = 1")
                 ->setParameter('typeValidation', json_encode([$etat => 1]))
                 ->orderBy('c.dateDemande', 'DESC');
