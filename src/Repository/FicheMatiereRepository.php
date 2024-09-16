@@ -373,6 +373,8 @@ class FicheMatiereRepository extends ServiceEntityRepository
     public function findFicheMatiereWithKeywordAndPagination(string $keyword, int $pageNumber) : array {
         $qb = $this->createQueryBuilder('fm');
 
+        $firstResults = $pageNumber > 1 ? ($pageNumber - 1) * 30 : 0;
+
         $qb = $qb->select(
             [
                 'fm.id AS fiche_matiere_id', 'fm.slug AS fiche_matiere_slug',
@@ -393,7 +395,7 @@ class FicheMatiereRepository extends ServiceEntityRepository
             $qb->expr()->like('UPPER(fm.objectifs)', 'UPPER(:keyword)')
         )
         ->setParameter('keyword', '%' . $keyword . '%')
-        ->setFirstResult($pageNumber * 30)
+        ->setFirstResult($firstResults)
         ->setMaxResults(30)
         ->getQuery()
         ->getResult();
