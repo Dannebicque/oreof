@@ -370,7 +370,7 @@ class FicheMatiereRepository extends ServiceEntityRepository
 
     }
 
-    public function findFicheMatiereWithKeywordAndPagination(string $keyword, int $pageNumber) : array {
+    public function findFicheMatiereWithKeywordAndPagination(string $keyword, int $pageNumber, bool $paginate = true) : array {
         $qb = $this->createQueryBuilder('fm');
 
         $firstResults = $pageNumber > 1 ? ($pageNumber - 1) * 30 : 0;
@@ -395,11 +395,13 @@ class FicheMatiereRepository extends ServiceEntityRepository
         ->orWhere(
             $qb->expr()->like('UPPER(fm.objectifs)', 'UPPER(:keyword)')
         )
-        ->setParameter('keyword', '%' . $keyword . '%')
-        ->setFirstResult($firstResults)
-        ->setMaxResults(30)
-        ->getQuery()
-        ->getResult();
+        ->setParameter('keyword', '%' . $keyword . '%');
+        if($paginate){
+            $qb = $qb->setFirstResult($firstResults)
+                ->setMaxResults(30);
+        }
+        $qb = $qb->getQuery()
+            ->getResult();
 
         return $qb;
     }

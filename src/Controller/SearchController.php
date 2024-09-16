@@ -12,7 +12,11 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use App\Utils\Tools;
-
+use DateTime;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class SearchController extends AbstractController
 {
@@ -171,6 +175,7 @@ class SearchController extends AbstractController
         }
     }
 
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/recherche/fiche_matiere/{page}/{mot_cle}', name: 'app_search_fiche_matiere_pagination')]
     public function searchFicheMatiereForKeywordAndPage(
         int $page,
@@ -181,5 +186,71 @@ class SearchController extends AbstractController
                 ->findFicheMatiereWithKeywordAndPagination($mot_cle, $page);
 
         return $this->json($data);
+    }
+
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route('/recherche/fiche_matiere/export/excel/{mot_cle}', name: 'app_search_fiche_matiere_export_excel')]
+    public function exportFicheMatiereRecherche(
+        string $mot_cle,
+        EntityManagerInterface $entityManager,
+        Filesystem $fs
+    ) : Response {
+
+        $data = $entityManager->getRepository(FicheMatiere::class)
+            ->findFicheMatiereWithKeywordAndPagination($mot_cle, 0, false);
+
+        $data = array_map(function($ficheMatiere){
+            $libelleMention = $ficheMatiere['type_diplome_libelle'] ? $ficheMatiere['type_diplome_libelle'] . ' - ' : '';
+            $libelleMention .= $ficheMatiere['mention_libelle'] . ' - ' . $ficheMatiere['parcours_libelle'];
+            $libelleMention .= $ficheMatiere['parcours_sigle'] ? '(' . $ficheMatiere['parcours_sigle'] . ')': '';
+
+            return [
+                $libelleMention,
+                $ficheMatiere['fiche_matiere_libelle'],
+                $ficheMatiere['fiche_matiere_slug'],     
+            ];
+
+        }, $data);
+
+        $excelData = [
+            ['Libellé du Parcours', 'Libellé de la fiche matière', 'Lien vers Oréof'],
+            ...$data
+        ];
+
+        $spreadsheet = new Spreadsheet();
+        $activeWorksheet = $spreadsheet->getActiveSheet();
+        $activeWorksheet->fromArray($excelData);
+
+        foreach($activeWorksheet->getRowIterator(2, count($data)) as $row){
+            foreach($row->getCellIterator('C') as $cell){
+                $cell->getHyperlink()->setUrl(
+                    $this->generateUrl('app_fiche_matiere_show', 
+                        ['slug' => $cell->getValue()],
+                        UrlGeneratorInterface::ABSOLUTE_URL
+                    )
+                );
+            }
+        }
+
+        $now = (new DateTime())->format('d-m-Y');
+        $path = __DIR__ . "/../../public/temp/";
+        $filename =  "Export-recherche-fiche-matiere.xlsx";
+        
+        if($fs->exists($path . $filename)){
+            $fs->remove($path . $filename);
+        }
+
+        $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
+        $writer->save($path . $filename);
+
+        $dataFile = file_get_contents($path . $filename);
+        return new Response(
+            $dataFile,
+            200,
+            [
+                'Content-Type' => 'application/vnd.ms-excel',
+                'Content-Disposition' => "attachment;filename=\"{$now}-{$mot_cle}-{$filename}\""
+            ]
+        );
     }
 }
