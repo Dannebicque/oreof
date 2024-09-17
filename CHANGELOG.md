@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.31.32](https://github.com/Dannebicque/oreof/compare/v1.31.31...v1.31.32) (2024-09-17)
+
+
+### Features
+
+* export des fichiers versionnés avec UE enfant d'enfant ([76459b3](https://github.com/Dannebicque/oreof/commit/76459b3f6915a81b6a7411cec8fc6eaba07a8037))
+* export des fichiers versionnés avec UE enfant d'enfant ([ffa7d6a](https://github.com/Dannebicque/oreof/commit/ffa7d6a881c3e5c1fb115916831752252a8f5305))
+* export des fichiers versionnés en lot ([0fab6ba](https://github.com/Dannebicque/oreof/commit/0fab6ba65ebad5d18172eb65cc335c3439e30e9f))
+
 ### [1.31.31](https://github.com/Dannebicque/oreof/compare/v1.31.30...v1.31.31) (2024-09-17)
 
 
