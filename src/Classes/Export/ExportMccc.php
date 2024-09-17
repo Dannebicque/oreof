@@ -11,6 +11,7 @@ namespace App\Classes\Export;
 
 use App\Entity\CampagneCollecte;
 use App\Entity\Parcours;
+use App\Repository\DpeParcoursRepository;
 use App\Repository\FormationRepository;
 use App\TypeDiplome\TypeDiplomeRegistry;
 use App\Utils\Tools;
@@ -30,7 +31,8 @@ class ExportMccc
     private bool $isLight = false;
 
     public function __construct(
-        protected FormationRepository $formationRepository
+        protected FormationRepository $formationRepository,
+        private readonly DpeParcoursRepository $dpeParcoursRepository
     ) {
     }
 
@@ -106,11 +108,21 @@ class ExportMccc
 
 
         foreach ($this->formations as $formationId) {
-            $formation = $this->formationRepository->findOneBy(['id' => $formationId]);
+            $dpeParcours = $this->dpeParcoursRepository->findOneBy(['id' => $formationId, 'campagneCollecte' => $this->annee->getId()]);
+            if ($dpeParcours === null) {
+                continue;
+            }
+
+            $parcours = $dpeParcours->getParcours();
+            if ($parcours === null) {
+                continue;
+            }
+            $formation = $parcours->getFormation();
+
             if ($formation !== null && $formation->getTypeDiplome()?->getModeleMcc() !== null) {
                 $typeDiplome = $this->typeDiplomeRegistry->getTypeDiplome($formation->getTypeDiplome()?->getModeleMcc());
                 if (null !== $typeDiplome) {
-                    foreach ($formation->getParcours() as $parcours) {
+
                         if ($formation->isHasParcours() === true) {
                             $texte = $formation->gettypeDiplome()?->getLibelleCourt(). ' ' . $formation->getSigle() . ' ' . $parcours->getSigle();
                         } else {
@@ -130,9 +142,9 @@ class ExportMccc
                         $tabFiles[] = $fichier;
                         $zip->addFile(
                             $dir . $fichier,
-                            $formation->getDisplay() . '/' . $fichier
+                             $fichier
                         );
-                    }
+
                 }
             }
         }
