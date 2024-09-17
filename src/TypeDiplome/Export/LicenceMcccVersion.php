@@ -190,7 +190,7 @@ class LicenceMcccVersion extends AbstractLicenceMccc
                                     $diffEc = $diffUe['elementConstitutifs'][$ordEc];
                                     $ligne = $this->afficheEc($ligne, $ec, $diffEc);
                                     foreach ($ec->elementsConstitutifsEnfants as $ordEce => $ece) {
-                                        if ($diffEc !== null && array_key_exists('ecEnfants', $diffEc) && array_key_exists($ordEce, $diffEc['ecEnfants'])) {
+                                        if (array_key_exists('ecEnfants', $diffEc) && array_key_exists($ordEce, $diffEc['ecEnfants'])) {
                                             $ligne = $this->afficheEc($ligne, $ece, $diffEc['ecEnfants'][$ordEce]);
                                         }
                                     }
@@ -263,9 +263,9 @@ class LicenceMcccVersion extends AbstractLicenceMccc
                                             if (array_key_exists('ecEnfants', $diffEc)) {
                                                 $ligne = $this->afficheEc($ligne, $ece, $diffEc['ecEnfants'][$ordEce]);
                                             }
-//                                            else {
-//                                                $ligne = $this->afficheEc($ligne, $ece, []);
-//                                            }
+                                            //                                            else {
+                                            //                                                $ligne = $this->afficheEc($ligne, $ece, []);
+                                            //                                            }
                                         }
                                     }
 
@@ -292,9 +292,9 @@ class LicenceMcccVersion extends AbstractLicenceMccc
                                                     if (array_key_exists('ecEnfants', $diffEcee)) {
                                                         $ligne = $this->afficheEc($ligne, $eceee, $diffEcee['ecEnfants'][$ordEceee]);
                                                     }
-//                                                    else {
-//                                                        $ligne = $this->afficheEc($ligne, $eceee, []);
-//                                                    }
+                                                    //                                                    else {
+                                                    //                                                        $ligne = $this->afficheEc($ligne, $eceee, []);
+                                                    //                                                    }
                                                 }
                                             }
 
@@ -311,13 +311,13 @@ class LicenceMcccVersion extends AbstractLicenceMccc
                         }
                     }
 
-//                    //traitement des UE supprimés
-//                    foreach ($diffSemestre['ues'] as $ordreUe => $ue) {
-//                        if (!in_array($ordreUe, $tabEcAffiches)) {
-//                            //EC supprimé
-//                            $ligne = $this->afficheEcSupprime($ligne, $ece);
-//                        }
-//                    }
+                    //                    //traitement des UE supprimés
+                    //                    foreach ($diffSemestre['ues'] as $ordreUe => $ue) {
+                    //                        if (!in_array($ordreUe, $tabEcAffiches)) {
+                    //                            //EC supprimé
+                    //                            $ligne = $this->afficheEcSupprime($ligne, $ece);
+                    //                        }
+                    //                    }
 
 
                     $ligne = $this->afficheSommeSemestre($ligne, $semestre, $diffSemestre);
@@ -602,8 +602,11 @@ class LicenceMcccVersion extends AbstractLicenceMccc
 
     private function afficheEc(int $ligne, StructureEc $structureEc, ?array $diffEc): int
     {
-        if ($diffEc === null) {
-            return $ligne;
+        if ($diffEc === null || $diffEc === []) {
+            $diffEc['libelle'] = '';
+            $diffEc['typeMccc'] = new DiffObject('', '');
+            $diffEc['mcccs'] = [];
+
         }
 
         $ec = $structureEc->elementConstitutif;
