@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.31.30](https://github.com/Dannebicque/oreof/compare/v1.31.29...v1.31.30) (2024-09-17)
+
+
+### Bug Fixes
+
+* change RF sur formation sans parcours ([9697d61](https://github.com/Dannebicque/oreof/commit/9697d618c65078b13e58ec487a9bbda09075bba5))
+* textes sur modal ([b2838c9](https://github.com/Dannebicque/oreof/commit/b2838c9acd4ca9f519a5d84043c1c65e142b0636))
+
 ### [1.31.29](https://github.com/Dannebicque/oreof/compare/v1.31.28...v1.31.29) (2024-09-16)
 
 
