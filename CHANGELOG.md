@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.31.34](https://github.com/Dannebicque/oreof/compare/v1.31.33...v1.31.34) (2024-09-17)
+
+
+### Bug Fixes
+
+* gestion du semestre nouveau ([c75af53](https://github.com/Dannebicque/oreof/commit/c75af539541c5fa0030f233df79473dfcb6f28c6))
+
 ### [1.31.33](https://github.com/Dannebicque/oreof/compare/v1.31.32...v1.31.33) (2024-09-17)
 
 
