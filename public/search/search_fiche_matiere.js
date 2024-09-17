@@ -12,6 +12,9 @@ document.addEventListener('DOMContentLoaded', async (e) => {
 
     let buttonPageRight = document.querySelector('i.button-page-right');
     let buttonPageLeft = document.querySelector('i.button-page-left');
+    let buttonGoToPage = document.querySelector('.button-go-to-page');
+
+    let inputNumeroPage = document.querySelector("input[name='inputNumeroPage']");
 
     if(totalNumber > 1){
         // Affichage du résultat pour la page 1
@@ -32,6 +35,19 @@ document.addEventListener('DOMContentLoaded', async (e) => {
                 await displayResult(fetchUrl, currentPage, keyword, parcoursViewUrl, ficheMatiereViewUrl, totalPageNumber);
             }
         });
+        
+        buttonGoToPage.addEventListener('click', async e => {
+            let value = Number(inputNumeroPage.value);
+            if(Number.isInteger(value) === false || value < 1){
+                value = 1;
+            }
+            if(value > totalPageNumber){
+                value = totalPageNumber;
+            }
+            currentPage = value;
+            inputNumeroPage.value = value;
+            await displayResult(fetchUrl, currentPage, keyword, parcoursViewUrl, ficheMatiereViewUrl, totalPageNumber);
+        })
         /*************************************/
     }
 
