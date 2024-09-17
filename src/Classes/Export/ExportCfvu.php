@@ -10,6 +10,7 @@
 namespace App\Classes\Export;
 
 use App\Classes\Excel\ExcelWriter;
+use App\Classes\GetDpeParcours;
 use App\Classes\GetHistorique;
 use App\Entity\CampagneCollecte;
 use App\Repository\FormationRepository;
@@ -73,7 +74,8 @@ class ExportCfvu implements ExportInterface
 
                     $this->excelWriter->writeCellXY(6, $ligne, $formation->getResponsableMention()?->getDisplay());
                     $this->excelWriter->writeCellXY(7, $ligne, $parcours->getRespParcours()?->getDisplay());
-                    $this->excelWriter->writeCellXY(8, $ligne, $this->getHistorique->getHistoriqueFormationLastStep($formation, 'conseil')?->getDate()?->format('d/m/Y') ?? 'Non validé');
+                    $dpeParcours = GetDpeParcours::getFromParcours($parcours);
+                    $this->excelWriter->writeCellXY(8, $ligne, $this->getHistorique->getHistoriqueParcoursLastStep($dpeParcours, 'conseil')?->getDate()?->format('d/m/Y') ?? 'Non validé');
                     $this->excelWriter->writeCellXY(9, $ligne, $this->getHistorique->getHistoriqueFormationHasPv($formation) === true ? 'Oui' : 'Non');
 
                     $this->excelWriter->getColumnsAutoSize('A', 'I');

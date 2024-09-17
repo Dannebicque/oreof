@@ -20,8 +20,9 @@ class ExportController extends BaseController
         "xlsx-mccc" => 'MCCC format Excel (xslx)',
         "xlsx-cap" => 'Export CAP format excel (xslx)',
         "pdf-mccc" => 'MCCC format PDF',
-        "xlsx-light_mccc" => 'MCCC simplifiés format Excel (xslx)',
-        "pdf-light_mccc" => 'MCCC simplifiés format PDF',
+        "xlsx-light_mccc" => 'MCCC simplifiées format Excel (xslx)',
+        "xlsx-version_mccc" => 'MCCC versionnées format Excel (xslx)',
+        "pdf-light_mccc" => 'MCCC simplifiées format PDF',
         "pdf-fiches" => 'Fiches descriptions format PDF'
     ];
 
