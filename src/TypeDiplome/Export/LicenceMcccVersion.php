@@ -262,9 +262,10 @@ class LicenceMcccVersion extends AbstractLicenceMccc
                                         foreach ($ec->elementsConstitutifsEnfants as $ordEce => $ece) {
                                             if (array_key_exists('ecEnfants', $diffEc)) {
                                                 $ligne = $this->afficheEc($ligne, $ece, $diffEc['ecEnfants'][$ordEce]);
-                                            } else {
-                                                $ligne = $this->afficheEc($ligne, $ece, []);
                                             }
+//                                            else {
+//                                                $ligne = $this->afficheEc($ligne, $ece, []);
+//                                            }
                                         }
                                     }
 
@@ -290,9 +291,10 @@ class LicenceMcccVersion extends AbstractLicenceMccc
                                                 foreach ($ecee->elementsConstitutifsEnfants as $ordEceee => $eceee) {
                                                     if (array_key_exists('ecEnfants', $diffEcee)) {
                                                         $ligne = $this->afficheEc($ligne, $eceee, $diffEcee['ecEnfants'][$ordEceee]);
-                                                    } else {
-                                                        $ligne = $this->afficheEc($ligne, $eceee, []);
                                                     }
+//                                                    else {
+//                                                        $ligne = $this->afficheEc($ligne, $eceee, []);
+//                                                    }
                                                 }
                                             }
 
