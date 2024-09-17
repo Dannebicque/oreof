@@ -2,7 +2,7 @@
       enctype="multipart/form-data">
     {% if meta.hasDate is defined and meta.hasDate == true %}
     <div>
-        <label for="date" class="form-label">{{ ('valide.change_rf.date.conseil_composante.label')|trans({}, 'process') }}
+        <label for="date" class="form-label">{{ ('valide.change_rf.date.'~transition~'.label')|trans({}, 'process') }}
             <span class="required"></span> <i
                     class="fal fa-question-circle ms-1"
                     data-controller="tooltip"

@@ -2,6 +2,7 @@
 
 namespace App\Security\Voter;
 
+use App\Classes\GetDpeParcours;
 use App\Entity\Composante;
 use App\Entity\DpeParcours;
 use App\Entity\FicheMatiere;
@@ -158,6 +159,14 @@ class GlobalVoter extends Voter
             return true;
         }
 
+        if ($subject->isHasParcours() === false && $subject->getParcours()->count() === 1) {
+            $dpeParcours  = GetDpeParcours::getFromParcours($subject->getParcours()->first());
+            if ($dpeParcours === null) {
+                return false;
+            }
+            return $this->canAccessDpeParcours($dpeParcours, $centre);
+        }
+
 
 
 
@@ -185,7 +194,6 @@ class GlobalVoter extends Voter
                 $this->dpeWorkflow->can($subject, 'valider_rf') ||
                 $this->dpeWorkflow->can($subject, 'valider_dpe_composante') ||
                 $this->dpeWorkflow->can($subject, 'valider_conseil');
-            //todo: cas si pas de parcours ?
         }
 
         $centre = $centre->getFormation() === $subject || $centre->getComposante() === $subject->getComposantePorteuse();

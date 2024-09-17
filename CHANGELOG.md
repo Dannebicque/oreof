@@ -2,6 +2,69 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.31.30](https://github.com/Dannebicque/oreof/compare/v1.31.29...v1.31.30) (2024-09-17)
+
+
+### Bug Fixes
+
+* change RF sur formation sans parcours ([9697d61](https://github.com/Dannebicque/oreof/commit/9697d618c65078b13e58ec487a9bbda09075bba5))
+* textes sur modal ([b2838c9](https://github.com/Dannebicque/oreof/commit/b2838c9acd4ca9f519a5d84043c1c65e142b0636))
+
+### [1.31.29](https://github.com/Dannebicque/oreof/compare/v1.31.28...v1.31.29) (2024-09-16)
+
+
+### Bug Fixes
+
+* liste des changements RF ([ca99f6d](https://github.com/Dannebicque/oreof/commit/ca99f6d868eb1450dd3578f0408d3df5266d4ab0))
+
+### [1.31.28](https://github.com/Dannebicque/oreof/compare/v1.31.27...v1.31.28) (2024-09-16)
+
+
+### Bug Fixes
+
+* liste des changements RF ([41d5c8f](https://github.com/Dannebicque/oreof/commit/41d5c8f86ad5f56e08cb3b974c0a332c8bdc1d9c))
+
+### [1.31.27](https://github.com/Dannebicque/oreof/compare/v1.31.26...v1.31.27) (2024-09-16)
+
+
+### Features
+
+* liste des changements RF ([4070947](https://github.com/Dannebicque/oreof/commit/4070947c462b02a16d650de703a10e02e5e81a42))
+
+### [1.31.26](https://github.com/Dannebicque/oreof/compare/v1.31.25...v1.31.26) (2024-09-16)
+
+
+### Features
+
+* liste des changements RF ([cdc5df2](https://github.com/Dannebicque/oreof/commit/cdc5df29b002cfeb54314c25124530d9e373e691))
+
+
+### Bug Fixes
+
+* API JSON versioning ([7e8af03](https://github.com/Dannebicque/oreof/commit/7e8af03eff5fad298b48f3cc48b115ea364f5a1b))
+* API JSON Versioning - création fichier index ([a2d0d59](https://github.com/Dannebicque/oreof/commit/a2d0d5928c65e48b118e2b07505255a9c638c697))
+* commande de publication ([25a7b79](https://github.com/Dannebicque/oreof/commit/25a7b79654f071e4cd1b67b52ff3f29c3861fc8a))
+* ECTS Maquette iframe EC ([565b951](https://github.com/Dannebicque/oreof/commit/565b95194a9a92c21a4e19b8eff72de574514277))
+* Export JSON Versionné - Fiche matiere ([83a7c46](https://github.com/Dannebicque/oreof/commit/83a7c466d1ff3f20b34493d34843497e3e4e86c6))
+* libelle API JSON Versioning ([5f159ac](https://github.com/Dannebicque/oreof/commit/5f159acfc89de49b3764f69d12732a39b18f29c9))
+* libellés options disponibles (commande versioning) ([0f9c314](https://github.com/Dannebicque/oreof/commit/0f9c314db53046a19922426fc137ec6988cf79ea))
+* memory limit API JSON Versioning ([cf1cd4f](https://github.com/Dannebicque/oreof/commit/cf1cd4fa1bce4a8e5c0d8e8a3187b0af5683fc47))
+* tri sur l'ordre des UE - iframe versioning ([b6b5d53](https://github.com/Dannebicque/oreof/commit/b6b5d532ec324a252021547f357a5908cb4fe9a8))
+
+### [1.31.25](https://github.com/Dannebicque/oreof/compare/v1.31.24...v1.31.25) (2024-09-13)
+
+
+### Features
+
+* Plaquette ([71afa03](https://github.com/Dannebicque/oreof/commit/71afa032f039cf0c5d2dce4ce0b1bbea18c3db0f))
+
+### [1.31.24](https://github.com/Dannebicque/oreof/compare/v1.31.23...v1.31.24) (2024-09-13)
+
+
+### Features
+
+* Accès parcours ([949e615](https://github.com/Dannebicque/oreof/commit/949e615014c33497e337b0061e141d42d1776755))
+
 ### [1.31.23](https://github.com/Dannebicque/oreof/compare/v1.31.22...v1.31.23) (2024-09-06)
 
 
