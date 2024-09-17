@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.31.31](https://github.com/Dannebicque/oreof/compare/v1.31.30...v1.31.31) (2024-09-17)
+
+
+### Features
+
+* export des fichiers versionnés en lot ([b49beed](https://github.com/Dannebicque/oreof/commit/b49beedc8c35a3140cf5c53a1eabea7c52e209e8))
+
 ### [1.31.30](https://github.com/Dannebicque/oreof/compare/v1.31.29...v1.31.30) (2024-09-17)
 
 
