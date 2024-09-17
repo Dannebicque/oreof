@@ -4,6 +4,7 @@
 {% else %}
     {% if formation.parcours[0] is defined %}
         {{ component('parcours_manage', {parcours:formation.parcours[0]}) }}
+        <twig:ChangeRfState formation="{{ formation }}" />
     {% else %}
         <div class="alert alert-danger">
             Pas de parcours ?
