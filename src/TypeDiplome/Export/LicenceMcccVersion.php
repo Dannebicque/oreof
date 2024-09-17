@@ -190,7 +190,7 @@ class LicenceMcccVersion extends AbstractLicenceMccc
                                     $diffEc = $diffUe['elementConstitutifs'][$ordEc];
                                     $ligne = $this->afficheEc($ligne, $ec, $diffEc);
                                     foreach ($ec->elementsConstitutifsEnfants as $ordEce => $ece) {
-                                        if (array_key_exists('ecEnfants', $diffEc) && array_key_exists($ordEce, $diffEc['ecEnfants'])) {
+                                        if ($diffEc !== null && array_key_exists('ecEnfants', $diffEc) && array_key_exists($ordEce, $diffEc['ecEnfants'])) {
                                             $ligne = $this->afficheEc($ligne, $ece, $diffEc['ecEnfants'][$ordEce]);
                                         }
                                     }
