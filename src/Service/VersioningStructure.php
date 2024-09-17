@@ -108,7 +108,6 @@ class VersioningStructure
                 if (!array_key_exists($ordreEc, $ueNouvelle->elementConstitutifs)) {
                     //donc n'existe plus ?
                     $diff['elementConstitutifs'][$ordreEc] = $this->compareElementConstitutif($ec, null);
-
                 } else {
                     $diff['elementConstitutifs'][$ordreEc] = $this->compareElementConstitutif($ec, $ueNouvelle->elementConstitutifs[$ordreEc]);
                 }
@@ -126,6 +125,12 @@ class VersioningStructure
                     $diff['uesEnfants'][$ordreUeEnfant] = $this->compareUe($ueEnfant, $ueNouvelle->uesEnfants()[$ordreUeEnfant]);
                 } else {
                     $diff['uesEnfants'][$ordreUeEnfant] = $this->compareUe($ueEnfant, null);
+                }
+            }
+
+            foreach ($ueNouvelle->uesEnfants() as $ordreUeEnfant => $ueEnfant) {
+                if (array_key_exists($ordreUeEnfant, $ueNouvelle->uesEnfants())) {
+                    $diff['uesEnfants'][$ordreUeEnfant] = $this->compareUe(null, $ueNouvelle->uesEnfants()[$ordreUeEnfant]);
                 }
             }
 
