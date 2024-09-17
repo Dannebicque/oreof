@@ -15,21 +15,21 @@ document.addEventListener('DOMContentLoaded', async (e) => {
 
     if(totalNumber > 1){
         // Affichage du résultat pour la page 1
-        await displayResult(fetchUrl, currentPage, keyword, parcoursViewUrl, ficheMatiereViewUrl);
+        await displayResult(fetchUrl, currentPage, keyword, parcoursViewUrl, ficheMatiereViewUrl, totalPageNumber);
         /**
          * Navigation vers la page souhaitée
          */
         buttonPageLeft.addEventListener('click', async e => {
             if(currentPage > 1){
                 currentPage -= 1;
-                await displayResult(fetchUrl, currentPage, keyword, parcoursViewUrl, ficheMatiereViewUrl);
+                await displayResult(fetchUrl, currentPage, keyword, parcoursViewUrl, ficheMatiereViewUrl, totalPageNumber);
             }
         })
     
         buttonPageRight.addEventListener('click', async e => {
             if(currentPage < totalPageNumber){
                 currentPage += 1;
-                await displayResult(fetchUrl, currentPage, keyword, parcoursViewUrl, ficheMatiereViewUrl);
+                await displayResult(fetchUrl, currentPage, keyword, parcoursViewUrl, ficheMatiereViewUrl, totalPageNumber);
             }
         });
         /*************************************/
@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', async (e) => {
 });
 
 
-async function displayResult(fetchUrl, pageNumber, keyword, parcoursViewUrl, ficheMatiereViewUrl){
+async function displayResult(fetchUrl, pageNumber, keyword, parcoursViewUrl, ficheMatiereViewUrl, totalPageNumber){
     emptyResultList();
     displayLoadingIcon();
     let url = configureFetchUrl(fetchUrl, pageNumber, keyword);
@@ -46,13 +46,13 @@ async function displayResult(fetchUrl, pageNumber, keyword, parcoursViewUrl, fic
     if(result){
         hideLoadingIcon();
         updateDomWithResult(result, parcoursViewUrl, ficheMatiereViewUrl, keyword);
-        updatePageLabel(pageNumber);
+        updatePageLabel(pageNumber, totalPageNumber);
     }
 }
 
-function updatePageLabel(pageNumber){
+function updatePageLabel(pageNumber, totalPageNumber){
     let label = document.querySelector('.numero-page');
-    label.textContent = `Page ${pageNumber}`;
+    label.textContent = `Page ${pageNumber} / ${totalPageNumber}`;
 }
 
 async function fetchResultPage(url){
