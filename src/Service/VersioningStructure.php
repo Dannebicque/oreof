@@ -251,14 +251,11 @@ class VersioningStructure
             $diff['typeMccc'] = new DiffObject('', $ecNouveau->typeMccc);
             $diff['mcccs'] = $this->compareMcccs([], $ecNouveau->mcccs);
 
-            // todo: gérer si un EC est ajouté avec des enfants           if ($ecNouveau->elementConstitutif->getNatureUeEc()?->isChoix()) {
-            //                //EC enfants
-            //                foreach ($ecNouveau->elementsConstitutifsEnfants as $ordreEc => $ecEnfant) {
-            //                    if (array_key_exists($ordreEc, $ecOriginal->elementsConstitutifsEnfants)) {
-            //                        $diff['ecEnfants'][$ordreEc] = $this->compareElementConstitutif($ecOriginal->elementsConstitutifsEnfants[$ordreEc], $ecEnfant);
-            //                    } //else supprimé
-            //                }
-            //            }
+            //EC enfants
+            foreach ($ecNouveau->elementsConstitutifsEnfants as $ordreEc => $ecEnfant) {
+                $diff['ecEnfants'][$ordreEc] = $this->compareElementConstitutif(null, $ecEnfant);
+            }
+
 
             return $diff;
         }
