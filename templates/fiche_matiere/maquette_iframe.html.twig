@@ -97,6 +97,7 @@
                                 </tr>
                             </thead>
                             <tbody>
+                            {% if isVersioning is not defined %}
                                 <tr>
                                     <td>{{ element_constitutif.getVolumeCmPresentiel ?: '-'  }}</td>
                                     <td>{{ element_constitutif.getVolumeTdPresentiel ?: '-'  }}</td>
@@ -106,6 +107,17 @@
                                     <td>{{ element_constitutif.getVolumeTpDistanciel ?: '-'  }}</td>
                                     <td>{{ element_constitutif.getVolumeTe ?: '-' }}</td>
                                 </tr>
+                            {% elseif isVersioning is defined and isVersioning == true %}
+                                <tr>
+                                    <td>{{ heuresEctsEc.volCmPres ?: '-'  }}</td>
+                                    <td>{{ heuresEctsEc.volTdPres ?: '-'  }}</td>
+                                    <td>{{ heuresEctsEc.volTpPres ?: '-'  }}</td>
+                                    <td>{{ heuresEctsEc.volCmDist ?: '-'  }}</td>
+                                    <td>{{ heuresEctsEc.volTdDist ?: '-'  }}</td>
+                                    <td>{{ heuresEctsEc.volTpDist ?: '-'  }}</td>
+                                    <td>{{ heuresEctsEc.volTe ?: '-' }}</td>
+                                </tr>
+                            {% endif %}
                             </tbody>
                         </table>
                     </div>

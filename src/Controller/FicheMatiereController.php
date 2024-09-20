@@ -255,6 +255,41 @@ class FicheMatiereController extends AbstractController
         ]);
     }
 
+    #[Route('/versioning/{volCmPres}/{volTdPres}/{volTpPres}/{volCmDist}/{volTdDist}/{volTpDist}/{volTe}/{parcours}/{ects}/{slug}/maquette_iframe', name: 'app_fiche_matiere_versioning_maquette_iframe')]
+    public function getMaquetteIframeVersioning(
+        float $volCmPres,
+        float $volTdPres,
+        float $volTpPres,
+        float $volCmDist,
+        float $volTdDist,
+        float $volTpDist,
+        float $volTe,
+        string $slug,
+        Parcours $parcours,
+        float $ects,
+        EntityManagerInterface $entityManager
+    ) : Response {
+        $ficheMatiere = $entityManager->getRepository(FicheMatiere::class)->findOneBySlug($slug);
+
+        return $this->render('fiche_matiere/maquette_iframe.html.twig', [
+            'fiche_matiere' => $ficheMatiere,
+            'typeDiplome' => $ficheMatiere->getParcours()?->getFormation()?->getTypeDiplome(),
+            'formation' => $ficheMatiere->getParcours()?->getFormation(),
+            'maquetteOrigineURL' => $parcours ? $this->generateUrl('app_versioning_parcours_maquette_iframe', ['parcours' => $parcours->getId()]) : "#",
+            'ects' => $ects,
+            'heuresEctsEc' => [        
+                'volCmPres' => $volCmPres, 
+                'volTdPres' => $volTdPres, 
+                'volTpPres' => $volTpPres, 
+                'volCmDist' => $volCmDist, 
+                'volTdDist' => $volTdDist, 
+                'volTpDist' => $volTpDist, 
+                'volTe' => $volTe
+            ],
+            'isVersioning' => true
+        ]);
+    }
+
     #[IsGranted('ROLE_ADMIN')]
     #[Route('/{slug}/versioning/save', name: 'app_fiche_matiere_versioning_save', methods: ['GET'])]
     public function saveFicheMatiereIntoJson(

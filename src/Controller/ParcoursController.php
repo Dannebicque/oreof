@@ -21,6 +21,7 @@ use App\DTO\HeuresEctsUe;
 use App\DTO\StructureParcours;
 use App\Entity\CampagneCollecte;
 use App\Entity\DpeParcours;
+use App\Entity\FicheMatiere;
 use App\Entity\Formation;
 use App\Entity\Parcours;
 use App\Entity\ParcoursVersioning;
@@ -452,9 +453,14 @@ class ParcoursController extends BaseController
 
         if($lastVersion){
             $dto = $versioningParcours->loadParcoursFromVersion($lastVersion)['dto'];
-    
+            
+            $ficheMatiereRepo = $entityManager->getRepository(FicheMatiere::class);
+
             return $this->render('parcours/maquette_iframe.html.twig', [
-                'parcours' => $dto
+                'parcours' => $dto,
+                'parcoursData' => $parcours,
+                'ficheMatiereRepo' => $ficheMatiereRepo,
+                'isVersioning' => true
             ]);
         }
         else {
