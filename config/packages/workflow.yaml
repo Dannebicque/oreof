@@ -550,23 +550,95 @@ framework:
         - App\Entity\FicheMatiere
       initial_marking: 'en_cours_redaction'
       places:
-        - 'en_cours_redaction'
-        - 'soumis_central'
-        - 'valide_pour_publication'
-        - 'publie'
+        'en_cours_redaction':
+          metadata:
+            process: true
+            icon: 'fa-ballot-check'
+            label: 'validation.fiche_matiere'
+            hasValid: true
+            hasReserve: false
+            hasRefuse: false
+            hasUpload: false
+            isTimeline: false
+            hasDate: false
+            transition: 'en_cours_redaction'
+            canValide: 'valider_fiche_compo'
+            check: true
+        'soumis_central':
+          metadata:
+            process: true
+            icon: 'fa-school-circle-check'
+            label: 'validation.fiche_matiere.ses'
+            hasValid: true
+            hasReserve: true
+            hasRefuse: true
+            hasUpload: false
+            isTimeline: false
+            hasDate: false
+            transition: 'transmis_ses'
+            canValide: 'valider_fiche_ses'
+            canRefuse: 'refuser_fiche_ses'
+            canReserve: 'reserver_fiche_ses'
+        'valide_pour_publication':
+          metadata:
+            process: true
+            icon: 'fa-stamp'
+            label: 'validation.fiche_matiere.publication'
+            hasValid: false
+            hasReserve: false
+            hasRefuse: false
+            hasUpload: false
+            isTimeline: true
+            hasDate: false
+            transition: 'transmis_pour_publication'
+            canValide: 'valider_fiche_pour_publication'
+        'publie':
+          metadata:
+            process: false
+            showOn: false
+            icon: 'fa-pencil'
+            label: 'fiche_matiere.rouvrir_fiche_matiere'
+            hasValid: false
+            hasReserve: false
+            hasRefuse: false
+            hasUpload: false
+            isTimeline: false
+            hasDate: false
+            transition: 'publie'
+            canValide: ''
       transitions:
         valider_fiche_compo:
           from: 'en_cours_redaction'
           to: 'soumis_central'
+          metadata:
+            type: valider
+            btn: success
+            icon: 'fa-ballot-check'
         valider_fiche_ses:
           from: 'soumis_central'
           to: 'valide_pour_publication'
+          metadata:
+            type: valider
+            btn: success
+            icon: 'fa-stamp'
         reserver_fiche_ses:
           from: 'soumis_central'
           to: 'en_cours_redaction'
-        rouvrir_fiche_matiere:
+          metadata:
+            type: reserver
+            btn: warning
+            icon: fa-check
+        publier:
           from: 'valide_pour_publication'
+          to: 'publie'
+          metadata:
+        rouvrir_fiche_matiere:
+          from: 'publie'
           to: 'en_cours_redaction'
+          metadata:
+            type: valider
+            btn: warning
+            icon: 'fa-pencil'
     changeRf:
       type: 'workflow'
       marking_store:

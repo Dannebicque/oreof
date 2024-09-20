@@ -156,8 +156,17 @@ class WorkflowExtension extends AbstractExtension
         return false;
     }
 
-    public function isPublie(Parcours|Formation $entity, string $type = 'parcours'): bool
+    public function isPublie(Parcours|Formation|FicheMatiere $entity, string $type = 'parcours'): bool
     {
+        if ($type === 'fiche') {
+            $places = $this->getWorkflow('fiche')->getMarking($entity)->getPlaces();
+            if (count($places) > 0) {
+                return str_starts_with(array_keys($places)[0], 'publie');
+            }
+
+            return false;
+        }
+
         if ($type === 'formation') {
             $dpeParcours = GetDpeParcours::getFromFormation($entity); //todo: comment gérer depuis Formation?
         } elseif ($type === 'parcours') {
@@ -208,13 +217,13 @@ class WorkflowExtension extends AbstractExtension
         return $actualPlaces;
     }
 
-    public function hasTransitions(DpeParcours|ChangeRf $dpeParcours, string $worflow = 'parcours'): array
+    public function hasTransitions(DpeParcours|ChangeRf|FicheMatiere $entity, string $worflow = 'parcours'): array
     {
         $data['valider'] = [];
         $data['reserver'] = [];
         $data['refuser'] = [];
 
-        $transitions = $this->getWorkflow($worflow)->getEnabledTransitions($dpeParcours);
+        $transitions = $this->getWorkflow($worflow)->getEnabledTransitions($entity);
 
         foreach ($transitions as $transition) {
             $meta = $this->getWorkflow($worflow)->getMetadataStore()->getTransitionMetadata($transition);
