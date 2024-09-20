@@ -68,12 +68,17 @@ export default class extends Controller {
         }),
       }
       modal = null
-      await fetch(url, body).then((e) => {
+      await fetch(url, body).then(async (e) => {
         if (e.status === 200) {
           callOut('Suppression effectuée', 'success')
           this._updateListe()
         } else {
-          callOut('Erreur lors de la suppression', 'danger')
+          const data = await e.json()
+          if (data.message !== undefined && data.message.trim() !== '') {
+            callOut(data.message, 'danger')
+          } else {
+            callOut('Erreur lors de la suppression', 'danger')
+          }
         }
       })
     })
