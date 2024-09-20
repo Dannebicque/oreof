@@ -245,13 +245,16 @@ class FicheMatiereController extends AbstractController
     public function getMaquetteIframe(ElementConstitutif $ec, Parcours $parcours, float $ects) : Response {
         $ficheMatiere = $ec->getFicheMatiere();
 
+        $isBUT = $ficheMatiere->getParcours()?->getTypeDiplome()?->getLibelleCourt() === 'BUT';
+
         return $this->render('fiche_matiere/maquette_iframe.html.twig', [
             'fiche_matiere' => $ficheMatiere,
             'typeDiplome' => $ficheMatiere->getParcours()?->getFormation()?->getTypeDiplome(),
             'formation' => $ficheMatiere->getParcours()?->getFormation(),
             'maquetteOrigineURL' => $parcours ? $this->generateUrl('app_parcours_maquette_iframe', ['parcours' => $parcours->getId()]) : "#",
             'element_constitutif' => $ec,
-            'ects' => $ects
+            'ects' => $ects,
+            'isBUT' => $isBUT
         ]);
     }
 
