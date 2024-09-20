@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.31.37](https://github.com/Dannebicque/oreof/compare/v1.31.36...v1.31.37) (2024-09-20)
+
+
+### Features
+
+* Ajout d'information sur les fiches ([3dc1d32](https://github.com/Dannebicque/oreof/commit/3dc1d328de8afb9dbc154f3976021a4281c49335))
+* validation, manage des fiches sur les fiches directements + nouveau processus ([c363d8d](https://github.com/Dannebicque/oreof/commit/c363d8db7f698fa636681c02e618afb63a8c1770))
+
+
+### Bug Fixes
+
+* message d'erreur sur une suppression ([a6f0851](https://github.com/Dannebicque/oreof/commit/a6f08516b550969dbfe8ea7eb233d1fc9f585d21))
+* typo dans modèle MCCC xlsx ([da43bb4](https://github.com/Dannebicque/oreof/commit/da43bb4b9d32efe523bd522fafb3cd730539bfc9))
+
 ### [1.31.36](https://github.com/Dannebicque/oreof/compare/v1.31.35...v1.31.36) (2024-09-20)
 
 
