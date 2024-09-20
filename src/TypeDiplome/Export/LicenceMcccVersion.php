@@ -247,7 +247,9 @@ class LicenceMcccVersion extends AbstractLicenceMccc
                             );
                             $this->excelWriter->writeCellXYDiff(self::COL_INTITULE_UE, $debut, $diffUe['libelle'], ['wrap' => true]);
                         }
+                        //Affichage des UE enfants
                         foreach ($ue->uesEnfants() as $ordUee => $uee) {
+
                             if (array_key_exists('uesEnfants', $diffUe) && array_key_exists($ordUee, $diffUe['uesEnfants'])) {
                                 $diffUee = $diffUe['uesEnfants'][$ordUee];
                                 $debut = $ligne;
@@ -258,7 +260,12 @@ class LicenceMcccVersion extends AbstractLicenceMccc
                                         $diffEc = $diffUee['elementConstitutifs'][$ordEc];
                                         $ligne = $this->afficheEc($ligne, $ec, $diffEc);
                                         foreach ($ec->elementsConstitutifsEnfants as $ordEce => $ece) {
-                                            $ligne = $this->afficheEc($ligne, $ece, $diffEc['ecEnfants'][$ordEce]);
+                                            if (array_key_exists('ecEnfants', $diffEc)) {
+                                                $ligne = $this->afficheEc($ligne, $ece, $diffEc['ecEnfants'][$ordEce]);
+                                            }
+                                            //                                            else {
+                                            //                                                $ligne = $this->afficheEc($ligne, $ece, []);
+                                            //                                            }
                                         }
                                     }
 
@@ -269,17 +276,48 @@ class LicenceMcccVersion extends AbstractLicenceMccc
                                 }
                                 $this->excelWriter->writeCellXY(self::COL_UE, $debut, $uee->display, ['wrap' => true, 'style' => 'HORIZONTAL_CENTER', 'font-weight' => false]);
                                 $this->excelWriter->writeCellXY(self::COL_INTITULE_UE, $debut, $uee->ue->getLibelle(), ['wrap' => true]);
+
+                                // Enfant des UE enfants
+                                foreach ($uee->uesEnfants() as $ordUeee => $ueee) {
+                                    if (array_key_exists('uesEnfants', $diffUee) && array_key_exists($ordUeee, $diffUee['uesEnfants'])) {
+                                        $diffUeee = $diffUee['uesEnfants'][$ordUeee];
+                                        $debut = $ligne;
+                                        if ($ueee->ue->getNatureUeEc() !== null && $ueee->ue->getNatureUeEc()->isLibre()) {
+                                            $ligne = $this->afficheUeLibre($ligne, $ueee);
+                                        } else {
+                                            foreach ($ueee->elementConstitutifs as $ordEcee => $ecee) {
+                                                $diffEcee = $diffUeee['elementConstitutifs'][$ordEcee];
+                                                $ligne = $this->afficheEc($ligne, $ecee, $diffEcee);
+                                                foreach ($ecee->elementsConstitutifsEnfants as $ordEceee => $eceee) {
+                                                    if (array_key_exists('ecEnfants', $diffEcee)) {
+                                                        $ligne = $this->afficheEc($ligne, $eceee, $diffEcee['ecEnfants'][$ordEceee]);
+                                                    }
+                                                    //                                                    else {
+                                                    //                                                        $ligne = $this->afficheEc($ligne, $eceee, []);
+                                                    //                                                    }
+                                                }
+                                            }
+
+                                            if ($debut < $ligne - 1) {
+                                                $this->excelWriter->mergeCellsCaR(self::COL_UE, $debut, self::COL_UE, $ligne - 1);
+                                                $this->excelWriter->mergeCellsCaR(self::COL_INTITULE_UE, $debut, self::COL_INTITULE_UE, $ligne - 1);
+                                            }
+                                        }
+                                        $this->excelWriter->writeCellXY(self::COL_UE, $debut, $ueee->display, ['wrap' => true, 'style' => 'HORIZONTAL_CENTER', 'font-weight' => false]);
+                                        $this->excelWriter->writeCellXY(self::COL_INTITULE_UE, $debut, $ueee->ue->getLibelle(), ['wrap' => true]);
+                                    }
+                                }
                             }
                         }
                     }
 
-//                    //traitement des UE supprimés
-//                    foreach ($diffSemestre['ues'] as $ordreUe => $ue) {
-//                        if (!in_array($ordreUe, $tabEcAffiches)) {
-//                            //EC supprimé
-//                            $ligne = $this->afficheEcSupprime($ligne, $ece);
-//                        }
-//                    }
+                    //                    //traitement des UE supprimés
+                    //                    foreach ($diffSemestre['ues'] as $ordreUe => $ue) {
+                    //                        if (!in_array($ordreUe, $tabEcAffiches)) {
+                    //                            //EC supprimé
+                    //                            $ligne = $this->afficheEcSupprime($ligne, $ece);
+                    //                        }
+                    //                    }
 
 
                     $ligne = $this->afficheSommeSemestre($ligne, $semestre, $diffSemestre);
@@ -564,8 +602,11 @@ class LicenceMcccVersion extends AbstractLicenceMccc
 
     private function afficheEc(int $ligne, StructureEc $structureEc, ?array $diffEc): int
     {
-        if ($diffEc === null) {
-            return $ligne;
+        if ($diffEc === null || $diffEc === []) {
+            $diffEc['libelle'] = '';
+            $diffEc['typeMccc'] = new DiffObject('', '');
+            $diffEc['mcccs'] = [];
+
         }
 
         $ec = $structureEc->elementConstitutif;

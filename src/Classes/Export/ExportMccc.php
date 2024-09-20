@@ -10,6 +10,8 @@
 namespace App\Classes\Export;
 
 use App\Entity\CampagneCollecte;
+use App\Entity\Parcours;
+use App\Repository\DpeParcoursRepository;
 use App\Repository\FormationRepository;
 use App\TypeDiplome\TypeDiplomeRegistry;
 use App\Utils\Tools;
@@ -24,12 +26,13 @@ class ExportMccc
     private TypeDiplomeRegistry $typeDiplomeRegistry;
     private array $formations;
     private CampagneCollecte $annee;
-    private DateTimeInterface $date;
+    private ?DateTimeInterface $date = null;
     private string $format = 'xlsx';
     private bool $isLight = false;
 
     public function __construct(
-        protected FormationRepository $formationRepository
+        protected FormationRepository $formationRepository,
+        private readonly DpeParcoursRepository $dpeParcoursRepository
     ) {
     }
 
@@ -93,6 +96,70 @@ class ExportMccc
         return $fileName;
     }
 
+    public function exportVersionZip(): string
+    {
+        $zip = new \ZipArchive();
+        $fileName = 'export_mccc_versionnees_' . date('YmdHis') . '.zip';
+        $zipName = $this->dir . '/zip/' . $fileName;
+        $zip->open($zipName, \ZipArchive::CREATE);
+
+        $tabFiles = [];
+        $dir = $this->dir . '/mccc/';
+
+
+        foreach ($this->formations as $formationId) {
+            $dpeParcours = $this->dpeParcoursRepository->findOneBy(['id' => $formationId, 'campagneCollecte' => $this->annee->getId()]);
+            if ($dpeParcours === null) {
+                continue;
+            }
+
+            $parcours = $dpeParcours->getParcours();
+            if ($parcours === null) {
+                continue;
+            }
+            $formation = $parcours->getFormation();
+
+            if ($formation !== null && $formation->getTypeDiplome()?->getModeleMcc() !== null) {
+                $typeDiplome = $this->typeDiplomeRegistry->getTypeDiplome($formation->getTypeDiplome()?->getModeleMcc());
+                if (null !== $typeDiplome) {
+
+                        if ($formation->isHasParcours() === true) {
+                            $texte = $formation->gettypeDiplome()?->getLibelleCourt(). ' ' . $formation->getSigle() . ' ' . $parcours->getSigle();
+                        } else {
+                            $texte = $formation->gettypeDiplome()?->getLibelleCourt() . ' ' . $formation->getSigle();
+                        }
+
+                        $fichierXlsx = Tools::FileName('MCCC - ' . $this->annee->getLibelle() . ' - ' . $texte, 50);
+                        $fichier = $typeDiplome->exportExcelAndSaveVersionMccc(
+                            $this->annee,
+                            $parcours,
+                            $dir,
+                            null,
+                            null,
+                            $fichierXlsx
+                        );
+
+                        $tabFiles[] = $fichier;
+                        $zip->addFile(
+                            $dir . $fichier,
+                             $fichier
+                        );
+
+                }
+            }
+        }
+
+        $zip->close();
+        // suppression des fichiers temporaires
+        foreach ($tabFiles as $file) {
+            if (file_exists($dir . $file)) {
+                unlink($dir . $file);
+            }
+        }
+
+        return $fileName;
+    }
+
     public function export(
         string              $dir,
         TypeDiplomeRegistry $typeDiplomeRegistry,
@@ -109,5 +176,15 @@ class ExportMccc
         $this->date = $date;
         $this->format = $format;
         $this->isLight = $isLight;
+    }
+
+    public function exportVersion(string $dir, TypeDiplomeRegistry $typeDiplomeRegistry, array $formations, ?CampagneCollecte $campagneCollecte)
+    {
+        $this->dir = $dir;
+        $this->typeDiplomeRegistry = $typeDiplomeRegistry;
+        $this->formations = $formations;
+        $this->annee = $campagneCollecte;
+        $this->format = 'xlsx';
+        $this->isLight = false;
     }
 }

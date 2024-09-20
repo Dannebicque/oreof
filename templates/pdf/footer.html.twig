@@ -12,26 +12,16 @@
             padding: 0;
             margin: 0;
         }
-        {% if withTemplate == false %}
-        footer {
-            margin:0;
-            bottom:0;
-            width:100%;
-            left:0;
-            padding: 0.2cm;
-            color: white;
-            text-align: center;
-            font-size: 10px;
-        }
-        {% else %}
+
+        {% if withTemplate is defined and withTemplate == true %}
         footer {
             /*-webkit-print-color-adjust: exact;*/
-            margin:0;
-            bottom:0;
-            width:100%;
+            margin: 0;
+            bottom: 0;
+            width: 100%;
             height: 3.5cm;
-            left:0;
-            right:0;
+            left: 0;
+            right: 0;
             padding: 0.2cm;
             color: white;
             text-align: right;
@@ -39,10 +29,10 @@
         }
 
         #class_vague {
-            margin:0;
-            padding:0;
+            margin: 0;
+            padding: 0;
             position: fixed;
-            right:-0.5cm;
+            right: -0.5cm;
             text-align: right;
 
         }
@@ -55,25 +45,34 @@
         #adresse_vague {
             color: black;
             position: fixed;
-            right:1cm;
-            bottom:0.5cm;
+            right: 1cm;
+            bottom: 0.5cm;
             width: 19cm;
             text-align: right;
             font-size: 10px;
         }
+
+
+        {% else %}
+
+        footer {
+            margin: 0;
+            bottom: 0;
+            width: 100%;
+            left: 0;
+            padding: 0.2cm;
+            color: white;
+            text-align: center;
+            font-size: 10px;
+        }
+
         {% endif %}
     </style>
 </head>
 <body>
 <footer>
     {% block footer %}
-        {% if withTemplate == false %}
-        <p><span class="pageNumber"></span> of <span class="totalPages"></span></p>
-        <p>Document généré le {{ 'now'|date('d/m/Y H:i') }} depuis
-            ORéOF
-            - {% if final is defined and final == true %}Document voté le ... {% else %}Document provisoire non validé en CFVU{% endif %}</p>
-        <p>Université de Reims Champagne-Ardenne</p>
-        {% else %}
+        {% if withTemplate is defined and withTemplate == true %}
             <div id="class_vague">
                 <img src="data:image/jpeg;base64,{{ image }}" alt="logo">
             </div>
@@ -85,6 +84,12 @@
                 {{ composante.urlSite }}<br>
                 {{ composante.mailContact }}
             </div>
+        {% else %}
+            <p><span class="pageNumber"></span> of <span class="totalPages"></span></p>
+            <p>Document généré le {{ 'now'|date('d/m/Y H:i') }} depuis
+                ORéOF
+                - {% if final is defined and final == true %}Document voté le ... {% else %}Document provisoire non validé en CFVU{% endif %}</p>
+            <p>Université de Reims Champagne-Ardenne</p>
         {% endif %}
     {% endblock %}
 </footer>

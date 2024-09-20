@@ -73,6 +73,8 @@ class Export
                 return $this->exportMccc();
             case 'light_mccc':
                 return $this->exportMccc(true);
+            case 'version_mccc':
+                return $this->exportMcccVersion();
             case 'carif':
                 return $this->exportCarif();
             case 'regime':
@@ -163,5 +165,16 @@ class Export
     private function exportSyntheseModifications(): string
     {
         return $this->exportSyntheseModification->exportLink($this->formations, $this->campagneCollecte);
+    }
+
+    private function exportMcccVersion()
+    {
+        $this->exportMccc->exportVersion(
+            $this->dir,
+            $this->typeDiplomeRegistry,
+            $this->formations,
+            $this->campagneCollecte,
+        );
+        return $this->exportMccc->exportVersionZip();
     }
 }

@@ -130,10 +130,10 @@ class DpeParcoursRepository extends ServiceEntityRepository
             ->addSelect('f')
             ->where('d.campagneCollecte = :campagneCollecte')
             ->andWhere('f.composantePorteuse = :composante')
-            ->andWhere('d.etatReconduction = :etatReconduction')
-            ->orWhere('d.etatReconduction = :etatReconduction2')
-            ->setParameter('etatReconduction', TypeModificationDpeEnum::MODIFICATION_MCCC)
-            ->setParameter('etatReconduction2', TypeModificationDpeEnum::MODIFICATION_MCCC_TEXTE)
+//            ->andWhere('d.etatReconduction = :etatReconduction')
+//            ->orWhere('d.etatReconduction = :etatReconduction2')
+//            ->setParameter('etatReconduction', TypeModificationDpeEnum::MODIFICATION_MCCC)
+//            ->setParameter('etatReconduction2', TypeModificationDpeEnum::MODIFICATION_MCCC_TEXTE)
             ->setParameter('campagneCollecte', $getDpe)
             ->setParameter('composante', $composante)
             ->orderBy('f.typeDiplome', 'ASC')
@@ -143,6 +143,32 @@ class DpeParcoursRepository extends ServiceEntityRepository
         return $query->getQuery()
             ->getResult();
     }
+
+    public function findParcoursByComposanteCfvu(CampagneCollecte $getDpe, Composante $composante): array
+    {
+        $query = $this->createQueryBuilder('d')
+            ->innerJoin('d.parcours', 'p')
+            ->addSelect('p')
+            ->innerJoin('p.formation', 'f')
+            ->addSelect('f')
+            ->where('d.campagneCollecte = :campagneCollecte')
+            ->andWhere("JSON_CONTAINS(d.etatValidation, :etatDpe) = 1")
+            ->setParameter('etatDpe', json_encode(['soumis_cfvu' => 1]))
+            ->andWhere('f.composantePorteuse = :composante')
+            ->andWhere('d.etatReconduction = :etatReconduction')
+            ->orWhere('d.etatReconduction = :etatReconduction2')
+            ->setParameter('etatReconduction', TypeModificationDpeEnum::MODIFICATION_MCCC)
+            ->setParameter('etatReconduction2', TypeModificationDpeEnum::MODIFICATION_MCCC_TEXTE)
+            ->setParameter('campagneCollecte', $getDpe)
+            ->setParameter('composante', $composante)
+            ->orderBy('f.typeDiplome', 'ASC')
+            ->addOrderBy('f.mentionTexte', 'ASC')
+        ;
+
+        return $query->getQuery()
+            ->getResult();
+    }
+
 
     public function findByCampagneWithModification(CampagneCollecte $getDpe)
     {
