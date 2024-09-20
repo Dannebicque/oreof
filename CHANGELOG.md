@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.31.36](https://github.com/Dannebicque/oreof/compare/v1.31.35...v1.31.36) (2024-09-20)
+
+
+### Bug Fixes
+
+* EC enfant sur nouvel EC ([9395038](https://github.com/Dannebicque/oreof/commit/9395038d9c10f3e2fcb91095ac9802bb09df4e03))
+* modif tableau EC ([3a8d849](https://github.com/Dannebicque/oreof/commit/3a8d849e1c882f6bdbae658ab32b6c58abed2eed))
+
 ### [1.31.35](https://github.com/Dannebicque/oreof/compare/v1.31.34...v1.31.35) (2024-09-18)
 
 
