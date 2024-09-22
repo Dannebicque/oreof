@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.31.38](https://github.com/Dannebicque/oreof/compare/v1.31.37...v1.31.38) (2024-09-22)
+
+
+### Features
+
+* Validation en lot des fiches matières ([ecf2c85](https://github.com/Dannebicque/oreof/commit/ecf2c850bd4da88740d584af04b48ad063fa7ad9))
+
 ### [1.31.37](https://github.com/Dannebicque/oreof/compare/v1.31.36...v1.31.37) (2024-09-20)
 
 
