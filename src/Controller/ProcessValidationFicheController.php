@@ -7,6 +7,7 @@ use App\Classes\Process\FicheMatiereProcess;
 use App\Classes\ValidationProcessFicheMatiere;
 use App\Entity\FicheMatiere;
 use App\Repository\FicheMatiereRepository;
+use App\Utils\JsonRequest;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -26,10 +27,11 @@ class ProcessValidationFicheController extends BaseController
         Request             $request
     ): Response {
         if ($request->isMethod('POST')) {
-            $sFiches = $request->request->get('formations');
+            $sFiches = $request->request->get('fiches');
         } else {
-            $sFiches = $request->query->get('formations');
+            $sFiches = $request->query->get('fiches');
         }
+
         $fiches = explode(',', $sFiches);
 
         $process = $this->validationProcessFicheMatiere->getEtape($etape);
@@ -154,14 +156,14 @@ class ProcessValidationFicheController extends BaseController
 
         $process = $this->validationProcessFicheMatiere->getEtape($etape);
 
-            if ($ficheMatiere === null) {
-                return JsonReponse::error('Fiche non trouvée');
-            }
-            $processData = $this->ficheMatiereProcess->etatFicheMatiere($ficheMatiere, $process);
+        if ($ficheMatiere === null) {
+            return JsonReponse::error('Fiche non trouvée');
+        }
+        $processData = $this->ficheMatiereProcess->etatFicheMatiere($ficheMatiere, $process);
 
-            if ($request->isMethod('POST')) {
-                $this->ficheMatiereProcess->refuseFicheMatiere($ficheMatiere, $this->getUser(), $process, $etape, $request);
-            }
+        if ($request->isMethod('POST')) {
+            $this->ficheMatiereProcess->refuseFicheMatiere($ficheMatiere, $this->getUser(), $process, $etape, $request);
+        }
 
 
         if ($request->isMethod('POST')) {

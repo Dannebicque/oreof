@@ -92,4 +92,33 @@ export default class extends Controller {
       this.actionTarget.innerHTML = await reponse.text()
     }
   }
+
+  async valide_fiche(event) {
+    const liste = document.querySelectorAll('.check-all:checked')
+    if (liste.length === 0) {
+      callOut('Veuillez sélectionner au moins une fiche EC/matière', 'danger')
+    } else {
+      const fiches = []
+      liste.forEach((item) => {
+        fiches.push(item.value)
+      })
+
+      const body = new URLSearchParams({
+        fiches,
+      })
+
+      this.actionTarget.innerHTML = ''
+      const reponse = await fetch(`${event.params.url}?${body.toString()}`)
+      this.actionTarget.innerHTML = await reponse.text()
+
+      // await fetch(`${event.params.url}?${body.toString()}`).then((response) => {
+      //   if (response.status === 200) {
+      //     callOut('Fiches validées', 'success')
+      //     window.location.reload()
+      //   } else {
+      //     callOut('Une erreur est survenue', 'danger')
+      //   }
+      // })
+    }
+  }
 }
