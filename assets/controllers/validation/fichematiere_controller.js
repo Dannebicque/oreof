@@ -13,7 +13,6 @@ export default class extends Controller {
   static targets = ['action']
 
   connect() {
-    console.log('fiche matiere controller')
   }
 
   detail(event) {

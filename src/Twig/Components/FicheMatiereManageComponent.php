@@ -40,14 +40,14 @@ final class FicheMatiereManageComponent extends AbstractController
     public ?FicheMatiere $ficheMatiere = null;
 
     public ?string $etape = '';
-
+    public string $place = '';
     #[LiveProp(writable: true)]
     public string $event = 'none';
     public bool $hasDemande = false;
 
     public function __construct(
         private HistoriqueFicheMatiereRepository $historiqueFicheMatiereRepository,
-        private ValidationProcessFicheMatiere             $validationProcess,
+        private ValidationProcessFicheMatiere    $validationProcess,
         #[Target('fiche')]
         private WorkflowInterface             $ficheMatiereWorkflow,
     ) {
@@ -57,8 +57,8 @@ final class FicheMatiereManageComponent extends AbstractController
     #[LiveListener('mention_manage:valide')]
     public function valide(): void
     {
-        $place = $this->getPlace();
-        $this->etape = self::TAB[$place];
+        $this->place = $this->getPlace();
+        $this->etape = self::TAB[$this->place];
         $this->getHistorique();
         $this->event = 'valide';
     }
@@ -74,24 +74,16 @@ final class FicheMatiereManageComponent extends AbstractController
     #[LiveListener('mention_manage:edit')]
     public function edit(): void
     {
-        $place = $this->getPlace();
-        $this->etape = self::TAB[$place];
+        $this->place = $this->getPlace();
+        $this->etape = self::TAB[$this->place];
         $this->event = 'edit';
-    }
-
-    #[LiveListener('mention_manage:refuse')]
-    public function refuse(): void
-    {
-        $place = $this->getPlace();
-        $this->etape = self::TAB[$place];
-        $this->event = 'refuse';
     }
 
     #[LiveListener('mention_manage:reserve')]
     public function reserve(): void
     {
-        $place = $this->getPlace();
-        $this->etape = self::TAB[$place];
+        $this->place = $this->getPlace();
+        $this->etape = self::TAB[$this->place];
         $this->event = 'reserve';
     }
 
@@ -99,19 +91,22 @@ final class FicheMatiereManageComponent extends AbstractController
     public function postMount(): void
     {
         $this->getHistorique();
-//        $lastHistorique = $this->historiqueFicheMatiereRepository->findOneBy(['ficheMatiere' => $this->ficheMatiere], ['created' => 'DESC']);
-//        if ($lastHistorique !== null && $lastHistorique->getEtape() === 'rouvrir_fiche_matiere') {
-//          //  $this->hasDemande = true;
-//        }
+        //        $lastHistorique = $this->historiqueFicheMatiereRepository->findOneBy(['ficheMatiere' => $this->ficheMatiere], ['created' => 'DESC']);
+        //        if ($lastHistorique !== null && $lastHistorique->getEtape() === 'rouvrir_fiche_matiere') {
+        //          //  $this->hasDemande = true;
+        //        }
 
-        // dépend du type et de l'étape...
-        $place = $this->getPlace();
-        $this->etape = self::TAB[$place] ;
+        $this->place = $this->getPlace();
+        $this->etape = self::TAB[$this->place] ;
     }
 
 
     private function getPlace()
     {
+        if (null === $this->ficheMatiere) {
+            return 'initialisation_dpe';
+        }
+
         return array_keys($this->ficheMatiereWorkflow->getMarking($this->ficheMatiere)->getPlaces())[0];
     }
 }

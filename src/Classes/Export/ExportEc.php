@@ -47,11 +47,13 @@ class ExportEc implements ExportInterface
         $this->excelWriter->writeCellXY(3, 1, 'Mention');
         $this->excelWriter->writeCellXY(4, 1, 'Parcours');
         $this->excelWriter->writeCellXY(5, 1, 'Semestre');
-        $this->excelWriter->writeCellXY(6, 1, 'Ue');
-        $this->excelWriter->writeCellXY(7, 1, 'EC');
-        $this->excelWriter->writeCellXY(8, 1, 'Fiche EC/matière');
-        $this->excelWriter->writeCellXY(9, 1, 'Type EC');
-        $this->excelWriter->writeCellXY(10, 1, 'Référent');
+        $this->excelWriter->writeCellXY(6, 1, 'N° UE');
+        $this->excelWriter->writeCellXY(7, 1, 'Initulé UE');
+        $this->excelWriter->writeCellXY(8, 1, 'N° EC');
+        $this->excelWriter->writeCellXY(9, 1, 'Initulé EC');
+        $this->excelWriter->writeCellXY(10, 1, 'Fiche EC/matière');
+        $this->excelWriter->writeCellXY(11, 1, 'Type EC');
+        $this->excelWriter->writeCellXY(12, 1, 'Référent');
 
         $ligne = 2;
         /** @var ElementConstitutif $ec */
@@ -67,10 +69,12 @@ class ExportEc implements ExportInterface
             }
             $this->excelWriter->writeCellXY(5, $ligne, $ec->getUe()?->getSemestre()?->display());
             $this->excelWriter->writeCellXY(6, $ligne, $ec->getUe()?->display($ec->getParcours()));
-            $this->excelWriter->writeCellXY(7, $ligne, $ec->getLibelle());
-            $this->excelWriter->writeCellXY(8, $ligne, $ec->getFicheMatiere()?->getLibelle());
-            $this->excelWriter->writeCellXY(9, $ligne, $ec->getTypeEc()?->getType()->value);
-            $this->excelWriter->writeCellXY(10, $ligne, $ec->getFicheMatiere()?->getResponsableFicheMatiere() !== null ? $ec->getFicheMatiere()?->getResponsableFicheMatiere()?->getDisplay() : 'Non défini - RP ou RF');
+            $this->excelWriter->writeCellXY(7, $ligne, $ec->getUe()?->getLibelle());
+            $this->excelWriter->writeCellXY(8, $ligne, $ec->getCode());
+            $this->excelWriter->writeCellXY(9, $ligne, $ec->getLibelle());
+            $this->excelWriter->writeCellXY(10, $ligne, $ec->getFicheMatiere()?->getLibelle());
+            $this->excelWriter->writeCellXY(11, $ligne, $ec->getTypeEc()?->getType()->value);
+            $this->excelWriter->writeCellXY(12, $ligne, $ec->getFicheMatiere()?->getResponsableFicheMatiere() !== null ? $ec->getFicheMatiere()?->getResponsableFicheMatiere()?->getDisplay() : 'Non défini - RP ou RF');
 
             $this->excelWriter->getColumnsAutoSize('A', 'M');
             $ligne++;

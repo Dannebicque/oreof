@@ -1140,4 +1140,9 @@ class FicheMatiere
 
         return $this;
     }
+
+    public function getEtatValidation(): ?array
+    {
+        return $this->getEtatFiche();
+    }
 }

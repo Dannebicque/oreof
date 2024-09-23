@@ -75,27 +75,16 @@
                 </td>
                 <td class="text-end">
 
-                                        <a href="{{ path('app_fiche_matiere_show',{'slug': fiche.slug}) }}"
-                                           class="btn btn-sm text-info"
-                                           data-bs-toggle="tooltip"
-                                           target="_blank"
-                                           data-bs-placement="bottom"
-                                           title="Voir la fiche EC/matière"
-                                        >
-                                            <i class="{{ iconShow }}"></i>
-                                            <span> Voir</span>
-                                        </a>
-
-
-
-                    {#                    {% if is_granted('ROLE_SES') %} #}
-                    {#                        <button {{ stimulus_action('crud', 'delete', 'click', { #}
-                    {#                            url:path('app_formation_delete',{'id': formation.id}), #}
-                    {#                            csrf: csrf_token('delete' ~ formation.id) #}
-                    {#                        }) }} class="btn btn-sm text-danger"> #}
-                    {#                            <i class="{{ iconDelete }}"></i> Supprimer #}
-                    {#                        </button> #}
-                    {#                    {% endif %} #}
+                    <a href="{{ path('app_fiche_matiere_show',{'slug': fiche.slug}) }}"
+                       class="btn btn-sm text-info"
+                       data-bs-toggle="tooltip"
+                       target="_blank"
+                       data-bs-placement="bottom"
+                       title="Voir la fiche EC/matière"
+                    >
+                        <i class="{{ iconShow }}"></i>
+                        <span> Voir</span>
+                    </a>
                 </td>
             </tr>
         {% else %}
@@ -110,7 +99,7 @@
             <div class="col-3 d-grid">
                 <button class="btn btn-sm d-block btn-outline-success"
                         type="button"
-                        data-action="validation--index#valide"
+                        data-action="validation--index#valide_fiche"
                         data-validation--index-url-param="{{ path('app_validation_valide_fiche_lot', {etape:etape}) }}"
                         data-controller="tooltip"
                         data-tooltip-placement-value="bottom"
@@ -129,7 +118,7 @@
             <div class="col-3 d-grid">
                 <button
                         class="btn btn-sm d-block btn-outline-warning"
-                        data-action="validation--index#valide"
+                        data-action="validation--index#reserve_fiche"
                         data-validation--index-url-param="{{ path('app_validation_reserve_fiche_lot', {etape:etape}) }}"
                         data-controller="tooltip"
                         data-tooltip-placement-value="bottom"
@@ -144,24 +133,24 @@
             </div>
         {% endif %}
 
-        {% if process.hasRefuse %}
-            <div class="col-3 d-grid">
-                <button class="btn btn-sm d-block btn-outline-danger"
-                        type="button"
-                        data-action="validation--index#valide"
-                        data-validation--index-url-param="{{ path('app_validation_refuse_fiche_lot', {etape:etape}) }}"
-                        data-controller="tooltip"
-                        data-tooltip-placement-value="bottom"
-                        aria-label="{{ ('validation.refuser.'~etape)|trans({}, 'process') }}"
-                        data-bs-original-title="{{ ('validation.refuser.'~etape)|trans({}, 'process') }}"
-                >
-                    <i class="fal fa-ban"></i> {{ ('validation.refuser.'~etape)|trans({}, 'process') }}
-                </button>
-            </div>
-        {% else %}
-            <div class="col-3 d-grid">
-            </div>
-        {% endif %}
+{#        {% if process.hasRefuse %}#}
+{#            <div class="col-3 d-grid">#}
+{#                <button class="btn btn-sm d-block btn-outline-danger"#}
+{#                        type="button"#}
+{#                        data-action="validation--index#refuse_fiche"#}
+{#                        data-validation--index-url-param="{{ path('app_validation_refuse_fiche_lot', {etape:etape}) }}"#}
+{#                        data-controller="tooltip"#}
+{#                        data-tooltip-placement-value="bottom"#}
+{#                        aria-label="{{ ('validation.refuser.'~etape)|trans({}, 'process') }}"#}
+{#                        data-bs-original-title="{{ ('validation.refuser.'~etape)|trans({}, 'process') }}"#}
+{#                >#}
+{#                    <i class="fal fa-ban"></i> {{ ('validation.refuser.'~etape)|trans({}, 'process') }}#}
+{#                </button>#}
+{#            </div>#}
+{#        {% else %}#}
+{#            <div class="col-3 d-grid">#}
+{#            </div>#}
+{#        {% endif %}#}
     </div>
     <div class="row mt-2" {{ stimulus_target('validation--index', 'action') }}>
 

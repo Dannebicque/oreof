@@ -427,7 +427,7 @@ validation.reserve.transmis_ses: validation.reserve.transmis_ses
 validation.refuser.transmis_ses.title: validation.refuser.transmis_ses.title
 validation.refuser.transmis_ses: validation.refuser.transmis_ses
 validation.fiche_matiere.ses.valide.alerte: 'Valider les fiches EC/matière pour la publication'
-btn.validation.fiche_matiere.ses.valide: btn.validation.fiche_matiere.ses.valide
+btn.validation.fiche_matiere.ses.valide: 'Valider pour publication'
 ficheMatiere.valide.transmis_ses.flash.success: ficheMatiere.valide.transmis_ses.flash.success
 validation.valider.transmis_pour_publication.title: validation.valider.transmis_pour_publication.title
 validation.valider.transmis_pour_publication: validation.valider.transmis_pour_publication
@@ -466,7 +466,7 @@ validation.valider.soumis_central.title: 'Valider et soumettre les fiches EC/mat
 modification.historique.title: "Modification de l'historique"
 modification.historique: "Modification de l'historique"
 validation.valider.valide_pour_publication: validation.valider.valide_pour_publication
-validation.fiche_matiere.ses.reserve.alerte: validation.fiche_matiere.ses.reserve.alerte
+validation.fiche_matiere.ses.reserve.alerte: 'Emettre des réserves sur la fiche matière rend la fiche de nouveau modifiable.'
 reserve.validation.fiche_matiere.ses.argumentaire.label: 'Argumentaire pour les réserves des fiches EC/matière'
 reserve.validation.fiche_matiere.ses.helps.argumentaire.help: ''
 btn.validation.fiche_matiere.ses.reserve: 'Emettre des réserves sur les fiches EC/matière'
@@ -512,7 +512,12 @@ btn:
     demande:
       cloture: 'Clore et soumettre les modifications'
       reouverture: 'Confirmer la réouverture'
-fiche_matiere.demande.reouverture.alerte: 'La fiche matière sera réouverte et pourra être modifiée. Il faudra ensuite la clôturer pour valider et publier les modifications.'
+
+  validation:
+    fiche:
+      valider_fiche_compo: 'Valider et soumettre la fiche matière'
+      valider_fiche_compo.title: 'Valider et soumettre la fiche matière'
+      fiche_matiere.demande.reouverture.alerte: 'La fiche matière sera réouverte et pourra être modifiée. Il faudra ensuite la clôturer pour valider et publier les modifications.'
 fiche_matiere.demande.reouverture.label: 'Je confirme la demande de réouverture'
 fiche_matiere.demande.reouverture.help: 'Confirmer la demande de réouverture.'
 historique:
@@ -597,11 +602,18 @@ valide:
       fichier:
         label: 'Pièce justifiant la demande de changement de responsable de formation (PV, relevé de décision, délibération) :'
 validation:
+  valider:
+    fiche:
+      valider_fiche_compo:
+        title: 'Validation de la fiche matière'
   soumis_conseil:
     valide:
       laisserPasser:
         soumis_conseil: 'Demande de laissez-passer, le conseil de composante ne pouvant avoir lieu avant le passage en CFVU.'
-
+  fiche_matiere:
+    valide:
+      fiche:
+        alerte: 'Vérifier et soumettre la fiche matière pour publication'
 changeRf:
   valide:
     soumis_conseil:
@@ -624,3 +636,14 @@ valide.date.conseil.help: 'Date du conseil de composante'
 valide.change_rf.date.valider_conseil.label: 'Date du conseil de composante'
 valide.change_rf.date.valider_cfvu_avec_pv.label: 'Date de la CFVU'
 valide.change_rf.date.valider_cfvu_attente_pv.label: 'Date de la CFVU'
+title:
+  validation:
+    fiche:
+      valider_fiche_compo: 'Soumettre la fiche matière'
+btn.validation.fiche.valider_fiche_ses: 'Validation SES pour publication'
+validation.valider.fiche.valider_fiche_ses.title: 'Validation SES pour publication'
+validation.fiche_matiere.ses.valide.fiche.alerte: ''
+title.validation.fiche.reserver_fiche_ses: 'Emettre des réserves sur la fiche matière'
+validation.valider.fiche.reserver_fiche_ses.title: 'Emettre des réserves sur la fiche matière'
+btn.validation.fiche.reserver_fiche_ses: 'Emettre des réserves'
+
