@@ -11,6 +11,7 @@ namespace App\Controller;
 
 use App\Classes\JsonReponse;
 use App\Classes\verif\FicheMatiereState;
+use App\DTO\StructureEc;
 use App\Entity\ElementConstitutif;
 use App\Entity\FicheMatiere;
 use App\Entity\FicheMatiereVersioning;
@@ -243,16 +244,17 @@ class FicheMatiereController extends AbstractController
 
     #[Route('/{ec}/{parcours}/{ects}/maquette_iframe', name: 'app_fiche_matiere_maquette_iframe')]
     public function getMaquetteIframe(ElementConstitutif $ec, Parcours $parcours, float $ects) : Response {
-        $ficheMatiere = $ec->getFicheMatiere();
 
+        $ficheMatiere = $ec->getFicheMatiere();
         $isBUT = $ficheMatiere->getParcours()?->getTypeDiplome()?->getLibelleCourt() === 'BUT';
+        $structureEC = new StructureEc($ec, $parcours, $isBUT, true, false);
 
         return $this->render('fiche_matiere/maquette_iframe.html.twig', [
             'fiche_matiere' => $ficheMatiere,
             'typeDiplome' => $ficheMatiere->getParcours()?->getFormation()?->getTypeDiplome(),
             'formation' => $ficheMatiere->getParcours()?->getFormation(),
             'maquetteOrigineURL' => $parcours ? $this->generateUrl('app_parcours_maquette_iframe', ['parcours' => $parcours->getId()]) : "#",
-            'element_constitutif' => $ec,
+            'heuresEctsEc' => $structureEC->heuresEctsEc,
             'ects' => $ects,
             'isBUT' => $isBUT
         ]);
