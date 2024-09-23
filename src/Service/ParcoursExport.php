@@ -222,7 +222,7 @@ class ParcoursExport {
                                     $tUeEnfantDeuxiemeNiveau = [
                                         'ordre' => $ueEnfantDeuxiemeNiveau->ordre(),
                                         'libelleOrdre' => $ueEnfantDeuxiemeNiveau->display,
-                                        'libelle' => $ueEnfantDeuxiemeNiveau->ue->getLibelle() ?? $ueEnfant->display,
+                                        'libelle' => $ueEnfantDeuxiemeNiveau->ue->getLibelle() ?? $ueEnfantDeuxiemeNiveau->display,
                                         'volumes' => [
                                             'CM' => [
                                                 'presentiel' => $ueEnfantDeuxiemeNiveau->heuresEctsUe->sommeUeCmPres,
