@@ -80,44 +80,44 @@
                 <tr>
                     <th class="border-left-semestre-{{ ordre }} text-end" colspan="3">Total Semestre {{ ordre }}</th>
                     <th>
-                        <span class="show_versioning d-none">{{ diffSemestre is defined and diffSemestre != null ? diffSemestre.heuresEctsSemestre.sommeSemestreEcts|displayDiff : '' }} ECTS</span>
+                        <span class="show_versioning d-none d-print-none">{{ diffSemestre is defined and diffSemestre != null ? diffSemestre.heuresEctsSemestre.sommeSemestreEcts|displayDiff : '' }} ECTS</span>
                         <p class="show_current">{{ semestre.heuresEctsSemestre.sommeSemestreEcts|filtreHeures }}</p>
                     </th>
 
                     {% if presentiel %}
                         <th>
-                            <span class="show_versioning d-none">{{ diffSemestre is defined and diffSemestre != null ? diffSemestre.heuresEctsSemestre.sommeSemestreCmPres|displayDiff : '' }}</span>
+                            <span class="show_versioning d-none d-print-none">{{ diffSemestre is defined and diffSemestre != null ? diffSemestre.heuresEctsSemestre.sommeSemestreCmPres|displayDiff : '' }}</span>
                             <span class="show_current">{{ semestre.heuresEctsSemestre.sommeSemestreCmPres|filtreHeures }}</span>
                         </th>
                         <th>
-                            <span class="show_versioning d-none">{{ diffSemestre is defined and diffSemestre != null ? diffSemestre.heuresEctsSemestre.sommeSemestreTdPres|displayDiff : '' }}</span>
+                            <span class="show_versioning d-none d-print-none">{{ diffSemestre is defined and diffSemestre != null ? diffSemestre.heuresEctsSemestre.sommeSemestreTdPres|displayDiff : '' }}</span>
                             <span class="show_current">{{ semestre.heuresEctsSemestre.sommeSemestreTdPres|filtreHeures }}</span>
                         </th>
                         <th>
-                            <span class="show_versioning d-none">{{ diffSemestre is defined and diffSemestre != null ? diffSemestre.heuresEctsSemestre.sommeSemestreTpPres|displayDiff : '' }}</span>
+                            <span class="show_versioning d-none d-print-none">{{ diffSemestre is defined and diffSemestre != null ? diffSemestre.heuresEctsSemestre.sommeSemestreTpPres|displayDiff : '' }}</span>
                             <span class="show_current">{{ semestre.heuresEctsSemestre.sommeSemestreTpPres|filtreHeures }}</span>
                         </th>
                         <th>
-                            <span class="show_versioning d-none">{{ diffSemestre is defined and diffSemestre != null ? diffSemestre.heuresEctsSemestre.sommeSemestreTotalPres|displayDiff : '' }}</span>
+                            <span class="show_versioning d-none d-print-none">{{ diffSemestre is defined and diffSemestre != null ? diffSemestre.heuresEctsSemestre.sommeSemestreTotalPres|displayDiff : '' }}</span>
                             <span class="show_current">{{ semestre.heuresEctsSemestre.sommeSemestreTotalPres|filtreHeures }}</span>
                         </th>
                         <th>
-                            <span class="show_versioning d-none">{{ diffSemestre is defined and diffSemestre != null ? diffSemestre.heuresEctsSemestre.sommeSemestreTePres|displayDiff : '' }}</span>
+                            <span class="show_versioning d-none d-print-none">{{ diffSemestre is defined and diffSemestre != null ? diffSemestre.heuresEctsSemestre.sommeSemestreTePres|displayDiff : '' }}</span>
                             <span class="show_current">{{ semestre.heuresEctsSemestre.sommeSemestreTePres|filtreHeures }}</span>
                         </th>
                     {% endif %}
 
                     {% if distanciel %}
                         <th>
-                            <span class="show_versioning d-none">{{ diffSemestre is defined and diffSemestre != null ? diffSemestre.heuresEctsSemestre.sommeSemestreCmDist|displayDiff : '' }}</span>
+                            <span class="show_versioning d-none d-print-none">{{ diffSemestre is defined and diffSemestre != null ? diffSemestre.heuresEctsSemestre.sommeSemestreCmDist|displayDiff : '' }}</span>
                             <span class="show_current">{{ semestre.heuresEctsSemestre.sommeSemestreCmDist|filtreHeures }}</span>
                         </th>
                         <th>
-                            <span class="show_versioning d-none">{{ diffSemestre is defined and diffSemestre != null ? diffSemestre.heuresEctsSemestre.sommeSemestreTdDist|displayDiff : '' }}</span>
+                            <span class="show_versioning d-none d-print-none">{{ diffSemestre is defined and diffSemestre != null ? diffSemestre.heuresEctsSemestre.sommeSemestreTdDist|displayDiff : '' }}</span>
                             <span class="show_current">{{ semestre.heuresEctsSemestre.sommeSemestreTdDist|filtreHeures }}</span>
                         </th>
                         <th>
-                            <span class="show_versioning d-none">{{ diffSemestre is defined and diffSemestre != null ? diffSemestre.heuresEctsSemestre.sommeSemestreTpDist|displayDiff : '' }}</span>
+                            <span class="show_versioning d-none d-print-none">{{ diffSemestre is defined and diffSemestre != null ? diffSemestre.heuresEctsSemestre.sommeSemestreTpDist|displayDiff : '' }}</span>
                             <span class="show_current">{{ semestre.heuresEctsSemestre.sommeSemestreTpDist|filtreHeures }}</span>
                         </th>
                         <th>
@@ -128,7 +128,7 @@
 
                     {% if parcours.modalitesEnseignement != null and (parcours.modalitesEnseignement.value == 1) %}
                         <th>
-                            <span class="show_versioning d-none">{{ diffSemestre is defined and diffSemestre != null ? diffSemestre.heuresEctsSemestre.sommeSemestreTotalPresDist|displayDiff : '' }}</span>
+                            <span class="show_versioning d-none d-print-none">{{ diffSemestre is defined and diffSemestre != null ? diffSemestre.heuresEctsSemestre.sommeSemestreTotalPresDist|displayDiff : '' }}</span>
                             <span class="show_current">{{ semestre.heuresEctsSemestre.sommeSemestreTotalPresDist|filtreHeures }}</span>
                         </th>
                     {% endif %}
@@ -137,55 +137,55 @@
             <tr>
                 <th colspan="3" class="text-end">Total formation</th>
                 <th>
-                    <span class="show_versioning d-none">{{ diffStructure is defined and diffStructure != null ? diffStructure.heuresEctsFormation.sommeFormationEcts|displayDiff : '' }} ECTS</span>
+                    <span class="show_versioning d-none d-print-none">{{ diffStructure is defined and diffStructure != null ? diffStructure.heuresEctsFormation.sommeFormationEcts|displayDiff : '' }} ECTS</span>
                     <p class="show_current">{{ dto.heuresEctsFormation.sommeFormationEcts }} ECTS</p>
                 </th>
 
                 {% if presentiel %}
                     <th>
-                        <span class="show_versioning d-none">{{ diffStructure is defined and diffStructure != null ? diffStructure.heuresEctsFormation.sommeFormationCmPres|displayDiff : '' }}</span>
+                        <span class="show_versioning d-none d-print-none">{{ diffStructure is defined and diffStructure != null ? diffStructure.heuresEctsFormation.sommeFormationCmPres|displayDiff : '' }}</span>
                         <span class="show_current">{{ dto.heuresEctsFormation.sommeFormationCmPres|filtreHeures }}</span>
                     </th>
                     <th>
-                        <span class="show_versioning d-none">{{ diffStructure is defined and diffStructure != null ? diffStructure.heuresEctsFormation.sommeFormationTdPres|displayDiff : '' }}</span>
+                        <span class="show_versioning d-none d-print-none">{{ diffStructure is defined and diffStructure != null ? diffStructure.heuresEctsFormation.sommeFormationTdPres|displayDiff : '' }}</span>
                         <span class="show_current">{{ dto.heuresEctsFormation.sommeFormationTdPres|filtreHeures }}</span>
                     </th>
                     <th>
-                        <span class="show_versioning d-none">{{ diffStructure is defined and diffStructure != null ? diffStructure.heuresEctsFormation.sommeFormationTpPres|displayDiff : '' }}</span>
+                        <span class="show_versioning d-none d-print-none">{{ diffStructure is defined and diffStructure != null ? diffStructure.heuresEctsFormation.sommeFormationTpPres|displayDiff : '' }}</span>
                         <span class="show_current">{{ dto.heuresEctsFormation.sommeFormationTpPres|filtreHeures }}</span>
                     </th>
                     <th>
-                        <span class="show_versioning d-none">{{ diffStructure is defined and diffStructure != null ? diffStructure.heuresEctsFormation.sommeFormationTotalPres|displayDiff : '' }}</span>
+                        <span class="show_versioning d-none d-print-none">{{ diffStructure is defined and diffStructure != null ? diffStructure.heuresEctsFormation.sommeFormationTotalPres|displayDiff : '' }}</span>
                         <span class="show_current">{{ dto.heuresEctsFormation.sommeFormationTotalPres|filtreHeures }}</span>
                     </th>
                     <th>
-                        <span class="show_versioning d-none">{{ diffStructure is defined and diffStructure != null ? diffStructure.heuresEctsFormation.sommeFormationTePres|displayDiff : '' }}</span>
+                        <span class="show_versioning d-none d-print-none">{{ diffStructure is defined and diffStructure != null ? diffStructure.heuresEctsFormation.sommeFormationTePres|displayDiff : '' }}</span>
                         <span class="show_current">{{ dto.heuresEctsFormation.sommeFormationTePres|filtreHeures }}</span>
                     </th>
                 {% endif %}
 
                 {% if distanciel %}
                     <th>
-                        <span class="show_versioning d-none">{{ diffStructure is defined and diffStructure != null ? diffStructure.heuresEctsFormation.sommeFormationCmDist|displayDiff : '' }}</span>
+                        <span class="show_versioning d-none d-print-none">{{ diffStructure is defined and diffStructure != null ? diffStructure.heuresEctsFormation.sommeFormationCmDist|displayDiff : '' }}</span>
                         <span class="show_current">{{ dto.heuresEctsFormation.sommeFormationCmDist|filtreHeures }}</span>
                     </th>
                     <th>
-                        <span class="show_versioning d-none">{{ diffStructure is defined and diffStructure != null ? diffStructure.heuresEctsFormation.sommeFormationTdDist|displayDiff : '' }}</span>
+                        <span class="show_versioning d-none d-print-none">{{ diffStructure is defined and diffStructure != null ? diffStructure.heuresEctsFormation.sommeFormationTdDist|displayDiff : '' }}</span>
                         <span class="show_current">{{ dto.heuresEctsFormation.sommeFormationTdDist|filtreHeures }}</span>
                     </th>
                     <th>
-                        <span class="show_versioning d-none">{{ diffStructure is defined and diffStructure != null ? diffStructure.heuresEctsFormation.sommeFormationTpDist|displayDiff : '' }}</span>
+                        <span class="show_versioning d-none d-print-none">{{ diffStructure is defined and diffStructure != null ? diffStructure.heuresEctsFormation.sommeFormationTpDist|displayDiff : '' }}</span>
                         <span class="show_current">{{ dto.heuresEctsFormation.sommeFormationTpDist|filtreHeures }}</span>
                     </th>
                     <th>
-                        <span class="show_versioning d-none">{{ diffStructure is defined and diffStructure != null ? diffStructure.heuresEctsFormation.sommeFormationTotalDist|displayDiff : '' }}</span>
+                        <span class="show_versioning d-none d-print-none">{{ diffStructure is defined and diffStructure != null ? diffStructure.heuresEctsFormation.sommeFormationTotalDist|displayDiff : '' }}</span>
                         <span class="show_current">{{ dto.heuresEctsFormation.sommeFormationTotalDist|filtreHeures }}</span>
                     </th>
                 {% endif %}
 
                 {% if parcours.modalitesEnseignement != null and (parcours.modalitesEnseignement.value == 1) %}
                     <th>
-                        <span class="show_versioning d-none">{{ diffStructure is defined and diffStructure != null ? diffStructure.heuresEctsFormation.sommeFormationTotalPresDist|displayDiff : '' }}</span>
+                        <span class="show_versioning d-none d-print-none">{{ diffStructure is defined and diffStructure != null ? diffStructure.heuresEctsFormation.sommeFormationTotalPresDist|displayDiff : '' }}</span>
                         <span class="show_current">{{ dto.heuresEctsFormation.sommeFormationTotalPresDist|filtreHeures }}</span>
                     </th>
                 {% endif %}
