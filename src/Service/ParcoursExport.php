@@ -301,6 +301,8 @@ class ParcoursExport {
     {
 
         $ficheMatiere = $ec->elementConstitutif->getFicheMatiere();
+        $elementConstitutif = $ec;
+
         if($isVersioning){  
             $ficheMatiere = $this->entityManager
                 ->getRepository(FicheMatiere::class)
@@ -315,6 +317,13 @@ class ParcoursExport {
                 || $etatWorkflow === ['valide_pour_publication' => 1]
                 ? $ficheMatiere
                 :null;
+
+                foreach($ficheMatiere->getElementConstitutifs() as $ecFM){
+                    if($ecFM->getParcours()->getId() === $ficheMatiere->getParcours()->getId()){
+                        $elementConstitutif = $ecFM;
+                    }
+                }
+
             }
         }
 
@@ -339,7 +348,7 @@ class ParcoursExport {
             'ordre' => $ec->elementConstitutif->getOrdre(),
             'valide' => $valide,
             'ec_libre' => $ecLibre,
-            'nature_ec' => $ec->elementConstitutif->getTypeEc()?->getLibelle(),
+            'nature_ec' => $elementConstitutif->getTypeEc()?->getLibelle(),// $ec->elementConstitutif->getTypeEc()?->getLibelle(),
             'valide_date' => new DateTime(),
             'numero'=> $ec->elementConstitutif->getCode(),
             'libelle'=> $libelle,
