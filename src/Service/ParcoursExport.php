@@ -302,6 +302,7 @@ class ParcoursExport {
 
         $ficheMatiere = $ec->elementConstitutif->getFicheMatiere();
         $elementConstitutif = $ec;
+        $isEcFromBD = false;
 
         if($isVersioning){  
             $ficheMatiere = $this->entityManager
@@ -318,12 +319,14 @@ class ParcoursExport {
                 ? $ficheMatiere
                 :null;
 
-                foreach($ficheMatiere->getElementConstitutifs() as $ecFM){
-                    if($ecFM->getParcours()->getId() === $ficheMatiere->getParcours()->getId()){
-                        $elementConstitutif = $ecFM;
+                if($ficheMatiere){
+                    foreach($ficheMatiere->getElementConstitutifs() as $ecFM){
+                        if($ecFM->getParcours()?->getId() === $ficheMatiere->getParcours()?->getId()){
+                            $elementConstitutif = $ecFM;
+                            $isEcFromBD = true;
+                        }
                     }
                 }
-
             }
         }
 
@@ -348,7 +351,7 @@ class ParcoursExport {
             'ordre' => $ec->elementConstitutif->getOrdre(),
             'valide' => $valide,
             'ec_libre' => $ecLibre,
-            'nature_ec' => $elementConstitutif->getTypeEc()?->getLibelle(),// $ec->elementConstitutif->getTypeEc()?->getLibelle(),
+            'nature_ec' => $isEcFromBD ? $elementConstitutif->getTypeEc()?->getLibelle() : $ec->elementConstitutif->getTypeEc()?->getLibelle(),
             'valide_date' => new DateTime(),
             'numero'=> $ec->elementConstitutif->getCode(),
             'libelle'=> $libelle,
