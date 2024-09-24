@@ -81,7 +81,7 @@ class ParcoursExportController extends AbstractController
             $parcoursVersionData = $versionData['parcours'];
             $dtoVersionData = $versionData['dto'];
 
-            return $this->myPdf->render('pdf/parcours.versioning.html.twig', [
+            return $this->myPdf->render('pdf/parcours.html.twig', [
                 'formation' => $parcoursVersionData->getFormation(),
                 'typeDiplome' => $parcoursVersionData->getTypeDiplome(),
                 'parcours' => $parcoursVersionData,
