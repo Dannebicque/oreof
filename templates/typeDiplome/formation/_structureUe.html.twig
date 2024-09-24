@@ -5,8 +5,12 @@
         <span class="show_current"> {{ ue.display }}</span> |
         <span class="show_versioning d-none d-print-none">{{ diffUe ? diffUe.libelle|displayDiff : '' }}</span>
         <span class="show_current"> {{ ue.ue.libelle }}</span>
-        ({{ ue.codeApogee() }}) {% if ue.raccroche == true %}<i
-                class="fal fa-link"></i>{% endif %}
+        {% if isVersioning is not defined or isVersioning == false %}
+            ({{ ue.codeApogee() }}) 
+        {% endif %}
+        {% if ue.raccroche == true %}<i
+                class="fal fa-link"></i>
+        {% endif %}
 
         {% if ue.ue.natureUeEc is defined and ue.ue.natureUeEc != null and ue.ue.natureUeEc.libre == true %}
             <span class="badge bg-secondary">

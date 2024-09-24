@@ -1,56 +1,57 @@
 <div class="row"
         {{ stimulus_controller('structure--affichage') }}
 >
-    {% if (print is not defined or print == false) %}
-        <div class="col-sm-12 text-end mb-2 pe-40px">
-            {% if source is defined and source == 'codification' %}
-                <a href="{{ path('app_codification_parcours_modifier', {parcours:parcours.id}) }}"
-                   class="btn btn-sm btn-outline-warning mx-2"
-                >Modifier codification parcours</a>
-                <a href="{{ path('app_codification_parcours_export', {parcours:parcours.id, _format:'xlsx'}) }}"
-                   class="btn btn-sm btn-outline-info mx-2"
-                >Export codification parcours</a>
-            {% endif %}
-            <div class="btn-group">
-                {% if hasLastVersion is defined and hasLastVersion == true %}
-                    <button type="button"
-                            class="btn btn-sm btn-outline-success btn-icon w-sm-auto mx-2 mb-1"
-                            {{ stimulus_action('structure--affichage', 'toggleVersioning') }}
-                    >
-                        <i class="fal fa-eye-slash"></i> Comparer version
-                    </button>
+    {% if isVersioning is not defined or isVersioning == false %}
+        {% if (print is not defined or print == false) %}
+            <div class="col-sm-12 text-end mb-2 pe-40px">
+                {% if source is defined and source == 'codification' %}
+                    <a href="{{ path('app_codification_parcours_modifier', {parcours:parcours.id}) }}"
+                    class="btn btn-sm btn-outline-warning mx-2"
+                    >Modifier codification parcours</a>
+                    <a href="{{ path('app_codification_parcours_export', {parcours:parcours.id, _format:'xlsx'}) }}"
+                    class="btn btn-sm btn-outline-info mx-2"
+                    >Export codification parcours</a>
                 {% endif %}
-                <button type="button"
-                        class="btn btn-sm btn-outline-info btn-icon w-sm-auto mx-2 mb-1"
-                        {{ stimulus_action('structure--affichage', 'toggleEc') }}
-                >
-                    <i class="fal fa-eye-slash"></i> Masquer les EC
-                </button>
-            </div>
-            {% if source is not defined or source != 'codification' %}
                 <div class="btn-group">
+                    {% if hasLastVersion is defined and hasLastVersion == true %}
+                        <button type="button"
+                                class="btn btn-sm btn-outline-success btn-icon w-sm-auto mx-2 mb-1"
+                                {{ stimulus_action('structure--affichage', 'toggleVersioning') }}
+                        >
+                            <i class="fal fa-eye-slash"></i> Comparer version
+                        </button>
+                    {% endif %}
                     <button type="button"
-                            class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2 dropdown-toggle mb-1"
-                            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="{{ iconDownload }}"></i> Fiches EC/matières
+                            class="btn btn-sm btn-outline-info btn-icon w-sm-auto mx-2 mb-1"
+                            {{ stimulus_action('structure--affichage', 'toggleEc') }}
+                    >
+                        <i class="fal fa-eye-slash"></i> Masquer les EC
                     </button>
-                    <div class="dropdown-menu" style="">
-                        <a class="dropdown-item" href="{{ path('fiche_matiere_export_all', {parcours:parcours.id}) }}">
-                            Version complète (toutes les fiches dans 1 pdf)
-                        </a>
-                        <a class="dropdown-item"
-                                {{ stimulus_controller('linkjs') }}
-                                {{ stimulus_action('linkjs', 'openLink') }}
-                           href="{{ path('fiche_matiere_export_zip', {parcours:parcours.id}) }}">
-                            Version zip (1 pdf par fiche)
-                        </a>
-                    </div>
                 </div>
+                {% if source is not defined or source != 'codification' %}
+                    <div class="btn-group">
+                        <button type="button"
+                                class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2 dropdown-toggle mb-1"
+                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="{{ iconDownload }}"></i> Fiches EC/matières
+                        </button>
+                        <div class="dropdown-menu" style="">
+                            <a class="dropdown-item" href="{{ path('fiche_matiere_export_all', {parcours:parcours.id}) }}">
+                                Version complète (toutes les fiches dans 1 pdf)
+                            </a>
+                            <a class="dropdown-item"
+                                    {{ stimulus_controller('linkjs') }}
+                                    {{ stimulus_action('linkjs', 'openLink') }}
+                            href="{{ path('fiche_matiere_export_zip', {parcours:parcours.id}) }}">
+                                Version zip (1 pdf par fiche)
+                            </a>
+                        </div>
+                    </div>
 
-
-                {{ include('btn/export_mccc.html.twig') }}
-            {% endif %}
-        </div>
+                    {{ include('btn/export_mccc.html.twig') }}
+                {% endif %}
+            </div>  
+        {% endif %}
     {% endif %}
     <div class="col-sm-12">
         <table class="table table-striped table-hover">
@@ -63,9 +64,13 @@
                     <th
                             class="border-left-semestre-{{ ordre }}"
                             colspan=" {% if presentiel %}9{% else %}14{% endif %}">S{{ semestre.ordre }}
-                        ({{ semestre.semestre.codeApogee }} | {{ semestre.semestreParcours.codeApogeeEtapeAnnee }}
-                        - {{ semestre.semestreParcours.codeApogeeEtapeVersion }}) {% if semestre.raccroche == true %}<i
-                                class="fal fa-link"></i>{% endif %}
+                            {% if isVersioning is not defined or isVersioning == false %}
+                                ({{ semestre.semestre.codeApogee }} | {{ semestre.semestreParcours.codeApogeeEtapeAnnee }}
+                                - {{ semestre.semestreParcours.codeApogeeEtapeVersion }}) 
+                            {% endif %}
+                            {% if semestre.raccroche == true %}
+                                <i class="fal fa-link"></i>
+                            {% endif %}
 
                     </th>
                 </tr>
