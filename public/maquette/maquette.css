@@ -16,6 +16,7 @@
     --urca-blue: #0d6efd;
     --urca-indigo: #6610f2;
     --urca-green-child: #39cac8;
+    --ue-enfant-deuxieme-niveau: #90f3f1;
 }
 
 .table-center {
@@ -99,7 +100,7 @@ h2 {
 }
 
 .table-parcours tr.UEEnfantLibelleDeuxiemeNiveau {
-    --bs-table-bg: var(--urca-teal) !important;
+    --bs-table-bg: var(--ue-enfant-deuxieme-niveau) !important;
     border: .1em solid var(--urca-black);
 }
 
