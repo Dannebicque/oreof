@@ -199,6 +199,7 @@ final class ParcoursManageComponent extends AbstractController
 
             return '- à venir -';
         }
+        return '- à venir -';
     }
 
     private function getWorkflow(): WorkflowInterface
