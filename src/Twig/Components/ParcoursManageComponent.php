@@ -111,7 +111,6 @@ final class ParcoursManageComponent extends AbstractController
     }
 
 
-
     public function redirige(): Response
     {
         if ($this->parcours->isParcoursDefaut() === false) {
@@ -179,11 +178,11 @@ final class ParcoursManageComponent extends AbstractController
     {
         $this->dpeParcours = GetDpeParcours::getFromParcours($this->parcours);
 
-            $this->typeDiplome = $this->parcours?->getFormation()?->getTypeDiplome();
-            $this->formation = $this->parcours?->getFormation();
-            $this->place = $this->getPlace();
-            $this->hasDemande = false;
-//                GetDpeParcours::getFromParcours($this->parcours)?->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_TEXTE || GetDpeParcours::getFromParcours($this->parcours)?->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_MCCC_TEXTE || GetDpeParcours::getFromParcours($this->parcours)?->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_MCCC; //todo selon l'état du process???
+        $this->typeDiplome = $this->parcours?->getFormation()?->getTypeDiplome();
+        $this->formation = $this->parcours?->getFormation();
+        $this->place = $this->getPlace();
+        $this->hasDemande = false;
+        //                GetDpeParcours::getFromParcours($this->parcours)?->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_TEXTE || GetDpeParcours::getFromParcours($this->parcours)?->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_MCCC_TEXTE || GetDpeParcours::getFromParcours($this->parcours)?->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_MCCC; //todo selon l'état du process???
 
         $this->getHistorique();
     }
@@ -191,10 +190,15 @@ final class ParcoursManageComponent extends AbstractController
     public function dateHistorique(string $transition): string
     {
         if (array_key_exists($transition, $this->historiques)) {
-            return $this->historiques[$transition]->getDate() !== null ? $this->historiques[$transition]->getDate()->format('d/m/Y') : $this->historiques[$transition]->getCreated()->format('d/m/Y');
-        }
+            if ($this->historiques[$transition]->getEtape() === 'soumis_conseil') {
+                if (array_key_exists('fichier', $this->historiques[$transition]->getComplements())) {
+                    return '- à venir -';
+                }
+                return $this->historiques[$transition]->getDate() !== null ? $this->historiques[$transition]->getDate()->format('d/m/Y') : $this->historiques[$transition]->getCreated()->format('d/m/Y');
+            }
 
-        return '- à venir -';
+            return '- à venir -';
+        }
     }
 
     private function getWorkflow(): WorkflowInterface
