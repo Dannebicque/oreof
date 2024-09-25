@@ -191,13 +191,12 @@ final class ParcoursManageComponent extends AbstractController
     {
         if (array_key_exists($transition, $this->historiques)) {
             if ($this->historiques[$transition]->getEtape() === 'soumis_conseil') {
-                if (array_key_exists('fichier', $this->historiques[$transition]->getComplements())) {
+                if (!array_key_exists('fichier', $this->historiques[$transition]->getComplements())) {
                     return '- à venir -';
                 }
-                return $this->historiques[$transition]->getDate() !== null ? $this->historiques[$transition]->getDate()->format('d/m/Y') : '- à venir -';
             }
 
-            return '- à venir -';
+            return $this->historiques[$transition]->getDate() !== null ? $this->historiques[$transition]->getDate()->format('d/m/Y') : '- à venir -';
         }
         return '- à venir -';
     }
