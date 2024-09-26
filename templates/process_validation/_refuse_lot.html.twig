@@ -7,7 +7,7 @@
 <form action="{{ path('app_validation_refuser_lot', {etape:etape, transition: transition}) }}" method="post">
     <input type="hidden" name="parcours" value="{{ sParcours }}">
 
-    {% if process.hasDate %}
+    {% if meta.hasDate is defined and meta.hasDate == true %}
         <div>
             <label for="date" class="form-label">{{ ('refuse.'~process.label~'.date.label')|trans({}, 'process') }}
                 <span class="required"></span>
@@ -26,7 +26,7 @@
         </div>
     {% endif %}
 
-    {% if etape == 'cfvu' %}
+    {% if etape == 'cfvu' or etape == 'soumis_cfvu' %}
         <div class="form-check mt-2">
             <input class="form-check-input" type="radio"
                    name="etatRefus"

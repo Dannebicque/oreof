@@ -7,7 +7,7 @@
       enctype="multipart/form-data">
     <input type="hidden" name="parcours" value="{{ sParcours }}">
 
-    {% if process.hasDate is defined and process.hasDate == true %}
+    {% if meta.hasDate is defined and meta.hasDate == true %}
         <div>
             <label for="date" class="form-label">{{ ('valide.'~process.label~'.date.label')|trans({}, 'process') }}
                 <span class="required"></span> <i
@@ -107,7 +107,7 @@
 
     {% endif %}
 
-    {% if process.hasUpload is defined and process.hasUpload == true %}
+    {% if meta.hasUpload is defined and meta.hasUpload == true %}
         <div>
             <label for="file" class="form-label">{{ ('valide.'~process.label~'.fichier.label')|trans({}, 'process') }}
                 <i class="fal fa-question-circle ms-1"

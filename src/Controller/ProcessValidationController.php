@@ -361,6 +361,7 @@ class ProcessValidationController extends BaseController
         $allParcours = explode(',', $sParcours);
 
         $process = $this->validationProcess->getEtape($etape);
+        $meta = $this->validationProcess->getMetaFromTransition($transition);
         $laisserPasser = false;
         $tParcours = [];
 
@@ -402,6 +403,7 @@ class ProcessValidationController extends BaseController
             'formations' => $tParcours,
             'sParcours' => $sParcours,
             'process' => $process,
+            'meta' => $meta,
             'type' => 'lot',
             'id' => $id,
             'etape' => $etape,
@@ -426,6 +428,7 @@ class ProcessValidationController extends BaseController
         $allParcours = explode(',', $sParcours);
 
         $process = $this->validationProcess->getEtape($etape);
+        $meta = $this->validationProcess->getMetaFromTransition($transition);
         $tParcours = [];
         foreach ($allParcours as $id) {
             $dpe = $dpeParcoursRepository->find($id);
@@ -449,6 +452,7 @@ class ProcessValidationController extends BaseController
             'formations' => $tParcours,
             'sParcours' => $sParcours,
             'process' => $process,
+            'meta' => $meta,
             'type' => 'lot',
             'id' => $id,
             'etape' => $etape,
@@ -473,6 +477,7 @@ class ProcessValidationController extends BaseController
         $allParcours = explode(',', $sParcours);
 
         $process = $this->validationProcess->getEtape($etape);
+        $meta = $this->validationProcess->getMetaFromTransition($transition);
         $tParcours = [];
         foreach ($allParcours as $id) {
             $dpe = $dpeParcoursRepository->find($id);
@@ -496,6 +501,7 @@ class ProcessValidationController extends BaseController
             'formations' => $tParcours,
             'sParcours' => $sParcours,
             'process' => $process,
+            'meta' => $meta,
             'transition' => $transition,
             'objet' => $dpe,
             'processData' => $processData ?? null,
