@@ -181,7 +181,9 @@ class PublishValidParcoursCommand extends Command
                             ->getHistoriqueParcoursLastStep($dpeParcours, 'soumis_cfvu')
                             ?->getDate() === null;
                         $isValide = $p->getDpeParcours()->last() instanceof DpeParcours
-                        && $p->getDpeParcours()->last()->getEtatValidation() === ["valide_a_publier" => 1];
+                        && ($p->getDpeParcours()->last()->getEtatValidation() === ["valide_a_publier" => 1]
+                            || $p->getDpeParcours()->last()->getEtatValidation() === ["publie" => 1]
+                        );
                         return $historiqueCfvu && $isValide;
                     }
                 );
@@ -197,7 +199,9 @@ class PublishValidParcoursCommand extends Command
                         ?->getDate() === null;
                         $isValideAPublier = $p
                             ->getDpeParcours()->last() instanceof DpeParcours 
-                            && $p->getDpeParcours()->last()->getEtatValidation() === ["valide_a_publier" => 1] ;
+                            && ($p->getDpeParcours()->last()->getEtatValidation() === ["valide_a_publier" => 1] 
+                            || $p->getDpeParcours()->last()->getEtatValidation() === ["publie" => 1] 
+                            );
                         return $historiqueConseil && $isValideAPublier;
                     }
                 );

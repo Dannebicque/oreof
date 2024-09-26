@@ -70,7 +70,7 @@ class McccPdfCommand extends Command
         )->addOption(
             name: 'generate-all-parcours',
             mode: InputOption::VALUE_NONE,
-            description: "Génère tous les PDF des MCCC pour tous les parcours validés ('valide_a_publier')"
+            description: "Génère tous les PDF des MCCC pour tous les parcours validés ('publie')"
         )->addOption(
             name: 'generate-today-cfvu-valid',
             mode: InputOption::VALUE_NONE,
@@ -145,7 +145,7 @@ class McccPdfCommand extends Command
                 $p->getDpeParcours()->last() instanceof DpeParcours && 
                 array_keys(
                     $p->getDpeParcours()->last()->getEtatValidation()
-                )[0] === 'valide_a_publier' 
+                )[0] === 'publie' 
                 && array_values(
                     $p->getDpeParcours()->last()->getEtatValidation()
                 )[0] === 1
