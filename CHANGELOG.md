@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.31.42](https://github.com/Dannebicque/oreof/compare/v1.31.41...v1.31.42) (2024-09-26)
+
+
+### Bug Fixes
+
+* Affichage des états dans la liste ([a8f760a](https://github.com/Dannebicque/oreof/commit/a8f760a0c06ffa3c3289613ca18a70de9f8b5f79))
+* Suppression de l'historique si présent sur fiche matière a supprimer ([a033a94](https://github.com/Dannebicque/oreof/commit/a033a94a7c8dc2b716ea80749db21332da68cfa9))
+
 ### [1.31.41](https://github.com/Dannebicque/oreof/compare/v1.31.40...v1.31.41) (2024-09-26)
 
 
