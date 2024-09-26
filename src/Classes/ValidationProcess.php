@@ -24,7 +24,10 @@ class ValidationProcess extends AbstractValidationProcess
             if (array_key_exists('process', $meta) && (bool)$meta['process'] === true) {
                 $data[$place] = $meta;
             }
+
+            $dataAll[$place] = $meta;
         }
+        $this->processAll = $dataAll;
         $this->process = $data;
     }
 

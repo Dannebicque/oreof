@@ -98,7 +98,7 @@ class ValidationController extends BaseController
                     'ses' => $isSes,
                     'composante' => $composante,
                     'composantes' => $composanteRepository->findAll(),
-                    'types_validation' => $validationProcess->getProcess(),
+                    'types_validation' => $validationProcess->getProcessAll(),
                 ]);
             case 'fiche':
                 return $this->render('validation/_fiches.html.twig', [
