@@ -356,6 +356,10 @@ class FicheMatiereRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('fm');
 
         $qb = $qb->select('COUNT(fm.id) AS nombre_total')
+            ->join('fm.parcours', 'p', 'WITH', 'fm.parcours = p.id')
+            ->join('p.formation', 'f', 'WITH', 'p.formation = f.id')
+            ->join('f.mention', 'm')
+            ->join('f.typeDiplome', 'td')
             ->where(
                 $qb->expr()->like('UPPER(fm.description)', 'UPPER(:keyword)')
             )
