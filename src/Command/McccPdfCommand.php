@@ -151,12 +151,22 @@ class McccPdfCommand extends Command
                 $parcoursArray,
                 fn($p) => 
                 $p->getDpeParcours()->last() instanceof DpeParcours && 
-                array_keys(
-                    $p->getDpeParcours()->last()->getEtatValidation()
-                )[0] === 'publie' 
-                && array_values(
-                    $p->getDpeParcours()->last()->getEtatValidation()
-                )[0] === 1
+                (
+                    (array_keys(
+                        $p->getDpeParcours()->last()->getEtatValidation()
+                    )[0] === 'publie' 
+                    && array_values(
+                        $p->getDpeParcours()->last()->getEtatValidation()
+                    )[0] === 1)
+                    || 
+                    (
+                    array_keys(
+                        $p->getDpeParcours()->last()->getEtatValidation()
+                    )[0] === 'valide_a_publier' 
+                    && array_values(
+                        $p->getDpeParcours()->last()->getEtatValidation()
+                    )[0] === 1)
+                )
             );
 
             $nombreParcoursValides = count($parcoursArray);
