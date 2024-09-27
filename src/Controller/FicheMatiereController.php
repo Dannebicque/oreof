@@ -234,6 +234,11 @@ class FicheMatiereController extends AbstractController
                 $entityManager->remove($mccc);
             }
 
+            foreach ($ficheMatiere->getHistoriqueFicheMatieres() as $historiqueFicheMatiere) {
+                $ficheMatiere->removeHistoriqueFicheMatiere($historiqueFicheMatiere);
+                $entityManager->remove($historiqueFicheMatiere);
+            }
+
             $ficheMatiereRepository->remove($ficheMatiere, true);
 
             return JsonReponse::success('La fiche matière a bien été supprimée.');
@@ -395,8 +400,8 @@ class FicheMatiereController extends AbstractController
             ->findForParcoursWithKeyword($parcours, $keyword);
 
         return new JsonResponse(
-            $associatedFicheMatiere, 
-            200, 
+            $associatedFicheMatiere,
+            200,
             ['Content-Type' => 'application/json'],
             false
         );

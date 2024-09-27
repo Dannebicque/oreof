@@ -2,6 +2,32 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.31.42](https://github.com/Dannebicque/oreof/compare/v1.31.41...v1.31.42) (2024-09-26)
+
+
+### Bug Fixes
+
+* Affichage des états dans la liste ([a8f760a](https://github.com/Dannebicque/oreof/commit/a8f760a0c06ffa3c3289613ca18a70de9f8b5f79))
+* Suppression de l'historique si présent sur fiche matière a supprimer ([a033a94](https://github.com/Dannebicque/oreof/commit/a033a94a7c8dc2b716ea80749db21332da68cfa9))
+
+### [1.31.41](https://github.com/Dannebicque/oreof/compare/v1.31.40...v1.31.41) (2024-09-26)
+
+
+### Bug Fixes
+
+* Date sur process en lot ([2c41bc1](https://github.com/Dannebicque/oreof/commit/2c41bc1a531f7336d45a382382c5011ddaeaa9dd))
+
+### [1.31.40](https://github.com/Dannebicque/oreof/compare/v1.31.39...v1.31.40) (2024-09-26)
+
+
+### Bug Fixes
+
+* historique sur conseil avec ou sans PV ([87f648b](https://github.com/Dannebicque/oreof/commit/87f648be8e571213ec62daa978feb6e71d2d7c5c))
+* historique sur conseil avec ou sans PV ([d70fe77](https://github.com/Dannebicque/oreof/commit/d70fe77ce35c9a50450663241b17cdd9d5fc298f))
+* historique sur conseil avec ou sans PV ([cbea46d](https://github.com/Dannebicque/oreof/commit/cbea46de495e7f9cb2e873c3eed81851f392025a))
+* historique sur conseil avec ou sans PV ([29158ab](https://github.com/Dannebicque/oreof/commit/29158ab14f531fa16adcd0d7570aa80e730da8b3))
+* menu export BCC ([c9531ea](https://github.com/Dannebicque/oreof/commit/c9531ea65a6a18f7cc93133887df864dad5a1b3e))
+
 ### [1.31.39](https://github.com/Dannebicque/oreof/compare/v1.31.38...v1.31.39) (2024-09-25)
 
 

@@ -227,15 +227,27 @@
     {% if formation.isHasParcours == false and formation.parcours|length == 1 %}
         {% set parcours = formation.parcours[0] %}
         {{ include('btn/export_mccc.html.twig') }}
-        <a href="{{ path('app_parcours_bcc', {parcours:parcours.id}) }}"
-           class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2"
-           data-bs-toggle="tooltip"
-           data-bs-placement="bottom"
-           title="Voir les BCC"
-        >
-            <i class="{{ iconShow }}"></i>
-            <span> Voir BCC</span>
-        </a>
+        <div class="btn-group">
+            <button type="button"
+                    class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2 dropdown-toggle mb-1"
+                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="{{ iconDownload }}"></i> BCC
+            </button>
+            <div class="dropdown-menu" style="">
+                <a class="dropdown-item" href="{{ path('app_parcours_bcc', {parcours:parcours.id}) }}">
+                    Voir en ligne
+                </a>
+                <a class="dropdown-item" href="{{ path('app_competence_export_bcc', {parcours:parcours.id}) }}">
+                    Export des BCC (pdf)
+                </a>
+                <a class="dropdown-item" href="{{ path('app_competence_export_croise', {parcours:parcours.id}) }}">
+                    Export du tableau croisé BCC/EC, par semestre (pdf)
+                </a>
+                <a class="dropdown-item" href="{{ path('app_competence_export_croise_global', {parcours:parcours.id}) }}">
+                    Export du tableau croisé BCC/EC, global (xslx)
+                </a>
+            </div>
+        </div>
     {% else %}
         <a href="#presentation"
            class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2"
