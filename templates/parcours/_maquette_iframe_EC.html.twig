@@ -39,6 +39,7 @@
                     </span>
                 </a>
             {% elseif isVersioning is defined and isVersioning == true 
+                and ficheMatiereRepo.findOneBySlug(ec.elementConstitutif.ficheMatiere.slug) != null
                 and ( workflow_has_marked_place(ficheMatiereRepo.findOneBySlug(ec.elementConstitutif.ficheMatiere.slug), 'publie')
                         or workflow_has_marked_place(ficheMatiereRepo.findOneBySlug(ec.elementConstitutif.ficheMatiere.slug), 'valide_pour_publication')
                     )
