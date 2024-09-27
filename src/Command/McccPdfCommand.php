@@ -99,16 +99,24 @@ class McccPdfCommand extends Command
                 $anneeDpe = $this->entityManager->getRepository(CampagneCollecte::class)->findOneBy(['defaut' => 1]);
                 $typeDiplomeParcours = $parcours->getFormation()->getTypeDiplome()->getLibelleCourt();
 
+                $dpeParcours = GetDpeParcours::getFromParcours($parcours);
+                $dateConseil = $this->getHistorique->getHistoriqueParcoursLastStep($dpeParcours, 'soumis_conseil')?->getDate();
+                $dateCfvu = $this->getHistorique->getHistoriqueParcoursLastStep($dpeParcours, 'soumis_cfvu')?->getDate();
+
                 if($typeDiplomeParcours !== "BUT"){
                     $pdf = $this->licenceMccc->exportPdfLicenceMccc(
                         anneeUniversitaire: $anneeDpe,
                         parcours : $parcours,
+                        dateCfvu: $dateCfvu,
+                        dateConseil: $dateConseil,
                     );
                 }
                 elseif($typeDiplomeParcours === "BUT"){
                     $pdf = $this->butMccc->exportPdfbutMccc(
                         anneeUniversitaire: $anneeDpe,
-                        parcours: $parcours
+                        parcours: $parcours,
+                        dateCfvu: $dateCfvu,
+                        dateConseil: $dateConseil
                     );
                 }
                 
