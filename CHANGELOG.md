@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.31.43](https://github.com/Dannebicque/oreof/compare/v1.31.42...v1.31.43) (2024-09-29)
+
+
+### Bug Fixes
+
+* plaquette pour SEN, essai ([6e5b5a1](https://github.com/Dannebicque/oreof/commit/6e5b5a102ddd68488b471e6473103525c95a86a4))
+
 ### [1.31.42](https://github.com/Dannebicque/oreof/compare/v1.31.41...v1.31.42) (2024-09-26)
 
 
