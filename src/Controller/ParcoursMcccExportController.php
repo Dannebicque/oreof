@@ -24,8 +24,14 @@ class ParcoursMcccExportController extends BaseController
         GetHistorique $getHistorique,
         TypeDiplomeRegistry $typeDiplomeRegistry,
         Parcours $parcours,
-        string $_format = 'xlsx'
+        string $_format = 'xlsx',
+        EntityManagerInterface $entityManager
     ) {
+
+        if($_format === "pdf"){
+            return $this->getCfvuMcccExportFromFile('simplifie', $parcours, $entityManager);
+        }
+
         $formation = $parcours->getFormation();
 
         if (null === $formation) {

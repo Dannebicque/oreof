@@ -410,13 +410,15 @@ class ParcoursController extends BaseController
 
     #[Route('/{parcours}/maquette_iframe', name: 'app_parcours_maquette_iframe')]
     public function getMaquetteIframe(
-        ParcoursRepository $parcoursRepository,
-        ParcoursVersioningRepository $parcoursVersioningRepository,
+        VersioningParcours $versioningParcours,
         Parcours                     $parcours,
         EntityManagerInterface       $em,
         ElementConstitutifRepository $ecRepo,
         UeRepository                 $ueRepository
     ) {
+
+        return $this->getValidatedMaquetteIframe($parcours, $versioningParcours, $em);
+
         $formation = $parcours->getFormation();
         if ($formation === null) {
             throw $this->createNotFoundException();
