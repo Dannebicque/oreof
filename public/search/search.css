@@ -6,6 +6,10 @@ i.button-page {
     font-size: 1.5em !important;
 }
 
+i.button-page:hover {
+    background: var(--alternate);
+}
+
 .numero-page {
     text-align: center;
 }

@@ -58,6 +58,22 @@
                                                 paddingCascadeValue: paddingCascadeValue
                                             }) 
                                         }}
+                                        {% if ueEnfant.uesEnfants|length > 0 %}
+                                                {% for ueEnfant2 in ueEnfant.uesEnfants %}
+                                                    {{ include('parcours/_maquette_iframe_UE.html.twig',
+                                                        {
+                                                            ue: ueEnfant2,
+                                                            IsUeEnfant: true,
+                                                            IsSecondNiveauEnfant: true,
+                                                            arrayLength: ueEnfant.uesEnfants|length,
+                                                            indexUeEnfant: loop.index,
+                                                            paddingCascade: paddingCascade + 2,
+                                                            paddingCascadeValue: paddingCascadeValue
+                                                        }
+                                                    )    
+                                                }}
+                                                {% endfor %}
+                                            {% endif %}
                                         {% endfor %}
                                     {% endif %}
                                 {% endfor %}

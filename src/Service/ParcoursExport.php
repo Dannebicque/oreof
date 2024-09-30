@@ -206,6 +206,52 @@ class ParcoursExport {
                             $nb++;
                             $tUe['nbChoix'] = $nb;
                             $tUeEnfant['ec'] = $this->getEcFromUe($ueEnfant, $isVersioning);
+                            
+                            /**
+                             * UE enfant dans une UE enfant
+                             */
+                            if($ueEnfant->ue->getNatureUeEc()?->isLibre()){
+                                $tUeEnfant['ects'] = $ueEnfant->ue->getEcts() ?? 0.0;
+                                $tUeEnfant['description_libre_choix'] = $ueEnfant->ue->getDescriptionUeLibre();
+                            }
+                            elseif($ueEnfant->ue->getNatureUeEc()?->isChoix() || count($ueEnfant->uesEnfants()) > 0){
+                                $nbDeuxiemeNiveau = 0;
+                                $tUeEnfant['description_libre_choix'] = $ueEnfant->ue->getDescriptionUeLibre();
+                                $tUeEnfant['UesEnfants'] = [];
+                                foreach($ueEnfant->uesEnfants() as $ueEnfantDeuxiemeNiveau){
+                                    $tUeEnfantDeuxiemeNiveau = [
+                                        'ordre' => $ueEnfantDeuxiemeNiveau->ordre(),
+                                        'libelleOrdre' => $ueEnfantDeuxiemeNiveau->display,
+                                        'libelle' => $ueEnfantDeuxiemeNiveau->ue->getLibelle() ?? $ueEnfantDeuxiemeNiveau->display,
+                                        'volumes' => [
+                                            'CM' => [
+                                                'presentiel' => $ueEnfantDeuxiemeNiveau->heuresEctsUe->sommeUeCmPres,
+                                                'distanciel' => $ueEnfantDeuxiemeNiveau->heuresEctsUe->sommeUeCmDist
+                                            ],
+                                            'TD' => [
+                                                'presentiel' => $ueEnfantDeuxiemeNiveau->heuresEctsUe->sommeUeTdPres,
+                                                'distanciel' => $ueEnfantDeuxiemeNiveau->heuresEctsUe->sommeUeTdDist
+                                            ],
+                                            'TP' => [
+                                                'presentiel' => $ueEnfantDeuxiemeNiveau->heuresEctsUe->sommeUeTpPres,
+                                                'distanciel' => $ueEnfantDeuxiemeNiveau->heuresEctsUe->sommeUeTpDist
+                                            ],
+                                            'autonomie' => $ueEnfantDeuxiemeNiveau->heuresEctsUe->sommeUeTePres
+                                        ],
+                                        'ects' => $ueEnfantDeuxiemeNiveau->heuresEctsUe->sommeUeEcts,
+        
+                                    ];
+                                    if ($ueEnfantDeuxiemeNiveau->ue->getNatureUeEc()?->isLibre()) {
+                                        $tUeEnfantDeuxiemeNiveau['description_libre_choix'] = $ueEnfantDeuxiemeNiveau->ue->getDescriptionUeLibre();
+                                    }
+        
+                                    $nbDeuxiemeNiveau++;  
+                                    $tUeEnfant['nbChoix'] = $nbDeuxiemeNiveau;
+                                    $tUeEnfantDeuxiemeNiveau['ec'] = $this->getEcFromUe($ueEnfantDeuxiemeNiveau, $isVersioning);
+                                    $tUeEnfant['UesEnfants'][] = $tUeEnfantDeuxiemeNiveau;
+                                }
+                            }
+
                             $tUe['UesEnfants'][] = $tUeEnfant;
                         }
                     } else {
@@ -255,6 +301,9 @@ class ParcoursExport {
     {
 
         $ficheMatiere = $ec->elementConstitutif->getFicheMatiere();
+        $elementConstitutif = $ec;
+        $isEcFromBD = false;
+
         if($isVersioning){  
             $ficheMatiere = $this->entityManager
                 ->getRepository(FicheMatiere::class)
@@ -269,6 +318,15 @@ class ParcoursExport {
                 || $etatWorkflow === ['valide_pour_publication' => 1]
                 ? $ficheMatiere
                 :null;
+
+                if($ficheMatiere){
+                    foreach($ficheMatiere->getElementConstitutifs() as $ecFM){
+                        if($ecFM->getParcours()?->getId() === $ficheMatiere->getParcours()?->getId()){
+                            $elementConstitutif = $ecFM;
+                            $isEcFromBD = true;
+                        }
+                    }
+                }
             }
         }
 
@@ -293,7 +351,7 @@ class ParcoursExport {
             'ordre' => $ec->elementConstitutif->getOrdre(),
             'valide' => $valide,
             'ec_libre' => $ecLibre,
-            'nature_ec' => $ec->elementConstitutif->getTypeEc()?->getLibelle(),
+            'nature_ec' => $isEcFromBD ? $elementConstitutif->getTypeEc()?->getLibelle() : $ec->elementConstitutif->getTypeEc()?->getLibelle(),
             'valide_date' => new DateTime(),
             'numero'=> $ec->elementConstitutif->getCode(),
             'libelle'=> $libelle,

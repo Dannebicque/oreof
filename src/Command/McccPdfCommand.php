@@ -70,7 +70,7 @@ class McccPdfCommand extends Command
         )->addOption(
             name: 'generate-all-parcours',
             mode: InputOption::VALUE_NONE,
-            description: "Génère tous les PDF des MCCC pour tous les parcours validés ('valide_a_publier')"
+            description: "Génère tous les PDF des MCCC pour tous les parcours validés ('publie')"
         )->addOption(
             name: 'generate-today-cfvu-valid',
             mode: InputOption::VALUE_NONE,
@@ -99,16 +99,24 @@ class McccPdfCommand extends Command
                 $anneeDpe = $this->entityManager->getRepository(CampagneCollecte::class)->findOneBy(['defaut' => 1]);
                 $typeDiplomeParcours = $parcours->getFormation()->getTypeDiplome()->getLibelleCourt();
 
+                $dpeParcours = GetDpeParcours::getFromParcours($parcours);
+                $dateConseil = $this->getHistorique->getHistoriqueParcoursLastStep($dpeParcours, 'soumis_conseil')?->getDate();
+                $dateCfvu = $this->getHistorique->getHistoriqueParcoursLastStep($dpeParcours, 'soumis_cfvu')?->getDate();
+
                 if($typeDiplomeParcours !== "BUT"){
                     $pdf = $this->licenceMccc->exportPdfLicenceMccc(
                         anneeUniversitaire: $anneeDpe,
                         parcours : $parcours,
+                        dateCfvu: $dateCfvu,
+                        dateConseil: $dateConseil,
                     );
                 }
                 elseif($typeDiplomeParcours === "BUT"){
                     $pdf = $this->butMccc->exportPdfbutMccc(
                         anneeUniversitaire: $anneeDpe,
-                        parcours: $parcours
+                        parcours: $parcours,
+                        dateCfvu: $dateCfvu,
+                        dateConseil: $dateConseil
                     );
                 }
                 
@@ -143,12 +151,22 @@ class McccPdfCommand extends Command
                 $parcoursArray,
                 fn($p) => 
                 $p->getDpeParcours()->last() instanceof DpeParcours && 
-                array_keys(
-                    $p->getDpeParcours()->last()->getEtatValidation()
-                )[0] === 'valide_a_publier' 
-                && array_values(
-                    $p->getDpeParcours()->last()->getEtatValidation()
-                )[0] === 1
+                (
+                    (array_keys(
+                        $p->getDpeParcours()->last()->getEtatValidation()
+                    )[0] === 'publie' 
+                    && array_values(
+                        $p->getDpeParcours()->last()->getEtatValidation()
+                    )[0] === 1)
+                    || 
+                    (
+                    array_keys(
+                        $p->getDpeParcours()->last()->getEtatValidation()
+                    )[0] === 'valide_a_publier' 
+                    && array_values(
+                        $p->getDpeParcours()->last()->getEtatValidation()
+                    )[0] === 1)
+                )
             );
 
             $nombreParcoursValides = count($parcoursArray);

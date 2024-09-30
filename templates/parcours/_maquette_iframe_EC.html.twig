@@ -33,16 +33,41 @@
                     'app_fiche_matiere_maquette_iframe',
                     { ec: ec.elementConstitutif.id, parcours: parcours.parcours.id, ects: ec.heuresEctsEc.ects }
                 ) }}">
-             <span>
-            EC {{ IsEcEnfant ? indexEC ~ '.' ~ alphabet|slice((indexECEnfant - 1), 1) : indexEC }} -
-            {{ ec.elementConstitutif.ficheMatiere.libelle ?? ec.elementConstitutif.libelle ?? ec.elementConstitutif.display() }}
-        </span>
+                    <span>
+                        EC {{ IsEcEnfant ? indexEC ~ '.' ~ alphabet|slice((indexECEnfant - 1), 1) : indexEC }} -
+                        {{ ec.elementConstitutif.ficheMatiere.libelle ?? ec.elementConstitutif.libelle ?? ec.elementConstitutif.display() }}
+                    </span>
+                </a>
+            {% elseif isVersioning is defined and isVersioning == true 
+                and ficheMatiereRepo.findOneBySlug(ec.elementConstitutif.ficheMatiere.slug) != null
+                and ( workflow_has_marked_place(ficheMatiereRepo.findOneBySlug(ec.elementConstitutif.ficheMatiere.slug), 'publie')
+                        or workflow_has_marked_place(ficheMatiereRepo.findOneBySlug(ec.elementConstitutif.ficheMatiere.slug), 'valide_pour_publication')
+                    )
+            %}
+                <a href="{{ path(
+                    'app_fiche_matiere_versioning_maquette_iframe',
+                    {   volCmPres: ec.heuresEctsEc.cmPres,
+                        volTdPres : ec.heuresEctsEc.tdPres,
+                        volTpPres : ec.heuresEctsEc.tpPres,
+                        volCmDist : ec.heuresEctsEc.cmDist,
+                        volTdDist : ec.heuresEctsEc.tdDist,
+                        volTpDist : ec.heuresEctsEc.tpDist,
+                        volTe : ec.heuresEctsEc.tePres, 
+                        parcours: parcoursData.id,
+                        ects: ec.heuresEctsEc.ects,
+                        slug: ec.elementConstitutif.ficheMatiere.slug 
+                    }
+                ) }}">
+                    <span>
+                        EC {{ IsEcEnfant ? indexEC ~ '.' ~ alphabet|slice((indexECEnfant - 1), 1) : indexEC }} -
+                        {{ ec.elementConstitutif.ficheMatiere.libelle ?? ec.elementConstitutif.libelle ?? ec.elementConstitutif.display() }}
+                    </span>
                 </a>
             {% else %}
                 <span>
-            EC {{ IsEcEnfant ? indexEC ~ '.' ~ alphabet|slice((indexECEnfant - 1), 1) : indexEC }} -
-            {{ ec.elementConstitutif.ficheMatiere.libelle ?? ec.elementConstitutif.libelle ?? ec.elementConstitutif.display() }}
-        </span>
+                    EC {{ IsEcEnfant ? indexEC ~ '.' ~ alphabet|slice((indexECEnfant - 1), 1) : indexEC }} -
+                    {{ ec.elementConstitutif.ficheMatiere.libelle ?? ec.elementConstitutif.libelle ?? ec.elementConstitutif.display() }}
+                </span>
             {% endif %}
             {# <a href="{{ path(
                     'app_fiche_matiere_maquette_iframe',
