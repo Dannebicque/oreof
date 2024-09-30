@@ -131,12 +131,19 @@ class MyGotenbergPdf
 
     private function getHeader(string $titre = ''): string
     {
-        $imageData = file_get_contents($this->options['baseUrl'] . '/images/logo_urca.png');
-        $base64Image = base64_encode($imageData);
+        if ($this->options['withTemplate']) {
+            $imageData = file_get_contents($this->options['baseUrl'] . '/images/header_sen.png');
+            $base64Image = base64_encode($imageData);
+        } else {
+            $imageData = file_get_contents($this->options['baseUrl'] . '/images/logo_urca.png');
+            $base64Image = base64_encode($imageData);
+        }
+
         return $this->twig->render('pdf/header.html.twig', [
             'baseUrl' => $this->options['baseUrl'],
             'titre' => $titre,
-            'image' => $base64Image
+            'image' => $base64Image,
+            'withTemplate' => $this->options['withTemplate'],
         ]);
     }
 

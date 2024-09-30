@@ -22,27 +22,67 @@
             width: 80%;
         }
 
+        {% if withTemplate is defined and withTemplate == true %}
         header {
-            margin:0;
-            bottom:0;
-            width:100%;
-            left:0;
+            /*-webkit-print-color-adjust: exact;*/
+            margin: 0;
+            top: 0;
+            width: 100%;
+            height: 3.5cm;
+            left: 0;
+            right: 0;
+            padding: 0.2cm;
+            color: white;
+            text-align: right;
+            font-size: 10px;
+        }
+
+        #class_vague {
+            margin: 0;
+            padding: 0;
+            position: fixed;
+            right: -0.5cm;
+            text-align: right;
+
+        }
+
+        #class_vague img {
+            height: 100%;
+            width: 21cm;
+        }
+
+
+        {% else %}
+
+        header {
+            margin: 0;
+            bottom: 0;
+            width: 100%;
+            left: 0;
             padding: 0.2cm;
             background-color: #03a9f4;
             color: white;
             text-align: center;
             font-size: 10px;
         }
+
+        {% endif %}
     </style>
 </head>
 <body>
 <header>
-    <div id="class_logo">
-        <img src="data:image/jpeg;base64,{{ image }}" alt="logo">
-    </div>
-    <div id="class_titre">
-        <h1>{{ titre|raw }}</h1>
-    </div>
+    {% if withTemplate is defined and withTemplate == true %}
+        <div id="class_vague">
+            <img src="data:image/jpeg;base64,{{ image }}" alt="logo">
+        </div>
+    {% else %}
+        <div id="class_logo">
+            <img src="data:image/jpeg;base64,{{ image }}" alt="logo">
+        </div>
+        <div id="class_titre">
+            <h1>{{ titre|raw }}</h1>
+        </div>
+    {% endif %}
 </header>
 </body>
 </html>
