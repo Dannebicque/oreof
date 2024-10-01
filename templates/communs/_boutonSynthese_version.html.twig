@@ -31,9 +31,19 @@
         </a>
     {% endif %}
 
+    {% if parcours.dpeParcours.last.getEtatValidation == {'valide_a_publier': 1} 
+          or parcours.dpeParcours.last.getEtatValidation == {'publie': 1} 
+    %}
+        <a class="btn btn-outline-primary d-block mt-1" 
+           href="{{ path('app_parcours_mccc_export_cfvu_valid', {parcours:parcours.id, format: 'simplifie'}) }}">
+            <i class="{{ iconDownload }}"></i>
+            Export MCCC simplifié (pdf)
+        </a>
+    {% else %}
     <a class="btn btn-outline-warning d-block mt-1"
        href="{{ path('app_parcours_mccc_export_versionning', {parcours:parcours.id, _format:'xlsx'}) }}">
         <i class="{{ iconDownload }}"></i>
         Export MCCC Version (xlsx)
     </a>
+    {% endif %}
 </div>
