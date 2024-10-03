@@ -1,7 +1,7 @@
 {% if parcours is defined and parcours is not null %}
     <div class="accordion" id="accordionMaquetteParcours{{ parcours.parcours.id }}Index{{ indexParcours }}">
     {% for ordre, semestre in parcours.semestres %}
-        {% if semestre.semestre.isNonDispense == false %}
+        {% if semestre.semestre.isNonDispense == false and semestre.ues|length > 0 %}
             <div class="accordion-item">
                 <h2 class="accordion-header">
                     <button class="accordion-button bg-button-semestre fs-6" type="button" data-bs-toggle="collapse" 
