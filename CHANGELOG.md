@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.31.44](https://github.com/Dannebicque/oreof/compare/v1.31.43...v1.31.44) (2024-10-04)
+
+
+### Bug Fixes
+
+* GlobalVoter restriction pour l'admin ([1daaafd](https://github.com/Dannebicque/oreof/commit/1daaafd02ce14627dbb55af546443f914070db87))
+
 ### [1.31.43](https://github.com/Dannebicque/oreof/compare/v1.31.42...v1.31.43) (2024-09-29)
 
 
