@@ -1,4 +1,5 @@
 <div class="row">
+{% if isVersioning is not defined or isVersioning == false %}
     {% if (print is defined and print == false) %}
         <div class="col-sm-12 text-end mb-2 pe-40px">
             <div class="btn-group">
@@ -25,10 +26,20 @@
             </div>
         </div>
     {% endif %}
+{% endif %}
+    {% if isVersioning is not defined or isVersioning == false %}
     <div class="col-sm-12">
         {{ render(controller(
             'App\\Controller\\BlocCompetenceController::afficheBUTReferentiel',
             { 'parcours': parcours }
         )) }}
     </div>
+    {% else %}
+        <div class="col-sm-12">
+            {{ render(controller(
+                    'App\\Controller\\BlocCompetenceController::afficheBUTReferentielVersioning',
+                    { 'parcours': parcours, 'indexParcours': indexParcours ?? 1 }
+                )) }}
+        </div>
+    {% endif %}
 </div>

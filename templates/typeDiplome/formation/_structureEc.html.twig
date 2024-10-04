@@ -9,8 +9,12 @@
                 {% if isBut is defined and isBut == true %}
                     <strong>{{ ec.elementConstitutif.ficheMatiere.sigle }}</strong> {{ ec.elementConstitutif.ficheMatiere.libelle }} ({{ ec.elementConstitutif.displayCodeApogee }})
                 {% else %}
-                    <span class="show_versioning d-none">{{ diffEc ? diffEc.libelle|displayDiff : '' }}</span>
-                    <span class="show_current">{{ ec.elementConstitutif.ficheMatiere.display }} ({{ ec.elementConstitutif.displayCodeApogee }})</span>
+                    <span class="show_versioning d-none d-print-none">{{ diffEc ? diffEc.libelle|displayDiff : '' }}</span>
+                    <span class="show_current">{{ ec.elementConstitutif.ficheMatiere.display }} 
+                    {% if isVersioning is not defined or isVersioning == false %}
+                        ({{ ec.elementConstitutif.displayCodeApogee }})
+                    {% endif %}
+                    </span>
                 {% endif %}
             </a>
             {% if app.user != null and
@@ -27,7 +31,7 @@
             {{ ec.elementConstitutif.ficheMatiere.etatFiche|badgeFiche }}
                 {% endif %}
         {% else %}
-            <span class="show_versioning d-none">{{ diffEc ? diffEc.libelle|displayDiff : '' }}</span>
+            <span class="show_versioning d-none d-print-none">{{ diffEc ? diffEc.libelle|displayDiff : '' }}</span>
             <span class="show_current">{{ ec.elementConstitutif.libelle }}</span>
         {% endif %}
         {% if ec.elementConstitutif.natureUeEc is defined
@@ -41,7 +45,7 @@
         {% endif %}
     </td>
     <td>
-        <span class="show_versioning d-none">{{ diffEc ? diffEc.heuresEctsEc.ects|displayDiff : '' }} ECTS</span>
+        <span class="show_versioning d-none d-print-none">{{ diffEc ? diffEc.heuresEctsEc.ects|displayDiff : '' }} ECTS</span>
         <p class="show_current">{{ ec.heuresEctsEc.ects|badgeEcts }}</p>
     </td>
 
@@ -50,24 +54,24 @@
             <td colspan="5"></td>
         {% else %}
             <td>
-                <span class="show_versioning d-none">{{ diffEc ? diffEc.heuresEctsEc.cmPres|displayDiff : '' }}</span>
+                <span class="show_versioning d-none d-print-none">{{ diffEc ? diffEc.heuresEctsEc.cmPres|displayDiff : '' }}</span>
                 <span class="show_current">{{ ec.heuresEctsEc.cmPres|filtreHeures }}</span>
             </td>
             <td>
-                <span class="show_versioning d-none">{{ diffEc ? diffEc.heuresEctsEc.tdPres|displayDiff : '' }}</span>
+                <span class="show_versioning d-none d-print-none">{{ diffEc ? diffEc.heuresEctsEc.tdPres|displayDiff : '' }}</span>
                 <span class="show_current">{{ ec.heuresEctsEc.tdPres|filtreHeures }}</span>
             </td>
             <td>
-                <span class="show_versioning d-none">{{ diffEc ? diffEc.heuresEctsEc.tpPres|displayDiff : '' }}</span>
+                <span class="show_versioning d-none d-print-none">{{ diffEc ? diffEc.heuresEctsEc.tpPres|displayDiff : '' }}</span>
                 <span class="show_current">{{ ec.heuresEctsEc.tpPres|filtreHeures }}</span>
             </td>
 
             <td>
-                <span class="show_versioning d-none">{{ diffEc ? diffEc.heuresEctsEc.sommeEcTotalPres|displayDiff : '' }}</span>
+                <span class="show_versioning d-none d-print-none">{{ diffEc ? diffEc.heuresEctsEc.sommeEcTotalPres|displayDiff : '' }}</span>
                 <span class="show_current">{{ ec.heuresEctsEc.sommeEcTotalPres|filtreHeures }}</span>
             </td>
             <td>
-                <span class="show_versioning d-none">{{ diffEc ? diffEc.heuresEctsEc.tePres|displayDiff : '' }}</span>
+                <span class="show_versioning d-none d-print-none">{{ diffEc ? diffEc.heuresEctsEc.tePres|displayDiff : '' }}</span>
                 <span class="show_current">{{ ec.heuresEctsEc.tePres|filtreHeures }}</span>
             </td>
         {% endif %}
@@ -78,19 +82,19 @@
             <td colspan="4"></td>
         {% else %}
             <td>
-                <span class="show_versioning d-none">{{ diffEc ? diffEc.heuresEctsEc.cmDist|displayDiff : '' }}</span>
+                <span class="show_versioning d-none d-print-none">{{ diffEc ? diffEc.heuresEctsEc.cmDist|displayDiff : '' }}</span>
                 <span class="show_current">{{ ec.heuresEctsEc.cmDist|filtreHeures }}</span>
             </td>
             <td>
-                <span class="show_versioning d-none">{{ diffEc ? diffEc.heuresEctsEc.tdDist|displayDiff : '' }}</span>
+                <span class="show_versioning d-none d-print-none">{{ diffEc ? diffEc.heuresEctsEc.tdDist|displayDiff : '' }}</span>
                 <span class="show_current">{{ ec.heuresEctsEc.tdDist|filtreHeures }}</span>
             </td>
             <td>
-                <span class="show_versioning d-none">{{ diffEc ? diffEc.heuresEctsEc.tpDist|displayDiff : '' }}</span>
+                <span class="show_versioning d-none d-print-none">{{ diffEc ? diffEc.heuresEctsEc.tpDist|displayDiff : '' }}</span>
                 <span class="show_current">{{ ec.heuresEctsEc.tpDist|filtreHeures }}</span>
             </td>
             <td>
-                <span class="show_versioning d-none">{{ diffEc ? diffEc.heuresEctsEc.sommeEcTotalDist|displayDiff : '' }}</span>
+                <span class="show_versioning d-none d-print-none">{{ diffEc ? diffEc.heuresEctsEc.sommeEcTotalDist|displayDiff : '' }}</span>
                 <span class="show_current">{{ ec.heuresEctsEc.sommeEcTotalDist|filtreHeures }}</span>
             </td>
         {% endif %}
@@ -98,7 +102,7 @@
 
     {% if parcours.modalitesEnseignement != null and (parcours.modalitesEnseignement.value == 1) %}
         <td>
-            <span class="show_versioning d-none">{{ diffEc ? diffEc.heuresEctsEc.sommeEcTotalPresDist|displayDiff : '' }}</span>
+            <span class="show_versioning d-none d-print-none">{{ diffEc ? diffEc.heuresEctsEc.sommeEcTotalPresDist|displayDiff : '' }}</span>
             <span class="show_current">{{ ec.heuresEctsEc.sommeEcTotalPresDist|filtreHeures }}</span>
         </td>
     {% endif %}

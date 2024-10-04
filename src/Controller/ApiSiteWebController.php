@@ -37,7 +37,7 @@ class ApiSiteWebController extends AbstractController
             /**
              * 
              * NE PRENDRE QUE LES PARCOURS QUI SONT ÉTIQUETÉS COMME PUBLIÉS
-             *  - Filtrer avec : array_filter()
+             *  - Filtrer sur l'état de validation 'DpeParcours'
              * 
              */
             $tParcours = [];
@@ -45,16 +45,11 @@ class ApiSiteWebController extends AbstractController
                 $isPubliable = false;
 
                 if($parcours->getDpeParcours()?->last() instanceof DpeParcours){
-
                     $etatValidation = $parcours->getDpeParcours()?->last()->getEtatValidation();        
-                    $count = count($parcours->getDpeParcours()?->last()->getEtatValidation()) ?? 0;
 
-                    if($count > 0 && isset($etatValidation)){
-                        $lastItem = array_keys($etatValidation)[$count - 1];
-                        if($lastItem === 'valide_a_publier'){
-                            $isPubliable = true;
-                            ++$countParcours;
-                        }
+                    if($etatValidation === ['valide_a_publier' => 1] || $etatValidation === ['publie' => 1]){
+                        $isPubliable = true;
+                        ++$countParcours;
                     }
                 }
 

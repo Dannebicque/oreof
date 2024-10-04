@@ -21,6 +21,7 @@ use App\DTO\HeuresEctsUe;
 use App\DTO\StructureParcours;
 use App\Entity\CampagneCollecte;
 use App\Entity\DpeParcours;
+use App\Entity\FicheMatiere;
 use App\Entity\Formation;
 use App\Entity\Parcours;
 use App\Entity\ParcoursVersioning;
@@ -409,13 +410,15 @@ class ParcoursController extends BaseController
 
     #[Route('/{parcours}/maquette_iframe', name: 'app_parcours_maquette_iframe')]
     public function getMaquetteIframe(
-        ParcoursRepository $parcoursRepository,
-        ParcoursVersioningRepository $parcoursVersioningRepository,
+        VersioningParcours $versioningParcours,
         Parcours                     $parcours,
         EntityManagerInterface       $em,
         ElementConstitutifRepository $ecRepo,
         UeRepository                 $ueRepository
     ) {
+
+        return $this->getValidatedMaquetteIframe($parcours, $versioningParcours, $em);
+
         $formation = $parcours->getFormation();
         if ($formation === null) {
             throw $this->createNotFoundException();
@@ -452,9 +455,14 @@ class ParcoursController extends BaseController
 
         if($lastVersion){
             $dto = $versioningParcours->loadParcoursFromVersion($lastVersion)['dto'];
-    
+            
+            $ficheMatiereRepo = $entityManager->getRepository(FicheMatiere::class);
+
             return $this->render('parcours/maquette_iframe.html.twig', [
-                'parcours' => $dto
+                'parcours' => $dto,
+                'parcoursData' => $parcours,
+                'ficheMatiereRepo' => $ficheMatiereRepo,
+                'isVersioning' => true
             ]);
         }
         else {
@@ -659,6 +667,7 @@ class ParcoursController extends BaseController
                 'hasParcours' => $loadedVersion['parcours']->getFormation()->isHasParcours(),
                 // 'isBut' => $loadedVersion['parcours']->getTypeDiplome()->getLibelleCourt() === 'BUT',
                 'dateVersion' => $loadedVersion['dateVersion'],
+                'isVersioning' => true
             ]);
         } catch(\Exception $e) {
             $now = new DateTimeImmutable('now');
@@ -845,7 +854,7 @@ class ParcoursController extends BaseController
                 'niveau-francais' => $parcoursVersionData->getNiveauFrancais()?->libelle() ?? '-',
             ],
             'xml-lheo' => $this->generateUrl('app_parcours_export_xml_lheo', ['parcours' => $parcoursVersion->getParcours()->getId()], UrlGenerator::ABSOLUTE_URL),
-            // 'fiche-pdf' => $this->generateUrl('app_parcours_export', ['parcours' => $parcours->getId()], UrlGenerator::ABSOLUTE_URL),
+            'fiche-pdf' => $this->generateUrl('app_parcours_export_pdf_versioning', ['parcours' => $parcours->getId()], UrlGenerator::ABSOLUTE_URL),
             'maquette-pdf' => $this->generateUrl('app_parcours_mccc_export_cfvu_valid', ['parcours' => $parcoursVersion->getParcours()->getId(), 'format' => 'simplifie'], UrlGenerator::ABSOLUTE_URL),
             'maquette-json' => $this->generateUrl('app_parcours_export_maquette_json_validee_cfvu', ['parcours' => $parcoursVersion->getParcours()->getId()], UrlGenerator::ABSOLUTE_URL),
         ];

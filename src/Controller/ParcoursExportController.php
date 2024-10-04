@@ -66,6 +66,33 @@ class ParcoursExportController extends AbstractController
         ], 'Parcours_' . $parcours->getDisplay());
     }
 
+    #[Route('/parcours/{parcours}/versioning/export-pdf', name: 'app_parcours_export_pdf_versioning')]
+    public function exportPdfVersioning(
+        Parcours $parcours,
+        EntityManagerInterface $entityManager,
+        VersioningParcours $versioningParcours
+    ){
+        $lastCfvuVersion = $entityManager->getRepository(ParcoursVersioning::class)
+            ->findLastCfvuVersion($parcours);
+        $lastCfvuVersion = count($lastCfvuVersion) > 0 ? $lastCfvuVersion[0] : null;
+
+        if($lastCfvuVersion){
+            $versionData = $versioningParcours->loadParcoursFromVersion($lastCfvuVersion);
+            $parcoursVersionData = $versionData['parcours'];
+            $dtoVersionData = $versionData['dto'];
+
+            return $this->myPdf->render('pdf/parcours.html.twig', [
+                'formation' => $parcoursVersionData->getFormation(),
+                'typeDiplome' => $parcoursVersionData->getTypeDiplome(),
+                'parcours' => $parcoursVersionData,
+                'hasParcours' => $parcoursVersionData->getFormation()->isHasParcours(),
+                'titre' => 'Détails du parcours ' . $parcoursVersionData->getLibelle(),
+                'dto' => $dtoVersionData,
+                'isVersioning' => true
+            ], 'Parcours_' . $parcours->getLibelle());
+        }
+    }
+
     #[Route('/parcours/{parcours}/maquette/validee_cfvu/export-json', name: 'app_parcours_export_maquette_json_validee_cfvu')]
     public function exportMaquetteValideeJson(
         Parcours $parcours,

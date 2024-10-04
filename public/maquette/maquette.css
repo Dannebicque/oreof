@@ -3,6 +3,7 @@
     --urca-yellow: #F2C52C;
     --urca-teal: #20c997;
     --urca-cyan: #0dcaf0;
+    --urca-green: #198754;
     --urca-gray: #6c757d;
     --urca-gray-300: #dee2e6;
     --urca-gray-400: #ced4da;
@@ -15,6 +16,7 @@
     --urca-blue: #0d6efd;
     --urca-indigo: #6610f2;
     --urca-green-child: #39cac8;
+    --ue-enfant-deuxieme-niveau: #90f3f1;
 }
 
 .table-center {
@@ -95,6 +97,15 @@ h2 {
 
 .table-parcours .table-dark-child {
     --bs-table-bg: var(--urca-green-child) !important;
+}
+
+.table-parcours tr.UEEnfantLibelleDeuxiemeNiveau {
+    --bs-table-bg: var(--ue-enfant-deuxieme-niveau) !important;
+    border: .1em solid var(--urca-black);
+}
+
+td#UEEnfantLibelleDeuxiemeNiveau {
+    text-align: start !important;
 }
 
 .table-parcours tr th:not(:first-child) {

@@ -96,7 +96,10 @@ class VersioningParcoursCommand extends Command
             );
             $parcoursArray = array_filter($parcoursArray, 
                 fn($p) => $p->getDpeParcours()->last() instanceof DpeParcours
-                    && $p->getDpeParcours()->last()->getEtatValidation() === ["valide_a_publier" => 1]
+                    && ( 
+                        $p->getDpeParcours()->last()->getEtatValidation() === ["publie" => 1]
+                        || $p->getDpeParcours()->last()->getEtatValidation() === ["valide_a_publier" => 1]
+                    ) 
             );
             $nombreParcours = count($parcoursArray);
             $io->progressStart($nombreParcours);

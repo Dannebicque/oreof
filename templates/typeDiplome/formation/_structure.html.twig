@@ -1,56 +1,57 @@
 <div class="row"
         {{ stimulus_controller('structure--affichage') }}
 >
-    {% if (print is not defined or print == false) %}
-        <div class="col-sm-12 text-end mb-2 pe-40px">
-            {% if source is defined and source == 'codification' %}
-                <a href="{{ path('app_codification_parcours_modifier', {parcours:parcours.id}) }}"
-                   class="btn btn-sm btn-outline-warning mx-2"
-                >Modifier codification parcours</a>
-                <a href="{{ path('app_codification_parcours_export', {parcours:parcours.id, _format:'xlsx'}) }}"
-                   class="btn btn-sm btn-outline-info mx-2"
-                >Export codification parcours</a>
-            {% endif %}
-            <div class="btn-group">
-                {% if hasLastVersion is defined and hasLastVersion == true %}
-                    <button type="button"
-                            class="btn btn-sm btn-outline-success btn-icon w-sm-auto mx-2 mb-1"
-                            {{ stimulus_action('structure--affichage', 'toggleVersioning') }}
-                    >
-                        <i class="fal fa-eye-slash"></i> Comparer version
-                    </button>
+    {% if isVersioning is not defined or isVersioning == false %}
+        {% if (print is not defined or print == false) %}
+            <div class="col-sm-12 text-end mb-2 pe-40px">
+                {% if source is defined and source == 'codification' %}
+                    <a href="{{ path('app_codification_parcours_modifier', {parcours:parcours.id}) }}"
+                    class="btn btn-sm btn-outline-warning mx-2"
+                    >Modifier codification parcours</a>
+                    <a href="{{ path('app_codification_parcours_export', {parcours:parcours.id, _format:'xlsx'}) }}"
+                    class="btn btn-sm btn-outline-info mx-2"
+                    >Export codification parcours</a>
                 {% endif %}
-                <button type="button"
-                        class="btn btn-sm btn-outline-info btn-icon w-sm-auto mx-2 mb-1"
-                        {{ stimulus_action('structure--affichage', 'toggleEc') }}
-                >
-                    <i class="fal fa-eye-slash"></i> Masquer les EC
-                </button>
-            </div>
-            {% if source is not defined or source != 'codification' %}
                 <div class="btn-group">
+                    {% if hasLastVersion is defined and hasLastVersion == true %}
+                        <button type="button"
+                                class="btn btn-sm btn-outline-success btn-icon w-sm-auto mx-2 mb-1"
+                                {{ stimulus_action('structure--affichage', 'toggleVersioning') }}
+                        >
+                            <i class="fal fa-eye-slash"></i> Comparer version
+                        </button>
+                    {% endif %}
                     <button type="button"
-                            class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2 dropdown-toggle mb-1"
-                            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="{{ iconDownload }}"></i> Fiches EC/matières
+                            class="btn btn-sm btn-outline-info btn-icon w-sm-auto mx-2 mb-1"
+                            {{ stimulus_action('structure--affichage', 'toggleEc') }}
+                    >
+                        <i class="fal fa-eye-slash"></i> Masquer les EC
                     </button>
-                    <div class="dropdown-menu" style="">
-                        <a class="dropdown-item" href="{{ path('fiche_matiere_export_all', {parcours:parcours.id}) }}">
-                            Version complète (toutes les fiches dans 1 pdf)
-                        </a>
-                        <a class="dropdown-item"
-                                {{ stimulus_controller('linkjs') }}
-                                {{ stimulus_action('linkjs', 'openLink') }}
-                           href="{{ path('fiche_matiere_export_zip', {parcours:parcours.id}) }}">
-                            Version zip (1 pdf par fiche)
-                        </a>
-                    </div>
                 </div>
+                {% if source is not defined or source != 'codification' %}
+                    <div class="btn-group">
+                        <button type="button"
+                                class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2 dropdown-toggle mb-1"
+                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="{{ iconDownload }}"></i> Fiches EC/matières
+                        </button>
+                        <div class="dropdown-menu" style="">
+                            <a class="dropdown-item" href="{{ path('fiche_matiere_export_all', {parcours:parcours.id}) }}">
+                                Version complète (toutes les fiches dans 1 pdf)
+                            </a>
+                            <a class="dropdown-item"
+                                    {{ stimulus_controller('linkjs') }}
+                                    {{ stimulus_action('linkjs', 'openLink') }}
+                            href="{{ path('fiche_matiere_export_zip', {parcours:parcours.id}) }}">
+                                Version zip (1 pdf par fiche)
+                            </a>
+                        </div>
+                    </div>
 
-
-                {{ include('btn/export_mccc.html.twig') }}
-            {% endif %}
-        </div>
+                    {{ include('btn/export_mccc.html.twig') }}
+                {% endif %}
+            </div>  
+        {% endif %}
     {% endif %}
     <div class="col-sm-12">
         <table class="table table-striped table-hover">
@@ -63,9 +64,13 @@
                     <th
                             class="border-left-semestre-{{ ordre }}"
                             colspan=" {% if presentiel %}9{% else %}14{% endif %}">S{{ semestre.ordre }}
-                        ({{ semestre.semestre.codeApogee }} | {{ semestre.semestreParcours.codeApogeeEtapeAnnee }}
-                        - {{ semestre.semestreParcours.codeApogeeEtapeVersion }}) {% if semestre.raccroche == true %}<i
-                                class="fal fa-link"></i>{% endif %}
+                            {% if isVersioning is not defined or isVersioning == false %}
+                                ({{ semestre.semestre.codeApogee }} | {{ semestre.semestreParcours.codeApogeeEtapeAnnee }}
+                                - {{ semestre.semestreParcours.codeApogeeEtapeVersion }}) 
+                            {% endif %}
+                            {% if semestre.raccroche == true %}
+                                <i class="fal fa-link"></i>
+                            {% endif %}
 
                     </th>
                 </tr>
@@ -80,44 +85,44 @@
                 <tr>
                     <th class="border-left-semestre-{{ ordre }} text-end" colspan="3">Total Semestre {{ ordre }}</th>
                     <th>
-                        <span class="show_versioning d-none">{{ diffSemestre is defined and diffSemestre != null ? diffSemestre.heuresEctsSemestre.sommeSemestreEcts|displayDiff : '' }} ECTS</span>
+                        <span class="show_versioning d-none d-print-none">{{ diffSemestre is defined and diffSemestre != null ? diffSemestre.heuresEctsSemestre.sommeSemestreEcts|displayDiff : '' }} ECTS</span>
                         <p class="show_current">{{ semestre.heuresEctsSemestre.sommeSemestreEcts|filtreHeures }}</p>
                     </th>
 
                     {% if presentiel %}
                         <th>
-                            <span class="show_versioning d-none">{{ diffSemestre is defined and diffSemestre != null ? diffSemestre.heuresEctsSemestre.sommeSemestreCmPres|displayDiff : '' }}</span>
+                            <span class="show_versioning d-none d-print-none">{{ diffSemestre is defined and diffSemestre != null ? diffSemestre.heuresEctsSemestre.sommeSemestreCmPres|displayDiff : '' }}</span>
                             <span class="show_current">{{ semestre.heuresEctsSemestre.sommeSemestreCmPres|filtreHeures }}</span>
                         </th>
                         <th>
-                            <span class="show_versioning d-none">{{ diffSemestre is defined and diffSemestre != null ? diffSemestre.heuresEctsSemestre.sommeSemestreTdPres|displayDiff : '' }}</span>
+                            <span class="show_versioning d-none d-print-none">{{ diffSemestre is defined and diffSemestre != null ? diffSemestre.heuresEctsSemestre.sommeSemestreTdPres|displayDiff : '' }}</span>
                             <span class="show_current">{{ semestre.heuresEctsSemestre.sommeSemestreTdPres|filtreHeures }}</span>
                         </th>
                         <th>
-                            <span class="show_versioning d-none">{{ diffSemestre is defined and diffSemestre != null ? diffSemestre.heuresEctsSemestre.sommeSemestreTpPres|displayDiff : '' }}</span>
+                            <span class="show_versioning d-none d-print-none">{{ diffSemestre is defined and diffSemestre != null ? diffSemestre.heuresEctsSemestre.sommeSemestreTpPres|displayDiff : '' }}</span>
                             <span class="show_current">{{ semestre.heuresEctsSemestre.sommeSemestreTpPres|filtreHeures }}</span>
                         </th>
                         <th>
-                            <span class="show_versioning d-none">{{ diffSemestre is defined and diffSemestre != null ? diffSemestre.heuresEctsSemestre.sommeSemestreTotalPres|displayDiff : '' }}</span>
+                            <span class="show_versioning d-none d-print-none">{{ diffSemestre is defined and diffSemestre != null ? diffSemestre.heuresEctsSemestre.sommeSemestreTotalPres|displayDiff : '' }}</span>
                             <span class="show_current">{{ semestre.heuresEctsSemestre.sommeSemestreTotalPres|filtreHeures }}</span>
                         </th>
                         <th>
-                            <span class="show_versioning d-none">{{ diffSemestre is defined and diffSemestre != null ? diffSemestre.heuresEctsSemestre.sommeSemestreTePres|displayDiff : '' }}</span>
+                            <span class="show_versioning d-none d-print-none">{{ diffSemestre is defined and diffSemestre != null ? diffSemestre.heuresEctsSemestre.sommeSemestreTePres|displayDiff : '' }}</span>
                             <span class="show_current">{{ semestre.heuresEctsSemestre.sommeSemestreTePres|filtreHeures }}</span>
                         </th>
                     {% endif %}
 
                     {% if distanciel %}
                         <th>
-                            <span class="show_versioning d-none">{{ diffSemestre is defined and diffSemestre != null ? diffSemestre.heuresEctsSemestre.sommeSemestreCmDist|displayDiff : '' }}</span>
+                            <span class="show_versioning d-none d-print-none">{{ diffSemestre is defined and diffSemestre != null ? diffSemestre.heuresEctsSemestre.sommeSemestreCmDist|displayDiff : '' }}</span>
                             <span class="show_current">{{ semestre.heuresEctsSemestre.sommeSemestreCmDist|filtreHeures }}</span>
                         </th>
                         <th>
-                            <span class="show_versioning d-none">{{ diffSemestre is defined and diffSemestre != null ? diffSemestre.heuresEctsSemestre.sommeSemestreTdDist|displayDiff : '' }}</span>
+                            <span class="show_versioning d-none d-print-none">{{ diffSemestre is defined and diffSemestre != null ? diffSemestre.heuresEctsSemestre.sommeSemestreTdDist|displayDiff : '' }}</span>
                             <span class="show_current">{{ semestre.heuresEctsSemestre.sommeSemestreTdDist|filtreHeures }}</span>
                         </th>
                         <th>
-                            <span class="show_versioning d-none">{{ diffSemestre is defined and diffSemestre != null ? diffSemestre.heuresEctsSemestre.sommeSemestreTpDist|displayDiff : '' }}</span>
+                            <span class="show_versioning d-none d-print-none">{{ diffSemestre is defined and diffSemestre != null ? diffSemestre.heuresEctsSemestre.sommeSemestreTpDist|displayDiff : '' }}</span>
                             <span class="show_current">{{ semestre.heuresEctsSemestre.sommeSemestreTpDist|filtreHeures }}</span>
                         </th>
                         <th>
@@ -128,7 +133,7 @@
 
                     {% if parcours.modalitesEnseignement != null and (parcours.modalitesEnseignement.value == 1) %}
                         <th>
-                            <span class="show_versioning d-none">{{ diffSemestre is defined and diffSemestre != null ? diffSemestre.heuresEctsSemestre.sommeSemestreTotalPresDist|displayDiff : '' }}</span>
+                            <span class="show_versioning d-none d-print-none">{{ diffSemestre is defined and diffSemestre != null ? diffSemestre.heuresEctsSemestre.sommeSemestreTotalPresDist|displayDiff : '' }}</span>
                             <span class="show_current">{{ semestre.heuresEctsSemestre.sommeSemestreTotalPresDist|filtreHeures }}</span>
                         </th>
                     {% endif %}
@@ -137,55 +142,55 @@
             <tr>
                 <th colspan="3" class="text-end">Total formation</th>
                 <th>
-                    <span class="show_versioning d-none">{{ diffStructure is defined and diffStructure != null ? diffStructure.heuresEctsFormation.sommeFormationEcts|displayDiff : '' }} ECTS</span>
+                    <span class="show_versioning d-none d-print-none">{{ diffStructure is defined and diffStructure != null ? diffStructure.heuresEctsFormation.sommeFormationEcts|displayDiff : '' }} ECTS</span>
                     <p class="show_current">{{ dto.heuresEctsFormation.sommeFormationEcts }} ECTS</p>
                 </th>
 
                 {% if presentiel %}
                     <th>
-                        <span class="show_versioning d-none">{{ diffStructure is defined and diffStructure != null ? diffStructure.heuresEctsFormation.sommeFormationCmPres|displayDiff : '' }}</span>
+                        <span class="show_versioning d-none d-print-none">{{ diffStructure is defined and diffStructure != null ? diffStructure.heuresEctsFormation.sommeFormationCmPres|displayDiff : '' }}</span>
                         <span class="show_current">{{ dto.heuresEctsFormation.sommeFormationCmPres|filtreHeures }}</span>
                     </th>
                     <th>
-                        <span class="show_versioning d-none">{{ diffStructure is defined and diffStructure != null ? diffStructure.heuresEctsFormation.sommeFormationTdPres|displayDiff : '' }}</span>
+                        <span class="show_versioning d-none d-print-none">{{ diffStructure is defined and diffStructure != null ? diffStructure.heuresEctsFormation.sommeFormationTdPres|displayDiff : '' }}</span>
                         <span class="show_current">{{ dto.heuresEctsFormation.sommeFormationTdPres|filtreHeures }}</span>
                     </th>
                     <th>
-                        <span class="show_versioning d-none">{{ diffStructure is defined and diffStructure != null ? diffStructure.heuresEctsFormation.sommeFormationTpPres|displayDiff : '' }}</span>
+                        <span class="show_versioning d-none d-print-none">{{ diffStructure is defined and diffStructure != null ? diffStructure.heuresEctsFormation.sommeFormationTpPres|displayDiff : '' }}</span>
                         <span class="show_current">{{ dto.heuresEctsFormation.sommeFormationTpPres|filtreHeures }}</span>
                     </th>
                     <th>
-                        <span class="show_versioning d-none">{{ diffStructure is defined and diffStructure != null ? diffStructure.heuresEctsFormation.sommeFormationTotalPres|displayDiff : '' }}</span>
+                        <span class="show_versioning d-none d-print-none">{{ diffStructure is defined and diffStructure != null ? diffStructure.heuresEctsFormation.sommeFormationTotalPres|displayDiff : '' }}</span>
                         <span class="show_current">{{ dto.heuresEctsFormation.sommeFormationTotalPres|filtreHeures }}</span>
                     </th>
                     <th>
-                        <span class="show_versioning d-none">{{ diffStructure is defined and diffStructure != null ? diffStructure.heuresEctsFormation.sommeFormationTePres|displayDiff : '' }}</span>
+                        <span class="show_versioning d-none d-print-none">{{ diffStructure is defined and diffStructure != null ? diffStructure.heuresEctsFormation.sommeFormationTePres|displayDiff : '' }}</span>
                         <span class="show_current">{{ dto.heuresEctsFormation.sommeFormationTePres|filtreHeures }}</span>
                     </th>
                 {% endif %}
 
                 {% if distanciel %}
                     <th>
-                        <span class="show_versioning d-none">{{ diffStructure is defined and diffStructure != null ? diffStructure.heuresEctsFormation.sommeFormationCmDist|displayDiff : '' }}</span>
+                        <span class="show_versioning d-none d-print-none">{{ diffStructure is defined and diffStructure != null ? diffStructure.heuresEctsFormation.sommeFormationCmDist|displayDiff : '' }}</span>
                         <span class="show_current">{{ dto.heuresEctsFormation.sommeFormationCmDist|filtreHeures }}</span>
                     </th>
                     <th>
-                        <span class="show_versioning d-none">{{ diffStructure is defined and diffStructure != null ? diffStructure.heuresEctsFormation.sommeFormationTdDist|displayDiff : '' }}</span>
+                        <span class="show_versioning d-none d-print-none">{{ diffStructure is defined and diffStructure != null ? diffStructure.heuresEctsFormation.sommeFormationTdDist|displayDiff : '' }}</span>
                         <span class="show_current">{{ dto.heuresEctsFormation.sommeFormationTdDist|filtreHeures }}</span>
                     </th>
                     <th>
-                        <span class="show_versioning d-none">{{ diffStructure is defined and diffStructure != null ? diffStructure.heuresEctsFormation.sommeFormationTpDist|displayDiff : '' }}</span>
+                        <span class="show_versioning d-none d-print-none">{{ diffStructure is defined and diffStructure != null ? diffStructure.heuresEctsFormation.sommeFormationTpDist|displayDiff : '' }}</span>
                         <span class="show_current">{{ dto.heuresEctsFormation.sommeFormationTpDist|filtreHeures }}</span>
                     </th>
                     <th>
-                        <span class="show_versioning d-none">{{ diffStructure is defined and diffStructure != null ? diffStructure.heuresEctsFormation.sommeFormationTotalDist|displayDiff : '' }}</span>
+                        <span class="show_versioning d-none d-print-none">{{ diffStructure is defined and diffStructure != null ? diffStructure.heuresEctsFormation.sommeFormationTotalDist|displayDiff : '' }}</span>
                         <span class="show_current">{{ dto.heuresEctsFormation.sommeFormationTotalDist|filtreHeures }}</span>
                     </th>
                 {% endif %}
 
                 {% if parcours.modalitesEnseignement != null and (parcours.modalitesEnseignement.value == 1) %}
                     <th>
-                        <span class="show_versioning d-none">{{ diffStructure is defined and diffStructure != null ? diffStructure.heuresEctsFormation.sommeFormationTotalPresDist|displayDiff : '' }}</span>
+                        <span class="show_versioning d-none d-print-none">{{ diffStructure is defined and diffStructure != null ? diffStructure.heuresEctsFormation.sommeFormationTotalPresDist|displayDiff : '' }}</span>
                         <span class="show_current">{{ dto.heuresEctsFormation.sommeFormationTotalPresDist|filtreHeures }}</span>
                     </th>
                 {% endif %}
