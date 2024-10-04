@@ -66,7 +66,11 @@ class GlobalVoter extends Voter
     {
         $this->user = $token->getUser();
 
-        if ($this->security->isGranted('ROLE_ADMIN')) {
+        if (
+            !$subject instanceof Parcours &&
+            !$subject instanceof Formation &&
+            !$subject instanceof FicheMatiere &&
+            $this->security->isGranted('ROLE_ADMIN') ) {
             return true;
         }
 
