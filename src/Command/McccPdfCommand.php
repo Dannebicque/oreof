@@ -104,31 +104,52 @@ class McccPdfCommand extends Command
                 $dateCfvu = $this->getHistorique->getHistoriqueParcoursLastStep($dpeParcours, 'soumis_cfvu')?->getDate();
 
                 if($typeDiplomeParcours !== "BUT"){
-                    $pdf = $this->licenceMccc->exportPdfLicenceMccc(
+                    $pdfFull = $this->licenceMccc->exportPdfLicenceMccc(
                         anneeUniversitaire: $anneeDpe,
                         parcours : $parcours,
                         dateCfvu: $dateCfvu,
                         dateConseil: $dateConseil,
+                        versionFull: true
                     );
-                }
-                elseif($typeDiplomeParcours === "BUT"){
-                    $pdf = $this->butMccc->exportPdfbutMccc(
+                    $pdfSimplifie = $this->licenceMccc->exportPdfLicenceMccc(
                         anneeUniversitaire: $anneeDpe,
                         parcours: $parcours,
                         dateCfvu: $dateCfvu,
-                        dateConseil: $dateConseil
+                        dateConseil: $dateConseil,
+                        versionFull: false
+                    );
+                }
+                elseif($typeDiplomeParcours === "BUT"){
+                    $pdfFull = $this->butMccc->exportPdfbutMccc(
+                        anneeUniversitaire: $anneeDpe,
+                        parcours: $parcours,
+                        dateCfvu: $dateCfvu,
+                        dateConseil: $dateConseil,
+                        versionFull: true
+                    );
+                    $pdfSimplifie = $this->butMccc->exportPdfbutMccc(
+                        anneeUniversitaire: $anneeDpe,
+                        parcours: $parcours,
+                        dateCfvu: $dateCfvu,
+                        dateConseil: $dateConseil,
+                        versionFull: false
                     );
                 }
                 
                 // $fileName = "MCCC - " . $anneeDpe->getAnnee() . " - " . $parcours->getFormation()->getSlug() ?? '---';
                 // $fileName = "MCC-Parcours-{$parcours->getId()}-" . Tools::slug($parcours->getLibelle()) . "-" . $anneeDpe->getAnnee() . ".pdf";
                 
-                $fileName = "MCCC-Parcours-{$parcours->getId()}-{$anneeDpe->getAnnee()}.pdf";
+                $fileName = "MCCC-Parcours-{$parcours->getId()}-{$anneeDpe->getAnnee()}";
                 $now = (new DateTime())->format("d-m-Y_H-i-s");
 
                 $this->fs->appendToFile(
-                    __DIR__ . "/../../export/" . $now . "-" . $fileName,
-                    $pdf
+                    __DIR__ . "/../../export/" . $now . "-" . $fileName . "-simplifie.pdf",
+                    $pdfSimplifie
+                );
+
+                $this->fs->appendToFile(
+                    __DIR__ . "/../../export/" . $now . "-" . $fileName . ".pdf",
+                    $pdfFull
                 );
 
                 $io->success("Fichier généré avec succès.");
