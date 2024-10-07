@@ -56,7 +56,8 @@ class StructureEc
         ?Parcours $parcours,
         bool $isBut = false,
         bool $withEcts = true,
-        bool $withBcc = true
+        bool $withBcc = true,
+        bool $heuresSurFicheMatiere = false
     ) {
         if($parcours) {
             $getElement = new GetElementConstitutif($elementConstitutif, $parcours);

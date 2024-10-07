@@ -32,7 +32,7 @@ class CalculStructureParcours
     {
     }
 
-    public function calcul(Parcours $parcours, bool $withEcts = true, bool $withBcc = true): StructureParcours
+    public function calcul(Parcours $parcours, bool $withEcts = true, bool $withBcc = true, bool $heuresSurFicheMatiere = false): StructureParcours
     {
         if ($this->parcoursRepository !== null) {
             $parcours = $this->parcoursRepository->find($parcours->getId());
@@ -71,10 +71,10 @@ class CalculStructureParcours
                         foreach ($ecs as $elementConstitutif) {
                             if ($elementConstitutif !== null && $elementConstitutif->getEcParent() === null) {
                                 //récupérer le bon EC selon tous les liens
-                                $dtoEc = new StructureEc($elementConstitutif, $parcours, false, $withEcts, $withBcc);
+                                $dtoEc = new StructureEc($elementConstitutif, $parcours, false, $withEcts, $withBcc, $heuresSurFicheMatiere);
                                 $dtoStructure->statsFichesMatieresParcours->addEc($elementConstitutif, $raccrocheUe);
                                 foreach ($elementConstitutif->getEcEnfants() as $elementConstitutifEnfant) {
-                                    $dtoEcEnfant = new StructureEc($elementConstitutifEnfant, $parcours, false, $withEcts, $withBcc);
+                                    $dtoEcEnfant = new StructureEc($elementConstitutifEnfant, $parcours, false, $withEcts, $withBcc, $heuresSurFicheMatiere);
                                     $dtoStructure->statsFichesMatieresParcours->addEc($elementConstitutifEnfant, $raccrocheUe);
                                     $dtoEc->addEcEnfant($elementConstitutifEnfant->getId(), $dtoEcEnfant);
                                 }
@@ -97,10 +97,10 @@ class CalculStructureParcours
                                 $ecsUeEnfant = $this->elementConstitutifRepository->getByUe($ueEnfant);
                                 foreach ($ecsUeEnfant as $elementConstitutif) {
                                     if ($elementConstitutif !== null && $elementConstitutif->getEcParent() === null) {
-                                        $dtoEc = new StructureEc($elementConstitutif, $parcours, false, $withEcts, $withBcc);
+                                        $dtoEc = new StructureEc($elementConstitutif, $parcours, false, $withEcts, $withBcc, $heuresSurFicheMatiere);
                                         $dtoStructure->statsFichesMatieresParcours->addEc($elementConstitutif, $raccrocheUeEnfant);
                                         foreach ($elementConstitutif->getEcEnfants() as $elementConstitutifEnfant) {
-                                            $dtoEcEnfant = new StructureEc($elementConstitutifEnfant, $parcours, false, $withEcts, $withBcc);
+                                            $dtoEcEnfant = new StructureEc($elementConstitutifEnfant, $parcours, false, $withEcts, $withBcc, $heuresSurFicheMatiere);
                                             $dtoStructure->statsFichesMatieresParcours->addEc($elementConstitutifEnfant, $raccrocheUeEnfant);
                                             $dtoEc->addEcEnfant($elementConstitutifEnfant->getId(), $dtoEcEnfant);
                                         }
@@ -126,10 +126,10 @@ class CalculStructureParcours
                                         $ecsUeEnfant2 = $this->elementConstitutifRepository->getByUe($ueEnfant2);
                                         foreach ($ecsUeEnfant2 as $elementConstitutif) {
                                             if ($elementConstitutif !== null && $elementConstitutif->getEcParent() === null) {
-                                                $dtoEc = new StructureEc($elementConstitutif, $parcours, false, $withEcts, $withBcc);
+                                                $dtoEc = new StructureEc($elementConstitutif, $parcours, false, $withEcts, $withBcc, $heuresSurFicheMatiere);
                                                 $dtoStructure->statsFichesMatieresParcours->addEc($elementConstitutif, $raccrocheUeEnfant2);
                                                 foreach ($elementConstitutif->getEcEnfants() as $elementConstitutifEnfant) {
-                                                    $dtoEcEnfant = new StructureEc($elementConstitutifEnfant, $parcours, false, $withEcts, $withBcc);
+                                                    $dtoEcEnfant = new StructureEc($elementConstitutifEnfant, $parcours, false, $withEcts, $withBcc, $heuresSurFicheMatiere);
                                                     $dtoStructure->statsFichesMatieresParcours->addEc($elementConstitutifEnfant, $raccrocheUeEnfant2);
                                                     $dtoEc->addEcEnfant($elementConstitutifEnfant->getId(), $dtoEcEnfant);
                                                 }
