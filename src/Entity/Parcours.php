@@ -279,6 +279,7 @@ class Parcours
         $this->adresses = new ArrayCollection();
         $this->contacts = new ArrayCollection();
         $this->dpeParcours = new ArrayCollection();
+        $this->niveauFrancais = NiveauLangueEnum::B2;
     }
 
 
