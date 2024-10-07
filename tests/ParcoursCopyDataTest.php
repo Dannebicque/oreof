@@ -31,7 +31,7 @@ class ParcoursCopyDataTest extends KernelTestCase
         // perform copy
         $this->parcoursCopyData->copyDataForParcours($parcours);
         // compare new and old data
-        $dtoAfter = $this->parcoursCopyData->getDTOForParcours($parcours);
+        $dtoAfter = $this->parcoursCopyData->getDTOForParcours($parcours, heuresSurFicheMatiere: true);
 
         $this->assertEquals(
             $dtoBefore->heuresEctsFormation->sommeFormationTotalPres(),

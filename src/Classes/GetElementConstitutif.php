@@ -107,7 +107,7 @@ class GetElementConstitutif
         return $this->elementConstitutif;
     }
 
-    public function getFicheMatiereHeures() : FicheMatiere {
+    public function getFicheMatiereHeures() : ?FicheMatiere {
         return $this->elementConstitutif->getFicheMatiere();
     }   
 

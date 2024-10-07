@@ -64,7 +64,7 @@ class ParcoursCopyData {
         }
     }
 
-    public function getDTOForParcours(Parcours $parcours){
+    public function getDTOForParcours(Parcours $parcours, bool $heuresSurFicheMatiere = false){
         if($parcours->getTypeDiplome()->getLibelleCourt() === 'BUT'){
             $calcul = new CalculButStructureParcours();
             $dto = $calcul->calcul($parcours);
@@ -75,7 +75,7 @@ class ParcoursCopyData {
             $ueRepository = $this->entityManager->getRepository(Ue::class);
             $ecRepository = $this->entityManager->getRepository(ElementConstitutif::class);
             $calcul = new CalculStructureParcours($this->entityManager, $ecRepository, $ueRepository);
-            $dto = $calcul->calcul($parcours);
+            $dto = $calcul->calcul($parcours, heuresSurFicheMatiere: $heuresSurFicheMatiere);
 
             return $dto;
         }
