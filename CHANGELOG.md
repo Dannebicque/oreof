@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.31.46](https://github.com/Dannebicque/oreof/compare/v1.31.45...v1.31.46) (2024-10-07)
+
+
+### Bug Fixes
+
+* export synthese et plaquette ([8afbaef](https://github.com/Dannebicque/oreof/commit/8afbaefc35b348564df201f1dd85693e7ae82a49))
+
 ### [1.31.45](https://github.com/Dannebicque/oreof/compare/v1.31.44...v1.31.45) (2024-10-07)
 
 
