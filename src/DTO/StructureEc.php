@@ -71,7 +71,12 @@ class StructureEc
         if ($this->withEcts && $parcours) {
             $this->heuresEctsEc = new HeuresEctsEc();
             $this->typeMccc = $getElement->getTypeMccc();
-            $this->heuresEctsEc->addEc($getElement->getElementConstitutifHeures(), $isBut);
+            if($heuresSurFicheMatiere === false){
+                $this->heuresEctsEc->addEc($getElement->getElementConstitutifHeures(), $isBut);
+            }
+            if($heuresSurFicheMatiere === true){
+                $this->heuresEctsEc->addEc($getElement->getFicheMatiereHeures(), $isBut);
+            }
             $this->heuresEctsEc->addEcts($getElement->getEcts());
             $this->mcccs = $getElement->getMcccsCollection()?->toArray();
         }

@@ -107,6 +107,10 @@ class GetElementConstitutif
         return $this->elementConstitutif;
     }
 
+    public function getFicheMatiereHeures() : FicheMatiere {
+        return $this->elementConstitutif->getFicheMatiere();
+    }   
+
     public function isRaccroche():bool
     {
         if ($this->isRaccroche !== null) {
