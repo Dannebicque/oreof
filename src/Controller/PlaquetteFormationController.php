@@ -23,17 +23,17 @@ class PlaquetteFormationController extends AbstractController
     ): Response {
         $rubriques = $formation->getComposantePorteuse()?->getPlaquetteRubriques();
         $typeDiplome = $formation->getTypeDiplome();
-        $tParcours = [];
-        foreach ($formation->getParcours() as $parcours) {
-            $tParcours[$parcours->getId()] =  $calculStructureParcours->calcul($parcours);
-        }
+//        $tParcours = [];
+//        foreach ($formation->getParcours() as $parcours) {
+//            $tParcours[$parcours->getId()] =  $calculStructureParcours->calcul($parcours);
+//        }
 
         return $this->myPdf->render('pdf/formation_plaquette.html.twig', [
             'composante' => $formation->getComposantePorteuse(),
             'formation' => $formation,
             'typeDiplome' => $typeDiplome,
             'titre' => 'Plaquette de la formation '.$formation->getDisplay(),
-            'tParcours' => $tParcours,
+            //'tParcours' => $tParcours,
             'rubriques' => $rubriques,
         ], 'Plaquette_formation_'.$formation->getDisplay().'.pdf', [
             'withTemplate' => true,

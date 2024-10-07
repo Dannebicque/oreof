@@ -11,7 +11,7 @@
             {% endif %}
             {% set parcours = demande.parcours %}
             <h2 class="text-center">{{ parcours.composanteInscription.libelle ?? "---" }}</h2>
-            <h3 class="text-center">{{ parcours.formation }}</h3>
+            <h3 class="text-center">{{ parcours.formation.displayLong }}</h3>
             <h3 class="text-center">Parcours {{ parcours.display }}</h3>
             {% for key, p in demande.patch %}
                 {% for patch in p %}
