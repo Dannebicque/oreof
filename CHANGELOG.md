@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.31.47](https://github.com/Dannebicque/oreof/compare/v1.31.46...v1.31.47) (2024-10-08)
+
+
+### Bug Fixes
+
+* traduction manquante ([573f22a](https://github.com/Dannebicque/oreof/commit/573f22a606f3f665913aed8dc868687c6f2891c5))
+
 ### [1.31.46](https://github.com/Dannebicque/oreof/compare/v1.31.45...v1.31.46) (2024-10-07)
 
 
