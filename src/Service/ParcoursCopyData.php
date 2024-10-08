@@ -4,9 +4,11 @@ namespace App\Service;
 
 use App\Classes\CalculButStructureParcours;
 use App\Classes\CalculStructureParcours;
+use App\Classes\MyGotenbergPdf;
 use App\Entity\ElementConstitutif;
 use App\Entity\FicheMatiere;
 use App\Entity\Parcours;
+use App\Entity\Semestre;
 use App\Entity\Ue;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
@@ -16,17 +18,25 @@ class ParcoursCopyData {
 
     private EntityManagerInterface $entityManager;
 
+    private MyGotenbergPdf $myPdf;
+
     public function __construct(
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        MyGotenbergPdf $myPdf
     ){
         $this->entityManager = $entityManager;
+        $this->myPdf = $myPdf;
     }
 
     public function copyDataForParcours(Parcours $parcours){
         foreach($parcours->getSemestreParcours() as $semestreParcours){
-            foreach($semestreParcours->getSemestre()->getUes() as $ue){
+            $semestre = $this->getSemestre($semestreParcours->getSemestre());
+            $ueArray = $this->entityManager->getRepository(Ue::class)->getBySemestre($semestre);
+            foreach($ueArray as $ueData){
+                $ue = $this->getUe($ueData);
                 $this->copyDataForUe($ue);
-                foreach($ue->getUeEnfants() as $ueEnfant){
+                foreach($ueData->getUeEnfants() as $ueEnfantData){
+                    $ueEnfant = $this->getUe($ueEnfantData);
                     $this->copyDataForUe($ueEnfant);
                 }
             }
@@ -64,7 +74,11 @@ class ParcoursCopyData {
         }
     }
 
-    public function getDTOForParcours(Parcours $parcours, bool $heuresSurFicheMatiere = false){
+    public function getDTOForParcours(
+        Parcours $parcours, 
+        bool $heuresSurFicheMatiere = false, 
+        bool $withCopy = false
+    ){
         if($parcours->getTypeDiplome()->getLibelleCourt() === 'BUT'){
             $calcul = new CalculButStructureParcours();
             $dto = $calcul->calcul($parcours);
@@ -75,10 +89,45 @@ class ParcoursCopyData {
             $ueRepository = $this->entityManager->getRepository(Ue::class);
             $ecRepository = $this->entityManager->getRepository(ElementConstitutif::class);
             $calcul = new CalculStructureParcours($this->entityManager, $ecRepository, $ueRepository);
-            $dto = $calcul->calcul($parcours, heuresSurFicheMatiere: $heuresSurFicheMatiere);
+            if($withCopy){
+                $parcoursData = $parcours;
+                $this->copyDataForParcours($parcoursData);
+                $dto = $calcul->calcul($parcoursData, heuresSurFicheMatiere: $heuresSurFicheMatiere);
+            }   
+            else {
+                $dto = $calcul->calcul($parcours, heuresSurFicheMatiere: $heuresSurFicheMatiere);
+            }
 
             return $dto;
         }
+    }
+
+    private function getUe(Ue $ue){
+        return $ue->getUeRaccrochee() !== null 
+            ? $ue->getUeRaccrochee()->getUe()
+            : $ue;
+    }
+
+    private function getSemestre(Semestre $semestre){
+        return $semestre->getSemestreRaccroche() !== null 
+            ? $semestre->getSemestreRaccroche()->getSemestre()
+            : $semestre;
+    }
+
+    public function exportDTOAsPdf(
+        Parcours $parcours, 
+        bool $heuresSurFicheMatiere, 
+        bool $withCopy = false
+    ){
+        return $this->myPdf->render(
+            'typeDiplome/formation/_structure.html.twig',
+            [
+                'print' => true,
+                'dto' => $this->getDTOForParcours($parcours, $heuresSurFicheMatiere, $withCopy),
+                'parcours' => $parcours,
+                'titre' => "Maquette-Parcours-{$parcours->getDisplay()}"
+            ]
+        );
     }
 
 }
