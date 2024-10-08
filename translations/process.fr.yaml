@@ -659,4 +659,4 @@ validation.fiche_matiere.ses.valide.fiche.alerte: ''
 title.validation.fiche.reserver_fiche_ses: 'Emettre des réserves sur la fiche matière'
 validation.valider.fiche.reserver_fiche_ses.title: 'Emettre des réserves sur la fiche matière'
 btn.validation.fiche.reserver_fiche_ses: 'Emettre des réserves'
-
+btn.validation.parcours.publier: 'Publier le parcours'
