@@ -34,33 +34,48 @@ class ParcoursCopyData {
             $ueArray = $this->entityManager->getRepository(Ue::class)->getBySemestre($semestre);
             foreach($ueArray as $ueData){
                 $ue = $this->getUe($ueData);
-                $this->copyDataForUe($ue);
+                $this->copyDataForUe($ue, $parcours->getId());
                 foreach($ueData->getUeEnfants() as $ueEnfantData){
                     $ueEnfant = $this->getUe($ueEnfantData);
-                    $this->copyDataForUe($ueEnfant);
+                    $this->copyDataForUe($ueEnfant, $parcours->getId());
                 }
             }
         }
     }
     
-    private function copyDataForUe(Ue $ue){
+    private function copyDataForUe(Ue $ue, int $parcoursId){
         foreach($ue->getElementConstitutifs() as $ec){
-            $this->copyDataOnFicheMatiere($ec, $ec->getFicheMatiere());
+            $this->copyDataOnFicheMatiere($ec, $ec->getFicheMatiere(), $parcoursId);
             foreach($ec->getEcEnfants() as $ecEnfant){
-                $this->copyDataOnFicheMatiere($ecEnfant, $ecEnfant->getFicheMatiere());
+                $this->copyDataOnFicheMatiere($ecEnfant, $ecEnfant->getFicheMatiere(), $parcoursId);
             }
         }
     }
 
-    private function copyDataOnFicheMatiere(ElementConstitutif $ec, ?FicheMatiere $ficheMatiere){
+    private function copyDataOnFicheMatiere(
+        ElementConstitutif $ecSource,
+        ?FicheMatiere $ficheMatiere,
+        int $parcoursId
+    ){
         
         if($ficheMatiere){
             $isVolumeHoraireFMImpose = $ficheMatiere->isVolumesHorairesImpose();
-
             if(!$isVolumeHoraireFMImpose){
                 $ficheMatiereBD = $this->entityManager->getRepository(FicheMatiere::class)
                     ->findOneById($ficheMatiere->getId());
     
+                $ec = $ecSource;
+                if($ecSource->getEcParent()?->isHeuresEnfantsIdentiques()){
+                    $ec = $ecSource->getEcParent();
+                }
+                if($ficheMatiereBD->getParcours()->getId() !== $parcoursId){
+                    foreach($ficheMatiereBD->getElementConstitutifs() as $ecFM){
+                        if($ecFM->getParcours()->getId() === $ficheMatiereBD->getParcours()->getId()){
+                            $ec = $ecFM;
+                        }
+                    }
+                }
+
                 $ficheMatiereBD->setVolumeCmPresentiel($ec->getVolumeCmPresentiel());
                 $ficheMatiereBD->setVolumeTdPresentiel($ec->getVolumeTdPresentiel());
                 $ficheMatiereBD->setVolumeTpPresentiel($ec->getVolumeTpPresentiel());
