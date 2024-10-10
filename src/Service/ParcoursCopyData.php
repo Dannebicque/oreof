@@ -42,6 +42,10 @@ class ParcoursCopyData {
                 foreach($ueData->getUeEnfants() as $ueEnfantData){
                     $ueEnfant = $this->getUe($ueEnfantData);
                     $this->copyDataForUe($ueEnfant, $parcours->getId());
+                    foreach($ueEnfantData->getUeEnfants() as $ueEnfantDeuxiemeData){
+                        $ueEnfantDeuxieme = $this->getUe($ueEnfantDeuxiemeData);
+                        $this->copyDataForUe($ueEnfantDeuxieme, $parcours->getId());
+                    }
                 }
             }
         }
