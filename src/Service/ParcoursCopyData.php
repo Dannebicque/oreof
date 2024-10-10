@@ -5,6 +5,7 @@ namespace App\Service;
 use App\Classes\CalculButStructureParcours;
 use App\Classes\CalculStructureParcours;
 use App\Classes\MyGotenbergPdf;
+use App\DTO\StructureEc;
 use App\DTO\StructureParcours;
 use App\DTO\StructureSemestre;
 use App\DTO\StructureUe;
@@ -168,6 +169,7 @@ class ParcoursCopyData {
         StructureSemestre $semestre1, 
         StructureSemestre $semestre2
     ) : bool {
+
         $result = true;
         /** 
          * Même nombre d'heures total sur le semestre
@@ -216,8 +218,8 @@ class ParcoursCopyData {
         StructureUe $ue1,
         StructureUe $ue2
     ) : bool {
-        $result = true;
 
+        $result = true;
         // Totaux
         $result = $result && $ue1->heuresEctsUe->sommeUeTotalPres() 
             === $ue2->heuresEctsUe->sommeUeTotalPres();
@@ -255,6 +257,47 @@ class ParcoursCopyData {
         // TE
         $result = $result && $ue1->heuresEctsUe->sommeUeTePres 
             === $ue2->heuresEctsUe->sommeUeTePres;
+
+        return $result;
+    }
+
+    public function compareTwoEcDTO(
+        StructureEc $ec1,
+        StructureEc $ec2
+    ) : bool {
+
+        $result = true;
+        // Totaux
+        $result = $result && $ec1->heuresEctsEc->sommeEcTotalPres() 
+            === $ec2->heuresEctsEc->sommeEcTotalPres();
+
+        $result = $result && $ec1->heuresEctsEc->sommeEcTotalDist() 
+            === $ec2->heuresEctsEc->sommeEcTotalDist();
+
+        $result = $result && $ec1->heuresEctsEc->sommeEcTotalPresDist() 
+            === $ec2->heuresEctsEc->sommeEcTotalPresDist();
+
+        /**
+         * Présentiel
+         */
+        // CM
+        $result = $result && $ec1->heuresEctsEc->cmPres === $ec2->heuresEctsEc->cmPres;
+        // TD
+        $result = $result && $ec1->heuresEctsEc->tdPres === $ec2->heuresEctsEc->tdPres;
+        // TP
+        $result = $result && $ec1->heuresEctsEc->tpPres === $ec2->heuresEctsEc->tpPres;
+        /**
+         * Distanciel
+         */
+        // CM
+        $result = $result && $ec1->heuresEctsEc->cmDist === $ec2->heuresEctsEc->cmDist;
+        // TD
+        $result = $result && $ec1->heuresEctsEc->tdDist === $ec2->heuresEctsEc->tdDist;
+        // TP
+        $result = $result && $ec1->heuresEctsEc->tpDist === $ec2->heuresEctsEc->tpDist;
+
+        // TE
+        $result = $result && $ec1->heuresEctsEc->tePres === $ec2->heuresEctsEc->tePres;
 
         return $result;
     }
