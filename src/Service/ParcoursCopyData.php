@@ -7,6 +7,7 @@ use App\Classes\CalculStructureParcours;
 use App\Classes\MyGotenbergPdf;
 use App\DTO\StructureParcours;
 use App\DTO\StructureSemestre;
+use App\DTO\StructureUe;
 use App\Entity\ElementConstitutif;
 use App\Entity\FicheMatiere;
 use App\Entity\Parcours;
@@ -149,9 +150,15 @@ class ParcoursCopyData {
 
     public function compareTwoDTO(StructureParcours $dto1, StructureParcours $dto2){
         $result = true;
+        // Même nombre de semestres
         $result = $result && count($dto1->semestres) === count($dto2->semestres);
         for($i = 1; $i <= count($dto1->semestres); $i++){
             $result = $result && $this->compareTwoSemestresDTO($dto1->semestres[$i], $dto2->semestres[$i]);
+            // Même nombre d'UE
+            $result = $result && count($dto1->semestres[$i]->ues) === count($dto2->semestres[$i]->ues);
+            for($j = 1; $j <= count($dto1->semestres[$i]->ues); $j++){
+                $result = $result && $this->compareTwoUeDTO($dto1->semestres[$i]->ues[$j], $dto2->semestres[$i]->ues[$j]);
+            }
         }
 
         return $result;
@@ -165,16 +172,20 @@ class ParcoursCopyData {
         /** 
          * Même nombre d'heures total sur le semestre
          */
-        $result = $result && $semestre1->heuresEctsSemestre->sommeSemestreTotalDist() 
-            === $semestre2->heuresEctsSemestre->sommeSemestreTotalDist();
         $result = $result && $semestre1->heuresEctsSemestre->sommeSemestreTotalPres()
             === $semestre2->heuresEctsSemestre->sommeSemestreTotalPres();
+
+        $result = $result && $semestre1->heuresEctsSemestre->sommeSemestreTotalDist() 
+            === $semestre2->heuresEctsSemestre->sommeSemestreTotalDist();
+
+        $result = $result && $semestre1->heuresEctsSemestre->sommeSemestreTotalPresDist() 
+            === $semestre2->heuresEctsSemestre->sommeSemestreTotalPresDist();
         /**
          * Présentiel
          */
         // CM
         $result = $result && $semestre1->heuresEctsSemestre->sommeSemestreCmPres
-            === $semestre1->heuresEctsSemestre->sommeSemestreCmPres;
+            === $semestre2->heuresEctsSemestre->sommeSemestreCmPres;
         // TD
         $result = $result && $semestre1->heuresEctsSemestre->sommeSemestreTdPres 
             === $semestre2->heuresEctsSemestre->sommeSemestreTdPres;
@@ -201,4 +212,50 @@ class ParcoursCopyData {
         return $result;
     }
 
+    public function compareTwoUeDTO(
+        StructureUe $ue1,
+        StructureUe $ue2
+    ) : bool {
+        $result = true;
+
+        // Totaux
+        $result = $result && $ue1->heuresEctsUe->sommeUeTotalPres() 
+            === $ue2->heuresEctsUe->sommeUeTotalPres();
+
+        $result = $result && $ue1->heuresEctsUe->sommeUeTotalDist() 
+            === $ue2->heuresEctsUe->sommeUeTotalDist();   
+            
+        $result = $result && $ue1->heuresEctsUe->sommeUeTotalPresDist() 
+            === $ue2->heuresEctsUe->sommeUeTotalPresDist();
+        /**
+         * Présentiel
+         */
+        // CM
+        $result = $result && $ue1->heuresEctsUe->sommeUeCmPres 
+            === $ue2->heuresEctsUe->sommeUeCmPres;
+        // TD
+        $result = $result && $ue1->heuresEctsUe->sommeUeTdPres 
+            === $ue2->heuresEctsUe->sommeUeTdPres;
+        // TP
+        $result = $result && $ue1->heuresEctsUe->sommeUeTpPres 
+            === $ue2->heuresEctsUe->sommeUeTpPres;
+        /**
+         * Distanciel
+         */
+        // CM
+        $result = $result && $ue1->heuresEctsUe->sommeUeCmDist 
+            === $ue2->heuresEctsUe->sommeUeCmDist;
+        // TD
+        $result = $result && $ue1->heuresEctsUe->sommeUeTdDist 
+            === $ue2->heuresEctsUe->sommeUeTdDist;
+        // TP
+        $result = $result && $ue1->heuresEctsUe->sommeUeTpDist 
+            === $ue2->heuresEctsUe->sommeUeTpDist;
+
+        // TE
+        $result = $result && $ue1->heuresEctsUe->sommeUeTePres 
+            === $ue2->heuresEctsUe->sommeUeTePres;
+
+        return $result;
+    }
 }
