@@ -44,5 +44,10 @@ class ParcoursCopyDataTest extends KernelTestCase
             $dtoAfter->heuresEctsFormation->sommeFormationTotalDist(),
             "Le total des heures de la formation en distanciel n'est pas égal."
         );
+
+        $this->assertTrue(
+            $this->parcoursCopyData->compareTwoDTO($dtoBefore, $dtoAfter),
+            "Les heures des semestres ne correspondent pas."
+        );
     }
 }

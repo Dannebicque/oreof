@@ -5,6 +5,8 @@ namespace App\Service;
 use App\Classes\CalculButStructureParcours;
 use App\Classes\CalculStructureParcours;
 use App\Classes\MyGotenbergPdf;
+use App\DTO\StructureParcours;
+use App\DTO\StructureSemestre;
 use App\Entity\ElementConstitutif;
 use App\Entity\FicheMatiere;
 use App\Entity\Parcours;
@@ -143,6 +145,60 @@ class ParcoursCopyData {
                 'titre' => "Maquette-Parcours-{$parcours->getDisplay()}"
             ]
         );
+    }
+
+    public function compareTwoDTO(StructureParcours $dto1, StructureParcours $dto2){
+        $result = true;
+        $result = $result && count($dto1->semestres) === count($dto2->semestres);
+        for($i = 1; $i <= count($dto1->semestres); $i++){
+            $result = $result && $this->compareTwoSemestresDTO($dto1->semestres[$i], $dto2->semestres[$i]);
+        }
+
+        return $result;
+    }
+
+    public function compareTwoSemestresDTO(
+        StructureSemestre $semestre1, 
+        StructureSemestre $semestre2
+    ) : bool {
+        $result = true;
+        /** 
+         * Même nombre d'heures total sur le semestre
+         */
+        $result = $result && $semestre1->heuresEctsSemestre->sommeSemestreTotalDist() 
+            === $semestre2->heuresEctsSemestre->sommeSemestreTotalDist();
+        $result = $result && $semestre1->heuresEctsSemestre->sommeSemestreTotalPres()
+            === $semestre2->heuresEctsSemestre->sommeSemestreTotalPres();
+        /**
+         * Présentiel
+         */
+        // CM
+        $result = $result && $semestre1->heuresEctsSemestre->sommeSemestreCmPres
+            === $semestre1->heuresEctsSemestre->sommeSemestreCmPres;
+        // TD
+        $result = $result && $semestre1->heuresEctsSemestre->sommeSemestreTdPres 
+            === $semestre2->heuresEctsSemestre->sommeSemestreTdPres;
+        // TP
+        $result = $result && $semestre1->heuresEctsSemestre->sommeSemestreTpPres 
+            === $semestre2->heuresEctsSemestre->sommeSemestreTpPres;
+        /**
+         * Distanciel
+         */
+        // CM
+        $result = $result && $semestre1->heuresEctsSemestre->sommeSemestreCmDist 
+            === $semestre2->heuresEctsSemestre->sommeSemestreCmDist;
+        // TD
+        $result = $result && $semestre1->heuresEctsSemestre->sommeSemestreTdDist 
+            === $semestre2->heuresEctsSemestre->sommeSemestreTdDist;
+        //TP
+        $result = $result && $semestre1->heuresEctsSemestre->sommeSemestreTpDist 
+            === $semestre2->heuresEctsSemestre->sommeSemestreTpDist;
+
+        // TE
+        $result = $result && $semestre1->heuresEctsSemestre->sommeSemestreTePres 
+            === $semestre2->heuresEctsSemestre->sommeSemestreTePres;
+
+        return $result;
     }
 
 }
