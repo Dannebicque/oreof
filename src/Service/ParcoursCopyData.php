@@ -67,32 +67,46 @@ class ParcoursCopyData {
     ){
         
         if($ficheMatiere){
+            $ficheMatiereBD = $this->entityManager->getRepository(FicheMatiere::class)
+                ->findOneById($ficheMatiere->getId());
+
             $isVolumeHoraireFMImpose = $ficheMatiere->isVolumesHorairesImpose();
+            $ecFromParcours = $ecSource->getParcours()?->getId() === $ficheMatiereBD->getParcours()?->getId();
+            $hasEcParentHeures = $ecSource->getEcParent()?->isHeuresEnfantsIdentiques();
+            $hasSynchroHeures = $ecSource->isSynchroHeures();
+
+            $ec = null;
+
             if(!$isVolumeHoraireFMImpose){
-                $ficheMatiereBD = $this->entityManager->getRepository(FicheMatiere::class)
-                    ->findOneById($ficheMatiere->getId());
-    
-                $ec = $ecSource;
-                if($ecSource->getEcParent()?->isHeuresEnfantsIdentiques()){
-                    $ec = $ecSource->getEcParent();
-                }
-                if($ficheMatiereBD->getParcours()->getId() !== $parcoursId){
-                    foreach($ficheMatiereBD->getElementConstitutifs() as $ecFM){
-                        if($ecFM->getParcours()->getId() === $ficheMatiereBD->getParcours()->getId()){
-                            $ec = $ecFM;
-                        }
+                if($ecFromParcours && !$hasSynchroHeures){
+                    $ec = $ecSource;
+                    if($hasEcParentHeures){
+                        $ec = $ecSource->getEcParent();
                     }
                 }
+                elseif($hasSynchroHeures){
+                    $ecPorteur = array_filter(
+                        $ficheMatiereBD->getElementConstitutifs()->toArray(), 
+                        fn($ec) => $ec->getParcours()->getId() === $ficheMatiereBD->getParcours()->getId())[0];
 
-                $ficheMatiereBD->setVolumeCmPresentiel($ec->getVolumeCmPresentiel());
-                $ficheMatiereBD->setVolumeTdPresentiel($ec->getVolumeTdPresentiel());
-                $ficheMatiereBD->setVolumeTpPresentiel($ec->getVolumeTpPresentiel());
-                $ficheMatiereBD->setVolumeCmDistanciel($ec->getVolumeCmDistanciel());
-                $ficheMatiereBD->setVolumeTdDistanciel($ec->getVolumeTdDistanciel());
-                $ficheMatiereBD->setVolumeTpDistanciel($ec->getVolumeTpDistanciel());
-                $ficheMatiereBD->setVolumeTe($ec->getVolumeTe());
-    
+                    $ec = $ecPorteur;
+                }
+                else {
+                    $ecSource->setHeuresSpecifiques(true);
+                }
+
+                if($ec){
+                    $ficheMatiereBD->setVolumeCmPresentiel($ec->getVolumeCmPresentiel());
+                    $ficheMatiereBD->setVolumeTdPresentiel($ec->getVolumeTdPresentiel());
+                    $ficheMatiereBD->setVolumeTpPresentiel($ec->getVolumeTpPresentiel());
+                    $ficheMatiereBD->setVolumeCmDistanciel($ec->getVolumeCmDistanciel());
+                    $ficheMatiereBD->setVolumeTdDistanciel($ec->getVolumeTdDistanciel());
+                    $ficheMatiereBD->setVolumeTpDistanciel($ec->getVolumeTpDistanciel());
+                    $ficheMatiereBD->setVolumeTe($ec->getVolumeTe());
+                }
+
                 $this->entityManager->persist($ficheMatiereBD);
+                $this->entityManager->persist($ecSource);
             }
         }
     }

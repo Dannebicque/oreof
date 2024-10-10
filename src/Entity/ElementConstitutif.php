@@ -167,6 +167,9 @@ class ElementConstitutif
     #[ORM\Column(length: 10, nullable: true)]
     private ?string $codeApogee = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $heuresSpecifiques = null;
+
 
     public function __construct()
     {
@@ -858,5 +861,17 @@ class ElementConstitutif
         }
 
         return '-';
+    }
+
+    public function isHeuresSpecifiques(): ?bool
+    {
+        return $this->heuresSpecifiques;
+    }
+
+    public function setHeuresSpecifiques(?bool $heuresSpecifiques): static
+    {
+        $this->heuresSpecifiques = $heuresSpecifiques;
+
+        return $this;
     }
 }

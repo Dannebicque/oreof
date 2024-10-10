@@ -108,7 +108,14 @@ class GetElementConstitutif
     }
 
     public function getFicheMatiereHeures() : FicheMatiere|ElementConstitutif {
-        return $this->elementConstitutif->getFicheMatiere() ?? $this->elementConstitutif;
+        $ficheMatiere = $this->elementConstitutif->getFicheMatiere() ?? $this->elementConstitutif;
+        if($this->elementConstitutif instanceof ElementConstitutif){
+            if($this->elementConstitutif->isHeuresSpecifiques()){
+                $ficheMatiere = $this->elementConstitutif;
+            }
+        }
+
+        return $ficheMatiere;
     }   
 
     public function isRaccroche():bool
