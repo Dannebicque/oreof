@@ -154,18 +154,41 @@ class ParcoursCopyData {
         // Même nombre de semestres
         $result = $result && count($dto1->semestres) === count($dto2->semestres);
         for($i = 1; $i <= count($dto1->semestres); $i++){
-            $result = $result && $this->compareTwoSemestresDTO($dto1->semestres[$i], $dto2->semestres[$i]);
+            $result = $result && $this->compareSemestresHeures($dto1->semestres[$i], $dto2->semestres[$i]);
             // Même nombre d'UE
             $result = $result && count($dto1->semestres[$i]->ues) === count($dto2->semestres[$i]->ues);
             for($j = 1; $j <= count($dto1->semestres[$i]->ues); $j++){
                 $result = $result && $this->compareTwoUeDTO($dto1->semestres[$i]->ues[$j], $dto2->semestres[$i]->ues[$j]);
+                // Si des UE enfants
+                if(count($dto1->semestres[$i]->ues[$j]->uesEnfants) > 0){
+                    // Même nombre d'UE enfants
+                    $result = $result && count($dto1->semestres[$i]->ues[$j]->uesEnfants()) 
+                        === count($dto2->semestres[$i]->ues[$j]->uesEnfants());
+                    for($k = 0; $k < count($dto1->semestres[$i]->ues[$j]->uesEnfants()); $k++){
+                        $result = $result && 
+                            $this->compareTwoUeDTO(
+                                $dto1->semestres[$i]->ues[$j]->uesEnfants()[$k],
+                                $dto2->semestres[$i]->ues[$j]->uesEnfants()[$k]
+                            );
+                        if(count($dto1->semestres[$i]->ues[$j]->uesEnfants()[$k]->uesEnfants()) > 0){
+                            $result = $result && count($dto1->semestres[$i]->ues[$j]->uesEnfants()[$k]->uesEnfants())
+                                === count($dto2->semestres[$i]->ues[$j]->uesEnfants()[$k]->uesEnfants());
+                            for($l = 0; $l < count($dto1->semestres[$i]->ues[$j]->uesEnfants()[$k]->uesEnfants()); $l++){
+                                $result = $result && $this->compareTwoUeDTO(
+                                    $dto1->semestres[$i]->ues[$j]->uesEnfants()[$k]->uesEnfants()[$l],
+                                    $dto2->semestres[$i]->ues[$j]->uesEnfants()[$k]->uesEnfants()[$l]
+                                );
+                            }
+                        }
+                    }
+                }
             }
         }
 
         return $result;
     }
 
-    public function compareTwoSemestresDTO(
+    public function compareSemestresHeures(
         StructureSemestre $semestre1, 
         StructureSemestre $semestre2
     ) : bool {
@@ -214,7 +237,7 @@ class ParcoursCopyData {
         return $result;
     }
 
-    public function compareTwoUeDTO(
+    public function compareUeHeures(
         StructureUe $ue1,
         StructureUe $ue2
     ) : bool {
@@ -261,7 +284,7 @@ class ParcoursCopyData {
         return $result;
     }
 
-    public function compareTwoEcDTO(
+    public function compareEcHeures(
         StructureEc $ec1,
         StructureEc $ec2
     ) : bool {
@@ -298,6 +321,37 @@ class ParcoursCopyData {
 
         // TE
         $result = $result && $ec1->heuresEctsEc->tePres === $ec2->heuresEctsEc->tePres;
+
+        return $result;
+    }
+
+    public function compareTwoUeDTO(
+        StructureUe $ue1,
+        StructureUe $ue2
+    ) : bool {
+
+        $result = true;
+        // Même nombre d'EC
+        $result = $result && count($ue1->elementConstitutifs) === count($ue2->elementConstitutifs);
+        for($i = 0; $i < count($ue1->elementConstitutifs); $i++){
+            // Comparaison d'heures des EC
+            $result = $result && $this->compareEcHeures($ue1->elementConstitutifs[$i], $ue2->elementConstitutifs[$i]);
+            if(count($ue1->elementConstitutifs[$i]->elementsConstitutifsEnfants) > 0){
+                // Même nombre d'EC enfants
+                $result = $result && count($ue1->elementConstitutifs[$i]->elementsConstitutifsEnfants) 
+                    === count($ue2->elementConstitutifs[$i]->elementsConstitutifsEnfants);
+
+                // Les EC enfants ont leur ID de BD comme clé
+                $keys = array_keys($ue1->elementConstitutifs[$i]->elementsConstitutifsEnfants);    
+                for($j = 0; $j < count($ue1->elementConstitutifs[$i]->elementsConstitutifsEnfants); $j++){
+                    // Comparaison d'heures des EC enfants
+                    $result = $result && $this->compareEcHeures(
+                        $ue1->elementConstitutifs[$i]->elementsConstitutifsEnfants[$keys[$j]],
+                        $ue2->elementConstitutifs[$i]->elementsConstitutifsEnfants[$keys[$j]]
+                    );
+                }
+            }
+        }
 
         return $result;
     }
