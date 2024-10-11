@@ -289,6 +289,10 @@ class ParcoursCopyData {
         $result = $result && $semestre1->heuresEctsSemestre->sommeSemestreTePres 
             === $semestre2->heuresEctsSemestre->sommeSemestreTePres;
 
+        if($result === false){
+            self::$errorMessageArray[] = "Semestre {$semestre1->semestre->getOrdre()} - le total d'heure du semestre est différent";
+        }
+
         return $result;
     }
 
@@ -335,6 +339,10 @@ class ParcoursCopyData {
         // TE
         $result = $result && $ue1->heuresEctsUe->sommeUeTePres 
             === $ue2->heuresEctsUe->sommeUeTePres;
+
+        if($result === false){
+            self::$errorMessageArray[] = "{$ue1->ue->display()} - le total d'heure de l'UE est différent";
+        }
 
         return $result;
     }
@@ -396,7 +404,6 @@ class ParcoursCopyData {
         // Même nombre d'EC
         $nbEc = count($ue1->elementConstitutifs) === count($ue2->elementConstitutifs);
         if($totalHeureUe === false){
-            self::$errorMessageArray[] = "{$ue1->ue->display()} : total d'heure de l'UE différent";
             $result = false;
         }
         if($nbEc === false){
