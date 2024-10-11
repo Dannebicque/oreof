@@ -24,6 +24,8 @@ class ParcoursCopyData {
 
     private MyGotenbergPdf $myPdf;
 
+    public static array $errorMessageArray = [];
+
     public function __construct(
         EntityManagerInterface $entityManager,
         MyGotenbergPdf $myPdf
@@ -170,32 +172,67 @@ class ParcoursCopyData {
     public function compareTwoDTO(StructureParcours $dto1, StructureParcours $dto2){
         $result = true;
         // Même nombre de semestres
-        $result = $result && count($dto1->semestres) === count($dto2->semestres);
-        for($i = 1; $i <= count($dto1->semestres); $i++){
-            $result = $result && $this->compareSemestresHeures($dto1->semestres[$i], $dto2->semestres[$i]);
+        $nbSemestre = count($dto1->semestres) === count($dto2->semestres);
+        if($nbSemestre === false){
+            self::$errorMessageArray[] = "Nombre de semestres différents.";
+            $result = false;
+        }
+        foreach($dto1->semestres as $indexSemestre => $semestre){
+            $totalHeureSemestre = $this->compareSemestresHeures($dto1->semestres[$indexSemestre], $dto2->semestres[$indexSemestre]);
+            if($totalHeureSemestre === false){
+                $result = false;
+            }
             // Même nombre d'UE
-            $result = $result && count($dto1->semestres[$i]->ues) === count($dto2->semestres[$i]->ues);
-            for($j = 1; $j <= count($dto1->semestres[$i]->ues); $j++){
-                $result = $result && $this->compareTwoUeDTO($dto1->semestres[$i]->ues[$j], $dto2->semestres[$i]->ues[$j]);
+            $nbUe = count($dto1->semestres[$indexSemestre]->ues) === count($dto2->semestres[$indexSemestre]->ues);
+            if($nbUe === false){
+                self::$errorMessageArray[] = "S{$indexSemestre} : nombre d'UE différent";
+                $result = false;
+            }
+            foreach($dto1->semestres[$indexSemestre]->ues as $indexUe => $ue){
+                // Comparaison des heures des UE
+                $comparaisonUe = $this->compareTwoUeDTO(
+                    $dto1->semestres[$indexSemestre]->ues[$indexUe],
+                    $dto2->semestres[$indexSemestre]->ues[$indexUe]
+                );
+                if($comparaisonUe === false){
+                    $result = false;
+                }
                 // Si des UE enfants
-                if(count($dto1->semestres[$i]->ues[$j]->uesEnfants) > 0){
+                if(count($dto1->semestres[$indexSemestre]->ues[$indexUe]->uesEnfants) > 0){
                     // Même nombre d'UE enfants
-                    $result = $result && count($dto1->semestres[$i]->ues[$j]->uesEnfants()) 
-                        === count($dto2->semestres[$i]->ues[$j]->uesEnfants());
-                    for($k = 0; $k < count($dto1->semestres[$i]->ues[$j]->uesEnfants()); $k++){
-                        $result = $result && 
-                            $this->compareTwoUeDTO(
-                                $dto1->semestres[$i]->ues[$j]->uesEnfants()[$k],
-                                $dto2->semestres[$i]->ues[$j]->uesEnfants()[$k]
+                    $nbUeEnfant = count($dto1->semestres[$indexSemestre]->ues[$indexUe]->uesEnfants()) 
+                        === count($dto2->semestres[$indexSemestre]->ues[$indexUe]->uesEnfants());
+                    if($nbUeEnfant === false){
+                        $result = false;
+                        self::$errorMessageArray[] = "S{$indexSemestre} - {$ue->ue->display()} : nombre d'enfant différent";
+                    }
+
+                    foreach($dto1->semestres[$indexSemestre]->ues[$indexUe]->uesEnfants() as $indexUeE => $ueE){
+                        // Comparaison des heures des UE Enfant
+                        $comparaisonUeEnfant = $this->compareTwoUeDTO(
+                                $dto1->semestres[$indexSemestre]->ues[$indexUe]->uesEnfants()[$indexUeE],
+                                $dto2->semestres[$indexSemestre]->ues[$indexUe]->uesEnfants()[$indexUeE]
                             );
-                        if(count($dto1->semestres[$i]->ues[$j]->uesEnfants()[$k]->uesEnfants()) > 0){
-                            $result = $result && count($dto1->semestres[$i]->ues[$j]->uesEnfants()[$k]->uesEnfants())
-                                === count($dto2->semestres[$i]->ues[$j]->uesEnfants()[$k]->uesEnfants());
-                            for($l = 0; $l < count($dto1->semestres[$i]->ues[$j]->uesEnfants()[$k]->uesEnfants()); $l++){
-                                $result = $result && $this->compareTwoUeDTO(
-                                    $dto1->semestres[$i]->ues[$j]->uesEnfants()[$k]->uesEnfants()[$l],
-                                    $dto2->semestres[$i]->ues[$j]->uesEnfants()[$k]->uesEnfants()[$l]
+                        if($comparaisonUeEnfant === false){
+                            $result = false;
+                        }
+                        // Même nombre d'UE Enfant
+                        if(count($dto1->semestres[$indexSemestre]->ues[$indexUe]->uesEnfants()[$indexUeE]->uesEnfants()) > 0){
+                            $nbUeEnfantDeuxieme = count($dto1->semestres[$indexSemestre]->ues[$indexUe]->uesEnfants()[$indexUeE]->uesEnfants())
+                                === count($dto2->semestres[$indexSemestre]->ues[$indexUe]->uesEnfants()[$indexUeE]->uesEnfants());
+                            if($nbUeEnfantDeuxieme === false){
+                                $result = false;
+                                self::$errorMessageArray[] = "S{$indexSemestre} - {$ue->ue->display()} : nombre d'enfant différent";
+                            }
+                            // Comparaison des heures des UE enfant d'UE enfant
+                            foreach($dto1->semestres[$indexSemestre]->ues[$indexUe]->uesEnfants()[$indexUeE]->uesEnfants() as $indexUeEDeuxieme => $ueEDeuxieme){
+                                $comparaisonUeEnfantDeuxieme = $this->compareTwoUeDTO(
+                                    $dto1->semestres[$indexSemestre]->ues[$indexUe]->uesEnfants()[$indexUeE]->uesEnfants()[$indexUeEDeuxieme],
+                                    $dto2->semestres[$indexSemestre]->ues[$indexUe]->uesEnfants()[$indexUeE]->uesEnfants()[$indexUeEDeuxieme]
                                 );
+                                if($comparaisonUeEnfantDeuxieme === false){
+                                    $result = false;
+                                }
                             }
                         }
                     }
@@ -304,7 +341,8 @@ class ParcoursCopyData {
 
     public function compareEcHeures(
         StructureEc $ec1,
-        StructureEc $ec2
+        StructureEc $ec2,
+        string $ueDisplay = ""
     ) : bool {
 
         $result = true;
@@ -340,6 +378,10 @@ class ParcoursCopyData {
         // TE
         $result = $result && $ec1->heuresEctsEc->tePres === $ec2->heuresEctsEc->tePres;
 
+        if($result === false){
+            self::$errorMessageArray[] = "Les deux EC ne correspondent pas. ({$ueDisplay} - {$ec1->elementConstitutif->getCode()})";
+        }
+
         return $result;
     }
 
@@ -349,24 +391,47 @@ class ParcoursCopyData {
     ) : bool {
 
         $result = true;
+        // Même heures sur les UE
+        $totalHeureUe = $this->compareUeHeures($ue1, $ue2);
         // Même nombre d'EC
-        $result = $result && count($ue1->elementConstitutifs) === count($ue2->elementConstitutifs);
-        for($i = 0; $i < count($ue1->elementConstitutifs); $i++){
+        $nbEc = count($ue1->elementConstitutifs) === count($ue2->elementConstitutifs);
+        if($totalHeureUe === false){
+            self::$errorMessageArray[] = "{$ue1->ue->display()} : total d'heure de l'UE différent";
+            $result = false;
+        }
+        if($nbEc === false){
+            self::$errorMessageArray[] = "{$ue1->ue->display()} : Nombre d'EC différent";
+            $result = false;
+        }
+        foreach($ue1->elementConstitutifs as $indexEc => $valueEc){
             // Comparaison d'heures des EC
-            $result = $result && $this->compareEcHeures($ue1->elementConstitutifs[$i], $ue2->elementConstitutifs[$i]);
-            if(count($ue1->elementConstitutifs[$i]->elementsConstitutifsEnfants) > 0){
+            $comparaisonHeureEc = $this->compareEcHeures(
+                $ue1->elementConstitutifs[$indexEc],
+                $ue2->elementConstitutifs[$indexEc], 
+                $ue1->ue->display()
+            );
+            if($comparaisonHeureEc === false){
+                $result = false;
+            }
+            if(count($ue1->elementConstitutifs[$indexEc]->elementsConstitutifsEnfants) > 0){
                 // Même nombre d'EC enfants
-                $result = $result && count($ue1->elementConstitutifs[$i]->elementsConstitutifsEnfants) 
-                    === count($ue2->elementConstitutifs[$i]->elementsConstitutifsEnfants);
-
+                $nbEcEnfant = count($ue1->elementConstitutifs[$indexEc]->elementsConstitutifsEnfants) 
+                    === count($ue2->elementConstitutifs[$indexEc]->elementsConstitutifsEnfants);
+                if($nbEcEnfant === false){
+                    self::$errorMessageArray[] = "{$ue1->ue->display()} - nombre d'EC enfants différent";
+                    $result = false;
+                }
                 // Les EC enfants ont leur ID de BD comme clé
-                $keys = array_keys($ue1->elementConstitutifs[$i]->elementsConstitutifsEnfants);    
-                for($j = 0; $j < count($ue1->elementConstitutifs[$i]->elementsConstitutifsEnfants); $j++){
+                foreach($ue1->elementConstitutifs[$indexEc]->elementsConstitutifsEnfants as $indexEcE => $valueEcE){
                     // Comparaison d'heures des EC enfants
-                    $result = $result && $this->compareEcHeures(
-                        $ue1->elementConstitutifs[$i]->elementsConstitutifsEnfants[$keys[$j]],
-                        $ue2->elementConstitutifs[$i]->elementsConstitutifsEnfants[$keys[$j]]
+                    $comparaisonHeureEcEnfant = $this->compareEcHeures(
+                        $ue1->elementConstitutifs[$indexEc]->elementsConstitutifsEnfants[$indexEcE],
+                        $ue2->elementConstitutifs[$indexEc]->elementsConstitutifsEnfants[$indexEcE],
+                        $ue1->ue->display()
                     );
+                    if($comparaisonHeureEcEnfant === false){
+                        $result = false;
+                    }
                 }
             }
         }

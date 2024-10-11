@@ -47,7 +47,7 @@ class ParcoursCopyDataTest extends KernelTestCase
 
         $this->assertTrue(
             $this->parcoursCopyData->compareTwoDTO($dtoBefore, $dtoAfter),
-            "Les heures des semestres ne correspondent pas."
+            implode("\n", $this->parcoursCopyData::$errorMessageArray)
         );
     }
 }

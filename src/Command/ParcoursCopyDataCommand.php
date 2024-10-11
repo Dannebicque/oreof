@@ -47,6 +47,10 @@ class ParcoursCopyDataCommand extends Command
             mode: InputOption::VALUE_REQUIRED, 
             description: 'Commande pour exporter un DTO de parcours au format PDF'
         )->addOption(
+            name: 'compare-two-dto',
+            mode: InputOption::VALUE_REQUIRED,
+            description: "Compare deux DTO avant et après copie. Donner deux Identifiants en entrée"
+        )->addOption(
             name: 'after-copy',
             mode: InputOption::VALUE_NONE,
             description: 'Si le résultat doit être généré après copie sur les fiches matières'
@@ -59,6 +63,7 @@ class ParcoursCopyDataCommand extends Command
 
         $dtoPdfExport = $input->getOption('dto-pdf-export');
         $afterCopy = $input->getOption('after-copy');
+        $compareTwoDTO = $input->getOption('compare-two-dto');
 
         if($dtoPdfExport){
             try{
@@ -94,6 +99,32 @@ class ParcoursCopyDataCommand extends Command
                     $io->writeln("Message d'erreur : {$e->getMessage()}");
         
                     return Command::FAILURE;
+            }
+        }
+
+        if($compareTwoDTO){
+            if(!is_numeric($compareTwoDTO)){
+                $io->warning("L'identifiant du parcours n'est pas un nombre ({$compareTwoDTO})");
+                return Command::INVALID;
+            }
+            $io->writeln("Comparaison des deux DTO avant et après copie.");
+            $io->writeln("Récupération du parcours...");
+            $parcours = $this->entityManager->getRepository(Parcours::class)->findOneById($compareTwoDTO);
+            if($parcours){
+                $io->writeln("[O.K] - Parcours trouvé : {$parcours->getDisplay()}");
+
+                $dtoBefore = $this->parcoursCopyData->getDTOForParcours($parcours);
+                $dtoAfter = $this->parcoursCopyData->getDTOForParcours($parcours, true, true);
+                $isEqual = $this->parcoursCopyData->compareTwoDTO($dtoBefore, $dtoAfter);
+
+                if($isEqual){
+                    $io->success("Les deux DTO sont identiques, avant et après copie.");
+                    return Command::SUCCESS;
+                }else {
+                    $io->writeln("Les deux DTO sont différents");
+                    dump($this->parcoursCopyData::$errorMessageArray);
+                    return Command::FAILURE;
+                }
             }
         }
 
