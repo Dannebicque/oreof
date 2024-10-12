@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.31.48](https://github.com/Dannebicque/oreof/compare/v1.31.47...v1.31.48) (2024-10-12)
+
+
+### Bug Fixes
+
+* ajout d'une recherche sur le libellé ou sigle du diplôme également ([8c9d4b0](https://github.com/Dannebicque/oreof/commit/8c9d4b05eaf1418ed868ffb43148b7d32abf7192))
+* ajout d'une recherche sur le libellé ou sigle du diplôme également ([5587e10](https://github.com/Dannebicque/oreof/commit/5587e1026dee995b86559b3eba517d57de374054))
+* bug affichage des BUT sur les semestres non réalisés (en FC par exemple) ([872a44d](https://github.com/Dannebicque/oreof/commit/872a44d3ef1370255672345affd446c216c18ab7))
+* gestion ouverture/fermeture des parcours ([8e0baa1](https://github.com/Dannebicque/oreof/commit/8e0baa1c5cf7c2a713a485d3d1380f5368aa4a6e))
+* refresh automatique sur le process manage ([25c3a90](https://github.com/Dannebicque/oreof/commit/25c3a90aaf134749fc5a24b209170d8920b30f78))
+
 ### [1.31.47](https://github.com/Dannebicque/oreof/compare/v1.31.46...v1.31.47) (2024-10-08)
 
 
