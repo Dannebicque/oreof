@@ -95,9 +95,6 @@ final class ParcoursManageComponent extends AbstractController
 
     public bool $hasDemande = true;
 
-    #[LiveProp(writable: true)]
-    public string $event = 'none';
-
     public DpeParcours $dpeParcours;
 
     public function __construct(
@@ -128,32 +125,30 @@ final class ParcoursManageComponent extends AbstractController
     public function edit(): void
     {
         $this->place = $this->getPlace();
-        $this->event = 'edit';
     }
 
     #[LiveListener('mention_manage:valider')]
     public function valide(): void
     {
+        $this->init();
         $this->place = $this->getPlace();
         $this->getHistorique();
-        $this->event = 'valide';
-        $this->redirige();
     }
 
     #[LiveListener('mention_manage:refuser')]
     public function refuse(): void
     {
+        $this->init();
         $this->place = $this->getPlace();
         $this->getHistorique();
-        $this->event = 'refuse';
     }
 
     #[LiveListener('mention_manage:reserver')]
     public function reserve(): void
     {
+        $this->init();
         $this->place = $this->getPlace();
         $this->getHistorique();
-        $this->event = 'reserve';
     }
 
     private function getHistorique(): void
@@ -173,15 +168,19 @@ final class ParcoursManageComponent extends AbstractController
         }
     }
 
-    #[PostMount]
-    public function postMount(): void
-    {
+    private function init() {
         $this->dpeParcours = GetDpeParcours::getFromParcours($this->parcours);
 
         $this->typeDiplome = $this->parcours?->getFormation()?->getTypeDiplome();
         $this->formation = $this->parcours?->getFormation();
         $this->place = $this->getPlace();
         $this->hasDemande = false;
+    }
+
+    #[PostMount]
+    public function postMount(): void
+    {
+       $this->init();
         //                GetDpeParcours::getFromParcours($this->parcours)?->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_TEXTE || GetDpeParcours::getFromParcours($this->parcours)?->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_MCCC_TEXTE || GetDpeParcours::getFromParcours($this->parcours)?->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_MCCC; //todo selon l'état du process???
 
         $this->getHistorique();
