@@ -42,6 +42,8 @@
                     {{ include('communs/_boutonSynthese.html.twig', {parcours: parcours, col:3}) }}
                 {% endif %}
             </div>
+            <twig:ParcoursOuvert :parcours="parcours" />
+
         </div>
     </div>
 </div>

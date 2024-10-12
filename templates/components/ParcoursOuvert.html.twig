@@ -1,0 +1,33 @@
+<div{{ attributes }}>
+    <!-- component html -->
+    <div class="col-12 mt-2">
+        <div class="alert alert-{{ this.getColor }}">
+            <span class="form-check form-switch">
+                <input class="form-check-input"
+                       type="checkbox"
+                       data-model="isOuvert"
+                       title="Parcours ouvert ?"
+                       id="parcours_ouvert"
+                       data-action="live#action"
+                       data-live-action-param="save"
+                >
+                <label class="form-check-label"
+                       for="parcours_ouvert">
+                    {% if this.isOuvert %}
+                        {% if this.type == 'parcours' %}
+                            Ce parcours est proposé pour la campagne {{ this.campagne.libelle }}.
+                        {% else %}
+                            Cette formation est proposée pour la campagne {{ this.campagne.libelle }}.
+                        {% endif %}
+                    {% else %}
+                        {% if this.type == 'parcours' %}
+                            Ce parcours n'est pas proposé pour la campagne {{ this.campagne.libelle }}.
+                        {% else %}
+                            Cette formation n'est pas proposée pour la campagne {{ this.campagne.libelle }}.
+                        {% endif %}
+                    {% endif %}
+                </label>
+            </span>
+        </div>
+    </div>
+</div>

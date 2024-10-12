@@ -44,6 +44,8 @@
                 {% else %}
                     {{ include('communs/_boutonSynthese.html.twig', {parcours: formation.parcours[0], col:'col-3'}) }}
                 {% endif %}
+
+                <twig:ParcoursOuvert :parcours="formation.parcours[0]" type="formation" />
             {% endif %}
 
 
