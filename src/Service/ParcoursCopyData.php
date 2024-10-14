@@ -206,7 +206,7 @@ class ParcoursCopyData {
                         === count($dto2->semestres[$indexSemestre]->ues[$indexUe]->uesEnfants());
                     if($nbUeEnfant === false){
                         $result = false;
-                        self::$errorMessageArray[] = "S{$indexSemestre} - {$ue->ue->display()} : nombre d'enfant différent";
+                        self::$errorMessageArray[] = "S{$indexSemestre} - {$ue->display} : nombre d'enfant différent";
                     }
 
                     foreach($dto1->semestres[$indexSemestre]->ues[$indexUe]->uesEnfants() as $indexUeE => $ueE){
@@ -224,7 +224,7 @@ class ParcoursCopyData {
                                 === count($dto2->semestres[$indexSemestre]->ues[$indexUe]->uesEnfants()[$indexUeE]->uesEnfants());
                             if($nbUeEnfantDeuxieme === false){
                                 $result = false;
-                                self::$errorMessageArray[] = "S{$indexSemestre} - {$ue->ue->display()} : nombre d'enfant différent";
+                                self::$errorMessageArray[] = "S{$indexSemestre} - {$ue->display} : nombre d'enfant différent";
                             }
                             // Comparaison des heures des UE enfant d'UE enfant
                             foreach($dto1->semestres[$indexSemestre]->ues[$indexUe]->uesEnfants()[$indexUeE]->uesEnfants() as $indexUeEDeuxieme => $ueEDeuxieme){
@@ -343,7 +343,7 @@ class ParcoursCopyData {
             === $ue2->heuresEctsUe->sommeUeTePres;
 
         if($result === false){
-            self::$errorMessageArray[] = "{$ue1->ue->display()} - le total d'heure de l'UE est différent";
+            self::$errorMessageArray[] = "{$ue1->display} - le total d'heure de l'UE est différent";
         }
 
         return $result;
@@ -409,7 +409,7 @@ class ParcoursCopyData {
             $result = false;
         }
         if($nbEc === false){
-            self::$errorMessageArray[] = "{$ue1->ue->display()} : Nombre d'EC différent";
+            self::$errorMessageArray[] = "{$ue1->display} : Nombre d'EC différent";
             $result = false;
         }
         foreach($ue1->elementConstitutifs as $indexEc => $valueEc){
@@ -417,7 +417,7 @@ class ParcoursCopyData {
             $comparaisonHeureEc = $this->compareEcHeures(
                 $ue1->elementConstitutifs[$indexEc],
                 $ue2->elementConstitutifs[$indexEc], 
-                $ue1->ue->display()
+                $ue1->display
             );
             if($comparaisonHeureEc === false){
                 $result = false;
@@ -427,7 +427,7 @@ class ParcoursCopyData {
                 $nbEcEnfant = count($ue1->elementConstitutifs[$indexEc]->elementsConstitutifsEnfants) 
                     === count($ue2->elementConstitutifs[$indexEc]->elementsConstitutifsEnfants);
                 if($nbEcEnfant === false){
-                    self::$errorMessageArray[] = "{$ue1->ue->display()} - nombre d'EC enfants différent";
+                    self::$errorMessageArray[] = "{$ue1->display} - nombre d'EC enfants différent";
                     $result = false;
                 }
                 // Les EC enfants ont leur ID de BD comme clé
@@ -436,7 +436,7 @@ class ParcoursCopyData {
                     $comparaisonHeureEcEnfant = $this->compareEcHeures(
                         $ue1->elementConstitutifs[$indexEc]->elementsConstitutifsEnfants[$indexEcE],
                         $ue2->elementConstitutifs[$indexEc]->elementsConstitutifsEnfants[$indexEcE],
-                        $ue1->ue->display()
+                        $ue1->display
                     );
                     if($comparaisonHeureEcEnfant === false){
                         $result = false;
