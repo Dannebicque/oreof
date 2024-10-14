@@ -41,10 +41,10 @@ class ParcoursCopyData {
             foreach($ueArray as $ueData){
                 $ue = $this->getUe($ueData);
                 $this->copyDataForUe($ue, $parcours->getId());
-                foreach($ueData->getUeEnfants() as $ueEnfantData){
+                foreach($ue->getUeEnfants() as $ueEnfantData){
                     $ueEnfant = $this->getUe($ueEnfantData);
                     $this->copyDataForUe($ueEnfant, $parcours->getId());
-                    foreach($ueEnfantData->getUeEnfants() as $ueEnfantDeuxiemeData){
+                    foreach($ueEnfant->getUeEnfants() as $ueEnfantDeuxiemeData){
                         $ueEnfantDeuxieme = $this->getUe($ueEnfantDeuxiemeData);
                         $this->copyDataForUe($ueEnfantDeuxieme, $parcours->getId());
                     }
@@ -54,7 +54,9 @@ class ParcoursCopyData {
     }
     
     private function copyDataForUe(Ue $ue, int $parcoursId){
-        foreach($ue->getElementConstitutifs() as $ec){
+        $elementConstitutifArray = $this->entityManager->getRepository(ElementConstitutif::class)
+            ->getByUe($ue);
+        foreach($elementConstitutifArray as $ec){
             $this->copyDataOnFicheMatiere($ec, $ec->getFicheMatiere(), $parcoursId);
             foreach($ec->getEcEnfants() as $ecEnfant){
                 $this->copyDataOnFicheMatiere($ecEnfant, $ecEnfant->getFicheMatiere(), $parcoursId);
