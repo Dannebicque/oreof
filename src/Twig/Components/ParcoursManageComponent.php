@@ -189,7 +189,7 @@ final class ParcoursManageComponent extends AbstractController
     public function dateHistorique(string $transition): string
     {
         if (array_key_exists($transition, $this->historiques)) {
-            if ($this->historiques[$transition]->getEtape() === 'soumis_conseil' && $this->dpeParcours->getEtatReconduction() !== TypeModificationDpeEnum::MODIFICATION_TEXTE) {
+            if ($this->historiques[$transition]->getEtape() === 'soumis_conseil' && ($this->dpeParcours->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_MCCC || $this->dpeParcours->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_MCCC_TEXTE)) {
                 if (!array_key_exists('fichier', $this->historiques[$transition]->getComplements())) {
                     return '- à venir -';
                 }
