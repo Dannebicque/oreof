@@ -104,7 +104,7 @@ class FormationRepository extends ServiceEntityRepository
             ->where('p.campagneCollecte = :campagneCollecte')
             ->setParameter('campagneCollecte', $campagneCollecte)
             ->innerJoin(Mention::class, 'm', 'WITH', 'f.mention = m.id')
-            ->andWhere('m.libelle LIKE :q or m.sigle LIKE :q or f.mentionTexte LIKE :q or parcours.libelle LIKE :q or parcours.sigle LIKE :q')
+            ->andWhere('m.libelle LIKE :q or f.sigle LIKE :q or m.sigle LIKE :q or f.mentionTexte LIKE :q or parcours.libelle LIKE :q or parcours.sigle LIKE :q')
 
             ->setParameter('q', '%' . $q . '%')
             ->orderBy('f.' . $sort, $direction);
