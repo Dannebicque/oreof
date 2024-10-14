@@ -76,22 +76,24 @@ class ParcoursCopyData {
             $ecFromParcours = $ecSource->getParcours()?->getId() === $ficheMatiereBD->getParcours()?->getId();
             $hasEcParentHeures = $ecSource->getEcParent()?->isHeuresEnfantsIdentiques();
             $hasSynchroHeures = $ecSource->isSynchroHeures();
+            $isHorsDiplome = $ficheMatiereBD->isHorsDiplome();
 
             $ec = null;
 
-            if(!$isVolumeHoraireFMImpose){
-                if($ecFromParcours && !$hasSynchroHeures){
-                    $ec = $ecSource;
-                    if($hasEcParentHeures){
-                        $ec = $ecSource->getEcParent();
-                    }
+            if(!$isVolumeHoraireFMImpose && !$isHorsDiplome){
+                $ec = $ecSource;
+                if($hasEcParentHeures){
+                    $ec = $ecSource->getEcParent();
                 }
                 elseif($hasSynchroHeures){
                     $ecPorteur = array_filter(
                         $ficheMatiereBD->getElementConstitutifs()->toArray(), 
-                        fn($ec) => $ec->getParcours()->getId() === $ficheMatiereBD->getParcours()->getId())[0];
+                        fn($ec) => $ec->getParcours()->getId() === $ficheMatiereBD->getParcours()->getId());
 
-                    $ec = $ecPorteur;
+                    if(count($ecPorteur) > 0){
+                        $ec = array_shift($ecPorteur);
+                    }
+
                 }
                 else {
                     $ecSource->setHeuresSpecifiques(true);
