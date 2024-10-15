@@ -6,9 +6,9 @@ use App\Entity\Parcours;
 use App\Service\ParcoursCopyData;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -21,20 +21,20 @@ use Symfony\Component\Filesystem\Filesystem;
 )]
 class ParcoursCopyDataCommand extends Command
 {
-    private EntityManagerInterface $entityManager;
+    private EntityManagerInterface $entityManagerCopyData;
 
     private ParcoursCopyData $parcoursCopyData;
 
     private Filesystem $fs;
 
     public function __construct(
-        EntityManagerInterface $entityManager,
         ParcoursCopyData $parcoursCopyData,
-        Filesystem $fs
+        Filesystem $fs,
+        ManagerRegistry $doctrine
     )
     {
         parent::__construct();
-        $this->entityManager = $entityManager;
+        $this->entityManagerCopyData = $doctrine->getManager('parcours_copy');
         $this->parcoursCopyData = $parcoursCopyData;
         $this->fs = $fs;
     }
@@ -54,6 +54,10 @@ class ParcoursCopyDataCommand extends Command
             name: 'after-copy',
             mode: InputOption::VALUE_NONE,
             description: 'Si le résultat doit être généré après copie sur les fiches matières'
+        )->addOption(
+            name: 'test-copy-database',
+            mode: InputOption::VALUE_NONE,
+            description: "Copie les heures sur les fiches matières dans une base de données de test"
         );
     }
 
@@ -64,11 +68,12 @@ class ParcoursCopyDataCommand extends Command
         $dtoPdfExport = $input->getOption('dto-pdf-export');
         $afterCopy = $input->getOption('after-copy');
         $compareTwoDTO = $input->getOption('compare-two-dto');
+        $testCopyDatabase = $input->getOption('test-copy-database');
 
         if($dtoPdfExport){
             try{
                 $io->writeln("Récupération du parcours en base de données...\n");
-                $parcours = $this->entityManager->getRepository(Parcours::class)->findOneById($dtoPdfExport);
+                $parcours = $this->entityManagerCopyData->getRepository(Parcours::class)->findOneById($dtoPdfExport);
                 if($parcours){
                     $io->writeln("[O.K] - Parcours trouvé : {$parcours->getDisplay()}\n");
                     $io->writeln("Génération de l'export PDF en cours...");
@@ -102,14 +107,14 @@ class ParcoursCopyDataCommand extends Command
             }
         }
 
-        if($compareTwoDTO){
+        else if($compareTwoDTO){
             if(!is_numeric($compareTwoDTO)){
                 $io->warning("L'identifiant du parcours n'est pas un nombre ({$compareTwoDTO})");
                 return Command::INVALID;
             }
             $io->writeln("Comparaison des deux DTO avant et après copie.");
             $io->writeln("Récupération du parcours...");
-            $parcours = $this->entityManager->getRepository(Parcours::class)->findOneById($compareTwoDTO);
+            $parcours = $this->entityManagerCopyData->getRepository(Parcours::class)->findOneById($compareTwoDTO);
             if($parcours){
                 $io->writeln("[O.K] - Parcours trouvé : {$parcours->getDisplay()}");
 
@@ -126,10 +131,21 @@ class ParcoursCopyDataCommand extends Command
                     return Command::FAILURE;
                 }
             }
+
+            $io->warning("Aucun parcours trouvé pour cet identifiant. ({$compareTwoDTO})");
+            return Command::INVALID;
+        }
+
+        else if($testCopyDatabase){
+
         }
 
         $io->warning("Option non reconnue. Doit être parmi ['dto-pdf-export']\n");
 
         return Command::INVALID;
+    }
+
+    private function copyIntoDatabase(){
+        
     }
 }

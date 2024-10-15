@@ -15,6 +15,7 @@ use App\Entity\Parcours;
 use App\Entity\Semestre;
 use App\Entity\Ue;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 
 #[Autoconfigure(public: true)]
@@ -27,10 +28,10 @@ class ParcoursCopyData {
     public static array $errorMessageArray = [];
 
     public function __construct(
-        EntityManagerInterface $entityManager,
+        ManagerRegistry $doctrine,
         MyGotenbergPdf $myPdf
     ){
-        $this->entityManager = $entityManager;
+        $this->entityManager = $doctrine->getManager('parcours_copy');
         $this->myPdf = $myPdf;
     }
 
@@ -75,15 +76,17 @@ class ParcoursCopyData {
                 ->findOneById($ficheMatiere->getId());
 
             $isVolumeHoraireFMImpose = $ficheMatiere->isVolumesHorairesImpose();
-            $ecFromParcours = $ecSource->getParcours()?->getId() === $ficheMatiereBD->getParcours()?->getId();
+            $ecFromParcours = $ecSource->getParcours()?->getId() === $ficheMatiereBD->getParcours()?->getId() 
+                && $ficheMatiereBD->getParcours()?->getId() === $parcoursId;
             $hasEcParentHeures = $ecSource->getEcParent()?->isHeuresEnfantsIdentiques();
             $hasSynchroHeures = $ecSource->isSynchroHeures();
             $isHorsDiplome = $ficheMatiereBD->isHorsDiplome();
 
-            $ec = null;
+            if($ecFromParcours){
+                $ec = $ecSource;
+            }
 
             if(!$isVolumeHoraireFMImpose && !$isHorsDiplome){
-                $ec = $ecSource;
                 if($hasEcParentHeures){
                     $ec = $ecSource->getEcParent();
                 }
@@ -97,7 +100,7 @@ class ParcoursCopyData {
                     }
 
                 }
-                else {
+                elseif($ecFromParcours === false && $this->hasEcSameHeuresAsFicheMatiere($ecSource, $ficheMatiereBD) === false) {
                     $ecSource->setHeuresSpecifiques(true);
                 }
 
