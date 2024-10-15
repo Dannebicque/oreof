@@ -449,4 +449,17 @@ class ParcoursCopyData {
 
         return $result;
     }
+
+    public function hasEcSameHeuresAsFicheMatiere(
+        ElementConstitutif $ec, 
+        FicheMatiere $ficheMatiere
+    ){  
+        return $ficheMatiere->getVolumeCmPresentiel() ?? 0 === $ec->getVolumeCmPresentiel() ?? 0
+        && $ficheMatiere->getVolumeCmDistanciel() ?? 0 === $ec->getVolumeCmDistanciel() ?? 0
+        && $ficheMatiere->getVolumeTdPresentiel() ?? 0 === $ec->getVolumeTdPresentiel() ?? 0
+        && $ficheMatiere->getVolumeTdDistanciel() ?? 0 === $ec->getVolumeTdDistanciel() ?? 0
+        && $ficheMatiere->getVolumeTpPresentiel() ?? 0 === $ec->getVolumeTpPresentiel() ?? 0
+        && $ficheMatiere->getVolumeTpDistanciel() ?? 0 === $ec->getVolumeTpDistanciel() ?? 0
+        && $ficheMatiere->getVolumeTe() ?? 0 === $ec->getVolumeTe() ?? 0;
+    }
 }
