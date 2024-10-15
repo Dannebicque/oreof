@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.31.52](https://github.com/Dannebicque/oreof/compare/v1.31.51...v1.31.52) (2024-10-15)
+
+
+### Bug Fixes
+
+* Code EC export Cap ([601fa51](https://github.com/Dannebicque/oreof/commit/601fa5184021fb9d83c27cb01852af532f2c4185))
+* Code EC export Cap ([63ac957](https://github.com/Dannebicque/oreof/commit/63ac9572213e23caaf9557314b16477efe3ee9ff))
+
 ### [1.31.51](https://github.com/Dannebicque/oreof/compare/v1.31.50...v1.31.51) (2024-10-15)
 
 
