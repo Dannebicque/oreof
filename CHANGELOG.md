@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.31.51](https://github.com/Dannebicque/oreof/compare/v1.31.50...v1.31.51) (2024-10-15)
+
+
+### Bug Fixes
+
+* Code EC export Cap ([fb01bca](https://github.com/Dannebicque/oreof/commit/fb01bcaf7d1dd68a7828913a895b03b29db490fa))
+* filtre sigle ([da880ac](https://github.com/Dannebicque/oreof/commit/da880ac4fdee6dece6bbc08b7f454a57c9e71779))
+
 ### [1.31.50](https://github.com/Dannebicque/oreof/compare/v1.31.49...v1.31.50) (2024-10-14)
 
 
