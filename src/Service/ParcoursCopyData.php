@@ -11,11 +11,13 @@ use App\DTO\StructureSemestre;
 use App\DTO\StructureUe;
 use App\Entity\ElementConstitutif;
 use App\Entity\FicheMatiere;
+use App\Entity\Formation;
 use App\Entity\Parcours;
 use App\Entity\Semestre;
 use App\Entity\Ue;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 
 #[Autoconfigure(public: true)]
@@ -35,19 +37,54 @@ class ParcoursCopyData {
         $this->myPdf = $myPdf;
     }
 
+    public function copyDataForAllParcoursInDatabase(SymfonyStyle $io){
+        $io->writeln("Commande pour copier les heures des matières sur la nouvelle base de données.");
+
+        $formationArray = $this->entityManager->getRepository(Formation::class)->findAll();
+        $nombreParcours = array_sum(array_map(fn($f) => count($f->getParcours()), $formationArray));
+        $io->writeln("Début de la copie...");
+        $io->progressStart($nombreParcours);
+
+        foreach($formationArray as $formation){
+            foreach($formation->getParcours() as $parcours){
+                $this->copyDataForParcoursFromDTO($parcours);
+                $io->progressAdvance(1);
+            }
+        }
+        $io->progressFinish();
+        $io->success("La copie s'est exécutée avec succès !");
+    }
+
     public function copyDataForParcours(Parcours $parcours){
         foreach($parcours->getSemestreParcours() as $semestreParcours){
             $semestre = $this->getSemestre($semestreParcours->getSemestre());
-            $ueArray = $this->entityManager->getRepository(Ue::class)->getBySemestre($semestre);
-            foreach($ueArray as $ueData){
-                $ue = $this->getUe($ueData);
-                $this->copyDataForUe($ue, $parcours->getId());
-                foreach($ue->getUeEnfants() as $ueEnfantData){
-                    $ueEnfant = $this->getUe($ueEnfantData);
-                    $this->copyDataForUe($ueEnfant, $parcours->getId());
-                    foreach($ueEnfant->getUeEnfants() as $ueEnfantDeuxiemeData){
-                        $ueEnfantDeuxieme = $this->getUe($ueEnfantDeuxiemeData);
-                        $this->copyDataForUe($ueEnfantDeuxieme, $parcours->getId());
+            if($semestre){
+                $ueArray = $this->entityManager->getRepository(Ue::class)->getBySemestre($semestre);
+                foreach($ueArray as $ueData){
+                    $ue = $this->getUe($ueData);
+                    $this->copyDataForUe($ue, $parcours->getId());
+                    foreach($ue->getUeEnfants() as $ueEnfantData){
+                        $ueEnfant = $this->getUe($ueEnfantData);
+                        $this->copyDataForUe($ueEnfant, $parcours->getId());
+                        foreach($ueEnfant->getUeEnfants() as $ueEnfantDeuxiemeData){
+                            $ueEnfantDeuxieme = $this->getUe($ueEnfantDeuxiemeData);
+                            $this->copyDataForUe($ueEnfantDeuxieme, $parcours->getId());
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public function copyDataForParcoursFromDTO(Parcours $parcours){
+        $dto = $this->getDTOForParcours($parcours);
+        foreach($dto->semestres as $semestre){
+            foreach($semestre->ues as $ue){
+                $this->copyDataForUeFromDTO($ue, $parcours->getId());
+                foreach($ue->uesEnfants() as $ueEnfant){
+                    $this->copyDataForUeFromDTO($ueEnfant, $parcours->getId());
+                    foreach($ueEnfant->uesEnfants() as $ueEnfantDeuxieme){
+                        $this->copyDataForUeFromDTO($ueEnfantDeuxieme, $parcours->getId());
                     }
                 }
             }
@@ -65,22 +102,30 @@ class ParcoursCopyData {
         }
     }
 
+    private function copyDataForUeFromDTO(StructureUe $structUE, int $parcoursId){
+        foreach($structUE->elementConstitutifs as $ec){
+            $this->copyDataOnFicheMatiere($ec->elementConstitutif, $ec->elementConstitutif->getFicheMatiere(), $parcoursId);
+            foreach($ec->elementsConstitutifsEnfants as $ecEnfant){
+                $this->copyDataOnFicheMatiere($ecEnfant->elementConstitutif, $ecEnfant->elementConstitutif->getFicheMatiere(), $parcoursId);
+            }
+        }
+    }
+
     private function copyDataOnFicheMatiere(
         ElementConstitutif $ecSource,
-        ?FicheMatiere $ficheMatiere,
+        ?FicheMatiere $ficheMatiereSource,
         int $parcoursId
     ){
         
-        if($ficheMatiere){
-            $ficheMatiereBD = $this->entityManager->getRepository(FicheMatiere::class)
-                ->findOneById($ficheMatiere->getId());
+        if($ficheMatiereSource){
+            // $ficheMatiere = $this->entityManager->getRepository(FicheMatiere::class)
+            //    ->findOneBySlug($ficheMatiereSource->getSlug());
 
-            $isVolumeHoraireFMImpose = $ficheMatiere->isVolumesHorairesImpose();
-            $ecFromParcours = $ecSource->getParcours()?->getId() === $ficheMatiereBD->getParcours()?->getId() 
-                && $ficheMatiereBD->getParcours()?->getId() === $parcoursId;
+            $isVolumeHoraireFMImpose = $ficheMatiereSource->isVolumesHorairesImpose();
+            $ecFromParcours = $ecSource->getParcours()?->getId() === $ficheMatiereSource->getParcours()?->getId();
             $hasEcParentHeures = $ecSource->getEcParent()?->isHeuresEnfantsIdentiques();
             $hasSynchroHeures = $ecSource->isSynchroHeures();
-            $isHorsDiplome = $ficheMatiereBD->isHorsDiplome();
+            $isHorsDiplome = $ficheMatiereSource->isHorsDiplome();
 
             if($ecFromParcours){
                 $ec = $ecSource;
@@ -92,30 +137,32 @@ class ParcoursCopyData {
                 }
                 elseif($hasSynchroHeures){
                     $ecPorteur = array_filter(
-                        $ficheMatiereBD->getElementConstitutifs()->toArray(), 
-                        fn($ec) => $ec->getParcours()->getId() === $ficheMatiereBD->getParcours()->getId());
+                        $ficheMatiereSource->getElementConstitutifs()->toArray(), 
+                        fn($ec) => $ec->getParcours()->getId() === $ficheMatiereSource->getParcours()->getId());
 
                     if(count($ecPorteur) > 0){
                         $ec = array_shift($ecPorteur);
                     }
 
                 }
-                elseif($ecFromParcours === false && $this->hasEcSameHeuresAsFicheMatiere($ecSource, $ficheMatiereBD) === false) {
+                elseif($ecFromParcours === false && $this->hasEcSameHeuresAsFicheMatiere($ecSource, $ficheMatiereSource) === false) {
                     $ecSource->setHeuresSpecifiques(true);
+                    $this->entityManager->persist($ecSource);
                 }
 
                 if($ec){
-                    $ficheMatiereBD->setVolumeCmPresentiel($ec->getVolumeCmPresentiel());
-                    $ficheMatiereBD->setVolumeTdPresentiel($ec->getVolumeTdPresentiel());
-                    $ficheMatiereBD->setVolumeTpPresentiel($ec->getVolumeTpPresentiel());
-                    $ficheMatiereBD->setVolumeCmDistanciel($ec->getVolumeCmDistanciel());
-                    $ficheMatiereBD->setVolumeTdDistanciel($ec->getVolumeTdDistanciel());
-                    $ficheMatiereBD->setVolumeTpDistanciel($ec->getVolumeTpDistanciel());
-                    $ficheMatiereBD->setVolumeTe($ec->getVolumeTe());
-                }
+                    $ficheMatiereSource->setVolumeCmPresentiel($ec->getVolumeCmPresentiel());
+                    $ficheMatiereSource->setVolumeTdPresentiel($ec->getVolumeTdPresentiel());
+                    $ficheMatiereSource->setVolumeTpPresentiel($ec->getVolumeTpPresentiel());
+                    $ficheMatiereSource->setVolumeCmDistanciel($ec->getVolumeCmDistanciel());
+                    $ficheMatiereSource->setVolumeTdDistanciel($ec->getVolumeTdDistanciel());
+                    $ficheMatiereSource->setVolumeTpDistanciel($ec->getVolumeTpDistanciel());
+                    $ficheMatiereSource->setVolumeTe($ec->getVolumeTe());
 
-                $this->entityManager->persist($ficheMatiereBD);
-                $this->entityManager->persist($ecSource);
+                }
+                
+                $this->entityManager->persist($ficheMatiereSource);
+                $this->entityManager->flush();
             }
         }
     }
@@ -154,10 +201,13 @@ class ParcoursCopyData {
             : $ue;
     }
 
-    private function getSemestre(Semestre $semestre){
-        return $semestre->getSemestreRaccroche() !== null 
-            ? $semestre->getSemestreRaccroche()->getSemestre()
-            : $semestre;
+    private function getSemestre(?Semestre $semestre){
+        if($semestre){
+            return $semestre->getSemestreRaccroche() !== null 
+                ? $semestre->getSemestreRaccroche()->getSemestre()
+                : $semestre;
+        }
+        return null;
     }
 
     public function exportDTOAsPdf(

@@ -2,6 +2,7 @@
 
 namespace App\Command;
 
+use App\Entity\Formation;
 use App\Entity\Parcours;
 use App\Service\ParcoursCopyData;
 use DateTime;
@@ -63,6 +64,8 @@ class ParcoursCopyDataCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        ini_set('memory_limit', '2048M');
+
         $io = new SymfonyStyle($input, $output);
 
         $dtoPdfExport = $input->getOption('dto-pdf-export');
@@ -137,15 +140,12 @@ class ParcoursCopyDataCommand extends Command
         }
 
         else if($testCopyDatabase){
-
+            $this->parcoursCopyData->copyDataForAllParcoursInDatabase($io);
+            return Command::SUCCESS;
         }
 
         $io->warning("Option non reconnue. Doit être parmi ['dto-pdf-export']\n");
 
         return Command::INVALID;
-    }
-
-    private function copyIntoDatabase(){
-        
     }
 }
