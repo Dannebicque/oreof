@@ -859,4 +859,17 @@ class ElementConstitutif
 
         return '-';
     }
+
+    public function displayId(): string
+    {
+        if ($this->codeApogee !== null) {
+            return 'EC_'.$this->id;
+        }
+
+        if ($this->ficheMatiere !== null) {
+            return 'FM_'.$this->ficheMatiere->getId() ?? '-err-';
+        }
+
+        return '-err-';
+    }
 }

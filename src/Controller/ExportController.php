@@ -20,6 +20,7 @@ class ExportController extends BaseController
     public const TYPES_DOCUMENT = [
         "xlsx-mccc" => 'MCCC format Excel (xslx)',
         "xlsx-cap" => 'Export CAP format excel (xslx)',
+        "xlsx-fiabilisation" => 'Export Fiabilisation format excel (xslx)',
         "pdf-mccc" => 'MCCC format PDF',
         "xlsx-light_mccc" => 'MCCC simplifiées format Excel (xslx)',
         "xlsx-version_mccc" => 'MCCC versionnées format Excel (xslx)',

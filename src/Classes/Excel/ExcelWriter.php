@@ -395,7 +395,6 @@ class ExcelWriter
             $sh->getPageMargins()->setLeft(0.5);
             $sh->getPageMargins()->setBottom(1);
         }
-        //todo: ajouter header/footer
 
         $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($this->spreadsheet, 'Mpdf');
         $writer->setOrientation(PageSetup::ORIENTATION_LANDSCAPE);

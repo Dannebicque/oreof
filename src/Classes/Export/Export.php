@@ -33,6 +33,7 @@ class Export
         protected ExportCfvu        $exportCfvu,
         protected ExportCarif       $exportCarif,
         protected ExportCap         $exportCap,
+        protected ExportFiabilisation         $exportFiabilisation,
         protected ExportSynthese    $exportSynthese,
         protected ExportSeip        $exportSeip,
         protected ExportEc          $exportEc,
@@ -83,6 +84,8 @@ class Export
                 return $this->exportCfvu();
             case 'cap':
                 return $this->exportCap();
+            case 'fiabilisation':
+                return $this->exportFiabilisation();
             case 'fiches_matieres':
                 return $this->exportFicheMatiere();
             case 'seip':
@@ -160,6 +163,11 @@ class Export
     private function exportCap() : string
     {
         return $this->exportCap->exportLink($this->formations);
+    }
+
+    private function exportFiabilisation() : string
+    {
+        return $this->exportFiabilisation->exportLink($this->formations);
     }
 
     private function exportSyntheseModifications(): string
