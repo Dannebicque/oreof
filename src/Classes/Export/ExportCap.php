@@ -128,7 +128,7 @@ class ExportCap
             $this->excelWriter->writeCellXY(7, $this->ligne, $semestreParcours?->getCodeApogeeEtapeAnnee());
             $this->excelWriter->writeCellXY(8, $this->ligne, $semestreParcours?->getCodeApogeeEtapeVersion());
             $this->excelWriter->writeCellXY(9, $this->ligne, $ec->elementConstitutif->getFicheMatiere()?->getLibelle() ?? '-');
-            $this->excelWriter->writeCellXY(10, $this->ligne, $ec->elementConstitutif->getCodeApogee() ?? '-');
+            $this->excelWriter->writeCellXY(10, $this->ligne, $ec->elementConstitutif->getCodeApogee() ?? ($ec->elementConstitutif->getFicheMatiere()?->getCodeApogee() ??'-'));
             $this->excelWriter->writeCellXY(11, $this->ligne, $ec->heuresEctsEc->cmPres);
             $this->excelWriter->writeCellXY(12, $this->ligne, $ec->heuresEctsEc->tdPres);
             $this->excelWriter->writeCellXY(13, $this->ligne, $ec->heuresEctsEc->tpPres);
