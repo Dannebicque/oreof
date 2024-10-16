@@ -16,6 +16,7 @@ use App\DTO\StructureEc;
 use App\DTO\StructureUe;
 use App\Entity\CampagneCollecte;
 use App\Entity\SemestreParcours;
+use App\Repository\DpeParcoursRepository;
 use App\Repository\FormationRepository;
 use App\Utils\CleanTexte;
 use App\Utils\Tools;
@@ -35,6 +36,7 @@ class ExportCap
         protected ExcelWriter             $excelWriter,
         KernelInterface                   $kernel,
         protected FormationRepository     $formationRepository,
+        protected DpeParcoursRepository   $dpeParcoursRepository,
     ) {
         $this->dir = $kernel->getProjectDir() . '/public/temp/';
     }
@@ -64,10 +66,12 @@ class ExportCap
 
         $this->ligne = 2;
         foreach ($formations as $idFormation) {
-            $formation = $this->formationRepository->find($idFormation);
-
-            if ($formation !== null) {
-                foreach ($formation->getParcours() as $parcours) {
+            $dpeParcours = $this->dpeParcoursRepository->find($idFormation);
+            if ($dpeParcours !== null) {
+                $parcours = $dpeParcours->getParcours();
+                $formation = $dpeParcours->getParcours()?->getFormation();
+                if ($formation !== null && $parcours !== null) {
+//                foreach ($formation->getParcours() as $parcours) {
                     $this->data[1] = $formation->getComposantePorteuse()?->getLibelle();
                     $this->data[2] = $formation->getTypeDiplome()?->getLibelle();
                     $this->data[3] = $formation->getDisplay();
