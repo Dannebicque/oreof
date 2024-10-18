@@ -64,7 +64,7 @@ class ParcoursCopyDataCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        ini_set('memory_limit', '2048M');
+        ini_set('memory_limit', '2500M');
 
         $io = new SymfonyStyle($input, $output);
 

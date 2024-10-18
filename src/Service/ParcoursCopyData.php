@@ -15,6 +15,8 @@ use App\Entity\Formation;
 use App\Entity\Parcours;
 use App\Entity\Semestre;
 use App\Entity\Ue;
+use App\Repository\ElementConstitutifCopyRepository;
+use App\Repository\FicheMatiereCopyRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -27,6 +29,10 @@ class ParcoursCopyData {
 
     private EntityManagerInterface $entityManagerCopy;
 
+    private ElementConstitutifCopyRepository $ecCopyRepo;
+
+    private FicheMatiereCopyRepository $fmCopyRepo;
+
     private MyGotenbergPdf $myPdf;
 
     public static array $errorMessageArray = [];
@@ -37,6 +43,9 @@ class ParcoursCopyData {
     ){
         $this->entityManager = $doctrine->getManager('default');
         $this->entityManagerCopy = $doctrine->getManager('parcours_copy');
+        $this->ecCopyRepo = new ElementConstitutifCopyRepository($this->entityManagerCopy, ElementConstitutif::class);
+        $this->fmCopyRepo = new FicheMatiereCopyRepository($this->entityManagerCopy, FicheMatiere::class);
+
         $this->myPdf = $myPdf;
     }
 
@@ -152,16 +161,12 @@ class ParcoursCopyData {
                 }
                 elseif($ecFromParcours === false && $this->hasEcSameHeuresAsFicheMatiere($ecSource, $ficheMatiereSource) === false) {
                 }
-                $ecCopy = $this->entityManagerCopy
-                    ->getRepository(ElementConstitutif::class)
-                    ->find($ecSource->getId());
+                $ecCopy = $this->ecCopyRepo->find($ecSource->getId());
                 $ecCopy->setHeuresSpecifiques(true);
                 $this->entityManagerCopy->persist($ecCopy);
 
                 if($ec){
-                    $ficheMatiereCopy = $this->entityManagerCopy
-                        ->getRepository(FicheMatiere::class)
-                        ->find($ficheMatiereSource->getId());
+                    $ficheMatiereCopy = $this->fmCopyRepo->find($ficheMatiereSource->getId());
 
                     $ficheMatiereCopy->setVolumeCmPresentiel($ec->getVolumeCmPresentiel());
                     $ficheMatiereCopy->setVolumeTdPresentiel($ec->getVolumeTdPresentiel());
