@@ -46,7 +46,7 @@ class Parcours
     private ?string $libelle = null;
 
     #[Groups(['parcours_json_versioning', 'fiche_matiere_versioning'])]
-    #[ORM\ManyToOne(targetEntity: Formation::class, inversedBy: 'parcours')]
+    #[ORM\ManyToOne(targetEntity: Formation::class, inversedBy: 'parcours', cascade: ['persist'])]
     private ?Formation $formation = null;
 
     #[Groups('parcours_json_versioning')]
@@ -210,7 +210,7 @@ class Parcours
     #[ORM\Column(nullable: true)]
     private ?array $etatsFichesMatieres = [];
 
-    #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: ElementConstitutif::class)]
+    #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: ElementConstitutif::class, cascade: ['persist'])]
     private Collection $elementConstitutifs;
 
     #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: CommentaireParcours::class)]
@@ -238,7 +238,7 @@ class Parcours
     private ?TypeParcoursEnum $typeParcours = null;
 
     #[Groups('parcours_json_versioning')]
-    #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: Contact::class)]
+    #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: Contact::class, cascade: ['persist'])]
     private Collection $contacts;
 
     #[ORM\Column(length: 1, nullable: true)]

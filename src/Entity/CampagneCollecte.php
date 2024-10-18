@@ -55,7 +55,7 @@ class CampagneCollecte
     #[ORM\Column(length: 1)]
     private ?string $codeApogee = null; //todo: déplacer dans année ?
 
-    #[ORM\ManyToOne(inversedBy: 'dpes')]
+    #[ORM\ManyToOne(inversedBy: 'dpes', cascade: ['persist'])]
     private ?AnneeUniversitaire $annee_universitaire = null;
 
     #[ORM\OneToMany(mappedBy: 'campagneCollecte', targetEntity: DpeParcours::class)]

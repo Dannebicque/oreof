@@ -34,7 +34,7 @@ class Semestre
     #[ORM\Column]
     private ?int $ordre = null;
 
-    #[ORM\OneToMany(mappedBy: 'semestre', targetEntity: Ue::class, fetch: 'EAGER')]
+    #[ORM\OneToMany(mappedBy: 'semestre', targetEntity: Ue::class, fetch: 'EAGER', cascade: ['persist'])]
     #[ORM\OrderBy(['ordre' => 'ASC'])]
     private Collection $ues;
 

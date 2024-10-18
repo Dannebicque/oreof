@@ -78,7 +78,7 @@ class ElementConstitutif
     private ?bool $isTpDistancielMutualise;
 
     #[Groups('DTO_json_versioning')]
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(cascade: ['persist'])]
     private ?NatureUeEc $natureUeEc = null;
 
     #[Groups(['DTO_json_versioning'])]
@@ -94,14 +94,14 @@ class ElementConstitutif
     private ?int $ordre = null;
 
     #[Groups(['DTO_json_versioning'])]
-    #[ORM\ManyToOne(fetch: 'EAGER', inversedBy: 'elementConstitutifs')]
+    #[ORM\ManyToOne(fetch: 'EAGER', inversedBy: 'elementConstitutifs', cascade: ['persist'])]
     private ?FicheMatiere $ficheMatiere = null;
 
     #[Groups(['fiche_matiere_versioning_ec_parcours', 'DTO_json_versioning'])]
     #[ORM\ManyToOne(inversedBy: 'elementConstitutifs')]
     private ?Parcours $parcours = null;
 
-    #[ORM\ManyToOne(inversedBy: 'elementConstitutifs', fetch: 'EAGER')]
+    #[ORM\ManyToOne(inversedBy: 'elementConstitutifs', fetch: 'EAGER', cascade: ['persist'])]
     private ?Ue $ue = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -111,7 +111,7 @@ class ElementConstitutif
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $libelle = null;
 
-    #[ORM\ManyToOne(inversedBy: 'elementConstitutifs', fetch: 'EAGER')]
+    #[ORM\ManyToOne(inversedBy: 'elementConstitutifs', fetch: 'EAGER', cascade: ['persist'])]
     private ?TypeEc $typeEc = null;
 
     #[MaxDepth(1)]

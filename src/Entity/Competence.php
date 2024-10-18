@@ -26,7 +26,7 @@ class Competence
     private ?int $id = null;
 
     #[Groups('fiche_matiere_versioning')]
-    #[ORM\ManyToOne(fetch: 'EAGER', inversedBy: 'competences')]
+    #[ORM\ManyToOne(fetch: 'EAGER', inversedBy: 'competences', cascade: ['persist'])]
     private ?BlocCompetence $blocCompetence;
 
     #[Groups(['parcours_json_versioning', 'fiche_matiere_versioning', 'DTO_json_versioning'])]

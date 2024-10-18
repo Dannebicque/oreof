@@ -46,12 +46,12 @@ class Formation
     private ?Composante $composantePorteuse = null;
 
     #[Groups('parcours_json_versioning')]
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(cascade: ['persist'])]
     /** @deprecated("Sur le Dpe")  */
     private ?CampagneCollecte $dpe;
 
     #[Groups(['parcours_json_versioning', 'fiche_matiere_versioning', 'formation_json_versioning'])]
-    #[ORM\ManyToOne(targetEntity: Mention::class, inversedBy: 'formations', fetch: 'EAGER')]
+    #[ORM\ManyToOne(targetEntity: Mention::class, inversedBy: 'formations', fetch: 'EAGER', cascade: ['persist'])]
     private ?Mention $mention = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -83,11 +83,11 @@ class Formation
     private ?int $semestreDebut = 1;
 
     #[Groups(['parcours_json_versioning', 'formation_json_versioning'])]
-    #[ORM\ManyToMany(targetEntity: Ville::class)]
+    #[ORM\ManyToMany(targetEntity: Ville::class, cascade: ['persist'])]
     private Collection $localisationMention;
 
     #[Groups(['parcours_json_versioning', 'formation_json_versioning'])]
-    #[ORM\ManyToMany(targetEntity: Composante::class, inversedBy: 'formations')]
+    #[ORM\ManyToMany(targetEntity: Composante::class, inversedBy: 'formations', cascade: ['persist'])]
     private Collection $composantesInscription;
 
     #[Groups(['parcours_json_versioning', 'formation_json_versioning'])]

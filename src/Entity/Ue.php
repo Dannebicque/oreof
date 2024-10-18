@@ -37,11 +37,11 @@ class Ue
     #[ORM\ManyToOne(inversedBy: 'ues')]
     private ?Semestre $semestre = null;
 
-    #[ORM\ManyToOne(fetch: 'EAGER')]
+    #[ORM\ManyToOne(fetch: 'EAGER', cascade: ['persist'])]
     private ?TypeUe $typeUe = null;
 
     #[Groups(['DTO_json_versioning'])]
-    #[ORM\ManyToOne(fetch: 'EAGER')]
+    #[ORM\ManyToOne(fetch: 'EAGER', cascade: ['persist'])]
     private ?NatureUeEc $natureUeEc = null;
 
     #[ORM\OneToMany(mappedBy: 'ue', targetEntity: ElementConstitutif::class, cascade: [

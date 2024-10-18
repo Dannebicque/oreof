@@ -34,12 +34,12 @@ class Mention
 
 //    #[ORM\Column(length: 255)]
 //    private ?string $typeDiplome = null;
- 
+
     #[Groups('parcours_json_versioning')]
     #[ORM\ManyToOne(inversedBy: 'mentions')]
     private ?Domaine $domaine = null;
 
-    #[ORM\ManyToOne(inversedBy: 'mentions')]
+    #[ORM\ManyToOne(inversedBy: 'mentions', cascade: ['persist'])]
     private ?TypeDiplome $typeDiplome = null;
 
     #[ORM\OneToMany(mappedBy: 'mention', targetEntity: Formation::class)]
