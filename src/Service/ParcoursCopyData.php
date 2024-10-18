@@ -25,6 +25,8 @@ class ParcoursCopyData {
 
     private EntityManagerInterface $entityManager;
 
+    private EntityManagerInterface $entityManagerCopy;
+
     private MyGotenbergPdf $myPdf;
 
     public static array $errorMessageArray = [];
@@ -33,7 +35,8 @@ class ParcoursCopyData {
         ManagerRegistry $doctrine,
         MyGotenbergPdf $myPdf
     ){
-        $this->entityManager = $doctrine->getManager('parcours_copy');
+        $this->entityManager = $doctrine->getManager('default');
+        $this->entityManagerCopy = $doctrine->getManager('parcours_copy');
         $this->myPdf = $myPdf;
     }
 
@@ -52,6 +55,8 @@ class ParcoursCopyData {
             }
         }
         $io->progressFinish();
+        $io->writeln("Application des changements...");
+        $this->entityManagerCopy->flush();
         $io->success("La copie s'est exécutée avec succès !");
     }
 
@@ -146,23 +151,29 @@ class ParcoursCopyData {
 
                 }
                 elseif($ecFromParcours === false && $this->hasEcSameHeuresAsFicheMatiere($ecSource, $ficheMatiereSource) === false) {
-                    $ecSource->setHeuresSpecifiques(true);
-                    $this->entityManager->persist($ecSource);
                 }
+                $ecCopy = $this->entityManagerCopy
+                    ->getRepository(ElementConstitutif::class)
+                    ->find($ecSource->getId());
+                $ecCopy->setHeuresSpecifiques(true);
+                $this->entityManagerCopy->persist($ecCopy);
 
                 if($ec){
-                    $ficheMatiereSource->setVolumeCmPresentiel($ec->getVolumeCmPresentiel());
-                    $ficheMatiereSource->setVolumeTdPresentiel($ec->getVolumeTdPresentiel());
-                    $ficheMatiereSource->setVolumeTpPresentiel($ec->getVolumeTpPresentiel());
-                    $ficheMatiereSource->setVolumeCmDistanciel($ec->getVolumeCmDistanciel());
-                    $ficheMatiereSource->setVolumeTdDistanciel($ec->getVolumeTdDistanciel());
-                    $ficheMatiereSource->setVolumeTpDistanciel($ec->getVolumeTpDistanciel());
-                    $ficheMatiereSource->setVolumeTe($ec->getVolumeTe());
+                    $ficheMatiereCopy = $this->entityManagerCopy
+                        ->getRepository(FicheMatiere::class)
+                        ->find($ficheMatiereSource->getId());
 
+                    $ficheMatiereCopy->setVolumeCmPresentiel($ec->getVolumeCmPresentiel());
+                    $ficheMatiereCopy->setVolumeTdPresentiel($ec->getVolumeTdPresentiel());
+                    $ficheMatiereCopy->setVolumeTpPresentiel($ec->getVolumeTpPresentiel());
+                    $ficheMatiereCopy->setVolumeCmDistanciel($ec->getVolumeCmDistanciel());
+                    $ficheMatiereCopy->setVolumeTdDistanciel($ec->getVolumeTdDistanciel());
+                    $ficheMatiereCopy->setVolumeTpDistanciel($ec->getVolumeTpDistanciel());
+                    $ficheMatiereCopy->setVolumeTe($ec->getVolumeTe());
+
+                    $this->entityManagerCopy->persist($ficheMatiereCopy);
                 }
                 
-                $this->entityManager->persist($ficheMatiereSource);
-                $this->entityManager->flush();
             }
         }
     }
