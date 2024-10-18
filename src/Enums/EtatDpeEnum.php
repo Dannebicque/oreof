@@ -94,7 +94,7 @@ enum EtatDpeEnum: string
             self::valide_a_publier => 'Validé à publier',
             self::valide_cfvu => 'Validé CFVU',
             self::publie => 'Publié',
-            self::valide_pour_publication => 'Validé CFVU', //todo: renommer en valide_cfvu
+            self::valide_pour_publication => 'Validé CFVU',
             self::soumis_conseil_reserve => 'Validé CFVU sous réserve de PV',
             self::en_cours_redaction_ss_cfvu => 'Modification en cours sans CFVU',
             self::soumis_central_sans_cfvu => 'Soumis SES sans CFVU',

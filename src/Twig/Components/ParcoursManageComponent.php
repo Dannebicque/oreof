@@ -160,7 +160,7 @@ final class ParcoursManageComponent extends AbstractController
             }
         }
         $historiques = $this->historiqueParcoursRepository->findBy(['parcours' => $this->parcours], ['created' => 'ASC']);
-
+//todo: gérer le cas d'une réouverture sans CFVU
         foreach ($historiques as $historique) {
             if (self::TAB_PROCESS[$historique->getEtape()] < self::TAB_PROCESS[self::TAB[$this->place]]) {
                 $this->historiques[$historique->getEtape()] = $historique;

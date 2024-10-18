@@ -57,7 +57,8 @@ class GetFormations
                     $formations[] = $this->formationRepository->findByComposante(
                         $centre->getComposante(),
                         $campagneCollecte,
-                        [$sort => $direction]
+                        [$sort => $direction],
+                        $q
                     );
                 }
 

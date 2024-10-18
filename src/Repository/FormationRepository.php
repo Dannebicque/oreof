@@ -56,7 +56,8 @@ class FormationRepository extends ServiceEntityRepository
     public function findByComposanteDpe(
         UserInterface    $user,
         CampagneCollecte $campagneCollecte,
-        array            $sorts = []
+        array            $sorts = [],
+        string|null $q = null
     ): array {
         $query = $this->createQueryBuilder('f')
             ->join('f.dpeParcours', 'dp')
@@ -64,7 +65,13 @@ class FormationRepository extends ServiceEntityRepository
             ->where('c.responsableDpe = :user')
             ->andWhere('dp.campagneCollecte = :campagneCollecte')
             ->setParameter('user', $user)
+
             ->setParameter('campagneCollecte', $campagneCollecte);
+
+        if ($q !== null) {
+            $query ->andWhere('m.libelle LIKE :q or f.sigle LIKE :q or m.sigle LIKE :q or f.mentionTexte LIKE :q or parcours.libelle LIKE :q or parcours.sigle LIKE :q')
+                ->setParameter('q', '%' . $q . '%');
+        }
 
         foreach ($sorts as $sort => $direction) {
             if ($sort === 'mention') {

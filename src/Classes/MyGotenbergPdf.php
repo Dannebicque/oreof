@@ -82,7 +82,7 @@ class MyGotenbergPdf
             ->header(Stream::string('header.html', $this->getHeader($title)))
             ->footer(Stream::string('footer.html', $this->getFooter()))
             ->paperSize($this->paperSizes[$this->options['paperSize']][0], $this->paperSizes[$this->options['paperSize']][1])
-            ->margins(1, 1, 0.8, 0.8)
+            ->margins(1.3, 1.3, 0.8, 0.8)
             ->outputFilename($name);
 
         if ($this->options['landscape']) {
@@ -150,7 +150,7 @@ class MyGotenbergPdf
     private function getFooter(): string
     {
         if ($this->options['withTemplate']) {
-            $imageData = file_get_contents($this->options['baseUrl'] . '/images/vague_urca.jpg');
+            $imageData = file_get_contents($this->options['baseUrl'] . '/images/vague_urca.png');
             $base64Image = base64_encode($imageData);
             return $this->twig->render('pdf/footer.html.twig', array_merge($this->options, ['image' => $base64Image]));
         }

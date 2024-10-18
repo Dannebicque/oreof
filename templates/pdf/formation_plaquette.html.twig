@@ -57,33 +57,31 @@
     {% endblock %}
 
 {% block content %}
-    <div class="header">
-        <p>{{ formation.typeDiplome.libelle }}</p>
-        <h1>{{ formation.display }}</h1>
-        {% for parcours in formation.parcours %}
-            <p>{{ parcours.display }}</p>
-        {% endfor %}
-    </div>
-    {% for key, rubrique in rubriques|filter(rubrique => rubrique != null) %}
-        {# test si se termine par formation, si oui afficher #}
-        {% if key|slice(-9) == 'Formation' and formation.hasParcours == false %}
-            <h2>{{ key|trans({}, 'communication') }}</h2>
-            <div class="two-columns">
-                {{ include('typeDiplome/formation/plaquette/_'~key~'.html.twig') }}
-
-            </div>
-{#            <hr class="hr-plaquette">#}
-        {% endif %}
-    {% endfor %}
-
     {% for parcours in formation.parcours %}
+        <div class="header">
+            <p>{{ formation.typeDiplome.libelle }}</p>
+            <h1>{{ formation.display }}</h1>
+            <p>{{ parcours.display }}</p>
+        </div>
+        {% for key, rubrique in rubriques|filter(rubrique => rubrique != null) %}
+            {# test si se termine par formation, si oui afficher #}
+            {% if key|slice(-9) == 'Formation' and formation.hasParcours == false %}
+                <h2>{{ key|trans({}, 'communication') }}</h2>
+                <div class="two-columns">
+                    {{ include('typeDiplome/formation/plaquette/_'~key~'.html.twig') }}
+
+                </div>
+                {#            <hr class="hr-plaquette"> #}
+            {% endif %}
+        {% endfor %}
+
         <h2 class="border-bottom">Parcours : {{ parcours.display }}</h2>
 
         {% for key, rubrique in rubriques|filter(rubrique => rubrique != null) %}
             {#  sauf celles se terminant par formation #}
             {% if key|slice(-9) != 'Formation' %}
                 {% if key != 'structure' %}
-{#                    <h3>{{ key|trans({}, 'communication') }}</h3>#}
+                    {#                    <h3>{{ key|trans({}, 'communication') }}</h3> #}
                     <div class="two-columns">
                         {{ include('typeDiplome/formation/plaquette/_'~key~'.html.twig') }}
                     </div>
@@ -96,6 +94,9 @@
                 {% endif %}
             {% endif %}
         {% endfor %}
+        {% if not loop.last %}
+        <div class="page_break"></div>
+        {% endif %}
     {% endfor %}
 
 {% endblock %}

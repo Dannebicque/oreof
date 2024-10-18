@@ -136,6 +136,7 @@ class CodificationController extends BaseController
     #[Route('/codification/export', name: 'app_codification_export')]
     public function export(
         ExportCodification  $export,
+        TypeDiplomeRepository $typeDiplomeRepository,
         FormationRepository $formationRepository,
     ): Response {
         if ($this->isGranted('ROLE_ADMIN') ||
@@ -191,6 +192,7 @@ class CodificationController extends BaseController
 
         return $this->render('codification/liste.html.twig', [
             'formations' => $tFormations,
+            'typeDiplomes' => $typeDiplomeRepository->findAll(),
         ]);
     }
 

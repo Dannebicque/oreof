@@ -32,25 +32,25 @@
             margin: 0;
             padding: 0;
             position: fixed;
-            right: -0.5cm;
+            right: 0;
             text-align: right;
 
         }
 
         #class_vague img {
             height: 100%;
-            width: 19cm;
+            width: 21cm;
         }
 
-        #adresse_vague {
-            color: black;
-            position: fixed;
-            right: 1cm;
-            bottom: 0.5cm;
-            width: 19cm;
-            text-align: right;
-            font-size: 10px;
-        }
+        /*#adresse_vague {*/
+        /*    color: black;*/
+        /*    position: fixed;*/
+        /*    right: 3cm;*/
+        /*    bottom: 0.5cm;*/
+        /*    width: 19cm;*/
+        /*    text-align: right;*/
+        /*    font-size: 10px;*/
+        /*}*/
 
 
         {% else %}
@@ -76,14 +76,14 @@
             <div id="class_vague">
                 <img src="data:image/jpeg;base64,{{ image }}" alt="logo">
             </div>
-            <div id="adresse_vague">
-                {{ composante.libelle }}<br>
-                {{ composante.adresse.adresse1 }}<br>
-                {{ composante.adresse.adresse2 }}<br>
-                {{ composante.adresse.codePostal }} {{ composante.adresse.ville }}<br>
-                {{ composante.urlSite }}<br>
-                {{ composante.mailContact }}
-            </div>
+{#            <div id="adresse_vague">#}
+{#                {{ composante.libelle }}<br>#}
+{#                {{ composante.adresse.adresse1 }}<br>#}
+{#                {{ composante.adresse.adresse2 }}<br>#}
+{#                {{ composante.adresse.codePostal }} {{ composante.adresse.ville }}<br>#}
+{#                {{ composante.urlSite }}<br>#}
+{#                {{ composante.mailContact }}#}
+{#            </div>#}
         {% else %}
             <p><span class="pageNumber"></span> of <span class="totalPages"></span></p>
             <p>Document généré le {{ 'now'|date('d/m/Y H:i') }} depuis
