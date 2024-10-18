@@ -12,6 +12,8 @@ namespace App\Controller;
 use App\Classes\CalculStructureParcours;
 use App\Classes\GetDpeParcours;
 use App\Classes\GetFormations;
+use App\Classes\MentionProcess;
+use App\Classes\ValidationProcess;
 use App\Classes\verif\FormationState;
 use App\Classes\verif\ParcoursState;
 use App\DTO\StatsFichesMatieres;
@@ -26,6 +28,7 @@ use App\Form\FormationDemandeType;
 use App\Form\FormationSesType;
 use App\Repository\ComposanteRepository;
 use App\Repository\DomaineRepository;
+use App\Repository\DpeParcoursRepository;
 use App\Repository\FormationRepository;
 use App\Repository\MentionRepository;
 use App\Repository\RoleRepository;
@@ -57,26 +60,16 @@ class FormationController extends BaseController
 
     #[Route('/liste-cfvu', name: 'app_formation_liste_cfvu', methods: ['GET'])]
     public function listeCfvu(
-        MentionRepository     $mentionRepository,
-        ComposanteRepository  $composanteRepository,
-        TypeDiplomeRepository $typeDiplomeRepository,
-        FormationRepository   $formationRepository,
-        Request               $request
+        DpeParcoursRepository $dpeParcoursRepository,
     ) {
-        $q = $request->query->get('q') ?? null;
-
         if ($this->isGranted('CAN_ETABLISSEMENT_CONSEILLER_ALL')) {
-            $formationsCfvu = $formationRepository->findBySearchAndCfvu($q, $this->getDpe(), $request->query->all());
-            $isCfvu = true;
+            $allparcours = $dpeParcoursRepository->findByCampagneAndTypeValidation($this->getDpe(), 'soumis_cfvu');
         }
 
-        return $this->render('formation/_liste.html.twig', [
-            'formations' => $formationsCfvu,
-            'mentions' => $mentionRepository->findBy([], ['libelle' => 'ASC']),
-            'composantes' => $composanteRepository->findPorteuse(),
-            'typeDiplomes' => $typeDiplomeRepository->findBy([], ['libelle' => 'ASC']),
-            'params' => $request->query->all(),
-            'isCfvu' => $isCfvu ?? false,
+        return $this->render('validation/_liste.html.twig', [
+            'allparcours' => $allparcours,
+            'etape' => 'cfvu',
+            'isCfvu' => true,
         ]);
     }
 
@@ -86,6 +79,7 @@ class FormationController extends BaseController
         MentionRepository     $mentionRepository,
         ComposanteRepository  $composanteRepository,
         TypeDiplomeRepository $typeDiplomeRepository,
+        MentionProcess                $validationProcess,
         Request               $request,
     ): Response {
         $isCfvu = false;
@@ -104,6 +98,7 @@ class FormationController extends BaseController
             'typeDiplomes' => $typeDiplomeRepository->findBy([], ['libelle' => 'ASC']),
             'params' => $request->query->all(),
             'isCfvu' => false,
+            'process' => $validationProcess->getProcess()
         ]);
     }
 
@@ -179,6 +174,7 @@ class FormationController extends BaseController
 
     #[Route('/liste/{composante}', name: 'app_formation_liste_composante', methods: ['GET'])]
     public function listeComposante(
+        MentionProcess        $validationProcess,
         MentionRepository     $mentionRepository,
         TypeDiplomeRepository $typeDiplomeRepository,
         ComposanteRepository  $composanteRepository,
@@ -202,6 +198,7 @@ class FormationController extends BaseController
             'composantes' => $composanteRepository->findPorteuse(),
             'typeDiplomes' => $typeDiplomeRepository->findAll(),
             'mentions' => $mentionRepository->findAll(),
+            'process' => $validationProcess->getProcess()
         ]);
     }
 
@@ -398,13 +395,14 @@ class FormationController extends BaseController
         }
 
         $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());
-
+        $hasLastVersion = false;
         /**
          * VERSIONING PARCOURS PAR DÉFAUT
          */
         $cssDiff = DiffHelper::getStyleSheet();
         if($formation->isHasParcours() === false && count($formation->getParcours()) === 1) {
             $textDifferencesParcours = $versioningParcours->getDifferencesBetweenParcoursAndLastVersion($formation->getParcours()[0]);
+            $hasLastVersion = $versioningParcours->hasLastVersion($formation->getParcours()[0]);
         }
 
         /**
@@ -419,7 +417,8 @@ class FormationController extends BaseController
             'cssDiff' => $cssDiff,
             'stringDifferencesParcours' => $textDifferencesParcours ?? [],
             'stringDifferencesFormation' => $formationStringDifferences ?? [],
-            'versioningParcours' => $versioningParcours
+            'versioningParcours' => $versioningParcours,
+            'hasLastVersion' => $hasLastVersion,
         ]);
     }
 
@@ -428,6 +427,7 @@ class FormationController extends BaseController
      */
     #[Route('/{slug}/edit', name: 'app_formation_edit', methods: ['GET', 'POST'])]
     public function edit(
+        VersioningParcours $versioningParcours,
         ParcoursState       $parcoursState,
         FormationState      $formationState,
         Request             $request,
@@ -444,13 +444,18 @@ class FormationController extends BaseController
             $parcoursState->setParcours($formation->getParcours()?->first());
         }
 
+        if($formation->isHasParcours() === false && count($formation->getParcours()) === 1) {
+            $hasLastVersion = $versioningParcours->hasLastVersion($formation->getParcours()[0]);
+        }
+
         return $this->render('formation/edit.html.twig', [
             'formation' => $formation,
             'selectedStep' => $request->query->get('step', 1),
             'typeDiplome' => $formation->getTypeDiplome(),
             'parcoursState' => $parcoursState,
             'formationState' => $formationState,
-            'typeD' => $typeD
+            'typeD' => $typeD,
+            'hasLastVersion' => $hasLastVersion ?? null
         ]);
     }
 

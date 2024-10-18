@@ -50,7 +50,7 @@ class LicenceMccc extends AbstractLicenceMccc
         protected ExcelWriter             $excelWriter,
         protected TypeEpreuveRepository             $typeEpreuveRepository
     ) {
-
+        parent::__construct($excelWriter);
         $this->dir = $kernel->getProjectDir() . '/public';
 
     }
@@ -370,9 +370,9 @@ class LicenceMccc extends AbstractLicenceMccc
         $this->excelWriter->removeSheetByIndex(0);
 
         if ($formation->isHasParcours() === true) {
-            $texte = $formation->gettypeDiplome()?->getLibelleCourt() . ' ' . $parcours->getDisplay();
+            $texte = $formation->gettypeDiplome()?->getLibelleCourt(). ' ' . $formation->getSigle() . ' ' . $parcours->getSigle();
         } else {
-            $texte = $formation->gettypeDiplome()?->getLibelleCourt() . ' ' . $formation->getDisplay();
+            $texte = $formation->gettypeDiplome()?->getLibelleCourt() . ' ' . $formation->getSigle();
         }
 
         $this->fileName = Tools::FileName('MCCC - ' . $anneeUniversitaire->getLibelle() . ' - ' . $texte, 50);
@@ -532,7 +532,7 @@ class LicenceMccc extends AbstractLicenceMccc
             $this->excelWriter->writeCellXY(self::COL_RESP_EC, $ligne, '', ['wrap' => true]);
             $this->lignesEcColorees[] = $ligne;
         } elseif ($ec->getNatureUeEc() !== null && $ec->getNatureUeEc()->isChoix() === true && $ec->getEcParent() === null) {
-            $this->excelWriter->writeCellXY(self::COL_INTITULE_EC, $ligne, $ec->getLibelle() . ' (EC à choix restreint, choisir une parmis les choix ci-dessous)', ['wrap' => true]);
+            $this->excelWriter->writeCellXY(self::COL_INTITULE_EC, $ligne, $ec->getLibelle() . ' (EC à choix restreint, choisir un parmi les choix ci-dessous ***)', ['wrap' => true]);
             $this->excelWriter->writeCellXY(self::COL_INTITULE_EC_EN, $ligne, '', ['wrap' => true]);
             $this->excelWriter->writeCellXY(self::COL_RESP_EC, $ligne, '', ['wrap' => true]);
             $this->lignesEcColorees[] = $ligne;
@@ -562,8 +562,10 @@ class LicenceMccc extends AbstractLicenceMccc
 
             // BCC
             $texte = [];
-            foreach ($structureEc->bccs as $comp) {
-                $texte[] = $comp->getCode();
+            if(isset($structureEc->bccs)){
+                foreach ($structureEc->bccs as $comp) {
+                    $texte[] = $comp->getCode();
+                }
             }
 
             //suppression des doublons

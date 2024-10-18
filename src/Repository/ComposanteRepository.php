@@ -70,4 +70,11 @@ class ComposanteRepository extends ServiceEntityRepository
             ->orderBy('c.libelle', 'ASC')
             ->getQuery()->getResult();
     }
+
+    public function findAllId()
+    {
+        $qb = $this->createQueryBuilder('c');
+        $qb->select('c.id, c.libelle, c.sigle');
+        return $qb->getQuery()->getResult();
+    }
 }

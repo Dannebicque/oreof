@@ -3,48 +3,45 @@
     urlUpdateComptence: path('app_parcours_bcc_update_competence', {parcours: parcours.id})
 }) }}>
     <div class="card-body">
-        {% for semParc in parcours.semestreParcours|filter(semestre => semestre.semestre.nonDispense == false) %}
-            {% if semParc.semestre.semestreRaccroche != null %}
-                {% set semestre = semParc.semestre.semestreRaccroche %}
-            {% else %}
-                {% set semestre = semParc %}
-            {% endif %}
-            <h2>{{ semParc.display }}</h2>
+        {% for semestre in dto.semestres %}
+            <h2>{{ semestre.semestreParcours.display }}</h2>
             <table class="table table-bordered table-hover">
                 <thead>
                 <tr>
                     <th colspan="2" rowspan="2">&nbsp;</th>
-                    {% for ue in semestre.semestre.ues|filter(ue => ue.ueParent == null) %}
-                        {% if ue.ueEnfants|length == 0 %}
+                    {% for ue in semestre.ues %}
+                        {% if ue.uesEnfants|length == 0 %}
                             <th colspan="{{ ue.elementConstitutifs|length }}"
-                                class="text-center">{{ ue.display(parcours) }}</th>
+                                class="text-center">{{ ue.display }}</th>
                         {% else %}
-                            {% for uee in ue.ueEnfants %}
+                            {% for uee in ue.uesEnfants %}
                                 <th colspan="{{ uee.elementConstitutifs|length }}"
-                                    class="text-center">{{ uee.display(parcours) }}</th>
+                                    class="text-center">{{ uee.display }}</th>
                             {% endfor %}
                         {% endif %}
                     {% endfor %}
                 </tr>
                 <tr>
-                    {% for ue in semestre.semestre.ues|filter(ue => ue.ueParent == null) %}
-                        {% if ue.ueEnfants|length == 0 %}
+                    {% for ue in semestre.ues %}
+                        {% if ue.uesEnfants|length == 0 %}
                             {% for ec in ue.elementConstitutifs %}
-                                <th class="text-center">{{ ec.code }} <i class="fal fa-question-circle ms-1"
-                                                                         data-controller="tooltip"
-                                                                         data-tooltip-placement-value="bottom"
-                                                                         title="{{ ec.display }}"></i>
+                                <th class="text-center">{{ ec.elementConstitutif.code }} <i
+                                            class="fal fa-question-circle ms-1"
+                                            data-controller="tooltip"
+                                            data-tooltip-placement-value="bottom"
+                                            title="{{ ec.elementConstitutif.display }}"></i>
                                 </th>
                             {% endfor %}
                         {% else %}
-                            {% for uee in ue.ueEnfants %}
+                            {% for uee in ue.uesEnfants %}
                                 {% for ec in uee.elementConstitutifs %}
-                                <th class="text-center">{{ ec.code }} <i class="fal fa-question-circle ms-1"
-                                                                         data-controller="tooltip"
-                                                                         data-tooltip-placement-value="bottom"
-                                                                         title="{{ ec.display }}"></i>
-                                </th>
-                            {% endfor %}
+                                    <th class="text-center">{{ ec.elementConstitutif.code }} <i
+                                                class="fal fa-question-circle ms-1"
+                                                data-controller="tooltip"
+                                                data-tooltip-placement-value="bottom"
+                                                title="{{ ec.elementConstitutif.display }}"></i>
+                                    </th>
+                                {% endfor %}
                             {% endfor %}
                         {% endif %}
                     {% endfor %}
@@ -59,30 +56,23 @@
                             {% endif %}
                             {# todo: faire une classe qui calcul le référentiel en amaont, nootamment pour gérer le raccrocher #}
                             <td>{{ competence.display }}</td>
-                            {% for ue in semestre.semestre.ues|filter(ue => ue.ueParent == null) %}
-                                {% if ue.ueEnfants|length == 0 %}
+                            {% for ue in semestre.ues %}
+                                {% if ue.uesEnfants|length == 0 %}
                                     {% for ec in ue.elementConstitutifs %}
                                         <td class="text-center">
                                             {% set checked = "" %}
-                                            {% if ec.ficheMatiere != null and
-                                                ec.ficheMatiere.parcours != null and
-                                                ec.ficheMatiere.parcours.id == parcours.id %}
-                                                {% if competence.ficheMatieress.contains(ec.ficheMatiere) %}
-                                                    {% set checked = "X" %}
-                                                {% endif %}
-                                            {% else %}
-                                                {% if competence.elementConstitutifs.contains(ec) %}
-                                                    {% set checked = "X" %}
-                                                {% endif %}
+                                            {% if competence.code in ec.bccs|keys %}
+                                                {% set checked = "X" %}
                                             {% endif %}
                                             {% if editable == true %}
-                                                <label class="sr-only" for="competences_{{ competence.id }}_{{ ec.id }}">Compétence
+                                                <label class="sr-only"
+                                                       for="competences_{{ competence.id }}_{{ ec.elementConstitutif.id }}">Compétence
                                                     mobilisée</label>
                                                 <input type="checkbox" class="form-check"
-                                                       id="competences_{{ competence.id }}_{{ ec.id }}"
+                                                       id="competences_{{ competence.id }}_{{ ec.elementConstitutif.id }}"
                                                         {{ stimulus_action('parcours--bcc', 'updateCompetence', 'change', {
                                                             competence: competence.id,
-                                                            ec: ec.id
+                                                            ec: ec.elementConstitutif.id
                                                         }) }}
                                                        value="X"
                                                         {% if checked == "X" %}checked{% endif %}>
@@ -92,29 +82,22 @@
                                         </td>
                                     {% endfor %}
                                 {% else %}
-                                    {% for uee in ue.ueEnfants %}
+                                    {% for uee in ue.uesEnfants %}
                                         {% for ec in uee.elementConstitutifs %}
                                             <td class="text-center">
                                                 {% set checked = "" %}
-                                                {% if ec.ficheMatiere != null and
-                                                    ec.ficheMatiere.parcours != null and
-                                                    ec.ficheMatiere.parcours.id == parcours.id %}
-                                                    {% if competence.ficheMatieress.contains(ec.ficheMatiere) %}
-                                                        {% set checked = "X" %}
-                                                    {% endif %}
-                                                {% else %}
-                                                    {% if competence.elementConstitutifs.contains(ec) %}
-                                                        {% set checked = "X" %}
-                                                    {% endif %}
+                                                {% if competence.code in ec.bccs|keys %}
+                                                    {% set checked = "X" %}
                                                 {% endif %}
                                                 {% if editable == true %}
-                                                    <label class="sr-only" for="competences_{{ competence.id }}_{{ ec.id }}">Compétence
+                                                    <label class="sr-only"
+                                                           for="competences_{{ competence.id }}_{{ ec.elementConstitutif.id }}">Compétence
                                                         mobilisée</label>
                                                     <input type="checkbox" class="form-check"
-                                                           id="competences_{{ competence.id }}_{{ ec.id }}"
+                                                           id="competences_{{ competence.id }}_{{ ec.elementConstitutif.id }}"
                                                             {{ stimulus_action('parcours--bcc', 'updateCompetence', 'change', {
                                                                 competence: competence.id,
-                                                                ec: ec.id
+                                                                ec: ec.elementConstitutif.id
                                                             }) }}
                                                            value="X"
                                                             {% if checked == "X" %}checked{% endif %}>

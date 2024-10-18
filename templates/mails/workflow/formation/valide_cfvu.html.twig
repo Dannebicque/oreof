@@ -1,16 +1,25 @@
 {% extends 'mails/base_mail.html.twig' %}
 
 {% block content %}
+    {% if parcours.isParcoursDefaut == true %}
+    {% set texteFormation = 'la formation <strong>'~ formation.displayLong ~'</strong>' %}
+    {% else %}
+    {% set texteFormation = 'le parcours <strong>'~ parcours.libelle ~'</strong> de la formation <strong>'~ formation.displayLong ~'</strong>' %}
+    {% endif %}
+
+
+
     <p>Bonjour,</p>
 
     {% if context.acceptationDirecte is defined and context.acceptationDirecte  == true %}
-        <p>La CFVU du {{ context.date|date('d/m/Y')}} a validé la formation <strong>{{ formation.displayLong }}</strong>.</p>
+        <p>La CFVU du {{ context.date|date('d/m/Y')}} a validé {{ texteFormation|raw }}.</p>
     {% else %}
-        <p>La CFVU du {{ context.date|date('d/m/Y')}} a validé la formation <strong>{{ formation.displayLong }}</strong> avec les réserves ci-dessous :
+        <p>La CFVU du {{ context.date|date('d/m/Y')}} a validé {{ texteFormation|raw }} avec les réserves ci-dessous :
         </p>
         <ul>
+            {# todo: géré au parcours ?? #}
             {% if context.sousReserveConseil is defined and context.sousReserveConseil  == true %}
-                <p>- Sous réserve du dépôt du PV du conseil de composante. Vous pouvez retourner sur la fiche descriptive de cette formation et téléverser le PV dans le menu du processus de validation ou vous pouvez déposer un même PV pour un ensemble de formation en accédant au menu "mes composantes" puis "Processus validation"</p>
+                <p>- Sous réserve du dépôt du PV du conseil de composante. Vous pouvez retourner sur la fiche descriptive de cette formation ou du parcours (<a href="{{ url('app_formation_show', {'slug': formation.slug}) }}">{{ url('app_formation_show', {'slug': formation.slug}) }}</a>) et téléverser le PV dans le menu du processus de validation ou vous pouvez déposer un même PV pour un ensemble de formations/parcours en accédant au menu "mes composantes" puis "Processus validation"</p>
             {% endif %}
             {% if context.sousReserveModifications is defined and context.sousReserveModifications  == true %}
                 <p>- Sous réserve des modifications suivantes

@@ -4,14 +4,14 @@ namespace App\Controller;
 
 use App\Classes\Excel\ExcelWriter;
 use App\Classes\ValidationProcess;
+use App\Classes\ValidationProcessChangeRf;
 use App\Classes\ValidationProcessFicheMatiere;
 use App\Entity\Composante;
-use App\Enums\EtatDemandeChangeRfEnum;
 use App\Repository\ChangeRfRepository;
 use App\Repository\ComposanteRepository;
+use App\Repository\DpeParcoursRepository;
 use App\Repository\FicheMatiereRepository;
-use App\Repository\FormationRepository;
-
+use App\Repository\ParcoursRepository;
 use App\Utils\Tools;
 use DateTime;
 use Symfony\Component\HttpFoundation\Request;
@@ -77,6 +77,7 @@ class ValidationController extends BaseController
     public function wizard(
         Request $request,
         ValidationProcessFicheMatiere    $validationProcessFicheMatiere,
+        ValidationProcessChangeRf    $validationProcessChangeRf,
         ValidationProcess    $validationProcess,
         ComposanteRepository $composanteRepository,
     ): Response {
@@ -97,7 +98,7 @@ class ValidationController extends BaseController
                     'ses' => $isSes,
                     'composante' => $composante,
                     'composantes' => $composanteRepository->findAll(),
-                    'types_validation' => $validationProcess->getProcess(),
+                    'types_validation' => $validationProcess->getProcessAll(),
                 ]);
             case 'fiche':
                 return $this->render('validation/_fiches.html.twig', [
@@ -109,7 +110,7 @@ class ValidationController extends BaseController
             case 'changeRf':
                 return $this->render('validation/_changeRf.html.twig', [
                     'composantes' => $composanteRepository->findAll(),
-                    'types_validation' => EtatDemandeChangeRfEnum::cases()
+                    'types_validation' => $validationProcessChangeRf->getProcess()
                 ]);
         }
     }
@@ -136,7 +137,7 @@ class ValidationController extends BaseController
     public function liste(
         ValidationProcess    $validationProcess,
         ComposanteRepository $composanteRepository,
-        FormationRepository  $formationRepository,
+        DpeParcoursRepository  $dpeParcoursRepository,
         Request              $request
     ): Response {
         $typeValidation = $request->query->get('typeValidation');
@@ -144,35 +145,30 @@ class ValidationController extends BaseController
 
         if ($request->query->has('composante')) {
             if ($request->query->get('composante') === 'all') {
-                $composante = null;
-                $formations = $formationRepository->findByTypeValidation($this->getDpe(), $process['transition']);
+                $allparcours = $dpeParcoursRepository->findByCampagneAndTypeValidation($this->getDpe(), $typeValidation);
             } else {
                 $composante = $composanteRepository->find($request->query->get('composante'));
                 if (!$composante) {
                     throw $this->createNotFoundException('La composante n\'existe pas');
                 }
-                $formations = $formationRepository->findByComposanteTypeValidation($composante, $this->getDpe(), $process['transition']);
+                $allparcours = $dpeParcoursRepository->findByComposanteAndCampagneAndTypeValidation($composante, $this->getDpe(), $typeValidation);
             }
-
-
-
-
         } else {
-            $formations = [];
             $process = null;
         }
 
         $composantes = $composanteRepository->findAll();
         return $this->render('validation/_liste.html.twig', [
             'process' => $process,
-            'formations' => $formations,
-            'composantes' => $composantes,
+            'allparcours' => $allparcours,
+          //  'composantes' => $composantes,
             'etape' => $typeValidation ?? null,
         ]);
     }
 
     #[Route('/validation/liste-change-rf', name: 'app_validation_formation_liste_changerf')]
     public function listeChangeRf(
+        ValidationProcessChangeRf    $validationProcess,
         ChangeRfRepository $changeRfRepository,
         ComposanteRepository $composanteRepository,
         Request              $request
@@ -180,27 +176,21 @@ class ValidationController extends BaseController
         $typeValidation = $request->query->get('typeValidation');
 
         if ($request->query->has('composante')) {
-            if ($request->query->get('composante') === 'all' && $request->query->get('composante') === 'all') {
+            if ($request->query->get('composante') === 'all' && $typeValidation === 'all') {
                 $demandes = $changeRfRepository->findBy([], ['dateDemande' => 'DESC']);
-            }  elseif ($request->query->get('composante') === 'all' && $request->query->get('type_validation') !== 'all') {
-                $composante = null;
-                $demandes = $changeRfRepository->findByTypeValidation(['etatDemande' => $request->query->get('type_validation')]);
+            } elseif ($request->query->get('composante') === 'all' && $typeValidation !== 'all') {
+                $demandes = $changeRfRepository->findByTypeValidation($typeValidation);
             } else {
                 $composante = $composanteRepository->find($request->query->get('composante'));
                 if (!$composante) {
                     throw $this->createNotFoundException('La composante n\'existe pas');
                 }
-                $demandes = $changeRfRepository->findByComposanteTypeValidation($composante, $request->query->get('type_validation'));
+                $demandes = $changeRfRepository->findByComposanteTypeValidation($composante, $typeValidation);
             }
-
-
-
-
         } else {
             $formations = [];
         }
 
-        $composantes = $composanteRepository->findAll();
         return $this->render('validation/_listeChangeRf.html.twig', [
             'demandes' => $demandes,
             'etape' => $typeValidation ?? null,

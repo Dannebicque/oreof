@@ -7,6 +7,7 @@ use App\Entity\Composante;
 use App\Message\Export;
 use App\Repository\CampagneCollecteRepository;
 use App\Repository\ComposanteRepository;
+use App\Repository\DpeParcoursRepository;
 use App\Repository\FormationRepository;
 use App\Utils\Tools;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,8 +21,9 @@ class ExportController extends BaseController
         "xlsx-mccc" => 'MCCC format Excel (xslx)',
         "xlsx-cap" => 'Export CAP format excel (xslx)',
         "pdf-mccc" => 'MCCC format PDF',
-        "xlsx-light_mccc" => 'MCCC simplifiés format Excel (xslx)',
-        "pdf-light_mccc" => 'MCCC simplifiés format PDF',
+        "xlsx-light_mccc" => 'MCCC simplifiées format Excel (xslx)',
+        "xlsx-version_mccc" => 'MCCC versionnées format Excel (xslx)',
+        "pdf-light_mccc" => 'MCCC simplifiées format PDF',
         "pdf-fiches" => 'Fiches descriptions format PDF'
     ];
 
@@ -100,26 +102,26 @@ class ExportController extends BaseController
 
     #[Route('/export/liste', name: 'app_export_liste')]
     public function liste(
+        DpeParcoursRepository $dpeParcoursRepository,
         ComposanteRepository $composanteRepository,
-        FormationRepository  $formationRepository,
         Request              $request
     ): Response {
         $composante = $composanteRepository->find($request->query->get('composante', null));
-//todo: gérer l'année du DPE en liste déroualante
+
         if (!$composante) {
             throw $this->createNotFoundException('La composante n\'existe pas');
         }
 
-        if ($this->isGranted('ROLE_SES')) {
-            $formations = $formationRepository->findByComposante($composante, $this->getDpe());
+        if ($this->isGranted('ROLE_SES') || $this->isGranted('CAN_ETABLISSEMENT_SHOW_ALL', $this->getUser())) {
+            $dpes = $dpeParcoursRepository->findParcoursByComposante($this->getDpe(), $composante);
         } elseif ($this->isGranted('CAN_ETABLISSEMENT_CONSEILLER_ALL', $this->getUser())) {
-            $formations = $formationRepository->findByComposanteCfvu($composante, $this->getDpe());
+            $dpes = $dpeParcoursRepository->findParcoursByComposanteCfvu($this->getDpe(), $composante);
         } else {
-            $formations = [];
+            $dpes = [];
         }
 
         return $this->render('export/_liste.html.twig', [
-            'formations' => $formations
+            'dpes' => $dpes
         ]);
     }
 
@@ -138,7 +140,7 @@ class ExportController extends BaseController
             $this->getUser()?->getId(),
             $request->request->get('type_document'),
             $request->request->all()['liste'] ?? [],
-            $annee->getId(),
+            $this->getDpe(),
             Tools::convertDate($request->request->get('date', null))
         ));
 

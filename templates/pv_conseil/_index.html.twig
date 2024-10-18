@@ -3,8 +3,17 @@
     message: ('deposer.fichier.valide.alerte')|trans({}, 'process')|nl2br|raw
 }) }}
 
-<form action="{{ path('app_deposer_pv_conseil', {formation:formation.id}) }}" method="post"
+<form action="{{ path('app_deposer_pv_conseil', {parcours:parcours.id}) }}" method="post"
       enctype="multipart/form-data">
+    <div>
+        <label for="dateconseil" class="form-label">{{ ('valide.date.conseil.label')|trans({}, 'process') }} <i
+                    class="fal fa-question-circle ms-1"
+                    data-controller="tooltip"
+                    data-tooltip-placement-value="bottom"
+                    aria-label="{{ ('valide.date.conseil.help')|trans({}, 'process') }}"
+                    data-bs-original-title="{{ ('valide.date.conseil.help')|trans({}, 'process') }}"></i></label>
+        <input type="date" name="dateconseil" id="dateconseil" class="form-control">
+    </div>
     <div>
         <label for="file" class="form-label">{{ ('valide.deposer.fichier.label')|trans({}, 'process') }} <i
                     class="fal fa-question-circle ms-1"

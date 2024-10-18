@@ -2,13 +2,18 @@
 
 namespace App\Controller;
 
+use App\Classes\GetDpeParcours;
+use App\Classes\GetHistorique;
 use App\Classes\JsonReponse;
 use App\Classes\Mailer;
 use App\Classes\Process\FormationProcess;
 use App\Classes\ValidationProcess;
 use App\Entity\Formation;
 use App\Entity\HistoriqueFormation;
+use App\Entity\HistoriqueParcours;
+use App\Entity\Parcours;
 use App\Events\HistoriqueFormationEvent;
+use App\Utils\Tools;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
@@ -23,57 +28,71 @@ class PvConseilController extends AbstractController
 {
     public const EMAIL_CENTRAL = 'cfvu-secretariat@univ-reims.fr'; //todo: a mettre sur établissement ?
 
-    #[Route('/pv/conseil/{formation}', name: 'app_deposer_pv_conseil')]
+    #[Route('/pv/conseil/{parcours}', name: 'app_deposer_pv_conseil')]
     public function index(
+        GetHistorique $getHistorique,
         Mailer $myMailer,
         KernelInterface $kernel,
         EntityManagerInterface $entityManager,
         TranslatorInterface $translator,
         Request $request,
-        Formation $formation,
+        Parcours $parcours,
     ): Response
     {
         if ($request->isMethod('POST')) {
             $dir = $kernel->getProjectDir().'/public/uploads/conseils/';
-            $histo = new HistoriqueFormation();
-            $histo->setFormation($formation);
-            $histo->setDate(new DateTime());
-            $histo->setUser($this->getUser());
-            $histo->setEtape('conseil');
-            $histo->setEtat('valide');
+            $dpeParcours = GetDpeParcours::getFromParcours($parcours);
+            if ($dpeParcours !== null) {
+                $conseilLaisserPasser = $getHistorique->getHistoriqueParcoursLastStep($dpeParcours, 'soumis_conseil');
+                if ($conseilLaisserPasser !== null && $conseilLaisserPasser->getEtat() === 'laisserPasser') {
+                    $histo = $conseilLaisserPasser;
+                } else {
+                    $histo = new HistoriqueParcours();
+                    $histo->setParcours($parcours);
+                    $histo->setUser($this->getUser());
+                    $histo->setEtape('soumis_conseil');
 
-            //upload
-            if ($request->files->has('file') && $request->files->get('file') !== null) {
-                $file = $request->files->get('file');
-                $fileName = md5(uniqid('', true)) . '.' . $file->guessExtension();
-                $file->move(
-                    $dir,
-                    $fileName
+                }
+                $histo->setEtat('valide');
+                if ($request->request->has('dateconseil') && $request->request->get('dateconseil') !== null) {
+                    $histo->setDate(Tools::convertDate($request->request->get('dateconseil')));
+                }
+
+                //upload
+                if ($request->files->has('file') && $request->files->get('file') !== null) {
+                    $file = $request->files->get('file');
+                    $fileName = md5(uniqid('', true)) . '.' . $file->guessExtension();
+                    $file->move(
+                        $dir,
+                        $fileName
+                    );
+                    $tab['fichier'] = $fileName;
+                } else {
+                    return JsonReponse::success($translator->trans('deposer.pv.flash.error', [], 'process'));
+                }
+
+                $histo->setComplements($tab ?? []);
+                $entityManager->persist($histo);
+                $entityManager->flush();
+
+                //todo:  mail à la CFVU, avec un event ? ou workflow sur laisserPasser
+                $myMailer->initEmail();
+                $myMailer->setTemplate(
+                    'mails/workflow/formation/conseil_pv_depose.html.twig',
+                    ['parcours' => $parcours]
+                ); //todo: revoir le texte du mail si avec ou sans parcours
+                $myMailer->sendMessage(
+                    [self::EMAIL_CENTRAL],
+                    '[ORéOF]  Le PV de conseil a été déposé pour le parcours ' . $parcours->getLibelle()
                 );
-                $tab['fichier'] = $fileName;
-            } else {
-                return JsonReponse::success($translator->trans('deposer.pv.flash.error', [], 'process'));
+
+                return JsonReponse::success($translator->trans('deposer.pv.flash.success', [], 'process'));
             }
 
-            $histo->setComplements($tab ?? []);
-            $entityManager->persist($histo);
-            $entityManager->flush();
-
-            //todo:  mail à la CFVU, avec un event ? ou workflow sur laisserPasser
-            $myMailer->initEmail();
-            $myMailer->setTemplate(
-                'mails/workflow/formation/conseil_pv_depose.html.twig',
-                ['formation' => $formation]
-            );
-            $myMailer->sendMessage(
-                [self::EMAIL_CENTRAL],
-                '[ORéOF]  Le PV de conseil a été déposé pour la formation '.$formation->getDisplayLong()
-            );
-
-            return JsonReponse::success($translator->trans('deposer.pv.flash.success', [], 'process'));
+            return JsonReponse::error('Pas de DPE associé au parcours');
         }
         return $this->render('pv_conseil/_index.html.twig', [
-            'formation' => $formation,
+            'parcours' => $parcours,
         ]);
     }
 }

@@ -182,8 +182,14 @@ class ExportBcc implements ExportInterface
         }
 
         $this->excelWriter->borderOutsiteInside(1, 7, $col-1, $ligne-1);
+        $formation = $parcours->getFormation();
+        if ($parcours->isParcoursDefaut() === false) {
+            $texte = $formation->gettypeDiplome()?->getLibelleCourt(). ' ' . $formation->getSigle() . ' ' . $parcours->getSigle();
+        } else {
+            $texte = $formation->gettypeDiplome()?->getLibelleCourt() . ' ' . $formation->getSigle();
+        }
 
-        $this->fileName = Tools::FileName('BCC Croisé Global - ' . $parcours->getDisplay() . ' ' . (new DateTime())->format('d-m-Y-H-i'), 30);
+        $this->fileName = Tools::FileName('BCC Croisé Global - ' . $texte . ' ' . (new DateTime())->format('d-m-Y-H-i'), 30);
     }
 
     public function export(Parcours $parcours): StreamedResponse

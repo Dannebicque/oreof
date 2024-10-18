@@ -60,6 +60,7 @@ class ExportCap
         $this->excelWriter->writeCellXY(12, 1, 'TD');
         $this->excelWriter->writeCellXY(13, 1, 'TP');
         $this->excelWriter->writeCellXY(14, 1, 'MATI/MATM');
+        $this->excelWriter->writeCellXY(15, 1, 'Semestre');
 
         $this->ligne = 2;
         foreach ($formations as $idFormation) {
@@ -79,6 +80,7 @@ class ExportCap
                     //récuération de la structure et des EC
                     $dto = $this->calculStructureParcours->calcul($parcours);
                     foreach ($dto->semestres as $ordre => $sem) {
+                        $this->data[5] = 'S'.$ordre;
                         foreach ($sem->ues as $ue) {
                             if ($ue->ue->getNatureUeEc()?->isChoix()) {
                                 foreach ($ue->uesEnfants() as $ueEnfant) {
@@ -92,7 +94,7 @@ class ExportCap
                             }
                         }
 
-                        $this->excelWriter->getColumnsAutoSize('A', 'I');
+                        $this->excelWriter->getColumnsAutoSize('A', 'P');
                     }
                 }
             }
@@ -131,14 +133,15 @@ class ExportCap
             $this->excelWriter->writeCellXY(12, $this->ligne, $ec->heuresEctsEc->tdPres);
             $this->excelWriter->writeCellXY(13, $this->ligne, $ec->heuresEctsEc->tpPres);
             $this->excelWriter->writeCellXY(14, $this->ligne, $ec->elementConstitutif->getFicheMatiere()?->getTypeApogee() ?? '-');
+            $this->excelWriter->writeCellXY(15, $this->ligne, $this->data[5]);
             $this->ligne++;
         }
     }
 
 
-    public function export(CampagneCollecte $anneeUniversitaire): StreamedResponse
+    public function export(array $formations): StreamedResponse
     {
-        $this->prepareExport($anneeUniversitaire);
+        $this->prepareExport($formations);
         return $this->excelWriter->genereFichier($this->fileName);
     }
 

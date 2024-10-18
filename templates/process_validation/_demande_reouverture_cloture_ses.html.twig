@@ -5,27 +5,32 @@
 
 <form action="{{ path('app_validation_demande_reouverture_cloture', {type:type, id:id}) }}" method="post"
       enctype="multipart/form-data">
-    <p>
-        <strong>{{ ('demande.reouverture.cloture.ses.label')|trans({}, 'process') }}</strong>
-        <i
-                class="fal fa-question-circle ms-1"
-                data-controller="tooltip"
-                data-tooltip-placement-value="bottom"
-                aria-label="{{ ('demande.reouverture.ses.help')|trans({}, 'process') }}"
-                data-bs-original-title="{{ ('demande.reouverture.ses.help')|trans({}, 'process') }}"></i>
-    </p>
     <div class="form-check mt-2">
-        <input class="form-check-input" type="radio" value="VALIDE_MODIFICATION_SANS_CFVU" id="modificationTexte"
-               name="demandeReouverture">
-        <label class="form-check-label" for="modificationTexte">
-            <strong>{{ ('demande.reouverture.modification.ses.sans_cfvu.label')|trans({}, 'process') }}</strong>
+        {% if type_modif == 'MODIFICATION_TEXTE' %}
+            <input class="form-check-input" type="radio" value="{{ type_modif }}" id="confirmeCloture"
+                   name="confirmeCloture">
+            <label class="form-check-label" for="confirmeCloture">
+                <strong>{{ ('demande.reouverture.cloture.sans_cfvu.ses.label')|trans({}, 'process') }}</strong>
+                <i
+                        class="fal fa-question-circle ms-1"
+                        data-controller="tooltip"
+                        data-tooltip-placement-value="bottom"
+                        aria-label="{{ ('demande.reouverture.cloture.sans_cfvu.ses.help')|trans({}, 'process') }}"
+                        data-bs-original-title="{{ ('demande.reouverture.cloture.sans_cfvu.sesu.help')|trans({}, 'process') }}"></i>
+            </label>
+        {% else %}
+        <input class="form-check-input" type="radio" value="{{ type_modif }}" id="confirmeCloture"
+               name="confirmeCloture">
+        <label class="form-check-label" for="confirmeCloture">
+            <strong>{{ ('demande.reouverture.cloture.ses.label')|trans({}, 'process') }}</strong>
             <i
                     class="fal fa-question-circle ms-1"
                     data-controller="tooltip"
                     data-tooltip-placement-value="bottom"
-                    aria-label="{{ ('demande.reouverture.modification.ses.sans_cfvu.help')|trans({}, 'process') }}"
-                    data-bs-original-title="{{ ('demande.reouverture.modification.ses.sans_cfvu.help')|trans({}, 'process') }}"></i>
+                    aria-label="{{ ('demande.reouverture.cloture.ses.help')|trans({}, 'process') }}"
+                    data-bs-original-title="{{ ('demande.reouverture.cloture.ses.help')|trans({}, 'process') }}"></i>
         </label>
+        {% endif %}
     </div>
 
     <div>
@@ -48,7 +53,11 @@
 {#                data-event="valide"#}
         >
             <i class="fal fa-floppy-disk"></i>
-            {{ ('btn.demande.reouverture.cloture')|trans({}, 'process') }}
+            {% if type_modif == 'MODIFICATION_TEXTE' %}
+            {{ ('btn.demande.reouverture.cloture.sans_cfvu.ses')|trans({}, 'process') }}
+            {% else %}
+            {{ ('btn.demande.reouverture.cloture.ses')|trans({}, 'process') }}
+            {% endif %}
         </button>
     </div>
 </form>

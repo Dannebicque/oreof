@@ -63,6 +63,10 @@ class GetElementConstitutif
             return $this->elementConstitutif->getFicheMatiere()?->getMcccs();
         }
 
+        if ($this->elementConstitutif->getEcParent() !== null && $this->elementConstitutif->getEcParent()->isMcccEnfantsIdentique()) {
+            return $this->elementConstitutif->getEcParent()?->getMcccs();
+        }
+
         if ($this->elementConstitutif->isSynchroMccc() === true && $this->isRaccroche() === true) {
             return $this->getElementConstitutif()->getMcccs();
         }
@@ -102,6 +106,22 @@ class GetElementConstitutif
         }
         return $this->elementConstitutif;
     }
+
+    public function getFicheMatiereHeures() : FicheMatiere|ElementConstitutif {
+        $ficheMatiere = $this->elementConstitutif->getFicheMatiere() ?? $this->elementConstitutif;
+        if($this->elementConstitutif instanceof ElementConstitutif){
+            if($this->elementConstitutif->isHeuresSpecifiques()){
+                $ficheMatiere = $this->elementConstitutif;
+            }
+            if($this->elementConstitutif->getEcParent()?->isHeuresEnfantsIdentiques()){
+                if(!$this->elementConstitutif->getFicheMatiere()?->isVolumesHorairesImpose()){
+                    $ficheMatiere = $this->elementConstitutif->getEcParent();
+                }
+            }
+        }
+
+        return $ficheMatiere;
+    }   
 
     public function isRaccroche():bool
     {

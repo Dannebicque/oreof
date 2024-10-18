@@ -187,18 +187,6 @@
 {% endblock %}
 
 {% block bouton_header %}
-    {% if hasLastVersion %}
-        <a href="{{ path('app_parcours_mccc_export_versionning', {parcours:parcours.id, _format:'xlsx'}) }}"
-           class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2"
-           data-bs-toggle="tooltip"
-           data-bs-placement="bottom"
-           title="Télécharger en XLSX"
-        >
-            <i class="{{ iconDownload }}"></i>
-            <span> MCCC versionnés</span>
-        </a>
-    {% endif %}
-
     {{ include('btn/export_mccc.html.twig') }}
 
     <div class="btn-group">

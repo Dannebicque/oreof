@@ -10,6 +10,8 @@
 namespace App\Twig;
 
 use App\Classes\GetDpeParcours;
+use App\Entity\ChangeRf;
+use App\Entity\DpeParcours;
 use App\Entity\FicheMatiere;
 use App\Entity\Formation;
 use App\Entity\Parcours;
@@ -25,6 +27,8 @@ class WorkflowExtension extends AbstractExtension
         private readonly WorkflowInterface $ficheWorkflow,
         #[Target('dpeParcours')]
         private readonly WorkflowInterface $dpeParcoursWorkflow,
+        #[Target('changeRf')]
+        private readonly WorkflowInterface $changeRfWorkflow,
     ) {
     }
 
@@ -37,18 +41,15 @@ class WorkflowExtension extends AbstractExtension
             new TwigFunction('isPublie', [$this, 'isPublie']),
             new TwigFunction('isPlace', [$this, 'isPlace']),
             new TwigFunction('hasHistorique', [$this, 'hasHistorique']),
+            new TwigFunction('hasTransitions', [$this, 'hasTransitions']),
         ];
     }
 
     public function hasHistorique(
-        Parcours|FicheMatiere|Formation $entity,
+        Parcours|FicheMatiere|Formation|ChangeRf $entity,
         string                $key,
         array                 $historique
     ): string {
-        if ($key === 'vp') { //todo: temporaire pour phase 1 ou VP = SES
-            $key = 'ses';
-        }
-
         if (array_key_exists($key, $historique)) {
             return match ($historique[$key]->getEtat()) {
                 'valide' => 'btn-success',
@@ -62,54 +63,58 @@ class WorkflowExtension extends AbstractExtension
         return 'btn-muted';
     }
 
-    public function isPlace(string $workflow, Parcours|FicheMatiere|Formation $entity, string $place): bool
+    public function isPlace(string $workflow, Parcours|FicheMatiere|Formation|ChangeRf $entity, string $place): bool
     {
         $actualPlaces = $this->getPlacesFromEntity($entity, $workflow);
-
         if ($actualPlaces === false) {
             return false;
         }
 
-        if (array_key_exists('en_cours_redaction', $actualPlaces) && $entity instanceof Formation && $place === 'formation') {
-            return true;
-        }
-
-        if (array_key_exists('soumis_dpe_composante', $actualPlaces) && $entity instanceof Formation && $place === 'dpe') {
-            return true;
-        }
-
-        if (array_key_exists('soumis_conseil', $actualPlaces) && $entity instanceof Formation && $place === 'conseil') {
-            return true;
-        }
-
-        if (
-            (array_key_exists('soumis_central', $actualPlaces) && $entity instanceof Formation && ($place === 'ses' || $place === 'vp')) ||
-            (array_key_exists('soumis_vp', $actualPlaces) && $entity instanceof Formation && ($place === 'ses' || $place === 'vp'))) {
-            //todo: sur cette phase SES et VP sont confondus
-            return true;
-        }
-
-        if (
-            array_key_exists('soumis_cfvu', $actualPlaces) && $entity instanceof Formation && $place === 'cfvu') {
-            return true;
-        }
-
-        if (
-            array_key_exists('valide_pour_publication', $actualPlaces) && $entity instanceof Formation && $place === 'publication') {
-            return true;
-        }
-
-        if (array_key_exists('en_cours_redaction', $actualPlaces) && $entity instanceof Parcours && $place === 'parcours') {
-            return true;
-        }
-
-        if (array_key_exists('en_cours_redaction', $actualPlaces) && $entity instanceof FicheMatiere && $place === 'fiche_matiere') {
-            return true;
-        }
-
-        if (array_key_exists('soumis_parcours', $actualPlaces) && $entity instanceof Parcours && $place === 'parcours_rf') {
-            return true;
-        }
+//        if (array_key_exists('en_cours_redaction', $actualPlaces) && $entity instanceof Formation && $place === 'formation') {
+//            return true;
+//        }
+//
+//        if (array_key_exists('soumis_dpe_composante', $actualPlaces) && ($entity instanceof Formation || $entity instanceof Parcours) && $place === 'dpe') {
+//            return true;
+//        }
+//
+//        if (array_key_exists('soumis_conseil', $actualPlaces) && ($entity instanceof Formation || $entity instanceof Parcours) && $place === 'conseil') {
+//            return true;
+//        }
+//
+//        if (
+//            (array_key_exists('soumis_central', $actualPlaces) && ($entity instanceof Formation || $entity instanceof Parcours) && ($place === 'ses' || $place === 'vp')) ||
+//            (array_key_exists('soumis_vp', $actualPlaces) && ($entity instanceof Formation || $entity instanceof Parcours) && ($place === 'ses' || $place === 'vp'))) {
+//            //todo: sur cette phase SES et VP sont confondus
+//            return true;
+//        }
+//
+//        if (
+//            array_key_exists('soumis_cfvu', $actualPlaces) && ($entity instanceof Formation || $entity instanceof Parcours ) && $place === 'cfvu') {
+//            return true;
+//        }
+//
+//        if (
+//            array_key_exists('valide_pour_publication', $actualPlaces) && ($entity instanceof Formation || $entity instanceof Parcours ) && $place === 'publication') {
+//            return true;
+//        }
+//
+//        if (
+//            array_key_exists('valide_a_publier', $actualPlaces) && ($entity instanceof Formation || $entity instanceof Parcours ) && $place === 'publication') {
+//            return true;
+//        }
+//
+//        if (array_key_exists('en_cours_redaction', $actualPlaces) && $entity instanceof Parcours && $place === 'parcours') {
+//            return true;
+//        }
+//
+//        if (array_key_exists('en_cours_redaction', $actualPlaces) && $entity instanceof FicheMatiere && $place === 'fiche_matiere') {
+//            return true;
+//        }
+//
+//        if (array_key_exists('soumis_parcours', $actualPlaces) && $entity instanceof Parcours && $place === 'parcours_rf') {
+//            return true;
+//        }
 
 
         if (array_key_exists($place, $actualPlaces)) {
@@ -151,8 +156,17 @@ class WorkflowExtension extends AbstractExtension
         return false;
     }
 
-    public function isPublie(Parcours|Formation $entity, string $type): bool
+    public function isPublie(Parcours|Formation|FicheMatiere $entity, string $type = 'parcours'): bool
     {
+        if ($type === 'fiche') {
+            $places = $this->getWorkflow('fiche')->getMarking($entity)->getPlaces();
+            if (count($places) > 0) {
+                return str_starts_with(array_keys($places)[0], 'publie');
+            }
+
+            return false;
+        }
+
         if ($type === 'formation') {
             $dpeParcours = GetDpeParcours::getFromFormation($entity); //todo: comment gérer depuis Formation?
         } elseif ($type === 'parcours') {
@@ -166,7 +180,7 @@ class WorkflowExtension extends AbstractExtension
 
         $places = $this->getWorkflow('dpe')->getMarking($dpeParcours)->getPlaces();
         if (count($places) > 0) {
-            return str_starts_with(array_keys($places)[0], 'valide_a_publier');
+            return str_starts_with(array_keys($places)[0], 'publie');
         }
 
         return false;
@@ -178,10 +192,11 @@ class WorkflowExtension extends AbstractExtension
             'dpe' => $this->dpeParcoursWorkflow,
             'parcours' => $this->dpeParcoursWorkflow,
             'fiche' => $this->ficheWorkflow,
+            'changeRf' => $this->changeRfWorkflow,
         };
     }
 
-    private function getPlacesFromEntity(Formation|Parcours|FicheMatiere $entity, string $workflow): array|false
+    private function getPlacesFromEntity(Formation|Parcours|FicheMatiere|ChangeRf $entity, string $workflow): array|false
     {
         if ($entity instanceof Parcours) {
             $dpeParcours = GetDpeParcours::getFromParcours($entity);
@@ -200,5 +215,28 @@ class WorkflowExtension extends AbstractExtension
         }
 
         return $actualPlaces;
+    }
+
+    public function hasTransitions(DpeParcours|ChangeRf|FicheMatiere $entity, string $worflow = 'parcours'): array
+    {
+        $data['valider'] = [];
+        $data['reserver'] = [];
+        $data['refuser'] = [];
+
+        $transitions = $this->getWorkflow($worflow)->getEnabledTransitions($entity);
+
+        foreach ($transitions as $transition) {
+            $meta = $this->getWorkflow($worflow)->getMetadataStore()->getTransitionMetadata($transition);
+            if (array_key_exists('type', $meta) ) {
+                if (array_key_exists('display', $meta) && $meta['display'] === false) {
+                    continue;
+                }
+                $data[$meta['type']][$transition->getName()] = [
+                    'transition' => $transition,
+                    'meta' => $meta,
+                ];
+            }
+        }
+        return $data;
     }
 }

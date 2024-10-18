@@ -5,7 +5,9 @@ namespace App\Controller;
 use App\Classes\JsonReponse;
 use App\Classes\Process\FicheMatiereProcess;
 use App\Classes\ValidationProcessFicheMatiere;
+use App\Entity\FicheMatiere;
 use App\Repository\FicheMatiereRepository;
+use App\Utils\JsonRequest;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -25,10 +27,11 @@ class ProcessValidationFicheController extends BaseController
         Request             $request
     ): Response {
         if ($request->isMethod('POST')) {
-            $sFiches = $request->request->get('formations');
+            $sFiches = $request->request->get('fiches');
         } else {
-            $sFiches = $request->query->get('formations');
+            $sFiches = $request->query->get('fiches');
         }
+
         $fiches = explode(',', $sFiches);
 
         $process = $this->validationProcessFicheMatiere->getEtape($etape);
@@ -60,6 +63,38 @@ class ProcessValidationFicheController extends BaseController
             'process' => $process,
             'type' => 'lot',
             'id' => $id,
+            'etape' => $etape,
+            'processData' => $processData ?? null,
+        ]);
+    }
+
+    #[Route('/validation/fiches/valide/{etape}/{id}', name: 'app_validation_valider_fiche')]
+    public function valide(
+        string              $etape,
+        FicheMatiere        $ficheMatiere,
+        Request             $request
+    ): Response {
+        $process = $this->validationProcessFicheMatiere->getEtape($etape);
+
+        if ($ficheMatiere === null) {
+            return JsonReponse::error('Fiche non trouvée');
+        }
+
+        $processData = $this->ficheMatiereProcess->etatFicheMatiere($ficheMatiere, $process);
+
+        if ($request->isMethod('POST')) {
+            $this->ficheMatiereProcess->valideFicheMatiere($ficheMatiere, $this->getUser(), $process, $etape, $request);
+        }
+
+        if ($request->isMethod('POST')) {
+            $this->toast('success', 'Fiche validée');
+            return $this->json(['success' => true]);
+        }
+
+        return $this->render('process_validation/_valide_fiche.html.twig', [
+            'fiche' => $ficheMatiere,
+            'process' => $process,
+            'type' => 'lot',
             'etape' => $etape,
             'processData' => $processData ?? null,
         ]);
@@ -111,6 +146,40 @@ class ProcessValidationFicheController extends BaseController
         ]);
     }
 
+    #[Route('/validation/fiches/refuse/{etape}/{id}', name: 'app_validation_refuser_fiche')]
+    public function refuse(
+        string              $etape,
+        FicheMatiere        $ficheMatiere,
+        Request             $request
+    ): Response {
+
+
+        $process = $this->validationProcessFicheMatiere->getEtape($etape);
+
+        if ($ficheMatiere === null) {
+            return JsonReponse::error('Fiche non trouvée');
+        }
+        $processData = $this->ficheMatiereProcess->etatFicheMatiere($ficheMatiere, $process);
+
+        if ($request->isMethod('POST')) {
+            $this->ficheMatiereProcess->refuseFicheMatiere($ficheMatiere, $this->getUser(), $process, $etape, $request);
+        }
+
+
+        if ($request->isMethod('POST')) {
+            $this->toast('success', 'Fiche refusée');
+            return $this->redirectToRoute('app_validation_index', ['step' => 'fiche']);
+        }
+
+        return $this->render('process_validation/_refuse_fiches_lot.html.twig', [
+            'fiche' => $ficheMatiere,
+            'process' => $process,
+            'type' => 'lot',
+            'etape' => $etape,
+            'processData' => $processData ?? null,
+        ]);
+    }
+
     #[Route('/validation/fiches/reserve-lot/{etape}', name: 'app_validation_reserve_fiche_lot')]
     public function reserveLot(
         FicheMatiereRepository $ficheMatiereRepository,
@@ -153,6 +222,38 @@ class ProcessValidationFicheController extends BaseController
             'processData' => $processData ?? null,
             'type' => 'lot',
             'id' => $id,
+            'etape' => $etape,
+        ]);
+    }
+
+    #[Route('/validation/fiches/reserve/{etape}/{id}', name: 'app_validation_reserver_fiche')]
+    public function reserve(
+        FicheMatiereRepository $ficheMatiereRepository,
+        string              $etape,
+        FicheMatiere        $ficheMatiere,
+        Request             $request
+    ): Response {
+
+        $process = $this->validationProcessFicheMatiere->getEtape($etape);
+
+        if ($ficheMatiere === null) {
+            return JsonReponse::error('Fiche non trouvée');
+        }
+        $processData = $this->ficheMatiereProcess->etatFicheMatiere($ficheMatiere, $process);
+
+        if ($request->isMethod('POST')) {
+            $this->ficheMatiereProcess->reserveFicheMatiere($ficheMatiere, $this->getUser(), $process, $etape, $request);
+        }
+
+        if ($request->isMethod('POST')) {
+            $this->toast('success', 'Fiche marquée avec des réserves');
+            return $this->json(['success' => true]);
+        }
+
+        return $this->render('process_validation/_reserve_fiche.html.twig', [
+            'fiche' => $ficheMatiere,
+            'process' => $process,
+            'processData' => $processData ?? null,
             'etape' => $etape,
         ]);
     }

@@ -28,7 +28,7 @@ class DiffBadgeExtension extends AbstractExtension
     public function displayDiff(DiffObject $value): string
     {
         if (false === $value->isDifferent()) {
-            return $value->original;
+            return $value->original ?? '';
         }
 
         return '<span class="text-danger text-decoration-line-through">'.$value->original.'</span> <span class="text-success">'.$value->new.'</span>';
@@ -55,8 +55,8 @@ class DiffBadgeExtension extends AbstractExtension
     public function diffNewOriginal(DiffObject $value): string
     {
         if (false === $value->isDifferent()) {
-            return $value->original;
+            return $value->original. ' (pas de modification)';
         }
-        return '<span class="diff-new">'.$value->new.'</span> (au lieu de <span class="diff-original">'.$value->new.'</span>)';
+        return '<span class="diff-new">'.$value->new.'</span> (au lieu de <span class="diff-original">'.$value->original.'</span>)';
     }
 }

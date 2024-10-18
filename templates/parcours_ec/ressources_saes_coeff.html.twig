@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block header %}
-    Ressources/SAE ECTS pour le parcours {{ parcours.libelle }}
+    Ressources/SAE ECTS : {{ parcours.libelle }} {{ parcours.typeParcours|badgeTypeParcours }}
 {% endblock %}
 
 {% block breadcrumb %}

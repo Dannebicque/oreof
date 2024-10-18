@@ -11,10 +11,13 @@ namespace App\Entity;
 
 use App\Classes\verif\ParcoursValide;
 use App\DTO\Remplissage;
+use App\DTO\StatsFichesMatieres;
+use App\DTO\StatsFichesMatieresParcours;
 use App\Entity\Traits\LifeCycleTrait;
 use App\Enums\ModaliteEnseignementEnum;
 use App\Enums\NiveauLangueEnum;
 use App\Enums\RegimeInscriptionEnum;
+use App\Enums\TypeModificationDpeEnum;
 use App\Enums\TypeParcoursEnum;
 use App\Repository\ParcoursRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -44,7 +47,7 @@ class Parcours
 
     #[Groups(['parcours_json_versioning', 'fiche_matiere_versioning'])]
     #[ORM\ManyToOne(targetEntity: Formation::class, inversedBy: 'parcours')]
-    private ?Formation $formation;
+    private ?Formation $formation = null;
 
     #[Groups('parcours_json_versioning')]
     #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: BlocCompetence::class, cascade: ['persist', 'remove'])]
@@ -198,10 +201,14 @@ class Parcours
     private Collection $parcoursEnfants;
 
     #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: HistoriqueParcours::class)]
+    #[ORM\OrderBy(['created' => 'DESC'])]
     private Collection $historiqueParcours;
 
     #[ORM\Column(nullable: true)]
     private ?array $remplissage = [];
+
+    #[ORM\Column(nullable: true)]
+    private ?array $etatsFichesMatieres = [];
 
     #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: ElementConstitutif::class)]
     private Collection $elementConstitutifs;
@@ -1019,11 +1026,55 @@ class Parcours
         return $this;
     }
 
+
     #[ORM\PreFlush]
     public function updateRemplissage(PreFlushEventArgs $args): void
     {
         $remplissage = $this->remplissageBrut();
         $this->setRemplissage($remplissage);
+    }
+
+    public function getEtatsFichesMatieres(): StatsFichesMatieresParcours
+    {
+        $etatsFichesMatieres = new StatsFichesMatieresParcours($this);
+
+        if ($this->etatsFichesMatieres !== null &&
+            count($this->etatsFichesMatieres) > 0
+            && array_key_exists('nbFiches', $this->etatsFichesMatieres)
+            && array_key_exists('nbFichesValidees', $this->etatsFichesMatieres)
+            && array_key_exists('nbFichesNonValideesSes', $this->etatsFichesMatieres)
+            && array_key_exists('nbFichesCompletes', $this->etatsFichesMatieres)
+            && array_key_exists('nbFichesPubliees', $this->etatsFichesMatieres)
+            && array_key_exists('nbFichesNonValidees', $this->etatsFichesMatieres)) {
+
+            $etatsFichesMatieres->nbFiches = $this->etatsFichesMatieres['nbFiches'];
+            $etatsFichesMatieres->nbFichesValidees = $this->etatsFichesMatieres['nbFichesValidees'];
+            $etatsFichesMatieres->nbFichesNonValideesSes = $this->etatsFichesMatieres['nbFichesNonValideesSes'];
+            $etatsFichesMatieres->nbFichesCompletes = $this->etatsFichesMatieres['nbFichesCompletes'];
+            $etatsFichesMatieres->nbFichesNonValidees = $this->etatsFichesMatieres['nbFichesNonValidees'];
+            $etatsFichesMatieres->nbFichesPubliees = $this->etatsFichesMatieres['nbFichesPubliees'];
+
+        }
+
+        return $etatsFichesMatieres;
+    }
+
+    public function setEtatsFichesMatieres(?StatsFichesMatieresParcours $etatsFichesMatieres = null): static
+    {
+        if (null === $etatsFichesMatieres) {
+           return $this;
+        }
+
+        $this->etatsFichesMatieres = [
+            'nbFiches' => $etatsFichesMatieres->nbFiches,
+            'nbFichesValidees' => $etatsFichesMatieres->nbFichesValidees,
+            'nbFichesNonValideesSes' => $etatsFichesMatieres->nbFichesNonValideesSes,
+            'nbFichesCompletes' => $etatsFichesMatieres->nbFichesCompletes,
+            'nbFichesNonValidees' => $etatsFichesMatieres->nbFichesNonValidees,
+            'nbFichesPubliees' => $etatsFichesMatieres->nbFichesPubliees,
+        ];
+
+        return $this;
     }
 
     /**
@@ -1178,7 +1229,7 @@ class Parcours
             $t[] = $regime;
         }
 
-        if ((count($t) === 1 || count($t) === 4 ) && in_array(RegimeInscriptionEnum::FI, $t, true)) {
+        if ((count($t) === 1 || count($t) === 4) && in_array(RegimeInscriptionEnum::FI, $t, true)) {
             return 1;
         }
 
@@ -1422,5 +1473,24 @@ class Parcours
         $this->niveauFrancais = $niveauFrancais;
 
         return $this;
+    }
+
+    public function etatDpeParcours() : array
+    {
+        return $this->dpeParcours->first()?->getEtatValidation();
+    }
+
+    public function hasReouverture() : bool
+    {
+        return in_array($this->dpeParcours->first()?->getEtatReconduction(), [
+            TypeModificationDpeEnum::MODIFICATION_TEXTE,
+            TypeModificationDpeEnum::MODIFICATION_MCCC,
+            TypeModificationDpeEnum::MODIFICATION_MCCC_TEXTE,
+        ])  ;
+    }
+
+    public function withCfvu() : bool
+    {
+        return $this->dpeParcours->first()?->withCfvu();
     }
 }

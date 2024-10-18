@@ -5,7 +5,7 @@
 
 <form action="{{ path('app_validation_valide_fiche_lot', {etape:etape}) }}" method="post"
       enctype="multipart/form-data">
-    <input type="hidden" name="formations" value="{{ sFiches }}">
+    <input type="hidden" name="fiches" value="{{ sFiches }}">
 
     {% if process.hasDate %}
         <div>

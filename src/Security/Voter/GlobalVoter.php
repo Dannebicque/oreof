@@ -2,6 +2,7 @@
 
 namespace App\Security\Voter;
 
+use App\Classes\GetDpeParcours;
 use App\Entity\Composante;
 use App\Entity\DpeParcours;
 use App\Entity\FicheMatiere;
@@ -30,6 +31,7 @@ class GlobalVoter extends Voter
         private WorkflowInterface       $dpeWorkflow,
         private WorkflowInterface       $parcoursWorkflow,
         private WorkflowInterface       $dpeParcoursWorkflow,
+        private WorkflowInterface       $ficheWorkflow,
         private readonly Security       $security,
         private readonly RoleRepository $roleRepository,
     ) {
@@ -149,32 +151,48 @@ class GlobalVoter extends Voter
 
     private function canAccessFormation(Formation $subject, mixed $centre): bool
     {
-        //        $canEdit = false;
-        //        if (
-        //            $subject->getResponsableMention() === $this->user ||
-        //            $subject->getCoResponsable() === $this->user ||
-        //            $this->formation === $centre->getUser
-        //
-        //        ) {
-        //todo: ou vérifier que le droit permet d'éditer ?
-        $canEdit = $this->dpeWorkflow->can($subject, 'autoriser') || $this->dpeWorkflow->can($subject, 'valide_rf');
-        //        }
-        //
+        //Vérifier les parcours en partant de Formation et de DpeParcours. Si pas de parcours autoriser
+
+        if ($subject->getParcours()->count() === 0)
+        {
+            //todo: en attendant
+            return true;
+        }
+
+        if ($subject->isHasParcours() === false && $subject->getParcours()->count() === 1) {
+            $dpeParcours  = GetDpeParcours::getFromParcours($subject->getParcours()->first());
+            if ($dpeParcours === null) {
+                return false;
+            }
+            return $this->canAccessDpeParcours($dpeParcours, $centre);
+        }
 
 
+
+
+//        $canEdit = false;
+//        if (
+//            $subject->getResponsableMention() === $this->user ||
+//            $subject->getCoResponsable() === $this->user
+//            //$this->formation === $centre->getUser
+//
+//        ) {
+//            //todo: ou vérifier que le droit permet d'éditer ?
+            $canEdit = $this->dpeWorkflow->can($subject, 'autoriser') || $this->dpeWorkflow->can($subject, 'valider_rf');
+//        }
         if ($this->security->isGranted('ROLE_SES')) {
             $canEdit =
                 $this->dpeWorkflow->can($subject, 'autoriser') ||
-                $this->dpeWorkflow->can($subject, 'valide_rf') ||
-                $this->dpeWorkflow->can($subject, 'valide_dpe_composante') ||
+                $this->dpeWorkflow->can($subject, 'valider_rf') ||
+                $this->dpeWorkflow->can($subject, 'valider_dpe_composante') ||
                 $this->dpeWorkflow->can($subject, 'valider_conseil') ||
                 $this->dpeWorkflow->can($subject, 'valider_central');
         } elseif ($subject->getComposantePorteuse() === $centre->getComposante()) { //todo: le gestionnaire n'est pas le DPE, gérer son cas spécifiquement ?
             //&& $centre->getComposante()->getResponsableDpe() === $this->user
             $canEdit =
                 $this->dpeWorkflow->can($subject, 'autoriser') ||
-                $this->dpeWorkflow->can($subject, 'valide_rf') ||
-                $this->dpeWorkflow->can($subject, 'valide_dpe_composante') ||
+                $this->dpeWorkflow->can($subject, 'valider_rf') ||
+                $this->dpeWorkflow->can($subject, 'valider_dpe_composante') ||
                 $this->dpeWorkflow->can($subject, 'valider_conseil');
         }
 
@@ -194,7 +212,7 @@ class GlobalVoter extends Voter
                 $this->parcoursWorkflow->can($subject, 'valider_parcours') ||
                 $this->parcoursWorkflow->can($subject, 'valider_rf') ||
                 $this->dpeWorkflow->can($subject->getFormation(), 'autoriser') ||
-                $this->dpeWorkflow->can($subject->getFormation(), 'valide_rf');
+                $this->dpeWorkflow->can($subject->getFormation(), 'valider_rf');
         }
 
         if (
@@ -205,8 +223,8 @@ class GlobalVoter extends Voter
                 $this->parcoursWorkflow->can($subject, 'valider_parcours') ||
                 $this->parcoursWorkflow->can($subject, 'valider_rf') ||
                 $this->dpeWorkflow->can($subject->getFormation(), 'autoriser') ||
-                $this->dpeWorkflow->can($subject->getFormation(), 'valide_rf') ||
-                $this->dpeWorkflow->can($subject->getFormation(), 'valide_dpe_composante') ||
+                $this->dpeWorkflow->can($subject->getFormation(), 'valider_rf') ||
+                $this->dpeWorkflow->can($subject->getFormation(), 'valider_dpe_composante') ||
                 $this->dpeWorkflow->can($subject->getFormation(), 'valider_conseil');
         }
 
@@ -216,8 +234,8 @@ class GlobalVoter extends Voter
                 $this->parcoursWorkflow->can($subject, 'autoriser') ||
                 $this->parcoursWorkflow->can($subject, 'valider_parcours') ||
                 $this->parcoursWorkflow->can($subject, 'valider_rf') ||
-                $this->dpeWorkflow->can($subject->getFormation(), 'valide_rf') ||
-                $this->dpeWorkflow->can($subject->getFormation(), 'valide_dpe_composante') ||
+                $this->dpeWorkflow->can($subject->getFormation(), 'valider_rf') ||
+                $this->dpeWorkflow->can($subject->getFormation(), 'valider_dpe_composante') ||
                 $this->dpeWorkflow->can($subject->getFormation(), 'valider_conseil') ||
                 $this->dpeWorkflow->can($subject->getFormation(), 'valider_central');
         }
@@ -241,7 +259,7 @@ class GlobalVoter extends Voter
                 $this->parcoursWorkflow->can($parcours, 'valider_parcours') ||
                 $this->parcoursWorkflow->can($parcours, 'valider_rf') ||
                 $this->dpeWorkflow->can($parcours->getFormation(), 'autoriser') ||
-                $this->dpeWorkflow->can($parcours->getFormation(), 'valide_rf');
+                $this->dpeWorkflow->can($parcours->getFormation(), 'valider_rf');
         }
 
         if (
@@ -252,8 +270,8 @@ class GlobalVoter extends Voter
                 $this->parcoursWorkflow->can($parcours, 'valider_parcours') ||
                 $this->parcoursWorkflow->can($parcours, 'valider_rf') ||
                 $this->dpeWorkflow->can($parcours->getFormation(), 'autoriser') ||
-                $this->dpeWorkflow->can($parcours->getFormation(), 'valide_rf') ||
-                $this->dpeWorkflow->can($parcours->getFormation(), 'valide_dpe_composante') ||
+                $this->dpeWorkflow->can($parcours->getFormation(), 'valider_rf') ||
+                $this->dpeWorkflow->can($parcours->getFormation(), 'valider_dpe_composante') ||
                 $this->dpeWorkflow->can($parcours->getFormation(), 'valider_conseil');
         }
 
@@ -264,8 +282,8 @@ class GlobalVoter extends Voter
                 $this->parcoursWorkflow->can($parcours, 'valider_parcours') ||
                 $this->parcoursWorkflow->can($parcours, 'valider_rf') ||
                 $this->dpeParcoursWorkflow->can($subject, 'valider_central') || // todo: gérer avec le nouveau workflow?
-                $this->dpeWorkflow->can($parcours->getFormation(), 'valide_rf') ||
-                $this->dpeWorkflow->can($parcours->getFormation(), 'valide_dpe_composante') ||
+                $this->dpeWorkflow->can($parcours->getFormation(), 'valider_rf') ||
+                $this->dpeWorkflow->can($parcours->getFormation(), 'valider_dpe_composante') ||
                 $this->dpeWorkflow->can($parcours->getFormation(), 'valider_conseil') ||
                 $this->dpeWorkflow->can($parcours->getFormation(), 'valider_central');
         }
@@ -301,9 +319,8 @@ class GlobalVoter extends Voter
             ($subject->getParcours()?->getFormation()?->getComposantePorteuse() === $centre->getComposante() &&
                 in_array('Gestionnaire', $centre->getDroits()))
         ) {
-            return true;
+            return $this->ficheWorkflow->can($subject, 'valider_fiche_compo');
         }
-
 
         return false;
     }

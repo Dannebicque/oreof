@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Classes\CalculStructureParcours;
 use App\Classes\JsonReponse;
 use App\Entity\Parcours;
 use App\Repository\ButApprentissageCritiqueRepository;
@@ -17,10 +18,14 @@ use Symfony\Component\Routing\Attribute\Route;
 class ParcoursBccController extends AbstractController
 {
     #[Route('/parcours/bcc/{parcours}', name: 'app_parcours_bcc')]
-    public function index(Parcours $parcours): Response
+    public function index(
+        CalculStructureParcours $calculStructureParcours,
+        Parcours $parcours): Response
     {
+        $dto = $calculStructureParcours->calcul($parcours, false, true);
         return $this->render('parcours_bcc/index.html.twig', [
             'parcours' => $parcours,
+            'dto' => $dto,
             'editable' => true //todo: déterminer selon l'état du process ...
         ]);
     }

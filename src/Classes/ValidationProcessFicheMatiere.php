@@ -9,16 +9,36 @@
 
 namespace App\Classes;
 
-use Symfony\Component\HttpKernel\KernelInterface;
-use Symfony\Component\Yaml\Yaml;
+use Symfony\Component\DependencyInjection\Attribute\Target;
+use Symfony\Component\Workflow\WorkflowInterface;
 
 class ValidationProcessFicheMatiere extends AbstractValidationProcess
 {
-    public function __construct(KernelInterface $kernel,)
+    public function __construct(
+        #[Target('fiche')]
+        protected WorkflowInterface $ficheWorkflow
+    )
     {
-        $file = $kernel->getContainer()->getParameter('kernel.project_dir') . '/config/processFicheMatiere.yaml';
+        $places = $ficheWorkflow->getDefinition()->getPlaces();
+        $data = [];
+        foreach ($places as $place) {
+            $meta = $ficheWorkflow->getMetadataStore()->getPlaceMetadata($place);
+            if (array_key_exists('process', $meta) && (bool)$meta['process'] === true) {
+                $data[$place] = $meta;
+            }
+        }
+        $this->process = $data;
+    }
 
-        $data = Yaml::parseFile($file);
-        $this->process = $data['process'];
+    public function getMetaFromTransition(string $transition): array
+    {
+        $transitions = $this->ficheWorkflow->getDefinition()->getTransitions();
+        foreach ($transitions as $trans) {
+            if ($trans->getName() === $transition) {
+                return $this->ficheWorkflow->getMetadataStore()->getTransitionMetadata($trans);
+            }
+        }
+
+        return [];
     }
 }

@@ -58,6 +58,7 @@ class Semestre
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $commentaire = null;
 
+    #[Groups('DTO_json_versioning')]
     #[ORM\Column]
     private ?bool $nonDispense = false;
 

@@ -47,7 +47,8 @@ class AppExtension extends AbstractExtension
             new TwigFilter('etatRemplissage', [$this, 'etatRemplissage'], ['is_safe' => ['html']]),
             new TwigFilter('printTexte', [$this, 'printTexte'], ['is_safe' => ['html']]),
             new TwigFilter('filtreHeures', [$this, 'filtreHeures'], ['is_safe' => ['html']]),
-            new TwigFilter('badgeEnum', [$this, 'badgeEnum'], ['is_safe' => ['html']])
+            new TwigFilter('badgeEnum', [$this, 'badgeEnum'], ['is_safe' => ['html']]),
+            new TwigFilter('startWith', [$this, 'startWith'], ['is_safe' => ['html']]),
         ];
     }
 
@@ -99,7 +100,13 @@ class AppExtension extends AbstractExtension
         return [
             new TwigFunction('displaySort', [$this, 'displaySort'], ['is_safe' => ['html']]),
             new TwigFunction('getDirection', [$this, 'getDirection'], ['is_safe' => ['html']]),
+
         ];
+    }
+
+    public function startWith(string $haystack, string $needle): bool
+    {
+        return str_starts_with($haystack, $needle);
     }
 
     public function displaySort(string $field, ?string $sort, ?string $direction): ?string

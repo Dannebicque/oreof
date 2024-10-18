@@ -3,10 +3,10 @@
     message: (process.label~'.reserve.alerte')|trans({}, 'process')|nl2br|raw
 }) }}
 
-<form action="{{ path('app_validation_reserve_lot', {etape:etape}) }}" method="post">
-    <input type="hidden" name="formations" value="{{ sFormations }}">
+<form action="{{ path('app_validation_reserver_lot', {etape:etape, transition: transition}) }}" method="post">
+    <input type="hidden" name="parcours" value="{{ sParcours }}">
 
-    {% if process.hasDate %}
+    {% if meta.hasDate is defined and meta.hasDate == true %}
     <div>
         <label for="date" class="form-label">{{ ('reserve.'~process.label~'.date.label')|trans({}, 'process') }} <span class="required"></span> <i class="fal fa-question-circle ms-1"
                                   data-controller="tooltip"
@@ -35,8 +35,8 @@
     > </textarea>
 </div>
 
-{% if process.hasReserve is iterable %}
-    {% for cas in process.hasReserve %}
+{% if meta.hasReserve is defined and meta.hasReserve is iterable %}
+    {% for cas in meta.hasReserve %}
         <div class="form-check">
             <input class="form-check-input" type="checkbox" value="" id="{{ cas }}">
             <label class="form-check-label" for="{{ cas }}">

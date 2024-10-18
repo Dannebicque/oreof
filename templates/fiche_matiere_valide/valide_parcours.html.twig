@@ -18,7 +18,7 @@ Cela entrainera la vérification des informations saisies. Seules les fiches EC/
                     data-controller="tooltip"
                     data-tooltip-placement-value="bottom"
                     data-action="validation--fichematiere#valide"
-                    data-validation--fichematiere-url-param="{{ path('fiche_matiere_valide_valide') }}"
+                    data-validation--fichematiere-url-param="{{ path('fiche_matiere_valide_valide', {type:'parcours', id: parcours.id}) }}"
                     aria-label="{{ ('validation.valider.fiches_matieres.parcours')|trans({}, 'process') }}"
                     data-bs-original-title="{{ ('validation.valider.fiches_matieres.parcours')|trans({}, 'process') }}"
             >
@@ -33,7 +33,7 @@ Cela entrainera la vérification des informations saisies. Seules les fiches EC/
                     data-controller="tooltip"
                     data-tooltip-placement-value="bottom"
                     data-action="validation--fichematiere#valide"
-                    data-validation--fichematiere-url-param="{{ path('fiche_matiere_valide_valide') }}"
+                    data-validation--fichematiere-url-param="{{ path('fiche_matiere_valide_valide', {type:'parcours', id: parcours.id}) }}"
                     aria-label="{{ ('validation.valider.fiches_matieres.parcours')|trans({}, 'process') }}"
                     data-bs-original-title="{{ ('validation.valider.fiches_matieres.parcours')|trans({}, 'process') }}"
             >

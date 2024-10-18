@@ -21,6 +21,7 @@ use App\DTO\HeuresEctsUe;
 use App\DTO\StructureParcours;
 use App\Entity\CampagneCollecte;
 use App\Entity\DpeParcours;
+use App\Entity\FicheMatiere;
 use App\Entity\Formation;
 use App\Entity\Parcours;
 use App\Entity\ParcoursVersioning;
@@ -29,8 +30,10 @@ use App\Enums\TypeModificationDpeEnum;
 use App\Enums\TypeParcoursEnum;
 use App\Events\AddCentreParcoursEvent;
 use App\Form\ParcoursType;
+use App\Repository\DpeParcoursRepository;
 use App\Repository\ElementConstitutifRepository;
 use App\Repository\ParcoursRepository;
+use App\Repository\ParcoursVersioningRepository;
 use App\Repository\UeRepository;
 use App\Service\LheoXML;
 use App\Service\VersioningFormation;
@@ -75,8 +78,10 @@ class ParcoursController extends BaseController
     }
 
     #[Route('/', name: 'app_parcours_index', methods: ['GET'])]
+    /** @deprecated  */
     public function index(): Response
     {
+
         return $this->render('parcours/index.html.twig');
     }
 
@@ -250,8 +255,7 @@ class ParcoursController extends BaseController
 
         $textDifferencesParcours = $versioningParcours->getDifferencesBetweenParcoursAndLastVersion($parcours);
         $textDifferencesFormation = $versioningFormation->getDifferencesBetweenFormationAndLastVersion($formation);
-
-
+        $version = $versioningParcours->hasLastVersion($parcours);
 
         $cssDiff = DiffHelper::getStyleSheet();
 
@@ -265,8 +269,9 @@ class ParcoursController extends BaseController
             'lheoXML' => $lheoXML,
             'stringDifferencesParcours' => $textDifferencesParcours,
             'stringDifferencesFormation' => $textDifferencesFormation,
-            'hasLastVersion' => $versioningParcours->hasLastVersion(),
-            'cssDiff' => $cssDiff
+            'hasLastVersion' => $versioningParcours->hasLastVersion($parcours),
+            'cssDiff' => $cssDiff,
+            'version' => $version,
         ]);
     }
 
@@ -292,7 +297,6 @@ class ParcoursController extends BaseController
             return $this->redirectToRoute('app_parcours_show', ['id' => $parcour->getId()]);
         }
 
-        $versioningParcours->getDifferencesBetweenParcoursAndLastVersion($parcour);
         $version = $versioningParcours->hasLastVersion($parcour);
 
         $parcoursState->setParcours($parcour);
@@ -406,11 +410,15 @@ class ParcoursController extends BaseController
 
     #[Route('/{parcours}/maquette_iframe', name: 'app_parcours_maquette_iframe')]
     public function getMaquetteIframe(
+        VersioningParcours $versioningParcours,
         Parcours                     $parcours,
         EntityManagerInterface       $em,
         ElementConstitutifRepository $ecRepo,
         UeRepository                 $ueRepository
     ) {
+
+        return $this->getValidatedMaquetteIframe($parcours, $versioningParcours, $em);
+
         $formation = $parcours->getFormation();
         if ($formation === null) {
             throw $this->createNotFoundException();
@@ -422,13 +430,46 @@ class ParcoursController extends BaseController
 
         if ($formation->getTypeDiplome()->getLibelleCourt() === 'BUT') {
             $calcul = new CalculButStructureParcours();
+            $dto = $calcul->calcul($parcours);
         } else {
+            // todo: récupérer le dernier DPE du parcours, regarder s'il est publié, si oui, cas classique, si non récupérer la version sauvegardée
+
             $calcul = new CalculStructureParcours($em, $ecRepo, $ueRepository);
+            $dto = $calcul->calcul($parcours);
         }
 
         return $this->render('parcours/maquette_iframe.html.twig', [
-            'parcours' => $calcul->calcul($parcours)
+            'parcours' => $dto
         ]);
+    }
+
+    #[Route('/{parcours}/versioning/maquette_iframe', 'app_versioning_parcours_maquette_iframe')]
+    public function getValidatedMaquetteIframe(
+        Parcours $parcours,
+        VersioningParcours $versioningParcours,
+        EntityManagerInterface $entityManager
+    ){
+        $lastVersion = $entityManager
+            ->getRepository(ParcoursVersioning::class)
+            ->findLastCfvuVersion($parcours)[0] ?? false;
+
+        if($lastVersion){
+            $dto = $versioningParcours->loadParcoursFromVersion($lastVersion)['dto'];
+            
+            $ficheMatiereRepo = $entityManager->getRepository(FicheMatiere::class);
+
+            return $this->render('parcours/maquette_iframe.html.twig', [
+                'parcours' => $dto,
+                'parcoursData' => $parcours,
+                'ficheMatiereRepo' => $ficheMatiereRepo,
+                'isVersioning' => true
+            ]);
+        }
+        else {
+            return $this->render('parcours/maquette_iframe.html.twig', [
+                'parcours' => false
+            ]);
+        }
     }
 
     #[Route('/{parcours}/export-xml-lheo', name: 'app_parcours_export_xml_lheo')]
@@ -626,6 +667,7 @@ class ParcoursController extends BaseController
                 'hasParcours' => $loadedVersion['parcours']->getFormation()->isHasParcours(),
                 // 'isBut' => $loadedVersion['parcours']->getTypeDiplome()->getLibelleCourt() === 'BUT',
                 'dateVersion' => $loadedVersion['dateVersion'],
+                'isVersioning' => true
             ]);
         } catch(\Exception $e) {
             $now = new DateTimeImmutable('now');
@@ -674,5 +716,149 @@ class ParcoursController extends BaseController
         return $this->render('lheo/list.html.twig', [
             'errorArray' => $errorArray
         ]);
+    }
+
+    #[IsGranted("ROLE_ADMIN")]
+    #[Route('/{idParcours}/mccc/export/pdf', 'app_parcours_valid_mccc_pdf_export')]
+    public function getMcccAsPdfForParcours(
+        int $idParcours,
+        EntityManagerInterface $entityManager
+    ) : Response|JsonResponse {  
+
+        if(is_integer($idParcours) === false){
+            throw $this->createNotFoundException();
+        }
+
+        $dpe = $entityManager->getRepository(CampagneCollecte::class)->findOneBy(['defaut' => 1]);
+        $annee = $dpe->getAnnee();
+ 
+        try{
+            $file = file_get_contents(__DIR__ . "/../../mccc-export/MCCC-Parcours-{$idParcours}-{$annee}.pdf");
+            if($file){
+                return new Response(
+                    $file,
+                    200, 
+                    [
+                        'Content-Type' => 'application/pdf'
+                    ]
+                );
+            }
+        }
+        catch(\Exception $error) {
+            return new Response(
+                json_encode(
+                    ['error' => "Le parcours n'a pas été trouvé"]
+                ), 
+                404,
+                [
+                    'Content-Type' => 'application/json'
+                ]
+            ) ;
+        }
+    }
+
+    #[Route('/{parcours}/export-json-urca/cfvu_valid', name: 'app_parcours_export_json_urca_cfvu_valid')]
+    public function getJsonExportUrcaCfvuValid(
+        Parcours $parcours,
+        EntityManagerInterface $entityManager,
+        VersioningParcours $versioningParcours
+    ): Response {
+
+        $parcoursVersion = $entityManager
+            ->getRepository(ParcoursVersioning::class)
+            ->findLastCfvuVersion($parcours);
+        if(count($parcoursVersion) === 0){
+            throw $this->createNotFoundException('Version not found.');
+        }
+
+        $parcoursVersion = $parcoursVersion[0];
+
+        $versionData = $versioningParcours->loadParcoursFromVersion($parcoursVersion);
+        $parcoursVersionData = $versionData['parcours'];
+        $dtoVersionData = $versionData['dto'];
+
+
+        $typeDiplome = $parcoursVersionData->getFormation()?->getTypeDiplome();
+        $ects = $dtoVersionData->heuresEctsFormation->sommeFormationEcts;
+
+        // Gestion de la localisation
+        // Vide par défaut : -
+        $localisationMetadata = ["-"];
+        // Si l'on a une ville sur le parcours
+        if($parcoursVersionData->getLocalisation()?->getLibelle() !== null) {
+            $localisationMetadata = [$parcoursVersionData->getLocalisation()?->getLibelle()];
+        }
+        // Sinon on prend au niveau de la composante
+        else {
+            $villeArray = $parcoursVersionData->getFormation()?->getLocalisationMention()?->toArray();
+            if(count($villeArray) > 0) {
+                $localisationMetadata = array_map(
+                    fn ($ville) => $ville->getLibelle(),
+                    $villeArray
+                );
+            }
+        }
+
+        // Gestion de 'faculte-ecole-institut'
+        // ---> Il peut y avoir plusieurs composantes d'inscription au niveau de la formation
+        // "-" par défaut
+        $faculteEcoleInstitut = ["-"];
+        // Si on a au niveau du parcours
+        if($parcoursVersionData->getComposanteInscription()?->getLibelle() !== null) {
+            
+            $composanteInscriptionParent = $entityManager->getRepository(Parcours::class)
+                ->findOneById($parcoursVersion->getParcours()->getId())
+                ->getComposanteInscription()
+                ?->getComposanteParent();
+
+            if ($composanteInscriptionParent === null) {
+                $faculteEcoleInstitut = [$parcoursVersionData->getComposanteInscription()?->getLibelle()];
+            } else {
+                $faculteEcoleInstitut = [$composanteInscriptionParent->getLibelle()];
+            }
+        }
+        // Sinon, on prend les composantes d'inscription de la formation
+        else {
+            if(count($parcoursVersionData->getFormation()?->getComposantesInscription()->toArray()) > 0) {
+                $faculteEcoleInstitut = array_map(
+                    fn ($composanteInscription) => $composanteInscription->getLibelle(),
+                    $parcoursVersionData->getFormation()?->getComposantesInscription()->toArray()
+                );
+            }
+        }
+
+        $typeF = [];
+        $typeF[] = $typeDiplome?->getLibelle() ?? '-';
+
+        $typeParcours = $entityManager->getRepository(Parcours::class)
+            ->findOneById($parcoursVersion->getParcours()->getId())
+            ->getTypeParcours();
+
+        if ($typeParcours === TypeParcoursEnum::TYPE_PARCOURS_CPI) {
+            $typeF[] = 'Diplômes d’ingénieur / CMI / CPI';
+        } elseif ($typeParcours === TypeParcoursEnum::TYPE_PARCOURS_LAS1) {
+            $typeF[] = 'Licence Accès Santé';
+        } elseif ($typeParcours === TypeParcoursEnum::TYPE_PARCOURS_LAS23) {
+            $typeF[] = 'Licence Accès Santé';
+        }
+
+        $data = [
+            'description' => "",
+            'ects' => $ects ?? 0,
+            'metadata' => [
+                'domaine' => $parcoursVersionData->getFormation()?->getDomaine()?->getLibelle() ?? '-',
+                'type-formation' => $typeF,
+                'localisation' => $localisationMetadata,
+                'faculte-ecole-institut' => $faculteEcoleInstitut,
+                'public-concerne' => $parcoursVersionData->getRegimeInscription() ?? [], //Certains sont des tableaux, d'autres en JSON
+                'niveau-francais' => $parcoursVersionData->getNiveauFrancais()?->libelle() ?? '-',
+            ],
+            'xml-lheo' => $this->generateUrl('app_parcours_export_xml_lheo', ['parcours' => $parcoursVersion->getParcours()->getId()], UrlGenerator::ABSOLUTE_URL),
+            'fiche-pdf' => $this->generateUrl('app_parcours_export_pdf_versioning', ['parcours' => $parcours->getId()], UrlGenerator::ABSOLUTE_URL),
+            'maquette-pdf' => $this->generateUrl('app_parcours_mccc_export_cfvu_valid', ['parcours' => $parcoursVersion->getParcours()->getId(), 'format' => 'simplifie'], UrlGenerator::ABSOLUTE_URL),
+            'maquette-json' => $this->generateUrl('app_parcours_export_maquette_json_validee_cfvu', ['parcours' => $parcoursVersion->getParcours()->getId()], UrlGenerator::ABSOLUTE_URL),
+        ];
+
+        return new JsonResponse($data);
     }
 }

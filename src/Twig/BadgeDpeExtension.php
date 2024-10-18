@@ -10,6 +10,7 @@
 namespace App\Twig;
 
 use App\Entity\FicheMatiere;
+use App\Enums\EtatChangeRfEnum;
 use App\Enums\EtatDpeEnum;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
@@ -23,12 +24,14 @@ class BadgeDpeExtension extends AbstractExtension
     {
         return [
             new TwigFilter('badgeDpe', [$this, 'badgeDpe'], ['is_safe' => ['html']]),
+            new TwigFilter('badgeStep', [$this, 'badgeStep'], ['is_safe' => ['html']]),
             new TwigFilter('badgeEtatComposante', [$this, 'badgeEtatComposante'], ['is_safe' => ['html']]),
             new TwigFilter('badgeFormation', [$this, 'badgeFormation'], ['is_safe' => ['html']]),
             new TwigFilter('badgeEc', [$this, 'badgeEc'], ['is_safe' => ['html']]),
             new TwigFilter('badgeFiche', [$this, 'badgeFiche'], ['is_safe' => ['html']]),
             new TwigFilter('badge', [$this, 'badge'], ['is_safe' => ['html']]),
             new TwigFilter('badgeValide', [$this, 'badgeValide'], ['is_safe' => ['html']]),
+            new TwigFilter('badgeChangeRf', [$this, 'badgeChangeRf'], ['is_safe' => ['html']]),
             new TwigFilter('displayErreurs', [$this, 'displayErreurs'], ['is_safe' => ['html']]),
             new TwigFilter('isFicheValidable', [$this, 'isFicheValidable'], ['is_safe' => ['html']])
         ];
@@ -89,6 +92,7 @@ class BadgeDpeExtension extends AbstractExtension
         return match ($etat) {
             'complet' => '<span class="badge bg-success me-1">Complet</span>',
             'incomplet' => '<span class="badge bg-warning me-1">Incomplet</span>',
+            'incomplet_ects' => '<span class="badge bg-warning me-1">Incomplet ECTS</span>',
             'erreur' => '<span class="badge bg-danger me-1">Erreur de saisie</span>',
             'vide' => '<span class="badge bg-danger me-1">Non complété</span>',
             'non_concerne' => '<span class="badge bg-info me-1">Non concerné</span>',
@@ -113,6 +117,11 @@ class BadgeDpeExtension extends AbstractExtension
         return $this->displayDpeBadge($etatsDpe);
     }
 
+    public function badgeStep(bool $etatsDpe): string
+    {
+        return $etatsDpe ? '<span class="badge bg-success me-1">Complet</span>' : '<span class="badge bg-warning me-1">Incomplet</span>';
+    }
+
     public function badgeFiche(array $etatFiche): string
     {
         return $this->displayDpeBadge($etatFiche);
@@ -132,6 +141,21 @@ class BadgeDpeExtension extends AbstractExtension
         $html = '';
         foreach ($etatsEc as $etatEc) {
             $html .= '<span class="badge bg-' . EtatDpeEnum::from(strtolower($etatEc))->badge() . ' me-1">' . EtatDpeEnum::from(strtolower($etatEc))->libelle() . '</span>';
+        }
+
+        return $html;
+    }
+
+    public function badgeChangeRf(array $etatsEc): string
+    {
+        if (count($etatsEc) === 0) {
+            return '<span class="badge bg-secondary me-1">Initialisé</span>';
+        }
+
+        $etatsEc = array_keys($etatsEc);
+        $html = '';
+        foreach ($etatsEc as $etatEc) {
+            $html .= '<span class="badge bg-' . EtatChangeRfEnum::from(strtolower($etatEc))->badge() . ' me-1">' . EtatChangeRfEnum::from(strtolower($etatEc))->libelle() . '</span>';
         }
 
         return $html;

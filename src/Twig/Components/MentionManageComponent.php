@@ -3,11 +3,14 @@
 namespace App\Twig\Components;
 
 use App\Classes\GetDpeParcours;
+use App\Classes\MentionProcess;
 use App\Classes\ValidationProcess;
 use App\Entity\FicheMatiere;
 use App\Entity\Formation;
 use App\Entity\Parcours;
 use App\Entity\TypeDiplome;
+use App\Enums\EtatDemandeChangeRfEnum;
+use App\Enums\EtatProcessMentionEnum;
 use App\Enums\TypeModificationDpeEnum;
 use App\Repository\HistoriqueFormationRepository;
 use App\Repository\HistoriqueParcoursRepository;
@@ -34,7 +37,9 @@ final class MentionManageComponent extends AbstractController
         'soumis_dpe_composante' => 'dpe',
         'refuse_rf' => 'formation',
         'refuse_dpe_composante' => 'dpe',
+        'dpe' => 'dpe',
         'soumis_conseil' => 'conseil',
+        'conseil' => 'conseil',
         'refuse_conseil' => 'ses',
         'refuse_central' => 'ses',
         'soumis_central' => 'ses',
@@ -68,14 +73,8 @@ final class MentionManageComponent extends AbstractController
     #[LiveProp(writable: true)]
     public ?Formation $formation = null;
 
-    #[LiveProp]
-    public ?Parcours $parcours = null;
-
     public array $process;
     public array $historiques = [];
-
-    #[LiveProp]
-    public ?FicheMatiere $ficheMatiere = null;
 
     #[LiveProp]
     public ?TypeDiplome $typeDiplome;
@@ -92,113 +91,36 @@ final class MentionManageComponent extends AbstractController
 
     public function __construct(
         private readonly HistoriqueFormationRepository $historiqueFormationRepository,
-        private readonly HistoriqueParcoursRepository  $historiqueParcoursRepository,
-        private readonly ValidationProcess             $validationProcess,
+        private readonly MentionProcess                $validationProcess,
         #[Target('dpeParcours')]
         private readonly WorkflowInterface             $dpeParcoursWorkflow,
     ) {
         $this->process = $this->validationProcess->getProcess();
     }
 
-    #[LiveListener('mention_manage:valide')]
-    public function valide(): void
-    {
-        $this->place = $this->getPlace($this->type);
-        $this->etape = self::TAB[$this->place] ?? $this->type;
-        $this->getHistorique();
-        $this->event = 'valide';
-
-        $this->redirige();
-    }
-
-    public function redirige(): Response
-    {
-        // si niveau parcours, formation ou composante, une fois validé => On redirige vers le show.
-        if ($this->type === 'parcours') {
-            return $this->redirectToRoute('app_parcours_show', [
-                'id' => $this->parcours->getId()
-            ]); //uniquement si RF ou DPE
-        }
-
-        return $this->redirectToRoute('app_formation_show', [
-            'slug' => $this->formation->getSlug()
-        ]); //uniquement si RF ou DPE
-    }
-
-    #[LiveListener('mention_manage:edit')]
-    public function edit(): void
-    {
-        $this->place = $this->getPlace($this->type);
-        $this->etape = self::TAB[$this->place] ?? $this->type;
-        $this->event = 'edit';
-    }
-
-    #[LiveListener('mention_manage:refuse')]
-    public function refuse(): void
-    {
-        $this->place = $this->getPlace($this->type);
-        $this->etape = self::TAB[$this->place] ?? $this->type;
-        $this->getHistorique();
-        $this->event = 'refuse';
-    }
-
-    #[LiveListener('mention_manage:reserve')]
-    public function reserve(): void
-    {
-        $this->place = $this->getPlace($this->type);
-        $this->etape = self::TAB[$this->place] ?? $this->type;
-        $this->getHistorique();
-        $this->event = 'reserve';
-    }
-
     private function getHistorique(): void
     {
-        if ($this->type === 'formation') {
-            $historiques = $this->historiqueFormationRepository->findBy(['formation' => $this->formation], ['created' => 'ASC']);
-            foreach ($historiques as $historique) {
-                $this->historiques[$historique->getEtape()] = $historique;
-            }
-        } elseif ($this->type === 'parcours') {
-            $historiques = $this->historiqueParcoursRepository->findBy(['parcours' => $this->parcours], ['created' => 'ASC']);
-
-            foreach ($historiques as $historique) {
-                if (self::TAB_PROCESS[$historique->getEtape()] < self::TAB_PROCESS[self::TAB[$this->etape]]) {
-                    $this->historiques[$historique->getEtape()] = $historique;
-                }
-            }
-            $historiques = $this->historiqueFormationRepository->findBy(['formation' => $this->parcours->getFormation()], ['created' => 'ASC']);
-            foreach ($historiques as $historique) {
-                if (self::TAB_PROCESS[$historique->getEtape()] < self::TAB_PROCESS[self::TAB[$this->etape]]) {
-                    $this->historiques[$historique->getEtape()] = $historique;
-                }
-            }
-
+        $historiques = $this->historiqueFormationRepository->findBy(['formation' => $this->formation], ['created' => 'ASC']);
+        foreach ($historiques as $historique) {
+            $this->historiques[$historique->getEtape()] = $historique;
         }
-
     }
 
     #[PostMount]
     public function postMount(): void
     {
-        if ($this->type === 'formation') {
-            $this->typeDiplome = $this->formation->getTypeDiplome();
-            $this->place = $this->getPlace($this->type);
-        } elseif ($this->type === 'parcours' && $this->parcours !== null) {
-            $this->typeDiplome = $this->parcours?->getFormation()?->getTypeDiplome();
-            $this->formation = $this->parcours?->getFormation();
-            $this->place = $this->getPlace($this->type);
+        $this->typeDiplome = $this->formation->getTypeDiplome();
+        $this->place = $this->getPlace($this->type);
+
+        if ($this->formation !== null && $this->formation->isHasParcours() === false && $this->formation->getParcours()->count() === 1) {
+
+            $parcours = $this->formation->getParcours()->first();
             $this->hasDemande =
-                GetDpeParcours::getFromParcours($this->parcours)?->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_TEXTE || GetDpeParcours::getFromParcours($this->parcours)?->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_MCCC_TEXTE || GetDpeParcours::getFromParcours($this->parcours)?->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_MCCC;
-        } elseif ($this->type === 'ficheMatiere') {
-            $this->typeDiplome = $this->ficheMatiere->getParcours()?->getFormation()?->getTypeDiplome();
-            $this->parcours = $this->ficheMatiere->getParcours();
-            $this->formation = $this->parcours->getFormation();
+                GetDpeParcours::getFromParcours($parcours)?->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_TEXTE || GetDpeParcours::getFromParcours($parcours)?->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_MCCC_TEXTE || GetDpeParcours::getFromParcours($parcours)?->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_MCCC;
         }
+
         $this->etape = self::TAB[$this->place] ?? $this->type;
         $this->getHistorique();
-
-        // dépend du type et de l'étape...
-
     }
 
     public function dateHistorique(string $transition): string
@@ -218,7 +140,7 @@ final class MentionManageComponent extends AbstractController
 
     private function getPlace(string $type): string
     {
-        $objet = $type === 'formation' || $this->parcours === null ? GetDpeParcours::getFromFormation($this->formation) : GetDpeParcours::getFromParcours($this->parcours);
+        $objet = GetDpeParcours::getFromFormation($this->formation);
         if (null === $objet) {
             return 'initialisation_dpe';
         }

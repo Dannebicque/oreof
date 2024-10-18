@@ -7,6 +7,13 @@
 </head>
 <body class="global-bg">
     <h2 class="fs-3 mt-5 mb-4 ms-4">Programme des enseignements</h2>
-    {{ include('parcours/_parcours_maquette_iframe.html.twig', {parcours: parcours, indexParcours: 1} ) }}
+    {% if parcours is defined and parcours != false %}
+        <p class="fst-italic text-white ms-4">Maquette en cours de validation, susceptible de modifications</p>
+        {{ include('parcours/_parcours_maquette_iframe.html.twig', {parcours: parcours, indexParcours: 1} ) }}
+    {% else %}
+        <h2 class="fs-4 mt-5 mb-4 ms-4 fst-italic">
+            Informations en cours de validation et non disponibles pour le moment
+        </h2>
+    {% endif %}
 </body>
 </html>

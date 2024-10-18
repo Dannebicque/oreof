@@ -123,10 +123,10 @@ class FormationRepository extends ServiceEntityRepository
                 ->setParameter('composante', $options['composantePorteuse']);
         }
 
-        if (array_key_exists('etatDpe', $options) && null !== $options['etatDpe']) {
-            $query->andWhere("JSON_CONTAINS(p.etatValidation, :etatDpe) = 1")
-                ->setParameter('etatDpe', json_encode([$options['etatDpe'] => 1]));
-        }
+//        if (array_key_exists('etatDpe', $options) && null !== $options['etatDpe']) {
+//            $query->andWhere("JSON_CONTAINS(p.etatValidation, :etatDpe) = 1")
+//                ->setParameter('etatDpe', json_encode([$options['etatDpe'] => 1]));
+//        }
 
         if (array_key_exists('mention', $filtres) && null !== $filtres['mention']) {
             $query->addOrderBy(
@@ -274,6 +274,9 @@ class FormationRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+
+
+    /** @deprecated  */
     public function findByComposanteTypeValidation(Composante $composante, CampagneCollecte $campagneCollecte, string $typeValidation): array
     {
         $query = $this->createQueryBuilder('f')

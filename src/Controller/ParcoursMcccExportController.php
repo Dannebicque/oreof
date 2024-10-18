@@ -10,8 +10,11 @@
 namespace App\Controller;
 
 use App\Classes\GetHistorique;
+use App\Entity\CampagneCollecte;
 use App\Entity\Parcours;
 use App\TypeDiplome\TypeDiplomeRegistry;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 class ParcoursMcccExportController extends BaseController
@@ -21,8 +24,14 @@ class ParcoursMcccExportController extends BaseController
         GetHistorique $getHistorique,
         TypeDiplomeRegistry $typeDiplomeRegistry,
         Parcours $parcours,
-        string $_format = 'xlsx'
+        string $_format = 'xlsx',
+        EntityManagerInterface $entityManager
     ) {
+
+        if($_format === "pdf"){
+            return $this->getCfvuMcccExportFromFile('simplifie', $parcours, $entityManager);
+        }
+
         $formation = $parcours->getFormation();
 
         if (null === $formation) {
@@ -131,5 +140,34 @@ class ParcoursMcccExportController extends BaseController
             ),
             default => throw new \Exception('Format non géré'),
         };
+    }
+
+    #[Route('/parcours/mccc/export/cfvu_valid/{parcours}/{format}', name: 'app_parcours_mccc_export_cfvu_valid')]
+    public function getCfvuMcccExportFromFile(
+        string $format = 'complet',
+        Parcours $parcours,
+        EntityManagerInterface $entityManager
+    ) {
+        if(in_array($format, ['complet', 'simplifie']) === false){
+            throw $this->createNotFoundException('File Type is invalid');
+        }
+
+        $dpe = $entityManager->getRepository(CampagneCollecte::class)->findOneBy(['defaut' => true]);
+
+        $fileName = "MCCC-Parcours-{$parcours->getId()}-{$dpe->getAnnee()}";
+        if($format === "simplifie"){
+            $fileName .= "-simplifie";
+        }
+        $fileName .= ".pdf";
+
+        try {
+            $pdf = file_get_contents(__DIR__ . "/../../public/mccc-export/{$fileName}");
+        }catch(\Exception $e){
+            throw $this->createNotFoundException("Le fichier demandé n'a pas été trouvé");
+        }
+
+        return new Response($pdf, 200, [
+            'Content-Type' => 'application/pdf',
+        ]);
     }
 }

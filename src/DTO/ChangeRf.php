@@ -15,6 +15,7 @@ use App\Enums\TypeRfEnum;
 class ChangeRf {
     private ?User $user = null;
     private ?string $commentaire = '';
+
     private ?TypeRfEnum $typeRf = TypeRfEnum::RF;
 
     public function getUser(): ?User

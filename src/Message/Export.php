@@ -11,7 +11,6 @@ namespace App\Message;
 
 use App\Entity\CampagneCollecte;
 use DateTimeInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 class Export
 {
@@ -19,7 +18,7 @@ class Export
         private readonly int $userId,
         private readonly string $typeDocument,
         private readonly array $formations,
-        private readonly ?int $anneeUniversitaireId = null,
+        private readonly ?CampagneCollecte $campagneCollecte = null,
         private readonly ?DateTimeInterface $date = null)
     {
     }
@@ -40,8 +39,8 @@ class Export
     {
         return $this->formations;
     }
-    public  function getAnnee(): ?int
+    public  function getCampagneCollecte(): ?CampagneCollecte
     {
-        return $this->anneeUniversitaireId;
+        return $this->campagneCollecte;
     }
 }

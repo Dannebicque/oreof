@@ -1,0 +1,29 @@
+{{ component('alerte', {
+    type: 'info',
+    message: ('fiche_matiere.demande.reouverture.ses.alerte')|trans({}, 'process')|nl2br|raw
+}) }}
+
+<form action="{{ path('app_fiche_matiere_validation_demande_reouverture', {id:ficheMatiere.id}) }}" method="post">
+    <div class="form-check mt-2">
+        <input class="form-check-input" type="radio" value="MODIFICATION_FICHE_MATIERE" id="modificationTexte"
+               name="demandeReouverture">
+        <label class="form-check-label" for="modificationTexte">
+            <strong>{{ ('fiche_matiere.demande.reouverture.label')|trans({}, 'process') }}</strong>
+            <i
+                    class="fal fa-question-circle ms-1"
+                    data-controller="tooltip"
+                    data-tooltip-placement-value="bottom"
+                    aria-label="{{ ('fiche_matiere.demande.reouverture.help')|trans({}, 'process') }}"
+                    data-bs-original-title="{{ ('fiche_matiere.demande.reouverture.help')|trans({}, 'process') }}"></i>
+        </label>
+    </div>
+
+    <div class="mt-2">
+        <button type="submit" class="btn btn-success"
+                {{ stimulus_action('base','sauvegardeFormModal', 'click') }}
+        >
+            <i class="fal fa-floppy-disk"></i>
+            {{ ('btn.fiche_matiere.demande.reouverture')|trans({}, 'process') }}
+        </button>
+    </div>
+</form>

@@ -58,7 +58,7 @@ class FicheMatiereProcess extends AbstractProcess
         return $processData;
     }
 
-    public function valideFicheMatiere(FicheMatiere $ficheMatiere, UserInterface $user, $process, $etape, $request): ?Response
+    public function valideFicheMatiere(FicheMatiere $ficheMatiere, UserInterface $user, array $process, string $etape, $request): ?Response
     {
         if ($this->ficheMatiereWorkflow->can($ficheMatiere, $process['canValide'])) {
             $this->ficheMatiereWorkflow->apply($ficheMatiere, $process['canValide']);
@@ -82,5 +82,12 @@ class FicheMatiereProcess extends AbstractProcess
         $histoEvent = new HistoriqueFicheMatiereEvent($ficheMatiere, $user, $etape, $etat, $request);
         $this->eventDispatcher->dispatch($histoEvent, HistoriqueFicheMatiereEvent::ADD_HISTORIQUE_FICHE_MATIERE);
         return JsonReponse::success($this->translator->trans('ficheMatiere.'.$etat.'.' . $etape . '.flash.success', [], 'process'));
+    }
+
+    public function ouvertureFicheMatiere(FicheMatiere $ficheMatiere, UserInterface $user, Request $request)
+    {
+        $this->ficheMatiereWorkflow->apply($ficheMatiere, 'rouvrir_fiche_matiere');
+        $this->entityManager->flush();
+        return $this->dispatchEventFicheMatiere($ficheMatiere, $user, 'rouvrir_fiche_matiere', $request, 'info');
     }
 }

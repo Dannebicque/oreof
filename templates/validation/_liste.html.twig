@@ -2,13 +2,15 @@
     <table class="table" {{ stimulus_controller('check_all') }}>
         <thead>
         <tr>
-            <th>
-                <div class="checkbox">
-                    <label>
-                        <input type="checkbox" id="check-all" {{ stimulus_action('check_all', 'checkAll') }}>
-                    </label>
-                </div>
-            </th>
+            {% if isCfvu is not defined or not isCfvu %}
+                <th>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" id="check-all" {{ stimulus_action('check_all', 'checkAll') }}>
+                        </label>
+                    </div>
+                </th>
+            {% endif %}
             <th>
                 Composante
             </th>
@@ -18,9 +20,14 @@
             <th>
                 Mention/spécialité
             </th>
+            <th>
+                Parcours
+            </th>
             <th>Etat</th>
-            {% if etape == 'cfvu' %}
-            <th>PV ?</th>
+            <th>BCC</th>
+            <th>Maquette</th>
+            {% if etape == 'cfvu' or etape == 'publication' or etape == 'valide_cfvu' or etape == 'soumis_cfvu' %}
+                <th>Conseil ?</th>
             {% endif %}
             <th>Remplissage</th>
             <th></th>
@@ -28,21 +35,25 @@
 
         </thead>
         <tbody>
-        {% for formation in formations %}
+        {% for dpeParcours in allparcours %}
+            {% set parcours = dpeParcours.parcours %}
+            {% set formation = parcours.formation %}
             <tr>
-                <td>
-                    <div class="checkbox">
-                        <label>
-                            <input
-                                    {{ stimulus_action('check_all', 'check') }}
-                                    type="checkbox"
-                                    class="check-all"
-                                    name="formations[]"
-                                    value="{{ formation.id }}"
-                            >
-                        </label>
-                    </div>
-                </td>
+                {% if isCfvu is not defined or not isCfvu %}
+                    <td>
+                        <div class="checkbox">
+                            <label>
+                                <input
+                                        {{ stimulus_action('check_all', 'check') }}
+                                        type="checkbox"
+                                        class="check-all"
+                                        name="parcours[]"
+                                        value="{{ dpeParcours.id }}"
+                                >
+                            </label>
+                        </div>
+                    </td>
+                {% endif %}
                 <td>
                     {% if formation.composantePorteuse != null %}
                         {{ formation.composantePorteuse.libelle }}
@@ -60,127 +71,237 @@
                         <span class="badge bg-danger">Non définie</span>
                     {% endif %}
                 </td>
-
                 <td>
-                    {{ formation.etatDpe|badgeDpe }}
+                    {% if formation.hasParcours %}
+                        {{ parcours.libelle }}
+                    {% else %}
+                        Sans parcours
+                    {% endif %}
                 </td>
-                {% if etape == 'cfvu' %}
+                <td>
+                    {{ dpeParcours.etatValidation|badgeDpe }}
+                </td>
+                <td>
+                    {{ parcours.etatStep(3)|badgeStep }}
+                </td>
+                <td>
+                    {{ parcours.etatStep(4)|badgeStep }}
+                </td>
+                {% if etape == 'cfvu' or etape == 'publication' or etape == 'valide_cfvu' or etape == 'soumis_cfvu' %}
                     <td>
-                        {{ component('historique_pv', {formation:formation}) }}
+                        {{ component('historique_pv', {parcours:parcours}) }}
                     </td>
                 {% endif %}
                 <td>
-                    {{ formation.remplissage|remplissage }}
+                    {{ parcours.remplissage|remplissage }}
                 </td>
                 <td class="text-end">
                     {% if formation.hasParcours and formation.parcours|length > 0 %}
-                        <button class="btn btn-sm btn-outline-primary"
-                                {{ stimulus_action('structure--formation', 'afficherParcours', 'click',
-                                    {formation:formation.id}) }}
-                        >
-                            <i class="fal fa-caret-right"></i>
-                            {{ formation.parcours|length }} parcours
-                        </button>
-                    {% endif %}
-
-                    <a href="{{ path('app_formation_show',{'slug': formation.slug}) }}"
-                       class="btn btn-sm text-info"
-                       data-bs-toggle="tooltip"
-                       data-bs-placement="bottom"
-                       title="Voir une formation"
-                    >
-                        <i class="{{ iconShow }}"></i>
-                        <span> Voir</span>
-                    </a>
-
-                    {% if is_granted('CAN_FORMATION_EDIT_MY', formation) %}
-                        <a href="{{ path('app_formation_edit',{'slug': formation.slug}) }}"
-                           class="btn btn-sm text-warning"
+                        <a href="{{ path('app_parcours_show',{'id': parcours.id}) }}"
+                           class="btn btn-sm text-info"
                            data-bs-toggle="tooltip"
                            data-bs-placement="bottom"
-                           title="Modifier la fiche d'identité de la formation"
+                           title="Voir le parcours"
                         >
-                            <i class="{{ iconEdit }}"></i>
-                            <span> Modifier</span>
+                            <i class="{{ iconShow }}"></i>
+                            <span> Voir</span>
                         </a>
+                        <a href="#"
+                           class="btn btn-sm text-success"
+                                {{ stimulus_controller('modal', {
+                                    size: 'lg',
+                                    modalTitle: 'Vérifier la saisie',
+                                    modalUrl: path('app_parcours_state', {parcours:parcours.id}) }) }}
+                           data-action="click->modal#openModal"
+                           data-size="lg"
+                           data-bs-toggle="tooltip"
+                           data-bs-placement="bottom"
+                           title="Vérifier la saisie"
+                        >
+                            <i class="fal fa-binoculars"></i>
+                            <span> vérifier</span>
+                        </a>
+                        {% if isCfvu is not defined or not isCfvu %}
+                            {% if is_granted('CAN_PARCOURS_EDIT_MY', parcours) %}
+                                <a href="{{ path('app_parcours_edit',{'id': parcours.id}) }}"
+                                   class="btn btn-sm text-warning"
+                                   data-bs-toggle="tooltip"
+                                   data-bs-placement="bottom"
+                                   title="Modifier la fiche d'identité du parcours"
+                                >
+                                    <i class="{{ iconEdit }}"></i>
+                                    <span> Modifier</span>
+                                </a>
+                            {% endif %}
+                        {% endif %}
+                    {% else %}
+                        <a href="{{ path('app_formation_show',{'slug': formation.slug}) }}"
+                           class="btn btn-sm text-info"
+                           data-bs-toggle="tooltip"
+                           data-bs-placement="bottom"
+                           title="Voir la formation"
+                        >
+                            <i class="{{ iconShow }}"></i>
+                            <span> Voir</span>
+                        </a>
+                        <a href="#"
+                           class="btn btn-sm text-success"
+                                {{ stimulus_controller('modal', {
+                                    size: 'lg',
+                                    modalTitle: 'Vérifier la saisie',
+                                    modalUrl: path('app_formation_state', {formation:formation.id}) }) }}
+                           data-action="click->modal#openModal"
+                           data-size="lg"
+                           data-bs-toggle="tooltip"
+                           data-bs-placement="bottom"
+                           title="Vérifier la saisie"
+                        >
+                            <i class="fal fa-binoculars"></i>
+                            <span> vérifier</span>
+                        </a>
+
+                        {% if is_granted('CAN_FORMATION_EDIT_MY', formation) %}
+                            <a href="{{ path('app_formation_edit',{'slug': formation.slug}) }}"
+                               class="btn btn-sm text-warning"
+                               data-bs-toggle="tooltip"
+                               data-bs-placement="bottom"
+                               title="Modifier la fiche d'identité de la formation"
+                            >
+                                <i class="{{ iconEdit }}"></i>
+                                <span> Modifier</span>
+                            </a>
+                        {% endif %}
                     {% endif %}
 
-                    {% if is_granted('ROLE_SES') %}
-                        <button {{ stimulus_action('crud', 'delete', 'click', {
-                            url:path('app_formation_delete',{'id': formation.id}),
-                            csrf: csrf_token('delete' ~ formation.id)
-                        }) }} class="btn btn-sm text-danger">
-                            <i class="{{ iconDelete }}"></i> Supprimer
-                        </button>
-                    {% endif %}
+
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="8" class="bg-warning">Aucun enregistrement trouvé</td>
+                <td colspan="10" class="bg-warning">Aucun enregistrement trouvé</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
-    <div class="row mt-2">
-        {% if process.hasValid %}
-            <div class="col-3 d-grid">
-                <button class="btn btn-sm d-block btn-outline-success"
-                        type="button"
-                        data-action="validation--index#valide"
-                        data-validation--index-url-param="{{ path('app_validation_valide_lot', {etape:etape}) }}"
-                        data-controller="tooltip"
-                        data-tooltip-placement-value="bottom"
-                        aria-label="{{ ('validation.valider.'~etape)|trans({}, 'process') }}"
-                        data-bs-original-title="{{ ('validation.valider.'~etape)|trans({}, 'process') }}"
-                >
-                    <i class="fal fa-check"></i> {{ ('validation.valider.'~etape)|trans({}, 'process') }}
-                </button>
-            </div>
-        {% else %}
-            <div class="col-3 d-grid">
-            </div>
-        {% endif %}
+    {% if isCfvu is not defined or not isCfvu %}
+        <div class="row mt-2">
+            {% set prefix = 'parcours' %}
+            {% if allparcours|length > 0 %}
+                {% set oneParcours = allparcours|first %}
 
-        {% if process.hasReserve %}
-            <div class="col-3 d-grid">
-                <button
-                        class="btn btn-sm d-block btn-outline-warning"
-                        data-action="validation--index#valide"
-                        data-validation--index-url-param="{{ path('app_validation_reserve_lot', {etape:etape}) }}"
-                        data-controller="tooltip"
-                        data-tooltip-placement-value="bottom"
-                        aria-label="{{ ('validation.reserve.'~etape)|trans({}, 'process') }}"
-                        data-bs-original-title="{{ ('validation.reserve.'~etape)|trans({}, 'process') }}"
-                        type="button">
-                    <i class="fal fa-circle-exclamation-check"></i> {{ ('validation.reserve.'~etape)|trans({}, 'process') }}
-                </button>
-            </div>
-        {% else %}
-            <div class="col-3 d-grid">
-            </div>
-        {% endif %}
+                {% for key, state in hasTransitions(oneParcours) %}
+                    {% for keyTrans, transition in state %}
+                        <div class="col-{{ 4 / state|length }} d-grid">
+                            <button class="btn btn-sm d-block btn-outline-{{ transition.meta.btn }}"
+                                    type="button"
+                                    data-action="validation--index#{{ key }}"
+                                    data-validation--index-url-param="{{ path('app_validation_'~key~'_lot', {etape:etape, transition:keyTrans}) }}"
+                                    data-controller="tooltip"
+                                    data-tooltip-placement-value="bottom"
+                                    aria-label="{{ ('title.validation.'~prefix~'.'~keyTrans)|trans({}, 'process') }}"
+                                    data-bs-original-title="{{ ('title.validation.'~prefix~'.'~keyTrans)|trans({}, 'process') }}"
+                            >
+                                <i class="fal {{ transition.meta.icon }}"></i> {{ ('btn.validation.'~prefix~'.'~keyTrans)|trans({}, 'process') }}
+                            </button>
 
-        {% if process.hasRefuse %}
-            <div class="col-3 d-grid">
-                <button class="btn btn-sm d-block btn-outline-danger"
-                        type="button"
-                        data-action="validation--index#valide"
-                        data-validation--index-url-param="{{ path('app_validation_refuse_lot', {etape:etape}) }}"
-                        data-controller="tooltip"
-                        data-tooltip-placement-value="bottom"
-                        aria-label="{{ ('validation.refuser.'~etape)|trans({}, 'process') }}"
-                        data-bs-original-title="{{ ('validation.refuser.'~etape)|trans({}, 'process') }}"
-                >
-                    <i class="fal fa-ban"></i> {{ ('validation.refuser.'~etape)|trans({}, 'process') }}
-                </button>
-            </div>
-        {% else %}
-            <div class="col-3 d-grid">
-            </div>
-        {% endif %}
-    </div>
-    <div class="row mt-2" {{ stimulus_target('validation--index', 'action') }}>
 
-    </div>
+                            {#                        <button class="btn btn-sm d-block btn-outline-{{ transition.meta.btn }}" #}
+                            {#                                type="button" #}
+                            {#                                {{ stimulus_controller('modal', { #}
+                            {#                                    size: 'lg', #}
+                            {#                                    updateComponent: { #}
+                            {#                                        id: 'parcours_manage', #}
+                            {#                                        event: 'mention_manage:'~key, #}
+                            {#                                        event_type: key #}
+                            {#                                    }, #}
+                            {#                                    modalTitle: ('validation.valider.'~prefix~'.'~keyTrans~'.title')|trans({}, 'process'), #}
+                            {#                                    modalUrl: path('app_validation_'~key, { #}
+                            {#                                        etape:this.place, #}
+                            {#                                        transition:keyTrans, #}
+                            {#                                        id:id, #}
+                            {#                                        type:'parcours' #}
+                            {#                                    }) }) }} #}
+                            {#                                data-action="click->modal#openModal" #}
+                            {#                                data-controller="tooltip" #}
+                            {#                                data-tooltip-placement-value="bottom" #}
+                            {#                                aria-label="{{ ('title.validation.'~prefix~'.'~keyTrans)|trans({}, 'process') }}" #}
+                            {#                                data-bs-original-title="{{ ('title.validation.'~prefix~'.'~keyTrans)|trans({}, 'process') }}" #}
+                            {#                        > #}
+                            {#                            <i class="fal {{ transition.meta.icon }}"></i> {{ ('btn.validation.'~prefix~'.'~keyTrans)|trans({}, 'process') }} #}
+                            {#                        </button> #}
+                        </div>
+                    {% else %}
+                        <div class="col-2 d-grid">
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="col-6 d-grid">
+                        <button class="btn btn-sm btn-muted d-block">
+                            {{ 'validation.formation.indisponible'|trans({}, 'process') }}
+                        </button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            {#        {% if process.hasValid %} #}
+            {#                    <div class="col-3 d-grid"> #}
+            {#                        <button class="btn btn-sm d-block btn-outline-success" #}
+            {#                                type="button" #}
+            {#                                data-action="validation--index#valide" #}
+            {#                                data-validation--index-url-param="{{ path('app_validation_valide_lot', {etape:etape}) }}" #}
+            {#                                data-controller="tooltip" #}
+            {#                                data-tooltip-placement-value="bottom" #}
+            {#                                aria-label="{{ ('validation.valider.'~etape)|trans({}, 'process') }}" #}
+            {#                                data-bs-original-title="{{ ('validation.valider.'~etape)|trans({}, 'process') }}" #}
+            {#                        > #}
+            {#                            <i class="fal fa-check"></i> {{ ('validation.valider.'~etape)|trans({}, 'process') }} #}
+            {#                        </button> #}
+            {#                    </div> #}
+            {#        {% else %} #}
+            {#            <div class="col-3 d-grid"> #}
+            {#            </div> #}
+            {#        {% endif %} #}
+
+            {#        {% if process.hasReserve %} #}
+            {#            <div class="col-3 d-grid"> #}
+            {#                <button #}
+            {#                        class="btn btn-sm d-block btn-outline-warning" #}
+            {#                        data-action="validation--index#valide" #}
+            {#                        data-validation--index-url-param="{{ path('app_validation_reserve_lot', {etape:etape}) }}" #}
+            {#                        data-controller="tooltip" #}
+            {#                        data-tooltip-placement-value="bottom" #}
+            {#                        aria-label="{{ ('validation.reserve.'~etape)|trans({}, 'process') }}" #}
+            {#                        data-bs-original-title="{{ ('validation.reserve.'~etape)|trans({}, 'process') }}" #}
+            {#                        type="button"> #}
+            {#                    <i class="fal fa-circle-exclamation-check"></i> {{ ('validation.reserve.'~etape)|trans({}, 'process') }} #}
+            {#                </button> #}
+            {#            </div> #}
+            {#        {% else %} #}
+            {#            <div class="col-3 d-grid"> #}
+            {#            </div> #}
+            {#        {% endif %} #}
+
+            {#        {% if process.hasRefuse %} #}
+            {#            <div class="col-3 d-grid"> #}
+            {#                <button class="btn btn-sm d-block btn-outline-danger" #}
+            {#                        type="button" #}
+            {#                        data-action="validation--index#valide" #}
+            {#                        data-validation--index-url-param="{{ path('app_validation_refuse_lot', {etape:etape}) }}" #}
+            {#                        data-controller="tooltip" #}
+            {#                        data-tooltip-placement-value="bottom" #}
+            {#                        aria-label="{{ ('validation.refuser.'~etape)|trans({}, 'process') }}" #}
+            {#                        data-bs-original-title="{{ ('validation.refuser.'~etape)|trans({}, 'process') }}" #}
+            {#                > #}
+            {#                    <i class="fal fa-ban"></i> {{ ('validation.refuser.'~etape)|trans({}, 'process') }} #}
+            {#                </button> #}
+            {#            </div> #}
+            {#        {% else %} #}
+            {#            <div class="col-3 d-grid"> #}
+            {#            </div> #}
+            {#        {% endif %} #}
+        </div>
+        <div class="row mt-2" {{ stimulus_target('validation--index', 'action') }}>
+
+        </div>
+    {% endif %}
 </div>

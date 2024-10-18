@@ -26,6 +26,7 @@ security:
 
 
     access_control:
+        - { path: ^/synthese/modification/pdf, roles: PUBLIC_ACCESS }
         - { path: ^/api, roles: PUBLIC_ACCESS }
         - { path: ^/connexion, roles: PUBLIC_ACCESS }
         - { path: ^/demande-acces, roles: PUBLIC_ACCESS }
@@ -38,7 +39,9 @@ security:
         - { path: ^/parcours/.+/export-xml-lheo, roles: PUBLIC_ACCESS }
         - { path: ^/parcours/.+/export-pdf, roles: PUBLIC_ACCESS }
         - { path: ^/parcours/.+/maquette_iframe, roles: PUBLIC_ACCESS }
+        - { path: ^/parcours/.+/versioning/maquette_iframe, roles: PUBLIC_ACCESS }
         - { path: ^/fiche/matiere/.+/maquette_iframe, roles: PUBLIC_ACCESS }
+        - { path: ^/parcours/mccc/export/cfvu_valid/[0-9]+/(complet|simplifie), roles: PUBLIC_ACCESS }
         - { path: ^/, roles: IS_AUTHENTICATED_FULLY }
 when@test:
     security:

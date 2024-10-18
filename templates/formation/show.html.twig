@@ -61,14 +61,13 @@
 
 {% block content %}
 
-    {{ component('mention_manage', {formation:formation, type:'formation'}) }}
+    {{ include('formation/_process.html.twig') }}
 
     {% if is_granted('ROLE_SES') or is_granted('CAN_ETABLISSEMENT_SCOLARITE_ALL') or is_granted('CAN_FORMATION_SCOLARITE_MY', formation) %}
-    {{ include('formation/_gestion.html.twig', {formation: formation}) }}
-    {# Versioning pour les parcours par défaut #}
-    {% if formation.isHasParcours == false and formation.parcours|length == 1 %}   
-        {{ include('formation/_manage_versioning_parcours.html.twig', {parcours: formation.parcours[0]}) }}
-    {% endif %}
+        {# Versioning pour les parcours par défaut #}
+        {% if formation.isHasParcours == false and formation.parcours|length == 1 %}
+            {{ include('formation/_manage_versioning_parcours.html.twig', {parcours: formation.parcours[0]}) }}
+        {% endif %}
         {% if is_granted('ROLE_ADMIN') %}
             {{ include('formation/_manage_versioning_formation.html.twig') }}
         {% endif %}
@@ -161,7 +160,7 @@
                         <li class="border-left-parcours border-left-parcours-{{ loop.index }}">
                             <a class="nav-link p-2" href="#descriptif_{{ parcours.id }}">
                                 <i class="fal fa-chevron-right"></i>
-                                Descriptif de la formation
+                                Descriptif du parcours
                             </a>
                         </li>
                         <li class="border-left-parcours border-left-parcours-{{ loop.index }}">
@@ -228,15 +227,27 @@
     {% if formation.isHasParcours == false and formation.parcours|length == 1 %}
         {% set parcours = formation.parcours[0] %}
         {{ include('btn/export_mccc.html.twig') }}
-        <a href="{{ path('app_parcours_bcc', {parcours:parcours.id}) }}"
-           class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2"
-           data-bs-toggle="tooltip"
-           data-bs-placement="bottom"
-           title="Voir les BCC"
-        >
-            <i class="{{ iconShow }}"></i>
-            <span> Voir BCC</span>
-        </a>
+        <div class="btn-group">
+            <button type="button"
+                    class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2 dropdown-toggle mb-1"
+                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="{{ iconDownload }}"></i> BCC
+            </button>
+            <div class="dropdown-menu" style="">
+                <a class="dropdown-item" href="{{ path('app_parcours_bcc', {parcours:parcours.id}) }}">
+                    Voir en ligne
+                </a>
+                <a class="dropdown-item" href="{{ path('app_competence_export_bcc', {parcours:parcours.id}) }}">
+                    Export des BCC (pdf)
+                </a>
+                <a class="dropdown-item" href="{{ path('app_competence_export_croise', {parcours:parcours.id}) }}">
+                    Export du tableau croisé BCC/EC, par semestre (pdf)
+                </a>
+                <a class="dropdown-item" href="{{ path('app_competence_export_croise_global', {parcours:parcours.id}) }}">
+                    Export du tableau croisé BCC/EC, global (xslx)
+                </a>
+            </div>
+        </div>
     {% else %}
         <a href="#presentation"
            class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2"
@@ -266,6 +277,16 @@
     >
         <i class="{{ iconDownload }}"></i>
         <span> Fiche descriptive (PDF)</span>
+    </a>
+
+    <a href="{{ path('app_plaquette_formation_export', {slug:formation.slug}) }}"
+       class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+       data-bs-toggle="tooltip"
+       data-bs-placement="bottom"
+       title="Télécharger la plaquette en PDF"
+    >
+        <i class="{{ iconDownload }}"></i>
+        <span> Plaquette (PDF)</span>
     </a>
 
     {% if is_granted('CAN_FORMATION_EDIT_MY', formation) %}

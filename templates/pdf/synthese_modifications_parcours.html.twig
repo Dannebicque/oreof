@@ -1,0 +1,58 @@
+{% extends 'pdf/base-pdf.html.twig' %}
+
+{% block content %}
+    <h1 class="text-center">CFVU du {{ dpe.dateCfvu|date('d/m/Y') }}</h1>
+{#    {% for composante in composantes|filter(composante => demandes[composante.id]|length > 0) %}#}
+
+
+        {% for demande in demandes[composante.id]|filter(demande => demande.nbDiff > 0) %}
+            {% if not loop.first %}
+                <div class="page_break"></div>
+            {% endif %}
+            {% set parcours = demande.parcours %}
+            <h2 class="text-center">{{ parcours.composanteInscription.libelle ?? "---" }}</h2>
+            <h3 class="text-center">{{ parcours.formation }}</h3>
+            <h3 class="text-center">Parcours {{ parcours.display }}</h3>
+            {% for key, p in demande.patch %}
+                {% for patch in p %}
+                    {% if key == 'modified' %}
+                        {% for  pp in patch %}
+                            {% if loop.first %}
+{#                                {% if pp.texte == 'Total Formation' %}#}
+{#                                    <div class="border border-1">#}
+{#                                {% endif %}#}
+                                <p>
+                                    <strong>Elément modifié : {{ pp.libelle }}</strong> ({{ pp.texte }})
+                                </p>
+                                <p>
+                            {% endif %}
+                            {{ pp.nouveau }} (au lieu de {{ pp.original }}).
+                            {% if loop.last %}
+                                </p>
+{#                                {% if pp.texte == 'Total Formation' %}#}
+{#                                    </div>#}
+{#                                {% endif %}#}
+                            {% endif %}
+                        {% endfor %}
+                    {% elseif key == 'added' %}
+                        {% for pp in patch %}
+                            {% if loop.first %}
+                                <p><strong>Elément ajouté :</strong></p>
+                                <p>{{ pp.libelle }}</p>
+                            {% endif %}
+                            <p>{{ pp.nouveau }}</p>
+                        {% endfor %}
+                    {% elseif key == 'removed' %}
+                        {% for pp in patch %}
+                            {% if loop.first %}
+                                <p><strong>Elément supprimé : </strong></p>
+                                <p>{{ pp.libelle }}</p>
+                            {% endif %}
+                            <p>{{ pp.origine }}</p>
+                        {% endfor %}
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+        {% endfor %}
+{#    {% endfor %}#}
+{% endblock %}

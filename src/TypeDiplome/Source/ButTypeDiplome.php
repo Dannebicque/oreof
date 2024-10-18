@@ -19,6 +19,7 @@ use App\Entity\Mccc;
 use App\Entity\Parcours;
 use App\Repository\ButCompetenceRepository;
 use App\TypeDiplome\Export\ButMccc;
+use App\TypeDiplome\Export\ButMcccVersion;
 use App\TypeDiplome\Synchronisation\But;
 use App\TypeDiplome\TypeDiplomeRegistry;
 use App\Utils\Tools;
@@ -59,7 +60,8 @@ class ButTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInterface
         protected EntityManagerInterface  $entityManager,
         protected TypeDiplomeRegistry     $typeDiplomeRegistry,
         protected But                     $synchronisationBut,
-        protected ButMccc                 $butMccc
+        protected ButMccc                 $butMccc,
+        protected ButMcccVersion          $butMcccVersion
     ) {
         parent::__construct($entityManager, $typeDiplomeRegistry);
     }
@@ -109,8 +111,8 @@ class ButTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInterface
     public function saveMcccs(FicheMatiere $ficheMatiere, InputBag $request): void
     {
         if ($request->has('sansNote') && $request->get('sansNote') === 'on') {
-                $ficheMatiere->setSansNote(true);
-                $ficheMatiere->setEtatMccc('Complet');
+            $ficheMatiere->setSansNote(true);
+            $ficheMatiere->setEtatMccc('Complet');
         } else {
             $ficheMatiere->setSansNote(false);
             $type = $ficheMatiere->getTypeMatiere();
@@ -156,8 +158,17 @@ class ButTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInterface
         ?DateTimeInterface $dateConseil = null,
         bool               $versionFull = true
     ): StreamedResponse {
-        //todo: exploiter la date...
         return $this->butMccc->exportExcelButMccc($anneeUniversitaire, $parcours, $dateCfvu, $dateConseil, $versionFull);
+    }
+
+    public function exportExcelVersionMccc(
+        CampagneCollecte   $anneeUniversitaire,
+        Parcours           $parcours,
+        ?DateTimeInterface $dateCfvu = null,
+        ?DateTimeInterface $dateConseil = null,
+        bool               $versionFull = true
+    ): StreamedResponse {
+        return $this->butMcccVersion->exportExcelButMccc($anneeUniversitaire, $parcours, $dateCfvu, $dateConseil, $versionFull);
     }
 
     public function exportPdfMccc(
@@ -167,7 +178,6 @@ class ButTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInterface
         ?DateTimeInterface $dateConseil = null,
         bool               $versionFull = true
     ): Response {
-        //todo: exploiter la date...
         return $this->butMccc->exportPdfButMccc($anneeUniversitaire, $parcours, $dateCfvu, $dateConseil, $versionFull);
     }
 
@@ -180,5 +190,16 @@ class ButTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInterface
         bool               $versionFull = true
     ): string {
         return $this->butMccc->exportAndSaveExcelbutMccc($anneeUniversitaire, $parcours, $dir, $dateCfvu, $dateConseil, $versionFull);
+    }
+
+    public function exportExcelAndSaveVersionMccc(
+        CampagneCollecte   $anneeUniversitaire,
+        Parcours           $parcours,
+        string $dir,
+        ?DateTimeInterface $dateCfvu = null,
+        ?DateTimeInterface $dateConseil = null,
+        string $fichier
+    ): string {
+        return $this->butMccc->exportAndSaveExcelbutMccc($anneeUniversitaire, $parcours, $dir, $dateCfvu, $dateConseil, false);
     }
 }

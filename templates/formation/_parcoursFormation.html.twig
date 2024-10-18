@@ -1,5 +1,5 @@
 <tr id="parcours_{{ formation.id }}">
-    <td colspan="7">
+    <td colspan="9">
         <table class="table" style="border-left: 2px solid var(--secondary)">
             <thead>
             <tr>
@@ -7,17 +7,30 @@
                 <th>Lieu</th>
                 <th>Responsable</th>
                 <th>Etat</th>
+                <th>BCC</th>
+                <th>MCCC</th>
+                <th>Conseil</th>
                 <th>Remplissage</th>
                 <th></th>
             </tr>
             </thead>
             <tbody>
+            {% if formation.hasParcours %}
             {% for parcours in formation.parcours|filter(parcours => parcours.formation.hasParcours) %}
                 <tr>
                     <td>{{ parcours.libelle }} {{ parcours.typeParcours|badgeTypeParcours }}</td>
                     <td>{{ parcours.localisation != null ? parcours.localisation.libelle : 'Non défini' }}</td>
                     <td>{{ parcours.respParcours != null ? parcours.respParcours.display : 'Non défini' }}</td>
                     <td>{{ dpesParcours[parcours.id].etatValidation|badgeDpe }}</td>
+                    <td>
+                        {{ parcours.etatStep(3)|badgeStep }}
+                    </td>
+                    <td>
+                        {{ parcours.etatStep(4)|badgeStep }}
+                    </td>
+                    <td>
+                        {{ component('historique_pv', {parcours:parcours}) }}
+                    </td>
                     <td>
                         {{ parcours.remplissage|remplissage }}
                     </td>
@@ -61,7 +74,7 @@
                         {% endif %}
 
                         {% if is_granted('CAN_FORMATION_DELETE_MY') or is_granted('ROLE_SES') %}
-{# todo manque formation sur le isgranted #}
+                            {# todo manque formation sur le isgranted #}
                             <button {{ stimulus_action('crud', 'delete', 'click', {
                                 url:path('app_parcours_delete',{'id': parcours.id}),
                                 csrf: csrf_token('delete' ~ parcours.id)
@@ -72,6 +85,82 @@
                     </td>
                 </tr>
             {% endfor %}
+            {% else %}
+                {% if formation.parcours|length == 0  %}
+                    <tr class="bg-warning text-white">
+                        <td colspan="9">Formation non initialisée, pas de parcours ou de parcours par défaut.</td>
+                    </tr>
+                    {% else %}
+            {% set parcours = formation.parcours[0] %}
+            <tr>
+                <td>{{ formation.display }}</td>
+                <td>{{ formation.localisationMention != null ? formation.localisationMention[0].libelle : 'Non défini' }}</td>
+                <td>{{ formation.responsableMention != null ? formation.responsableMention.display : 'Non défini' }}</td>
+                <td>{{ dpesParcours[parcours.id].etatValidation|badgeDpe }}</td>
+                <td>
+                    {{ parcours.etatStep(3)|badgeStep }}
+                </td>
+                <td>
+                    {{ parcours.etatStep(4)|badgeStep }}
+                </td>
+                <td>
+                    {{ component('historique_pv', {parcours:parcours}) }}
+                </td>
+                <td>
+                    {{ parcours.remplissage|remplissage }}
+                </td>
+                <td class="text-end">
+                    <a href="{{ path('app_formation_show',{'slug': formation.slug}) }}"
+                       class="btn btn-sm text-info"
+                       data-bs-toggle="tooltip"
+                       data-bs-placement="bottom"
+                       title="Voir une formation"
+                    >
+                        <i class="{{ iconShow }}"></i>
+                        <span> voir</span>
+                    </a>
+
+                    <a href="#"
+                       class="btn btn-sm text-success"
+                            {{ stimulus_controller('modal', {
+                                size: 'lg',
+                                modalTitle: 'Vérifier la saisie',
+                                modalUrl: path('app_formation_state', {formation:formation.id}) }) }}
+                       data-action="click->modal#openModal"
+                       data-size="lg"
+                       data-bs-toggle="tooltip"
+                       data-bs-placement="bottom"
+                       title="Vérifier la saisie"
+                    >
+                        <i class="fal fa-binoculars"></i>
+                        <span> vérifier</span>
+                    </a><br>
+
+                    {% if is_granted('CAN_FORMATION_EDIT_MY', formation) %}
+                        <a href="{{ path('app_formation_edit',{'slug':  formation.slug}) }}"
+                           class="btn btn-sm text-warning"
+                           data-bs-toggle="tooltip"
+                           data-bs-placement="bottom"
+                           title="Modifier la fiche d'identité du parcours"
+                        >
+                            <i class="{{ iconEdit }}"></i>
+                            <span> modifier</span>
+                        </a>
+                    {% endif %}
+
+                    {% if is_granted('CAN_FORMATION_DELETE_MY') or is_granted('ROLE_SES') %}
+                        {# todo manque formation sur le isgranted #}
+                        <button {{ stimulus_action('crud', 'delete', 'click', {
+                            url:path('app_formation_delete',{'id': formation.id}),
+                            csrf: csrf_token('delete' ~ formation.id)
+                        }) }} class="btn btn-sm text-danger">
+                            <i class="{{ iconDelete }}"></i> Supprimer
+                        </button>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endif %}
+            {% endif %}
             </tbody>
         </table>
     </td>

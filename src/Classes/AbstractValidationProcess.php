@@ -15,10 +15,16 @@ use Symfony\Component\Yaml\Yaml;
 abstract class AbstractValidationProcess
 {
     protected array $process = [];
+    protected array $processAll = [];
 
     public function getProcess(): array
     {
         return $this->process;
+    }
+
+    public function getProcessAll(): array
+    {
+        return $this->processAll;
     }
 
     public function getEtapeCle(string $etape, string $cle): string

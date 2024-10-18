@@ -23,13 +23,14 @@
                             BCC
                         </div>
                         {% if not isBut %}
-                            <div class="col-md-1 d-flex align-items-center justify-content-center
-                        text-secondary text-small">
-                                MCCC
-                            </div>
+
                             <div class="col-md-1 d-flex align-items-center justify-content-center
                         text-secondary text-small">
                                 Volumes Horaires
+                            </div>
+                            <div class="col-md-1 d-flex align-items-center justify-content-center
+                        text-secondary text-small">
+                                MCCC
                             </div>
                         {% endif %}
                         <div class="col-md-4 d-flex align-items-center justify-content-center
@@ -44,6 +45,7 @@
                     <div {{ stimulus_controller('ec--liste') }}>
                         {% if ec.ecEnfants|length == 0 %}
                             <div class="card mb-2 sh-19 sh-md-8">
+                                {# todo: avoir en paramètre si c''est une ue d'enfant d'enfant #}
                                 <div class="card-body pt-0 pb-0 h-100 {% if ue.ueParent != null %}border-left-sousUe border-left-sousUe-{{ ue.ordre }}{% endif %}">
                                     <div class="row g-1 h-100 align-content-center">
                                         <div class="col-md-1 d-flex flex-column justify-content-center">
@@ -142,16 +144,7 @@
                                                 }) }}
                                         </div>
                                         {% if not isBut %}
-                                            <div class="col-md-1 d-flex flex-column justify-content-center">
-                                                <div class="text-muted text-small d-md-none">mccc</div>
-                                                {{ component('badge_mccc', {
-                                                    elementConstitutif: ec,
-                                                    parcours: parcours,
-                                                    deplacer: deplacer,
-                                                    editable: editable,
-                                                    ue: ue
-                                                }) }}
-                                            </div>
+
                                             <div class="col-md-1 d-flex flex-column justify-content-center">
                                                 <div class="text-muted text-small d-md-none">Volumes Horaires</div>
                                                 {{ component('badge_heures', {
@@ -191,6 +184,16 @@
 {#                        </span>#}
 {#                                                    </button>#}
 {#                                                {% endif %}#}
+                                            </div>
+                                            <div class="col-md-1 d-flex flex-column justify-content-center">
+                                                <div class="text-muted text-small d-md-none">mccc</div>
+                                                {{ component('badge_mccc', {
+                                                    elementConstitutif: ec,
+                                                    parcours: parcours,
+                                                    deplacer: deplacer,
+                                                    editable: editable,
+                                                    ue: ue
+                                                }) }}
                                             </div>
                                         {% endif %}
                                         <div class="col-md-4 d-flex flex-column justify-content-center">
@@ -290,6 +293,21 @@
                                             <span class="badge bg-info">(EC à choix restreint)</span>
                                         </div>
 
+
+                                        <div class="col-6 col-md-2 d-flex flex-column justify-content-center">
+                                            <div class="text-muted text-small d-md-none">Volumes Horaires</div>
+                                            {% if ec.ecEnfants|length > 0 and ec.heuresEnfantsIdentiques == false %}
+                                                <span class="badge bg-info ms-1 me-1">Vol. Horaire des enfants</span>
+                                            {% else %}
+                                                {{ component('badge_heures', {
+                                                    elementConstitutif: ec,
+                                                    parcours: parcours,
+                                                    ue: ue,
+                                                    editable: true,
+                                                    deplacer: true,
+                                                }) }}
+                                            {% endif %}
+                                        </div>
                                         <div class="col-6 col-md-2 d-flex flex-column justify-content-center">
                                             <div class="text-muted text-small d-md-none">mccc</div>
 
@@ -323,20 +341,6 @@
                                                 {% endif %}
 
                                             </button>
-                                        </div>
-                                        <div class="col-6 col-md-2 d-flex flex-column justify-content-center">
-                                            <div class="text-muted text-small d-md-none">Volumes Horaires</div>
-                                            {% if ec.ecEnfants|length > 0 and ec.heuresEnfantsIdentiques == false %}
-                                                <span class="badge bg-info ms-1 me-1">Vol. Horaire des enfants</span>
-                                            {% else %}
-                                                {{ component('badge_heures', {
-                                                    elementConstitutif: ec,
-                                                    parcours: parcours,
-                                                    ue: ue,
-                                                    editable: true,
-                                                    deplacer: true,
-                                                }) }}
-                                            {% endif %}
                                         </div>
                                         <div class="col-6 col-md-3 d-flex flex-column justify-content-center">
                                             <div class="text-muted text-small d-md-none">Actions</div>

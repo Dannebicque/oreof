@@ -1,32 +1,34 @@
-{% if ec.heuresEctsEc.cmPres.isDifferent == true or
-    ec.heuresEctsEc.tdPres.isDifferent == true or
-    ec.heuresEctsEc.tpPres.isDifferent == true or
-    ec.heuresEctsEc.ects.isDifferent == true or
-    ec.heuresEctsEc.cmDist.isDifferent == true or
-    ec.heuresEctsEc.tdDist.isDifferent == true or
-    ec.heuresEctsEc.tpDist.isDifferent == true or
-    ec.libelle.isDifferent == true or
-    ec.raccroche.isDifferent == true %}
-    <h5> > {{ ec.code.new }} : {{ ec.libelle.new }}</h5>
+{% if ec != null %}
+    {% if ec.heuresEctsEc is defined and ec.heuresEctsEc != false and (ec.heuresEctsEc.cmPres.isDifferent == true or
+        ec.heuresEctsEc.tdPres.isDifferent == true or
+        ec.heuresEctsEc.tpPres.isDifferent == true or
+        ec.heuresEctsEc.ects.isDifferent == true or
+        ec.heuresEctsEc.cmDist.isDifferent == true or
+        ec.heuresEctsEc.tdDist.isDifferent == true or
+        ec.heuresEctsEc.tpDist.isDifferent == true or
+        ec.mcccs != '' or
+        ec.libelle.isDifferent == true) %}
+        <h5> > {{ ued }} | {{ ec.code.new }} : {{ ec.libelle.new }}</h5>
+    {% endif %}
+
+    {% if ec.libelle.isDifferent == true %}
+        <p>Modification du libellé de l'EC {{ ec.code.new }} :
+            {{ ec.libelle|diffNewOriginal }}
+        </p>
+    {% endif %}
+
+    {{ include('pdf/synthse_modifications/_ec_heures.html.twig', { heuresEctsEc: ec.heuresEctsEc}) }}
+
+    {{ include('pdf/synthse_modifications/_ec_mccc.html.twig') }}
+
+    {% if ec.ecEnfants is defined %}
+        {% for enfant in ec.ecEnfants %}
+            {% if enfant != false %}
+                <h5> > {{ enfant.code.new }} : {{ enfant.libelle.new }}</h5>
+                {{ include('pdf/synthse_modifications/_ec_heures.html.twig', { heuresEctsEc: enfant.heuresEctsEc, ec: enfant}) }}
+
+                {{ include('pdf/synthse_modifications/_ec_mccc.html.twig', {ec:enfant}) }}
+            {% endif %}
+        {% endfor %}
+    {% endif %}
 {% endif %}
-
-
-{% if ec.libelle.isDifferent == true %}
-    <p>Modification du libellé de l'EC :
-        {{ ec.libelle|diffNewOriginal }}
-    </p>
-{% endif %}
-
-{% if ec.raccroche.isDifferent == true %}
-    <p>EC initialement
-        <span class="diff-new">{{ sem.raccroche.new == true ? 'raccrochée' : 'non raccrochée' }}</span>
-        (au lieu de
-        <span class="diff-original">{{ ue.raccroche.original == true ? 'raccrochée' : 'non raccrochée' }}</span>)
-    </p>
-{% endif %}
-
-
-
-{{ include('pdf/synthse_modifications/_ec_heures.html.twig', { heuresEctsEc: ec.heuresEctsEc}) }}
-
-{#{{ include('pdf/synthse_modifications/_ec_mccc.html.twig') }}#}

@@ -13,5 +13,5 @@ use App\Entity\CampagneCollecte;
 
 interface ExportInterface
 {
-    public function exportLink(CampagneCollecte $anneeUniversitaire): string;
+    public function exportLink(CampagneCollecte $campagneCollecte): string;
 }

@@ -14,10 +14,14 @@ use App\Classes\MyGotenbergPdf;
 use App\DTO\StructureEc;
 use App\DTO\StructureUe;
 use App\Entity\Parcours;
+use App\Entity\ParcoursVersioning;
 use App\Repository\TypeEpreuveRepository;
+use App\Service\ParcoursExport;
+use App\Service\VersioningParcours;
 use App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException;
 use App\Utils\CleanTexte;
 use DateTime;
+use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -62,6 +66,62 @@ class ParcoursExportController extends AbstractController
         ], 'Parcours_' . $parcours->getDisplay());
     }
 
+    #[Route('/parcours/{parcours}/versioning/export-pdf', name: 'app_parcours_export_pdf_versioning')]
+    public function exportPdfVersioning(
+        Parcours $parcours,
+        EntityManagerInterface $entityManager,
+        VersioningParcours $versioningParcours
+    ){
+        $lastCfvuVersion = $entityManager->getRepository(ParcoursVersioning::class)
+            ->findLastCfvuVersion($parcours);
+        $lastCfvuVersion = count($lastCfvuVersion) > 0 ? $lastCfvuVersion[0] : null;
+
+        if($lastCfvuVersion){
+            $versionData = $versioningParcours->loadParcoursFromVersion($lastCfvuVersion);
+            $parcoursVersionData = $versionData['parcours'];
+            $dtoVersionData = $versionData['dto'];
+
+            return $this->myPdf->render('pdf/parcours.html.twig', [
+                'formation' => $parcoursVersionData->getFormation(),
+                'typeDiplome' => $parcoursVersionData->getTypeDiplome(),
+                'parcours' => $parcoursVersionData,
+                'hasParcours' => $parcoursVersionData->getFormation()->isHasParcours(),
+                'titre' => 'Détails du parcours ' . $parcoursVersionData->getLibelle(),
+                'dto' => $dtoVersionData,
+                'isVersioning' => true
+            ], 'Parcours_' . $parcours->getLibelle());
+        }
+    }
+
+    #[Route('/parcours/{parcours}/maquette/validee_cfvu/export-json', name: 'app_parcours_export_maquette_json_validee_cfvu')]
+    public function exportMaquetteValideeJson(
+        Parcours $parcours,
+        ParcoursExport $parcoursExport,
+        VersioningParcours $versioningParcours,
+        EntityManagerInterface $entityManager
+    ) : Response {
+        $lastCfvuVersion = $entityManager
+            ->getRepository(ParcoursVersioning::class)
+            ->findLastCfvuVersion($parcours);
+
+        if(count($lastCfvuVersion) === 0){
+            return $this->json(["error" => "no valid version available"]);
+        }
+
+        $versionData = $versioningParcours->loadParcoursFromVersion($lastCfvuVersion[0]);
+        $parcours_id = $lastCfvuVersion[0]->getParcours()->getId();
+        $formation_id = $lastCfvuVersion[0]->getParcours()->getFormation()->getId();
+
+        $json = $parcoursExport->exportLastValidVersionMaquetteJson(
+            $versionData['dto'],
+            $versionData['parcours'],
+            $parcours_id,
+            $formation_id
+        );
+
+        return $this->json($json);
+    }   
+
     #[Route('/parcours/{parcours}/maquette/export-json', name: 'app_parcours_export_maquette_json')]
     public function exportMaquetteJson(
         Parcours                $parcours,
@@ -79,6 +139,10 @@ class ParcoursExportController extends AbstractController
             'path' => $this->generateUrl('app_parcours_export_maquette_json', ['parcours' => $parcours->getId()], UrlGeneratorInterface::ABSOLUTE_URL),
             'id' => $parcours->getId(),
             'formationId' => $parcours->getFormation()?->getId(),
+            'formation' => $parcours->getFormation()?->getDisplay(),
+            'parcours' => $parcours->isParcoursDefaut() ? '' : $parcours->getLibelle(),
+            'typeDiplome' => $typeDiplome->getLibelle(),
+            'composante' => $parcours->getFormation()?->getComposantePorteuse()?->getLibelle(),
             'volumes'=> [
                 'CM'=> [
                     'presentiel'=> $dto->heuresEctsFormation->sommeFormationCmPres,
@@ -99,96 +163,98 @@ class ParcoursExportController extends AbstractController
         ];
 
         foreach ($dto->semestres as $ordre => $sem) {
-            $semestre =  [
-                'ordre' => $ordre,
-                'volumes'=> [
-                    'CM'=> [
-                        'presentiel'=> $sem->heuresEctsSemestre->sommeSemestreCmPres,
-                        'distanciel'=> $sem->heuresEctsSemestre->sommeSemestreCmDist
-                    ],
-                    'TD'=> [
-                        'presentiel'=> $sem->heuresEctsSemestre->sommeSemestreTdPres,
-                        'distanciel'=> $sem->heuresEctsSemestre->sommeSemestreTdDist
-                    ],
-                    'TP'=> [
-                        'presentiel'=> $sem->heuresEctsSemestre->sommeSemestreTpPres,
-                        'distanciel'=> $sem->heuresEctsSemestre->sommeSemestreTpDist
-                    ],
-                    'autonomie'=> $sem->heuresEctsSemestre->sommeSemestreTePres
-                ],
-                'ects' => $sem->heuresEctsSemestre->sommeSemestreEcts,
-                'ues' => []
-            ];
-            foreach ($sem->ues as $ue) {
-                $tUe = [
-                    'ordre' => $ue->ordre(),
-                    'libelleOrdre' => $ue->display,
-                    'libelle' => $ue->ue->getLibelle() ?? $ue->display,
-                    'volumes'=> [
-                        'CM'=> [
-                            'presentiel'=> $ue->heuresEctsUe->sommeUeCmPres,
-                            'distanciel'=> $ue->heuresEctsUe->sommeUeCmDist
+            if ($sem->semestre->isNonDispense() === false) {
+                $semestre = [
+                    'ordre' => $ordre,
+                    'volumes' => [
+                        'CM' => [
+                            'presentiel' => $sem->heuresEctsSemestre->sommeSemestreCmPres,
+                            'distanciel' => $sem->heuresEctsSemestre->sommeSemestreCmDist
                         ],
-                        'TD'=> [
-                            'presentiel'=> $ue->heuresEctsUe->sommeUeTdPres,
-                            'distanciel'=> $ue->heuresEctsUe->sommeUeTdDist
+                        'TD' => [
+                            'presentiel' => $sem->heuresEctsSemestre->sommeSemestreTdPres,
+                            'distanciel' => $sem->heuresEctsSemestre->sommeSemestreTdDist
                         ],
-                        'TP'=> [
-                            'presentiel'=> $ue->heuresEctsUe->sommeUeTpPres,
-                            'distanciel'=> $ue->heuresEctsUe->sommeUeTpDist
+                        'TP' => [
+                            'presentiel' => $sem->heuresEctsSemestre->sommeSemestreTpPres,
+                            'distanciel' => $sem->heuresEctsSemestre->sommeSemestreTpDist
                         ],
-                        'autonomie'=> $ue->heuresEctsUe->sommeUeTePres
+                        'autonomie' => $sem->heuresEctsSemestre->sommeSemestreTePres
                     ],
-                    'ects' => $ue->heuresEctsUe->sommeUeEcts,
+                    'ects' => $sem->heuresEctsSemestre->sommeSemestreEcts,
+                    'ues' => []
                 ];
-
-                if ($ue->ue->getNatureUeEc()?->isLibre()) {
-                    $tUe['ects'] = $ue->ue->getEcts() ?? 0.0;
-                    $tUe['description_libre_choix'] = $ue->ue->getDescriptionUeLibre();
-                } elseif ($ue->ue->getNatureUeEc()?->isChoix()) {
-                    $tUe['description_libre_choix'] = $ue->ue->getDescriptionUeLibre();
-                    $tUe['UesEnfants'] = [];
-                    $nb = 0;
-                    foreach ($ue->uesEnfants() as $ueEnfant) {
-                        $tUeEnfant = [
-                            'ordre' => $ueEnfant->ordre(),
-                            'libelleOrdre' => $ueEnfant->display,
-                            'libelle' => $ueEnfant->ue->getLibelle() ?? $ueEnfant->display,
-                            'volumes'=> [
-                                'CM'=> [
-                                    'presentiel'=> $ueEnfant->heuresEctsUe->sommeUeCmPres,
-                                    'distanciel'=> $ueEnfant->heuresEctsUe->sommeUeCmDist
-                                ],
-                                'TD'=> [
-                                    'presentiel'=> $ueEnfant->heuresEctsUe->sommeUeTdPres,
-                                    'distanciel'=> $ueEnfant->heuresEctsUe->sommeUeTdDist
-                                ],
-                                'TP'=> [
-                                    'presentiel'=> $ueEnfant->heuresEctsUe->sommeUeTpPres,
-                                    'distanciel'=> $ueEnfant->heuresEctsUe->sommeUeTpDist
-                                ],
-                                'autonomie'=> $ueEnfant->heuresEctsUe->sommeUeTePres
+                foreach ($sem->ues as $ue) {
+                    $tUe = [
+                        'ordre' => $ue->ordre(),
+                        'libelleOrdre' => $ue->display,
+                        'libelle' => $ue->ue->getLibelle() ?? $ue->display,
+                        'volumes' => [
+                            'CM' => [
+                                'presentiel' => $ue->heuresEctsUe->sommeUeCmPres,
+                                'distanciel' => $ue->heuresEctsUe->sommeUeCmDist
                             ],
-                            'ects' => $ueEnfant->heuresEctsUe->sommeUeEcts,
+                            'TD' => [
+                                'presentiel' => $ue->heuresEctsUe->sommeUeTdPres,
+                                'distanciel' => $ue->heuresEctsUe->sommeUeTdDist
+                            ],
+                            'TP' => [
+                                'presentiel' => $ue->heuresEctsUe->sommeUeTpPres,
+                                'distanciel' => $ue->heuresEctsUe->sommeUeTpDist
+                            ],
+                            'autonomie' => $ue->heuresEctsUe->sommeUeTePres
+                        ],
+                        'ects' => $ue->heuresEctsUe->sommeUeEcts,
+                    ];
 
-                        ];
-                        if ($ueEnfant->ue->getNatureUeEc()?->isLibre()) {
-                            $tUeEnfant['description_libre_choix'] = $ueEnfant->ue->getDescriptionUeLibre();
+                    if ($ue->ue->getNatureUeEc()?->isLibre()) {
+                        $tUe['ects'] = $ue->ue->getEcts() ?? 0.0;
+                        $tUe['description_libre_choix'] = $ue->ue->getDescriptionUeLibre();
+                    } elseif ($ue->ue->getNatureUeEc()?->isChoix()) {
+                        $tUe['description_libre_choix'] = $ue->ue->getDescriptionUeLibre();
+                        $tUe['UesEnfants'] = [];
+                        $nb = 0;
+                        foreach ($ue->uesEnfants() as $ueEnfant) {
+                            $tUeEnfant = [
+                                'ordre' => $ueEnfant->ordre(),
+                                'libelleOrdre' => $ueEnfant->display,
+                                'libelle' => $ueEnfant->ue->getLibelle() ?? $ueEnfant->display,
+                                'volumes' => [
+                                    'CM' => [
+                                        'presentiel' => $ueEnfant->heuresEctsUe->sommeUeCmPres,
+                                        'distanciel' => $ueEnfant->heuresEctsUe->sommeUeCmDist
+                                    ],
+                                    'TD' => [
+                                        'presentiel' => $ueEnfant->heuresEctsUe->sommeUeTdPres,
+                                        'distanciel' => $ueEnfant->heuresEctsUe->sommeUeTdDist
+                                    ],
+                                    'TP' => [
+                                        'presentiel' => $ueEnfant->heuresEctsUe->sommeUeTpPres,
+                                        'distanciel' => $ueEnfant->heuresEctsUe->sommeUeTpDist
+                                    ],
+                                    'autonomie' => $ueEnfant->heuresEctsUe->sommeUeTePres
+                                ],
+                                'ects' => $ueEnfant->heuresEctsUe->sommeUeEcts,
+
+                            ];
+                            if ($ueEnfant->ue->getNatureUeEc()?->isLibre()) {
+                                $tUeEnfant['description_libre_choix'] = $ueEnfant->ue->getDescriptionUeLibre();
+                            }
+
+                            $nb++;
+                            $tUe['nbChoix'] = $nb;
+                            $tUeEnfant['ec'] = $this->getEcFromUe($ueEnfant);
+                            $tUe['UesEnfants'][] = $tUeEnfant;
                         }
-
-                        $nb++;
-                        $tUe['nbChoix'] = $nb;
-                        $tUeEnfant['ec'] = $this->getEcFromUe($ueEnfant);
-                        $tUe['UesEnfants'][] = $tUeEnfant;
+                    } else {
+                        $tUe['ects'] = $ue->heuresEctsUe->sommeUeEcts;
+                        $tUe['ec'] = $this->getEcFromUe($ue);
                     }
-                } else {
-                    $tUe['ects'] = $ue->heuresEctsUe->sommeUeEcts;
-                    $tUe['ec'] = $this->getEcFromUe($ue);
+                    $semestre['ues'][] = $tUe;
                 }
-                $semestre['ues'][] = $tUe;
-            }
 
-            $data['semestres'][] = $semestre;
+                $data['semestres'][] = $semestre;
+            }
         }
 
         return $this->json($data);

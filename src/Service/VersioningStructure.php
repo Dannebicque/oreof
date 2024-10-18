@@ -26,110 +26,268 @@ class VersioningStructure
         private StructureParcours $dtoOrigine,
         private StructureParcours $dtoNouveau
     ) {
-//        dd($this->dtoOrigine);
     }
 
-    public function calculDiff()
+    //todo: gérer le cas d'ajout d'une UE, voire d'un Semestre
+    //todo: gérer le cas d'une suppression EC, UE, Semestre entre ancien et nouveau
+
+    public function calculDiff(): array
     {
         // parcourir les deux structures et comparer. Construire un tableau de différences
         $diff = [];
-
         foreach ($this->dtoOrigine->semestres as $ordreSemestre => $semestre) {
-            $diff['semestres'][$ordreSemestre] = $this->compareSemestre($semestre, $this->dtoNouveau->semestres[$ordreSemestre]);
+            if (array_key_exists($ordreSemestre, $this->dtoNouveau->semestres)) {
+                $diff['semestres'][$ordreSemestre] = $this->compareSemestre($semestre, $this->dtoNouveau->semestres[$ordreSemestre]);
+            } else {
+                //donc n'existe plus ?
+                $diff['semestres'][$ordreSemestre] = $this->compareSemestre($semestre, null);
+            }
         }
+
+        foreach ($this->dtoNouveau->semestres as $ordreSemestre => $semestre) {
+            //si pas dans l'original, donc ajouté
+            if (!array_key_exists($ordreSemestre, $this->dtoOrigine->semestres)) {
+                $diff['semestres'][$ordreSemestre] = $this->compareSemestre(null, $semestre);
+            }
+        }
+
         $diff['heuresEctsFormation'] = $this->compareHeuresEctsFormation($this->dtoOrigine->heuresEctsFormation, $this->dtoNouveau->heuresEctsFormation);
 
         return $diff;
     }
 
-    private function compareSemestre(StructureSemestre $semestreOriginal, StructureSemestre $semestreNouveau)
+    private function compareSemestre(?StructureSemestre $semestreOriginal, ?StructureSemestre $semestreNouveau): array
     {
         $diff = [];
 
-        $diff['raccroche'] = new DiffObject($semestreOriginal->raccroche, $semestreNouveau->raccroche);
-        $diff['ordre'] = new DiffObject($semestreOriginal->ordre, $semestreNouveau->ordre);
-        $diff['heuresEctsSemestre'] = $this->compareHeuresEctsSemestre($semestreOriginal->heuresEctsSemestre, $semestreNouveau->heuresEctsSemestre);
-        foreach ($semestreOriginal->ues as $ordreUe => $ue) {
-            $diff['ues'][$ordreUe] = $this->compareUe($ue, $semestreNouveau->ues[$ordreUe]);//cas si UE n'existe plus ou si ajouté dans nouveau ?
-        }
-
-        return $diff;
-    }
-
-    private function compareHeuresEctsSemestre(HeuresEctsSemestre $heuresEctsSemestre, HeuresEctsSemestre $heuresEctsSemestreNouveau): array
-    {
-        $diff = [];
-        $diff['sommeSemestreEcts'] = new DiffObject($heuresEctsSemestre->sommeSemestreEcts, $heuresEctsSemestreNouveau->sommeSemestreEcts);
-        $diff['sommeSemestreCmPres'] = new DiffObject(Tools::filtreHeures($heuresEctsSemestre->sommeSemestreCmPres), Tools::filtreHeures($heuresEctsSemestreNouveau->sommeSemestreCmPres));
-        $diff['sommeSemestreTdPres'] = new DiffObject(Tools::filtreHeures($heuresEctsSemestre->sommeSemestreTdPres), Tools::filtreHeures($heuresEctsSemestreNouveau->sommeSemestreTdPres));
-        $diff['sommeSemestreTpPres'] = new DiffObject(Tools::filtreHeures($heuresEctsSemestre->sommeSemestreTpPres), Tools::filtreHeures($heuresEctsSemestreNouveau->sommeSemestreTpPres));
-        $diff['sommeSemestreTePres'] = new DiffObject(Tools::filtreHeures($heuresEctsSemestre->sommeSemestreTePres), Tools::filtreHeures($heuresEctsSemestreNouveau->sommeSemestreTePres));
-        $diff['sommeSemestreCmDist'] = new DiffObject(Tools::filtreHeures($heuresEctsSemestre->sommeSemestreCmDist), Tools::filtreHeures($heuresEctsSemestreNouveau->sommeSemestreCmDist));
-        $diff['sommeSemestreTdDist'] = new DiffObject(Tools::filtreHeures($heuresEctsSemestre->sommeSemestreTdDist), Tools::filtreHeures($heuresEctsSemestreNouveau->sommeSemestreTdDist));
-        $diff['sommeSemestreTpDist'] = new DiffObject(Tools::filtreHeures($heuresEctsSemestre->sommeSemestreTpDist), Tools::filtreHeures($heuresEctsSemestreNouveau->sommeSemestreTpDist));
-
-        $sommeSemestreTotalPres = $heuresEctsSemestre->sommeSemestreCmPres + $heuresEctsSemestre->sommeSemestreTdPres + $heuresEctsSemestre->sommeSemestreTpPres;
-        $diff['sommeSemestreTotalPres'] = new DiffObject(Tools::filtreHeures($sommeSemestreTotalPres), Tools::filtreHeures($heuresEctsSemestreNouveau->sommeSemestreTotalPres()));
-
-        $sommeSemestreTotalDist = $heuresEctsSemestre->sommeSemestreCmDist + $heuresEctsSemestre->sommeSemestreTdDist + $heuresEctsSemestre->sommeSemestreTpDist;
-        $diff['sommeSemestreTotalDist'] = new DiffObject(Tools::filtreHeures($sommeSemestreTotalDist), Tools::filtreHeures($heuresEctsSemestreNouveau->sommeSemestreTotalDist()));
-
-        $sommeSemestreTotalPresDist = $sommeSemestreTotalPres + $sommeSemestreTotalDist;
-        $diff['sommeSemestreTotalPresDist'] = new DiffObject(Tools::filtreHeures($sommeSemestreTotalPresDist), Tools::filtreHeures($heuresEctsSemestreNouveau->sommeSemestreTotalPresDist()));
-
-        return $diff;
-    }
-
-    private function compareUe(StructureUe $ueOriginale, StructureUe $ueNouvelle): array
-    {
-        /*
-         * "display" => "UE 1.1"
-          "ueOrigine" => array:4 [▶]
-          "ue" => array:4 [▶]
-          "raccroche" => false
-          "elementConstitutifs" => array:1 [▶]
-          "uesEnfants" => []
-          "heuresEctsUeEnfants" => []
-          "heuresEctsUe" => array:8 [▼
-            "sommeUeEcts" => 6.0
-            "sommeUeCmPres" => 20.0
-            "sommeUeTdPres" => 20.0
-            "sommeUeTpPres" => 0.0
-            "sommeUeTePres" => 0.0
-            "sommeUeCmDist" => 0.0
-            "sommeUeTdDist" => 0.0
-            "sommeUeTpDist" => 0.0
-          ]
-         */
-        $diff = [];
-
-        $diff['display'] = new DiffObject($ueOriginale->display, $ueNouvelle->display);
-        $diff['libelle'] = new DiffObject($ueOriginale->ue->getLibelle(), $ueNouvelle->ue->getLibelle());
-        $diff['raccroche'] = new DiffObject($ueOriginale->raccroche, $ueNouvelle->raccroche);
-        foreach ($ueOriginale->elementConstitutifs as $ordreEc => $ec) {
-            if (!array_key_exists($ordreEc, $ueNouvelle->elementConstitutifs)) {
-                //donc n'existe plus ?
-            } else {
-                $diff['elementConstitutifs'][$ordreEc] = $this->compareElementConstitutif($ec, $ueNouvelle->elementConstitutifs[$ordreEc]);
+        if ($semestreNouveau !== null && $semestreOriginal !== null) {
+            $diff['raccroche'] = new DiffObject($semestreOriginal->raccroche, $semestreNouveau->raccroche);
+            $diff['ordre'] = new DiffObject($semestreOriginal->ordre, $semestreNouveau->ordre);
+            $diff['heuresEctsSemestre'] = $this->compareHeuresEctsSemestre($semestreOriginal->heuresEctsSemestre, $semestreNouveau->heuresEctsSemestre);
+            foreach ($semestreOriginal->ues as $ordreUe => $ue) {
+                if (!array_key_exists($ordreUe, $semestreNouveau->ues)) {
+                    //donc n'existe plus ?
+                    $diff['ues'][$ordreUe] = $this->compareUe($ue, null);
+                } else {
+                    $diff['ues'][$ordreUe] = $this->compareUe($ue, $semestreNouveau->ues[$ordreUe]);//cas si UE n'existe plus ou si ajouté dans nouveau ?
+                }
             }
-        }
-//dump($ueOriginale);
-        foreach ($ueOriginale->uesEnfants() as $ordreUeEnfant => $ueEnfant) {
-            if (array_key_exists($ordreUeEnfant, $ueNouvelle->uesEnfants())) {
-                $diff['uesEnfants'][$ordreUeEnfant] = $this->compareUe($ueEnfant, $ueNouvelle->uesEnfants()[$ordreUeEnfant]);
-            } else {
+            foreach ($semestreNouveau->ues as $ordreUe => $ue) {
+                if (!array_key_exists($ordreUe, $semestreOriginal->ues)) {
+                    //donc n'existe plus ?
+                    $diff['ues'][$ordreUe] = $this->compareUe(null, $ue);
+                }
+            }
+
+            ksort($diff['ues']);
+        } elseif ($semestreNouveau !== null && $semestreOriginal === null) {
+            $diff['raccroche'] = new DiffObject(null, $semestreNouveau->raccroche);
+            $diff['ordre'] = new DiffObject(null, $semestreNouveau->ordre);
+            $diff['heuresEctsSemestre'] = $this->compareHeuresEctsSemestre(null, $semestreNouveau->heuresEctsSemestre);
+            foreach ($semestreNouveau->ues as $ordreUe => $ue) {
                 //donc n'existe plus ?
+                $diff['ues'][$ordreUe] = $this->compareUe(null, $ue);
+
+            }
+        } elseif ($semestreNouveau === null && $semestreOriginal !== null) {
+            $diff['raccroche'] = new DiffObject($semestreOriginal->raccroche, null);
+            $diff['ordre'] = new DiffObject($semestreOriginal->ordre, null);
+            $diff['heuresEctsSemestre'] = $this->compareHeuresEctsSemestre($semestreOriginal->heuresEctsSemestre, null);
+            foreach ($semestreOriginal->ues as $ordreUe => $ue) {
+                //donc n'existe plus ?
+                $diff['ues'][$ordreUe] = $this->compareUe($ue, null);
+
             }
         }
 
-        $diff['heuresEctsUe'] = $this->compareHeuresEctsUe($ueOriginale->heuresEctsUe, $ueNouvelle->heuresEctsUe);
+        return $diff;
+    }
+
+    private function compareHeuresEctsSemestre(?HeuresEctsSemestre $heuresEctsSemestre, ?HeuresEctsSemestre $heuresEctsSemestreNouveau): array
+    {
+        $diff = [];
+        if ($heuresEctsSemestre !== null && $heuresEctsSemestreNouveau !== null) {
+            $diff['sommeSemestreEcts'] = new DiffObject($heuresEctsSemestre->sommeSemestreEcts, $heuresEctsSemestreNouveau->sommeSemestreEcts);
+            $diff['sommeSemestreCmPres'] = new DiffObject(Tools::filtreHeures($heuresEctsSemestre->sommeSemestreCmPres), Tools::filtreHeures($heuresEctsSemestreNouveau->sommeSemestreCmPres));
+            $diff['sommeSemestreTdPres'] = new DiffObject(Tools::filtreHeures($heuresEctsSemestre->sommeSemestreTdPres), Tools::filtreHeures($heuresEctsSemestreNouveau->sommeSemestreTdPres));
+            $diff['sommeSemestreTpPres'] = new DiffObject(Tools::filtreHeures($heuresEctsSemestre->sommeSemestreTpPres), Tools::filtreHeures($heuresEctsSemestreNouveau->sommeSemestreTpPres));
+            $diff['sommeSemestreTePres'] = new DiffObject(Tools::filtreHeures($heuresEctsSemestre->sommeSemestreTePres), Tools::filtreHeures($heuresEctsSemestreNouveau->sommeSemestreTePres));
+            $diff['sommeSemestreCmDist'] = new DiffObject(Tools::filtreHeures($heuresEctsSemestre->sommeSemestreCmDist), Tools::filtreHeures($heuresEctsSemestreNouveau->sommeSemestreCmDist));
+            $diff['sommeSemestreTdDist'] = new DiffObject(Tools::filtreHeures($heuresEctsSemestre->sommeSemestreTdDist), Tools::filtreHeures($heuresEctsSemestreNouveau->sommeSemestreTdDist));
+            $diff['sommeSemestreTpDist'] = new DiffObject(Tools::filtreHeures($heuresEctsSemestre->sommeSemestreTpDist), Tools::filtreHeures($heuresEctsSemestreNouveau->sommeSemestreTpDist));
+
+            $sommeSemestreTotalPres = $heuresEctsSemestre->sommeSemestreCmPres + $heuresEctsSemestre->sommeSemestreTdPres + $heuresEctsSemestre->sommeSemestreTpPres;
+            $diff['sommeSemestreTotalPres'] = new DiffObject(Tools::filtreHeures($sommeSemestreTotalPres), Tools::filtreHeures($heuresEctsSemestreNouveau->sommeSemestreTotalPres()));
+
+            $sommeSemestreTotalDist = $heuresEctsSemestre->sommeSemestreCmDist + $heuresEctsSemestre->sommeSemestreTdDist + $heuresEctsSemestre->sommeSemestreTpDist;
+            $diff['sommeSemestreTotalDist'] = new DiffObject(Tools::filtreHeures($sommeSemestreTotalDist), Tools::filtreHeures($heuresEctsSemestreNouveau->sommeSemestreTotalDist()));
+
+            $sommeSemestreTotalPresDist = $sommeSemestreTotalPres + $sommeSemestreTotalDist;
+            $diff['sommeSemestreTotalPresDist'] = new DiffObject(Tools::filtreHeures($sommeSemestreTotalPresDist), Tools::filtreHeures($heuresEctsSemestreNouveau->sommeSemestreTotalPresDist()));
+        } elseif ($heuresEctsSemestre !== null && $heuresEctsSemestreNouveau === null) {
+            $diff['sommeSemestreEcts'] = new DiffObject($heuresEctsSemestre->sommeSemestreEcts, null);
+            $diff['sommeSemestreCmPres'] = new DiffObject(Tools::filtreHeures($heuresEctsSemestre->sommeSemestreCmPres), null);
+            $diff['sommeSemestreTdPres'] = new DiffObject(Tools::filtreHeures($heuresEctsSemestre->sommeSemestreTdPres), null);
+            $diff['sommeSemestreTpPres'] = new DiffObject(Tools::filtreHeures($heuresEctsSemestre->sommeSemestreTpPres), null);
+            $diff['sommeSemestreTePres'] = new DiffObject(Tools::filtreHeures($heuresEctsSemestre->sommeSemestreTePres), null);
+            $diff['sommeSemestreCmDist'] = new DiffObject(Tools::filtreHeures($heuresEctsSemestre->sommeSemestreCmDist), null);
+            $diff['sommeSemestreTdDist'] = new DiffObject(Tools::filtreHeures($heuresEctsSemestre->sommeSemestreTdDist), null);
+            $diff['sommeSemestreTpDist'] = new DiffObject(Tools::filtreHeures($heuresEctsSemestre->sommeSemestreTpDist), null);
+
+            $sommeSemestreTotalPres = $heuresEctsSemestre->sommeSemestreCmPres + $heuresEctsSemestre->sommeSemestreTdPres + $heuresEctsSemestre->sommeSemestreTpPres;
+            $diff['sommeSemestreTotalPres'] = new DiffObject(Tools::filtreHeures($sommeSemestreTotalPres), null);
+
+            $sommeSemestreTotalDist = $heuresEctsSemestre->sommeSemestreCmDist + $heuresEctsSemestre->sommeSemestreTdDist + $heuresEctsSemestre->sommeSemestreTpDist;
+            $diff['sommeSemestreTotalDist'] = new DiffObject(Tools::filtreHeures($sommeSemestreTotalDist), null);
+
+            $sommeSemestreTotalPresDist = $sommeSemestreTotalPres + $sommeSemestreTotalDist;
+            $diff['sommeSemestreTotalPresDist'] = new DiffObject(Tools::filtreHeures($sommeSemestreTotalPresDist), null);
+        } elseif ($heuresEctsSemestre === null && $heuresEctsSemestreNouveau !== null) {
+            $diff['sommeSemestreEcts'] = new DiffObject(null, $heuresEctsSemestreNouveau->sommeSemestreEcts);
+            $diff['sommeSemestreCmPres'] = new DiffObject(null, Tools::filtreHeures($heuresEctsSemestreNouveau->sommeSemestreCmPres));
+            $diff['sommeSemestreTdPres'] = new DiffObject(null, Tools::filtreHeures($heuresEctsSemestreNouveau->sommeSemestreTdPres));
+            $diff['sommeSemestreTpPres'] = new DiffObject(null, Tools::filtreHeures($heuresEctsSemestreNouveau->sommeSemestreTpPres));
+            $diff['sommeSemestreTePres'] = new DiffObject(null, Tools::filtreHeures($heuresEctsSemestreNouveau->sommeSemestreTePres));
+            $diff['sommeSemestreCmDist'] = new DiffObject(null, Tools::filtreHeures($heuresEctsSemestreNouveau->sommeSemestreCmDist));
+            $diff['sommeSemestreTdDist'] = new DiffObject(null, Tools::filtreHeures($heuresEctsSemestreNouveau->sommeSemestreTdDist));
+            $diff['sommeSemestreTpDist'] = new DiffObject(null, Tools::filtreHeures($heuresEctsSemestreNouveau->sommeSemestreTpDist));
+
+            $diff['sommeSemestreTotalPres'] = new DiffObject(null, Tools::filtreHeures($heuresEctsSemestreNouveau->sommeSemestreTotalPres()));
+
+            $diff['sommeSemestreTotalDist'] = new DiffObject(null, Tools::filtreHeures($heuresEctsSemestreNouveau->sommeSemestreTotalDist()));
+
+            $diff['sommeSemestreTotalPresDist'] = new DiffObject(null, Tools::filtreHeures($heuresEctsSemestreNouveau->sommeSemestreTotalPresDist()));
+        }
 
         return $diff;
     }
 
-    private function compareElementConstitutif(StructureEc $ecOriginal, StructureEc $ecNouveau): array
+    private function compareUe(?StructureUe $ueOriginale, ?StructureUe $ueNouvelle): array
     {
         $diff = [];
+
+        if ($ueNouvelle !== null && $ueOriginale !== null) {
+            $diff['display'] = new DiffObject($ueOriginale->display, $ueNouvelle->display);
+            $diff['libelle'] = new DiffObject($ueOriginale->ue->getLibelle(), $ueNouvelle->ue->getLibelle());
+            $diff['raccroche'] = new DiffObject($ueOriginale->raccroche, $ueNouvelle->raccroche);
+            foreach ($ueOriginale->elementConstitutifs as $ordreEc => $ec) {
+                if (!array_key_exists($ordreEc, $ueNouvelle->elementConstitutifs)) {
+                    //donc n'existe plus ?
+                    $diff['elementConstitutifs'][$ordreEc] = $this->compareElementConstitutif($ec, null);
+                } else {
+                    $diff['elementConstitutifs'][$ordreEc] = $this->compareElementConstitutif($ec, $ueNouvelle->elementConstitutifs[$ordreEc]);
+                }
+            }
+
+            foreach ($ueNouvelle->elementConstitutifs as $ordreEc => $ec) {
+                if (!array_key_exists($ordreEc, $ueOriginale->elementConstitutifs)) {
+                    //donc nouvel EC
+                    $diff['elementConstitutifs'][$ordreEc] = $this->compareElementConstitutif(null, $ec);
+                }
+            }
+
+            foreach ($ueOriginale->uesEnfants() as $ordreUeEnfant => $ueEnfant) {
+                if (array_key_exists($ordreUeEnfant, $ueNouvelle->uesEnfants())) {
+                    $diff['uesEnfants'][$ordreUeEnfant] = $this->compareUe($ueEnfant, $ueNouvelle->uesEnfants()[$ordreUeEnfant]);
+                } else {
+                    $diff['uesEnfants'][$ordreUeEnfant] = $this->compareUe($ueEnfant, null);
+                }
+            }
+
+            foreach ($ueNouvelle->uesEnfants() as $ordreUeEnfant => $ueEnfant) {
+                if (array_key_exists($ordreUeEnfant, $ueNouvelle->uesEnfants())) {
+                    $diff['uesEnfants'][$ordreUeEnfant] = $this->compareUe(null, $ueNouvelle->uesEnfants()[$ordreUeEnfant]);
+                }
+            }
+
+            $diff['heuresEctsUe'] = $this->compareHeuresEctsUe($ueOriginale->heuresEctsUe, $ueNouvelle->heuresEctsUe);
+        } elseif ($ueOriginale !== null && $ueNouvelle === null) {
+            $diff['display'] = new DiffObject($ueOriginale->display, '-');
+            $diff['libelle'] = new DiffObject($ueOriginale->ue->getLibelle(), '-');
+            $diff['raccroche'] = new DiffObject($ueOriginale->raccroche, '-');
+            foreach ($ueOriginale->elementConstitutifs as $ordreEc => $ec) {
+                $diff['elementConstitutifs'][$ordreEc] = $this->compareElementConstitutif($ec, null);
+            }
+
+            foreach ($ueOriginale->uesEnfants() as $ordreUeEnfant => $ueEnfant) {
+                $diff['uesEnfants'][$ordreUeEnfant] = $this->compareUe($ueEnfant, null);
+            }
+
+            $diff['heuresEctsUe'] = $this->compareHeuresEctsUe($ueOriginale->heuresEctsUe, null);
+        } else {
+            $diff['display'] = new DiffObject('-', $ueNouvelle->display);
+            $diff['libelle'] = new DiffObject('-', $ueNouvelle->ue->getLibelle());
+            $diff['raccroche'] = new DiffObject('-', $ueNouvelle->raccroche);
+
+            foreach ($ueNouvelle->elementConstitutifs as $ordreEc => $ec) {
+                //donc nouvel EC
+                $diff['elementConstitutifs'][$ordreEc] = $this->compareElementConstitutif(null, $ec);
+
+            }
+
+            foreach ($ueNouvelle->uesEnfants() as $ordreUeEnfant => $ueEnfant) {
+                $diff['uesEnfants'][$ordreUeEnfant] = $this->compareUe(null, $ueEnfant);
+            }
+
+            $diff['heuresEctsUe'] = $this->compareHeuresEctsUe(null, $ueNouvelle->heuresEctsUe);
+        }
+        return $diff;
+    }
+
+    private function compareElementConstitutif(?StructureEc $ecOriginal, ?StructureEc $ecNouveau): array
+    {
+        $diff = [];
+        if ($ecOriginal === null && $ecNouveau !== null) {
+            if ($ecNouveau->elementConstitutif->getFicheMatiere() !== null) {
+                $libelleNew = $ecNouveau->elementConstitutif->getFicheMatiere()->getLibelle();
+            } else {
+                $libelleNew = $ecNouveau->elementConstitutif->getLibelle();
+            }
+
+            $diff['libelle'] = new DiffObject('-', $libelleNew);
+            $diff['code'] = new DiffObject('-', $ecNouveau->elementConstitutif->getCode());
+            $diff['raccroche'] = new DiffObject(null, $ecNouveau->raccroche);
+            $diff['heuresEctsEc'] = $this->compareHeuresEctsEc(null, $ecNouveau->heuresEctsEc);
+            $diff['typeMccc'] = new DiffObject('', $ecNouveau->typeMccc);
+            $diff['mcccs'] = $this->compareMcccs([], $ecNouveau->mcccs);
+
+            //EC enfants
+            foreach ($ecNouveau->elementsConstitutifsEnfants as $ordreEc => $ecEnfant) {
+                $diff['ecEnfants'][$ordreEc] = $this->compareElementConstitutif(null, $ecEnfant);
+            }
+
+
+            return $diff;
+        }
+
+        if ($ecOriginal !== null && $ecNouveau === null) {
+            if ($ecOriginal->elementConstitutif->getFicheMatiere() !== null) {
+                $libelleNew = $ecOriginal->elementConstitutif->getFicheMatiere()->getLibelle();
+            } else {
+                $libelleNew = $ecOriginal->elementConstitutif->getLibelle();
+            }
+
+            $diff['libelle'] = new DiffObject($libelleNew, '-');
+            $diff['code'] = new DiffObject($ecOriginal->elementConstitutif->getCode(), '');
+            $diff['raccroche'] = new DiffObject($ecOriginal->raccroche, null);
+            $diff['heuresEctsEc'] = $this->compareHeuresEctsEc($ecOriginal->heuresEctsEc, null);
+            $diff['typeMccc'] = new DiffObject($ecOriginal->typeMccc, '-');
+            $diff['mcccs'] = $this->compareMcccs($ecOriginal->mcccs, []);
+
+            // todo: gérer si un EC est ajouté avec des enfants           if ($ecNouveau->elementConstitutif->getNatureUeEc()?->isChoix()) {
+            //                //EC enfants
+            //                foreach ($ecNouveau->elementsConstitutifsEnfants as $ordreEc => $ecEnfant) {
+            //                    if (array_key_exists($ordreEc, $ecOriginal->elementsConstitutifsEnfants)) {
+            //                        $diff['ecEnfants'][$ordreEc] = $this->compareElementConstitutif($ecOriginal->elementsConstitutifsEnfants[$ordreEc], $ecEnfant);
+            //                    } //else supprimé
+            //                }
+            //            }
+
+            return $diff;
+        }
+
+
+
 
         if ($ecOriginal->elementConstitutif->getFicheMatiere() !== null) {
             $libelleOriginal = $ecOriginal->elementConstitutif->getFicheMatiere()->getLibelle();
@@ -152,57 +310,131 @@ class VersioningStructure
             $diff['mcccs'] = $this->compareMcccs($ecOriginal->mcccs, $ecNouveau->mcccs);
         }
 
-
+        if ($ecNouveau->elementConstitutif->getNatureUeEc()?->isChoix()) {
+            //EC enfants
+            foreach ($ecNouveau->elementsConstitutifsEnfants as $ordreEc => $ecEnfant) {
+                if (array_key_exists($ordreEc, $ecOriginal->elementsConstitutifsEnfants)) {
+                    $diff['ecEnfants'][$ordreEc] = $this->compareElementConstitutif($ecOriginal->elementsConstitutifsEnfants[$ordreEc], $ecEnfant);
+                } else {
+                    //création
+                    $diff['ecEnfants'][$ordreEc] = $this->compareElementConstitutif(null, $ecEnfant);
+                }
+            }
+        }
 
         return $diff;
     }
 
-    private function compareHeuresEctsUe(HeuresEctsUe $heuresEctsUe, HeuresEctsUe $heuresEctsUe1)
+    private function compareHeuresEctsUe(?HeuresEctsUe $heuresEctsUe, ?HeuresEctsUe $heuresEctsUe1): array
+    {
+
+        $diff = [];
+        if ($heuresEctsUe1 !== null && $heuresEctsUe !== null) {
+            $diff['sommeUeEcts'] = new DiffObject($heuresEctsUe->sommeUeEcts, $heuresEctsUe1->sommeUeEcts);
+            $diff['sommeUeCmPres'] = new DiffObject(Tools::filtreHeures($heuresEctsUe->sommeUeCmPres), Tools::filtreHeures($heuresEctsUe1->sommeUeCmPres));
+            $diff['sommeUeTdPres'] = new DiffObject(Tools::filtreHeures($heuresEctsUe->sommeUeTdPres), Tools::filtreHeures($heuresEctsUe1->sommeUeTdPres));
+            $diff['sommeUeTpPres'] = new DiffObject(Tools::filtreHeures($heuresEctsUe->sommeUeTpPres), Tools::filtreHeures($heuresEctsUe1->sommeUeTpPres));
+            $diff['sommeUeTePres'] = new DiffObject(Tools::filtreHeures($heuresEctsUe->sommeUeTePres), Tools::filtreHeures($heuresEctsUe1->sommeUeTePres));
+            $diff['sommeUeCmDist'] = new DiffObject(Tools::filtreHeures($heuresEctsUe->sommeUeCmDist), Tools::filtreHeures($heuresEctsUe1->sommeUeCmDist));
+            $diff['sommeUeTdDist'] = new DiffObject(Tools::filtreHeures($heuresEctsUe->sommeUeTdDist), Tools::filtreHeures($heuresEctsUe1->sommeUeTdDist));
+            $diff['sommeUeTpDist'] = new DiffObject(Tools::filtreHeures($heuresEctsUe->sommeUeTpDist), Tools::filtreHeures($heuresEctsUe1->sommeUeTpDist));
+
+            $sommeUeTotalPres = $heuresEctsUe->sommeUeCmPres + $heuresEctsUe->sommeUeTdPres + $heuresEctsUe->sommeUeTpPres;
+            $diff['sommeUeTotalPres'] = new DiffObject(Tools::filtreHeures($sommeUeTotalPres), Tools::filtreHeures($heuresEctsUe1->sommeUeTotalPres()));
+
+            $sommeUeTotalDist = $heuresEctsUe->sommeUeCmDist + $heuresEctsUe->sommeUeTdDist + $heuresEctsUe->sommeUeTpDist;
+            $diff['sommeUeTotalDist'] = new DiffObject(Tools::filtreHeures($sommeUeTotalDist), Tools::filtreHeures($heuresEctsUe1->sommeUeTotalDist()));
+
+            $sommeUeTotalPresDist = $sommeUeTotalPres + $sommeUeTotalDist;
+            $diff['sommeUeTotalPresDist'] = new DiffObject(Tools::filtreHeures($sommeUeTotalPresDist), Tools::filtreHeures($heuresEctsUe1->sommeUeTotalPresDist()));
+        } elseif ($heuresEctsUe !== null && $heuresEctsUe1 === null) {
+            $diff['sommeUeEcts'] = new DiffObject($heuresEctsUe->sommeUeEcts, 0);
+            $diff['sommeUeCmPres'] = new DiffObject(Tools::filtreHeures($heuresEctsUe->sommeUeCmPres), 0);
+            $diff['sommeUeTdPres'] = new DiffObject(Tools::filtreHeures($heuresEctsUe->sommeUeTdPres), 0);
+            $diff['sommeUeTpPres'] = new DiffObject(Tools::filtreHeures($heuresEctsUe->sommeUeTpPres), 0);
+            $diff['sommeUeTePres'] = new DiffObject(Tools::filtreHeures($heuresEctsUe->sommeUeTePres), 0);
+            $diff['sommeUeCmDist'] = new DiffObject(Tools::filtreHeures($heuresEctsUe->sommeUeCmDist), 0);
+            $diff['sommeUeTdDist'] = new DiffObject(Tools::filtreHeures($heuresEctsUe->sommeUeTdDist), 0);
+            $diff['sommeUeTpDist'] = new DiffObject(Tools::filtreHeures($heuresEctsUe->sommeUeTpDist), 0);
+
+            $sommeUeTotalPres = $heuresEctsUe->sommeUeCmPres + $heuresEctsUe->sommeUeTdPres + $heuresEctsUe->sommeUeTpPres;
+            $diff['sommeUeTotalPres'] = new DiffObject(Tools::filtreHeures($sommeUeTotalPres), 0);
+
+            $sommeUeTotalDist = $heuresEctsUe->sommeUeCmDist + $heuresEctsUe->sommeUeTdDist + $heuresEctsUe->sommeUeTpDist;
+            $diff['sommeUeTotalDist'] = new DiffObject(Tools::filtreHeures($sommeUeTotalDist), 0);
+
+            $sommeUeTotalPresDist = $sommeUeTotalPres + $sommeUeTotalDist;
+            $diff['sommeUeTotalPresDist'] = new DiffObject(Tools::filtreHeures($sommeUeTotalPresDist), 0);
+        } else {
+            $diff['sommeUeEcts'] = new DiffObject(0, $heuresEctsUe1->sommeUeEcts);
+            $diff['sommeUeCmPres'] = new DiffObject(0, Tools::filtreHeures($heuresEctsUe1->sommeUeCmPres));
+            $diff['sommeUeTdPres'] = new DiffObject(0, Tools::filtreHeures($heuresEctsUe1->sommeUeTdPres));
+            $diff['sommeUeTpPres'] = new DiffObject(0, Tools::filtreHeures($heuresEctsUe1->sommeUeTpPres));
+            $diff['sommeUeTePres'] = new DiffObject(0, Tools::filtreHeures($heuresEctsUe1->sommeUeTePres));
+            $diff['sommeUeCmDist'] = new DiffObject(0, Tools::filtreHeures($heuresEctsUe1->sommeUeCmDist));
+            $diff['sommeUeTdDist'] = new DiffObject(0, Tools::filtreHeures($heuresEctsUe1->sommeUeTdDist));
+            $diff['sommeUeTpDist'] = new DiffObject(0, Tools::filtreHeures($heuresEctsUe1->sommeUeTpDist));
+
+            $diff['sommeUeTotalPres'] = new DiffObject(0, Tools::filtreHeures($heuresEctsUe1->sommeUeTotalPres()));
+            $diff['sommeUeTotalDist'] = new DiffObject(0, Tools::filtreHeures($heuresEctsUe1->sommeUeTotalDist()));
+            $diff['sommeUeTotalPresDist'] = new DiffObject(0, Tools::filtreHeures($heuresEctsUe1->sommeUeTotalPresDist()));
+        }
+
+        return $diff;
+    }
+
+    private function compareHeuresEctsEc(?HeuresEctsEc $heuresEctsEc, ?HeuresEctsEc $heuresEctsEc1): array
     {
         $diff = [];
-        $diff['sommeUeEcts'] = new DiffObject($heuresEctsUe->sommeUeEcts, $heuresEctsUe1->sommeUeEcts);
-        $diff['sommeUeCmPres'] = new DiffObject(Tools::filtreHeures($heuresEctsUe->sommeUeCmPres), Tools::filtreHeures($heuresEctsUe1->sommeUeCmPres));
-        $diff['sommeUeTdPres'] = new DiffObject(Tools::filtreHeures($heuresEctsUe->sommeUeTdPres), Tools::filtreHeures($heuresEctsUe1->sommeUeTdPres));
-        $diff['sommeUeTpPres'] = new DiffObject(Tools::filtreHeures($heuresEctsUe->sommeUeTpPres), Tools::filtreHeures($heuresEctsUe1->sommeUeTpPres));
-        $diff['sommeUeTePres'] = new DiffObject(Tools::filtreHeures($heuresEctsUe->sommeUeTePres), Tools::filtreHeures($heuresEctsUe1->sommeUeTePres));
-        $diff['sommeUeCmDist'] = new DiffObject(Tools::filtreHeures($heuresEctsUe->sommeUeCmDist), Tools::filtreHeures($heuresEctsUe1->sommeUeCmDist));
-        $diff['sommeUeTdDist'] = new DiffObject(Tools::filtreHeures($heuresEctsUe->sommeUeTdDist), Tools::filtreHeures($heuresEctsUe1->sommeUeTdDist));
-        $diff['sommeUeTpDist'] = new DiffObject(Tools::filtreHeures($heuresEctsUe->sommeUeTpDist), Tools::filtreHeures($heuresEctsUe1->sommeUeTpDist));
 
-        $sommeUeTotalPres = $heuresEctsUe->sommeUeCmPres + $heuresEctsUe->sommeUeTdPres + $heuresEctsUe->sommeUeTpPres;
-        $diff['sommeUeTotalPres'] = new DiffObject(Tools::filtreHeures($sommeUeTotalPres), Tools::filtreHeures($heuresEctsUe1->sommeUeTotalPres()));
+        if ($heuresEctsEc === null && $heuresEctsEc1 !== null) {
+            $diff['ects'] = new DiffObject(0, $heuresEctsEc1->ects);
+            $diff['cmPres'] = new DiffObject(0, Tools::filtreHeures($heuresEctsEc1->cmPres));
+            $diff['tdPres'] = new DiffObject(0, Tools::filtreHeures($heuresEctsEc1->tdPres));
+            $diff['tpPres'] = new DiffObject(0, Tools::filtreHeures($heuresEctsEc1->tpPres));
+            $diff['tePres'] = new DiffObject(0, Tools::filtreHeures($heuresEctsEc1->tePres));
+            $diff['cmDist'] = new DiffObject(0, Tools::filtreHeures($heuresEctsEc1->cmDist));
+            $diff['tdDist'] = new DiffObject(0, Tools::filtreHeures($heuresEctsEc1->tdDist));
+            $diff['tpDist'] = new DiffObject(0, Tools::filtreHeures($heuresEctsEc1->tpDist));
 
-        $sommeUeTotalDist = $heuresEctsUe->sommeUeCmDist + $heuresEctsUe->sommeUeTdDist + $heuresEctsUe->sommeUeTpDist;
-        $diff['sommeUeTotalDist'] = new DiffObject(Tools::filtreHeures($sommeUeTotalDist), Tools::filtreHeures($heuresEctsUe1->sommeUeTotalDist()));
+            $diff['sommeEcTotalPres'] = new DiffObject(0, Tools::filtreHeures($heuresEctsEc1->sommeEcTotalPres()));
+            $diff['sommeEcTotalDist'] = new DiffObject(0, Tools::filtreHeures($heuresEctsEc1->sommeEcTotalDist()));
+            $diff['sommeEcTotalPresDist'] = new DiffObject(0, Tools::filtreHeures($heuresEctsEc1->sommeEcTotalPresDist()));
+        } elseif ($heuresEctsEc !== null && $heuresEctsEc1 === null) {
+            $diff['ects'] = new DiffObject($heuresEctsEc->ects, 0);
+            $diff['cmPres'] = new DiffObject(Tools::filtreHeures($heuresEctsEc->cmPres), 0);
+            $diff['tdPres'] = new DiffObject(Tools::filtreHeures($heuresEctsEc->tdPres), 0);
+            $diff['tpPres'] = new DiffObject(Tools::filtreHeures($heuresEctsEc->tpPres), 0);
+            $diff['tePres'] = new DiffObject(Tools::filtreHeures($heuresEctsEc->tePres), 0);
+            $diff['cmDist'] = new DiffObject(Tools::filtreHeures($heuresEctsEc->cmDist), 0);
+            $diff['tdDist'] = new DiffObject(Tools::filtreHeures($heuresEctsEc->tdDist), 0);
+            $diff['tpDist'] = new DiffObject(Tools::filtreHeures($heuresEctsEc->tpDist), 0);
 
-        $sommeUeTotalPresDist = $sommeUeTotalPres + $sommeUeTotalDist;
-        $diff['sommeUeTotalPresDist'] = new DiffObject(Tools::filtreHeures($sommeUeTotalPresDist), Tools::filtreHeures($heuresEctsUe1->sommeUeTotalPresDist()));
 
+            $diff['sommeEcTotalPres'] = new DiffObject(Tools::filtreHeures($heuresEctsEc->sommeEcTotalPres()), 0);
+            $diff['sommeEcTotalDist'] = new DiffObject(Tools::filtreHeures($heuresEctsEc->sommeEcTotalDist()), 0);
+            $diff['sommeEcTotalPresDist'] = new DiffObject(Tools::filtreHeures($heuresEctsEc->sommeEcTotalPresDist()), 0);
+        } else {
+            $diff['ects'] = new DiffObject($heuresEctsEc->ects, $heuresEctsEc1->ects);
+            $diff['cmPres'] = new DiffObject(Tools::filtreHeures($heuresEctsEc->cmPres), Tools::filtreHeures($heuresEctsEc1->cmPres));
+            $diff['tdPres'] = new DiffObject(Tools::filtreHeures($heuresEctsEc->tdPres), Tools::filtreHeures($heuresEctsEc1->tdPres));
+            $diff['tpPres'] = new DiffObject(Tools::filtreHeures($heuresEctsEc->tpPres), Tools::filtreHeures($heuresEctsEc1->tpPres));
+            $diff['tePres'] = new DiffObject(Tools::filtreHeures($heuresEctsEc->tePres), Tools::filtreHeures($heuresEctsEc1->tePres));
+            $diff['cmDist'] = new DiffObject(Tools::filtreHeures($heuresEctsEc->cmDist), Tools::filtreHeures($heuresEctsEc1->cmDist));
+            $diff['tdDist'] = new DiffObject(Tools::filtreHeures($heuresEctsEc->tdDist), Tools::filtreHeures($heuresEctsEc1->tdDist));
+            $diff['tpDist'] = new DiffObject(Tools::filtreHeures($heuresEctsEc->tpDist), Tools::filtreHeures($heuresEctsEc1->tpDist));
+
+
+            $diff['sommeEcTotalPres'] = new DiffObject(Tools::filtreHeures($heuresEctsEc->sommeEcTotalPres()), Tools::filtreHeures($heuresEctsEc1->sommeEcTotalPres()));
+            $diff['sommeEcTotalDist'] = new DiffObject(Tools::filtreHeures($heuresEctsEc->sommeEcTotalDist()), Tools::filtreHeures($heuresEctsEc1->sommeEcTotalDist()));
+            $diff['sommeEcTotalPresDist'] = new DiffObject(Tools::filtreHeures($heuresEctsEc->sommeEcTotalPresDist()), Tools::filtreHeures($heuresEctsEc1->sommeEcTotalPresDist()));
+
+
+        }
         return $diff;
     }
 
-    private function compareHeuresEctsEc(HeuresEctsEc $heuresEctsEc, HeuresEctsEc $heuresEctsEc1)
-    {
-        $diff = [];
-        $diff['ects'] = new DiffObject($heuresEctsEc->ects, $heuresEctsEc1->ects);
-        $diff['cmPres'] = new DiffObject(Tools::filtreHeures($heuresEctsEc->cmPres), Tools::filtreHeures($heuresEctsEc1->cmPres));
-        $diff['tdPres'] = new DiffObject(Tools::filtreHeures($heuresEctsEc->tdPres), Tools::filtreHeures($heuresEctsEc1->tdPres));
-        $diff['tpPres'] = new DiffObject(Tools::filtreHeures($heuresEctsEc->tpPres), Tools::filtreHeures($heuresEctsEc1->tpPres));
-        $diff['tePres'] = new DiffObject(Tools::filtreHeures($heuresEctsEc->tePres), Tools::filtreHeures($heuresEctsEc1->tePres));
-        $diff['cmDist'] = new DiffObject(Tools::filtreHeures($heuresEctsEc->cmDist), Tools::filtreHeures($heuresEctsEc1->cmDist));
-        $diff['tdDist'] = new DiffObject(Tools::filtreHeures($heuresEctsEc->tdDist), Tools::filtreHeures($heuresEctsEc1->tdDist));
-        $diff['tpDist'] = new DiffObject(Tools::filtreHeures($heuresEctsEc->tpDist), Tools::filtreHeures($heuresEctsEc1->tpDist));
-
-
-        $diff['sommeEcTotalPres'] = new DiffObject(Tools::filtreHeures($heuresEctsEc->sommeEcTotalPres()), Tools::filtreHeures($heuresEctsEc1->sommeEcTotalPres()));
-        $diff['sommeEcTotalDist'] = new DiffObject(Tools::filtreHeures($heuresEctsEc->sommeEcTotalDist()), Tools::filtreHeures($heuresEctsEc1->sommeEcTotalDist()));
-        $diff['sommeEcTotalPresDist'] = new DiffObject(Tools::filtreHeures($heuresEctsEc->sommeEcTotalPresDist()), Tools::filtreHeures($heuresEctsEc1->sommeEcTotalPresDist()));
-
-        return $diff;
-
-    }
-
-    private function compareHeuresEctsFormation(mixed $heuresEctsFormation, $heuresEctsFormationNouveau)
+    private function compareHeuresEctsFormation(mixed $heuresEctsFormation, $heuresEctsFormationNouveau): array
     {
         $diff = [];
         $diff['sommeFormationEcts'] = new DiffObject($heuresEctsFormation->sommeFormationEcts, $heuresEctsFormationNouveau->sommeFormationEcts);

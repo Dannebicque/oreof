@@ -39,7 +39,6 @@
                                         <span class="badge bg-warning"> À compléter</span>
                                     {% endif %}
                                 </a>
-
                             </td>
                             <td>
                                 {#                        <button #}
@@ -108,11 +107,10 @@
             </table>
         </div>
     </div>
-
 {% endblock %}
 
 {% block header %}
-    EC pour le parcours {{ parcours.libelle }}
+    EC : {{ parcours.libelle }} {{ parcours.typeParcours|badgeTypeParcours }}
 {% endblock %}
 
 {% block breadcrumb %}

@@ -130,4 +130,22 @@ class DpeParcours
 
         return $this;
     }
+
+    public function withCfvu() : bool
+    {
+        return $this->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_MCCC ||
+        $this->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_MCCC_TEXTE;
+    }
+
+    public function updateMinorVersion(): void
+    {
+        if ($this->getVersion() === null) {
+            $this->setVersion('1.0');
+        } else {
+            $version = explode('.', $this->getVersion());
+
+            $version[1] = (int)$version[1] + 1;
+            $this->setVersion($version[0].'.'.$version[1]);
+        }
+    }
 }

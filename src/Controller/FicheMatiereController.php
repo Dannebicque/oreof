@@ -11,6 +11,7 @@ namespace App\Controller;
 
 use App\Classes\JsonReponse;
 use App\Classes\verif\FicheMatiereState;
+use App\DTO\StructureEc;
 use App\Entity\ElementConstitutif;
 use App\Entity\FicheMatiere;
 use App\Entity\FicheMatiereVersioning;
@@ -28,6 +29,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Jfcherng\Diff\DiffHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor;
@@ -97,10 +99,8 @@ class FicheMatiereController extends AbstractController
         VersioningFicheMatiere $ficheMatiereVersioningService
     ): Response {
         $formation = $ficheMatiere->getParcours()?->getFormation();
-//        if ($formation === null) {
-//            throw new RuntimeException('Formation non trouvée');
-//        }
 
+//todo: supprimer la partie version pas utilisée sur les fiches
         $bccs = [];
         foreach ($ficheMatiere->getCompetences() as $competence) {
             if (!array_key_exists($competence->getBlocCompetence()?->getId(), $bccs)) {
@@ -234,6 +234,11 @@ class FicheMatiereController extends AbstractController
                 $entityManager->remove($mccc);
             }
 
+            foreach ($ficheMatiere->getHistoriqueFicheMatieres() as $historiqueFicheMatiere) {
+                $ficheMatiere->removeHistoriqueFicheMatiere($historiqueFicheMatiere);
+                $entityManager->remove($historiqueFicheMatiere);
+            }
+
             $ficheMatiereRepository->remove($ficheMatiere, true);
 
             return JsonReponse::success('La fiche matière a bien été supprimée.');
@@ -242,16 +247,57 @@ class FicheMatiereController extends AbstractController
         return $this->json(false);
     }
 
-    #[Route('/{ec}/{parcours}/maquette_iframe', name: 'app_fiche_matiere_maquette_iframe')]
-    public function getMaquetteIframe(ElementConstitutif $ec, Parcours $parcours) : Response {
+    #[Route('/{ec}/{parcours}/{ects}/maquette_iframe', name: 'app_fiche_matiere_maquette_iframe')]
+    public function getMaquetteIframe(ElementConstitutif $ec, Parcours $parcours, float $ects) : Response {
+
         $ficheMatiere = $ec->getFicheMatiere();
+        $isBUT = $ficheMatiere->getParcours()?->getTypeDiplome()?->getLibelleCourt() === 'BUT';
+        $structureEC = new StructureEc($ec, $parcours, $isBUT, true, false);
 
         return $this->render('fiche_matiere/maquette_iframe.html.twig', [
             'fiche_matiere' => $ficheMatiere,
             'typeDiplome' => $ficheMatiere->getParcours()?->getFormation()?->getTypeDiplome(),
             'formation' => $ficheMatiere->getParcours()?->getFormation(),
             'maquetteOrigineURL' => $parcours ? $this->generateUrl('app_parcours_maquette_iframe', ['parcours' => $parcours->getId()]) : "#",
-            'element_constitutif' => $ec
+            'heuresEctsEc' => $structureEC->heuresEctsEc,
+            'ects' => $ects,
+            'isBUT' => $isBUT
+        ]);
+    }
+
+    #[Route('/versioning/{volCmPres}/{volTdPres}/{volTpPres}/{volCmDist}/{volTdDist}/{volTpDist}/{volTe}/{parcours}/{ects}/{slug}/maquette_iframe', name: 'app_fiche_matiere_versioning_maquette_iframe')]
+    public function getMaquetteIframeVersioning(
+        float $volCmPres,
+        float $volTdPres,
+        float $volTpPres,
+        float $volCmDist,
+        float $volTdDist,
+        float $volTpDist,
+        float $volTe,
+        string $slug,
+        Parcours $parcours,
+        float $ects,
+        EntityManagerInterface $entityManager
+    ) : Response {
+        $ficheMatiere = $entityManager->getRepository(FicheMatiere::class)->findOneBySlug($slug);
+
+        return $this->render('fiche_matiere/maquette_iframe.html.twig', [
+            'fiche_matiere' => $ficheMatiere,
+            'typeDiplome' => $ficheMatiere->getParcours()?->getFormation()?->getTypeDiplome(),
+            'formation' => $ficheMatiere->getParcours()?->getFormation(),
+            'maquetteOrigineURL' => $parcours ? $this->generateUrl('app_parcours_maquette_iframe', ['parcours' => $parcours->getId()]) : "#",
+            // $parcours ? $this->generateUrl('app_versioning_parcours_maquette_iframe', ['parcours' => $parcours->getId()]) : "#",
+            'ects' => $ects,
+            'heuresEctsEc' => [        
+                'volCmPres' => $volCmPres, 
+                'volTdPres' => $volTdPres, 
+                'volTpPres' => $volTpPres, 
+                'volCmDist' => $volCmDist, 
+                'volTdDist' => $volTdDist, 
+                'volTpDist' => $volTpDist, 
+                'volTe' => $volTe
+            ],
+            'isVersioning' => true
         ]);
     }
 
@@ -341,6 +387,25 @@ class FicheMatiereController extends AbstractController
             ]);
             return $this->redirectToRoute('app_fiche_matiere_show', ['slug' => $ficheMatiere->getSlug()]);
         }
+    }
+
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route('/recherche/parcours/{parcours}/{keyword}', name: 'app_fiche_matiere_search')]
+    public function getFicheMatiereForParcoursAndKeyword(
+        Parcours $parcours,
+        string $keyword = "",
+        EntityManagerInterface $entityManager
+    ){
+        $associatedFicheMatiere = $entityManager
+            ->getRepository(FicheMatiere::class)
+            ->findForParcoursWithKeyword($parcours, $keyword);
+
+        return new JsonResponse(
+            $associatedFicheMatiere,
+            200,
+            ['Content-Type' => 'application/json'],
+            false
+        );
     }
 
 }

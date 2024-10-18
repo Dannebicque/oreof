@@ -3,10 +3,8 @@
 {% block title %}Parcours{% endblock %}
 
 {% block content %}
-    {# {{ component('mention_manage', {parcours:parcours, type:'parcours'}) }} #}
     <div class="row">
-        {# {{ include('typeDiplome/parcours/common/_licence.versioning.html.twig') }} #}
-        {{ include('typeDiplome/parcours/common/_'~constant('SOURCE', typeD)~'.versioning.html.twig') }}
+        {{ include('typeDiplome/parcours/common/_'~constant('SOURCE', typeD)~'.html.twig') }}
         <!-- Scrollspy Start -->
         <div class="col-md-auto d-none d-lg-block" id="scrollSpyMenu">
             <ul class="nav flex-column">
@@ -80,60 +78,3 @@
 {% block header %}
     Détail du parcours : {{ parcours.libelle }} <h2 class="text-primary">Version du : {{ dateVersion }}</h2>
 {% endblock %}
-
-{# 
-{% block breadcrumb %}
-    {{ include('communs/_breadcrumb.html.twig', {liens:[
-        {href: path('app_formation_index'), title: 'Liste des formations'},
-        {href: path('app_formation_show', {slug:formation.slug}), title:'Formation :  ' ~ formation.display},
-    ]}) }}
-{% endblock %}
-#}
-
-{#
-{% block bouton_header %}
-
-    {{ include('btn/export_mccc.html.twig') }}
-
-    <div class="btn-group">
-        <button type="button"
-                class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2 dropdown-toggle mb-1"
-                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="{{ iconDownload }}"></i> BCC
-        </button>
-        <div class="dropdown-menu" style="">
-            <a class="dropdown-item" href="{{ path('app_parcours_bcc', {parcours:parcours.id}) }}">
-                Voir en ligne
-            </a>
-            <a class="dropdown-item" href="{{ path('app_competence_export_bcc', {parcours:parcours.id}) }}">
-                Export des BCC (pdf)
-            </a>
-            <a class="dropdown-item" href="{{ path('app_competence_export_croise', {parcours:parcours.id}) }}">
-                Export du tableau croisé BCC/EC (pdf)
-            </a>
-        </div>
-    </div>
-
-    <a href="{{ path('app_parcours_export', {parcours:parcours.id}) }}"
-       class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2"
-       data-bs-toggle="tooltip"
-       data-bs-placement="bottom"
-       title="Télécharger en PDF"
-    >
-        <i class="{{ iconDownload }}"></i>
-        <span> Fiche descriptive (PDF)</span>
-    </a>
-
-    {% if is_granted('CAN_PARCOURS_EDIT_MY', parcours) %}
-        <a href="{{ path('app_parcours_edit', {id:parcours.id}) }}"
-           class="btn btn-sm btn-outline-warning btn-icon btn-icon-end w-100 w-sm-auto mx-2"
-           data-bs-toggle="tooltip"
-           data-bs-placement="bottom"
-           title="Modifier le parcours"
-        >
-            <i class="{{ iconEdit }}"></i>
-            <span> Modifier le parcours</span>
-        </a>
-    {% endif %}
-{% endblock %}
-#}

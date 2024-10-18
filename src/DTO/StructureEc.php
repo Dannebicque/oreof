@@ -46,15 +46,20 @@ class StructureEc
     public ?string $typeMccc = null;
 
     #[Groups(['DTO_json_versioning'])]
-    public ?array $bccs;
+    public ?array $bccs = [];
 
     private bool $withEcts = true;
     private bool $withBcc = true;
 
     public function __construct(
-        ElementConstitutif $elementConstitutif, ?Parcours $parcours, bool $isBut = false, bool $withEcts = true, bool $withBcc = true)
-    {
-        if($parcours){
+        ElementConstitutif $elementConstitutif,
+        ?Parcours $parcours,
+        bool $isBut = false,
+        bool $withEcts = true,
+        bool $withBcc = true,
+        bool $heuresSurFicheMatiere = false
+    ) {
+        if($parcours) {
             $getElement = new GetElementConstitutif($elementConstitutif, $parcours);
             $this->withEcts = $withEcts;
             $this->withBcc = $withBcc;
@@ -66,14 +71,25 @@ class StructureEc
         if ($this->withEcts && $parcours) {
             $this->heuresEctsEc = new HeuresEctsEc();
             $this->typeMccc = $getElement->getTypeMccc();
-            $this->heuresEctsEc->addEc($getElement->getElementConstitutifHeures(), $isBut);
+            if($heuresSurFicheMatiere === false){
+                $this->heuresEctsEc->addEc($getElement->getElementConstitutifHeures(), $isBut, $heuresSurFicheMatiere);
+            }
+            elseif ($heuresSurFicheMatiere === true) {
+                $this->heuresEctsEc->addEc($getElement->getFicheMatiereHeures(), $isBut, $heuresSurFicheMatiere);
+            }
             $this->heuresEctsEc->addEcts($getElement->getEcts());
             $this->mcccs = $getElement->getMcccsCollection()?->toArray();
-
         }
 
         if ($this->withBcc && $parcours) {
-            $this->bccs = $getElement->getBccs()?->toArray();
+            $bccs = $getElement->getBccs()?->toArray();
+            if ($bccs !== null) {
+                foreach ($bccs as $bcc) {
+                    $this->bccs[$bcc->getCode()] = $bcc;
+                }
+            } else {
+                $this->bccs = [];
+            }
         }
     }
 

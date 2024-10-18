@@ -24,14 +24,25 @@
 {% endif %}
 
 {% if IsUeEnfant %}
-{% set colorBadge = indexUeEnfant == 1 ? 'bg-primary'
-    : indexUeEnfant == 2 ? 'bg-danger'
-    : indexUeEnfant == 3 ? 'bg-warning'
-    : 'bg-success'
-%}
-<tr class="table-dark-child">
-    <td id="UEEnfantLibelle" style="{{ 'padding-left: ' ~ paddingCascade * paddingCascadeValue ~ 'em;' }}">
-        {{ ue.ue.display }} - {{ ue.ue.libelle }}
+    {% set colorBadge = indexUeEnfant == 1 ? 'bg-primary'
+        : indexUeEnfant == 2 ? 'bg-danger'
+        : indexUeEnfant == 3 ? 'bg-warning'
+        : 'bg-success'
+    %}
+{% set classTdUeDeuxiemeNiveau = "UEEnfantLibelle" %}
+
+{% if IsSecondNiveauEnfant is defined and IsSecondNiveauEnfant == true %}
+    {% set classTdUeDeuxiemeNiveau = "UEEnfantLibelleDeuxiemeNiveau" %}
+{% endif %}
+
+<tr class="table-dark-child {{ classTdUeDeuxiemeNiveau }}">
+    <td id="{{ classTdUeDeuxiemeNiveau }}" style="{{ 'padding-left: ' ~ paddingCascade * paddingCascadeValue ~ 'em;' }}">
+        {{ ue.display }} - {{ ue.ue.libelle }}
+        {% if ue.uesEnfants|length > 0 %}
+            <span class="badge bg-primary">
+                UE à choix restreint : 1 choix possible parmi {{ ue.uesEnfants|length }}
+            </span>
+        {% endif %}
         {# <span class="ms-3 badge {{ colorBadge }}">Choix {{ indexUeEnfant }}</span> #}
     </td>
     <td>{{ ue.heuresEctsUe.sommeUeCmPres > 0 ? ue.heuresEctsUe.sommeUeCmPres : '-'  }}</td>
@@ -73,7 +84,7 @@
         {% endif %}
 {% endfor %}
 
-{% if IsUeEnfant and ue.elementConstitutifs|length == 0 %}
+{% if IsUeEnfant and ue.elementConstitutifs|length == 0 and ue.ue.descriptionUeLibre != null %}
     <tr>
         <td id="ECEnfantLibelleLibre" style="{{ 'padding-left: ' ~ (paddingCascade + 1) * paddingCascadeValue ~ 'em;' }}">
             {{ ue.ue.descriptionUeLibre }}

@@ -9,7 +9,7 @@
            data-bs-original-title="{{ 'ec_manage.helps.fiche_matieres_libelle_choix.help'|trans({}, 'help') }}"></i>
     </label>
     <textarea maxlength="255" type="text" id="ficheMatiereLibre" name="ficheMatiereLibre"
-              class="form-control"></textarea>
+              class="form-control">{{ ec.libelle }}</textarea>
 </div>
 
 <table class="table" id="tableFiches">
@@ -24,7 +24,7 @@
     </tr>
     </thead>
     {% if ec != null %}
-        {% for ecEnfant in ec.ecEnfants %}
+        {% for ecEnfant in ec.ecEnfants|filter(ecEnfant => ecEnfant.ficheMatiere != null) %}
             <tr>
                 <td data-id="id_{{ ecEnfant.ficheMatiere.id }}">
                     {{ ecEnfant.display }}

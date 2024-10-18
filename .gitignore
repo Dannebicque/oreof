@@ -26,3 +26,32 @@ yarn-error.log
 ###> phpstan/phpstan ###
 phpstan.neon
 ###< phpstan/phpstan ###
+
+
+### TEST CONFIG ###
+.env.local.old
+
+### EXPORT MCCC PDF ###
+mccc-export/
+public/temp/*
+
+### Script de publication ###
+publication-cron/
+
+### Dossier d'export
+export/
+
+### API JSON Versioning ###
+public/api_json/
+
+###> phpunit/phpunit ###
+/phpunit.xml
+.phpunit.result.cache
+
+.env.test
+###< phpunit/phpunit ###
+
+###> symfony/phpunit-bridge ###
+.phpunit.result.cache
+/phpunit.xml
+###< symfony/phpunit-bridge ###

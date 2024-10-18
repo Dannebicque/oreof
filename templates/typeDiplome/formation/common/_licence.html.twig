@@ -28,7 +28,7 @@
                     zone: 'localisation',
                 }) }}
                 {% endif %}
-                {{ include('typeDiplome/formation/_localisation.html.twig') }}
+                {{ include('typeDiplome/formation/_localisationFormation.html.twig') }}
             </div>
         </div>
     </section>
@@ -64,7 +64,6 @@
                         zone: 'descriptif',
                     }) }}
                     {% endif %}
-                    //render controller
                     {{ render(controller('App\\Controller\\StructureShowController::licence', {
                         parcours: formation.parcours[0].id,
                         hasLastVersion: hasLastVersion ?? false,
@@ -213,7 +212,7 @@
                 </section>
 
                 <section class="scroll-section" id="descriptif_{{ parcours.id }}">
-                    <h3 class="small-title">Descriptif de la formation</h3>
+                    <h3 class="small-title">Descriptif du parcours</h3>
                     <div class="card mb-5">
                         <div class="card-body">
                             {% if (print is not defined or print == false) %}
@@ -224,7 +223,7 @@
                                 zone: 'descriptif_'~ parcours.id,
                             }) }}
                             {% endif %}
-                            {{ include('typeDiplome/formation/_descriptif.html.twig', {
+                            {{ include('typeDiplome/formation/_descriptifParcours.html.twig', {
                                     parcours:parcours,
                                     stringDifferencesParcours: versioningParcours.getDifferencesBetweenParcoursAndLastVersion(parcours) ?? []
                                 })

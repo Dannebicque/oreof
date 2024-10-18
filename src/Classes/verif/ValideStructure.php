@@ -154,13 +154,18 @@ abstract class ValideStructure extends AbstractValide
         //vérification des ECTS, d'un libellé et d'une description
         } elseif ($ec->getNatureUeEc()?->isChoix() || $ec->getEcEnfants()->count() > 0) {
             if (self::$typeDiplome !== null) {
-                //si l'EC est un choix, on vérifie les enfants
+                //si l'EC est un choix, on vérifie les enfants => todo: utiliser self::analyseEc ?
                 if ($ec->getEcts() !== null && $ec->getEcts() > 0.0 && $ec->getEcts() <= 30.0) {
                     $t['global'] = self::COMPLET;
                     $t['erreur'] = [];
                 } else {
-                    $t['global'] = self::ERREUR;
-                    $t['erreur'] = ['Les ECTS ne sont pas définis ou non compris entre 0 et 30 l\'' . $ec->getCode() . ' de l\'' . $ue->display(self::$parcours)];
+                    if (self::$typeDiplome->isEctsObligatoireSurEc() === true && ($ec->getEcts() === null || $ec->getEcts() === 0.0)) {
+                        $t['global'] = self::INCOMPLET_ECTS;
+                        $t['erreur'] = ['Les ECTS ne sont pas définis mais ce type de diplôme l\'autorise pour l\'' . $ec->getCode() . ' de l\'' . $ue->display(self::$parcours)];
+                    } else {
+                        $t['global'] = self::ERREUR;
+                        $t['erreur'] = ['Les ECTS ne sont pas définis ou non compris entre 0 et 30 l\'' . $ec->getCode() . ' de l\'' . $ue->display(self::$parcours)];
+                    }
                 }
             }
 
@@ -195,12 +200,19 @@ abstract class ValideStructure extends AbstractValide
         if ($ec->getNatureUeEc()?->isLibre() === true) {
             if (self::$typeDiplome !== null) {
                 $ects = $getElement->getEcts();
+                //todo: selon le type de diplôme, vérifier si les ECTS sont obligatoires
+                if (self::$typeDiplome->isEctsObligatoireSurEc() === false && ($ects === null || $ects === 0.0)) {
+                    $t['erreur'][] = 'ECTS non renseignés, mais ce type de diplôme l\'autorise';
+                    $etatEc = self::INCOMPLET_ECTS;
+                    self::$errors[] = 'ECTS non renseignés, mais ce type de diplôme l\'autorise pour l\'' . $ec->getCode() . ' de l\'' . $ue->display(self::$parcours);
+                } else {
                 if ($ects === null ||
                     $ects <= 0.0 ||
                     $ects > 30.0) {
                     $t['erreur'][] = 'ECTS non renseignés';
                     $etatEc = self::ERREUR;
                     self::$errors[] = 'ECTS non renseignés pour l\'' . $ec->getCode() . ' de l\'' . $ue->display(self::$parcours);
+                }
                 }
             }
         } elseif ($ec->getFicheMatiere() === null) {
@@ -222,12 +234,18 @@ abstract class ValideStructure extends AbstractValide
             }
             if (self::$typeDiplome !== null) {
                 $ects = $getElement->getEcts();
-                if ($ects === null ||
-                    $ects <= 0.0 ||
-                    $ects > 30.0) {
-                    $t['erreur'][] = 'ECTS non renseignés';
-                    $etatEc = self::ERREUR;
-                    self::$errors[] = 'ECTS non renseignés pour l\'' . $ec->getCode() . ' de l\'' . $ue->display(self::$parcours);
+                if (self::$typeDiplome->isEctsObligatoireSurEc() === false && ($ects === null || $ects === 0.0)) {
+                    $t['erreur'][] = 'ECTS non renseignés, mais ce type de diplôme l\'autorise';
+                    $etatEc = self::INCOMPLET_ECTS;
+                    self::$errors[] = 'ECTS non renseignés, mais ce type de diplôme l\'autorise pour l\'' . $ec->getCode() . ' de l\'' . $ue->display(self::$parcours);
+                } else {
+                    if ($ects === null ||
+                        $ects <= 0.0 ||
+                        $ects > 30.0) {
+                        $t['erreur'][] = 'ECTS non renseignés';
+                        $etatEc = self::ERREUR;
+                        self::$errors[] = 'ECTS non renseignés pour l\'' . $ec->getCode() . ' de l\'' . $ue->display(self::$parcours);
+                    }
                 }
             }
 

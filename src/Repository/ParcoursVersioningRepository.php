@@ -32,6 +32,22 @@ class ParcoursVersioningRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function findLastCfvuVersion(Parcours $parcours) {
+        return $this->createQueryBuilder('pv')
+            ->orderBy('pv.version_timestamp', 'DESC')
+            ->join('pv.parcours', 'p', 'WITH', 'pv.parcours = :parcours')
+            ->where('pv.cvfuFlag = 1')
+            ->setParameter('parcours', $parcours)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function countSavedParcours(){
+        return $this->createQueryBuilder('pv')
+            ->select("count(DISTINCT (pv.parcours)) AS nb_parcours")
+            ->getQuery()->getResult();
+    }
+
 //    /**
 //     * @return ParcoursVersioning[] Returns an array of ParcoursVersioning objects
 //     */

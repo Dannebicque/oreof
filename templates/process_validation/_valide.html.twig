@@ -3,9 +3,9 @@
     message: (process.label~'.valide.alerte')|trans({}, 'process')|nl2br|raw
 }) }}
 
-<form action="{{ path('app_validation_valide', {etape:etape, type:type, id:id}) }}" method="post"
+<form action="{{ path('app_validation_valider', {etape:etape, type:type, id:id, transition: transition}) }}" method="post"
       enctype="multipart/form-data">
-    {% if process.hasDate %}
+    {% if meta.hasDate is defined and meta.hasDate == true %}
         <div>
             <label for="date" class="form-label">{{ ('valide.'~process.label~'.date.label')|trans({}, 'process') }}
                 <span class="required"></span> <i
@@ -22,11 +22,10 @@
     {% endif %}
 
     {% if process.check is defined and process.check == true %}
-        {{ include('process_validation/_check'~etape|capitalize~'.html.twig') }}
+        {{ include('process_validation/'~process.templateCheck) }}
     {% endif %}
 
-    {% if etape == 'cfvu' %}
-
+    {% if etape == 'soumis_cfvu' %}
         {# regarder si dans l'historique on à un laissez-passer sur le conseil  #}
         {% if laisserPasser is defined and laisserPasser != false %}
             {% if laisserPasser.etat == 'laisserPasser' %}
@@ -120,7 +119,7 @@
 
     {% endif %}
 
-    {% if process.hasUpload %}
+    {% if meta.hasUpload is defined and meta.hasUpload == true %}
         <div>
             <label for="file" class="form-label">{{ ('valide.'~process.label~'.fichier.label')|trans({}, 'process') }}
                 <i class="fal fa-question-circle ms-1"

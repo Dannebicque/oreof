@@ -152,14 +152,6 @@
                                         <span class="label">Détail des mentions/spécialités</span>
                                     </a>
                                 </li>
-
-                                <li>
-                                    <a href="{{ path('app_parcours_index') }}">
-                                        <i class="fal fa-shuffle icon"></i>
-                                        <span class="label">Détail des parcours</span>
-                                    </a>
-                                </li>
-
                                 <li>
                                     <a href="{{ path('structure_fiche_matiere_index') }}">
                                         <i class="fal fa-person-chalkboard icon"></i>
@@ -178,6 +170,14 @@
                                         <span class="label">Détail des éléments mutualisés</span>
                                     </a>
                                 </li>
+                                {% if is_granted('ROLE_ADMIN') %}
+                                    <li>
+                                        <a href="{{ path('app_search') }}">
+                                            <i class="fal fa-magnifying-glass icon"></i>
+                                            <span class="label">Effectuer une recherche</span>
+                                        </a>    
+                                    </li>
+                                {% endif %}
                             </ul>
                         </li>
                         {% if (is_granted('CAN_ETABLISSEMENT_SHOW_ALL')) and not is_granted('ROLE_ADMIN') and not is_granted('ROLE_SES') %}
@@ -279,6 +279,15 @@
                                                 <span class="label">Actualités ORéOF</span>
                                             </a>
                                         </li>
+                                        {% if is_granted('ROLE_ADMIN') %}
+                                            <li>
+                                                <a href="{{ path('app_composante_list_for_cfvu') }}">
+                                                    <span class="label">
+                                                        Synthèse par composante
+                                                    </span>
+                                                </a>
+                                            </li>
+                                        {% endif %}
                                     </ul>
                                 </li>
 
@@ -508,6 +517,23 @@
                                 {% endfor %}
                             </ul>
                         </li>
+                    {% endif %}
+
+                    {% if is_granted('CAN_COMPOSANTE_SHOW_MY', app.user) %}
+                    <li>
+                        <a href="#gestion_offre_formation" data-href="gestion_offre_formation">
+                            <i class="fal fa-book icon"></i>
+                            <span class="label">Communication</span>
+                        </a>
+                        <ul id="gestion_offre_formation">
+                            <li>
+                                <a href="{{ path('app_plaquette') }}">
+                                    <i class="fal fa-random icon"></i>
+                                    <span class="label">Configurer les plaquettes</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
                     {% endif %}
                 </ul>
             </div>

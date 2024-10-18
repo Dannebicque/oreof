@@ -10,11 +10,14 @@
 namespace App\Controller;
 
 use App\Classes\CalculStructureParcours;
+use App\Classes\JsonReponse;
 use App\Classes\Process\FicheMatiereProcess;
 use App\Classes\ValidationProcessFicheMatiere;
 use App\Entity\Formation;
 use App\Entity\Parcours;
 use App\Repository\FicheMatiereRepository;
+use App\Repository\FormationRepository;
+use App\Repository\ParcoursRepository;
 use App\Utils\JsonRequest;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -24,17 +27,25 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class FicheMatiereValideController extends BaseController
 {
+    public function __construct(private readonly EntityManagerInterface $entityManager)
+    {
+    }
+
     #[Route('/fiche-matiere/valide/formation/{formation}', name: 'fiche_matiere_valide_formation')]
     public function valideFormation(
         CalculStructureParcours $calculStructureParcours,
-        Formation $formation): Response
-    {
+        Formation $formation
+    ): Response {
         $stats = [];
         $parcourss = $formation->getParcours();
 
         foreach ($parcourss as $parcours) {
             $stats[$parcours->getId()] = $calculStructureParcours->calcul($parcours, false);
+            //update des stats sur parcours
+            $parcours->setEtatsFichesMatieres($stats[$parcours->getId()]->statsFichesMatieresParcours);
         }
+
+        $this->entityManager->flush();
 
         return $this->render('fiche_matiere_valide/valide_formation.html.twig', [
             'parcourss' => $parcourss,
@@ -49,21 +60,35 @@ class FicheMatiereValideController extends BaseController
         Parcours                     $parcours
     ): Response {
 
+        $stats = $calculStructureParcours->calcul($parcours, false, false);
+        $parcours->setEtatsFichesMatieres($stats->statsFichesMatieresParcours);
+        $this->entityManager->flush();
+
         return $this->render('fiche_matiere_valide/valide_parcours.html.twig', [
             'parcours' => $parcours,
             'formation' => $parcours->getFormation(),
-            'statsParcours' => $calculStructureParcours->calcul($parcours, false, false),
+            'statsParcours' => $stats,
         ]);
     }
 
     #[Route('/fiche-matiere/valide/confirmation', name: 'fiche_matiere_valide_valide', methods: ['POST'])]
     public function valideParcoursValide(
+        FormationRepository $formationRepository,
+        ParcoursRepository   $parcoursRepository,
+        CalculStructureParcours $calculStructureParcours,
         ValidationProcessFicheMatiere        $validationProcessFicheMatiere,
         FicheMatiereProcess    $ficheMatiereProcess,
         FicheMatiereRepository $ficheMatiereRepository,
-        EntityManagerInterface $entityManager,
         Request                $request,
-    ): JsonResponse {
+    ): Response {
+        $type = $request->query->get('type');
+        if ('formation' !== $type && 'parcours' !== $type) {
+            return JsonReponse::error('Type de validation incorrect');
+        }
+
+
+
+
         $fiches = JsonRequest::getValueFromRequest($request, 'fiches');
         $tFiches = explode(',', $fiches);
         //parcours toutes les fiches du tableau tFches, trouve la fiche et la valide
@@ -75,8 +100,26 @@ class FicheMatiereValideController extends BaseController
             }
         }
 
-        $entityManager->flush();
-        return new JsonResponse(['message' => 'ok']);
+        if ('formation' === $type) {
+            $formation = $formationRepository->find($request->query->get('id'));
+            if ($formation !== null) {
+                $parcourss = $formation->getParcours();
+                foreach ($parcourss as $parcours) {
+                    $stats = $calculStructureParcours->calcul($parcours, false);
+                    $parcours->setEtatsFichesMatieres($stats->statsFichesMatieresParcours);
+                }
+            }
+        } else {
+            $parcours = $parcoursRepository->find($request->query->get('id'));
+            if ($parcours !== null) {
+                $stats = $calculStructureParcours->calcul($parcours, false, false);
+                $parcours->setEtatsFichesMatieres($stats->statsFichesMatieresParcours);
+            }
+        }
+
+        $this->entityManager->flush();
+
+        return JsonReponse::success('Fiches validées');
     }
 
 }

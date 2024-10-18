@@ -1,7 +1,7 @@
 {% if parcours is defined and parcours is not null %}
     <div class="accordion" id="accordionMaquetteParcours{{ parcours.parcours.id }}Index{{ indexParcours }}">
     {% for ordre, semestre in parcours.semestres %}
-        {% if semestre.semestre.isNonDispense == false %}
+        {% if semestre.semestre.isNonDispense == false and semestre.ues|length > 0 %}
             <div class="accordion-item">
                 <h2 class="accordion-header">
                     <button class="accordion-button bg-button-semestre fs-6" type="button" data-bs-toggle="collapse" 
@@ -37,7 +37,7 @@
                                 {# Espacement en cascade pour les UE, EC et leurs enfants #}
                                 {% set paddingCascadeValue = 1.15 %}
                                 {% set paddingCascade = 0 %}
-                                {% for ue in semestre.ues %}
+                                {% for ue in semestre.ues|sort((ueA, ueB) => ueA.ordre <=> ueB.ordre) %}
                                     {{ include('parcours/_maquette_iframe_UE.html.twig', 
                                         {
                                             ue: ue,
@@ -58,6 +58,22 @@
                                                 paddingCascadeValue: paddingCascadeValue
                                             }) 
                                         }}
+                                        {% if ueEnfant.uesEnfants|length > 0 %}
+                                                {% for ueEnfant2 in ueEnfant.uesEnfants %}
+                                                    {{ include('parcours/_maquette_iframe_UE.html.twig',
+                                                        {
+                                                            ue: ueEnfant2,
+                                                            IsUeEnfant: true,
+                                                            IsSecondNiveauEnfant: true,
+                                                            arrayLength: ueEnfant.uesEnfants|length,
+                                                            indexUeEnfant: loop.index,
+                                                            paddingCascade: paddingCascade + 2,
+                                                            paddingCascadeValue: paddingCascadeValue
+                                                        }
+                                                    )    
+                                                }}
+                                                {% endfor %}
+                                            {% endif %}
                                         {% endfor %}
                                     {% endif %}
                                 {% endfor %}

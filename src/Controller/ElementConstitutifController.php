@@ -430,7 +430,7 @@ class ElementConstitutifController extends AbstractController
             }
 
             $elementConstitutif->genereCode();
-            $elementConstitutifRepository->save($elementConstitutif, true);
+            $entityManager->flush();
 
             return $this->json(true);
         }
@@ -525,11 +525,13 @@ class ElementConstitutifController extends AbstractController
         $form = $this->createForm(EcStep4Type::class, $ecHeures, [
             'isModal' => true,
             'data_class' => $ecHeures::class,
+            'modalite' => $parcours->getModalitesEnseignement(),
             'action' => $this->generateUrl(
                 'app_element_constitutif_structure',
                 ['id' => $elementConstitutif->getId(), 'parcours' => $parcours->getId()]
             ),
         ]);
+
         $form->handleRequest($request);
         if ($form->isSubmitted() &&
             ($elementConstitutif->isSynchroHeures() === false ||
@@ -551,13 +553,12 @@ class ElementConstitutifController extends AbstractController
             return $this->json(true);
         }
 
-
-
         return $this->render('element_constitutif/_structureEcModal.html.twig', [
             'ec' => $elementConstitutif,
             'form' => $form->createView(),
             'raccroche' => $raccroche,
-            'parcours' => $parcours
+            'parcours' => $parcours,
+            'modalite' => $parcours->getModalitesEnseignement()
         ]);
         // }
         //

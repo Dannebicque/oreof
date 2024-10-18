@@ -9,6 +9,7 @@
 
 namespace App\Classes;
 
+use App\Entity\DpeParcours;
 use App\Entity\Formation;
 use App\Entity\HistoriqueFormation;
 use App\Entity\Parcours;
@@ -41,5 +42,11 @@ class GetHistorique
     {
         $conseil = $this->historiqueFormationRepository->findByFormationLastStep($formation, 'conseil');
         return $conseil !== null && array_key_exists('fichier', $conseil->getComplements());
+    }
+
+    public function getHistoriqueParcoursLastStep(DpeParcours $dpeParcours, string $step)
+    {
+        return $this->historiqueParcoursRepository->findByParcoursLastStep($dpeParcours->getParcours(), $step);
+
     }
 }

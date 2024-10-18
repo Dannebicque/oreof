@@ -106,6 +106,11 @@ class TypeDiplome
     #[ORM\Column(nullable: true)]
     private ?bool $codifIntermediaire = false;
 
+    #[ORM\Column]
+    private ?bool $ectsObligatoireSurEc = true;
+    #[ORM\Column]
+    private ?bool $mcccObligatoireSurEc = true;
+
     public function __construct()
     {
         $this->formations = new ArrayCollection();
@@ -567,4 +572,28 @@ class TypeDiplome
 
         return $this;
     }
+
+    public function isEctsObligatoireSurEc(): ?bool
+    {
+        return $this->ectsObligatoireSurEc ?? true;
+    }
+
+    public function setEctsObligatoireSurEc(bool $ectsObligatoireSurEc): static
+    {
+        $this->ectsObligatoireSurEc = $ectsObligatoireSurEc;
+
+        return $this;
+    }
+
+    public function getMcccObligatoireSurEc(): ?bool
+    {
+        return $this->mcccObligatoireSurEc ?? true;
+    }
+
+    public function setMcccObligatoireSurEc(?bool $mcccObligatoireSurEc): void
+    {
+        $this->mcccObligatoireSurEc = $mcccObligatoireSurEc;
+    }
+
+
 }

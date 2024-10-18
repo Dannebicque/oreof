@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\ChangeRf;
+use App\Entity\Composante;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -21,28 +22,43 @@ class ChangeRfRepository extends ServiceEntityRepository
         parent::__construct($registry, ChangeRf::class);
     }
 
-//    /**
-//     * @return ChangeRf[] Returns an array of ChangeRf objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('c')
-//            ->andWhere('c.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('c.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function findByComposanteTypeValidation(Composante $composante, ?string $etat): array
+    {
+        if ($etat === null || $etat === 'all') {
+            $qb = $this->createQueryBuilder('c')
+                ->innerJoin('c.formation', 'f')
+                ->andWhere('f.composantePorteuse = :composante')
+                ->setParameter('composante', $composante)
+                ->orderBy('c.dateDemande', 'DESC')
+            ;
+        } else {
+            $qb = $this->createQueryBuilder('c')
+                ->innerJoin('c.formation', 'f')
+                ->andWhere('f.composantePorteuse = :composante')
+                ->setParameter('composante', $composante)
+                ->andWhere("JSON_CONTAINS(c.etatDemande, :typeValidation) = 1")
+                ->setParameter('typeValidation', json_encode([$etat => 1]))
+                ->orderBy('c.dateDemande', 'DESC');
+        }
 
-//    public function findOneBySomeField($value): ?ChangeRf
-//    {
-//        return $this->createQueryBuilder('c')
-//            ->andWhere('c.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+        return $qb->getQuery()->getResult();
+    }
+
+    public function findByTypeValidation(?string $etat): array
+    {
+        if ($etat === null || $etat === 'all') {
+            $qb = $this->createQueryBuilder('c')
+                ->innerJoin('c.formation', 'f')
+                ->orderBy('c.dateDemande', 'DESC')
+            ;
+        } else {
+            $qb = $this->createQueryBuilder('c')
+                ->innerJoin('c.formation', 'f')
+                ->andWhere("JSON_CONTAINS(c.etatDemande, :typeValidation) = 1")
+                ->setParameter('typeValidation', json_encode([$etat => 1]))
+                ->orderBy('c.dateDemande', 'DESC');
+        }
+
+        return $qb->getQuery()->getResult();
+    }
 }

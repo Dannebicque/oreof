@@ -337,4 +337,76 @@ class FicheMatiereRepository extends ServiceEntityRepository
 
         return $qb->getQuery()->getResult();
     }
+
+    public function findForParcoursWithKeyword(Parcours $parcours, string $keyword){
+        $qb = $this->createQueryBuilder('fm');
+
+        $qb = $qb->select('fm.id, fm.description, fm.objectifs, fm.slug, fm.libelle')
+            ->where(
+                $qb->expr()->like('UPPER(fm.description)', 'UPPER(:keyword)')
+            )
+            ->join('fm.parcours', 'p', 'WITH', 'fm.parcours = :parcours')
+            ->setParameter('keyword', '%' . $keyword . '%')
+            ->setParameter('parcours', $parcours);
+
+        return $qb->getQuery()->getResult();
+    }
+
+    public function findCountForKeyword(string $keyword) : array {
+        $qb = $this->createQueryBuilder('fm');
+
+        $qb = $qb->select('COUNT(fm.id) AS nombre_total')
+            ->join('fm.parcours', 'p', 'WITH', 'fm.parcours = p.id')
+            ->join('p.formation', 'f', 'WITH', 'p.formation = f.id')
+            ->join('f.mention', 'm')
+            ->join('f.typeDiplome', 'td')
+            ->where(
+                $qb->expr()->like('UPPER(fm.description)', 'UPPER(:keyword)')
+            )
+            ->orWhere(
+                $qb->expr()->like('UPPER(fm.objectifs)', 'UPPER(:keyword)')
+            )
+            ->setParameter('keyword', '%' . $keyword . '%')
+        ->getQuery()
+        ->getResult();
+
+        return $qb;
+
+    }
+
+    public function findFicheMatiereWithKeywordAndPagination(string $keyword, int $pageNumber, bool $paginate = true) : array {
+        $qb = $this->createQueryBuilder('fm');
+
+        $firstResults = $pageNumber > 1 ? ($pageNumber - 1) * 30 : 0;
+
+        $qb = $qb->select(
+            [
+                'fm.id AS fiche_matiere_id', 'fm.slug AS fiche_matiere_slug',
+                'fm.objectifs AS fiche_matiere_objectifs', 'fm.description AS fiche_matiere_description',
+                'fm.libelle AS fiche_matiere_libelle', 'p.id AS parcours_id',
+                'fm.sigle AS formation_sigle', 'm.libelle AS mention_libelle',
+                'p.libelle AS parcours_libelle', 'td.libelle AS type_diplome_libelle',
+                'p.sigle AS parcours_sigle'
+            ]
+        )
+        ->join('fm.parcours', 'p', 'WITH', 'fm.parcours = p.id')
+        ->join('p.formation', 'f', 'WITH', 'p.formation = f.id')
+        ->join('f.mention', 'm')
+        ->join('f.typeDiplome', 'td')
+        ->where(
+            $qb->expr()->like('UPPER(fm.description)', 'UPPER(:keyword)')
+        )
+        ->orWhere(
+            $qb->expr()->like('UPPER(fm.objectifs)', 'UPPER(:keyword)')
+        )
+        ->setParameter('keyword', '%' . $keyword . '%');
+        if($paginate){
+            $qb = $qb->setFirstResult($firstResults)
+                ->setMaxResults(30);
+        }
+        $qb = $qb->getQuery()
+            ->getResult();
+
+        return $qb;
+    }
 }

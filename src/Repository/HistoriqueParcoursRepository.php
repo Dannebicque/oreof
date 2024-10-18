@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\HistoriqueParcours;
+use App\Entity\Parcours;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -39,28 +40,17 @@ class HistoriqueParcoursRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return HistoriqueParcours[] Returns an array of HistoriqueParcours objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('h')
-//            ->andWhere('h.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('h.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function findByParcoursLastStep(?Parcours $parcours, string $step): ?HistoriqueParcours
+    {
+        $data = $this->createQueryBuilder('h')
+            ->where('h.parcours = :parcours')
+            ->andWhere('h.etape = :step')
+            ->setParameter('parcours', $parcours)
+            ->setParameter('step', $step)
+            ->orderBy('h.date', 'DESC')
+            ->getQuery()
+            ->getResult();
 
-//    public function findOneBySomeField($value): ?HistoriqueParcours
-//    {
-//        return $this->createQueryBuilder('h')
-//            ->andWhere('h.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+        return count($data) > 0 ? $data[0] : null;
+    }
 }
