@@ -138,7 +138,11 @@ class ParcoursCopyDataCommand extends Command
                 $io->writeln("[O.K] - Parcours trouvé : {$parcours->getDisplay()}");
 
                 $dtoBefore = $this->parcoursCopyData->getDTOForParcours($parcours);
-                $dtoAfter = $this->parcoursCopyData->getDTOForParcours($parcours, true, true);
+                if($fromCopy){
+                    $dtoAfter = $this->parcoursCopyData->getDTOForParcours($parcours, true, true, true);
+                }else {
+                    $dtoAfter = $this->parcoursCopyData->getDTOForParcours($parcours, true, true);
+                }
                 $isEqual = $this->parcoursCopyData->compareTwoDTO($dtoBefore, $dtoAfter);
 
                 if($isEqual){

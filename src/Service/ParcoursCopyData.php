@@ -138,11 +138,12 @@ class ParcoursCopyData {
 
             $isVolumeHoraireFMImpose = $ficheMatiereSource->isVolumesHorairesImpose();
             $ecFromParcours = $ecSource->getParcours()?->getId() === $ficheMatiereSource->getParcours()?->getId();
+            $ficheMatiereFromParcours = $ficheMatiereSource->getParcours()?->getId() === $parcoursId;
             $hasEcParentHeures = $ecSource->getEcParent()?->isHeuresEnfantsIdentiques();
             $hasSynchroHeures = $ecSource->isSynchroHeures();
             $isHorsDiplome = $ficheMatiereSource->isHorsDiplome();
 
-            if($ecFromParcours){
+            if($ecFromParcours || $ficheMatiereFromParcours){
                 $ec = $ecSource;
             }
 
@@ -161,10 +162,10 @@ class ParcoursCopyData {
 
                 }
                 elseif($ecFromParcours === false && $this->hasEcSameHeuresAsFicheMatiere($ecSource, $ficheMatiereSource) === false) {
+                    $ecCopy = $this->ecCopyRepo->find($ecSource->getId());
+                    $ecCopy->setHeuresSpecifiques(true);
+                    $this->entityManagerCopy->persist($ecCopy);
                 }
-                $ecCopy = $this->ecCopyRepo->find($ecSource->getId());
-                $ecCopy->setHeuresSpecifiques(true);
-                $this->entityManagerCopy->persist($ecCopy);
 
                 if($ec){
                     $ficheMatiereCopy = $this->fmCopyRepo->find($ficheMatiereSource->getId());
