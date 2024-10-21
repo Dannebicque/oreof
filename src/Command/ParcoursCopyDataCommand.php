@@ -139,7 +139,7 @@ class ParcoursCopyDataCommand extends Command
 
                 $dtoBefore = $this->parcoursCopyData->getDTOForParcours($parcours);
                 if($fromCopy){
-                    $dtoAfter = $this->parcoursCopyData->getDTOForParcours($parcours, true, true, true);
+                    $dtoAfter = $this->parcoursCopyData->getDTOForParcours($parcours, true, false, true);
                 }else {
                     $dtoAfter = $this->parcoursCopyData->getDTOForParcours($parcours, true, true);
                 }
