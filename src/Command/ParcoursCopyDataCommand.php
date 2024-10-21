@@ -103,9 +103,12 @@ class ParcoursCopyDataCommand extends Command
                     if($afterCopy){
                         $fileName .= "-after-copy.pdf";
                         $pdf = $this->parcoursCopyData->exportDTOAsPdf($parcours, true, true, fromCopy: $dtoFromCopy);
-                    }else {
+                    }elseif(!$afterCopy && !$fromCopy) {
                         $fileName .= "-initial.pdf";
                         $pdf = $this->parcoursCopyData->exportDTOAsPdf($parcours, false, fromCopy: $dtoFromCopy);
+                    }elseif($fromCopy){
+                        $fileName .= "-initial.pdf";
+                        $pdf = $this->parcoursCopyData->exportDTOAsPdf($parcours, true, fromCopy: $dtoFromCopy);
                     }
 
                     $this->fs->appendToFile($path . $fileName, $pdf);
