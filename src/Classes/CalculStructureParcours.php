@@ -15,8 +15,10 @@ use App\DTO\StructureParcours;
 use App\DTO\StructureSemestre;
 use App\DTO\StructureUe;
 use App\Entity\Parcours;
+use App\Repository\ElementConstitutifCopyRepository;
 use App\Repository\ElementConstitutifRepository;
 use App\Repository\ParcoursRepository;
+use App\Repository\UeCopyRepository;
 use App\Repository\UeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -25,8 +27,8 @@ class CalculStructureParcours
     public function __construct(
 
         protected EntityManagerInterface $entityManager,
-        protected ElementConstitutifRepository $elementConstitutifRepository,
-        protected UeRepository $ueRepository,
+        protected ElementConstitutifRepository|ElementConstitutifCopyRepository $elementConstitutifRepository,
+        protected UeRepository|UeCopyRepository $ueRepository,
         protected ?ParcoursRepository $parcoursRepository = null,
     )
     {

@@ -24,6 +24,8 @@ class ParcoursCopyDataCommand extends Command
 {
     private EntityManagerInterface $entityManagerCopyData;
 
+    private EntityManagerInterface $entityManager;
+
     private ParcoursCopyData $parcoursCopyData;
 
     private Filesystem $fs;
@@ -35,6 +37,7 @@ class ParcoursCopyDataCommand extends Command
     )
     {
         parent::__construct();
+        $this->entityManager = $doctrine->getManager('default');
         $this->entityManagerCopyData = $doctrine->getManager('parcours_copy');
         $this->parcoursCopyData = $parcoursCopyData;
         $this->fs = $fs;
@@ -59,6 +62,10 @@ class ParcoursCopyDataCommand extends Command
             name: 'test-copy-database',
             mode: InputOption::VALUE_NONE,
             description: "Copie les heures sur les fiches matières dans une base de données de test"
+        )->addOption(
+            name: 'from-copy',
+            mode: InputOption::VALUE_NONE,
+            description: "Option pour réaliser la commande depuis la base où les données sont copiées"
         );
     }
 
@@ -72,24 +79,33 @@ class ParcoursCopyDataCommand extends Command
         $afterCopy = $input->getOption('after-copy');
         $compareTwoDTO = $input->getOption('compare-two-dto');
         $testCopyDatabase = $input->getOption('test-copy-database');
+        $fromCopy = $input->getOption('from-copy');
 
         if($dtoPdfExport){
             try{
                 $io->writeln("Récupération du parcours en base de données...\n");
-                $parcours = $this->entityManagerCopyData->getRepository(Parcours::class)->findOneById($dtoPdfExport);
+                $fromCopyFilename = "";
+                $dtoFromCopy = false;
+                if($fromCopy){
+                    $parcours = $this->entityManagerCopyData->getRepository(Parcours::class)->findOneById($dtoPdfExport);
+                    $fromCopyFilename = "-from-copy";
+                    $dtoFromCopy = true;
+                }else {
+                    $parcours = $this->entityManager->getRepository(Parcours::class)->findOneById($dtoPdfExport);
+                }
                 if($parcours){
                     $io->writeln("[O.K] - Parcours trouvé : {$parcours->getDisplay()}\n");
                     $io->writeln("Génération de l'export PDF en cours...");
 
                     $now = (new DateTime())->format('d-m-Y_H-i-s');
                     $path = __DIR__ . "/../../export/";
-                    $fileName = "{$now}-Maquette-DTO-Parcours-{$dtoPdfExport}";
+                    $fileName = "{$now}-Maquette-DTO-Parcours-{$dtoPdfExport}" . $fromCopyFilename;
                     if($afterCopy){
                         $fileName .= "-after-copy.pdf";
-                        $pdf = $this->parcoursCopyData->exportDTOAsPdf($parcours, true, true);
+                        $pdf = $this->parcoursCopyData->exportDTOAsPdf($parcours, true, true, fromCopy: $dtoFromCopy);
                     }else {
                         $fileName .= "-initial.pdf";
-                        $pdf = $this->parcoursCopyData->exportDTOAsPdf($parcours, false);
+                        $pdf = $this->parcoursCopyData->exportDTOAsPdf($parcours, false, fromCopy: $dtoFromCopy);
                     }
 
                     $this->fs->appendToFile($path . $fileName, $pdf);

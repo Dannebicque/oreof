@@ -17,6 +17,7 @@ use App\Entity\Semestre;
 use App\Entity\Ue;
 use App\Repository\ElementConstitutifCopyRepository;
 use App\Repository\FicheMatiereCopyRepository;
+use App\Repository\UeCopyRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -186,7 +187,8 @@ class ParcoursCopyData {
     public function getDTOForParcours(
         Parcours $parcours, 
         bool $heuresSurFicheMatiere = false, 
-        bool $withCopy = false
+        bool $withCopy = false,
+        bool $fromCopy = false
     ){
         if($parcours->getTypeDiplome()->getLibelleCourt() === 'BUT'){
             $calcul = new CalculButStructureParcours();
@@ -195,9 +197,15 @@ class ParcoursCopyData {
             return $dto;
         }
         else {
-            $ueRepository = $this->entityManager->getRepository(Ue::class);
-            $ecRepository = $this->entityManager->getRepository(ElementConstitutif::class);
-            $calcul = new CalculStructureParcours($this->entityManager, $ecRepository, $ueRepository);
+            if($fromCopy){
+                $ueCopyRepository = new UeCopyRepository($this->entityManagerCopy, Ue::class);
+                $ecCopyRepository = new ElementConstitutifCopyRepository($this->entityManagerCopy, ElementConstitutif::class);
+                $calcul = new CalculStructureParcours($this->entityManagerCopy, $ecCopyRepository, $ueCopyRepository);
+            }else {
+                $ueRepository = $this->entityManager->getRepository(Ue::class);
+                $ecRepository = $this->entityManager->getRepository(ElementConstitutif::class);
+                $calcul = new CalculStructureParcours($this->entityManager, $ecRepository, $ueRepository);
+            }
             if($withCopy){
                 $parcoursData = $parcours;
                 $this->copyDataForParcours($parcoursData);
@@ -229,13 +237,14 @@ class ParcoursCopyData {
     public function exportDTOAsPdf(
         Parcours $parcours, 
         bool $heuresSurFicheMatiere, 
-        bool $withCopy = false
+        bool $withCopy = false,
+        bool $fromCopy = false,
     ){
         return $this->myPdf->render(
             'typeDiplome/formation/_structure.html.twig',
             [
                 'print' => true,
-                'dto' => $this->getDTOForParcours($parcours, $heuresSurFicheMatiere, $withCopy),
+                'dto' => $this->getDTOForParcours($parcours, $heuresSurFicheMatiere, $withCopy, $fromCopy),
                 'parcours' => $parcours,
                 'titre' => "Maquette-Parcours-{$parcours->getDisplay()}"
             ]
