@@ -143,7 +143,7 @@ class ParcoursCopyData {
             $hasSynchroHeures = $ecSource->isSynchroHeures();
             $isHorsDiplome = $ficheMatiereSource->isHorsDiplome();
 
-            if($ecFromParcours || $ficheMatiereFromParcours){
+            if($ficheMatiereFromParcours){
                 $ec = $ecSource;
             }
 
@@ -198,7 +198,7 @@ class ParcoursCopyData {
             return $dto;
         }
         else {
-            if($fromCopy){
+            if($fromCopy ||$withCopy){
                 $ueCopyRepository = new UeCopyRepository($this->entityManagerCopy, Ue::class);
                 $ecCopyRepository = new ElementConstitutifCopyRepository($this->entityManagerCopy, ElementConstitutif::class);
                 $calcul = new CalculStructureParcours($this->entityManagerCopy, $ecCopyRepository, $ueCopyRepository);
@@ -533,12 +533,12 @@ class ParcoursCopyData {
         ElementConstitutif $ec, 
         FicheMatiere $ficheMatiere
     ){  
-        return $ficheMatiere->getVolumeCmPresentiel() ?? 0 === $ec->getVolumeCmPresentiel() ?? 0
-        && $ficheMatiere->getVolumeCmDistanciel() ?? 0 === $ec->getVolumeCmDistanciel() ?? 0
-        && $ficheMatiere->getVolumeTdPresentiel() ?? 0 === $ec->getVolumeTdPresentiel() ?? 0
-        && $ficheMatiere->getVolumeTdDistanciel() ?? 0 === $ec->getVolumeTdDistanciel() ?? 0
-        && $ficheMatiere->getVolumeTpPresentiel() ?? 0 === $ec->getVolumeTpPresentiel() ?? 0
-        && $ficheMatiere->getVolumeTpDistanciel() ?? 0 === $ec->getVolumeTpDistanciel() ?? 0
-        && $ficheMatiere->getVolumeTe() ?? 0 === $ec->getVolumeTe() ?? 0;
+        return $ficheMatiere->getVolumeCmPresentiel()  === $ec->getVolumeCmPresentiel() 
+        && $ficheMatiere->getVolumeCmDistanciel() === $ec->getVolumeCmDistanciel() 
+        && $ficheMatiere->getVolumeTdPresentiel() === $ec->getVolumeTdPresentiel() 
+        && $ficheMatiere->getVolumeTdDistanciel() === $ec->getVolumeTdDistanciel() 
+        && $ficheMatiere->getVolumeTpPresentiel() === $ec->getVolumeTpPresentiel() 
+        && $ficheMatiere->getVolumeTpDistanciel() === $ec->getVolumeTpDistanciel() 
+        && $ficheMatiere->getVolumeTe() === $ec->getVolumeTe();
     }
 }
