@@ -66,6 +66,10 @@ class ParcoursCopyDataCommand extends Command
             name: 'from-copy',
             mode: InputOption::VALUE_NONE,
             description: "Option pour réaliser la commande depuis la base où les données sont copiées"
+        )->addOption(
+            name: 'compare-two-databases',
+            mode: InputOption::VALUE_NONE,
+            description: "Compare les deux base de données : l'originale et celle qui reçoit la copie des heures"
         );
     }
 
@@ -80,6 +84,7 @@ class ParcoursCopyDataCommand extends Command
         $compareTwoDTO = $input->getOption('compare-two-dto');
         $testCopyDatabase = $input->getOption('test-copy-database');
         $fromCopy = $input->getOption('from-copy');
+        $compareTwoDatabases = $input->getOption('compare-two-databases');
 
         if($dtoPdfExport){
             try{
@@ -166,8 +171,32 @@ class ParcoursCopyDataCommand extends Command
             $this->parcoursCopyData->copyDataForAllParcoursInDatabase($io);
             return Command::SUCCESS;
         }
+        else if($compareTwoDatabases){
+            $io->writeln("Comparaison des DTO des deux base de données...");
 
-        $io->warning("Option non reconnue. Doit être parmi ['dto-pdf-export']\n");
+            $formations = $this->entityManager->getRepository(Formation::class)->findAll();
+            $errorArray = [];
+            $nbParcours = array_sum(array_map(fn($f) => count($f->getParcours()), $formations));
+
+            $io->progressStart($nbParcours);
+            foreach($formations as $f){
+                foreach($f->getParcours() as $parcours){
+                    $dtoBefore = $this->parcoursCopyData->getDTOForParcours($parcours);
+                    $dtoAfter = $this->parcoursCopyData->getDTOForParcours($parcours, true, false, true);
+                    if($this->parcoursCopyData->compareTwoDTO($dtoBefore, $dtoAfter) === false){
+                        $errorArray[] = "ID : {$parcours->getId()} - {$parcours->getFormation()->getDisplayLong()}";
+                    }
+                    $io->progressAdvance(1);
+                }
+            }
+            $io->progressFinish();
+            $nbErreur = count($errorArray);
+            $io->writeln("Comparaison terminée. Il y a {$nbErreur} parcours qui ne sont pas identiques");
+            dump($errorArray);
+            return Command::SUCCESS;
+        }
+
+        $io->warning("Option non reconnue. Doit être parmi ['dto-pdf-export', 'compare-two-dto', 'test-copy-database', 'compare-two-databases']\n");
 
         return Command::INVALID;
     }
