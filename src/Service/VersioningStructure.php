@@ -28,9 +28,6 @@ class VersioningStructure
     ) {
     }
 
-    //todo: gérer le cas d'ajout d'une UE, voire d'un Semestre
-    //todo: gérer le cas d'une suppression EC, UE, Semestre entre ancien et nouveau
-
     public function calculDiff(): array
     {
         // parcourir les deux structures et comparer. Construire un tableau de différences
@@ -79,7 +76,9 @@ class VersioningStructure
                 }
             }
 
-            ksort($diff['ues']);
+            if (array_key_exists('ues', $diff) && count($diff['ues']) > 0) {
+                ksort($diff['ues']);
+            }
         } elseif ($semestreNouveau !== null && $semestreOriginal === null) {
             $diff['raccroche'] = new DiffObject(null, $semestreNouveau->raccroche);
             $diff['ordre'] = new DiffObject(null, $semestreNouveau->ordre);

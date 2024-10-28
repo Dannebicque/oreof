@@ -148,4 +148,11 @@ class DpeParcours
             $this->setVersion($version[0].'.'.$version[1]);
         }
     }
+
+    public function isPubliable(): bool
+    {
+        // vérifier si etatDpe = publiable et date OK
+        //todo: sauvegarder date publication dans DpeParcours ou récupérer depuis l'historique
+        return array_key_exists('valide_a_publier', $this->getEtatValidation());
+    }
 }

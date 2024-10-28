@@ -11,6 +11,7 @@ namespace App\Classes\Export;
 
 use App\Classes\CalculStructureParcours;
 use App\Classes\Excel\ExcelWriter;
+use App\Classes\GetDpeParcours;
 use App\Classes\GetHistorique;
 use App\DTO\StructureEc;
 use App\DTO\StructureUe;
@@ -24,7 +25,7 @@ use DateTime;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpKernel\KernelInterface;
 
-class ExportCap
+class ExportFiabilisation
 {
     private string $fileName;
     private string $dir;
@@ -45,24 +46,27 @@ class ExportCap
         array $formations,
     ): void {
 
-        $this->excelWriter->nouveauFichier('Export CAP');
+        $this->excelWriter->nouveauFichier('Export Fiabilisation');
         $this->excelWriter->setActiveSheetIndex(0);
 
-        $this->excelWriter->writeCellXY(1, 1, 'Composante');
-        $this->excelWriter->writeCellXY(2, 1, 'Type Diplôme');
-        $this->excelWriter->writeCellXY(3, 1, 'Mention');
-        $this->excelWriter->writeCellXY(4, 1, 'Parcours');
-        $this->excelWriter->writeCellXY(5, 1, 'Code Dip.');
-        $this->excelWriter->writeCellXY(6, 1, 'VDI');
-        $this->excelWriter->writeCellXY(7, 1, 'Code étape');
-        $this->excelWriter->writeCellXY(8, 1, 'VET');
-        $this->excelWriter->writeCellXY(9, 1, 'Fiche EC/matière');
-        $this->excelWriter->writeCellXY(10, 1, 'Code élément');
-        $this->excelWriter->writeCellXY(11, 1, 'CM');
-        $this->excelWriter->writeCellXY(12, 1, 'TD');
-        $this->excelWriter->writeCellXY(13, 1, 'TP');
-        $this->excelWriter->writeCellXY(14, 1, 'MATI/MATM');
-        $this->excelWriter->writeCellXY(15, 1, 'Semestre');
+        //         //Version diplôme - Cursus LMD (lib.)	Diplôme (lib.)	Version diplôme (lib.)	Diplôme (code)	Version diplôme (code)	Version diplôme - Mention (lib.)	Version diplôme - Mention (code)	ELP (code)	ELP (lib.)	ELP (lib. long)	ELP - Composante (code)
+
+        $this->excelWriter->writeCellXY('A', 1, 'Composante');
+        $this->excelWriter->writeCellXY('B', 1, 'Type Diplôme');
+        $this->excelWriter->writeCellXY('C', 1, 'Mention');
+        $this->excelWriter->writeCellXY('D', 1, 'Parcours');
+        $this->excelWriter->writeCellXY('E', 1, 'Code Dip.');
+        $this->excelWriter->writeCellXY('F', 1, 'VDI');
+        $this->excelWriter->writeCellXY('G', 1, 'Code étape');
+        $this->excelWriter->writeCellXY('H', 1, 'VET');
+        $this->excelWriter->writeCellXY('I', 1, 'Semestre');
+        $this->excelWriter->writeCellXY('J', 1, 'Code Semestre');
+        $this->excelWriter->writeCellXY('K', 1, 'UE');
+        $this->excelWriter->writeCellXY('L', 1, 'Code UE');
+        $this->excelWriter->writeCellXY('M', 1, 'Id Fiche EC/matière');
+        $this->excelWriter->writeCellXY('N', 1, 'Fiche EC/matière');
+        $this->excelWriter->writeCellXY('O', 1, 'Code élément');
+        $this->excelWriter->writeCellXY('P', 1, 'MATI/MATM');
 
         $this->ligne = 2;
         foreach ($formations as $idFormation) {
@@ -71,11 +75,11 @@ class ExportCap
                 $parcours = $dpeParcours->getParcours();
                 $formation = $dpeParcours->getParcours()?->getFormation();
                 if ($formation !== null && $parcours !== null) {
-//                foreach ($formation->getParcours() as $parcours) {
+                    //                    foreach ($formation->getParcours() as $parcours) {
                     $this->data[1] = $formation->getComposantePorteuse()?->getLibelle();
                     $this->data[2] = $formation->getTypeDiplome()?->getLibelle();
                     $this->data[3] = $formation->getDisplay();
-                    if ($formation->isHasParcours()) {
+                    if ($parcours->isParcoursDefaut() === false) {
                         $this->data[4] = $parcours->getLibelle();
                     } else {
                         $this->data[4] = 'Pas de parcours';
@@ -84,7 +88,6 @@ class ExportCap
                     //récuération de la structure et des EC
                     $dto = $this->calculStructureParcours->calcul($parcours);
                     foreach ($dto->semestres as $ordre => $sem) {
-                        $this->data[5] = 'S'.$ordre;
                         foreach ($sem->ues as $ue) {
                             if ($ue->ue->getNatureUeEc()?->isChoix()) {
                                 foreach ($ue->uesEnfants() as $ueEnfant) {
@@ -100,11 +103,12 @@ class ExportCap
 
                         $this->excelWriter->getColumnsAutoSize('A', 'P');
                     }
+                    //}
                 }
             }
         }
 
-        $this->fileName = Tools::FileName('EXPORT-CAP - ' . (new DateTime())->format('d-m-Y-H-i'), 30);
+        $this->fileName = Tools::FileName('EXPORT-FIABILISATION - ' . (new DateTime())->format('d-m-Y-H-i'), 30);
     }
 
     private function getEcFromUe(StructureUe $ue, ?SemestreParcours $codeApogeeParcours): void
@@ -114,15 +118,15 @@ class ExportCap
             if ($ec->elementConstitutif->getNatureUeEc()?->isChoix()) {
 
                 foreach ($ec->elementsConstitutifsEnfants as $ecEnfant) {
-                    $this->getEc($ecEnfant, $codeApogeeParcours);
+                    $this->getEc($ue, $ecEnfant, $codeApogeeParcours);
                 }
             } else {
-                $this->getEc($ec, $codeApogeeParcours);
+                $this->getEc($ue, $ec, $codeApogeeParcours);
             }
         }
     }
 
-    private function getEc(StructureEc $ec, ?SemestreParcours $semestreParcours): void
+    private function getEc(StructureUe $ue, StructureEc $ec, ?SemestreParcours $semestreParcours): void
     {
 
         if ($ec->elementConstitutif->getNatureUeEc()?->isLibre() === false) {
@@ -131,13 +135,14 @@ class ExportCap
             $this->excelWriter->writeCellXY(6, $this->ligne, $semestreParcours?->getCodeApogeeVersionDiplome());
             $this->excelWriter->writeCellXY(7, $this->ligne, $semestreParcours?->getCodeApogeeEtapeAnnee());
             $this->excelWriter->writeCellXY(8, $this->ligne, $semestreParcours?->getCodeApogeeEtapeVersion());
-            $this->excelWriter->writeCellXY(9, $this->ligne, $ec->elementConstitutif->getFicheMatiere()?->getLibelle() ?? '-');
-            $this->excelWriter->writeCellXY(10, $this->ligne, $ec->elementConstitutif->displayCodeApogee());
-            $this->excelWriter->writeCellXY(11, $this->ligne, $ec->heuresEctsEc->cmPres);
-            $this->excelWriter->writeCellXY(12, $this->ligne, $ec->heuresEctsEc->tdPres);
-            $this->excelWriter->writeCellXY(13, $this->ligne, $ec->heuresEctsEc->tpPres);
-            $this->excelWriter->writeCellXY(14, $this->ligne, $ec->elementConstitutif->getFicheMatiere()?->getTypeApogee() ?? '-');
-            $this->excelWriter->writeCellXY(15, $this->ligne, $this->data[5]);
+            $this->excelWriter->writeCellXY(9, $this->ligne, $semestreParcours?->getSemestre()?->display());
+            $this->excelWriter->writeCellXY(10, $this->ligne, $semestreParcours?->getSemestre()?->getCodeApogee());
+            $this->excelWriter->writeCellXY(11, $this->ligne, $ue->ue->display());
+            $this->excelWriter->writeCellXY(12, $this->ligne, $ue->ue->getCodeApogee());
+            $this->excelWriter->writeCellXY(13, $this->ligne, $ec->elementConstitutif->displayId());
+            $this->excelWriter->writeCellXY(14, $this->ligne, $ec->elementConstitutif->getFicheMatiere()?->getLibelle() ?? '-');
+            $this->excelWriter->writeCellXY(15, $this->ligne, $ec->elementConstitutif->displayCodeApogee());
+            $this->excelWriter->writeCellXY(16, $this->ligne, $ec->elementConstitutif->getFicheMatiere()?->getTypeApogee() ?? '-');
             $this->ligne++;
         }
     }
