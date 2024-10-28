@@ -21,13 +21,16 @@ use App\Repository\ParcoursRepository;
 use App\Repository\UeCopyRepository;
 use App\Repository\UeRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 class CalculStructureParcours
 {
     public function __construct(
 
         protected EntityManagerInterface $entityManager,
+        #[Autowire(expression: 'service("App\\\Repository\\\ElementConstitutifRepository")')]
         protected ElementConstitutifRepository|ElementConstitutifCopyRepository $elementConstitutifRepository,
+        #[Autowire(expression: 'service("App\\\Repository\\\UeRepository")')]
         protected UeRepository|UeCopyRepository $ueRepository,
         protected ?ParcoursRepository $parcoursRepository = null,
     )
