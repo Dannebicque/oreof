@@ -142,6 +142,9 @@ class ParcoursCopyData {
             $hasEcParentHeures = $ecSource->getEcParent()?->isHeuresEnfantsIdentiques();
             $hasSynchroHeures = $ecSource->isSynchroHeures();
             $isHorsDiplome = $ficheMatiereSource->isHorsDiplome();
+            $ficheMatiereFromCopy = $this->fmCopyRepo->find($ficheMatiereSource->getId());
+
+            $ec = null;
 
             if($ficheMatiereFromParcours){
                 $ec = $ecSource;
@@ -167,18 +170,16 @@ class ParcoursCopyData {
                     $this->entityManagerCopy->persist($ecCopy);
                 }
 
-                if($ec){
-                    $ficheMatiereCopy = $this->fmCopyRepo->find($ficheMatiereSource->getId());
+                if($ec && $this->hasHeuresFicheMatiere($ficheMatiereFromCopy) === false){
+                    $ficheMatiereFromCopy->setVolumeCmPresentiel($ec->getVolumeCmPresentiel());
+                    $ficheMatiereFromCopy->setVolumeTdPresentiel($ec->getVolumeTdPresentiel());
+                    $ficheMatiereFromCopy->setVolumeTpPresentiel($ec->getVolumeTpPresentiel());
+                    $ficheMatiereFromCopy->setVolumeCmDistanciel($ec->getVolumeCmDistanciel());
+                    $ficheMatiereFromCopy->setVolumeTdDistanciel($ec->getVolumeTdDistanciel());
+                    $ficheMatiereFromCopy->setVolumeTpDistanciel($ec->getVolumeTpDistanciel());
+                    $ficheMatiereFromCopy->setVolumeTe($ec->getVolumeTe());
 
-                    $ficheMatiereCopy->setVolumeCmPresentiel($ec->getVolumeCmPresentiel());
-                    $ficheMatiereCopy->setVolumeTdPresentiel($ec->getVolumeTdPresentiel());
-                    $ficheMatiereCopy->setVolumeTpPresentiel($ec->getVolumeTpPresentiel());
-                    $ficheMatiereCopy->setVolumeCmDistanciel($ec->getVolumeCmDistanciel());
-                    $ficheMatiereCopy->setVolumeTdDistanciel($ec->getVolumeTdDistanciel());
-                    $ficheMatiereCopy->setVolumeTpDistanciel($ec->getVolumeTpDistanciel());
-                    $ficheMatiereCopy->setVolumeTe($ec->getVolumeTe());
-
-                    $this->entityManagerCopy->persist($ficheMatiereCopy);
+                    $this->entityManagerCopy->persist($ficheMatiereFromCopy);
                 }
                 
             }
@@ -198,7 +199,7 @@ class ParcoursCopyData {
             return $dto;
         }
         else {
-            if($fromCopy ||$withCopy){
+            if($fromCopy || $withCopy){
                 $ueCopyRepository = new UeCopyRepository($this->entityManagerCopy, Ue::class);
                 $ecCopyRepository = new ElementConstitutifCopyRepository($this->entityManagerCopy, ElementConstitutif::class);
                 $calcul = new CalculStructureParcours($this->entityManagerCopy, $ecCopyRepository, $ueCopyRepository);
@@ -533,12 +534,34 @@ class ParcoursCopyData {
         ElementConstitutif $ec, 
         FicheMatiere $ficheMatiere
     ){  
-        return $ficheMatiere->getVolumeCmPresentiel()  === $ec->getVolumeCmPresentiel() 
-        && $ficheMatiere->getVolumeCmDistanciel() === $ec->getVolumeCmDistanciel() 
-        && $ficheMatiere->getVolumeTdPresentiel() === $ec->getVolumeTdPresentiel() 
-        && $ficheMatiere->getVolumeTdDistanciel() === $ec->getVolumeTdDistanciel() 
-        && $ficheMatiere->getVolumeTpPresentiel() === $ec->getVolumeTpPresentiel() 
-        && $ficheMatiere->getVolumeTpDistanciel() === $ec->getVolumeTpDistanciel() 
-        && $ficheMatiere->getVolumeTe() === $ec->getVolumeTe();
+        $fmCmPres = $ficheMatiere->getVolumeCmPresentiel() ?? 0;          
+        $fmCmDist = $ficheMatiere->getVolumeCmDistanciel() ?? 0;          
+        $fmTdPres = $ficheMatiere->getVolumeTdPresentiel() ?? 0;          
+        $fmTdDist = $ficheMatiere->getVolumeTdDistanciel() ?? 0;          
+        $fmTpPres = $ficheMatiere->getVolumeTpPresentiel() ?? 0;          
+        $fmTpDist = $ficheMatiere->getVolumeTpDistanciel() ?? 0;          
+        $fmTe = $ficheMatiere->getVolumeTe() ?? 0;                         
+        
+        $ecTe = $ec->getVolumeTe() ?? 0;
+
+        return $fmCmPres === $ec->getVolumeCmPresentiel() 
+        && $fmCmDist === $ec->getVolumeCmDistanciel() 
+        && $fmTdPres === $ec->getVolumeTdPresentiel() 
+        && $fmTdDist === $ec->getVolumeTdDistanciel() 
+        && $fmTpPres === $ec->getVolumeTpPresentiel() 
+        && $fmTpDist === $ec->getVolumeTpDistanciel() 
+        && $fmTe === $ecTe;
+    }
+
+    public function hasHeuresFicheMatiere(FicheMatiere $ficheMatiere) : bool {
+        $haystack = [0, null];
+
+        return in_array($ficheMatiere->getVolumeCmPresentiel(), $haystack) === false
+            || in_array($ficheMatiere->getVolumeCmDistanciel(), $haystack) === false
+            || in_array($ficheMatiere->getVolumeTdPresentiel(), $haystack) === false
+            || in_array($ficheMatiere->getVolumeTdDistanciel(), $haystack) === false
+            || in_array($ficheMatiere->getVolumeTpPresentiel(), $haystack) === false
+            || in_array($ficheMatiere->getVolumeTpDistanciel(), $haystack) === false
+            || in_array($ficheMatiere->getVolumeTe() , $haystack) === false;
     }
 }
