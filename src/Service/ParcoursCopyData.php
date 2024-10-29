@@ -146,7 +146,7 @@ class ParcoursCopyData {
 
             $ec = null;
 
-            if($ficheMatiereFromParcours){
+            if($ficheMatiereFromParcours && $ecFromParcours){
                 $ec = $ecSource;
             }
 
@@ -164,7 +164,9 @@ class ParcoursCopyData {
                     }
 
                 }
-                elseif($ecFromParcours === false && $this->hasEcSameHeuresAsFicheMatiere($ecSource, $ficheMatiereSource) === false) {
+                elseif($ecFromParcours === false && $this->hasEcSameHeuresAsFicheMatiere($ecSource, $ficheMatiereFromCopy) === false
+                ) {
+
                     $ecCopy = $this->ecCopyRepo->find($ecSource->getId());
                     $ecCopy->setHeuresSpecifiques(true);
                     $this->entityManagerCopy->persist($ecCopy);
