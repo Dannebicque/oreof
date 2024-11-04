@@ -148,14 +148,29 @@ class ParcoursCopyData {
 
             $ec = null;
 
+            // Si l'EC et la FM font partie du parcours
             if($ficheMatiereFromParcours && $ecFromParcours){
                 $ec = $ecSource;
             }
 
+            // Si la FM n'est pas utilisée par le parcours porteur
+            $orphelinFicheMatiere = array_filter(
+                $ficheMatiereSource->getElementConstitutifs()->toArray(),
+                fn($ec) => $ec->getParcours()?->getId() === $ficheMatiereSource->getParcours()?->getId()
+                    && $ec->getParcours() !== null && $ficheMatiereSource->getParcours() !== null
+            );
+            $orphelinFicheMatiere = count($orphelinFicheMatiere) === 0;
+            // On prend le premier EC disponible
+            if($orphelinFicheMatiere){
+                $ec = $ficheMatiereSource->getElementConstitutifs()->first();
+            }
+
             if(!$isVolumeHoraireFMImpose && !$isHorsDiplome){
+                // Cas où il y a la valeur 'heure enfant identique'
                 if($hasEcParentHeures){
                     $ec = $ecSource->getEcParent();
                 }
+                // Cas où il y a la valeur 'synchro heures'
                 elseif($hasSynchroHeures){
                     if(count($ficheMatiereSource->getElementConstitutifs()->toArray()) >= 2){
                         $ecPorteur = array_filter(
@@ -171,7 +186,10 @@ class ParcoursCopyData {
 
 
                 }
-                elseif($ecFromParcours === false && $this->hasEcSameHeuresAsFicheMatiereCopy($ecSource, $ficheMatiereFromCopy) === false
+                // Si l'EC n'a pas les même heures que la FM, on lui met le flag 'heures spécifiques'
+                elseif(
+                    isset($ec) 
+                    && $this->hasEcSameHeuresAsFicheMatiereCopy($ec, $ficheMatiereFromCopy) === false
                 ) {
                     $ecCopy = $this->ecCopyRepo->find($ecSource->getId());
                     $ecCopy->setHeuresSpecifiques(true);
@@ -593,5 +611,20 @@ class ParcoursCopyData {
         }
 
         return false;
+    }
+
+    public function hasEcHeures(ElementConstitutif $ec){
+        if($ec->isSansHeure()){
+            return false;
+        }
+
+        $haystack = [0, null];
+        return in_array($ec->getVolumeCmPresentiel(), $haystack) === false
+        || in_array($ec->getVolumeCmDistanciel(), $haystack) === false
+        || in_array($ec->getVolumeTdPresentiel(), $haystack) === false
+        || in_array($ec->getVolumeTdDistanciel(), $haystack) === false
+        || in_array($ec->getVolumeTpPresentiel(), $haystack) === false
+        || in_array($ec->getVolumeTpDistanciel(), $haystack) === false
+        || in_array($ec->getVolumeTe(), $haystack) === false;
     }
 }
