@@ -38,6 +38,8 @@ class ParcoursCopyData {
 
     public static array $errorMessageArray = [];
 
+    private array $ficheMatiereCopyDataArray = [];
+
     public function __construct(
         ManagerRegistry $doctrine,
         MyGotenbergPdf $myPdf
@@ -155,24 +157,28 @@ class ParcoursCopyData {
                     $ec = $ecSource->getEcParent();
                 }
                 elseif($hasSynchroHeures){
-                    $ecPorteur = array_filter(
-                        $ficheMatiereSource->getElementConstitutifs()->toArray(), 
-                        fn($ec) => $ec->getParcours()->getId() === $ficheMatiereSource->getParcours()->getId());
-
-                    if(count($ecPorteur) > 0){
-                        $ec = array_shift($ecPorteur);
+                    if(count($ficheMatiereSource->getElementConstitutifs()->toArray()) >= 2){
+                        $ecPorteur = array_filter(
+                            $ficheMatiereSource->getElementConstitutifs()->toArray(), 
+                            fn($ec) => $ec->getParcours()->getId() === $ficheMatiereSource->getParcours()->getId()
+                        );
+                        if(count($ecPorteur) > 0){
+                            $ec = array_shift($ecPorteur);
+                        }
+                    }elseif(count($ficheMatiereSource->getElementConstitutifs()->toArray()) === 1){
+                        $ec = $ficheMatiereSource->getElementConstitutifs()->first();
                     }
 
-                }
-                elseif($ecFromParcours === false && $this->hasEcSameHeuresAsFicheMatiere($ecSource, $ficheMatiereFromCopy) === false
-                ) {
 
+                }
+                elseif($ecFromParcours === false && $this->hasEcSameHeuresAsFicheMatiereCopy($ecSource, $ficheMatiereFromCopy) === false
+                ) {
                     $ecCopy = $this->ecCopyRepo->find($ecSource->getId());
                     $ecCopy->setHeuresSpecifiques(true);
                     $this->entityManagerCopy->persist($ecCopy);
                 }
 
-                if($ec && $this->hasHeuresFicheMatiere($ficheMatiereFromCopy) === false){
+                if($ec && $this->hasHeuresFicheMatiereCopy($ficheMatiereFromCopy) === false){
                     $ficheMatiereFromCopy->setVolumeCmPresentiel($ec->getVolumeCmPresentiel());
                     $ficheMatiereFromCopy->setVolumeTdPresentiel($ec->getVolumeTdPresentiel());
                     $ficheMatiereFromCopy->setVolumeTpPresentiel($ec->getVolumeTpPresentiel());
@@ -180,6 +186,16 @@ class ParcoursCopyData {
                     $ficheMatiereFromCopy->setVolumeTdDistanciel($ec->getVolumeTdDistanciel());
                     $ficheMatiereFromCopy->setVolumeTpDistanciel($ec->getVolumeTpDistanciel());
                     $ficheMatiereFromCopy->setVolumeTe($ec->getVolumeTe());
+
+                    $this->ficheMatiereCopyDataArray[$ficheMatiereFromCopy->getId()] = [
+                        'cmPres' => $ec->getVolumeCmPresentiel(),
+                        'tdPres' => $ec->getVolumeTdPresentiel(),
+                        'tpPres' => $ec->getVolumeTpPresentiel(),
+                        'cmDist' => $ec->getVolumeCmDistanciel(),
+                        'tdDist' => $ec->getVolumeTdDistanciel(),
+                        'tpDist' => $ec->getVolumeTpDistanciel(),
+                        'te' => $ec->getVolumeTe(),
+                    ];
 
                     $this->entityManagerCopy->persist($ficheMatiereFromCopy);
                 }
@@ -532,38 +548,50 @@ class ParcoursCopyData {
         return $result;
     }
 
-    public function hasEcSameHeuresAsFicheMatiere(
+    public function hasEcSameHeuresAsFicheMatiereCopy(
         ElementConstitutif $ec, 
         FicheMatiere $ficheMatiere
     ){  
-        $fmCmPres = $ficheMatiere->getVolumeCmPresentiel() ?? 0;          
-        $fmCmDist = $ficheMatiere->getVolumeCmDistanciel() ?? 0;          
-        $fmTdPres = $ficheMatiere->getVolumeTdPresentiel() ?? 0;          
-        $fmTdDist = $ficheMatiere->getVolumeTdDistanciel() ?? 0;          
-        $fmTpPres = $ficheMatiere->getVolumeTpPresentiel() ?? 0;          
-        $fmTpDist = $ficheMatiere->getVolumeTpDistanciel() ?? 0;          
-        $fmTe = $ficheMatiere->getVolumeTe() ?? 0;                         
-        
-        $ecTe = $ec->getVolumeTe() ?? 0;
+        if(array_key_exists($ficheMatiere->getId(), $this->ficheMatiereCopyDataArray)){
+            $ficheMatiereCopy = $this->ficheMatiereCopyDataArray[$ficheMatiere->getId()];
 
-        return $fmCmPres === $ec->getVolumeCmPresentiel() 
-        && $fmCmDist === $ec->getVolumeCmDistanciel() 
-        && $fmTdPres === $ec->getVolumeTdPresentiel() 
-        && $fmTdDist === $ec->getVolumeTdDistanciel() 
-        && $fmTpPres === $ec->getVolumeTpPresentiel() 
-        && $fmTpDist === $ec->getVolumeTpDistanciel() 
-        && $fmTe === $ecTe;
+            $fmCmPres = $ficheMatiereCopy["cmPres"] ?? 0;
+            $fmCmDist = $ficheMatiereCopy["cmDist"] ?? 0;
+            $fmTdPres = $ficheMatiereCopy["tdPres"] ?? 0;
+            $fmTdDist = $ficheMatiereCopy["tdDist"] ?? 0;
+            $fmTpPres = $ficheMatiereCopy["tpPres"] ?? 0;
+            $fmTpDist = $ficheMatiereCopy["tpDist"] ?? 0;
+            $fmTe = $ficheMatiereCopy["te"] ?? 0;
+
+            $ecTe = $ec->getVolumeTe() ?? 0;
+    
+            return $fmCmPres === $ec->getVolumeCmPresentiel() 
+            && $fmCmDist === $ec->getVolumeCmDistanciel() 
+            && $fmTdPres === $ec->getVolumeTdPresentiel() 
+            && $fmTdDist === $ec->getVolumeTdDistanciel() 
+            && $fmTpPres === $ec->getVolumeTpPresentiel() 
+            && $fmTpDist === $ec->getVolumeTpDistanciel() 
+            && $fmTe === $ecTe;
+        }
+
+        return null;
+                         
     }
 
-    public function hasHeuresFicheMatiere(FicheMatiere $ficheMatiere) : bool {
+    public function hasHeuresFicheMatiereCopy(FicheMatiere $ficheMatiere) : bool {
         $haystack = [0, null];
 
-        return in_array($ficheMatiere->getVolumeCmPresentiel(), $haystack) === false
-            || in_array($ficheMatiere->getVolumeCmDistanciel(), $haystack) === false
-            || in_array($ficheMatiere->getVolumeTdPresentiel(), $haystack) === false
-            || in_array($ficheMatiere->getVolumeTdDistanciel(), $haystack) === false
-            || in_array($ficheMatiere->getVolumeTpPresentiel(), $haystack) === false
-            || in_array($ficheMatiere->getVolumeTpDistanciel(), $haystack) === false
-            || in_array($ficheMatiere->getVolumeTe() , $haystack) === false;
+        if(array_key_exists($ficheMatiere->getId(), $this->ficheMatiereCopyDataArray)){
+            $ficheMatiereCopy = $this->ficheMatiereCopyDataArray[$ficheMatiere->getId()];
+            return in_array($ficheMatiereCopy["cmPres"], $haystack) === false
+                || in_array($ficheMatiereCopy["tdPres"], $haystack) === false
+                || in_array($ficheMatiereCopy["tpPres"], $haystack) === false
+                || in_array($ficheMatiereCopy["cmDist"], $haystack) === false
+                || in_array($ficheMatiereCopy["tdDist"], $haystack) === false
+                || in_array($ficheMatiereCopy["tpDist"], $haystack) === false
+                || in_array($ficheMatiereCopy["te"], $haystack) === false;
+        }
+
+        return false;
     }
 }
