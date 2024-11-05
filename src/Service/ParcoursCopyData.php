@@ -252,7 +252,7 @@ class ParcoursCopyData {
             $isDifferent = $this->hasHeuresFicheMatiereCopy($ec->getFicheMatiere())
                 && $this->hasEcSameHeuresAsFicheMatiereCopy($ec, $ec->getFicheMatiere()) === false;
     
-            if($isDifferent){
+            if($isDifferent && $ec->isSynchroHeures() === false){
                 $ecCopyFlag = $this->ecCopyRepo->find($ec->getId());
                 $ecCopyFlag->setHeuresSpecifiques(true);
                 $this->entityManagerCopy->persist($ecCopyFlag);
