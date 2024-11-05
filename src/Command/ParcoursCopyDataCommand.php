@@ -176,17 +176,23 @@ class ParcoursCopyDataCommand extends Command
 
             $formations = $this->entityManager->getRepository(Formation::class)->findAll();
             $errorArray = [];
-            $nbParcours = array_sum(array_map(fn($f) => count($f->getParcours()), $formations));
+            $nbParcours = array_sum(
+                array_map(fn($f) => count($f->getParcours()), 
+                    array_filter($formations, fn($f) => $f->getTypeDiplome()->getLibelleCourt() !== "BUT")
+                )
+            );
 
             $io->progressStart($nbParcours);
             foreach($formations as $f){
-                foreach($f->getParcours() as $parcours){
-                    $dtoBefore = $this->parcoursCopyData->getDTOForParcours($parcours);
-                    $dtoAfter = $this->parcoursCopyData->getDTOForParcours($parcours, true, false, true);
-                    if($this->parcoursCopyData->compareTwoDTO($dtoBefore, $dtoAfter) === false){
-                        $errorArray[] = "ID : {$parcours->getId()} - {$parcours->getFormation()->getDisplayLong()}";
+                if($f->getTypeDiplome()->getLibelleCourt() !== "BUT"){
+                    foreach($f->getParcours() as $parcours){
+                        $dtoBefore = $this->parcoursCopyData->getDTOForParcours($parcours);
+                        $dtoAfter = $this->parcoursCopyData->getDTOForParcours($parcours, true, false, true);
+                        if($this->parcoursCopyData->compareTwoDTO($dtoBefore, $dtoAfter) === false){
+                            $errorArray[] = "ID : {$parcours->getId()} - {$parcours->getFormation()->getDisplayLong()}";
+                        }
+                        $io->progressAdvance(1);
                     }
-                    $io->progressAdvance(1);
                 }
             }
             $io->progressFinish();

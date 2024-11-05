@@ -56,14 +56,20 @@ class ParcoursCopyData {
         $io->writeln("Commande pour copier les heures des matières sur la nouvelle base de données.");
 
         $formationArray = $this->entityManager->getRepository(Formation::class)->findAll();
-        $nombreParcours = array_sum(array_map(fn($f) => count($f->getParcours()), $formationArray));
+        $nombreParcours = array_sum(
+            array_map(fn($f) => count($f->getParcours()), 
+                array_filter($formationArray, fn($f) => $f->getTypeDiplome()->getLibelleCourt() !== "BUT")
+            )
+        );
         $io->writeln("Début de la copie...");
         $io->progressStart($nombreParcours);
 
         foreach($formationArray as $formation){
-            foreach($formation->getParcours() as $parcours){
-                $this->copyDataForParcoursFromDTO($parcours);
-                $io->progressAdvance(1);
+            if($formation->getTypeDiplome()->getLibelleCourt() !== "BUT"){
+                foreach($formation->getParcours() as $parcours){
+                    $this->copyDataForParcoursFromDTO($parcours);
+                    $io->progressAdvance(1);
+                }
             }
         }
         $io->progressFinish();
@@ -135,36 +141,32 @@ class ParcoursCopyData {
     ){
         
         if($ficheMatiereSource){
-            // $ficheMatiere = $this->entityManager->getRepository(FicheMatiere::class)
-            //    ->findOneBySlug($ficheMatiereSource->getSlug());
-
             $isVolumeHoraireFMImpose = $ficheMatiereSource->isVolumesHorairesImpose();
             $ecFromParcours = $ecSource->getParcours()?->getId() === $ficheMatiereSource->getParcours()?->getId();
             $ficheMatiereFromParcours = $ficheMatiereSource->getParcours()?->getId() === $parcoursId;
             $hasEcParentHeures = $ecSource->getEcParent()?->isHeuresEnfantsIdentiques();
             $hasSynchroHeures = $ecSource->isSynchroHeures();
             $isHorsDiplome = $ficheMatiereSource->isHorsDiplome();
-            $ficheMatiereFromCopy = $this->fmCopyRepo->find($ficheMatiereSource->getId());
+            // Si la fiche matière a un EC porteur (parcours de la fiche matière = parcours de l'EC) 
+            $hasFicheMatiereEcPorteur = array_filter(
+                $ficheMatiereSource->getElementConstitutifs()->toArray(), 
+                fn($ecFM) => $ecFM->getParcours()?->getId() === $ficheMatiereSource->getParcours()?->getId()
+                    && $ecFM->getParcours()?->getId() !== null && $ficheMatiereSource->getParcours()?->getId() !== null
+            );
+            $hasFicheMatiereEcPorteur = count($hasFicheMatiereEcPorteur) > 0;
 
-            $ec = null;
-
+            $isEcPorteur = false;
             // Si l'EC et la FM font partie du parcours
             if($ficheMatiereFromParcours && $ecFromParcours){
                 $ec = $ecSource;
+                $isEcPorteur = true;
             }
-
-            // Si la FM n'est pas utilisée par le parcours porteur
-            $orphelinFicheMatiere = array_filter(
-                $ficheMatiereSource->getElementConstitutifs()->toArray(),
-                fn($ec) => $ec->getParcours()?->getId() === $ficheMatiereSource->getParcours()?->getId()
-                    && $ec->getParcours() !== null && $ficheMatiereSource->getParcours() !== null
-            );
-            $orphelinFicheMatiere = count($orphelinFicheMatiere) === 0;
-            // On prend le premier EC disponible
-            if($orphelinFicheMatiere){
+            // Si la fiche n'a pas d'EC porteur, on prend le premier
+            if($hasFicheMatiereEcPorteur === false){
                 $ec = $ficheMatiereSource->getElementConstitutifs()->first();
             }
 
+            // Si le volume est imposé ou que la FM est hors diplôme, les heures sont déjà dessus
             if(!$isVolumeHoraireFMImpose && !$isHorsDiplome){
                 // Cas où il y a la valeur 'heure enfant identique'
                 if($hasEcParentHeures){
@@ -183,20 +185,22 @@ class ParcoursCopyData {
                     }elseif(count($ficheMatiereSource->getElementConstitutifs()->toArray()) === 1){
                         $ec = $ficheMatiereSource->getElementConstitutifs()->first();
                     }
-
-
                 }
-                // Si l'EC n'a pas les même heures que la FM, on lui met le flag 'heures spécifiques'
-                elseif(
-                    isset($ec) 
-                    && $this->hasEcSameHeuresAsFicheMatiereCopy($ec, $ficheMatiereFromCopy) === false
-                ) {
+                
+                $isDifferent = $this->hasHeuresFicheMatiereCopy($ficheMatiereSource)
+                    && $this->hasEcSameHeuresAsFicheMatiereCopy($ecSource, $ficheMatiereSource) === false;
+
+                // Si l'EC n'a pas les même heures que la FM, on lui met le flag 'heures spécifiques'  
+                if($isDifferent) {
                     $ecCopy = $this->ecCopyRepo->find($ecSource->getId());
                     $ecCopy->setHeuresSpecifiques(true);
                     $this->entityManagerCopy->persist($ecCopy);
-                }
+                    
+                } elseif(($isEcPorteur || $hasFicheMatiereEcPorteur === false) 
+                    && $this->hasHeuresFicheMatiereCopy($ficheMatiereSource) === false
+                ) {
+                    $ficheMatiereFromCopy = $this->fmCopyRepo->find($ficheMatiereSource->getId());
 
-                if($ec && $this->hasHeuresFicheMatiereCopy($ficheMatiereFromCopy) === false){
                     $ficheMatiereFromCopy->setVolumeCmPresentiel($ec->getVolumeCmPresentiel());
                     $ficheMatiereFromCopy->setVolumeTdPresentiel($ec->getVolumeTdPresentiel());
                     $ficheMatiereFromCopy->setVolumeTpPresentiel($ec->getVolumeTpPresentiel());
@@ -205,7 +209,7 @@ class ParcoursCopyData {
                     $ficheMatiereFromCopy->setVolumeTpDistanciel($ec->getVolumeTpDistanciel());
                     $ficheMatiereFromCopy->setVolumeTe($ec->getVolumeTe());
 
-                    $this->ficheMatiereCopyDataArray[$ficheMatiereFromCopy->getId()] = [
+                    $this->ficheMatiereCopyDataArray[$ficheMatiereSource->getId()] = [
                         'cmPres' => $ec->getVolumeCmPresentiel(),
                         'tdPres' => $ec->getVolumeTdPresentiel(),
                         'tpPres' => $ec->getVolumeTpPresentiel(),
@@ -216,8 +220,7 @@ class ParcoursCopyData {
                     ];
 
                     $this->entityManagerCopy->persist($ficheMatiereFromCopy);
-                }
-                
+                }       
             }
         }
     }
@@ -600,14 +603,17 @@ class ParcoursCopyData {
         $haystack = [0, null];
 
         if(array_key_exists($ficheMatiere->getId(), $this->ficheMatiereCopyDataArray)){
-            $ficheMatiereCopy = $this->ficheMatiereCopyDataArray[$ficheMatiere->getId()];
-            return in_array($ficheMatiereCopy["cmPres"], $haystack) === false
-                || in_array($ficheMatiereCopy["tdPres"], $haystack) === false
-                || in_array($ficheMatiereCopy["tpPres"], $haystack) === false
-                || in_array($ficheMatiereCopy["cmDist"], $haystack) === false
-                || in_array($ficheMatiereCopy["tdDist"], $haystack) === false
-                || in_array($ficheMatiereCopy["tpDist"], $haystack) === false
-                || in_array($ficheMatiereCopy["te"], $haystack) === false;
+            // $ficheMatiereCopy = $this->ficheMatiereCopyDataArray[$ficheMatiere->getId()];
+            // return in_array($ficheMatiereCopy["cmPres"], $haystack) === false
+            //     || in_array($ficheMatiereCopy["tdPres"], $haystack) === false
+            //     || in_array($ficheMatiereCopy["tpPres"], $haystack) === false
+            //     || in_array($ficheMatiereCopy["cmDist"], $haystack) === false
+            //     || in_array($ficheMatiereCopy["tdDist"], $haystack) === false
+            //     || in_array($ficheMatiereCopy["tpDist"], $haystack) === false
+            //     || in_array($ficheMatiereCopy["te"], $haystack) === false;
+
+            // La FM est dans le tableau, donc elle a été traitée
+            return true;
         }
 
         return false;
