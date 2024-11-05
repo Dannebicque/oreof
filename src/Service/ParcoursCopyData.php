@@ -61,7 +61,7 @@ class ParcoursCopyData {
                 array_filter($formationArray, fn($f) => $f->getTypeDiplome()->getLibelleCourt() !== "BUT")
             )
         );
-        $io->writeln("Début de la copie...");
+        $io->writeln("Début de la copie des heures sur les fiches matières...");
         $io->progressStart($nombreParcours);
 
         foreach($formationArray as $formation){
@@ -73,6 +73,20 @@ class ParcoursCopyData {
             }
         }
         $io->progressFinish();
+
+        $io->writeln("Deuxième parcours de la base de données pour les heures spécifiques...");
+        $io->progressStart($nombreParcours);
+        foreach($formationArray as $f){
+            if($f->getTypeDiplome()->getLibelleCourt() !== "BUT"){
+                foreach($f->getParcours() as $p){
+                    $this->copyDataForParcoursFromDTO($p, onlyHeuresSpecifiques: true);
+                    $io->progressAdvance(1);
+                }
+            }
+        }
+        $io->progressFinish();
+
+
         $io->writeln("Application des changements...");
         $this->entityManagerCopy->flush();
         $io->success("La copie s'est exécutée avec succès !");
@@ -99,15 +113,15 @@ class ParcoursCopyData {
         }
     }
 
-    public function copyDataForParcoursFromDTO(Parcours $parcours){
+    public function copyDataForParcoursFromDTO(Parcours $parcours, bool $onlyHeuresSpecifiques = false){
         $dto = $this->getDTOForParcours($parcours);
         foreach($dto->semestres as $semestre){
             foreach($semestre->ues as $ue){
-                $this->copyDataForUeFromDTO($ue, $parcours->getId());
+                $this->copyDataForUeFromDTO($ue, $parcours->getId(), $onlyHeuresSpecifiques);
                 foreach($ue->uesEnfants() as $ueEnfant){
-                    $this->copyDataForUeFromDTO($ueEnfant, $parcours->getId());
+                    $this->copyDataForUeFromDTO($ueEnfant, $parcours->getId(), $onlyHeuresSpecifiques);
                     foreach($ueEnfant->uesEnfants() as $ueEnfantDeuxieme){
-                        $this->copyDataForUeFromDTO($ueEnfantDeuxieme, $parcours->getId());
+                        $this->copyDataForUeFromDTO($ueEnfantDeuxieme, $parcours->getId(), $onlyHeuresSpecifiques);
                     }
                 }
             }
@@ -125,11 +139,19 @@ class ParcoursCopyData {
         }
     }
 
-    private function copyDataForUeFromDTO(StructureUe $structUE, int $parcoursId){
+    private function copyDataForUeFromDTO(StructureUe $structUE, int $parcoursId, bool $onlyHeuresSpecifiques){
         foreach($structUE->elementConstitutifs as $ec){
-            $this->copyDataOnFicheMatiere($ec->elementConstitutif, $ec->elementConstitutif->getFicheMatiere(), $parcoursId);
+            if($onlyHeuresSpecifiques){
+                $this->placeHeuresSpecifiquesFlag($ec->elementConstitutif);
+            }else {
+                $this->copyDataOnFicheMatiere($ec->elementConstitutif, $ec->elementConstitutif->getFicheMatiere(), $parcoursId);
+            }
             foreach($ec->elementsConstitutifsEnfants as $ecEnfant){
-                $this->copyDataOnFicheMatiere($ecEnfant->elementConstitutif, $ecEnfant->elementConstitutif->getFicheMatiere(), $parcoursId);
+                if($onlyHeuresSpecifiques){
+                    $this->placeHeuresSpecifiquesFlag($ecEnfant->elementConstitutif);
+                }else {
+                    $this->copyDataOnFicheMatiere($ecEnfant->elementConstitutif, $ecEnfant->elementConstitutif->getFicheMatiere(), $parcoursId);
+                }
             }
         }
     }
@@ -187,16 +209,16 @@ class ParcoursCopyData {
                     }
                 }
                 
-                $isDifferent = $this->hasHeuresFicheMatiereCopy($ficheMatiereSource)
-                    && $this->hasEcSameHeuresAsFicheMatiereCopy($ecSource, $ficheMatiereSource) === false;
-
+                // $isDifferent = $this->hasHeuresFicheMatiereCopy($ficheMatiereSource)
+                //     && $this->hasEcSameHeuresAsFicheMatiereCopy($ecSource, $ficheMatiereSource) === false;
+                //
                 // Si l'EC n'a pas les même heures que la FM, on lui met le flag 'heures spécifiques'  
-                if($isDifferent) {
-                    $ecCopy = $this->ecCopyRepo->find($ecSource->getId());
-                    $ecCopy->setHeuresSpecifiques(true);
-                    $this->entityManagerCopy->persist($ecCopy);
-                    
-                } elseif(($isEcPorteur || $hasFicheMatiereEcPorteur === false) 
+                // if($isDifferent) {
+                //     $ecCopy = $this->ecCopyRepo->find($ecSource->getId());
+                //     $ecCopy->setHeuresSpecifiques(true);
+                //     $this->entityManagerCopy->persist($ecCopy);
+                // }    
+                if(($isEcPorteur || $hasFicheMatiereEcPorteur === false) 
                     && $this->hasHeuresFicheMatiereCopy($ficheMatiereSource) === false
                 ) {
                     $ficheMatiereFromCopy = $this->fmCopyRepo->find($ficheMatiereSource->getId());
@@ -221,6 +243,19 @@ class ParcoursCopyData {
 
                     $this->entityManagerCopy->persist($ficheMatiereFromCopy);
                 }       
+            }
+        }
+    }
+
+    public function placeHeuresSpecifiquesFlag(ElementConstitutif $ec){
+        if($ec->getFicheMatiere()){
+            $isDifferent = $this->hasHeuresFicheMatiereCopy($ec->getFicheMatiere())
+                && $this->hasEcSameHeuresAsFicheMatiereCopy($ec, $ec->getFicheMatiere()) === false;
+    
+            if($isDifferent){
+                $ecCopyFlag = $this->ecCopyRepo->find($ec->getId());
+                $ecCopyFlag->setHeuresSpecifiques(true);
+                $this->entityManagerCopy->persist($ecCopyFlag);
             }
         }
     }
@@ -576,15 +611,15 @@ class ParcoursCopyData {
         if(array_key_exists($ficheMatiere->getId(), $this->ficheMatiereCopyDataArray)){
             $ficheMatiereCopy = $this->ficheMatiereCopyDataArray[$ficheMatiere->getId()];
 
-            $fmCmPres = $ficheMatiereCopy["cmPres"] ?? 0;
-            $fmCmDist = $ficheMatiereCopy["cmDist"] ?? 0;
-            $fmTdPres = $ficheMatiereCopy["tdPres"] ?? 0;
-            $fmTdDist = $ficheMatiereCopy["tdDist"] ?? 0;
-            $fmTpPres = $ficheMatiereCopy["tpPres"] ?? 0;
-            $fmTpDist = $ficheMatiereCopy["tpDist"] ?? 0;
-            $fmTe = $ficheMatiereCopy["te"] ?? 0;
+            $fmCmPres = $ficheMatiereCopy["cmPres"] ?? 0.0;
+            $fmCmDist = $ficheMatiereCopy["cmDist"] ?? 0.0;
+            $fmTdPres = $ficheMatiereCopy["tdPres"] ?? 0.0;
+            $fmTdDist = $ficheMatiereCopy["tdDist"] ?? 0.0;
+            $fmTpPres = $ficheMatiereCopy["tpPres"] ?? 0.0;
+            $fmTpDist = $ficheMatiereCopy["tpDist"] ?? 0.0;
+            $fmTe = $ficheMatiereCopy["te"] ?? 0.0;
 
-            $ecTe = $ec->getVolumeTe() ?? 0;
+            $ecTe = $ec->getVolumeTe() ?? 0.0;
     
             return $fmCmPres === $ec->getVolumeCmPresentiel() 
             && $fmCmDist === $ec->getVolumeCmDistanciel() 
