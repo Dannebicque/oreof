@@ -50,6 +50,7 @@ class ApiJsonExport {
         $urlPrefix = "https://" . $hostname;
 
         foreach($formationArray as $formation){
+            $dateValidationFormation = [];
             $tParcours = [];
             foreach($formation->getParcours() as $parcours){
                 $lastVersion = $this->entityManager->getRepository(ParcoursVersioning::class)
@@ -65,26 +66,49 @@ class ApiJsonExport {
                             UrlGeneratorInterface::ABSOLUTE_PATH
                         )
                     ];
+                    $dateValideCfvu = $this->getHistorique
+                        ->getHistoriqueParcoursLastStep($parcours->getDpeParcours()->last(), 'valide_cfvu')
+                        ?->getDate();
+
+                    $dateValideAPublier = $this->getHistorique
+                        ->getHistoriqueParcoursLastStep($parcours->getDpeParcours()->last(), 'valide_a_publier')
+                        ?->getDate();
+
+                    if($dateValideCfvu !== null){
+                        $dateValidationFormation[] = $dateValideCfvu;
+                    }
+                    if($dateValideAPublier !== null){
+                        $dateValidationFormation[] = $dateValideAPublier;
+                    }
                     ++$countParcours;
                     if($io){
                         $io->progressAdvance();
                     }
                 }
             }
-            $dataJSON[] = [
-                'id' => $formation->getId(),
-                'libelle' => $formation->getDisplayLong(),
-                'parcours' => $tParcours,
-                'dateValidation' => $this->getHistorique
-                    ->getHistoriqueFormationLastStep($formation, 'publication')
-                    ?->getDate()
-                    ?->format('Y-m-d H:i:s') ?? null,
-            ];
+            // Date de validation : la plus récente des dates de publication de parcours
+            if(count($dateValidationFormation) > 0){
+                rsort($dateValidationFormation);
+                $dateValidationFormation = $dateValidationFormation[0];
+            }else {
+                $dateValidationFormation = null;
+            }
+
+            if(count($tParcours) > 0){
+                $dataJSON[] = [
+                    'id' => $formation->getId(),
+                    'libelle' => $formation->getDisplayLong(),
+                    'parcours' => $tParcours,
+                    'dateValidation' => $dateValidationFormation?->format('Y-m-d H:i:s') ?? null
+                ];
+            }
         }
 
         if($io){
             $io->progressFinish();
         }
+
+        $io->writeln("{$countParcours} Parcours ont été ajoutés à l'API");
 
         return $dataJSON;
     }
