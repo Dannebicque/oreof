@@ -2,6 +2,33 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.31.45](https://github.com/Dannebicque/oreof/compare/v1.31.43...v1.31.45) (2024-11-05)
+
+
+### Features
+
+* export ([12f5d34](https://github.com/Dannebicque/oreof/commit/12f5d3441d5db0c87969c9f4b645478f1a022783))
+
+
+### Bug Fixes
+
+* bouton export MCCC ([b18f1a5](https://github.com/Dannebicque/oreof/commit/b18f1a57d16ab6a7e35b2c6551defebf8f4108a4))
+* cascade persist ([e1f22c7](https://github.com/Dannebicque/oreof/commit/e1f22c7f287df8f0ae08d47f30fc516401f25196))
+* filtre API ([54d8e37](https://github.com/Dannebicque/oreof/commit/54d8e379cf02bcc1d1cac55329a27684f2549f48))
+* heures EC pour les BUT - maquette iframe ([864a392](https://github.com/Dannebicque/oreof/commit/864a392d00c9da6bfb1d73fc34089e82578a3d76))
+* heures fiche matière iframe ([7b961d0](https://github.com/Dannebicque/oreof/commit/7b961d04aea616803a54a2df5f12c149357fc1b0))
+* libellé ([c43b491](https://github.com/Dannebicque/oreof/commit/c43b491ad405d532adac46107952c36ce49e39d0))
+* libellé ue versioning ([a06954c](https://github.com/Dannebicque/oreof/commit/a06954cdcd3d51867da4d0f74358bdd0d874b695))
+* libellés en double - fiche descriptive PDF ([629733e](https://github.com/Dannebicque/oreof/commit/629733e9ee8d3ece92d41d5c9f27937e499a129e))
+* loading icon ([9d91006](https://github.com/Dannebicque/oreof/commit/9d910068a5d72aea62bb42f1e3517d1061d18514))
+* maquette_iframe ([1f84de5](https://github.com/Dannebicque/oreof/commit/1f84de51f0ba2c8811eb4d0c703cd320121c4687))
+* nature_ec - API JSON versionnée ([3dda464](https://github.com/Dannebicque/oreof/commit/3dda464d1711aa991d383ee5a0760d8574ebec4d))
+* pagination recherche fiche matière ([43e5992](https://github.com/Dannebicque/oreof/commit/43e5992396d09694cda42ee73d0e14a8f19b7606))
+* recherche de fiche matière ([df27aa0](https://github.com/Dannebicque/oreof/commit/df27aa06d4ccbcf9119f6fddadd05ac1a965dae3))
+* recherche fiche matière ([3ef5bdf](https://github.com/Dannebicque/oreof/commit/3ef5bdf0b97a052bba979cd5a3859629ae143d3c))
+* semestre non dispensé maquette versioning ([4d68314](https://github.com/Dannebicque/oreof/commit/4d68314d0796c5a3691dc22cc69d70d46b8aee99))
+* sigle du parcours - recherche fiche matière ([c0d2e14](https://github.com/Dannebicque/oreof/commit/c0d2e144c35ed9a809c0cb9656daba5e2325fb47))
+
 ### [1.31.44](https://github.com/Dannebicque/oreof/compare/v1.31.43...v1.31.44) (2024-11-05)
 
 
