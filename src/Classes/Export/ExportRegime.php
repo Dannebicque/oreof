@@ -46,12 +46,14 @@ class ExportRegime implements ExportInterface
         $this->excelWriter->writeCellXY(4, 1, 'Parcours');
         $this->excelWriter->writeCellXY(5, 1, 'Lieu de formation');
         $this->excelWriter->writeCellXY(6, 1, 'Resp. Mention');
-        $this->excelWriter->writeCellXY(7, 1, 'Resp. Parcours');
-        $this->excelWriter->writeCellXY(8, 1, 'RNCP');
-        $this->excelWriter->writeCellXY(9, 1, 'Validation CFVU');
+        $this->excelWriter->writeCellXY(7, 1, 'Co. Resp. Mention');
+        $this->excelWriter->writeCellXY(8, 1, 'Resp. Parcours');
+        $this->excelWriter->writeCellXY(9, 1, 'Co. Resp. Parcours');
+        $this->excelWriter->writeCellXY(10, 1, 'RNCP');
+        $this->excelWriter->writeCellXY(11, 1, 'Validation CFVU');
         $i = 0;
         foreach (RegimeInscriptionEnum::cases() as $regime) {
-            $this->excelWriter->writeCellXY(10 + $i, 1, $regime->value);
+            $this->excelWriter->writeCellXY(12 + $i, 1, $regime->value);
             $i++;
         }
 
@@ -73,13 +75,15 @@ class ExportRegime implements ExportInterface
                     $this->excelWriter->writeCellXY(5, $ligne, substr($texte, 0, -2));
                 }
                 $this->excelWriter->writeCellXY(6, $ligne, $formation->getResponsableMention()?->getDisplay());
-                $this->excelWriter->writeCellXY(7, $ligne, $parcours->getRespParcours()?->getDisplay());
-                $this->excelWriter->writeCellXY(8, $ligne, $formation->getCodeRNCP());
-                $this->excelWriter->writeCellXY(9, $ligne, $this->getHistorique->getHistoriqueFormationLastStep($formation, 'cfvu')?->getDate()?->format('d/m/Y') ?? 'Non validé');
+                $this->excelWriter->writeCellXY(7, $ligne, $formation->getCoResponsable()?->getDisplay());
+                $this->excelWriter->writeCellXY(8, $ligne, $parcours->getRespParcours()?->getDisplay());
+                $this->excelWriter->writeCellXY(9, $ligne, $parcours->getCoResponsable()?->getDisplay());
+                $this->excelWriter->writeCellXY(10, $ligne, $formation->getCodeRNCP());
+                $this->excelWriter->writeCellXY(11, $ligne, $this->getHistorique->getHistoriqueParcoursLastStep($parcours, 'cfvu')?->getDate()?->format('d/m/Y') ?? 'Non validé');
                 $i = 0;
                 foreach (RegimeInscriptionEnum::cases() as $regime) {
                     if (in_array($regime, $parcours->getRegimeInscription())) {
-                        $this->excelWriter->writeCellXY(10 + $i, $ligne, 'X', [
+                        $this->excelWriter->writeCellXY(12 + $i, $ligne, 'X', [
                             'style' => 'HORIZONTAL_CENTER'
                         ]);
                     }
