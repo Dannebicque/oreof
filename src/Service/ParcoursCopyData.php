@@ -148,9 +148,19 @@ class ParcoursCopyData {
             }
             foreach($ec->elementsConstitutifsEnfants as $ecEnfant){
                 if($onlyHeuresSpecifiques){
-                    $this->placeHeuresSpecifiquesFlag($ecEnfant->elementConstitutif);
+                    $isHeuresIdentiques = $ec->elementConstitutif->isHeuresEnfantsIdentiques();
+                    $this->placeHeuresSpecifiquesFlag($ecEnfant->elementConstitutif, $isHeuresIdentiques);
                 }else {
-                    $this->copyDataOnFicheMatiere($ecEnfant->elementConstitutif, $ecEnfant->elementConstitutif->getFicheMatiere(), $parcoursId);
+                    if($ec->elementConstitutif->isHeuresEnfantsIdentiques()){
+                        $this->copyDataOnFicheMatiere(
+                            $ec->elementConstitutif, 
+                            $ecEnfant->elementConstitutif->getFicheMatiere(),
+                            $parcoursId,
+                            isHeuresEnfantIdentiques: true
+                        );
+                    }else {
+                        $this->copyDataOnFicheMatiere($ecEnfant->elementConstitutif, $ecEnfant->elementConstitutif->getFicheMatiere(), $parcoursId);
+                    }
                 }
             }
         }
@@ -159,14 +169,15 @@ class ParcoursCopyData {
     private function copyDataOnFicheMatiere(
         ElementConstitutif $ecSource,
         ?FicheMatiere $ficheMatiereSource,
-        int $parcoursId
+        int $parcoursId,
+        bool $isHeuresEnfantIdentiques = false
     ){
         
         if($ficheMatiereSource){
             $isVolumeHoraireFMImpose = $ficheMatiereSource->isVolumesHorairesImpose();
             $ecFromParcours = $ecSource->getParcours()?->getId() === $ficheMatiereSource->getParcours()?->getId();
             $ficheMatiereFromParcours = $ficheMatiereSource->getParcours()?->getId() === $parcoursId;
-            $hasEcParentHeures = $ecSource->getEcParent()?->isHeuresEnfantsIdentiques();
+            // $hasEcParentHeures = $ecSource->getEcParent()?->isHeuresEnfantsIdentiques();
             $hasSynchroHeures = $ecSource->isSynchroHeures();
             $isHorsDiplome = $ficheMatiereSource->isHorsDiplome();
             // Si la fiche matière a un EC porteur (parcours de la fiche matière = parcours de l'EC) 
@@ -190,12 +201,8 @@ class ParcoursCopyData {
 
             // Si le volume est imposé ou que la FM est hors diplôme, les heures sont déjà dessus
             if(!$isVolumeHoraireFMImpose && !$isHorsDiplome){
-                // Cas où il y a la valeur 'heure enfant identique'
-                if($hasEcParentHeures){
-                    $ec = $ecSource->getEcParent();
-                }
                 // Cas où il y a la valeur 'synchro heures'
-                elseif($hasSynchroHeures){
+                if($hasSynchroHeures){
                     if(count($ficheMatiereSource->getElementConstitutifs()->toArray()) >= 2){
                         $ecPorteur = array_filter(
                             $ficheMatiereSource->getElementConstitutifs()->toArray(), 
@@ -208,16 +215,10 @@ class ParcoursCopyData {
                         $ec = $ficheMatiereSource->getElementConstitutifs()->first();
                     }
                 }
-                
-                // $isDifferent = $this->hasHeuresFicheMatiereCopy($ficheMatiereSource)
-                //     && $this->hasEcSameHeuresAsFicheMatiereCopy($ecSource, $ficheMatiereSource) === false;
-                //
-                // Si l'EC n'a pas les même heures que la FM, on lui met le flag 'heures spécifiques'  
-                // if($isDifferent) {
-                //     $ecCopy = $this->ecCopyRepo->find($ecSource->getId());
-                //     $ecCopy->setHeuresSpecifiques(true);
-                //     $this->entityManagerCopy->persist($ecCopy);
-                // }    
+                // Cas où il y a la valeur 'heure enfant identique'
+                if($isHeuresEnfantIdentiques && $ficheMatiereFromParcours && $ecFromParcours){
+                    $ec = $ecSource;
+                }  
                 if(($isEcPorteur || $hasFicheMatiereEcPorteur === false) 
                     && $this->hasHeuresFicheMatiereCopy($ficheMatiereSource) === false
                 ) {
@@ -247,10 +248,14 @@ class ParcoursCopyData {
         }
     }
 
-    public function placeHeuresSpecifiquesFlag(ElementConstitutif $ec){
+    public function placeHeuresSpecifiquesFlag(ElementConstitutif $ec, bool $isHeuresIdentiques = false){
         if($ec->getFicheMatiere()){
+            $ecSource = $ec;
+            if($isHeuresIdentiques){
+                $ecSource = $ec->getEcParent();
+            }
             $isDifferent = $this->hasHeuresFicheMatiereCopy($ec->getFicheMatiere())
-                && $this->hasEcSameHeuresAsFicheMatiereCopy($ec, $ec->getFicheMatiere()) === false;
+                && $this->hasEcSameHeuresAsFicheMatiereCopy($ecSource, $ec->getFicheMatiere()) === false;
     
             if($isDifferent && $ec->isSynchroHeures() === false){
                 $ecCopyFlag = $this->ecCopyRepo->find($ec->getId());
