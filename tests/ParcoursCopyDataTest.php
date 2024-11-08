@@ -29,9 +29,9 @@ class ParcoursCopyDataTest extends KernelTestCase
         $parcours = $this->entityManager->getRepository(Parcours::class)->findOneById(405);
         $dtoBefore = $this->parcoursCopyData->getDTOForParcours($parcours);
         // perform copy
-        $this->parcoursCopyData->copyDataForParcours($parcours);
+        $this->parcoursCopyData->copyDataForParcoursFromDTO($parcours);
         // compare new and old data
-        $dtoAfter = $this->parcoursCopyData->getDTOForParcours($parcours, heuresSurFicheMatiere: true);
+        $dtoAfter = $this->parcoursCopyData->getDTOForParcours($parcours, withCopy:true, heuresSurFicheMatiere: true);
 
         $this->assertEquals(
             $dtoBefore->heuresEctsFormation->sommeFormationTotalPres(),
