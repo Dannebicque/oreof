@@ -204,12 +204,12 @@ class ParcoursCopyData {
                 // Cas où il y a la valeur 'synchro heures'
                 if($hasSynchroHeures){
                     if(count($ficheMatiereSource->getElementConstitutifs()->toArray()) >= 2){
-                        $ecPorteur = array_filter(
-                            $ficheMatiereSource->getElementConstitutifs()->toArray(), 
+                        $ecPorteur = $ficheMatiereSource->getElementConstitutifs()->filter(
                             fn($ec) => $ec->getParcours()->getId() === $ficheMatiereSource->getParcours()->getId()
+                                && $ec->getParcours()->getId() !== null && $ficheMatiereSource->getParcours()->getId() !== null
                         );
                         if(count($ecPorteur) > 0){
-                            $ec = array_shift($ecPorteur);
+                            $ec = $ecPorteur->first();
                         }
                     }elseif(count($ficheMatiereSource->getElementConstitutifs()->toArray()) === 1){
                         $ec = $ficheMatiereSource->getElementConstitutifs()->first();
@@ -257,7 +257,7 @@ class ParcoursCopyData {
             $isDifferent = $this->hasHeuresFicheMatiereCopy($ec->getFicheMatiere())
                 && $this->hasEcSameHeuresAsFicheMatiereCopy($ecSource, $ec->getFicheMatiere()) === false;
     
-            if($isDifferent && $ec->isSynchroHeures() === false){
+            if($isDifferent && ($ec->isSynchroHeures() === false || $ec->isSansHeure())){
                 $ecCopyFlag = $this->ecCopyRepo->find($ec->getId());
                 $ecCopyFlag->setHeuresSpecifiques(true);
                 $this->entityManagerCopy->persist($ecCopyFlag);
