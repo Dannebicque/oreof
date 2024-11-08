@@ -187,6 +187,7 @@ class ParcoursCopyData {
                     && $ecFM->getParcours()?->getId() !== null && $ficheMatiereSource->getParcours()?->getId() !== null
             );
             $hasFicheMatiereEcPorteur = count($hasFicheMatiereEcPorteur) > 0;
+            $countEcForFiche = count($ficheMatiereSource->getElementConstitutifs()->toArray());
 
             $isEcPorteur = false;
             // Si l'EC et la FM font partie du parcours
@@ -195,7 +196,7 @@ class ParcoursCopyData {
                 $isEcPorteur = true;
             }
             // Si la fiche n'a pas d'EC porteur, on prend le premier
-            if($hasFicheMatiereEcPorteur === false){
+            if($hasFicheMatiereEcPorteur === false || $countEcForFiche === 1){
                 $ec = $ficheMatiereSource->getElementConstitutifs()->first();
             }
 
@@ -219,7 +220,7 @@ class ParcoursCopyData {
                 if($isHeuresEnfantIdentiques && $ficheMatiereFromParcours && $ecFromParcours){
                     $ec = $ecSource;
                 }  
-                if(($isEcPorteur || $hasFicheMatiereEcPorteur === false) 
+                if(($isEcPorteur || $hasFicheMatiereEcPorteur === false || $countEcForFiche === 1) 
                     && $this->hasHeuresFicheMatiereCopy($ficheMatiereSource) === false
                 ) {
                     $ficheMatiereFromCopy = $this->fmCopyRepo->find($ficheMatiereSource->getId());
