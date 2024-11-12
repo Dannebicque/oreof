@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.31.56](https://github.com/Dannebicque/oreof/compare/v1.31.55...v1.31.56) (2024-11-12)
+
+
+### Features
+
+* export ([47023f9](https://github.com/Dannebicque/oreof/commit/47023f9dd8cf7768cbdc931dfb5ad271b5ce38ca))
+* export ([8d05017](https://github.com/Dannebicque/oreof/commit/8d05017c64a7a879820bb1fdecf350b9e384120f))
+* export ([ef2260b](https://github.com/Dannebicque/oreof/commit/ef2260bf6a5d4c0e61093f7d37ce8e913cc6508f))
+
+
+### Bug Fixes
+
+* API JSON Versionné - date de validation ([1b04414](https://github.com/Dannebicque/oreof/commit/1b0441480b0395dfb894cf232b967a7b6aa35bba))
+* date de publication API ([21f73f9](https://github.com/Dannebicque/oreof/commit/21f73f903bef9a5221589c8e7131de7921847000))
+* typo sur une méthode ([6a8085c](https://github.com/Dannebicque/oreof/commit/6a8085c5b6077136c26b0a2c6288123d441edc12))
+
 ### [1.31.55](https://github.com/Dannebicque/oreof/compare/v1.31.54...v1.31.55) (2024-11-05)
 
 
