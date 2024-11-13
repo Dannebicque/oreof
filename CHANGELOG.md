@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.31.57](https://github.com/Dannebicque/oreof/compare/v1.31.56...v1.31.57) (2024-11-13)
+
+
+### Bug Fixes
+
+* dates CFVU/Conseil sur Excel MCCC ([e7133d5](https://github.com/Dannebicque/oreof/commit/e7133d573664fb7a1abc036dcf0d6027d38e55ee))
+
 ### [1.31.56](https://github.com/Dannebicque/oreof/compare/v1.31.55...v1.31.56) (2024-11-12)
 
 
