@@ -9,6 +9,7 @@
 
 namespace App\Controller;
 
+use App\Classes\GetDpeParcours;
 use App\Classes\GetHistorique;
 use App\Entity\CampagneCollecte;
 use App\Entity\Parcours;
@@ -44,8 +45,12 @@ class ParcoursMcccExportController extends BaseController
             throw new \Exception('Aucun modèle MCC n\'est défini pour ce diplôme');
         }
 
-        $cfvu = $getHistorique->getHistoriqueFormationLastStep($formation, 'cfvu');
-        $conseil = $getHistorique->getHistoriqueFormationLastStep($formation, 'conseil');
+        $dpe = GetDpeParcours::getFromParcours($parcours);
+
+        if ($dpe !== null) {
+            $cfvu = $getHistorique->getHistoriqueParcoursLastStep($dpe, 'soumis_cfvu');
+            $conseil = $getHistorique->getHistoriqueParcoursLastStep($dpe, 'soumis_conseil');
+        }
 
         return match ($_format) {
             'xlsx' => $typeDiplome->exportExcelMccc(
@@ -120,8 +125,12 @@ class ParcoursMcccExportController extends BaseController
             throw new \Exception('Aucun modèle MCC n\'est défini pour ce diplôme');
         }
 
-        $cfvu = $getHistorique->getHistoriqueFormationLastStep($formation, 'cfvu');
-        $conseil = $getHistorique->getHistoriqueFormationLastStep($formation, 'conseil');
+        $dpe = GetDpeParcours::getFromParcours($parcours);
+
+        if ($dpe !== null) {
+            $cfvu = $getHistorique->getHistoriqueParcoursLastStep($dpe, 'soumis_cfvu');
+            $conseil = $getHistorique->getHistoriqueParcoursLastStep($dpe, 'soumis_conseil');
+        }
 
         return match ($_format) {
             'xlsx' => $typeDiplome->exportExcelMccc(
