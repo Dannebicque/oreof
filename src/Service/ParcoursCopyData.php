@@ -199,6 +199,13 @@ class ParcoursCopyData {
             if($hasFicheMatiereEcPorteur === false || $countEcForFiche === 1){
                 $ec = $ficheMatiereSource->getElementConstitutifs()->first();
             }
+            // Si l'EC fait partie d'une UE mutualisée (portée par un autre parcours)
+            if($ecSource->getUe()?->getUeMutualisables()->count() > 0){
+                if($ecSource->getUe()->getSemestre()->getSemestreParcours()->first()->getParcours()->getId() === $parcoursId){
+                    $ec = $ecSource;
+                    $isEcPorteur = true;
+                }
+            }
 
             // Si le volume est imposé ou que la FM est hors diplôme, les heures sont déjà dessus
             if(!$isVolumeHoraireFMImpose && !$isHorsDiplome){
