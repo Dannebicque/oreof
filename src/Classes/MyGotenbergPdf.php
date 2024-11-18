@@ -132,7 +132,7 @@ class MyGotenbergPdf
     private function getHeader(string $titre = ''): string
     {
         if ($this->options['withTemplate']) {
-            $imageData = file_get_contents($this->options['baseUrl'] . '/images/header_sen.png');
+            $imageData = file_get_contents($this->options['baseUrl'] . '/images/header_sen.jpg');
             $base64Image = base64_encode($imageData);
         } else {
             $imageData = file_get_contents($this->options['baseUrl'] . '/images/logo_urca.png');
@@ -150,7 +150,7 @@ class MyGotenbergPdf
     private function getFooter(): string
     {
         if ($this->options['withTemplate']) {
-            $imageData = file_get_contents($this->options['baseUrl'] . '/images/vague_urca.png');
+            $imageData = file_get_contents($this->options['baseUrl'] . '/images/vague_urca_sen.png');
             $base64Image = base64_encode($imageData);
             return $this->twig->render('pdf/footer.html.twig', array_merge($this->options, ['image' => $base64Image]));
         }
