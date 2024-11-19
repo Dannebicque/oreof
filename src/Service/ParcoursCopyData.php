@@ -12,6 +12,7 @@ use App\DTO\StructureUe;
 use App\Entity\ElementConstitutif;
 use App\Entity\FicheMatiere;
 use App\Entity\Formation;
+use App\Entity\Mccc;
 use App\Entity\Parcours;
 use App\Entity\Semestre;
 use App\Entity\Ue;
@@ -39,6 +40,8 @@ class ParcoursCopyData {
     public static array $errorMessageArray = [];
 
     private array $ficheMatiereCopyDataArray = [];
+
+    private $errorMcccMessageArray = [];
 
     public function __construct(
         ManagerRegistry $doctrine,
@@ -680,5 +683,83 @@ class ParcoursCopyData {
         || in_array($ec->getVolumeTpPresentiel(), $haystack) === false
         || in_array($ec->getVolumeTpDistanciel(), $haystack) === false
         || in_array($ec->getVolumeTe(), $haystack) === false;
+    }
+
+    public function compareTwoMCCC(Mccc $mccc1, Mccc $mccc2) : bool{
+        $retour = true;
+        $variableError = [];
+
+        if($mccc1->getLibelle() !== $mccc2->getLibelle()){
+            $retour = false;
+            $variableError[] = "Libellé";
+        }
+        if($mccc1->getNumeroSession() !== $mccc2->getNumeroSession()){
+            $retour = false;
+            $variableError[] = "Numéro de sesssion";
+        }
+        if($mccc1->isSecondeChance() !== $mccc2->isSecondeChance()){
+            $retour = false;
+            $variableError[] = "Seconde chance";
+        }
+        if($mccc1->getPourcentage() !== $mccc2->getPourcentage()){
+            $retour = false;
+            $variableError[] = "Pourcentage";
+        }
+        if($mccc1->getNbEpreuves() !== $mccc2->getNbEpreuves()){
+            $retour = false;
+            $variableError[] = "Nb. épreuves";
+        }
+        // Comparaison du tableau de type épreuve
+        if($this->twoArrayAreIdentical($mccc1->getTypeEpreuve(), $mccc2->getTypeEpreuve()) === false){
+            $retour = false;
+            $variableError[] = "Type épreuve";
+        }
+        if($mccc1->isControleContinu() !== $mccc2->isControleContinu()){
+            $retour = false;
+            $variableError[] = "Contrôle continu";
+        }
+        if($mccc1->isExamenTerminal() !== $mccc2->isExamenTerminal()){
+            $retour = false;
+            $variableError[] = "Examen terminal";
+        }
+        if($mccc1->getDuree() !== $mccc2->getDuree()){
+            $retour = false;
+            $variableError[] = "Durée";
+        }
+        if($mccc1->getNumeroEpreuve() !== $mccc2->getNumeroEpreuve()){
+            $retour = false;
+            $variableError[] = "Numéro épreuve";
+        }
+        // Comparaison du tableau d'options
+        if($this->twoArrayAreIdentical($mccc1->getOptions(), $mccc2->getOptions()) === false){
+            $retour = false;
+            $variableError[] = "Options";
+        }
+
+        if($retour === false){
+            $dataError = "Les deux MCCC ne correspondent pas : [" . implode(", ", $variableError) . "]";
+            $this->errorMcccMessageArray[] = $dataError;
+
+        }
+
+        return $retour;
+    }
+
+    private function twoArrayAreIdentical(array $array1, array $array2){
+        $retour = true;
+        if(count($array1) !== count($array2)){
+            $retour = false;
+        }
+        foreach($array1 as $key => $value){
+            if(array_key_exists($key, $array2)){
+                if($value !== $array2[$key]){
+                    $retour = false;
+                }
+            }
+            else {
+                $retour = false;
+            }
+        }
+        return $retour;
     }
 }
