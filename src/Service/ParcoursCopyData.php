@@ -18,10 +18,10 @@ use App\Entity\Semestre;
 use App\Entity\Ue;
 use App\Repository\ElementConstitutifCopyRepository;
 use App\Repository\FicheMatiereCopyRepository;
+use App\Repository\McccCopyRepository;
 use App\Repository\UeCopyRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
-use McccCopyRepository;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 
@@ -44,7 +44,7 @@ class ParcoursCopyData {
 
     private array $ficheMatiereCopyDataArray = [];
 
-    private $errorMcccMessageArray = [];
+    public static $errorMcccMessageArray = [];
 
     public function __construct(
         ManagerRegistry $doctrine,
@@ -470,6 +470,71 @@ class ParcoursCopyData {
         return $result;
     }
 
+    public function compareTwoDtoForMCCC(StructureParcours $dto1, StructureParcours $dto2){
+        $result = true;
+        foreach($dto1->semestres as $indexSemestre => $semestre){
+            foreach($semestre->ues as $indexUe => $ue){
+                $testUe = $this->compareTwoUeDtoForMccc(
+                    $ue, $dto2->semestres[$indexSemestre]->ues[$indexUe], $dto1->parcours->getId()
+                );
+                $result = $result && $testUe;
+                foreach($ue->uesEnfants() as $indexUeEnfant => $ueEnfant){
+                    $testUeEnfant = $this->compareTwoUeDtoForMccc(
+                        $ueEnfant, 
+                        $dto2->semestres[$indexSemestre]->ues[$indexUe]->uesEnfants()[$indexUeEnfant],
+                        $dto1->parcours->getId()
+                    );
+                    $result = $result && $testUeEnfant;
+                    foreach($ueEnfant->uesEnfants() as $indexUeEnfantDeuxieme => $ueEnfantDeuxieme){
+                        $testUeEnfantDeuxieme = $this->compareTwoUeDtoForMccc(
+                            $ueEnfantDeuxieme,
+                            $dto2->semestres[$indexSemestre]->ues[$indexUe]
+                                ->uesEnfants()[$indexUeEnfant]
+                                ->uesEnfants()[$indexUeEnfantDeuxieme],
+                            $dto1->parcours->getId()
+                        );
+                        $result = $result && $testUeEnfantDeuxieme;
+                    }
+                }
+            }
+        }
+
+        return $result;
+    }
+
+    public function compareTwoUeDtoForMccc(StructureUe $ue1, StructureUe $ue2, int $parcoursId){
+        $result = true;
+        if(count($ue1->elementConstitutifs) !== count($ue2->elementConstitutifs)){
+            $result = false;
+        }
+        if($result){
+            foreach($ue1->elementConstitutifs as $indexEc => $ec){
+                foreach($ec->mcccs as $indexMccc => $mccc){
+                    $mcccTest = $this->compareTwoMCCC(
+                        $mccc,
+                        $ue2->elementConstitutifs[$indexEc]->mcccs[$indexMccc],
+                        $parcoursId,
+                        $ue1->display . " " . $ec->elementConstitutif->getCode()
+                    );
+                    $result = $result && $mcccTest;
+                }
+                foreach($ec->elementsConstitutifsEnfants as $indexEcEnfant => $ecEnfant){
+                    foreach($ecEnfant->mcccs as $indexMcccEnfant => $mcccEnfant){
+                        $mcccEnfantTest = $this->compareTwoMCCC(
+                            $mcccEnfant,
+                            $ue2->elementConstitutifs[$indexEc]->elementsConstitutifsEnfants[$indexEcEnfant]->mcccs[$indexMcccEnfant],
+                            $parcoursId,
+                            $ue1->display . " " . $ec->elementConstitutif->getCode()
+                        );
+                        $result = $result && $mcccEnfantTest;
+                    }
+                }
+            }
+        }
+
+        return $result;
+    }
+
     public function compareSemestresHeures(
         StructureSemestre $semestre1, 
         StructureSemestre $semestre2
@@ -738,60 +803,80 @@ class ParcoursCopyData {
         || in_array($ec->getVolumeTe(), $haystack) === false;
     }
 
-    public function compareTwoMCCC(Mccc $mccc1, Mccc $mccc2) : bool{
+    public function compareTwoMCCC(?Mccc $mccc1, ?Mccc $mccc2, int $parcoursId, string $debugText) : bool{
         $retour = true;
         $variableError = [];
 
-        if($mccc1->getLibelle() !== $mccc2->getLibelle()){
+        if( ($mccc1 === null && $mccc2 !== null) || ($mccc1 !== null && $mccc2 === null) ){
             $retour = false;
-            $variableError[] = "Libellé";
-        }
-        if($mccc1->getNumeroSession() !== $mccc2->getNumeroSession()){
-            $retour = false;
-            $variableError[] = "Numéro de sesssion";
-        }
-        if($mccc1->isSecondeChance() !== $mccc2->isSecondeChance()){
-            $retour = false;
-            $variableError[] = "Seconde chance";
-        }
-        if($mccc1->getPourcentage() !== $mccc2->getPourcentage()){
-            $retour = false;
-            $variableError[] = "Pourcentage";
-        }
-        if($mccc1->getNbEpreuves() !== $mccc2->getNbEpreuves()){
-            $retour = false;
-            $variableError[] = "Nb. épreuves";
-        }
-        // Comparaison du tableau de type épreuve
-        if($this->twoArrayAreIdentical($mccc1->getTypeEpreuve(), $mccc2->getTypeEpreuve()) === false){
-            $retour = false;
-            $variableError[] = "Type épreuve";
-        }
-        if($mccc1->isControleContinu() !== $mccc2->isControleContinu()){
-            $retour = false;
-            $variableError[] = "Contrôle continu";
-        }
-        if($mccc1->isExamenTerminal() !== $mccc2->isExamenTerminal()){
-            $retour = false;
-            $variableError[] = "Examen terminal";
-        }
-        if($mccc1->getDuree() !== $mccc2->getDuree()){
-            $retour = false;
-            $variableError[] = "Durée";
-        }
-        if($mccc1->getNumeroEpreuve() !== $mccc2->getNumeroEpreuve()){
-            $retour = false;
-            $variableError[] = "Numéro épreuve";
-        }
-        // Comparaison du tableau d'options
-        if($this->twoArrayAreIdentical($mccc1->getOptions(), $mccc2->getOptions()) === false){
-            $retour = false;
-            $variableError[] = "Options";
+            $variableError[] = "MCCC 'null' alors que son équivalent à une valeur";
         }
 
+        if($mccc1 !== null && $mccc2 !== null){
+            if($mccc1->getLibelle() !== $mccc2->getLibelle()){
+                $retour = false;
+                $variableError[] = "Libellé";
+            }
+            if($mccc1->getNumeroSession() !== $mccc2->getNumeroSession()){
+                $retour = false;
+                $variableError[] = "Numéro de sesssion";
+            }
+            if($mccc1->isSecondeChance() !== $mccc2->isSecondeChance()){
+                $retour = false;
+                $variableError[] = "Seconde chance";
+            }
+            if($mccc1->getPourcentage() !== $mccc2->getPourcentage()){
+                $retour = false;
+                $variableError[] = "Pourcentage";
+            }
+            if($mccc1->getNbEpreuves() !== $mccc2->getNbEpreuves()){
+                $retour = false;
+                $variableError[] = "Nb. épreuves";
+            }
+            // Comparaison du tableau de type épreuve
+            if($this->twoArrayAreIdentical($mccc1->getTypeEpreuve(), $mccc2->getTypeEpreuve()) === false){
+                $retour = false;
+                $variableError[] = "Type épreuve";
+            }
+            if($mccc1->isControleContinu() !== $mccc2->isControleContinu()){
+                $retour = false;
+                $variableError[] = "Contrôle continu";
+            }
+            if($mccc1->isExamenTerminal() !== $mccc2->isExamenTerminal()){
+                $retour = false;
+                $variableError[] = "Examen terminal";
+            }
+            if($mccc1->getDuree() !== $mccc2->getDuree()){
+                $retour = false;
+                $variableError[] = "Durée";
+            }
+            if($mccc1->getNumeroEpreuve() !== $mccc2->getNumeroEpreuve()){
+                $retour = false;
+                $variableError[] = "Numéro épreuve";
+            }
+            // Si une option est nulle mais que son équivalent ne l'est pas
+            if(
+                ($mccc1->getOptions() !== null && $mccc2->getOptions() === null )
+                || 
+                ($mccc1->getOptions() === null && $mccc2->getOptions() !== null)
+            ){
+                $retour = false;
+                $variableError[] = "Option à 'null' alors que son équivalent ne l'est pas";
+            }
+            // Comparaison du tableau d'options
+            if($mccc1->getOptions() && $mccc2->getOptions()){
+                if($this->twoArrayAreIdentical($mccc1->getOptions(), $mccc2->getOptions()) === false){
+                    $retour = false;
+                    $variableError[] = "Options";
+                }
+            }
+        }
         if($retour === false){
-            $dataError = "Les deux MCCC ne correspondent pas : [" . implode(", ", $variableError) . "]";
-            $this->errorMcccMessageArray[] = $dataError;
+            $dataError = $debugText . " : Les deux MCCC ne correspondent pas : [" . implode(", ", $variableError) . "]";
+            if(array_key_exists($parcoursId, self::$errorMcccMessageArray) === false){
+                self::$errorMcccMessageArray[$parcoursId] = [];
+            }
+            self::$errorMcccMessageArray[$parcoursId][] = $dataError;
 
         }
 

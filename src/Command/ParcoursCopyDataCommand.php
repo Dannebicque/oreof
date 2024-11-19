@@ -68,7 +68,7 @@ class ParcoursCopyDataCommand extends Command
             description: "Option pour réaliser la commande depuis la base où les données sont copiées"
         )->addOption(
             name: 'compare-two-databases',
-            mode: InputOption::VALUE_NONE,
+            mode: InputOption::VALUE_REQUIRED,
             description: "Compare les deux base de données : l'originale et celle qui reçoit la copie des heures"
         );
     }
@@ -172,7 +172,19 @@ class ParcoursCopyDataCommand extends Command
             return Command::SUCCESS;
         }
         else if($compareTwoDatabases){
+            if(in_array($compareTwoDatabases, ['hours', 'mccc']) === false){
+                $io->warning("Mode de comparaison non reconnue. Doit être parmi ['hours', 'mccc']");
+                return Command::INVALID;
+            }
+            if($compareTwoDatabases === 'hours'){
+                $infoText = "Informations comparées : [HEURES]";
+            }
+            elseif ($compareTwoDatabases === 'mccc'){
+                $infoText = "Informations comparées : [MCCC]";
+            }
+
             $io->writeln("Comparaison des DTO des deux base de données...");
+            $io->writeln($infoText);
 
             $formations = $this->entityManager->getRepository(Formation::class)->findAll();
             $errorArray = [];
@@ -188,17 +200,33 @@ class ParcoursCopyDataCommand extends Command
                     foreach($f->getParcours() as $parcours){
                         $dtoBefore = $this->parcoursCopyData->getDTOForParcours($parcours);
                         $dtoAfter = $this->parcoursCopyData->getDTOForParcours($parcours, true, false, true);
-                        if($this->parcoursCopyData->compareTwoDTO($dtoBefore, $dtoAfter) === false){
-                            $errorArray[] = "ID : {$parcours->getId()} - {$parcours->getFormation()->getDisplayLong()}";
+                        if($compareTwoDatabases === 'hours'){
+                            if($this->parcoursCopyData->compareTwoDTO($dtoBefore, $dtoAfter) === false){
+                                $errorArray[] = "ID : {$parcours->getId()} - {$parcours->getFormation()->getDisplayLong()}";
+                            }
                         }
+                        elseif($compareTwoDatabases === 'mccc'){
+                            if($this->parcoursCopyData->compareTwoDtoForMCCC($dtoBefore, $dtoAfter) === false){
+                                $errorArray[] = "ID : {$parcours->getId()} - {$parcours->getFormation()->getDisplayLong()}";
+                            }
+                        }   
                         $io->progressAdvance(1);
                     }
                 }
             }
-            $io->progressFinish();
-            $nbErreur = count($errorArray);
-            $io->writeln("Comparaison terminée. Il y a {$nbErreur} parcours qui ne sont pas identiques");
-            dump($errorArray);
+            $io->progressFinish();          
+
+            if($compareTwoDatabases === 'hours'){
+                $nbErreur = count($errorArray);
+                $io->writeln("Comparaison terminée. Il y a {$nbErreur} parcours qui ne sont pas identiques");
+                dump($errorArray);
+            }
+            elseif($compareTwoDatabases === 'mccc'){
+                $nbErreur = count($errorArray);
+                $io->writeln("{$nbErreur} Maquettes ont des MCCC différents.");
+                // dump($this->parcoursCopyData::$errorMcccMessageArray);
+            }
+
             return Command::SUCCESS;
         }
 
