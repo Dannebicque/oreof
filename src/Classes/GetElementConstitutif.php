@@ -74,6 +74,14 @@ class GetElementConstitutif
         return $this->elementConstitutif->getMcccs();
     }
 
+    public function getMcccsFromFicheMatiere() : ?Collection {
+        if($this->elementConstitutif->getEcParent()?->isMcccEnfantsIdentique()){
+            return $this->elementConstitutif->getEcParent()->getMcccs();
+        }
+
+        return $this->elementConstitutif->getFicheMatiere()->getMcccs();
+    }
+
     public function getEcts(): ?float
     {
         if ($this->elementConstitutif->getFicheMatiere()?->isEctsImpose()) {

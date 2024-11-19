@@ -21,6 +21,7 @@ use App\Repository\FicheMatiereCopyRepository;
 use App\Repository\UeCopyRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
+use McccCopyRepository;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 
@@ -34,6 +35,8 @@ class ParcoursCopyData {
     private ElementConstitutifCopyRepository $ecCopyRepo;
 
     private FicheMatiereCopyRepository $fmCopyRepo;
+
+    private McccCopyRepository $mcccCopyRepo;
 
     private MyGotenbergPdf $myPdf;
 
@@ -51,6 +54,7 @@ class ParcoursCopyData {
         $this->entityManagerCopy = $doctrine->getManager('parcours_copy');
         $this->ecCopyRepo = new ElementConstitutifCopyRepository($this->entityManagerCopy, ElementConstitutif::class);
         $this->fmCopyRepo = new FicheMatiereCopyRepository($this->entityManagerCopy, FicheMatiere::class);
+        $this->mcccCopyRepo = new McccCopyRepository($this->entityManagerCopy, Mccc::class);
 
         $this->myPdf = $myPdf;
     }
@@ -168,7 +172,7 @@ class ParcoursCopyData {
                 $this->placeHeuresSpecifiquesFlag($ec->elementConstitutif);
             }
             elseif($onlyMccc){
-                $this->moveMcccToFicheMatiere($ec->mcccs);
+                $this->moveMcccToFicheMatiere($ec, $parcoursId);
             }else {
                 $this->copyDataOnFicheMatiere($ec->elementConstitutif, $ec->elementConstitutif->getFicheMatiere(), $parcoursId);
             }
@@ -177,7 +181,7 @@ class ParcoursCopyData {
                     $isHeuresIdentiques = $ec->elementConstitutif->isHeuresEnfantsIdentiques();
                     $this->placeHeuresSpecifiquesFlag($ecEnfant->elementConstitutif, $isHeuresIdentiques);
                 }elseif($onlyMccc){
-                    $this->moveMcccToFicheMatiere($ecEnfant->mcccs);
+                    $this->moveMcccToFicheMatiere($ecEnfant, $parcoursId);
                 }else {
                     if($ec->elementConstitutif->isHeuresEnfantsIdentiques()){
                         $this->copyDataOnFicheMatiere(
@@ -301,13 +305,33 @@ class ParcoursCopyData {
         }
     }
 
-    public function moveMcccToFicheMatiere(array $mccc){
+    public function moveMcccToFicheMatiere(
+        StructureEc $structEc,
+        int $parcoursId
+    ){
+        $ficheMatierePorteuse = null;
 
+        $ecFromParcours = $structEc->elementConstitutif->getParcours()->getId() 
+            === $structEc->elementConstitutif->getFicheMatiere()->getParcours()->getId();
+
+        $isEcPorteur = false;
+        if($ecFromParcours && $structEc->elementConstitutif->getParcours()->getId() === $parcoursId){
+            $isEcPorteur = true;
+            $ficheMatierePorteuse = $structEc->elementConstitutif->getFicheMatiere();
+        }
+
+        if(!$structEc->elementConstitutif->getFicheMatiere()->isMcccImpose()){
+           if($ficheMatierePorteuse){
+                foreach($structEc->mcccs as $mccc){
+                    
+                }
+           }
+        }
     }
 
     public function getDTOForParcours(
         Parcours $parcours, 
-        bool $heuresSurFicheMatiere = false, 
+        bool $dataFromFicheMatiere = false, 
         bool $withCopy = false,
         bool $fromCopy = false
     ){
@@ -330,10 +354,10 @@ class ParcoursCopyData {
             if($withCopy){
                 $parcoursData = $parcours;
                 $this->copyDataForParcours($parcoursData);
-                $dto = $calcul->calcul($parcoursData, heuresSurFicheMatiere: $heuresSurFicheMatiere);
+                $dto = $calcul->calcul($parcoursData, dataFromFicheMatiere: $dataFromFicheMatiere);
             }   
             else {
-                $dto = $calcul->calcul($parcours, heuresSurFicheMatiere: $heuresSurFicheMatiere);
+                $dto = $calcul->calcul($parcours, dataFromFicheMatiere: $dataFromFicheMatiere);
             }
 
             return $dto;
