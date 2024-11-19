@@ -89,6 +89,17 @@ class ParcoursCopyData {
         }
         $io->progressFinish();
 
+        $io->writeln("Traitement de la copie des MCCC...");;
+        $io->progressStart($nombreParcours);
+        foreach($formationArray as $f){
+            if($f->getTypeDiplome()->getLibelleCourt() !== "BUT"){
+                foreach($f->getParcours() as $parcours){
+                    $this->copyDataForParcoursFromDTO($parcours, onlyMccc: true);
+                    $io->progressAdvance(1);
+                }
+            }
+        }
+        $io->progressFinish();
 
         $io->writeln("Application des changements...");
         $this->entityManagerCopy->flush();
@@ -116,15 +127,19 @@ class ParcoursCopyData {
         }
     }
 
-    public function copyDataForParcoursFromDTO(Parcours $parcours, bool $onlyHeuresSpecifiques = false){
+    public function copyDataForParcoursFromDTO(
+        Parcours $parcours, 
+        bool $onlyHeuresSpecifiques = false,
+        bool $onlyMccc = false
+    ){
         $dto = $this->getDTOForParcours($parcours);
         foreach($dto->semestres as $semestre){
             foreach($semestre->ues as $ue){
-                $this->copyDataForUeFromDTO($ue, $parcours->getId(), $onlyHeuresSpecifiques);
+                $this->copyDataForUeFromDTO($ue, $parcours->getId(), $onlyHeuresSpecifiques, $onlyMccc);
                 foreach($ue->uesEnfants() as $ueEnfant){
-                    $this->copyDataForUeFromDTO($ueEnfant, $parcours->getId(), $onlyHeuresSpecifiques);
+                    $this->copyDataForUeFromDTO($ueEnfant, $parcours->getId(), $onlyHeuresSpecifiques, $onlyMccc);
                     foreach($ueEnfant->uesEnfants() as $ueEnfantDeuxieme){
-                        $this->copyDataForUeFromDTO($ueEnfantDeuxieme, $parcours->getId(), $onlyHeuresSpecifiques);
+                        $this->copyDataForUeFromDTO($ueEnfantDeuxieme, $parcours->getId(), $onlyHeuresSpecifiques, $onlyMccc);
                     }
                 }
             }
@@ -142,10 +157,18 @@ class ParcoursCopyData {
         }
     }
 
-    private function copyDataForUeFromDTO(StructureUe $structUE, int $parcoursId, bool $onlyHeuresSpecifiques){
+    private function copyDataForUeFromDTO(
+        StructureUe $structUE, 
+        int $parcoursId, 
+        bool $onlyHeuresSpecifiques,
+        bool $onlyMccc
+    ){
         foreach($structUE->elementConstitutifs as $ec){
             if($onlyHeuresSpecifiques){
                 $this->placeHeuresSpecifiquesFlag($ec->elementConstitutif);
+            }
+            elseif($onlyMccc){
+                $this->moveMcccToFicheMatiere($ec->mcccs);
             }else {
                 $this->copyDataOnFicheMatiere($ec->elementConstitutif, $ec->elementConstitutif->getFicheMatiere(), $parcoursId);
             }
@@ -153,6 +176,8 @@ class ParcoursCopyData {
                 if($onlyHeuresSpecifiques){
                     $isHeuresIdentiques = $ec->elementConstitutif->isHeuresEnfantsIdentiques();
                     $this->placeHeuresSpecifiquesFlag($ecEnfant->elementConstitutif, $isHeuresIdentiques);
+                }elseif($onlyMccc){
+                    $this->moveMcccToFicheMatiere($ecEnfant->mcccs);
                 }else {
                     if($ec->elementConstitutif->isHeuresEnfantsIdentiques()){
                         $this->copyDataOnFicheMatiere(
@@ -274,6 +299,10 @@ class ParcoursCopyData {
                 $this->entityManagerCopy->persist($ecCopyFlag);
             }
         }
+    }
+
+    public function moveMcccToFicheMatiere(array $mccc){
+
     }
 
     public function getDTOForParcours(
