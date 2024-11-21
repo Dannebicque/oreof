@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.31.58](https://github.com/Dannebicque/oreof/compare/v1.31.57...v1.31.58) (2024-11-21)
+
+
+### Bug Fixes
+
+* Bon état de process lors de la réouverture sans CFVU ([bd92709](https://github.com/Dannebicque/oreof/commit/bd9270994ca70739534477a0881ccad95c566ee5))
+* edition si réouverture sans CFVU ([1576746](https://github.com/Dannebicque/oreof/commit/157674655429f78ccd2b24dae9fa8b7d9518f053))
+* id EC en admin ([6599a4b](https://github.com/Dannebicque/oreof/commit/6599a4b84b31ca7c191eabb32b2fa134bda30679))
+* images ([5204096](https://github.com/Dannebicque/oreof/commit/520409606ffab86805660a407c14261aa19b0c4d))
+* images ([52cc979](https://github.com/Dannebicque/oreof/commit/52cc9796fb872f9577b1fe07679d1dc28df75b7f))
+
 ### [1.31.57](https://github.com/Dannebicque/oreof/compare/v1.31.56...v1.31.57) (2024-11-13)
 
 
