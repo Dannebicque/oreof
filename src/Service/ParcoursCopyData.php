@@ -852,7 +852,9 @@ class ParcoursCopyData {
                 $retour = false;
                 $variableError[] = "Examen terminal";
             }
-            if($mccc1->getDuree() !== $mccc2->getDuree()){
+            // Comparaison de date
+            $dateFormat = "d-m-Y H:i:s";
+            if($mccc1->getDuree()?->format($dateFormat) !== $mccc2->getDuree()?->format($dateFormat)){
                 $retour = false;
                 $variableError[] = "Durée";
             }
@@ -878,7 +880,7 @@ class ParcoursCopyData {
             }
         }
         if($retour === false){
-            $dataError = $debugText . " : Les deux MCCC ne correspondent pas : [" . implode(", ", $variableError) . "]";
+            $dataError = $debugText . " : Les deux MCCC ({$mccc1->getId()}) ne correspondent pas : [" . implode(", ", $variableError) . "]";
             if(array_key_exists($parcoursId, self::$errorMcccMessageArray) === false){
                 self::$errorMcccMessageArray[$parcoursId] = [];
             }
