@@ -672,4 +672,5 @@ reserve.validation.soumis_central_sans_cfvu.argumentaire.label: 'Argumentaire :'
 validation.soumis_central_sans_cfvu.reserve.alerte: 'Les modifications apportées à la formation ne nécessitent pas de passage en CFVU, elles seront validées et publiées.'
 validation.valider.parcours.reserver_transmettre_ouverture_sans_cfvu.title: 'Emettre des réserves'
 btn.validation.soumis_central_sans_cfvu.reserve: 'Emettre des réserves'
-
+valide.validation.soumis_central_sans_cfvu.date.label: 'Date de publication'
+btn.validation.parcours.valider_ouverture_sans_cfvu: 'Valider et transmettre au SES'
