@@ -36,6 +36,7 @@
         </thead>
         <tbody>
         {% for dpeParcours in allparcours %}
+            {% if dpeParcours.parcours != null %}
             {% set parcours = dpeParcours.parcours %}
             {% set formation = parcours.formation %}
             <tr>
@@ -101,6 +102,7 @@
                            class="btn btn-sm text-info"
                            data-bs-toggle="tooltip"
                            data-bs-placement="bottom"
+                           target="_blank"
                            title="Voir le parcours"
                         >
                             <i class="{{ iconShow }}"></i>
@@ -140,6 +142,7 @@
                            data-bs-toggle="tooltip"
                            data-bs-placement="bottom"
                            title="Voir la formation"
+                           target="_blank"
                         >
                             <i class="{{ iconShow }}"></i>
                             <span> Voir</span>
@@ -165,6 +168,7 @@
                                class="btn btn-sm text-warning"
                                data-bs-toggle="tooltip"
                                data-bs-placement="bottom"
+                               target="_blank"
                                title="Modifier la fiche d'identité de la formation"
                             >
                                 <i class="{{ iconEdit }}"></i>
@@ -176,6 +180,7 @@
 
                 </td>
             </tr>
+            {% endif %}
         {% else %}
             <tr>
                 <td colspan="10" class="bg-warning">Aucun enregistrement trouvé</td>
