@@ -553,7 +553,7 @@ class ProcessValidationController extends BaseController
                 //réouverture directe sans sauvegarde ou avec sauvegarde selon le choix
                 if ($data['demandeReouverture'] === 'MODIFICATION_SANS_CFVU') {
 
-                    $dpe->setEtatValidation(['soumis_conseil' => 1]); //un état de processus différent pour connaitre le branchement ensuite
+                    $dpe->setEtatValidation(['en_cours_redaction_ss_cfvu' => 1]); //un état de processus différent pour connaitre le branchement ensuite
                     $dpe->setEtatReconduction(TypeModificationDpeEnum::MODIFICATION_TEXTE);
                     $histoEvent = new HistoriqueParcoursEvent($parcours, $this->getUser(), 'soumis_central', 'valide', $request);
                     $this->eventDispatcher->dispatch($histoEvent, HistoriqueParcoursEvent::ADD_HISTORIQUE_PARCOURS);
