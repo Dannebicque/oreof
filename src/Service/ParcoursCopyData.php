@@ -335,6 +335,10 @@ class ParcoursCopyData {
         }
     }
 
+    public function placeMcccSpecifiquesFlag(){
+        
+    }
+
     public function getDTOForParcours(
         Parcours $parcours, 
         bool $dataFromFicheMatiere = false, 

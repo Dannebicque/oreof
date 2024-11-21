@@ -170,6 +170,9 @@ class ElementConstitutif
     #[ORM\Column(nullable: true)]
     private ?bool $heuresSpecifiques = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $mccc_specifiques = null;
+
 
     public function __construct()
     {
@@ -884,6 +887,18 @@ class ElementConstitutif
     public function setHeuresSpecifiques(?bool $heuresSpecifiques): static
     {
         $this->heuresSpecifiques = $heuresSpecifiques;
+
+        return $this;
+    }
+
+    public function isMcccSpecifiques(): ?bool
+    {
+        return $this->mccc_specifiques;
+    }
+
+    public function setMcccSpecifiques(?bool $mccc_specifiques): static
+    {
+        $this->mccc_specifiques = $mccc_specifiques;
 
         return $this;
     }
