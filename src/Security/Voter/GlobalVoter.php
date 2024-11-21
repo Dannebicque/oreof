@@ -238,7 +238,7 @@ class GlobalVoter extends Voter
                 $this->dpeWorkflow->can($subject->getFormation(), 'autoriser') ||
                 $this->parcoursWorkflow->can($subject, 'autoriser') ||
                 $this->parcoursWorkflow->can($subject, 'valider_parcours') ||
-                $this->dpeParcoursWorkflow->can($subject, 'valider_ouverture_sans_cfvu') ||
+                $this->dpeParcoursWorkflow->can($subject->getDpeParcours()->first(), 'valider_ouverture_sans_cfvu') ||
                 $this->parcoursWorkflow->can($subject, 'valider_rf') ||
                 $this->dpeWorkflow->can($subject->getFormation(), 'valider_rf') ||
                 $this->dpeWorkflow->can($subject->getFormation(), 'valider_dpe_composante') ||
