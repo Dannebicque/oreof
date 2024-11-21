@@ -53,7 +53,7 @@ class ParcoursCopyDataCommand extends Command
         )->addOption(
             name: 'compare-two-dto',
             mode: InputOption::VALUE_REQUIRED,
-            description: "Compare deux DTO avant et après copie. Donner deux Identifiants en entrée"
+            description: "Compare deux DTO avant et après copie. Donner un identifiant en entrée"
         )->addOption(
             name: 'after-copy',
             mode: InputOption::VALUE_NONE,
@@ -70,6 +70,10 @@ class ParcoursCopyDataCommand extends Command
             name: 'compare-two-databases',
             mode: InputOption::VALUE_REQUIRED,
             description: "Compare les deux base de données : l'originale et celle qui reçoit la copie des heures"
+        )->addOption(
+            name: 'mccc',
+            mode: InputOption::VALUE_NONE,
+            description: "Option pour effectuer la commande sur les MCCC (ex: comparaison de deux DTO)"
         );
     }
 
@@ -85,6 +89,7 @@ class ParcoursCopyDataCommand extends Command
         $testCopyDatabase = $input->getOption('test-copy-database');
         $fromCopy = $input->getOption('from-copy');
         $compareTwoDatabases = $input->getOption('compare-two-databases');
+        $focusOnMccc = $input->getOption('mccc');
 
         if($dtoPdfExport){
             try{
@@ -151,14 +156,24 @@ class ParcoursCopyDataCommand extends Command
                 }else {
                     $dtoAfter = $this->parcoursCopyData->getDTOForParcours($parcours, true, true);
                 }
-                $isEqual = $this->parcoursCopyData->compareTwoDTO($dtoBefore, $dtoAfter);
+                if($focusOnMccc){
+                    // Une fois que la copie a été faite
+                    $dtoAfter = $this->parcoursCopyData->getDTOForParcours($parcours, true, false, true);
+                    $isEqual = $this->parcoursCopyData->compareTwoDtoForMCCC($dtoBefore, $dtoAfter);
+                } else {    
+                    $isEqual = $this->parcoursCopyData->compareTwoDTO($dtoBefore, $dtoAfter);
+                }
 
                 if($isEqual){
                     $io->success("Les deux DTO sont identiques, avant et après copie.");
                     return Command::SUCCESS;
                 }else {
                     $io->writeln("Les deux DTO sont différents");
-                    dump($this->parcoursCopyData::$errorMessageArray);
+                    if($focusOnMccc){
+                        dump($this->parcoursCopyData::$errorMcccMessageArray);
+                    }else {
+                        dump($this->parcoursCopyData::$errorMessageArray);
+                    }
                     return Command::FAILURE;
                 }
             }
@@ -223,6 +238,7 @@ class ParcoursCopyDataCommand extends Command
             }
             elseif($compareTwoDatabases === 'mccc'){
                 $nbErreur = count($errorArray);
+                dump($errorArray);
                 $io->writeln("{$nbErreur} Maquettes ont des MCCC différents.");
                 // dump($this->parcoursCopyData::$errorMcccMessageArray);
             }

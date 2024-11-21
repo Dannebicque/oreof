@@ -311,8 +311,8 @@ class ParcoursCopyData {
     ){
         $ficheMatierePorteuse = null;
 
-        $ecFromParcours = $structEc->elementConstitutif->getParcours()->getId() 
-            === $structEc->elementConstitutif->getFicheMatiere()->getParcours()->getId();
+        $ecFromParcours = $structEc->elementConstitutif->getParcours()?->getId() 
+            === $structEc->elementConstitutif->getFicheMatiere()?->getParcours()?->getId();
 
         $isEcPorteur = false;
         if($ecFromParcours && $structEc->elementConstitutif->getParcours()->getId() === $parcoursId){
@@ -320,10 +320,16 @@ class ParcoursCopyData {
             $ficheMatierePorteuse = $structEc->elementConstitutif->getFicheMatiere();
         }
 
-        if(!$structEc->elementConstitutif->getFicheMatiere()->isMcccImpose()){
+        // Si les MCCC sont sur l'EC
+        if(!$structEc->elementConstitutif->getFicheMatiere()?->isMcccImpose()){
            if($ficheMatierePorteuse){
                 foreach($structEc->mcccs as $mccc){
-                    
+                    if($isEcPorteur){
+                        $mcccCopy = $this->mcccCopyRepo->find($mccc->getId());
+                        $ficheMatiereCopy = $this->fmCopyRepo->find($ficheMatierePorteuse->getId());
+                        $mcccCopy->setFicheMatiere($ficheMatiereCopy);
+                        $this->entityManagerCopy->persist($mcccCopy);
+                    }
                 }
            }
         }
