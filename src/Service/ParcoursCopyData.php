@@ -105,6 +105,18 @@ class ParcoursCopyData {
         }
         $io->progressFinish();
 
+        $io->writeln("Second parcours pour les MCCC spécifiques...");
+        $io->progressStart($nombreParcours);
+        foreach($formationArray as $f){
+            if($f->getTypeDiplome()->getLibelleCourt() !== "BUT"){
+                foreach($f->getParcours() as $parcours){
+                    $this->copyDataForParcoursFromDTO($parcours, onlyEcMcccSpecifiques: true);
+                    $io->progressAdvance(1);
+                }
+            }
+        }
+        $io->progressFinish();
+
         $io->writeln("Application des changements...");
         $this->entityManagerCopy->flush();
         $io->success("La copie s'est exécutée avec succès !");
@@ -134,16 +146,17 @@ class ParcoursCopyData {
     public function copyDataForParcoursFromDTO(
         Parcours $parcours, 
         bool $onlyHeuresSpecifiques = false,
-        bool $onlyMccc = false
+        bool $onlyMccc = false,
+        bool $onlyEcMcccSpecifiques = false
     ){
         $dto = $this->getDTOForParcours($parcours);
         foreach($dto->semestres as $semestre){
             foreach($semestre->ues as $ue){
-                $this->copyDataForUeFromDTO($ue, $parcours->getId(), $onlyHeuresSpecifiques, $onlyMccc);
+                $this->copyDataForUeFromDTO($ue, $parcours->getId(), $onlyHeuresSpecifiques, $onlyMccc, $onlyEcMcccSpecifiques);
                 foreach($ue->uesEnfants() as $ueEnfant){
-                    $this->copyDataForUeFromDTO($ueEnfant, $parcours->getId(), $onlyHeuresSpecifiques, $onlyMccc);
+                    $this->copyDataForUeFromDTO($ueEnfant, $parcours->getId(), $onlyHeuresSpecifiques, $onlyMccc, $onlyEcMcccSpecifiques);
                     foreach($ueEnfant->uesEnfants() as $ueEnfantDeuxieme){
-                        $this->copyDataForUeFromDTO($ueEnfantDeuxieme, $parcours->getId(), $onlyHeuresSpecifiques, $onlyMccc);
+                        $this->copyDataForUeFromDTO($ueEnfantDeuxieme, $parcours->getId(), $onlyHeuresSpecifiques, $onlyMccc, $onlyEcMcccSpecifiques);
                     }
                 }
             }
@@ -165,7 +178,8 @@ class ParcoursCopyData {
         StructureUe $structUE, 
         int $parcoursId, 
         bool $onlyHeuresSpecifiques,
-        bool $onlyMccc
+        bool $onlyMccc,
+        bool $onlyEcMcccSpecifiques,
     ){
         foreach($structUE->elementConstitutifs as $ec){
             if($onlyHeuresSpecifiques){
@@ -173,7 +187,9 @@ class ParcoursCopyData {
             }
             elseif($onlyMccc){
                 $this->moveMcccToFicheMatiere($ec, $parcoursId);
-            }else {
+            } elseif($onlyEcMcccSpecifiques){
+                $this->placeMcccSpecifiquesFlag($ec);
+            } else {
                 $this->copyDataOnFicheMatiere($ec->elementConstitutif, $ec->elementConstitutif->getFicheMatiere(), $parcoursId);
             }
             foreach($ec->elementsConstitutifsEnfants as $ecEnfant){
@@ -182,6 +198,8 @@ class ParcoursCopyData {
                     $this->placeHeuresSpecifiquesFlag($ecEnfant->elementConstitutif, $isHeuresIdentiques);
                 }elseif($onlyMccc){
                     $this->moveMcccToFicheMatiere($ecEnfant, $parcoursId);
+                }elseif($onlyEcMcccSpecifiques){
+                    $this->placeMcccSpecifiquesFlag($ecEnfant);
                 }else {
                     if($ec->elementConstitutif->isHeuresEnfantsIdentiques()){
                         $this->copyDataOnFicheMatiere(
@@ -335,8 +353,28 @@ class ParcoursCopyData {
         }
     }
 
-    public function placeMcccSpecifiquesFlag(){
-        
+    public function placeMcccSpecifiquesFlag(StructureEc $structEc){
+        $mcccFromFiche = $structEc->elementConstitutif->getFicheMatiere()?->getMcccs()->toArray();
+        if($mcccFromFiche){
+            usort($mcccFromFiche, fn($a, $b) => $a->getId() <=> $b->getId());
+            usort($structEc->mcccs, fn($a, $b) => $a->getId() <=> $b->getId());
+            $areArrayStructureEqual = $this->twoArrayAreIdentical($structEc->mcccs, $mcccFromFiche);
+
+            $mcccAreEqual = true;
+            if($areArrayStructureEqual){
+                foreach($structEc->mcccs as $index => $value){
+                    if($this->compareTwoMCCC($value, $mcccFromFiche[$index]) === false){
+                        $mcccAreEqual = false;
+                    }
+                }
+            }
+
+            if($mcccAreEqual === false){
+                $ecCopy = $this->ecCopyRepo->find($structEc->elementConstitutif->getId());
+                $ecCopy->setMcccSpecifiques(true);
+                $this->entityManagerCopy->persist($ecCopy);
+            }
+        }
     }
 
     public function getDTOForParcours(
@@ -813,7 +851,13 @@ class ParcoursCopyData {
         || in_array($ec->getVolumeTe(), $haystack) === false;
     }
 
-    public function compareTwoMCCC(?Mccc $mccc1, ?Mccc $mccc2, int $parcoursId, string $debugText) : bool{
+    public function compareTwoMCCC(
+        ?Mccc $mccc1,
+        ?Mccc $mccc2,
+        int $parcoursId = -1,
+        string $debugText = "",
+        bool $withDebug = true
+    ) : bool{
         $retour = true;
         $variableError = [];
 
@@ -884,12 +928,13 @@ class ParcoursCopyData {
             }
         }
         if($retour === false){
-            $dataError = $debugText . " : Les deux MCCC ({$mccc1->getId()}) ne correspondent pas : [" . implode(", ", $variableError) . "]";
-            if(array_key_exists($parcoursId, self::$errorMcccMessageArray) === false){
-                self::$errorMcccMessageArray[$parcoursId] = [];
+            if($withDebug){
+                $dataError = $debugText . " : Les deux MCCC ({$mccc1->getId()}) ne correspondent pas : [" . implode(", ", $variableError) . "]";
+                if(array_key_exists($parcoursId, self::$errorMcccMessageArray) === false){
+                    self::$errorMcccMessageArray[$parcoursId] = [];
+                }
+                self::$errorMcccMessageArray[$parcoursId][] = $dataError;
             }
-            self::$errorMcccMessageArray[$parcoursId][] = $dataError;
-
         }
 
         return $retour;
