@@ -386,6 +386,7 @@ framework:
             type: valider
             btn: success
             icon: fa-check
+            hasValidLheo: true
         refuser_definitif_cfvu:
           from: 'soumis_cfvu'
           to: 'refuse_definitif_cfvu'
@@ -446,6 +447,7 @@ framework:
             btn: success
             icon: fa-check
             hasDate: true
+            hasValidLheo: true
         publier:
           from: 'valide_a_publier'
           to: 'publie'
@@ -474,13 +476,14 @@ framework:
             type: valider
             btn: success
             icon: fa-check
-            hasDate: true
         valider_transmettre_ouverture_sans_cfvu:
           from: 'soumis_central_sans_cfvu'
           to: 'valide_a_publier'
           metadata:
             type: valider
             btn: success
+            hasDate: true
+            hasValidLheo: true
             icon: fa-check
         reserver_transmettre_ouverture_sans_cfvu:
           from: 'soumis_central_sans_cfvu'
