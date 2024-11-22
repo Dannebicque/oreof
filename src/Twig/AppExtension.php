@@ -72,11 +72,8 @@ class AppExtension extends AbstractExtension
         $texte = nl2br(trim($texte));
 
         //retirer <div> de début et de fin
-        if (str_starts_with($texte, '<div>')) {
+        if (str_starts_with($texte, '<div>') && str_ends_with($texte, '</div>')) {
             $texte = mb_substr($texte, 5);
-        }
-
-        if (str_ends_with($texte, '</div>')) {
             $texte = mb_substr($texte, 0, -6);
         }
 
