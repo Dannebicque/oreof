@@ -122,6 +122,7 @@ class PvConseilController extends AbstractController
 
                 }
                 $histo->setEtat('valide');
+                $histo->setCreated(new DateTime());
                 if ($request->request->has('dateconseil') && $request->request->get('dateconseil') !== null) {
                     $histo->setDate(Tools::convertDate($request->request->get('dateconseil')));
                 }

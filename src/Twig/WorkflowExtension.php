@@ -66,9 +66,9 @@ class WorkflowExtension extends AbstractExtension
     public function isPlace(string $workflow, Parcours|FicheMatiere|Formation|ChangeRf $entity, string $place): bool
     {
         //si le workflow est change_rf, supprimer de $place le début changeRf.
-        if ($workflow === 'changeRf') {
-            $place = str_replace('changeRf.', '', $place);
-        }
+//        if ($workflow === 'changeRf') {
+//            $place = str_replace('changeRf.', '', $place);
+//        }
 
 
         $actualPlaces = $this->getPlacesFromEntity($entity, $workflow);
