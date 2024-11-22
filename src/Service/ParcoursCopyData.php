@@ -42,9 +42,12 @@ class ParcoursCopyData {
 
     public static array $errorMessageArray = [];
 
+    public static $errorMcccMessageArray = [];
+
     private array $ficheMatiereCopyDataArray = [];
 
-    public static $errorMcccMessageArray = [];
+    private array $mcccCopyDataArray = [];
+
 
     public function __construct(
         ManagerRegistry $doctrine,
@@ -104,6 +107,9 @@ class ParcoursCopyData {
             }
         }
         $io->progressFinish();
+
+        $io->writeln("Application des changements...");
+        $this->entityManagerCopy->flush();
 
         $io->writeln("Second parcours pour les MCCC spécifiques...");
         $io->progressStart($nombreParcours);
@@ -346,6 +352,12 @@ class ParcoursCopyData {
                         $mcccCopy = $this->mcccCopyRepo->find($mccc->getId());
                         $ficheMatiereCopy = $this->fmCopyRepo->find($ficheMatierePorteuse->getId());
                         $mcccCopy->setFicheMatiere($ficheMatiereCopy);
+
+                        if(array_key_exists($ficheMatiereCopy->getId(), $this->mcccCopyDataArray) === false){
+                            $this->mcccCopyDataArray[$ficheMatiereCopy->getId()] = [];
+                        }
+                        $this->mcccCopyDataArray[$ficheMatiereCopy->getId()][] = $mccc;
+
                         $this->entityManagerCopy->persist($mcccCopy);
                     }
                 }
@@ -353,26 +365,34 @@ class ParcoursCopyData {
         }
     }
 
+    /**
+     * Les données sont récupérées depuis la copie
+     * Il n'y a plus besoin de sélectionner l'élément en BD
+     */
     public function placeMcccSpecifiquesFlag(StructureEc $structEc){
-        $mcccFromFiche = $structEc->elementConstitutif->getFicheMatiere()?->getMcccs()->toArray();
+        $mcccFromFiche = null;
+        if($structEc->elementConstitutif->getFicheMatiere()){
+            $mcccFromFiche = $this->mcccCopyDataArray[$structEc->elementConstitutif->getFicheMatiere()->getId()];
+        }
         if($mcccFromFiche){
             usort($mcccFromFiche, fn($a, $b) => $a->getId() <=> $b->getId());
             usort($structEc->mcccs, fn($a, $b) => $a->getId() <=> $b->getId());
-            $areArrayStructureEqual = $this->twoArrayAreIdentical($structEc->mcccs, $mcccFromFiche);
 
-            $mcccAreEqual = true;
-            if($areArrayStructureEqual){
+            if(count($mcccFromFiche) === count($structEc->mcccs)){
+                $mcccAreEqual = true;
                 foreach($structEc->mcccs as $index => $value){
-                    if($this->compareTwoMCCC($value, $mcccFromFiche[$index]) === false){
+                    if($this->compareTwoMCCC($structEc->mcccs[$index], $mcccFromFiche[$index]) === false){
                         $mcccAreEqual = false;
                     }
                 }
+            }else {
+                $mcccAreEqual = false;
             }
-
+            
             if($mcccAreEqual === false){
-                $ecCopy = $this->ecCopyRepo->find($structEc->elementConstitutif->getId());
-                $ecCopy->setMcccSpecifiques(true);
-                $this->entityManagerCopy->persist($ecCopy);
+                $ecCopyMccc = $this->ecCopyRepo->find($structEc->elementConstitutif->getId());
+                $ecCopyMccc->setMcccSpecifiques(true);
+                $this->entityManagerCopy->persist($ecCopyMccc);
             }
         }
     }
