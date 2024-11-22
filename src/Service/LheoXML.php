@@ -394,7 +394,7 @@ HTML;
         // ---> XML 'objectif-formation'
         $modalitesAlternance = "La formation n'est pas dispensée en alternance";
 
-        if ($parcours->isParcoursDefaut()) {
+        if ($parcours->isParcoursDefaut() || $parcours->getFormation()?->getParcours()->count() === 1) { // si par défaut ou parcours uniquement alors RF et CO-RF
             // Contact de la formation
             $referentsPedagogiques = [];
             if ($parcours->getFormation()?->getResponsableMention()) {
