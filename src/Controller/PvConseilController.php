@@ -118,7 +118,7 @@ class PvConseilController extends AbstractController
                     $histo = new HistoriqueFormation();
                     $histo->setChangeRf($changeRf);
                     $histo->setUser($this->getUser());
-                    $histo->setEtape('soumis_conseil');
+                    $histo->setEtape('changeRf.soumis_conseil');
 
                 }
                 $histo->setEtat('valide');
