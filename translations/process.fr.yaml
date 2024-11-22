@@ -251,7 +251,7 @@ validation.publication.timeline: 'Validation pour publication'
 validation.formation: 'Formation validée'
 validation.dpe: 'Validé Responsable DPE'
 validation.soumis_conseil: 'Validé Conseil de composante'
-validation.ses: 'Validé central'
+validation.ses: 'Soumis central/SES' # pour la liste select de validation
 validation.cfvu: 'Validé CFVU'
 validation.publication: 'A publier'
 validation.formation.valide.autorisation_saisie: validation.formation.valide.autorisation_saisie
