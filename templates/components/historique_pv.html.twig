@@ -1,33 +1,67 @@
 <div{{ attributes }}>
     <!-- component html -->
-    {% if this.hasPv == false %}
-        {# todo: filtrer uniquement sur DPE pour la mise à jour #}
-        <button
-                {{ stimulus_controller('modal', {
-                    size: 'lg',
-                    modalTitle: 'deposer.le.pv.title'|trans({}, 'process'),
-                    modalUrl: path('app_deposer_pv_conseil', {parcours:this.parcours.id}) }) }}
-                data-action="click->modal#openModal"
-                class="btn btn-outline-warning btn-sm ms-1"
-                data-size="lg"
-                data-bs-toggle="tooltip"
-                data-bs-placement="bottom"
-                title="{{ 'deposer.le.pv.infobulle'|trans({}, 'process')}}"
-        >
-            <i class="{{ iconEdit }}"></i>
-            <span> {{ 'deposer.le.pv'|trans({}, 'process')}}</span>
-        </button>
+    {% if this.type == 'parcours' %}
+        {% if this.hasPv == false %}
+            {# todo: filtrer uniquement sur DPE pour la mise à jour #}
+            <button
+                    {{ stimulus_controller('modal', {
+                        size: 'lg',
+                        modalTitle: 'deposer.le.pv.title'|trans({}, 'process'),
+                        modalUrl: path('app_deposer_pv_conseil', {parcours:this.parcours.id}) }) }}
+                    data-action="click->modal#openModal"
+                    class="btn btn-outline-warning btn-sm ms-1"
+                    data-size="lg"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="bottom"
+                    title="{{ 'deposer.le.pv.infobulle'|trans({}, 'process') }}"
+            >
+                <i class="{{ iconEdit }}"></i>
+                <span> {{ 'deposer.le.pv'|trans({}, 'process') }}</span>
+            </button>
+        {% else %}
+            <a
+                    href="{{ asset('uploads/conseils/'~this.fichier) }}"
+                    target="_blank"
+                    class="btn btn-outline-info btn-sm ms-1"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="bottom"
+                    title="{{ 'voir.le.pv.infobulle'|trans({}, 'process') }}"
+            >
+                <i class="{{ iconDownload }}"></i>
+                <span> {{ 'voir.le.pv'|trans({}, 'process') }}</span>
+            </a>
+        {% endif %}
+    {% elseif this.type == 'change_rf' %}
+        {% if this.hasPv == false %}
+            <button
+                    {{ stimulus_controller('modal', {
+                        size: 'lg',
+                        modalTitle: 'deposer.le.pv.title'|trans({}, 'process'),
+                        modalUrl: path('app_deposer_pv_conseil_change_rf', {changeRf:this.changeRf.id}) }) }}
+                    data-action="click->modal#openModal"
+                    class="btn btn-outline-warning btn-sm ms-1"
+                    data-size="lg"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="bottom"
+                    title="{{ 'deposer.le.pv.infobulle'|trans({}, 'process') }}"
+            >
+                <i class="{{ iconEdit }}"></i>
+                <span> {{ 'deposer.le.pv'|trans({}, 'process') }}</span>
+            </button>
+        {% else %}
+            <a
+                    href="{{ asset('uploads/conseils/'~this.fichier) }}"
+                    target="_blank"
+                    class="btn btn-outline-info btn-sm ms-1"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="bottom"
+                    title="{{ 'voir.le.pv.infobulle'|trans({}, 'process') }}"
+            >
+                <i class="{{ iconDownload }}"></i>
+                <span> {{ 'voir.le.pv'|trans({}, 'process') }}</span>
+            </a>
+        {% endif %}
     {% else %}
-        <a
-                href="{{ asset('uploads/conseils/'~this.fichier) }}"
-                target="_blank"
-                class="btn btn-outline-info btn-sm ms-1"
-                data-bs-toggle="tooltip"
-                data-bs-placement="bottom"
-                title="{{ 'voir.le.pv.infobulle'|trans({}, 'process')}}"
-        >
-            <i class="{{ iconDownload }}"></i>
-            <span> {{ 'voir.le.pv'|trans({}, 'process')}}</span>
-        </a>
+        <span class="badge bg-danger">Erreur de type</span>
     {% endif %}
 </div>

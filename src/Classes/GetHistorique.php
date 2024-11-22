@@ -9,9 +9,11 @@
 
 namespace App\Classes;
 
+use App\Entity\ChangeRf;
 use App\Entity\DpeParcours;
 use App\Entity\Formation;
 use App\Entity\HistoriqueFormation;
+use App\Entity\HistoriqueParcours;
 use App\Entity\Parcours;
 use App\Repository\HistoriqueFormationRepository;
 use App\Repository\HistoriqueParcoursRepository;
@@ -34,7 +36,8 @@ class GetHistorique
         return $this->historiqueFormationRepository->findByFormation($formation);
     }
 
-    public  function getHistoriqueFormationLastStep(Formation $formation, string $step): ?HistoriqueFormation {
+    public function getHistoriqueFormationLastStep(Formation $formation, string $step): ?HistoriqueFormation
+    {
         return $this->historiqueFormationRepository->findByFormationLastStep($formation, $step);
     }
 
@@ -44,9 +47,14 @@ class GetHistorique
         return $conseil !== null && array_key_exists('fichier', $conseil->getComplements());
     }
 
-    public function getHistoriqueParcoursLastStep(DpeParcours $dpeParcours, string $step)
+    public function getHistoriqueParcoursLastStep(DpeParcours $dpeParcours, string $step): ?HistoriqueParcours
     {
         return $this->historiqueParcoursRepository->findByParcoursLastStep($dpeParcours->getParcours(), $step);
 
+    }
+
+    public function getHistoriqueChangeRfLastStep(?ChangeRf $changeRf, string $step): ?HistoriqueFormation
+    {
+        return $this->historiqueFormationRepository->findByChangeRfLastStep($changeRf, $step);
     }
 }

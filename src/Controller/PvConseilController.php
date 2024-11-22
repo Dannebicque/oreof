@@ -8,6 +8,7 @@ use App\Classes\JsonReponse;
 use App\Classes\Mailer;
 use App\Classes\Process\FormationProcess;
 use App\Classes\ValidationProcess;
+use App\Entity\ChangeRf;
 use App\Entity\Formation;
 use App\Entity\HistoriqueFormation;
 use App\Entity\HistoriqueParcours;
@@ -93,6 +94,74 @@ class PvConseilController extends AbstractController
         }
         return $this->render('pv_conseil/_index.html.twig', [
             'parcours' => $parcours,
+        ]);
+    }
+
+    #[Route('/pv/conseil/change-rf/{changeRf}', name: 'app_deposer_pv_conseil_change_rf')]
+    public function changeRfPv(
+        GetHistorique $getHistorique,
+        Mailer $myMailer,
+        KernelInterface $kernel,
+        EntityManagerInterface $entityManager,
+        TranslatorInterface $translator,
+        Request $request,
+        ChangeRf $changeRf,
+    ): Response
+    {
+        if ($request->isMethod('POST')) {
+            $dir = $kernel->getProjectDir().'/public/uploads/conseils/';
+            if ($changeRf !== null) {
+                $conseilLaisserPasser = $getHistorique->getHistoriqueChangeRfLastStep($changeRf, 'changeRf.soumis_conseil');
+                if ($conseilLaisserPasser !== null && $conseilLaisserPasser->getEtat() === 'laisserPasser') {
+                    $histo = $conseilLaisserPasser;
+                } else {
+                    $histo = new HistoriqueFormation();
+                    $histo->setChangeRf($changeRf);
+                    $histo->setUser($this->getUser());
+                    $histo->setEtape('soumis_conseil');
+
+                }
+                $histo->setEtat('valide');
+                if ($request->request->has('dateconseil') && $request->request->get('dateconseil') !== null) {
+                    $histo->setDate(Tools::convertDate($request->request->get('dateconseil')));
+                }
+
+                //upload
+                if ($request->files->has('file') && $request->files->get('file') !== null) {
+                    $file = $request->files->get('file');
+                    $fileName = md5(uniqid('', true)) . '.' . $file->guessExtension();
+                    $file->move(
+                        $dir,
+                        $fileName
+                    );
+                    $tab['fichier'] = $fileName;
+                } else {
+                    return JsonReponse::success($translator->trans('deposer.pv.flash.error', [], 'process'));
+                }
+
+                $histo->setComplements($tab ?? []);
+                $entityManager->persist($histo);
+                $entityManager->flush();
+
+                //todo:  mail à la CFVU, avec un event ? ou workflow sur laisserPasser
+                $myMailer->initEmail();
+                $myMailer->setTemplate(
+                    'mails/workflow/formation/conseil_pv_depose.html.twig',
+                    ['changeRf' => $changeRf]
+                );
+                $myMailer->sendMessage(
+                    [self::EMAIL_CENTRAL],
+                    '[ORéOF]  Le PV de conseil a été déposé pour le change de RF : ' . $changeRf->getFormation()?->getDisplay()
+                );
+
+                return JsonReponse::success($translator->trans('deposer.pv.flash.success', [], 'process'));
+            }
+
+            return JsonReponse::error('Pas de DPE associé au parcours');
+        }
+        return $this->render('pv_conseil/_index.html.twig', [
+            'changeRf' => $changeRf,
+            'type' => 'change_rf',
         ]);
     }
 }

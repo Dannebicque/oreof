@@ -140,95 +140,95 @@ class FormationResponsableController extends BaseController
         ], 'synthese_changement_rf_'.(new DateTime())->format('d-m-Y_H-i-s'));
     }
 
-    #[Route(
-        '/formation/change-responsable/valide-confirm-form/{etape}',
-        name: 'app_formation_responsable_valide_confirme'
-    )]
-    public function valideConfirmeForm(
-        EventDispatcherInterface $eventDispatcher,
-        KernelInterface $kernel,
-        ChangeRfRepository $changeRfRepository,
-        string $etape,
-        Request $request
-    ): Response {
-//todo: sans doute deprecated ??
-        if ($request->isMethod('POST')) {
-            $dir = $kernel->getProjectDir() . '/public/uploads/change_rf/pv/';
-            $demandes = explode(',', $request->request->get('demandes'));
-            if ($request->files->has('file') && $request->files->get('file') !== null) {
-                $file = $request->files->get('file');
-                $fileName = md5(uniqid('', true)) . '.' . $file->guessExtension();
-                $file->move(
-                    $dir,
-                    $fileName
-                );
-                $nomFichier = $fileName;
-            }
-
-            foreach ($demandes as $idDemande) {
-                $demande = $changeRfRepository->find($idDemande);
-                if ($demande !== null) {
-                    $dateCfvu = Tools::convertDate($request->request->get('dateCFVU'));
-                    $demande->setEtatDemande(EtatDemandeChangeRfEnum::VALIDE);
-                    $demande->setDateValidationCfvu($dateCfvu);
-                    $demande->setFichierPv($nomFichier);
-                    $formation = $demande->getFormation();
-
-                    if ($formation === null) {
-                        $this->toast('error', 'Erreur lors de la validation de la demande.');
-                        return $this->redirectToRoute('app_validation_index');
-                    }
-
-                    if ($demande->getTypeRf() === TypeRfEnum::RF) {
-                        $type = 'change_rf';
-                        $droits = ['ROLE_RESP_FORMATION'];
-                        $formation->setResponsableMention(null);
-                    } else {
-                        $droits = ['ROLE_CO_RESP_FORMATION'];
-                        $type = 'change_rf_co';
-                        $formation->setCoResponsable(null);
-                    }
-
-                    if ($demande->getNouveauResponsable() !== null) {
-                        $eventDispatcher->dispatch(new NotifCentreFormationEvent($demande->getFormation(), $demande->getNouveauResponsable(), $droits), NotifCentreFormationEvent::NOTIF_ADD_CENTRE_FORMATION);
-
-                        if ($demande->getTypeRf() === TypeRfEnum::RF) {
-                            $formation->setResponsableMention($demande->getNouveauResponsable());
-                        } else {
-                            $formation->setCoResponsable($demande->getNouveauResponsable());
-                        }
-                    }
-
-                    if ($demande->getAncienResponsable() !== null) {
-                        $eventDispatcher->dispatch(new NotifCentreFormationEvent($demande->getFormation(), $demande->getAncienResponsable(), $droits), NotifCentreFormationEvent::NOTIF_REMOVE_CENTRE_FORMATION);
-                    }
-
-                    $histo = new HistoriqueFormation();
-                    $histo->setFormation($formation);
-                    $histo->setChangeRf($demande);
-                    $histo->setEtape($type);
-                    $histo->setUser($this->getUser());
-                    $histo->setEtat('valide');
-                    $histo->setDate($dateCfvu);
-                    $histo->setComplements([
-                        'fichier' => $nomFichier
-                    ]);
-                    $this->entityManager->persist($histo);
-
-
-                    $this->entityManager->flush();
-                }
-            }
-
-            $this->toast('success', 'Demandes validées, les droits ont été modifiés.');
-            return $this->redirectToRoute('app_validation_index');
-        }
-
-        return $this->render('formation_responsable/_valide_confirm_form.html.twig', [
-            'etape' => $etape,
-            'sDemandes' => $request->query->get('demandes'),
-        ]);
-    }
+//    #[Route(
+//        '/formation/change-responsable/valide-confirm-form/{etape}',
+//        name: 'app_formation_responsable_valide_confirme'
+//    )]
+//    public function valideConfirmeForm(
+//        EventDispatcherInterface $eventDispatcher,
+//        KernelInterface $kernel,
+//        ChangeRfRepository $changeRfRepository,
+//        string $etape,
+//        Request $request
+//    ): Response {
+////todo: sans doute deprecated ??
+//        if ($request->isMethod('POST')) {
+//            $dir = $kernel->getProjectDir() . '/public/uploads/change_rf/pv/';
+//            $demandes = explode(',', $request->request->get('demandes'));
+//            if ($request->files->has('file') && $request->files->get('file') !== null) {
+//                $file = $request->files->get('file');
+//                $fileName = md5(uniqid('', true)) . '.' . $file->guessExtension();
+//                $file->move(
+//                    $dir,
+//                    $fileName
+//                );
+//                $nomFichier = $fileName;
+//            }
+//
+//            foreach ($demandes as $idDemande) {
+//                $demande = $changeRfRepository->find($idDemande);
+//                if ($demande !== null) {
+//                    $dateCfvu = Tools::convertDate($request->request->get('dateCFVU'));
+//                    $demande->setEtatDemande(EtatDemandeChangeRfEnum::VALIDE);
+//                    $demande->setDateValidationCfvu($dateCfvu);
+//                    $demande->setFichierPv($nomFichier);
+//                    $formation = $demande->getFormation();
+//
+//                    if ($formation === null) {
+//                        $this->toast('error', 'Erreur lors de la validation de la demande.');
+//                        return $this->redirectToRoute('app_validation_index');
+//                    }
+//
+//                    if ($demande->getTypeRf() === TypeRfEnum::RF) {
+//                        $type = 'change_rf';
+//                        $droits = ['ROLE_RESP_FORMATION'];
+//                        $formation->setResponsableMention(null);
+//                    } else {
+//                        $droits = ['ROLE_CO_RESP_FORMATION'];
+//                        $type = 'change_rf_co';
+//                        $formation->setCoResponsable(null);
+//                    }
+//
+//                    if ($demande->getNouveauResponsable() !== null) {
+//                        $eventDispatcher->dispatch(new NotifCentreFormationEvent($demande->getFormation(), $demande->getNouveauResponsable(), $droits), NotifCentreFormationEvent::NOTIF_ADD_CENTRE_FORMATION);
+//
+//                        if ($demande->getTypeRf() === TypeRfEnum::RF) {
+//                            $formation->setResponsableMention($demande->getNouveauResponsable());
+//                        } else {
+//                            $formation->setCoResponsable($demande->getNouveauResponsable());
+//                        }
+//                    }
+//
+//                    if ($demande->getAncienResponsable() !== null) {
+//                        $eventDispatcher->dispatch(new NotifCentreFormationEvent($demande->getFormation(), $demande->getAncienResponsable(), $droits), NotifCentreFormationEvent::NOTIF_REMOVE_CENTRE_FORMATION);
+//                    }
+//
+//                    $histo = new HistoriqueFormation();
+//                    $histo->setFormation($formation);
+//                    $histo->setChangeRf($demande);
+//                    $histo->setEtape($type);
+//                    $histo->setUser($this->getUser());
+//                    $histo->setEtat('valide');
+//                    $histo->setDate($dateCfvu);
+//                    $histo->setComplements([
+//                        'fichier' => $nomFichier
+//                    ]);
+//                    $this->entityManager->persist($histo);
+//
+//
+//                    $this->entityManager->flush();
+//                }
+//            }
+//
+//            $this->toast('success', 'Demandes validées, les droits ont été modifiés.');
+//            return $this->redirectToRoute('app_validation_index');
+//        }
+//
+//        return $this->render('formation_responsable/_valide_confirm_form.html.twig', [
+//            'etape' => $etape,
+//            'sDemandes' => $request->query->get('demandes'),
+//        ]);
+//    }
 
     #[Route(
         '/formation/change-responsable/validation-demande/{transition}/{etape}/{demande}',
