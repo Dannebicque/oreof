@@ -80,9 +80,14 @@ class GetElementConstitutif
             return $this->elementConstitutif->getMcccs();
         }
         
-        // EC enfant 
+        // EC qui a un parent avec MCCC identiques
         if($this->elementConstitutif->getEcParent()?->isMcccEnfantsIdentique()){
             return $this->elementConstitutif->getEcParent()->getMcccs();
+        }
+
+        // MCCC spécifiques sur EC
+        if($this->elementConstitutif->isMcccSpecifiques()){
+            return $this->elementConstitutif->getMcccs();
         }
 
         return $this->elementConstitutif->getFicheMatiere()?->getMcccs()
