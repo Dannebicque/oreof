@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.31.63](https://github.com/Dannebicque/oreof/compare/v1.31.62...v1.31.63) (2024-11-22)
+
+
+### Bug Fixes
+
+* Affichage bas et haut de page sur parcours ([b1faa9f](https://github.com/Dannebicque/oreof/commit/b1faa9f8655696c3cfe6cf12624ae47e2f2594d1))
+* Affichage bas et haut de page sur parcours ([78fc031](https://github.com/Dannebicque/oreof/commit/78fc031a7a86fe067dd17b91746dc1535c79870c))
+* Cas médecine ([7501fb8](https://github.com/Dannebicque/oreof/commit/7501fb823c6542b0fb97726ebcb1bcaa349bb6f1))
+* Mise à jour du PV pour change de RF ([56c55b5](https://github.com/Dannebicque/oreof/commit/56c55b51d428a0686a1daf1245459c83abf97b95))
+* target blank ([06b4e9c](https://github.com/Dannebicque/oreof/commit/06b4e9c53671ff57e804717574a22a4c60a115e8))
+* trads ([0ab8acc](https://github.com/Dannebicque/oreof/commit/0ab8acc94d7e856bf39d5ad972e1ef6265994e81))
+* trads ([786c124](https://github.com/Dannebicque/oreof/commit/786c124d5b0cd60ceaac38f51e57b34dc5c13032))
+* typo ([e208c3f](https://github.com/Dannebicque/oreof/commit/e208c3f96d3984473bb93a233e623b48b3bf6b41))
+
 ### [1.31.62](https://github.com/Dannebicque/oreof/compare/v1.31.61...v1.31.62) (2024-11-21)
 
 
