@@ -303,6 +303,7 @@ class ParcoursController extends BaseController
         $typeDiplome = $parcour->getFormation()?->getTypeDiplome();
         $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());
         return $this->render('parcours/edit.html.twig', [
+            'dpeParcours' => $dpeParcours,
             'parcours' => $parcour,
             'typeDiplome' => $typeDiplome,
             'typeD' => $typeD,
@@ -455,7 +456,7 @@ class ParcoursController extends BaseController
 
         if($lastVersion){
             $dto = $versioningParcours->loadParcoursFromVersion($lastVersion)['dto'];
-            
+
             $ficheMatiereRepo = $entityManager->getRepository(FicheMatiere::class);
 
             return $this->render('parcours/maquette_iframe.html.twig', [
@@ -723,7 +724,7 @@ class ParcoursController extends BaseController
     public function getMcccAsPdfForParcours(
         int $idParcours,
         EntityManagerInterface $entityManager
-    ) : Response|JsonResponse {  
+    ) : Response|JsonResponse {
 
         if(is_integer($idParcours) === false){
             throw $this->createNotFoundException();
@@ -731,13 +732,13 @@ class ParcoursController extends BaseController
 
         $dpe = $entityManager->getRepository(CampagneCollecte::class)->findOneBy(['defaut' => 1]);
         $annee = $dpe->getAnnee();
- 
+
         try{
             $file = file_get_contents(__DIR__ . "/../../mccc-export/MCCC-Parcours-{$idParcours}-{$annee}.pdf");
             if($file){
                 return new Response(
                     $file,
-                    200, 
+                    200,
                     [
                         'Content-Type' => 'application/pdf'
                     ]
@@ -748,7 +749,7 @@ class ParcoursController extends BaseController
             return new Response(
                 json_encode(
                     ['error' => "Le parcours n'a pas été trouvé"]
-                ), 
+                ),
                 404,
                 [
                     'Content-Type' => 'application/json'
@@ -805,7 +806,7 @@ class ParcoursController extends BaseController
         $faculteEcoleInstitut = ["-"];
         // Si on a au niveau du parcours
         if($parcoursVersionData->getComposanteInscription()?->getLibelle() !== null) {
-            
+
             $composanteInscriptionParent = $entityManager->getRepository(Parcours::class)
                 ->findOneById($parcoursVersion->getParcours()->getId())
                 ->getComposanteInscription()

@@ -15,6 +15,8 @@ use App\Entity\DpeParcours;
 use App\Entity\FicheMatiere;
 use App\Entity\Formation;
 use App\Entity\Parcours;
+use App\Enums\TypeModificationDpeEnum;
+use App\Utils\Access;
 use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\Workflow\WorkflowInterface;
 use Twig\Extension\AbstractExtension;
@@ -40,9 +42,15 @@ class WorkflowExtension extends AbstractExtension
             new TwigFunction('isRefuse', [$this, 'isRefuse']),
             new TwigFunction('isPublie', [$this, 'isPublie']),
             new TwigFunction('isPlace', [$this, 'isPlace']),
+            new TwigFunction('isAccessible', [$this, 'isAccessible']),
             new TwigFunction('hasHistorique', [$this, 'hasHistorique']),
             new TwigFunction('hasTransitions', [$this, 'hasTransitions']),
         ];
+    }
+
+    public function isAccessible(DpeParcours $dpeParcours, string $state = 'cfvu'): bool
+    {
+        return Access::isAccessible($dpeParcours, $state);
     }
 
     public function hasHistorique(
@@ -66,9 +74,9 @@ class WorkflowExtension extends AbstractExtension
     public function isPlace(string $workflow, Parcours|FicheMatiere|Formation|ChangeRf $entity, string $place): bool
     {
         //si le workflow est change_rf, supprimer de $place le début changeRf.
-//        if ($workflow === 'changeRf') {
-//            $place = str_replace('changeRf.', '', $place);
-//        }
+        //        if ($workflow === 'changeRf') {
+        //            $place = str_replace('changeRf.', '', $place);
+        //        }
 
 
         $actualPlaces = $this->getPlacesFromEntity($entity, $workflow);
@@ -186,7 +194,7 @@ class WorkflowExtension extends AbstractExtension
 
         foreach ($transitions as $transition) {
             $meta = $this->getWorkflow($worflow)->getMetadataStore()->getTransitionMetadata($transition);
-            if (array_key_exists('type', $meta) ) {
+            if (array_key_exists('type', $meta)) {
                 if (array_key_exists('display', $meta) && $meta['display'] === false) {
                     continue;
                 }
