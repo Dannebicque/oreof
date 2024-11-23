@@ -88,11 +88,11 @@ class SearchController extends AbstractController
                     ->findOneById($parcoursArray[$i]['formation_id'])
                     ->getDisplayLong() ?? "";
 
-                $resultArrayBadge[] = 
+                $resultArrayBadge[] =
                 [
-                    ...$textContains, 
+                    ...$textContains,
                     'fichesMatieres' => [...$linkedFicheMatiere],
-                    'libelleMention' => $libelleMention 
+                    'libelleMention' => $libelleMention
                 ];
 
                 $isParcoursParDefautArray[] = $parcoursArray[$i]['parcours_libelle'] === Parcours::PARCOURS_DEFAUT;
@@ -142,7 +142,7 @@ class SearchController extends AbstractController
                 ...$parcoursParDefautArray
                 ],
                 'resultArrayBadge' => $resultArrayBadge,
-                'isParcoursDefautArray' => $isParcoursParDefautArray 
+                'isParcoursDefautArray' => $isParcoursParDefautArray
             ];
         }
         elseif($typeRechercheValide === 'ficheMatiere'){
@@ -207,13 +207,14 @@ class SearchController extends AbstractController
             return [
                 $libelleMention,
                 $ficheMatiere['fiche_matiere_libelle'],
-                $ficheMatiere['fiche_matiere_slug'],     
+                $ficheMatiere['fiche_matiere_sigle'],
+                $ficheMatiere['fiche_matiere_slug'],
             ];
 
         }, $data);
 
         $excelData = [
-            ['Libellé du Parcours', 'Libellé de la fiche matière', 'Lien vers Oréof'],
+            ['Libellé du Parcours', 'Libellé de la fiche matière', 'Sigle de la fiche matière', 'Lien vers Oréof'],
             ...$data
         ];
 
@@ -222,9 +223,9 @@ class SearchController extends AbstractController
         $activeWorksheet->fromArray($excelData);
 
         foreach($activeWorksheet->getRowIterator(2, count($data)) as $row){
-            foreach($row->getCellIterator('C') as $cell){
+            foreach($row->getCellIterator('D') as $cell){
                 $cell->getHyperlink()->setUrl(
-                    $this->generateUrl('app_fiche_matiere_show', 
+                    $this->generateUrl('app_fiche_matiere_show',
                         ['slug' => $cell->getValue()],
                         UrlGeneratorInterface::ABSOLUTE_URL
                     )
@@ -235,12 +236,13 @@ class SearchController extends AbstractController
         $activeWorksheet->getColumnDimension('A')->setAutoSize(true);
         $activeWorksheet->getColumnDimension('B')->setAutoSize(true);
         $activeWorksheet->getColumnDimension('C')->setAutoSize(true);
+        $activeWorksheet->getColumnDimension('D')->setAutoSize(true);
 
 
         $now = (new DateTime())->format('d-m-Y');
         $path = __DIR__ . "/../../public/temp/";
         $filename =  "Export-recherche-fiche-matiere.xlsx";
-        
+
         if($fs->exists($path . $filename)){
             $fs->remove($path . $filename);
         }
