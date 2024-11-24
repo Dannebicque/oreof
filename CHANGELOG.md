@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.31.64](https://github.com/Dannebicque/oreof/compare/v1.31.63...v1.31.64) (2024-11-24)
+
+
+### Features
+
+* Ajout du type choix/option sur export CAP ([52f27f7](https://github.com/Dannebicque/oreof/commit/52f27f7818a3c0f070edec05e8ba553c2dcd2c3c))
+
+
+### Bug Fixes
+
+* Affichage état LHEO sur validation ([9aea323](https://github.com/Dannebicque/oreof/commit/9aea3238f6b426542b57eef74688042fdd2c10f6))
+* AJout du sigle dans l'export fiche matière recherche ([0e1924d](https://github.com/Dannebicque/oreof/commit/0e1924d9a970d7bc21c4a0b32f7be94416e1031b))
+* Blocage des onglets sur parcours selon édition ([e543a4d](https://github.com/Dannebicque/oreof/commit/e543a4da85ff62dc795b34fb55d3a18d0edda652))
+* Mise à jour du PV pour change de RF ([54a859d](https://github.com/Dannebicque/oreof/commit/54a859d6e0a52f43ce036ecc3d56c696237b9d70))
+* plaquette ([39fb216](https://github.com/Dannebicque/oreof/commit/39fb2169f750120a11fdb158c060fa01ca521fac))
+* RF/CO-RF sur parcours unique ([fc233f5](https://github.com/Dannebicque/oreof/commit/fc233f5c59e81bb8d6777db680b033504bb5c5dd))
+* target blank sur la recherche ([7c877fe](https://github.com/Dannebicque/oreof/commit/7c877feb73892028eafbf7336b5faa8d135149e1))
+* workflow change Rf ([fba990c](https://github.com/Dannebicque/oreof/commit/fba990c4cb511e460b9ac8ef67faae2b7c019d06))
+* workflow change Rf ([4c07c4c](https://github.com/Dannebicque/oreof/commit/4c07c4cbd6bd4dafde4ff5f6ccf1d030e1a4272a))
+* workflow change Rf ([43a1c9b](https://github.com/Dannebicque/oreof/commit/43a1c9bf8561a3cc140426cc1efd1eb97629bba2))
+
 ### [1.31.63](https://github.com/Dannebicque/oreof/compare/v1.31.62...v1.31.63) (2024-11-22)
 
 
