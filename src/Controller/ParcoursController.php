@@ -159,7 +159,6 @@ class ParcoursController extends BaseController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->parcoursWorkflow->apply($parcour, 'initialiser');//todo: devenu inutile a vérifier et supprimer
             $parcoursRepository->save($parcour, true);
 
             $dpeParcours = new DpeParcours();
@@ -414,34 +413,9 @@ class ParcoursController extends BaseController
         VersioningParcours $versioningParcours,
         Parcours                     $parcours,
         EntityManagerInterface       $em,
-        ElementConstitutifRepository $ecRepo,
-        UeRepository                 $ueRepository
-    ) {
+    ): Response {
 
         return $this->getValidatedMaquetteIframe($parcours, $versioningParcours, $em);
-
-        $formation = $parcours->getFormation();
-        if ($formation === null) {
-            throw $this->createNotFoundException();
-        }
-
-        if ($formation->getTypeDiplome() === null) {
-            throw $this->createNotFoundException();
-        }
-
-        if ($formation->getTypeDiplome()->getLibelleCourt() === 'BUT') {
-            $calcul = new CalculButStructureParcours();
-            $dto = $calcul->calcul($parcours);
-        } else {
-            // todo: récupérer le dernier DPE du parcours, regarder s'il est publié, si oui, cas classique, si non récupérer la version sauvegardée
-
-            $calcul = new CalculStructureParcours($em, $ecRepo, $ueRepository);
-            $dto = $calcul->calcul($parcours);
-        }
-
-        return $this->render('parcours/maquette_iframe.html.twig', [
-            'parcours' => $dto
-        ]);
     }
 
     #[Route('/{parcours}/versioning/maquette_iframe', 'app_versioning_parcours_maquette_iframe')]
@@ -449,12 +423,12 @@ class ParcoursController extends BaseController
         Parcours $parcours,
         VersioningParcours $versioningParcours,
         EntityManagerInterface $entityManager
-    ){
+    ) : Response {
         $lastVersion = $entityManager
             ->getRepository(ParcoursVersioning::class)
             ->findLastCfvuVersion($parcours)[0] ?? false;
 
-        if($lastVersion){
+        if($lastVersion) {
             $dto = $versioningParcours->loadParcoursFromVersion($lastVersion)['dto'];
 
             $ficheMatiereRepo = $entityManager->getRepository(FicheMatiere::class);
@@ -466,11 +440,10 @@ class ParcoursController extends BaseController
                 'isVersioning' => true
             ]);
         }
-        else {
-            return $this->render('parcours/maquette_iframe.html.twig', [
-                'parcours' => false
-            ]);
-        }
+
+        return $this->render('parcours/maquette_iframe.html.twig', [
+            'parcours' => false
+        ]);
     }
 
     #[Route('/{parcours}/export-xml-lheo', name: 'app_parcours_export_xml_lheo')]
@@ -726,16 +699,16 @@ class ParcoursController extends BaseController
         EntityManagerInterface $entityManager
     ) : Response|JsonResponse {
 
-        if(is_integer($idParcours) === false){
+        if(is_integer($idParcours) === false) {
             throw $this->createNotFoundException();
         }
 
         $dpe = $entityManager->getRepository(CampagneCollecte::class)->findOneBy(['defaut' => 1]);
         $annee = $dpe->getAnnee();
 
-        try{
+        try {
             $file = file_get_contents(__DIR__ . "/../../mccc-export/MCCC-Parcours-{$idParcours}-{$annee}.pdf");
-            if($file){
+            if($file) {
                 return new Response(
                     $file,
                     200,
@@ -744,8 +717,7 @@ class ParcoursController extends BaseController
                     ]
                 );
             }
-        }
-        catch(\Exception $error) {
+        } catch(\Exception $error) {
             return new Response(
                 json_encode(
                     ['error' => "Le parcours n'a pas été trouvé"]
@@ -768,7 +740,7 @@ class ParcoursController extends BaseController
         $parcoursVersion = $entityManager
             ->getRepository(ParcoursVersioning::class)
             ->findLastCfvuVersion($parcours);
-        if(count($parcoursVersion) === 0){
+        if(count($parcoursVersion) === 0) {
             throw $this->createNotFoundException('Version not found.');
         }
 
