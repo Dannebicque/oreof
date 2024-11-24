@@ -674,3 +674,6 @@ validation.valider.parcours.reserver_transmettre_ouverture_sans_cfvu.title: 'Eme
 btn.validation.soumis_central_sans_cfvu.reserve: 'Emettre des réserves'
 valide.validation.soumis_central_sans_cfvu.date.label: 'Date de publication'
 btn.validation.parcours.valider_ouverture_sans_cfvu: 'Valider et transmettre au SES'
+validation.en_cours_redaction_ss_cfvu.valide.alerte: 'Les modifications apportées à la formation ne nécessitent pas de passage en CFVU, elles seront validées par le SES et publiées.'
+validation.valider.parcours.valider_ouverture_sans_cfvu.title: 'Valider et transmettre au SES (sans CFVU)'
+btn.validation.en_cours_redaction_ss_cfvu.valide: 'Valider et transmettre au SES'

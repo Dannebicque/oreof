@@ -19,6 +19,7 @@ use App\Repository\DpeParcoursRepository;
 use App\Repository\FicheMatiereRepository;
 use App\Repository\FormationRepository;
 use App\Repository\ParcoursRepository;
+use App\Service\LheoXML;
 use App\Service\VersioningParcours;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
@@ -49,6 +50,7 @@ class ProcessValidationController extends BaseController
     public function valide(
         ParcoursRepository  $parcoursRepository,
         FicheMatiereRepository $ficheMatiereRepository,
+        LheoXML             $lheoXML,
         string              $etape,
         Request             $request
     ): Response {
@@ -57,6 +59,9 @@ class ProcessValidationController extends BaseController
         $id = $request->query->get('id');
         $process = $this->validationProcess->getEtape($etape);
         $meta = $this->validationProcess->getMetaFromTransition($transition);
+
+        $validLheo = null;
+        $xmlErrorArray = [];
 
 
         $laisserPasser = false;
@@ -89,6 +94,18 @@ class ProcessValidationController extends BaseController
                 if ($parcours === null) {
                     return JsonReponse::error('Parcours non trouvé');
                 }
+                if (array_key_exists('hasValidLheo', $meta) && $meta['hasValidLheo'] === true) {
+                    $erreursChampsParcours = $lheoXML->checkTextValuesAreLongEnough($objet);
+                    $validLheo = $lheoXML->isValidLHEO($objet);
+                    if ( $validLheo === false || count($erreursChampsParcours) > 0) {
+                        $xmlErrorArray = [];
+                        foreach (libxml_get_errors() as $xmlError) {
+                            $xmlErrorArray[] = $lheoXML->decodeErrorMessages($xmlError->message);
+                        }
+                        $xmlErrorArray = array_merge($xmlErrorArray, $erreursChampsParcours);
+                        libxml_clear_errors();
+                    }
+                }
 
                 $processData = $this->parcoursProcess->etatParcours($parcours, $process);//todo: process??
 
@@ -119,6 +136,8 @@ class ProcessValidationController extends BaseController
             'process' => $process,
             'type' => $type,
             'id' => $id,
+            'validLheo' => $validLheo,
+            'xmlErrorArray' => $xmlErrorArray,
             'etape' => $etape,
             'processData' => $processData ?? null,
             'laisserPasser' => $laisserPasser,
@@ -589,6 +608,8 @@ class ProcessValidationController extends BaseController
             $this->eventDispatcher->dispatch($dpeDemandeEvent, DpeDemandeEvent::DPE_DEMANDE_CREATED);
 
             return JsonReponse::success('Demande de réouverture enregistrée');
+            //todo: gérer une redirection vers la page edit du parcours
+            //return $this->redirectToRoute('app_parcours_edit', ['id' => $parcours->getId()]);
         }
 
         if ($this->isGranted('ROLE_SES')) {
