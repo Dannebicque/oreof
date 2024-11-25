@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.31.65](https://github.com/Dannebicque/oreof/compare/v1.31.64...v1.31.65) (2024-11-25)
+
+
+### Features
+
+* Suppression constante mail CFVU pour mettre en BDD ([11b763f](https://github.com/Dannebicque/oreof/commit/11b763f6a4e2b95996efa1a517b73ff32bad8007))
+
+
+### Bug Fixes
+
+* PDF avec header/footer pour les plaquettes ([1693bcd](https://github.com/Dannebicque/oreof/commit/1693bcdbfaadcd3e1f47091aa13f5c044c245846))
+* suppression code inutile iframe versionné ([b7b8b0a](https://github.com/Dannebicque/oreof/commit/b7b8b0a13c53a9ed2933889dce437e5623692920))
+
 ### [1.31.64](https://github.com/Dannebicque/oreof/compare/v1.31.63...v1.31.64) (2024-11-24)
 
 
