@@ -135,7 +135,7 @@ class MyGotenbergPdf
             if (array_key_exists('composante', $context) && $context['composante']->getHeaderPlaquette() !== null) {
                 $imageData = file_get_contents($this->options['baseUrl'] . '/images/'.$context['composante']->getHeaderPlaquette());
             } else {
-                $imageData = file_get_contents($this->options['baseUrl'] . '/images/header_sen.jpg');
+                $imageData = file_get_contents($this->options['baseUrl'] . '/images/header.jpg');
             }
             $base64Image = base64_encode($imageData);
         } else {
