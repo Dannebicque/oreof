@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.31.66](https://github.com/Dannebicque/oreof/compare/v1.31.65...v1.31.66) (2024-11-25)
+
+
+### Bug Fixes
+
+* LHEO ([3490095](https://github.com/Dannebicque/oreof/commit/34900954fac3abe1727955d87442e0ef46a469ec))
+* PDF avec header/footer pour les plaquettes ([a66e145](https://github.com/Dannebicque/oreof/commit/a66e145f6a0d510ed03e957c8a05b3a807cd2182))
+
 ### [1.31.65](https://github.com/Dannebicque/oreof/compare/v1.31.64...v1.31.65) (2024-11-25)
 
 
