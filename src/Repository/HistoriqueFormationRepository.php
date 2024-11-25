@@ -64,4 +64,18 @@ class HistoriqueFormationRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function findByChangeRfLastStep(?\App\Entity\ChangeRf $changeRf, string $step): ?HistoriqueFormation
+    {
+        $data = $this->createQueryBuilder('h')
+            ->where('h.changeRf = :changeRf')
+            ->andWhere('h.etape = :step')
+            ->setParameter('changeRf', $changeRf)
+            ->setParameter('step', $step)
+            ->orderBy('h.date', 'DESC')
+            ->getQuery()
+            ->getResult();
+
+        return count($data) > 0 ? $data[0] : null;
+    }
 }

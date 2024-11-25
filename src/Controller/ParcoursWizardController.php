@@ -11,6 +11,7 @@ namespace App\Controller;
 
 use App\Classes\Bcc;
 use App\Classes\JsonReponse;
+use App\Entity\DpeParcours;
 use App\Entity\FicheMatiere;
 use App\Entity\Parcours;
 use App\Form\ParcoursStep1Type;
@@ -23,6 +24,7 @@ use App\Repository\FicheMatiereMutualisableRepository;
 use App\Repository\FormationRepository;
 use App\Repository\ParcoursRepository;
 use App\TypeDiplome\TypeDiplomeRegistry;
+use App\Utils\Access;
 use App\Utils\JsonRequest;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -39,9 +41,15 @@ class ParcoursWizardController extends AbstractController
         return $this->render('formation/index.html.twig');
     }
 
-    #[Route('/{parcours}/1', name: 'app_parcours_wizard_step_1', methods: ['GET'])]
-    public function step1(Parcours $parcours): Response
+    #[Route('/{dpeParcours}/1', name: 'app_parcours_wizard_step_1', methods: ['GET'])]
+    public function step1(DpeParcours $dpeParcours): Response
     {
+        if (!Access::isAccessible($dpeParcours, 'ss_cfvu')) {
+            return $this->render('parcours_wizard/_access_denied.html.twig');
+        }
+
+        $parcours = $dpeParcours->getParcours();
+
         $form = $this->createForm(ParcoursStep1Type::class, $parcours);
 
         return $this->render('parcours_wizard/_step1.html.twig', [
@@ -53,10 +61,16 @@ class ParcoursWizardController extends AbstractController
     /**
      * @throws \App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException
      */
-    #[Route('/{parcours}/2', name: 'app_parcours_wizard_step_2', methods: ['GET'])]
+    #[Route('/{dpeParcours}/2', name: 'app_parcours_wizard_step_2', methods: ['GET'])]
     public function step2(
-        Parcours $parcours
+        DpeParcours $dpeParcours
     ): Response {
+        if (!Access::isAccessible($dpeParcours, 'ss_cfvu')) {
+            return $this->render('parcours_wizard/_access_denied.html.twig');
+        }
+
+        $parcours = $dpeParcours->getParcours();
+
         $form = $this->createForm(ParcoursStep2Type::class, $parcours, [
             'typeDiplome' => $parcours->getTypeDiplome(),
         ]);
@@ -68,12 +82,18 @@ class ParcoursWizardController extends AbstractController
         ]);
     }
 
-    #[Route('/{parcours}/3', name: 'app_parcours_wizard_step_3', methods: ['GET'])]
+    #[Route('/{dpeParcours}/3', name: 'app_parcours_wizard_step_3', methods: ['GET'])]
     public function step3(
         TypeDiplomeRegistry $typeDiplomeRegistry,
         ParcoursRepository $parcoursRepository,
-        Parcours $parcours
+        DpeParcours $dpeParcours
     ): Response {
+        if (!Access::isAccessible($dpeParcours, 'cfvu')) {
+            return $this->render('parcours_wizard/_access_denied.html.twig');
+        }
+
+        $parcours = $dpeParcours->getParcours();
+
         $typeDiplome = $typeDiplomeRegistry->getTypeDiplome($parcours->getFormation()->getTypeDiplome()->getModeleMcc());
         $listeParcours = $parcoursRepository->findBy(['formation' => $parcours->getFormation()]);
         return $this->render('parcours_wizard/_step3.html.twig', [
@@ -84,9 +104,15 @@ class ParcoursWizardController extends AbstractController
         ]);
     }
 
-    #[Route('/{parcours}/4', name: 'app_parcours_wizard_step_4', methods: ['GET'])]
-    public function step4(ParcoursRepository $parcoursRepository, Parcours $parcours): Response
+    #[Route('/{dpeParcours}/4', name: 'app_parcours_wizard_step_4', methods: ['GET'])]
+    public function step4(ParcoursRepository $parcoursRepository, DpeParcours $dpeParcours): Response
     {
+        if (!Access::isAccessible($dpeParcours, 'cfvu')) {
+            return $this->render('parcours_wizard/_access_denied.html.twig');
+        }
+
+        $parcours = $dpeParcours->getParcours();
+
         $listeParcours = $parcoursRepository->findBy(['formation' => $parcours->getFormation()]);
         return $this->render('parcours_wizard/_step4.html.twig', [
             'parcours' => $parcours,
@@ -153,9 +179,15 @@ class ParcoursWizardController extends AbstractController
         return $this->json($t);
     }
 
-    #[Route('/{parcours}/5', name: 'app_parcours_wizard_step_5', methods: ['GET'])]
-    public function step5(Parcours $parcours): Response
+    #[Route('/{dpeParcours}/5', name: 'app_parcours_wizard_step_5', methods: ['GET'])]
+    public function step5(DpeParcours $dpeParcours): Response
     {
+        if (!Access::isAccessible($dpeParcours, 'ss_cfvu')) {
+            return $this->render('parcours_wizard/_access_denied.html.twig');
+        }
+
+        $parcours = $dpeParcours->getParcours();
+
         $form = $this->createForm(ParcoursStep5Type::class, $parcours);
 
         return $this->render('parcours_wizard/_step5.html.twig', [
@@ -164,9 +196,15 @@ class ParcoursWizardController extends AbstractController
         ]);
     }
 
-    #[Route('/{parcours}/6', name: 'app_parcours_wizard_step_6', methods: ['GET'])]
-    public function step6(Parcours $parcours): Response
+    #[Route('/{dpeParcours}/6', name: 'app_parcours_wizard_step_6', methods: ['GET'])]
+    public function step6(DpeParcours $dpeParcours): Response
     {
+        if (!Access::isAccessible($dpeParcours, 'ss_cfvu')) {
+            return $this->render('parcours_wizard/_access_denied.html.twig');
+        }
+
+        $parcours = $dpeParcours->getParcours();
+
         $form = $this->createForm(ParcoursStep6Type::class, $parcours);
 
         return $this->render('parcours_wizard/_step6.html.twig', [
@@ -175,9 +213,15 @@ class ParcoursWizardController extends AbstractController
         ]);
     }
 
-    #[Route('/{parcours}/7', name: 'app_parcours_wizard_step_7', methods: ['GET'])]
-    public function step7(Parcours $parcours): Response
+    #[Route('/{dpeParcours}/7', name: 'app_parcours_wizard_step_7', methods: ['GET'])]
+    public function step7(DpeParcours $dpeParcours): Response
     {
+        if (!Access::isAccessible($dpeParcours, 'ss_cfvu')) {
+            return $this->render('parcours_wizard/_access_denied.html.twig');
+        }
+
+        $parcours = $dpeParcours->getParcours();
+
         $form = $this->createForm(ParcoursStep7Type::class, $parcours);
 
         return $this->render('parcours_wizard/_step7.html.twig', [

@@ -62,7 +62,8 @@ class ExportCap
         $this->excelWriter->writeCellXY(12, 1, 'TD');
         $this->excelWriter->writeCellXY(13, 1, 'TP');
         $this->excelWriter->writeCellXY(14, 1, 'MATI/MATM');
-        $this->excelWriter->writeCellXY(15, 1, 'Semestre');
+        $this->excelWriter->writeCellXY(15, 1, 'Option');
+        $this->excelWriter->writeCellXY(16, 1, 'Semestre');
 
         $this->ligne = 2;
         foreach ($formations as $idFormation) {
@@ -88,9 +89,8 @@ class ExportCap
                         foreach ($sem->ues as $ue) {
                             if ($ue->ue->getNatureUeEc()?->isChoix()) {
                                 foreach ($ue->uesEnfants() as $ueEnfant) {
-
                                     if ($ueEnfant->ue->getNatureUeEc()?->isLibre() === false) {
-                                        $this->getEcFromUe($ueEnfant, $sem->semestreParcours);
+                                        $this->getEcFromUe($ueEnfant, $sem->semestreParcours, true);
                                     }
                                 }
                             } elseif ($ue->ue->getNatureUeEc()?->isLibre() === false) {
@@ -107,22 +107,22 @@ class ExportCap
         $this->fileName = Tools::FileName('EXPORT-CAP - ' . (new DateTime())->format('d-m-Y-H-i'), 30);
     }
 
-    private function getEcFromUe(StructureUe $ue, ?SemestreParcours $codeApogeeParcours): void
+    private function getEcFromUe(StructureUe $ue, ?SemestreParcours $codeApogeeParcours, bool $option = false): void
     {
 
         foreach ($ue->elementConstitutifs as $ec) {
             if ($ec->elementConstitutif->getNatureUeEc()?->isChoix()) {
 
                 foreach ($ec->elementsConstitutifsEnfants as $ecEnfant) {
-                    $this->getEc($ecEnfant, $codeApogeeParcours);
+                    $this->getEc($ecEnfant, $codeApogeeParcours, true);
                 }
             } else {
-                $this->getEc($ec, $codeApogeeParcours);
+                $this->getEc($ec, $codeApogeeParcours, $option);
             }
         }
     }
 
-    private function getEc(StructureEc $ec, ?SemestreParcours $semestreParcours): void
+    private function getEc(StructureEc $ec, ?SemestreParcours $semestreParcours, bool $option = false): void
     {
 
         if ($ec->elementConstitutif->getNatureUeEc()?->isLibre() === false) {
@@ -137,7 +137,8 @@ class ExportCap
             $this->excelWriter->writeCellXY(12, $this->ligne, $ec->heuresEctsEc->tdPres);
             $this->excelWriter->writeCellXY(13, $this->ligne, $ec->heuresEctsEc->tpPres);
             $this->excelWriter->writeCellXY(14, $this->ligne, $ec->elementConstitutif->getFicheMatiere()?->getTypeApogee() ?? '-');
-            $this->excelWriter->writeCellXY(15, $this->ligne, $this->data[5]);
+            $this->excelWriter->writeCellXY(15, $this->ligne, $option ? 'Choix/option' : 'Obligatoire');
+            $this->excelWriter->writeCellXY(16, $this->ligne, $this->data[5]);
             $this->ligne++;
         }
     }

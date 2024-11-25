@@ -26,6 +26,7 @@ final class ChangeRfState
         'changeRf.soumis_conseil' => 0,
         'changeRf.soumis_ses' => 1,
         'changeRf.soumis_cfvu' => 2,
+        'changeRf.attente_pv' => 2,
     ];
 
     public function __construct(

@@ -165,7 +165,7 @@ class ExportBcc implements ExportInterface
                                 } else {
                                     foreach ($ue->getUeEnfants() as $uee) {
                                         foreach ($uee->getElementConstitutifs() as $ec) {
-                                            $this->excelWriter->writeCellXY($col, $ligne, $competence->getFicheMatieress()->contains($ec->getFicheMatiere()) ? 'X' : '', [
+                                            $this->excelWriter->writeCellXY($col, $ligne, $competence->getFicheMatieres()->contains($ec->getFicheMatiere()) ? 'X' : '', [
                                                 'style' => 'HORIZONTAL_CENTER',
                                                 'valign' => 'VERTICAL_CENTER'
                                             ]);

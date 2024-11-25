@@ -22,8 +22,14 @@ class RemplissageExtension extends AbstractExtension
         ];
     }
 
-    public function remplissage(Remplissage|float $value): string
+    public function remplissage(Remplissage|float|null $value): string
     {
+        if ($value === null) {
+            return '<div class="progress sh-2">
+                        <div class="progress-bar bg-danger" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">Non complété</div>
+                    </div>';
+        }
+
         if ($value instanceof Remplissage) {
             $value = $value->calcul();
         }

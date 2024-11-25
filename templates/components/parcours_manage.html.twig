@@ -103,7 +103,8 @@
                                         {# todo: vérifier si le RP peut valider niveau RF? #}
                                         {% if
                                             (is_granted('CAN_FORMATION_VALIDATE_MY', this.formation) or is_granted('CAN_FORMATION_VALIDATE_ALL')) or
-                                            (is_granted('CAN_PARCOURS_VALIDATE_MY', this.parcours) or is_granted('CAN_PARCOURS_VALIDATE_ALL')) %}
+                                            (is_granted('CAN_PARCOURS_VALIDATE_MY', this.parcours) or is_granted('CAN_PARCOURS_VALIDATE_ALL')) or
+                                            is_granted('CAN_PARCOURS_VALIDATE_MY', this.dpeParcours) %}
                                             {% for key, state in hasTransitions(this.dpeParcours) %}
                                                 {% for keyTrans, transition in state %}
                                                     <div class="col-4 d-grid">

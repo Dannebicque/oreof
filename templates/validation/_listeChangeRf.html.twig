@@ -28,6 +28,9 @@
                 Etat
             </th>
             <th>
+                PV ?
+            </th>
+            <th>
                 Actions
             </th>
         </tr>
@@ -67,11 +70,15 @@
                     {{ demande.etatDemande|badgeChangeRf }}
                 </td>
                 <td>
+                    {{ component('historique_pv', {changeRf:demande, type:'change_rf'}) }}
+                </td>
+                <td>
                     <a href="{{ path('app_formation_show',{'slug': demande.formation.slug}) }}"
                        class="btn btn-sm text-info"
                        data-bs-toggle="tooltip"
                        data-bs-placement="bottom"
                        title="Voir la formation"
+                       target="_blank"
                     >
                         <i class="{{ iconShow }}"></i>
                         <span> Voir</span>

@@ -253,11 +253,15 @@ framework:
             label: 'validation.soumis_conseil_reserve'
         en_cours_redaction_ss_cfvu:
           metadata:
-            process: false
+            process: true
+            icon: 'fa-paper-plane'
+            isTimeline: false
             label: 'validation.en_cours_redaction_ss_cfvu'
         soumis_central_sans_cfvu:
           metadata:
-            process: false
+            process: true
+            icon: 'fa-school-circle-check'
+            isTimeline: false
             label: 'validation.soumis_central_sans_cfvu'
         soumis_central_reserve_cfvu:
           metadata:
@@ -382,6 +386,7 @@ framework:
             type: valider
             btn: success
             icon: fa-check
+            hasValidLheo: true
         refuser_definitif_cfvu:
           from: 'soumis_cfvu'
           to: 'refuse_definitif_cfvu'
@@ -442,6 +447,7 @@ framework:
             btn: success
             icon: fa-check
             hasDate: true
+            hasValidLheo: true
         publier:
           from: 'valide_a_publier'
           to: 'publie'
@@ -476,6 +482,8 @@ framework:
           metadata:
             type: valider
             btn: success
+            hasDate: true
+            hasValidLheo: true
             icon: fa-check
         reserver_transmettre_ouverture_sans_cfvu:
           from: 'soumis_central_sans_cfvu'

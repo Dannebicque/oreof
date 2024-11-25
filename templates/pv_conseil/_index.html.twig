@@ -3,7 +3,7 @@
     message: ('deposer.fichier.valide.alerte')|trans({}, 'process')|nl2br|raw
 }) }}
 
-<form action="{{ path('app_deposer_pv_conseil', {parcours:parcours.id}) }}" method="post"
+<form action="{{ type is defined and type == 'change_rf' ? path('app_deposer_pv_conseil_change_rf', {changeRf:changeRf.id}) : path('app_deposer_pv_conseil', {parcours:parcours.id}) }}" method="post"
       enctype="multipart/form-data">
     <div>
         <label for="dateconseil" class="form-label">{{ ('valide.date.conseil.label')|trans({}, 'process') }} <i
