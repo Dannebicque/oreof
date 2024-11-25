@@ -72,6 +72,10 @@ class VersioningParcoursCommand extends Command
             name: 'with-skip-option',
             mode: InputOption::VALUE_NONE,
             description: "Ne sauvegarde pas une version de parcours, si la dernière version est validée CFVU"
+        )->addOption(
+            name: 'single-parcours',
+            mode: InputOption::VALUE_REQUIRED,
+            description: "Sauvegarde un seul parcours qui est à l'état validé. Préciser l'ID"
         );
     }
 
@@ -83,6 +87,8 @@ class VersioningParcoursCommand extends Command
 
         $dpeFullValidDatabase = $input->getOption('dpe-full-valid-database');
         $dpeTodayCfvuValid = $input->getOption('dpe-today-cfvu-valid');
+
+        $singleParcours = $input->getOption('single-parcours');
 
         $withSkipOption = $input->getOption('with-skip-option');
 
@@ -194,8 +200,54 @@ class VersioningParcoursCommand extends Command
                 return Command::FAILURE;
             }
         }
+        if($singleParcours){
+            $io->writeln("Sauvegarde d'un parcours dans un fichier JSON");
+            if(is_numeric($singleParcours) === false){
+                $io->warning("L'identifiant du parcours doit être un nombre. '{$singleParcours}'");
+                return Command::INVALID;
+            }
+            $io->writeln("Récupération du parcours...");
+            $parcoursToSave = $this->entityManager->getRepository(Parcours::class)->findOneById($singleParcours);
+            if($parcoursToSave){
+                $io->writeln("\n[O.K] " . $parcoursToSave->getFormation()->getDisplayLong() . " - " . $parcoursToSave->getDisplay());
+                $io->writeln("\n[Sauvegarde CFVU]");
+                $continue = $io->ask("Voulez-vous procéder à la sauvegarde ? [Y/n]", 'n', function($answer){
+                    return $answer === "Y";
+                });
+
+                if($continue === false){
+                    $io->writeln("Pas de confirmation. La commande s'arrête.");
+                    return Command::SUCCESS;
+                }
+
+                // On ne sauvegarde le parcours que s'il est à un état validé ['valide_a_publier', 'publie']
+                $haystack = [
+                    ['valide_a_publier' => 1],
+                    ['publie' => 1]
+                ];
+                if(in_array($parcoursToSave->getDpeParcours()->last()->getEtatValidation(), $haystack)){
+                    $io->writeln("Sauvegarde en cours...");
+                    $this->versioningParcours->saveVersionOfParcours(
+                        $parcoursToSave,
+                        new DateTimeImmutable('now'),
+                        isCfvu: true
+                    );
+                    $this->entityManager->flush();
+
+                    $io->success("Sauvegarde réussie !");
+                    return Command::SUCCESS;
+                }else {
+                    $io->warning("Le parcours n'est pas à un état validé. La sauvegarde ne s'exécutera pas.");
+                    return Command::FAILURE;
+                }
+
+            }else {
+                $io->warning("Aucun parcours ne correspond pour cet identifiant. ({$singleParcours})");
+                return Command::INVALID;
+            }
+        }
         
-        $io->warning("Option de la commande non reconnue. Choix possibles : ['dpe-full-valid-database', 'dpe-today-cfvu-valid']");
+        $io->warning("Option de la commande non reconnue. Choix possibles : ['single-parcours', 'dpe-full-valid-database', 'dpe-today-cfvu-valid']");
         return Command::INVALID;
     }
 
