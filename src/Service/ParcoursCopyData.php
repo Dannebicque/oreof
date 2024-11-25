@@ -372,7 +372,9 @@ class ParcoursCopyData {
     public function placeMcccSpecifiquesFlag(StructureEc $structEc){
         $mcccFromFiche = null;
         if($structEc->elementConstitutif->getFicheMatiere()){
-            $mcccFromFiche = $this->mcccCopyDataArray[$structEc->elementConstitutif->getFicheMatiere()->getId()];
+            if(array_key_exists($structEc->elementConstitutif->getFicheMatiere()->getId(), $this->mcccCopyDataArray)){
+                $mcccFromFiche = $this->mcccCopyDataArray[$structEc->elementConstitutif->getFicheMatiere()->getId()];
+            }
         }
         if($mcccFromFiche){
             usort($mcccFromFiche, fn($a, $b) => $a->getId() <=> $b->getId());
