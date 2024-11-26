@@ -338,17 +338,37 @@ class ParcoursCopyData {
         $ecFromParcours = $structEc->elementConstitutif->getParcours()?->getId() 
             === $structEc->elementConstitutif->getFicheMatiere()?->getParcours()?->getId();
 
+        // Si c'est l'EC porteur
         $isEcPorteur = false;
         if($ecFromParcours && $structEc->elementConstitutif->getParcours()->getId() === $parcoursId){
             $isEcPorteur = true;
             $ficheMatierePorteuse = $structEc->elementConstitutif->getFicheMatiere();
         }
 
+        $isEcOnlyOne = false;
+        // Si la fiche matière n'est liée qu'à un seul EC
+        if($ecFromFiche = $structEc->elementConstitutif->getFicheMatiere()?->getElementConstitutifs()){
+            if(count($ecFromFiche) === 1 && !$isEcPorteur){
+                $ficheMatierePorteuse = $structEc->elementConstitutif->getFicheMatiere();
+                $isEcOnlyOne = true;
+            }
+        }
+
+        // Si l'EC fait partie d'une UE mutualisée (porté par un autre parcours)
+        if($structEc->elementConstitutif->getUe()?->getUeMutualisables()->count() > 0){
+            if($structEc->elementConstitutif->getUe()->getSemestre()->getSemestreParcours()
+                ->first()->getParcours()->getId() === $parcoursId
+            ){
+                $ficheMatierePorteuse = $structEc->elementConstitutif->getFicheMatiere();
+                $isEcPorteur = true;
+            }
+        }
+
         // Si les MCCC sont sur l'EC
         if(!$structEc->elementConstitutif->getFicheMatiere()?->isMcccImpose()){
            if($ficheMatierePorteuse){
                 foreach($structEc->mcccs as $mccc){
-                    if($isEcPorteur){
+                    if($isEcPorteur || $isEcOnlyOne){
                         $mcccCopy = $this->mcccCopyRepo->find($mccc->getId());
                         $ficheMatiereCopy = $this->fmCopyRepo->find($ficheMatierePorteuse->getId());
                         $mcccCopy->setFicheMatiere($ficheMatiereCopy);
@@ -370,20 +390,24 @@ class ParcoursCopyData {
      * Il n'y a plus besoin de sélectionner l'élément en BD
      */
     public function placeMcccSpecifiquesFlag(StructureEc $structEc){
-        $mcccFromFiche = null;
+        $isMcccParentIdentique = $structEc->elementConstitutif->getEcParent()?->isMcccEnfantsIdentique();
+        $mcccResult = null;
         if($structEc->elementConstitutif->getFicheMatiere()){
             if(array_key_exists($structEc->elementConstitutif->getFicheMatiere()->getId(), $this->mcccCopyDataArray)){
-                $mcccFromFiche = $this->mcccCopyDataArray[$structEc->elementConstitutif->getFicheMatiere()->getId()];
+                $mcccResult = $this->mcccCopyDataArray[$structEc->elementConstitutif->getFicheMatiere()->getId()];
             }
         }
-        if($mcccFromFiche){
-            usort($mcccFromFiche, fn($a, $b) => $a->getId() <=> $b->getId());
+        if($isMcccParentIdentique){
+            $mcccResult = $structEc->elementConstitutif->getEcParent()->getMcccs()->toArray();
+        }
+        if($mcccResult){
+            usort($mcccResult, fn($a, $b) => $a->getId() <=> $b->getId());
             usort($structEc->mcccs, fn($a, $b) => $a->getId() <=> $b->getId());
 
-            if(count($mcccFromFiche) === count($structEc->mcccs)){
+            if(count($mcccResult) === count($structEc->mcccs)){
                 $mcccAreEqual = true;
                 foreach($structEc->mcccs as $index => $value){
-                    if($this->compareTwoMCCC($structEc->mcccs[$index], $mcccFromFiche[$index]) === false){
+                    if($this->compareTwoMCCC($structEc->mcccs[$index], $mcccResult[$index]) === false){
                         $mcccAreEqual = false;
                     }
                 }
@@ -582,7 +606,7 @@ class ParcoursCopyData {
                 foreach($ec->mcccs as $indexMccc => $mccc){
                     $mcccTest = $this->compareTwoMCCC(
                         $mccc,
-                        $ue2->elementConstitutifs[$indexEc]->mcccs[$indexMccc],
+                        $ue2->elementConstitutifs[$indexEc]?->mcccs[$indexMccc] ?? null,
                         $parcoursId,
                         $ue1->display . " " . $ec->elementConstitutif->getCode()
                     );
@@ -592,7 +616,7 @@ class ParcoursCopyData {
                     foreach($ecEnfant->mcccs as $indexMcccEnfant => $mcccEnfant){
                         $mcccEnfantTest = $this->compareTwoMCCC(
                             $mcccEnfant,
-                            $ue2->elementConstitutifs[$indexEc]->elementsConstitutifsEnfants[$indexEcEnfant]->mcccs[$indexMcccEnfant],
+                            $ue2->elementConstitutifs[$indexEc]?->elementsConstitutifsEnfants[$indexEcEnfant]?->mcccs[$indexMcccEnfant] ?? null,
                             $parcoursId,
                             $ue1->display . " " . $ec->elementConstitutif->getCode()
                         );
