@@ -388,7 +388,7 @@ class ParcoursCopyData {
                 if(array_key_exists($ficheMatierePorteuse->getId(), $this->mcccCopyDataArray) === false){
                     $this->mcccCopyDataArray[$ficheMatierePorteuse->getId()] = [];
                     foreach($structEc->mcccs as $mccc){
-                        if($isEcPorteur || $isEcOnlyOne){
+                        if($isEcPorteur || $isEcOnlyOne || !$hasFicheMatiereEcPorteur){
                             $mcccCopy = $this->mcccCopyRepo->find($mccc->getId());
                             $ficheMatiereCopy = $this->fmCopyRepo->find($ficheMatierePorteuse->getId());
                             $mcccCopy->setFicheMatiere($ficheMatiereCopy);
