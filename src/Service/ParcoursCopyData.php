@@ -932,7 +932,7 @@ class ParcoursCopyData {
         if($mccc1 !== null && $mccc2 !== null){
             if($mccc1->getLibelle() !== $mccc2->getLibelle()){
                 $retour = false;
-                $variableError[] = "Libellé";
+                $variableError[] = "Libellé - {$mccc1->getLibelle()} | {$mccc2->getLibelle()}";
             }
             if($mccc1->getNumeroSession() !== $mccc2->getNumeroSession()){
                 $retour = false;
