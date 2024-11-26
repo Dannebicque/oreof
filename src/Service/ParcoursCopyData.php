@@ -334,6 +334,17 @@ class ParcoursCopyData {
         int $parcoursId
     ){
         $ficheMatierePorteuse = null;
+        $ficheMatiereSource = $structEc->elementConstitutif->getFicheMatiere();
+
+        $hasFicheMatiereEcPorteur = null;
+        if($ficheMatiereSource){
+            $hasFicheMatiereEcPorteur = array_filter(
+                $ficheMatiereSource->getElementConstitutifs()->toArray(), 
+                fn($ecFM) => $ecFM->getParcours()?->getId() === $ficheMatiereSource->getParcours()?->getId()
+                    && $ecFM->getParcours()?->getId() !== null && $ficheMatiereSource->getParcours()?->getId() !== null
+            );
+            $hasFicheMatiereEcPorteur = count($hasFicheMatiereEcPorteur) > 0;
+        }
 
         $ecFromParcours = $structEc->elementConstitutif->getParcours()?->getId() 
             === $structEc->elementConstitutif->getFicheMatiere()?->getParcours()?->getId();
@@ -342,6 +353,11 @@ class ParcoursCopyData {
         $isEcPorteur = false;
         if($ecFromParcours && $structEc->elementConstitutif->getParcours()->getId() === $parcoursId){
             $isEcPorteur = true;
+            $ficheMatierePorteuse = $structEc->elementConstitutif->getFicheMatiere();
+        }
+
+        // Si la fiche matière n'a pas d'EC porteur
+        if($hasFicheMatiereEcPorteur === false){
             $ficheMatierePorteuse = $structEc->elementConstitutif->getFicheMatiere();
         }
 
@@ -365,20 +381,21 @@ class ParcoursCopyData {
         }
 
         // Si les MCCC sont sur l'EC
-        if(!$structEc->elementConstitutif->getFicheMatiere()?->isMcccImpose()){
+        if(!$structEc->elementConstitutif->getFicheMatiere()?->isMcccImpose() 
+           && !$structEc->elementConstitutif->getFicheMatiere()?->isHorsDiplome()
+        ){
            if($ficheMatierePorteuse){
-                foreach($structEc->mcccs as $mccc){
-                    if($isEcPorteur || $isEcOnlyOne){
-                        $mcccCopy = $this->mcccCopyRepo->find($mccc->getId());
-                        $ficheMatiereCopy = $this->fmCopyRepo->find($ficheMatierePorteuse->getId());
-                        $mcccCopy->setFicheMatiere($ficheMatiereCopy);
+                if(array_key_exists($ficheMatierePorteuse->getId(), $this->mcccCopyDataArray) === false){
+                    $this->mcccCopyDataArray[$ficheMatierePorteuse->getId()] = [];
+                    foreach($structEc->mcccs as $mccc){
+                        if($isEcPorteur || $isEcOnlyOne){
+                            $mcccCopy = $this->mcccCopyRepo->find($mccc->getId());
+                            $ficheMatiereCopy = $this->fmCopyRepo->find($ficheMatierePorteuse->getId());
+                            $mcccCopy->setFicheMatiere($ficheMatiereCopy);
 
-                        if(array_key_exists($ficheMatiereCopy->getId(), $this->mcccCopyDataArray) === false){
-                            $this->mcccCopyDataArray[$ficheMatiereCopy->getId()] = [];
+                            $this->mcccCopyDataArray[$ficheMatiereCopy->getId()][] = $mccc;
+                            $this->entityManagerCopy->persist($mcccCopy);
                         }
-                        $this->mcccCopyDataArray[$ficheMatiereCopy->getId()][] = $mccc;
-
-                        $this->entityManagerCopy->persist($mcccCopy);
                     }
                 }
            }
