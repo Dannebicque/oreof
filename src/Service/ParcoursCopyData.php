@@ -357,6 +357,7 @@ class ParcoursCopyData {
         }
 
         // Si la fiche matière n'a pas d'EC porteur
+        // Les fiches hors diplôme devraient être traitées ici
         if($hasFicheMatiereEcPorteur === false){
             $ficheMatierePorteuse = $structEc->elementConstitutif->getFicheMatiere();
         }
@@ -381,9 +382,7 @@ class ParcoursCopyData {
         }
 
         // Si les MCCC sont sur l'EC
-        if(!$structEc->elementConstitutif->getFicheMatiere()?->isMcccImpose() 
-           && !$structEc->elementConstitutif->getFicheMatiere()?->isHorsDiplome()
-        ){
+        if(!$structEc->elementConstitutif->getFicheMatiere()?->isMcccImpose()){
            if($ficheMatierePorteuse){
                 if(array_key_exists($ficheMatierePorteuse->getId(), $this->mcccCopyDataArray) === false){
                     $this->mcccCopyDataArray[$ficheMatierePorteuse->getId()] = [];
