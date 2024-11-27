@@ -15,6 +15,7 @@ use App\Enums\TypeModificationDpeEnum;
 abstract class Access {
     public static function isAccessible(DpeParcours $dpeParcours, string $state = 'cfvu'): bool
     {
+        //todo: intégrer le isGranted ici ou dans les vues ?
         if ($state === 'cfvu') {
             return $dpeParcours->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_MCCC || $dpeParcours->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_MCCC_TEXTE;
         }

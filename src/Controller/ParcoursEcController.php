@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Classes\GetDpeParcours;
 use App\Classes\JsonReponse;
 use App\Entity\Parcours;
 use App\Repository\ElementConstitutifRepository;
@@ -62,6 +63,7 @@ class ParcoursEcController extends AbstractController
 
         return $this->render('parcours_ec/index.html.twig', [
             'parcours' => $parcours,
+            'dpeParcours' => GetDpeParcours::getFromParcours($parcours),
             'tabEcs' => $tabEcs,
             'typesEc' => $typeEcRepository->findByTypeDiplome($parcours->getFormation()->getTypeDiplome())
         ]);
