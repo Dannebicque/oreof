@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.31.67](https://github.com/Dannebicque/oreof/compare/v1.31.66...v1.31.67) (2024-11-27)
+
+
+### Bug Fixes
+
+* Sécurisation des entrées dans la page de contrôle ([9933e9a](https://github.com/Dannebicque/oreof/commit/9933e9aea8905f959edcc6ed4abe6c6136c7427e))
+
 ### [1.31.66](https://github.com/Dannebicque/oreof/compare/v1.31.65...v1.31.66) (2024-11-25)
 
 
