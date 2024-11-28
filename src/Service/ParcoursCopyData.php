@@ -619,25 +619,21 @@ class ParcoursCopyData {
         }
         if($result){
             foreach($ue1->elementConstitutifs as $indexEc => $ec){
-                foreach($ec->mcccs as $indexMccc => $mccc){
-                    $mcccTest = $this->compareTwoMCCC(
-                        $mccc,
-                        $ue2->elementConstitutifs[$indexEc]?->mcccs[$indexMccc] ?? null,
-                        $parcoursId,
-                        $ue1->display . " " . $ec->elementConstitutif->getCode()
-                    );
-                    $result = $result && $mcccTest;
-                }
+                $mcccTest = $this->compareTwoMcccArray(
+                    $ec->mcccs,
+                    $ue2->elementConstitutifs[$indexEc]?->mcccs ?? [],
+                    $parcoursId,
+                    $ue1->display . " " . $ec->elementConstitutif->getCode()
+                );
+                $result = $result && $mcccTest;
                 foreach($ec->elementsConstitutifsEnfants as $indexEcEnfant => $ecEnfant){
-                    foreach($ecEnfant->mcccs as $indexMcccEnfant => $mcccEnfant){
-                        $mcccEnfantTest = $this->compareTwoMCCC(
-                            $mcccEnfant,
-                            $ue2->elementConstitutifs[$indexEc]?->elementsConstitutifsEnfants[$indexEcEnfant]?->mcccs[$indexMcccEnfant] ?? null,
-                            $parcoursId,
-                            $ue1->display . " " . $ec->elementConstitutif->getCode()
-                        );
-                        $result = $result && $mcccEnfantTest;
-                    }
+                    $mcccEnfantTest = $this->compareTwoMcccArray(
+                        $ecEnfant->mcccs,
+                        $ue2->elementConstitutifs[$indexEc]?->elementsConstitutifsEnfants[$indexEcEnfant]?->mcccs ?? [],
+                        $parcoursId,
+                        $ue1->display . " " . $ecEnfant->elementConstitutif->getCode()
+                    );
+                    $result = $result && $mcccEnfantTest;
                 }
             }
         }
@@ -1000,6 +996,46 @@ class ParcoursCopyData {
         }
 
         return $retour;
+    }
+
+    private function compareTwoMcccArray(
+        array $array1, 
+        array $array2, 
+        int $parcoursId,
+        string $debugText = "",
+    ) : bool {
+        $return = true;
+        // Si on a le même nombre de MCCC avant et après
+        if(count($array1) !== count($array2)){
+            $return = false;
+            if(array_key_exists($parcoursId, self::$errorMcccMessageArray) === false){
+                self::$errorMcccMessageArray[$parcoursId] = [];
+            }
+            self::$errorMcccMessageArray[$parcoursId][] = $debugText .  " : Il n'y a pas le même nombre de MCCC";
+            
+        }
+        if($return){
+            $alreadyUsedIndex = [];
+            // Pour chaque MCCC, on regarde s'il a un équivalent dans le résultat, et on le compare
+            foreach($array1 as $index1 => $mccc1){
+                foreach($array2 as $index2 => $mccc2){
+                    // Si une valeur équivalente n'a pas encore été utilisée
+                    if(in_array($index2, $alreadyUsedIndex) === false){
+                        // On teste le MCCC
+                        $testEqual = $this->compareTwoMCCC($mccc1, $mccc2, $parcoursId, $debugText);
+                        if($testEqual === true){
+                            // Si le test est positif, on marque l'équivalent 
+                            // pour qu'il ne soit pas à nouveau utilisé
+                            $alreadyUsedIndex[] = $index2;
+                        }
+                    }
+                }
+            }
+
+            $return = $return && count($alreadyUsedIndex) === count($array1);
+        }
+
+        return $return;
     }
 
     private function twoArrayAreIdentical(array $array1, array $array2){
