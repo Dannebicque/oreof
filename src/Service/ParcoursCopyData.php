@@ -335,6 +335,9 @@ class ParcoursCopyData {
     ){
         $ficheMatierePorteuse = null;
         $ficheMatiereSource = $structEc->elementConstitutif->getFicheMatiere();
+        $ficheMatiereFromParcours = $ficheMatiereSource?->getParcours()?->getId() === $parcoursId;
+        $hasParentMcccIdentique = $structEc->elementConstitutif->getEcParent()?->isMcccEnfantsIdentique();
+        $ecFromParcours = $structEc->elementConstitutif->getParcours()?->getId() === $ficheMatiereSource?->getParcours()?->getId();
 
         $hasFicheMatiereEcPorteur = null;
         if($ficheMatiereSource){
@@ -346,12 +349,9 @@ class ParcoursCopyData {
             $hasFicheMatiereEcPorteur = count($hasFicheMatiereEcPorteur) > 0;
         }
 
-        $ecFromParcours = $structEc->elementConstitutif->getParcours()?->getId() 
-            === $structEc->elementConstitutif->getFicheMatiere()?->getParcours()?->getId();
-
         // Si c'est l'EC porteur
         $isEcPorteur = false;
-        if($ecFromParcours && $structEc->elementConstitutif->getParcours()->getId() === $parcoursId){
+        if($ecFromParcours && $ficheMatiereFromParcours){
             $isEcPorteur = true;
             $ficheMatierePorteuse = $structEc->elementConstitutif->getFicheMatiere();
         }
@@ -1009,7 +1009,7 @@ class ParcoursCopyData {
                     // Si une valeur équivalente n'a pas encore été utilisée
                     if(in_array($index2, $alreadyUsedIndex) === false){
                         // On teste le MCCC
-                        $testEqual = $this->compareTwoMCCC($mccc1, $mccc2, $parcoursId, $debugText);
+                        $testEqual = $this->compareTwoMCCC($mccc1, $mccc2, $parcoursId, $debugText, false);
                         if($testEqual === true){
                             // Si le test est positif, on marque l'équivalent 
                             // pour qu'il ne soit pas à nouveau utilisé
