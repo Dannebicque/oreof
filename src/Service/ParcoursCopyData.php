@@ -417,20 +417,7 @@ class ParcoursCopyData {
             $mcccResult = $structEc->elementConstitutif->getEcParent()->getMcccs()->toArray();
         }
         if($mcccResult){
-            usort($mcccResult, fn($a, $b) => $a->getId() <=> $b->getId());
-            usort($structEc->mcccs, fn($a, $b) => $a->getId() <=> $b->getId());
-
-            if(count($mcccResult) === count($structEc->mcccs)){
-                $mcccAreEqual = true;
-                foreach($structEc->mcccs as $index => $value){
-                    if($this->compareTwoMCCC($structEc->mcccs[$index], $mcccResult[$index]) === false){
-                        $mcccAreEqual = false;
-                    }
-                }
-            }else {
-                $mcccAreEqual = false;
-            }
-            
+            $mcccAreEqual = $this->compareTwoMcccArray($structEc->mcccs, $mcccResult);
             if($mcccAreEqual === false){
                 $ecCopyMccc = $this->ecCopyRepo->find($structEc->elementConstitutif->getId());
                 $ecCopyMccc->setMcccSpecifiques(true);
@@ -1001,7 +988,7 @@ class ParcoursCopyData {
     private function compareTwoMcccArray(
         array $array1, 
         array $array2, 
-        int $parcoursId,
+        int $parcoursId = -1,
         string $debugText = "",
     ) : bool {
         $return = true;
