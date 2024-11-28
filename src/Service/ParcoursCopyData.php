@@ -406,15 +406,11 @@ class ParcoursCopyData {
      * Il n'y a plus besoin de sélectionner l'élément en BD
      */
     public function placeMcccSpecifiquesFlag(StructureEc $structEc){
-        $isMcccParentIdentique = $structEc->elementConstitutif->getEcParent()?->isMcccEnfantsIdentique();
         $mcccResult = null;
         if($structEc->elementConstitutif->getFicheMatiere()){
             if(array_key_exists($structEc->elementConstitutif->getFicheMatiere()->getId(), $this->mcccCopyDataArray)){
                 $mcccResult = $this->mcccCopyDataArray[$structEc->elementConstitutif->getFicheMatiere()->getId()];
             }
-        }
-        if($isMcccParentIdentique){
-            $mcccResult = $structEc->elementConstitutif->getEcParent()->getMcccs()->toArray();
         }
         if($mcccResult){
             $mcccAreEqual = $this->compareTwoMcccArray($structEc->mcccs, $mcccResult);
