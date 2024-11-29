@@ -387,7 +387,7 @@ class ParcoursCopyData {
                 if(array_key_exists($ficheMatierePorteuse->getId(), $this->mcccCopyDataArray) === false){
                     $this->mcccCopyDataArray[$ficheMatierePorteuse->getId()] = [];
                     foreach($structEc->mcccs as $mccc){
-                        if($isEcPorteur || $isEcOnlyOne || !$hasFicheMatiereEcPorteur){
+                        if($isEcPorteur || $isEcOnlyOne || $hasFicheMatiereEcPorteur === false){
                             $mcccCopy = $this->mcccCopyRepo->find($mccc->getId());
                             $ficheMatiereCopy = $this->fmCopyRepo->find($ficheMatierePorteuse->getId());
                             $mcccCopy->setFicheMatiere($ficheMatiereCopy);
@@ -417,7 +417,7 @@ class ParcoursCopyData {
         }
         if(is_array($mcccResult)){
             $mcccAreEqual = $this->compareTwoMcccArray($structEc->mcccs, $mcccResult);
-            if($mcccAreEqual === false){
+            if($mcccAreEqual === false && !$structEc->elementConstitutif->isSynchroMccc()){
                 $ecCopyMccc = $this->ecCopyRepo->find($structEc->elementConstitutif->getId());
                 $ecCopyMccc->setMcccSpecifiques(true);
                 $this->entityManagerCopy->persist($ecCopyMccc);

@@ -85,6 +85,12 @@ class GetElementConstitutif
             return $this->elementConstitutif->getEcParent()->getMcccs();
         }
 
+        if ($this->elementConstitutif->isSynchroMccc() === true && $this->isRaccroche() === true 
+            && !$this->elementConstitutif->getFicheMatiere()->isMcccImpose()
+        ) {
+            return $this->getElementConstitutif()->getMcccs();
+        }
+
         // MCCC spécifiques sur EC
         if($this->elementConstitutif->isMcccSpecifiques()){
             return $this->elementConstitutif->getMcccs();
