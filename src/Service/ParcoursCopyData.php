@@ -407,12 +407,15 @@ class ParcoursCopyData {
      */
     public function placeMcccSpecifiquesFlag(StructureEc $structEc){
         $mcccResult = null;
-        if($structEc->elementConstitutif->getFicheMatiere()){
-            if(array_key_exists($structEc->elementConstitutif->getFicheMatiere()->getId(), $this->mcccCopyDataArray)){
-                $mcccResult = $this->mcccCopyDataArray[$structEc->elementConstitutif->getFicheMatiere()->getId()];
-            }
+        if($structEc->elementConstitutif->getFicheMatiere()
+           && !$structEc->elementConstitutif->getEcParent()?->isMcccEnfantsIdentique()
+           && !$structEc->elementConstitutif->isMcccEnfantsIdentique()
+        ){
+            $mcccResult = $this->mcccCopyRepo->findBy(
+                ['ficheMatiere' => $structEc->elementConstitutif->getFicheMatiere()->getId()]
+            );
         }
-        if($mcccResult){
+        if(is_array($mcccResult)){
             $mcccAreEqual = $this->compareTwoMcccArray($structEc->mcccs, $mcccResult);
             if($mcccAreEqual === false){
                 $ecCopyMccc = $this->ecCopyRepo->find($structEc->elementConstitutif->getId());
