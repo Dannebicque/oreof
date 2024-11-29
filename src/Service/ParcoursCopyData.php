@@ -1003,17 +1003,29 @@ class ParcoursCopyData {
             foreach($array1 as $index1 => $mccc1){
                 foreach($array2 as $index2 => $mccc2){
                     // Si une valeur équivalente n'a pas encore été utilisée
-                    if(in_array($index2, $alreadyUsedIndex) === false){
+                    if(array_key_exists($index2, $alreadyUsedIndex) === false){
                         // On teste le MCCC
                         $testEqual = $this->compareTwoMCCC($mccc1, $mccc2, $parcoursId, $debugText, false);
                         if($testEqual === true){
                             // Si le test est positif, on marque l'équivalent 
                             // pour qu'il ne soit pas à nouveau utilisé
-                            $alreadyUsedIndex[] = $index2;
+                            $alreadyUsedIndex[$index2] = true;
                         }
                     }
                 }
             }
+
+            $differentIndex = array_diff_key($array2, $alreadyUsedIndex);
+            if(count($differentIndex) > 0){
+                if(array_key_exists($parcoursId, self::$errorMcccMessageArray) === false){
+                    self::$errorMcccMessageArray[$parcoursId] = [];
+                }
+                foreach($differentIndex as $diffIndex => $diffValue){
+                    $differentMccc = $array2[$diffIndex];
+                    self::$errorMcccMessageArray[$parcoursId][] = $debugText . " Le MCCC est différent - ID : ({$differentMccc->getId()})";
+                }
+            }
+            
 
             $return = $return && count($alreadyUsedIndex) === count($array1);
         }
