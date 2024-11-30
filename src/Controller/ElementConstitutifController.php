@@ -560,11 +560,15 @@ class ElementConstitutifController extends AbstractController
             'parcours' => $parcours,
             'modalite' => $parcours->getModalitesEnseignement()
         ]);
-        // }
-        //
-        //        return $this->render('element_constitutif/_structureEcNonEditable.html.twig', [
-        //            'ec' => $elementConstitutif,
-        //        ]);
+    }
+
+    #[Route('/{id}/structure-ec-non-editable', name: 'app_element_constitutif_structure_non_editable', methods: ['GET', 'POST'])]
+    public function structureEcNonEditable(
+        ElementConstitutif           $elementConstitutif,
+    ): Response {
+        return $this->render('element_constitutif/_structureEcNonEditable.html.twig', [
+            'ec' => $elementConstitutif,
+        ]);
     }
 
     #[Route('/{id}/structure-but', name: 'app_element_constitutif_structure_but', methods: ['GET', 'POST'])]

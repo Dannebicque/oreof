@@ -1,0 +1,16 @@
+{% extends 'mails/base_mail.html.twig' %}
+
+{% block content %}
+    <p>Bonjour,</p>
+
+    <p>
+    {% if hasParcours == true %}
+        Le parcours <strong>{{ parcours.libelle }}</strong> de la formation <strong>{{ formation.displayLong }}</strong> vient d'être modifié et transmis pour validation sans passage en CFVU.
+        {# todo: mettre lien fiche descriptive parcours  #}
+    {% else %}
+        La formation <strong>{{ formation.displayLong }}</strong> vient d'être modifiée et transmise pour validation sans passage en CFVU.
+
+        {# todo: mettre lien fiche descriptive formation  #}
+    {% endif %}
+    </p>
+{% endblock %}

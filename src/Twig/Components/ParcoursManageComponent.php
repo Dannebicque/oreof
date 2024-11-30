@@ -178,7 +178,7 @@ final class ParcoursManageComponent extends AbstractController
         $this->typeDiplome = $this->parcours?->getFormation()?->getTypeDiplome();
         $this->formation = $this->parcours?->getFormation();
         $this->place = $this->getPlace();
-        $this->hasDemande = false;
+        $this->hasDemande = $this->dpeParcours->isReouvert();
     }
 
     #[PostMount]

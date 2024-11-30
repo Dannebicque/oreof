@@ -1,62 +1,26 @@
 {{ component('alerte', {
     type: 'info',
-    message: ('demande.reouverture.ses.cloture.alerte')|trans({}, 'process')|nl2br|raw
+    message: ('demande.reouverture.annuler.alerte')|trans({}, 'process')|nl2br|raw
 }) }}
 
 <form action="{{ path('app_validation_demande_reouverture_cloture', {type:type, id:id}) }}" method="post"
       enctype="multipart/form-data">
-    <div class="form-check mt-2">
-        {% if type_modif == 'MODIFICATION_TEXTE' %}
-            <input class="form-check-input" type="radio" value="{{ type_modif }}" id="confirmeCloture"
-                   name="confirmeCloture">
-            <label class="form-check-label" for="confirmeCloture">
-                <strong>{{ ('demande.reouverture.cloture.sans_cfvu.ses.label')|trans({}, 'process') }}</strong>
-                <i
-                        class="fal fa-question-circle ms-1"
-                        data-controller="tooltip"
-                        data-tooltip-placement-value="bottom"
-                        aria-label="{{ ('demande.reouverture.cloture.sans_cfvu.ses.help')|trans({}, 'process') }}"
-                        data-bs-original-title="{{ ('demande.reouverture.cloture.sans_cfvu.sesu.help')|trans({}, 'process') }}"></i>
-            </label>
-        {% else %}
-        <input class="form-check-input" type="radio" value="{{ type_modif }}" id="confirmeCloture"
-               name="confirmeCloture">
-        <label class="form-check-label" for="confirmeCloture">
-            <strong>{{ ('demande.reouverture.cloture.ses.label')|trans({}, 'process') }}</strong>
-            <i
-                    class="fal fa-question-circle ms-1"
-                    data-controller="tooltip"
-                    data-tooltip-placement-value="bottom"
-                    aria-label="{{ ('demande.reouverture.cloture.ses.help')|trans({}, 'process') }}"
-                    data-bs-original-title="{{ ('demande.reouverture.cloture.ses.help')|trans({}, 'process') }}"></i>
-        </label>
-        {% endif %}
-    </div>
 
-    <div>
-        <label class="form-label" for="argumentaire">
-            <strong>{{ ('demande.reouverture.modification.ses.cloture.commentaire.label')|trans({}, 'process') }}</strong>
-            <i
-                    class="fal fa-question-circle ms-1"
-                    data-controller="tooltip"
-                    data-tooltip-placement-value="bottom"
-                    aria-label="{{ ('demande.reouverture.modification.ses.cloture.commentaire.help')|trans({}, 'process') }}"
-                    data-bs-original-title="{{ ('demande.reouverture.modification.ses.cloture.commentaire.help')|trans({}, 'process') }}"></i>
-        </label>
-        <textarea class="form-control" name="argumentaire" id="argumentaire" rows="3"></textarea>
-    </div>
+    {% if hasDifferences %}
+        Des différences existent entre la version actuelle et la version précédente.
+    {% else %}
+        Aucune différence n'a été détectée entre la version actuelle et la version précédente.
+    {% endif %}
 
     <div class="mt-2">
         <button type="submit" class="btn btn-success"
                 {{ stimulus_action('base','sauvegardeFormModal', 'click') }}
-{#                data-action="live#emit"#}
-{#                data-event="valide"#}
         >
             <i class="fal fa-floppy-disk"></i>
             {% if type_modif == 'MODIFICATION_TEXTE' %}
-            {{ ('btn.demande.reouverture.cloture.sans_cfvu.ses')|trans({}, 'process') }}
+                {{ ('btn.demande.reouverture.cloture.sans_cfvu.ses')|trans({}, 'process') }}
             {% else %}
-            {{ ('btn.demande.reouverture.cloture.ses')|trans({}, 'process') }}
+                {{ ('btn.demande.reouverture.cloture.ses')|trans({}, 'process') }}
             {% endif %}
         </button>
     </div>

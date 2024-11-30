@@ -289,11 +289,13 @@
                                         {{ stimulus_controller('modal', {
                                             size: 'lg',
                                             nomEvenement: 'refreshPage',
+
                                             modalTitle: ('demande.reouverture.title')|trans({}, 'process'),
                                             modalUrl: path('app_validation_demande_reouverture', {
                                                 id:id,
                                                 type:'parcours'
                                             }) }) }}
+                                        {# todo:  gérer une redirection vers la page edit du parcours #}
                                         data-action="click->modal#openModal"
                                         data-controller="tooltip"
                                         data-tooltip-placement-value="bottom"
@@ -303,6 +305,27 @@
                                     <i class="fal fa-question"></i> {{ ('demande.reouverture')|trans({}, 'process') }}
                                 </button>
                                 {# todo: fermeture que si pas de MCCC/Maquette pour revenir en SES sans CFVU avant publication #}
+                                {% elseif this.hasDemande %}
+                                    <button class="btn btn-sm d-block btn-outline-warning"
+                                            type="button"
+                                            {{ stimulus_controller('modal', {
+                                                size: 'lg',
+                                                nomEvenement: 'refreshPage',
+
+                                                modalTitle: ('demande.reouverture.annuler.title')|trans({}, 'process'),
+                                                modalUrl: path('app_validation_demande_reouverture_cloture', {
+                                                    id:id,
+                                                    type:'parcours'
+                                                }) }) }}
+                                            {# todo:  gérer une redirection vers la page edit du parcours #}
+                                            data-action="click->modal#openModal"
+                                            data-controller="tooltip"
+                                            data-tooltip-placement-value="bottom"
+                                            aria-label="{{ ('demande.reouverture.annuler')|trans({}, 'process') }}"
+                                            data-bs-original-title="{{ ('demande.reouverture.annuler')|trans({}, 'process') }}"
+                                    >
+                                        <i class="fal fa-times"></i> {{ ('demande.reouverture.annuler')|trans({}, 'process') }}
+                                    </button>
                             {% endif %}
                         </div>
                         <div class="col-3 d-grid">

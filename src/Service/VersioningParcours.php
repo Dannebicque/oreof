@@ -5,7 +5,6 @@ namespace App\Service;
 use App\DTO\StructureParcours;
 use App\Entity\Parcours;
 use App\Entity\ParcoursVersioning;
-use App\Serializer\McccCollectionDenormalizer;
 use App\TypeDiplome\TypeDiplomeRegistry;
 use DateTimeImmutable;
 use Doctrine\Common\Annotations\AnnotationReader;
@@ -30,6 +29,8 @@ class VersioningParcours
 
     private EntityManagerInterface $entityManager;
     private Serializer $serializer;
+
+    private array $textDifferences = [];
     private Filesystem $fileSystem;
     private TypeDiplomeRegistry $typeD;
 
@@ -133,7 +134,7 @@ class VersioningParcours
 
     public function getDifferencesBetweenParcoursAndLastVersion(Parcours $parcours): array
     {
-        $textDifferences = [];
+        $this->textDifferences = [];
 
         if($this->hasLastVersion($parcours)) {
             $lastVersion = $this->getLastVersion($parcours);
@@ -160,7 +161,7 @@ class VersioningParcours
                                             . "{$lastVersion->getParcoursFileName()}.json"
             );
             $lastVersion = $this->serializer->deserialize($fileParcours, Parcours::class, 'json');
-            $textDifferences = [
+            $this->textDifferences = [
                 'presentationParcoursContenuFormation' =>
                 self::cleanUpComparison(
                     html_entity_decode(DiffHelper::calculate(
@@ -333,7 +334,7 @@ class VersioningParcours
             ];
         }
 
-        return $textDifferences;
+        return $this->textDifferences;
     }
 
     public static function cleanUpHtmlTextForComparison(string $html) : string
@@ -423,6 +424,27 @@ class VersioningParcours
         ]);
 
         return $dtoJson;
+
+    }
+
+    public function rollbackToLastVersion(?Parcours $parcours)
+    {
+        // si parcours et différences alors remettre dans parcours les données venant de this->textDifferences
+
+        if($parcours && count($this->textDifferences) > 0) {
+            $parcours->setContenuFormation($this->textDifferences['presentationParcoursContenuFormation']);
+            $parcours->setObjectifsParcours($this->textDifferences['presentationParcoursObjectifsParcours']);
+            $parcours->setResultatsAttendus($this->textDifferences['presentationParcoursResultatsAttendus']);
+            $parcours->setRespParcours($this->textDifferences['contactsParcoursResponsableParcours']);
+            $parcours->setCoResponsable($this->textDifferences['contactsParcoursCoResponsableDuParcours']);
+            $parcours->setRegimeInscription($this->textDifferences['regimeInscriptionParcours']);
+            $parcours->setRythmeFormation($this->textDifferences['rythmeFormationParcours']);
+            $parcours->setMemoireText($this->textDifferences['memoireTextParcours']);
+            $parcours->setStageText($this->textDifferences['stageTextParcours']);
+            $parcours->setPrerequis($this->textDifferences['prerequisRecommandesParcours']);
+            $parcours->setDebouches($this->textDifferences['debouchesTextParcours']);
+            $parcours->setPoursuitesEtudes($this->textDifferences['poursuiteEtudesParcours']);
+        }
 
     }
 }

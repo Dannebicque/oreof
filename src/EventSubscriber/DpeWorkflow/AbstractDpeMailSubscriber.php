@@ -101,7 +101,7 @@ class AbstractDpeMailSubscriber
         ];
     }
 
-    public function getDestinataires(): array
+    public function getDestinataires(bool $withDpe = false): array
     {
         $d = [];
         //si des parcours on prends les RP, sinon juste RF
@@ -120,6 +120,10 @@ class AbstractDpeMailSubscriber
 
         if ($this->formation->getCoResponsable() !== null) {
             $d[] = $this->formation->getCoResponsable()->getEmail();
+        }
+
+        if ($withDpe) {
+            $d[] = $this->responsableDpe->getEmail();
         }
 
         return $d;
