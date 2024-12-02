@@ -10,6 +10,7 @@
 namespace App\Classes;
 
 use App\Entity\CampagneCollecte;
+use App\Entity\Etablissement;
 use App\Repository\CampagneCollecteRepository;
 use Stringable;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -24,6 +25,7 @@ class DataUserSession
 
     private string $dir;
     private ?CampagneCollecte $dpe = null;
+    private ?Etablissement $etablissement = null;
 
 
     public function __construct(
@@ -63,5 +65,14 @@ class DataUserSession
     public function getUser(): UserInterface|Stringable|string
     {
         return $this->user;
+    }
+
+    public function getEtablissement(): ?Etablissement
+    {
+        if ($this->etablissement === null) {
+            $this->etablissement = $this->getUser()?->getEtablissement();
+        }
+
+        return $this->etablissement;
     }
 }

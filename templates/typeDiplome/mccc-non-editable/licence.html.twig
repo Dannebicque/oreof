@@ -1,69 +1,11 @@
-<h3>1ère Session</h3>
-<div>
-    <div class="row mb-2">
-        <div class="col-4">
-            <strong>Contrôle Continu</strong>
-        </div>
-        <div class="col-4">
-            <span>Pourcentage</span><br>
-            {{ mcccs[1]['cc'].pourcentage }}%
-        </div>
-        <div class="col-4">
-            <span>Nb d'épreuve(s)</span><br>
-            {{ mcccs[1]['cc'].nbEpreuves }}
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-4">
-            <strong>Examen terminal</strong>
-        </div>
-        <div class="col-4">
-            <span>Pourcentage</span><br>
-            {{ mcccs[1]['et'].pourcentage }}%
-        </div>
-        <div class="col-4">
-            <span>Type d'épreuve</span><br>
-            {% if mcccs[1]['et'].typeEpreuve[0] is defined and typeEpreuves[mcccs[1]['et'].typeEpreuve[0]] is defined
-            %}{{ typeEpreuves[mcccs[1]['et'].typeEpreuve[0]].display }}{% else %}erreur{% endif %}
-        </div>
-    </div>
-</div>
-
-{#<h3 class="mt-3">2ème Chance</h3>#}
-{#<div>#}
-{#    <div class="row">#}
-{#        <div class="col-4">#}
-{#            <strong>Pour le contrôle continu intégral</strong>#}
-{#        </div>#}
-{#        <div class="col-4">#}
-{#            <span>Pourcentage</span><br>#}
-{#            {{ mcccs[3]['chance'].pourcentage }}%#}
-{#        </div>#}
-{#        <div class="col-4">#}
-{#            <span>Type d'épreuve</span><br>#}
-
-{#            {% for typeE in mcccs[3]['chance'].typeEpreuve %}#}
-
-{#                {% if typeEpreuves[typeE] is defined %}{{ typeEpreuves[typeE].libelle}} {% else %}Erreur{% endif %}#}
-
-{#            {% endfor %}#}
-{#        </div>#}
-{#    </div>#}
-{#</div>#}
-<h3>2ème Session</h3>
-<div>
-    <div class="row">
-        <div class="col-4">
-            <strong>Examen 2ème Session</strong>
-        </div>
-        <div class="col-4">
-            <span>Pourcentage</span><br>
-            100%
-        </div>
-        <div class="col-4">
-            <span>Type d'épreuve</span><br>
-            {% if mcccs[2]['et'].typeEpreuve[0] is defined and typeEpreuves[mcccs[2]['et'].typeEpreuve[0]] is defined
-            %}{{ typeEpreuves[mcccs[2]['et'].typeEpreuve[0]].display }}{% else %}erreur{% endif %}
-        </div>
-    </div>
-</div>
+{% if typeMccc == 'cci' %}
+    {{ include('typeDiplome/mccc/licence/_cci.html.twig', {disabled: true}) }}
+{% elseif typeMccc == 'cc' %}
+    {{ include('typeDiplome/mccc/licence/_cc.html.twig', {disabled: true}) }}
+{% elseif typeMccc == 'ct' %}
+    {{ include('typeDiplome/mccc/licence/_ct.html.twig', {disabled: true}) }}
+{% elseif typeMccc == 'cc_ct' %}
+    {{ include('typeDiplome/mccc/licence/_cc_ct.html.twig', {disabled: true}) }}
+{% else %}
+    <twig:alerte type="danger" message="Le type de MCCC est inconnu"/>
+{% endif %}

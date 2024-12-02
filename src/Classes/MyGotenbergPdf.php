@@ -79,8 +79,8 @@ class MyGotenbergPdf
                 Stream::path($this->basePath . '/images/logo_urca.png'),
                 Stream::path($this->basePath . '/build/print.css'),
             )
-            ->header(Stream::string('header.html', $this->getHeader($title)))
-            ->footer(Stream::string('footer.html', $this->getFooter()))
+            ->header(Stream::string('header.html', $this->getHeader($title, $context)))
+            ->footer(Stream::string('footer.html', $this->getFooter($context)))
             ->paperSize($this->paperSizes[$this->options['paperSize']][0], $this->paperSizes[$this->options['paperSize']][1])
             ->margins(1.3, 1.3, 0.8, 0.8)
             ->outputFilename($name);
@@ -129,10 +129,14 @@ class MyGotenbergPdf
         return Tools::FileName($name);
     }
 
-    private function getHeader(string $titre = ''): string
+    private function getHeader(string $titre = '', array $context = []): string
     {
         if ($this->options['withTemplate']) {
-            $imageData = file_get_contents($this->options['baseUrl'] . '/images/header_sen.jpg');
+            if (array_key_exists('composante', $context) && $context['composante']->getHeaderPlaquette() !== null) {
+                $imageData = file_get_contents($this->options['baseUrl'] . '/images/'.$context['composante']->getHeaderPlaquette());
+            } else {
+                $imageData = file_get_contents($this->options['baseUrl'] . '/images/header.jpg');
+            }
             $base64Image = base64_encode($imageData);
         } else {
             $imageData = file_get_contents($this->options['baseUrl'] . '/images/logo_urca.png');
@@ -147,15 +151,21 @@ class MyGotenbergPdf
         ]);
     }
 
-    private function getFooter(): string
+    private function getFooter(array $context = []): string
     {
         if ($this->options['withTemplate']) {
-            $imageData = file_get_contents($this->options['baseUrl'] . '/images/vague_urca_sen.jpg');
+            if (array_key_exists('composante', $context) && $context['composante']->getFooterPlaquette() !== null) {
+                $imageData = file_get_contents($this->options['baseUrl'] . '/images/'.$context['composante']->getFooterPlaquette());
+            } else {
+                $imageData = file_get_contents($this->options['baseUrl'] . '/images/vague_urca.jpg');
+            }
+
             $base64Image = base64_encode($imageData);
             return $this->twig->render('pdf/footer.html.twig', array_merge($this->options, ['image' => $base64Image]));
         }
 
-        return $this->twig->render('pdf/footer.html.twig',
+        return $this->twig->render(
+            'pdf/footer.html.twig',
             $this->options,
         );
     }

@@ -6,29 +6,21 @@ use App\Classes\GetDpeParcours;
 use App\Classes\GetHistorique;
 use App\Classes\JsonReponse;
 use App\Classes\Mailer;
-use App\Classes\Process\FormationProcess;
-use App\Classes\ValidationProcess;
 use App\Entity\ChangeRf;
-use App\Entity\Formation;
 use App\Entity\HistoriqueFormation;
 use App\Entity\HistoriqueParcours;
 use App\Entity\Parcours;
-use App\Events\HistoriqueFormationEvent;
 use App\Utils\Tools;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
-use Psr\EventDispatcher\EventDispatcherInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class PvConseilController extends AbstractController
+class PvConseilController extends BaseController
 {
-    public const EMAIL_CENTRAL = 'cfvu-secretariat@univ-reims.fr'; //todo: a mettre sur établissement ?
-
     #[Route('/pv/conseil/{parcours}', name: 'app_deposer_pv_conseil')]
     public function index(
         GetHistorique $getHistorique,
@@ -83,7 +75,7 @@ class PvConseilController extends AbstractController
                     ['parcours' => $parcours]
                 ); //todo: revoir le texte du mail si avec ou sans parcours
                 $myMailer->sendMessage(
-                    [self::EMAIL_CENTRAL],
+                    [$this->getEtablissement()?->getEmailCentral()],
                     '[ORéOF]  Le PV de conseil a été déposé pour le parcours ' . $parcours->getLibelle()
                 );
 
@@ -151,7 +143,7 @@ class PvConseilController extends AbstractController
                     ['changeRf' => $changeRf]
                 );
                 $myMailer->sendMessage(
-                    [self::EMAIL_CENTRAL],
+                    [$this->getEtablissement()?->getEmailCentral()],
                     '[ORéOF]  Le PV de conseil a été déposé pour le change de RF : ' . $changeRf->getFormation()?->getDisplay()
                 );
 

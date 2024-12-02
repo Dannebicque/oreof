@@ -3,6 +3,7 @@
 namespace App\Twig\Components;
 
 use App\Classes\GetElementConstitutif;
+use App\Entity\DpeParcours;
 use App\Entity\ElementConstitutif;
 use App\Entity\Parcours;
 use App\Entity\Ue;
@@ -14,6 +15,7 @@ final class BadgeBccComponent
 {
     public ?ElementConstitutif $elementConstitutif = null;
     public ?Parcours $parcours = null;
+    public ?DpeParcours $dpeParcours = null;
     public bool $deplacer = false;
     public bool $editable = false;
     public ?Ue $ue = null;

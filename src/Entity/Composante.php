@@ -115,6 +115,12 @@ class Composante
     #[ORM\Column(nullable: true)]
     private ?array $plaquette_rubriques = [];
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $headerPlaquette = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $footerPlaquette = null;
+
     public function __construct()
     {
         $this->formations = new ArrayCollection();
@@ -474,6 +480,30 @@ class Composante
     public function setPlaquetteRubriques(?array $plaquette_rubriques): static
     {
         $this->plaquette_rubriques = $plaquette_rubriques;
+
+        return $this;
+    }
+
+    public function getHeaderPlaquette(): ?string
+    {
+        return $this->headerPlaquette;
+    }
+
+    public function setHeaderPlaquette(?string $headerPlaquette): static
+    {
+        $this->headerPlaquette = $headerPlaquette;
+
+        return $this;
+    }
+
+    public function getFooterPlaquette(): ?string
+    {
+        return $this->footerPlaquette;
+    }
+
+    public function setFooterPlaquette(?string $footerPlaquette): static
+    {
+        $this->footerPlaquette = $footerPlaquette;
 
         return $this;
     }

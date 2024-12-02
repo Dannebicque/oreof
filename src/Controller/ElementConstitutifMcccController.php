@@ -28,6 +28,7 @@ use App\Repository\TypeEcRepository;
 use App\Repository\TypeEpreuveRepository;
 use App\TypeDiplome\Source\ButTypeDiplome;
 use App\TypeDiplome\TypeDiplomeRegistry;
+use App\Utils\Access;
 use App\Utils\JsonRequest;
 use Doctrine\ORM\EntityManagerInterface;
 use RuntimeException;
@@ -69,9 +70,20 @@ class ElementConstitutifMcccController extends AbstractController
         }
         $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());
 
+        $raccroche = $elementConstitutif->getFicheMatiere()?->getParcours()?->getId() !== $parcours->getId();
+        $getElement = new GetElementConstitutif($elementConstitutif, $parcours);
+        $getElement->setIsRaccroche($raccroche);
 
+        if ($elementConstitutif->getFicheMatiere() !== null && $elementConstitutif->getFicheMatiere()?->isMcccImpose()) {
+            $typeEpreuve = $elementConstitutif->getFicheMatiere()?->getTypeMccc();
+        } elseif ($raccroche && $elementConstitutif->isSynchroMccc()) {
+            $ec = $getElement->getElementConstitutif();
+            $typeEpreuve = $ec->getTypeMccc();
+        } else {
+            $typeEpreuve = $elementConstitutif->getTypeMccc();
+        }
 
-        if ($this->isGranted('CAN_PARCOURS_EDIT_MY', $dpeParcours)) {
+        if ($this->isGranted('CAN_PARCOURS_EDIT_MY', $dpeParcours) && Access::isAccessible($dpeParcours, 'cfvu')) {
             if ($request->isMethod('POST')) {
                 if (
                     ($elementConstitutif->isSynchroEcts() === false &&
@@ -119,21 +131,6 @@ class ElementConstitutifMcccController extends AbstractController
                 return $this->json(true);
             }
 
-            $raccroche = $elementConstitutif->getFicheMatiere()?->getParcours()?->getId() !== $parcours->getId();
-            $getElement = new GetElementConstitutif($elementConstitutif, $parcours);
-            $getElement->setIsRaccroche($raccroche);
-
-
-
-            if ($elementConstitutif->getFicheMatiere() !== null && $elementConstitutif->getFicheMatiere()?->isMcccImpose()) {
-                $typeEpreuve = $elementConstitutif->getFicheMatiere()?->getTypeMccc();
-            } elseif ($raccroche && $elementConstitutif->isSynchroMccc()) {
-                $ec = $getElement->getElementConstitutif();
-                $typeEpreuve = $ec->getTypeMccc();
-            } else {
-                $typeEpreuve = $elementConstitutif->getTypeMccc();
-            }
-
             return $this->render('element_constitutif/_mcccEcModal.html.twig', [
                 'isMcccImpose' => $elementConstitutif->getFicheMatiere()?->isMcccImpose(),
                 'isEctsImpose' => $elementConstitutif->getFicheMatiere()?->isEctsImpose(),
@@ -151,10 +148,17 @@ class ElementConstitutifMcccController extends AbstractController
         }
 
         return $this->render('element_constitutif/_mcccEcNonEditable.html.twig', [
+            'isMcccImpose' => $elementConstitutif->getFicheMatiere()?->isMcccImpose(),
+            'isEctsImpose' => $elementConstitutif->getFicheMatiere()?->isEctsImpose(),
+            'typeMccc' => $typeEpreuve,
+            'typeEpreuves' => $typeEpreuveRepository->findByTypeDiplome($typeDiplome),
             'ec' => $elementConstitutif,
             'templateForm' => $typeD::TEMPLATE_FORM_MCCC,
+            'mcccs' => $getElement->getMcccs($typeD),
         ]);
     }
+
+
 
     #[Route('/{id}/mccc-ec-but', name: 'app_element_constitutif_mccc_but', methods: ['GET', 'POST'])]
     public function mcccEcBut(
