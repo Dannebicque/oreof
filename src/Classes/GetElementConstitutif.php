@@ -75,20 +75,15 @@ class GetElementConstitutif
     }
 
     public function getMcccsFromFicheMatiere() : ?Collection {
+        $isMcccImpose = $this->elementConstitutif->getFicheMatiere()?->isMcccImpose();
         // MCCC spécifiques sur EC
         if($this->elementConstitutif->isMcccSpecifiques()){
             return $this->elementConstitutif->getMcccs();
         }
         
         // EC qui a un parent avec MCCC identiques
-        if($this->elementConstitutif->getEcParent()?->isMcccEnfantsIdentique()){
+        if($this->elementConstitutif->getEcParent()?->isMcccEnfantsIdentique() && !$isMcccImpose){
             return $this->elementConstitutif->getEcParent()->getMcccs();
-        }
-        
-        if ($this->elementConstitutif->isSynchroMccc() === true && $this->isRaccroche() === true 
-        && !$this->elementConstitutif->getFicheMatiere()->isMcccImpose()
-        ) {
-            return $this->getElementConstitutif()->getMcccs();
         }
         
         // Cas de l'EC avec des enfants qui ont des MCCC identiques
@@ -96,6 +91,10 @@ class GetElementConstitutif
             return $this->elementConstitutif->getMcccs();
         }
 
+        if ($this->elementConstitutif->isSynchroMccc() === true && $this->isRaccroche() === true && !$isMcccImpose) {
+            return $this->getElementConstitutif()->getMcccs();
+        }
+        
         return $this->elementConstitutif->getFicheMatiere()?->getMcccs()
             ?? $this->elementConstitutif->getMcccs();
     }
