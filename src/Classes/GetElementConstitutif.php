@@ -75,20 +75,21 @@ class GetElementConstitutif
     }
 
     public function getMcccsFromFicheMatiere() : ?Collection {
-        // Cas de l'EC avec des enfants qui ont des MCCC identiques
-        if($this->elementConstitutif->isMcccEnfantsIdentique()){
-            return $this->elementConstitutif->getMcccs();
-        }
         
         // EC qui a un parent avec MCCC identiques
         if($this->elementConstitutif->getEcParent()?->isMcccEnfantsIdentique()){
             return $this->elementConstitutif->getEcParent()->getMcccs();
         }
-
+        
         if ($this->elementConstitutif->isSynchroMccc() === true && $this->isRaccroche() === true 
-            && !$this->elementConstitutif->getFicheMatiere()->isMcccImpose()
+        && !$this->elementConstitutif->getFicheMatiere()->isMcccImpose()
         ) {
             return $this->getElementConstitutif()->getMcccs();
+        }
+        
+        // Cas de l'EC avec des enfants qui ont des MCCC identiques
+        if($this->elementConstitutif->isMcccEnfantsIdentique()){
+            return $this->elementConstitutif->getMcccs();
         }
 
         // MCCC spécifiques sur EC
