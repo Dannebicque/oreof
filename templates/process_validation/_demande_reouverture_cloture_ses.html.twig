@@ -7,9 +7,16 @@
       enctype="multipart/form-data">
 
     {% if hasDifferences %}
-        Des différences existent entre la version actuelle et la version précédente.
+        <twig:alerte type="danger" message="Des différences existent entre la version actuelle et la version précédente, si vous clôturez la demande, ces différences seront perdues." />
+
+        <p>Les différences sont sur les champs suivants</p>
+        <ul>
+            {% for key, diff in stringDifferencesParcours|filter(diff => diff != null) %}
+                <li>{{ key|trans({}, 'process') }}</li>
+            {% endfor %}
+        </ul>
     {% else %}
-        Aucune différence n'a été détectée entre la version actuelle et la version précédente.
+        <twig:alerte type="success" message="Aucune différence n'a été détectée entre la version actuelle et la version précédente. Vous pouvez clôturer la demande sans risque." />
     {% endif %}
 
     <div class="mt-2">

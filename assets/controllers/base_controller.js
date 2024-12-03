@@ -43,9 +43,9 @@ export default class extends Controller {
           const component = document.getElementById(this.updateComponent.id).__component
           component.emit(this.updateComponent.event)
         }
-        // console.log('avant dispatch')
-        // this.dispatch('modalClose')
-        // console.log('après dispatch')
+        console.log('event')
+        console.log(this.nomEvenement, this.details)
+
         this.dispatch(this.nomEvenement, { detail: this.details })
       })
   }
@@ -105,5 +105,10 @@ export default class extends Controller {
 
   refreshPage() {
     window.location.reload()
+  }
+
+  redirectEdit() {
+    // ajouter /edt à l'URL et recharge la page
+    window.location.href = `${window.location.href}/edit`
   }
 }
