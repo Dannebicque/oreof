@@ -77,7 +77,7 @@ class GetElementConstitutif
     public function getMcccsFromFicheMatiere() : ?Collection {
         $isMcccImpose = $this->elementConstitutif->getFicheMatiere()?->isMcccImpose();
         // MCCC spécifiques sur EC
-        if($this->elementConstitutif->isMcccSpecifiques()){
+        if($this->elementConstitutif->isMcccSpecifiques() && !$isMcccImpose){
             return $this->elementConstitutif->getMcccs();
         }
         
@@ -86,13 +86,14 @@ class GetElementConstitutif
             return $this->elementConstitutif->getEcParent()->getMcccs();
         }
         
-        // Cas de l'EC avec des enfants qui ont des MCCC identiques
-        if($this->elementConstitutif->isMcccEnfantsIdentique()){
-            return $this->elementConstitutif->getMcccs();
-        }
-
+        // Cas où il y a le flag de synchro
         if ($this->elementConstitutif->isSynchroMccc() === true && $this->isRaccroche() === true && !$isMcccImpose) {
             return $this->getElementConstitutif()->getMcccs();
+        }
+
+        // Cas de l'EC avec des enfants qui ont des MCCC identiques
+        if($this->elementConstitutif->isMcccEnfantsIdentique() && !$isMcccImpose){
+            return $this->elementConstitutif->getMcccs();
         }
         
         return $this->elementConstitutif->getFicheMatiere()?->getMcccs()
