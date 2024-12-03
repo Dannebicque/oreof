@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.31.69](https://github.com/Dannebicque/oreof/compare/v1.31.68...v1.31.69) (2024-12-03)
+
+
+### Bug Fixes
+
+* Redirection sur Edit après réouverture ([2884606](https://github.com/Dannebicque/oreof/commit/288460634b3e18db4a5431640a5baf6694d97265))
+* validation lot change RF ([2dc7592](https://github.com/Dannebicque/oreof/commit/2dc75921da125e9d27f552dc36e8ca3d754adfdd))
+
 ### [1.31.68](https://github.com/Dannebicque/oreof/compare/v1.31.67...v1.31.68) (2024-12-02)
 
 
