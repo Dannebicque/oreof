@@ -75,7 +75,6 @@ export default class extends Controller {
   async valide_rf(event) {
     const liste = document.querySelectorAll('.check-all:checked')
     if (liste.length === 0) {
-      this.actionTarget.innerHTML = ''
       callOut('Veuillez sélectionner au moins une demande', 'danger')
     } else {
       const demandes = []
@@ -83,13 +82,29 @@ export default class extends Controller {
         demandes.push(item.value)
       })
 
-      const body = new URLSearchParams({
-        demandes,
-      })
+      // si le champ avec un id date existe, récupérer la valeur
+      const date = document.getElementById('date')
+      let dateCfvu = null
+      if (date !== null) {
+        dateCfvu = date.value
+      }
 
-      this.actionTarget.innerHTML = ''
-      const reponse = await fetch(`${event.params.url}?${body.toString()}`)
-      this.actionTarget.innerHTML = await reponse.text()
+      const body = new FormData()
+      body.append('demandes', demandes)
+      body.append('date', dateCfvu)
+
+      await fetch(`${event.params.url}`, {
+        method: 'POST',
+        body,
+      }).then((response) => response.json())
+        .then((data) => {
+          if (data.success) {
+            callOut('Demandes validées', 'success')
+            window.location.reload()
+          } else {
+            callOut(data.message, 'danger')
+          }
+        })
     }
   }
 
