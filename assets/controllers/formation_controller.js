@@ -26,15 +26,15 @@ export default class extends Controller {
 
       mentionTexte.disabled = mention.value !== 'autre' && mention.value.trim() !== 'null';
 
-      if (mentionTexte.value.trim() !== '') {
-        mention.value = 'autre'
-      }
+      // if (mentionTexte.value.trim() !== '') {
+      //   mention.value = 'autre'
+      // }
     })
-    this._updateListePersonnel(document.getElementById('formation_ses_composantePorteuse').value).then(() => {
-      if (document.getElementById('formation_ses_responsableMention').value !== 'null') {
-        this._updatePersonnel(document.getElementById('formation_ses_responsableMention').value)
-      }
-    })
+    // this._updateListePersonnel(document.getElementById('formation_ses_composantePorteuse').value).then(() => {
+    //   // if (document.getElementById('formation_ses_responsableMention').value !== 'null' && document.getElementById('formation_ses_responsableMention').value !== '') {
+    //   //   this._updatePersonnel(document.getElementById('formation_ses_responsableMention').value)
+    //   // }
+    // })
   }
 
   changeInscriptionRNCP(event) {
@@ -115,6 +115,8 @@ export default class extends Controller {
         const { mentions } = data
         const { selectedMention } = data
         const selectMention = document.getElementById('formation_ses_mention')
+
+        // suppression des options du select selectMention
         selectMention.innerHTML = ''
 
         mentions.forEach((mention) => {
@@ -123,6 +125,7 @@ export default class extends Controller {
           opt.text = mention.libelle;
           selectMention.add(opt, null);
         })
+
         selectMention.value = selectedMention == null ? '' : selectedMention
       },
     )
