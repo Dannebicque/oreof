@@ -70,7 +70,6 @@ class ParcoursProcess extends AbstractProcess
         $place = array_keys($this->dpeParcoursWorkflow->getMarking($dpeParcours)->getPlaces())[0];
 
         if ($place === 'soumis_central_sans_cfvu') {
-            $place = 'valider_a_publier';
             $dpeParcours->setEtatReconduction(TypeModificationDpeEnum::OUVERT);
         }
 
