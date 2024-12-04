@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.31.70](https://github.com/Dannebicque/oreof/compare/v1.31.69...v1.31.70) (2024-12-04)
+
+
+### Bug Fixes
+
+* onglets actifs si ouverture sans CFVU sur formation sans parcours ([8f237ba](https://github.com/Dannebicque/oreof/commit/8f237ba7a3076200aba9d69866474528554d0bbe))
+
 ### [1.31.69](https://github.com/Dannebicque/oreof/compare/v1.31.68...v1.31.69) (2024-12-03)
 
 
