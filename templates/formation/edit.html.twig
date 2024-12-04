@@ -4,9 +4,9 @@
     {% set step = 1 %}
     {{ include('formation/_synthese_formation.html.twig') }}
     <div class="mt-2">
-{#        {% if is_granted('ROLE_SES') or is_granted('CAN_ETABLISSEMENT_SCOLARITE_ALL') or is_granted('CAN_FORMATION_SCOLARITE_MY', formation) %}#}
-{#            {{ include('formation/_gestion.html.twig', {formation: formation}) }}#}
-{#        {% endif %}#}
+        {#        {% if is_granted('ROLE_SES') or is_granted('CAN_ETABLISSEMENT_SCOLARITE_ALL') or is_granted('CAN_FORMATION_SCOLARITE_MY', formation) %} #}
+        {#            {{ include('formation/_gestion.html.twig', {formation: formation}) }} #}
+        {#        {% endif %} #}
     </div>
     <div class="mt-3"
             {{ stimulus_controller('formation_wizard', {
@@ -37,46 +37,52 @@
             {% if formation.parcours[0] is defined and formation.hasParcours == false %}
                 {% set parcours = formation.parcours[0] %}
                 <li class="nav-item" role="presentation">
-                    <a class="nav-link {% if selectedStep == 2 %}active{% endif %}" data-bs-toggle="tab" href="#"
+                    <a class="nav-link {% if selectedStep == 2 %}active{% endif %} {% if not isAccessible(dpeParcours, 'ss_cfvu') %}disabled{% endif %}"
+                       data-bs-toggle="tab" href="#"
                        role="tab"
+
                             {{ stimulus_action('formation_wizard', 'changeStep', 'click', {step: 2}) }}
                        aria-selected="false">Présentation de la
                         formation {{ formationState.onglets|etatRemplissage(2, 'formation') }}</a>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <a class="nav-link"
+                    <a class="nav-link {% if not isAccessible(dpeParcours, 'ss_cfvu') %}disabled{% endif %}"
                        data-bs-toggle="tab" href="#" role="tab"
                             {{ stimulus_action('formation_wizard', 'changeStepParcours', 'click', {step: 2,
-                                parcours:parcours.id}) }}
+                                parcours:dpeParcours.id}) }}
                     >
                         Descriptif {{ parcoursState.onglets|etatRemplissage(2, 'parcours') }}
                     </a>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <a class="nav-link" data-bs-toggle="tab" href="#" role="tab" aria-selected="false"
-                            {{ stimulus_action('formation_wizard', 'changeStepParcours', 'click', {step: 3,parcours:parcours.id}) }}
+                    <a class="nav-link {% if not isAccessible(dpeParcours, 'cfvu') %}disabled{% endif %}"
+                       data-bs-toggle="tab" href="#" role="tab" aria-selected="false"
+                            {{ stimulus_action('formation_wizard', 'changeStepParcours', 'click', {step: 3,parcours:dpeParcours.id}) }}
                     >
                         Compétences {{ parcoursState.onglets|etatRemplissage(3, 'parcours') }}
                     </a>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <a class="nav-link" data-bs-toggle="tab" href="#" role="tab" aria-selected="false"
-                            {{ stimulus_action('formation_wizard', 'changeStepParcours', 'click', {step: 4,parcours:parcours.id}) }}
+                    <a class="nav-link {% if not isAccessible(dpeParcours, 'cfvu') %}disabled{% endif %}"
+                       data-bs-toggle="tab" href="#" role="tab" aria-selected="false"
+                            {{ stimulus_action('formation_wizard', 'changeStepParcours', 'click', {step: 4,parcours:dpeParcours.id}) }}
                     >
                         Structure de la maquette {{ parcoursState.onglets|etatRemplissage(4, 'parcours') }}
                     </a>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <a class="nav-link" data-bs-toggle="tab" href="#" role="tab" aria-selected="false"
-                            {{ stimulus_action('formation_wizard', 'changeStepParcours', 'click', {step: 5,parcours:parcours.id}) }}
+                    <a class="nav-link {% if not isAccessible(dpeParcours, 'ss_cfvu') %}disabled{% endif %}
+" data-bs-toggle="tab" href="#" role="tab" aria-selected="false"
+                            {{ stimulus_action('formation_wizard', 'changeStepParcours', 'click', {step: 5,parcours:dpeParcours.id}) }}
                     >
                         Admission & inscription {{ parcoursState.onglets|etatRemplissage(5, 'parcours') }}
                     </a>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <a class="nav-link" data-bs-toggle="tab" href="#" role="tab" aria-selected="false"
+                    <a class="nav-link  {% if not isAccessible(dpeParcours, 'ss_cfvu') %}disabled{% endif %}"
+                       data-bs-toggle="tab" href="#" role="tab" aria-selected="false"
                             {{ stimulus_action('formation_wizard', 'changeStepParcours', 'click', {step: 6,
-                                parcours:parcours.id}) }}
+                                parcours:dpeParcours.id}) }}
                     >
                         Et après... {{ parcoursState.onglets|etatRemplissage(6, 'parcours') }}
                     </a>
@@ -85,7 +91,7 @@
                     <li class="nav-item" role="presentation">
                         <a class="nav-link {% if step == 7 %}active{% endif %}" data-bs-toggle="tab" href="#" role="tab"
                            aria-selected="false"
-                                {{ stimulus_action('formation_wizard', 'changeStepParcours', 'click', {step: 7, parcours:parcours.id}) }}
+                                {{ stimulus_action('formation_wizard', 'changeStepParcours', 'click', {step: 7, parcours:dpeParcours.id}) }}
                         >
                             Configuration
                         </a>
