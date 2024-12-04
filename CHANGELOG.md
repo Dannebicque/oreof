@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.31.71](https://github.com/Dannebicque/oreof/compare/v1.31.70...v1.31.71) (2024-12-04)
+
+
+### Bug Fixes
+
+* process sur réouvertaure sans CFVU ([d43ddf4](https://github.com/Dannebicque/oreof/commit/d43ddf4ce7d2fff7b7bf9b00629274094ad37800))
+
 ### [1.31.70](https://github.com/Dannebicque/oreof/compare/v1.31.69...v1.31.70) (2024-12-04)
 
 
