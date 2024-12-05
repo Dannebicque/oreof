@@ -315,14 +315,11 @@ class ParcoursCopyData {
 
     public function placeHeuresSpecifiquesFlag(ElementConstitutif $ec, bool $isHeuresIdentiques = false){
         if($ec->getFicheMatiere()){
-            $ecSource = $ec;
-            if($isHeuresIdentiques){
-                $ecSource = $ec->getEcParent();
-            }
             $isDifferent = $this->hasHeuresFicheMatiereCopy($ec->getFicheMatiere())
-                && $this->hasEcSameHeuresAsFicheMatiereCopy($ecSource, $ec->getFicheMatiere()) === false;
+                && $this->hasEcSameHeuresAsFicheMatiereCopy($ec, $ec->getFicheMatiere()) === false;
     
-            if($isDifferent && ($ec->isSynchroHeures() === false || $ec->isSansHeure())){
+            // Si différent, sans synchro, et que les heures ne sont pas déjà sur le parent
+            if($isDifferent && ($ec->isSynchroHeures() === false || $ec->isSansHeure()) && !$isHeuresIdentiques){
                 $ecCopyFlag = $this->ecCopyRepo->find($ec->getId());
                 $ecCopyFlag->setHeuresSpecifiques(true);
                 $this->entityManagerCopy->persist($ecCopyFlag);

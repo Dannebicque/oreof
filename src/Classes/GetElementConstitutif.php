@@ -141,13 +141,13 @@ class GetElementConstitutif
             ) {
                 $ficheMatiere = $this->getElementConstitutif();
             }
-            if($this->elementConstitutif->isHeuresSpecifiques()){
-                $ficheMatiere = $this->elementConstitutif;
-            }
             if($this->elementConstitutif->getEcParent()?->isHeuresEnfantsIdentiques()){
                 if(!$this->elementConstitutif->getFicheMatiere()?->isVolumesHorairesImpose()){
                     $ficheMatiere = $this->elementConstitutif->getEcParent();
                 }
+            }
+            if($this->elementConstitutif->isHeuresSpecifiques()){
+                $ficheMatiere = $this->elementConstitutif;
             }
         }
 
