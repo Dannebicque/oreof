@@ -233,14 +233,23 @@ class ParcoursCopyDataCommand extends Command
 
             if($compareTwoDatabases === 'hours'){
                 $nbErreur = count($errorArray);
-                $io->writeln("Comparaison terminée. Il y a {$nbErreur} parcours qui ne sont pas identiques");
-                dump($errorArray);
+                if($nbErreur === 0){
+                    $io->success("Aucune différence d'heures détectées !");
+                    return Command::SUCCESS;
+                }else {
+                    dump($errorArray);
+                    $io->writeln("Comparaison terminée. Il y a {$nbErreur} parcours qui ne sont pas identiques");
+                }
             }
             elseif($compareTwoDatabases === 'mccc'){
                 $nbErreur = count($errorArray);
-                dump($errorArray);
-                $io->writeln("{$nbErreur} Maquettes ont des MCCC différents.");
-                // dump($this->parcoursCopyData::$errorMcccMessageArray);
+                if($nbErreur === 0){
+                    $io->success("Aucun MCCC différents détectés !");
+                    return Command::SUCCESS;
+                }else {
+                    dump($errorArray);
+                    $io->writeln("{$nbErreur} Maquettes ont des MCCC différents.");
+                }
             }
 
             return Command::SUCCESS;

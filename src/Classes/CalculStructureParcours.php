@@ -33,7 +33,6 @@ class CalculStructureParcours
         protected ElementConstitutifRepository|ElementConstitutifCopyRepository $elementConstitutifRepository,
         #[Autowire(expression: 'service("App\\\Repository\\\UeRepository")')]
         protected UeRepository|UeCopyRepository $ueRepository,
-        #[Autowire(expression: 'service("App\\\Repository\\\ParcoursRepository")')]
         protected ParcoursRepository|ParcoursCopyRepository|null $parcoursRepository = null,
     )
     {
