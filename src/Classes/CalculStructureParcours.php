@@ -17,6 +17,7 @@ use App\DTO\StructureUe;
 use App\Entity\Parcours;
 use App\Repository\ElementConstitutifCopyRepository;
 use App\Repository\ElementConstitutifRepository;
+use App\Repository\ParcoursCopyRepository;
 use App\Repository\ParcoursRepository;
 use App\Repository\UeCopyRepository;
 use App\Repository\UeRepository;
@@ -32,7 +33,8 @@ class CalculStructureParcours
         protected ElementConstitutifRepository|ElementConstitutifCopyRepository $elementConstitutifRepository,
         #[Autowire(expression: 'service("App\\\Repository\\\UeRepository")')]
         protected UeRepository|UeCopyRepository $ueRepository,
-        protected ?ParcoursRepository $parcoursRepository = null,
+        #[Autowire(expression: 'service("App\\\Repository\\\ParcoursRepository")')]
+        protected ParcoursRepository|ParcoursCopyRepository|null $parcoursRepository = null,
     )
     {
     }

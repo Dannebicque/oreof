@@ -19,6 +19,7 @@ use App\Entity\Ue;
 use App\Repository\ElementConstitutifCopyRepository;
 use App\Repository\FicheMatiereCopyRepository;
 use App\Repository\McccCopyRepository;
+use App\Repository\ParcoursCopyRepository;
 use App\Repository\UeCopyRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
@@ -441,11 +442,13 @@ class ParcoursCopyData {
             if($fromCopy || $withCopy){
                 $ueCopyRepository = new UeCopyRepository($this->entityManagerCopy, Ue::class);
                 $ecCopyRepository = new ElementConstitutifCopyRepository($this->entityManagerCopy, ElementConstitutif::class);
-                $calcul = new CalculStructureParcours($this->entityManagerCopy, $ecCopyRepository, $ueCopyRepository);
+                $parcoursCopyRepository = new ParcoursCopyRepository($this->entityManagerCopy, Parcours::class);
+                $calcul = new CalculStructureParcours($this->entityManagerCopy, $ecCopyRepository, $ueCopyRepository, $parcoursCopyRepository);
             }else {
                 $ueRepository = $this->entityManager->getRepository(Ue::class);
                 $ecRepository = $this->entityManager->getRepository(ElementConstitutif::class);
-                $calcul = new CalculStructureParcours($this->entityManager, $ecRepository, $ueRepository);
+                $parcoursRepository = $this->entityManager->getRepository(Parcours::class);
+                $calcul = new CalculStructureParcours($this->entityManager, $ecRepository, $ueRepository, $parcoursRepository);
             }
             if($withCopy){
                 $parcoursData = $parcours;
