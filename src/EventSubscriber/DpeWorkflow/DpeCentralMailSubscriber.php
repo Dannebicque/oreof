@@ -11,7 +11,6 @@ namespace App\EventSubscriber\DpeWorkflow;
 
 use App\Classes\GetHistorique;
 use App\Classes\Mailer;
-use App\Entity\Formation;
 use App\Repository\ComposanteRepository;
 use App\Repository\FormationRepository;
 use App\Repository\UserRepository;
@@ -32,93 +31,106 @@ class DpeCentralMailSubscriber extends AbstractDpeMailSubscriber implements Even
     public static function getSubscribedEvents(): array
     {
         return [
-            'workflow.dpe.transition.refuser_central' => 'onRefuseCentral',
-            'workflow.dpe.transition.valider_central' => 'onValideCentral',
-            'workflow.dpe.transition.transmettre_cfvu' => 'onValideCentral',
-            'workflow.dpe.transition.reserver_central' => 'onReserveCentral',
+            'workflow.dpeParcours.transition.refuser_central' => 'onRefuseCentral',
+            'workflow.dpeParcours.transition.valider_central' => 'onValideCentral',
+            'workflow.dpeParcours.transition.transmettre_cfvu' => 'onValideCentral',
+            'workflow.dpeParcours.transition.valider_transmettre_ouverture_sans_cfvu' => 'onValideCentralSansCfvu',
+            'workflow.dpeParcours.transition.reserver_central' => 'onReserveCentral',
+            'workflow.dpeParcours.transition.reserver_transmettre_ouverture_sans_cfvu' => 'onReserveCentral',
         ];
     }
 
     public function onRefuseCentral(Event $event): void
     {
-        //mail au RF
-        /** @var Formation $formation */
-        $formation = $event->getSubject();
-        $dpe = $formation->getComposantePorteuse()?->getResponsableDpe();
-        $context = $event->getContext();
+        $data = $this->getDataFromEvent($event);
+        if ($data === null) {
+            return;
+        }
 
-        //todo: check si le responsable de formation accepte le mail
+        $context = $event->getContext();
+        $titre = $this->hasParcours ?
+            'Votre parcours ' . $this->parcours->getLibelle().' de la formation '.$this->formation->getDisplay(). ' a été refusé par le SES' :
+            'Votre formation ' . $this->formation->getDisplay(). ' a été refusée par le SES';
+
         $this->myMailer->initEmail();
         $this->myMailer->setTemplate(
             'mails/workflow/formation/refuse_central.html.twig',
-            [
-                'dpe' => $dpe,
-                'formation' => $formation,
-                'motif' => $context['motif']]
+            array_merge($this->getData(), ['motif' => $context['motif']])
         );
         $this->myMailer->sendMessage(
-            [
-                $dpe->getEmail(),
-                $formation->getResponsableMention()?->getEmail(),
-                $formation->getCoResponsable()?->getEmail()],
-            '[ORéOF]  Votre formation a été refusée par le central',
+            $this->getDestinataires(true),
+            '[ORéOF]  '.$titre,
             ['replyTo' => 'oreof-vp@univ-reims.fr', 'cc' => Mailer::MAIL_GENERIC]
         );
     }
 
     public function onValideCentral(Event $event): void
     {
-        //todo: prevenir CFVU?
-        /** @var Formation $formation */
-        $formation = $event->getSubject();
-        $dpe = $formation->getComposantePorteuse()?->getResponsableDpe();
-
-        if ($formation === null) {
+        $data = $this->getDataFromEvent($event);
+        if ($data === null) {
             return;
         }
-        //todo: check si le responsable de formation accepte le mail
+
+        $titre = $this->hasParcours ?
+            'Votre parcours ' . $this->parcours->getLibelle().' de la formation '.$this->formation->getDisplay(). ' a été validé par le SES' :
+            'Votre formation ' . $this->formation->getDisplay(). ' a été validée par le SES';
 
         $this->myMailer->initEmail();
         $this->myMailer->setTemplate(
             'mails/workflow/formation/valide_central.html.twig',
-            [
-                'formation' => $formation,
-                'dpe' => $dpe,
-            ]
+            $this->getData()
         );
 
         $this->myMailer->sendMessage(
-            [
-                $dpe->getEmail(),
-                $formation->getResponsableMention()?->getEmail(),
-                $formation->getCoResponsable()?->getEmail()],
-            '[ORéOF]  La formation ' . $formation->getDisplayLong() . ' a été validé par le central'
+            $this->getDestinataires(true),
+            '[ORéOF]  '.$titre,
+        );
+    }
+
+    public function onValideCentralSansCfvu(Event $event): void
+    {
+        $data = $this->getDataFromEvent($event);
+        if ($data === null) {
+            return;
+        }
+
+        $titre = $this->hasParcours ?
+            'Votre parcours ' . $this->parcours->getLibelle().' de la formation '.$this->formation->getDisplay(). ' a été validé par le SES et va être publié' :
+            'Votre formation ' . $this->formation->getDisplay(). ' a été validée par le SES et va être publiée';
+
+        $this->myMailer->initEmail();
+        $this->myMailer->setTemplate(
+            'mails/workflow/formation/valide_central_sans_cfvu.html.twig',
+            $this->getData()
+        );
+
+        $this->myMailer->sendMessage(
+            $this->getDestinataires(true),
+            '[ORéOF]  '.$titre,
         );
     }
 
     public function onReserveCentral(Event $event): void
     {
         //mail au RF
-        /** @var Formation $formation */
-        $formation = $event->getSubject();
-        $dpe = $formation->getComposantePorteuse()?->getResponsableDpe();
-
+        $data = $this->getDataFromEvent($event);
+        if ($data === null) {
+            return;
+        }
         $context = $event->getContext();
 
-        //todo: check si le responsable de formation accepte le mail
+        $titre = $this->hasParcours ?
+            'Votre parcours ' . $this->parcours->getLibelle().' de la formation '.$this->formation->getDisplay(). ' a reçu des réserves par le SES' :
+            'Votre formation ' . $this->formation->getDisplay(). ' a reçue des réserves par le SES';
+
         $this->myMailer->initEmail();
         $this->myMailer->setTemplate(
             'mails/workflow/formation/reserve_central.html.twig',
-            ['formation' => $formation,
-                'dpe' => $dpe,
-                'motif' => $context['motif']]
+            array_merge($this->getData(), ['motif' => $context['motif']])
         );
         $this->myMailer->sendMessage(
-            [
-                $dpe->getEmail(),
-                $formation->getResponsableMention()?->getEmail(),
-                $formation->getCoResponsable()?->getEmail()],
-            '[ORéOF]  Votre formation a reçu des réserves du central',
+            $this->getDestinataires(true),
+            '[ORéOF]  '.$titre,
             ['replyTo' => 'oreof-vp@univ-reims.fr', 'cc' => Mailer::MAIL_GENERIC]
         );
     }

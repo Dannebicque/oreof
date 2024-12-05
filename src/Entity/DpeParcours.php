@@ -155,4 +155,11 @@ class DpeParcours
         //todo: sauvegarder date publication dans DpeParcours ou récupérer depuis l'historique
         return array_key_exists('valide_a_publier', $this->getEtatValidation());
     }
+
+    public function isReouvert(): bool
+    {
+        return $this->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_TEXTE ||
+            $this->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_MCCC_TEXTE ||
+            $this->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_MCCC;
+    }
 }

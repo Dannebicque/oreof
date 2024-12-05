@@ -2,6 +2,45 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.31.72](https://github.com/Dannebicque/oreof/compare/v1.31.71...v1.31.72) (2024-12-04)
+
+
+### Bug Fixes
+
+* modification mention/formation ([592f6c2](https://github.com/Dannebicque/oreof/commit/592f6c232a0f2929f8fdcc9266761270293cf3e7))
+* process sur réouvertaure sans CFVU ([7b7244c](https://github.com/Dannebicque/oreof/commit/7b7244c04ea80e03dc843dde7a43393bca0a3ffd))
+
+### [1.31.71](https://github.com/Dannebicque/oreof/compare/v1.31.70...v1.31.71) (2024-12-04)
+
+
+### Bug Fixes
+
+* process sur réouvertaure sans CFVU ([d43ddf4](https://github.com/Dannebicque/oreof/commit/d43ddf4ce7d2fff7b7bf9b00629274094ad37800))
+
+### [1.31.70](https://github.com/Dannebicque/oreof/compare/v1.31.69...v1.31.70) (2024-12-04)
+
+
+### Bug Fixes
+
+* onglets actifs si ouverture sans CFVU sur formation sans parcours ([8f237ba](https://github.com/Dannebicque/oreof/commit/8f237ba7a3076200aba9d69866474528554d0bbe))
+
+### [1.31.69](https://github.com/Dannebicque/oreof/compare/v1.31.68...v1.31.69) (2024-12-03)
+
+
+### Bug Fixes
+
+* Redirection sur Edit après réouverture ([2884606](https://github.com/Dannebicque/oreof/commit/288460634b3e18db4a5431640a5baf6694d97265))
+* validation lot change RF ([2dc7592](https://github.com/Dannebicque/oreof/commit/2dc75921da125e9d27f552dc36e8ca3d754adfdd))
+
+### [1.31.68](https://github.com/Dannebicque/oreof/compare/v1.31.67...v1.31.68) (2024-12-02)
+
+
+### Bug Fixes
+
+* Fermeture parcours sans modif ([ecc6d6b](https://github.com/Dannebicque/oreof/commit/ecc6d6b89806692d264c9820db9da5dd7e236908))
+* Mémorisation du step dans le wizard ([91feee1](https://github.com/Dannebicque/oreof/commit/91feee1a8152bfd6226332b3c2398539351fd415))
+* Sécurisation des entrées dans la page de contrôle ([9152c1e](https://github.com/Dannebicque/oreof/commit/9152c1e183a051e9938b53f0cb6514a69143d23f))
+
 ### [1.31.67](https://github.com/Dannebicque/oreof/compare/v1.31.66...v1.31.67) (2024-11-27)
 
 

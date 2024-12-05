@@ -175,7 +175,7 @@
                                         <a href="{{ path('app_search') }}">
                                             <i class="fal fa-magnifying-glass icon"></i>
                                             <span class="label">Effectuer une recherche</span>
-                                        </a>    
+                                        </a>
                                     </li>
                                 {% endif %}
                             </ul>
@@ -719,7 +719,7 @@
 <div {{ stimulus_controller('base') }}
         data-action="modal:openModal@window->base#openModal
         base:refreshPage@window->base#refreshPage
-        modal_confirm:refreshPage2@window->base#refreshPage {# todo: ne fonctionne pas #}
+        base:redirectEdit@window->base#redirectEdit
 ">
     {{ include('communs/_modal.html.twig') }}
 </div>

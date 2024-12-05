@@ -4,6 +4,9 @@
 {% else %}
     {% set raccrocheUe = false %}
 {% endif %}
+
+{% set editableCfvu = isAccessible(dpeParcours, 'cfvu') %}
+
 <tr>
     <th colspan="7" class="font-weight-bold">{{ ue.display(parcours) }}</th>
 </tr>
@@ -137,6 +140,7 @@
                 <div class="form-check mb-2">
                     <input class="form-check-input" type="checkbox"
                            id="synchroEcts"
+                           {{ editableCfvu ? '' : 'disabled' }}
                            name="synchroEcts"
                             {{ stimulus_action('parcours--ec', 'synchro', 'change', {
                                 ec:ec.id,
@@ -150,14 +154,12 @@
                            data-tooltip-placement-value="bottom"
                            title="{{ 'parcours_ec.helps.synchroEcts'|trans({}, 'help') }}"></i></label>
                 </div>
-                {#                                        <button class="btn text-primary">Recopier les ECTS  <i class="fal fa-question-circle ms-1" data-controller="tooltip" #}
-                {#                                                                                               data-tooltip-placement-value="bottom" #}
-                {#                                                                                               title="{{ 'parcours_ec.helps.recopieEcts'|trans({}, 'help') }}"></i></button> #}
             </td>
             <td>
                 <div class="form-check mb-2">
                     <input class="form-check-input" type="checkbox"
                            id="synchroBcc"
+                            {{ editableCfvu ? '' : 'disabled' }}
                            name="synchroBcc"
                             {{ stimulus_action('parcours--ec', 'synchro', 'change', {
                                 ec:ec.id,
@@ -171,15 +173,13 @@
                            data-tooltip-placement-value="bottom"
                            title="{{ 'parcours_ec.helps.synchroBcc'|trans({}, 'help') }}"></i></label>
                 </div>
-                {#                                        <button class="btn text-primary">Recopier les BCC  <i class="fal fa-question-circle ms-1" data-controller="tooltip" #}
-                {#                                                                                               data-tooltip-placement-value="bottom" #}
-                {#                                                                                               title="{{ 'parcours_ec.helps.recopieBcc'|trans({}, 'help') }}"></i></button> #}
             </td>
             <td>
                 <div class="form-check mb-2">
                     <input class="form-check-input" type="checkbox"
                            id="synchroHeures"
                            name="synchroHeures"
+                            {{ editableCfvu ? '' : 'disabled' }}
                             {{ stimulus_action('parcours--ec', 'synchro', 'change', {
                                 ec:ec.id,
                                 type:'synchroHeures'
@@ -193,15 +193,13 @@
                            title="{{ 'parcours_ec.helps.synchroHeures'|trans({}, 'help') }}"></i>
                     </label>
                 </div>
-                {#                                        <button class="btn text-primary">Recopier les Heures  <i class="fal fa-question-circle ms-1" data-controller="tooltip" #}
-                {#                                                                                               data-tooltip-placement-value="bottom" #}
-                {#                                                                                               title="{{ 'parcours_ec.helps.recopieHeures'|trans({}, 'help') }}"></i></button> #}
             </td>
             <td>
                 <div class="form-check mb-2">
                     <input class="form-check-input" type="checkbox"
                            id="synchroMccc"
                            name="synchroMccc"
+                            {{ editableCfvu ? '' : 'disabled' }}
                             {{ stimulus_action('parcours--ec', 'synchro', 'change', {
                                 ec:ec.id,
                                 type:'synchroMccc'
@@ -214,9 +212,6 @@
                            data-tooltip-placement-value="bottom"
                            title="{{ 'parcours_ec.helps.synchroMccc'|trans({}, 'help') }}"></i></label>
                 </div>
-                {#                                        <button class="btn text-primary">Recopier les MCCC  <i class="fal fa-question-circle ms-1" data-controller="tooltip" #}
-                {#                                                                                               data-tooltip-placement-value="bottom" #}
-                {#                                                                                               title="{{ 'parcours_ec.helps.recopieMccc'|trans({}, 'help') }}"></i></button> #}
             </td>
         </tr>
     {% endif %}

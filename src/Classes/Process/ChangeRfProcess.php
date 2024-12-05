@@ -56,13 +56,18 @@ class ChangeRfProcess extends AbstractProcess
             $motifs['date'] = Tools::convertDate($request->request->get('date'));
         }
 
+        if ($transition === 'soumis_cfvu') {
+            //si PV de CFVU
+            $valid = 'valider_cfvu_avec_pv';
+        }
+
         if ($request->request->has('argumentaire')) {
             $motifs['motif'] = $request->request->get('argumentaire', '');
         }
 
         if ($request->request->has('sousReserveConseil')) {
             $motifs['sousReserveConseil'] = (bool)$request->request->get('sousReserveConseil');
-            $valid = 'valider_reserve_conseil_cfvu';
+            $valid = 'reserver_cfvu';
         }
 
         $this->changeRfWorkflow->apply($changeRf, $valid, $motifs);

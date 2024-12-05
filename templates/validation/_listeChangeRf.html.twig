@@ -86,8 +86,8 @@
                 </td>
             </tr>
             <tr>
-                <td colspan="2" class="text-end"> Commentaire :</td>
-                <td colspan="5">
+                <td colspan="3" class="text-end"> Commentaire :</td>
+                <td colspan="6">
                     {{ demande.commentaire }}
                 </td>
                 <td>
@@ -96,20 +96,36 @@
             </tr>
         {% else %}
             <tr>
-                <td colspan="8">
+                <td colspan="9">
                     <div class="alert alert-info">Aucune demande de changement de Co/RF dans cette état de demande</div>
                 </td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
-    {% if etape == 'EN_ATTENTE' %}
+    {% if etape == 'soumis_cfvu' %}
+        <div>
+            <label for="date" class="form-label">{{ ('valide.soumis_cfvu.date.label')|trans({}, 'process') }}
+                <span class="required"></span> <i
+                        class="fal fa-question-circle ms-1"
+                        data-controller="tooltip"
+                        data-tooltip-placement-value="bottom"
+                        aria-label="{{ ('valide.soumis_cfvu.helps.date.help')|trans({}, 'process') }}"
+                        data-bs-original-title="{{ ('valide.soumis_cfvu.helps.date.help')|trans({}, 'process') }}"></i></label>
+            <input type="date" name="date"
+                   class="form-control"
+                   id="date"
+            >
+        </div>
+    {% endif %}
+
+    {% if etape == 'soumis_ses' or etape == 'soumis_cfvu' %}
         <div class="row mt-2">
             <div class="col-3 d-grid">
                 <button class="btn btn-sm d-block btn-outline-success"
                         type="button"
                         data-action="validation--index#valide_rf"
-                        data-validation--index-url-param="{{ path('app_formation_responsable_valide_confirme', {etape:etape}) }}"
+                        data-validation--index-url-param="{{ path('app_validation_change_rf_valider_lot', {etape:etape}) }}"
                         data-controller="tooltip"
                         data-tooltip-placement-value="bottom"
                         aria-label="{{ ('validation.valider.'~etape)|trans({}, 'process') }}"
@@ -123,22 +139,20 @@
             <div class="col-3 d-grid">
             </div>
 
-            <div class="col-3 d-grid">
-                <button class="btn btn-sm d-block btn-outline-danger"
-                        type="button"
-                        data-action="validation--index#valide"
-                        data-validation--index-url-param="{{ path('app_validation_refuse_lot', {etape:etape}) }}"
-                        data-controller="tooltip"
-                        data-tooltip-placement-value="bottom"
-                        aria-label="{{ ('validation.refuser.'~etape)|trans({}, 'process') }}"
-                        data-bs-original-title="{{ ('validation.refuser.'~etape)|trans({}, 'process') }}"
-                >
-                    <i class="fal fa-ban"></i> {{ ('validation.refuser.'~etape)|trans({}, 'process') }}
-                </button>
-            </div>
+            {#            <div class="col-3 d-grid"> #}
+            {#                <button class="btn btn-sm d-block btn-outline-danger" #}
+            {#                        type="button" #}
+            {#                        data-action="validation--index#valide" #}
+            {#                        data-validation--index-url-param="{{ path('app_validation_refuse_lot', {etape:etape}) }}" #}
+            {#                        data-controller="tooltip" #}
+            {#                        data-tooltip-placement-value="bottom" #}
+            {#                        aria-label="{{ ('validation.refuser.'~etape)|trans({}, 'process') }}" #}
+            {#                        data-bs-original-title="{{ ('validation.refuser.'~etape)|trans({}, 'process') }}" #}
+            {#                > #}
+            {#                    <i class="fal fa-ban"></i> {{ ('validation.refuser.'~etape)|trans({}, 'process') }} #}
+            {#                </button> #}
+            {#            </div> #}
         </div>
-        <div class="row mt-2" {{ stimulus_target('validation--index', 'action') }}>
 
-        </div>
     {% endif %}
 </div>

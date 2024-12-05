@@ -5,12 +5,12 @@
             {% if formation.mention != null %}
                 {{ stimulus_controller('formation', {
                     url: path('app_formation_api', {mention:formation.mention.id}),
-                    urlUser: path('api_user_get_user'),
+                    urlUser: path('api_user_get_user')
                 }) }}
             {% else %}
                 {{ stimulus_controller('formation', {
                     url: path('app_formation_api'),
-                    urlUser: path('api_user_get_user'),
+                    urlUser: path('api_user_get_user')
                 }) }}
             {% endif %}
     >

@@ -27,7 +27,7 @@
     <div class="mt-3"
             {{ stimulus_controller('wizard', {
                 url: composante is defined ? path('app_validation_wizard', {composante: composante}) : path('app_validation_wizard'),
-                step: 'formation'
+                stepDefault: 'formation'
             }) }}
     >
 

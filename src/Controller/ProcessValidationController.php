@@ -97,7 +97,7 @@ class ProcessValidationController extends BaseController
                 if (array_key_exists('hasValidLheo', $meta) && $meta['hasValidLheo'] === true) {
                     $erreursChampsParcours = $lheoXML->checkTextValuesAreLongEnough($objet);
                     $validLheo = $lheoXML->isValidLHEO($objet);
-                    if ( $validLheo === false || count($erreursChampsParcours) > 0) {
+                    if ($validLheo === false || count($erreursChampsParcours) > 0) {
                         $xmlErrorArray = [];
                         foreach (libxml_get_errors() as $xmlError) {
                             $xmlErrorArray[] = $lheoXML->decodeErrorMessages($xmlError->message);
@@ -385,7 +385,7 @@ class ProcessValidationController extends BaseController
         $tParcours = [];
 
         foreach ($allParcours as $id) {
-           // $objet = $dpeParcoursRepository->find($id);
+            // $objet = $dpeParcoursRepository->find($id);
 
             $dpe = $dpeParcoursRepository->find($id);
             if ($dpe === null) {
@@ -569,11 +569,17 @@ class ProcessValidationController extends BaseController
 
             if ($this->isGranted('ROLE_SES')) {
                 $dpe = GetDpeParcours::getFromParcours($parcours);
+                if ($dpe === null) {
+                    return JsonReponse::error('DPE non trouvé');
+                }
+
                 //réouverture directe sans sauvegarde ou avec sauvegarde selon le choix
                 if ($data['demandeReouverture'] === 'MODIFICATION_SANS_CFVU') {
 
                     $dpe->setEtatValidation(['en_cours_redaction_ss_cfvu' => 1]); //un état de processus différent pour connaitre le branchement ensuite
                     $dpe->setEtatReconduction(TypeModificationDpeEnum::MODIFICATION_TEXTE);
+                    $now = new DateTimeImmutable('now');
+                    $versioningParcours->saveVersionOfParcours($parcours, $now, true, false);
                     $histoEvent = new HistoriqueParcoursEvent($parcours, $this->getUser(), 'soumis_central', 'valide', $request);
                     $this->eventDispatcher->dispatch($histoEvent, HistoriqueParcoursEvent::ADD_HISTORIQUE_PARCOURS);
                     $this->entityManager->flush();
@@ -587,8 +593,7 @@ class ProcessValidationController extends BaseController
 
                     $this->entityManager->flush();
                 }
-                //                $this->addFlash('success', 'DPE ouvert');
-                //                return $this->redirectToRoute('app_parcours_edit', ['id' => $parcours->getId()]);
+
                 return JsonReponse::success('DPE ouvert');
             }
 
@@ -623,32 +628,22 @@ class ProcessValidationController extends BaseController
             'type' => $type,
             'id' => $id,
         ]);
-
     }
 
     #[Route('/demande/reouverture/cloture', name: 'app_validation_demande_reouverture_cloture')]
-    /** @deprecated('plus nécessaire revient sur le process, uniquement si pas de MCCC/Maquette pour signaler les modifs avant publication') */
+    //autorisation de la cloture si pas de différence entre les versions
     public function demandeReouvertureCloture(
         DpeParcoursRepository  $dpeParcoursRepository,
         ParcoursRepository  $parcoursRepository,
-        FormationRepository $formationRepository,
+        VersioningParcours $versioningParcours,
         Request             $request
     ): Response {
         $type = $request->query->get('type');
         $id = $request->query->get('id');
 
-        $formation = null;
         $parcours = null;
 
         switch ($type) {
-            case 'formation':
-                $formation = $formationRepository->find($id);
-                $parcours = null;
-
-                if ($formation === null) {
-                    return JsonReponse::error('Formation non trouvée');
-                }
-                break;
             case 'parcours':
                 $parcours = $parcoursRepository->find($id);
                 $dpeParcours = $dpeParcoursRepository->findLastDpeForParcours($parcours);
@@ -656,7 +651,20 @@ class ProcessValidationController extends BaseController
                 if ($parcours === null ||  $dpeParcours === null) {
                     return JsonReponse::error('Parcours non trouvé');
                 }
-                $formation = $parcours->getFormation();
+
+                //todo: gérer le cas du parcours par défaut...
+                $textDifferencesParcours = $versioningParcours->getDifferencesBetweenParcoursAndLastVersion($parcours);
+                $version = $versioningParcours->hasLastVersion($parcours);
+
+                //parcourir toutes les clés de $textDifferencesParcours pour vérifier si il y a des différences (valeur non vide)
+                $hasDifferences = false;
+                foreach ($textDifferencesParcours as $key => $value) {
+                    if ($value !== '') {
+                        $hasDifferences = true;
+                        break;
+                    }
+                }
+
                 break;
         }
 
@@ -664,18 +672,27 @@ class ProcessValidationController extends BaseController
             $data = $request->request->all();
 
             if ($this->isGranted('ROLE_SES')) {
-                $dpe = GetDpeParcours::getFromParcours($parcours);
-                //réouverture directe sans sauvegarde ou avec sauvegarde selon le choix
-                if ($data['confirmeCloture'] === TypeModificationDpeEnum::MODIFICATION_TEXTE->value) {
 
-                    $dpe->setEtatValidation(['valide_a_publier' => 1]); //un état de processus différent pour connaitre le branchement ensuite
+                $dpe = GetDpeParcours::getFromParcours($parcours);
+
+                if ($dpe === null) {
+                    return JsonReponse::error('DPE non trouvé');
+                }
+                //réouverture directe sans sauvegarde ou avec sauvegarde selon le choix
+                if ($dpe->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_TEXTE) {
+//todo: tester si pas de diff, et si oui revenir au contenu de départ
+                    if ($hasDifferences === true) {
+                        //rollback ds modifs depuis la dernière version
+                        $versioningParcours->rollbackToLastVersion($parcours);
+                    }
+                    $dpe->setEtatValidation(['publie' => 1]); //un état de processus différent pour connaitre le branchement ensuite
                     $parcours->getDpeParcours()->first()->setEtatReconduction(TypeModificationDpeEnum::OUVERT);
 
                     $histoEvent = new HistoriqueParcoursEvent($parcours, $this->getUser(), 'cloture_ses_ss_cfvu', 'valide', $request);
                     $this->eventDispatcher->dispatch($histoEvent, HistoriqueParcoursEvent::ADD_HISTORIQUE_PARCOURS);
 
                     $this->entityManager->flush();
-                } elseif ($data['confirmeCloture'] === TypeModificationDpeEnum::MODIFICATION_MCCC->value || $data['confirmeCloture'] === TypeModificationDpeEnum::MODIFICATION_MCCC_TEXTE->value) {
+                } elseif ($dpe->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_MCCC || $dpe->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_MCCC_TEXTE) {
                     $process = $this->validationProcess->getEtape('ses');
                     $this->parcoursProcess->etatParcours($dpe, $process);
                     $dpe->setEtatReconduction(TypeModificationDpeEnum::OUVERT);
@@ -691,14 +708,18 @@ class ProcessValidationController extends BaseController
             }
 
 
-            return JsonReponse::success('Demande de réouverture enregistrée');
+         //   return JsonReponse::success('Demande de réouverture enregistrée');
         }
+
 
         if ($this->isGranted('ROLE_SES')) {
             return $this->render('process_validation/_demande_reouverture_cloture_ses.html.twig', [
                 'type' => $type,
                 'id' => $id,
-                'type_modif' =>$dpeParcours->getEtatReconduction()->value
+                'hasDifferences' => $hasDifferences,
+                'type_modif' =>$dpeParcours->getEtatReconduction()->value,
+                'stringDifferencesParcours' => $textDifferencesParcours,
+                'hasLastVersion' => $version,
             ]);
         }
 
