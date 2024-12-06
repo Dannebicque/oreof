@@ -33,6 +33,7 @@ class ExportController extends BaseController
         "xlsx-ec" => 'Fiches EC/Type (xslx)',
         "xlsx-seip" => 'Tableau SEIP (xslx)',
         "xlsx-regime" => 'Tableau Régimes Inscriptions (xslx)',
+        "xlsx-responsable" => 'Tableau des responsables (xslx)',
         "xlsx-cfvu" => 'Tableau Synthèse CFVU (xslx)',
     ];
 

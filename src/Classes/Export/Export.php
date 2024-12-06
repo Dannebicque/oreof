@@ -80,6 +80,8 @@ class Export
                 return $this->exportCarif();
             case 'regime':
                 return $this->exportRegime();
+            case 'responsable':
+                return $this->exportRegime();
             case 'cfvu':
                 return $this->exportCfvu();
             case 'cap':
