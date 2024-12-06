@@ -136,11 +136,6 @@ class GetElementConstitutif
     public function getFicheMatiereHeures() : FicheMatiere|ElementConstitutif {
         $ficheMatiere = $this->elementConstitutif->getFicheMatiere() ?? $this->elementConstitutif;
         if($this->elementConstitutif instanceof ElementConstitutif){
-            if ($this->isRaccroche() === true && $this->elementConstitutif->isSynchroHeures() === true
-            && !$this->elementConstitutif->getFicheMatiere()->isVolumesHorairesImpose()
-            ) {
-                $ficheMatiere = $this->getElementConstitutif();
-            }
             if($this->elementConstitutif->getEcParent()?->isHeuresEnfantsIdentiques()){
                 if(!$this->elementConstitutif->getFicheMatiere()?->isVolumesHorairesImpose()){
                     $ficheMatiere = $this->elementConstitutif->getEcParent();

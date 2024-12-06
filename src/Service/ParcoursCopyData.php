@@ -5,6 +5,7 @@ namespace App\Service;
 use App\Classes\CalculButStructureParcours;
 use App\Classes\CalculStructureParcours;
 use App\Classes\MyGotenbergPdf;
+use App\DTO\HeuresEctsEc;
 use App\DTO\StructureEc;
 use App\DTO\StructureParcours;
 use App\DTO\StructureSemestre;
@@ -190,7 +191,7 @@ class ParcoursCopyData {
     ){
         foreach($structUE->elementConstitutifs as $ec){
             if($onlyHeuresSpecifiques){
-                $this->placeHeuresSpecifiquesFlag($ec->elementConstitutif);
+                $this->placeHeuresSpecifiquesFlag($ec);
             }
             elseif($onlyMccc){
                 $this->moveMcccToFicheMatiere($ec, $parcoursId);
@@ -202,7 +203,7 @@ class ParcoursCopyData {
             foreach($ec->elementsConstitutifsEnfants as $ecEnfant){
                 if($onlyHeuresSpecifiques){
                     $isHeuresIdentiques = $ec->elementConstitutif->isHeuresEnfantsIdentiques();
-                    $this->placeHeuresSpecifiquesFlag($ecEnfant->elementConstitutif, $isHeuresIdentiques);
+                    $this->placeHeuresSpecifiquesFlag($ecEnfant, $isHeuresIdentiques);
                 }elseif($onlyMccc){
                     $this->moveMcccToFicheMatiere($ecEnfant, $parcoursId);
                 }elseif($onlyEcMcccSpecifiques){
@@ -313,14 +314,17 @@ class ParcoursCopyData {
         }
     }
 
-    public function placeHeuresSpecifiquesFlag(ElementConstitutif $ec, bool $isHeuresIdentiques = false){
-        if($ec->getFicheMatiere()){
-            $isDifferent = $this->hasHeuresFicheMatiereCopy($ec->getFicheMatiere())
-                && $this->hasEcSameHeuresAsFicheMatiereCopy($ec, $ec->getFicheMatiere()) === false;
+    public function placeHeuresSpecifiquesFlag(StructureEc $ec, bool $isHeuresIdentiques = false){
+        if($ec->elementConstitutif->getFicheMatiere()){
+            $isDifferent = $this->hasHeuresFicheMatiereCopy($ec->elementConstitutif->getFicheMatiere())
+                && $this->hasEcSameHeuresAsFicheMatiereCopy($ec->heuresEctsEc, $ec->elementConstitutif->getFicheMatiere()) === false;
     
-            // Si différent, sans synchro, et que les heures ne sont pas déjà sur le parent
-            if($isDifferent && ($ec->isSynchroHeures() === false || $ec->isSansHeure()) && !$isHeuresIdentiques){
-                $ecCopyFlag = $this->ecCopyRepo->find($ec->getId());
+            // Si différent, que les heures ne sont pas sur le parent, ni sur la FM
+            if( $isDifferent && !$isHeuresIdentiques 
+                && !$ec->elementConstitutif->getFicheMatiere()->isHorsDiplome() 
+                && !$ec->elementConstitutif->getFicheMatiere()->isVolumesHorairesImpose()
+            ){
+                $ecCopyFlag = $this->ecCopyRepo->find($ec->elementConstitutif->getId());
                 $ecCopyFlag->setHeuresSpecifiques(true);
                 $this->entityManagerCopy->persist($ecCopyFlag);
             }
@@ -831,7 +835,7 @@ class ParcoursCopyData {
     }
 
     public function hasEcSameHeuresAsFicheMatiereCopy(
-        ElementConstitutif $ec, 
+        HeuresEctsEc $heures, 
         FicheMatiere $ficheMatiere
     ){  
         if(array_key_exists($ficheMatiere->getId(), $this->ficheMatiereCopyDataArray)){
@@ -845,15 +849,15 @@ class ParcoursCopyData {
             $fmTpDist = $ficheMatiereCopy["tpDist"] ?? 0.0;
             $fmTe = $ficheMatiereCopy["te"] ?? 0.0;
 
-            $ecTe = $ec->getVolumeTe() ?? 0.0;
+            $ecTe = $heures->tePres;
     
-            return $fmCmPres === $ec->getVolumeCmPresentiel() 
-            && $fmCmDist === $ec->getVolumeCmDistanciel() 
-            && $fmTdPres === $ec->getVolumeTdPresentiel() 
-            && $fmTdDist === $ec->getVolumeTdDistanciel() 
-            && $fmTpPres === $ec->getVolumeTpPresentiel() 
-            && $fmTpDist === $ec->getVolumeTpDistanciel() 
-            && $fmTe === $ecTe;
+            return $fmCmPres === $heures->cmPres    
+            && $fmCmDist === $heures->cmDist        
+            && $fmTdPres === $heures->tdPres        
+            && $fmTdDist === $heures->tdDist        
+            && $fmTpPres === $heures->tpPres        
+            && $fmTpDist === $heures->tpDist        
+            && $fmTe === $ecTe; 
         }
 
         return null;
