@@ -373,16 +373,6 @@ class ParcoursCopyData {
             }
         }
 
-        // Si l'EC fait partie d'une UE mutualisée (porté par un autre parcours)
-        if($structEc->elementConstitutif->getUe()?->getUeMutualisables()->count() > 0){
-            if($structEc->elementConstitutif->getUe()->getSemestre()->getSemestreParcours()
-                ->first()->getParcours()->getId() === $parcoursId
-            ){
-                $ficheMatierePorteuse = $structEc->elementConstitutif->getFicheMatiere();
-                $isEcPorteur = true;
-            }
-        }
-
         // Si les MCCC sont sur l'EC
         if(!$structEc->elementConstitutif->getFicheMatiere()?->isMcccImpose()){
            if($ficheMatierePorteuse){
@@ -411,7 +401,6 @@ class ParcoursCopyData {
         $mcccResult = null;
         if($structEc->elementConstitutif->getFicheMatiere()
            && !$structEc->elementConstitutif->getEcParent()?->isMcccEnfantsIdentique()
-           && !$structEc->elementConstitutif->isMcccEnfantsIdentique()
         ){
             $mcccResult = $this->mcccCopyRepo->findBy(
                 ['ficheMatiere' => $structEc->elementConstitutif->getFicheMatiere()->getId()]
@@ -419,7 +408,7 @@ class ParcoursCopyData {
         }
         if(is_array($mcccResult)){
             $mcccAreEqual = $this->compareTwoMcccArray($structEc->mcccs, $mcccResult);
-            if($mcccAreEqual === false && !$structEc->elementConstitutif->isSynchroMccc()){
+            if($mcccAreEqual === false){
                 $ecCopyMccc = $this->ecCopyRepo->find($structEc->elementConstitutif->getId());
                 $ecCopyMccc->setMcccSpecifiques(true);
                 $this->entityManagerCopy->persist($ecCopyMccc);
