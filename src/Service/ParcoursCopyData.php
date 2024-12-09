@@ -399,6 +399,12 @@ class ParcoursCopyData {
      */
     public function placeMcccSpecifiquesFlag(StructureEc $structEc){
         $mcccResult = null;
+        if(!$structEc->elementConstitutif->getEcParent()?->isMcccEnfantsIdentique()){
+            $mcccResult = $this->mcccCopyRepo->findBy(
+                ['ec' => $structEc->elementConstitutif->getId()]
+            );
+        }
+
         if($structEc->elementConstitutif->getFicheMatiere()
            && !$structEc->elementConstitutif->getEcParent()?->isMcccEnfantsIdentique()
         ){
@@ -408,7 +414,7 @@ class ParcoursCopyData {
         }
         if(is_array($mcccResult)){
             $mcccAreEqual = $this->compareTwoMcccArray($structEc->mcccs, $mcccResult);
-            if($mcccAreEqual === false){
+            if($mcccAreEqual === false && !$structEc->elementConstitutif->getFicheMatiere()->isMcccImpose()){
                 $ecCopyMccc = $this->ecCopyRepo->find($structEc->elementConstitutif->getId());
                 $ecCopyMccc->setMcccSpecifiques(true);
                 $this->entityManagerCopy->persist($ecCopyMccc);
