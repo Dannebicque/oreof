@@ -86,8 +86,12 @@ class GetElementConstitutif
             return $this->elementConstitutif->getEcParent()->getMcccs();
         }
         
-        return $this->elementConstitutif->getFicheMatiere()?->getMcccs()
-            ?? $this->elementConstitutif->getMcccs();
+        
+        if($this->elementConstitutif->getFicheMatiere()){
+            return $this->elementConstitutif->getFicheMatiere()?->getMcccs();
+        } else {
+            return $this->elementConstitutif->getMcccs();
+        }
     }
 
     public function getEcts(): ?float
