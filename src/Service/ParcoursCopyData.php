@@ -98,6 +98,18 @@ class ParcoursCopyData {
         }
         $io->progressFinish();
 
+        $io->writeln("Traitement des ECTS spécifiques...");
+        $io->progressStart($nombreParcours);
+        foreach($formationArray as $f){
+            if($f->getTypeDiplome()->getLibelleCourt() !== "BUT"){
+                foreach($f->getParcours() as $p){
+                    $this->copyDataForParcoursFromDTO($p, onlyEctsSpecifiques: true);
+                    $io->progressAdvance(1);
+                }
+            }
+        }
+        $io->progressFinish();
+
         $io->writeln("Traitement de la copie des MCCC...");;
         $io->progressStart($nombreParcours);
         foreach($formationArray as $f){
@@ -155,16 +167,17 @@ class ParcoursCopyData {
         Parcours $parcours, 
         bool $onlyHeuresSpecifiques = false,
         bool $onlyMccc = false,
-        bool $onlyEcMcccSpecifiques = false
+        bool $onlyEcMcccSpecifiques = false,
+        bool $onlyEctsSpecifiques = false,
     ){
         $dto = $this->getDTOForParcours($parcours);
         foreach($dto->semestres as $semestre){
             foreach($semestre->ues as $ue){
-                $this->copyDataForUeFromDTO($ue, $parcours->getId(), $onlyHeuresSpecifiques, $onlyMccc, $onlyEcMcccSpecifiques);
+                $this->copyDataForUeFromDTO($ue, $parcours->getId(), $onlyHeuresSpecifiques, $onlyMccc, $onlyEcMcccSpecifiques, $onlyEctsSpecifiques);
                 foreach($ue->uesEnfants() as $ueEnfant){
-                    $this->copyDataForUeFromDTO($ueEnfant, $parcours->getId(), $onlyHeuresSpecifiques, $onlyMccc, $onlyEcMcccSpecifiques);
+                    $this->copyDataForUeFromDTO($ueEnfant, $parcours->getId(), $onlyHeuresSpecifiques, $onlyMccc, $onlyEcMcccSpecifiques, $onlyEctsSpecifiques);
                     foreach($ueEnfant->uesEnfants() as $ueEnfantDeuxieme){
-                        $this->copyDataForUeFromDTO($ueEnfantDeuxieme, $parcours->getId(), $onlyHeuresSpecifiques, $onlyMccc, $onlyEcMcccSpecifiques);
+                        $this->copyDataForUeFromDTO($ueEnfantDeuxieme, $parcours->getId(), $onlyHeuresSpecifiques, $onlyMccc, $onlyEcMcccSpecifiques, $onlyEctsSpecifiques);
                     }
                 }
             }
@@ -188,6 +201,7 @@ class ParcoursCopyData {
         bool $onlyHeuresSpecifiques,
         bool $onlyMccc,
         bool $onlyEcMcccSpecifiques,
+        bool $onlyEctsSpecifiques,
     ){
         foreach($structUE->elementConstitutifs as $ec){
             if($onlyHeuresSpecifiques){
@@ -197,7 +211,10 @@ class ParcoursCopyData {
                 $this->moveMcccToFicheMatiere($ec, $parcoursId);
             } elseif($onlyEcMcccSpecifiques){
                 $this->placeMcccSpecifiquesFlag($ec);
-            } else {
+            } 
+            elseif($onlyEctsSpecifiques){
+                $this->placeEctsSpecifiquesFlag($ec);
+            }else {
                 $this->copyDataOnFicheMatiere($ec->elementConstitutif, $ec->elementConstitutif->getFicheMatiere(), $parcoursId);
             }
             foreach($ec->elementsConstitutifsEnfants as $ecEnfant){
@@ -208,7 +225,10 @@ class ParcoursCopyData {
                     $this->moveMcccToFicheMatiere($ecEnfant, $parcoursId);
                 }elseif($onlyEcMcccSpecifiques){
                     $this->placeMcccSpecifiquesFlag($ecEnfant);
-                }else {
+                }elseif($onlyEctsSpecifiques){
+                    $this->placeEctsSpecifiquesFlag($ecEnfant);
+                }
+                else {
                     if($ec->elementConstitutif->isHeuresEnfantsIdentiques()){
                         $this->copyDataOnFicheMatiere(
                             $ec->elementConstitutif, 
@@ -298,6 +318,9 @@ class ParcoursCopyData {
                     $ficheMatiereFromCopy->setVolumeTpDistanciel($ec->getVolumeTpDistanciel());
                     $ficheMatiereFromCopy->setVolumeTe($ec->getVolumeTe());
 
+                    // ECTS 
+                    $ficheMatiereFromCopy->setEcts($ec->getEcts());
+
                     $this->ficheMatiereCopyDataArray[$ficheMatiereSource->getId()] = [
                         'cmPres' => $ec->getVolumeCmPresentiel(),
                         'tdPres' => $ec->getVolumeTdPresentiel(),
@@ -306,6 +329,7 @@ class ParcoursCopyData {
                         'tdDist' => $ec->getVolumeTdDistanciel(),
                         'tpDist' => $ec->getVolumeTpDistanciel(),
                         'te' => $ec->getVolumeTe(),
+                        'ects' => $ec->getEcts()
                     ];
 
                     $this->entityManagerCopy->persist($ficheMatiereFromCopy);
@@ -327,6 +351,21 @@ class ParcoursCopyData {
                 $ecCopyFlag = $this->ecCopyRepo->find($ec->elementConstitutif->getId());
                 $ecCopyFlag->setHeuresSpecifiques(true);
                 $this->entityManagerCopy->persist($ecCopyFlag);
+            }
+        }
+    }
+
+    public function placeEctsSpecifiquesFlag(StructureEc $ec){
+        if($ec->elementConstitutif->getFicheMatiere()){
+            $isDifferent = $this->hasEctsDifferent($ec);
+
+            if( $ec->elementConstitutif->getEcParent() === null 
+                && $isDifferent
+                && !$ec->elementConstitutif->getFicheMatiere()?->isEctsImpose()
+            ){
+                $ecCopyEcts = $this->ecCopyRepo->find($ec->elementConstitutif->getId());
+                $ecCopyEcts->setEctsSpecifiques(true);
+                $this->entityManagerCopy->persist($ecCopyEcts);
             }
         }
     }
@@ -1161,5 +1200,14 @@ class ParcoursCopyData {
             self::$errorMessageArray[$parcoursId] = [];
         } 
         self::$errorMessageArray[$parcoursId][] = $message;
+    }
+
+    private function hasEctsDifferent(StructureEc $ec) : bool {
+        if($this->hasHeuresFicheMatiereCopy($ec->elementConstitutif->getFicheMatiere())){
+            return $ec->heuresEctsEc->ects 
+                !== $this->ficheMatiereCopyDataArray[$ec->elementConstitutif->getFicheMatiere()->getId()]['ects'];
+        }
+
+        return true;
     }
 }
