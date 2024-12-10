@@ -111,6 +111,26 @@ class GetElementConstitutif
         return $this->elementConstitutif->getEcts();
     }
 
+    public function getFicheMatiereEcts() : float {
+        $isEctsImpose = $this->elementConstitutif->getFicheMatiere()?->isEctsImpose();
+        
+        if($this->elementConstitutif->isEctsSpecifiques() && !$isEctsImpose){
+            return $this->elementConstitutif->getEcts();
+        }
+
+        if($this->elementConstitutif->getEcParent() !== null && !$isEctsImpose){
+            return $this->elementConstitutif->getEcParent()->getEcts();
+        }
+
+        if($this->elementConstitutif->getFicheMatiere()){
+            return $this->elementConstitutif->getFicheMatiere()->getEcts();
+        }
+        else {
+            return $this->elementConstitutif->getEcts();
+        }
+
+    }
+
     public function getElementConstitutifHeures(): ElementConstitutif|FicheMatiere
     {
         if ($this->elementConstitutif->getFicheMatiere()?->isVolumesHorairesImpose()) {

@@ -491,7 +491,15 @@ class ParcoursCopyData {
         );
     }
 
-    public function compareTwoDTO(StructureParcours $dto1, StructureParcours $dto2){
+    public function compareTwoDTO(
+        StructureParcours $dto1,
+        StructureParcours $dto2,
+        string $typeVerif = 'hours'
+    ){
+        if(in_array($typeVerif, ['hours', 'ects']) === false){
+            throw new \Exception("Le type de vérification doit être parmi ['hours', 'ects'].");
+        }
+
         $result = true;
         // Même nombre de semestres
         $nbSemestre = count($dto1->semestres) === count($dto2->semestres);
@@ -501,8 +509,16 @@ class ParcoursCopyData {
         }
         foreach($dto1->semestres as $indexSemestre => $semestre){
             $totalHeureSemestre = $this->compareSemestresHeures($dto1->semestres[$indexSemestre], $dto2->semestres[$indexSemestre]);
-            if($totalHeureSemestre === false){
+            if($totalHeureSemestre === false && $typeVerif === 'hours'){
                 $result = false;
+            }
+            if($typeVerif === 'ects'){
+                if( $dto1->semestres[$indexSemestre]->heuresEctsSemestre->sommeSemestreEcts 
+                    !== $dto2->semestres[$indexSemestre]->heuresEctsSemestre->sommeSemestreEcts
+                ){
+                    $result = false;
+                    self::$errorMessageArray[] = "Semestre {$dto1->semestres[$indexSemestre]->ordre} - Somme des ECTS différente";
+                }
             }
             // Même nombre d'UE
             $nbUe = count($dto1->semestres[$indexSemestre]->ues) === count($dto2->semestres[$indexSemestre]->ues);
@@ -511,13 +527,26 @@ class ParcoursCopyData {
                 $result = false;
             }
             foreach($dto1->semestres[$indexSemestre]->ues as $indexUe => $ue){
-                // Comparaison des heures des UE
-                $comparaisonUe = $this->compareTwoUeDTO(
-                    $dto1->semestres[$indexSemestre]->ues[$indexUe],
-                    $dto2->semestres[$indexSemestre]->ues[$indexUe]
-                );
-                if($comparaisonUe === false){
-                    $result = false;
+                if($typeVerif === 'hours'){
+                    // Comparaison des heures des UE
+                    $comparaisonUe = $this->compareTwoUeDTO(
+                        $dto1->semestres[$indexSemestre]->ues[$indexUe],
+                        $dto2->semestres[$indexSemestre]->ues[$indexUe]
+                    );
+                    if($comparaisonUe === false){
+                        $result = false;
+                    }
+                }
+                if($typeVerif === 'ects'){
+                    // Comparaison des ECTS des UE
+                    $comparaisonEctsUe = $this->compareTwoUeDTO(
+                        $dto1->semestres[$indexSemestre]->ues[$indexUe],
+                        $dto2->semestres[$indexSemestre]->ues[$indexUe],
+                        typeVerif: 'ects',
+                    );
+                    if($comparaisonEctsUe === false){
+                        $result = false;
+                    }
                 }
                 // Si des UE enfants
                 if(count($dto1->semestres[$indexSemestre]->ues[$indexUe]->uesEnfants) > 0){
@@ -530,13 +559,26 @@ class ParcoursCopyData {
                     }
 
                     foreach($dto1->semestres[$indexSemestre]->ues[$indexUe]->uesEnfants() as $indexUeE => $ueE){
-                        // Comparaison des heures des UE Enfant
-                        $comparaisonUeEnfant = $this->compareTwoUeDTO(
+                        if($typeVerif === 'hours'){
+                            // Comparaison des heures des UE Enfant
+                            $comparaisonUeEnfant = $this->compareTwoUeDTO(
+                                    $dto1->semestres[$indexSemestre]->ues[$indexUe]->uesEnfants()[$indexUeE],
+                                    $dto2->semestres[$indexSemestre]->ues[$indexUe]->uesEnfants()[$indexUeE]
+                                );
+                            if($comparaisonUeEnfant === false){
+                                $result = false;
+                            }
+                        }
+                        if($typeVerif === 'ects'){
+                            // Comparaison des ECTS de UE enfant
+                            $comparaisonEctsUeEnfant = $this->compareTwoUeDTO(
                                 $dto1->semestres[$indexSemestre]->ues[$indexUe]->uesEnfants()[$indexUeE],
-                                $dto2->semestres[$indexSemestre]->ues[$indexUe]->uesEnfants()[$indexUeE]
+                                $dto2->semestres[$indexSemestre]->ues[$indexUe]->uesEnfants()[$indexUeE],
+                                typeVerif: 'ects'
                             );
-                        if($comparaisonUeEnfant === false){
-                            $result = false;
+                            if($comparaisonEctsUeEnfant === false){
+                                $result = false;
+                            }
                         }
                         // Même nombre d'UE Enfant
                         if(count($dto1->semestres[$indexSemestre]->ues[$indexUe]->uesEnfants()[$indexUeE]->uesEnfants()) > 0){
@@ -548,12 +590,25 @@ class ParcoursCopyData {
                             }
                             // Comparaison des heures des UE enfant d'UE enfant
                             foreach($dto1->semestres[$indexSemestre]->ues[$indexUe]->uesEnfants()[$indexUeE]->uesEnfants() as $indexUeEDeuxieme => $ueEDeuxieme){
-                                $comparaisonUeEnfantDeuxieme = $this->compareTwoUeDTO(
-                                    $dto1->semestres[$indexSemestre]->ues[$indexUe]->uesEnfants()[$indexUeE]->uesEnfants()[$indexUeEDeuxieme],
-                                    $dto2->semestres[$indexSemestre]->ues[$indexUe]->uesEnfants()[$indexUeE]->uesEnfants()[$indexUeEDeuxieme]
-                                );
-                                if($comparaisonUeEnfantDeuxieme === false){
-                                    $result = false;
+                                if($typeVerif === 'hours'){
+                                    $comparaisonUeEnfantDeuxieme = $this->compareTwoUeDTO(
+                                        $dto1->semestres[$indexSemestre]->ues[$indexUe]->uesEnfants()[$indexUeE]->uesEnfants()[$indexUeEDeuxieme],
+                                        $dto2->semestres[$indexSemestre]->ues[$indexUe]->uesEnfants()[$indexUeE]->uesEnfants()[$indexUeEDeuxieme]
+                                    );
+                                    if($comparaisonUeEnfantDeuxieme === false){
+                                        $result = false;
+                                    }
+                                }
+                                if($typeVerif === 'ects'){
+                                    // Comparaison des ECTS d'UE enfant d'UE enfant (deuxième niveau)
+                                    $comparaisonEctsUeEnfantDeuxieme = $this->compareTwoUeDTO(
+                                        $dto1->semestres[$indexSemestre]->ues[$indexUe]->uesEnfants()[$indexUeE]->uesEnfants()[$indexUeEDeuxieme],
+                                        $dto2->semestres[$indexSemestre]->ues[$indexUe]->uesEnfants()[$indexUeE]->uesEnfants()[$indexUeEDeuxieme],
+                                        typeVerif: 'ects'
+                                    );
+                                    if($comparaisonEctsUeEnfantDeuxieme === false){
+                                        $result = false;
+                                    }
                                 }
                             }
                         }
@@ -778,15 +833,26 @@ class ParcoursCopyData {
 
     public function compareTwoUeDTO(
         StructureUe $ue1,
-        StructureUe $ue2
+        StructureUe $ue2,
+        string $typeVerif = "hours"
     ) : bool {
 
+        if(in_array($typeVerif, ['hours', 'ects']) === false){
+            throw new \Exception("Le type de vérification doit être parmi ['hours', 'ects'].");
+        }
+
         $result = true;
+
+        // Même ECTS sur les UE
+        if($ue1->heuresEctsUe->sommeUeEcts !== $ue2->heuresEctsUe->sommeUeEcts && $typeVerif === 'ects'){
+            self::$errorMessageArray[] = "{$ue1->display} : ECTS différent";
+            $result = false;
+        }
         // Même heures sur les UE
         $totalHeureUe = $this->compareUeHeures($ue1, $ue2);
         // Même nombre d'EC
         $nbEc = count($ue1->elementConstitutifs) === count($ue2->elementConstitutifs);
-        if($totalHeureUe === false){
+        if($totalHeureUe === false && $typeVerif === 'hours'){
             $result = false;
         }
         if($nbEc === false){
@@ -794,14 +860,26 @@ class ParcoursCopyData {
             $result = false;
         }
         foreach($ue1->elementConstitutifs as $indexEc => $valueEc){
-            // Comparaison d'heures des EC
-            $comparaisonHeureEc = $this->compareEcHeures(
-                $ue1->elementConstitutifs[$indexEc],
-                $ue2->elementConstitutifs[$indexEc], 
-                $ue1->display
-            );
-            if($comparaisonHeureEc === false){
-                $result = false;
+            if($typeVerif === 'hours'){
+                // Comparaison d'heures des EC
+                $comparaisonHeureEc = $this->compareEcHeures(
+                    $ue1->elementConstitutifs[$indexEc],
+                    $ue2->elementConstitutifs[$indexEc], 
+                    $ue1->display
+                );
+                if($comparaisonHeureEc === false){
+                    $result = false;
+                }
+            }
+            if($typeVerif === 'ects'){
+                $comparaisonEctsEc = $this->compareEctsEC(
+                    $ue1->elementConstitutifs[$indexEc],
+                    $ue2->elementConstitutifs[$indexEc],
+                    $ue1->display
+                );
+                if($comparaisonEctsEc === false){
+                    $result = false;
+                }
             }
             if(count($ue1->elementConstitutifs[$indexEc]->elementsConstitutifsEnfants) > 0){
                 // Même nombre d'EC enfants
@@ -813,14 +891,26 @@ class ParcoursCopyData {
                 }
                 // Les EC enfants ont leur ID de BD comme clé
                 foreach($ue1->elementConstitutifs[$indexEc]->elementsConstitutifsEnfants as $indexEcE => $valueEcE){
-                    // Comparaison d'heures des EC enfants
-                    $comparaisonHeureEcEnfant = $this->compareEcHeures(
-                        $ue1->elementConstitutifs[$indexEc]->elementsConstitutifsEnfants[$indexEcE],
-                        $ue2->elementConstitutifs[$indexEc]->elementsConstitutifsEnfants[$indexEcE],
-                        $ue1->display
-                    );
-                    if($comparaisonHeureEcEnfant === false){
-                        $result = false;
+                    if($typeVerif === 'hours'){
+                        // Comparaison d'heures des EC enfants
+                        $comparaisonHeureEcEnfant = $this->compareEcHeures(
+                            $ue1->elementConstitutifs[$indexEc]->elementsConstitutifsEnfants[$indexEcE],
+                            $ue2->elementConstitutifs[$indexEc]->elementsConstitutifsEnfants[$indexEcE],
+                            $ue1->display
+                        );
+                        if($comparaisonHeureEcEnfant === false){
+                            $result = false;
+                        }
+                    }
+                    if($typeVerif === 'ects'){
+                        $comparaisonEctsEcEnfant = $this->compareEctsEC(
+                            $ue1->elementConstitutifs[$indexEc]->elementsConstitutifsEnfants[$indexEcE],
+                            $ue2->elementConstitutifs[$indexEc]->elementsConstitutifsEnfants[$indexEcE],
+                            $ue1->display
+                        );
+                        if($comparaisonEctsEcEnfant === false){
+                            $result = false;
+                        }
                     }
                 }
             }
@@ -1036,6 +1126,18 @@ class ParcoursCopyData {
         return $return;
     }
 
+    private function compareEctsEC(
+        StructureEc $ec1, 
+        StructureEc $ec2, 
+        string $debugText = ""
+    ){
+        $result = $ec1->heuresEctsEc->ects === $ec2->heuresEctsEc->ects;
+        if($result === false){
+            self::$errorMessageArray[] = $debugText . " EC {$ec1->elementConstitutif->getCode()} - ECTS différents";
+        }
+        return $result;
+    }
+
     private function twoArrayAreIdentical(array $array1, array $array2){
         $retour = true;
         if(count($array1) !== count($array2)){
@@ -1052,5 +1154,12 @@ class ParcoursCopyData {
             }
         }
         return $retour;
+    }
+
+    private function placeErrorMessage(int $parcoursId, string $message){
+        if(array_key_exists($parcoursId, self::$errorMessageArray) === false){
+            self::$errorMessageArray[$parcoursId] = [];
+        } 
+        self::$errorMessageArray[$parcoursId][] = $message;
     }
 }

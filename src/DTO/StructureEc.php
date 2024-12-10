@@ -77,7 +77,12 @@ class StructureEc
             elseif ($dataFromFicheMatiere === true) {
                 $this->heuresEctsEc->addEc($getElement->getFicheMatiereHeures(), $isBut, $dataFromFicheMatiere);
             }
-            $this->heuresEctsEc->addEcts($getElement->getEcts());
+            if($dataFromFicheMatiere === false){
+                $this->heuresEctsEc->addEcts($getElement->getEcts());
+            }
+            elseif($dataFromFicheMatiere === true){
+                $this->heuresEctsEc->addEcts($getElement->getFicheMatiereEcts());
+            }
             if($dataFromFicheMatiere === false){
                 $this->mcccs = $getElement->getMcccsCollection()?->toArray();
             }

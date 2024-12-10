@@ -187,8 +187,8 @@ class ParcoursCopyDataCommand extends Command
             return Command::SUCCESS;
         }
         else if($compareTwoDatabases){
-            if(in_array($compareTwoDatabases, ['hours', 'mccc']) === false){
-                $io->warning("Mode de comparaison non reconnue. Doit être parmi ['hours', 'mccc']");
+            if(in_array($compareTwoDatabases, ['hours', 'mccc', 'ects']) === false){
+                $io->warning("Mode de comparaison non reconnue. Doit être parmi ['hours', 'mccc', 'ects']");
                 return Command::INVALID;
             }
             if($compareTwoDatabases === 'hours'){
@@ -196,6 +196,9 @@ class ParcoursCopyDataCommand extends Command
             }
             elseif ($compareTwoDatabases === 'mccc'){
                 $infoText = "Informations comparées : [MCCC]";
+            }
+            elseif ($compareTwoDatabases === 'ects'){
+                $infoText = "Informations comparées : [ECTS]";
             }
 
             $io->writeln("Comparaison des DTO des deux base de données...");
@@ -224,6 +227,11 @@ class ParcoursCopyDataCommand extends Command
                             if($this->parcoursCopyData->compareTwoDtoForMCCC($dtoBefore, $dtoAfter) === false){
                                 $errorArray[] = "ID : {$parcours->getId()} - {$parcours->getFormation()->getDisplayLong()}";
                             }
+                        }
+                        elseif($compareTwoDatabases === 'ects'){
+                            if($this->parcoursCopyData->compareTwoDTO($dtoBefore, $dtoAfter, typeVerif: 'ects') === false){
+                                $errorArray[] = "ID : {$parcours->getId()} - {$parcours->getFormation()->getDisplayLong()}";
+                            }
                         }   
                         $io->progressAdvance(1);
                     }
@@ -249,6 +257,16 @@ class ParcoursCopyDataCommand extends Command
                 }else {
                     dump($errorArray);
                     $io->writeln("{$nbErreur} Maquettes ont des MCCC différents.");
+                }
+            }
+            elseif($compareTwoDatabases === 'ects'){
+                $nbErreur = count($errorArray);
+                if($nbErreur === 0){
+                    $io->success("Les ECTS correspondent !");
+                    return Command::SUCCESS;
+                }else {
+                    dump($errorArray);
+                    $io->writeln("{$nbErreur} Parcours ont des ECTS différents.");
                 }
             }
 
