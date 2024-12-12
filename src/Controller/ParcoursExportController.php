@@ -302,7 +302,7 @@ class ParcoursExportController extends AbstractController
             $libelle = $ec->elementConstitutif->getTexteEcLibre();
             $ecLibre = true;
         } else {
-            $libelle = $ec->elementConstitutif->getFicheMatiere()?->getLibelle() ?? '-';
+            $libelle = $ec->elementConstitutif->getFicheMatiere()?->getLibelle() ?? $ec->elementConstitutif->getLibelle() ?? '-';
             $ecLibre = false;
         }
 
