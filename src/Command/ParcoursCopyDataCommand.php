@@ -74,6 +74,10 @@ class ParcoursCopyDataCommand extends Command
             name: 'mccc',
             mode: InputOption::VALUE_NONE,
             description: "Option pour effectuer la commande sur les MCCC (ex: comparaison de deux DTO)"
+        )->addOption(
+            name: 'ects',
+            mode: InputOption::VALUE_NONE,
+            description: "Option pour effectuer la commande sur les ECTS (ex: comparaison de deux DTO)"
         );
     }
 
@@ -90,6 +94,7 @@ class ParcoursCopyDataCommand extends Command
         $fromCopy = $input->getOption('from-copy');
         $compareTwoDatabases = $input->getOption('compare-two-databases');
         $focusOnMccc = $input->getOption('mccc');
+        $focusOnEcts = $input->getOption('ects');
 
         if($dtoPdfExport){
             try{
@@ -160,7 +165,11 @@ class ParcoursCopyDataCommand extends Command
                     // Une fois que la copie a été faite
                     $dtoAfter = $this->parcoursCopyData->getDTOForParcours($parcours, true, false, true);
                     $isEqual = $this->parcoursCopyData->compareTwoDtoForMCCC($dtoBefore, $dtoAfter);
-                } else {    
+                } 
+                elseif($focusOnEcts){
+                    $dtoAfter = $this->parcoursCopyData->getDTOForParcours($parcours, true, false, true);
+                    $isEqual = $this->parcoursCopyData->compareTwoDTO($dtoBefore, $dtoAfter, 'ects');
+                }else {    
                     $isEqual = $this->parcoursCopyData->compareTwoDTO($dtoBefore, $dtoAfter);
                 }
 

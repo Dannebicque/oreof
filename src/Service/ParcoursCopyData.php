@@ -318,9 +318,6 @@ class ParcoursCopyData {
                     $ficheMatiereFromCopy->setVolumeTpDistanciel($ec->getVolumeTpDistanciel());
                     $ficheMatiereFromCopy->setVolumeTe($ec->getVolumeTe());
 
-                    // ECTS 
-                    $ficheMatiereFromCopy->setEcts($ec->getEcts());
-
                     $this->ficheMatiereCopyDataArray[$ficheMatiereSource->getId()] = [
                         'cmPres' => $ec->getVolumeCmPresentiel(),
                         'tdPres' => $ec->getVolumeTdPresentiel(),
@@ -329,8 +326,16 @@ class ParcoursCopyData {
                         'tdDist' => $ec->getVolumeTdDistanciel(),
                         'tpDist' => $ec->getVolumeTpDistanciel(),
                         'te' => $ec->getVolumeTe(),
-                        'ects' => $ec->getEcts()
                     ];
+
+                    // ECTS 
+                    if( $ec->getEcts() !== 0.0 && $ec->getEcts() !== null 
+                        && $this->hasFicheMatiereEcts($ficheMatiereSource) === false
+                    ){
+                        $ects = $ec->getEcts();
+                        $ficheMatiereFromCopy->setEcts($ects);
+                        $this->ficheMatiereCopyDataArray[$ficheMatiereSource->getId()]['ects'] = $ects;
+                    }
 
                     $this->entityManagerCopy->persist($ficheMatiereFromCopy);
                 }       
@@ -360,7 +365,8 @@ class ParcoursCopyData {
             $isDifferent = $this->hasEctsDifferent($ec);
 
             if( $ec->elementConstitutif->getEcParent() === null 
-                && $isDifferent
+                && $isDifferent === true
+                && $ec->elementConstitutif->getEcts() === $ec->heuresEctsEc->ects
                 && !$ec->elementConstitutif->getFicheMatiere()?->isEctsImpose()
             ){
                 $ecCopyEcts = $this->ecCopyRepo->find($ec->elementConstitutif->getId());
@@ -1172,7 +1178,8 @@ class ParcoursCopyData {
     ){
         $result = $ec1->heuresEctsEc->ects === $ec2->heuresEctsEc->ects;
         if($result === false){
-            self::$errorMessageArray[] = $debugText . " EC {$ec1->elementConstitutif->getCode()} - ECTS différents";
+            self::$errorMessageArray[] = $debugText . " EC {$ec1->elementConstitutif->getCode()} - "
+                . "ECTS différents {$ec1->heuresEctsEc->ects} | {$ec2->heuresEctsEc->ects}";
         }
         return $result;
     }
@@ -1202,12 +1209,20 @@ class ParcoursCopyData {
         self::$errorMessageArray[$parcoursId][] = $message;
     }
 
-    private function hasEctsDifferent(StructureEc $ec) : bool {
-        if($this->hasHeuresFicheMatiereCopy($ec->elementConstitutif->getFicheMatiere())){
+    private function hasEctsDifferent(StructureEc $ec) : bool|null {
+        if($this->hasFicheMatiereEcts($ec->elementConstitutif->getFicheMatiere())){
             return $ec->heuresEctsEc->ects 
                 !== $this->ficheMatiereCopyDataArray[$ec->elementConstitutif->getFicheMatiere()->getId()]['ects'];
         }
 
-        return true;
+        return null;
+    }
+
+    private function hasFicheMatiereEcts(FicheMatiere $fm){
+        if($this->hasHeuresFicheMatiereCopy($fm)){
+            return array_key_exists('ects', $this->ficheMatiereCopyDataArray[$fm->getId()]);
+        }
+
+        return false;
     }
 }
