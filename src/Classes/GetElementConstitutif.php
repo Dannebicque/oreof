@@ -122,8 +122,8 @@ class GetElementConstitutif
             return $this->elementConstitutif->getEcParent()->getEcts();
         }
 
-        if($this->elementConstitutif->getFicheMatiere()?->getEcts()){
-            return $this->elementConstitutif->getFicheMatiere()->getEcts();
+        if($this->elementConstitutif->getFicheMatiere()){
+            return $this->elementConstitutif->getFicheMatiere()->getEcts() ?? 0.0;
         }
         else {
             return $this->elementConstitutif->getEcts();
