@@ -48,6 +48,8 @@ class ParcoursCopyData {
 
     private array $ficheMatiereCopyDataArray = [];
 
+    private array $ficheMatiereEctsCopyArray = [];
+
     private array $mcccCopyDataArray = [];
 
 
@@ -266,49 +268,53 @@ class ParcoursCopyData {
             );
             $hasFicheMatiereEcPorteur = count($hasFicheMatiereEcPorteur) > 0;
             $countEcForFiche = count($ficheMatiereSource->getElementConstitutifs()->toArray());
+            $ecEcts = null;
 
             $isEcPorteur = false;
             // Si l'EC et la FM font partie du parcours
             if($ficheMatiereFromParcours && $ecFromParcours){
                 $ec = $ecSource;
                 $isEcPorteur = true;
+                $ecEcts = $ecSource->getEcParent() ? $ecSource->getEcParent() : $ecSource;                
             }
             // Si la fiche n'a pas d'EC porteur, on prend le premier
             if($hasFicheMatiereEcPorteur === false || $countEcForFiche === 1){
                 $ec = $ficheMatiereSource->getElementConstitutifs()->first();
+                $ecEcts = $ficheMatiereSource->getElementConstitutifs()->first();
             }
             // Si l'EC fait partie d'une UE mutualisée (portée par un autre parcours)
             if($ecSource->getUe()?->getUeMutualisables()->count() > 0){
                 if($ecSource->getUe()->getSemestre()->getSemestreParcours()->first()->getParcours()->getId() === $parcoursId){
                     $ec = $ecSource;
                     $isEcPorteur = true;
+                    $ecEcts = $ecSource;
                 }
             }
-
-            // Si le volume est imposé ou que la FM est hors diplôme, les heures sont déjà dessus
-            if(!$isVolumeHoraireFMImpose && !$isHorsDiplome){
-                // Cas où il y a la valeur 'synchro heures'
-                if($hasSynchroHeures){
-                    if(count($ficheMatiereSource->getElementConstitutifs()->toArray()) >= 2){
-                        $ecPorteur = $ficheMatiereSource->getElementConstitutifs()->filter(
-                            fn($ec) => $ec->getParcours()->getId() === $ficheMatiereSource->getParcours()->getId()
-                                && $ec->getParcours()->getId() !== null && $ficheMatiereSource->getParcours()->getId() !== null
-                        );
-                        if(count($ecPorteur) > 0){
-                            $ec = $ecPorteur->first();
-                        }
-                    }elseif(count($ficheMatiereSource->getElementConstitutifs()->toArray()) === 1){
-                        $ec = $ficheMatiereSource->getElementConstitutifs()->first();
+        
+            // Cas où il y a la valeur 'synchro heures'
+            if($hasSynchroHeures){
+                if(count($ficheMatiereSource->getElementConstitutifs()->toArray()) >= 2){
+                    $ecPorteur = $ficheMatiereSource->getElementConstitutifs()->filter(
+                        fn($ec) => $ec->getParcours()?->getId() === $ficheMatiereSource->getParcours()?->getId()
+                            && $ec->getParcours()?->getId() !== null && $ficheMatiereSource->getParcours()?->getId() !== null
+                    );
+                    if(count($ecPorteur) > 0){
+                        $ec = $ecPorteur->first();
                     }
+                }elseif(count($ficheMatiereSource->getElementConstitutifs()->toArray()) === 1){
+                    $ec = $ficheMatiereSource->getElementConstitutifs()->first();
                 }
-                // Cas où il y a la valeur 'heure enfant identique'
-                if($isHeuresEnfantIdentiques && $ficheMatiereFromParcours && $ecFromParcours){
-                    $ec = $ecSource;
-                }  
-                if(($isEcPorteur || $hasFicheMatiereEcPorteur === false || $countEcForFiche === 1) 
-                    && $this->hasHeuresFicheMatiereCopy($ficheMatiereSource) === false
-                ) {
-                    $ficheMatiereFromCopy = $this->fmCopyRepo->find($ficheMatiereSource->getId());
+            }
+            // Cas où il y a la valeur 'heure enfant identique'
+            if($isHeuresEnfantIdentiques && $ficheMatiereFromParcours && $ecFromParcours){
+                $ec = $ecSource;
+            } 
+            if(($isEcPorteur || $hasFicheMatiereEcPorteur === false || $countEcForFiche === 1) 
+                && $this->hasHeuresFicheMatiereCopy($ficheMatiereSource) === false
+            ) {
+                $ficheMatiereFromCopy = $this->fmCopyRepo->find($ficheMatiereSource->getId());
+                // Si le volume est imposé ou que la FM est hors diplôme, les heures sont déjà dessus
+                if(!$isVolumeHoraireFMImpose && !$isHorsDiplome){
 
                     $ficheMatiereFromCopy->setVolumeCmPresentiel($ec->getVolumeCmPresentiel());
                     $ficheMatiereFromCopy->setVolumeTdPresentiel($ec->getVolumeTdPresentiel());
@@ -327,19 +333,21 @@ class ParcoursCopyData {
                         'tpDist' => $ec->getVolumeTpDistanciel(),
                         'te' => $ec->getVolumeTe(),
                     ];
+                }
 
-                    // ECTS 
-                    if( $ec->getEcts() !== 0.0 && $ec->getEcts() !== null 
-                        && $this->hasFicheMatiereEcts($ficheMatiereSource) === false
-                    ){
-                        $ects = $ec->getEcts();
+                // ECTS 
+                if( $ecEcts !== null 
+                    && $this->hasFicheMatiereEcts($ficheMatiereSource) === false
+                ){
+                    $ects = $ecEcts->getEcts();
+                    if(is_null($ects) === false){
                         $ficheMatiereFromCopy->setEcts($ects);
-                        $this->ficheMatiereCopyDataArray[$ficheMatiereSource->getId()]['ects'] = $ects;
+                        $this->ficheMatiereEctsCopyArray[$ficheMatiereSource->getId()] = $ects;
                     }
+                }
 
-                    $this->entityManagerCopy->persist($ficheMatiereFromCopy);
-                }       
-            }
+                $this->entityManagerCopy->persist($ficheMatiereFromCopy);
+            }       
         }
     }
 
@@ -362,11 +370,11 @@ class ParcoursCopyData {
 
     public function placeEctsSpecifiquesFlag(StructureEc $ec){
         if($ec->elementConstitutif->getFicheMatiere()){
-            $isDifferent = $this->hasEctsDifferent($ec);
+            $isDifferent = $this->hasFicheMatiereEcts($ec->elementConstitutif->getFicheMatiere())
+            && $this->hasEctsDifferent($ec);
 
             if( $ec->elementConstitutif->getEcParent() === null 
                 && $isDifferent === true
-                && $ec->elementConstitutif->getEcts() === $ec->heuresEctsEc->ects
                 && !$ec->elementConstitutif->getFicheMatiere()?->isEctsImpose()
             ){
                 $ecCopyEcts = $this->ecCopyRepo->find($ec->elementConstitutif->getId());
@@ -1210,19 +1218,10 @@ class ParcoursCopyData {
     }
 
     private function hasEctsDifferent(StructureEc $ec) : bool|null {
-        if($this->hasFicheMatiereEcts($ec->elementConstitutif->getFicheMatiere())){
-            return $ec->heuresEctsEc->ects 
-                !== $this->ficheMatiereCopyDataArray[$ec->elementConstitutif->getFicheMatiere()->getId()]['ects'];
-        }
-
-        return null;
+        return $ec->heuresEctsEc->ects !== $this->ficheMatiereEctsCopyArray[$ec->elementConstitutif->getFicheMatiere()->getId()];
     }
 
     private function hasFicheMatiereEcts(FicheMatiere $fm){
-        if($this->hasHeuresFicheMatiereCopy($fm)){
-            return array_key_exists('ects', $this->ficheMatiereCopyDataArray[$fm->getId()]);
-        }
-
-        return false;
+        return array_key_exists($fm->getId(), $this->ficheMatiereEctsCopyArray);
     }
 }
