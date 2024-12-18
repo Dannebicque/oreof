@@ -244,6 +244,44 @@ class ParcoursExportController extends AbstractController
                             $nb++;
                             $tUe['nbChoix'] = $nb;
                             $tUeEnfant['ec'] = $this->getEcFromUe($ueEnfant);
+
+                            $nbChoixDeuxiemeNiveau = 0;
+                            if(count($ueEnfant->uesEnfants()) > 0){
+                                $tUeEnfant['UesEnfants'] = [];
+                            }
+                            foreach($ueEnfant->uesEnfants() as $ueEnfantDeuxieme){
+                                $tUeEnfantDeuxieme = [
+                                    'ordre' => $ueEnfantDeuxieme->ordre(),
+                                    'libelleOrdre' => $ueEnfantDeuxieme->display,
+                                    'libelle' => $ueEnfantDeuxieme->ue->getLibelle() ?? $ueEnfantDeuxieme->display,
+                                    'volumes' => [
+                                        'CM' => [
+                                            'presentiel' => $ueEnfantDeuxieme->heuresEctsUe->sommeUeCmPres,
+                                            'distanciel' => $ueEnfantDeuxieme->heuresEctsUe->sommeUeCmDist
+                                        ],
+                                        'TD' => [
+                                            'presentiel' => $ueEnfantDeuxieme->heuresEctsUe->sommeUeTdPres,
+                                            'distanciel' => $ueEnfantDeuxieme->heuresEctsUe->sommeUeTdDist
+                                        ],
+                                        'TP' => [
+                                            'presentiel' => $ueEnfantDeuxieme->heuresEctsUe->sommeUeTpPres,
+                                            'distanciel' => $ueEnfantDeuxieme->heuresEctsUe->sommeUeTpDist
+                                        ],
+                                        'autonomie' => $ueEnfantDeuxieme->heuresEctsUe->sommeUeTePres
+                                    ],
+                                    'ects' => $ueEnfantDeuxieme->heuresEctsUe->sommeUeEcts,
+    
+                                ];
+                                if ($ueEnfantDeuxieme->ue->getNatureUeEc()?->isLibre()) {
+                                    $tUeEnfantDeuxieme['description_libre_choix'] = $ueEnfantDeuxieme->ue->getDescriptionUeLibre();
+                                }
+
+                                ++$nbChoixDeuxiemeNiveau;
+                                $tUeEnfant['nbChoix'] = $nbChoixDeuxiemeNiveau;
+                                $tUeEnfantDeuxieme['ec'] = $this->getEcFromUe($ueEnfantDeuxieme);
+                                $tUeEnfant['UesEnfants'][] = $tUeEnfantDeuxieme;
+                            }
+
                             $tUe['UesEnfants'][] = $tUeEnfant;
                         }
                     } else {
@@ -302,7 +340,7 @@ class ParcoursExportController extends AbstractController
             $libelle = $ec->elementConstitutif->getTexteEcLibre();
             $ecLibre = true;
         } else {
-            $libelle = $ec->elementConstitutif->getFicheMatiere()?->getLibelle() ?? '-';
+            $libelle = $ec->elementConstitutif->getFicheMatiere()?->getLibelle() ?? $ec->elementConstitutif->getLibelle() ?? '-';
             $ecLibre = false;
         }
 

@@ -362,8 +362,10 @@ class ParcoursExport {
                 'nom'=> $ficheMatiere?->getResponsableFicheMatiere()?->getDisplay() ?? '-',
                 'email'=> $ficheMatiere?->getResponsableFicheMatiere()?->getEmail() ?? '-'
             ],
-            'description' => CleanTexte::cleanTextArea($ficheMatiere?->getDescription()) ?? '-',
-            'objectifs' => CleanTexte::cleanTextArea($ficheMatiere?->getObjectifs()) ?? '-',
+            // 'description' => CleanTexte::cleanTextArea($ficheMatiere?->getDescription()) ?? '-',
+            // 'objectifs' => CleanTexte::cleanTextArea($ficheMatiere?->getObjectifs()) ?? '-',
+            'description' => $ficheMatiere?->getDescription() ?? '-',
+            'objectifs' => $ficheMatiere?->getObjectifs() ?? '-',
             'modalite_enseignement'=> $ficheMatiere?->getModaliteEnseignement()->value ?? '-',
             'langues_supports' => $ficheMatiere?->getLanguesSupportsArray() ?? [],
             'langues_dispense_cours' => $ficheMatiere?->getLanguesDispenseArray() ?? [],
