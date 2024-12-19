@@ -20,7 +20,7 @@
             UE à choix restreint : {{ ue.uesEnfants|length }} choix possible(s)</span>{% endif %}
 
         {% if is_granted('ROLE_ADMIN') %}
-            #{{ ec.elementConstitutif.id }}
+            #{{ ue.ue.id }}
         {% endif %}
     </th>
     {% if presentiel %}
