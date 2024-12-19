@@ -341,8 +341,10 @@ class ParcoursCopyData {
                 ){
                     $ects = $ecEcts->getEcts();
                     if(is_null($ects) === false){
-                        $ficheMatiereFromCopy->setEcts($ects);
-                        $this->ficheMatiereEctsCopyArray[$ficheMatiereSource->getId()] = $ects;
+                        if(!$ficheMatiereFromCopy->isEctsImpose()){
+                            $ficheMatiereFromCopy->setEcts($ects);
+                            $this->ficheMatiereEctsCopyArray[$ficheMatiereSource->getId()] = $ects;
+                        }
                     }
                 }
 
