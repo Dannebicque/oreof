@@ -6,7 +6,7 @@
         <span class="show_versioning d-none d-print-none">{{ diffUe ? diffUe.libelle|displayDiff : '' }}</span>
         <span class="show_current"> {{ ue.ue.libelle }}</span>
         {% if isVersioning is not defined or isVersioning == false %}
-            ({{ ue.codeApogee() }}) 
+            ({{ ue.codeApogee() }})
         {% endif %}
         {% if ue.raccroche == true %}<i
                 class="fal fa-link"></i>
@@ -18,6 +18,10 @@
         {% endif %}
         {% if ue.uesEnfants|length > 0 %}<span class="badge bg-primary">
             UE à choix restreint : {{ ue.uesEnfants|length }} choix possible(s)</span>{% endif %}
+
+        {% if is_granted('ROLE_ADMIN') %}
+            #{{ ec.elementConstitutif.id }}
+        {% endif %}
     </th>
     {% if presentiel %}
         {% if ue.uesEnfants|length == 0 %}
