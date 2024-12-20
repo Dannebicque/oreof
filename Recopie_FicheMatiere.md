@@ -111,3 +111,46 @@ Par exemple, pour la maquette du parcours 405 issu de la copie la commande est :
 Le fichier est généré dans le dossier `export` à la racine de l'application.
 
 On peut alors comparer la source et le résultat manuellement
+
+## Statistiques des données
+
+La requête ci-dessous permet d'obtenir des statistiques
+concernant les EC des parcours, une fois la copie réalisée.
+
+- Nombre d'EC total (hors BUT)
+- Nombre d'EC avec un parent (hors BUT)
+- Nombre d'EC avec les heures sur le parent
+- Nombre d'EC avec le flag 'heures spécifiques'
+- Nombre d'EC avec le flag 'MCCC spécifiques'
+- Nombre d'EC avec le flag 'ECTS spécifiques'
+
+```
+SELECT 
+	(SELECT COUNT(ec.id) 
+	 FROM element_constitutif ec
+		JOIN parcours p ON p.id = ec.parcours_id
+		JOIN formation f on p.formation_id = f.id
+		JOIN type_diplome td on f.type_diplome_id = td.id
+	 WHERE ec.parcours_id IS NOT NULL
+	 AND td.libelle_court != "BUT"
+	 ) AS "Nb. d'EC total (hors BUT)",
+	(
+	SELECT COUNT(ec.id)
+	FROM element_constitutif ec
+		JOIN parcours p ON p.id = ec.parcours_id
+		JOIN formation f on p.formation_id = f.id
+		JOIN type_diplome td on f.type_diplome_id = td.id
+	WHERE ec.parcours_id IS NOT NULL
+	AND td.libelle_court != "BUT"
+	  AND ec.ec_parent_id IS NOT NULL
+	) AS "Nb. d'EC avec un parent (hors BUT)",
+	 (SELECT COUNT(ecEnfant.id)
+	  FROM element_constitutif ecEnfant
+		JOIN element_constitutif ecParent ON ecEnfant.ec_parent_id = ecParent.id
+	  WHERE ecParent.heures_enfants_identiques = 1
+	  AND ecEnfant.ec_parent_id IS NOT NULL
+	 ) AS "Nb. d'EC avec heures sur parent",
+	(SELECT COUNT(id) FROM element_constitutif WHERE heures_specifiques IS NOT NULL) AS "Nb. Heures Spécifiques",
+	(SELECT COUNT(id) FROM element_constitutif WHERE mccc_specifiques IS NOT NULL) AS "Nb. MCC Spécifiques",
+	(SELECT COUNT(id) FROM element_constitutif WHERE ects_specifiques IS NOT NULL) AS "Nb. ECTS Spécifiques";
+```
