@@ -23,7 +23,7 @@ les nouvelles colonnes qui mémorisent les données spécifiques.
 Ces colonnes sont à créer **sur les deux bases de données (source et résultat)**.
 
 `ALTER TABLE element_constitutif
-ADD heures_specifiques TINYINT(1) DEFAULT NULL,  
+ADD heures_specifiques TINYINT(1) DEFAULT NULL,
 ADD mccc_specifiques TINYINT(1) DEFAULT NULL,
 ADD ects_specifiques TINYINT(1) DEFAULT NULL;`
 
