@@ -108,6 +108,10 @@ class StructureUe
                 if ($heuresEctsUeEnfant->sommeUeTotalPres() > $this->heuresEctsUe->sommeUeTotalPres()) {
                     $this->heuresEctsUe = $heuresEctsUeEnfant;
                 }
+
+                if ($heuresEctsUeEnfant->sommeUeTePres > $this->heuresEctsUe->sommeUeTePres) {
+                    $this->heuresEctsUe->sommeUeTePres = $heuresEctsUeEnfant->sommeUeTePres;
+                }
             }
         }
 

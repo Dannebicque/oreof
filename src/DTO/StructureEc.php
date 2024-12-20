@@ -125,6 +125,10 @@ class StructureEc
                 if ($heuresEctsEcEnfant->sommeEcTotalPres() > $this->heuresEctsEc->sommeEcTotalPres()) {
                     $this->heuresEctsEc = $heuresEctsEcEnfant;
                 }
+
+                if ($heuresEctsEcEnfant->tePres > $this->heuresEctsEc->tePres) {
+                    $this->heuresEctsEc->tePres = $heuresEctsEcEnfant->tePres;
+                }
             }
         }
 
