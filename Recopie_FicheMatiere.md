@@ -119,7 +119,7 @@ concernant les EC des parcours, une fois la copie réalisée.
 
 - Nombre d'EC total (hors BUT)
 - Nombre d'EC avec un parent (hors BUT)
-- Nombre d'EC avec les heures sur le parent
+- Nombre d'EC avec les heures sur le parent (heures enfants identiques)
 - Nombre d'EC avec le flag 'heures spécifiques'
 - Nombre d'EC avec le flag 'MCCC spécifiques'
 - Nombre d'EC avec le flag 'ECTS spécifiques'
