@@ -69,7 +69,7 @@ class RegisterController extends AbstractController
                             $ajout = true;
                             break;
                         case CentreGestionEnum::CENTRE_GESTION_ETABLISSEMENT:
-                            $etablissement = $etablissementRepository->find(1);//todo: imposé car juste URCA
+                            $etablissement = $etablissementRepository->find(1);//imposé car juste URCA
                             $user->setEtablissementDemande($etablissement);
                             $userEvent->setEtablissement($etablissement);
                             $ajout = true;

@@ -140,11 +140,13 @@
                                         {% endif %}
                                         <a href="{{ path('app_formation_show', {slug:formation.slug}) }}"
                                            class="btn btn-outline-info btn-sm"
+                                           target="_blank"
                                         >
                                             <i class="{{ iconShow }}"></i>
                                         </a>
                                         {% if is_granted('CAN_FORMATION_EDIT_MY', formation) %}
                                             <a href="{{ path('app_formation_edit', {slug:formation.slug}) }}"
+                                               target="_blank"
                                                class="btn btn-outline-warning btn-sm"
                                             >
                                                 <i class="{{ iconEdit }}"></i>

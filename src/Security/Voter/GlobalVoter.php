@@ -66,7 +66,12 @@ class GlobalVoter extends Voter
     {
         $this->user = $token->getUser();
 
-        if ($this->security->isGranted('ROLE_ADMIN')) {
+        if (
+            !$subject instanceof DpeParcours &&
+            !$subject instanceof Parcours &&
+            !$subject instanceof Formation &&
+            !$subject instanceof FicheMatiere &&
+            $this->security->isGranted('ROLE_ADMIN') ) {
             return true;
         }
 
@@ -233,6 +238,7 @@ class GlobalVoter extends Voter
                 $this->dpeWorkflow->can($subject->getFormation(), 'autoriser') ||
                 $this->parcoursWorkflow->can($subject, 'autoriser') ||
                 $this->parcoursWorkflow->can($subject, 'valider_parcours') ||
+                $this->dpeParcoursWorkflow->can($subject->getDpeParcours()->first(), 'valider_ouverture_sans_cfvu') ||
                 $this->parcoursWorkflow->can($subject, 'valider_rf') ||
                 $this->dpeWorkflow->can($subject->getFormation(), 'valider_rf') ||
                 $this->dpeWorkflow->can($subject->getFormation(), 'valider_dpe_composante') ||
@@ -257,6 +263,7 @@ class GlobalVoter extends Voter
         if ($parcours->getFormation()?->getResponsableMention() === $this->user || $parcours->getFormation()?->getCoResponsable() === $this->user) {
             $canEdit = $this->parcoursWorkflow->can($parcours, 'autoriser') ||
                 $this->parcoursWorkflow->can($parcours, 'valider_parcours') ||
+              //  $this->dpeParcoursWorkflow->can(subject, 'valider_ouverture_sans_cfvu') || todo: a mettre dès l'ouverture
                 $this->parcoursWorkflow->can($parcours, 'valider_rf') ||
                 $this->dpeWorkflow->can($parcours->getFormation(), 'autoriser') ||
                 $this->dpeWorkflow->can($parcours->getFormation(), 'valider_rf');
@@ -268,6 +275,7 @@ class GlobalVoter extends Voter
             //todo: filtre pas si les bons droits... Edit ou lecture ?
             $canEdit = $this->parcoursWorkflow->can($parcours, 'autoriser') ||
                 $this->parcoursWorkflow->can($parcours, 'valider_parcours') ||
+                //$this->dpeParcoursWorkflow->can(subject, 'valider_ouverture_sans_cfvu') ||
                 $this->parcoursWorkflow->can($parcours, 'valider_rf') ||
                 $this->dpeWorkflow->can($parcours->getFormation(), 'autoriser') ||
                 $this->dpeWorkflow->can($parcours->getFormation(), 'valider_rf') ||
@@ -279,6 +287,7 @@ class GlobalVoter extends Voter
             $canEdit =
                 $this->dpeWorkflow->can($parcours->getFormation(), 'autoriser') ||
                 $this->parcoursWorkflow->can($parcours, 'autoriser') ||
+                $this->dpeParcoursWorkflow->can($subject, 'valider_ouverture_sans_cfvu') ||
                 $this->parcoursWorkflow->can($parcours, 'valider_parcours') ||
                 $this->parcoursWorkflow->can($parcours, 'valider_rf') ||
                 $this->dpeParcoursWorkflow->can($subject, 'valider_central') || // todo: gérer avec le nouveau workflow?
@@ -287,6 +296,7 @@ class GlobalVoter extends Voter
                 $this->dpeWorkflow->can($parcours->getFormation(), 'valider_conseil') ||
                 $this->dpeWorkflow->can($parcours->getFormation(), 'valider_central');
         }
+
 
         return $canEdit;
     }

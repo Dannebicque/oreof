@@ -4,6 +4,9 @@
 {% else %}
     {% set raccrocheUe = false %}
 {% endif %}
+
+{% set editableCfvu = isAccessible(dpeParcours, 'cfvu') %}
+
 <tr>
     <th colspan="7" class="font-weight-bold">{{ ue.display(parcours) }}</th>
 </tr>
@@ -29,7 +32,10 @@
             {% elseif ec.ecParent == null and ec.natureUeEc != null and ec.natureUeEc.isChoix ==  true %}
                 <span class="badge bg-info">EC à choix</span>
             {% elseif ec.ficheMatiere != null %}
-                {% if ec.ficheMatiere.parcours != null and ec.ficheMatiere.parcours.id == parcours.id and raccrocheSem == false and raccrocheUe == false %}
+                {# todo: isGranted ? #}
+                {% if
+                    isAccessible(dpeParcours, 'cfvu') and
+                    ec.ficheMatiere.parcours != null and ec.ficheMatiere.parcours.id == parcours.id and raccrocheSem == false and raccrocheUe == false %}
                     <a
                             href="{{ path('app_fiche_matiere_edit',{slug: ec.ficheMatiere.slug}) }}"
                             class="btn btn-sm btn-outline-info"
@@ -61,26 +67,31 @@
         </td>
         <td>
             <label for="typeEc_{{ ec.id }}" class="sr-only">Type EC</label>
-            <select
-                    class="form-select"
-                    name="typeEc_{{ ec.id }}"
-                    id="typeEc_{{ ec.id }}"
-                    data-bs-toggle="tooltip"
-                    data-bs-placement="bottom"
-                    title="Type EC"
-                    {{ stimulus_action('parcours--ec', 'changeTypeEc', 'change', {
-                        ec:ec.id
-                    }) }}
-            >
-                <option value="">Choisir dans la liste</option>
-                {% for typeEc in typesEc %}
-                    <option
-                            value="{{ typeEc.id }}"
-                            {% if ec.typeEc != null and ec.typeEc.id == typeEc.id %}selected{% endif %}>
-                        {{ typeEc.libelle }}
-                    </option>
-                {% endfor %}
-            </select>
+            {% if isAccessible(dpeParcours, 'cfvu') %} {# todo: isGranted ? #}
+                <select
+                        class="form-select"
+                        name="typeEc_{{ ec.id }}"
+                        id="typeEc_{{ ec.id }}"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="bottom"
+                        title="Type EC"
+                        {{ stimulus_action('parcours--ec', 'changeTypeEc', 'change', {
+                            ec:ec.id
+                        }) }}
+                >
+                    <option value="">Choisir dans la liste</option>
+                    {% for typeEc in typesEc %}
+                        <option
+                                value="{{ typeEc.id }}"
+                                {% if ec.typeEc != null and ec.typeEc.id == typeEc.id %}selected{% endif %}>
+                            {{ typeEc.libelle }}
+                        </option>
+                    {% endfor %}
+                </select>
+            {% else %}
+                {% if ec.typeEc != null %}{{ ec.typeEc.libelle }}{% else %}<span
+                        class="text-danger">Non défini</span>{% endif %}
+            {% endif %}
         </td>
         <td>
             {{ component('badge_ects', {
@@ -92,6 +103,7 @@
             {{ component('badge_bcc', {
                 elementConstitutif: ec,
                 parcours: parcours,
+                dpeParcours: dpeParcours,
                 ue: ue,
                 editable: true,
                 deplacer: true,
@@ -102,6 +114,7 @@
             {{ component('badge_heures', {
                 elementConstitutif: ec,
                 parcours: parcours,
+                dpeParcours: dpeParcours,
                 ue: ue,
                 editable: true,
                 deplacer: true,
@@ -112,6 +125,7 @@
             {{ component('badge_mccc', {
                 elementConstitutif: ec,
                 parcours: parcours,
+                dpeParcours: dpeParcours,
                 ue: ue,
                 editable: true,
                 deplacer: true,
@@ -126,6 +140,7 @@
                 <div class="form-check mb-2">
                     <input class="form-check-input" type="checkbox"
                            id="synchroEcts"
+                           {{ editableCfvu ? '' : 'disabled' }}
                            name="synchroEcts"
                             {{ stimulus_action('parcours--ec', 'synchro', 'change', {
                                 ec:ec.id,
@@ -139,14 +154,12 @@
                            data-tooltip-placement-value="bottom"
                            title="{{ 'parcours_ec.helps.synchroEcts'|trans({}, 'help') }}"></i></label>
                 </div>
-                {#                                        <button class="btn text-primary">Recopier les ECTS  <i class="fal fa-question-circle ms-1" data-controller="tooltip" #}
-                {#                                                                                               data-tooltip-placement-value="bottom" #}
-                {#                                                                                               title="{{ 'parcours_ec.helps.recopieEcts'|trans({}, 'help') }}"></i></button> #}
             </td>
             <td>
                 <div class="form-check mb-2">
                     <input class="form-check-input" type="checkbox"
                            id="synchroBcc"
+                            {{ editableCfvu ? '' : 'disabled' }}
                            name="synchroBcc"
                             {{ stimulus_action('parcours--ec', 'synchro', 'change', {
                                 ec:ec.id,
@@ -160,15 +173,13 @@
                            data-tooltip-placement-value="bottom"
                            title="{{ 'parcours_ec.helps.synchroBcc'|trans({}, 'help') }}"></i></label>
                 </div>
-                {#                                        <button class="btn text-primary">Recopier les BCC  <i class="fal fa-question-circle ms-1" data-controller="tooltip" #}
-                {#                                                                                               data-tooltip-placement-value="bottom" #}
-                {#                                                                                               title="{{ 'parcours_ec.helps.recopieBcc'|trans({}, 'help') }}"></i></button> #}
             </td>
             <td>
                 <div class="form-check mb-2">
                     <input class="form-check-input" type="checkbox"
                            id="synchroHeures"
                            name="synchroHeures"
+                            {{ editableCfvu ? '' : 'disabled' }}
                             {{ stimulus_action('parcours--ec', 'synchro', 'change', {
                                 ec:ec.id,
                                 type:'synchroHeures'
@@ -182,15 +193,13 @@
                            title="{{ 'parcours_ec.helps.synchroHeures'|trans({}, 'help') }}"></i>
                     </label>
                 </div>
-                {#                                        <button class="btn text-primary">Recopier les Heures  <i class="fal fa-question-circle ms-1" data-controller="tooltip" #}
-                {#                                                                                               data-tooltip-placement-value="bottom" #}
-                {#                                                                                               title="{{ 'parcours_ec.helps.recopieHeures'|trans({}, 'help') }}"></i></button> #}
             </td>
             <td>
                 <div class="form-check mb-2">
                     <input class="form-check-input" type="checkbox"
                            id="synchroMccc"
                            name="synchroMccc"
+                            {{ editableCfvu ? '' : 'disabled' }}
                             {{ stimulus_action('parcours--ec', 'synchro', 'change', {
                                 ec:ec.id,
                                 type:'synchroMccc'
@@ -203,9 +212,6 @@
                            data-tooltip-placement-value="bottom"
                            title="{{ 'parcours_ec.helps.synchroMccc'|trans({}, 'help') }}"></i></label>
                 </div>
-                {#                                        <button class="btn text-primary">Recopier les MCCC  <i class="fal fa-question-circle ms-1" data-controller="tooltip" #}
-                {#                                                                                               data-tooltip-placement-value="bottom" #}
-                {#                                                                                               title="{{ 'parcours_ec.helps.recopieMccc'|trans({}, 'help') }}"></i></button> #}
             </td>
         </tr>
     {% endif %}

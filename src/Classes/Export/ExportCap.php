@@ -16,6 +16,7 @@ use App\DTO\StructureEc;
 use App\DTO\StructureUe;
 use App\Entity\CampagneCollecte;
 use App\Entity\SemestreParcours;
+use App\Repository\DpeParcoursRepository;
 use App\Repository\FormationRepository;
 use App\Utils\CleanTexte;
 use App\Utils\Tools;
@@ -35,6 +36,7 @@ class ExportCap
         protected ExcelWriter             $excelWriter,
         KernelInterface                   $kernel,
         protected FormationRepository     $formationRepository,
+        protected DpeParcoursRepository   $dpeParcoursRepository,
     ) {
         $this->dir = $kernel->getProjectDir() . '/public/temp/';
     }
@@ -60,14 +62,17 @@ class ExportCap
         $this->excelWriter->writeCellXY(12, 1, 'TD');
         $this->excelWriter->writeCellXY(13, 1, 'TP');
         $this->excelWriter->writeCellXY(14, 1, 'MATI/MATM');
-        $this->excelWriter->writeCellXY(15, 1, 'Semestre');
+        $this->excelWriter->writeCellXY(15, 1, 'Option');
+        $this->excelWriter->writeCellXY(16, 1, 'Semestre');
 
         $this->ligne = 2;
         foreach ($formations as $idFormation) {
-            $formation = $this->formationRepository->find($idFormation);
-
-            if ($formation !== null) {
-                foreach ($formation->getParcours() as $parcours) {
+            $dpeParcours = $this->dpeParcoursRepository->find($idFormation);
+            if ($dpeParcours !== null) {
+                $parcours = $dpeParcours->getParcours();
+                $formation = $dpeParcours->getParcours()?->getFormation();
+                if ($formation !== null && $parcours !== null) {
+//                foreach ($formation->getParcours() as $parcours) {
                     $this->data[1] = $formation->getComposantePorteuse()?->getLibelle();
                     $this->data[2] = $formation->getTypeDiplome()?->getLibelle();
                     $this->data[3] = $formation->getDisplay();
@@ -84,9 +89,8 @@ class ExportCap
                         foreach ($sem->ues as $ue) {
                             if ($ue->ue->getNatureUeEc()?->isChoix()) {
                                 foreach ($ue->uesEnfants() as $ueEnfant) {
-
                                     if ($ueEnfant->ue->getNatureUeEc()?->isLibre() === false) {
-                                        $this->getEcFromUe($ueEnfant, $sem->semestreParcours);
+                                        $this->getEcFromUe($ueEnfant, $sem->semestreParcours, true);
                                     }
                                 }
                             } elseif ($ue->ue->getNatureUeEc()?->isLibre() === false) {
@@ -103,22 +107,22 @@ class ExportCap
         $this->fileName = Tools::FileName('EXPORT-CAP - ' . (new DateTime())->format('d-m-Y-H-i'), 30);
     }
 
-    private function getEcFromUe(StructureUe $ue, ?SemestreParcours $codeApogeeParcours): void
+    private function getEcFromUe(StructureUe $ue, ?SemestreParcours $codeApogeeParcours, bool $option = false): void
     {
 
         foreach ($ue->elementConstitutifs as $ec) {
             if ($ec->elementConstitutif->getNatureUeEc()?->isChoix()) {
 
                 foreach ($ec->elementsConstitutifsEnfants as $ecEnfant) {
-                    $this->getEc($ecEnfant, $codeApogeeParcours);
+                    $this->getEc($ecEnfant, $codeApogeeParcours, true);
                 }
             } else {
-                $this->getEc($ec, $codeApogeeParcours);
+                $this->getEc($ec, $codeApogeeParcours, $option);
             }
         }
     }
 
-    private function getEc(StructureEc $ec, ?SemestreParcours $semestreParcours): void
+    private function getEc(StructureEc $ec, ?SemestreParcours $semestreParcours, bool $option = false): void
     {
 
         if ($ec->elementConstitutif->getNatureUeEc()?->isLibre() === false) {
@@ -128,12 +132,13 @@ class ExportCap
             $this->excelWriter->writeCellXY(7, $this->ligne, $semestreParcours?->getCodeApogeeEtapeAnnee());
             $this->excelWriter->writeCellXY(8, $this->ligne, $semestreParcours?->getCodeApogeeEtapeVersion());
             $this->excelWriter->writeCellXY(9, $this->ligne, $ec->elementConstitutif->getFicheMatiere()?->getLibelle() ?? '-');
-            $this->excelWriter->writeCellXY(10, $this->ligne, $ec->elementConstitutif->getCodeApogee() ?? '-');
+            $this->excelWriter->writeCellXY(10, $this->ligne, $ec->elementConstitutif->displayCodeApogee());
             $this->excelWriter->writeCellXY(11, $this->ligne, $ec->heuresEctsEc->cmPres);
             $this->excelWriter->writeCellXY(12, $this->ligne, $ec->heuresEctsEc->tdPres);
             $this->excelWriter->writeCellXY(13, $this->ligne, $ec->heuresEctsEc->tpPres);
             $this->excelWriter->writeCellXY(14, $this->ligne, $ec->elementConstitutif->getFicheMatiere()?->getTypeApogee() ?? '-');
-            $this->excelWriter->writeCellXY(15, $this->ligne, $this->data[5]);
+            $this->excelWriter->writeCellXY(15, $this->ligne, $option ? 'Choix/option' : 'Obligatoire');
+            $this->excelWriter->writeCellXY(16, $this->ligne, $this->data[5]);
             $this->ligne++;
         }
     }

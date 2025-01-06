@@ -8,9 +8,10 @@
                         <div class="row p-2 mt-1">
                             {% if isParcoursDefautArray[loop.index0] == true %}
                                 <div class="col-8">
-                                    <a 
+                                    <a
                                         href="{{ path('app_formation_show', {slug: p.formation_slug}) }}"
                                         class="text-primary font-weight-bold"
+                                        target="_blank"
                                     >
                                         {{ resultArrayBadge[loop.index0]['libelleMention'] }}
                                     </a>
@@ -22,9 +23,10 @@
                                 </div>
                             {% else %}
                                 <div class="col-8">
-                                    <a 
+                                    <a
                                         href="{{ path('app_parcours_show', {id: p.parcours_id}) }}"
                                         class="text-primary font-weight-bold"
+                                        target="_blank"
                                     >
                                         {{ resultArrayBadge[loop.index0]['libelleMention'] }}
                                         {{ p.parcours_libelle }}
@@ -35,7 +37,7 @@
                                         Sigle : {{ p.parcours_sigle }}
                                     </span>
                                 </div>
-                            {% endif %}                            
+                            {% endif %}
                         </div>
                         <div class="row p-2 mt-2">
                             <div>
@@ -47,7 +49,7 @@
                                 {% if 'poursuitesEtudes' in resultArrayBadge[loop.index0] %}
                                     <span class="badge rounded-pill text-bg-warning">
                                         Poursuite d'études
-                                    </span> 
+                                    </span>
                                 {% endif %}
                                 {% if 'contenuFormation' in resultArrayBadge[loop.index0] %}
                                     <span class="badge rounded-pill text-bg-primary">
@@ -66,25 +68,25 @@
                                 {% endif %}
                             </div>
                         </div>
-                        {% if resultArrayBadge[loop.index0]['fichesMatieres'] is defined 
+                        {% if resultArrayBadge[loop.index0]['fichesMatieres'] is defined
                               and resultArrayBadge[loop.index0]['fichesMatieres']|length > 0
                         %}
                         {% set nbFichesMatieres = resultArrayBadge[loop.index0]['fichesMatieres']|length %}
                         <div class="col mb-2">
-                            <a href="#" class="fiche-matiere-search-link" 
-                               data-bs-toggle="modal" 
+                            <a href="#" class="fiche-matiere-search-link"
+                               data-bs-toggle="modal"
                                data-bs-target="#associatedFicheMatiereModal"
                             >
-                                <span 
+                                <span
                                     class="font-weight-bold ms-3 pb-2 text-dark"
-                                    data-fetch-url="{{ absolute_url(path('app_fiche_matiere_search', 
+                                    data-fetch-url="{{ absolute_url(path('app_fiche_matiere_search',
                                             { parcours: p.parcours_id, keyword: keyword_1}))
                                     }}"
                                     data-number-associated-fiches-matieres="{{ nbFichesMatieres }}"
                                 >
-                                    {{ 
-                                        nbFichesMatieres > 1 
-                                        ? nbFichesMatieres ~ ' fiches matières associées' 
+                                    {{
+                                        nbFichesMatieres > 1
+                                        ? nbFichesMatieres ~ ' fiches matières associées'
                                         : nbFichesMatieres ~ ' fiche matière associée' }}
                                 </span>
                             </a>
@@ -105,11 +107,11 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="titre-modale-recherche">
-                    
+
                 </h5>
             </div>
             <div class="modal-body text-center" id="associated-fiche-matiere-modal-body">
-                
+
             </div>
             <div class="modal-footer">
                 <button type="button" data-bs-dismiss="modal" class="btn btn-primary">

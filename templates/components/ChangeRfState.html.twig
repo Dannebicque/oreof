@@ -1,4 +1,6 @@
-<div{{ attributes }}>
+<div{{ attributes }}
+        id="change_rf_state"
+>
     {% if this.demandes|length > 0 %}
         <section class="scroll-section" id="identite_formation">
             <h3 class="small-title">Demandes de changement de (co-) responsable </h3>
@@ -10,8 +12,12 @@
                                 demandes
                             </div>
                         </div>
-                        <div class="col-5 text-muted">
+                        <div class="col-4 text-muted">
                             <div class="text-extra-small fw-medium text-muted text-center text-divider mb-2">Actions
+                            </div>
+                        </div>
+                        <div class="col-1 text-muted">
+                            <div class="text-extra-small fw-medium text-muted text-center text-divider mb-2">PV ?
                             </div>
                         </div>
                         <div class="col-3 text-muted">
@@ -30,14 +36,15 @@
                                 <strong>{{ demande.nouveauResponsable != null ? demande.nouveauResponsable.display : 'non défini' }}</strong>
                                 ({{ demande.typeRf.value }})
                             </div>
-                            <div class="col-5">
-                                <div class="row">
+
+                            <div class="col-4">
+                                <div class="row gy-1">
                                     {% set place = this.getPlace(demande) %}
                                     {% if this.process[place] is defined %}
                                         {% for key, state in hasTransitions(demande, 'changeRf') %}
                                             {% for keyTrans, transition in state %}
                                                 <div class="col-{{ 6 / state|length }} d-grid">
-                                                    <button class="btn btn-sm d-block btn-outline-{{ transition.meta.btn }}"
+                                                    <button class="btn d-block text-wrap btn-outline-{{ transition.meta.btn }}"
                                                             type="button"
                                                             {{ stimulus_controller('modal', {
                                                                 size: 'lg',
@@ -69,6 +76,9 @@
                                         {% endfor %}
                                     {% endif %}
                                 </div>
+                            </div>
+                            <div class="col-1">
+                                {{ component('historique_pv', {changeRf:demande, type:'change_rf'}) }}
                             </div>
                             <div class="col-3 d-flex align-items-center justify-content-center">
                                 {% set historique = this.getHistoriques(demande) %}

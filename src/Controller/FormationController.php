@@ -446,6 +446,7 @@ class FormationController extends BaseController
 
         if($formation->isHasParcours() === false && count($formation->getParcours()) === 1) {
             $hasLastVersion = $versioningParcours->hasLastVersion($formation->getParcours()[0]);
+            $dpeParcours = GetDpeParcours::getFromParcours($formation->getParcours()[0]);
         }
 
         return $this->render('formation/edit.html.twig', [
@@ -455,6 +456,7 @@ class FormationController extends BaseController
             'parcoursState' => $parcoursState,
             'formationState' => $formationState,
             'typeD' => $typeD,
+            'dpeParcours' => $dpeParcours ?? null,
             'hasLastVersion' => $hasLastVersion ?? null
         ]);
     }

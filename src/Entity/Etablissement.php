@@ -57,6 +57,9 @@ class Etablissement
     #[ORM\OneToMany(mappedBy: 'etablissement', targetEntity: Composante::class)]
     private Collection $composantes;
 
+    #[ORM\Column(length: 255)]
+    private ?string $emailCentral = null;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -275,6 +278,18 @@ class Etablissement
                 $composante->setEtablissement(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getEmailCentral(): ?string
+    {
+        return $this->emailCentral;
+    }
+
+    public function setEmailCentral(string $emailCentral): static
+    {
+        $this->emailCentral = $emailCentral;
 
         return $this;
     }

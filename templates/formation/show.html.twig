@@ -61,7 +61,7 @@
 
 {% block content %}
 
-    {{ include('formation/_process.html.twig') }}
+    {{ include('formation/_synthese_formation.html.twig') }}
 
     {% if is_granted('ROLE_SES') or is_granted('CAN_ETABLISSEMENT_SCOLARITE_ALL') or is_granted('CAN_FORMATION_SCOLARITE_MY', formation) %}
         {# Versioning pour les parcours par défaut #}
@@ -300,4 +300,14 @@
             <span> Modifier le DPE</span>
         </a>
     {% endif %}
+
+    <a href="{{ path('app_formation_index') }}"
+       class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+       data-bs-toggle="tooltip"
+       data-bs-placement="bottom"
+       title="Retour à la liste des formations"
+    >
+        <i class="{{ iconBack }}"></i>
+        <span> Retour à la liste des formations</span>
+    </a>
 {% endblock %}

@@ -1,3 +1,4 @@
+#todo: deprecated
 process:
   fiche_matiere:
     page: 'fiche_matiere'

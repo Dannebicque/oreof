@@ -133,32 +133,32 @@ class FormationSesType extends AbstractType
                     }
                 }
             )
-//            ->addEventListener(
-//                FormEvents::PRE_SET_DATA,
-//                static function (FormEvent $event) use ($mentionRepository) {
-//                    $formation = $event->getData();
-//                    if ($formation->getDomaine() !== null && $formation->getTypeDiplome() !== null) {
-//                        $form = $event->getForm();
-//                        $mentions = $mentionRepository->findByDomaineAndTypeDiplome(
-//                            $formation->getDomaine(),
-//                            $formation->getTypeDiplome()
-//                        );
-//                        foreach ($mentions as $mention) {
-//                            $tabMentions[$mention->getLibelle()] = $mention->getId();
-//                        }
-//                        $tabMentions['Autre'] = 'autre';
-//                        $tabMentions[''] = null;
-//                        $form->add('mention', ChoiceType::class, [
-//                            'attr' => ['data-action' => 'change->formation#changeMention'],
-//                            'choices' => $tabMentions,
-//                            'label' => 'Mention',
-//                            'required' => false,
-//                            'mapped' => false,
-//                            'help' => 'Si la mention n\'existe pas, veuillez la créer dans la section "Autre mention"'
-//                        ]);
-//                    }
-//                }
-//            )
+            ->addEventListener(
+                FormEvents::PRE_SET_DATA,
+                static function (FormEvent $event) use ($mentionRepository) {
+                    $formation = $event->getData();
+                    if ($formation->getDomaine() !== null && $formation->getTypeDiplome() !== null) {
+                        $form = $event->getForm();
+                        $mentions = $mentionRepository->findByDomaineAndTypeDiplome(
+                            $formation->getDomaine(),
+                            $formation->getTypeDiplome()
+                        );
+                        foreach ($mentions as $mention) {
+                            $tabMentions[$mention->getLibelle()] = $mention->getId();
+                        }
+                        $tabMentions['Autre'] = 'autre';
+                        $tabMentions[''] = null;
+                        $form->add('mention', ChoiceType::class, [
+                            'attr' => ['data-action' => 'change->formation#changeMention'],
+                            'choices' => $tabMentions,
+                            'label' => 'Mention',
+                            'required' => false,
+                            'mapped' => false,
+                            'help' => 'Si la mention n\'existe pas, veuillez la créer dans la section "Autre mention"'
+                        ]);
+                    }
+                }
+            )
 ;
     }
 

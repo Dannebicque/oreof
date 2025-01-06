@@ -381,7 +381,7 @@ class FicheMatiereRepository extends ServiceEntityRepository
 
         $qb = $qb->select(
             [
-                'fm.id AS fiche_matiere_id', 'fm.slug AS fiche_matiere_slug',
+                'fm.id AS fiche_matiere_id', 'fm.slug AS fiche_matiere_slug', 'fm.sigle AS fiche_matiere_sigle',
                 'fm.objectifs AS fiche_matiere_objectifs', 'fm.description AS fiche_matiere_description',
                 'fm.libelle AS fiche_matiere_libelle', 'p.id AS parcours_id',
                 'fm.sigle AS formation_sigle', 'm.libelle AS mention_libelle',

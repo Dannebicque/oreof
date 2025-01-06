@@ -11,6 +11,7 @@ namespace App\Form;
 
 use App\Entity\Etablissement;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -33,6 +34,10 @@ class EtablissementType extends AbstractType
                 'label' => "Numéro d'activité",
                 'required' => true,
                 'attr' => ['maxlength' => 11, 'minlength' => 11]
+            ])
+            ->add('emailCentral', EmailType::class, [
+                'label' => "Email central/CFVU",
+                'required' => true,
             ])
             ->add('etablissement_information', EtablissementInformationType::class, [
                 'label' => "Informations diverses"

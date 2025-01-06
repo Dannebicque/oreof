@@ -117,7 +117,7 @@ class BadgeDpeExtension extends AbstractExtension
         return $this->displayDpeBadge($etatsDpe);
     }
 
-    public function badgeStep(bool $etatsDpe): string
+    public function badgeStep(?bool $etatsDpe): string
     {
         return $etatsDpe ? '<span class="badge bg-success me-1">Complet</span>' : '<span class="badge bg-warning me-1">Incomplet</span>';
     }

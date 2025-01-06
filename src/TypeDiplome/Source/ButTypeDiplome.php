@@ -200,6 +200,6 @@ class ButTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInterface
         ?DateTimeInterface $dateConseil = null,
         string $fichier
     ): string {
-        return $this->butMccc->exportAndSaveExcelbutMccc($anneeUniversitaire, $parcours, $dir, $dateCfvu, $dateConseil, false);
+        return $this->butMcccVersion->exportAndSaveExcelbutMccc($anneeUniversitaire, $parcours, $dir, $dateCfvu, $dateConseil, false);
     }
 }

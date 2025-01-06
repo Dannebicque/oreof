@@ -13,7 +13,7 @@
             h2 {
                 font-size: 1.4em;
                 font-weight: bolder;
-                margin-top: 1em;
+                margin-top: 0.8em;
                 margin-bottom: 0.5em;
                 color: #660800;
                 border-bottom: none;
@@ -39,38 +39,52 @@
             .text-justify {
                 text-align: justify;
             }
+
+            .hr-plaquette {
+                /* 60% de la page, 2 px de large, couleur #660800 */
+                width: 60%;
+                border: 2px solid #660800;
+                margin: 1em auto;
+            }
+
+            .border-bottom {
+                border-bottom: 2px solid #660800;
+                padding-bottom: 0.5em;
+            }
+
+
         </style>
     {% endblock %}
 
 {% block content %}
-    <div class="header">
-        <p>{{ formation.typeDiplome.libelle }}</p>
-        <h1>{{ formation.display }}</h1>
-        {% for parcours in formation.parcours %}
-            <p>{{ parcours.display }}</p>
-        {% endfor %}
-    </div>
-    {% for key, rubrique in rubriques|filter(rubrique => rubrique != null) %}
-        {# test si se termine par formation, si oui afficher #}
-        {% if key|slice(-9) == 'Formation' %}
-            <h2>{{ key|trans({}, 'communication') }}</h2>
-            <div class="two-columns">
-                {{ include('typeDiplome/formation/plaquette/_'~key~'.html.twig') }}
-            </div>
-        {% endif %}
-    {% endfor %}
-
     {% for parcours in formation.parcours %}
-        <h2>{{ parcours.display }}</h2>
+        <div class="header">
+            <p>{{ formation.typeDiplome.libelle }}</p>
+            <h1>{{ formation.display }}</h1>
+            <p>{{ parcours.display }}</p>
+        </div>
+        {% for key, rubrique in rubriques|filter(rubrique => rubrique != null) %}
+            {# test si se termine par formation, si oui afficher #}
+            {% if key|slice(-9) == 'Formation' and formation.hasParcours == false %}
+                <h2>{{ key|trans({}, 'communication') }}</h2>
+                <div class="two-columns">
+                    {{ include('typeDiplome/formation/plaquette/_'~key~'.html.twig') }}
+                </div>
+                {#            <hr class="hr-plaquette"> #}
+            {% endif %}
+        {% endfor %}
+
+        <h2 class="border-bottom">Parcours : {{ parcours.display }}</h2>
 
         {% for key, rubrique in rubriques|filter(rubrique => rubrique != null) %}
             {#  sauf celles se terminant par formation #}
             {% if key|slice(-9) != 'Formation' %}
                 {% if key != 'structure' %}
-                    <h3>{{ key|trans({}, 'communication') }}</h3>
+                    {#                    <h3>{{ key|trans({}, 'communication') }}</h3> #}
                     <div class="two-columns">
                         {{ include('typeDiplome/formation/plaquette/_'~key~'.html.twig') }}
                     </div>
+                    <hr class="hr-plaquette">
                 {% else %}
                     {{ render(controller('App\\Controller\\StructureShowController::licence', {
                         parcours: formation.parcours[0].id,
@@ -79,6 +93,9 @@
                 {% endif %}
             {% endif %}
         {% endfor %}
+        {% if not loop.last %}
+        <div class="page_break"></div>
+        {% endif %}
     {% endfor %}
 
 {% endblock %}

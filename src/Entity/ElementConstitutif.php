@@ -170,6 +170,12 @@ class ElementConstitutif
     #[ORM\Column(nullable: true)]
     private ?bool $heuresSpecifiques = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $mccc_specifiques = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?bool $ects_specifiques = null;
+
 
     public function __construct()
     {
@@ -863,6 +869,19 @@ class ElementConstitutif
         return '-';
     }
 
+    public function displayId(): string
+    {
+        if ($this->codeApogee !== null) {
+            return 'EC_'.$this->id;
+        }
+
+        if ($this->ficheMatiere !== null) {
+            return 'FM_'.$this->ficheMatiere->getId() ?? '-err-';
+        }
+
+        return '-err-';
+    }
+
     public function isHeuresSpecifiques(): ?bool
     {
         return $this->heuresSpecifiques;
@@ -871,6 +890,30 @@ class ElementConstitutif
     public function setHeuresSpecifiques(?bool $heuresSpecifiques): static
     {
         $this->heuresSpecifiques = $heuresSpecifiques;
+
+        return $this;
+    }
+
+    public function isMcccSpecifiques(): ?bool
+    {
+        return $this->mccc_specifiques;
+    }
+
+    public function setMcccSpecifiques(?bool $mccc_specifiques): static
+    {
+        $this->mccc_specifiques = $mccc_specifiques;
+
+        return $this;
+    }
+
+    public function isEctsSpecifiques(): ?bool
+    {
+        return $this->ects_specifiques;
+    }
+
+    public function setEctsSpecifiques(?bool $ects_specifiques): static
+    {
+        $this->ects_specifiques = $ects_specifiques;
 
         return $this;
     }

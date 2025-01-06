@@ -30,13 +30,16 @@ final class ParcoursManageComponent extends AbstractController
         'initialisation_dpe' => 'formation',
         'autorisation_saisie' => null,
         'en_cours_redaction' => 'parcours',
+        'en_cours_redaction_ss_cfvu' => 'parcours',
         'soumis_parcours' => 'parcours_rf',
         'valide_parcours_rf' => 'formation',
         'soumis_rf' => 'formation',
         'soumis_dpe_composante' => 'dpe',
+        'soumis_central_sans_cfvu' => 'ses',
         'refuse_rf' => 'formation',
         'refuse_dpe_composante' => 'dpe',
         'dpe' => 'dpe',
+        'vp' => 'vp',
         'soumis_conseil' => 'conseil',
         'conseil' => 'conseil',
         'refuse_conseil' => 'ses',
@@ -60,6 +63,7 @@ final class ParcoursManageComponent extends AbstractController
         'cloture_ses_ss_cfvu' => 0,
         'soumis_parcours' => 0,
         'en_cours_redaction' => 0,
+        'en_cours_redaction_ss_cfvu' => 0,
         'soumis_dpe_composante' => 3,
         'soumis_conseil' => 4,
         'parcours' => 0,
@@ -68,7 +72,9 @@ final class ParcoursManageComponent extends AbstractController
         'dpe' => 3,
         'conseil' => 4,
         'ses' => 5,
+        'vp' => 5,
         'soumis_central' => 5,
+        'soumis_central_sans_cfvu' => 5,
         'valide_cfvu' => 7,
         'soumis_cfvu' => 6,
         'cfvu' => 6,
@@ -94,9 +100,6 @@ final class ParcoursManageComponent extends AbstractController
     public string $place = '';
 
     public bool $hasDemande = true;
-
-    #[LiveProp(writable: true)]
-    public string $event = 'none';
 
     public DpeParcours $dpeParcours;
 
@@ -128,32 +131,30 @@ final class ParcoursManageComponent extends AbstractController
     public function edit(): void
     {
         $this->place = $this->getPlace();
-        $this->event = 'edit';
     }
 
     #[LiveListener('mention_manage:valider')]
     public function valide(): void
     {
+        $this->init();
         $this->place = $this->getPlace();
         $this->getHistorique();
-        $this->event = 'valide';
-        $this->redirige();
     }
 
     #[LiveListener('mention_manage:refuser')]
     public function refuse(): void
     {
+        $this->init();
         $this->place = $this->getPlace();
         $this->getHistorique();
-        $this->event = 'refuse';
     }
 
     #[LiveListener('mention_manage:reserver')]
     public function reserve(): void
     {
+        $this->init();
         $this->place = $this->getPlace();
         $this->getHistorique();
-        $this->event = 'reserve';
     }
 
     private function getHistorique(): void
@@ -165,7 +166,7 @@ final class ParcoursManageComponent extends AbstractController
             }
         }
         $historiques = $this->historiqueParcoursRepository->findBy(['parcours' => $this->parcours], ['created' => 'ASC']);
-
+//todo: gérer le cas d'une réouverture sans CFVU
         foreach ($historiques as $historique) {
             if (self::TAB_PROCESS[$historique->getEtape()] < self::TAB_PROCESS[self::TAB[$this->place]]) {
                 $this->historiques[$historique->getEtape()] = $historique;
@@ -173,15 +174,19 @@ final class ParcoursManageComponent extends AbstractController
         }
     }
 
-    #[PostMount]
-    public function postMount(): void
-    {
+    private function init() {
         $this->dpeParcours = GetDpeParcours::getFromParcours($this->parcours);
 
         $this->typeDiplome = $this->parcours?->getFormation()?->getTypeDiplome();
         $this->formation = $this->parcours?->getFormation();
         $this->place = $this->getPlace();
-        $this->hasDemande = false;
+        $this->hasDemande = $this->dpeParcours->isReouvert();
+    }
+
+    #[PostMount]
+    public function postMount(): void
+    {
+       $this->init();
         //                GetDpeParcours::getFromParcours($this->parcours)?->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_TEXTE || GetDpeParcours::getFromParcours($this->parcours)?->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_MCCC_TEXTE || GetDpeParcours::getFromParcours($this->parcours)?->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_MCCC; //todo selon l'état du process???
 
         $this->getHistorique();
@@ -190,7 +195,7 @@ final class ParcoursManageComponent extends AbstractController
     public function dateHistorique(string $transition): string
     {
         if (array_key_exists($transition, $this->historiques)) {
-            if ($this->historiques[$transition]->getEtape() === 'soumis_conseil') {
+            if ($this->historiques[$transition]->getEtape() === 'soumis_conseil' && ($this->dpeParcours->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_MCCC || $this->dpeParcours->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_MCCC_TEXTE)) {
                 if (!array_key_exists('fichier', $this->historiques[$transition]->getComplements())) {
                     return '- à venir -';
                 }

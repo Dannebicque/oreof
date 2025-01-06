@@ -3,7 +3,7 @@
     {{ component('mention_manage', {formation:formation, type:'formation'}) }}
 {% else %}
     {% if formation.parcours[0] is defined %}
-        {{ component('parcours_manage', {parcours:formation.parcours[0]}) }}
+        {{ component('parcours_manage', {parcours:formation.parcours[0], id:'parcours_manage'}) }}
         <twig:ChangeRfState formation="{{ formation }}" />
     {% else %}
         <div class="alert alert-danger">

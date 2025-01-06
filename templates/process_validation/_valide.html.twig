@@ -3,8 +3,27 @@
     message: (process.label~'.valide.alerte')|trans({}, 'process')|nl2br|raw
 }) }}
 
-<form action="{{ path('app_validation_valider', {etape:etape, type:type, id:id, transition: transition}) }}" method="post"
+<form action="{{ path('app_validation_valider', {etape:etape, type:type, id:id, transition: transition}) }}"
+      method="post"
       enctype="multipart/form-data">
+
+    {% if meta.hasValidLheo is defined and meta.hasValidLheo == true %}
+        <a href="{{ path('app_parcours_export_xml_lheo', {'parcours': objet.id}) }}">
+            <span class="mt-4 badge {{ validLheo ? 'bg-success' : 'bg-danger' }}">
+                            {{ validLheo ? 'Export LHEO valide' : 'Export LHEO invalide' }}
+                        </span>
+        </a>
+        {% if xmlErrorArray|length > 0 %}
+            <div class="alert alert-danger mt-2">
+                <ul>
+                    {% for xmlError in xmlErrorArray %}
+                        <li>{{ xmlError }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+    {% endif %}
+
     {% if meta.hasDate is defined and meta.hasDate == true %}
         <div>
             <label for="date" class="form-label">{{ ('valide.'~process.label~'.date.label')|trans({}, 'process') }}
@@ -37,10 +56,10 @@
                         class="mt-1"
                         data-bs-toggle="tooltip"
                         data-bs-placement="bottom"
-                        title="{{ 'voir.le.pv.infobulle'|trans({}, 'process')}}"
+                        title="{{ 'voir.le.pv.infobulle'|trans({}, 'process') }}"
                 >
                     <i class="{{ iconDownload }}"></i>
-                    <span> {{ 'voir.le.pv'|trans({}, 'process')}}</span>
+                    <span> {{ 'voir.le.pv'|trans({}, 'process') }}</span>
                 </a>
             {% endif %}
         {% endif %}

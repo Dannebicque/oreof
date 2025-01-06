@@ -9,6 +9,8 @@
 
 namespace App\TypeDiplome\Export;
 
+use App\Classes\CalculButStructureParcours;
+use App\Classes\CalculStructureParcours;
 use App\Classes\Excel\ExcelWriter;
 use App\DTO\TotalVolumeHeure;
 use App\Entity\CampagneCollecte;
@@ -20,6 +22,8 @@ use App\Entity\Parcours;
 use App\Enums\RegimeInscriptionEnum;
 use App\Repository\FicheMatiereRepository;
 use App\Repository\TypeEpreuveRepository;
+use App\Service\VersioningParcours;
+use App\Service\VersioningStructure;
 use App\TypeDiplome\Source\ButTypeDiplome;
 use App\Utils\Tools;
 use DateTimeInterface;
@@ -82,6 +86,8 @@ class ButMcccVersion
     public function __construct(
         KernelInterface                  $kernel,
         protected ClientInterface        $client,
+        protected CalculButStructureParcours $calculStructureParcours,
+        protected VersioningParcours      $versioningParcours,
         protected FicheMatiereRepository $ficheMatiereRepository,
         protected ExcelWriter            $excelWriter,
     ) {
@@ -122,6 +128,16 @@ class ButMcccVersion
 
         if (null === $formation) {
             throw new \Exception('La formation n\'existe pas');
+        }
+
+        $dto = $this->calculStructureParcours->calcul($parcours);
+
+        // version
+        $structureDifferencesParcours = $this->versioningParcours->getStructureDifferencesBetweenParcoursAndLastVersion($parcours);
+        if ($structureDifferencesParcours !== null) {
+            $diffStructure = (new VersioningStructure($structureDifferencesParcours, $dto))->calculDiff();
+        } else {
+            //return false;
         }
 
         $this->excelWriter->createFromTemplate('Annexe_MCCC_BUT.xlsx');

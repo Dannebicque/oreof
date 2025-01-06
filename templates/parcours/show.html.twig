@@ -101,7 +101,34 @@
         </div>
     {% endif %}
 
-    <div class="row">
+    {% if (parcours.descriptifHautPage != '' and parcours.descriptifHautPage != null)  or
+        (parcours.descriptifBasPage != '' and parcours.descriptifBasPage != null) %}
+        <div class="row mt-2 mb-5">
+            <div class="col-12">
+                <h3 class="small-title">Informations complémentaires (affichées sur le site institutionnel)</h3>
+                <div class="card border-info">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <dl>
+                                    {% if (parcours.descriptifHautPage != '' and parcours.descriptifHautPage != null) %}
+                                        <dt>Texte haut de page</dt>
+                                        <dl>{{ parcours.descriptifHautPage|raw }}</dl>
+                                    {% endif %}
+                                    {% if (parcours.descriptifBasPage != '' and parcours.descriptifBasPage != null) %}
+                                        <dt>Texte base de page</dt>
+                                        <dl>{{ parcours.descriptifBasPage|raw }}</dl>
+                                    {% endif %}
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="row mt-2">
         {{ include('typeDiplome/parcours/common/_'~constant('SOURCE', typeD)~'.html.twig') }}
         <!-- Scrollspy Start -->
         <div class="col-md-auto d-none d-lg-block" id="scrollSpyMenu">

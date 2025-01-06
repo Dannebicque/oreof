@@ -288,13 +288,13 @@ class FicheMatiereController extends AbstractController
             'maquetteOrigineURL' => $parcours ? $this->generateUrl('app_parcours_maquette_iframe', ['parcours' => $parcours->getId()]) : "#",
             // $parcours ? $this->generateUrl('app_versioning_parcours_maquette_iframe', ['parcours' => $parcours->getId()]) : "#",
             'ects' => $ects,
-            'heuresEctsEc' => [        
-                'volCmPres' => $volCmPres, 
-                'volTdPres' => $volTdPres, 
-                'volTpPres' => $volTpPres, 
-                'volCmDist' => $volCmDist, 
-                'volTdDist' => $volTdDist, 
-                'volTpDist' => $volTpDist, 
+            'heuresEctsEc' => [
+                'volCmPres' => $volCmPres,
+                'volTdPres' => $volTdPres,
+                'volTpPres' => $volTpPres,
+                'volCmDist' => $volCmDist,
+                'volTdDist' => $volTdDist,
+                'volTpDist' => $volTpDist,
                 'volTe' => $volTe
             ],
             'isVersioning' => true
@@ -392,9 +392,9 @@ class FicheMatiereController extends AbstractController
     #[IsGranted('ROLE_ADMIN')]
     #[Route('/recherche/parcours/{parcours}/{keyword}', name: 'app_fiche_matiere_search')]
     public function getFicheMatiereForParcoursAndKeyword(
+        EntityManagerInterface $entityManager,
         Parcours $parcours,
-        string $keyword = "",
-        EntityManagerInterface $entityManager
+        string $keyword = ""
     ){
         $associatedFicheMatiere = $entityManager
             ->getRepository(FicheMatiere::class)

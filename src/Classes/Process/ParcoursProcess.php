@@ -15,6 +15,7 @@ use App\DTO\ProcessData;
 use App\Entity\DpeParcours;
 use App\Entity\Historique;
 use App\Entity\HistoriqueParcours;
+use App\Enums\TypeModificationDpeEnum;
 use App\Events\HistoriqueParcoursEditEvent;
 use App\Events\HistoriqueParcoursEvent;
 use App\Utils\Tools;
@@ -67,6 +68,11 @@ class ParcoursProcess extends AbstractProcess
         $valid = $transition;
         $motifs = [];
         $place = array_keys($this->dpeParcoursWorkflow->getMarking($dpeParcours)->getPlaces())[0];
+
+        if ($place === 'soumis_central_sans_cfvu') {
+            $dpeParcours->setEtatReconduction(TypeModificationDpeEnum::OUVERT);
+        }
+
         $reponse = $this->dispatchEventParcours($dpeParcours, $user, $place, $request, 'valide', $fileName);
 
         if ($request->request->has('date')) {

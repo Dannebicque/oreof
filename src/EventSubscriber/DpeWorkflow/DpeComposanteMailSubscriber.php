@@ -38,6 +38,8 @@ class DpeComposanteMailSubscriber extends AbstractDpeMailSubscriber implements E
             'workflow.dpeParcours.transition.refuser_conseil' => 'onRefuseConseil',
             'workflow.dpeParcours.transition.valider_conseil' => 'onValideConseil', //todo: ajouter un état pour prévenir RF et RP?
             'workflow.dpeParcours.transition.reserver_conseil' => 'onReserveConseil',
+            'workflow.dpe.transition.valider_ouverture_sans_cfvu' => 'onTransmetSesSansCfvu',
+
         ];
     }
 
@@ -88,6 +90,32 @@ class DpeComposanteMailSubscriber extends AbstractDpeMailSubscriber implements E
         $titre = $this->hasParcours ?
             'Votre parcours ' . $this->parcours->getLibelle().' de la formation '.$this->formation->getDisplay(). ' a été validé par le conseil de la composante' :
             'Votre formation ' . $this->formation->getDisplay(). ' a été validée par le conseil de la composante';
+
+        $this->myMailer->sendMessage(
+            [self::EMAIL_CENTRAL, 'oreof@univ-reims.fr'],
+            '[ORéOF]  '.$titre
+        );
+    }
+    public function onTransmetSesSansCfvu(Event $event): void
+    {
+        $data = $this->getDataFromEvent($event);
+        if ($data === null) {
+            return;
+        }
+        //todo: check si le responsable de formation accepte le mail
+
+        $this->myMailer->initEmail();
+        $this->myMailer->setTemplate(
+            'mails/workflow/formation/valide_conseil_sans_cfvu.html.twig',
+            array_merge($this->getData(),
+            [
+                'composante' => $this->formation->getComposantePorteuse(),
+            ])
+        );
+
+        $titre = $this->hasParcours ?
+            'Parcours ' . $this->parcours->getLibelle().' de la formation '.$this->formation->getDisplay(). ' a été modifié sans passage en CFVU' :
+            'Formation ' . $this->formation->getDisplay(). ' a été modifiée sans passage en CFVU';
 
         $this->myMailer->sendMessage(
             [self::EMAIL_CENTRAL, 'oreof@univ-reims.fr'],

@@ -196,7 +196,7 @@ class ElementConstitutifBccController extends AbstractController
 
 
             if (
-                $this->isGranted('CAN_PARCOURS_EDIT_MY', $dpeParcours)) {
+                $this->isGranted('CAN_PARCOURS_EDIT_MY', $dpeParcours)) { //todo: + accessible CFVU?
                 return $this->render('element_constitutif/_bccEcModal.html.twig', [
                     'ec' => $elementConstitutif,
                     'bccs' => $bccs,
@@ -209,10 +209,13 @@ class ElementConstitutifBccController extends AbstractController
                 ]);
             }
 
-            //todo: a faire
             return $this->render('element_constitutif/_bccEcNonEditable.html.twig', [
                 'ec' => $elementConstitutif,
                 'bccs' => $bccs,
+                'editable' => false,
+                'parcours' => $parcours,
+                'ecBccs' => array_flip(array_unique($ecBccs)),
+                'ecComps' => array_flip($ecComps),
             ]);
         }
     }

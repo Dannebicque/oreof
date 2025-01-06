@@ -36,18 +36,16 @@ export default class extends Controller {
         document.querySelectorAll('.modal-backdrop').forEach((e) => {
           e.remove()
         })
+
         // tester si l'objet json updateComponent n'est pas vide et contient les clés id et event
         if (Object.keys(this.updateComponent).length > 0 && this.updateComponent.id && this.updateComponent.event) {
-          // todo: ne fonctionne pas avec le refresh ? recharger la page plus simple en attendant ?
-          const element = document.getElementById(this.updateComponent.id);
-          element.addEventListener('live:connect', (e) => {
-            const { component } = e.detail;
-            component.emit(this.updateComponent.event)
-          });
-
-          // console.log(document.getElementById())
-          // const component = document.getElementById(this.updateComponent.id).__component
+          // this.refreshPage()
+          const component = document.getElementById(this.updateComponent.id).__component
+          component.emit(this.updateComponent.event)
         }
+        console.log('event')
+        console.log(this.nomEvenement, this.details)
+
         this.dispatch(this.nomEvenement, { detail: this.details })
       })
   }
@@ -106,7 +104,11 @@ export default class extends Controller {
   }
 
   refreshPage() {
-    console.log('base refreshPage')
     window.location.reload()
+  }
+
+  redirectEdit() {
+    // ajouter /edt à l'URL et recharge la page
+    window.location.href = `${window.location.href}/edit`
   }
 }

@@ -61,14 +61,10 @@ class HeuresEctsEc
         $this->ects = $ects ?? 0.0;
     }
 
-    public function addEc(ElementConstitutif|FicheMatiere $elementConstitutif, bool $isBut = false, bool $heuresSurFicheMatiere = false): void
+    public function addEc(ElementConstitutif|FicheMatiere $elementConstitutif, bool $isBut = false): void
     {
         if ($isBut) {
             $ficheMatiere = $elementConstitutif->getFicheMatiere();
-            if($heuresSurFicheMatiere){
-                $ficheMatiere = $elementConstitutif;
-            }
-                
             if ($ficheMatiere !== null) {
                 $this->cmPres = $ficheMatiere->getVolumeCmPresentiel() ?? 0.0;
                 $this->tdPres = $ficheMatiere->getVolumeTdPresentiel() ?? 0.0;

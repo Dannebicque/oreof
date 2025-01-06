@@ -1,11 +1,11 @@
 <div {{ attributes }}>
-        {# todo: cas ou les mCC reviennent du parent ? #}
+    {# todo: cas ou les mCC reviennent du parent ? #}
     {% if this.elementConstitutif.natureUeEc != null and this.elementConstitutif.natureUeEc.isLibre ==  true %}
-        <span class="badge bg-info ms-1 w-100">EC Libre</span>
-    {% else %}
-        <button
-                {% if deplacer is defined and deplacer == true and editable ==
-                    true %}
+    <span class="badge bg-info ms-1 w-100">EC Libre</span>
+{% else %}
+    <button
+            {% if isAccessible(this.dpeParcours, 'cfvu') %}{# todo: isGranted #}
+                {% if deplacer is defined and deplacer == true and editable == true %}
                     {{ stimulus_controller('modal', {
                         size: 'lg',
                         modalTitle: 'Volumes Horaires',
@@ -18,16 +18,22 @@
                         modalTitle: 'Volumes Horaires',
                         modalUrl: path('app_element_constitutif_structure',{'id': this.elementConstitutif.id, parcours: this.parcours.id}) }) }}
                 {% endif %}
-                data-action="click->modal#openModal"
-                class="btn btn-sm btn-outline-info px-1 ms-1 w-100"
-                data-size="lg"
-                data-bs-toggle="tooltip"
-                data-bs-placement="bottom"
-                title="Volumes Horaires"
-        >
-            {% if this.texte == true %}<i class="fal fa-clock"></i>{% endif %}
-            <span class="badge bg-{% if this.etatHeuresComplet == true %}success{% else %}warning{% endif %}">{% if this.texte == true %}{% if this.etatHeuresComplet == true %}Complet{% else %}A saisir{% endif %} {% else %}Heures{% endif %} {% if this.isSynchroHeures %}
-                    <i class="fal fa-link"></i>{% endif %}</span>
-        </button>
+            {% else %}
+                {{ stimulus_controller('modal', {
+                    size: 'lg',
+                    modalTitle: 'Volumes Horaires',
+                    modalUrl: path('app_element_constitutif_structure_non_editable',{'id': this.elementConstitutif.id}) }) }}
+            {% endif %}
+            data-action="click->modal#openModal"
+            class="btn btn-sm btn-outline-info px-1 ms-1 w-100"
+            data-size="lg"
+            data-bs-toggle="tooltip"
+            data-bs-placement="bottom"
+            title="Volumes Horaires"
+    >
+        {% if this.texte == true %}<i class="fal fa-clock"></i>{% endif %}
+        <span class="badge bg-{% if this.etatHeuresComplet == true %}success{% else %}warning{% endif %}">{% if this.texte == true %}{% if this.etatHeuresComplet == true %}Complet{% else %}A saisir{% endif %} {% else %}Heures{% endif %} {% if this.isSynchroHeures %}
+                <i class="fal fa-link"></i>{% endif %}</span>
+    </button>
     {% endif %}
 </div>

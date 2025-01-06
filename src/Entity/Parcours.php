@@ -170,6 +170,7 @@ class Parcours
     private ?Ville $localisation = null;
 
     #[ORM\Column(length: 15, nullable: true)]
+    #[Groups('parcours_json_versioning')]
     private ?string $sigle = null;
 
     #[ORM\Column]
@@ -220,18 +221,22 @@ class Parcours
     private Collection $parcoursVersionings;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups('parcours_json_versioning')]
     private ?string $modalitesAdmission = null;
 
     #[ORM\Column(length: 1, nullable: true)]
     private ?string $codeApogee = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups('parcours_json_versioning')]
     private ?string $descriptifHautPage = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups('parcours_json_versioning')]
     private ?string $descriptifBasPage = null;
 
     #[ORM\Column(length: 10, nullable: true)]
+    #[Groups('parcours_json_versioning')]
     private ?string $codeRNCP = null;
 
     #[ORM\Column(length: 20, nullable: true, enumType: TypeParcoursEnum::class)]
@@ -279,6 +284,7 @@ class Parcours
         $this->adresses = new ArrayCollection();
         $this->contacts = new ArrayCollection();
         $this->dpeParcours = new ArrayCollection();
+        $this->niveauFrancais = NiveauLangueEnum::B2;
     }
 
 

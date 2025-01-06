@@ -57,7 +57,7 @@ class StructureEc
         bool $isBut = false,
         bool $withEcts = true,
         bool $withBcc = true,
-        bool $heuresSurFicheMatiere = false
+        bool $dataFromFicheMatiere = false
     ) {
         if($parcours) {
             $getElement = new GetElementConstitutif($elementConstitutif, $parcours);
@@ -71,14 +71,24 @@ class StructureEc
         if ($this->withEcts && $parcours) {
             $this->heuresEctsEc = new HeuresEctsEc();
             $this->typeMccc = $getElement->getTypeMccc();
-            if($heuresSurFicheMatiere === false){
-                $this->heuresEctsEc->addEc($getElement->getElementConstitutifHeures(), $isBut, $heuresSurFicheMatiere);
+            if($dataFromFicheMatiere === false){
+                $this->heuresEctsEc->addEc($getElement->getElementConstitutifHeures(), $isBut, $dataFromFicheMatiere);
             }
-            elseif ($heuresSurFicheMatiere === true) {
-                $this->heuresEctsEc->addEc($getElement->getFicheMatiereHeures(), $isBut, $heuresSurFicheMatiere);
+            elseif ($dataFromFicheMatiere === true) {
+                $this->heuresEctsEc->addEc($getElement->getFicheMatiereHeures(), $isBut, $dataFromFicheMatiere);
             }
-            $this->heuresEctsEc->addEcts($getElement->getEcts());
-            $this->mcccs = $getElement->getMcccsCollection()?->toArray();
+            if($dataFromFicheMatiere === false){
+                $this->heuresEctsEc->addEcts($getElement->getEcts());
+            }
+            elseif($dataFromFicheMatiere === true){
+                $this->heuresEctsEc->addEcts($getElement->getFicheMatiereEcts());
+            }
+            if($dataFromFicheMatiere === false){
+                $this->mcccs = $getElement->getMcccsCollection()?->toArray();
+            }
+            elseif ($dataFromFicheMatiere === true) {
+                $this->mcccs = $getElement->getMcccsFromFicheMatiere()?->toArray();
+            }
         }
 
         if ($this->withBcc && $parcours) {
@@ -114,6 +124,10 @@ class StructureEc
             foreach ($this->heuresEctsEcEnfants as $heuresEctsEcEnfant) {
                 if ($heuresEctsEcEnfant->sommeEcTotalPres() > $this->heuresEctsEc->sommeEcTotalPres()) {
                     $this->heuresEctsEc = $heuresEctsEcEnfant;
+                }
+
+                if ($heuresEctsEcEnfant->tePres > $this->heuresEctsEc->tePres) {
+                    $this->heuresEctsEc->tePres = $heuresEctsEcEnfant->tePres;
                 }
             }
         }

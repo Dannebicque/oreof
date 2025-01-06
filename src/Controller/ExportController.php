@@ -20,6 +20,7 @@ class ExportController extends BaseController
     public const TYPES_DOCUMENT = [
         "xlsx-mccc" => 'MCCC format Excel (xslx)',
         "xlsx-cap" => 'Export CAP format excel (xslx)',
+        "xlsx-fiabilisation" => 'Export Fiabilisation format excel (xslx)',
         "pdf-mccc" => 'MCCC format PDF',
         "xlsx-light_mccc" => 'MCCC simplifiées format Excel (xslx)',
         "xlsx-version_mccc" => 'MCCC versionnées format Excel (xslx)',
@@ -32,6 +33,7 @@ class ExportController extends BaseController
         "xlsx-ec" => 'Fiches EC/Type (xslx)',
         "xlsx-seip" => 'Tableau SEIP (xslx)',
         "xlsx-regime" => 'Tableau Régimes Inscriptions (xslx)',
+        "xlsx-responsable" => 'Tableau des responsables (xslx)',
         "xlsx-cfvu" => 'Tableau Synthèse CFVU (xslx)',
     ];
 
