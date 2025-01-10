@@ -250,18 +250,18 @@ HTML;
             ->findOneById(1)->getEtablissementInformation();
 
         // Élément Maquette Iframe
-        $UrlMaquetteIframe = $this->router->generate('app_parcours_maquette_iframe', ['parcours' => $parcours->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
-        $maquetteIframe = <<<HTML
-        <iframe
-            id="maquettePedagogiqueFormation"
-            width="800"
-            height="750"
-            src="{$UrlMaquetteIframe}" 
-            style="max-height: auto;"
-            loading="eager"
-            >
-        </iframe>
-HTML;
+//         $UrlMaquetteIframe = $this->router->generate('app_parcours_maquette_iframe', ['parcours' => $parcours->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
+//         $maquetteIframe = <<<HTML
+//         <iframe
+//             id="maquettePedagogiqueFormation"
+//             width="800"
+//             height="750"
+//             src="{$UrlMaquetteIframe}" 
+//             style="max-height: auto;"
+//             loading="eager"
+//             >
+//         </iframe>
+// HTML;
         // Stage et projet tuteuré (Organisation pédagogique)
         $stage = "Non concerné";
         $projetTuteure = "Non concerné";
@@ -309,7 +309,6 @@ HTML;
             . "<h3>TER/Mémoire de recherche</h3>"
             . $terMemoire
             . "<br><br>"
-            . $maquetteIframe
             . "<h3>Calendrier universitaire</h3>"
             . $calendrierUniversitaire
             . "<h3>Maquette de la formation</h3>"
