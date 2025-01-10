@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.31.75](https://github.com/Dannebicque/oreof/compare/v1.31.74...v1.31.75) (2025-01-10)
+
+
+### Bug Fixes
+
+* Libelle EC si pas de libelle FM ([28b0eb9](https://github.com/Dannebicque/oreof/commit/28b0eb9966aac37a436ce3e838380f9fd7915cc7))
+* Partie recherche pour tous ([058b91f](https://github.com/Dannebicque/oreof/commit/058b91ffd47a14e6b2319b54fd49ad221f97adb5))
+* Total sur UE des TE ([d1ad8db](https://github.com/Dannebicque/oreof/commit/d1ad8db44ae33f5b7ac7629c991813bb309ff884))
+* Total sur UE des TE ([f00b531](https://github.com/Dannebicque/oreof/commit/f00b531119fa68ba1ca325fc20a582b3db2aca0e))
+
 ### [1.31.74](https://github.com/Dannebicque/oreof/compare/v1.31.73...v1.31.74) (2024-12-18)
 
 
