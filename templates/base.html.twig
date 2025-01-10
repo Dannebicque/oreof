@@ -170,12 +170,12 @@
                                         <span class="label">Détail des éléments mutualisés</span>
                                     </a>
                                 </li>
-                                    <li>
-                                        <a href="{{ path('app_search') }}">
-                                            <i class="fal fa-magnifying-glass icon"></i>
-                                            <span class="label">Effectuer une recherche</span>
-                                        </a>
-                                    </li>
+                                <li>
+                                    <a href="{{ path('app_search') }}">
+                                        <i class="fal fa-magnifying-glass icon"></i>
+                                        <span class="label">Effectuer une recherche</span>
+                                    </a>
+                                </li>
                             </ul>
                         </li>
                         {% if (is_granted('CAN_ETABLISSEMENT_SHOW_ALL')) and not is_granted('ROLE_ADMIN') and not is_granted('ROLE_SES') %}

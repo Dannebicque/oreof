@@ -1,5 +1,12 @@
 <ul class="list-unstyled list-inline text-center menu-icons">
     <li class="list-inline-item">
+        <a href="{{ path('app_search') }}"
+           title="Effectuer une recherche"
+        >
+            <i class="fal fa-magnifying-glass icon"></i>
+        </a>
+    </li>
+    <li class="list-inline-item">
         <a href="{{ path('app_commentaire') }}"
            title="Mes commentaires"
         >
@@ -7,41 +14,41 @@
         </a>
     </li>
     {% if is_granted('ROLE_SES') %}
+        <li class="list-inline-item">
+            {% block contact %}
+                <a href="#"
+                        {{ stimulus_controller('modal', {
+                            size: 'large',
+                            modalTitle: 'Contacter',
+                            right: true,
+                            modalUrl: path('app_ses_contact', {formation: this.formation != null ? this.formation.id : '', parcours: this.parcours != null ? this.parcours.id : ''}) }) }}
+                   data-action="click->modal#openModal"
+                   data-size="lg"
+                   data-bs-toggle="tooltip"
+                   data-bs-placement="bottom"
+                   title="Contacter"
+                >
+                    <i class="fas fa-comments"></i>
+                </a>
+            {% endblock %}
+        </li>
+    {% endif %}
     <li class="list-inline-item">
-        {% block contact %}
         <a href="#"
                 {{ stimulus_controller('modal', {
                     size: 'large',
-                    modalTitle: 'Contacter',
+                    modalTitle: 'Paramètres & Accessibilité',
                     right: true,
-                    modalUrl: path('app_ses_contact', {formation: this.formation != null ? this.formation.id : '', parcours: this.parcours != null ? this.parcours.id : ''}) }) }}
+                    modalUrl: path('app_settings') }) }}
            data-action="click->modal#openModal"
            data-size="lg"
            data-bs-toggle="tooltip"
            data-bs-placement="bottom"
-           title="Contacter"
+           title="Paramètres & Accessibilité"
         >
-            <i class="fas fa-comments"></i>
-        </a>
-        {% endblock %}
-    </li>
-    {% endif %}
-    <li class="list-inline-item">
-    <a href="#"
-            {{ stimulus_controller('modal', {
-                size: 'large',
-                modalTitle: 'Paramètres & Accessibilité',
-                right: true,
-                modalUrl: path('app_settings') }) }}
-            data-action="click->modal#openModal"
-            data-size="lg"
-            data-bs-toggle="tooltip"
-            data-bs-placement="bottom"
-            title="Paramètres & Accessibilité"
-    >
 
-                  <i class="fas fa-gears"></i>
-    </a>
+            <i class="fas fa-gears"></i>
+        </a>
     </li>
     <li class="list-inline-item">
         <a href="{{ path('app_document') }}" target="_blank">
