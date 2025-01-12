@@ -43,8 +43,6 @@ export default class extends Controller {
           const component = document.getElementById(this.updateComponent.id).__component
           component.emit(this.updateComponent.event)
         }
-        console.log('event')
-        console.log(this.nomEvenement, this.details)
 
         this.dispatch(this.nomEvenement, { detail: this.details })
       })
