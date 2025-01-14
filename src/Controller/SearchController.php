@@ -20,7 +20,6 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class SearchController extends AbstractController
 {
-    #[IsGranted('ROLE_ADMIN')]
     #[Route('/recherche/parcours', name: 'app_search')]
     public function index(): Response
     {
@@ -29,7 +28,6 @@ class SearchController extends AbstractController
         ]);
     }
 
-    #[IsGranted('ROLE_ADMIN')]
     #[Route('/recherche/mot_cle', name: 'app_search_action')]
     public function searchWithKeyword(
         EntityManagerInterface $entityManager,
@@ -175,7 +173,6 @@ class SearchController extends AbstractController
         }
     }
 
-    #[IsGranted('ROLE_ADMIN')]
     #[Route('/recherche/fiche_matiere/{page}/{mot_cle}', name: 'app_search_fiche_matiere_pagination')]
     public function searchFicheMatiereForKeywordAndPage(
         int $page,
@@ -188,7 +185,6 @@ class SearchController extends AbstractController
         return $this->json($data);
     }
 
-    #[IsGranted('ROLE_ADMIN')]
     #[Route('/recherche/fiche_matiere/export/excel/{mot_cle}', name: 'app_search_fiche_matiere_export_excel')]
     public function exportFicheMatiereRecherche(
         string $mot_cle,
