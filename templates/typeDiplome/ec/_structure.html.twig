@@ -1,0 +1,43 @@
+<div class="row">
+    <div class="col-sm-12">
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">Modalité</th>
+                <th scope="col">CM</th>
+                <th scope="col">TD</th>
+                <th scope="col">TP</th>
+                <th scope="col">Autonomie</th> {# todo: PTUT en BUT?) #}
+                <th scope="col">Total</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <th scope="row">Présentiel</th>
+                <td>{{ ficheMatiere.volumeCmPresentiel }} h</td>
+                <td>{{ ficheMatiere.volumeTdPresentiel }} h</td>
+                <td>{{ ficheMatiere.volumeTdPresentiel }} h</td>
+                <td rowspan="2">{{ ficheMatiere.volumeTe }} h</td>
+                <td>{{ ficheMatiere.volumeCmPresentiel + ficheMatiere.volumeTdPresentiel + ficheMatiere.volumeTpPresentiel }} h</td>
+            </tr>
+            <tr>
+                <th  scope="row">Distanciel</th>
+                <td>{{ ficheMatiere.volumeCmDistanciel }} h</td>
+                <td>{{ ficheMatiere.volumeTdDistanciel }} h</td>
+                <td>{{ ficheMatiere.volumeTdDistanciel }} h</td>
+                <td>{{ ficheMatiere.volumeCmDistanciel + ficheMatiere.volumeTdDistanciel + ficheMatiere.volumeTpDistanciel }} h</td>
+
+            </tr>
+            <tr>
+                <th>Total</th>
+                <td>{{ ficheMatiere.volumeCmPresentiel + ficheMatiere.volumeCmDistanciel }} h</td>
+                <td>{{ ficheMatiere.volumeTdPresentiel + ficheMatiere.volumeTdDistanciel }} h</td>
+                <td>{{ ficheMatiere.volumeTpPresentiel + ficheMatiere.volumeTpDistanciel }} h</td>
+                <td>{{ ficheMatiere.volumeTe }} h</td>
+                <td>{{ ficheMatiere.volumeCmDistanciel + ficheMatiere.volumeTdDistanciel + ficheMatiere.volumeTpDistanciel + ficheMatiere.volumeCmPresentiel + ficheMatiere.volumeTdPresentiel + ficheMatiere.volumeTpPresentiel  }} h<br>(+ {{ ficheMatiere.volumeTe }} h en autonomie) </td>
+            </tr>
+            </tbody>
+        </table>
+        <twig:alerte type="info" message="Les volumes horaires sont donnés à titre indicatif et peuvent varier en fonction des parcours dans lesquels cette fiche matière est utilisée." class="mt-2"></twig:alerte>
+    </div>
+</div>

@@ -16,15 +16,32 @@
             </div>
         </div>
     </section>
-    {# todo: liste tous les parcours exploitant cette fiche matière (les EC) #}
-    {# todo: pour chaque parcours mobilisant la fiche... #}
+
+    <section class="scroll-section" id="volumes_horaires">
+        <h2 class="small-title">Volumes horaires</h2>
+        <div class="card mb-5">
+            <div class="card-body">
+                {{ include('typeDiplome/ec/_structure.html.twig') }}
+            </div>
+        </div>
+    </section>
+
+    <section class="scroll-section" id="mccc">
+        <h2 class="small-title">Modalités de contrôle des connaissances</h2>
+        <div class="card mb-5">
+            <div class="card-body">
+                {{ include('typeDiplome/ec/_mccc.html.twig') }}
+            </div>
+        </div>
+    </section>
+
     {% if ficheMatiere.enseignementMutualise == true or ficheMatiere.elementConstitutifs|length > 0 %}
-        {% for ec in ficheMatiere.elementConstitutifs %}
-            <section class="scroll-section" id="objectifs">
-                <h2 class="small-title">Parcours utilisant la fiche matière et détails des EC</h2>
-                <div class="card mb-5">
-                    <div class="card-body">
-                        <ul class="list-unstyled">
+        <section class="scroll-section" id="parcours">
+            <h2 class="small-title">Parcours utilisant la fiche matière et détails des EC</h2>
+            <div class="card mb-5">
+                <div class="card-body">
+                    <ul class="list-unstyled">
+                        {% for ec in ficheMatiere.elementConstitutifs %}
                             <li>
                                 {% if isVersioningView is defined and isVersioningView == false %}
                                     <button
@@ -57,40 +74,21 @@
                                     {% endif %}
                                 {% endif %}
                             </li>
-                        </ul>
-                    </div>
-                </div>
-            </section>
-        {% endfor %}
-    {% else %}
-        <section class="scroll-section" id="objectifs">
-            <h2 class="small-title">Objectifs / compétences acquises à l’issue de la formation</h2>
-            <div class="card mb-5">
-                <div class="card-body">
-                    {{ include('typeDiplome/formation/_objectifs.html.twig') }}
+                        {% endfor %}
+                    </ul>
                 </div>
             </div>
         </section>
-        {#        <section class="scroll-section" id="structure"> #}
-        {#            <h2 class="small-title">Structure et organisation pédagogiques</h2> #}
-        {#            <div class="card mb-5"> #}
-        {#                <div class="card-body"> #}
-        {#                    {{ include('typeDiplome/ec/_structure.html.twig') }} #}
-        {#                </div> #}
-        {#            </div> #}
-        {#        </section> #}
-
-        {#        <section class="scroll-section" id="mccc"> #}
-        {#            <h2 class="small-title">Modalités de contrôle des connaissances</h2> #}
-        {#            <div class="card mb-5"> #}
-        {#                <div class="card-body"> #}
-        {#                    {{ include('typeDiplome/ec/_mccc.html.twig') }} #}
-        {#                </div> #}
-        {#            </div> #}
-        {#        </section> #}
     {% endif %}
-    {# todo: si pas mutualisé, alors affichage BCCC, MCCC et heures ici, si mutualisé affichage des parcours + modal avec des détails. Si impression 1 docs/parcours #}
 
+    <section class="scroll-section" id="bcc">
+        <h2 class="small-title">Compétences acquises à l’issue de la formation</h2>
+        <div class="card mb-5">
+            <div class="card-body">
+                {{ include('typeDiplome/formation/_objectifs.html.twig') }}
+            </div>
+        </div>
+    </section>
 
     <section class="scroll-section" id="infos">
         <h2 class="small-title">Infos Pratiques</h2>
