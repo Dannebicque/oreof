@@ -152,7 +152,7 @@
 {% endblock %}
 
 {% block bouton_header %}
-    {% if is_granted('ROLE_ADMIN') %}
+    {% if is_granted('CAN_EC_EDIT_MY', ficheMatiere) %}
         <a
                 href="{{ path('app_fiche_matiere_edit',{slug: ficheMatiere.slug}) }}"
                 class="btn btn-sm btn-outline-warning"
