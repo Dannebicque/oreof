@@ -2,19 +2,305 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-### [1.31.45](https://github.com/Dannebicque/oreof/compare/v1.31.43...v1.31.45) (2024-11-05)
+### [1.31.78](https://github.com/Dannebicque/oreof/compare/v1.31.77...v1.31.78) (2025-01-14)
+
+
+### Bug Fixes
+
+* Recherche ouverte à tous ([4ba970b](https://github.com/Dannebicque/oreof/commit/4ba970b329564098927f70375f14bf987ae2f676))
+
+### [1.31.77](https://github.com/Dannebicque/oreof/compare/v1.31.76...v1.31.77) (2025-01-12)
+
+
+### Bug Fixes
+
+* Réouverture des fiches matières ([c1a3606](https://github.com/Dannebicque/oreof/commit/c1a360678489c43f7b82dba990df7761e5eea2a2))
+
+### [1.31.76](https://github.com/Dannebicque/oreof/compare/v1.31.75...v1.31.76) (2025-01-10)
+
+
+### Bug Fixes
+
+* Partie recherche pour tous ([4a36290](https://github.com/Dannebicque/oreof/commit/4a36290e369f9b74db0ef010773db34c75008282))
+
+### [1.31.75](https://github.com/Dannebicque/oreof/compare/v1.31.74...v1.31.75) (2025-01-10)
+
+
+### Bug Fixes
+
+* Libelle EC si pas de libelle FM ([28b0eb9](https://github.com/Dannebicque/oreof/commit/28b0eb9966aac37a436ce3e838380f9fd7915cc7))
+* Partie recherche pour tous ([058b91f](https://github.com/Dannebicque/oreof/commit/058b91ffd47a14e6b2319b54fd49ad221f97adb5))
+* Total sur UE des TE ([d1ad8db](https://github.com/Dannebicque/oreof/commit/d1ad8db44ae33f5b7ac7629c991813bb309ff884))
+* Total sur UE des TE ([f00b531](https://github.com/Dannebicque/oreof/commit/f00b531119fa68ba1ca325fc20a582b3db2aca0e))
+
+### [1.31.74](https://github.com/Dannebicque/oreof/compare/v1.31.73...v1.31.74) (2024-12-18)
+
+
+### Bug Fixes
+
+* Total sur UE des TE ([e684354](https://github.com/Dannebicque/oreof/commit/e684354a7361ee5776338a2d30a8245376d5346e))
+
+### [1.31.73](https://github.com/Dannebicque/oreof/compare/v1.31.72...v1.31.73) (2024-12-06)
+
+
+### Bug Fixes
+
+* Ajout d'un export ([6dc0f4f](https://github.com/Dannebicque/oreof/commit/6dc0f4fd0368ff49e4db4d4fe499e8dacfae68a6))
+
+### [1.31.72](https://github.com/Dannebicque/oreof/compare/v1.31.71...v1.31.72) (2024-12-04)
+
+
+### Bug Fixes
+
+* modification mention/formation ([592f6c2](https://github.com/Dannebicque/oreof/commit/592f6c232a0f2929f8fdcc9266761270293cf3e7))
+* process sur réouvertaure sans CFVU ([7b7244c](https://github.com/Dannebicque/oreof/commit/7b7244c04ea80e03dc843dde7a43393bca0a3ffd))
+
+### [1.31.71](https://github.com/Dannebicque/oreof/compare/v1.31.70...v1.31.71) (2024-12-04)
+
+
+### Bug Fixes
+
+* process sur réouvertaure sans CFVU ([d43ddf4](https://github.com/Dannebicque/oreof/commit/d43ddf4ce7d2fff7b7bf9b00629274094ad37800))
+
+### [1.31.70](https://github.com/Dannebicque/oreof/compare/v1.31.69...v1.31.70) (2024-12-04)
+
+
+### Bug Fixes
+
+* onglets actifs si ouverture sans CFVU sur formation sans parcours ([8f237ba](https://github.com/Dannebicque/oreof/commit/8f237ba7a3076200aba9d69866474528554d0bbe))
+
+### [1.31.69](https://github.com/Dannebicque/oreof/compare/v1.31.68...v1.31.69) (2024-12-03)
+
+
+### Bug Fixes
+
+* Redirection sur Edit après réouverture ([2884606](https://github.com/Dannebicque/oreof/commit/288460634b3e18db4a5431640a5baf6694d97265))
+* validation lot change RF ([2dc7592](https://github.com/Dannebicque/oreof/commit/2dc75921da125e9d27f552dc36e8ca3d754adfdd))
+
+### [1.31.68](https://github.com/Dannebicque/oreof/compare/v1.31.67...v1.31.68) (2024-12-02)
+
+
+### Bug Fixes
+
+* Fermeture parcours sans modif ([ecc6d6b](https://github.com/Dannebicque/oreof/commit/ecc6d6b89806692d264c9820db9da5dd7e236908))
+* Mémorisation du step dans le wizard ([91feee1](https://github.com/Dannebicque/oreof/commit/91feee1a8152bfd6226332b3c2398539351fd415))
+* Sécurisation des entrées dans la page de contrôle ([9152c1e](https://github.com/Dannebicque/oreof/commit/9152c1e183a051e9938b53f0cb6514a69143d23f))
+
+### [1.31.67](https://github.com/Dannebicque/oreof/compare/v1.31.66...v1.31.67) (2024-11-27)
+
+
+### Bug Fixes
+
+* Sécurisation des entrées dans la page de contrôle ([9933e9a](https://github.com/Dannebicque/oreof/commit/9933e9aea8905f959edcc6ed4abe6c6136c7427e))
+
+### [1.31.66](https://github.com/Dannebicque/oreof/compare/v1.31.65...v1.31.66) (2024-11-25)
+
+
+### Bug Fixes
+
+* LHEO ([3490095](https://github.com/Dannebicque/oreof/commit/34900954fac3abe1727955d87442e0ef46a469ec))
+* PDF avec header/footer pour les plaquettes ([a66e145](https://github.com/Dannebicque/oreof/commit/a66e145f6a0d510ed03e957c8a05b3a807cd2182))
+
+### [1.31.65](https://github.com/Dannebicque/oreof/compare/v1.31.64...v1.31.65) (2024-11-25)
 
 
 ### Features
 
-* export ([12f5d34](https://github.com/Dannebicque/oreof/commit/12f5d3441d5db0c87969c9f4b645478f1a022783))
+* Suppression constante mail CFVU pour mettre en BDD ([11b763f](https://github.com/Dannebicque/oreof/commit/11b763f6a4e2b95996efa1a517b73ff32bad8007))
+
+
+### Bug Fixes
+
+* PDF avec header/footer pour les plaquettes ([1693bcd](https://github.com/Dannebicque/oreof/commit/1693bcdbfaadcd3e1f47091aa13f5c044c245846))
+* suppression code inutile iframe versionné ([b7b8b0a](https://github.com/Dannebicque/oreof/commit/b7b8b0a13c53a9ed2933889dce437e5623692920))
+
+### [1.31.64](https://github.com/Dannebicque/oreof/compare/v1.31.63...v1.31.64) (2024-11-24)
+
+
+### Features
+
+* Ajout du type choix/option sur export CAP ([52f27f7](https://github.com/Dannebicque/oreof/commit/52f27f7818a3c0f070edec05e8ba553c2dcd2c3c))
+
+
+### Bug Fixes
+
+* Affichage état LHEO sur validation ([9aea323](https://github.com/Dannebicque/oreof/commit/9aea3238f6b426542b57eef74688042fdd2c10f6))
+* AJout du sigle dans l'export fiche matière recherche ([0e1924d](https://github.com/Dannebicque/oreof/commit/0e1924d9a970d7bc21c4a0b32f7be94416e1031b))
+* Blocage des onglets sur parcours selon édition ([e543a4d](https://github.com/Dannebicque/oreof/commit/e543a4da85ff62dc795b34fb55d3a18d0edda652))
+* Mise à jour du PV pour change de RF ([54a859d](https://github.com/Dannebicque/oreof/commit/54a859d6e0a52f43ce036ecc3d56c696237b9d70))
+* plaquette ([39fb216](https://github.com/Dannebicque/oreof/commit/39fb2169f750120a11fdb158c060fa01ca521fac))
+* RF/CO-RF sur parcours unique ([fc233f5](https://github.com/Dannebicque/oreof/commit/fc233f5c59e81bb8d6777db680b033504bb5c5dd))
+* target blank sur la recherche ([7c877fe](https://github.com/Dannebicque/oreof/commit/7c877feb73892028eafbf7336b5faa8d135149e1))
+* workflow change Rf ([fba990c](https://github.com/Dannebicque/oreof/commit/fba990c4cb511e460b9ac8ef67faae2b7c019d06))
+* workflow change Rf ([4c07c4c](https://github.com/Dannebicque/oreof/commit/4c07c4cbd6bd4dafde4ff5f6ccf1d030e1a4272a))
+* workflow change Rf ([43a1c9b](https://github.com/Dannebicque/oreof/commit/43a1c9bf8561a3cc140426cc1efd1eb97629bba2))
+
+### [1.31.63](https://github.com/Dannebicque/oreof/compare/v1.31.62...v1.31.63) (2024-11-22)
+
+
+### Bug Fixes
+
+* Affichage bas et haut de page sur parcours ([b1faa9f](https://github.com/Dannebicque/oreof/commit/b1faa9f8655696c3cfe6cf12624ae47e2f2594d1))
+* Affichage bas et haut de page sur parcours ([78fc031](https://github.com/Dannebicque/oreof/commit/78fc031a7a86fe067dd17b91746dc1535c79870c))
+* Cas médecine ([7501fb8](https://github.com/Dannebicque/oreof/commit/7501fb823c6542b0fb97726ebcb1bcaa349bb6f1))
+* Mise à jour du PV pour change de RF ([56c55b5](https://github.com/Dannebicque/oreof/commit/56c55b51d428a0686a1daf1245459c83abf97b95))
+* target blank ([06b4e9c](https://github.com/Dannebicque/oreof/commit/06b4e9c53671ff57e804717574a22a4c60a115e8))
+* trads ([0ab8acc](https://github.com/Dannebicque/oreof/commit/0ab8acc94d7e856bf39d5ad972e1ef6265994e81))
+* trads ([786c124](https://github.com/Dannebicque/oreof/commit/786c124d5b0cd60ceaac38f51e57b34dc5c13032))
+* typo ([e208c3f](https://github.com/Dannebicque/oreof/commit/e208c3f96d3984473bb93a233e623b48b3bf6b41))
+
+### [1.31.62](https://github.com/Dannebicque/oreof/compare/v1.31.61...v1.31.62) (2024-11-21)
+
+
+### Bug Fixes
+
+* ouverture en target blank ([c63fb02](https://github.com/Dannebicque/oreof/commit/c63fb024df11b0bf6efb72deb5f5227d887c0ed2))
+
+### [1.31.61](https://github.com/Dannebicque/oreof/compare/v1.31.60...v1.31.61) (2024-11-21)
+
+
+### Bug Fixes
+
+* workflow validation ([94facb0](https://github.com/Dannebicque/oreof/commit/94facb002038e3e3b2347a1021262d58eca7b705))
+* workflow validation ([57c4df1](https://github.com/Dannebicque/oreof/commit/57c4df19b8b60bce5183af96fb5fac82638620e5))
+
+### [1.31.60](https://github.com/Dannebicque/oreof/compare/v1.31.59...v1.31.60) (2024-11-21)
+
+
+### Bug Fixes
+
+* workflow validation ([011f043](https://github.com/Dannebicque/oreof/commit/011f043a89910b1cf736e122df6a0e0e37837838))
+
+### [1.31.59](https://github.com/Dannebicque/oreof/compare/v1.31.58...v1.31.59) (2024-11-21)
+
+
+### Bug Fixes
+
+* edition si réouverture sans CFVU ([fd1467a](https://github.com/Dannebicque/oreof/commit/fd1467a1d6e1f6a1bc621fb6e1b1a8db2eee47f3))
+* edition si réouverture sans CFVU ([9b3602c](https://github.com/Dannebicque/oreof/commit/9b3602c0d250a28fc03165b60295a95ce91d83db))
+* edition si réouverture sans CFVU ([9c32448](https://github.com/Dannebicque/oreof/commit/9c324485a05e935576ab93e9133554cc878260d8))
+* edition si réouverture sans CFVU ([9848a27](https://github.com/Dannebicque/oreof/commit/9848a2780f35e434b3b7336a5c93ea1005a5d3b9))
+* workflow validation ([73643fb](https://github.com/Dannebicque/oreof/commit/73643fbc2b4a39704314ba66882d2744887cf5b3))
+
+### [1.31.58](https://github.com/Dannebicque/oreof/compare/v1.31.57...v1.31.58) (2024-11-21)
+
+
+### Bug Fixes
+
+* Bon état de process lors de la réouverture sans CFVU ([bd92709](https://github.com/Dannebicque/oreof/commit/bd9270994ca70739534477a0881ccad95c566ee5))
+* edition si réouverture sans CFVU ([1576746](https://github.com/Dannebicque/oreof/commit/157674655429f78ccd2b24dae9fa8b7d9518f053))
+* id EC en admin ([6599a4b](https://github.com/Dannebicque/oreof/commit/6599a4b84b31ca7c191eabb32b2fa134bda30679))
+* images ([5204096](https://github.com/Dannebicque/oreof/commit/520409606ffab86805660a407c14261aa19b0c4d))
+* images ([52cc979](https://github.com/Dannebicque/oreof/commit/52cc9796fb872f9577b1fe07679d1dc28df75b7f))
+
+### [1.31.57](https://github.com/Dannebicque/oreof/compare/v1.31.56...v1.31.57) (2024-11-13)
+
+
+### Bug Fixes
+
+* dates CFVU/Conseil sur Excel MCCC ([e7133d5](https://github.com/Dannebicque/oreof/commit/e7133d573664fb7a1abc036dcf0d6027d38e55ee))
+
+### [1.31.56](https://github.com/Dannebicque/oreof/compare/v1.31.55...v1.31.56) (2024-11-12)
+
+
+### Features
+
+* export ([47023f9](https://github.com/Dannebicque/oreof/commit/47023f9dd8cf7768cbdc931dfb5ad271b5ce38ca))
+* export ([8d05017](https://github.com/Dannebicque/oreof/commit/8d05017c64a7a879820bb1fdecf350b9e384120f))
+* export ([ef2260b](https://github.com/Dannebicque/oreof/commit/ef2260bf6a5d4c0e61093f7d37ce8e913cc6508f))
+
+
+### Bug Fixes
+
+* API JSON Versionné - date de validation ([1b04414](https://github.com/Dannebicque/oreof/commit/1b0441480b0395dfb894cf232b967a7b6aa35bba))
+* date de publication API ([21f73f9](https://github.com/Dannebicque/oreof/commit/21f73f903bef9a5221589c8e7131de7921847000))
+* typo sur une méthode ([6a8085c](https://github.com/Dannebicque/oreof/commit/6a8085c5b6077136c26b0a2c6288123d441edc12))
+
+### [1.31.55](https://github.com/Dannebicque/oreof/compare/v1.31.54...v1.31.55) (2024-11-05)
+
+
+### Features
+
+* export ([f1fb594](https://github.com/Dannebicque/oreof/commit/f1fb5946b7fc2a4a0e766ac1275517d9dce6e69b))
+
+### [1.31.54](https://github.com/Dannebicque/oreof/compare/v1.31.53...v1.31.54) (2024-10-18)
+
+
+### Bug Fixes
+
+* diverses améliorations ([29ec197](https://github.com/Dannebicque/oreof/commit/29ec197db9f869938499ddc2e2cbdf36f3fcb98b))
+
+### [1.31.53](https://github.com/Dannebicque/oreof/compare/v1.31.52...v1.31.53) (2024-10-16)
+
+
+### Bug Fixes
+
+* Code EC export Cap ([ac1f41c](https://github.com/Dannebicque/oreof/commit/ac1f41c0c51194a956547bb3f3fc400f6abf81fe))
+
+### [1.31.52](https://github.com/Dannebicque/oreof/compare/v1.31.51...v1.31.52) (2024-10-15)
+
+
+### Bug Fixes
+
+* Code EC export Cap ([601fa51](https://github.com/Dannebicque/oreof/commit/601fa5184021fb9d83c27cb01852af532f2c4185))
+* Code EC export Cap ([63ac957](https://github.com/Dannebicque/oreof/commit/63ac9572213e23caaf9557314b16477efe3ee9ff))
+
+### [1.31.51](https://github.com/Dannebicque/oreof/compare/v1.31.50...v1.31.51) (2024-10-15)
+
+
+### Bug Fixes
+
+* Code EC export Cap ([fb01bca](https://github.com/Dannebicque/oreof/commit/fb01bcaf7d1dd68a7828913a895b03b29db490fa))
+* filtre sigle ([da880ac](https://github.com/Dannebicque/oreof/commit/da880ac4fdee6dece6bbc08b7f454a57c9e71779))
+
+### [1.31.50](https://github.com/Dannebicque/oreof/compare/v1.31.49...v1.31.50) (2024-10-14)
+
+
+### Bug Fixes
+
+* filtre sigle ([0b4c787](https://github.com/Dannebicque/oreof/commit/0b4c787ffcc46c890a550d7e5b98f8212edb28a5))
+
+### [1.31.49](https://github.com/Dannebicque/oreof/compare/v1.31.48...v1.31.49) (2024-10-14)
+
+
+### Bug Fixes
+
+* historique ([a9a8c99](https://github.com/Dannebicque/oreof/commit/a9a8c99b3f47537c3bc42855725322f007253a6c))
+
+### [1.31.48](https://github.com/Dannebicque/oreof/compare/v1.31.47...v1.31.48) (2024-10-12)
+
+
+### Bug Fixes
+
+* ajout d'une recherche sur le libellé ou sigle du diplôme également ([8c9d4b0](https://github.com/Dannebicque/oreof/commit/8c9d4b05eaf1418ed868ffb43148b7d32abf7192))
+* ajout d'une recherche sur le libellé ou sigle du diplôme également ([5587e10](https://github.com/Dannebicque/oreof/commit/5587e1026dee995b86559b3eba517d57de374054))
+* bug affichage des BUT sur les semestres non réalisés (en FC par exemple) ([872a44d](https://github.com/Dannebicque/oreof/commit/872a44d3ef1370255672345affd446c216c18ab7))
+* gestion ouverture/fermeture des parcours ([8e0baa1](https://github.com/Dannebicque/oreof/commit/8e0baa1c5cf7c2a713a485d3d1380f5368aa4a6e))
+* refresh automatique sur le process manage ([25c3a90](https://github.com/Dannebicque/oreof/commit/25c3a90aaf134749fc5a24b209170d8920b30f78))
+
+### [1.31.47](https://github.com/Dannebicque/oreof/compare/v1.31.46...v1.31.47) (2024-10-08)
+
+
+### Bug Fixes
+
+* traduction manquante ([573f22a](https://github.com/Dannebicque/oreof/commit/573f22a606f3f665913aed8dc868687c6f2891c5))
+
+### [1.31.46](https://github.com/Dannebicque/oreof/compare/v1.31.45...v1.31.46) (2024-10-07)
+
+
+### Bug Fixes
+
+* export synthese et plaquette ([8afbaef](https://github.com/Dannebicque/oreof/commit/8afbaefc35b348564df201f1dd85693e7ae82a49))
+
+### [1.31.45](https://github.com/Dannebicque/oreof/compare/v1.31.44...v1.31.45) (2024-10-07)
 
 
 ### Bug Fixes
 
 * bouton export MCCC ([b18f1a5](https://github.com/Dannebicque/oreof/commit/b18f1a57d16ab6a7e35b2c6551defebf8f4108a4))
-* cascade persist ([e1f22c7](https://github.com/Dannebicque/oreof/commit/e1f22c7f287df8f0ae08d47f30fc516401f25196))
+* création d'un nouveau parcours ([864eb69](https://github.com/Dannebicque/oreof/commit/864eb69a36e37ce7b467542c179e38d54bc636d9))
 * filtre API ([54d8e37](https://github.com/Dannebicque/oreof/commit/54d8e379cf02bcc1d1cac55329a27684f2549f48))
+* GlobalVoter restriction pour l'admin ([fc8f6d2](https://github.com/Dannebicque/oreof/commit/fc8f6d2d383dbe106b7581f7dc97b05881b89f9e))
 * heures EC pour les BUT - maquette iframe ([864a392](https://github.com/Dannebicque/oreof/commit/864a392d00c9da6bfb1d73fc34089e82578a3d76))
 * heures fiche matière iframe ([7b961d0](https://github.com/Dannebicque/oreof/commit/7b961d04aea616803a54a2df5f12c149357fc1b0))
 * libellé ([c43b491](https://github.com/Dannebicque/oreof/commit/c43b491ad405d532adac46107952c36ce49e39d0))
@@ -29,32 +315,12 @@ All notable changes to this project will be documented in this file. See [standa
 * semestre non dispensé maquette versioning ([4d68314](https://github.com/Dannebicque/oreof/commit/4d68314d0796c5a3691dc22cc69d70d46b8aee99))
 * sigle du parcours - recherche fiche matière ([c0d2e14](https://github.com/Dannebicque/oreof/commit/c0d2e144c35ed9a809c0cb9656daba5e2325fb47))
 
-### [1.31.44](https://github.com/Dannebicque/oreof/compare/v1.31.43...v1.31.44) (2024-11-05)
-
-
-### Features
-
-* export ([12f5d34](https://github.com/Dannebicque/oreof/commit/12f5d3441d5db0c87969c9f4b645478f1a022783))
+### [1.31.44](https://github.com/Dannebicque/oreof/compare/v1.31.43...v1.31.44) (2024-10-04)
 
 
 ### Bug Fixes
 
-* bouton export MCCC ([b18f1a5](https://github.com/Dannebicque/oreof/commit/b18f1a57d16ab6a7e35b2c6551defebf8f4108a4))
-* cascade persist ([e1f22c7](https://github.com/Dannebicque/oreof/commit/e1f22c7f287df8f0ae08d47f30fc516401f25196))
-* filtre API ([54d8e37](https://github.com/Dannebicque/oreof/commit/54d8e379cf02bcc1d1cac55329a27684f2549f48))
-* heures EC pour les BUT - maquette iframe ([864a392](https://github.com/Dannebicque/oreof/commit/864a392d00c9da6bfb1d73fc34089e82578a3d76))
-* heures fiche matière iframe ([7b961d0](https://github.com/Dannebicque/oreof/commit/7b961d04aea616803a54a2df5f12c149357fc1b0))
-* libellé ([c43b491](https://github.com/Dannebicque/oreof/commit/c43b491ad405d532adac46107952c36ce49e39d0))
-* libellé ue versioning ([a06954c](https://github.com/Dannebicque/oreof/commit/a06954cdcd3d51867da4d0f74358bdd0d874b695))
-* libellés en double - fiche descriptive PDF ([629733e](https://github.com/Dannebicque/oreof/commit/629733e9ee8d3ece92d41d5c9f27937e499a129e))
-* loading icon ([9d91006](https://github.com/Dannebicque/oreof/commit/9d910068a5d72aea62bb42f1e3517d1061d18514))
-* maquette_iframe ([1f84de5](https://github.com/Dannebicque/oreof/commit/1f84de51f0ba2c8811eb4d0c703cd320121c4687))
-* nature_ec - API JSON versionnée ([3dda464](https://github.com/Dannebicque/oreof/commit/3dda464d1711aa991d383ee5a0760d8574ebec4d))
-* pagination recherche fiche matière ([43e5992](https://github.com/Dannebicque/oreof/commit/43e5992396d09694cda42ee73d0e14a8f19b7606))
-* recherche de fiche matière ([df27aa0](https://github.com/Dannebicque/oreof/commit/df27aa06d4ccbcf9119f6fddadd05ac1a965dae3))
-* recherche fiche matière ([3ef5bdf](https://github.com/Dannebicque/oreof/commit/3ef5bdf0b97a052bba979cd5a3859629ae143d3c))
-* semestre non dispensé maquette versioning ([4d68314](https://github.com/Dannebicque/oreof/commit/4d68314d0796c5a3691dc22cc69d70d46b8aee99))
-* sigle du parcours - recherche fiche matière ([c0d2e14](https://github.com/Dannebicque/oreof/commit/c0d2e144c35ed9a809c0cb9656daba5e2325fb47))
+* GlobalVoter restriction pour l'admin ([1daaafd](https://github.com/Dannebicque/oreof/commit/1daaafd02ce14627dbb55af546443f914070db87))
 
 ### [1.31.43](https://github.com/Dannebicque/oreof/compare/v1.31.42...v1.31.43) (2024-09-29)
 

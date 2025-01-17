@@ -434,6 +434,7 @@ validation.valider.transmis_pour_publication: validation.valider.transmis_pour_p
 historique.validation.fiche_matiere.ses: 'Historique de validation fiche EC/matière'
 validation.valider.fiches_matieres: 'Valider et soumettre les fiches EC/matière'
 demande.reouverture: 'Demander la réouverture du DPE'
+demande.reouverture.fiche: 'Réouvrir la fiche'
 demande.reouverture.annuler: 'Annuler la demander de réouverture du DPE'
 demande.reouverture.title: 'Réouverture du DPE'
 demande.reouverture.fiche.title: 'Réouverture de fiche EC/matière'
