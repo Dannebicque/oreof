@@ -9,6 +9,7 @@
 
 namespace App\Controller;
 
+use App\Classes\GetDpeParcours;
 use App\Classes\JsonReponse;
 use App\Classes\verif\FicheMatiereState;
 use App\DTO\StructureEc;
@@ -177,6 +178,12 @@ class FicheMatiereController extends AbstractController
             return $this->redirectToRoute('app_fiche_matiere_show', ['slug' => $ficheMatiere->getSlug()]);
         }
 
+        if ($ficheMatiere->getParcours() !== null) {
+            $dpeParcours = GetDpeParcours::getFromParcours($ficheMatiere->getParcours());
+        } else {
+            $dpeParcours = null;
+        }
+
         $ficheMatiereState->setFicheMatiere($ficheMatiere);
 
         $referer = $request->headers->get('referer');
@@ -187,11 +194,11 @@ class FicheMatiereController extends AbstractController
             $source = 'parcours';
             $link = $referer.'?step=4';
         }
-
         return $this->render('fiche_matiere/edit.html.twig', [
             'fiche_matiere' => $ficheMatiere,
             'ficheMatiereState' => $ficheMatiereState,
             'source' => $source,
+            'dpeParcours' => $dpeParcours,
             'link' => $link ?? null,
         ]);
     }

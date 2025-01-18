@@ -1,0 +1,137 @@
+<div {{ stimulus_controller('fichematiere--step4', {
+    url: path('app_fiche_matiere_save', {ficheMatiere:ficheMatiere.id}),
+}) }}>
+    <twig:alerte type="info" message="Les volumes horaires et les MCCC sont renseignés sur la fiche, mais peuvent être adaptés dans chaque EC utilisant cette fiche matière." />
+
+    {% form_theme form 'communs/form_theme.html.twig' %}
+    {{ form_start(form) }}
+    <h3>Répartition des heures</h3>
+{#    <div class="form-check mb-2">#}
+{#        <input class="form-check-input" type="checkbox" id="volumesHorairesImpose" name="volumesHorairesImpose"#}
+{#               {% if ficheMatiere.volumesHorairesImpose == true %}checked{% endif %}#}
+{#               data-action="change->fichematiere--step4#volumesHorairesImpose"#}
+{#        >#}
+{#        <label class="form-check-label"#}
+{#               for="volumesHorairesImpose"> {{ 'mccc.but.labels.volumesHorairesImpose'|trans({}, 'form') }} <i#}
+{#                    class="fal fa-question-circle ms-1" data-controller="tooltip" data-tooltip-placement-value="bottom"#}
+{#                    title="{{ 'mccc.but.helps.volumesHorairesImpose'|trans({}, 'help') }}"></i></label>#}
+{#    </div>#}
+    <div class="row">
+        <div class="col-4">
+            {{ form_row(form.volumeCmPresentiel) }}
+        </div>
+        <div class="col-4">
+            {{ form_row(form.volumeTdPresentiel) }}
+        </div>
+        <div class="col-4">
+            {{ form_row(form.volumeTpPresentiel) }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-4">
+            {{ form_row(form.volumeCmDistanciel) }}
+        </div>
+        <div class="col-4">
+            {{ form_row(form.volumeTdDistanciel) }}
+        </div>
+        <div class="col-4">
+            {{ form_row(form.volumeTpDistanciel) }}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-4">
+            {{ form_row(form.volumeTe) }}
+        </div>
+        <div class="col-8"></div>
+    </div>
+
+    <h3>ECTS</h3>
+{#    <div class="form-check mb-2">#}
+{#        <input class="form-check-input" type="checkbox" id="ectsImpose" name="ectsImpose"#}
+{#               {% if ficheMatiere.ectsImpose == true %}checked{% endif %}#}
+{#               data-action="change->fichematiere--step4#ectsImpose"#}
+{#        >#}
+{#        <label class="form-check-label" for="ectsImpose"> {{ 'mccc.but.labels.ectsImpose'|trans({}, 'form') }} <i#}
+{#                    class="fal fa-question-circle ms-1" data-controller="tooltip" data-tooltip-placement-value="bottom"#}
+{#                    title="{{ 'mccc.but.helps.ectsImpose'|trans({}, 'help') }}"></i></label>#}
+{#    </div>#}
+    <div class="row">
+        <div class="col-4">
+            {{ form_row(form.ects) }}
+        </div>
+        <div class="col-8"></div>
+    </div>
+
+
+    {{ form_end(form) }}
+
+    <h3>Modalités de contrôle des connaissances et des compétences</h3>
+{#    <div class="form-check mb-2">#}
+{#        <input class="form-check-input" type="checkbox" id="mcccImpose" name="mcccImpose"#}
+{#               {% if ficheMatiere.mcccImpose == true %}checked{% endif %}#}
+{#               data-action="change->fichematiere--step4#mcccImpose"#}
+{#        >#}
+{#        <label class="form-check-label" for="mcccImpose"> {{ 'mccc.but.labels.mcccImpose'|trans({}, 'form') }} <i#}
+{#                    class="fal fa-question-circle ms-1" data-controller="tooltip"#}
+{#                    data-tooltip-placement-value="bottom"#}
+{#                    title="{{ 'mccc.but.helps.mcccImpose'|trans({}, 'help') }}"></i></label>#}
+{#    </div>#}
+    <div {{ stimulus_controller('mccc--licence', {
+        url: path('type_diplome_licence_change_hd', {ficheMatiere:ficheMatiere.id}),
+        typeMccc: ficheMatiere.typeMccc,
+    }) }}>
+        <form method="post"
+              id="formMccc"
+              action="{{ path('app_fiche_matiere_mccc_hors_diplome', {ficheMatiere:ficheMatiere.id}) }}">
+            <label for="choix_type_mccc" class="form-label">{{ 'mccc_licence.labels.choix_type_mccc.label'|trans({},
+                    'form') }}
+                <i class="fal fa-question-circle ms-1"
+                   data-controller="tooltip"
+                   data-tooltip-placement-value="bottom"
+                   aria-label="{{ 'mccc_licence.helps.choix_type_mccc.help'|trans({}, 'help') }}"
+                   data-bs-original-title="{{ 'mccc_licence.helps.choix_type_mccc.help'|trans({}, 'help') }}"></i>
+            </label>
+            <select id="choix_type_mccc" name="choix_type_mccc" class="form-select"
+                    {{ stimulus_action('mccc--licence', 'changeType') }}
+            >
+                <option value="">{{ 'mccc_licence.placeholder.label'|trans({}, 'form') }}</option>
+                <option value="ct" {% if ficheMatiere.typeMccc == 'ct' %}selected{% endif %}>
+                    {{ 'mccc_licence.ct.label'|trans({},'form') }}
+                </option>
+                <option value="cc_ct" {% if ficheMatiere.typeMccc == 'cc_ct' %}selected{% endif %}>
+                    {{ 'mccc_licence.cc_ct.label'|trans({}, 'form') }}
+                </option>
+                <option value="cc" {% if ficheMatiere.typeMccc == 'cc' %}selected{% endif %}>
+                    {{ 'mccc_licence.cc.label'|trans({}, 'form') }}
+                </option>
+                <option value="cci" {% if ficheMatiere.typeMccc == 'cci' %}selected{% endif %}>
+                    {{ 'mccc_licence.cci.label'|trans({}, 'form') }}
+                </option>
+            </select>
+
+
+            <div {{ stimulus_target('mccc--licence', 'zone') }} class="mt-2"></div>
+
+            <button type="button" class="btn btn-success"
+                    {{ stimulus_action('fichematiere--step4','sauvegardeMccc', 'click') }}
+            >
+                <i class="fal fa-floppy-disk"></i>
+                Enregistrer
+            </button>
+        </form>
+    </div>
+
+
+    <div class="alert {% if ficheMatiere.getEtatStep(4) %}alert-success{% else %}alert-warning{% endif %} mt-2"
+         id="alertEtatStructure">
+        <input type="checkbox"
+               id="etatStructure"
+               class="form-check-inline"
+               {% if ficheMatiere.getEtatStep(4) %}checked{% endif %}
+                {{ stimulus_action('fichematiere--step4', 'etatStep', 'change') }}
+
+        ><label for="etatStructure">
+            Cochez cette case si vous avez terminé ...</label>
+    </div>
+</div>

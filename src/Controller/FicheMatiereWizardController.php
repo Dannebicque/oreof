@@ -9,6 +9,7 @@
 
 namespace App\Controller;
 
+use App\Classes\GetDpeParcours;
 use App\Entity\FicheMatiere;
 use App\Entity\FicheMatiereMutualisable;
 use App\Form\FicheMatiereStep1Type;
@@ -24,6 +25,7 @@ use App\Repository\FormationRepository;
 use App\Repository\ParcoursRepository;
 use App\Repository\TypeDiplomeRepository;
 use App\TypeDiplome\TypeDiplomeRegistry;
+use App\Utils\Access;
 use App\Utils\JsonRequest;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -243,6 +245,18 @@ class FicheMatiereWizardController extends AbstractController
         FicheMatiere        $ficheMatiere,
         string              $type,
     ): Response {
+        if ($ficheMatiere->getParcours() !== null) {
+            $dpeParcours = GetDpeParcours::getFromParcours($ficheMatiere->getParcours());
+        }
+
+        if ($dpeParcours !==null && !Access::isAccessible($dpeParcours, 'cfvu')) {
+            return $this->render('fiche_matiere_wizard/_access_denied.html.twig');
+        }
+        // récupérer les parcours pour savoir si la fiche peut être éditée ou pas
+
+
+
+
         if ($type === 'but') {
             $form = $this->createForm(FicheMatiereStep4Type::class, $ficheMatiere);
             $typeDiplome = $ficheMatiere->getParcours()?->getFormation()?->getTypeDiplome();
@@ -259,6 +273,14 @@ class FicheMatiereWizardController extends AbstractController
             $form = $this->createForm(FicheMatiereStep4HdType::class, $ficheMatiere);
 
             return $this->render('fiche_matiere_wizard/_step4Hd.html.twig', [
+                'ficheMatiere' => $ficheMatiere,
+                'form' => $form->createView(),
+            ]);
+        }
+
+        if ($type === 'other') {
+            $form = $this->createForm(FicheMatiereStep4HdType::class, $ficheMatiere);
+            return $this->render('fiche_matiere_wizard/_step4Other.html.twig', [
                 'ficheMatiere' => $ficheMatiere,
                 'form' => $form->createView(),
             ]);
