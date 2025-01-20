@@ -437,9 +437,14 @@ class ParcoursCopyData {
                         if($isEcPorteur || $isEcOnlyOne || $hasFicheMatiereEcPorteur === false){
                             $mcccCopy = $this->mcccCopyRepo->find($mccc->getId());
                             $ficheMatiereCopy = $this->fmCopyRepo->find($ficheMatierePorteuse->getId());
+                            // MCCC Sur la fiche matière
                             $mcccCopy->setFicheMatiere($ficheMatiereCopy);
+                            $this->mcccCopyDataArray[$ficheMatiereCopy->getId()]['mccc'] = $mccc;
+                            // Type MCCC recopié sur la fiche matière
+                            $ficheMatiereCopy->setTypeMccc($structEc->elementConstitutif->getTypeMccc());
+                            $this->mcccCopyDataArray[$ficheMatiereCopy->getId()]['type_mccc'] = $structEc->elementConstitutif->getTypeMccc();
 
-                            $this->mcccCopyDataArray[$ficheMatiereCopy->getId()][] = $mccc;
+                            $this->entityManagerCopy->persist($ficheMatiereCopy);
                             $this->entityManagerCopy->persist($mcccCopy);
                         }
                     }
@@ -454,6 +459,7 @@ class ParcoursCopyData {
      */
     public function placeMcccSpecifiquesFlag(StructureEc $structEc){
         $mcccResult = null;
+        $typeMcccAreEqual = null;
         if(!$structEc->elementConstitutif->getEcParent()?->isMcccEnfantsIdentique()){
             $mcccResult = $this->mcccCopyRepo->findBy(
                 ['ec' => $structEc->elementConstitutif->getId()]
@@ -466,10 +472,12 @@ class ParcoursCopyData {
             $mcccResult = $this->mcccCopyRepo->findBy(
                 ['ficheMatiere' => $structEc->elementConstitutif->getFicheMatiere()->getId()]
             );
+            $ficheMatiereCopy = $this->fmCopyRepo->findOneById($structEc->elementConstitutif->getFicheMatiere()->getId());
+            $typeMcccAreEqual = $structEc->typeMccc === $ficheMatiereCopy->getTypeMccc();
         }
         if(is_array($mcccResult)){
-            $mcccAreEqual = $this->compareTwoMcccArray($structEc->mcccs, $mcccResult);
-            if($mcccAreEqual === false && !$structEc->elementConstitutif->getFicheMatiere()->isMcccImpose()){
+            $mcccAreEqual = $this->compareTwoMcccArray($structEc->mcccs, $mcccResult);               
+            if(($mcccAreEqual === false || $typeMcccAreEqual === false) && !$structEc->elementConstitutif->getFicheMatiere()?->isMcccImpose()){
                 $ecCopyMccc = $this->ecCopyRepo->find($structEc->elementConstitutif->getId());
                 $ecCopyMccc->setMcccSpecifiques(true);
                 $this->entityManagerCopy->persist($ecCopyMccc);
@@ -720,7 +728,11 @@ class ParcoursCopyData {
                     $parcoursId,
                     $ue1->display . " " . $ec->elementConstitutif->getCode()
                 );
-                $result = $result && $mcccTest;
+                $typeMcccTest = $ec->typeMccc === $ue2->elementConstitutifs[$indexEc]?->typeMccc;
+                if(!$typeMcccTest){
+                    self::$errorMcccMessageArray[$parcoursId][] = "{$ue1->display} {$ec->elementConstitutif->getCode()} - Type MCCC différent";
+                }
+                $result = $result && $mcccTest && $typeMcccTest;
                 foreach($ec->elementsConstitutifsEnfants as $indexEcEnfant => $ecEnfant){
                     $mcccEnfantTest = $this->compareTwoMcccArray(
                         $ecEnfant->mcccs,
@@ -728,7 +740,11 @@ class ParcoursCopyData {
                         $parcoursId,
                         $ue1->display . " " . $ecEnfant->elementConstitutif->getCode()
                     );
-                    $result = $result && $mcccEnfantTest;
+                    $typeMcccEnfantTest = $ecEnfant->typeMccc === $ue2->elementConstitutifs[$indexEc]?->elementsConstitutifsEnfants[$indexEcEnfant]?->typeMccc;
+                    if(!$typeMcccEnfantTest){
+                        self::$errorMcccMessageArray[$parcoursId][] = "{$ue1->display} {$ecEnfant->elementConstitutif->getCode()} - Type MCCC différent";
+                    }
+                    $result = $result && $mcccEnfantTest && $typeMcccEnfantTest;
                 }
             }
         }

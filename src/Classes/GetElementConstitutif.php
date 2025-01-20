@@ -94,6 +94,24 @@ class GetElementConstitutif
         }
     }
 
+    public function getTypeMcccFromFicheMatiere() {
+        $isMcccImpose = $this->elementConstitutif->getFicheMatiere()?->isMcccImpose();
+
+        if($this->elementConstitutif->isMcccSpecifiques() && !$isMcccImpose){
+            return $this->elementConstitutif->getTypeMccc();
+        }
+        
+        if($this->elementConstitutif->getEcParent()?->isMcccEnfantsIdentique() && !$isMcccImpose){
+            return $this->elementConstitutif->getEcParent()->getTypeMccc();
+        }
+
+        if($this->elementConstitutif->getFicheMatiere()){
+            return $this->elementConstitutif->getFicheMatiere()->getTypeMccc();
+        } else {
+            return $this->elementConstitutif->getTypeMccc();
+        }
+    }
+
     public function getEcts(): ?float
     {
         if ($this->elementConstitutif->getFicheMatiere()?->isEctsImpose()) {

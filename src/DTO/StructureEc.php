@@ -70,24 +70,16 @@ class StructureEc
         $this->elementConstitutif = $elementConstitutif;
         if ($this->withEcts && $parcours) {
             $this->heuresEctsEc = new HeuresEctsEc();
-            $this->typeMccc = $getElement->getTypeMccc();
             if($dataFromFicheMatiere === false){
                 $this->heuresEctsEc->addEc($getElement->getElementConstitutifHeures(), $isBut, $dataFromFicheMatiere);
-            }
-            elseif ($dataFromFicheMatiere === true) {
-                $this->heuresEctsEc->addEc($getElement->getFicheMatiereHeures(), $isBut, $dataFromFicheMatiere);
-            }
-            if($dataFromFicheMatiere === false){
                 $this->heuresEctsEc->addEcts($getElement->getEcts());
-            }
-            elseif($dataFromFicheMatiere === true){
-                $this->heuresEctsEc->addEcts($getElement->getFicheMatiereEcts());
-            }
-            if($dataFromFicheMatiere === false){
                 $this->mcccs = $getElement->getMcccsCollection()?->toArray();
-            }
-            elseif ($dataFromFicheMatiere === true) {
+                $this->typeMccc = $getElement->getTypeMccc();
+            } elseif ($dataFromFicheMatiere === true){
+                $this->heuresEctsEc->addEc($getElement->getFicheMatiereHeures(), $isBut, $dataFromFicheMatiere);
+                $this->heuresEctsEc->addEcts($getElement->getFicheMatiereEcts());
                 $this->mcccs = $getElement->getMcccsFromFicheMatiere()?->toArray();
+                $this->typeMccc = $getElement->getTypeMcccFromFicheMatiere();
             }
         }
 
