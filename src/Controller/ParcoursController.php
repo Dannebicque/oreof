@@ -32,6 +32,7 @@ use App\Events\AddCentreParcoursEvent;
 use App\Form\ParcoursType;
 use App\Repository\DpeParcoursRepository;
 use App\Repository\ElementConstitutifRepository;
+use App\Repository\GenericRepository;
 use App\Repository\ParcoursRepository;
 use App\Repository\ParcoursVersioningRepository;
 use App\Repository\UeRepository;
@@ -833,5 +834,40 @@ class ParcoursController extends BaseController
         ];
 
         return new JsonResponse($data);
+    }
+
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route('/test/testGenericRepository', name: 'testGenericRepository')]
+    public function testParallelConnections(
+        GenericRepository $currentVersionRepository,
+        GenericRepository $nextVersionRepository
+    ) : JsonResponse {
+        
+        $currentFormation = $currentVersionRepository
+            ->setConfiguration(Formation::class, 'current')
+            ->findOneById(35);
+
+        $nextFormation = $nextVersionRepository
+            ->setConfiguration(Formation::class, 'next')
+            ->findOneById(35);
+
+        $return = [
+            "CURRENT_DATABASE_NAME" => $currentVersionRepository->getDatabaseName(),
+            "NEXT_DATABASE_NAME" => $nextVersionRepository->getDatabaseName(),
+            "CURRENT_OBJECTIFS_FORMATION" => $currentFormation->getObjectifsFormation(),
+            "NEXT_OBJECTIFS_FORMATION" => $nextFormation->getObjectifsFormation()
+        ];
+
+        $currentFormation->setObjectifsFormation("CURRENT CHANGE #1 - A");
+
+        $return["CURRENT_CHANGED"] = $currentFormation->getObjectifsFormation();
+        $return["NEXT_SHOULD_NOT_BE_CHANGED"] = $nextFormation->getObjectifsFormation();
+
+        $nextFormation->setObjectifsFormation("NEXT CHANGE #1 - B");
+
+        $return["CURRENT_SHOULD_BE_CHANGE_#1_A"] = $currentFormation->getObjectifsFormation();
+        $return["NEXT_SHOULD_BE_CHANGE_#1_B"] = $nextFormation->getObjectifsFormation();
+
+        return new JsonResponse($return);
     }
 }

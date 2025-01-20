@@ -30,6 +30,7 @@ phpstan.neon
 
 ### TEST CONFIG ###
 .env.local.old
+.env.test
 
 ### EXPORT MCCC PDF ###
 mccc-export/
@@ -43,3 +44,12 @@ export/
 
 ### API JSON Versioning ###
 public/api_json/
+###> symfony/phpunit-bridge ###
+.phpunit.result.cache
+/phpunit.xml
+###< symfony/phpunit-bridge ###
+
+###> phpunit/phpunit ###
+/phpunit.xml
+.phpunit.result.cache
+###< phpunit/phpunit ###
