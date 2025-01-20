@@ -33,7 +33,7 @@
 
 {% block content %}
 
-    {{ component('fiche_matiere_manage', {ficheMatiere:ficheMatiere}) }}
+    {{ component('fiche_matiere_manage', {ficheMatiere:ficheMatiere, id:'fiche_matiere_manage'}) }}
 
 
 {# Versioning. Plus utilisé sur les fiches #}
@@ -104,11 +104,31 @@
                     </a>
                 </li>
                 <li>
-                    <a class="nav-link p-2" href="#objectifs">
+                    <a class="nav-link p-2" href="#volumes_horaires">
                         <i class="fal fa-chevron-right"></i>
-                        Objectifs / compétences acquises
+                        Volumes horaires
                     </a>
                 </li>
+                <li>
+                    <a class="nav-link p-2" href="#mccc">
+                        <i class="fal fa-chevron-right"></i>
+                        MCCC
+                    </a>
+                </li>
+                <li>
+                    <a class="nav-link p-2" href="#bcc">
+                        <i class="fal fa-chevron-right"></i>
+                        Compétences acquises
+                    </a>
+                </li>
+                {% if ficheMatiere.enseignementMutualise == true or ficheMatiere.elementConstitutifs|length > 0 %}
+                    <li>
+                        <a class="nav-link p-2" href="#parcours">
+                            <i class="fal fa-chevron-right"></i>
+                            Parcours
+                        </a>
+                    </li>
+                {% endif %}
                 <li>
                     <a class="nav-link p-2" href="#infos">
                         <i class="fal fa-chevron-right"></i>
@@ -132,7 +152,7 @@
 {% endblock %}
 
 {% block bouton_header %}
-    {% if is_granted('ROLE_ADMIN') %}
+    {% if is_granted('CAN_EC_EDIT_MY', ficheMatiere) %}
         <a
                 href="{{ path('app_fiche_matiere_edit',{slug: ficheMatiere.slug}) }}"
                 class="btn btn-sm btn-outline-warning"

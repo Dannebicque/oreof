@@ -29,7 +29,7 @@ final class FicheMatiereManageComponent extends AbstractController
         'en_cours_redaction' => 'fiche_matiere',
         'soumis_central' => 'soumis_central',
         'valide_pour_publication' => 'valide_pour_publication',
-//        'publie' => 'publie',
+        'publie' => 'publie',
     ];
     use DefaultActionTrait;
 
@@ -41,8 +41,7 @@ final class FicheMatiereManageComponent extends AbstractController
 
     public ?string $etape = '';
     public string $place = '';
-    #[LiveProp(writable: true)]
-    public string $event = 'none';
+
     public bool $hasDemande = false;
 
     public function __construct(
@@ -54,13 +53,12 @@ final class FicheMatiereManageComponent extends AbstractController
         $this->process = $this->validationProcess->getProcess();
     }
 
-    #[LiveListener('mention_manage:valide')]
+    #[LiveListener('fiche_matiere_manage:valider')]
     public function valide(): void
     {
         $this->place = $this->getPlace();
         $this->etape = self::TAB[$this->place];
         $this->getHistorique();
-        $this->event = 'valide';
     }
 
     private function getHistorique(): void
@@ -71,20 +69,18 @@ final class FicheMatiereManageComponent extends AbstractController
         }
     }
 
-    #[LiveListener('mention_manage:edit')]
+    #[LiveListener('fiche_matiere_manage:edit')]
     public function edit(): void
     {
         $this->place = $this->getPlace();
         $this->etape = self::TAB[$this->place];
-        $this->event = 'edit';
     }
 
-    #[LiveListener('mention_manage:reserve')]
+    #[LiveListener('fiche_matiere_manage:reserver')]
     public function reserve(): void
     {
         $this->place = $this->getPlace();
         $this->etape = self::TAB[$this->place];
-        $this->event = 'reserve';
     }
 
     #[PostMount]

@@ -10,7 +10,6 @@
 namespace App\Classes\Export;
 
 use App\Classes\Excel\ExcelWriter;
-use App\Classes\GetDpeParcours;
 use App\Classes\GetHistorique;
 use App\Entity\CampagneCollecte;
 use App\Enums\RegimeInscriptionEnum;
@@ -61,41 +60,38 @@ class ExportRegime implements ExportInterface
         $ligne = 2;
         foreach ($formations as $formation) {
             foreach ($formation->getParcours() as $parcours) {
-                $dpeParcours = GetDpeParcours::getFromParcours($parcours);
-                if ($dpeParcours !== null) {
-                    $this->excelWriter->writeCellXY(1, $ligne, $formation->getComposantePorteuse()?->getLibelle());
-                    $this->excelWriter->writeCellXY(2, $ligne, $formation->getTypeDiplome()?->getLibelle());
-                    $this->excelWriter->writeCellXY(3, $ligne, $formation->getDisplay());
-                    if ($formation->isHasParcours()) {
-                        $this->excelWriter->writeCellXY(4, $ligne, $parcours->getLibelle());
-                        $this->excelWriter->writeCellXY(5, $ligne, $parcours->getLocalisation()?->getLibelle());
-                    } else {
-                        $this->excelWriter->writeCellXY(4, $ligne, 'Pas de parcours');
-                        $texte = '';
-                        foreach ($formation->getLocalisationMention() as $localisation) {
-                            $texte .= $localisation->getLibelle() . ', ';
-                        }
-                        $this->excelWriter->writeCellXY(5, $ligne, substr($texte, 0, -2));
+                $this->excelWriter->writeCellXY(1, $ligne, $formation->getComposantePorteuse()?->getLibelle());
+                $this->excelWriter->writeCellXY(2, $ligne, $formation->getTypeDiplome()?->getLibelle());
+                $this->excelWriter->writeCellXY(3, $ligne, $formation->getDisplay());
+                if ($formation->isHasParcours()) {
+                    $this->excelWriter->writeCellXY(4, $ligne, $parcours->getLibelle());
+                    $this->excelWriter->writeCellXY(5, $ligne, $parcours->getLocalisation()?->getLibelle());
+                } else {
+                    $this->excelWriter->writeCellXY(4, $ligne, 'Pas de parcours');
+                    $texte = '';
+                    foreach ($formation->getLocalisationMention() as $localisation) {
+                        $texte .= $localisation->getLibelle() . ', ';
                     }
-                    $this->excelWriter->writeCellXY(6, $ligne, $formation->getResponsableMention()?->getDisplay());
-                    $this->excelWriter->writeCellXY(7, $ligne, $formation->getCoResponsable()?->getDisplay());
-                    $this->excelWriter->writeCellXY(8, $ligne, $parcours->getRespParcours()?->getDisplay());
-                    $this->excelWriter->writeCellXY(9, $ligne, $parcours->getCoResponsable()?->getDisplay());
-                    $this->excelWriter->writeCellXY(10, $ligne, $formation->getCodeRNCP());
-                    $this->excelWriter->writeCellXY(11, $ligne, $this->getHistorique->getHistoriqueParcoursLastStep($dpeParcours, 'soumis_cfvu')?->getDate()?->format('d/m/Y') ?? 'Non validé');
-                    $i = 0;
-                    foreach (RegimeInscriptionEnum::cases() as $regime) {
-                        if (in_array($regime, $parcours->getRegimeInscription())) {
-                            $this->excelWriter->writeCellXY(12 + $i, $ligne, 'X', [
-                                'style' => 'HORIZONTAL_CENTER'
-                            ]);
-                        }
-                        $i++;
-                    }
-
-                    $this->excelWriter->getColumnsAutoSize('A', 'M');
-                    $ligne++;
+                    $this->excelWriter->writeCellXY(5, $ligne, substr($texte, 0, -2));
                 }
+                $this->excelWriter->writeCellXY(6, $ligne, $formation->getResponsableMention()?->getDisplay());
+                $this->excelWriter->writeCellXY(7, $ligne, $formation->getCoResponsable()?->getDisplay());
+                $this->excelWriter->writeCellXY(8, $ligne, $parcours->getRespParcours()?->getDisplay());
+                $this->excelWriter->writeCellXY(9, $ligne, $parcours->getCoResponsable()?->getDisplay());
+                $this->excelWriter->writeCellXY(10, $ligne, $formation->getCodeRNCP());
+                $this->excelWriter->writeCellXY(11, $ligne, $this->getHistorique->getHistoriqueParcoursLastStep($parcours, 'cfvu')?->getDate()?->format('d/m/Y') ?? 'Non validé');
+                $i = 0;
+                foreach (RegimeInscriptionEnum::cases() as $regime) {
+                    if (in_array($regime, $parcours->getRegimeInscription())) {
+                        $this->excelWriter->writeCellXY(12 + $i, $ligne, 'X', [
+                            'style' => 'HORIZONTAL_CENTER'
+                        ]);
+                    }
+                    $i++;
+                }
+
+                $this->excelWriter->getColumnsAutoSize('A', 'M');
+                $ligne++;
             }
         }
 

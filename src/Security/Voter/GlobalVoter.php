@@ -320,6 +320,7 @@ class GlobalVoter extends Voter
 
     private function canAccessFicheMatiere(FicheMatiere $subject, mixed $centre): bool
     {
+        $canEdit = false;
         if ($subject->getResponsableFicheMatiere() === $this->user ||
             $subject->getParcours()?->getRespParcours() === $this->user ||
             $subject->getParcours()?->getCoResponsable() === $this->user ||
@@ -329,9 +330,15 @@ class GlobalVoter extends Voter
             ($subject->getParcours()?->getFormation()?->getComposantePorteuse() === $centre->getComposante() &&
                 in_array('Gestionnaire', $centre->getDroits()))
         ) {
-            return $this->ficheWorkflow->can($subject, 'valider_fiche_compo');
+            $canEdit = $this->ficheWorkflow->can($subject, 'valider_fiche_compo');
         }
 
-        return false;
+        if ($this->security->isGranted('ROLE_SES')) {
+            $canEdit =
+                $this->ficheWorkflow->can($subject, 'valider_fiche_compo') ||
+                $this->ficheWorkflow->can($subject, 'valider_fiche_ses');
+        }
+
+        return $canEdit;
     }
 }

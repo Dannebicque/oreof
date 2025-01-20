@@ -20,8 +20,10 @@ use App\Form\FicheMatiereType;
 use App\Repository\ElementConstitutifRepository;
 use App\Repository\FicheMatiereRepository;
 use App\Repository\LangueRepository;
+use App\Repository\TypeEpreuveRepository;
 use App\Repository\UeRepository;
 use App\Service\VersioningFicheMatiere;
+use App\TypeDiplome\TypeDiplomeRegistry;
 use App\Utils\JsonRequest;
 use DateTimeImmutable;
 use Doctrine\Common\Annotations\AnnotationReader;
@@ -95,12 +97,14 @@ class FicheMatiereController extends AbstractController
      */
     #[Route('/{slug}', name: 'app_fiche_matiere_show', methods: ['GET'])]
     public function show(
-        FicheMatiere $ficheMatiere,
-        VersioningFicheMatiere $ficheMatiereVersioningService
+        TypeDiplomeRegistry          $typeDiplomeRegistry,
+        TypeEpreuveRepository        $typeEpreuveRepository,
+        FicheMatiere                 $ficheMatiere,
+        VersioningFicheMatiere       $ficheMatiereVersioningService
     ): Response {
         $formation = $ficheMatiere->getParcours()?->getFormation();
 
-//todo: supprimer la partie version pas utilisée sur les fiches
+        //todo: supprimer la partie version pas utilisée sur les fiches
         $bccs = [];
         foreach ($ficheMatiere->getCompetences() as $competence) {
             if (!array_key_exists($competence->getBlocCompetence()?->getId(), $bccs)) {
@@ -112,10 +116,11 @@ class FicheMatiereController extends AbstractController
 
         if ($formation !== null) {
             $typeDiplome = $formation->getTypeDiplome();
+            $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());
         } else {
             $typeDiplome = null;
+            $typeD = null;
         }
-
         $cssDiff = DiffHelper::getStyleSheet();
         $textDifferences = $ficheMatiereVersioningService
             ->getStringDifferencesWithBetweenFicheMatiereAndLastVersion($ficheMatiere);
@@ -123,8 +128,13 @@ class FicheMatiereController extends AbstractController
         return $this->render('fiche_matiere/show.html.twig', [
             'ficheMatiere' => $ficheMatiere,
             'formation' => $formation,
+            'typeEpreuves' => $typeEpreuveRepository->findByTypeDiplome($typeDiplome),
             'typeDiplome' => $typeDiplome,
+            'ects' => $ficheMatiere->getEcts(),
+            'templateForm' => $typeD !== null ? $typeD::TEMPLATE_FORM_MCCC : '',
+            'mcccs' => $typeD !== null ? $typeD->getMcccs($ficheMatiere) : [],
             'bccs' => $bccs,
+            'typeMccc' => $ficheMatiere->getTypeMccc(),
             'stringDifferences' => $textDifferences,
             'cssDiff' => $cssDiff
         ]);
@@ -248,7 +258,8 @@ class FicheMatiereController extends AbstractController
     }
 
     #[Route('/{ec}/{parcours}/{ects}/maquette_iframe', name: 'app_fiche_matiere_maquette_iframe')]
-    public function getMaquetteIframe(ElementConstitutif $ec, Parcours $parcours, float $ects) : Response {
+    public function getMaquetteIframe(ElementConstitutif $ec, Parcours $parcours, float $ects) : Response
+    {
 
         $ficheMatiere = $ec->getFicheMatiere();
         $isBUT = $ficheMatiere->getParcours()?->getTypeDiplome()?->getLibelleCourt() === 'BUT';
@@ -308,8 +319,8 @@ class FicheMatiereController extends AbstractController
         EntityManagerInterface $entityManager,
         Filesystem $fileSystem,
         VersioningFicheMatiere $ficheMatiereVersioningService
-    ){
-        try{
+    ) {
+        try {
             // Date / Heure
             $now = new DateTimeImmutable('now');
             $dateHeure = $now->format('d-m-Y_H-i-s');
@@ -330,7 +341,7 @@ class FicheMatiereController extends AbstractController
                 'text' => 'La fiche matière a bien été sauvegardée.',
             ]);
             return $this->redirectToRoute('app_fiche_matiere_show', ['slug' => $ficheMatiere->getSlug()]);
-        }catch(\Exception $e){
+        } catch(\Exception $e) {
             // Log error
             $logTxt = "[{$dateHeure}] Le versioning de la fiche matière : "
                 . "{$ficheMatiere->getSlug()} - ID : {$ficheMatiere->getId()}"
@@ -351,8 +362,8 @@ class FicheMatiereController extends AbstractController
         FicheMatiereVersioning $ficheMatiereVersioning,
         VersioningFicheMatiere $ficheMatiereVersioningService,
         Filesystem $filesystem
-    ){
-        try{
+    ) {
+        try {
             $version = $ficheMatiereVersioningService->loadFicheMatiereVersion($ficheMatiereVersioning);
             $ficheMatiere = $version['ficheMatiere'];
 
@@ -373,7 +384,7 @@ class FicheMatiereController extends AbstractController
                 'dateHeure' => $version['dateVersion'],
                 'cssDiff' => ""
             ]);
-        }catch(\Exception $e){
+        } catch(\Exception $e) {
             // Log error
             $now = new DateTimeImmutable();
             $dateHeure = $now->format('d-m-Y_H-i-s');
@@ -395,7 +406,7 @@ class FicheMatiereController extends AbstractController
         EntityManagerInterface $entityManager,
         Parcours $parcours,
         string $keyword = ""
-    ){
+    ) {
         $associatedFicheMatiere = $entityManager
             ->getRepository(FicheMatiere::class)
             ->findForParcoursWithKeyword($parcours, $keyword);

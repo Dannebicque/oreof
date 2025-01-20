@@ -1,0 +1,6 @@
+
+{% if templateForm != '' %}
+{{ include('typeDiplome/mccc-non-editable/'~templateForm) }}
+{% else %}
+<twig:alerte type="warning" message="Le template {{ templateForm }} n'existe pas" />
+{% endif %}

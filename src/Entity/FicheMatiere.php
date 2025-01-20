@@ -112,7 +112,7 @@ class FicheMatiere
     private Collection $elementConstitutifs;
 
     #[Groups(['fiche_matiere_versioning', 'DTO_json_versioning'])]
-    #[ORM\ManyToOne(inversedBy: 'ficheMatieres', cascade: ['persist'])]
+    #[ORM\ManyToOne(inversedBy: 'ficheMatieres', cascade: ['persist'], fetch: 'EAGER')]
     private ?Parcours $parcours = null;
 
     #[Groups(['DTO_json_versioning', 'fiche_matiere_versioning'])]
