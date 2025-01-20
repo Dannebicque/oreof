@@ -5,7 +5,9 @@ namespace App\Repository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 
+#[Autoconfigure(public:true)]
 class GenericRepository extends EntityRepository {
 
     public const CURRENT_YEAR_DATABASE = "current" ;
