@@ -19,8 +19,14 @@ class GenericRepository extends EntityRepository {
 
     public function __construct(private ManagerRegistry $doctrine){}
 
+    /**
+     * Configure le Repository générique, en choisissant la bonne entité, et la bonne connexion
+     * @param string $className Nom de l'entité que l'on souhaite utiliser (ex: Parcours::class)
+     * @param string $databaseVersion Version de la base de données à utiliser ('current' ou 'next')
+     * @return GenericRepository On peut utiliser le retour directement avec les méthodes comme findBy()
+     */
     public function setConfiguration(string $className, string $databaseVersion) : static {
-        if(in_array($databaseVersion, ["current", "next"]) === false){
+        if(in_array($databaseVersion, ["current", "next"], true) === false){
             throw new \Exception("Database version not recognized. Should be 'current' or 'next'.");
         }
 
@@ -37,7 +43,10 @@ class GenericRepository extends EntityRepository {
         return $this;
     }
 
-    public function getDatabaseName() {
+    /**
+     * @return string Nom de la base de données active
+     */
+    public function getDatabaseName() : string {
         return $this->entityManager->getConnection()->getDatabase();
     }
 }
