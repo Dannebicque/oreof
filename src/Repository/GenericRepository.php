@@ -49,4 +49,8 @@ class GenericRepository extends EntityRepository {
     public function getDatabaseName() : string {
         return $this->entityManager->getConnection()->getDatabase();
     }
+
+    public function getGenericEntityManager(){
+        return $this->entityManager;
+    }
 }
