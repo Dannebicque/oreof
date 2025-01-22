@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.31.79](https://github.com/Dannebicque/oreof/compare/v1.31.78...v1.31.79) (2025-01-22)
+
+
+### Bug Fixes
+
+* Affichage uniquement des semestres ouverts dans le JSON ([c30e623](https://github.com/Dannebicque/oreof/commit/c30e623e8c0aca9bcb1b92081fc2e852e7646139))
+
 ### [1.31.78](https://github.com/Dannebicque/oreof/compare/v1.31.77...v1.31.78) (2025-01-14)
 
 
