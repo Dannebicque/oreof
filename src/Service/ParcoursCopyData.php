@@ -71,7 +71,7 @@ class ParcoursCopyData {
 
         $formationArray = $this->entityManager->getRepository(Formation::class)->findAll();
         $nombreParcours = array_sum(
-            array_map(fn($f) => count($f->getParcours()), 
+            array_map(fn($f) => count($f->getParcours()),
                 array_filter($formationArray, fn($f) => $f->getTypeDiplome()->getLibelleCourt() !== "BUT")
             )
         );
@@ -166,7 +166,7 @@ class ParcoursCopyData {
     }
 
     public function copyDataForParcoursFromDTO(
-        Parcours $parcours, 
+        Parcours $parcours,
         bool $onlyHeuresSpecifiques = false,
         bool $onlyMccc = false,
         bool $onlyEcMcccSpecifiques = false,
@@ -185,7 +185,7 @@ class ParcoursCopyData {
             }
         }
     }
-    
+
     private function copyDataForUe(Ue $ue, int $parcoursId){
         $elementConstitutifArray = $this->entityManager->getRepository(ElementConstitutif::class)
             ->getByUe($ue);
@@ -198,8 +198,8 @@ class ParcoursCopyData {
     }
 
     private function copyDataForUeFromDTO(
-        StructureUe $structUE, 
-        int $parcoursId, 
+        StructureUe $structUE,
+        int $parcoursId,
         bool $onlyHeuresSpecifiques,
         bool $onlyMccc,
         bool $onlyEcMcccSpecifiques,
@@ -213,7 +213,7 @@ class ParcoursCopyData {
                 $this->moveMcccToFicheMatiere($ec, $parcoursId);
             } elseif($onlyEcMcccSpecifiques){
                 $this->placeMcccSpecifiquesFlag($ec);
-            } 
+            }
             elseif($onlyEctsSpecifiques){
                 $this->placeEctsSpecifiquesFlag($ec);
             }else {
@@ -233,7 +233,7 @@ class ParcoursCopyData {
                 else {
                     if($ec->elementConstitutif->isHeuresEnfantsIdentiques()){
                         $this->copyDataOnFicheMatiere(
-                            $ec->elementConstitutif, 
+                            $ec->elementConstitutif,
                             $ecEnfant->elementConstitutif->getFicheMatiere(),
                             $parcoursId,
                             isHeuresEnfantIdentiques: true
@@ -252,7 +252,7 @@ class ParcoursCopyData {
         int $parcoursId,
         bool $isHeuresEnfantIdentiques = false
     ){
-        
+
         if($ficheMatiereSource){
             $isVolumeHoraireFMImpose = $ficheMatiereSource->isVolumesHorairesImpose();
             $ecFromParcours = $ecSource->getParcours()?->getId() === $ficheMatiereSource->getParcours()?->getId();
@@ -260,9 +260,9 @@ class ParcoursCopyData {
             // $hasEcParentHeures = $ecSource->getEcParent()?->isHeuresEnfantsIdentiques();
             $hasSynchroHeures = $ecSource->isSynchroHeures();
             $isHorsDiplome = $ficheMatiereSource->isHorsDiplome();
-            // Si la fiche matière a un EC porteur (parcours de la fiche matière = parcours de l'EC) 
+            // Si la fiche matière a un EC porteur (parcours de la fiche matière = parcours de l'EC)
             $hasFicheMatiereEcPorteur = array_filter(
-                $ficheMatiereSource->getElementConstitutifs()->toArray(), 
+                $ficheMatiereSource->getElementConstitutifs()->toArray(),
                 fn($ecFM) => $ecFM->getParcours()?->getId() === $ficheMatiereSource->getParcours()?->getId()
                     && $ecFM->getParcours()?->getId() !== null && $ficheMatiereSource->getParcours()?->getId() !== null
             );
@@ -275,7 +275,7 @@ class ParcoursCopyData {
             if($ficheMatiereFromParcours && $ecFromParcours){
                 $ec = $ecSource;
                 $isEcPorteur = true;
-                $ecEcts = $ecSource->getEcParent() ? $ecSource->getEcParent() : $ecSource;                
+                $ecEcts = $ecSource->getEcParent() ? $ecSource->getEcParent() : $ecSource;
             }
             // Si la fiche n'a pas d'EC porteur, on prend le premier
             if($hasFicheMatiereEcPorteur === false || $countEcForFiche === 1){
@@ -290,7 +290,7 @@ class ParcoursCopyData {
                     $ecEcts = $ecSource;
                 }
             }
-        
+
             // Cas où il y a la valeur 'synchro heures'
             if($hasSynchroHeures){
                 if(count($ficheMatiereSource->getElementConstitutifs()->toArray()) >= 2){
@@ -308,8 +308,8 @@ class ParcoursCopyData {
             // Cas où il y a la valeur 'heure enfant identique'
             if($isHeuresEnfantIdentiques && $ficheMatiereFromParcours && $ecFromParcours){
                 $ec = $ecSource;
-            } 
-            if(($isEcPorteur || $hasFicheMatiereEcPorteur === false || $countEcForFiche === 1) 
+            }
+            if(($isEcPorteur || $hasFicheMatiereEcPorteur === false || $countEcForFiche === 1)
                 && $this->hasHeuresFicheMatiereCopy($ficheMatiereSource) === false
             ) {
                 $ficheMatiereFromCopy = $this->fmCopyRepo->find($ficheMatiereSource->getId());
@@ -335,8 +335,8 @@ class ParcoursCopyData {
                     ];
                 }
 
-                // ECTS 
-                if( $ecEcts !== null 
+                // ECTS
+                if( $ecEcts !== null
                     && $this->hasFicheMatiereEcts($ficheMatiereSource) === false
                 ){
                     $ects = $ecEcts->getEcts();
@@ -349,7 +349,7 @@ class ParcoursCopyData {
                 }
 
                 $this->entityManagerCopy->persist($ficheMatiereFromCopy);
-            }       
+            }
         }
     }
 
@@ -357,10 +357,10 @@ class ParcoursCopyData {
         if($ec->elementConstitutif->getFicheMatiere()){
             $isDifferent = $this->hasHeuresFicheMatiereCopy($ec->elementConstitutif->getFicheMatiere())
                 && $this->hasEcSameHeuresAsFicheMatiereCopy($ec->heuresEctsEc, $ec->elementConstitutif->getFicheMatiere()) === false;
-    
+
             // Si différent, que les heures ne sont pas sur le parent, ni sur la FM
-            if( $isDifferent && !$isHeuresIdentiques 
-                && !$ec->elementConstitutif->getFicheMatiere()->isHorsDiplome() 
+            if( $isDifferent && !$isHeuresIdentiques
+                && !$ec->elementConstitutif->getFicheMatiere()->isHorsDiplome()
                 && !$ec->elementConstitutif->getFicheMatiere()->isVolumesHorairesImpose()
             ){
                 $ecCopyFlag = $this->ecCopyRepo->find($ec->elementConstitutif->getId());
@@ -375,7 +375,7 @@ class ParcoursCopyData {
             $isDifferent = $this->hasFicheMatiereEcts($ec->elementConstitutif->getFicheMatiere())
             && $this->hasEctsDifferent($ec);
 
-            if( $ec->elementConstitutif->getEcParent() === null 
+            if( $ec->elementConstitutif->getEcParent() === null
                 && $isDifferent === true
                 && !$ec->elementConstitutif->getFicheMatiere()?->isEctsImpose()
             ){
@@ -399,7 +399,7 @@ class ParcoursCopyData {
         $hasFicheMatiereEcPorteur = null;
         if($ficheMatiereSource){
             $hasFicheMatiereEcPorteur = array_filter(
-                $ficheMatiereSource->getElementConstitutifs()->toArray(), 
+                $ficheMatiereSource->getElementConstitutifs()->toArray(),
                 fn($ecFM) => $ecFM->getParcours()?->getId() === $ficheMatiereSource->getParcours()?->getId()
                     && $ecFM->getParcours()?->getId() !== null && $ficheMatiereSource->getParcours()?->getId() !== null
             );
@@ -443,6 +443,8 @@ class ParcoursCopyData {
                             $this->entityManagerCopy->persist($mcccCopy);
                         }
                     }
+                    //todo: reprendre le type MCCC de l'EC ?
+                    $ficheMatiereCopy->setTypeMccc($structEc->elementConstitutif->getTypeMccc());
                 }
            }
         }
@@ -478,8 +480,8 @@ class ParcoursCopyData {
     }
 
     public function getDTOForParcours(
-        Parcours $parcours, 
-        bool $dataFromFicheMatiere = false, 
+        Parcours $parcours,
+        bool $dataFromFicheMatiere = false,
         bool $withCopy = false,
         bool $fromCopy = false
     ){
@@ -505,7 +507,7 @@ class ParcoursCopyData {
                 $parcoursData = $parcours;
                 $this->copyDataForParcours($parcoursData);
                 $dto = $calcul->calcul($parcoursData, dataFromFicheMatiere: $dataFromFicheMatiere);
-            }   
+            }
             else {
                 $dto = $calcul->calcul($parcours, dataFromFicheMatiere: $dataFromFicheMatiere);
             }
@@ -515,14 +517,14 @@ class ParcoursCopyData {
     }
 
     private function getUe(Ue $ue){
-        return $ue->getUeRaccrochee() !== null 
+        return $ue->getUeRaccrochee() !== null
             ? $ue->getUeRaccrochee()->getUe()
             : $ue;
     }
 
     private function getSemestre(?Semestre $semestre){
         if($semestre){
-            return $semestre->getSemestreRaccroche() !== null 
+            return $semestre->getSemestreRaccroche() !== null
                 ? $semestre->getSemestreRaccroche()->getSemestre()
                 : $semestre;
         }
@@ -530,8 +532,8 @@ class ParcoursCopyData {
     }
 
     public function exportDTOAsPdf(
-        Parcours $parcours, 
-        bool $heuresSurFicheMatiere, 
+        Parcours $parcours,
+        bool $heuresSurFicheMatiere,
         bool $withCopy = false,
         bool $fromCopy = false,
     ){
@@ -568,7 +570,7 @@ class ParcoursCopyData {
                 $result = false;
             }
             if($typeVerif === 'ects'){
-                if( $dto1->semestres[$indexSemestre]->heuresEctsSemestre->sommeSemestreEcts 
+                if( $dto1->semestres[$indexSemestre]->heuresEctsSemestre->sommeSemestreEcts
                     !== $dto2->semestres[$indexSemestre]->heuresEctsSemestre->sommeSemestreEcts
                 ){
                     $result = false;
@@ -606,7 +608,7 @@ class ParcoursCopyData {
                 // Si des UE enfants
                 if(count($dto1->semestres[$indexSemestre]->ues[$indexUe]->uesEnfants) > 0){
                     // Même nombre d'UE enfants
-                    $nbUeEnfant = count($dto1->semestres[$indexSemestre]->ues[$indexUe]->uesEnfants()) 
+                    $nbUeEnfant = count($dto1->semestres[$indexSemestre]->ues[$indexUe]->uesEnfants())
                         === count($dto2->semestres[$indexSemestre]->ues[$indexUe]->uesEnfants());
                     if($nbUeEnfant === false){
                         $result = false;
@@ -685,7 +687,7 @@ class ParcoursCopyData {
                 $result = $result && $testUe;
                 foreach($ue->uesEnfants() as $indexUeEnfant => $ueEnfant){
                     $testUeEnfant = $this->compareTwoUeDtoForMccc(
-                        $ueEnfant, 
+                        $ueEnfant,
                         $dto2->semestres[$indexSemestre]->ues[$indexUe]->uesEnfants()[$indexUeEnfant],
                         $dto1->parcours->getId()
                     );
@@ -737,21 +739,21 @@ class ParcoursCopyData {
     }
 
     public function compareSemestresHeures(
-        StructureSemestre $semestre1, 
+        StructureSemestre $semestre1,
         StructureSemestre $semestre2
     ) : bool {
 
         $result = true;
-        /** 
+        /**
          * Même nombre d'heures total sur le semestre
          */
         $result = $result && $semestre1->heuresEctsSemestre->sommeSemestreTotalPres()
             === $semestre2->heuresEctsSemestre->sommeSemestreTotalPres();
 
-        $result = $result && $semestre1->heuresEctsSemestre->sommeSemestreTotalDist() 
+        $result = $result && $semestre1->heuresEctsSemestre->sommeSemestreTotalDist()
             === $semestre2->heuresEctsSemestre->sommeSemestreTotalDist();
 
-        $result = $result && $semestre1->heuresEctsSemestre->sommeSemestreTotalPresDist() 
+        $result = $result && $semestre1->heuresEctsSemestre->sommeSemestreTotalPresDist()
             === $semestre2->heuresEctsSemestre->sommeSemestreTotalPresDist();
         /**
          * Présentiel
@@ -760,26 +762,26 @@ class ParcoursCopyData {
         $result = $result && $semestre1->heuresEctsSemestre->sommeSemestreCmPres
             === $semestre2->heuresEctsSemestre->sommeSemestreCmPres;
         // TD
-        $result = $result && $semestre1->heuresEctsSemestre->sommeSemestreTdPres 
+        $result = $result && $semestre1->heuresEctsSemestre->sommeSemestreTdPres
             === $semestre2->heuresEctsSemestre->sommeSemestreTdPres;
         // TP
-        $result = $result && $semestre1->heuresEctsSemestre->sommeSemestreTpPres 
+        $result = $result && $semestre1->heuresEctsSemestre->sommeSemestreTpPres
             === $semestre2->heuresEctsSemestre->sommeSemestreTpPres;
         /**
          * Distanciel
          */
         // CM
-        $result = $result && $semestre1->heuresEctsSemestre->sommeSemestreCmDist 
+        $result = $result && $semestre1->heuresEctsSemestre->sommeSemestreCmDist
             === $semestre2->heuresEctsSemestre->sommeSemestreCmDist;
         // TD
-        $result = $result && $semestre1->heuresEctsSemestre->sommeSemestreTdDist 
+        $result = $result && $semestre1->heuresEctsSemestre->sommeSemestreTdDist
             === $semestre2->heuresEctsSemestre->sommeSemestreTdDist;
         //TP
-        $result = $result && $semestre1->heuresEctsSemestre->sommeSemestreTpDist 
+        $result = $result && $semestre1->heuresEctsSemestre->sommeSemestreTpDist
             === $semestre2->heuresEctsSemestre->sommeSemestreTpDist;
 
         // TE
-        $result = $result && $semestre1->heuresEctsSemestre->sommeSemestreTePres 
+        $result = $result && $semestre1->heuresEctsSemestre->sommeSemestreTePres
             === $semestre2->heuresEctsSemestre->sommeSemestreTePres;
 
         if($result === false){
@@ -796,41 +798,41 @@ class ParcoursCopyData {
 
         $result = true;
         // Totaux
-        $result = $result && $ue1->heuresEctsUe->sommeUeTotalPres() 
+        $result = $result && $ue1->heuresEctsUe->sommeUeTotalPres()
             === $ue2->heuresEctsUe->sommeUeTotalPres();
 
-        $result = $result && $ue1->heuresEctsUe->sommeUeTotalDist() 
-            === $ue2->heuresEctsUe->sommeUeTotalDist();   
-            
-        $result = $result && $ue1->heuresEctsUe->sommeUeTotalPresDist() 
+        $result = $result && $ue1->heuresEctsUe->sommeUeTotalDist()
+            === $ue2->heuresEctsUe->sommeUeTotalDist();
+
+        $result = $result && $ue1->heuresEctsUe->sommeUeTotalPresDist()
             === $ue2->heuresEctsUe->sommeUeTotalPresDist();
         /**
          * Présentiel
          */
         // CM
-        $result = $result && $ue1->heuresEctsUe->sommeUeCmPres 
+        $result = $result && $ue1->heuresEctsUe->sommeUeCmPres
             === $ue2->heuresEctsUe->sommeUeCmPres;
         // TD
-        $result = $result && $ue1->heuresEctsUe->sommeUeTdPres 
+        $result = $result && $ue1->heuresEctsUe->sommeUeTdPres
             === $ue2->heuresEctsUe->sommeUeTdPres;
         // TP
-        $result = $result && $ue1->heuresEctsUe->sommeUeTpPres 
+        $result = $result && $ue1->heuresEctsUe->sommeUeTpPres
             === $ue2->heuresEctsUe->sommeUeTpPres;
         /**
          * Distanciel
          */
         // CM
-        $result = $result && $ue1->heuresEctsUe->sommeUeCmDist 
+        $result = $result && $ue1->heuresEctsUe->sommeUeCmDist
             === $ue2->heuresEctsUe->sommeUeCmDist;
         // TD
-        $result = $result && $ue1->heuresEctsUe->sommeUeTdDist 
+        $result = $result && $ue1->heuresEctsUe->sommeUeTdDist
             === $ue2->heuresEctsUe->sommeUeTdDist;
         // TP
-        $result = $result && $ue1->heuresEctsUe->sommeUeTpDist 
+        $result = $result && $ue1->heuresEctsUe->sommeUeTpDist
             === $ue2->heuresEctsUe->sommeUeTpDist;
 
         // TE
-        $result = $result && $ue1->heuresEctsUe->sommeUeTePres 
+        $result = $result && $ue1->heuresEctsUe->sommeUeTePres
             === $ue2->heuresEctsUe->sommeUeTePres;
 
         if($result === false){
@@ -848,13 +850,13 @@ class ParcoursCopyData {
 
         $result = true;
         // Totaux
-        $result = $result && $ec1->heuresEctsEc->sommeEcTotalPres() 
+        $result = $result && $ec1->heuresEctsEc->sommeEcTotalPres()
             === $ec2->heuresEctsEc->sommeEcTotalPres();
 
-        $result = $result && $ec1->heuresEctsEc->sommeEcTotalDist() 
+        $result = $result && $ec1->heuresEctsEc->sommeEcTotalDist()
             === $ec2->heuresEctsEc->sommeEcTotalDist();
 
-        $result = $result && $ec1->heuresEctsEc->sommeEcTotalPresDist() 
+        $result = $result && $ec1->heuresEctsEc->sommeEcTotalPresDist()
             === $ec2->heuresEctsEc->sommeEcTotalPresDist();
 
         /**
@@ -919,7 +921,7 @@ class ParcoursCopyData {
                 // Comparaison d'heures des EC
                 $comparaisonHeureEc = $this->compareEcHeures(
                     $ue1->elementConstitutifs[$indexEc],
-                    $ue2->elementConstitutifs[$indexEc], 
+                    $ue2->elementConstitutifs[$indexEc],
                     $ue1->display
                 );
                 if($comparaisonHeureEc === false){
@@ -938,7 +940,7 @@ class ParcoursCopyData {
             }
             if(count($ue1->elementConstitutifs[$indexEc]->elementsConstitutifsEnfants) > 0){
                 // Même nombre d'EC enfants
-                $nbEcEnfant = count($ue1->elementConstitutifs[$indexEc]->elementsConstitutifsEnfants) 
+                $nbEcEnfant = count($ue1->elementConstitutifs[$indexEc]->elementsConstitutifsEnfants)
                     === count($ue2->elementConstitutifs[$indexEc]->elementsConstitutifsEnfants);
                 if($nbEcEnfant === false){
                     self::$errorMessageArray[] = "{$ue1->display} - nombre d'EC enfants différent";
@@ -975,9 +977,9 @@ class ParcoursCopyData {
     }
 
     public function hasEcSameHeuresAsFicheMatiereCopy(
-        HeuresEctsEc $heures, 
+        HeuresEctsEc $heures,
         FicheMatiere $ficheMatiere
-    ){  
+    ){
         if(array_key_exists($ficheMatiere->getId(), $this->ficheMatiereCopyDataArray)){
             $ficheMatiereCopy = $this->ficheMatiereCopyDataArray[$ficheMatiere->getId()];
 
@@ -990,18 +992,18 @@ class ParcoursCopyData {
             $fmTe = $ficheMatiereCopy["te"] ?? 0.0;
 
             $ecTe = $heures->tePres;
-    
-            return $fmCmPres === $heures->cmPres    
-            && $fmCmDist === $heures->cmDist        
-            && $fmTdPres === $heures->tdPres        
-            && $fmTdDist === $heures->tdDist        
-            && $fmTpPres === $heures->tpPres        
-            && $fmTpDist === $heures->tpDist        
-            && $fmTe === $ecTe; 
+
+            return $fmCmPres === $heures->cmPres
+            && $fmCmDist === $heures->cmDist
+            && $fmTdPres === $heures->tdPres
+            && $fmTdDist === $heures->tdDist
+            && $fmTpPres === $heures->tpPres
+            && $fmTpDist === $heures->tpDist
+            && $fmTe === $ecTe;
         }
 
         return null;
-                         
+
     }
 
     public function hasHeuresFicheMatiereCopy(FicheMatiere $ficheMatiere) : bool {
@@ -1101,7 +1103,7 @@ class ParcoursCopyData {
             // Si une option est nulle mais que son équivalent ne l'est pas
             if(
                 ($mccc1->getOptions() !== null && $mccc2->getOptions() === null )
-                || 
+                ||
                 ($mccc1->getOptions() === null && $mccc2->getOptions() !== null)
             ){
                 $retour = false;
@@ -1129,8 +1131,8 @@ class ParcoursCopyData {
     }
 
     private function compareTwoMcccArray(
-        array $array1, 
-        array $array2, 
+        array $array1,
+        array $array2,
         int $parcoursId = -1,
         string $debugText = "",
     ) : bool {
@@ -1142,7 +1144,7 @@ class ParcoursCopyData {
                 self::$errorMcccMessageArray[$parcoursId] = [];
             }
             self::$errorMcccMessageArray[$parcoursId][] = $debugText .  " : Il n'y a pas le même nombre de MCCC";
-            
+
         }
         if($return){
             $alreadyUsedIndex = [];
@@ -1154,7 +1156,7 @@ class ParcoursCopyData {
                         // On teste le MCCC
                         $testEqual = $this->compareTwoMCCC($mccc1, $mccc2, $parcoursId, $debugText, false);
                         if($testEqual === true){
-                            // Si le test est positif, on marque l'équivalent 
+                            // Si le test est positif, on marque l'équivalent
                             // pour qu'il ne soit pas à nouveau utilisé
                             $alreadyUsedIndex[$index2] = true;
                         }
@@ -1169,11 +1171,11 @@ class ParcoursCopyData {
                 }
                 foreach($differentIndex as $diffIndex => $diffValue){
                     $differentMccc = $array2[$diffIndex];
-                    self::$errorMcccMessageArray[$parcoursId][] = $debugText 
+                    self::$errorMcccMessageArray[$parcoursId][] = $debugText
                     . " - EC ID ({$differentMccc->getEc()->getId()}) - Le MCCC est différent - ID : ({$differentMccc->getId()})";
                 }
             }
-            
+
 
             $return = $return && count($alreadyUsedIndex) === count($array1);
         }
@@ -1182,8 +1184,8 @@ class ParcoursCopyData {
     }
 
     private function compareEctsEC(
-        StructureEc $ec1, 
-        StructureEc $ec2, 
+        StructureEc $ec1,
+        StructureEc $ec2,
         string $debugText = ""
     ){
         $result = $ec1->heuresEctsEc->ects === $ec2->heuresEctsEc->ects;
@@ -1215,7 +1217,7 @@ class ParcoursCopyData {
     private function placeErrorMessage(int $parcoursId, string $message){
         if(array_key_exists($parcoursId, self::$errorMessageArray) === false){
             self::$errorMessageArray[$parcoursId] = [];
-        } 
+        }
         self::$errorMessageArray[$parcoursId][] = $message;
     }
 
