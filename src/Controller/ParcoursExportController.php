@@ -120,7 +120,7 @@ class ParcoursExportController extends AbstractController
         );
 
         return $this->json($json);
-    }   
+    }
 
     #[Route('/parcours/{parcours}/maquette/export-json', name: 'app_parcours_export_maquette_json')]
     public function exportMaquetteJson(
@@ -163,7 +163,7 @@ class ParcoursExportController extends AbstractController
         ];
 
         foreach ($dto->semestres as $ordre => $sem) {
-            if ($sem->semestre->isNonDispense() === false) {
+            if ($sem->semestre->isNonDispense() === false && $sem->semestreParcours->isOuvert() === true) {
                 $semestre = [
                     'ordre' => $ordre,
                     'volumes' => [
@@ -270,7 +270,7 @@ class ParcoursExportController extends AbstractController
                                         'autonomie' => $ueEnfantDeuxieme->heuresEctsUe->sommeUeTePres
                                     ],
                                     'ects' => $ueEnfantDeuxieme->heuresEctsUe->sommeUeEcts,
-    
+
                                 ];
                                 if ($ueEnfantDeuxieme->ue->getNatureUeEc()?->isLibre()) {
                                     $tUeEnfantDeuxieme['description_libre_choix'] = $ueEnfantDeuxieme->ue->getDescriptionUeLibre();
