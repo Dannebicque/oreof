@@ -159,7 +159,7 @@ class LheoXML
         $dureeCycle = 0;
 
         foreach ($parcours->getSemestreParcours() as $semestre) {
-            if ($semestre->getSemestre()?->isNonDispense() === false) {
+            if ($semestre->getSemestre()?->isNonDispense() === false && $semestre->isOuvert() === true) {
                 ++$dureeCycle;
             }
         }
@@ -256,7 +256,7 @@ HTML;
 //             id="maquettePedagogiqueFormation"
 //             width="800"
 //             height="750"
-//             src="{$UrlMaquetteIframe}" 
+//             src="{$UrlMaquetteIframe}"
 //             style="max-height: auto;"
 //             loading="eager"
 //             >
