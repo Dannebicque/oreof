@@ -56,7 +56,7 @@ class CalculStructureParcours
                 $raccrocheSemestre = false;
             }
 
-            if ($semestre !== null && $semestre->isNonDispense() === false) {
+            if ($semestre !== null && $semestre->isNonDispense() === false && $semestreParcours->isOuvert() === true) {
                 $dtoSemestre = new StructureSemestre($semestre, $semestreParcours->getOrdre(), $raccrocheSemestre, $semestreParcours, $withEcts, $withBcc);
                 $ues = $this->ueRepository->getBySemestre($semestre);
                 foreach ($ues as $ue) {
