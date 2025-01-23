@@ -34,14 +34,14 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
             - '../src/TypeDiplome/DependencyInjection/'
-            - '../src/Repository/GenericRepository'
+            - '../src/Classes/GenericRepositoryProvider'
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
-    current.version.repository:
-        class: App\Repository\GenericRepository
-    next.version.repository:
-        class: App\Repository\GenericRepository
-    
-    App\Repository\GenericRepository $currentVersionRepository: '@current.version.repository'
-    App\Repository\GenericRepository $nextVersionRepository: '@next.version.repository'
+    current.generic.repository.provider:
+        class: App\Classes\GenericRepositoryProvider
+    next.generic.repository.provider:
+        class: App\Classes\GenericRepositoryProvider
+
+    App\Classes\GenericRepositoryProvider $currentGenericRepositoryProvider: '@current.generic.repository.provider'
+    App\Classes\GenericRepositoryProvider $nextGenericRepositoryProvider: '@next.generic.repository.provider'

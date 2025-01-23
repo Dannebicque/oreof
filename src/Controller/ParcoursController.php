@@ -11,6 +11,7 @@ namespace App\Controller;
 
 use App\Classes\CalculButStructureParcours;
 use App\Classes\CalculStructureParcours;
+use App\Classes\GenericRepositoryProvider;
 use App\Classes\GetDpeParcours;
 use App\Classes\JsonReponse;
 use App\Classes\ParcoursDupliquer;
@@ -839,21 +840,24 @@ class ParcoursController extends BaseController
     #[IsGranted('ROLE_ADMIN')]
     #[Route('/test/testGenericRepository', name: 'testGenericRepository')]
     public function testParallelConnections(
-        GenericRepository $currentVersionRepository,
-        GenericRepository $nextVersionRepository
+        GenericRepositoryProvider $currentGenericRepositoryProvider,
+        GenericRepositoryProvider $nextGenericRepositoryProvider
     ) : JsonResponse {
         
-        $currentFormation = $currentVersionRepository
-            ->setConfiguration(Formation::class, 'current')
-            ->findOneById(35);
+        $nextGenericRepositoryProvider
+            ->setConfiguration($nextGenericRepositoryProvider::NEXT_YEAR_DATABASE)
+            ->setCurrentRepository(className: Formation::class);
 
-        $nextFormation = $nextVersionRepository
-            ->setConfiguration(Formation::class, 'next')
-            ->findOneById(35);
+        $currentGenericRepositoryProvider
+            ->setConfiguration($currentGenericRepositoryProvider::CURRENT_YEAR_DATABASE)
+            ->setCurrentRepository(className: Formation::class);
+
+        $currentFormation = $currentGenericRepositoryProvider->getCurrentRepository()->findOneById(35);
+        $nextFormation = $nextGenericRepositoryProvider->getCurrentRepository()->findOneById(35);
 
         $return = [
-            "CURRENT_DATABASE_NAME" => $currentVersionRepository->getDatabaseName(),
-            "NEXT_DATABASE_NAME" => $nextVersionRepository->getDatabaseName(),
+            "CURRENT_DATABASE_NAME" => $currentGenericRepositoryProvider->getCurrentDatabaseName(),
+            "NEXT_DATABASE_NAME" => $nextGenericRepositoryProvider->getCurrentDatabaseName(),
             "CURRENT_OBJECTIFS_FORMATION" => $currentFormation->getObjectifsFormation(),
             "NEXT_OBJECTIFS_FORMATION" => $nextFormation->getObjectifsFormation()
         ];

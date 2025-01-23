@@ -10,35 +10,20 @@ use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 #[Autoconfigure(public:true)]
 class GenericRepository extends EntityRepository {
 
-    public const CURRENT_YEAR_DATABASE = "current" ;
-    public const NEXT_YEAR_DATABASE = "next";
-
     private string $className;
+    private string $databaseName;
 
-    private EntityManagerInterface $entityManager;
-
-    public function __construct(private ManagerRegistry $doctrine){}
+    public function __construct(){}
 
     /**
-     * Configure le Repository générique, en choisissant la bonne entité, et la bonne connexion
-     * @param string $className Nom de l'entité que l'on souhaite utiliser (ex: Parcours::class)
-     * @param string $databaseVersion Version de la base de données à utiliser ('current' ou 'next')
-     * @return GenericRepository On peut utiliser le retour directement avec les méthodes comme findBy()
+     * @param string $className Nom de l'entité que l'on souhaite utiliser
+     * @param EntityManagerInterface EntityManager à utiliser
+     * @return GenericRepository Retourne l'objet courant
      */
-    public function setConfiguration(string $className, string $databaseVersion) : static {
-        if(in_array($databaseVersion, ["current", "next"], true) === false){
-            throw new \Exception("Database version not recognized. Should be 'current' or 'next'.");
-        }
-
+    public function setConfiguration(string $className, EntityManagerInterface $entityManager) : static {
         $this->className = $className;
-        $this->entityManager = $databaseVersion === "current" 
-            ? $this->doctrine->getManager('default') 
-            : $this->doctrine->getManager('next_year');
-
-        parent::__construct(
-            $this->entityManager,
-            $this->entityManager->getClassMetadata($this->className)
-        );
+        $this->databaseName = $entityManager->getConnection()->getDatabase();
+        parent::__construct($entityManager, $entityManager->getClassMetadata($className));
 
         return $this;
     }
@@ -47,10 +32,13 @@ class GenericRepository extends EntityRepository {
      * @return string Nom de la base de données active
      */
     public function getDatabaseName() : string {
-        return $this->entityManager->getConnection()->getDatabase();
+        return $this->databaseName;
     }
 
-    public function getGenericEntityManager(){
-        return $this->entityManager;
+    /**
+     * @return string Nom de l'entité actuellement utilisée
+     */
+    public function getClassName() {
+        return $this->className;
     }
 }
