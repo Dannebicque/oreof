@@ -30,9 +30,17 @@ class LheoXmlTest extends WebTestCase
         self::$lheoXML = $container->get(LheoXML::class);
     }
 
-    public function testLheoXmlLoadsCorrectly(){
-        $idParcours = 147;
-
+    /**
+     * @dataProvider lheoXmlProvider
+     */
+    public function testLheoXmlLoadsCorrectly(
+        int $idParcours, 
+        string $libelleParcours,
+        string $modifCurrent,
+        string $modifNext,
+        string $methodName,
+        string $lheoXmlAttributeName
+    ){
         $parcoursXmlCurrent = self::$currentGenericProvider
             ->setCurrentRepository(Parcours::class)
             ->findOneById($idParcours);
@@ -40,7 +48,6 @@ class LheoXmlTest extends WebTestCase
             ->setCurrentRepository(Parcours::class)
             ->findOneById($idParcours);
 
-        $libelleParcours = "LLCER Espagnol (Reims)";
         $this->assertEquals($libelleParcours, $parcoursXmlCurrent->getLibelle());
         $this->assertEquals($libelleParcours, $parcoursXmlNext->getLibelle());
 
@@ -52,10 +59,8 @@ class LheoXmlTest extends WebTestCase
         $this->assertTrue(self::$lheoXML->validateLheoSchema($nextXML));
 
         // Modification
-        $modificationResultatsCurrent = "RESULTATS CURRENT #123";
-        $modificationResultatsNext = "RESULTATS NEXT #456";
-        $parcoursXmlCurrent->setResultatsAttendus($modificationResultatsCurrent);
-        $parcoursXmlNext->setResultatsAttendus($modificationResultatsNext);
+        $parcoursXmlCurrent->{$methodName}($modifCurrent);
+        $parcoursXmlNext->{$methodName}($modifNext);
 
         self::$currentGenericProvider->getEntityManager()->persist($parcoursXmlCurrent);
         self::$currentGenericProvider->getEntityManager()->flush();
@@ -80,12 +85,45 @@ class LheoXmlTest extends WebTestCase
         $newNextXmlArray = json_decode(json_encode(simplexml_load_string($newNextXml)), true);
 
         $this->assertEquals(
-            $modificationResultatsCurrent,
-            $newCurrentXmlArray['offres']['formation']['resultats-attendus']
+            $modifCurrent,
+            $newCurrentXmlArray['offres']['formation'][$lheoXmlAttributeName]
         );
         $this->assertEquals(
-            $modificationResultatsNext,
-            $newNextXmlArray['offres']['formation']['resultats-attendus']
+            $modifNext,
+            $newNextXmlArray['offres']['formation'][$lheoXmlAttributeName]
         );
+        $this->assertNotEquals(
+            $newCurrentXmlArray['offres']['formation'][$lheoXmlAttributeName],
+            $newNextXmlArray['offres']['formation'][$lheoXmlAttributeName]
+        );
+    }
+
+    public function lheoXmlProvider(){
+        return [
+            [
+                79, 
+                "Médicaments, Qualité, Réglementation", 
+                "CONTENU CURRENT",
+                "CONTENU NEXT #12345", 
+                "setContenuFormation",
+                "contenu-formation",
+            ],
+            [
+                512,
+                "Finance comptabilité contrôle  - Troyes",
+                "RESULTATS CURRENT #456",
+                "RESULTATS NEXT #987",
+                "setResultatsAttendus",
+                "resultats-attendus",
+            ],
+            [
+                244,
+                "Gestion de l’environnement : eau, sol, roche",
+                "OBJECTIFS CURRENT #1",
+                "OBJECTIFS NEXT #2",
+                "setObjectifsParcours",
+                "objectif-formation",
+            ],
+        ];
     }
 }
