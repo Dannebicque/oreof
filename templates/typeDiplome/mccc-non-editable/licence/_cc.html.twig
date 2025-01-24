@@ -1,0 +1,42 @@
+<h3>1ᵉ Session</h3>
+<div>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th></th>
+            <th>Pourcentage</th>
+            <th>Nb d'épreuve(s)</th>
+            <th>CC avec TP</th>
+            <th>Pourcentage du TP</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <th>Contrôle continu</th>
+            <td>50%</td>
+            <td>2 épreuves</td>
+            <td>
+                {% if mcccs[1]['cc'][1].options is defined and mcccs[1]['cc'][1].options.cc_has_tp is defined and mcccs[1]['cc'][1].options.cc_has_tp == "on" %}
+                    Oui
+                {% else %}
+                    Non
+                {% endif %}
+            </td>
+            <td>
+                {% if mcccs[1]['cc'][1].options is defined and mcccs[1]['cc'][1].options.cc_has_tp is defined and mcccs[1]['cc'][1].options.cc_has_tp == "on" %}
+                    50%
+                {% else %}
+                    -
+                {% endif %}
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<h3>2ᵉ Session</h3>
+<div>
+    {% if mcccs[2]['et'] is defined %}
+        {{ include('typeDiplome/mccc-non-editable/licence/_secondeChance.html.twig',{mcccs:mcccs[2]['et'] }) }}
+    {% endif %}
+</div>
+

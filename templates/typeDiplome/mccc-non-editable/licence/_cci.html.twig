@@ -1,0 +1,19 @@
+<h3>1ᵉ Session</h3>
+<div>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Pourcentage</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for mccc in mcccs %}
+            <tr>
+                <th>Epreuve N°{{ loop.index }}</th>
+                <td>{{ mccc.pourcentage ?? '' }}%</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

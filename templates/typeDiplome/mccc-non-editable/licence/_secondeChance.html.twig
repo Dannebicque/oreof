@@ -1,0 +1,34 @@
+<div>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th></th>
+            <th>Pourcentage</th>
+            <th>Type épreuve</th>
+            <th>Durée de l'épreuve</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for mccc in mcccs %}
+            <tr>
+                <th>Examen 2ᵉ Session N°{{ loop.index }}</th>
+                <td>
+                    {% if mccc.pourcentage is defined %}
+                    {{ mccc.pourcentage }}%
+                    {% else %}
+                        100%
+                        {% endif %}
+                </td>
+                <td>
+                    {% for typeE in typeEpreuves %}
+                        {% if mccc.typeEpreuve[0] is defined and mccc.typeEpreuve[0] == typeE.id %}{{ typeE.display }}{% endif %}
+                    {% endfor %}
+                </td>
+                <td>
+                    {% if mccc.duree is defined and mccc.duree != null %}{{ mccc.duree|date('H:i') }}{% else %}-{% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

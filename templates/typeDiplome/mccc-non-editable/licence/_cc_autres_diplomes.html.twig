@@ -1,0 +1,39 @@
+<h3>1ᵉ Session</h3>
+<input type="hidden" value="cc_autre" name="type_cc">
+<div id="epreuves_cc_autre">
+    {{ include('typeDiplome/mccc-non-editable/licence/_epreuveCc.html.twig', {index: 1, btn: false}) }}
+    {{ include('typeDiplome/mccc-non-editable/licence/_epreuveCc.html.twig', {index: 2, btn:false}) }}
+    {% if mcccs[1]['cc'] is defined and mcccs[1]['cc']|length > 2 %}
+        {% for i in 3..mcccs[1]['cc']|length %}
+            {{ include('typeDiplome/mccc-non-editable/licence/_epreuveCc.html.twig', {index: i, btn: true}) }}
+        {% endfor %}
+    {% endif %}
+</div>
+<button class="btn btn-primary mb-2 synchro-mccc"
+        {% if disabled %}disabled{% endif %}
+        {{ stimulus_action('mccc--licence', 'addEpreuveCcAutresDiplomes', 'click') }}
+>Ajouter une épreuve
+</button>
+
+<h3 class="mt-2">2ᵉ Session</h3>
+<div id="epreuves_s2_ct">
+    {% if mcccs[2]['et'] is defined %}
+        {% for i in 1..mcccs[2]['et']|length %}
+            {{ include('typeDiplome/mccc-non-editable/licence/_secondeChance.html.twig', {index:i}) }}
+        {% else %}
+            {{ include('typeDiplome/mccc-non-editable/licence/_secondeChance.html.twig',{index:1}) }}
+        {% endfor %}
+    {% else %}
+        {{ include('typeDiplome/mccc-non-editable/licence/_secondeChance.html.twig',{index:1}) }}
+    {% endif %}
+</div>
+
+<button class="btn btn-primary mb-2 synchro-mccc"
+        {% if disabled %}disabled{% endif %}
+        {{ stimulus_action('mccc--licence', 'addEpreuveSecondeSession', 'click') }}
+>Ajouter une épreuve pour la 2e session
+</button>
+
+<div class="alert alert-danger d-none mt-2" {{ stimulus_target('mccc--licence', 'zoneErreur') }}>
+
+</div>

@@ -1,0 +1,111 @@
+<div>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th></th>
+            <th>Pourcentage</th>
+            <th>Type épreuve</th>
+            <th>Durée de l'épreuve</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for mccc in mcccs %}
+            <tr>
+                <th>Contrôle terminal N°{{ loop.index }}</th>
+                <td>
+                    {% if mccc.pourcentage is defined %}
+                        {{ mccc.pourcentage }}%
+                    {% else %}
+                        100%
+                    {% endif %}
+                </td>
+                <td>
+                    {% for typeE in typeEpreuves %}
+                        {% if mccc.typeEpreuve[0] is defined and mccc.typeEpreuve[0] == typeE.id %}{{ typeE.display }}{% endif %}
+                    {% endfor %}
+                </td>
+                <td>
+                    {% if mccc.duree is defined and mccc.duree != null %}{{ mccc.duree|date('H:i') }}{% else %}-{% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{#    <div class="col-4">#}
+{#        <strong>Contrôle terminal N°{{ index }}</strong>#}
+{#    </div>#}
+{#    <div class="col-4">#}
+{#        <label for="pourcentage_s1_ct{{ index }}">#}
+{#            Pourcentage#}
+{#            <i class="fal fa-question-circle ms-1"#}
+{#               data-controller="tooltip"#}
+{#               data-tooltip-placement-value="bottom"#}
+{#               aria-label="{{ 'mccc_licence.helps.cc_ct.pourcentage_s1_et.help'|trans({}, 'help') }}"#}
+{#               data-bs-original-title="{{ 'mccc_licence.helps.cc_ct.pourcentage_s1_et.help'|trans({}, 'help') }}"></i>#}
+{#        </label>#}
+{#        <div class="input-group">#}
+{#            <input type="text" class="form-control synchro-mccc" id="pourcentage_s1_ct{{ index }}"#}
+{#                   name="pourcentage_s1_ct{{ index }}"#}
+{#                   {% if disabled %}disabled{% endif %}#}
+{#                    #}{#                        {{ stimulus_action('mccc--licence', 'saveDataCcCt', 'change', { #}
+{#                    #}{#                            action: 'float', #}
+{#                    #}{#                            field: 'pourcentage_s1_ct1', #}
+{#                    #}{#                        }) }} #}
+{#                    {% if mcccs[1]['et'][index] is defined %}#}
+{#                        value="{{ mcccs[1]['et'][index].pourcentage }}"#}
+{#                    {% endif %}#}
+{#            >#}
+{#            <span class="input-group-text">%</span>#}
+{#        </div>#}
+{#    </div>#}
+{#    <div class="col-4">#}
+{#        <label for="typeEpreuve_s1_ct{{ index }}">#}
+{#            Type d'épreuve#}
+{#            <i class="fal fa-question-circle ms-1"#}
+{#               data-controller="tooltip"#}
+{#               data-tooltip-placement-value="bottom"#}
+{#               aria-label="{{ 'mccc_licence.helps.cc_ct.typeEpreuve_s1_et.help'|trans({}, 'help') }}"#}
+{#               data-bs-original-title="{{ 'mccc_licence.helps.cc_ct.typeEpreuve_s1_et.help'|trans({}, 'help') }}"></i>#}
+{#        </label>#}
+{#        <select class="form-select typeEpreuveSelectCt synchro-mccc" id="typeEpreuve_s1_ct{{ index }}"#}
+{#                {% if disabled %}disabled{% endif %}#}
+{#                name="typeEpreuve_s1_ct{{ index }}"#}
+{#                {{ stimulus_action('mccc--licence', 'changeTypeEpreuveCt', 'change') }}#}
+{#        >#}
+{#            <option value="">Choisir</option>#}
+{#            {% for typeE in typeEpreuves %}#}
+{#                <option value="{{ typeE.id }}"#}
+{#                        data-hasduree="{{ typeE.hasDuree }}"#}
+{#                        {% if mcccs[1]['et'][index] is defined %}#}
+{#                            {% if mcccs[1]['et'][index].typeEpreuve[0] is defined and mcccs[1]['et'][index].typeEpreuve[0] == typeE.id %}selected{% endif %}#}
+{#                        {% endif %}#}
+{#                >{{ typeE.display }}</option>#}
+{#            {% endfor %}#}
+{#        </select>#}
+{#    </div>#}
+{#    <div class="col-4">#}
+{#        &nbsp;#}
+{#    </div>#}
+{#    <div class="col-4">#}
+{#        &nbsp;#}
+{#    </div>#}
+{#    <div class="col-4">#}
+{#        <label for="duree_s1_ct{{ index }}">#}
+{#            Durée de l'épreuve#}
+{#            <i class="fal fa-question-circle ms-1"#}
+{#               data-controller="tooltip"#}
+{#               data-tooltip-placement-value="bottom"#}
+{#               aria-label="{{ 'mccc_licence.helps.ct.duree_s1_et.help'|trans({}, 'help') }}"#}
+{#               data-bs-original-title="{{ 'mccc_licence.helps.ct.duree_s1_et.help'|trans({}, 'help') }}"></i>#}
+{#        </label>#}
+{#        <div class="input-group">#}
+{#            <input type="time" class="form-control synchro-mccc" id="duree_s1_ct{{ index }}" name="duree_s1_ct{{ index }}"#}
+{#                   {% if disabled %}disabled{% endif %}#}
+{#                    {% if mcccs[1]['et'][index] is defined %}#}
+{#                        value="{% if mcccs[1]['et'][index].duree != null %}{{ mcccs[1]['et'][index].duree|date('H:i') }}{% endif %}"#}
+{#                    {% endif %}#}
+{#            >#}
+{#        </div>#}
+{#    </div>#}
+</div>
+

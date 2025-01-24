@@ -1,0 +1,59 @@
+<h3>1ᵉ Session</h3>
+<div>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th></th>
+            <th>Pourcentage</th>
+            <th>Nb d'épreuve(s)</th>
+            <th>CC avec TP</th>
+            <th>Pourcentage du TP</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <th>Contrôle continu</th>
+            <td>
+                {% if mcccs[1]['cc'][1] is defined %}
+                    {{ mcccs[1]['cc'][1].pourcentage }}%
+                {% else %}
+                    -%
+                {% endif %}
+            </td>
+            <td>
+                {% if mcccs[1]['cc'][1] is defined %}
+                    {{ mcccs[1]['cc'][1].nbEpreuves }} épreuve(s)
+                {% else %}
+                    -
+                {% endif %}
+            </td>
+            <td>
+                {% if mcccs[1]['cc'][1].options is defined and mcccs[1]['cc'][1].options.cc_has_tp is defined and mcccs[1]['cc'][1].options.cc_has_tp == "on" %}
+                    Oui
+                {% else %}
+                    Non
+                {% endif %}
+            </td>
+            <td>
+                {% if mcccs[1]['cc'][1].options is defined and mcccs[1]['cc'][1].options.cc_has_tp is defined and mcccs[1]['cc'][1].options.cc_has_tp == "on" %}
+                    50%
+                {% else %}
+                    -
+                {% endif %}
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div id="epreuves_ct">
+        {% if mcccs[1]['et'] is defined %}
+            {{ include('typeDiplome/mccc-non-editable/licence/_epreuveCt.html.twig', {mcccs:mcccs[1]['et']}) }}
+        {% endif %}
+    </div>
+</div>
+<h3>2ᵉ Session</h3>
+<div id="epreuves_s2_ct">
+    {% if mcccs[2]['et'] is defined %}
+        {{ include('typeDiplome/mccc-non-editable/licence/_secondeChance.html.twig', {mcccs:mcccs[2]['et']}) }}
+    {% endif %}
+</div>
