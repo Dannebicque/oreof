@@ -4,22 +4,14 @@ namespace App\Twig\Components;
 
 use App\Classes\GetDpeParcours;
 use App\Classes\MentionProcess;
-use App\Classes\ValidationProcess;
-use App\Entity\FicheMatiere;
 use App\Entity\Formation;
-use App\Entity\Parcours;
 use App\Entity\TypeDiplome;
-use App\Enums\EtatDemandeChangeRfEnum;
-use App\Enums\EtatProcessMentionEnum;
 use App\Enums\TypeModificationDpeEnum;
 use App\Repository\HistoriqueFormationRepository;
-use App\Repository\HistoriqueParcoursRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\Attribute\Target;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Workflow\WorkflowInterface;
 use Symfony\UX\LiveComponent\Attribute\AsLiveComponent;
-use Symfony\UX\LiveComponent\Attribute\LiveListener;
 use Symfony\UX\LiveComponent\Attribute\LiveProp;
 use Symfony\UX\LiveComponent\DefaultActionTrait;
 use Symfony\UX\TwigComponent\Attribute\PostMount;
@@ -112,11 +104,9 @@ final class MentionManageComponent extends AbstractController
         $this->typeDiplome = $this->formation->getTypeDiplome();
         $this->place = $this->getPlace($this->type);
 
-        if ($this->formation !== null && $this->formation->isHasParcours() === false && $this->formation->getParcours()->count() === 1) {
-
-            $parcours = $this->formation->getParcours()->first();
-            $this->hasDemande =
-                GetDpeParcours::getFromParcours($parcours)?->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_TEXTE || GetDpeParcours::getFromParcours($parcours)?->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_MCCC_TEXTE || GetDpeParcours::getFromParcours($parcours)?->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_MCCC;
+        if ($this->formation !== null) {
+            $this->hasDemande = $this->formation->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_TEXTE ||
+                $this->formation->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_INTITULE || $this->formation->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION;
         }
 
         $this->etape = self::TAB[$this->place] ?? $this->type;

@@ -434,9 +434,12 @@ validation.valider.transmis_pour_publication: validation.valider.transmis_pour_p
 historique.validation.fiche_matiere.ses: 'Historique de validation fiche EC/matière'
 validation.valider.fiches_matieres: 'Valider et soumettre les fiches EC/matière'
 demande.reouverture: 'Demander la réouverture du DPE'
+demande.reouverture.formation: 'Demander de modification de la mention'
+demande.reouverture.formation.title: 'Demander de modification de la mention'
 demande.reouverture.fiche: 'Réouvrir la fiche'
 demande.reouverture.annuler: 'Annuler la demander de réouverture du DPE'
 demande.reouverture.title: 'Réouverture du DPE'
+demande.reouverture.mention.label: 'Précisez quelle(s) modification(s) vous souhaitez apporter à la mention'
 demande.reouverture.fiche.title: 'Réouverture de fiche EC/matière'
 demande.reouverture.annuler.title: 'Annuler la demande de réouverture du DPE'
 demande.reouverture.fiche.annuler.title: 'Annuler la demande de réouverture de fiche EC/matière'
@@ -450,10 +453,17 @@ demande.reouverture.modification.maquette.help: demande.reouverture.modification
 demande.reouverture.modification.argumentaire.label: 'Motif(s) de la demande de réouverture (texte servant de justificatif en cas de passage en CFVU)'
 demande.reouverture.modification.argumentaire.help: demande.reouverture.modification.argumentaire.help
 btn.demande.reouverture.modification: 'Demander la réouverture du projet DPE'
+
 demande.reouverture.modification.texte.label: 'modifications des descriptifs'
 demande.reouverture.modification.texte.help: demande.reouverture.modification.texte.help
 demande.reouverture.modification.mccc.texte.label: 'modifications des descriptifs et de la maquette/MCCC'
 demande.reouverture.modification.mccc.texte.help: demande.reouverture.modification.mccc.texte.help
+
+demande.reouverture.mention.modification.texte.label: 'modifications des descriptifs de la mention'
+demande.reouverture.mention.modification.texte.help: demande.reouverture.modification.texte.help
+demande.reouverture.mention.modification.mccc.texte.label: 'modifications des parcours de la mention'
+demande.reouverture.mention.modification.mccc.texte.help: demande.reouverture.modification.mccc.texte.help
+
 demande.reouverture.label: 'Précisez quelle(s) modification(s) vous souhaitez apporter à la formation'
 demande.reouverture.help: demande.reouverture.help
 historique.validation.fiche_matiere: 'Historique de validation fiche EC/matière'

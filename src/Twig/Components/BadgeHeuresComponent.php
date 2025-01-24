@@ -7,6 +7,7 @@ use App\Entity\DpeParcours;
 use App\Entity\ElementConstitutif;
 use App\Entity\Parcours;
 use App\Entity\Ue;
+use App\Repository\ElementConstitutifRepository;
 use Symfony\UX\TwigComponent\Attribute\AsTwigComponent;
 use Symfony\UX\TwigComponent\Attribute\PostMount;
 
@@ -26,14 +27,18 @@ final class BadgeHeuresComponent
     #[PostMount]
     public function mounted(): void
     {
-        if ($this->elementConstitutif->getFicheMatiere() !== null && $this->elementConstitutif->getFicheMatiere()->isVolumesHorairesImpose() === true) {
+        if ($this->elementConstitutif->isHeuresSpecifiques() === true) {
+            $this->etatHeuresComplet = $this->elementConstitutif->etatStructure() === 'Complet';
+            $this->isSynchroHeures = false;
+        } elseif ($this->elementConstitutif->getFicheMatiere() !== null &&
+            ($this->elementConstitutif->getFicheMatiere()->isVolumesHorairesImpose() === true || $this->elementConstitutif->isHeuresSpecifiques() !== true)) {
             $this->etatHeuresComplet = $this->elementConstitutif->getFicheMatiere()->etatStructure() === 'Complet';
             $this->isSynchroHeures = true;
         } else {
+            // todo: simplifier ou tout mettre dans le service
             $this->isSynchroHeures = $this->elementConstitutif->isSynchroHeures() && $this->elementConstitutif->getFicheMatiere()?->getParcours()?->getId() !== $this->parcours->getId();
             if ($this->isSynchroHeures) {
                 $getElement = new GetElementConstitutif($this->elementConstitutif, $this->parcours);
-                $raccroche = $getElement->isRaccroche();
                 $ec = $getElement->getElementConstitutifHeures();
                 $this->etatHeuresComplet = $ec->etatStructure() === 'Complet';
             } else {

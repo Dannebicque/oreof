@@ -11,6 +11,7 @@ use App\Classes\Process\ParcoursProcess;
 use App\Classes\ValidationProcess;
 use App\Classes\ValidationProcessFicheMatiere;
 use App\Entity\DpeDemande;
+use App\Entity\Formation;
 use App\Enums\TypeModificationDpeEnum;
 use App\Events\DpeDemandeEvent;
 use App\Events\HistoriqueFormationEvent;
@@ -630,6 +631,74 @@ class ProcessValidationController extends BaseController
         ]);
     }
 
+    #[Route('/demande/reouverture-mention/{formation}', name: 'app_validation_demande_reouverture_mention')]
+    public function demandeReouvertureMention(
+        VersioningParcours $versioningParcours,
+        Formation $formation,
+        Request             $request
+    ): Response {
+        $typeDpe = 'F';
+
+        if ($formation === null) {
+            return JsonReponse::error('Formation non trouvée');
+        }
+
+
+        if ($request->isMethod('POST')) {
+            $data = $request->request->all();
+            if ($data['demandeReouverture'] === 'MODIFICATION_TEXTE') {
+                $etat =TypeModificationDpeEnum::MODIFICATION_TEXTE;
+            } elseif ($data['demandeReouverture'] === 'MODIFICATION_AVEC_CFVU') {
+                $etat = TypeModificationDpeEnum::MODIFICATION;
+            }
+
+
+
+            if ($this->isGranted('ROLE_SES')) {
+                //réouverture directe sans sauvegarde ou avec sauvegarde selon le choix
+
+                    $formation->setEtatReconduction($etat);
+                    $this->entityManager->flush();
+
+
+                return JsonReponse::success('DPE ouvert');
+            }
+
+            if ($etat === TypeModificationDpeEnum::MODIFICATION) {
+                $demande = new DpeDemande();
+                $demande->setFormation($formation);
+                $demande->setParcours(null);
+                $demande->setNiveauDemande($typeDpe);
+                $demande->setArgumentaireDemande($data['argumentaire_demande_reouverture']);
+                $demande->setEtatDemande('attente');
+                $demande->setNiveauModification($etat);
+                //$demande->setUser($this->getUser());
+                $this->entityManager->persist($demande);
+                $this->entityManager->flush();
+
+                //mail au SES
+                $dpeDemandeEvent = new DpeDemandeEvent($demande, $this->getUser());
+                $this->eventDispatcher->dispatch($dpeDemandeEvent, DpeDemandeEvent::DPE_DEMANDE_CREATED);
+
+                return JsonReponse::success('Demande de réouverture enregistrée');
+            }
+            $formation->setEtatReconduction($etat);
+            $this->entityManager->flush();
+
+            return JsonReponse::success('DPE ouvert pour modification des textes');
+        }
+
+        if ($this->isGranted('ROLE_SES')) {
+            return $this->render('process_validation/_demande_reouverture_formation_ses.html.twig', [
+                'formation' => $formation,
+            ]);
+        }
+
+        return $this->render('process_validation/_demande_reouverture_formation.html.twig', [
+            'formation' => $formation,
+        ]);
+    }
+
     #[Route('/demande/reouverture/cloture', name: 'app_validation_demande_reouverture_cloture')]
     //autorisation de la cloture si pas de différence entre les versions
     public function demandeReouvertureCloture(
@@ -680,7 +749,7 @@ class ProcessValidationController extends BaseController
                 }
                 //réouverture directe sans sauvegarde ou avec sauvegarde selon le choix
                 if ($dpe->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_TEXTE) {
-//todo: tester si pas de diff, et si oui revenir au contenu de départ
+                    //todo: tester si pas de diff, et si oui revenir au contenu de départ
                     if ($hasDifferences === true) {
                         //rollback ds modifs depuis la dernière version
                         $versioningParcours->rollbackToLastVersion($parcours);
@@ -708,7 +777,7 @@ class ProcessValidationController extends BaseController
             }
 
 
-         //   return JsonReponse::success('Demande de réouverture enregistrée');
+            //   return JsonReponse::success('Demande de réouverture enregistrée');
         }
 
 

@@ -14,6 +14,7 @@ use App\DTO\Remplissage;
 use App\Entity\Traits\LifeCycleTrait;
 use App\Enums\NiveauFormationEnum;
 use App\Enums\RegimeInscriptionEnum;
+use App\Enums\TypeModificationDpeEnum;
 use App\Repository\FormationRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -204,6 +205,9 @@ class Formation
 
     #[ORM\OneToMany(mappedBy: 'formation', targetEntity: ChangeRf::class)]
     private Collection $changeRves;
+
+    #[ORM\Column(length: 255, enumType: TypeModificationDpeEnum::class, nullable: true)]
+    private ?TypeModificationDpeEnum $etatReconduction = null;
 
     public function __construct(?CampagneCollecte $anneeUniversitaire)
     {
@@ -1101,5 +1105,17 @@ class Formation
             $etatParcours[] = $parcours->getDpeParcours()->first()?->getEtatValidation();
         }
         return array_merge(...$etatParcours);
+    }
+
+    public function getEtatReconduction(): ?TypeModificationDpeEnum
+    {
+        return $this->etatReconduction ?? TypeModificationDpeEnum::OUVERT;
+    }
+
+    public function setEtatReconduction(TypeModificationDpeEnum $etatReconduction): static
+    {
+        $this->etatReconduction = $etatReconduction;
+
+        return $this;
     }
 }

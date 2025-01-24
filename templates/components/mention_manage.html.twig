@@ -61,22 +61,21 @@
                             {% if not this.hasDemande %}
                                 <button class="btn btn-sm d-block btn-outline-warning"
                                         type="button"
-                                        {#                                        {{ stimulus_controller('modal', {#}
-                                        {#                                            size: 'lg',#}
-                                        {#                                            nomEvenement: 'refreshPage',#}
-                                        {#                                            modalTitle: ('demande.reouverture.title')|trans({}, 'process'),#}
-                                        {#                                            modalUrl: path('app_validation_demande_reouverture', {#}
-                                        {#                                                id:formation.parcours[0].id,#}
-                                        {#                                                type:'parcours'#}
-                                        {#                                            }) }) }}#}
+                                        {{ stimulus_controller('modal', {
+                                            size: 'lg',
+                                            nomEvenement: 'refreshPage',
+                                            modalTitle: ('demande.reouverture.formation.title')|trans({}, 'process'),
+                                            modalUrl: path('app_validation_demande_reouverture_mention', {
+                                                formation:formation.id,
+                                            }) }) }}
                                         data-action="click->modal#openModal"
                                         data-controller="tooltip"
                                         data-tooltip-placement-value="bottom"
 
-                                        aria-label="{{ ('demande.reouverture')|trans({}, 'process') }}"
-                                        data-bs-original-title="{{ ('demande.reouverture')|trans({}, 'process') }}"
+                                        aria-label="{{ ('demande.reouverture.formation')|trans({}, 'process') }}"
+                                        data-bs-original-title="{{ ('demande.reouverture.formation')|trans({}, 'process') }}"
                                 >
-                                    <i class="fal fa-question"></i> {{ ('demande.reouverture')|trans({}, 'process') }}
+                                    <i class="fal fa-question"></i> {{ ('demande.reouverture.formation')|trans({}, 'process') }}
                                 </button>
                             {% else %}
                                 <button class="btn btn-sm d-block btn-outline-success"

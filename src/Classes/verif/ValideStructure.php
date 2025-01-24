@@ -196,7 +196,6 @@ abstract class ValideStructure extends AbstractValide
             self::$errors[] = 'Type d\'EC non renseigné (disciplinaire, ...) pour l\'' . $ec->getCode() . ' de l\'' . $ue->display(self::$parcours);
         }
         $getElement = new GetElementConstitutif($ec, self::$parcours);
-        $raccroche = $getElement->isRaccroche();
         if ($ec->getNatureUeEc()?->isLibre() === true) {
             if (self::$typeDiplome !== null) {
                 $ects = $getElement->getEcts();

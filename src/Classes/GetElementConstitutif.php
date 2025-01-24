@@ -104,7 +104,7 @@ class GetElementConstitutif
         if($this->elementConstitutif->isMcccSpecifiques() && !$isMcccImpose){
             return $this->elementConstitutif->getTypeMccc();
         }
-        
+
         if($this->elementConstitutif->getEcParent()?->isMcccEnfantsIdentique() && !$isMcccImpose){
             return $this->elementConstitutif->getEcParent()->getTypeMccc();
         }
@@ -234,18 +234,21 @@ class GetElementConstitutif
 
     public function getEtatStructure(): ?string
     {
+        if ($this->elementConstitutif->isHeuresSpecifiques() === true) {
+            return $this->elementConstitutif->etatStructure();
+        }
+
         if ($this->elementConstitutif->getFicheMatiere()?->isVolumesHorairesImpose()) {
             return $this->elementConstitutif->getFicheMatiere()?->etatStructure();
         }
 
         if ($this->elementConstitutif->getEcParent() !== null && $this->elementConstitutif->getEcParent()->isHeuresEnfantsIdentiques() === true) {
-            return $this->elementConstitutif->getEcParent()->etatStructure();
+            if ($this->elementConstitutif->getEcParent()->isHeuresSpecifiques() === true) {
+                return $this->elementConstitutif->getEcParent()->etatStructure();
+            }
+            return $this->elementConstitutif->getEcParent()->getFicheMatiere()?->etatStructure();
         }
-
-        if ($this->isRaccroche() === true && $this->elementConstitutif->isSynchroHeures() === true) {
-            return $this->getElementConstitutif()->etatStructure();
-        }
-        return $this->elementConstitutif->etatStructure();
+        return $this->elementConstitutif->getFicheMatiere()?->etatStructure();
     }
 
     public function getEtatBcc(): ?string

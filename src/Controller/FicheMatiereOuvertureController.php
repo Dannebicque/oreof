@@ -32,22 +32,4 @@ class FicheMatiereOuvertureController extends BaseController
             'ficheMatiere' => $ficheMatiere,
         ]);
     }
-
-//    #[Route('/fiche/matiere/demande/cloture/{id}', name: 'app_fiche_matiere_validation_demande_cloture')]
-//    public function cloture(
-//        ValidationProcessFicheMatiere $validationProcess,
-//        FicheMatiereProcess $ficheMatiereProcess,
-//        Request $request,
-//        FicheMatiere $ficheMatiere
-//    ): Response {
-//        if ($request->isMethod('POST')) {
-//            $process = $validationProcess->getEtape('fiche_matiere');
-//            $ficheMatiereProcess->valideFicheMatiere($ficheMatiere, $this->getUser(), $process, 'fiche_matiere', $request);
-//            return JsonReponse::success('La fiche matière est soumise pour validation');
-//        }
-//
-//        return $this->render('fiche_matiere_ouverture/_cloture.html.twig', [
-//            'ficheMatiere' => $ficheMatiere,
-//        ]);
-//    }
 }

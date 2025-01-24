@@ -659,6 +659,13 @@ framework:
             type: valider
             btn: warning
             icon: 'fa-pencil'
+        rouvrir_fiche_matiere_b:
+          from: 'valide_pour_publication'
+          to: 'en_cours_redaction'
+          metadata:
+            type: valider
+            btn: warning
+            icon: 'fa-pencil'
     changeRf:
       type: 'workflow'
       marking_store:

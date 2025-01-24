@@ -59,7 +59,7 @@ class BaseController extends AbstractController
         return $this->dataUserSession->getDpe();
     }
 
-    public function getEtablissement(): Etablissement
+    public function getEtablissement(): ?Etablissement
     {
         return $this->dataUserSession->getEtablissement();
     }

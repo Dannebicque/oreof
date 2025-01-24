@@ -35,51 +35,6 @@
         </div>
     </section>
 
-    {% if ficheMatiere.enseignementMutualise == true or ficheMatiere.elementConstitutifs|length > 0 %}
-        <section class="scroll-section" id="parcours">
-            <h2 class="small-title">Parcours utilisant la fiche matière et détails des EC</h2>
-            <div class="card mb-5">
-                <div class="card-body">
-                    <ul class="list-unstyled">
-                        {% for ec in ficheMatiere.elementConstitutifs %}
-                            <li>
-                                {% if isVersioningView is defined and isVersioningView == false %}
-                                    <button
-                                            {{ stimulus_controller('modal', {
-                                                size: 'lg',
-                                                modalTitle: 'Ajouter un domaine',
-                                                modalUrl: path('app_fiche_matiere_detail_parcours', {elementConstitutif:ec.id}) }) }}
-                                            data-action="click->modal#openModal"
-                                            class="btn text-info btn-icon btn-icon-end w-100 w-sm-auto mx-2"
-                                            data-size="lg"
-                                            data-bs-toggle="tooltip"
-                                            data-bs-placement="bottom"
-                                            title="Ajouter un domaine"
-                                    >
-                                        <i class="{{ iconShow }}"></i>
-                                        <span> Voir les éléments pour  {% if ec.parcours.isParcoursDefaut %}
-                                                la mention <strong>{{ ec.parcours.formation.displayLong }} (mention sans parcours)</strong>
-                                    {% else %}
-                                                le parcours
-                                                <strong>
-                                                    {{ ec.parcours.libelle }} - {{ ec.ue.display(ec.parcours) }}({{ ec.parcours.formation.displayLong }})
-                                                </strong>
-                                            {% endif %}</span>
-                                    </button>
-                                {% else %}
-                                    {% if ec.parcours.isParcoursDefaut %}
-                                        <span><strong>{{ ec.parcours.formation.display }} (mention sans parcours)</strong></span>
-                                    {% else %}
-                                        <span><strong>{{ ec.parcours.libelle }} ({{ ec.parcours.formation.display }})</strong></span>
-                                    {% endif %}
-                                {% endif %}
-                            </li>
-                        {% endfor %}
-                    </ul>
-                </div>
-            </div>
-        </section>
-    {% endif %}
 
     <section class="scroll-section" id="bcc">
         <h2 class="small-title">Compétences acquises à l’issue de la formation</h2>
@@ -89,6 +44,38 @@
             </div>
         </div>
     </section>
+
+    {% if ficheMatiere.enseignementMutualise == true or ficheMatiere.elementConstitutifs|length > 0 %}
+        <section class="scroll-section" id="parcours">
+            <h2 class="small-title">Parcours utilisant la fiche matière et détails des EC</h2>
+            <div class="card mb-5">
+                <div class="card-body">
+                    <ul class="list-unstyled">
+                        {% for ec in ficheMatiere.elementConstitutifs %}
+                            {% if ec.parcours != null %}
+                            <li>
+                                {% if ec.parcours.isParcoursDefaut == true %}
+                                    <a href="{{ path('app_formation_show', {slug:ec.parcours.formation.slug}) }}" target="_blank" class="text-primary">
+                                        <i class="fas fa-eye"></i>
+                                        <strong>Formation sans parcours</strong> - {{ ec.ue.display(ec.parcours) }}
+                                        | {{ ec.code }} - ({{ ec.parcours.formation.displayLong }}) - {{ ec.parcours.formation.composantePorteuse.libelle }}
+                                    </a>
+                                    {% else %}
+                                <a href="{{ path('app_parcours_show', {id:ec.parcours.id}) }}" target="_blank" class="text-primary">
+                                    <i class="fas fa-eye"></i>
+                                <strong>{{ ec.parcours.libelle }} </strong> - {{ ec.ue.display(ec.parcours) }}
+                                | {{ ec.code }} - ({{ ec.parcours.formation.displayLong }}) - {{ ec.parcours.formation.composantePorteuse.libelle }}
+                                </a>
+                                        {% endif %}
+                            </li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </section>
+    {% endif %}
+
 
     <section class="scroll-section" id="infos">
         <h2 class="small-title">Infos Pratiques</h2>
