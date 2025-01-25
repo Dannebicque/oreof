@@ -30,8 +30,7 @@ class PvConseilController extends BaseController
         TranslatorInterface $translator,
         Request $request,
         Parcours $parcours,
-    ): Response
-    {
+    ): Response {
         if ($request->isMethod('POST')) {
             $dir = $kernel->getProjectDir().'/public/uploads/conseils/';
             $dpeParcours = GetDpeParcours::getFromParcours($parcours);
@@ -98,8 +97,7 @@ class PvConseilController extends BaseController
         TranslatorInterface $translator,
         Request $request,
         ChangeRf $changeRf,
-    ): Response
-    {
+    ): Response {
         if ($request->isMethod('POST')) {
             $dir = $kernel->getProjectDir().'/public/uploads/conseils/';
             if ($changeRf !== null) {
@@ -139,8 +137,9 @@ class PvConseilController extends BaseController
                 //todo:  mail à la CFVU, avec un event ? ou workflow sur laisserPasser
                 $myMailer->initEmail();
                 $myMailer->setTemplate(
-                    'mails/workflow/formation/conseil_pv_depose.html.twig',
-                    ['changeRf' => $changeRf]
+                    'mails/workflow/changerf/deposer_pv.html.twig',
+                    ['demande' => $changeRf,
+                        'formation' => $changeRf->getFormation(),]
                 );
                 $myMailer->sendMessage(
                     [$this->getEtablissement()?->getEmailCentral()],

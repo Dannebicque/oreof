@@ -50,7 +50,7 @@ class ChangeRf
     /**
      * @var Collection<int, HistoriqueFormation>
      */
-    #[ORM\OneToMany(mappedBy: 'changeRf', targetEntity: HistoriqueFormation::class)]
+    #[ORM\OneToMany(mappedBy: 'changeRf', targetEntity: HistoriqueFormation::class, cascade: ['persist', 'remove'])]
     private Collection $historiqueFormations;
 
     public function __construct()

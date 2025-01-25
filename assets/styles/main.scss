@@ -415,3 +415,7 @@ thead th {
 .diff-original {
   font-style: italic;
 }
+
+.nav-tabs .nav-link.disabled, .nav-tabs .nav-link:disabled {
+  background-color: var(--muted);
+}
