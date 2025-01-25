@@ -52,26 +52,6 @@
             </div>
         </section>
 
-{#        <section class="scroll-section" id="descriptif">#}
-{#            <h3 class="small-title">Descriptif</h3>#}
-{#            <div class="card mb-5">#}
-{#                <div class="card-body">#}
-{#                    {% if (print is not defined or print == false) %}#}
-{#                    {{ component('commentaire', {#}
-{#                        commentaires: formation.commentaires,#}
-{#                        id: formation.id,#}
-{#                        type: 'formation',#}
-{#                        zone: 'descriptif',#}
-{#                    }) }}#}
-{#                    {% endif %}#}
-{#                    {{ render(controller('App\\Controller\\StructureShowController::licence', #}{#}#}
-{#                        parcours: formation.parcours[0].id,#}
-{#                        hasLastVersion: hasLastVersion ?? false,#}
-{#                    })) }}#}
-{#                </div>#}
-{#            </div>#}
-{#        </section>#}
-
         <section class="scroll-section" id="competences">
             <h3 class="small-title">Compétences acquises</h3>
             <div class="card mb-5">
