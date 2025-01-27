@@ -48,9 +48,13 @@ class WorkflowExtension extends AbstractExtension
         ];
     }
 
-    public function isAccessible(DpeParcours $dpeParcours, string $state = 'cfvu'): bool
+    public function isAccessible(DpeParcours|Formation $dpeParcours, string $state = 'cfvu'): bool
     {
+        if ($dpeParcours instanceof Formation) {
+            return Access::isAccessibleMention($dpeParcours, $state);
+        }
         return Access::isAccessible($dpeParcours, $state);
+
     }
 
     public function hasHistorique(

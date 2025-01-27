@@ -13,6 +13,7 @@ use App\Entity\UserCentre;
 use App\Enums\PermissionEnum;
 use App\Enums\PorteeEnum;
 use App\Enums\RoleNiveauEnum;
+use App\Enums\TypeModificationDpeEnum;
 use App\Repository\RoleRepository;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -156,52 +157,12 @@ class GlobalVoter extends Voter
 
     private function canAccessFormation(Formation $subject, mixed $centre): bool
     {
-        //Vérifier les parcours en partant de Formation et de DpeParcours. Si pas de parcours autoriser
+        $canEdit =
+            $subject->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_TEXTE ||
+            $subject->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION;
 
-        if ($subject->getParcours()->count() === 0)
-        {
-            //todo: en attendant
-            return true;
-        }
+        $centre = $centre->getFormation() === $subject || $centre->getComposante() === $subject->getComposantePorteuse() || $this->security->isGranted('ROLE_SES');
 
-        if ($subject->isHasParcours() === false && $subject->getParcours()->count() === 1) {
-            $dpeParcours  = GetDpeParcours::getFromParcours($subject->getParcours()->first());
-            if ($dpeParcours === null) {
-                return false;
-            }
-            return $this->canAccessDpeParcours($dpeParcours, $centre);
-        }
-
-
-
-
-//        $canEdit = false;
-//        if (
-//            $subject->getResponsableMention() === $this->user ||
-//            $subject->getCoResponsable() === $this->user
-//            //$this->formation === $centre->getUser
-//
-//        ) {
-//            //todo: ou vérifier que le droit permet d'éditer ?
-            $canEdit = $this->dpeWorkflow->can($subject, 'autoriser') || $this->dpeWorkflow->can($subject, 'valider_rf');
-//        }
-        if ($this->security->isGranted('ROLE_SES')) {
-            $canEdit =
-                $this->dpeWorkflow->can($subject, 'autoriser') ||
-                $this->dpeWorkflow->can($subject, 'valider_rf') ||
-                $this->dpeWorkflow->can($subject, 'valider_dpe_composante') ||
-                $this->dpeWorkflow->can($subject, 'valider_conseil') ||
-                $this->dpeWorkflow->can($subject, 'valider_central');
-        } elseif ($subject->getComposantePorteuse() === $centre->getComposante()) { //todo: le gestionnaire n'est pas le DPE, gérer son cas spécifiquement ?
-            //&& $centre->getComposante()->getResponsableDpe() === $this->user
-            $canEdit =
-                $this->dpeWorkflow->can($subject, 'autoriser') ||
-                $this->dpeWorkflow->can($subject, 'valider_rf') ||
-                $this->dpeWorkflow->can($subject, 'valider_dpe_composante') ||
-                $this->dpeWorkflow->can($subject, 'valider_conseil');
-        }
-
-        $centre = $centre->getFormation() === $subject || $centre->getComposante() === $subject->getComposantePorteuse();
         return $canEdit && $centre;
     }
 

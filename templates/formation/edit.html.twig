@@ -20,7 +20,7 @@
         <ul class="nav nav-tabs nav-tabs-title nav-tabs-line-title responsive-tabs" id="lineTitleTabsContainer"
             role="tablist">
             <li class="nav-item" role="presentation">
-                <a class="nav-link {% if selectedStep == 1 %}active{% endif %}"
+                <a class="nav-link {% if selectedStep == 1 %}active{% endif %} {% if not isAccessible(formation, 'ss_cfvu') %}disabled{% endif %}"
                    data-bs-toggle="tab" href="#" role="tab" {% if step == 1 %}aria-selected="true"{% endif %}
                         {{ stimulus_action('formation_wizard', 'changeStep', 'click', {step: 1}) }}
                 >
@@ -28,7 +28,7 @@
                 </a>
             </li>
             <li class="nav-item" role="presentation">
-                <a class="nav-link {% if selectedStep == 3 %}active{% endif %}" data-bs-toggle="tab" href="#"
+                <a class="nav-link {% if selectedStep == 3 %}active{% endif %} {% if not isAccessible(formation, 'cfvu') %}disabled{% endif %}" data-bs-toggle="tab" href="#"
                    role="tab" aria-selected="false"
                         {{ stimulus_action('formation_wizard', 'changeStep', 'click', {step: 3}) }}
                 >Structure et organisation de la

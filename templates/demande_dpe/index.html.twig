@@ -1,9 +1,9 @@
 {% extends 'base.html.twig' %}
 
-{% block header %}Demandes Ouverture DPE{% endblock %}
+{% block header %}DPE ouverts{% endblock %}
 
 {% block content %}
-    <h2 class="small-title mt-3">Demandes en attente</h2>
+    <h2 class="small-title mt-3">DPE ouverts</h2>
     <div class="row">
         <div class="col-12">
             <div class="card">
@@ -16,7 +16,6 @@
                             <th>Date demande</th>
                             <th>Niveau demande</th>
                             <th>Etat</th>
-                            <th>Actions</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -34,33 +33,10 @@
                                 <td>
                                     {{ demande.niveauModification|badgeEnum }} // {{ demande.niveauDemande }}</td>
                                 <td>{{ demande.etatDemande }}</td>
-                                <td>
-                                    <a type="button" class="btn btn-sm btn-outline-success"
-                                       href="">
-                                        Accepter
-                                    </a>
-                                    <button class="btn btn-sm btn-outline-danger"
-                                            type="button"
-                                            {{ stimulus_controller('modal', {
-                                                size: 'lg',
-                                                modalTitle: 'Refus de la demande de réouverture',
-                                                modalUrl: path('app_validation_demande_reouverture', {
-                                                    demande:demande.id,
-                                                }) }) }}
-                                            data-action="click->modal#openModal"
-                                            data-controller="tooltip"
-                                            data-tooltip-placement-value="bottom"
-
-                                            aria-label="Refus de la demande de réouverture"
-                                            data-bs-original-title="Refus de la demande de réouverture"
-                                    >
-                                        Refuser
-                                    </button>
-                                </td>
                             </tr>
                         {% else %}
                             <tr>
-                                <td colspan="8">Aucune demande en attente</td>
+                                <td colspan="7">Aucune demande en attente</td>
                             </tr>
                         {% endfor %}
                     </table>

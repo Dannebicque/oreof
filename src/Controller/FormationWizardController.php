@@ -14,6 +14,7 @@ use App\Entity\Parcours;
 use App\Form\FormationStep1Type;
 use App\Form\FormationStep2Type;
 use App\Form\Type\TextareaAutoSaveType;
+use App\Utils\Access;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -30,6 +31,9 @@ class FormationWizardController extends AbstractController
     #[Route('/{formation}/1', name: 'app_formation_wizard_step_1', methods: ['GET'])]
     public function step1(Formation $formation): Response
     {
+        if (!Access::isAccessibleMention($formation, 'ss_cfvu')) {
+            return $this->render('parcours_wizard/_access_denied.html.twig');
+        }
         $form = $this->createForm(FormationStep1Type::class, $formation);
 
         return $this->render('formation_wizard/_step1.html.twig', [
@@ -41,6 +45,10 @@ class FormationWizardController extends AbstractController
     #[Route('/{formation}/2', name: 'app_formation_wizard_step_2', methods: ['GET'])]
     public function step2(Formation $formation): Response
     {
+        if (!Access::isAccessibleMention($formation, 'ss_cfvu')) {
+            return $this->render('parcours_wizard/_access_denied.html.twig');
+        }
+
         $form = $this->createForm(FormationStep2Type::class, $formation);
 
 
@@ -58,6 +66,10 @@ class FormationWizardController extends AbstractController
     public function step3(
         Formation $formation
     ): Response {
+
+        if (!Access::isAccessibleMention($formation, 'cfvu')) {
+            return $this->render('parcours_wizard/_access_denied.html.twig');
+        }
 
         $form = $this->createFormBuilder($formation)
             ->add('objectifsFormation', TextareaAutoSaveType::class, [

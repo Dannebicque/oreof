@@ -21,6 +21,7 @@ use App\Repository\FicheMatiereRepository;
 use App\Repository\FormationRepository;
 use App\Repository\ParcoursRepository;
 use App\Service\LheoXML;
+use App\Service\VersioningFormation;
 use App\Service\VersioningParcours;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
@@ -34,27 +35,30 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 class ProcessValidationController extends BaseController
 {
     private string $dir;
+
     public function __construct(
-        private readonly EventDispatcherInterface $eventDispatcher,
-        private readonly EntityManagerInterface   $entityManager,
-        private readonly ValidationProcess        $validationProcess,
-        private readonly ValidationProcessFicheMatiere        $validationProcessFicheMatiere,
-        private readonly FormationProcess         $formationProcess,
-        private readonly ParcoursProcess          $parcoursProcess,
-        private readonly FicheMatiereProcess          $ficheMatiereProcess,
-        KernelInterface $kernel
-    ) {
-        $this->dir = $kernel->getProjectDir().'/public/uploads/conseils/';
+        private readonly EventDispatcherInterface      $eventDispatcher,
+        private readonly EntityManagerInterface        $entityManager,
+        private readonly ValidationProcess             $validationProcess,
+        private readonly ValidationProcessFicheMatiere $validationProcessFicheMatiere,
+        private readonly FormationProcess              $formationProcess,
+        private readonly ParcoursProcess               $parcoursProcess,
+        private readonly FicheMatiereProcess           $ficheMatiereProcess,
+        KernelInterface                                $kernel
+    )
+    {
+        $this->dir = $kernel->getProjectDir() . '/public/uploads/conseils/';
     }
 
     #[Route('/validation/valide/{etape}', name: 'app_validation_valider')]
     public function valide(
-        ParcoursRepository  $parcoursRepository,
+        ParcoursRepository     $parcoursRepository,
         FicheMatiereRepository $ficheMatiereRepository,
-        LheoXML             $lheoXML,
-        string              $etape,
-        Request             $request
-    ): Response {
+        LheoXML                $lheoXML,
+        string                 $etape,
+        Request                $request
+    ): Response
+    {
         $type = $request->query->get('type');
         $transition = $request->query->get('transition');
         $id = $request->query->get('id');
@@ -153,7 +157,8 @@ class ProcessValidationController extends BaseController
         FormationRepository $formationRepository,
         string              $etape,
         Request             $request
-    ): Response {
+    ): Response
+    {
         $type = $request->query->get('type');
         $transition = $request->query->get('transition');
         $id = $request->query->get('id');
@@ -218,11 +223,12 @@ class ProcessValidationController extends BaseController
     #[Route('/validation/reserve/{etape}', name: 'app_validation_reserver')]
     public function reserve(
         FicheMatiereRepository $ficheMatiereRepository,
-        ParcoursRepository  $parcoursRepository,
-        FormationRepository $formationRepository,
-        string              $etape,
-        Request             $request
-    ): Response {
+        ParcoursRepository     $parcoursRepository,
+        FormationRepository    $formationRepository,
+        string                 $etape,
+        Request                $request
+    ): Response
+    {
         $type = $request->query->get('type');
         $transition = $request->query->get('transition');
         $id = $request->query->get('id');
@@ -293,13 +299,14 @@ class ProcessValidationController extends BaseController
 
     #[Route('/validation/edit/{type}/{id}', name: 'app_validation_edit')]
     public function edit(
-        DpeParcoursRepository  $dpeParcoursRepository,
-        ParcoursRepository  $parcoursRepository,
-        FormationRepository $formationRepository,
-        Request             $request,
-        string              $type,
-        int                 $id
-    ) {
+        DpeParcoursRepository $dpeParcoursRepository,
+        ParcoursRepository    $parcoursRepository,
+        FormationRepository   $formationRepository,
+        Request               $request,
+        string                $type,
+        int                   $id
+    )
+    {
         if ($request->isMethod('POST')) {
             $data = $request->request->all();
             $place = $data['etat'];
@@ -358,10 +365,11 @@ class ProcessValidationController extends BaseController
     #[Route('/validation/valide-lot/{etape}/{transition}', name: 'app_validation_valider_lot')]
     public function valideLot(
         DpeParcoursRepository $dpeParcoursRepository,
-        string              $etape,
-        string              $transition,
-        Request             $request
-    ): Response {
+        string                $etape,
+        string                $transition,
+        Request               $request
+    ): Response
+    {
         $fileName = null;
         if ($request->isMethod('POST')) {
             $sParcours = $request->request->get('parcours');
@@ -436,10 +444,11 @@ class ProcessValidationController extends BaseController
     #[Route('/validation/refuse-lot/{etape}/{transition}', name: 'app_validation_refuser_lot')]
     public function refuseLot(
         DpeParcoursRepository $dpeParcoursRepository,
-        string              $etape,
-        string              $transition,
-        Request             $request
-    ): Response {
+        string                $etape,
+        string                $transition,
+        Request               $request
+    ): Response
+    {
         if ($request->isMethod('POST')) {
             $sParcours = $request->request->get('parcours');
         } else {
@@ -485,10 +494,11 @@ class ProcessValidationController extends BaseController
     #[Route('/validation/reserve-lot/{etape}/{transition}', name: 'app_validation_reserver_lot')]
     public function reserveLot(
         DpeParcoursRepository $dpeParcoursRepository,
-        string              $etape,
-        string              $transition,
-        Request             $request
-    ): Response {
+        string                $etape,
+        string                $transition,
+        Request               $request
+    ): Response
+    {
         if ($request->isMethod('POST')) {
             $sParcours = $request->request->get('parcours');
         } else {
@@ -535,9 +545,11 @@ class ProcessValidationController extends BaseController
     public function demandeReouverture(
         ParcoursRepository  $parcoursRepository,
         FormationRepository $formationRepository,
-        VersioningParcours $versioningParcours,
+        VersioningParcours  $versioningParcours,
         Request             $request
-    ): Response {
+    ): Response
+    {
+        //todo: utilisé ou ? Si juste parcours nettoyer
         $type = $request->query->get('type');
         $id = $request->query->get('id');
 
@@ -634,9 +646,10 @@ class ProcessValidationController extends BaseController
     #[Route('/demande/reouverture-mention/{formation}', name: 'app_validation_demande_reouverture_mention')]
     public function demandeReouvertureMention(
         VersioningParcours $versioningParcours,
-        Formation $formation,
-        Request             $request
-    ): Response {
+        Formation          $formation,
+        Request            $request
+    ): Response
+    {
         $typeDpe = 'F';
 
         if ($formation === null) {
@@ -647,45 +660,37 @@ class ProcessValidationController extends BaseController
         if ($request->isMethod('POST')) {
             $data = $request->request->all();
             if ($data['demandeReouverture'] === 'MODIFICATION_TEXTE') {
-                $etat =TypeModificationDpeEnum::MODIFICATION_TEXTE;
+                $etat = TypeModificationDpeEnum::MODIFICATION_TEXTE;
+                $texte = 'DPE ouvert pour modification des textes';
             } elseif ($data['demandeReouverture'] === 'MODIFICATION_AVEC_CFVU') {
                 $etat = TypeModificationDpeEnum::MODIFICATION;
+                $texte = 'DPE ouvert pour modification de la structure de la mention';
             }
 
-
-
-            if ($this->isGranted('ROLE_SES')) {
-                //réouverture directe sans sauvegarde ou avec sauvegarde selon le choix
-
-                    $formation->setEtatReconduction($etat);
-                    $this->entityManager->flush();
-
-
-                return JsonReponse::success('DPE ouvert');
-            }
-
-            if ($etat === TypeModificationDpeEnum::MODIFICATION) {
-                $demande = new DpeDemande();
-                $demande->setFormation($formation);
-                $demande->setParcours(null);
-                $demande->setNiveauDemande($typeDpe);
-                $demande->setArgumentaireDemande($data['argumentaire_demande_reouverture']);
-                $demande->setEtatDemande('attente');
-                $demande->setNiveauModification($etat);
-                //$demande->setUser($this->getUser());
-                $this->entityManager->persist($demande);
-                $this->entityManager->flush();
-
-                //mail au SES
-                $dpeDemandeEvent = new DpeDemandeEvent($demande, $this->getUser());
-                $this->eventDispatcher->dispatch($dpeDemandeEvent, DpeDemandeEvent::DPE_DEMANDE_CREATED);
-
-                return JsonReponse::success('Demande de réouverture enregistrée');
-            }
             $formation->setEtatReconduction($etat);
             $this->entityManager->flush();
 
-            return JsonReponse::success('DPE ouvert pour modification des textes');
+            //on applique directement l'ouverture, mais on historise la demande
+
+            $demande = new DpeDemande();
+            $demande->setFormation($formation);
+            $demande->setParcours(null);
+            $demande->setNiveauDemande($typeDpe);
+            $demande->setArgumentaireDemande($data['argumentaire_demande_reouverture']);
+            $demande->setEtatDemande('attente');
+            $demande->setNiveauModification($etat);
+            //$demande->setUser($this->getUser());
+            $this->entityManager->persist($demande);
+            $this->entityManager->flush();
+
+            //mail au SES
+//            $dpeDemandeEvent = new DpeDemandeEvent($demande, $this->getUser());
+//            $this->eventDispatcher->dispatch($dpeDemandeEvent, DpeDemandeEvent::DPE_DEMANDE_CREATED);
+
+            $formation->setEtatReconduction($etat);
+            $this->entityManager->flush();
+
+            return JsonReponse::success($texte);
         }
 
         if ($this->isGranted('ROLE_SES')) {
@@ -702,11 +707,12 @@ class ProcessValidationController extends BaseController
     #[Route('/demande/reouverture/cloture', name: 'app_validation_demande_reouverture_cloture')]
     //autorisation de la cloture si pas de différence entre les versions
     public function demandeReouvertureCloture(
-        DpeParcoursRepository  $dpeParcoursRepository,
-        ParcoursRepository  $parcoursRepository,
-        VersioningParcours $versioningParcours,
-        Request             $request
-    ): Response {
+        DpeParcoursRepository $dpeParcoursRepository,
+        ParcoursRepository    $parcoursRepository,
+        VersioningParcours    $versioningParcours,
+        Request               $request
+    ): Response
+    {
         $type = $request->query->get('type');
         $id = $request->query->get('id');
 
@@ -717,7 +723,7 @@ class ProcessValidationController extends BaseController
                 $parcours = $parcoursRepository->find($id);
                 $dpeParcours = $dpeParcoursRepository->findLastDpeForParcours($parcours);
 
-                if ($parcours === null ||  $dpeParcours === null) {
+                if ($parcours === null || $dpeParcours === null) {
                     return JsonReponse::error('Parcours non trouvé');
                 }
 
@@ -786,7 +792,7 @@ class ProcessValidationController extends BaseController
                 'type' => $type,
                 'id' => $id,
                 'hasDifferences' => $hasDifferences,
-                'type_modif' =>$dpeParcours->getEtatReconduction()->value,
+                'type_modif' => $dpeParcours->getEtatReconduction()->value,
                 'stringDifferencesParcours' => $textDifferencesParcours,
                 'hasLastVersion' => $version,
             ]);
@@ -795,6 +801,80 @@ class ProcessValidationController extends BaseController
         return $this->render('process_validation/_demande_reouverture.html.twig', [
             'type' => $type,
             'id' => $id,
+        ]);
+
+    }
+
+    #[Route('/demande/reouverture-mention/cloture/{formation}', name: 'app_validation_demande_reouverture_cloture_mention')]
+    public function demandeReouvertureClotureMention(
+        Formation $formation,
+        VersioningFormation $versioningFormation,
+        Request             $request
+    ): Response
+    {
+
+
+        if ($formation === null) {
+            return JsonReponse::error('Parcours non trouvé');
+        }
+
+        //todo: gérer le cas du parcours par défaut...
+        $textDifferencesParcours = $versioningFormation->getDifferencesBetweenFormationAndLastVersion($formation);
+        $version = $versioningFormation->hasLastVersion($formation);
+
+        //parcourir toutes les clés de $textDifferencesParcours pour vérifier si il y a des différences (valeur non vide)
+        $hasDifferences = false;
+        foreach ($textDifferencesParcours as $key => $value) {
+            if ($value !== '') {
+                $hasDifferences = true;
+                break;
+            }
+        }
+
+        if ($request->isMethod('POST')) {
+            $data = $request->request->all();
+
+            if ($this->isGranted('ROLE_SES')) {
+                //réouverture directe sans sauvegarde ou avec sauvegarde selon le choix
+                if ($formation->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_TEXTE) {
+                    //todo: tester si pas de diff, et si oui revenir au contenu de départ
+                    if ($hasDifferences === true) {
+                        //rollback ds modifs depuis la dernière version
+                        $versioningFormation->rollbackToLastVersion($formation);
+                    }
+
+                    $histoEvent = new HistoriqueFormationEvent($formation, $this->getUser(), 'cloture_ses_ss_cfvu', 'valide', $request);
+                    $this->eventDispatcher->dispatch($histoEvent, HistoriqueParcoursEvent::ADD_HISTORIQUE_PARCOURS);
+
+                    $this->entityManager->flush();
+                } elseif ($formation->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION) {
+                    $process = $this->validationProcess->getEtape('ses');
+                    $this->parcoursProcess->etatParcours($dpe, $process);
+                    $dpe->setEtatReconduction(TypeModificationDpeEnum::OUVERT);
+                    $this->parcoursProcess->valideParcours($dpe, $this->getUser(), $process, $request);
+
+                    //                    $parcours->getDpeParcours()?->first()->setEtatValidation(['central' => 1]); //un état de processus différent pour connaitre le branchement ensuite
+                    //                    $formation->getDpe()?->getDpeParcours()->first()->setEtatValidation(['soumis_central' => 1]);
+                    //processus de passage en cfvu
+
+                }
+
+                return JsonReponse::success('DPE cloturé');
+            }
+        }
+        
+        if ($this->isGranted('ROLE_SES')) {
+            return $this->render('process_validation/_demande_reouverture_cloture_ses.html.twig', [
+                'formation' => $formation,
+                'hasDifferences' => $hasDifferences,
+                'type_modif' => $formation->getEtatReconduction()->value,
+                'stringDifferencesParcours' => $textDifferencesParcours,
+                'hasLastVersion' => $version,
+            ]);
+        }
+
+        return $this->render('process_validation/_demande_reouverture.html.twig', [
+            'formation' => $formation,
         ]);
 
     }
