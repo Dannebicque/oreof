@@ -782,7 +782,7 @@ class LicenceMccc extends AbstractLicenceMccc
         foreach ($mccc->getTypeEpreuve() as $type) {
             if ($type !== "" && $this->typeEpreuves[$type] !== null) {
                 if ($quitus === true) {
-                    $texte .= 'QUITUS ' . $this->typeEpreuves[$type]->getSigle();
+                    $texte .= 'QUITUS ' . $this->typeEpreuves[$type]->getSigle().'; ';
                 } else {
                     $duree = '';
                     if ($this->typeEpreuves[$type]->isHasDuree() === true) {
