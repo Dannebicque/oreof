@@ -448,8 +448,6 @@ class ParcoursCopyData {
                             $this->entityManagerCopy->persist($mcccCopy);
                         }
                     }
-                    //todo: reprendre le type MCCC de l'EC ?
-                    $ficheMatiereCopy->setTypeMccc($structEc->elementConstitutif->getTypeMccc());
                 }
            }
         }
@@ -478,7 +476,7 @@ class ParcoursCopyData {
             $typeMcccAreEqual = $structEc->typeMccc === $ficheMatiereCopy->getTypeMccc();
         }
         if(is_array($mcccResult)){
-            $mcccAreEqual = $this->compareTwoMcccArray($structEc->mcccs, $mcccResult);               
+            $mcccAreEqual = $this->compareTwoMcccArray($structEc->mcccs, $mcccResult);
             if(($mcccAreEqual === false || $typeMcccAreEqual === false) && !$structEc->elementConstitutif->getFicheMatiere()?->isMcccImpose()){
                 $ecCopyMccc = $this->ecCopyRepo->find($structEc->elementConstitutif->getId());
                 $ecCopyMccc->setMcccSpecifiques(true);
