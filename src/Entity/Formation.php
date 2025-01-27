@@ -231,14 +231,14 @@ class Formation
         $this->changeRves = new ArrayCollection();
     }
 
-    #[ORM\PreFlush]
-    public function updateSlug(): void
-    {
-        $texte = $this->getMention() === null ? $this->getMentionTexte() : $this->getMention()->getLibelle();
-        $texte = ($this->getTypeDiplome() != null ? $this->getTypeDiplome()->getLibelleCourt() : '') . '-' . $texte . '-' . $this->getDpe()?->getAnneeUniversitaire()?->getAnnee();
+    // #[ORM\PreFlush]
+    // public function updateSlug(): void
+    // {
+    //     $texte = $this->getMention() === null ? $this->getMentionTexte() : $this->getMention()->getLibelle();
+    //     $texte = ($this->getTypeDiplome() != null ? $this->getTypeDiplome()->getLibelleCourt() : '') . '-' . $texte . '-' . $this->getDpe()?->getAnneeUniversitaire()?->getAnnee();
 
-        $this->setSlug($texte);
-    }
+    //     $this->setSlug($texte);
+    // }
 
 
     public function getEtatStep(int $step): bool
