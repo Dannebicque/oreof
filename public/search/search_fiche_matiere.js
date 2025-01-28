@@ -95,6 +95,13 @@ function updateDomWithResult(jsonResult, parcoursViewUrl, ficheMatiereViewUrl, k
     const ficheMatiereTitleDiv = document.createElement('div')
     ficheMatiereTitleDiv.classList.add('col-12')
 
+    const libelleFicheDiv = document.createElement('div');
+    libelleFicheDiv.classList.add('col-12');
+    let libelleFiche = document.createElement('span');
+    libelleFiche.classList.add('text-dark', 'font-weight-bold', 'mb-1');
+    libelleFiche.textContent = 'Fiche matière';
+    libelleFicheDiv.appendChild(libelleFiche);
+
     const ficheMatiereLibelle = document.createElement('a')
     ficheMatiereLibelle.textContent = fiche.fiche_matiere_libelle
     ficheMatiereLibelle.target = '_blank'
@@ -104,6 +111,7 @@ function updateDomWithResult(jsonResult, parcoursViewUrl, ficheMatiereViewUrl, k
     const ficheMatierePillDiv = document.createElement('div')
     ficheMatierePillDiv.classList.add('col-12', 'mt-3')
 
+    ficheMatiereTitle.appendChild(libelleFicheDiv);
     ficheMatiereTitle.appendChild(ficheMatiereTitleDiv)
     ficheMatiereTitle.appendChild(ficheMatierePillDiv)
 
