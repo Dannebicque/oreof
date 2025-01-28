@@ -80,13 +80,13 @@ class GetElementConstitutif
         if($this->elementConstitutif->isMcccSpecifiques() && !$isMcccImpose){
             return $this->elementConstitutif->getMcccs();
         }
-        
+
         // EC qui a un parent avec MCCC identiques
         if($this->elementConstitutif->getEcParent()?->isMcccEnfantsIdentique() && !$isMcccImpose){
             return $this->elementConstitutif->getEcParent()->getMcccs();
         }
-        
-        
+
+
         if($this->elementConstitutif->getFicheMatiere()){
             return $this->elementConstitutif->getFicheMatiere()?->getMcccs();
         } else {
@@ -100,7 +100,7 @@ class GetElementConstitutif
         if($this->elementConstitutif->isMcccSpecifiques() && !$isMcccImpose){
             return $this->elementConstitutif->getTypeMccc();
         }
-        
+
         if($this->elementConstitutif->getEcParent()?->isMcccEnfantsIdentique() && !$isMcccImpose){
             return $this->elementConstitutif->getEcParent()->getTypeMccc();
         }
@@ -131,7 +131,7 @@ class GetElementConstitutif
 
     public function getFicheMatiereEcts() : float {
         $isEctsImpose = $this->elementConstitutif->getFicheMatiere()?->isEctsImpose();
-        
+
         if($this->elementConstitutif->isEctsSpecifiques() && !$isEctsImpose){
             return $this->elementConstitutif->getEcts();
         }
@@ -140,12 +140,11 @@ class GetElementConstitutif
             return $this->elementConstitutif->getEcParent()->getEcts();
         }
 
-        if($this->elementConstitutif->getFicheMatiere()){
+        if($this->elementConstitutif->getFicheMatiere() !== null){
             return $this->elementConstitutif->getFicheMatiere()->getEcts() ?? 0.0;
         }
-        else {
-            return $this->elementConstitutif->getEcts();
-        }
+
+        return $this->elementConstitutif->getEcts();
 
     }
 
@@ -179,7 +178,7 @@ class GetElementConstitutif
         }
 
         return $ficheMatiere;
-    }   
+    }
 
     public function isRaccroche():bool
     {
