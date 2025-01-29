@@ -84,6 +84,7 @@ class ValidationController extends BaseController
         //todo:  Affichage des bons boutons selon le process et le status choisi sur la liste en bas et haut de page.
         //todo: filtrer si DPE composante ou pas
         $idComposante = $request->query->get('composante', null);
+        $typeValidation = $request->query->get('typeValidation', null);
         $step = $request->query->get('step', 'formation');
         $composante = null;
         $isSes = $this->isGranted('ROLE_SES');
@@ -110,7 +111,9 @@ class ValidationController extends BaseController
             case 'changeRf':
                 return $this->render('validation/_changeRf.html.twig', [
                     'composantes' => $composanteRepository->findAll(),
-                    'types_validation' => $validationProcessChangeRf->getProcess()
+                    'types_validation' => $validationProcessChangeRf->getProcess(),
+                    'idComposante' => $idComposante,
+                    'typeValidation' => $typeValidation,
                 ]);
         }
     }

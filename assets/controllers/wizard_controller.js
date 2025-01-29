@@ -32,16 +32,18 @@ export default class extends Controller {
   }
 
   changeStep(event) {
-    // ajouter dans l'url de la barre d'adresse le step en cours
-    window.history.pushState({}, '', `${window.location.pathname}?step=${event.params.step}`)
+    const url = new URL(window.location);
+    const params = new URLSearchParams(url.search);
+    params.set('step', event.params.step);
+    window.history.pushState({}, '', `${url.pathname}?${params.toString()}`);
 
     this._loadStep(event.params.step)
   }
 
   async _loadStep(step) {
-    const params = new URLSearchParams(
-      { step },
-    )
+    const url = new URL(window.location);
+    const params = new URLSearchParams(url.search);
+    params.set('step', step);
 
     const response = await fetch(`${this.urlValue}?${params}`)
     this.contentTarget.innerHTML = await response.text()

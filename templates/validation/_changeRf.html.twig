@@ -17,7 +17,10 @@
                             <option value="">Choisir une composante</option>
                             <option value="all">Toutes les composantes de l'établissement</option>
                             {% for composante in composantes %}
-                                <option value="{{ composante.id }}">{{ composante.libelle }}</option>
+                                <option
+                                        value="{{ composante.id }}"
+                                {% if idComposante == composante.id %}selected{% endif %}
+                                >{{ composante.libelle }}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -31,7 +34,10 @@
                             <option value="">Choisir l'état</option>
                             <option value="all">Tous les états</option>
                             {% for value, type in types_validation %}
-                                <option value="{{ value }}">{{ type.label|trans({}, 'process') }}</option>
+                                <option value="{{ value }}"
+                                        {% if typeValidation == value %}selected{% endif %}>
+                                    {{ type.label|trans({}, 'process') }}
+                                </option>
                             {% endfor %}
                         </select>
                     </div>

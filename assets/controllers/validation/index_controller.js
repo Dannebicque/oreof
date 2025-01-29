@@ -9,6 +9,7 @@
 import { Controller } from '@hotwired/stimulus'
 import callOut from '../../js/callOut'
 import JsonResponse from '../../js/JsonResponse'
+import updateUrl from '../../js/updateUrl'
 
 export default class extends Controller {
   static values = {
@@ -28,6 +29,14 @@ export default class extends Controller {
   async _updateListe() {
     const composante = document.getElementById('composante').value
     const typeValidation = document.getElementById('type_validation').value
+
+    updateUrl({
+      composante,
+      typeValidation,
+    })
+
+    // mettre à jour l'URL pour ajouter ces paramètres, retirer si vide
+
     if (composante !== '' && typeValidation !== '') {
       const body = new URLSearchParams({
         composante,

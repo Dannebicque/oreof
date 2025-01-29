@@ -25,6 +25,9 @@
                 Date demande
             </th>
             <th>
+                Date Validation CFVU
+            </th>
+            <th>
                 Etat
             </th>
             <th>
@@ -65,6 +68,9 @@
                 </td>
                 <td>
                     {{ demande.dateDemande|date('d/m/Y H:i') }}
+                </td>
+                <td>
+                    {{ component('historique_date', {changeRf:demande, type:'change_rf', step:'soumis_cfvu'}) }}
                 </td>
                 <td>
                     {{ demande.etatDemande|badgeChangeRf }}
