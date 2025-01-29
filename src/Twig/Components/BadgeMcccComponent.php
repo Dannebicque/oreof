@@ -29,24 +29,24 @@ final class BadgeMcccComponent
     public function mounted(): void
     {
         if ($this->elementConstitutif !== null) {
-            if ($this->elementConstitutif->getFicheMatiere() !== null &&
-                $this->elementConstitutif->getFicheMatiere()->isHorsDiplome() === true &&
-                $this->elementConstitutif->getFicheMatiere()->isMcccImpose() === true) {
-                $this->etatMcccComplet = $this->elementConstitutif->getFicheMatiere()->getEtatMccc() === 'Complet';
-                $this->isSynchroMccc = true;
-            } else {
-                //todo: bug si imposé et synchro activé en même temps ?
-                $this->isSynchroMccc = $this->elementConstitutif->isSynchroMccc() && $this->elementConstitutif->getFicheMatiere()?->getParcours()?->getId() !== $this->parcours?->getId();
-
-                if ($this->isSynchroMccc) {
-                    $getElement = new GetElementConstitutif($this->elementConstitutif, $this->parcours);
-                    $ec = $getElement->getElementConstitutif();
-
-                    $this->etatMcccComplet = $ec->getEtatMccc() === 'Complet';
-                } else {
-                    $this->etatMcccComplet = $this->elementConstitutif->getEtatMccc() === 'Complet';
-                }
-            }
+            //            if ($this->elementConstitutif->getFicheMatiere() !== null &&
+            //                $this->elementConstitutif->getFicheMatiere()->isHorsDiplome() === true &&
+            //                $this->elementConstitutif->getFicheMatiere()->isMcccImpose() === true) {
+            //                $this->etatMcccComplet = $this->elementConstitutif->getFicheMatiere()->getEtatMccc() === 'Complet';
+            //                $this->isSynchroMccc = true;
+            //            } else {
+            //todo: bug si imposé et synchro activé en même temps ?
+            //                $this->isSynchroMccc = $this->elementConstitutif->isSynchroMccc() && $this->elementConstitutif->getFicheMatiere()?->getParcours()?->getId() !== $this->parcours?->getId();
+            //
+            //                if ($this->isSynchroMccc) {
+            $getElement = new GetElementConstitutif($this->elementConstitutif, $this->parcours);
+            $this->etatMcccComplet = $getElement->getEtatMccc()  === 'Complet';
+            //
+//            $this->etatMcccComplet = $ec->getEtatMccc() === 'Complet';
+            //                } else {
+            //                    $this->etatMcccComplet = $this->elementConstitutif->getEtatMccc() === 'Complet';
+            //}
+            //  }
         }
     }
 }

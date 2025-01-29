@@ -440,9 +440,11 @@ class ParcoursCopyData {
                             // MCCC Sur la fiche matière
                             $mcccCopy->setFicheMatiere($ficheMatiereCopy);
                             $this->mcccCopyDataArray[$ficheMatiereCopy->getId()]['mccc'] = $mccc;
-                            // Type MCCC recopié sur la fiche matière
+                            // Type MCCC et etat MCCC recopié sur la fiche matière
                             $ficheMatiereCopy->setTypeMccc($structEc->elementConstitutif->getTypeMccc());
                             $this->mcccCopyDataArray[$ficheMatiereCopy->getId()]['type_mccc'] = $structEc->elementConstitutif->getTypeMccc();
+                            $ficheMatiereCopy->setEtatMccc($structEc->elementConstitutif->getEtatMccc());
+                            $this->mcccCopyDataArray[$ficheMatiereCopy->getId()]['etat_mccc'] = $structEc->elementConstitutif->getEtatMccc();
 
                             $this->entityManagerCopy->persist($ficheMatiereCopy);
                             $this->entityManagerCopy->persist($mcccCopy);

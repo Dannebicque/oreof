@@ -63,8 +63,8 @@ class StructureEc
             $getElement = new GetElementConstitutif($elementConstitutif, $parcours);
             $this->withEcts = $withEcts;
             $this->withBcc = $withBcc;
-            $this->raccroche = $getElement->isRaccroche();
-            $this->elementRaccroche = $getElement->getElementConstitutif();
+//            $this->raccroche = $getElement->isRaccroche();
+//            $this->elementRaccroche = $getElement->getElementConstitutif();
         }
 
         $this->elementConstitutif = $elementConstitutif;

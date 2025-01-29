@@ -17,31 +17,34 @@ use Doctrine\Common\Collections\Collection;
 
 class GetElementConstitutif
 {
+    /* @deprecated */
     private ?bool $isRaccroche = null;
+
     private ElementConstitutif|FicheMatiere|null $ecSource = null;
+
     public function __construct(
         private readonly ElementConstitutif $elementConstitutif,
         private readonly Parcours $parcours) {}
 
     public function getElementConstitutif(): ElementConstitutif|FicheMatiere
     {
-        if ($this->ecSource !== null) {
-            return $this->ecSource;
-        }
-
-        if ($this->isRaccroche() && $this->elementConstitutif->getFicheMatiere() !== null && $this->elementConstitutif->getFicheMatiere()->getParcours() !== null) {
-            foreach ($this->elementConstitutif->getFicheMatiere()->getParcours()->getElementConstitutifs() as $ec) {
-                if ($ec->getFicheMatiere()?->getId() === $this->elementConstitutif->getFicheMatiere()->getId()) {
-                    $this->ecSource = $ec;
-                    return $this->ecSource;
-                }
-            }
-        } elseif ($this->elementConstitutif->getEcParent() !== null) {
-            $this->ecSource = $this->elementConstitutif->getEcParent();
-            return $this->ecSource;
-        }
-        $this->ecSource = $this->elementConstitutif;
-        return $this->ecSource;
+//        if ($this->ecSource !== null) {
+//            return $this->ecSource;
+//        }
+//
+//        if ($this->isRaccroche() && $this->elementConstitutif->getFicheMatiere() !== null && $this->elementConstitutif->getFicheMatiere()->getParcours() !== null) {
+//            foreach ($this->elementConstitutif->getFicheMatiere()->getParcours()->getElementConstitutifs() as $ec) {
+//                if ($ec->getFicheMatiere()?->getId() === $this->elementConstitutif->getFicheMatiere()->getId()) {
+//                    $this->ecSource = $ec;
+//                    return $this->ecSource;
+//                }
+//            }
+//        } elseif ($this->elementConstitutif->getEcParent() !== null) {
+//            $this->ecSource = $this->elementConstitutif->getEcParent();
+//            return $this->ecSource;
+//        }
+        return $this->elementConstitutif;
+//        return $this->ecSource;
     }
 
     public function getMcccs(TypeDiplomeInterface $typeD): array
@@ -180,6 +183,7 @@ class GetElementConstitutif
         return $ficheMatiere;
     }
 
+    /* @deprecated */
     public function isRaccroche():bool
     {
         if ($this->isRaccroche !== null) {
@@ -298,5 +302,22 @@ class GetElementConstitutif
     public function setIsRaccroche(bool $raccroche): void
     {
         $this->isRaccroche = $raccroche;
+    }
+
+    public function getEtatMccc()
+    {
+        if ($this->elementConstitutif->isSynchroMccc()) {
+            return $this->elementConstitutif->getEtatMccc();
+        }
+
+        if ($this->elementConstitutif->getFicheMatiere()?->isMcccImpose()) {
+            return $this->elementConstitutif->getFicheMatiere()?->getEtatMccc();
+        }
+
+        if ($this->elementConstitutif->getEcParent() !== null && $this->elementConstitutif->getEcParent()->isMcccEnfantsIdentique() === true) {
+            return (new GetElementConstitutif($this->elementConstitutif->getEcParent(), $this->parcours))->getEtatMccc();
+        }
+
+        return $this->elementConstitutif->getFicheMatiere()?->getEtatMccc() ?? null;
     }
 }

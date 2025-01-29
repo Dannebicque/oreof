@@ -80,6 +80,7 @@ html[data-dyslexique='false'] {
 $variable-prefix: bs- !default; // Deprecated in v5.2.0 for the shorter `$prefix`
 $prefix: $variable-prefix !default;
 body {
+  --separator: #7c7c7c;
   --avatar-size: 2rem;
   --avatar-size-md: 4rem;
   --avatar-size-xxl: 6rem;
