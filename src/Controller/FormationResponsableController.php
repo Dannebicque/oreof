@@ -92,7 +92,11 @@ class FormationResponsableController extends BaseController
         $this->entityManager->remove($demande);
         $this->entityManager->flush();
 
-        return JsonReponse::success('Le changement de responsable de formation a bien été supprimé.');
+        $this->addFlashBag('success', 'La demande de changement de (co-)responsable de formation a bien été supprimée.');
+
+        return $this->redirectToRoute('app_formation_show', [
+            'slug'=> $demande->getFormation()?->getSlug()
+        ]);
 
     }
 

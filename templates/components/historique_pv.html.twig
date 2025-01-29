@@ -32,10 +32,11 @@
             </a>
         {% endif %}
     {% elseif this.type == 'change_rf' %}
-        {% if this.hasPv == false %}
+        {% if this.hasPv == false and this.hasHistorique == true %}
             <button
                     {{ stimulus_controller('modal', {
                         size: 'lg',
+                        nomEvenement: 'refreshPage',
                         modalTitle: 'deposer.le.pv.title'|trans({}, 'process'),
                         modalUrl: path('app_deposer_pv_conseil_change_rf', {changeRf:this.changeRf.id}) }) }}
                     data-action="click->modal#openModal"
@@ -48,7 +49,7 @@
                 <i class="{{ iconEdit }}"></i>
                 <span> {{ 'deposer.le.pv'|trans({}, 'process') }}</span>
             </button>
-        {% else %}
+        {% elseif this.hasPv == true and this.hasHistorique == true %}
             <a
                     href="{{ asset('uploads/conseils/'~this.fichier) }}"
                     target="_blank"
@@ -60,6 +61,8 @@
                 <i class="{{ iconDownload }}"></i>
                 <span> {{ 'voir.le.pv'|trans({}, 'process') }}</span>
             </a>
+            {% else %}
+            -
         {% endif %}
     {% else %}
         <span class="badge bg-danger">Erreur de type</span>
