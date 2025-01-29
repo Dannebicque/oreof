@@ -1,6 +1,6 @@
 {{ component('alerte', {
     type: 'info',
-    message: ('demande.reouverture.ses.alerte')|trans({}, 'process')|nl2br|raw
+    message: ('demande.reouverture.alerte')|trans({}, 'process')|nl2br|raw
 }) }}
 
 <form action="{{ path('app_validation_demande_reouverture', {parcours:parcours.id}) }}" method="post"

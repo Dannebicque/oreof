@@ -1,6 +1,6 @@
 {{ component('alerte', {
     type: 'info',
-    message: ('demande.reouverture.mention.alerte')|trans({}, 'process')|nl2br|raw
+    message: ('demande.reouverture.alerte')|trans({}, 'process')|nl2br|raw
 }) }}
 
 <form action="{{ path('app_validation_demande_reouverture_mention', {formation:formation.id}) }}" method="post"
@@ -41,6 +41,9 @@
                     data-bs-original-title="{{ ('demande.reouverture.modification.mccc.texte.help')|trans({}, 'process') }}"></i>
         </label>
     </div>
+
+    <twig:alerte type="warning" message="Une ouverture avec CFVU implique que la publication des modifications sur les textes se fera à l'issue de la CFVU." />
+
 
     <div>
         <label for="argumentaire_demande_reouverture"

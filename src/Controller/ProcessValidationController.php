@@ -593,14 +593,8 @@ class ProcessValidationController extends BaseController
             return JsonReponse::success('DPE ouvert ---');
         }
 
-        if ($this->isGranted('ROLE_SES')) {
-            return $this->render('process_validation/_demande_reouverture_ses.html.twig', [
-                'parcours' => $parcours,
-            ]);
-        }
-
         return $this->render('process_validation/_demande_reouverture.html.twig', [
-            'parcours' => $parcours,
+            'parcours' => $parcours
         ]);
     }
 
@@ -653,14 +647,8 @@ class ProcessValidationController extends BaseController
             return JsonReponse::success($texte);
         }
 
-        if ($this->isGranted('ROLE_SES')) {
-            return $this->render('process_validation/_demande_reouverture_formation_ses.html.twig', [
-                'formation' => $formation,
-            ]);
-        }
-
         return $this->render('process_validation/_demande_reouverture_formation.html.twig', [
-            'formation' => $formation,
+            'formation' => $formation
         ]);
     }
 
