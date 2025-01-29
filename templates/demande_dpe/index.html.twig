@@ -24,15 +24,33 @@
                                 <td>{{ demande.formation.displayLong }}</td>
                                 <td>
                                     {% if demande.niveauDemande == 'F' %}
-                                       <span class="badge bg-info">Tous les parcours</span>
+                                        <span class="badge bg-info">Mention</span>
                                     {% else %}
                                         {{ demande.parcours != null ? demande.parcours.libelle : '' }}
                                     {% endif %}
                                 </td>
                                 <td>{{ demande.dateDemande|date('d/m/Y') }}</td>
                                 <td>
-                                    {{ demande.niveauModification|badgeEnum }} // {{ demande.niveauDemande }}</td>
-                                <td>{{ demande.etatDemande }}</td>
+                                    {{ demande.niveauModification|badgeEnum }}</td>
+                                <td>
+                                    {{ demande.etatDemande|badgeEnum }}
+                                </td>
+                                <td>
+                                    {% if demande.niveauDemande == 'F' %}
+                                        <a href="{{ path('app_formation_show', {'slug': demande.formation.slug}) }}"
+                                           target="_blank"
+                                           class="btn btn-sm btn-primary"
+                                           title="Voir la formation">
+                                            <i class="{{ iconShow }}"></i>
+                                        </a>
+                                        {% else %}
+                                        <a href="{{ path('app_parcours_show', {'id': demande.parcours.id}) }}"
+                                           target="_blank"
+                                           class="btn btn-sm btn-primary"
+                                           title="Voir le parcours">
+                                            <i class="{{ iconShow }}"></i>
+                                    {% endif %}
+                                </td>
                             </tr>
                         {% else %}
                             <tr>

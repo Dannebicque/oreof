@@ -9,7 +9,7 @@
 
 namespace App\Enums;
 
-enum EtatDpeEnum: string
+enum EtatDpeEnum: string implements BadgeEnumInterface
 {
     /*
      *     - 'initialisation_dpe'
@@ -112,5 +112,15 @@ enum EtatDpeEnum: string
             self::refuse_rf, self::refuse_ec, self::refuse_dpe_composante, self::refuse_conseil, self::refuse_central, self::refuse_definitif_cfvu => 'danger',
             self::valide_a_publier, self::valide_cfvu, self::publie, self::valide_pour_publication, self::transmis_rf, self::transmis_dpe  => 'success',
         };
+    }
+
+    public function getLibelle(): string
+    {
+        return $this->libelle();
+    }
+
+    public function getBadge(): string
+    {
+        return 'bg-'.$this->badge();
     }
 }
