@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Enums\EtatDpeEnum;
 use App\Enums\TypeModificationDpeEnum;
 use App\Repository\DpeDemandeRepository;
 use Doctrine\DBAL\Types\Types;
@@ -27,8 +28,8 @@ class DpeDemande
     #[ORM\Column(length: 50, enumType: TypeModificationDpeEnum::class)]
     private ?TypeModificationDpeEnum $niveauModification = null;
 
-    #[ORM\Column(length: 50)]
-    private ?string $etatDemande = null;
+    #[ORM\Column(length: 50, enumType: EtatDpeEnum::class)]
+    private ?EtatDpeEnum $etatDemande = null;
 
     #[ORM\Column(length: 1)]
     private ?string $niveauDemande = 'P'; //ou F
@@ -104,12 +105,12 @@ class DpeDemande
         return $this;
     }
 
-    public function getEtatDemande(): ?string
+    public function getEtatDemande(): ?EtatDpeEnum
     {
         return $this->etatDemande;
     }
 
-    public function setEtatDemande(string $etatDemande): static
+    public function setEtatDemande(EtatDpeEnum $etatDemande): static
     {
         $this->etatDemande = $etatDemande;
 

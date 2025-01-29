@@ -42,25 +42,6 @@
         </label>
     </div>
 
-    <div>
-        <label for="argumentaire_demande_reouverture"
-               class="form-label"> {{ ('demande.reouverture.modification.argumentaire.label')|trans({}, 'process') }}
-            <span class="required"></span>
-            <i class="fal fa-question-circle ms-1"
-               data-controller="tooltip"
-               data-tooltip-placement-value="bottom"
-               aria-label="{{ ('demande.reouverture.modification.argumentaire.help')|trans({}, 'process') }}"
-               data-bs-original-title="{{ ('demande.reouverture.modification.argumentaire.help')|trans({}, 'process') }}"></i>
-        </label>
-        <textarea name="argumentaire_demande_reouverture"
-                  class="form-control"
-                  required
-                  id="argumentaire_demande_reouverture"
-                  rows="5"
-        > </textarea>
-    </div>
-
-
     <div class="mt-2">
         <button type="submit" class="btn btn-success"
                 {{ stimulus_action('base','sauvegardeFormModal', 'click') }}

@@ -21,7 +21,7 @@
                         <tbody>
                         {% for demande in demandes %}
                             <tr>
-                                <td>{{ demande.formation.displayLong }}</td>
+                                <td>{{ demande.formation.displayLong(false) }}</td>
                                 <td>
                                     {% if demande.niveauDemande == 'F' %}
                                         <span class="badge bg-info">Mention</span>

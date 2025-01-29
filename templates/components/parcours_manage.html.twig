@@ -291,8 +291,7 @@
                                             nomEvenement: 'redirectEdit',
                                             modalTitle: ('demande.reouverture.title')|trans({}, 'process'),
                                             modalUrl: path('app_validation_demande_reouverture', {
-                                                id:id,
-                                                type:'parcours'
+                                                parcours: id
                                             }) }) }}
                                         {# todo:  gérer une redirection vers la page edit du parcours #}
                                         data-action="click->modal#openModal"
@@ -313,10 +312,8 @@
 
                                                 modalTitle: ('demande.reouverture.annuler.title')|trans({}, 'process'),
                                                 modalUrl: path('app_validation_demande_reouverture_cloture', {
-                                                    id:id,
-                                                    type:'parcours'
+                                                    parcours:id
                                                 }) }) }}
-                                            {# todo:  gérer une redirection vers la page edit du parcours #}
                                             data-action="click->modal#openModal"
                                             data-controller="tooltip"
                                             data-tooltip-placement-value="bottom"

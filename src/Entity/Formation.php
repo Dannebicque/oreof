@@ -460,10 +460,10 @@ class Formation
     }
 
     #[Groups(['formation:read'])]
-    public function getDisplay(): ?string
+    public function getDisplay(bool $avecSigle = true): ?string
     {
         $texte = $this->getMention() === null ? $this->getMentionTexte() : $this->getMention()->getLibelle();
-        if ($this->sigle !== null && trim($this->sigle) !== '') {
+        if ($avecSigle && $this->sigle !== null && trim($this->sigle) !== '') {
             $texte .= ' (' . $this->sigle . ')';
         }
 
@@ -949,10 +949,10 @@ class Formation
         $this->setRemplissage($remplissage);
     }
 
-    public function getDisplayLong(): string
+    public function getDisplayLong(bool $avecSigle = true): string
     {
         $typeD = $this->getTypeDiplome() !== null ? $this->getTypeDiplome()->getLibelle() . ' - ' : '';
-        return $typeD . $this->getDisplay();
+        return $typeD . $this->getDisplay($avecSigle);
     }
 
     /**

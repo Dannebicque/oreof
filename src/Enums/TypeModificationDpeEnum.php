@@ -24,6 +24,7 @@ enum TypeModificationDpeEnum: string implements BadgeEnumInterface
     case OUVERT = 'OUVERT';
     case NON_OUVERTURE = 'NON_OUVERTURE';
     case MODIFICATION = 'MODIFICATION';
+    case MODIFICATION_PARCOURS = 'MODIFICATION_PARCOURS';
     case MODIFICATION_INTITULE = 'MODIFICATION_INTITULE';
     case MODIFICATION_MCCC = 'MODIFICATION_MCCC';
     case MODIFICATION_TEXTE = 'MODIFICATION_TEXTE';
@@ -36,6 +37,7 @@ enum TypeModificationDpeEnum: string implements BadgeEnumInterface
             self::CREATION => 'Création',
             self::NON_OUVERTURE => 'Non ouverture',
             self::MODIFICATION => 'modification(s) MCCC, Maquette ou textes',
+            self::MODIFICATION_PARCOURS => 'modification des parcours (ajout, suppression)',
             self::MODIFICATION_INTITULE => 'modification intitulé parcours',
             self::MODIFICATION_MCCC => 'modification MCCC et Maquette',
             self::MODIFICATION_TEXTE => 'modification des textes',
@@ -51,6 +53,7 @@ enum TypeModificationDpeEnum: string implements BadgeEnumInterface
             self::CREATION => 'bg-info',
             self::NON_OUVERTURE => 'bg-danger',
             self::MODIFICATION => 'bg-warning',
+            self::MODIFICATION_PARCOURS => 'bg-warning',
             self::MODIFICATION_INTITULE => 'bg-warning',
             self::MODIFICATION_MCCC => 'bg-warning',
             self::MODIFICATION_TEXTE => 'bg-warning',
