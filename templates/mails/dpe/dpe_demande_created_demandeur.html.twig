@@ -1,0 +1,22 @@
+{% extends 'mails/base_mail.html.twig' %}
+{% block content %}
+    <p>Bonjour,</p>
+
+    {% if dpeDemande.niveauDemande == 'F'  %}
+        <p>Une nouvelle demande d'ouverture de DPE a été faite pour la formation {{ dpeDemande.formation.displayLong(false) }}.</p>
+
+        <p>Pour consulter la formation, cliquez sur le lien suivant : <a href="{{ url('app_formation_show', {'slug': dpeDemande.formation.slug}) }}">voir la formation</a>.</p>
+    {% else %}
+        <p>Une nouvelle demande d'ouverture de DPE a été faite pour le parcours {{ dpeDemande.parcours.libelle }} ({{ dpeDemande.formation.displayLong(false) }}).</p>
+
+        <p>Pour consulter le parcours, cliquez sur le lien suivant : <a href="{{ url('app_parcours_show', {'id': dpeDemande.parcours.id}) }}">voir le parcours</a>.</p>
+    {% endif %}
+
+    <p>La demande concerne une modification : {{ dpeDemande.niveauModification.libelle }}.
+
+    {% if dpeDemande.argumentaireDemande != null %}
+        <p>L'argumentaire est : {{ dpeDemande.argumentaireDemande }}.</p>
+    {% else %}
+        <p>L'argumentaire est : non précisé.</p>
+    {% endif %}
+{% endblock %}

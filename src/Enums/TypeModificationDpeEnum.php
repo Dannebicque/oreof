@@ -29,6 +29,7 @@ enum TypeModificationDpeEnum: string implements BadgeEnumInterface
     case MODIFICATION_MCCC = 'MODIFICATION_MCCC';
     case MODIFICATION_TEXTE = 'MODIFICATION_TEXTE';
     case MODIFICATION_MCCC_TEXTE = 'MODIFICATION_MCCC_TEXTE';
+    case ANNULATION_REOUVERTURE = 'ANNULATION_REOUVERTURE';
 
     public function getLibelle(): string
     {
@@ -42,6 +43,7 @@ enum TypeModificationDpeEnum: string implements BadgeEnumInterface
             self::MODIFICATION_MCCC => 'modification MCCC et Maquette',
             self::MODIFICATION_TEXTE => 'modification des textes',
             self::MODIFICATION_MCCC_TEXTE => 'modification MCCC, maquettes et des textes',
+            self::ANNULATION_REOUVERTURE => 'Annulation de la réouverture',
             default => 'Non défini',
         };
     }
@@ -58,6 +60,7 @@ enum TypeModificationDpeEnum: string implements BadgeEnumInterface
             self::MODIFICATION_MCCC => 'bg-warning',
             self::MODIFICATION_TEXTE => 'bg-warning',
             self::MODIFICATION_MCCC_TEXTE => 'bg-warning',
+            self::ANNULATION_REOUVERTURE => 'bg-info',
             default => 'bg-danger',
         };
     }

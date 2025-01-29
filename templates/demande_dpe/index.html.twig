@@ -14,15 +14,17 @@
                             <th>Mention</th>
                             <th>Parcours</th>
                             <th>Date demande</th>
+                            <th>Date clôture</th>
                             <th>Niveau demande</th>
                             <th>Etat</th>
+                            <th></th>
                         </tr>
                         </thead>
                         <tbody>
                         {% for demande in demandes %}
                             <tr>
-                                <td>{{ demande.formation.displayLong(false) }}</td>
-                                <td>
+                                <td rowspan="2">{{ demande.formation.displayLong(false) }}</td>
+                                <td rowspan="2">
                                     {% if demande.niveauDemande == 'F' %}
                                         <span class="badge bg-info">Mention</span>
                                     {% else %}
@@ -30,6 +32,7 @@
                                     {% endif %}
                                 </td>
                                 <td>{{ demande.dateDemande|date('d/m/Y') }}</td>
+                                <td>{{ demande.dateCloture != null ?  demande.dateCloture|date('d/m/Y') : '-' }}</td>
                                 <td>
                                     {{ demande.niveauModification|badgeEnum }}</td>
                                 <td>
@@ -50,6 +53,11 @@
                                            title="Voir le parcours">
                                             <i class="{{ iconShow }}"></i>
                                     {% endif %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="5">
+                                    {{ demande.argumentaireDemande }}
                                 </td>
                             </tr>
                         {% else %}

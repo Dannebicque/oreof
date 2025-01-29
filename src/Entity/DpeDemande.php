@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Traits\LifeCycleTrait;
 use App\Enums\EtatDpeEnum;
 use App\Enums\TypeModificationDpeEnum;
 use App\Repository\DpeDemandeRepository;
@@ -9,8 +10,11 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: DpeDemandeRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class DpeDemande
 {
+    use LifeCycleTrait;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -45,6 +49,9 @@ class DpeDemande
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $argumentaireSes = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $dateCloture = null;
 
     //constructeur pour initialiser la date de demande
     public function __construct()
@@ -173,6 +180,18 @@ class DpeDemande
     public function setArgumentaireSes(?string $argumentaireSes): static
     {
         $this->argumentaireSes = $argumentaireSes;
+
+        return $this;
+    }
+
+    public function getDateCloture(): ?\DateTimeInterface
+    {
+        return $this->dateCloture;
+    }
+
+    public function setDateCloture(?\DateTimeInterface $dateCloture): static
+    {
+        $this->dateCloture = $dateCloture;
 
         return $this;
     }
