@@ -581,6 +581,7 @@ class ProcessValidationController extends BaseController
             $demande = new DpeDemande();
             $demande->setFormation($formation);
             $demande->setParcours($parcours);
+            $demande->setAuteur($this->getUser());
             $demande->setNiveauDemande($typeDpe);
             $demande->setArgumentaireDemande(array_key_exists('argumentaire_demande_reouverture', $data) ? $data['argumentaire_demande_reouverture'] : '');
             $demande->setEtatDemande(EtatDpeEnum::en_cours_redaction);
@@ -631,11 +632,11 @@ class ProcessValidationController extends BaseController
             $demande = new DpeDemande();
             $demande->setFormation($formation);
             $demande->setParcours(null);
+            $demande->setAuteur($this->getUser());
             $demande->setNiveauDemande($typeDpe);
             $demande->setArgumentaireDemande(array_key_exists('argumentaire_demande_reouverture', $data) ? $data['argumentaire_demande_reouverture'] : '');
             $demande->setEtatDemande(EtatDpeEnum::en_cours_redaction);
             $demande->setNiveauModification($etat);
-            //$demande->setUser($this->getUser());
             $this->entityManager->persist($demande);
             $this->entityManager->flush();
 

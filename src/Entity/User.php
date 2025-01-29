@@ -120,6 +120,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Commentaire::class)]
     private Collection $commentaires;
 
+    /**
+     * @var Collection<int, DpeDemande>
+     */
+    #[ORM\OneToMany(mappedBy: 'auteur', targetEntity: DpeDemande::class)]
+    private Collection $dpeDemandes;
+
     public function __construct()
     {
         $this->composantes = new ArrayCollection();
@@ -131,6 +137,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->coFormations = new ArrayCollection();
         $this->historiques = new ArrayCollection();
         $this->commentaires = new ArrayCollection();
+        $this->dpeDemandes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -656,6 +663,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($commentaire->getUser() === $this) {
                 $commentaire->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, DpeDemande>
+     */
+    public function getDpeDemandes(): Collection
+    {
+        return $this->dpeDemandes;
+    }
+
+    public function addDpeDemande(DpeDemande $dpeDemande): static
+    {
+        if (!$this->dpeDemandes->contains($dpeDemande)) {
+            $this->dpeDemandes->add($dpeDemande);
+            $dpeDemande->setAuteur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDpeDemande(DpeDemande $dpeDemande): static
+    {
+        if ($this->dpeDemandes->removeElement($dpeDemande)) {
+            // set the owning side to null (unless already changed)
+            if ($dpeDemande->getAuteur() === $this) {
+                $dpeDemande->setAuteur(null);
             }
         }
 
