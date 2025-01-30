@@ -110,6 +110,13 @@ class McccPdfCommand extends Command
                         dateCfvu: $dateCfvu,
                         dateConseil: $dateConseil,
                     );
+                    $pdfSimplifie = $this->licenceMccc->exportPdfLicenceMccc(
+                        anneeUniversitaire: $anneeDpe,
+                        parcours: $parcours,
+                        dateCfvu: $dateCfvu,
+                        dateConseil: $dateConseil,
+                        versionFull: false
+                    );
                 }
                 elseif($typeDiplomeParcours === "BUT"){
                     $pdf = $this->butMccc->exportPdfbutMccc(
@@ -118,18 +125,32 @@ class McccPdfCommand extends Command
                         dateCfvu: $dateCfvu,
                         dateConseil: $dateConseil
                     );
+                    $pdfSimplifie = $this->butMccc->exportPdfbutMccc(
+                        anneeUniversitaire: $anneeDpe,
+                        parcours: $parcours,
+                        dateCfvu: $dateCfvu,
+                        dateConseil: $dateConseil,
+                        versionFull: false
+                    );
                 }
                 
                 // $fileName = "MCCC - " . $anneeDpe->getAnnee() . " - " . $parcours->getFormation()->getSlug() ?? '---';
                 // $fileName = "MCC-Parcours-{$parcours->getId()}-" . Tools::slug($parcours->getLibelle()) . "-" . $anneeDpe->getAnnee() . ".pdf";
                 
                 $fileName = "MCCC-Parcours-{$parcours->getId()}-{$anneeDpe->getAnnee()}.pdf";
+                $fileNameSimplifie = "MCCC-Parcours-{$parcours->getId()}-{$anneeDpe->getAnnee()}-simplifie.pdf";
                 $now = (new DateTime())->format("d-m-Y_H-i-s");
 
                 $this->fs->appendToFile(
                     __DIR__ . "/../../export/" . $now . "-" . $fileName,
                     $pdf
                 );
+
+                $this->fs->appendToFile(
+                    __DIR__ . "/../../export/" . $now . '-' . $fileNameSimplifie,
+                    $pdfSimplifie
+                );
+
 
                 $io->success("Fichier généré avec succès.");
 
