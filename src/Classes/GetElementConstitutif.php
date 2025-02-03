@@ -44,7 +44,7 @@ class GetElementConstitutif
             $this->ecSource = $this->elementConstitutif->getEcParent();
             return $this->ecSource;
         }
-        //return $this->elementConstitutif;
+        $this->ecSource = $this->elementConstitutif;
         return $this->ecSource;
     }
 
