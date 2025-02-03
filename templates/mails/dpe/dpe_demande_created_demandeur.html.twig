@@ -1,6 +1,6 @@
 {% extends 'mails/base_mail.html.twig' %}
 {% block content %}
-    <p>Bonjour,</p>
+    <p>Bonjour {{ dpeDemande.auteur != null ? dpeDemande.auteur.display }},</p>
 
     {% if dpeDemande.niveauDemande == 'F'  %}
         <p>Une nouvelle demande d'ouverture de DPE a été faite pour la formation {{ dpeDemande.formation.displayLong(false) }}.</p>
@@ -18,5 +18,9 @@
         <p>L'argumentaire est : {{ dpeDemande.argumentaireDemande }}.</p>
     {% else %}
         <p>L'argumentaire est : non précisé.</p>
+    {% endif %}
+
+    {% if withDpe == true %}
+        <p>Copie responsable DPE de la composante pour information.</p>
     {% endif %}
 {% endblock %}

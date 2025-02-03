@@ -13,6 +13,7 @@
                         <tr>
                             <th>Mention</th>
                             <th>Parcours</th>
+                            <th>Demande de ?</th>
                             <th>Date demande</th>
                             <th>Date clôture</th>
                             <th>Niveau demande</th>
@@ -30,6 +31,11 @@
                                     {% else %}
                                         {{ demande.parcours != null ? demande.parcours.libelle : '' }}
                                     {% endif %}
+                                </td>
+                                <td rowspan="2">
+                                    {{
+                                        demande.auteur != null ? demande.auteur.display : '-'
+                                    }}
                                 </td>
                                 <td>{{ demande.dateDemande|date('d/m/Y') }}</td>
                                 <td>{{ demande.dateCloture != null ?  demande.dateCloture|date('d/m/Y') : '-' }}</td>
@@ -62,7 +68,7 @@
                             </tr>
                         {% else %}
                             <tr>
-                                <td colspan="7">Aucune demande en attente</td>
+                                <td colspan="8">Aucune demande en attente</td>
                             </tr>
                         {% endfor %}
                     </table>

@@ -98,8 +98,8 @@ class DpeParcoursRepository extends ServiceEntityRepository
             $newParcours->setFormation($p->getFormation());
             $newParcours->setCampagneCollecte($campagneCollecte);
             $newParcours->setVersion($version.'.0');
-            $newParcours->setEtatValidation([]);
-            $newParcours->setEtatReconduction(null);
+            $newParcours->setEtatValidation($p->getEtatValidation());
+            $newParcours->setEtatReconduction(TypeModificationDpeEnum::OUVERT);
             $newParcours->setCreated(new \DateTime());
 
             $this->_em->persist($newParcours);

@@ -43,13 +43,27 @@ class DpeDemandeSubscriber implements EventSubscriberInterface
             ['dpeDemande' => $dpeDemande]
         );
         $this->mailer->sendMessage(['oreof@univ-reims.fr', $user->getEmail()], '[ORéOF] Réouverture de DPE');
+        $dpe = $dpeDemande->getFormation()?->getComposantePorteuse()?->getResponsableDpe();
+        $mails = [
+            $user->getEmail()
+        ];
+        $withDpe = false;
 
+        if ($dpe !== null && $dpe->getId() !== $user->getId()) {
+            $mails[] = $dpe->getEmail();
+            $withDpe = true;
+        }
         $this->mailer->initEmail();
         $this->mailer->setTemplate(
             'mails/dpe/dpe_demande_created_demandeur.html.twig',
-            ['dpeDemande' => $dpeDemande]
+            [
+                'dpeDemande' => $dpeDemande,
+                'withDpe' => $withDpe
+            ]
         );
-        $this->mailer->sendMessage([$user->getEmail()], '[ORéOF] Réouverture de DPE');
+
+
+        $this->mailer->sendMessage($mails, '[ORéOF] Réouverture de DPE');
     }
 
     public function onDpeDemandeUpdated(DpeDemandeEvent $event): void

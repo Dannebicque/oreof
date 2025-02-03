@@ -13,7 +13,8 @@
     <p>Pour consulter le parcours, cliquez sur le lien suivant : <a href="{{ url('app_parcours_show', {'id': dpeDemande.parcours.id}) }}">voir le parcours</a>.</p>
     {% endif %}
 
-    <p>La demande concerne une modification : {{ dpeDemande.niveauModification.libelle }}.
+    <p>La demande concerne une modification : {{ dpeDemande.niveauModification.libelle }}.</p>
+    <p>Demande faite par : {{ dpeDemande.auteur != null ? dpeDemande.auteur.display : '-' }}.</p>
 
     {% if dpeDemande.argumentaireDemande != null %}
     <p>L'argumentaire est : {{ dpeDemande.argumentaireDemande }}.</p>

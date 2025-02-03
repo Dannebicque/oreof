@@ -53,6 +53,9 @@ class DpeDemande
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $dateCloture = null;
 
+    #[ORM\ManyToOne(inversedBy: 'dpeDemandes')]
+    private ?User $auteur = null;
+
     //constructeur pour initialiser la date de demande
     public function __construct()
     {
@@ -192,6 +195,18 @@ class DpeDemande
     public function setDateCloture(?\DateTimeInterface $dateCloture): static
     {
         $this->dateCloture = $dateCloture;
+
+        return $this;
+    }
+
+    public function getAuteur(): ?User
+    {
+        return $this->auteur;
+    }
+
+    public function setAuteur(?User $auteur): static
+    {
+        $this->auteur = $auteur;
 
         return $this;
     }
