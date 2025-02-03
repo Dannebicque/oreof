@@ -193,6 +193,9 @@ class FicheMatiere
     #[ORM\Column(nullable: true)]
     private ?float $ects = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $quitus = false;
+
     #[ORM\ManyToMany(targetEntity: Composante::class, inversedBy: 'ficheMatieres')]
     /** @deprecated('encore utile?') */
     private Collection $composante;
@@ -1144,5 +1147,17 @@ class FicheMatiere
     public function getEtatValidation(): ?array
     {
         return $this->getEtatFiche();
+    }
+
+    public function isQuitus(): ?bool
+    {
+        return $this->quitus ?? false;
+    }
+
+    public function setQuitus(?bool $quitus): self
+    {
+        $this->quitus = $quitus;
+
+        return $this;
     }
 }

@@ -146,19 +146,23 @@ class ElementConstitutif
     private Collection $competences;
 
     #[ORM\ManyToMany(targetEntity: ButApprentissageCritique::class, inversedBy: 'elementConstitutifs')]
-    /** @deprecated */
+    /** @deprecated("A supprimer une fois le transfert des données EC => Fiche") */
     private Collection $apprentissagesCritiques;
 
     #[ORM\Column(nullable: true)]
+    /** @deprecated("A supprimer une fois le transfert des données EC => Fiche") */
     private ?bool $synchroMccc = null;
 
     #[ORM\Column(nullable: true)]
+    /** @deprecated("A supprimer une fois le transfert des données EC => Fiche") */
     private ?bool $synchroHeures = null;
 
     #[ORM\Column(nullable: true)]
+    /** @deprecated("A supprimer une fois le transfert des données EC => Fiche") */
     private ?bool $synchroBcc = null;
 
     #[ORM\Column(nullable: true)]
+    /** @deprecated("A supprimer une fois le transfert des données EC => Fiche") */
     private ?bool $synchroEcts = null;
 
     #[ORM\Column(nullable: true)]
@@ -741,39 +745,13 @@ class ElementConstitutif
         return $this;
     }
 
-    public function getHeures()
-    {
-    }
-
-    /**
-     * @return Collection<int, ButApprentissageCritique>
-     */
-    public function getApprentissagesCritiques(): Collection
-    {
-        return $this->apprentissagesCritiques;
-    }
-
-    public function addApprentissagesCritique(ButApprentissageCritique $apprentissagesCritique): static
-    {
-        if (!$this->apprentissagesCritiques->contains($apprentissagesCritique)) {
-            $this->apprentissagesCritiques->add($apprentissagesCritique);
-        }
-
-        return $this;
-    }
-
-    public function removeApprentissagesCritique(ButApprentissageCritique $apprentissagesCritique): static
-    {
-        $this->apprentissagesCritiques->removeElement($apprentissagesCritique);
-
-        return $this;
-    }
-
+    /** @deprecated("A supprimer une fois le transfert des données EC => Fiche") */
     public function isSynchroMccc(): ?bool
     {
         return $this->synchroMccc ?? false;
     }
 
+    /** @deprecated("A supprimer une fois le transfert des données EC => Fiche") */
     public function setSynchroMccc(?bool $synchroMccc): static
     {
         $this->synchroMccc = $synchroMccc;
@@ -781,11 +759,13 @@ class ElementConstitutif
         return $this;
     }
 
+    /** @deprecated("A supprimer une fois le transfert des données EC => Fiche") */
     public function isSynchroHeures(): ?bool
     {
         return $this->synchroHeures ?? false;
     }
 
+    /** @deprecated("A supprimer une fois le transfert des données EC => Fiche") */
     public function setSynchroHeures(?bool $synchroHeures): static
     {
         $this->synchroHeures = $synchroHeures;
@@ -793,11 +773,13 @@ class ElementConstitutif
         return $this;
     }
 
+    /** @deprecated("A supprimer une fois le transfert des données EC => Fiche") */
     public function isSynchroBcc(): ?bool
     {
         return $this->synchroBcc ?? false;
     }
 
+    /** @deprecated("A supprimer une fois le transfert des données EC => Fiche") */
     public function setSynchroBcc(?bool $synchroBcc): static
     {
         $this->synchroBcc = $synchroBcc;
@@ -805,11 +787,13 @@ class ElementConstitutif
         return $this;
     }
 
+    /** @deprecated("A supprimer une fois le transfert des données EC => Fiche") */
     public function isSynchroEcts(): ?bool
     {
         return $this->synchroEcts ?? false;
     }
 
+    /** @deprecated("A supprimer une fois le transfert des données EC => Fiche") */
     public function setSynchroEcts(?bool $synchroEcts): static
     {
         $this->synchroEcts = $synchroEcts;

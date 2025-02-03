@@ -14,7 +14,7 @@ final class BadgeEctsComponent
 {
     public ?ElementConstitutif $elementConstitutif = null;
     public ?Parcours $parcours = null;
-    public ?bool $isSynchroEcts = false;
+    public ?bool $isEctsSpecifique = false;
     public ?bool $texte = false;
     public ?string $etatEcts = 'danger';
     public null|float|string $ects = null;
@@ -22,7 +22,7 @@ final class BadgeEctsComponent
     #[PostMount]
     public function mounted(): void
     {
-        $this->isSynchroEcts = $this->elementConstitutif->isSynchroEcts() && $this->elementConstitutif->getFicheMatiere()?->getParcours()?->getId() !== $this->parcours->getId();
+        $this->isEctsSpecifique = $this->elementConstitutif->isEctsSpecifiques();
         $getElement = new GetElementConstitutif($this->elementConstitutif, $this->parcours);
         $this->ects = $getElement->getEcts();
 

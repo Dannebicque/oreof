@@ -443,8 +443,12 @@ class ParcoursCopyData {
                             // Type MCCC et etat MCCC recopié sur la fiche matière
                             $ficheMatiereCopy->setTypeMccc($structEc->elementConstitutif->getTypeMccc());
                             $this->mcccCopyDataArray[$ficheMatiereCopy->getId()]['type_mccc'] = $structEc->elementConstitutif->getTypeMccc();
+
+                            //todo; David - Ajouté manquant
                             $ficheMatiereCopy->setEtatMccc($structEc->elementConstitutif->getEtatMccc());
                             $this->mcccCopyDataArray[$ficheMatiereCopy->getId()]['etat_mccc'] = $structEc->elementConstitutif->getEtatMccc();
+                            $ficheMatiereCopy->setQuitus($structEc->elementConstitutif->isQuitus());
+                            $this->mcccCopyDataArray[$ficheMatiereCopy->getId()]['quitus'] = $structEc->elementConstitutif->isQuitus();
 
                             $this->entityManagerCopy->persist($ficheMatiereCopy);
                             $this->entityManagerCopy->persist($mcccCopy);

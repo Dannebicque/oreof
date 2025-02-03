@@ -566,8 +566,12 @@
     <!-- Title and Top Buttons Start -->
     <div class="page-title-container fixed-title-container">
         <div class="row">
+            <div class="col-md-12 col-sm-6 mt-0">
+                {# todo: comparer si année U = année U en cours et si Campagne = Campagne active #}
+                <twig:alerte type="warning" message="Vous êtes sur l'année en cours"></twig:alerte>
+            </div>
             <!-- Title Start -->
-            <div class="col-12 col-sm-6">
+            <div class="col-md-6 col-sm-6">
                 <h1 class="mb-0 pb-0 display-4" id="title">{% block header %}{% endblock %}</h1>
                 <nav class="breadcrumb-container d-inline-block" aria-label="breadcrumb">
                     {% block breadcrumb %}
@@ -578,7 +582,7 @@
             <!-- Title End -->
 
             <!-- Top Buttons Start -->
-            <div class="col-12 col-sm-6 d-flex align-items-start justify-content-end">
+            <div class="col-md-6 col-sm-6 d-flex align-items-start justify-content-end">
                 <!-- Tour Button Start -->
                 {% block bouton_header %}
 

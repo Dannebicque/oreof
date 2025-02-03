@@ -21,29 +21,20 @@ final class BadgeHeuresComponent
     public bool $editable = false;
     public ?Ue $ue = null;
     public ?bool $etatHeuresComplet = false;
-    public ?bool $isSynchroHeures = false;
+    public ?bool $isHeuresSpecifiques = false;
     public ?bool $texte = false;
 
     #[PostMount]
     public function mounted(): void
     {
+        $this->isHeuresSpecifiques = $this->elementConstitutif->isHeuresSpecifiques();
         if ($this->elementConstitutif->isHeuresSpecifiques() === true) {
             $this->etatHeuresComplet = $this->elementConstitutif->etatStructure() === 'Complet';
-            $this->isSynchroHeures = false;
         } elseif ($this->elementConstitutif->getFicheMatiere() !== null &&
             ($this->elementConstitutif->getFicheMatiere()->isVolumesHorairesImpose() === true || $this->elementConstitutif->isHeuresSpecifiques() !== true)) {
             $this->etatHeuresComplet = $this->elementConstitutif->getFicheMatiere()->etatStructure() === 'Complet';
-            $this->isSynchroHeures = true;
         } else {
-            // todo: simplifier ou tout mettre dans le service
-            $this->isSynchroHeures = $this->elementConstitutif->isSynchroHeures() && $this->elementConstitutif->getFicheMatiere()?->getParcours()?->getId() !== $this->parcours->getId();
-            if ($this->isSynchroHeures) {
-                $getElement = new GetElementConstitutif($this->elementConstitutif, $this->parcours);
-                $ec = $getElement->getElementConstitutifHeures();
-                $this->etatHeuresComplet = $ec->etatStructure() === 'Complet';
-            } else {
-                $this->etatHeuresComplet = $this->elementConstitutif->etatStructure() === 'Complet';
-            }
+            $this->etatHeuresComplet = $this->elementConstitutif->etatStructure() === 'Complet';
         }
     }
 }

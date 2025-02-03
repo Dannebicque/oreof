@@ -50,6 +50,7 @@ class CampagneCollecteController extends AbstractController
 
         //todo: prévenir les responsables DPE
 
+        return $this->json(true);
     }
 
     #[Route('/liste', name: 'app_campagne_collecte_liste', methods: ['GET'])]
