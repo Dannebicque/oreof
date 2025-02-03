@@ -28,23 +28,24 @@ class GetElementConstitutif
 
     public function getElementConstitutif(): ElementConstitutif|FicheMatiere
     {
-//        if ($this->ecSource !== null) {
-//            return $this->ecSource;
-//        }
-//
-//        if ($this->isRaccroche() && $this->elementConstitutif->getFicheMatiere() !== null && $this->elementConstitutif->getFicheMatiere()->getParcours() !== null) {
-//            foreach ($this->elementConstitutif->getFicheMatiere()->getParcours()->getElementConstitutifs() as $ec) {
-//                if ($ec->getFicheMatiere()?->getId() === $this->elementConstitutif->getFicheMatiere()->getId()) {
-//                    $this->ecSource = $ec;
-//                    return $this->ecSource;
-//                }
-//            }
-//        } elseif ($this->elementConstitutif->getEcParent() !== null) {
-//            $this->ecSource = $this->elementConstitutif->getEcParent();
-//            return $this->ecSource;
-//        }
-        return $this->elementConstitutif;
-//        return $this->ecSource;
+        //todo: ne plus en dépendre ou résumer à  return $this->elementConstitutif;
+        if ($this->ecSource !== null) {
+            return $this->ecSource;
+        }
+
+        if ($this->isRaccroche() && $this->elementConstitutif->getFicheMatiere() !== null && $this->elementConstitutif->getFicheMatiere()->getParcours() !== null) {
+            foreach ($this->elementConstitutif->getFicheMatiere()->getParcours()->getElementConstitutifs() as $ec) {
+                if ($ec->getFicheMatiere()?->getId() === $this->elementConstitutif->getFicheMatiere()->getId()) {
+                    $this->ecSource = $ec;
+                    return $this->ecSource;
+                }
+            }
+        } elseif ($this->elementConstitutif->getEcParent() !== null) {
+            $this->ecSource = $this->elementConstitutif->getEcParent();
+            return $this->ecSource;
+        }
+        //return $this->elementConstitutif;
+        return $this->ecSource;
     }
 
     public function getMcccs(TypeDiplomeInterface $typeD): array
