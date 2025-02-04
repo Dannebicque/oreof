@@ -218,6 +218,9 @@ class FicheMatiere
     #[ORM\Column(length: 4, nullable: true)]
     private ?string $typeApogee = null;
 
+    #[ORM\OneToOne(targetEntity: self::class, cascade: ['persist', 'remove'])]
+    private ?self $ficheMatiereOrigineCopie = null;
+
     public function __construct()
     {
         $this->mcccs = new ArrayCollection();
@@ -1157,6 +1160,18 @@ class FicheMatiere
     public function setQuitus(?bool $quitus): self
     {
         $this->quitus = $quitus;
+
+        return $this;
+    }
+
+    public function getFicheMatiereOrigineCopie(): ?self
+    {
+        return $this->ficheMatiereOrigineCopie;
+    }
+
+    public function setFicheMatiereOrigineCopie(?self $ficheMatiereOrigineCopie): static
+    {
+        $this->ficheMatiereOrigineCopie = $ficheMatiereOrigineCopie;
 
         return $this;
     }

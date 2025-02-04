@@ -209,6 +209,9 @@ class Formation
     #[ORM\Column(length: 255, enumType: TypeModificationDpeEnum::class, nullable: true)]
     private ?TypeModificationDpeEnum $etatReconduction = null;
 
+    #[ORM\OneToOne(targetEntity: self::class, cascade: ['persist', 'remove'])]
+    private ?self $formationOrigineCopie = null;
+
     public function __construct(?CampagneCollecte $anneeUniversitaire)
     {
         $this->dpe = $anneeUniversitaire;
@@ -1115,6 +1118,18 @@ class Formation
     public function setEtatReconduction(TypeModificationDpeEnum $etatReconduction): static
     {
         $this->etatReconduction = $etatReconduction;
+
+        return $this;
+    }
+
+    public function getFormationOrigineCopie(): ?self
+    {
+        return $this->formationOrigineCopie;
+    }
+
+    public function setFormationOrigineCopie(?self $formationOrigineCopie): static
+    {
+        $this->formationOrigineCopie = $formationOrigineCopie;
 
         return $this;
     }

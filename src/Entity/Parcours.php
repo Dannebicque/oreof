@@ -263,6 +263,9 @@ class Parcours
     #[Groups('parcours_json_versioning')]
     private ?NiveauLangueEnum $niveauFrancais = null;
 
+    #[ORM\OneToOne(targetEntity: self::class, cascade: ['persist', 'remove'])]
+    private ?self $parcoursOrigineCopie = null;
+
     public function __construct(?Formation $formation)
     {
         $this->formation = $formation;
@@ -1498,5 +1501,17 @@ class Parcours
     public function withCfvu() : bool
     {
         return $this->dpeParcours->first()?->withCfvu();
+    }
+
+    public function getParcoursOrigineCopie(): ?self
+    {
+        return $this->parcoursOrigineCopie;
+    }
+
+    public function setParcoursOrigineCopie(?self $parcoursOrigineCopie): static
+    {
+        $this->parcoursOrigineCopie = $parcoursOrigineCopie;
+
+        return $this;
     }
 }
