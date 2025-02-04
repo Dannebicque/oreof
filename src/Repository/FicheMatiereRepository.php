@@ -409,4 +409,12 @@ class FicheMatiereRepository extends ServiceEntityRepository
 
         return $qb;
     }
+
+    public function findAllWithPagination(int $pageNumber, int $pageLength) {
+        return $this->createQueryBuilder('fm')
+            ->setMaxResults($pageLength)
+            ->setFirstResult($pageNumber * $pageLength)
+            ->getQuery()
+            ->getResult();
+    }
 }
