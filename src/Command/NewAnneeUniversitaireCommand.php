@@ -21,6 +21,8 @@ class NewAnneeUniversitaireCommand extends Command
 {
     private EntityManagerInterface $entityManager;
 
+    private string $slugSuffix = "-2025";
+
     public function __construct(
         EntityManagerInterface $entityManager
     )
@@ -61,11 +63,13 @@ class NewAnneeUniversitaireCommand extends Command
                 foreach($formationArray as $formation){
                     // Clone de la formation
                     $formationClone = clone $formation;
-                    $formationClone->setSlug($formation->getSlug() . "-3");
+                    $formationClone->setSlug($formation->getSlug() . $this->slugSuffix);
+                    $formationClone->setFormationOrigineCopie($formation);
                     foreach($formationClone->getParcours() as $parcours){
                         // Clone du Parcours
                         $parcoursClone = clone $parcours;
                         $parcoursClone->setFormation($formationClone);
+                        $parcoursClone->setParcoursOrigineCopie($parcours);
                         // Clone du DpeParcours
                         $dpeParcours = $this->entityManager
                             ->getRepository(DpeParcours::class)

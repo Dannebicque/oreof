@@ -263,8 +263,13 @@ class Parcours
     #[Groups('parcours_json_versioning')]
     private ?NiveauLangueEnum $niveauFrancais = null;
 
-    #[ORM\OneToOne(targetEntity: self::class, cascade: ['persist', 'remove'])]
+    /** @var Parcours $parcoursOrigineCopie Référence le parcours d'origine, depuis la copie */ 
+    #[ORM\OneToOne(inversedBy: 'parcoursCopieAnneeUniversitaire', targetEntity: self::class, cascade: ['persist', 'remove'])]
     private ?self $parcoursOrigineCopie = null;
+
+    /** @var Parcours $parcoursCopieAnneeUniversitaire Référence l'élément copié, depuis le parcours d'origine */
+    #[ORM\OneToOne(mappedBy: 'parcoursOrigineCopie', targetEntity: self::class, cascade: ['persist', 'remove'])]
+    private ?self $parcoursCopieAnneeUniversitaire = null;
 
     public function __construct(?Formation $formation)
     {
@@ -1514,4 +1519,27 @@ class Parcours
 
         return $this;
     }
+
+    public function getParcoursCopieAnneeUniversitaire(): ?self
+    {
+        return $this->parcoursCopieAnneeUniversitaire;
+    }
+
+    public function setParcoursCopieAnneeUniversitaire(?self $parcoursCopieAnneeUniversitaire): static
+    {
+        // unset the owning side of the relation if necessary
+        if ($parcoursCopieAnneeUniversitaire === null && $this->parcoursCopieAnneeUniversitaire !== null) {
+            $this->parcoursCopieAnneeUniversitaire->setParcoursOrigineCopie(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($parcoursCopieAnneeUniversitaire !== null && $parcoursCopieAnneeUniversitaire->getParcoursOrigineCopie() !== $this) {
+            $parcoursCopieAnneeUniversitaire->setParcoursOrigineCopie($this);
+        }
+
+        $this->parcoursCopieAnneeUniversitaire = $parcoursCopieAnneeUniversitaire;
+
+        return $this;
+    }
+
 }

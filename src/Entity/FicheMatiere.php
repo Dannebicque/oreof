@@ -218,8 +218,13 @@ class FicheMatiere
     #[ORM\Column(length: 4, nullable: true)]
     private ?string $typeApogee = null;
 
-    #[ORM\OneToOne(targetEntity: self::class, cascade: ['persist', 'remove'])]
+    /** @var FicheMatiere $ficheMatiereOrigineCopie Référence la fiche matière d'origine, depuis la copie */
+    #[ORM\OneToOne(inversedBy: 'ficheMatiereCopieAnneeUniversitaire', targetEntity: self::class, cascade: ['persist', 'remove'])]
     private ?self $ficheMatiereOrigineCopie = null;
+
+    /** @var FicheMatiere $ficheMatiereCopieAnneeUniversitaire Accès à la fiche matière copiée, depuis celle d'origine */
+    #[ORM\OneToOne(mappedBy: 'ficheMatiereOrigineCopie', targetEntity: self::class, cascade: ['persist', 'remove'])]
+    private ?self $ficheMatiereCopieAnneeUniversitaire = null;
 
     public function __construct()
     {
@@ -1175,4 +1180,27 @@ class FicheMatiere
 
         return $this;
     }
+
+    public function getFicheMatiereCopieAnneeUniversitaire(): ?self
+    {
+        return $this->ficheMatiereCopieAnneeUniversitaire;
+    }
+
+    public function setFicheMatiereCopieAnneeUniversitaire(?self $ficheMatiereCopieAnneeUniversitaire): static
+    {
+        // unset the owning side of the relation if necessary
+        if ($ficheMatiereCopieAnneeUniversitaire === null && $this->ficheMatiereCopieAnneeUniversitaire !== null) {
+            $this->ficheMatiereCopieAnneeUniversitaire->setFicheMatiereOrigineCopie(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($ficheMatiereCopieAnneeUniversitaire !== null && $ficheMatiereCopieAnneeUniversitaire->getFicheMatiereOrigineCopie() !== $this) {
+            $ficheMatiereCopieAnneeUniversitaire->setFicheMatiereOrigineCopie($this);
+        }
+
+        $this->ficheMatiereCopieAnneeUniversitaire = $ficheMatiereCopieAnneeUniversitaire;
+
+        return $this;
+    }
+
 }

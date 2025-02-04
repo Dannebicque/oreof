@@ -209,8 +209,13 @@ class Formation
     #[ORM\Column(length: 255, enumType: TypeModificationDpeEnum::class, nullable: true)]
     private ?TypeModificationDpeEnum $etatReconduction = null;
 
-    #[ORM\OneToOne(targetEntity: self::class, cascade: ['persist', 'remove'])]
+    /** @var Formation $formationOrigineCopie Référence la formation d'origine, depuis la copie */
+    #[ORM\OneToOne(inversedBy: 'formationCopieAnneeUniversitaire', targetEntity: self::class, cascade: ['persist', 'remove'])]
     private ?self $formationOrigineCopie = null;
+
+    /** @var Formation $formationCopieAnneeUniversitaire Référence la formation copiée, depuis celle d'origine */
+    #[ORM\OneToOne(mappedBy: 'formationOrigineCopie', targetEntity: self::class, cascade: ['persist', 'remove'])]
+    private ?self $formationCopieAnneeUniversitaire = null;
 
     public function __construct(?CampagneCollecte $anneeUniversitaire)
     {
@@ -1133,4 +1138,27 @@ class Formation
 
         return $this;
     }
+
+    public function getFormationCopieAnneeUniversitaire(): ?self
+    {
+        return $this->formationCopieAnneeUniversitaire;
+    }
+
+    public function setFormationCopieAnneeUniversitaire(?self $formationCopieAnneeUniversitaire): static
+    {
+        // unset the owning side of the relation if necessary
+        if ($formationCopieAnneeUniversitaire === null && $this->formationCopieAnneeUniversitaire !== null) {
+            $this->formationCopieAnneeUniversitaire->setFormationOrigineCopie(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($formationCopieAnneeUniversitaire !== null && $formationCopieAnneeUniversitaire->getFormationOrigineCopie() !== $this) {
+            $formationCopieAnneeUniversitaire->setFormationOrigineCopie($this);
+        }
+
+        $this->formationCopieAnneeUniversitaire = $formationCopieAnneeUniversitaire;
+
+        return $this;
+    }
+
 }
