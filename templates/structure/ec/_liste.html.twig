@@ -56,19 +56,20 @@
                                             <div class="text-muted text-small d-md-none">Matière</div>
                                             {% if ec.ficheMatiere != null %}
                                                 <p class="mt-0 mb-0">
-                                                {% if isBut %}{{ ec.ficheMatiere.sigle }} | {% endif %}
-                                                {{ ec.display }}
-                                                {% if ec.ficheMatiere.parcours != null and ec.ficheMatiere.parcours.id != parcours.id %}
-                                                    <i class="fal fa-link"
-                                                       data-controller="tooltip"
-                                                       data-tooltip-placement-value="bottom"
-                                                       title="Fiche matière/EC rédigée par le parcours {{ ec.ficheMatiere.parcours.libelle }}"></i></p>
-                                                {% elseif ec.ficheMatiere.parcours == null %}
-                                                    <i class="fal fa-link"
-                                                       data-controller="tooltip"
-                                                       data-tooltip-placement-value="bottom"
-                                                       title="Fiche matière/EC mutualisée globalement"></i></p>
-                                                {% endif %}
+                                                    {% if isBut %}{{ ec.ficheMatiere.sigle }} | {% endif %}
+                                                    {{ ec.display }}
+                                                    {% if ec.ficheMatiere.parcours != null and ec.ficheMatiere.parcours.id != parcours.id %}
+                                                        <i class="fal fa-link"
+                                                           data-controller="tooltip"
+                                                           data-tooltip-placement-value="bottom"
+                                                           title="Fiche matière/EC rédigée par le parcours {{ ec.ficheMatiere.parcours.libelle }}"></i>
+                                                    {% elseif ec.ficheMatiere.parcours == null %}
+                                                        <i class="fal fa-link"
+                                                           data-controller="tooltip"
+                                                           data-tooltip-placement-value="bottom"
+                                                           title="Fiche matière/EC mutualisée globalement"></i>
+                                                    {% endif %}
+                                                </p>
                                             {% else %}
                                                 {{ ec.libelle == null ? 'Définir le libellé' : ec.libelle }} <i
                                                     class="fal fa-question-circle ms-1"
@@ -150,6 +151,7 @@
                                                 {{ component('badge_heures', {
                                                     elementConstitutif: ec,
                                                     parcours: parcours,
+                                                    dpeParcours: dpeParcours,
                                                     ue: ue,
                                                     editable: true,
                                                     deplacer: true,

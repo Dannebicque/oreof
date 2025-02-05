@@ -24,8 +24,9 @@ class GetElementConstitutif
 
     public function __construct(
         private readonly ElementConstitutif $elementConstitutif,
-        private readonly Parcours $parcours) {}
+        private readonly Parcours           $parcours) {}
 
+    /** @deprecated("Ne plus en dépendre, ancienne version") */
     public function getElementConstitutif(): ElementConstitutif|FicheMatiere
     {
         //todo: ne plus en dépendre ou résumer à  return $this->elementConstitutif;
@@ -45,6 +46,7 @@ class GetElementConstitutif
             return $this->ecSource;
         }
         //return $this->elementConstitutif;
+        $this->ecSource = $this->elementConstitutif; //todo utile ?
         return $this->ecSource;
     }
 
@@ -213,11 +215,11 @@ class GetElementConstitutif
             return $this->elementConstitutif->getFicheMatiere()?->getEtatMccc();
         }
 
-        if ($this->isRaccroche() === true && $this->elementConstitutif->isSynchroMccc() === true) {
-            return $this->getElementConstitutif()->getEtatMccc();
+        if ($this->elementConstitutif->isMcccSpecifiques() === true) {
+            return $this->elementConstitutif->getEtatMccc();
         }
 
-        return $this->elementConstitutif->getEtatMccc();
+        return $this->elementConstitutif->getFicheMatiere()?->getEtatMccc();
     }
 
     public function getEtatStructure(): ?string
@@ -230,10 +232,10 @@ class GetElementConstitutif
             return $this->elementConstitutif->getEcParent()->etatStructure();
         }
 
-        if ($this->isRaccroche() === true && $this->elementConstitutif->isSynchroHeures() === true) {
-            return $this->getElementConstitutif()->etatStructure();
+        if ($this->elementConstitutif->isHeuresSpecifiques() === true) {
+            return $this->elementConstitutif->etatStructure();
         }
-        return $this->elementConstitutif->etatStructure();
+        return $this->elementConstitutif->getFicheMatiere()?->etatStructure();
     }
 
     public function getEtatBcc(): ?string
