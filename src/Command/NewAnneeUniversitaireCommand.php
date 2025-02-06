@@ -53,7 +53,7 @@ class NewAnneeUniversitaireCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        ini_set('memory_limit', '8000M');
+        ini_set('memory_limit', '5000M');
 
         $io = new SymfonyStyle($input, $output);
         
