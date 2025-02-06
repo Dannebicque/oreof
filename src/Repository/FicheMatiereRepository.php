@@ -412,6 +412,7 @@ class FicheMatiereRepository extends ServiceEntityRepository
 
     public function findAllWithPagination(int $pageNumber, int $pageLength) {
         return $this->createQueryBuilder('fm')
+            ->orderBy('id', 'ASC')
             ->setMaxResults($pageLength)
             ->setFirstResult($pageNumber * $pageLength)
             ->getQuery()

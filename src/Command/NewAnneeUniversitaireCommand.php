@@ -28,11 +28,11 @@ class NewAnneeUniversitaireCommand extends Command
 
     private int $idCampagneCollecte = 2;
 
-    private int $stepFormationFlush =  20;
+    private int $stepFormationFlush =  35;
 
-    private int $stepFicheMatiereFlush = 300;
+    private int $stepFicheMatiereFlush = 1000;
 
-    private int $stepMutualisations = 500;
+    private int $stepMutualisations = 1000;
 
     public function __construct(
         EntityManagerInterface $entityManager
@@ -53,7 +53,7 @@ class NewAnneeUniversitaireCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        ini_set('memory_limit', '5000M');
+        ini_set('memory_limit', '8000M');
 
         $io = new SymfonyStyle($input, $output);
         
@@ -74,7 +74,7 @@ class NewAnneeUniversitaireCommand extends Command
                 $io->writeln("Copie des formations et parcours...");
                 // ProgressBar Formation
                 $io->progressStart($nbFormation);
-                $countFormationFlush = 0;
+                $processedFormations = 0;
                 // Gestion de la partie haute
                 foreach($formationArray as $formation){
                     // Clone de la formation
@@ -101,15 +101,12 @@ class NewAnneeUniversitaireCommand extends Command
                         $this->entityManager->persist($parcoursClone);
                     }
                     $this->entityManager->persist($formationClone);
-                    ++$countFormationFlush;
-                    if($countFormationFlush >= $this->stepFormationFlush){
-                        $countFormationFlush = 0;
-                        $this->entityManager->flush();
-                        $io->progressAdvance($this->stepFormationFlush);
-                    }
+                    ++$processedFormations;
+                    $io->progressAdvance(1);
                 }
-                $this->entityManager->flush();
                 $io->progressFinish();
+                $io->writeln("Application des changements...");
+                $this->entityManager->flush();
                 // Libération de la mémoire
                 $formationArray = null;
                 // Gestion de la partie basse
@@ -121,7 +118,7 @@ class NewAnneeUniversitaireCommand extends Command
                 $io->writeln("Copie des fiches matières...");
                 $io->progressStart($nbFicheMatiere);
                 // Pagination de la table des fiches matières
-                for($i = 0; $processedFicheMatiere <= $nbFicheMatiere; $i++){
+                for($i = 0; $processedFicheMatiere < $nbFicheMatiere; $i++){
                     $ficheMatiereArray = array_slice(
                         $this->entityManager->getRepository(FicheMatiere::class)
                             ->findBy([], ['id' => 'ASC']),
@@ -143,14 +140,14 @@ class NewAnneeUniversitaireCommand extends Command
                         // Sauvegarde en BD
                         $this->entityManager->persist($ficheMatiereClone);
                         ++$processedFicheMatiere;
+                        $io->progressAdvance(1);
                     }
-                    $this->entityManager->flush();
-                    $io->progressAdvance($this->stepFicheMatiereFlush);
                 }
                 // Libération de la mémoire
                 $ficheMatiereArray = null;
-                $this->entityManager->flush();
                 $io->progressFinish();
+                $io->writeln("Application des changements...");
+                $this->entityManager->flush();
                 /**
                  * FICHES MATIERES MUTUALISABLES
                  */
@@ -158,7 +155,7 @@ class NewAnneeUniversitaireCommand extends Command
                 $processedMutualisations = 0;
                 $io->writeln("Copie des mutualisations des fiches matières...");
                 $io->progressStart($nbMutualisations);
-                for($i = 0; $processedMutualisations <= $nbMutualisations; $i++){
+                for($i = 0; $processedMutualisations < $nbMutualisations; $i++){
                     $mutualisationArray = array_slice(
                         $this->entityManager->getRepository(FicheMatiereMutualisable::class)
                             ->findBy([], ['id' => 'ASC']),
@@ -179,15 +176,13 @@ class NewAnneeUniversitaireCommand extends Command
                         }
                         $this->entityManager->persist($mutualisationFMClone);
                         ++$processedMutualisations;
+                        $io->progressAdvance(1);
                     }
-                    $this->entityManager->flush();
-                    $io->progressAdvance($this->stepMutualisations);
                 }
-                $this->entityManager->flush();
                 $io->progressFinish();
-
-                $io->writeln("Application des derniers changements...");
+                $io->writeln("Application des changements...");
                 $this->entityManager->flush();
+                
                 $io->success("Copie réussie !");
                 return Command::SUCCESS;
             }
