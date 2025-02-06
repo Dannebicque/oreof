@@ -65,6 +65,9 @@ class Semestre
     #[ORM\Column(length: 10, nullable: true)]
     private ?string $codeApogee = null;
 
+    #[ORM\OneToOne(targetEntity: self::class, cascade: ['persist', 'remove'])]
+    private ?self $semestreOrigineCopie = null;
+
     public function __construct()
     {
         $this->ues = new ArrayCollection();
@@ -263,6 +266,18 @@ class Semestre
     public function setCodeApogee(?string $codeApogee): static
     {
         $this->codeApogee = $codeApogee;
+
+        return $this;
+    }
+
+    public function getSemestreOrigineCopie(): ?self
+    {
+        return $this->semestreOrigineCopie;
+    }
+
+    public function setSemestreOrigineCopie(?self $semestreOrigineCopie): static
+    {
+        $this->semestreOrigineCopie = $semestreOrigineCopie;
 
         return $this;
     }

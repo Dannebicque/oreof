@@ -8,6 +8,9 @@ use App\Entity\FicheMatiere;
 use App\Entity\FicheMatiereMutualisable;
 use App\Entity\Formation;
 use App\Entity\Parcours;
+use App\Entity\Semestre;
+use App\Entity\SemestreMutualisable;
+use App\Entity\SemestreParcours;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -211,6 +214,86 @@ class NewAnneeUniversitaireCommand extends Command
                 $io->progressFinish();
                 $io->writeln("Application des changements...");
                 $this->entityManager->flush();
+
+                /**
+                 * 
+                 * SEMESTRES
+                 * 
+                 */
+                $nbSemestres = count($this->entityManager->getRepository(Semestre::class)->findBy([]));
+                $semestreArray = $this->entityManager->getRepository(Semestre::class)->findBy([], ['id' => 'ASC']);
+                $io->writeln('Copie des semestres...');
+                $io->progressStart($nbSemestres);
+                foreach($semestreArray as $semestre) {
+                    $cloneSemestre = clone $semestre;
+                    $cloneSemestre->setSemestreRaccroche(null);
+                    $cloneSemestre->setSemestreOrigineCopie($semestre);
+                    $this->entityManager->persist($cloneSemestre);
+                    $io->progressAdvance(1);
+                }
+                $io->progressFinish();
+                $io->writeln("Application des changements...");
+                $this->entityManager->flush();
+                $semestreArray = null;
+                /**
+                 * 
+                 * SEMESTRES PARCOURS
+                 * 
+                 */
+                $nbSemestreParcours = count($this->entityManager->getRepository(SemestreParcours::class)->findBy([]));
+                $semestreParcoursArray = $this->entityManager->getRepository(SemestreParcours::class)->findBy([], ['id' => 'ASC']);
+                $io->writeln("Copie des données 'semestre_parcours'");
+                $io->progressStart($nbSemestreParcours);
+                foreach($semestreParcoursArray as $sp){
+                    $newSemestreClone = $this->entityManager->getRepository(Semestre::class)
+                        ->findOneBy(['semestreOrigineCopie' => $sp->getSemestre()]);
+                    $newParcoursClone = $parcoursRepository->findOneBy(['parcoursOrigineCopie' => $sp->getParcours()]);
+                    $cloneSemestreParcours = clone $sp;
+                    $cloneSemestreParcours->setParcours($newParcoursClone);
+                    $cloneSemestreParcours->setSemestre($newSemestreClone);
+                    $this->entityManager->persist($cloneSemestreParcours);
+                    $io->progressAdvance();
+                }
+                $io->progressFinish();
+                $io->writeln("Application des changements...");
+                $this->entityManager->flush();
+                $semestreParcoursArray = null;
+                /**
+                 * 
+                 * SEMESTRES MUTUALISABLES et Semestre Raccroché
+                 * 
+                 */
+                $nbSemestreMutualisable = count($this->entityManager->getRepository(SemestreMutualisable::class)->findBy([]));
+                $semestreMutualisableArray = $this->entityManager->getRepository(SemestreMutualisable::class)
+                    ->findBy([], ['id' => 'ASC']);
+                $io->writeln("Copie des semestres mutualisables...");
+                $io->progressStart($nbSemestreMutualisable);
+                foreach($semestreMutualisableArray as $semMutu){
+                    // On clone la mutualisation, avec les nouvelles valeurs
+                    $newCloneSemestreMutualise = clone $semMutu;
+                    $parcoursCloneMutualise = $parcoursRepository->findOneBy(['parcoursOrigineCopie' => $semMutu->getParcours()]);
+                    $semestreCloneMutualise = $this->entityManager->getRepository(Semestre::class)
+                        ->findOneBy(['semestreOrigineCopie' => $semMutu->getSemestre()]);
+                    $newCloneSemestreMutualise->setSemestre($semestreCloneMutualise);
+                    $newCloneSemestreMutualise->setParcours($parcoursCloneMutualise);
+
+                    // On récupère le semestre qui avait la mutualisation en semestre raccroché
+                    $semestreARaccrocherArray = $this->entityManager->getRepository(Semestre::class)->findBy(['semestreRaccroche' => $semMutu]);
+                    foreach($semestreARaccrocherArray as $semestreARaccrocher){
+                        $raccrochageSemestre = $this->entityManager->getRepository(Semestre::class)
+                            ->findOneBy(['semestreOrigineCopie' => $semestreARaccrocher]);
+                            
+                        $raccrochageSemestre->setSemestreRaccroche($newCloneSemestreMutualise);
+                        $this->entityManager->persist($raccrochageSemestre);
+                    }
+                    // Et on enregistre
+                    $this->entityManager->persist($newCloneSemestreMutualise);
+                    $io->progressAdvance();
+                }
+                $io->progressFinish();
+                $io->writeln("Application des changements...");
+                $this->entityManager->flush();
+                $semestreMutualisableArray = null;
 
                 $io->success("Copie réussie !");
                 return Command::SUCCESS;
