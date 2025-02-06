@@ -66,52 +66,80 @@ class NewAnneeUniversitaireCommand extends Command
             $io->writeln("\nCommande pour copier les parcours et formations sur une nouvelle année universitaire.\n");
             $io->writeln("La commande va copier l'année actuelle pour créer l'année 2025-2026\n");
             if($io->ask("Souhaitez-vous poursuivre ? [Y/n]", 'n') === "Y"){
-                $newCampagneCollecte = $this->entityManager
-                    ->getRepository(CampagneCollecte::class)
-                    ->findOneById($this->idCampagneCollecte);
-                $formationArray = $this->entityManager->getRepository(Formation::class)->findBy([]);
+                /**
+                 * 
+                 * FORMATION
+                 * 
+                 */
+                $formationArray = $this->entityManager->getRepository(Formation::class)->findBy([], ['id' => 'ASC']);
                 $nbFormation = count($formationArray);
-                $io->writeln("Copie des formations et parcours...");
-                // ProgressBar Formation
+                $io->writeln("Copie des formations...");
                 $io->progressStart($nbFormation);
-                $processedFormations = 0;
-                // Gestion de la partie haute
                 foreach($formationArray as $formation){
-                    // Clone de la formation
                     $formationClone = clone $formation;
                     $formationClone->setSlug($formation->getSlug() . $this->slugSuffix);
                     $formationClone->setFormationOrigineCopie($formation);
-                    foreach($formationClone->getParcours() as $parcours){
-                        // Clone du Parcours
-                        $parcoursClone = clone $parcours;
-                        $parcoursClone->setFormation($formationClone);
-                        $parcoursClone->setParcoursOrigineCopie($parcours);
-                        // Clone du DpeParcours
-                        $dpeParcours = $this->entityManager
-                            ->getRepository(DpeParcours::class)
-                            ->findOneBy(['parcours' => $parcours, 'formation' => $formation]);
-                        if($dpeParcours){
-                            $dpeParcoursClone = clone $dpeParcours;
-                            $dpeParcoursClone->setParcours($parcoursClone);
-                            $dpeParcoursClone->setFormation($formationClone);
-                            $dpeParcoursClone->setCampagneCollecte($newCampagneCollecte);
-                            $this->entityManager->persist($dpeParcoursClone);
-                        }
-                        // Sauvegarde en BD
-                        $this->entityManager->persist($parcoursClone);
-                    }
                     $this->entityManager->persist($formationClone);
-                    ++$processedFormations;
                     $io->progressAdvance(1);
                 }
                 $io->progressFinish();
                 $io->writeln("Application des changements...");
                 $this->entityManager->flush();
-                // Libération de la mémoire
                 $formationArray = null;
-                // Gestion de la partie basse
                 /**
+                 * 
+                 * PARCOURS
+                 * 
+                 */
+                $io->writeln("Copie des parcours...");
+                $parcoursArray = $parcoursRepository->findBy([], ['id' => 'ASC']);
+                $nbParcours = count($parcoursArray);
+                $io->progressStart($nbParcours);
+                foreach($parcoursArray as $parcours){
+                    $parcoursClone = clone $parcours;
+                    $newCloneFormation = $this->entityManager->getRepository(Formation::class)
+                        ->findOneBy(['formationOrigineCopie' => $parcours->getFormation()]);
+                    $parcoursClone->setFormation($newCloneFormation);
+                    $parcoursClone->setParcoursOrigineCopie($parcours);
+                    $this->entityManager->persist($parcoursClone);
+                    $io->progressAdvance(1);
+                }
+                $io->progressFinish();
+                $io->writeln("Application des changements...");
+                $this->entityManager->flush();
+                $parcoursArray = null;
+                /**
+                 * 
+                 * DPE PARCOURS
+                 * 
+                 */
+                $io->writeln("Copie du DPE Parcours...");
+                $dpeArray = $this->entityManager->getRepository(DpeParcours::class)->findBy([], ['id' => 'ASC']);
+                $nbDpe = count($dpeArray);
+                $io->progressStart($nbDpe);
+                $newCampagneCollecte = $this->entityManager
+                    ->getRepository(CampagneCollecte::class)
+                    ->findOneById($this->idCampagneCollecte);
+                foreach($dpeArray as $dpe){
+                    $dpeParcoursClone = clone $dpe;
+                    $newFormationDpe = $this->entityManager->getRepository(Formation::class)
+                        ->findOneBy(['formationOrigineCopie' => $dpe->getFormation()]);
+                    $newParcoursDpe = $parcoursRepository
+                        ->findOneBy(['parcoursOrigineCopie' => $dpe->getParcours()]);
+                    $dpeParcoursClone->setParcours($newParcoursDpe);
+                    $dpeParcoursClone->setFormation($newFormationDpe);
+                    $dpeParcoursClone->setCampagneCollecte($newCampagneCollecte);
+                    $this->entityManager->persist($dpeParcoursClone);
+                    $io->progressAdvance(1);                    
+                }
+                $io->progressFinish();
+                $io->writeln("Application des changements...");
+                $this->entityManager->flush();
+                $dpeArray = null;
+                /**
+                 * 
                  * FICHES MATIERES
+                 * 
                  */
                 $nbFicheMatiere = count($this->entityManager->getRepository(FicheMatiere::class)->findBy([]));
                 $processedFicheMatiere = 0;
@@ -126,7 +154,6 @@ class NewAnneeUniversitaireCommand extends Command
                         $this->stepFicheMatiereFlush    
                     );
                     foreach($ficheMatiereArray as $ficheMatiere){
-                        // Clone de toutes les fiches matières
                         $ficheMatiereClone = clone $ficheMatiere;
                         // Le slug est unique, donc on le préfixe
                         $ficheMatiereClone->setSlug($ficheMatiereClone->getSlug() . $this->slugSuffix);
@@ -149,7 +176,9 @@ class NewAnneeUniversitaireCommand extends Command
                 $io->writeln("Application des changements...");
                 $this->entityManager->flush();
                 /**
+                 * 
                  * FICHES MATIERES MUTUALISABLES
+                 * 
                  */
                 $nbMutualisations = count($this->entityManager->getRepository(FicheMatiereMutualisable::class)->findBy([]));
                 $processedMutualisations = 0;
@@ -182,7 +211,7 @@ class NewAnneeUniversitaireCommand extends Command
                 $io->progressFinish();
                 $io->writeln("Application des changements...");
                 $this->entityManager->flush();
-                
+
                 $io->success("Copie réussie !");
                 return Command::SUCCESS;
             }

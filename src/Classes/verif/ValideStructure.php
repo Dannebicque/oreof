@@ -67,7 +67,7 @@ abstract class ValideStructure extends AbstractValide
                         self::$structure['semestres'][$semestreParcour->getOrdre()]['global'] = $hasUe;
                     }
                 } else {
-                    if ($sem->isNonDispense() !== true) {
+                    if ($sem?->isNonDispense() !== true) {
                         self::$structure['semestres'][$semestreParcour->getOrdre()]['global'] = self::VIDE;
                         self::$structure['semestres'][$semestreParcour->getOrdre()]['erreur'][] = 'Semestre non renseigné';
                         self::$errors[] = 'Semestre ' . $semestreParcour->getOrdre() . ' non renseigné';
