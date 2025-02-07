@@ -2,6 +2,7 @@
 
 namespace App\Command;
 
+use App\Entity\Adresse;
 use App\Entity\CampagneCollecte;
 use App\Entity\Contact;
 use App\Entity\DpeParcours;
@@ -452,6 +453,28 @@ class NewAnneeUniversitaireCommand extends Command
 
                 /**
                  * 
+                 * ADRESSES
+                 * 
+                 * Doivent être dupliquées car il y a une contrainte 'UNIQUE'
+                 * sur la table contact 
+                 * 
+                 */
+                $adresseArray = $this->entityManager->getRepository(Adresse::class)->findBy([], ['id' => 'ASC']);
+                $nbAdresse = count($adresseArray);
+                $io->writeln("Copie des adresses de contacts...");
+                $io->progressStart($nbAdresse);
+                foreach($adresseArray as $adresse){
+                    $adresseClone = clone $adresse;
+                    $adresseClone->setAdresseOrigineCopie($adresse);
+                    $this->entityManager->persist($adresseClone);
+                    $io->progressAdvance();
+                }
+                $io->progressFinish();
+                $io->writeln("Application des changements...");
+                $this->entityManager->flush();
+                $adresseArray = null;
+                /**
+                 * 
                  * CONTACTS DU PARCOURS
                  * 
                  */
@@ -462,7 +485,10 @@ class NewAnneeUniversitaireCommand extends Command
                 foreach($contactsArray as $contact){
                     $contactClone = clone $contact;
                     $newParcoursContact = $parcoursRepository->findOneBy(['parcoursOrigineCopie' => $contact->getParcours()]);
+                    $newAdresseContact = $this->entityManager->getRepository(Adresse::class)
+                        ->findOneBy(['adresseOrigineCopie' => $contact->getAdresse()]);
                     $contactClone->setParcours($newParcoursContact);
+                    $contactClone->setAdresse($newAdresseContact);
                     $this->entityManager->persist($contactClone);
                     $io->progressAdvance();
                 }
