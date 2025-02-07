@@ -6,12 +6,12 @@
       action="{{ path('app_element_constitutif_mccc', {id:ec.id, parcours:parcours.id}) }}" {{ stimulus_controller('ec--mccc') }}>
     {% if typeDiplome.libelleCourt != 'BUT' %}
         {% if raccroche == true %}
+            {# todo: a modifier, plus de notion de raccrocher. Juste si mutualisé possibilité de mettre heures spécifiques et dévloquer le reste, sinon par défaut bloqué. Non modifiable si UE ou Semestre raccroché... Exemple : https://oreof:8890/index.php/parcours/171/edit# #}
             <div class="alert alert-info">
                 <div class="row">
                     {% if isMcccImpose == false and isEctsImpose == false %}
                         <div class="col-12">
-                            <p>Cet EC est raccroché, vous pouvez modifier les éléments librement, ou bien les
-                                synchroniser ou recopier depuis l'EC d'origine.</p>
+                            <p>Cet EC est raccroché, par défaut, les données sont celles de l'EC d'origine.</p>{# todo: afficher le parcours d'origine ici... Si UE ou Semestre raccroché mettre le modal non editable #}
                         </div>
                         <div class="col-5">
                             <div class="form-check mb-2">

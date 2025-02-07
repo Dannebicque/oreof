@@ -40,7 +40,7 @@ class EcController extends BaseController
         Ue $ue,
         Parcours $parcours
     ): Response {
-        $raccroche = (bool) $request->query->get('raccroche', false);
+        $isUeRaccrochee = (bool) $request->query->get('raccroche', false);
 
         if ($ue->getUeRaccrochee() === null) {
             $ecs = $elementConstitutifRepository->findBy(['ue' => $ue], ['ordre' => 'ASC']);
@@ -56,7 +56,8 @@ class EcController extends BaseController
             'parcours' => $parcours,
             'deplacer' => true,
             'mode' => 'detail',
-            'editable' => $raccroche === false && $ue->getUeRaccrochee() === null,
+            'isUeRaccrochee' => $isUeRaccrochee,
+            'editable' => $isUeRaccrochee === false && $ue->getUeRaccrochee() === null,
         ]);
     }
 }

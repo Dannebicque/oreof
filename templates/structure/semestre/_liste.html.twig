@@ -264,29 +264,29 @@
                                                                     <span> Raccrocher un semestre</span>
                                                                 </a>
                                                             </li>
-                                                            {% if sem.troncCommun == false %}
-                                                                <li>
-                                                                    <button
-                                                                            {{ stimulus_action('structure--semestre', 'transformeTroncCommun', 'click', {
-                                                                                url: path
-                                                                                    ('structure_semestre_definir_tronc_commun',
-                                                                                    {semestreParcours:semestre.id, parcours: parcours.id})
-                                                                            }) }}
-                                                                            href="#"
-                                                                            class="dropdown-item text-danger"
-                                                                            data-size="lg"
-                                                                            data-bs-toggle="tooltip"
-                                                                            {% if raccroche %}
-                                                                                disabled
-                                                                            {% endif %}
-                                                                            data-bs-placement="bottom"
-                                                                            title="Définir ce {{ semestre.display }} comme tronc commun de la mention"
-                                                                    >
-                                                                        <i class="fal fa-merge"></i>
-                                                                        <span> Définir tronc commun de la mention</span>
-                                                                    </button>
-                                                                </li>
-                                                            {% endif %}
+{#                                                            {% if sem.troncCommun == false %}#}
+{#                                                                <li>#}
+{#                                                                    <button#}
+{#                                                                            {{ stimulus_action('structure--semestre', 'transformeTroncCommun', 'click', {#}
+{#                                                                                url: path#}
+{#                                                                                    ('structure_semestre_definir_tronc_commun',#}
+{#                                                                                    {semestreParcours:semestre.id, parcours: parcours.id})#}
+{#                                                                            }) }}#}
+{#                                                                            href="#"#}
+{#                                                                            class="dropdown-item text-danger"#}
+{#                                                                            data-size="lg"#}
+{#                                                                            data-bs-toggle="tooltip"#}
+{#                                                                            {% if raccroche %}#}
+{#                                                                                disabled#}
+{#                                                                            {% endif %}#}
+{#                                                                            data-bs-placement="bottom"#}
+{#                                                                            title="Définir ce {{ semestre.display }} comme tronc commun de la mention"#}
+{#                                                                    >#}
+{#                                                                        <i class="fal fa-merge"></i>#}
+{#                                                                        <span> Définir tronc commun de la mention</span>#}
+{#                                                                    </button>#}
+{#                                                                </li>#}
+{#                                                            {% endif %}#}
                                                             <li>
                                                                 <button
                                                                         {{ stimulus_action('structure--semestre', 'reinitSemestre', 'click', {

@@ -158,6 +158,57 @@ class ElementConstitutifMcccController extends AbstractController
         ]);
     }
 
+    #[Route('/{id}/mccc-ec/{parcours}/non-editable', name: 'app_element_constitutif_mccc_non_editable', methods: ['GET', 'POST'])]
+    public function mcccEcNonEditable(
+        EntityManagerInterface       $entityManager,
+        TypeDiplomeRegistry          $typeDiplomeRegistry,
+        TypeEpreuveRepository        $typeEpreuveRepository,
+        Request                      $request,
+        ElementConstitutifRepository $elementConstitutifRepository,
+        ElementConstitutif           $elementConstitutif,
+        Parcours                     $parcours
+    ): Response {
+
+        $dpeParcours = GetDpeParcours::getFromParcours($parcours);
+
+        if ($dpeParcours === null) {
+            throw new RuntimeException('DPE Parcours non trouvé');
+        }
+
+        $formation = $parcours?->getFormation();
+        if ($formation === null) {
+            throw new RuntimeException('Formation non trouvée');
+        }
+        $typeDiplome = $formation->getTypeDiplome();
+        if ($typeDiplome === null) {
+            throw new RuntimeException('Type de diplome non trouvé');
+        }
+        $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());
+
+        $raccroche = $elementConstitutif->getFicheMatiere()?->getParcours()?->getId() !== $parcours->getId();
+        $getElement = new GetElementConstitutif($elementConstitutif, $parcours);
+        $getElement->setIsRaccroche($raccroche);
+
+        if ($elementConstitutif->getFicheMatiere() !== null && $elementConstitutif->getFicheMatiere()?->isMcccImpose()) {
+            $typeEpreuve = $elementConstitutif->getFicheMatiere()?->getTypeMccc();
+        } elseif ($raccroche && $elementConstitutif->isSynchroMccc()) {
+            $ec = $getElement->getElementConstitutif();
+            $typeEpreuve = $ec->getTypeMccc();
+        } else {
+            $typeEpreuve = $elementConstitutif->getTypeMccc();
+        }
+
+        return $this->render('element_constitutif/_mcccEcNonEditable.html.twig', [
+            'isMcccImpose' => $elementConstitutif->getFicheMatiere()?->isMcccImpose(),
+            'isEctsImpose' => $elementConstitutif->getFicheMatiere()?->isEctsImpose(),
+            'typeMccc' => $typeEpreuve,
+            'typeEpreuves' => $typeEpreuveRepository->findByTypeDiplome($typeDiplome),
+            'ec' => $elementConstitutif,
+            'templateForm' => $typeD::TEMPLATE_FORM_MCCC,
+            'mcccs' => $getElement->getMcccs($typeD),
+        ]);
+    }
+
 
 
     #[Route('/{id}/mccc-ec-but', name: 'app_element_constitutif_mccc_but', methods: ['GET', 'POST'])]
