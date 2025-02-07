@@ -392,11 +392,20 @@ class NewAnneeUniversitaireCommand extends Command
                 foreach($elementConstitutifArray as $ec){
                     $ecClone = clone $ec;
                     // Liens vers les nouveaux éléments
-                    $newEcFm = $this->entityManager->getRepository(FicheMatiere::class)
-                        ->findOneBy(['ficheMatiereOrigineCopie' => $ec->getFicheMatiere()]);
-                    $newEcUe = $this->entityManager->getRepository(Ue::class)
-                        ->findOneBy(['ueOrigineCopie' => $ec->getUe()]);
-                    $newEcParcours = $parcoursRepository->findOneBy(['parcoursOrigineCopie' => $ec->getParcours()]);
+                    $newEcFm = null;
+                    $newEcUe = null;
+                    $newEcParcours = null;
+                    if($ec->getFicheMatiere() !== null){
+                        $newEcFm = $this->entityManager->getRepository(FicheMatiere::class)
+                            ->findOneBy(['ficheMatiereOrigineCopie' => $ec->getFicheMatiere()]);
+                    }
+                    if($ec->getUe() !== null){
+                        $newEcUe = $this->entityManager->getRepository(Ue::class)
+                            ->findOneBy(['ueOrigineCopie' => $ec->getUe()]);
+                    }
+                    if($ec->getParcours() !== null){
+                        $newEcParcours = $parcoursRepository->findOneBy(['parcoursOrigineCopie' => $ec->getParcours()]);
+                    }
                     if($newEcFm !== null){
                         $ecClone->setFicheMatiere($newEcFm);
                     }
