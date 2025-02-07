@@ -11,6 +11,8 @@ use App\Entity\Parcours;
 use App\Entity\Semestre;
 use App\Entity\SemestreMutualisable;
 use App\Entity\SemestreParcours;
+use App\Entity\Ue;
+use App\Entity\UeMutualisable;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -294,6 +296,88 @@ class NewAnneeUniversitaireCommand extends Command
                 $io->writeln("Application des changements...");
                 $this->entityManager->flush();
                 $semestreMutualisableArray = null;
+
+                /**
+                 * 
+                 * UE
+                 * 
+                 */
+                $nbUe = count($this->entityManager->getRepository(Ue::class)->findBy([]));
+                $ueArray = $this->entityManager->getRepository(Ue::class)->findBy([], ['id' => 'ASC']);
+                $io->writeln('Copie des UE...');
+                $io->progressStart($nbUe);
+                foreach($ueArray as $ue){
+                    $ueClone = clone $ue;
+                    $ueClone->setUeParent(null);
+                    $ueClone->setUeRaccrochee(null);
+                    if($ue->getSemestre() !== null){
+                        $semestreUe = $this->entityManager->getRepository(Semestre::class)
+                            ->findOneBy(['semestreOrigineCopie' => $ue->getSemestre()]);
+                        $ueClone->setSemestre($semestreUe);
+                    }
+                    $ueClone->setUeOrigineCopie($ue);
+                    $this->entityManager->persist($ueClone);
+                    $io->progressAdvance();
+                }
+                $io->progressFinish();
+                $io->writeln("Application des changements...");
+                $this->entityManager->flush();
+                $ueArray = null;
+                /**
+                 * 
+                 * UE PARENT 
+                 * 
+                 */
+                $io->writeln("Copie des UE parents...");
+                $ueDataArray = $this->entityManager->getRepository(Ue::class)->findBy([], ['id' => 'ASC']);
+                $nbUeFromDb = count($ueDataArray);
+                $io->progressStart($nbUeFromDb);
+                foreach($ueDataArray as $ueData){
+                    if($ueData->getUeParent() !== null && $ueData->getUeOrigineCopie() === null){
+                        $newClonedUe = $this->entityManager->getRepository(Ue::class)
+                            ->findOneBy(['ueOrigineCopie' => $ueData]);
+                        $newClonedParent = $this->entityManager->getRepository(Ue::class)
+                            ->findOneBy(['ueOrigineCopie' => $ueData->getUeParent()]);
+                        $newClonedUe->setUeParent($newClonedParent);
+                        $this->entityManager->persist($newClonedUe);
+                    }
+                    $io->progressAdvance();
+                }
+                $io->progressFinish();
+                $io->writeln("Application des changements...");
+                $this->entityManager->flush();
+                $ueDataArray = null;
+                /**
+                 * 
+                 * UE MUTUALISEES et Ue Raccrochées
+                 * 
+                 */
+                $io->writeln("Copie des UE mutualisées...");
+                $ueMutualiseesArray = $this->entityManager->getRepository(UeMutualisable::class)->findBy([], ['id' => 'ASC']);
+                $nbUeMutualisees = count($ueMutualiseesArray);
+                $io->progressStart($nbUeMutualisees);
+                foreach($ueMutualiseesArray as $ueMutu){
+                    // On clone l'UE mutualisable
+                    $ueMutuClone = clone $ueMutu;
+                    $newParcours = $parcoursRepository->findOneBy(['parcoursOrigineCopie' => $ueMutu->getParcours()]);
+                    $newUe = $this->entityManager->getRepository(Ue::class)->findOneBy(['ueOrigineCopie' => $ueMutu->getUe()]);
+                    $ueMutuClone->setParcours($newParcours);
+                    $ueMutuClone->setUe($newUe);
+                    // Et on crée le lien dans ue (ue_raccroche_id)
+                    $ueRaccrocherArray = $this->entityManager->getRepository(Ue::class)->findBy(['ueRaccrochee' => $ueMutu]);
+                    foreach($ueRaccrocherArray as $ueRaccrocher){
+                        $raccrochageUe = $this->entityManager->getRepository(Ue::class)
+                            ->findOneBy(['ueOrigineCopie' => $ueRaccrocher]);
+                        $raccrochageUe->setUeRaccrochee($ueMutuClone);
+                        $this->entityManager->persist($raccrochageUe);
+                    }
+                    $this->entityManager->persist($ueMutuClone);
+                    $io->progressAdvance();
+                }
+                $io->progressFinish();
+                $io->writeln("Application des changements...");
+                $this->entityManager->flush();
+                $ueMutualiseesArray = null;
 
                 $io->success("Copie réussie !");
                 return Command::SUCCESS;

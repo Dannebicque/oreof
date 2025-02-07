@@ -81,6 +81,9 @@ class Ue
     #[ORM\Column(length: 10, nullable: true)]
     private ?string $codeApogee = null;
 
+    #[ORM\OneToOne(targetEntity: self::class, cascade: ['persist', 'remove'])]
+    private ?self $ueOrigineCopie = null;
+
     public function __construct()
     {
         $this->elementConstitutifs = new ArrayCollection();
@@ -386,6 +389,18 @@ class Ue
     public function setCodeApogee(?string $codeApogee): static
     {
         $this->codeApogee = $codeApogee;
+
+        return $this;
+    }
+
+    public function getUeOrigineCopie(): ?self
+    {
+        return $this->ueOrigineCopie;
+    }
+
+    public function setUeOrigineCopie(?self $ueOrigineCopie): static
+    {
+        $this->ueOrigineCopie = $ueOrigineCopie;
 
         return $this;
     }
