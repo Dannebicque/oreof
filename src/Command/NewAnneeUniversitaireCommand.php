@@ -4,6 +4,7 @@ namespace App\Command;
 
 use App\Entity\CampagneCollecte;
 use App\Entity\DpeParcours;
+use App\Entity\ElementConstitutif;
 use App\Entity\FicheMatiere;
 use App\Entity\FicheMatiereMutualisable;
 use App\Entity\Formation;
@@ -58,7 +59,7 @@ class NewAnneeUniversitaireCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        ini_set('memory_limit', '5000M');
+        ini_set('memory_limit', '8000M');
 
         $io = new SymfonyStyle($input, $output);
         
@@ -378,6 +379,66 @@ class NewAnneeUniversitaireCommand extends Command
                 $io->writeln("Application des changements...");
                 $this->entityManager->flush();
                 $ueMutualiseesArray = null;
+
+                /**
+                 * 
+                 * ELEMENT CONSTITUTIF
+                 * 
+                 */
+                $elementConstitutifArray = $this->entityManager->getRepository(ElementConstitutif::class)->findBy([], ['id' => 'ASC']);
+                $nbEc = count($elementConstitutifArray);
+                $io->writeln("Copie des éléments constitutifs...");
+                $io->progressStart($nbEc);
+                foreach($elementConstitutifArray as $ec){
+                    $ecClone = clone $ec;
+                    // Liens vers les nouveaux éléments
+                    $newEcFm = $this->entityManager->getRepository(FicheMatiere::class)
+                        ->findOneBy(['ficheMatiereOrigineCopie' => $ec->getFicheMatiere()]);
+                    $newEcUe = $this->entityManager->getRepository(Ue::class)
+                        ->findOneBy(['ueOrigineCopie' => $ec->getUe()]);
+                    $newEcParcours = $parcoursRepository->findOneBy(['parcoursOrigineCopie' => $ec->getParcours()]);
+                    if($newEcFm !== null){
+                        $ecClone->setFicheMatiere($newEcFm);
+                    }
+                    if($newEcUe !== null){
+                        $ecClone->setUe($newEcUe);
+                    }
+                    if($newEcParcours !== null){
+                        $ecClone->setParcours($newEcParcours);
+                    }
+                    $ecClone->setEcOrigineCopie($ec);
+                    $this->entityManager->persist($ecClone);
+                    $io->progressAdvance();
+                }
+                $io->progressFinish();
+                $io->writeln("Application des changements...");
+                $this->entityManager->flush();
+                $elementConstitutifArray = null;
+
+                /**
+                 * 
+                 * EC PARENT
+                 * 
+                 */
+                $ecArray = $this->entityManager->getRepository(ElementConstitutif::class)->findBy([], ['id' => 'ASC']);
+                $nbEcForParent = count($ecArray);
+                $io->writeln("Copie des EC parents...");
+                $io->progressStart($nbEcForParent);
+                foreach($ecArray as $elemConstitutif){
+                    if($elemConstitutif->getEcParent() !== null && $elemConstitutif->getEcOrigineCopie() === null){
+                        $ecParentCopie = $this->entityManager->getRepository(ElementConstitutif::class)
+                            ->findOneBy(['ecOrigineCopie' => $elemConstitutif->getEcParent()]);
+                        $ecEnfantCopie = $this->entityManager->getRepository(ElementConstitutif::class)
+                            ->findOneBy(['ecOrigineCopie' => $elemConstitutif]);
+                        $ecEnfantCopie->setEcParent($ecParentCopie);
+                        $this->entityManager->persist($ecEnfantCopie);
+                    }
+                    $io->progressAdvance();
+                }
+                $io->progressFinish();
+                $io->writeln("Application des changements...");
+                $this->entityManager->flush();
+                $ecArray = null;
 
                 $io->success("Copie réussie !");
                 return Command::SUCCESS;

@@ -180,6 +180,9 @@ class ElementConstitutif
     #[ORM\Column(nullable: true)]
     private ?bool $ects_specifiques = null;
 
+    #[ORM\OneToOne(targetEntity: self::class, cascade: ['persist', 'remove'])]
+    private ?self $ecOrigineCopie = null;
+
 
     public function __construct()
     {
@@ -898,6 +901,18 @@ class ElementConstitutif
     public function setEctsSpecifiques(?bool $ects_specifiques): static
     {
         $this->ects_specifiques = $ects_specifiques;
+
+        return $this;
+    }
+
+    public function getEcOrigineCopie(): ?self
+    {
+        return $this->ecOrigineCopie;
+    }
+
+    public function setEcOrigineCopie(?self $ecOrigineCopie): static
+    {
+        $this->ecOrigineCopie = $ecOrigineCopie;
 
         return $this;
     }
