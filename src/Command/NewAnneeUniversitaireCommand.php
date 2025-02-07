@@ -3,6 +3,7 @@
 namespace App\Command;
 
 use App\Entity\CampagneCollecte;
+use App\Entity\Contact;
 use App\Entity\DpeParcours;
 use App\Entity\ElementConstitutif;
 use App\Entity\FicheMatiere;
@@ -448,6 +449,27 @@ class NewAnneeUniversitaireCommand extends Command
                 $io->writeln("Application des changements...");
                 $this->entityManager->flush();
                 $ecArray = null;
+
+                /**
+                 * 
+                 * CONTACTS DU PARCOURS
+                 * 
+                 */
+                $contactsArray = $this->entityManager->getRepository(Contact::class)->findBy([], ['id' => 'ASC']);
+                $nbContact = count($contactsArray);
+                $io->writeln("Copie des contacts des parcours...");
+                $io->progressStart($nbContact);
+                foreach($contactsArray as $contact){
+                    $contactClone = clone $contact;
+                    $newParcoursContact = $parcoursRepository->findOneBy(['parcoursOrigineCopie' => $contact->getParcours()]);
+                    $contactClone->setParcours($newParcoursContact);
+                    $this->entityManager->persist($contactClone);
+                    $io->progressAdvance();
+                }
+                $io->progressFinish();
+                $io->writeln("Application des changements...");
+                $this->entityManager->flush();
+                $contactsArray = null;
 
                 $io->success("Copie réussie !");
                 return Command::SUCCESS;
