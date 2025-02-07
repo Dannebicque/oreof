@@ -24,9 +24,8 @@ class GetElementConstitutif
 
     public function __construct(
         private readonly ElementConstitutif $elementConstitutif,
-        private readonly Parcours           $parcours) {}
+        private readonly Parcours $parcours) {}
 
-    /** @deprecated("Ne plus en dépendre, ancienne version") */
     public function getElementConstitutif(): ElementConstitutif|FicheMatiere
     {
         //todo: ne plus en dépendre ou résumer à  return $this->elementConstitutif;
@@ -45,8 +44,7 @@ class GetElementConstitutif
             $this->ecSource = $this->elementConstitutif->getEcParent();
             return $this->ecSource;
         }
-        //return $this->elementConstitutif;
-        $this->ecSource = $this->elementConstitutif; //todo utile ?
+        $this->ecSource = $this->elementConstitutif;
         return $this->ecSource;
     }
 
