@@ -24,7 +24,7 @@ class FormationEtatController extends BaseController
     public function sendOuverture(
         FormationRepository $formationRepository
     ): Response {
-        $formations = $formationRepository->findBy(['anneeUniversitaire' => $this->getDpe()]);
+        $formations = $formationRepository->findBy(['anneeUniversitaire' => $this->getCampagneCollecte()]);
         $listeFormationsOuvrables = [];
         foreach ($formations as $formation) {
             if ($this->dpeWorkflow->can($formation, 'initialiser') && $formation->getResponsableMention() !== null) {

@@ -140,7 +140,7 @@ class FormationResponsableController extends BaseController
             'titre' => 'Demandes de modification de responsable de formation',
             'demandes' => $tDemandes,
             'composantes' => $composantes,
-            'dpe' => $this->getDpe()
+            'dpe' => $this->getCampagneCollecte()
         ], 'synthese_changement_rf_'.(new DateTime())->format('d-m-Y_H-i-s'));
     }
 

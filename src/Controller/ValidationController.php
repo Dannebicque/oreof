@@ -34,8 +34,8 @@ class ValidationController extends BaseController
         ExcelWriter $excelWriter,
         FicheMatiereRepository $ficheMatiereRepository,
     ): Response {
-        $fiches[] = $ficheMatiereRepository->findByTypeValidation($this->getDpe(), 'fiche_matiere');
-        $fiches[] = $ficheMatiereRepository->findByTypeValidationNull($this->getDpe());
+        $fiches[] = $ficheMatiereRepository->findByTypeValidation($this->getCampagneCollecte(), 'fiche_matiere');
+        $fiches[] = $ficheMatiereRepository->findByTypeValidationNull($this->getCampagneCollecte());
         $fiches = array_merge(...$fiches);
         $excelWriter->nouveauFichier('Export Vérification');
         $excelWriter->setActiveSheetIndex(0);
@@ -148,13 +148,13 @@ class ValidationController extends BaseController
 
         if ($request->query->has('composante')) {
             if ($request->query->get('composante') === 'all') {
-                $allparcours = $dpeParcoursRepository->findByCampagneAndTypeValidation($this->getDpe(), $typeValidation);
+                $allparcours = $dpeParcoursRepository->findByCampagneAndTypeValidation($this->getCampagneCollecte(), $typeValidation);
             } else {
                 $composante = $composanteRepository->find($request->query->get('composante'));
                 if (!$composante) {
                     throw $this->createNotFoundException('La composante n\'existe pas');
                 }
-                $allparcours = $dpeParcoursRepository->findByComposanteAndCampagneAndTypeValidation($composante, $this->getDpe(), $typeValidation);
+                $allparcours = $dpeParcoursRepository->findByComposanteAndCampagneAndTypeValidation($composante, $this->getCampagneCollecte(), $typeValidation);
             }
         } else {
             $process = null;
@@ -212,8 +212,8 @@ class ValidationController extends BaseController
 
         if ($request->query->has('composante')) {
             if ($request->query->get('composante') === 'all') {
-                $fiches[] = $ficheMatiereRepository->findByTypeValidation($this->getDpe(), $typeValidation);
-                $fiches[] = $ficheMatiereRepository->findByTypeValidationHorsDiplome($this->getDpe(), $typeValidation);
+                $fiches[] = $ficheMatiereRepository->findByTypeValidation($this->getCampagneCollecte(), $typeValidation);
+                $fiches[] = $ficheMatiereRepository->findByTypeValidationHorsDiplome($this->getCampagneCollecte(), $typeValidation);
                 $fiches = array_merge(...$fiches);
                 //todo: doublons possibles ?
             } else {
@@ -221,7 +221,7 @@ class ValidationController extends BaseController
                 if (!$composante) {
                     throw $this->createNotFoundException('La composante n\'existe pas');
                 }
-                $fiches = $ficheMatiereRepository->findByComposanteTypeValidation($composante, $this->getDpe(), $typeValidation);
+                $fiches = $ficheMatiereRepository->findByComposanteTypeValidation($composante, $this->getCampagneCollecte(), $typeValidation);
             }
         } else {
             $fiches = [];

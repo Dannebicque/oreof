@@ -96,7 +96,7 @@ class ParcoursController extends BaseController
 
 
         $parcours = $parcoursRepository->findParcours(
-            $this->getDpe(),
+            $this->getCampagneCollecte(),
             [$sort => $direction, 'recherche' => $q]
         );
 
@@ -164,7 +164,7 @@ class ParcoursController extends BaseController
             $dpeParcours = new DpeParcours();
             $dpeParcours->setParcours($parcour);
             $dpeParcours->setFormation($formation);
-            $dpeParcours->setCampagneCollecte($this->getDpe());
+            $dpeParcours->setCampagneCollecte($this->getCampagneCollecte());
             $dpeParcours->setVersion('1.0');
             $dpeParcours->setEtatReconduction(TypeModificationDpeEnum::CREATION);
             $this->dpeParcoursWorkflow->apply($dpeParcours, 'initialiser');
@@ -662,9 +662,9 @@ class ParcoursController extends BaseController
         ParcoursRepository $parcoursRepo
     ): Response {
         $parcoursList = [
-            ...$parcoursRepo->findByTypeValidation($this->getDpe(), 'valide_pour_publication'),
-            ...$parcoursRepo->findByTypeValidation($this->getDpe(), 'publie'),
-            ...$parcoursRepo->findByTypeValidation($this->getDpe(), 'valide_a_publier')
+            ...$parcoursRepo->findByTypeValidation($this->getCampagneCollecte(), 'valide_pour_publication'),
+            ...$parcoursRepo->findByTypeValidation($this->getCampagneCollecte(), 'publie'),
+            ...$parcoursRepo->findByTypeValidation($this->getCampagneCollecte(), 'valide_a_publier')
         ];
 
         $errorArray = [];

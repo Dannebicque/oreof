@@ -24,13 +24,13 @@ class SesExportController extends BaseController
     public function exportOffreFormation(
         ExportSynthese $exportSynthese,
     ): Response {
-        return $exportSynthese->export($this->getDpe());
+        return $exportSynthese->export($this->getCampagneCollecte());
     }
 
     #[Route('/ses/export/offre-formtion-brut', name: 'ses_export_offre_formation_brut')]
     public function exportOffreFormationBrut(
         ExportSynthese $exportSynthese,
     ): Response {
-        return $exportSynthese->exportBrut($this->getDpe());
+        return $exportSynthese->exportBrut($this->getCampagneCollecte());
     }
 }

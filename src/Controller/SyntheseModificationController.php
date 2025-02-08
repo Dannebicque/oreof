@@ -18,7 +18,7 @@ class SyntheseModificationController extends BaseController
         DpeParcoursRepository $dpeParcoursRepository,
         ComposanteRepository $composanteRepository,
     ): Response {
-        $dpes = $dpeParcoursRepository->findByCampagneWithModification($this->getDpe());
+        $dpes = $dpeParcoursRepository->findByCampagneWithModification($this->getCampagneCollecte());
         $comp = [];
         foreach ($dpes as $dpe) {
             if (!array_key_exists($dpe->getFormation()?->getComposantePorteuse()?->getId(), $comp)) {
@@ -39,7 +39,7 @@ class SyntheseModificationController extends BaseController
         MessageBusInterface $messageBus,
     ): Response {
         // récupèrer les formations qui sont ouvertes avec CFVU
-        $dpes = $dpeParcoursRepository->findByCampagneWithModification($this->getDpe());
+        $dpes = $dpeParcoursRepository->findByCampagneWithModification($this->getCampagneCollecte());
         $formations = [];
         foreach ($dpes as $dpe) {
             $formation = $dpe->getFormation();
@@ -54,7 +54,7 @@ class SyntheseModificationController extends BaseController
                 $this->getUser()?->getId(),
                 'synthese_modification',
                 $formations,
-                $this->getDpe(),
+                $this->getCampagneCollecte(),
                 null
             )
         );
@@ -72,7 +72,7 @@ class SyntheseModificationController extends BaseController
         Composante          $composante
     ): Response {
         //récupère toutes les formations de la composante qui sont ouvertes en CFVU
-        $dpes = $dpeParcoursRepository->findParcoursByComposante($this->getDpe(), $composante);
+        $dpes = $dpeParcoursRepository->findParcoursByComposante($this->getCampagneCollecte(), $composante);
 
         $formations = [];
         foreach ($dpes as $dpe) {
@@ -94,7 +94,7 @@ class SyntheseModificationController extends BaseController
                 $this->getUser()?->getId(),
                 'pdf-synthese_modification',
                 $formations,
-                $this->getDpe(),
+                $this->getCampagneCollecte(),
                 null
             )
         );

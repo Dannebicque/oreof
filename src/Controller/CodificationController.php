@@ -76,7 +76,7 @@ class CodificationController extends BaseController
             $this->isGranted('CAN_FORMATION_SHOW_ALL', $this->getUser())) {
             $tFormations = $getFormations->getFormations(
                 $this->getUser(),
-                $this->getDpe(),
+                $this->getCampagneCollecte(),
                 $filtres
             );
         } else {
@@ -92,22 +92,22 @@ class CodificationController extends BaseController
                 )) {
                     $formations[] = $formationRepository->findByComposante(
                         $centre->getComposante(),
-                        $this->getDpe()
+                        $this->getCampagneCollecte()
                     );
                 }
             }
 
             $formations[] = $formationRepository->findByComposanteDpe(
                 $this->getUser(),
-                $this->getDpe()
+                $this->getCampagneCollecte()
             );
             $formations[] = $formationRepository->findByResponsableOuCoResponsable(
                 $this->getUser(),
-                $this->getDpe()
+                $this->getCampagneCollecte()
             );
             $formations[] = $formationRepository->findByResponsableOuCoResponsableParcours(
                 $this->getUser(),
-                $this->getDpe(),
+                $this->getCampagneCollecte(),
                 []
             );
             $formations = array_merge(...$formations);
@@ -146,7 +146,7 @@ class CodificationController extends BaseController
             $this->isGranted('CAN_ETABLISSEMENT_SHOW_ALL', $this->getUser()) ||
             $this->isGranted('CAN_ETABLISSEMENT_SCOLARITE_ALL', $this->getUser()) ||
             $this->isGranted('CAN_FORMATION_SHOW_ALL', $this->getUser())) {
-            $formations = $formationRepository->findBySearch('', $this->getDpe(), []);
+            $formations = $formationRepository->findBySearch('', $this->getCampagneCollecte(), []);
 
             return $export->exportFormations($formations);
         }
@@ -165,22 +165,22 @@ class CodificationController extends BaseController
                 //todo: il faudrait pouvoir filtrer par ce que contient le rôle et pas juste le nom
                 $formations[] = $formationRepository->findByComposante(
                     $centre->getComposante(),
-                    $this->getDpe()
+                    $this->getCampagneCollecte()
                 );
             }
         }
 
         $formations[] = $formationRepository->findByComposanteDpe(
             $this->getUser(),
-            $this->getDpe()
+            $this->getCampagneCollecte()
         );
         $formations[] = $formationRepository->findByResponsableOuCoResponsable(
             $this->getUser(),
-            $this->getDpe()
+            $this->getCampagneCollecte()
         );
         $formations[] = $formationRepository->findByResponsableOuCoResponsableParcours(
             $this->getUser(),
-            $this->getDpe(),
+            $this->getCampagneCollecte(),
             []
         );
         $formations = array_merge(...$formations);

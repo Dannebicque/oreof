@@ -320,7 +320,7 @@ class ProcessValidationController extends BaseController
 
                     if ($objet->isHasParcours() === false) {
                         //formation sans parcours
-                        $dpe = $dpeParcoursRepository->findOneBy(['parcours' => $objet->getParcours()->first(), 'campagneCollecte' => $this->getDpe()]);
+                        $dpe = $dpeParcoursRepository->findOneBy(['parcours' => $objet->getParcours()->first(), 'campagneCollecte' => $this->getCampagneCollecte()]);
                         if ($dpe === null) {
                             return JsonReponse::error('Formation non trouvée');
                         }
@@ -336,7 +336,7 @@ class ProcessValidationController extends BaseController
                     //récupérer la transition de départ en fonction de la place selectionnée
 
                     $objet = $parcoursRepository->find($id);
-                    $dpe = $dpeParcoursRepository->findOneBy(['parcours' => $objet, 'campagneCollecte' => $this->getDpe()]);
+                    $dpe = $dpeParcoursRepository->findOneBy(['parcours' => $objet, 'campagneCollecte' => $this->getCampagneCollecte()]);
                     if ($objet === null) {
                         return JsonReponse::error('Parcours non trouvé');
                     }

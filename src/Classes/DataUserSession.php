@@ -24,13 +24,13 @@ class DataUserSession
     private UserInterface $user;
 
     private string $dir;
-    private ?CampagneCollecte $dpe = null;
+    private ?CampagneCollecte $campagneCollecte = null;
     private ?Etablissement $etablissement = null;
 
 
     public function __construct(
         private RequestStack               $requestStack,
-        private CampagneCollecteRepository $dpeRepository,
+        private CampagneCollecteRepository $campagneCollecteRepository,
         TokenStorageInterface              $tokenStorage,
         KernelInterface                    $kernel,
     ) {
@@ -40,18 +40,18 @@ class DataUserSession
         }
     }
 
-    public function getDpe(): ?CampagneCollecte
+    public function getCampagneCollecte(): ?CampagneCollecte
     {
         $session = $this->requestStack->getSession();
-        if ($this->dpe === null) {
+        if ($this->campagneCollecte === null) {
             if ($session !== null && $session->get('dpe') !== null) {
-                $this->dpe = $this->dpeRepository->find($session->get('dpe'));
+                $this->campagneCollecte = $this->campagneCollecteRepository->find($session->get('dpe'));
             } else {
-                $this->dpe = $this->dpeRepository->findOneBy(['defaut' => true]);
+                $this->campagneCollecte = $this->campagneCollecteRepository->findOneBy(['defaut' => true]);
             }
         }
 
-        return $this->dpe;
+        return $this->campagneCollecte;
     }
 
     public function version(): ?string

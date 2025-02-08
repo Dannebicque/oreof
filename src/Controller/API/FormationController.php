@@ -27,7 +27,7 @@ class FormationController extends BaseController
         if ($dpe === false) {
             $formations = $formationRepository->findAll();
         } else {
-            $formations = $formationRepository->findByComposanteDpe($this->getUser(), $this->getDpe());
+            $formations = $formationRepository->findByComposanteDpe($this->getUser(), $this->getCampagneCollecte());
         }
 
         $t = [];

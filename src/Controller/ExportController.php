@@ -115,9 +115,9 @@ class ExportController extends BaseController
         }
 
         if ($this->isGranted('ROLE_SES') || $this->isGranted('CAN_ETABLISSEMENT_SHOW_ALL', $this->getUser())) {
-            $dpes = $dpeParcoursRepository->findParcoursByComposante($this->getDpe(), $composante);
+            $dpes = $dpeParcoursRepository->findParcoursByComposante($this->getCampagneCollecte(), $composante);
         } elseif ($this->isGranted('CAN_ETABLISSEMENT_CONSEILLER_ALL', $this->getUser())) {
-            $dpes = $dpeParcoursRepository->findParcoursByComposanteCfvu($this->getDpe(), $composante);
+            $dpes = $dpeParcoursRepository->findParcoursByComposanteCfvu($this->getCampagneCollecte(), $composante);
         } else {
             $dpes = [];
         }
@@ -142,7 +142,7 @@ class ExportController extends BaseController
             $this->getUser()?->getId(),
             $request->request->get('type_document'),
             $request->request->all()['liste'] ?? [],
-            $this->getDpe(),
+            $this->getCampagneCollecte(),
             Tools::convertDate($request->request->get('date', null))
         ));
 
