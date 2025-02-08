@@ -567,8 +567,11 @@
     <div class="page-title-container fixed-title-container">
         <div class="row">
             <div class="col-md-12 col-sm-6 mt-0">
-                {# todo: comparer si année U = année U en cours et si Campagne = Campagne active #}
-                <twig:alerte type="warning" message="Vous êtes sur l'année en cours"></twig:alerte>
+                {% if user_data.campagneCollecte.defaut == true %}
+                    <twig:alerte type="warning" message="Vous êtes sur la campagne pour l'année <strong>{{ user_data.campagneCollecte.anneeUniversitaire.libelle }}</strong>. C'est la campagne en cours."></twig:alerte>
+                {% else %}
+                    <twig:alerte type="danger" message="Vous êtes sur la campagne pour l'année <strong>{{ user_data.campagneCollecte.anneeUniversitaire.libelle }}</strong>. C'est une campagne terminée."></twig:alerte>
+                {% endif %}
             </div>
             <!-- Title Start -->
             <div class="col-md-6 col-sm-6">

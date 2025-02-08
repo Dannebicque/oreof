@@ -44,8 +44,8 @@ class DataUserSession
     {
         $session = $this->requestStack->getSession();
         if ($this->campagneCollecte === null) {
-            if ($session !== null && $session->get('dpe') !== null) {
-                $this->campagneCollecte = $this->campagneCollecteRepository->find($session->get('dpe'));
+            if ($session !== null && $session->get('campagneCollecte') !== null) {
+                $this->campagneCollecte = $this->campagneCollecteRepository->find($session->get('campagneCollecte'));
             } else {
                 $this->campagneCollecte = $this->campagneCollecteRepository->findOneBy(['defaut' => true]);
             }

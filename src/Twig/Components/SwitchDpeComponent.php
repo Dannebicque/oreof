@@ -35,7 +35,7 @@ final class SwitchDpeComponent extends AbstractController
     #[LiveAction]
     public function changeDpe(#[LiveArg] int $id)
     {
-        $this->requestStack->getSession()->set('dpe', $id);
+        $this->requestStack->getSession()->set('campagneCollecte', $id);
 
         //forcer l'actualisation de la page
         return $this->redirectToRoute('app_homepage');
