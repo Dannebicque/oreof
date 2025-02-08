@@ -17,10 +17,10 @@ export default class extends Controller {
     urlUpdate: String,
   }
 
-  async synchroEcts(event) {
+  async ectsSpecifiques(event) {
     const body = new FormData()
     body.append('value', event.target.checked)
-    body.append('field', 'synchroEcts')
+    body.append('field', 'ectsSpecifiques')
     body.append('ec', event.params.ec)
 
     await fetch(this.urlUpdateValue, {
@@ -31,9 +31,9 @@ export default class extends Controller {
         const input = document.getElementById('ec_step4_ects')
 
         if (event.target.checked) {
-          input.setAttribute('disabled', 'disabled')
-        } else {
           input.removeAttribute('disabled')
+        } else {
+          input.setAttribute('disabled', 'disabled')
         }
       }
       JsonResponse(response)

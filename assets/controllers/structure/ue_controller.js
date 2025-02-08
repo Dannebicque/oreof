@@ -10,6 +10,7 @@ import { Controller } from '@hotwired/stimulus'
 import { Modal } from 'bootstrap'
 import { saveData } from '../../js/saveData'
 import callOut from '../../js/callOut'
+import updateUrl from '../../js/updateUrl'
 
 export default class extends Controller {
   static targets = ['detail']
@@ -36,11 +37,13 @@ export default class extends Controller {
       event.target.dataset.state = 'close'
       event.target.firstElementChild.classList.add('fa-caret-right')
       event.target.firstElementChild.classList.remove('fa-caret-down')
+      updateUrl({ ue: event.params.ue }, 'remove')
     } else {
       this._listeEc(event)
       event.target.dataset.state = 'open'
       event.target.firstElementChild.classList.remove('fa-caret-right')
       event.target.firstElementChild.classList.add('fa-caret-down')
+      updateUrl({ ue: event.params.ue })
     }
   }
 

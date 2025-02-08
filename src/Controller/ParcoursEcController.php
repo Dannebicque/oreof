@@ -206,16 +206,16 @@ class ParcoursEcController extends AbstractController
                 $ec->setSynchroHeures($request->request->get('value') === 'true');
                 $ecRepository->save($ec, true);
                 return JsonReponse::success('EC mis à jour, Heures raccrochées');
-            case 'synchroEcts':
+            case 'ectsSpecifiques':
                 $ec = $ecRepository->find($request->request->get('ec'));
 
                 if ($ec === null) {
                     return JsonReponse::error('EC introuvable');
                 }
 
-                $ec->setSynchroEcts($request->request->get('value') === 'true');
+                $ec->setEctsSpecifiques($request->request->get('value') === 'true');
                 $ecRepository->save($ec, true);
-                return JsonReponse::success('EC mis à jour, ECTS raccrochés');
+                return JsonReponse::success('EC mis à jour, ECTS spécifiques');
             case 'typeEc':
                 $ec = $ecRepository->find($request->request->get('ec'));
 

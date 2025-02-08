@@ -15,7 +15,6 @@
             </label>
             <div class="input-group">
                 <input type="text" class="form-control synchro-mccc" id="pourcentage_s1_cc" name="pourcentage_s1_cc"
-                       {% if disabled %}disabled{% endif %}
                         {{ stimulus_action('mccc--licence', 'saveDataCcCt', 'change') }}
                         {% if mcccs[1]['cc'][1] is defined %}
                             value="{{ mcccs[1]['cc'][1].pourcentage }}"
@@ -35,7 +34,6 @@
             </label>
             <input type="number" id="nbepreuve_s1_cc" name="nbepreuve_s1_cc" class="form-control synchro-mccc"
                     {{ stimulus_action('mccc--licence', 'saveDataCcCt', 'change') }}
-                    {% if disabled %}disabled{% endif %}
                     {% if mcccs[1]['cc'][1] is defined %}
                         value="{{ mcccs[1]['cc'][1].nbEpreuves }}"
                     {% endif %}
@@ -47,7 +45,6 @@
         <div class="col-4">
             <div class="form-check mb-2">
                 <input class="form-check-input synchro-mccc" type="checkbox" id="cc_has_tp" name="cc_has_tp"
-                       {% if disabled %}disabled{% endif %}
                        {{ stimulus_action('mccc--licence', "ccHasTp", 'change') }}
                         {% if mcccs[1]['cc'][1].options is defined and mcccs[1]['cc'][1].options != null and mcccs[1]['cc'][1].options.cc_has_tp == "on" %}checked{% endif %}
                 >
@@ -70,7 +67,6 @@
             <div class="input-group">
                  <input type="text" class="form-control"
                        id="cc_has_tp_pourcentage"
-                        {% if elementConstitutif is defined and elementConstitutif.synchroMccc %}disabled{% endif %}
                        name="cc_has_tp_pourcentage"
                         {% if (mcccs[1]['cc'][1].options is not defined or mcccs[1]['cc'][1].options == null or mcccs[1]['cc'][1].options.cc_has_tp != "on") %}disabled{% endif %}
                         {% if mcccs[1]['cc'][1].options is defined and mcccs[1]['cc'][1].options != null and mcccs[1]['cc'][1].options.pourcentage is defined %}
@@ -94,7 +90,6 @@
         {% endif %}
     </div>
     <button class="btn btn-primary mb-2 synchro-mccc"
-            {% if disabled %}disabled{% endif %}
             {{ stimulus_action('mccc--licence', 'addEpreuveCt', 'click') }}
     >Ajouter une épreuve de contrôle terminal
     </button>
@@ -113,7 +108,6 @@
 </div>
 
 <button class="btn btn-primary mb-2 synchro-mccc"
-        {% if disabled %}disabled{% endif %}
         {{ stimulus_action('mccc--licence', 'addEpreuveSecondeSession', 'click') }}
 >Ajouter une épreuve pour la 2e session
 </button>

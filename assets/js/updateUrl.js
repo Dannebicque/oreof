@@ -6,7 +6,7 @@
  * @lastUpdate 29/01/2025 11:47
  */
 
-export default function updateUrl(params) {
+export default function updateUrl(params, action = 'add') {
   if (Object.keys(params).length === 0) {
     return;
   }
@@ -21,6 +21,14 @@ export default function updateUrl(params) {
       searchParams.delete(key);
     }
   });
+
+  if (action === 'remove') {
+    searchParams.forEach((value, key) => {
+      if (params[key]) {
+        searchParams.delete(key);
+      }
+    });
+  }
 
   url.search = searchParams.toString();
   window.history.replaceState({}, '', url);

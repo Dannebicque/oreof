@@ -868,7 +868,7 @@ class ElementConstitutif
 
     public function isHeuresSpecifiques(): ?bool
     {
-        return $this->heuresSpecifiques;
+        return $this->heuresSpecifiques ?? false;
     }
 
     public function setHeuresSpecifiques(?bool $heuresSpecifiques): static
@@ -880,7 +880,7 @@ class ElementConstitutif
 
     public function isMcccSpecifiques(): ?bool
     {
-        return $this->mccc_specifiques;
+        return $this->mccc_specifiques ?? false;
     }
 
     public function setMcccSpecifiques(?bool $mccc_specifiques): static
@@ -892,7 +892,7 @@ class ElementConstitutif
 
     public function isEctsSpecifiques(): ?bool
     {
-        return $this->ects_specifiques;
+        return $this->ects_specifiques ?? false;
     }
 
     public function setEctsSpecifiques(?bool $ects_specifiques): static
