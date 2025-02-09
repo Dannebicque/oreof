@@ -34,7 +34,8 @@
         >
             {% if this.texte == true %}<i class="fal fa-marker"></i>{% endif %}
             <span class="badge bg-{% if this.etatMcccComplet == true %}success{% else %}warning{% endif %}">
-               {% if this.texte == true %}{% if this.etatMcccComplet == true %}Complet{% else %}A saisir{% endif %} {% else %}MCCC{% endif %} {% if this.isMcccSpecifiques == false %}
+               {% if this.texte == true %}{% if this.etatMcccComplet == true %}Complet{% else %}A saisir{% endif %} {% else %}MCCC{% endif %}
+                {% if this.isParcoursProprietaire == false and this.isMcccSpecifiques == false  %}
                     <i class="fal fa-link" title="MCCC repris de la fiche matière"></i>{% endif %}
                 </span>
         </button>

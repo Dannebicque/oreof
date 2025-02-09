@@ -18,10 +18,12 @@ final class BadgeEctsComponent
     public ?bool $texte = false;
     public ?string $etatEcts = 'danger';
     public null|float|string $ects = null;
+    public ?bool $isParcoursProprietaire = false;
 
     #[PostMount]
     public function mounted(): void
     {
+        $this->isParcoursProprietaire = $this->elementConstitutif->getFicheMatiere()?->getParcours()?->getId() === $this->parcours->getId();
         $this->isEctsSpecifique = $this->elementConstitutif->isEctsSpecifiques();
         $getElement = new GetElementConstitutif($this->elementConstitutif, $this->parcours);
         $this->ects = $getElement->getEcts();
