@@ -509,6 +509,8 @@ class NewAnneeUniversitaireCommand extends Command
                 $io->progressStart($nbMccc);
                 foreach($mcccArray as $mccc){
                     $mcccClone = clone $mccc;
+                    $mcccClone->setEc(null);
+                    $mcccClone->setFicheMatiere(null);
                     // S'il y a une fiche matière à copier
                     if($mccc->getFicheMatiere() !== null){
                         $newLinkFm = $this->entityManager->getRepository(FicheMatiere::class)
