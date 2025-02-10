@@ -198,7 +198,7 @@ abstract class ValideStructure extends AbstractValide
         $getElement = new GetElementConstitutif($ec, self::$parcours);
         if ($ec->getNatureUeEc()?->isLibre() === true) {
             if (self::$typeDiplome !== null) {
-                $ects = $getElement->getEcts();
+                $ects = $getElement->getFicheMatiereEcts();
                 //todo: selon le type de diplôme, vérifier si les ECTS sont obligatoires
                 if (self::$typeDiplome->isEctsObligatoireSurEc() === false && ($ects === null || $ects === 0.0)) {
                     $t['erreur'][] = 'ECTS non renseignés, mais ce type de diplôme l\'autorise';
@@ -232,7 +232,7 @@ abstract class ValideStructure extends AbstractValide
                 self::$errors[] = 'MCCC non renseignées pour l\'' . $ec->getCode() . ' de l\'' . $ue->display(self::$parcours);
             }
             if (self::$typeDiplome !== null) {
-                $ects = $getElement->getEcts();
+                $ects = $getElement->getFicheMatiereEcts();
                 if (self::$typeDiplome->isEctsObligatoireSurEc() === false && ($ects === null || $ects === 0.0)) {
                     $t['erreur'][] = 'ECTS non renseignés, mais ce type de diplôme l\'autorise';
                     $etatEc = self::INCOMPLET_ECTS;

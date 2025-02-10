@@ -43,18 +43,17 @@ class UeController extends AbstractController
     public function detailComposante(
         Request              $request,
         UeRepository         $ueRepository,
-        TypeUeRepository     $typeUeRepository,
         NatureUeEcRepository $natureUeEcRepository,
         Semestre             $semestre,
         Parcours             $parcours,
     ): Response {
-        $raccroche = (bool)$request->query->get('raccroche', false);
+        $isSemestreRaccroche = (bool)$request->query->get('raccroche', false);
         $ues = $ueRepository->findBy(['semestre' => $semestre], ['ordre' => 'ASC']);
         $typeDiplome = $parcours->getFormation()?->getTypeDiplome();
 
         return $this->render('structure/ue/_liste.html.twig', [
             'ues' => $ues,
-            'raccroche' => $raccroche,
+            'isSemestreRaccroche' => $isSemestreRaccroche,
             'semestre' => $semestre,
             'typeUes' => $typeDiplome?->getTypeUes(),
             'natureUeEcs' => $natureUeEcRepository->findAll(),

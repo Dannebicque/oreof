@@ -44,10 +44,6 @@ class ParcoursWizardController extends AbstractController
     #[Route('/{dpeParcours}/1', name: 'app_parcours_wizard_step_1', methods: ['GET'])]
     public function step1(DpeParcours $dpeParcours): Response
     {
-        if (!Access::isAccessible($dpeParcours, 'ss_cfvu')) {
-            return $this->render('parcours_wizard/_access_denied.html.twig');
-        }
-
         $parcours = $dpeParcours->getParcours();
 
         $form = $this->createForm(ParcoursStep1Type::class, $parcours);
@@ -65,9 +61,6 @@ class ParcoursWizardController extends AbstractController
     public function step2(
         DpeParcours $dpeParcours
     ): Response {
-        if (!Access::isAccessible($dpeParcours, 'ss_cfvu')) {
-            return $this->render('parcours_wizard/_access_denied.html.twig');
-        }
 
         $parcours = $dpeParcours->getParcours();
 
@@ -182,9 +175,7 @@ class ParcoursWizardController extends AbstractController
     #[Route('/{dpeParcours}/5', name: 'app_parcours_wizard_step_5', methods: ['GET'])]
     public function step5(DpeParcours $dpeParcours): Response
     {
-        if (!Access::isAccessible($dpeParcours, 'ss_cfvu')) {
-            return $this->render('parcours_wizard/_access_denied.html.twig');
-        }
+
 
         $parcours = $dpeParcours->getParcours();
 
@@ -199,9 +190,7 @@ class ParcoursWizardController extends AbstractController
     #[Route('/{dpeParcours}/6', name: 'app_parcours_wizard_step_6', methods: ['GET'])]
     public function step6(DpeParcours $dpeParcours): Response
     {
-        if (!Access::isAccessible($dpeParcours, 'ss_cfvu')) {
-            return $this->render('parcours_wizard/_access_denied.html.twig');
-        }
+
 
         $parcours = $dpeParcours->getParcours();
 
@@ -216,10 +205,6 @@ class ParcoursWizardController extends AbstractController
     #[Route('/{dpeParcours}/7', name: 'app_parcours_wizard_step_7', methods: ['GET'])]
     public function step7(DpeParcours $dpeParcours): Response
     {
-        if (!Access::isAccessible($dpeParcours, 'ss_cfvu')) {
-            return $this->render('parcours_wizard/_access_denied.html.twig');
-        }
-
         $parcours = $dpeParcours->getParcours();
 
         $form = $this->createForm(ParcoursStep7Type::class, $parcours);

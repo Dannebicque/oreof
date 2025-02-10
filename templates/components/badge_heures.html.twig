@@ -4,8 +4,8 @@
         <span class="badge bg-info ms-1 w-100">EC Libre</span>
     {% else %}
         <button
-                {% if isAccessible(this.dpeParcours, 'cfvu') %}{# todo: isGranted #}
-                    {% if deplacer is defined and deplacer == true and editable == true %}
+                {% if isAccessible(this.dpeParcours, 'cfvu') and this.editable %}{# todo: isGranted #}
+                    {% if deplacer is defined and deplacer == true and this.editable == true %}
                         {{ stimulus_controller('modal', {
                             size: 'lg',
                             modalTitle: 'Volumes Horaires',
@@ -32,8 +32,11 @@
                 title="Volumes Horaires"
         >
             {% if this.texte == true %}<i class="fal fa-clock"></i>{% endif %}
-            <span class="badge bg-{% if this.etatHeuresComplet == true %}success{% else %}warning{% endif %}">{% if this.texte == true %}{% if this.etatHeuresComplet == true %}Complet{% else %}A saisir{% endif %} {% else %}Heures{% endif %} {% if this.isHeuresSpecifiques == false %}
-                    <i class="fal fa-link" title="Heures reprises de la fiche matière"></i>{% endif %}</span>
+            <span class="badge bg-{% if this.etatHeuresComplet == true %}success{% else %}warning{% endif %}">{% if this.texte == true %}{% if this.etatHeuresComplet == true %}Complet{% else %}A saisir{% endif %} {% else %}Heures{% endif %}
+                    {% if this.isHeuresSpecifiques == false %}
+                    <i class="fal fa-link" title="Heures reprises de la fiche matière"></i>
+                    {% endif %}
+            </span>
         </button>
     {% endif %}
 </div>
