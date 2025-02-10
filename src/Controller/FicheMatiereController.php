@@ -389,7 +389,6 @@ class FicheMatiereController extends AbstractController
         }
     }
 
-    #[IsGranted('ROLE_ADMIN')]
     #[Route('/recherche/parcours/{parcours}/{keyword}', name: 'app_fiche_matiere_search')]
     public function getFicheMatiereForParcoursAndKeyword(
         EntityManagerInterface $entityManager,
