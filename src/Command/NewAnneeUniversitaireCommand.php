@@ -10,6 +10,7 @@ use App\Entity\ElementConstitutif;
 use App\Entity\FicheMatiere;
 use App\Entity\FicheMatiereMutualisable;
 use App\Entity\Formation;
+use App\Entity\Mccc;
 use App\Entity\Parcours;
 use App\Entity\Semestre;
 use App\Entity\SemestreMutualisable;
@@ -61,7 +62,7 @@ class NewAnneeUniversitaireCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        ini_set('memory_limit', '8000M');
+        ini_set('memory_limit', '12500M');
 
         $io = new SymfonyStyle($input, $output);
         
@@ -496,6 +497,37 @@ class NewAnneeUniversitaireCommand extends Command
                 $io->writeln("Application des changements...");
                 $this->entityManager->flush();
                 $contactsArray = null;
+
+                /**
+                 * 
+                 * MCCC
+                 * 
+                 */
+                $mcccArray = $this->entityManager->getRepository(Mccc::class)->findBy([], ['id' => 'ASC']);
+                $nbMccc = count($mcccArray);
+                $io->writeln("Copie des MCCC...");
+                $io->progressStart($nbMccc);
+                foreach($mcccArray as $mccc){
+                    $mcccClone = clone $mccc;
+                    // S'il y a une fiche matière à copier
+                    if($mccc->getFicheMatiere() !== null){
+                        $newLinkFm = $this->entityManager->getRepository(FicheMatiere::class)
+                            ->findOneBy(['ficheMatiereOrigineCopie' => $mccc->getFicheMatiere()]);
+                        $mcccClone->setFicheMatiere($newLinkFm);
+                    }
+                    // S'il y a un EC à copier
+                    if($mccc->getEc() !== null){
+                        $newLinkEc = $this->entityManager->getRepository(ElementConstitutif::class)
+                            ->findOneBy(['ecOrigineCopie' => $mccc->getEc()]);
+                        $mcccClone->setEc($newLinkEc);
+                    }
+                    $this->entityManager->persist($mcccClone);
+                    $io->progressAdvance();
+                }
+                $io->progressFinish();
+                $io->writeln("Application des changements...");
+                $this->entityManager->flush();
+                $mcccArray = null;
 
                 $io->success("Copie réussie !");
                 return Command::SUCCESS;
