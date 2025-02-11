@@ -147,6 +147,61 @@ class NewAnneeUniversitaireCommand extends Command
                 $io->writeln("Application des changements...");
                 $this->entityManager->flush();
                 $dpeArray = null;
+
+                /**
+                 * 
+                 * BLOCS DE COMPÉTENCES
+                 * 
+                 */
+                $blocCompArray = $this->entityManager->getRepository(BlocCompetence::class)->findBy([], ['id' => 'ASC']);
+                $nbBlocC = count($blocCompArray);
+                $io->writeln("Copie des blocs de compétences...");
+                $io->progressStart($nbBlocC);
+                foreach($blocCompArray as $bc){
+                    $blocCompClone = clone $bc;
+                    if($bc->getParcours() !== null){
+                        $newLinkParcours = $this->entityManager->getRepository(Parcours::class)
+                            ->findOneBy(['parcoursOrigineCopie' => $bc->getParcours()]);
+                        $blocCompClone->setParcours($newLinkParcours);
+                    }   
+                    if($bc->getFormation() !== null){
+                        $newLinkFormation = $this->entityManager->getRepository(Formation::class)
+                            ->findOneBy(['formationOrigineCopie' => $bc->getFormation()]);
+                        $blocCompClone->setFormation($newLinkFormation);
+                    }
+                    $blocCompClone->setBlocCompetenceOrigineCopie($bc);
+                    $this->entityManager->persist($blocCompClone);
+                    $io->progressAdvance();
+                }
+                $io->progressFinish();
+                $io->writeln("Application des changements...");
+                $this->entityManager->flush();
+                $blocCompArray = null;
+
+                /**
+                 * 
+                 * COMPÉTENCES
+                 * 
+                 */
+                $competencesArray = $this->entityManager->getRepository(Competence::class)->findBy([], ['id' => 'ASC']);
+                $nbCompetence = count($competencesArray);
+                $io->writeln("Copie des compétences...");
+                $io->progressStart($nbCompetence);
+                foreach($competencesArray as $comp){
+                    $competenceClone = clone $comp;
+                    if($comp->getBlocCompetence() !== null){
+                        $newLinkBlocComp = $this->entityManager->getRepository(BlocCompetence::class)
+                            ->findOneBy(['blocCompetenceOrigineCopie' => $comp->getBlocCompetence()]);
+                        $competenceClone->setBlocCompetence($newLinkBlocComp);
+                    }
+                    $competenceClone->setCompetenceOrigineCopie($comp);
+                    $io->progressAdvance();
+                }
+                $io->progressFinish();
+                $io->writeln("Application des changements...");
+                $this->entityManager->flush();
+                $competencesArray = null;
+
                 /**
                  * 
                  * FICHES MATIERES
@@ -173,6 +228,22 @@ class NewAnneeUniversitaireCommand extends Command
                             $ficheMatiereClone->setParcours(
                                 $parcoursRepository->findOneBy(['parcoursOrigineCopie' => $ficheMatiere->getParcours()])
                             );
+                        }
+                        /**
+                         * 
+                         * Gestion des fiche_matiere_competence
+                         * 
+                         */
+                        // On supprime les compétences du clone
+                        array_walk(
+                            $ficheMatiereClone->getCompetences(), 
+                            fn($c) => $ficheMatiereClone->removeCompetence($c)
+                        );
+                        // Et on rajoute les nouveaux
+                        foreach($ficheMatiere->getCompetences() as $compFM){
+                            $newLinkCompetenceFM = $this->entityManager->getRepository(Competence::class)
+                                ->findOneBy(['competenceOrigineCopie' => $compFM]);
+                            $ficheMatiereClone->addCompetence($newLinkCompetenceFM);
                         }
                         $ficheMatiereClone->setFicheMatiereOrigineCopie($ficheMatiere);
                         // Sauvegarde en BD
@@ -532,60 +603,6 @@ class NewAnneeUniversitaireCommand extends Command
                 $io->writeln("Application des changements...");
                 $this->entityManager->flush();
                 $mcccArray = null;
-
-                /**
-                 * 
-                 * BLOCS DE COMPÉTENCES
-                 * 
-                 */
-                $blocCompArray = $this->entityManager->getRepository(BlocCompetence::class)->findBy([], ['id' => 'ASC']);
-                $nbBlocC = count($blocCompArray);
-                $io->writeln("Copie des blocs de compétences...");
-                $io->progressStart($nbBlocC);
-                foreach($blocCompArray as $bc){
-                    $blocCompClone = clone $bc;
-                    if($bc->getParcours() !== null){
-                        $newLinkParcours = $this->entityManager->getRepository(Parcours::class)
-                            ->findOneBy(['parcoursOrigineCopie' => $bc->getParcours()]);
-                        $blocCompClone->setParcours($newLinkParcours);
-                    }   
-                    if($bc->getFormation() !== null){
-                        $newLinkFormation = $this->entityManager->getRepository(Formation::class)
-                            ->findOneBy(['formationOrigineCopie' => $bc->getFormation()]);
-                        $blocCompClone->setFormation($newLinkFormation);
-                    }
-                    $blocCompClone->setBlocCompetenceOrigineCopie($bc);
-                    $this->entityManager->persist($blocCompClone);
-                    $io->progressAdvance();
-                }
-                $io->progressFinish();
-                $io->writeln("Application des changements...");
-                $this->entityManager->flush();
-                $blocCompArray = null;
-
-                /**
-                 * 
-                 * COMPÉTENCES
-                 * 
-                 */
-                $competencesArray = $this->entityManager->getRepository(Competence::class)->findBy([], ['id' => 'ASC']);
-                $nbCompetence = count($competencesArray);
-                $io->writeln("Copie des compétences...");
-                $io->progressStart($nbCompetence);
-                foreach($competencesArray as $comp){
-                    $competenceClone = clone $comp;
-                    if($comp->getBlocCompetence() !== null){
-                        $newLinkBlocComp = $this->entityManager->getRepository(BlocCompetence::class)
-                            ->findOneBy(['blocCompetenceOrigineCopie' => $comp->getBlocCompetence()]);
-                        $competenceClone->setBlocCompetence($newLinkBlocComp);
-                    }
-                    $competenceClone->setCompetenceOrigineCopie($comp);
-                    $io->progressAdvance();
-                }
-                $io->progressFinish();
-                $io->writeln("Application des changements...");
-                $this->entityManager->flush();
-                $competencesArray = null;
 
                 $io->success("Copie réussie !");
                 return Command::SUCCESS;
