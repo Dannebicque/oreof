@@ -195,6 +195,7 @@ class NewAnneeUniversitaireCommand extends Command
                         $competenceClone->setBlocCompetence($newLinkBlocComp);
                     }
                     $competenceClone->setCompetenceOrigineCopie($comp);
+                    $this->entityManager->persist($competenceClone);
                     $io->progressAdvance();
                 }
                 $io->progressFinish();
@@ -235,10 +236,9 @@ class NewAnneeUniversitaireCommand extends Command
                          * 
                          */
                         // On supprime les compétences du clone
-                        array_walk(
-                            $ficheMatiereClone->getCompetences(), 
-                            fn($c) => $ficheMatiereClone->removeCompetence($c)
-                        );
+                        foreach($ficheMatiereClone->getCompetences() as $cloneComp){
+                            $ficheMatiereClone->removeCompetence($cloneComp);
+                        }
                         // Et on rajoute les nouveaux
                         foreach($ficheMatiere->getCompetences() as $compFM){
                             $newLinkCompetenceFM = $this->entityManager->getRepository(Competence::class)
