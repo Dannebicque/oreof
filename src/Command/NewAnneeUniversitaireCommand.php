@@ -235,15 +235,10 @@ class NewAnneeUniversitaireCommand extends Command
                          * Gestion des fiche_matiere_competence
                          * 
                          */
-                        // On supprime les compétences du clone
-                        foreach($ficheMatiereClone->getCompetences() as $cloneComp){
-                            $ficheMatiereClone->removeCompetence($cloneComp);
-                        }
-                        // Et on rajoute les nouveaux
                         foreach($ficheMatiere->getCompetences() as $compFM){
-                            $newLinkCompetenceFM = $this->entityManager->getRepository(Competence::class)
+                            $newLinkCompFM = $this->entityManager->getRepository(Competence::class)
                                 ->findOneBy(['competenceOrigineCopie' => $compFM]);
-                            $ficheMatiereClone->addCompetence($newLinkCompetenceFM);
+                            $ficheMatiereClone->addCompetence($newLinkCompFM);
                         }
                         $ficheMatiereClone->setFicheMatiereOrigineCopie($ficheMatiere);
                         // Sauvegarde en BD

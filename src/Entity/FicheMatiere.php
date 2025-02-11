@@ -1203,4 +1203,9 @@ class FicheMatiere
         return $this;
     }
 
+    public function __clone() : void {
+        // On initialise à vide, pour remplir selon le besoin
+        $this->competences = new ArrayCollection();
+    }
+
 }
