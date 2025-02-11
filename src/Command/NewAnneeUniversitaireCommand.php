@@ -3,6 +3,7 @@
 namespace App\Command;
 
 use App\Entity\Adresse;
+use App\Entity\BlocCompetence;
 use App\Entity\CampagneCollecte;
 use App\Entity\Contact;
 use App\Entity\DpeParcours;
@@ -530,6 +531,35 @@ class NewAnneeUniversitaireCommand extends Command
                 $io->writeln("Application des changements...");
                 $this->entityManager->flush();
                 $mcccArray = null;
+
+                /**
+                 * 
+                 * BLOCS DE COMPÉTENCES
+                 * 
+                 */
+                $blocCompArray = $this->entityManager->getRepository(BlocCompetence::class)->findBy([], ['id' => 'ASC']);
+                $nbBlocC = count($blocCompArray);
+                $io->writeln("Copie des blocs de compétences...");
+                $io->progressStart($nbBlocC);
+                foreach($blocCompArray as $bc){
+                    $blocCompClone = clone $bc;
+                    if($bc->getParcours() !== null){
+                        $newLinkParcours = $this->entityManager->getRepository(Parcours::class)
+                            ->findOneBy(['parcoursOrigineCopie' => $bc->getParcours()]);
+                        $blocCompClone->setParcours($newLinkParcours);
+                    }   
+                    if($bc->getFormation() !== null){
+                        $newLinkFormation = $this->entityManager->getRepository(Formation::class)
+                            ->findOneBy(['formationOrigineCopie' => $bc->getFormation()]);
+                        $blocCompClone->setFormation($newLinkFormation);
+                    }
+                    $this->entityManager->persist($blocCompClone);
+                    $io->progressAdvance();
+                }
+                $io->progressFinish();
+                $io->writeln("Application des changements...");
+                $this->entityManager->flush();
+                $blocCompArray = null;
 
                 $io->success("Copie réussie !");
                 return Command::SUCCESS;
