@@ -5,6 +5,7 @@ namespace App\Command;
 use App\Entity\Adresse;
 use App\Entity\BlocCompetence;
 use App\Entity\CampagneCollecte;
+use App\Entity\Competence;
 use App\Entity\Contact;
 use App\Entity\DpeParcours;
 use App\Entity\ElementConstitutif;
@@ -553,6 +554,7 @@ class NewAnneeUniversitaireCommand extends Command
                             ->findOneBy(['formationOrigineCopie' => $bc->getFormation()]);
                         $blocCompClone->setFormation($newLinkFormation);
                     }
+                    $blocCompClone->setBlocCompetenceOrigineCopie($bc);
                     $this->entityManager->persist($blocCompClone);
                     $io->progressAdvance();
                 }
@@ -560,6 +562,30 @@ class NewAnneeUniversitaireCommand extends Command
                 $io->writeln("Application des changements...");
                 $this->entityManager->flush();
                 $blocCompArray = null;
+
+                /**
+                 * 
+                 * COMPÉTENCES
+                 * 
+                 */
+                $competencesArray = $this->entityManager->getRepository(Competence::class)->findBy([], ['id' => 'ASC']);
+                $nbCompetence = count($competencesArray);
+                $io->writeln("Copie des compétences...");
+                $io->progressStart($nbCompetence);
+                foreach($competencesArray as $comp){
+                    $competenceClone = clone $comp;
+                    if($comp->getBlocCompetence() !== null){
+                        $newLinkBlocComp = $this->entityManager->getRepository(BlocCompetence::class)
+                            ->findOneBy(['blocCompetenceOrigineCopie' => $comp->getBlocCompetence()]);
+                        $competenceClone->setBlocCompetence($newLinkBlocComp);
+                    }
+                    $competenceClone->setCompetenceOrigineCopie($comp);
+                    $io->progressAdvance();
+                }
+                $io->progressFinish();
+                $io->writeln("Application des changements...");
+                $this->entityManager->flush();
+                $competencesArray = null;
 
                 $io->success("Copie réussie !");
                 return Command::SUCCESS;

@@ -47,6 +47,9 @@ class Competence
     #[ORM\ManyToMany(targetEntity: ElementConstitutif::class, mappedBy: 'competences')]
     private Collection $elementConstitutifs;
 
+    #[ORM\OneToOne(targetEntity: self::class, cascade: ['persist', 'remove'])]
+    private ?self $competenceOrigineCopie = null;
+
 
     public function __construct(?BlocCompetence $blocCompetence)
     {
@@ -167,6 +170,18 @@ class Competence
         if ($this->elementConstitutifs->removeElement($elementConstitutif)) {
             $elementConstitutif->removeCompetence($this);
         }
+
+        return $this;
+    }
+
+    public function getCompetenceOrigineCopie(): ?self
+    {
+        return $this->competenceOrigineCopie;
+    }
+
+    public function setCompetenceOrigineCopie(?self $competenceOrigineCopie): static
+    {
+        $this->competenceOrigineCopie = $competenceOrigineCopie;
 
         return $this;
     }

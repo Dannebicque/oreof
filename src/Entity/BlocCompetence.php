@@ -47,6 +47,9 @@ class BlocCompetence
     #[ORM\Column]
     private ?int $ordre = null;
 
+    #[ORM\OneToOne(targetEntity: self::class, cascade: ['persist', 'remove'])]
+    private ?self $blocCompetenceOrigineCopie = null;
+
     public function __construct()
     {
         $this->competences = new ArrayCollection();
@@ -153,5 +156,17 @@ class BlocCompetence
     public function genereCode(): void
     {
         $this->setCode('BC ' . $this->getOrdre());
+    }
+
+    public function getBlocCompetenceOrigineCopie(): ?self
+    {
+        return $this->blocCompetenceOrigineCopie;
+    }
+
+    public function setBlocCompetenceOrigineCopie(?self $blocCompetenceOrigineCopie): static
+    {
+        $this->blocCompetenceOrigineCopie = $blocCompetenceOrigineCopie;
+
+        return $this;
     }
 }
