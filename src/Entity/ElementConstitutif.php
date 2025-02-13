@@ -916,4 +916,12 @@ class ElementConstitutif
 
         return $this;
     }
+
+    /**
+     * Méthode appelée lors de la duplication de l'année universitaire
+     */
+    public function prepareCloneForNewAnnee() : void {
+        $this->competences = new ArrayCollection();
+        $this->apprentissagesCritiques = new ArrayCollection();
+    }
 }

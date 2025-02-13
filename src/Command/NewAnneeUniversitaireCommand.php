@@ -540,6 +540,7 @@ class NewAnneeUniversitaireCommand extends Command
                 $io->progressStart($nbEc);
                 foreach($elementConstitutifArray as $ec){
                     $ecClone = clone $ec;
+                    $ecClone->prepareCloneForNewAnnee();
                     // Liens vers les nouveaux éléments
                     $newEcFm = null;
                     $newEcUe = null;
@@ -564,6 +565,13 @@ class NewAnneeUniversitaireCommand extends Command
                     if($newEcParcours !== null){
                         $ecClone->setParcours($newEcParcours);
                     }
+                    // EC competence
+                    foreach($ec->getCompetences() as $ecCompetence){
+                        $newEcCompetence = $this->entityManager->getRepository(Competence::class)
+                            ->findOneBy(['competenceOrigineCopie' => $ecCompetence]);
+                        $ecClone->addCompetence($newEcCompetence);
+                    }
+
                     $ecClone->setEcOrigineCopie($ec);
                     $this->entityManager->persist($ecClone);
                     $io->progressAdvance();

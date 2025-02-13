@@ -1224,5 +1224,6 @@ class FicheMatiere
     public function prepareCloneForNewAnnee() : void {
         // On initialise à vide, pour remplir selon le besoin
         $this->competences = new ArrayCollection();
+        $this->apprentissagesCritiques = new ArrayCollection();
     }
 }
