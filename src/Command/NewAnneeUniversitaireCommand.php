@@ -317,6 +317,16 @@ class NewAnneeUniversitaireCommand extends Command
                                 ->findOneBy(['competenceOrigineCopie' => $compFM]);
                             $ficheMatiereClone->addCompetence($newLinkCompFM);
                         }
+                        /**
+                         * Gestion des fiche_matiere_but_apprentissage_critique
+                         * 
+                         */
+                        foreach($ficheMatiere->getApprentissagesCritiques() as $appCrit){
+                            $newLinkAppCrit = $this->entityManager->getRepository(ButApprentissageCritique::class)
+                                ->findOneBy(['butApprentissageCritiqueOrigineCopie' => $appCrit]);
+                            $ficheMatiereClone->addApprentissagesCritique($newLinkAppCrit);
+                        }
+
                         $ficheMatiereClone->setFicheMatiereOrigineCopie($ficheMatiere);
                         $ficheMatiereClone->setCampagneCollecte($newCampagneCollecte);
                         // Sauvegarde en BD
