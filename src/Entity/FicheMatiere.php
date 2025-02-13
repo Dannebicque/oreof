@@ -226,6 +226,9 @@ class FicheMatiere
     #[ORM\OneToOne(mappedBy: 'ficheMatiereOrigineCopie', targetEntity: self::class, cascade: ['persist', 'remove'])]
     private ?self $ficheMatiereCopieAnneeUniversitaire = null;
 
+    #[ORM\ManyToOne]
+    private ?CampagneCollecte $campagneCollecte = null;
+
     public function __construct()
     {
         $this->mcccs = new ArrayCollection();
@@ -1203,9 +1206,23 @@ class FicheMatiere
         return $this;
     }
 
-    public function __clone() : void {
+    public function getCampagneCollecte(): ?CampagneCollecte
+    {
+        return $this->campagneCollecte;
+    }
+
+    public function setCampagneCollecte(?CampagneCollecte $campagneCollecte): static
+    {
+        $this->campagneCollecte = $campagneCollecte;
+
+        return $this;
+    }
+
+    /**
+     * Méthode appelée lors de la duplication de l'année universitaire
+     */
+    public function prepareCloneForNewAnnee() : void {
         // On initialise à vide, pour remplir selon le besoin
         $this->competences = new ArrayCollection();
     }
-
 }

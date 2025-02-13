@@ -222,6 +222,7 @@ class NewAnneeUniversitaireCommand extends Command
                     );
                     foreach($ficheMatiereArray as $ficheMatiere){
                         $ficheMatiereClone = clone $ficheMatiere;
+                        $ficheMatiereClone->prepareCloneForNewAnnee();
                         // Le slug est unique, donc on le préfixe
                         $ficheMatiereClone->setSlug($ficheMatiereClone->getSlug() . $this->slugSuffix);
                         // Le parcours devient le nouveau
@@ -241,6 +242,7 @@ class NewAnneeUniversitaireCommand extends Command
                             $ficheMatiereClone->addCompetence($newLinkCompFM);
                         }
                         $ficheMatiereClone->setFicheMatiereOrigineCopie($ficheMatiere);
+                        $ficheMatiereClone->setCampagneCollecte($newCampagneCollecte);
                         // Sauvegarde en BD
                         $this->entityManager->persist($ficheMatiereClone);
                         ++$processedFicheMatiere;
