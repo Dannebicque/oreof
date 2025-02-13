@@ -5,6 +5,7 @@ namespace App\Command;
 use App\Entity\Adresse;
 use App\Entity\BlocCompetence;
 use App\Entity\ButCompetence;
+use App\Entity\ButNiveau;
 use App\Entity\CampagneCollecte;
 use App\Entity\Competence;
 use App\Entity\Contact;
@@ -211,7 +212,7 @@ class NewAnneeUniversitaireCommand extends Command
                  */
                 $butCompetencesArray = $this->entityManager->getRepository(ButCompetence::class)->findBy([], ['id' => 'ASC']);
                 $nbButComp = count($butCompetencesArray);
-                $io->writeln("Copie des compétences de BUT...");
+                $io->writeln("Copie des compétences de BUT (but_competence)...");
                 $io->progressStart($nbButComp);
                 foreach($butCompetencesArray as $butComp){
                     $butCompetenceClone = clone $butComp;
@@ -227,6 +228,30 @@ class NewAnneeUniversitaireCommand extends Command
                 $io->writeln("Application des changements...");
                 $this->entityManager->flush();
                 $butCompetencesArray = null;
+
+                /**
+                 * 
+                 * BUT NIVEAU
+                 * 
+                 */
+                $butNiveauArray = $this->entityManager->getRepository(ButNiveau::class)->findBy([], ['id' => 'ASC']);
+                $nbButNiveau = count($butNiveauArray);
+                $io->writeln("Copie des niveaux de BUT (but_niveau)...");
+                $io->progressStart($nbButNiveau);
+                foreach($butNiveauArray as $butNiv){
+                    $butNiveauClone = clone $butNiv;
+                    $newLinkButCompetence = $this->entityManager->getRepository(ButCompetence::class)
+                        ->findOneBy(['butCompetenceOrigineCopie' => $butNiv->getCompetence()]);
+
+                    $butNiveauClone->setCompetence($newLinkButCompetence);
+                    $butNiveauClone->setButNiveauOrigineCopie($butNiv);
+                    $this->entityManager->persist($butNiveauClone);
+                    $io->progressAdvance();
+                }
+                $io->progressFinish();
+                $io->writeln("Application des changements...");
+                $this->entityManager->flush();
+                $butNiveauArray = null;
 
                 /**
                  * 
