@@ -4,6 +4,7 @@ namespace App\Command;
 
 use App\Entity\Adresse;
 use App\Entity\BlocCompetence;
+use App\Entity\ButCompetence;
 use App\Entity\CampagneCollecte;
 use App\Entity\Competence;
 use App\Entity\Contact;
@@ -202,6 +203,30 @@ class NewAnneeUniversitaireCommand extends Command
                 $io->writeln("Application des changements...");
                 $this->entityManager->flush();
                 $competencesArray = null;
+
+                /**
+                 * 
+                 * BUT COMPÉTENCES
+                 * 
+                 */
+                $butCompetencesArray = $this->entityManager->getRepository(ButCompetence::class)->findBy([], ['id' => 'ASC']);
+                $nbButComp = count($butCompetencesArray);
+                $io->writeln("Copie des compétences de BUT...");
+                $io->progressStart($nbButComp);
+                foreach($butCompetencesArray as $butComp){
+                    $butCompetenceClone = clone $butComp;
+                    $newLinkFormationButComp = $this->entityManager->getRepository(Formation::class)
+                        ->findOneBy(['formationOrigineCopie' => $butComp->getFormation()]);
+
+                    $butCompetenceClone->setFormation($newLinkFormationButComp);
+                    $butCompetenceClone->setButCompetenceOrigineCopie($butComp);
+                    $this->entityManager->persist($butCompetenceClone);
+                    $io->progressAdvance();
+                }
+                $io->progressFinish();
+                $io->writeln("Application des changements...");
+                $this->entityManager->flush();
+                $butCompetencesArray = null;
 
                 /**
                  * 
