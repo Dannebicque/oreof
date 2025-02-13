@@ -4,6 +4,7 @@ namespace App\Command;
 
 use App\Entity\Adresse;
 use App\Entity\BlocCompetence;
+use App\Entity\ButApprentissageCritique;
 use App\Entity\ButCompetence;
 use App\Entity\ButNiveau;
 use App\Entity\CampagneCollecte;
@@ -252,6 +253,31 @@ class NewAnneeUniversitaireCommand extends Command
                 $io->writeln("Application des changements...");
                 $this->entityManager->flush();
                 $butNiveauArray = null;
+
+                /**
+                 * 
+                 * BUT APPRENTISSAGE CRITIQUE
+                 * 
+                 */
+                $butApprentissageCritArray = $this->entityManager->getRepository(ButApprentissageCritique::class)
+                    ->findBy([], ['id' => 'ASC']);
+                $nbApprentissageCritique = count($butApprentissageCritArray);
+                $io->writeln("Copie des apprentissages critiques des BUT...");
+                $io->progressStart($nbApprentissageCritique);
+                foreach($butApprentissageCritArray as $butAppCrit){
+                    $butAppCritClone = clone $butAppCrit;
+                    $newLinkButNiveau = $this->entityManager->getRepository(ButNiveau::class)
+                        ->findOneBy(['butNiveauOrigineCopie' => $butAppCrit->getNiveau()]);
+
+                    $butAppCritClone->setNiveau($newLinkButNiveau);
+                    $butAppCritClone->setButApprentissageCritiqueOrigineCopie($butAppCrit);
+                    $this->entityManager->persist($butAppCritClone);
+                    $io->progressAdvance();
+                }
+                $io->progressFinish();
+                $io->writeln("Application des changements...");
+                $this->entityManager->flush();
+                $butApprentissageCritArray = null;
 
                 /**
                  * 
