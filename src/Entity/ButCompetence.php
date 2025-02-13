@@ -46,6 +46,9 @@ class ButCompetence
     #[ORM\OrderBy(['ordre' => 'ASC'])]
     private Collection $butNiveaux;
 
+    #[ORM\OneToOne(targetEntity: self::class, cascade: ['persist', 'remove'])]
+    private ?self $butCompetenceOrigineCopie = null;
+
     public function __construct()
     {
         $this->butNiveaux = new ArrayCollection();
@@ -161,5 +164,17 @@ class ButCompetence
     public function getDisplay(): string
     {
         return '['.$this->getNomCourt().'] ' . $this->getLibelle();
+    }
+
+    public function getButCompetenceOrigineCopie(): ?self
+    {
+        return $this->butCompetenceOrigineCopie;
+    }
+
+    public function setButCompetenceOrigineCopie(?self $butCompetenceOrigineCopie): static
+    {
+        $this->butCompetenceOrigineCopie = $butCompetenceOrigineCopie;
+
+        return $this;
     }
 }

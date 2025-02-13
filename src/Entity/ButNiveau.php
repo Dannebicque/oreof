@@ -37,6 +37,9 @@ class ButNiveau
     #[ORM\ManyToOne(inversedBy: 'butNiveaux')]
     private ?ButCompetence $competence = null;
 
+    #[ORM\OneToOne(targetEntity: self::class, cascade: ['persist', 'remove'])]
+    private ?self $butNiveauOrigineCopie = null;
+
     public function __construct()
     {
         $this->butApprentissageCritiques = new ArrayCollection();
@@ -121,6 +124,18 @@ class ButNiveau
     public function setCompetence(?ButCompetence $competence): self
     {
         $this->competence = $competence;
+
+        return $this;
+    }
+
+    public function getButNiveauOrigineCopie(): ?self
+    {
+        return $this->butNiveauOrigineCopie;
+    }
+
+    public function setButNiveauOrigineCopie(?self $butNiveauOrigineCopie): static
+    {
+        $this->butNiveauOrigineCopie = $butNiveauOrigineCopie;
 
         return $this;
     }
