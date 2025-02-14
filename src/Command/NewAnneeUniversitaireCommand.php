@@ -22,6 +22,7 @@ use App\Entity\SemestreMutualisable;
 use App\Entity\SemestreParcours;
 use App\Entity\Ue;
 use App\Entity\UeMutualisable;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -77,6 +78,8 @@ class NewAnneeUniversitaireCommand extends Command
             $parcoursRepository = $this->entityManager->getRepository(Parcours::class);
             $ficheMatiereRepository = $this->entityManager->getRepository(FicheMatiere::class);
 
+            $nowDate = new DateTime('now');
+
             $io->writeln("\nCommande pour copier les parcours et formations sur une nouvelle année universitaire.\n");
             $io->writeln("La commande va copier l'année actuelle pour créer l'année 2025-2026\n");
             if($io->ask("Souhaitez-vous poursuivre ? [Y/n]", 'n') === "Y"){
@@ -93,6 +96,8 @@ class NewAnneeUniversitaireCommand extends Command
                     $formationClone = clone $formation;
                     $formationClone->setSlug($formation->getSlug() . $this->slugSuffix);
                     $formationClone->setFormationOrigineCopie($formation);
+                    $formationClone->setCreated($nowDate);
+                    $formationClone->setUpdated($nowDate);
                     $this->entityManager->persist($formationClone);
                     $io->progressAdvance(1);
                 }
@@ -115,6 +120,8 @@ class NewAnneeUniversitaireCommand extends Command
                         ->findOneBy(['formationOrigineCopie' => $parcours->getFormation()]);
                     $parcoursClone->setFormation($newCloneFormation);
                     $parcoursClone->setParcoursOrigineCopie($parcours);
+                    $parcoursClone->setCreated($nowDate);
+                    $parcoursClone->setUpdated($nowDate);
                     $this->entityManager->persist($parcoursClone);
                     $io->progressAdvance(1);
                 }
