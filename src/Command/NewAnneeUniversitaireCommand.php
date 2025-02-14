@@ -22,6 +22,7 @@ use App\Entity\SemestreMutualisable;
 use App\Entity\SemestreParcours;
 use App\Entity\Ue;
 use App\Entity\UeMutualisable;
+use App\Enums\TypeModificationDpeEnum;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -147,6 +148,10 @@ class NewAnneeUniversitaireCommand extends Command
                         ->findOneBy(['formationOrigineCopie' => $dpe->getFormation()]);
                     $newParcoursDpe = $parcoursRepository
                         ->findOneBy(['parcoursOrigineCopie' => $dpe->getParcours()]);
+                    // État reconduction - OUVERT par défaut
+                    if($dpeParcoursClone->getEtatReconduction() !== TypeModificationDpeEnum::NON_OUVERTURE){
+                        $dpeParcoursClone->setEtatReconduction(TypeModificationDpeEnum::OUVERT);
+                    }
                     $dpeParcoursClone->setParcours($newParcoursDpe);
                     $dpeParcoursClone->setFormation($newFormationDpe);
                     $dpeParcoursClone->setCampagneCollecte($newCampagneCollecte);
