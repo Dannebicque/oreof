@@ -57,7 +57,7 @@ class StructureEc
         bool $isBut = false,
         bool $withEcts = true,
         bool $withBcc = true,
-        bool $dataFromFicheMatiere = false
+        bool $dataFromFicheMatiere = false //todo: mettre true par défaut ?
     ) {
         if($parcours) {
             $getElement = new GetElementConstitutif($elementConstitutif, $parcours);

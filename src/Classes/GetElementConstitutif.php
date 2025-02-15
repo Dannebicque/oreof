@@ -116,6 +116,9 @@ class GetElementConstitutif
         }
     }
 
+    /**
+     * @deprecated("Ne plus utiliser une fois la recopie des ECTS sur fiche matière validé")
+     */
     public function getEcts(): ?float
     {
         if ($this->elementConstitutif->getFicheMatiere()?->isEctsImpose()) {
@@ -152,6 +155,9 @@ class GetElementConstitutif
 
     }
 
+    /**
+     * @deprecated("Ne plus utiliser une fois la recopie des ECTS sur fiche matière validé")
+     */
     public function getElementConstitutifHeures(): ElementConstitutif|FicheMatiere
     {
         if ($this->elementConstitutif->getFicheMatiere()?->isVolumesHorairesImpose()) {

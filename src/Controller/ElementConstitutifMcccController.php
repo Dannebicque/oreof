@@ -138,7 +138,7 @@ class ElementConstitutifMcccController extends AbstractController
                 'typeMccc' => $typeEpreuve,
                 'typeEpreuves' => $typeEpreuveRepository->findByTypeDiplome($typeDiplome),
                 'ec' => $elementConstitutif,
-                'ects' => $getElement->getEcts(),
+                'ects' => $getElement->getFicheMatiereEcts(),
                 'templateForm' => $typeD::TEMPLATE_FORM_MCCC,
                 'mcccs' => $getElement->getMcccs($typeD),
                 'wizard' => false,

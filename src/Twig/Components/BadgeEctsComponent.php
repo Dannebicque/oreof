@@ -26,7 +26,7 @@ final class BadgeEctsComponent
         $this->isParcoursProprietaire = $this->elementConstitutif->getFicheMatiere()?->getParcours()?->getId() === $this->parcours->getId();
         $this->isEctsSpecifique = $this->elementConstitutif->isEctsSpecifiques();
         $getElement = new GetElementConstitutif($this->elementConstitutif, $this->parcours);
-        $this->ects = $getElement->getEcts();
+        $this->ects = $getElement->getFicheMatiereEcts();
 
         if ($this->ects > 0.0 && $this->ects < 30.0) {
             $this->etatEcts = 'success';

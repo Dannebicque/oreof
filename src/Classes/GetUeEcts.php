@@ -47,18 +47,6 @@ abstract class GetUeEcts
             if ($ec->getEcParent() === null) {
                 $getElement = new GetElementConstitutif($ec, $parcours);
                 $totalEctsUe += $getElement->getFicheMatiereEcts();
-//                $raccroche = $ec->getFicheMatiere()?->getParcours()?->getId() !== $parcours->getId();
-//                if ($ec->getFicheMatiere() !== null && $ec->getFicheMatiere()?->isEctsImpose()) {
-//                    $totalEctsUe += $ec->getFicheMatiere()?->getEcts();
-//                } elseif ($raccroche && $ec->isEctsSpecifiques()) {
-//                    $getElement = new GetElementConstitutif($ec, $parcours);
-//                    $getElement->setIsRaccroche($raccroche);
-//
-//                    $ects = $getElement->getEcts();
-//                    $totalEctsUe += $ects;
-//                } else {
-//                    $totalEctsUe += $ec->getEcts();
-//                }
             }
         }
         return $totalEctsUe;
