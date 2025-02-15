@@ -33,7 +33,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class ParcoursSaveController extends AbstractController
 {
-    public function __construct(private WorkflowInterface $parcoursWorkflow)
+    public function __construct(private WorkflowInterface $dpeParcoursWorkflow)
     {
     }
 
@@ -61,7 +61,8 @@ class ParcoursSaveController extends AbstractController
             return $this->json(['error' => 'DPE non trouvé']);
         }
         $this->denyAccessUnlessGranted('CAN_PARCOURS_EDIT_MY', $dpeParcours);
-
+//todo: passer par le Dpe ?
+        $dpeParcours = GetDpeParcours::getFromParcours($parcours);
         //        if (!($this->parcoursWorkflow->can($parcours, 'valider_parcours') || $this->parcoursWorkflow->can(
         //            $parcours, 'autoriser')) && !$this->isGranted('ROLE_SES')) {
         //            //si on est pas dans un état qui permet de modifier la formation
@@ -69,9 +70,9 @@ class ParcoursSaveController extends AbstractController
         //todo: bloquant + pas erreur envoyée ou pas traitée dans JS
         //        }
 
-        if ($this->parcoursWorkflow->can($parcours, 'autoriser')) {
+        if ($this->dpeParcoursWorkflow->can($parcours, 'autoriser')) {
             //un champ est modifié, on met à jour l'état
-            $this->parcoursWorkflow->apply($parcours, 'autoriser');
+            $this->dpeParcoursWorkflow->apply($parcours, 'autoriser');
         }
 
         $data = JsonRequest::getFromRequest($request);

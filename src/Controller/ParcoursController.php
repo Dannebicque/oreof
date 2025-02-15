@@ -9,42 +9,30 @@
 
 namespace App\Controller;
 
-use App\Classes\CalculButStructureParcours;
-use App\Classes\CalculStructureParcours;
 use App\Classes\GetDpeParcours;
 use App\Classes\JsonReponse;
 use App\Classes\ParcoursDupliquer;
 use App\Classes\verif\ParcoursState;
-use App\DTO\HeuresEctsFormation;
-use App\DTO\HeuresEctsSemestre;
-use App\DTO\HeuresEctsUe;
-use App\DTO\StructureParcours;
 use App\Entity\CampagneCollecte;
 use App\Entity\DpeParcours;
 use App\Entity\FicheMatiere;
 use App\Entity\Formation;
 use App\Entity\Parcours;
 use App\Entity\ParcoursVersioning;
-use App\Entity\SemestreParcours;
 use App\Enums\TypeModificationDpeEnum;
 use App\Enums\TypeParcoursEnum;
 use App\Events\AddCentreParcoursEvent;
 use App\Form\ParcoursType;
-use App\Repository\DpeParcoursRepository;
 use App\Repository\ElementConstitutifRepository;
 use App\Repository\ParcoursRepository;
-use App\Repository\ParcoursVersioningRepository;
-use App\Repository\UeRepository;
 use App\Service\LheoXML;
 use App\Service\VersioningFormation;
 use App\Service\VersioningParcours;
-use App\Service\VersioningStructure;
 use App\TypeDiplome\TypeDiplomeRegistry;
 use App\Utils\JsonRequest;
 use DateTimeImmutable;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\ORM\EntityManagerInterface;
-use Jfcherng\Diff\Differ;
 use Jfcherng\Diff\DiffHelper;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -71,7 +59,6 @@ use Symfony\Component\Serializer\Serializer;
 class ParcoursController extends BaseController
 {
     public function __construct(
-        private WorkflowInterface $parcoursWorkflow,
         private WorkflowInterface $dpeParcoursWorkflow,
         private readonly EntityManagerInterface $entityManager
     ) {

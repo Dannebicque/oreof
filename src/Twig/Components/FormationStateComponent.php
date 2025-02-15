@@ -11,7 +11,6 @@ namespace App\Twig\Components;
 
 use App\Classes\GetDpeParcours;
 use App\Entity\Formation;
-use App\Enums\EtatDemandeChangeRfEnum;
 use App\Enums\EtatProcessMentionEnum;
 use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\Workflow\WorkflowInterface;
@@ -100,7 +99,7 @@ class FormationStateComponent
                 return EtatProcessMentionEnum::RESERVE;
             }
 
-            if ($etat === 'valide_cfvu' && $nb === $nbParcours) {
+            if (($etat === 'valide_cfvu' || $etat==='publie') && $nb === $nbParcours) {
                 return EtatProcessMentionEnum::COMPLETE;
             }
         }

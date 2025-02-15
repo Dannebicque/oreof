@@ -3,10 +3,8 @@
 namespace App\Controller;
 
 use App\Classes\GetDpeParcours;
-use App\Classes\GetHistorique;
 use App\Classes\JsonReponse;
 use App\Classes\Process\FicheMatiereProcess;
-use App\Classes\Process\FormationProcess;
 use App\Classes\Process\ParcoursProcess;
 use App\Classes\ValidationProcess;
 use App\Classes\ValidationProcessFicheMatiere;
@@ -44,7 +42,6 @@ class ProcessValidationController extends BaseController
         private readonly EntityManagerInterface        $entityManager,
         private readonly ValidationProcess             $validationProcess,
         private readonly ValidationProcessFicheMatiere $validationProcessFicheMatiere,
-        private readonly FormationProcess              $formationProcess,
         private readonly ParcoursProcess               $parcoursProcess,
         private readonly FicheMatiereProcess           $ficheMatiereProcess,
         KernelInterface                                $kernel

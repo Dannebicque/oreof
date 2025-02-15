@@ -5,17 +5,14 @@ namespace App\Controller;
 use App\Classes\GetDpeParcours;
 use App\Classes\GetHistorique;
 use App\Classes\JsonReponse;
-use App\Classes\Process\FormationProcess;
 use App\Classes\Process\ParcoursProcess;
 use App\Classes\ValidationProcess;
 use App\Entity\FicheMatiere;
 use App\Entity\Formation;
 use App\Entity\Historique;
-use App\Entity\HistoriqueFormation;
 use App\Entity\HistoriqueParcours;
 use App\Entity\Parcours;
 use App\Twig\HistoriqueExtension;
-use App\Utils\JsonRequest;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,7 +22,6 @@ class HistoriqueController extends BaseController
 {
     public function __construct(
         private readonly ValidationProcess        $validationProcess,
-        private readonly FormationProcess         $formationProcess,
         private readonly ParcoursProcess          $parcoursProcess,
     ) {
     }
@@ -129,23 +125,25 @@ class HistoriqueController extends BaseController
             if ($request->isMethod('POST')) {
                 return $this->parcoursProcess->editParcours($historique, $this->getUser(), $etape, $request);
             }
-        } elseif ($historique instanceof HistoriqueFormation) {
-            //todo: a supprimer dès bascule full parcours
-            $objet = $historique->getFormation();
-            if ($objet === null) {
-                return JsonReponse::error('Formation non trouvée');
-            }
-            $processData = $this->formationProcess->etatFormation($objet, $process);
-
-            if ($etape === 'cfvu') {
-                $laisserPasser = $getHistorique->getHistoriqueFormationLastStep($objet, 'conseil');
-            }
-
-
-            if ($request->isMethod('POST')) {
-                return $this->formationProcess->editFormation($historique, $this->getUser(), $etape, $request);
-            }
         }
+
+//        elseif ($historique instanceof HistoriqueFormation) {
+//            //todo: a supprimer dès bascule full parcours
+//            $objet = $historique->getFormation();
+//            if ($objet === null) {
+//                return JsonReponse::error('Formation non trouvée');
+//            }
+//            $processData = $this->formationProcess->etatFormation($objet, $process);
+//
+//            if ($etape === 'cfvu') {
+//                $laisserPasser = $getHistorique->getHistoriqueFormationLastStep($objet, 'conseil');
+//            }
+//
+//
+//            if ($request->isMethod('POST')) {
+//                return $this->formationProcess->editFormation($historique, $this->getUser(), $etape, $request);
+//            }
+//        }
 
         return $this->render('historique/_edit.html.twig', [
             'process' => $process,

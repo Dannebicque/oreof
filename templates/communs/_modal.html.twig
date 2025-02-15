@@ -4,25 +4,30 @@
      data-base-target="modal">
     <div class="modal-dialog" id="stimulus_modal">
         <div class="modal-content">
-                <div class="modal-header">
+            <div class="modal-header row">
+                <div class="col-9">
                     <h5 class="modal-title"
                         data-base-target="modalTitle">... Chargement ...</h5>
-                    <button type="button" class="btn-close"
+                </div>
+                <div class="col-3 text-end">
+                    <span class="badge bg-info">{{ user_data.campagneCollecte.anneeUniversitaire.libelle }}</span>
+                    <button type="button" class="btn-close "
                             data-bs-dismiss="modal"
                             data-action="base#modalClose"
                             aria-label="Close"><i class="far fa-xmark-large"></i></button>
                 </div>
-                <div class="modal-body"
-                     data-base-target="modalBody">
-                    Chargement...
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary"
-                            data-action="base#modalClose"
-                            data-bs-dismiss="modal" data-base-target="btnClose">
-                        Fermer sans sauvegarder
-                    </button>
-                </div>
+            </div>
+            <div class="modal-body"
+                 data-base-target="modalBody">
+                Chargement...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary"
+                        data-action="base#modalClose"
+                        data-bs-dismiss="modal" data-base-target="btnClose">
+                    Fermer sans sauvegarder
+                </button>
+            </div>
         </div>
     </div>
 </div>

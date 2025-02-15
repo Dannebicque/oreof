@@ -17,9 +17,7 @@ use Symfony\Component\Workflow\WorkflowInterface;
 #[Route('/central/formation/etat')]
 class FormationEtatController extends BaseController
 {
-    public function __construct(private readonly WorkflowInterface $dpeWorkflow)
-    {
-    }
+    //todo: a reprendre
     #[Route('/send/ouverture', name: 'app_formation_etat_send_ouverture')]
     public function sendOuverture(
         FormationRepository $formationRepository
