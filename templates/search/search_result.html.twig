@@ -88,6 +88,9 @@ a.fiche-matiere-search-link span {
                 id="newSearchField"
                 class="form-control"
                 name="keyword_1"
+                {% if keyword_1 is defined and keyword_1 != ""%}
+                value="{{ keyword_1 }}"
+                {% endif %}
             >
             <div class="row justify-content-center">
                 <div class="d-flex col-10 col-md-8 col-lg-6 col-xl-4 justify-content-center">
