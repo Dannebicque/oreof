@@ -42,7 +42,7 @@ class DpeParcoursRepository extends ServiceEntityRepository
 
             ->addOrderBy('m.libelle', 'ASC')
             ->addOrderBy('f.mentionTexte', 'ASC')
-            ;
+        ;
 
         return $query->getQuery()
             ->getResult();
@@ -121,7 +121,7 @@ class DpeParcoursRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
-    public function findParcoursByComposante(CampagneCollecte $getDpe, Composante $composante): array
+    public function findParcoursByComposante(CampagneCollecte $campagneCollecte, Composante $composante): array
     {
         $query = $this->createQueryBuilder('d')
             ->innerJoin('d.parcours', 'p')
@@ -134,17 +134,17 @@ class DpeParcoursRepository extends ServiceEntityRepository
 //            ->orWhere('d.etatReconduction = :etatReconduction2')
 //            ->setParameter('etatReconduction', TypeModificationDpeEnum::MODIFICATION_MCCC)
 //            ->setParameter('etatReconduction2', TypeModificationDpeEnum::MODIFICATION_MCCC_TEXTE)
-            ->setParameter('campagneCollecte', $getDpe)
+            ->setParameter('campagneCollecte', $campagneCollecte)
             ->setParameter('composante', $composante)
             ->orderBy('f.typeDiplome', 'ASC')
             ->addOrderBy('f.mentionTexte', 'ASC')
-            ;
+        ;
 
         return $query->getQuery()
             ->getResult();
     }
 
-    public function findParcoursByComposanteCfvu(CampagneCollecte $getDpe, Composante $composante): array
+    public function findParcoursByComposanteCfvu(CampagneCollecte $campagneCollecte, Composante $composante): array
     {
         $query = $this->createQueryBuilder('d')
             ->innerJoin('d.parcours', 'p')
@@ -159,7 +159,7 @@ class DpeParcoursRepository extends ServiceEntityRepository
             ->orWhere('d.etatReconduction = :etatReconduction2')
             ->setParameter('etatReconduction', TypeModificationDpeEnum::MODIFICATION_MCCC)
             ->setParameter('etatReconduction2', TypeModificationDpeEnum::MODIFICATION_MCCC_TEXTE)
-            ->setParameter('campagneCollecte', $getDpe)
+            ->setParameter('campagneCollecte', $campagneCollecte)
             ->setParameter('composante', $composante)
             ->orderBy('f.typeDiplome', 'ASC')
             ->addOrderBy('f.mentionTexte', 'ASC')
@@ -170,7 +170,7 @@ class DpeParcoursRepository extends ServiceEntityRepository
     }
 
 
-    public function findByCampagneWithModification(CampagneCollecte $getDpe)
+    public function findByCampagneWithModification(CampagneCollecte $campagneCollecte)
     {
         $query = $this->createQueryBuilder('d')
             ->innerJoin('d.formation', 'f')
@@ -180,7 +180,7 @@ class DpeParcoursRepository extends ServiceEntityRepository
             ->orWhere('d.etatReconduction = :etatReconduction2')
             ->setParameter('etatReconduction', TypeModificationDpeEnum::MODIFICATION_MCCC)
             ->setParameter('etatReconduction2', TypeModificationDpeEnum::MODIFICATION_MCCC_TEXTE)
-            ->setParameter('campagneCollecte', $getDpe)
+            ->setParameter('campagneCollecte', $campagneCollecte)
             ->orderBy('f.typeDiplome', 'ASC')
             ->addOrderBy('f.mentionTexte', 'ASC')
         ;
