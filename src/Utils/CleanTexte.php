@@ -12,14 +12,16 @@ namespace App\Utils;
 abstract class CleanTexte
 {
     // Supprime toutes les balises HTML du texte
-    public static function cleanTextArea(?string $texte): ?String
+    public static function cleanTextArea(?string $texte, bool $striptag = true): ?String
     {
         if ($texte === null) {
             return null;
         }
 
         $texte = str_replace(['<!--block-->'], '', $texte);
-        $texte = strip_tags($texte);
+        if ($striptag) {
+            $texte = strip_tags($texte);
+        }
         $texte = str_replace(['&nbsp;'], ' ', $texte);
         return $texte;
     }

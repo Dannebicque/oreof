@@ -358,8 +358,8 @@ class ParcoursExportController extends AbstractController
                 'nom'=> $ec->elementConstitutif->getFicheMatiere()?->getResponsableFicheMatiere()?->getDisplay() ?? '-',
                 'email'=> $ec->elementConstitutif->getFicheMatiere()?->getResponsableFicheMatiere()?->getEmail() ?? '-'
             ],
-            'description' => CleanTexte::cleanTextArea($ec->elementConstitutif->getFicheMatiere()?->getDescription()) ?? '-',
-            'objectifs' => CleanTexte::cleanTextArea($ec->elementConstitutif->getFicheMatiere()?->getObjectifs()) ?? '-',
+            'description' => CleanTexte::cleanTextArea($ec->elementConstitutif->getFicheMatiere()?->getDescription(), false) ?? '-',
+            'objectifs' => CleanTexte::cleanTextArea($ec->elementConstitutif->getFicheMatiere()?->getObjectifs(), false) ?? '-',
             'modalite_enseignement'=> $ec->elementConstitutif->getFicheMatiere()?->getModaliteEnseignement()->value ?? '-',
             'langues_supports' => $ec->elementConstitutif->getFicheMatiere()?->getLanguesSupportsArray() ?? [],
             'langues_dispense_cours' => $ec->elementConstitutif->getFicheMatiere()?->getLanguesDispenseArray() ?? [],
