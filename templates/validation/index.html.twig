@@ -60,6 +60,14 @@
                     Valider les responsables formation
                 </a>
             </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link {% if step == 'ouverture' %}active{% endif %}" data-bs-toggle="tab" href="#" role="tab"
+                       aria-selected="false"
+                            {{ stimulus_action('wizard', 'changeStep', 'click', {step: 'ouverture'}) }}
+                    >
+                        Valider Ouverture/non ouverture
+                    </a>
+                </li>
             {% endif %}
 
             <!-- An empty list to put overflowed links -->

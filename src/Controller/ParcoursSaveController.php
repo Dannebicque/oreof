@@ -70,9 +70,9 @@ class ParcoursSaveController extends AbstractController
         //todo: bloquant + pas erreur envoyée ou pas traitée dans JS
         //        }
 
-        if ($this->dpeParcoursWorkflow->can($parcours, 'autoriser')) {
+        if ($this->dpeParcoursWorkflow->can($dpeParcours, 'autoriser')) {
             //un champ est modifié, on met à jour l'état
-            $this->dpeParcoursWorkflow->apply($parcours, 'autoriser');
+            $this->dpeParcoursWorkflow->apply($dpeParcours, 'autoriser');
         }
 
         $data = JsonRequest::getFromRequest($request);

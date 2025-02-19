@@ -96,6 +96,8 @@ class ParcoursRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+
+
     public function findParcours(CampagneCollecte $campagneCollecte, array $options): array
     {
         $qb = $this->createQueryBuilder('p')
@@ -262,8 +264,8 @@ class ParcoursRepository extends ServiceEntityRepository
             ->join('p.formation', 'f', 'WITH', 'f.id = p.formation')
             ->select(
                 [
-                    'f.id AS formation_id', 'f.slug AS formation_slug', 'p.id AS parcours_id', 
-                    'f.contenuFormation', 'f.resultatsAttendus', 'f.objectifsFormation', 
+                    'f.id AS formation_id', 'f.slug AS formation_slug', 'p.id AS parcours_id',
+                    'f.contenuFormation', 'f.resultatsAttendus', 'f.objectifsFormation',
                     'p.poursuitesEtudes', 'p.libelle AS parcours_libelle', 'f.sigle AS formation_sigle'
                 ]
             )

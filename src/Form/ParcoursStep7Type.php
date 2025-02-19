@@ -21,6 +21,12 @@ class ParcoursStep7Type extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+            ->add('descriptifHautPageAutomatique', TextareaAutoSaveType::class, [
+                'label' => 'Texte affiché en haut des pages parcours (généré automatiquement)',
+                'help' => 'Ce texte est généré par la configuration du parcours et des semestres. Ce texte sera affiché par défaut en haut des pages parcours. Il peut être remplacé par un texte spécifique à chaque parcours.',
+                'required' => false,
+                'attr' => ['rows' => 20, 'maxlength' => 2500, 'data-action' => 'change->parcours--step7#saveDescriptifHautPageAutomatique'],
+            ])
             ->add('descriptifHautPage', TextareaAutoSaveType::class, [
                 'label' => 'Texte affiché en haut des pages parcours',
                 'help' => 'Ce texte sera affiché par défaut en haut des pages parcours. Il peut être remplacé par un texte spécifique à chaque parcours.',

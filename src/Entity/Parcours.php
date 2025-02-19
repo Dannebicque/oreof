@@ -229,6 +229,10 @@ class Parcours
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Groups('parcours_json_versioning')]
+    private ?string $descriptifHautPageAutomatique = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups('parcours_json_versioning')]
     private ?string $descriptifHautPage = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
@@ -1255,6 +1259,11 @@ class Parcours
         return 1;
     }
 
+    public function getDescriptifHautPageAutomatique(): ?string
+    {
+        return $this->descriptifHautPageAutomatique;
+    }
+
     public function getDescriptifHautPage(): ?string
     {
         return $this->descriptifHautPage;
@@ -1262,12 +1271,35 @@ class Parcours
 
     public function getDescriptifHautPageAffichage(): ?string
     {
-        return $this->descriptifHautPage ?? $this->getFormation()?->getComposantePorteuse()?->getEtablissement()?->getEtablissementInformation()?->getDescriptifHautPage();
+        if ($this->descriptifHautPageAutomatique === null && $this->descriptifHautPage=== null) {
+            return $this->getFormation()?->getComposantePorteuse()?->getEtablissement()?->getEtablissementInformation()?->getDescriptifHautPage();
+        }
+
+        if ($this->descriptifHautPageAutomatique !== null && $this->descriptifHautPage !== null) {
+            return $this->descriptifHautPageAutomatique. '<br>'. $this->descriptifHautPage;
+        }
+
+        if ($this->descriptifHautPageAutomatique !== null && $this->descriptifHautPage === null) {
+            return $this->descriptifHautPageAutomatique;
+        }
+
+        if ($this->descriptifHautPageAutomatique === null && $this->descriptifHautPage !== null) {
+            return $this->descriptifHautPage;
+        }
+
+        return '' ;
     }
 
     public function setDescriptifHautPage(?string $descriptifHautPage): static
     {
         $this->descriptifHautPage = $descriptifHautPage;
+
+        return $this;
+    }
+
+    public function setDescriptifHautPageAutomatique(?string $descriptifHautPageAutomatique): static
+    {
+        $this->descriptifHautPageAutomatique = $descriptifHautPageAutomatique;
 
         return $this;
     }

@@ -188,4 +188,59 @@ class DpeParcoursRepository extends ServiceEntityRepository
         return $query->getQuery()
             ->getResult();
     }
+
+    public function findByComposanteTypeOuverture(string $typeValidation, Composante|int $composante,CampagneCollecte $campagneCollecte): array
+    {
+        if (!is_int($composante)) {
+            $composante = $composante->getId();
+        }
+
+        $query = $this->createQueryBuilder('dp')
+            ->join('dp.parcours', 'p')
+            ->join('p.formation', 'f')
+            ->andWhere('f.composantePorteuse = :composante')
+            ->andWhere('dp.etatReconduction = :etatReconduction')
+            ->setParameter('composante', $composante)
+            ->setParameter('etatReconduction', $typeValidation)
+            ->andWhere('dp.campagneCollecte = :campagneCollecte')
+            ->setParameter('campagneCollecte', $campagneCollecte);
+
+        return $query->getQuery()
+            ->getResult();
+
+    }
+
+    public function findByTypeOuverture(mixed $typeValidation, CampagneCollecte $campagneCollecte): array
+    {
+        $query = $this->createQueryBuilder('dp')
+            ->join('dp.parcours', 'p')
+            ->innerJoin('p.formation', 'f')
+            ->andWhere('dp.etatReconduction = :etatReconduction')
+            ->setParameter('etatReconduction', $typeValidation)
+            ->andWhere('dp.campagneCollecte = :campagneCollecte')
+            ->setParameter('campagneCollecte', $campagneCollecte);
+
+        return $query->getQuery()
+            ->getResult();
+    }
+
+    public function findByCampagneCollecte(CampagneCollecte $campagneCollecte): array
+    {
+        $query = $this->createQueryBuilder('dp')
+            ->join('dp.parcours', 'p')
+            ->join('p.formation', 'f')
+            ->addSelect('p')
+            ->addSelect('f')
+            ->innerJoin(Mention::class, 'm', 'WITH', 'f.mention = m.id')
+            ->where('dp.campagneCollecte = :campagneCollecte')
+            ->setParameter('campagneCollecte', $campagneCollecte)
+            ->orderBy('f.typeDiplome', 'ASC')
+
+            ->addOrderBy('m.libelle', 'ASC')
+            ->addOrderBy('f.mentionTexte', 'ASC')
+        ;
+
+        return $query->getQuery()
+            ->getResult();
+    }
 }
