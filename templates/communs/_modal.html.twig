@@ -10,7 +10,7 @@
                         data-base-target="modalTitle">... Chargement ...</h5>
                 </div>
                 <div class="col-3 text-end">
-                    <span class="badge bg-info">{{ user_data.campagneCollecte.anneeUniversitaire.libelle }}</span>
+                    <span class="badge bg-{{ user_data.campagneCollecte.couleur ?? 'info' }}">{{ user_data.campagneCollecte.anneeUniversitaire.libelle }}</span>
                     <button type="button" class="btn-close "
                             data-bs-dismiss="modal"
                             data-action="base#modalClose"
