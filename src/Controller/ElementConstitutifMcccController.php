@@ -73,16 +73,7 @@ class ElementConstitutifMcccController extends AbstractController
 
         $raccroche = $elementConstitutif->getFicheMatiere()?->getParcours()?->getId() !== $parcours->getId();
         $getElement = new GetElementConstitutif($elementConstitutif, $parcours);
-      //  $getElement->setIsRaccroche($raccroche);
-
-        if ($elementConstitutif->getFicheMatiere() !== null && $elementConstitutif->getFicheMatiere()?->isMcccImpose()) {
-            $typeEpreuve = $elementConstitutif->getFicheMatiere()?->getTypeMccc();
-        } elseif ($raccroche && $elementConstitutif->isMcccSpecifiques() === true) {
-            $ec = $getElement->getElementConstitutif();
-            $typeEpreuve = $ec->getTypeMccc();
-        } else {
-            $typeEpreuve = $elementConstitutif->getTypeMccc();
-        }
+        $typeEpreuve = $getElement->getTypeMcccFromFicheMatiere();
 
         if ($this->isGranted('CAN_PARCOURS_EDIT_MY', $dpeParcours) && Access::isAccessible($dpeParcours, 'cfvu')) {
             if ($request->isMethod('POST')) {
@@ -140,7 +131,7 @@ class ElementConstitutifMcccController extends AbstractController
                 'ec' => $elementConstitutif,
                 'ects' => $getElement->getFicheMatiereEcts(),
                 'templateForm' => $typeD::TEMPLATE_FORM_MCCC,
-                'mcccs' => $getElement->getMcccs($typeD),
+                'mcccs' => $getElement->getMcccsFromFicheMatiereCollection($typeD),
                 'wizard' => false,
                 'typeDiplome' => $typeDiplome,
                 'parcours' => $parcours,
@@ -156,7 +147,7 @@ class ElementConstitutifMcccController extends AbstractController
             'typeEpreuves' => $typeEpreuveRepository->findByTypeDiplome($typeDiplome),
             'ec' => $elementConstitutif,
             'templateForm' => $typeD::TEMPLATE_FORM_MCCC,
-            'mcccs' => $getElement->getMcccs($typeD),
+            'mcccs' => $getElement->getMcccsFromFicheMatiereCollection($typeD),
         ]);
     }
 
@@ -207,7 +198,7 @@ class ElementConstitutifMcccController extends AbstractController
             'typeEpreuves' => $typeEpreuveRepository->findByTypeDiplome($typeDiplome),
             'ec' => $elementConstitutif,
             'templateForm' => $typeD::TEMPLATE_FORM_MCCC,
-            'mcccs' => $getElement->getMcccs($typeD),
+            'mcccs' => $getElement->getMcccsFromFicheMatiere($typeD),
         ]);
     }
 

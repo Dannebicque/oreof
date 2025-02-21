@@ -136,33 +136,33 @@ class LicenceController extends AbstractController
 
                     //seul cas particulier, pour les autres mêmes formulaires
                     return $this->render('typeDiplome/'.$folder.'/licence/_cc_autres_diplomes.html.twig', [
-                        'mcccs' => $getElement->getMcccs($licenceTypeDiplome),
+                        'mcccs' => $getElement->getMcccsFromFicheMatiere($licenceTypeDiplome),
                         'typeEpreuves' => $typeEpreuves,
                         'elementConstitutif' => $elementConstitutif,
                     ]);
                 }
 
                 return $this->render('typeDiplome/'.$folder.'/licence/_cc.html.twig', [
-                    'mcccs' => $getElement->getMcccs($licenceTypeDiplome),
+                    'mcccs' => $getElement->getMcccsFromFicheMatiere($licenceTypeDiplome),
                     'typeEpreuves' => $typeEpreuves,
                     'elementConstitutif' => $elementConstitutif,
                 ]);
 
             case 'cci':
                 return $this->render('typeDiplome/'.$folder.'/licence/_cci.html.twig', [
-                    'mcccs' => $getElement->getMcccs($licenceTypeDiplome),
+                    'mcccs' => $getElement->getMcccsFromFicheMatiere($licenceTypeDiplome),
                     'typeEpreuves' => $typeEpreuves,
                     'elementConstitutif' => $elementConstitutif,
                 ]);
             case 'cc_ct':
                 return $this->render('typeDiplome/'.$folder.'/licence/_cc_ct.html.twig', [
-                    'mcccs' => $getElement->getMcccs($licenceTypeDiplome),
+                    'mcccs' => $getElement->getMcccsFromFicheMatiere($licenceTypeDiplome),
                     'typeEpreuves' => $typeEpreuves,
                     'elementConstitutif' => $elementConstitutif,
                 ]);
             case 'ct':
                 return $this->render('typeDiplome/'.$folder.'/licence/_ct.html.twig', [
-                    'mcccs' => $getElement->getMcccs($licenceTypeDiplome),
+                    'mcccs' => $getElement->getMcccsFromFicheMatiere($licenceTypeDiplome),
                     'typeEpreuves' => $typeEpreuves,
                     'elementConstitutif' => $elementConstitutif,
                 ]);

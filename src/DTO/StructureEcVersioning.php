@@ -38,10 +38,10 @@ class StructureEcVersioning
 
         $this->elementConstitutif = $elementConstitutif;
         $this->heuresEctsEc = new HeuresEctsEc();
-        $this->typeMccc = $getElement->getTypeMccc();
+        $this->typeMccc = $getElement->getTypeMcccFromFicheMatiere();
         $this->heuresEctsEc->addEc($getElement->getFicheMatiereHeures());
         $this->heuresEctsEc->addEcts($getElement->getFicheMatiereEcts());
-        $this->mcccs = $getElement->getMcccsCollection();
+        $this->mcccs = $getElement->getMcccsFromFicheMatiereCollection();
         $this->bccs = $getElement->getBccs();
     }
 
