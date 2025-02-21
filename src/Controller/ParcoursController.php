@@ -273,6 +273,9 @@ class ParcoursController extends BaseController
         VersioningParcours $versioningParcours,
     ): Response {
 
+        $request->getSession()->set('semestreAffiche', $request->query->get('semestre') ?? null);
+        $request->getSession()->set('ueAffichee', $request->query->get('ue') ?? null);
+
         $dpeParcours = GetDpeParcours::getFromParcours($parcour);
 
         if ($dpeParcours === null) {

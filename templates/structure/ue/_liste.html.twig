@@ -41,6 +41,10 @@
                         <div {{ stimulus_controller('structure--ue', {
                             ue:ue.id,
                             parcours:parcours.id,
+                            ueAffichee: ueAffichee,
+                            semestreAffiche: semestreAffiche,
+                            urlDetail : path('structure_ec_detail_ue', {ue:ue.id,
+                                parcours: parcours.id, raccroche: (isSemestreRaccroche or raccroche)}),
                             url: path('api_ects_ue', {ue: ue.id, parcours: parcours.id}),
                         }) }}>
                             <div class="card mb-2 sh-19 sh-md-8">
@@ -135,6 +139,7 @@
                                             {% if ue.ueEnfants|length == 0 %}
                                                 <div class="text-muted text-small d-md-none">Voir les EC</div>
                                                 <button class="btn btn-sm btn-outline-primary"
+                                                        id="btn_ue_detail_{{ ue.id }}"
                                                         {{ stimulus_action('structure--ue', 'detail', 'click',
                                                             {ue:ue.id, parcours: parcours.id, url: path
                                                                 ('structure_ec_detail_ue', {ue:ue.id, parcours: parcours.id, raccroche: (isSemestreRaccroche or raccroche)})}

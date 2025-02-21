@@ -43,6 +43,7 @@ class SemestreController extends AbstractController
         Route('/detail/parcours/{parcours}', name: 'detail_parcours')
     ]
     public function detailParcours(
+        Request                    $request,
         SemestreParcoursRepository $semestreRepository,
         Parcours                   $parcours
     ): Response {
@@ -73,13 +74,14 @@ class SemestreController extends AbstractController
         }
 
         $debut = $parcours->getFormation()?->getSemestreDebut();
-
         return $this->render('structure/semestre/_liste.html.twig', [
             'semestres' => $semestres,
             'parcours' => $parcours,
             'dpeParcours' => $dpeParcours,
             'debut' => $debut,
             'fin' => $typeDiplome->getSemestreFin(),
+            'semestreAffiche' => $request->getSession()->get('semestreAffiche'),
+            'ueAffichee' => $request->getSession()->get('ueAffichee'),
         ]);
     }
 

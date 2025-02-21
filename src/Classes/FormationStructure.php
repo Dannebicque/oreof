@@ -9,6 +9,8 @@
 
 namespace App\Classes;
 
+use App\Entity\CampagneCollecte;
+use App\Entity\DpeParcours;
 use App\Entity\Formation;
 use App\Entity\Parcours;
 use App\Entity\Semestre;
@@ -24,26 +26,26 @@ class FormationStructure
     public function __construct(
         protected SemestreParcoursRepository $semestreParcoursRepository,
         protected EntityManagerInterface     $entityManager,
-        protected WorkflowInterface          $parcoursWorkflow,
+        protected WorkflowInterface          $dpeParcoursWorkflow,
     ) {
     }
 
-    public function genereStructure(Parcours $parcours): void
+    public function genereStructure(Parcours $parcours, CampagneCollecte $campagneCollecte): void
     {
         $formation = $parcours->getFormation();
         if ($formation === null) {
             throw new RuntimeException('La formation n\'est pas définie');
         }
 
-        $this->genereStructureFormation($formation, $parcours);
+        $this->genereStructureFormation($formation, $campagneCollecte, $parcours);
     }
 
-    public function genereStructrePasParcours(Formation $formation): void
+    public function genereStructrePasParcours(Formation $formation, CampagneCollecte $campagneCollecte): void
     {
-        $this->genereStructureFormation($formation, $formation->getParcours()->first());
+        $this->genereStructureFormation($formation, $campagneCollecte, $formation->getParcours()->first());
     }
 
-    private function genereStructureFormation(Formation $formation, bool|Parcours|null $parcours = null): void
+    private function genereStructureFormation(Formation $formation, CampagneCollecte $campagneCollecte, bool|Parcours|null $parcours = null): void
     {
         if ($formation->getTypeDiplome() === null) {
             throw new RuntimeException('Le type de diplôme n\'est pas défini');
@@ -69,12 +71,16 @@ class FormationStructure
                 $parcours->setLibelle(Parcours::PARCOURS_DEFAUT);
                 $parcours->setRespParcours($formation->getResponsableMention());
                 $parcours->setModalitesEnseignement(null);
-                $this->parcoursWorkflow->apply($parcours, 'initialiser');
-                $this->parcoursWorkflow->apply($parcours, 'autoriser');
                 $semestres = [];
 
                 $formation->addParcour($parcours);
                 $parcours->setFormation($formation);
+
+                $dpeParcours = new DpeParcours();
+                $dpeParcours->setParcours($parcours);
+                $dpeParcours->setFormation($formation);
+                $dpeParcours->setCampagneCollecte($campagneCollecte);
+                $this->entityManager->persist($dpeParcours);
                 $this->entityManager->persist($parcours);
             }
 

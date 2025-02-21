@@ -19,6 +19,21 @@ export default class extends Controller {
     ue: Number,
     parcours: Number,
     url: String,
+    urlDetail: String,
+    semestreAffiche: String,
+    ueAffichee: String,
+  }
+
+  async connect() {
+    if (parseInt(this.ueAfficheeValue, 10) === this.ueValue) {
+      const btn = document.getElementById(`btn_ue_detail_${this.ueValue}`)
+      const response = await fetch(this.urlDetailValue)
+      this.detailTarget.innerHTML = await response.text()
+      btn.dataset.state = 'open'
+      btn.firstElementChild.classList.remove('fa-caret-right')
+      btn.firstElementChild.classList.add('fa-caret-down')
+      document.getElementById(`detail_ue_${this.ueValue}_${this.parcoursValue}`).classList.remove('d-none')
+    }
   }
 
   async deplacerUe(event) {

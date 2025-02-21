@@ -106,7 +106,8 @@ final class MentionManageComponent extends AbstractController
 
         if ($this->formation !== null) {
             $this->hasDemande = $this->formation->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_TEXTE ||
-                $this->formation->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_INTITULE || $this->formation->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION;
+                $this->formation->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_INTITULE ||
+                $this->formation->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_PARCOURS ||$this->formation->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION;
         }
 
         $this->etape = self::TAB[$this->place] ?? $this->type;

@@ -45,13 +45,13 @@
                     <span> Modifier le libellé/Responsable du parcours</span>
                 </button>
                 {% if constant('SOURCE', typeDiplome) != 'meef' %}
-                <a href="{{ path('app_parcours_edit', {id:parcour.id}) }}"
-                   class="btn btn-sm text-warning btn-icon"
-                   target="_blank"
-                >
-                    <i class="{{ iconEdit }}"></i>
-                    Editer la fiche du parcours
-                </a>
+                    <a href="{{ path('app_parcours_edit', {id:parcour.id}) }}"
+                       class="btn btn-sm text-warning btn-icon"
+                       target="_blank"
+                    >
+                        <i class="{{ iconEdit }}"></i>
+                        Editer la fiche du parcours
+                    </a>
                 {% endif %}
                 <a href="#"
                    class="btn btn-sm text-success"
@@ -69,11 +69,11 @@
                     <span> vérifier</span>
                 </a><br>
 
-{#                <button {{ stimulus_action('formation--step3', 'dupliquerParcours', 'click', {#}
-{#                    url:path('app_parcours_dupliquer',{'id': parcour.id}),#}
-{#                    id: parcour.id}) }} class="btn btn-sm text-primary">#}
-{#                    <i class="{{ iconDuplicate }}"></i> Dupliquer#}
-{#                </button>#}
+                {#                <button {{ stimulus_action('formation--step3', 'dupliquerParcours', 'click', { #}
+                {#                    url:path('app_parcours_dupliquer',{'id': parcour.id}), #}
+                {#                    id: parcour.id}) }} class="btn btn-sm text-primary"> #}
+                {#                    <i class="{{ iconDuplicate }}"></i> Dupliquer #}
+                {#                </button> #}
 
                 <button
                         {{ stimulus_controller('modal', {
@@ -89,7 +89,6 @@
                 >
                     <i class="{{ iconDuplicate }}"></i> Dupliquer
                 </button>
-
 
 
                 <button {{ stimulus_action('formation--step3', 'deleteParcours', 'click', {
@@ -140,20 +139,21 @@
                             <i class="{{ iconEdit }}"></i>
                             Editer la fiche de l'option
                         </a>
+                        {% if is_granted('ROLE_SES') %}
+                            <button {{ stimulus_action('formation--step3', 'dupliquerParcours', 'click', {
+                                url:path('app_parcours_dupliquer',{'id': parc.id}),
+                                id: parc.id}) }} class="btn btn-sm text-primary">
+                                <i class="{{ iconDuplicate }}"></i> Dupliquer
+                            </button>
 
-                        <button {{ stimulus_action('formation--step3', 'dupliquerParcours', 'click', {
-                            url:path('app_parcours_dupliquer',{'id': parc.id}),
-                            id: parc.id}) }} class="btn btn-sm text-primary">
-                            <i class="{{ iconDuplicate }}"></i> Dupliquer
-                        </button>
-
-                        <button {{ stimulus_action('formation--step3', 'deleteParcours', 'click', {
-                            url:path('app_parcours_delete',{'id': parc.id}),
-                            id: parc.id,
-                            csrf: csrf_token('delete' ~ parc.id)
-                        }) }} class="btn btn-sm text-danger">
-                            <i class="{{ iconDelete }}"></i> Supprimer
-                        </button>
+                            <button {{ stimulus_action('formation--step3', 'deleteParcours', 'click', {
+                                url:path('app_parcours_delete',{'id': parc.id}),
+                                id: parc.id,
+                                csrf: csrf_token('delete' ~ parc.id)
+                            }) }} class="btn btn-sm text-danger">
+                                <i class="{{ iconDelete }}"></i> Supprimer
+                            </button>
+                        {% endif %}
                     </td>
                 </tr>
             {% else %}

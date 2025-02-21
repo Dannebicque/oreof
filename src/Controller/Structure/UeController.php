@@ -59,6 +59,8 @@ class UeController extends AbstractController
             'natureUeEcs' => $natureUeEcRepository->findAll(),
             'parcours' => $parcours,
             'typeDiplome' => $typeDiplome,
+            'semestreAffiche' => $request->getSession()->get('semestreAffiche'),
+            'ueAffichee' => $request->getSession()->get('ueAffichee'),
         ]);
     }
 

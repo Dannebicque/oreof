@@ -40,6 +40,7 @@ class DpeParcours
     public function __construct()
     {
         $this->created = new \DateTime();
+        $this->etatReconduction = TypeModificationDpeEnum::CREATION;
     }
 
     public function getId(): ?int

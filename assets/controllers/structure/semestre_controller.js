@@ -14,6 +14,25 @@ import updateUrl from '../../js/updateUrl'
 export default class extends Controller {
   static targets = ['detail']
 
+  static values = {
+    semestreAffiche: String,
+    ueAffichee: String,
+    semestre: String,
+    url: String,
+  }
+
+  async connect() {
+    if (this.semestreAfficheValue === this.semestreValue) {
+      const btn = document.getElementById(`btn_semestre_detail_${this.semestreValue}`)
+      const response = await fetch(this.urlValue)
+      this.detailTarget.innerHTML = await response.text()
+      btn.dataset.state = 'open'
+      btn.firstElementChild.classList.remove('fa-caret-right')
+      btn.firstElementChild.classList.add('fa-caret-down')
+      document.getElementById(`detail_semestre_${this.semestreValue}`).classList.remove('d-none')
+    }
+  }
+
   async detail(event) {
     if (event.target.dataset.state === 'open') {
       document.getElementById(`detail_semestre_${event.params.semestre}`).classList.add('d-none')

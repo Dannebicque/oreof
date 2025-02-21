@@ -12,6 +12,7 @@ namespace App\Twig\Components;
 use App\Classes\GetDpeParcours;
 use App\Entity\Formation;
 use App\Enums\EtatProcessMentionEnum;
+use App\Enums\TypeModificationDpeEnum;
 use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\Workflow\WorkflowInterface;
 use Symfony\UX\TwigComponent\Attribute\AsTwigComponent;
@@ -142,7 +143,23 @@ class FormationStateComponent
         //            bleu - au moins un DPE en cours de rédaction et non validée SES (en cours de process) - vérifier qu'il n'y a pas de modifications de textes en cours
         //            orange - réserves sur fiche DPE ou non conforme
         //            vert - fiche DPE validées SES
-        return EtatProcessMentionEnum::WIP;
+
+        if ($this->getEtatParcours() !== EtatProcessMentionEnum::COMPLETE) {
+            return $this->getEtatParcours();
+        }
+
+        if ($this->formation->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION || $this->formation->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_TEXTE || $this->formation->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_INTITULE || $this->formation->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_PARCOURS) {
+            return EtatProcessMentionEnum::WIP;
+        }
+
+        $steps = $this->formation->getEtatSteps(); //todo: est-ce fiable
+        foreach ($steps as $step) {
+            if ($step !== true) {
+                return EtatProcessMentionEnum::WIP;
+            }
+        }
+
+        return EtatProcessMentionEnum::COMPLETE;
     }
 
     private function getEtatChangeRf(): EtatProcessMentionEnum

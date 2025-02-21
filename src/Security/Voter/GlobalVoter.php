@@ -159,6 +159,7 @@ class GlobalVoter extends Voter
     {
         $canEdit =
             $subject->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_TEXTE ||
+            $subject->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_PARCOURS ||
             $subject->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION;
 
         $centre = $centre->getFormation() === $subject || $centre->getComposante() === $subject->getComposantePorteuse() || $this->security->isGranted('ROLE_SES');

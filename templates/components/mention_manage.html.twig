@@ -61,22 +61,23 @@
                             {% if this.hasDemande %}
                                 <button class="btn btn-sm d-block btn-outline-success"
                                         type="button"
-                                        {#                                            {{ stimulus_controller('modal', { #}
-                                        {#                                                size: 'lg', #}
-                                        {#                                                nomEvenement: 'refreshPage', #}
-                                        {#                                                modalTitle: ('demande.reouverture.clore.title')|trans({}, 'process'), #}
-                                        {#                                                modalUrl: path('app_validation_demande_reouverture_cloture', { #}
-                                        {#                                                    id:formation.parcours[0].id, #}
-                                        {#                                                    type:'parcours' #}
-                                        {#                                                }) }) }} #}
+                                        {{ stimulus_controller('modal', {
+                                            size: 'lg',
+                                            nomEvenement: 'refreshPage',
+
+                                            modalTitle: ('demande.reouverture.mention.clore.title')|trans({}, 'process'),
+                                            modalUrl: path('app_validation_formation_valide', {
+                                                formation:formation.id,
+                                                etape: 'cloture',
+                                            }) }) }}
                                         data-action="click->modal#openModal"
                                         data-controller="tooltip"
                                         data-tooltip-placement-value="bottom"
 
-                                        aria-label="{{ ('demande.reouverture.clore')|trans({}, 'process') }}"
-                                        data-bs-original-title="{{ ('demande.reouverture.clore')|trans({}, 'process') }}"
+                                        aria-label="{{ ('demande.reouverture.mention.clore')|trans({}, 'process') }}"
+                                        data-bs-original-title="{{ ('demande.reouverture.mention.clore')|trans({}, 'process') }}"
                                 >
-                                    {{ ('demande.reouverture.clore')|trans({}, 'process') }}
+                                    {{ ('demande.reouverture.mention.clore')|trans({}, 'process') }}
                                 </button>
                             {% endif %}
                         </div>

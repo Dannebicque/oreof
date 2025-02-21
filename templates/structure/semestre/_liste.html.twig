@@ -102,7 +102,15 @@
                             {% set sem = semestre.semestre %}
                             {% set raccroche = false %}
                         {% endif %}
-                        <div {{ stimulus_controller('structure--semestre') }}>
+                        <div {{ stimulus_controller('structure--semestre',
+                            {
+                                semestreAffiche: semestreAffiche,
+                                ueAffichee: ueAffichee,
+                                semestre: sem.id,
+                                url: path
+                                ('structure_ue_detail_semestre', {semestre:sem
+                                .id, parcours: parcours.id, raccroche:raccroche})
+                            }) }}>
                             <div class="card mb-2 sh-19 sh-md-8">
                                 <div class="card-body pt-0 pb-0 h-100">
                                     <div class="row g-0 h-100 align-content-center">
@@ -160,6 +168,7 @@
                                             mb-1 mb-md-0">
                                             <div class="text-muted text-small d-md-none">Voir les UE</div>
                                             <button class="btn btn-sm btn-outline-primary"
+                                                    id="btn_semestre_detail_{{ sem.id }}"
                                                     {{ stimulus_action('structure--semestre', 'detail', 'click',
                                                         {semestre:sem.id, url: path
                                                             ('structure_ue_detail_semestre', {semestre:sem
