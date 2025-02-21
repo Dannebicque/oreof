@@ -108,12 +108,12 @@ class GetElementConstitutif
     {
         $isMcccImpose = $this->elementConstitutif->getFicheMatiere()?->isMcccImpose();
         // MCCC spécifiques sur EC
-        if($this->elementConstitutif->isMcccSpecifiques() && !$isMcccImpose) {
+        if(!$isMcccImpose && $this->elementConstitutif->isMcccSpecifiques()) {
             return $this->elementConstitutif->getMcccs();
         }
 
         // EC qui a un parent avec MCCC identiques
-        if($this->elementConstitutif->getEcParent()?->isMcccEnfantsIdentique() && !$isMcccImpose) {
+        if(!$isMcccImpose && $this->elementConstitutif->getEcParent()?->isMcccEnfantsIdentique()) {
             return $this->elementConstitutif->getEcParent()?->getMcccs();
         }
 
