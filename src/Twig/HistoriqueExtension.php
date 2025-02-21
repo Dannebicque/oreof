@@ -20,7 +20,6 @@ use Twig\TwigFilter;
 
 class HistoriqueExtension extends AbstractExtension
 {
-    private array $process;
     public const TRADUCTIONS = [
         'conseil' => 'soumis_conseil',
         'publication' => 'valide_cfvu',

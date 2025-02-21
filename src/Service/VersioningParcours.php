@@ -34,8 +34,6 @@ class VersioningParcours
     private Filesystem $fileSystem;
     private TypeDiplomeRegistry $typeD;
 
-    private ?bool $hasLastVersion = null;
-
     public function __construct(
         EntityManagerInterface $entityManager,
         Filesystem $fileSystem,
