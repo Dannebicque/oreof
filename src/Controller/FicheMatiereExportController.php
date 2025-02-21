@@ -14,12 +14,9 @@ use App\Classes\MyGotenbergPdf;
 use App\Entity\FicheMatiere;
 use App\Entity\Parcours;
 use App\Message\Export;
-use App\Utils\Tools;
-use Dompdf\Dompdf;
 use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Attribute\Route;
 

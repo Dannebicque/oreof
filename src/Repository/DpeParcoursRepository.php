@@ -7,7 +7,6 @@ use App\Entity\CampagneCollecte;
 use App\Entity\DpeParcours;
 use App\Entity\Mention;
 use App\Entity\Parcours;
-use App\Enums\EtatDpeEnum;
 use App\Enums\TypeModificationDpeEnum;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;

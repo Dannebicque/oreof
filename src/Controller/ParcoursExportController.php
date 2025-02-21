@@ -15,7 +15,6 @@ use App\DTO\StructureEc;
 use App\DTO\StructureUe;
 use App\Entity\Parcours;
 use App\Entity\ParcoursVersioning;
-use App\Repository\TypeEpreuveRepository;
 use App\Service\ParcoursExport;
 use App\Service\VersioningParcours;
 use App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException;

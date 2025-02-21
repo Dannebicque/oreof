@@ -11,7 +11,6 @@ namespace App\Entity;
 
 use App\Classes\verif\ParcoursValide;
 use App\DTO\Remplissage;
-use App\DTO\StatsFichesMatieres;
 use App\DTO\StatsFichesMatieresParcours;
 use App\Entity\Traits\LifeCycleTrait;
 use App\Enums\ModaliteEnseignementEnum;
@@ -47,7 +46,7 @@ class Parcours
 
     #[Groups(['parcours_json_versioning', 'fiche_matiere_versioning'])]
     #[ORM\ManyToOne(targetEntity: Formation::class, inversedBy: 'parcours', cascade: ['persist'])]
-    private ?Formation $formation = null;
+    private ?Formation $formation;
 
     #[Groups('parcours_json_versioning')]
     #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: BlocCompetence::class, cascade: ['persist', 'remove'])]
@@ -265,7 +264,7 @@ class Parcours
 
     #[ORM\Column(type: Types::STRING, length: 5, enumType: NiveauLangueEnum::class)]
     #[Groups('parcours_json_versioning')]
-    private ?NiveauLangueEnum $niveauFrancais = null;
+    private ?NiveauLangueEnum $niveauFrancais;
 
     public function __construct(?Formation $formation)
     {

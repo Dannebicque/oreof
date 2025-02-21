@@ -13,7 +13,6 @@ use App\Classes\JsonReponse;
 use App\Classes\verif\ParcoursValide;
 use App\DTO\ProcessData;
 use App\Entity\DpeParcours;
-use App\Entity\Historique;
 use App\Entity\HistoriqueParcours;
 use App\Enums\TypeModificationDpeEnum;
 use App\Events\HistoriqueParcoursEditEvent;

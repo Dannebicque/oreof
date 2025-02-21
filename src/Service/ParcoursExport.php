@@ -9,7 +9,6 @@ use App\DTO\StructureUe;
 use App\Entity\FicheMatiere;
 use App\Entity\Parcours;
 use App\Entity\TypeDiplome;
-use App\Utils\CleanTexte;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -21,7 +20,7 @@ class ParcoursExport {
     private EntityManagerInterface $entityManager;
 
     private CalculStructureParcours $calculStructureParcours;
-    
+
     private UrlGeneratorInterface $router;
 
     private WorkflowInterface $ficheWorkflow;
@@ -206,7 +205,7 @@ class ParcoursExport {
                             $nb++;
                             $tUe['nbChoix'] = $nb;
                             $tUeEnfant['ec'] = $this->getEcFromUe($ueEnfant, $isVersioning);
-                            
+
                             /**
                              * UE enfant dans une UE enfant
                              */
@@ -239,13 +238,13 @@ class ParcoursExport {
                                             'autonomie' => $ueEnfantDeuxiemeNiveau->heuresEctsUe->sommeUeTePres
                                         ],
                                         'ects' => $ueEnfantDeuxiemeNiveau->heuresEctsUe->sommeUeEcts,
-        
+
                                     ];
                                     if ($ueEnfantDeuxiemeNiveau->ue->getNatureUeEc()?->isLibre()) {
                                         $tUeEnfantDeuxiemeNiveau['description_libre_choix'] = $ueEnfantDeuxiemeNiveau->ue->getDescriptionUeLibre();
                                     }
-        
-                                    $nbDeuxiemeNiveau++;  
+
+                                    $nbDeuxiemeNiveau++;
                                     $tUeEnfant['nbChoix'] = $nbDeuxiemeNiveau;
                                     $tUeEnfantDeuxiemeNiveau['ec'] = $this->getEcFromUe($ueEnfantDeuxiemeNiveau, $isVersioning);
                                     $tUeEnfant['UesEnfants'][] = $tUeEnfantDeuxiemeNiveau;
@@ -304,7 +303,7 @@ class ParcoursExport {
         $elementConstitutif = $ec;
         $isEcFromBD = false;
 
-        if($isVersioning){  
+        if($isVersioning){
             $ficheMatiere = $this->entityManager
                 ->getRepository(FicheMatiere::class)
                 ->findOneBy([
@@ -314,7 +313,7 @@ class ParcoursExport {
                 $etatWorkflow = $this->ficheWorkflow
                     ->getMarking($ficheMatiere)
                     ->getPlaces();
-                $ficheMatiere = $etatWorkflow === ["publie" => 1] 
+                $ficheMatiere = $etatWorkflow === ["publie" => 1]
                 || $etatWorkflow === ['valide_pour_publication' => 1]
                 ? $ficheMatiere
                 :null;

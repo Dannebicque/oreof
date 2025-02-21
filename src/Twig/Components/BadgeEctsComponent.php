@@ -5,7 +5,6 @@ namespace App\Twig\Components;
 use App\Classes\GetElementConstitutif;
 use App\Entity\ElementConstitutif;
 use App\Entity\Parcours;
-use App\Entity\Ue;
 use Symfony\UX\TwigComponent\Attribute\AsTwigComponent;
 use Symfony\UX\TwigComponent\Attribute\PostMount;
 

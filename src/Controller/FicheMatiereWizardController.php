@@ -23,7 +23,6 @@ use App\Repository\ComposanteRepository;
 use App\Repository\FicheMatiereMutualisableRepository;
 use App\Repository\FormationRepository;
 use App\Repository\ParcoursRepository;
-use App\Repository\TypeDiplomeRepository;
 use App\Repository\TypeEpreuveRepository;
 use App\TypeDiplome\TypeDiplomeRegistry;
 use App\Utils\Access;

@@ -9,8 +9,6 @@
 
 namespace App\DTO;
 
-use App\Entity\ElementConstitutif;
-
 class TotalVolumeHeure
 {
     public float $totalCmPresentiel = 0;

@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Classes\Json\ExtractTextFromJsonPatch;
 use App\Classes\MyGotenbergPdf;
 use App\Entity\Composante;
-use App\Entity\DpeParcours;
 use App\Enums\TypeModificationDpeEnum;
 use App\Repository\ComposanteRepository;
 use App\Repository\DpeParcoursRepository;
@@ -15,11 +14,9 @@ use App\Service\VersioningParcours;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Swaggest\JsonDiff\JsonDiff;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Routing\Generator\UrlGenerator;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class ComposanteController extends BaseController

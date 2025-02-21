@@ -2,21 +2,12 @@
 
 namespace App\Controller;
 
-use App\Classes\JsonReponse;
-use App\Entity\Actualite;
 use App\Entity\Contact;
 use App\Entity\Parcours;
-use App\Form\ActualiteType;
 use App\Form\ContactType;
-use App\Repository\ActualiteRepository;
-use App\Repository\ButApprentissageCritiqueRepository;
-use App\Repository\CompetenceRepository;
 use App\Repository\ContactRepository;
-use App\Repository\ElementConstitutifRepository;
-use App\Repository\FicheMatiereRepository;
 use App\Utils\JsonRequest;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;

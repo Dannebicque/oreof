@@ -9,12 +9,10 @@ use App\Entity\DpeParcours;
 use App\Entity\Parcours;
 use App\TypeDiplome\Export\ButMccc;
 use App\TypeDiplome\Export\LicenceMccc;
-use App\Utils\Tools;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -83,7 +81,7 @@ class McccPdfCommand extends Command
         ini_set('memory_limit', '3500M');
 
         $io = new SymfonyStyle($input, $output);
-        
+
         $generateParcours = $input->getOption("generate-parcours");
 
         $generateAllParcours = $input->getOption("generate-all-parcours");
@@ -135,10 +133,10 @@ class McccPdfCommand extends Command
                         versionFull: false
                     );
                 }
-                
+
                 // $fileName = "MCCC - " . $anneeDpe->getAnnee() . " - " . $parcours->getFormation()->getSlug() ?? '---';
                 // $fileName = "MCC-Parcours-{$parcours->getId()}-" . Tools::slug($parcours->getLibelle()) . "-" . $anneeDpe->getAnnee() . ".pdf";
-                
+
                 $fileName = "MCCC-Parcours-{$parcours->getId()}-{$anneeDpe->getAnnee()}";
                 $now = (new DateTime())->format("d-m-Y_H-i-s");
 
@@ -170,20 +168,20 @@ class McccPdfCommand extends Command
 
             $parcoursArray = array_filter(
                 $parcoursArray,
-                fn($p) => 
-                $p->getDpeParcours()->last() instanceof DpeParcours && 
+                fn($p) =>
+                $p->getDpeParcours()->last() instanceof DpeParcours &&
                 (
                     (array_keys(
                         $p->getDpeParcours()->last()->getEtatValidation()
-                    )[0] === 'publie' 
+                    )[0] === 'publie'
                     && array_values(
                         $p->getDpeParcours()->last()->getEtatValidation()
                     )[0] === 1)
-                    || 
+                    ||
                     (
                     array_keys(
                         $p->getDpeParcours()->last()->getEtatValidation()
-                    )[0] === 'valide_a_publier' 
+                    )[0] === 'valide_a_publier'
                     && array_values(
                         $p->getDpeParcours()->last()->getEtatValidation()
                     )[0] === 1)
@@ -200,7 +198,7 @@ class McccPdfCommand extends Command
                 if($this->fs->exists([$directoryPath . "/old-version"]) === false){
                     $this->fs->mkdir($directoryPath . "/old-version");
                 }
-                
+
                 $dpeParcours = GetDpeParcours::getFromParcours($parcours);
 
                 $dateConseil = $this->getHistorique->getHistoriqueParcoursLastStep($dpeParcours, 'soumis_conseil')?->getDate();
@@ -213,7 +211,7 @@ class McccPdfCommand extends Command
                 $now = (new DateTime())->format("d-m-Y_H-i-s");
                 if($this->fs->exists($directoryPath . "/" . $fileNamePdf)){
                     $this->fs->rename($directoryPath . "/" . $fileNamePdf, $directoryPath . "/old-version/{$now}-{$fileNamePdf}");
-                }   
+                }
                 if($this->fs->exists($directoryPath . "/" . $fileNameSimplifiePdf)){
                     $this->fs->rename($directoryPath . "/" . $fileNameSimplifiePdf, $directoryPath . "/old-version/{$now}-{$fileNameSimplifiePdf}");
                 }
@@ -259,7 +257,7 @@ class McccPdfCommand extends Command
                         dateCfvu: $dateCfvu
                     );
                     $this->fs->appendToFile(
-                        $directoryPath . "/" . $fileNamePdf, 
+                        $directoryPath . "/" . $fileNamePdf,
                         $pdfFull
                     );
                     $this->fs->appendToFile(
@@ -270,7 +268,7 @@ class McccPdfCommand extends Command
                 $io->progressAdvance(1);
             }
             $io->progressFinish();
-            
+
             $io->success("Tous les exports MCCC au format PDF ont été générés.");
 
             return Command::SUCCESS;
@@ -287,12 +285,12 @@ class McccPdfCommand extends Command
                     $dateHistoriquePublication = $this->getHistorique
                         ->getHistoriqueParcoursLastStep($lastDpe, 'valide_a_publier')
                         ?->getDate();
-                                        
+
                     $dateFormat = 'd-m-Y';
                     $today = new DateTime();
 
-                    return $today->format($dateFormat) === $dateHistoriquePublication?->format($dateFormat); 
-                        
+                    return $today->format($dateFormat) === $dateHistoriquePublication?->format($dateFormat);
+
                 }
             );
 
@@ -316,7 +314,7 @@ class McccPdfCommand extends Command
                     $now = (new DateTime())->format("d-m-Y_H-i-s");
                     if($this->fs->exists($directoryPath . "/" . $fileNamePdf)){
                         $this->fs->rename($directoryPath . "/" . $fileNamePdf, $directoryPath . "/old-version/{$now}-{$fileNamePdf}");
-                    }   
+                    }
                     if($this->fs->exists($directoryPath . "/" . $fileNameSimplifiePdf)){
                         $this->fs->rename($directoryPath . "/" . $fileNameSimplifiePdf, $directoryPath . "/old-version/{$now}-{$fileNameSimplifiePdf}");
                     }

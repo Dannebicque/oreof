@@ -2,7 +2,6 @@
 
 namespace App\Security\Voter;
 
-use App\Classes\GetDpeParcours;
 use App\Entity\Composante;
 use App\Entity\DpeParcours;
 use App\Entity\FicheMatiere;

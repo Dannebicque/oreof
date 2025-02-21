@@ -23,7 +23,6 @@ use Doctrine\ORM\Event\PreFlushEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 #[ORM\Entity(repositoryClass: FormationRepository::class)]
 #[ORM\Index(name: 'sigle_formation', columns: ['sigle'], flags: ['fulltext'])]

@@ -12,7 +12,6 @@ namespace App\TypeDiplome\Export;
 use App\Classes\Excel\ExcelWriter;
 use DateTimeInterface;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
-use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 class AbstractLicenceMccc
 {

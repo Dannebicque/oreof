@@ -10,7 +10,6 @@ use App\Repository\FicheMatiereRepository;
 use App\Repository\TypeEcRepository;
 use App\Repository\UeRepository;
 use App\Utils\Tools;
-use Hoa\Visitor\Element;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

@@ -9,11 +9,9 @@
 
 namespace App\Classes\Export;
 
-use App\Classes\Export\ExportSyntheseModification;
 use App\Classes\MyPDF;
 use App\Entity\CampagneCollecte;
 use App\TypeDiplome\TypeDiplomeRegistry;
-use App\Utils\Tools;
 use DateTimeInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 

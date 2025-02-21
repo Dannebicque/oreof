@@ -10,15 +10,11 @@
 namespace App\Classes\Export;
 
 use App\Entity\CampagneCollecte;
-use App\Entity\Parcours;
 use App\Repository\DpeParcoursRepository;
 use App\Repository\FormationRepository;
 use App\TypeDiplome\TypeDiplomeRegistry;
 use App\Utils\Tools;
-use DateTime;
 use DateTimeInterface;
-use Symfony\Component\HttpFoundation\Response;
-use ZipArchive;
 
 class ExportMccc
 {

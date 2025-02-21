@@ -28,10 +28,10 @@ class DpeParcours
     private ?string $version = null;
 
     #[ORM\Column(length: 255, enumType: TypeModificationDpeEnum::class, nullable: true)]
-    private ?TypeModificationDpeEnum $etatReconduction = null;
+    private ?TypeModificationDpeEnum $etatReconduction;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $created = null;
+    private ?\DateTimeInterface $created;
 
     #[ORM\ManyToOne(inversedBy: 'dpeParcours')]
     private ?Formation $formation = null;

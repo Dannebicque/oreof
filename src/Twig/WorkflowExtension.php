@@ -15,7 +15,6 @@ use App\Entity\DpeParcours;
 use App\Entity\FicheMatiere;
 use App\Entity\Formation;
 use App\Entity\Parcours;
-use App\Enums\TypeModificationDpeEnum;
 use App\Utils\Access;
 use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\Workflow\WorkflowInterface;

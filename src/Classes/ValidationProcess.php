@@ -9,9 +9,7 @@
 
 namespace App\Classes;
 
-use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Workflow\WorkflowInterface;
-use Symfony\Component\Yaml\Yaml;
 
 class ValidationProcess extends AbstractValidationProcess
 {

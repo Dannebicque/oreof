@@ -26,7 +26,6 @@ use App\Repository\FormationRepository;
 use App\Repository\ParcoursRepository;
 use App\Repository\SemestreMutualisableRepository;
 use App\Repository\SemestreParcoursRepository;
-use App\TypeDiplome\TypeDiplomeRegistry;
 use App\Utils\JsonRequest;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

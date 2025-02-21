@@ -29,7 +29,6 @@ use DateTimeInterface;
 use Gotenberg\Gotenberg;
 use Gotenberg\Stream;
 use PhpOffice\PhpSpreadsheet\Exception;
-use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
 use Psr\Http\Client\ClientInterface;

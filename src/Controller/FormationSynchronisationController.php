@@ -2,9 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\ButApprentissageCritique;
 use App\Entity\Formation;
-use App\Repository\ButApprentissageCritiqueRepository;
 use App\Repository\FicheMatiereRepository;
 use App\TypeDiplome\TypeDiplomeRegistry;
 use Doctrine\ORM\EntityManagerInterface;

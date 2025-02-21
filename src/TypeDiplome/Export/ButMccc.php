@@ -10,29 +10,18 @@
 namespace App\TypeDiplome\Export;
 
 use App\Classes\Excel\ExcelWriter;
-use App\DTO\TotalVolumeHeure;
 use App\Entity\CampagneCollecte;
-use App\Entity\ElementConstitutif;
 use App\Entity\FicheMatiere;
-use App\Entity\Formation;
-use App\Entity\Mccc;
 use App\Entity\Parcours;
 use App\Enums\RegimeInscriptionEnum;
 use App\Repository\FicheMatiereRepository;
-use App\Repository\TypeEpreuveRepository;
-use App\TypeDiplome\Source\ButTypeDiplome;
 use App\Utils\Tools;
 use DateTimeInterface;
 use Gotenberg\Gotenberg;
 use Gotenberg\Stream;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Exception;
-use PhpOffice\PhpSpreadsheet\Settings;
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
-use PhpOffice\PhpSpreadsheet\Style\Color;
-use PhpOffice\PhpSpreadsheet\Style\Fill;
-use PhpOffice\PhpSpreadsheet\Style\Style;
 use Psr\Http\Client\ClientInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -141,10 +130,8 @@ class ButMccc
             if ($semParc->getSemestre()?->isNonDispense() === false) {
                 if ($semParc->getSemestre()?->getSemestreRaccroche() !== null) {
                     $tabSemestres[$semParc->getOrdre()] = $semParc->getSemestre()?->getSemestreRaccroche();
-                    $raccroche = true;
                 } else {
                     $tabSemestres[$semParc->getOrdre()] = $semParc;
-                    $raccroche = false;
                 }
             }
         }

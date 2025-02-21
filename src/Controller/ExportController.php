@@ -8,7 +8,6 @@ use App\Message\Export;
 use App\Repository\CampagneCollecteRepository;
 use App\Repository\ComposanteRepository;
 use App\Repository\DpeParcoursRepository;
-use App\Repository\FormationRepository;
 use App\Utils\Tools;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

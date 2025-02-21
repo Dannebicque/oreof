@@ -24,7 +24,6 @@ use App\Repository\ElementConstitutifRepository;
 use App\Repository\FicheMatiereRepository;
 use App\Repository\NatureUeEcRepository;
 use App\Repository\TypeEcRepository;
-use App\Repository\TypeEpreuveRepository;
 use App\TypeDiplome\TypeDiplomeRegistry;
 use App\Utils\JsonRequest;
 use Doctrine\ORM\EntityManagerInterface;
@@ -115,8 +114,6 @@ class ElementConstitutifController extends AbstractController
         if ($typeDiplome === null) {
             throw new RuntimeException('Type de diplôme non trouvé');
         }
-
-        $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());
 
         $form = $this->createForm(ElementConstitutifType::class, $elementConstitutif, [
             'action' => $this->generateUrl(

@@ -4,10 +4,7 @@ namespace App\Controller;
 
 use App\Classes\JsonReponse;
 use App\Classes\Process\FicheMatiereProcess;
-use App\Classes\ValidationProcessFicheMatiere;
 use App\Entity\FicheMatiere;
-use App\Events\HistoriqueFicheMatiereEvent;
-use App\Events\HistoriqueParcoursEvent;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

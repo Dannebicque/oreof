@@ -4,7 +4,6 @@ namespace App\Command;
 
 use App\Classes\CalculButStructureParcours;
 use App\Classes\CalculStructureParcours;
-use App\Classes\GetElementConstitutif;
 use App\DTO\StructureEc;
 use App\DTO\StructureParcours;
 use App\DTO\StructureSemestre;
@@ -36,7 +35,6 @@ use stdClass;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;

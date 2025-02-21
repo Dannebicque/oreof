@@ -13,7 +13,6 @@ use App\Classes\CalculStructureParcours;
 use App\Classes\GetDpeParcours;
 use App\Classes\GetFormations;
 use App\Classes\MentionProcess;
-use App\Classes\ValidationProcess;
 use App\Classes\verif\FormationState;
 use App\Classes\verif\ParcoursState;
 use App\DTO\StatsFichesMatieres;

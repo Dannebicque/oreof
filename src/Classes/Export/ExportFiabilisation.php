@@ -11,15 +11,11 @@ namespace App\Classes\Export;
 
 use App\Classes\CalculStructureParcours;
 use App\Classes\Excel\ExcelWriter;
-use App\Classes\GetDpeParcours;
-use App\Classes\GetHistorique;
 use App\DTO\StructureEc;
 use App\DTO\StructureUe;
-use App\Entity\CampagneCollecte;
 use App\Entity\SemestreParcours;
 use App\Repository\DpeParcoursRepository;
 use App\Repository\FormationRepository;
-use App\Utils\CleanTexte;
 use App\Utils\Tools;
 use DateTime;
 use Symfony\Component\HttpFoundation\StreamedResponse;

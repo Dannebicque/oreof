@@ -2,8 +2,6 @@
 
 namespace App\Controller;
 
-use App\Classes\GetDpeParcours;
-use App\Classes\JsonReponse;
 use App\Classes\MentionProcess;
 use App\Classes\Process\FicheMatiereProcess;
 use App\Classes\Process\ParcoursProcess;
@@ -11,13 +9,6 @@ use App\Classes\ValidationProcess;
 use App\Classes\ValidationProcessFicheMatiere;
 use App\Classes\verif\FormationValide;
 use App\Entity\Formation;
-use App\Events\HistoriqueFormationEvent;
-use App\Events\HistoriqueParcoursEvent;
-use App\Repository\DpeParcoursRepository;
-use App\Repository\FicheMatiereRepository;
-use App\Repository\FormationRepository;
-use App\Repository\ParcoursRepository;
-use App\Service\LheoXML;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

@@ -14,7 +14,6 @@ use App\Entity\DpeParcours;
 use App\Entity\Formation;
 use App\Entity\Parcours;
 use App\Entity\User;
-use Symfony\Component\Workflow\Event\Event;
 
 class AbstractDpeMailSubscriber
 {

@@ -6,7 +6,6 @@ use App\Classes\CalculStructureParcours;
 use App\Classes\Export\ExportBcc;
 use App\Classes\MyGotenbergPdf;
 use App\Entity\Parcours;
-use Dompdf\Dompdf;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;

@@ -11,7 +11,6 @@ namespace App\Form;
 
 use App\Entity\Composante;
 use App\Entity\Parcours;
-use App\Enums\NiveauFormationEnum;
 use App\Enums\NiveauLangueEnum;
 use App\Enums\RegimeInscriptionEnum;
 use App\Form\Type\TextareaAutoSaveType;

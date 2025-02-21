@@ -10,8 +10,6 @@
 namespace App\DTO;
 
 use App\Entity\Parcours;
-use App\Entity\Semestre;
-use App\Entity\Ue;
 
 use Symfony\Component\Serializer\Annotation\Groups;
 

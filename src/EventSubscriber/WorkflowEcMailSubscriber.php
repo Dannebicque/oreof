@@ -10,7 +10,6 @@
 namespace App\EventSubscriber;
 
 use App\Classes\Mailer;
-use App\Entity\Parcours;
 use App\Repository\ComposanteRepository;
 use App\Repository\FormationRepository;
 use App\Repository\UserRepository;

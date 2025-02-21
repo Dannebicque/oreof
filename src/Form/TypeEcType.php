@@ -11,7 +11,6 @@ namespace App\Form;
 
 use App\Entity\TypeDiplome;
 use App\Entity\TypeEc;
-use App\Enums\RegimeInscriptionEnum;
 use App\Enums\TypeUeEcEnum;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;

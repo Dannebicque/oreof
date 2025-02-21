@@ -11,7 +11,6 @@ namespace App\EventSubscriber\DpeWorkflow;
 
 use App\Classes\GetHistorique;
 use App\Classes\Mailer;
-use App\Entity\DpeParcours;
 use App\Entity\Formation;
 use App\Repository\ComposanteRepository;
 use App\Repository\FormationRepository;

@@ -2,18 +2,11 @@
 
 namespace App\Twig\Components;
 
-use App\Classes\ValidationProcess;
 use App\Classes\ValidationProcessFicheMatiere;
 use App\Entity\FicheMatiere;
-use App\Entity\Formation;
-use App\Entity\Parcours;
-use App\Entity\TypeDiplome;
 use App\Repository\HistoriqueFicheMatiereRepository;
-use App\Repository\HistoriqueFormationRepository;
-use App\Repository\HistoriqueParcoursRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\Attribute\Target;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Workflow\WorkflowInterface;
 use Symfony\UX\LiveComponent\Attribute\AsLiveComponent;
 use Symfony\UX\LiveComponent\Attribute\LiveListener;

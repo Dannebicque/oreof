@@ -21,7 +21,7 @@ class DpeDemande
     private ?int $id = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $dateDemande = null;
+    private ?\DateTimeInterface $dateDemande;
 
     #[ORM\ManyToOne]
     private ?Parcours $parcours = null;

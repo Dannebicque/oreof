@@ -9,7 +9,6 @@
 
 namespace App\Classes\verif;
 
-use App\Classes\GetElementConstitutif;
 use App\Entity\Formation;
 use App\Entity\Parcours;
 use App\Entity\TypeDiplome;

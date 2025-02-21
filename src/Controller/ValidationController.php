@@ -12,7 +12,6 @@ use App\Repository\ChangeRfRepository;
 use App\Repository\ComposanteRepository;
 use App\Repository\DpeParcoursRepository;
 use App\Repository\FicheMatiereRepository;
-use App\Repository\ParcoursRepository;
 use App\Utils\Tools;
 use DateTime;
 use Symfony\Component\HttpFoundation\Request;

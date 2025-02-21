@@ -13,7 +13,6 @@ use App\Classes\GetElementConstitutif;
 use App\Entity\ElementConstitutif;
 use App\Entity\FicheMatiere;
 use App\Entity\Parcours;
-use Doctrine\Common\Collections\Collection;
 
 use Symfony\Component\Serializer\Annotation\Groups;
 

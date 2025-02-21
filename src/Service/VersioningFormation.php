@@ -4,8 +4,6 @@ namespace App\Service;
 
 use App\Entity\Formation;
 use App\Entity\FormationVersioning;
-use App\Entity\Parcours;
-use App\Entity\ParcoursVersioning;
 use DateTimeImmutable;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\ORM\EntityManagerInterface;
