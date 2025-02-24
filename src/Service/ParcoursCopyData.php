@@ -359,9 +359,10 @@ class ParcoursCopyData {
                 && $this->hasEcSameHeuresAsFicheMatiereCopy($ec->heuresEctsEc, $ec->elementConstitutif->getFicheMatiere()) === false;
 
             // Si différent, que les heures ne sont pas sur le parent, ni sur la FM
-            if( $isDifferent && !$isHeuresIdentiques
+            if( ( $isDifferent && !$isHeuresIdentiques
                 && !$ec->elementConstitutif->getFicheMatiere()->isHorsDiplome()
-                && !$ec->elementConstitutif->getFicheMatiere()->isVolumesHorairesImpose()
+                && !$ec->elementConstitutif->getFicheMatiere()->isVolumesHorairesImpose() )
+                || ($ec->elementConstitutif->isSansHeure())
             ){
                 $ecCopyFlag = $this->ecCopyRepo->find($ec->elementConstitutif->getId());
                 $ecCopyFlag->setHeuresSpecifiques(true);
