@@ -10,6 +10,7 @@ import { Controller } from '@hotwired/stimulus'
 import { Modal } from 'bootstrap'
 import { saveData } from '../../js/saveData'
 import callOut from '../../js/callOut'
+import updateUrl from '../../js/updateUrl'
 
 export default class extends Controller {
   static targets = ['detail']
@@ -18,6 +19,21 @@ export default class extends Controller {
     ue: Number,
     parcours: Number,
     url: String,
+    urlDetail: String,
+    semestreAffiche: String,
+    ueAffichee: String,
+  }
+
+  async connect() {
+    if (parseInt(this.ueAfficheeValue, 10) === this.ueValue) {
+      const btn = document.getElementById(`btn_ue_detail_${this.ueValue}`)
+      const response = await fetch(this.urlDetailValue)
+      this.detailTarget.innerHTML = await response.text()
+      btn.dataset.state = 'open'
+      btn.firstElementChild.classList.remove('fa-caret-right')
+      btn.firstElementChild.classList.add('fa-caret-down')
+      document.getElementById(`detail_ue_${this.ueValue}_${this.parcoursValue}`).classList.remove('d-none')
+    }
   }
 
   async deplacerUe(event) {
@@ -36,11 +52,13 @@ export default class extends Controller {
       event.target.dataset.state = 'close'
       event.target.firstElementChild.classList.add('fa-caret-right')
       event.target.firstElementChild.classList.remove('fa-caret-down')
+      updateUrl({ ue: event.params.ue }, 'remove')
     } else {
       this._listeEc(event)
       event.target.dataset.state = 'open'
       event.target.firstElementChild.classList.remove('fa-caret-right')
       event.target.firstElementChild.classList.add('fa-caret-down')
+      updateUrl({ ue: event.params.ue })
     }
   }
 

@@ -229,12 +229,12 @@
                                     </a>
                                 </li>
                                 {% if is_granted('ROLE_SES') %}
-                                <li>
-                                    <a href="{{ path('app_synthese_modification_export_pdf') }}">
-                                        <i class="fal fa-book icon"></i>
-                                        <span class="label">Synthèse Modifications</span>
-                                    </a>
-                                </li>
+                                    <li>
+                                        <a href="{{ path('app_synthese_modification_export_pdf') }}">
+                                            <i class="fal fa-book icon"></i>
+                                            <span class="label">Synthèse Modifications</span>
+                                        </a>
+                                    </li>
                                 {% endif %}
                             </ul>
                         </li>
@@ -518,20 +518,20 @@
                     {% endif %}
 
                     {% if is_granted('CAN_COMPOSANTE_SHOW_MY', app.user) %}
-                    <li>
-                        <a href="#gestion_offre_formation" data-href="gestion_offre_formation">
-                            <i class="fal fa-book icon"></i>
-                            <span class="label">Communication</span>
-                        </a>
-                        <ul id="gestion_offre_formation">
-                            <li>
-                                <a href="{{ path('app_plaquette') }}">
-                                    <i class="fal fa-random icon"></i>
-                                    <span class="label">Configurer les plaquettes</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
+                        <li>
+                            <a href="#gestion_offre_formation" data-href="gestion_offre_formation">
+                                <i class="fal fa-book icon"></i>
+                                <span class="label">Communication</span>
+                            </a>
+                            <ul id="gestion_offre_formation">
+                                <li>
+                                    <a href="{{ path('app_plaquette') }}">
+                                        <i class="fal fa-random icon"></i>
+                                        <span class="label">Configurer les plaquettes</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
                     {% endif %}
                 </ul>
             </div>
@@ -567,8 +567,13 @@
     <div class="page-title-container fixed-title-container">
         <div class="row">
             <div class="col-md-12 col-sm-6 mt-0">
-                {# todo: comparer si année U = année U en cours et si Campagne = Campagne active #}
-                <twig:alerte type="warning" message="Vous êtes sur l'année en cours"></twig:alerte>
+                {% if user_data.campagneCollecte.defaut == true %}
+                    <twig:alerte type="warning"
+                                 message="La campagne de collecte des Descriptifs et des Programmes des Enseignements (DPE) pour l'année universitaire <strong>{{ user_data.campagneCollecte.anneeUniversitaire.libelle }}</strong> est actuellement ouverte. <br> Vous pouvez procéder aux modifications nécessaires pour adapter vos descriptifs (sans passage en CFVU) et/ou pour proposer des changements de maquette et MCCC pour votre/vos formations (avec passage en CFVU). La date limite est fixée au {{ user_data.campagneCollecte.dateTransmissionSes|dateFr }}."></twig:alerte>
+                {% else %}
+                    <twig:alerte type="danger" message="
+                    Pour information, la campagne de collecte des Descriptifs et des Programmes des Enseignements (DPE) pour l'année universitaire <strong>{{ user_data.campagneCollecte.anneeUniversitaire.libelle }}</strong> est close. Des modifications ponctuelles peuvent encore être demandées mais sont soumises à un accord préalable."></twig:alerte>
+                {% endif %}
             </div>
             <!-- Title Start -->
             <div class="col-md-6 col-sm-6">

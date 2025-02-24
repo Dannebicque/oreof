@@ -9,27 +9,16 @@
 
 namespace App\Controller;
 
-use App\Classes\EcOrdre;
 use App\Classes\GetDpeParcours;
 use App\Classes\GetElementConstitutif;
 use App\Classes\JsonReponse;
 use App\Entity\ElementConstitutif;
 use App\Entity\FicheMatiere;
 use App\Entity\Parcours;
-use App\Entity\TypeEc;
-use App\Entity\Ue;
-use App\Form\EcStep4Type;
-use App\Form\ElementConstitutifEnfantType;
-use App\Form\ElementConstitutifType;
 use App\Repository\ElementConstitutifRepository;
-use App\Repository\FicheMatiereRepository;
-use App\Repository\NatureUeEcRepository;
-use App\Repository\TypeEcRepository;
 use App\Repository\TypeEpreuveRepository;
-use App\TypeDiplome\Source\ButTypeDiplome;
 use App\TypeDiplome\TypeDiplomeRegistry;
 use App\Utils\Access;
-use App\Utils\JsonRequest;
 use Doctrine\ORM\EntityManagerInterface;
 use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -53,8 +42,9 @@ class ElementConstitutifMcccController extends AbstractController
         ElementConstitutif           $elementConstitutif,
         Parcours                     $parcours
     ): Response {
-
+//todo: sans doute à simplifier. Les cas sont : EC parent, EC enfant, EC propriétaire de la fiche, EC raccroché ? récupérer les infos du badge ?l
         $dpeParcours = GetDpeParcours::getFromParcours($parcours);
+        $isParcoursProprietaire = $elementConstitutif->getFicheMatiere()?->getParcours()?->getId() === $parcours->getId();
 
         if ($dpeParcours === null) {
             throw new RuntimeException('DPE Parcours non trouvé');
@@ -72,21 +62,12 @@ class ElementConstitutifMcccController extends AbstractController
 
         $raccroche = $elementConstitutif->getFicheMatiere()?->getParcours()?->getId() !== $parcours->getId();
         $getElement = new GetElementConstitutif($elementConstitutif, $parcours);
-        $getElement->setIsRaccroche($raccroche);
-
-        if ($elementConstitutif->getFicheMatiere() !== null && $elementConstitutif->getFicheMatiere()?->isMcccImpose()) {
-            $typeEpreuve = $elementConstitutif->getFicheMatiere()?->getTypeMccc();
-        } elseif ($raccroche && $elementConstitutif->isSynchroMccc()) {
-            $ec = $getElement->getElementConstitutif();
-            $typeEpreuve = $ec->getTypeMccc();
-        } else {
-            $typeEpreuve = $elementConstitutif->getTypeMccc();
-        }
+        $typeEpreuve = $getElement->getTypeMcccFromFicheMatiere();
 
         if ($this->isGranted('CAN_PARCOURS_EDIT_MY', $dpeParcours) && Access::isAccessible($dpeParcours, 'cfvu')) {
             if ($request->isMethod('POST')) {
                 if (
-                    ($elementConstitutif->isSynchroEcts() === false &&
+                    ($elementConstitutif->isEctsSpecifiques() === true &&
                         ($elementConstitutif->getFicheMatiere() === null ||
                             $elementConstitutif->getFicheMatiere()?->isEctsImpose() === false)) ||
                     $elementConstitutif->getParcours()->getId() === $parcours->getId()
@@ -137,12 +118,13 @@ class ElementConstitutifMcccController extends AbstractController
                 'typeMccc' => $typeEpreuve,
                 'typeEpreuves' => $typeEpreuveRepository->findByTypeDiplome($typeDiplome),
                 'ec' => $elementConstitutif,
-                'ects' => $getElement->getEcts(),
+                'ects' => $getElement->getFicheMatiereEcts(),
                 'templateForm' => $typeD::TEMPLATE_FORM_MCCC,
-                'mcccs' => $getElement->getMcccs($typeD),
+                'mcccs' => $getElement->getMcccsFromFicheMatiereCollection($typeD),
                 'wizard' => false,
                 'typeDiplome' => $typeDiplome,
                 'parcours' => $parcours,
+                'isParcoursProprietaire' => $isParcoursProprietaire,
                 'raccroche' => $raccroche
             ]);
         }
@@ -154,7 +136,7 @@ class ElementConstitutifMcccController extends AbstractController
             'typeEpreuves' => $typeEpreuveRepository->findByTypeDiplome($typeDiplome),
             'ec' => $elementConstitutif,
             'templateForm' => $typeD::TEMPLATE_FORM_MCCC,
-            'mcccs' => $getElement->getMcccs($typeD),
+            'mcccs' => $getElement->getMcccsFromFicheMatiereCollection($typeD),
         ]);
     }
 
@@ -205,7 +187,7 @@ class ElementConstitutifMcccController extends AbstractController
             'typeEpreuves' => $typeEpreuveRepository->findByTypeDiplome($typeDiplome),
             'ec' => $elementConstitutif,
             'templateForm' => $typeD::TEMPLATE_FORM_MCCC,
-            'mcccs' => $getElement->getMcccs($typeD),
+            'mcccs' => $getElement->getMcccsFromFicheMatiere($typeD),
         ]);
     }
 

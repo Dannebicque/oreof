@@ -1,0 +1,68 @@
+<div
+        {{ stimulus_controller('validation--index',
+            {
+                urlListe: path('app_validation_formation_liste_ouverture'),
+            }) }}
+>
+    <div class="card mt-2">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-6">
+                    <div>
+                        <label for="composante" class="required">Composante</label>
+                        <select name="composante" id="composante" class="form-select"
+                                {{ stimulus_action('validation--index', 'changeListe') }}
+                                {{ stimulus_controller('symfony/ux-autocomplete/autocomplete') }}
+                        >
+                            <option value="">Choisir une composante</option>
+                            <option value="all">Toutes les composantes de l'établissement</option>
+                            {% for composante in composantes %}
+                                <option
+                                        value="{{ composante.id }}"
+                                {% if idComposante == composante.id %}selected{% endif %}
+                                >{{ composante.libelle }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div>
+                        <label for="type_validation" class="required">Etat ouverture/non ouverture</label>
+                        <select name="type_validation" id="type_validation" class="form-select"
+                                {{ stimulus_action('validation--index', 'changeListe') }}
+                        >
+                            <option value="">Choisir l'état</option>
+                            <option value="all">Tous les états</option>
+                            {% for type in types_validation %}
+                                <option value="{{ type.value }}"
+                                        {% if typeValidation == type.value %}selected{% endif %}>
+                                    {{ type.libelle }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+{#                <div class="col-6">#}
+{#                    <a href="{{ path('app_formation_responsable_liste_export') }}"#}
+{#                       class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2 mt-2"#}
+{#                       data-bs-toggle="tooltip"#}
+{#                       data-bs-placement="bottom"#}
+{#                       title="Exporter les données en PDF"#}
+{#                    >#}
+{#                        <i class="{{ iconDownload }}"></i>#}
+{#                        <span> Exporter les données en PDF</span>#}
+{#                    </a>#}
+{#                </div>#}
+            </div>
+        </div>
+    </div>
+
+    <div class="card mt-2" {{ stimulus_target('validation--index', 'liste') }}>
+        <div class="card-body">
+            {{ component('alerte', {
+                type:'info',
+                message:'Veuillez sélectionner une composante et un état d\'ouverture pour afficher les parcours concernés.'
+            }) }}
+        </div>
+    </div>
+</div>

@@ -9,8 +9,6 @@
 
 namespace App\Events;
 
-use App\Entity\Formation;
-use App\Entity\HistoriqueFormation;
 use App\Entity\HistoriqueParcours;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\User\UserInterface;

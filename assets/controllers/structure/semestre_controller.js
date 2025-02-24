@@ -9,9 +9,29 @@
 import { Controller } from '@hotwired/stimulus'
 import callOut from '../../js/callOut';
 import JsonResponse from '../../js/JsonResponse'
+import updateUrl from '../../js/updateUrl'
 
 export default class extends Controller {
   static targets = ['detail']
+
+  static values = {
+    semestreAffiche: String,
+    ueAffichee: String,
+    semestre: String,
+    url: String,
+  }
+
+  async connect() {
+    if (this.semestreAfficheValue === this.semestreValue) {
+      const btn = document.getElementById(`btn_semestre_detail_${this.semestreValue}`)
+      const response = await fetch(this.urlValue)
+      this.detailTarget.innerHTML = await response.text()
+      btn.dataset.state = 'open'
+      btn.firstElementChild.classList.remove('fa-caret-right')
+      btn.firstElementChild.classList.add('fa-caret-down')
+      document.getElementById(`detail_semestre_${this.semestreValue}`).classList.remove('d-none')
+    }
+  }
 
   async detail(event) {
     if (event.target.dataset.state === 'open') {
@@ -20,6 +40,7 @@ export default class extends Controller {
       event.target.dataset.state = 'close'
       event.target.firstElementChild.classList.add('fa-caret-right')
       event.target.firstElementChild.classList.remove('fa-caret-down')
+      updateUrl({ semestre: event.params.semestre, ue: 0 }, 'remove')
     } else {
       const response = await fetch(event.params.url)
       this.detailTarget.innerHTML = await response.text()
@@ -27,6 +48,7 @@ export default class extends Controller {
       event.target.dataset.state = 'open'
       event.target.firstElementChild.classList.remove('fa-caret-right')
       event.target.firstElementChild.classList.add('fa-caret-down')
+      updateUrl({ semestre: event.params.semestre })
     }
   }
 

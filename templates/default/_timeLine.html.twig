@@ -1,5 +1,5 @@
 <!-- Stats Start -->
-<h2 class="small-title">Processus de la campagne de collecte des projets de DPE ({{ user_data.dpe.libelle }})</h2>
+<h2 class="small-title">Processus de la campagne de collecte des projets de DPE ({{ user_data.campagneCollecte.libelle }})</h2>
 <div class="row gy-2">
     <div class="col-2 p-0">
         <div class="card me-2 sh-20 hover-border-primary">
@@ -9,7 +9,7 @@
                 </div>
                 <p class="mb-0 lh-1">Ouverture de la campagne de collecte</p>
                 <p class="cta-3 mb-0 text-primary">
-                    {{ user_data.dpe != null ? user_data.dpe.dateOuvertureDpe|dateFr :
+                    {{ user_data.campagneCollecte != null ? user_data.campagneCollecte.dateOuvertureDpe|dateFr :
                     'Non renseigné' }}
                 </p>
             </div>
@@ -24,8 +24,8 @@
                 </div>
                 <p class="mb-0 lh-1">Période d'enrichissement des projets de DPE</p>
                 <p class="cta-3 mb-0 text-primary">
-                    {{ user_data.dpe != null ? user_data.dpe.dateOuvertureDpe|dateFr :
-                    'Non renseigné' }} au {{ user_data.dpe != null ? user_data.dpe
+                    {{ user_data.campagneCollecte != null ? user_data.campagneCollecte.dateOuvertureDpe|dateFr :
+                    'Non renseigné' }} au {{ user_data.campagneCollecte != null ? user_data.campagneCollecte
                     .dateClotureDpe|dateFr :
                     'Non renseigné' }}
                 </p>
@@ -64,7 +64,7 @@
                 </div>
                 <p class="mb-0 lh-1">Date limite de transmission des projets DPE au Central</p>
                 <p class="cta-3 mb-0 text-primary">
-                    {{ user_data.dpe != null ? user_data.dpe.dateTransmissionSes|dateFr :
+                    {{ user_data.campagneCollecte != null ? user_data.campagneCollecte.dateTransmissionSes|dateFr :
                     'Non renseigné' }}
                 </p>
             </div>
@@ -78,7 +78,7 @@
                 </div>
                 <p class="mb-0 lh-1">Date prévisionnelle de passage en CFVU</p>
                 <p class="cta-3 mb-0 text-primary">
-                    {{ user_data.dpe != null ? user_data.dpe.dateCfvu|dateFr :
+                    {{ user_data.campagneCollecte != null ? user_data.campagneCollecte.dateCfvu|dateFr :
                     'Non renseigné' }}
                 </p>
             </div>
@@ -92,7 +92,7 @@
                 </div>
                 <p class="mb-0 lh-1">Publication</p>
                 <p class="cta-3 mb-0 text-primary">
-                    {{ user_data.dpe != null ? user_data.dpe.datePublication|dateFr :
+                    {{ user_data.campagneCollecte != null ? user_data.campagneCollecte.datePublication|dateFr :
                     'Non renseigné' }}
                 </p>
             </div>

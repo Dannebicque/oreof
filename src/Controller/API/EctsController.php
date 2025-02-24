@@ -9,7 +9,6 @@
 
 namespace App\Controller\API;
 
-use App\Classes\GetElementConstitutif;
 use App\Classes\GetUeEcts;
 use App\Entity\Parcours;
 use App\Entity\Ue;

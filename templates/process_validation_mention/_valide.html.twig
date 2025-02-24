@@ -1,0 +1,30 @@
+<twig:alerte message="Contrôle de la formation avant transmission des modifications au SES" type="info" />
+
+<form action="{{ path('app_validation_formation_valide', {etape:etape, formation:formation.id}) }}"
+      method="post"
+      enctype="multipart/form-data">
+
+{{ include('formation_state/_index.html.twig') }}
+
+    {% if isValid == false %}
+        {{ component('alerte', {
+            type: 'danger',
+            message: 'Validation impossible formation incomplète'
+        }) }}
+    {% else %}
+        {{ component('alerte', {
+            type: 'success',
+            message: 'Formation complète'
+        }) }}
+        <div class="mt-2">
+            <button type="submit" class="btn btn-success"
+                    {{ stimulus_action('base','sauvegardeFormModal', 'click') }}
+                    data-action="live#emit"
+                    data-event="valide"
+            >
+                <i class="fal fa-floppy-disk"></i>
+                {{ ('btn.formation.valide')|trans({}, 'process') }}
+            </button>
+        </div>
+    {% endif %}
+</form>

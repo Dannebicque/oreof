@@ -21,7 +21,7 @@ class ChangeRf
     private ?Formation $formation = null;
 
     #[ORM\Column(length: 20, enumType: TypeRfEnum::class)]
-    private ?TypeRfEnum $typeRf = null;
+    private ?TypeRfEnum $typeRf;
 
     #[ORM\Column(nullable: true)]
     private ?array $etatDemande = [];

@@ -35,7 +35,7 @@
                 {# todo: isGranted ? #}
                 {% if
                     isAccessible(dpeParcours, 'cfvu') and
-                    ec.ficheMatiere.parcours != null and ec.ficheMatiere.parcours.id == parcours.id and raccrocheSem == false and raccrocheUe == false %}
+                    ec.ficheMatiere.parcours != null and ec.ficheMatiere.parcours.id == parcours.id and isSemestreRaccroche == false and raccrocheUe == false %}
                     <a
                             href="{{ path('app_fiche_matiere_edit',{slug: ec.ficheMatiere.slug}) }}"
                             class="btn btn-sm btn-outline-info"

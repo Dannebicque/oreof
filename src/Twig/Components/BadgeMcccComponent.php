@@ -23,11 +23,13 @@ final class BadgeMcccComponent
     public ?bool $etatMcccComplet = false;
     public ?bool $isMcccSpecifiques = false;
     public ?bool $texte = false;
+    public ?bool $isParcoursProprietaire = false;
 
 
     #[PostMount]
     public function mounted(): void
     {
+        $this->isParcoursProprietaire = $this->elementConstitutif->getFicheMatiere()?->getParcours()?->getId() === $this->parcours->getId();
         $this->isMcccSpecifiques = $this->elementConstitutif->isMcccSpecifiques();
         if ($this->elementConstitutif !== null) {
             $getElement = new GetElementConstitutif($this->elementConstitutif, $this->parcours);

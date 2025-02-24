@@ -25,7 +25,7 @@ class FormationStructureController extends BaseController
         FormationStructure $formationStructure,
         Formation $formation
     ): Response {
-        $formationStructure->genereStructrePasParcours($formation);
+        $formationStructure->genereStructrePasParcours($formation, $this->getCampagneCollecte());
 
         $this->addFlashBag('success', 'La structure de la formation a été générée');
 
@@ -48,7 +48,7 @@ class FormationStructureController extends BaseController
                 break;
             case 'genereStructure':
             case 'reinitialiseStructure':
-                $formationStructure->genereStructure($parcours);
+                $formationStructure->genereStructure($parcours, $this->getCampagneCollecte());
                 break;
         }
 

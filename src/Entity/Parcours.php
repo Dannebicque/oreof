@@ -11,7 +11,6 @@ namespace App\Entity;
 
 use App\Classes\verif\ParcoursValide;
 use App\DTO\Remplissage;
-use App\DTO\StatsFichesMatieres;
 use App\DTO\StatsFichesMatieresParcours;
 use App\Entity\Traits\LifeCycleTrait;
 use App\Enums\ModaliteEnseignementEnum;
@@ -47,7 +46,7 @@ class Parcours
 
     #[Groups(['parcours_json_versioning', 'fiche_matiere_versioning'])]
     #[ORM\ManyToOne(targetEntity: Formation::class, inversedBy: 'parcours', cascade: ['persist'])]
-    private ?Formation $formation = null;
+    private ?Formation $formation;
 
     #[Groups('parcours_json_versioning')]
     #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: BlocCompetence::class, cascade: ['persist', 'remove'])]
@@ -229,6 +228,10 @@ class Parcours
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Groups('parcours_json_versioning')]
+    private ?string $descriptifHautPageAutomatique = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups('parcours_json_versioning')]
     private ?string $descriptifHautPage = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
@@ -261,7 +264,7 @@ class Parcours
 
     #[ORM\Column(type: Types::STRING, length: 5, enumType: NiveauLangueEnum::class)]
     #[Groups('parcours_json_versioning')]
-    private ?NiveauLangueEnum $niveauFrancais = null;
+    private ?NiveauLangueEnum $niveauFrancais;
 
     /** @var Parcours $parcoursOrigineCopie Référence le parcours d'origine, depuis la copie */ 
     #[ORM\OneToOne(inversedBy: 'parcoursCopieAnneeUniversitaire', targetEntity: self::class, cascade: ['persist', 'remove'])]
@@ -1263,6 +1266,11 @@ class Parcours
         return 1;
     }
 
+    public function getDescriptifHautPageAutomatique(): ?string
+    {
+        return $this->descriptifHautPageAutomatique;
+    }
+
     public function getDescriptifHautPage(): ?string
     {
         return $this->descriptifHautPage;
@@ -1270,12 +1278,35 @@ class Parcours
 
     public function getDescriptifHautPageAffichage(): ?string
     {
-        return $this->descriptifHautPage ?? $this->getFormation()?->getComposantePorteuse()?->getEtablissement()?->getEtablissementInformation()?->getDescriptifHautPage();
+        if ($this->descriptifHautPageAutomatique === null && $this->descriptifHautPage=== null) {
+            return $this->getFormation()?->getComposantePorteuse()?->getEtablissement()?->getEtablissementInformation()?->getDescriptifHautPage();
+        }
+
+        if ($this->descriptifHautPageAutomatique !== null && $this->descriptifHautPage !== null) {
+            return $this->descriptifHautPageAutomatique. '<br>'. $this->descriptifHautPage;
+        }
+
+        if ($this->descriptifHautPageAutomatique !== null && $this->descriptifHautPage === null) {
+            return $this->descriptifHautPageAutomatique;
+        }
+
+        if ($this->descriptifHautPageAutomatique === null && $this->descriptifHautPage !== null) {
+            return $this->descriptifHautPage;
+        }
+
+        return '' ;
     }
 
     public function setDescriptifHautPage(?string $descriptifHautPage): static
     {
         $this->descriptifHautPage = $descriptifHautPage;
+
+        return $this;
+    }
+
+    public function setDescriptifHautPageAutomatique(?string $descriptifHautPageAutomatique): static
+    {
+        $this->descriptifHautPageAutomatique = $descriptifHautPageAutomatique;
 
         return $this;
     }

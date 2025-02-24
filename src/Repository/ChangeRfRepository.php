@@ -22,6 +22,7 @@ class ChangeRfRepository extends ServiceEntityRepository
         parent::__construct($registry, ChangeRf::class);
     }
 
+    //todo: mettre CampagneCollecte ?
     public function findByComposanteTypeValidation(Composante $composante, ?string $etat): array
     {
         if ($etat === null || $etat === 'all') {

@@ -46,20 +46,20 @@ class FicheMatiereController extends BaseController
 
         if ($this->isGranted('ROLE_ADMIN') || $this->isGranted('ROLE_SES')) {
             $ficheMatieres = $ficheMatiereRepository->findByAdmin(
-                $this->getDpe(),
+                $this->getCampagneCollecte(),
                 $request->query->all()
             );
-            $totalFiches = $ficheMatiereRepository->countByAdmin($this->getDpe(), $request->query->all());
+            $totalFiches = $ficheMatiereRepository->countByAdmin($this->getCampagneCollecte(), $request->query->all());
         } else {
             $ficheMatieres = $ficheMatiereRepository->findByResponsable(
                 $this->getUser(),
-                $this->getDpe(),
+                $this->getCampagneCollecte(),
                 $request->query->all()
             );
 
             $totalFiches = $ficheMatiereRepository->countByResponsable(
                 $this->getUser(),
-                $this->getDpe(),
+                $this->getCampagneCollecte(),
                 $request->query->all()
             );
         }
@@ -108,11 +108,11 @@ class FicheMatiereController extends BaseController
     ): Response
     {
         $ficheMatieres = $ficheMatiereRepository->findByHd(
-            $this->getDpe(),
+            $this->getCampagneCollecte(),
             $request->query->all(),
         );
 
-        $totalFiches = $ficheMatiereRepository->countByHd($this->getDpe(), $request->query->all());
+        $totalFiches = $ficheMatiereRepository->countByHd($this->getCampagneCollecte(), $request->query->all());
         $nbPages = ceil($totalFiches / 50);
 
         return $this->render('structure/fiche_matiere/_listeHd.html.twig', [

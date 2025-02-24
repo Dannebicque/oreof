@@ -44,7 +44,11 @@ final class ParcoursOuvert
         $this->dpeParcours = GetDpeParcours::getFromParcours($this->parcours);
         if ($this->dpeParcours !== null) {
             $this->campagne = $this->dpeParcours->getCampagneCollecte();
-            if ($this->dpeParcours->getEtatReconduction() === TypeModificationDpeEnum::NON_OUVERTURE) {
+            if (
+                $this->dpeParcours->getEtatReconduction() === TypeModificationDpeEnum::NON_OUVERTURE ||
+                $this->dpeParcours->getEtatReconduction() === TypeModificationDpeEnum::NON_OUVERTURE_SES ||
+                $this->dpeParcours->getEtatReconduction() === TypeModificationDpeEnum::NON_OUVERTURE_CFVU
+            ) {
                 $this->isOuvert = false;
             } else {
                 $this->isOuvert = true;
@@ -60,8 +64,16 @@ final class ParcoursOuvert
 
         if ($this->isOuvert) {
             $this->dpeParcours->setEtatReconduction(TypeModificationDpeEnum::OUVERT);
+            $this->parcours->setDescriptifHautPageAutomatique(null);
         } else {
-            $this->dpeParcours->setEtatReconduction(TypeModificationDpeEnum::NON_OUVERTURE);
+            $this->dpeParcours->setEtatReconduction(TypeModificationDpeEnum::NON_OUVERTURE_SES);
+
+            // todo: déplacer dans la validation CFVU
+            //            if ($this->type === 'parcours') {
+            //                $this->parcours->setDescriptifHautPageAutomatique('Ce parcours ne sera pas proposé pour la campagne ' . $this->campagne->getLibelle() . '.');
+            //            } else {
+            //                $this->parcours->setDescriptifHautPageAutomatique('Cette formation ne sera pas proposée pour la campagne ' . $this->campagne->getLibelle() . '.');
+            //            }
         }
 
         $this->entityManager->flush();
@@ -70,6 +82,10 @@ final class ParcoursOuvert
     public function getColor(): string
     {
         if ($this->dpeParcours->getEtatReconduction() === TypeModificationDpeEnum::NON_OUVERTURE) {
+            return 'danger';
+        }
+
+        if ($this->dpeParcours->getEtatReconduction() === TypeModificationDpeEnum::NON_OUVERTURE_SES || $this->dpeParcours->getEtatReconduction() === TypeModificationDpeEnum::NON_OUVERTURE_CFVU) {
             return 'warning';
         }
         return 'success';

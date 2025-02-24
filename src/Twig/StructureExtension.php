@@ -12,7 +12,6 @@ namespace App\Twig;
 use App\Enums\TypeParcoursEnum;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
-use Twig\TwigFunction;
 
 class StructureExtension extends AbstractExtension
 {

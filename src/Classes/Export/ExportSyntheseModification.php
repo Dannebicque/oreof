@@ -9,19 +9,14 @@
 
 namespace App\Classes\Export;
 
-use App\Classes\Excel\ExcelWriter;
 use App\Classes\MyGotenbergPdf;
 use App\Entity\CampagneCollecte;
-use App\Enums\RegimeInscriptionEnum;
 use App\Repository\FormationRepository;
 use App\Repository\TypeEpreuveRepository;
 use App\Service\VersioningParcours;
-use App\Service\VersioningStructure;
 use App\Service\VersioningStructureExtractDiff;
 use App\TypeDiplome\TypeDiplomeRegistry;
 use App\Utils\Tools;
-use DateTime;
-use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpKernel\KernelInterface;
 
 class ExportSyntheseModification

@@ -19,13 +19,13 @@ use App\Entity\Semestre;
 use App\Entity\SemestreMutualisable;
 use App\Entity\SemestreParcours;
 use App\Entity\Ue;
+use App\Enums\TypeModificationDpeEnum;
 use App\Repository\ComposanteRepository;
 use App\Repository\FicheMatiereMutualisableRepository;
 use App\Repository\FormationRepository;
 use App\Repository\ParcoursRepository;
 use App\Repository\SemestreMutualisableRepository;
 use App\Repository\SemestreParcoursRepository;
-use App\TypeDiplome\TypeDiplomeRegistry;
 use App\Utils\JsonRequest;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -42,6 +42,7 @@ class SemestreController extends AbstractController
         Route('/detail/parcours/{parcours}', name: 'detail_parcours')
     ]
     public function detailParcours(
+        Request                    $request,
         SemestreParcoursRepository $semestreRepository,
         Parcours                   $parcours
     ): Response {
@@ -72,13 +73,14 @@ class SemestreController extends AbstractController
         }
 
         $debut = $parcours->getFormation()?->getSemestreDebut();
-
         return $this->render('structure/semestre/_liste.html.twig', [
             'semestres' => $semestres,
             'parcours' => $parcours,
             'dpeParcours' => $dpeParcours,
             'debut' => $debut,
             'fin' => $typeDiplome->getSemestreFin(),
+            'semestreAffiche' => $request->getSession()->get('semestreAffiche'),
+            'ueAffichee' => $request->getSession()->get('ueAffichee'),
         ]);
     }
 
@@ -107,15 +109,38 @@ class SemestreController extends AbstractController
         $valeur = JsonRequest::getValueFromRequest($request, 'check');
 
         $semestre->setOuvert((bool) $valeur);
+        $parcours = $semestre->getParcours();
+        $dpeParcours = GetDpeParcours::getFromParcours($parcours);
+
+        //parcours les semestres et construire la phrase si le parcours est ouvert, sinon laisser la phrase par défaut
+        $phrase = '';
+
+        if ($dpeParcours->getEtatReconduction() === TypeModificationDpeEnum::NON_OUVERTURE) {
+            $phrase = 'Ce parcours ne sera pas proposé pour la campagne ' . $dpeParcours->getCampagneCollecte()->getLibelle() . '.';
+        } else {
+            $semestres = $parcours->getSemestreParcours();
+            foreach ($semestres as $sem) {
+                if ($sem->isOuvert() === false) {
+                    $tSemestre[] = $sem->getSemestre()?->getOrdre();
+                }
+            }
+
+            $phrase = 'Ce parcours sera proposé pour la campagne ' . $dpeParcours->getCampagneCollecte()->getLibelle() . '.';
+            if (count($tSemestre) === 1) {
+                $phrase .= ' Le semestre ' . $tSemestre[0] . ' n\'est pas ouvert.';
+            } elseif (count($tSemestre) > 1) {
+                $phrase .= ' Les semestres ' . implode(', ', $tSemestre) . ' ne seront pas ouverts.';
+            }
+        }
+
+        $parcours->setDescriptifHautPageAutomatique($phrase);
 
         $entityManager->flush();
         return JsonReponse::success('Semestre modifié');
 
     }
 
-    #[
-        Route('/actions/{parcours}', name: 'actions')
-    ]
+    #[Route('/actions/{parcours}', name: 'actions')]
     public function init(
         EntityManagerInterface     $entityManager,
         SemestreParcoursRepository $semestreParcoursRepository,

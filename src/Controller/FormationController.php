@@ -13,7 +13,6 @@ use App\Classes\CalculStructureParcours;
 use App\Classes\GetDpeParcours;
 use App\Classes\GetFormations;
 use App\Classes\MentionProcess;
-use App\Classes\ValidationProcess;
 use App\Classes\verif\FormationState;
 use App\Classes\verif\ParcoursState;
 use App\DTO\StatsFichesMatieres;
@@ -63,7 +62,7 @@ class FormationController extends BaseController
         DpeParcoursRepository $dpeParcoursRepository,
     ) {
         if ($this->isGranted('CAN_ETABLISSEMENT_CONSEILLER_ALL')) {
-            $allparcours = $dpeParcoursRepository->findByCampagneAndTypeValidation($this->getDpe(), 'soumis_cfvu');
+            $allparcours = $dpeParcoursRepository->findByCampagneAndTypeValidation($this->getCampagneCollecte(), 'soumis_cfvu');
         }
 
         return $this->render('validation/_liste.html.twig', [
@@ -86,7 +85,7 @@ class FormationController extends BaseController
 
         $tFormations = $getFormations->getFormations(
             $this->getUser(),
-            $this->getDpe(),
+            $this->getCampagneCollecte(),
             $request->query->all(),
             $isCfvu
         );
@@ -143,7 +142,7 @@ class FormationController extends BaseController
 
         $tFormations = $getFormations->getFormations(
             $this->getUser(),
-            $this->getDpe(),
+            $this->getCampagneCollecte(),
             $request->query->all()
         );
 
@@ -186,7 +185,7 @@ class FormationController extends BaseController
 
         $formations = $formationRepository->findBySearch(
             $q,
-            $this->getDpe(),
+            $this->getCampagneCollecte(),
             $request->query->all(),
             $composante
         );
@@ -262,7 +261,7 @@ class FormationController extends BaseController
     ): Response {
         $this->denyAccessUnlessGranted('CAN_FORMATION_CREATE_ALL', $this->getUser());
 
-        $formation = new Formation($this->getDpe());
+        $formation = new Formation($this->getCampagneCollecte());
         $form = $this->createForm(FormationSesType::class, $formation, [
             'action' => $this->generateUrl('app_formation_new'),
         ]);

@@ -13,7 +13,6 @@ use App\Classes\GetElementConstitutif;
 use App\Entity\ElementConstitutif;
 use App\Entity\FicheMatiere;
 use App\Entity\Parcours;
-use Doctrine\Common\Collections\Collection;
 
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -57,7 +56,7 @@ class StructureEc
         bool $isBut = false,
         bool $withEcts = true,
         bool $withBcc = true,
-        bool $dataFromFicheMatiere = false
+        bool $dataFromFicheMatiere = false //todo: mettre true par défaut ?
     ) {
         if($parcours) {
             $getElement = new GetElementConstitutif($elementConstitutif, $parcours);
@@ -78,7 +77,7 @@ class StructureEc
             } elseif ($dataFromFicheMatiere === true){
                 $this->heuresEctsEc->addEc($getElement->getFicheMatiereHeures(), $isBut, $dataFromFicheMatiere);
                 $this->heuresEctsEc->addEcts($getElement->getFicheMatiereEcts());
-                $this->mcccs = $getElement->getMcccsFromFicheMatiere()?->toArray();
+                $this->mcccs = $getElement->getMcccsFromFicheMatiereCollection()?->toArray();
                 $this->typeMccc = $getElement->getTypeMcccFromFicheMatiere();
             }
         }

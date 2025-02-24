@@ -87,7 +87,6 @@ class GetFormations
 
             $formations = array_merge(...$formations);
         }
-
         $tFormations = [];
         foreach ($formations as $formation) {
             $tFormations[$formation->getId()] = $formation;

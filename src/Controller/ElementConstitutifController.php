@@ -24,7 +24,6 @@ use App\Repository\ElementConstitutifRepository;
 use App\Repository\FicheMatiereRepository;
 use App\Repository\NatureUeEcRepository;
 use App\Repository\TypeEcRepository;
-use App\Repository\TypeEpreuveRepository;
 use App\TypeDiplome\TypeDiplomeRegistry;
 use App\Utils\JsonRequest;
 use Doctrine\ORM\EntityManagerInterface;
@@ -115,8 +114,6 @@ class ElementConstitutifController extends AbstractController
         if ($typeDiplome === null) {
             throw new RuntimeException('Type de diplôme non trouvé');
         }
-
-        $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());
 
         $form = $this->createForm(ElementConstitutifType::class, $elementConstitutif, [
             'action' => $this->generateUrl(
@@ -517,10 +514,12 @@ class ElementConstitutifController extends AbstractController
         //            $elementConstitutif->getParcours()->getFormation()
         //        )) { //todo: ajouter le workflow...
 
+        $isParcoursProprietaire = $elementConstitutif->getFicheMatiere()?->getParcours()?->getId() === $parcours->getId();
+
+        //todo: deprecated $raccroche ?
         $raccroche = $elementConstitutif->getFicheMatiere()?->getParcours()?->getId() !== $parcours->getId();
         $getElement = new GetElementConstitutif($elementConstitutif, $parcours);
-        $getElement->setIsRaccroche($raccroche);
-        $ecHeures = $getElement->getElementConstitutifHeures();
+        $ecHeures = $getElement->getFicheMatiereHeures();
 
         $form = $this->createForm(EcStep4Type::class, $ecHeures, [
             'isModal' => true,
@@ -558,6 +557,7 @@ class ElementConstitutifController extends AbstractController
             'form' => $form->createView(),
             'raccroche' => $raccroche,
             'parcours' => $parcours,
+            'isParcoursProprietaire' => $isParcoursProprietaire,
             'modalite' => $parcours->getModalitesEnseignement()
         ]);
     }

@@ -23,7 +23,7 @@ use App\Repository\ComposanteRepository;
 use App\Repository\FicheMatiereMutualisableRepository;
 use App\Repository\FormationRepository;
 use App\Repository\ParcoursRepository;
-use App\Repository\TypeDiplomeRepository;
+use App\Repository\TypeEpreuveRepository;
 use App\TypeDiplome\TypeDiplomeRegistry;
 use App\Utils\Access;
 use App\Utils\JsonRequest;
@@ -242,6 +242,8 @@ class FicheMatiereWizardController extends AbstractController
     #[Route('/{ficheMatiere}/4/{type}', name: 'app_fiche_matiere_wizard_step_4', methods: ['GET'])]
     public function step4(
         TypeDiplomeRegistry $typeDiplomeRegistry,
+        TypeEpreuveRepository        $typeEpreuveRepository,
+
         FicheMatiere        $ficheMatiere,
         string              $type,
     ): Response {
@@ -254,12 +256,24 @@ class FicheMatiereWizardController extends AbstractController
         }
         // récupérer les parcours pour savoir si la fiche peut être éditée ou pas
 
+        $parcours = [];
+        $ecProprietaire = null;
+        foreach ($ficheMatiere->getElementConstitutifs() as $ec) {
+            if ($ec->getParcours() !== null) {
+                $parcours[] = $ec->getParcours();
+            }
 
+            if ($ec->getParcours() === $ficheMatiere->getParcours()) {
+                $ecProprietaire = $ec;
+            }
+        }
+
+
+        $typeDiplome = $ficheMatiere->getParcours()?->getFormation()?->getTypeDiplome();
 
 
         if ($type === 'but') {
             $form = $this->createForm(FicheMatiereStep4Type::class, $ficheMatiere);
-            $typeDiplome = $ficheMatiere->getParcours()?->getFormation()?->getTypeDiplome();
             $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());
 
             return $this->render('fiche_matiere_wizard/_step4But.html.twig', [
@@ -279,10 +293,18 @@ class FicheMatiereWizardController extends AbstractController
         }
 
         if ($type === 'other') {
-            $form = $this->createForm(FicheMatiereStep4HdType::class, $ficheMatiere);
+            $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());
+            // $form = $this->createForm(FicheMatiereStep4HdType::class, $ficheMatiere);
             return $this->render('fiche_matiere_wizard/_step4Other.html.twig', [
                 'ficheMatiere' => $ficheMatiere,
-                'form' => $form->createView(),
+               'parcours' => $parcours,
+                'typeEpreuves' => $typeEpreuveRepository->findByTypeDiplome($typeDiplome),
+
+                'mcccs' => $typeD !== null ? $typeD->getMcccs($ficheMatiere) : [],
+                'ecProprietaire' => $ecProprietaire,
+                'typeMccc' => $ficheMatiere->getTypeMccc(),
+                'templateForm' => $typeD !== null ? $typeD::TEMPLATE_FORM_MCCC : '',
+               // 'form' => $form->createView(),
             ]);
         }
     }

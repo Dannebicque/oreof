@@ -1,13 +1,12 @@
 <!-- component html -->
 <div class="language-switch-container" {{ attributes }}>
     <button class="btn btn-empty language-button dropdown-toggle" data-bs-toggle="dropdown"
-            aria-haspopup="true" aria-expanded="false">{{ user_data.dpe != null ? user_data.dpe.libelle|trim|replace({'-':'<br>'})|raw : 'erreur' }}
+            aria-haspopup="true" aria-expanded="false">{{ user_data.campagneCollecte != null ? user_data.campagneCollecte.libelle|trim|replace({'-':'<br>'})|raw : 'erreur' }}
     </button>
     <div class="dropdown-menu">
         {% for dpe in this.dpes %}
             <a
-                    data-action="live#action"
-                    data-action-name="changeDpe(id={{ dpe.id }})"
+                    {{ live_action('changeDpe', {'id': dpe.id}) }}
                     href="#" class="dropdown-item">{{ dpe.libelle }}</a>
         {% endfor %}
     </div>

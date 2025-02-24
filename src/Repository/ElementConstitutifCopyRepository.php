@@ -1,10 +1,9 @@
-<?php 
+<?php
 
 namespace App\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Mapping\ClassMetadata;
 use App\Entity\Ue;
 
 class ElementConstitutifCopyRepository extends EntityRepository {

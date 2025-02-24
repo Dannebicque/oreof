@@ -33,7 +33,7 @@
         >
             {% if this.texte == true %}<i class="fal fa-clock"></i>{% endif %}
             <span class="badge bg-{% if this.etatHeuresComplet == true %}success{% else %}warning{% endif %}">{% if this.texte == true %}{% if this.etatHeuresComplet == true %}Complet{% else %}A saisir{% endif %} {% else %}Heures{% endif %}
-                    {% if this.isHeuresSpecifiques == false %}
+                    {% if this.isParcoursProprietaire == false and this.isHeuresSpecifiques == false %}
                     <i class="fal fa-link" title="Heures reprises de la fiche matière"></i>
                     {% endif %}
             </span>

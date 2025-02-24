@@ -4,7 +4,6 @@ namespace App\Repository;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\Mapping\ClassMetadata;
 
 class FicheMatiereCopyRepository extends EntityRepository {
 

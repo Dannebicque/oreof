@@ -54,13 +54,13 @@ class ParcoursMcccExportController extends BaseController
 
         return match ($_format) {
             'xlsx' => $typeDiplome->exportExcelMccc(
-                $this->getDpe(),
+                $this->getCampagneCollecte(),
                 $parcours,
                 $cfvu?->getDate() ?? null,
                 $conseil?->getDate() ?? null
             ),
             'pdf' => $typeDiplome->exportPdfMccc(
-                $this->getDpe(),
+                $this->getCampagneCollecte(),
                 $parcours,
                 $cfvu?->getDate() ?? null,
                 $conseil?->getDate() ?? null
@@ -91,13 +91,13 @@ class ParcoursMcccExportController extends BaseController
 
         return match ($_format) {
             'xlsx' => $typeDiplome->exportExcelVersionMccc(
-                $this->getDpe(),
+                $this->getCampagneCollecte(),
                 $parcours,
                  null,
                  null
             ),
             'pdf' => $typeDiplome->exportPdfMccc(
-                $this->getDpe(),
+                $this->getCampagneCollecte(),
                 $parcours,
                 null,
                  null
@@ -134,14 +134,14 @@ class ParcoursMcccExportController extends BaseController
 
         return match ($_format) {
             'xlsx' => $typeDiplome->exportExcelMccc(
-                $this->getDpe(),
+                $this->getCampagneCollecte(),
                 $parcours,
                 $cfvu?->getDate() ?? null,
                 $conseil?->getDate() ?? null,
                 false
             ),
             'pdf' => $typeDiplome->exportPdfMccc(
-                $this->getDpe(),
+                $this->getCampagneCollecte(),
                 $parcours,
                 $cfvu?->getDate() ?? null,
                 $conseil?->getDate() ?? null,

@@ -5,7 +5,6 @@ namespace App\Entity;
 use App\Repository\ButCompetenceRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -29,7 +28,7 @@ class ButCompetence
     #[Groups('parcours_json_versioning')]
     #[ORM\Column]
     private ?int $numero = null;
- 
+
     #[ORM\ManyToOne(inversedBy: 'butCompetences')]
     private ?Formation $formation = null;
 

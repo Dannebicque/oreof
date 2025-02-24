@@ -9,8 +9,6 @@
 
 namespace App\DTO;
 
-use App\Entity\ElementConstitutif;
-
 use Symfony\Component\Serializer\Annotation\Groups;
 
 class HeuresEctsUe

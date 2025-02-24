@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Classes\Json\ExtractTextFromJsonPatch;
 use App\Classes\MyGotenbergPdf;
 use App\Entity\Composante;
-use App\Entity\DpeParcours;
 use App\Enums\TypeModificationDpeEnum;
 use App\Repository\ComposanteRepository;
 use App\Repository\DpeParcoursRepository;
@@ -15,11 +14,9 @@ use App\Service\VersioningParcours;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Swaggest\JsonDiff\JsonDiff;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Routing\Generator\UrlGenerator;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class ComposanteController extends BaseController
@@ -37,7 +34,7 @@ class ComposanteController extends BaseController
         DpeParcoursRepository $dpeParcoursRepository,
         Composante $composante): Response
     {
-        $parcours = $dpeParcoursRepository->findByComposanteAndCampagne($composante, $this->getDpe());
+        $parcours = $dpeParcoursRepository->findByComposanteAndCampagne($composante, $this->getCampagneCollecte());
 
         $tFormations = [];
 
@@ -50,7 +47,7 @@ class ComposanteController extends BaseController
         return $this->render('composante/campagne_collecte.html.twig', [
             'composante' => $composante,
             'formations' => $tFormations,
-            'campagne' => $this->getDpe()->isDefaut() && $this->getDpe()->isMailDpeEnvoye(),
+            'campagne' => $this->getCampagneCollecte()->isDefaut() && $this->getCampagneCollecte()->isMailDpeEnvoye(),
             'etats' => TypeModificationDpeEnum::cases()
         ]);
     }
@@ -67,17 +64,17 @@ class ComposanteController extends BaseController
     ) : Response {
 
         /**
-         * 
+         *
          *     /!\ WARNING /!\
-         * 
+         *
          *     ENSURE YOU HAVE ENOUGH SYSTEM RESOURCES
          *     FOR THIS ROUTE
-         * 
+         *
          */
          ini_set('memory_limit', '2048M');
          ini_set('max_execution_time', '240');
          /**
-          * 
+          *
           *    END WARNING
           *
           */
@@ -107,8 +104,8 @@ class ComposanteController extends BaseController
             '\/semestres\/\d+\/ues\/\d+\/elementConstitutifs\/\d+\/heuresEctsEcEnfants\/',
         ];
 
-        
-        $allparcours = $parcoursRepository->findByTypeValidationAttenteCfvuAndComposante($this->getDpe(), 'soumis_central', $cmp->getId());
+
+        $allparcours = $parcoursRepository->findByTypeValidationAttenteCfvuAndComposante($this->getCampagneCollecte(), 'soumis_central', $cmp->getId());
 
         foreach ($allparcours as $parcours) {
             //créer la sauvegarde JSON
@@ -173,11 +170,11 @@ class ComposanteController extends BaseController
                     'titre' => 'Liste des demandes de changement MCCC et maquettes',
                     'demandes' => $tDemandes,
                     'composante' => $cmp,
-                    'dpe' => $this->getDpe(),
+                    'dpe' => $this->getCampagneCollecte(),
                 ],
                 name: "synthese_changement_cfvu_" . $cmp->getSigle() . "_" . (new DateTime())->format('d-m-Y_H-i-s'),
             );
-            
+
             return new Response(
                 content: $pdf,
                 status: 200,

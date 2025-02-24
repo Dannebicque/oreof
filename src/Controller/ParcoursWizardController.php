@@ -12,7 +12,6 @@ namespace App\Controller;
 use App\Classes\Bcc;
 use App\Classes\JsonReponse;
 use App\Entity\DpeParcours;
-use App\Entity\FicheMatiere;
 use App\Entity\Parcours;
 use App\Form\ParcoursStep1Type;
 use App\Form\ParcoursStep2Type;
@@ -20,7 +19,6 @@ use App\Form\ParcoursStep5Type;
 use App\Form\ParcoursStep6Type;
 use App\Form\ParcoursStep7Type;
 use App\Repository\ComposanteRepository;
-use App\Repository\FicheMatiereMutualisableRepository;
 use App\Repository\FormationRepository;
 use App\Repository\ParcoursRepository;
 use App\TypeDiplome\TypeDiplomeRegistry;
@@ -98,7 +96,9 @@ class ParcoursWizardController extends AbstractController
     }
 
     #[Route('/{dpeParcours}/4', name: 'app_parcours_wizard_step_4', methods: ['GET'])]
-    public function step4(ParcoursRepository $parcoursRepository, DpeParcours $dpeParcours): Response
+    public function step4(
+        Request $request,
+        ParcoursRepository $parcoursRepository, DpeParcours $dpeParcours): Response
     {
         if (!Access::isAccessible($dpeParcours, 'cfvu')) {
             return $this->render('parcours_wizard/_access_denied.html.twig');
@@ -110,6 +110,8 @@ class ParcoursWizardController extends AbstractController
         return $this->render('parcours_wizard/_step4.html.twig', [
             'parcours' => $parcours,
             'listeParcours' => $listeParcours,
+            'semestreAffiche' => $request->getSession()->get('semestreAffiche') ?? null,
+            'ueAffichee' => $request->getSession()->get('ueAffichee') ?? null,
         ]);
     }
 

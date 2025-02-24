@@ -9,7 +9,6 @@
 
 namespace App\Events;
 
-use App\Entity\Formation;
 use App\Entity\HistoriqueFormation;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\User\UserInterface;

@@ -15,7 +15,6 @@ use App\Entity\Ue;
 use App\Form\Type\FloatType;
 use App\Repository\NatureUeEcRepository;
 use App\Repository\TypeUeRepository;
-use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;

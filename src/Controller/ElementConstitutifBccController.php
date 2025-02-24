@@ -9,28 +9,15 @@
 
 namespace App\Controller;
 
-use App\Classes\EcOrdre;
 use App\Classes\GetDpeParcours;
 use App\Classes\GetElementConstitutif;
 use App\Classes\JsonReponse;
 use App\Entity\ElementConstitutif;
-use App\Entity\FicheMatiere;
 use App\Entity\Parcours;
-use App\Entity\TypeEc;
-use App\Entity\Ue;
-use App\Form\EcStep4Type;
-use App\Form\ElementConstitutifEnfantType;
-use App\Form\ElementConstitutifType;
 use App\Repository\BlocCompetenceRepository;
 use App\Repository\ButApprentissageCritiqueRepository;
 use App\Repository\ButCompetenceRepository;
 use App\Repository\CompetenceRepository;
-use App\Repository\ElementConstitutifRepository;
-use App\Repository\FicheMatiereRepository;
-use App\Repository\NatureUeEcRepository;
-use App\Repository\TypeEcRepository;
-use App\Repository\TypeEpreuveRepository;
-use App\TypeDiplome\TypeDiplomeRegistry;
 use App\Utils\JsonRequest;
 use Doctrine\ORM\EntityManagerInterface;
 use RuntimeException;

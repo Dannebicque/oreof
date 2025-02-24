@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Repository\BlocCompetenceRepository;
 use App\Repository\FicheMatiereMutualisableRepository;
 use App\Repository\SemestreMutualisableRepository;
 use App\Repository\UeMutualisableRepository;

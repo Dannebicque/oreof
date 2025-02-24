@@ -5,7 +5,7 @@
         }) }}
       action="{{ path('app_element_constitutif_mccc', {id:ec.id, parcours:parcours.id}) }}" {{ stimulus_controller('ec--mccc') }}>
     {% if typeDiplome.libelleCourt != 'BUT' %}
-        {% if raccroche == true %}
+        {% if isParcoursProprietaire == false %}
             {# todo: a modifier, plus de notion de raccrocher. Juste si mutualisé possibilité de mettre heures spécifiques et dévloquer le reste, sinon par défaut bloqué. Non modifiable si UE ou Semestre raccroché... Exemple : https://oreof:8890/index.php/parcours/171/edit# #}
             <div class="alert alert-info">
                 <div class="row">
@@ -13,70 +13,44 @@
                         <div class="col-12">
                             <p>Cet EC est raccroché, par défaut, les données sont celles de l'EC d'origine.</p>{# todo: afficher le parcours d'origine ici... Si UE ou Semestre raccroché mettre le modal non editable #}
                         </div>
-                        <div class="col-5">
+                        <div class="col-6">
                             <div class="form-check mb-2">
                                 <input class="form-check-input" type="checkbox"
-                                       id="synchroEcts"
-                                       name="synchroEcts"
-                                        {{ stimulus_action('ec--mccc', 'synchroEcts', 'change', {
+                                       id="ectsSpecifiques"
+                                       name="ectsSpecifiques"
+                                        {{ stimulus_action('ec--mccc', 'ectsSpecifiques', 'change', {
                                             ec:ec.id
                                         }) }}
-                                        {% if ec.synchroEcts == true %}checked{% endif %}
+                                        {% if ec.ectsSpecifiques == true %}checked{% endif %}
                                 >
                                 <label class="form-check-label"
-                                       for="synchroEcts"> Raccrocher les ECTS
+                                       for="ectsSpecifiques"> ECTS spécifiques pour cet EC dans ce parcours
                                     <i class="fal fa-question-circle ms-1" data-controller="tooltip"
                                        data-tooltip-placement-value="bottom"
-                                       title="{{ 'parcours_ec.helps.synchroEcts'|trans({}, 'help') }}"></i>
+                                       title="{{ 'parcours_ec.helps.ectsSpecifiques'|trans({}, 'help') }}"></i>
                                 </label>
                             </div>
 
                         </div>
-                        <div class="col-2">
-                            {#                            OU #}
-                        </div>
-                        <div class="col-5">
-                            {#                            <button class="btn text-primary">Recopier les ECTS <i class="fal fa-question-circle ms-1" #}
-                            {#                                                                                  data-controller="tooltip" #}
-                            {#                                                                                  data-tooltip-placement-value="bottom" #}
-                            {#                                                                                  title="{{ 'parcours_ec.helps.synchroMccc'|trans({}, 'help') }}"></i> #}
-                            {#                            </button> #}
-                        </div>
-                        {% if ec.synchroEcts == true %}
-                            Les ECTS sont raccrochées depuis l'EC du parcours "...". Les données ne sont pas modifiables.
-                        {% endif %}
-                        <div class="col-5">
+
+                        <div class="col-6">
                             <div class="form-check mb-2">
                                 <input class="form-check-input" type="checkbox"
-                                       id="synchroMccc"
-                                       name="synchroMccc"
-                                        {{ stimulus_action('ec--mccc', 'synchroMccc', 'change', {
+                                       id="mcccSpecifiques"
+                                       name="mcccSpecifiques"
+                                        {{ stimulus_action('ec--mccc', 'mcccSpecifiques', 'change', {
                                             ec:ec.id
                                         }) }}
-                                        {% if ec.synchroMccc == true %}checked{% endif %}
+                                        {% if ec.mcccSpecifiques == true %}checked{% endif %}
                                 >
                                 <label class="form-check-label"
-                                       for="synchroMccc"> Raccrocher les MCCC
+                                       for="mcccSpecifiques"> MCCC spécifiques pour cet EC dans ce parcours
                                     <i class="fal fa-question-circle ms-1" data-controller="tooltip"
                                        data-tooltip-placement-value="bottom"
-                                       title="{{ 'parcours_ec.helps.synchroMccc'|trans({}, 'help') }}"></i>
+                                       title="{{ 'parcours_ec.helps.mcccSpecifiques'|trans({}, 'help') }}"></i>
                                 </label>
                             </div>
-
                         </div>
-                        <div class="col-2">
-                            {#                            OU #}
-                        </div>
-                        <div class="col-5">
-                            {#                            <button class="btn text-primary">Recopier les MCCC <i class="fal fa-question-circle ms-1" #}
-                            {#                                                                                  data-controller="tooltip" #}
-                            {#                                                                                  data-tooltip-placement-value="bottom" #}
-                            {#                                                                                  title="{{ 'parcours_ec.helps.recopieMccc'|trans({}, 'help') }}"></i> #}
-                            {#                            </button> #}
-                        </div>
-                        {% if ec.synchroMccc == true %}
-                            Les MCCC sont raccrochées depuis l'EC du parcours "...". Les données ne sont pas modifiables.
-                        {% endif %}
                     {% else %}
                         {% if isEctsImpose == true %}
                             Les ECTS sont imposés par la fiche matière. Les données ne sont pas modifiables.
@@ -89,7 +63,7 @@
             </div>
         {% endif %}
 
-        {% if ec.ecParent == null and isEctsImpose == false %}
+        {% if (ec.ecParent == null and isEctsImpose == false) or isParcoursProprietaire == true %}
             {# Uniquement sur le parent. #}
             <div class="mb-2">
                 <label for="ec_step4_ects" class="form-label">
@@ -101,7 +75,7 @@
                 </label>
                 <div class="input-group">
                     <input type="number" id="ec_step4_ects" name="ec_step4[ects]"
-                           {% if ec.synchroEcts %}disabled{% endif %}
+                           {% if isParcoursProprietaire == false and ec.ectsSpecifiques == false %}disabled{% endif %}
                            value="{{ ects }}" min="0" max="60"
                            required="required" step="any" class="form-control">
                 </div>
@@ -170,7 +144,7 @@
     {% endif %}
 
     {% if (ec.natureUeEc != null and ec.natureUeEc.isLibre == false) or ec.natureUeEc == null %}
-        {{ include('typeDiplome/mccc/'~templateForm, {raccroche: ec.synchroMccc and raccroche }) }}
+        {{ include('typeDiplome/mccc/'~templateForm, {raccroche: ec.mcccSpecifiques == false and raccroche }) }}
     {% endif %}
     <button type="submit" class="btn btn-success"
             {{ stimulus_action('base','sauvegardeFormModal', 'click') }}

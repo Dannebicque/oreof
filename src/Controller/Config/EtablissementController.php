@@ -11,7 +11,6 @@ namespace App\Controller\Config;
 
 use App\Controller\BaseController;
 use App\Entity\Etablissement;
-use App\Entity\EtablissementInformation;
 use App\Form\EtablissementType;
 use App\Repository\EtablissementRepository;
 use Symfony\Component\HttpFoundation\Request;

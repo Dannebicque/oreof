@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-use App\Repository\HistoriqueRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\MappedSuperclass;
@@ -20,7 +19,7 @@ abstract class Historique
     private ?int $id = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $created = null;
+    private ?\DateTimeInterface $created;
 
     #[ORM\Column(length: 255)]
     private ?string $etat = null;

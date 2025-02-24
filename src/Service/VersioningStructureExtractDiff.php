@@ -12,7 +12,6 @@ namespace App\Service;
 use App\DTO\DiffObject;
 use App\DTO\HeuresEctsEc;
 use App\DTO\HeuresEctsSemestre;
-use App\DTO\HeuresEctsUe;
 use App\DTO\StructureEc;
 use App\DTO\StructureParcours;
 use App\DTO\StructureSemestre;

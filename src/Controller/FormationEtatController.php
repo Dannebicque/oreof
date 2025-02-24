@@ -12,19 +12,16 @@ namespace App\Controller;
 use App\Repository\FormationRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Workflow\WorkflowInterface;
 
 #[Route('/central/formation/etat')]
 class FormationEtatController extends BaseController
 {
-    public function __construct(private readonly WorkflowInterface $dpeWorkflow)
-    {
-    }
+    //todo: a reprendre
     #[Route('/send/ouverture', name: 'app_formation_etat_send_ouverture')]
     public function sendOuverture(
         FormationRepository $formationRepository
     ): Response {
-        $formations = $formationRepository->findBy(['anneeUniversitaire' => $this->getDpe()]);
+        $formations = $formationRepository->findBy(['anneeUniversitaire' => $this->getCampagneCollecte()]);
         $listeFormationsOuvrables = [];
         foreach ($formations as $formation) {
             if ($this->dpeWorkflow->can($formation, 'initialiser') && $formation->getResponsableMention() !== null) {

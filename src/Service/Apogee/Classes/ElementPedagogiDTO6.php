@@ -2,7 +2,6 @@
 
 namespace App\Service\Apogee\Classes;
 
-use App\Classes\Export\Export;
 use App\Command\ExportElpApogeeCommand;
 use App\DTO\StructureEc;
 use App\DTO\StructureParcours;
@@ -69,20 +68,20 @@ class ElementPedagogiDTO6
                 "Type : EC - ID : {$elementPedagogique->elementConstitutif->getId()} - {$elementPedagogique->elementConstitutif->display()}",
                 $withChecks,
                 $dto->parcours->getId()
-            ); 
+            );
             // Libellé court
             $this->libCourtElp = $this->checkLibelleEC($elementPedagogique, 25, $withChecks, $dto->parcours->getId());
             // Libellé long
             $this->libElp = $this->checkLibelleEC($elementPedagogique, 60, $withChecks, $dto->parcours->getId());
             // Nature
             $this->codNatureElp = $this->checkNatureElp(
-                $nature, 
+                $nature,
                 "Type : EC - ID : {$elementPedagogique->elementConstitutif->getId()}",
                 $withChecks,
                 $dto->parcours->getId()
             );
             $this->codComposante = $this->checkCodeComposante(
-                $dto, 
+                $dto,
                 "Type : EC - Parcours ID : {$dto->parcours->getId()}",
                 $withChecks
             );
@@ -112,7 +111,7 @@ class ElementPedagogiDTO6
                 //     fn($composante) => $composante->getCodeApogee(),
                 //     $dto->parcours->getFormation()?->getComposantesInscription()?->toArray() ?? []
                 // )
-                
+
                 // Code CIP de la composante porteuse uniquement
                 // [$dto->parcours->getFormation()->getComposantePorteuse()->getCodeApogee()]
                 // CODE CIP DE LA COMPOSANTE D'INSCRIPTION
@@ -128,7 +127,7 @@ class ElementPedagogiDTO6
         }
         elseif ($elementPedagogique instanceof StructureUe){
             $this->codElp = $this->checkCodeApogee(
-                $elementPedagogique->getCodeApogee(), 
+                $elementPedagogique->getCodeApogee(),
                 "Type UE - ID : {$elementPedagogique->ue->getId()}",
                 $withChecks,
                 $dto->parcours->getId()
@@ -137,7 +136,7 @@ class ElementPedagogiDTO6
             $this->libElp = $this->checkLibelleUE(
                 $elementPedagogique, $dto, 60, $withChecks);
             $this->codNatureElp = $this->checkNatureElp(
-                $nature, 
+                $nature,
                 "Type : UE - ID : {$elementPedagogique->ue->getId()}",
                 true,
                 $dto->parcours->getId()
@@ -180,7 +179,7 @@ class ElementPedagogiDTO6
             // $this->listParamChargEns;
             // $this->listElementPrerequis;
             // $this->listTypePopulation;
-        
+
         }
         elseif ($elementPedagogique instanceof StructureSemestre){
             $this->codElp = $elementPedagogique->semestre->getCodeApogee() ?? "ERROR";
@@ -264,16 +263,16 @@ class ElementPedagogiDTO6
      * @return string Libellé de l'EC raccourci à la longueur max $length
      */
     private function checkLibelleEC(
-        StructureEc $elementPedagogique, 
+        StructureEc $elementPedagogique,
         int $length,
         bool $withChecks = false,
         int $parcoursID
     ) : string {
-        $libelle = $elementPedagogique->elementConstitutif->getFicheMatiere()?->getLibelle() 
+        $libelle = $elementPedagogique->elementConstitutif->getFicheMatiere()?->getLibelle()
         ?? $elementPedagogique->elementConstitutif->getLibelle() ?? $elementPedagogique->elementConstitutif->getCode();
         if(count($elementPedagogique->elementsConstitutifsEnfants) > 0){
             $libelle = "EC A CHOIX";
-        } 
+        }
         if($libelle === null && $withChecks){
             ExportElpApogeeCommand::$errorMessagesArray[$parcoursID][] = "Le libellé de l'EC est 'null'. ID : {$elementPedagogique->elementConstitutif->getId()}";
         }
@@ -321,9 +320,9 @@ class ElementPedagogiDTO6
      */
     private function checkLibelleUE (
         StructureUe $elementPedagogique,
-        StructureParcours $dto, 
-        int $length, 
-        bool $withChecks, 
+        StructureParcours $dto,
+        int $length,
+        bool $withChecks,
     ){
         $retour = // "UE " . $elementPedagogique->ue->getSemestre()->getOrdre() . "." . $elementPedagogique->ue->getOrdre()
             $elementPedagogique->display
@@ -338,11 +337,11 @@ class ElementPedagogiDTO6
                 ExportElpApogeeCommand::$errorMessagesArray[$dto->parcours->getId()][] = "L'UE n'a pas d'ordre. Ue {$elementPedagogique->ue->getId()}";
             }
             if($dto->parcours->getFormation()->getTypeDiplome()->getLibelleCourt() === null){
-                ExportElpApogeeCommand::$errorMessagesArray[$dto->parcours->getId()][] = "Pas de libellé court de type diplôme. UE {$elementPedagogique->ue->getId()}";    
+                ExportElpApogeeCommand::$errorMessagesArray[$dto->parcours->getId()][] = "Pas de libellé court de type diplôme. UE {$elementPedagogique->ue->getId()}";
             }
             if($dto->parcours->getSigle() === null && $dto->parcours->isParcoursDefaut() === false){
                 ExportElpApogeeCommand::$errorMessagesArray[$dto->parcours->getId()][] = "Pas de sigle sur le parcours. UE {$elementPedagogique->ue->getId()}";
-            } 
+            }
         }
 
         return $this->prepareLibelle($retour, $length);
@@ -362,17 +361,17 @@ class ElementPedagogiDTO6
         bool $withChecks,
         string $type
     ){
-        if( $elementPedagogique->semestre->getOrdre() 
+        if( $elementPedagogique->semestre->getOrdre()
             && ($dto->parcours->getSigle() || ($dto->parcours->isParcoursDefaut() === true && $dto->parcours->getFormation()?->getSigle()))
             && $dto->parcours->getFormation()?->getSigle()
             && $dto->parcours->getFormation()?->getTypeDiplome()->getLibelleCourt()
         ){
             if($type === "libelleLong"){
-                return 'SEMESTRE ' . $elementPedagogique->ordre 
-                . ' ' 
+                return 'SEMESTRE ' . $elementPedagogique->ordre
+                . ' '
                 . $dto->parcours->getFormation()->getTypeDiplome()->getLibelleCourt()
                 . ' '
-                . $dto->parcours->getFormation()->getSigle() 
+                . $dto->parcours->getFormation()->getSigle()
                 . ($dto->parcours->isParcoursDefaut() ? "" : ' ' . $dto->parcours->getSigle());
 
             }
@@ -388,7 +387,7 @@ class ElementPedagogiDTO6
                 // Ordre du semestre
                 if($elementPedagogique->semestre->getOrdre() === null){
                     ExportElpApogeeCommand::$errorMessagesArray[$dto->parcours->getId()][] = "Le semestre n'a pas d'ordre - ID : {$elementPedagogique->semestre->getId()}";
-                } 
+                }
                 // Sigle du parcours
                 if($dto->parcours->getSigle() === null && $dto->parcours->isParcoursDefaut() === false){
                     ExportElpApogeeCommand::$errorMessagesArray[$dto->parcours->getId()][] = "Le Parcours n'a pas de sigle - ID : {$dto->parcours->getId()}";

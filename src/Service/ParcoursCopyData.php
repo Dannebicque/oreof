@@ -252,7 +252,7 @@ class ParcoursCopyData {
         int $parcoursId,
         bool $isHeuresEnfantIdentiques = false
     ){
-
+//todo: gérer l'info "EC sans heure" dans la fiche ? Cas des EC extra académique ?
         if($ficheMatiereSource){
             $isVolumeHoraireFMImpose = $ficheMatiereSource->isVolumesHorairesImpose();
             $ecFromParcours = $ecSource->getParcours()?->getId() === $ficheMatiereSource->getParcours()?->getId();

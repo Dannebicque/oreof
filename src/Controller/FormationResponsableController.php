@@ -8,20 +8,15 @@ use App\Classes\Process\ChangeRfProcess;
 use App\Classes\ValidationProcessChangeRf;
 use App\DTO\ChangeRf;
 use App\Entity\Formation;
-use App\Entity\HistoriqueFormation;
 use App\Enums\EtatChangeRfEnum;
 use App\Enums\TypeRfEnum;
-use App\Events\NotifCentreFormationEvent;
 use App\Form\ChangeRfFormationType;
 use App\Repository\ChangeRfRepository;
 use App\Repository\ComposanteRepository;
-use App\Utils\Tools;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Workflow\WorkflowInterface;
 
@@ -140,7 +135,7 @@ class FormationResponsableController extends BaseController
             'titre' => 'Demandes de modification de responsable de formation',
             'demandes' => $tDemandes,
             'composantes' => $composantes,
-            'dpe' => $this->getDpe()
+            'dpe' => $this->getCampagneCollecte()
         ], 'synthese_changement_rf_'.(new DateTime())->format('d-m-Y_H-i-s'));
     }
 

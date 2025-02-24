@@ -82,7 +82,7 @@
 {% endblock %}
 
 {% block header %}
-    Fiche EC/matière <strong id="fiche_matiere_libelle">{{ fiche_matiere.display }}</strong>
+    Fiche EC/matière <strong id="fiche_matiere_libelle">{{ fiche_matiere.libelle }}</strong> {% if fiche_matiere.ficheMatiereParcours|length > 0 %}<span class="badge bg-info">Mutualisée</span>{% endif %}
 {% endblock %}
 
 {% block breadcrumb %}
