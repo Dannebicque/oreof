@@ -345,7 +345,7 @@ class FicheMatiereRepository extends ServiceEntityRepository
             ->where(
                 $qb->expr()->like('UPPER(fm.description)', 'UPPER(:keyword)')
             )
-            ->join('fm.parcours', 'p', 'WITH', 'fm.parcours = :parcours')
+            ->andWhere('fm.parcours = :parcours')
             ->setParameter('keyword', '%' . $keyword . '%')
             ->setParameter('parcours', $parcours);
 
@@ -356,7 +356,7 @@ class FicheMatiereRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('fm');
 
         $qb = $qb->select('COUNT(fm.id) AS nombre_total')
-            ->join('fm.parcours', 'p', 'WITH', 'fm.parcours = p.id')
+            ->innerJoin('fm.parcours', 'p')
             ->join('p.formation', 'f', 'WITH', 'p.formation = f.id')
             ->join('f.mention', 'm')
             ->join('f.typeDiplome', 'td')
@@ -389,7 +389,7 @@ class FicheMatiereRepository extends ServiceEntityRepository
                 'p.sigle AS parcours_sigle'
             ]
         )
-        ->join('fm.parcours', 'p', 'WITH', 'fm.parcours = p.id')
+        ->innerJoin('fm.parcours', 'p')
         ->join('p.formation', 'f', 'WITH', 'p.formation = f.id')
         ->join('f.mention', 'm')
         ->join('f.typeDiplome', 'td')
