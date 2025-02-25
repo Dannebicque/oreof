@@ -63,17 +63,9 @@ final class ParcoursOuvert
         $this->campagne = $this->dpeParcours->getCampagneCollecte();
 
         if ($this->isOuvert) {
-            $this->dpeParcours->setEtatReconduction(TypeModificationDpeEnum::OUVERT);
-            $this->parcours->setDescriptifHautPageAutomatique(null);
+            $this->dpeParcours->setEtatReconduction(TypeModificationDpeEnum::OUVERTURE_SES);
         } else {
             $this->dpeParcours->setEtatReconduction(TypeModificationDpeEnum::NON_OUVERTURE_SES);
-
-            // todo: déplacer dans la validation CFVU
-            //            if ($this->type === 'parcours') {
-            //                $this->parcours->setDescriptifHautPageAutomatique('Ce parcours ne sera pas proposé pour la campagne ' . $this->campagne->getLibelle() . '.');
-            //            } else {
-            //                $this->parcours->setDescriptifHautPageAutomatique('Cette formation ne sera pas proposée pour la campagne ' . $this->campagne->getLibelle() . '.');
-            //            }
         }
 
         $this->entityManager->flush();
@@ -89,6 +81,5 @@ final class ParcoursOuvert
             return 'warning';
         }
         return 'success';
-
     }
 }

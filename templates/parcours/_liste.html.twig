@@ -82,6 +82,7 @@
             <td>{{ parcour.libelle }} {{ parcour.typeParcours|badgeTypeParcours }}</td>
             <td>{{ parcour.localisation != null ? parcour.localisation.libelle : 'Non défini' }}</td>
             <td>
+                {% if  %}
                 {{ parcour.etatDpeParcours|badgeDpe }}
             </td>
             <td>

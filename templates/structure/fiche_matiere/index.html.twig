@@ -4,6 +4,7 @@
     <div class="card"
             {{ stimulus_controller('crud', {
                 url: type == 'hd' ? path('structure_fiche_matiere_liste_hd') : path('structure_fiche_matiere_liste'),
+                page: page
             }) }}
          data-action="base:refreshListe@window->crud#refreshListe base:modalClose@window->crud#refreshListe"
     >
