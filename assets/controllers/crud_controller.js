@@ -10,19 +10,27 @@ import { Controller } from '@hotwired/stimulus'
 import { Modal } from 'bootstrap'
 import { useDebounce } from 'stimulus-use'
 import callOut from '../js/callOut'
+import updateUrl from '../js/updateUrl'
 
 export default class extends Controller {
   static targets = ['liste']
 
-  static values = { url: String }
+  static values = { url: String, page: Number }
 
   static debounces = ['rechercher']
 
   fields = {}
 
+  scrollPosition = 0
+
   connect() {
     useDebounce(this)
-    this._updateListe()
+    this.fields = {
+      page: this.pageValue ?? 1,
+    }
+    this._updateListe({
+      page: this.pageValue,
+    })
   }
 
   filter(event) {
@@ -35,7 +43,8 @@ export default class extends Controller {
   }
 
   page(event) {
-    this.fields.start = event.params.page
+    this.fields.page = event.params.page
+    updateUrl({ page: event.params.page })
     this._updateListe(this.fields)
   }
 
@@ -71,7 +80,8 @@ export default class extends Controller {
       await fetch(url, body).then(async (e) => {
         if (e.status === 200) {
           callOut('Suppression effectuée', 'success')
-          this._updateListe()
+          console.log(this.fields)
+          this._updateListe(this.fields)
         } else {
           const data = await e.json()
           if (data.message !== undefined && data.message.trim() !== '') {
@@ -99,10 +109,12 @@ export default class extends Controller {
   }
 
   async _updateListe(params) {
+    this.scrollPosition = window.scrollY
     const _params = new URLSearchParams(params)
     this.listeTarget.innerHTML = window.da.loaderStimulus
     const response = await fetch(`${this.urlValue}?${_params.toString()}`)
     this.listeTarget.innerHTML = await response.text()
+    window.scrollTo(0, this.scrollPosition)
   }
 
   sort(event) {

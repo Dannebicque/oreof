@@ -175,11 +175,11 @@ class FicheMatiereRepository extends ServiceEntityRepository
 
     public function findByHd(CampagneCollecte $campagneCollecte, array $options): array
     {
-        $start = $options['start'] ?? 0;
+        $start = $options['page'] ?? 1;
         $query = $this->createQueryBuilder('f')
-            ->where('f.horsDiplome = 1')
+            ->where('f.horsDiplome = 1') //todo: ajouter filtre sur campagneCollecte
             ->orderBy('f.libelle', 'ASC')
-            ->setFirstResult($start * 50)
+            ->setFirstResult(($start - 1) * 50)
             ->setMaxResults($options['length'] ?? 50);
 
         //$this->addFiltres($query, $options);
@@ -209,7 +209,7 @@ class FicheMatiereRepository extends ServiceEntityRepository
     public function countByHd(CampagneCollecte $campagneCollecte, array $options): ?int
     {
         $query = $this->createQueryBuilder('f')
-            ->select('count(f.id)')
+            ->select('count(f.id)') //todo: ajouter filtre sur campagneCollecte
             ->andWhere('f.horsDiplome = 1');
 
         if (array_key_exists('q', $options) && null !== $options['q']) {

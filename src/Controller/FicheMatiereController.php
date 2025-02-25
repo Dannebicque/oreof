@@ -245,7 +245,7 @@ class FicheMatiereController extends AbstractController
                 $ficheMatiere->removeHistoriqueFicheMatiere($historiqueFicheMatiere);
                 $entityManager->remove($historiqueFicheMatiere);
             }
-
+            //todo: gérer si champs dans fiche matière copie ?
             $ficheMatiereRepository->remove($ficheMatiere, true);
 
             return JsonReponse::success('La fiche matière a bien été supprimée.');
