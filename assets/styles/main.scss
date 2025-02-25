@@ -383,7 +383,7 @@ html[data-show=true] .settings-button {
   position: fixed;
   top: 0;
   left: 0;
-  padding-top: 100px;
+  padding-top: 80px;
   width: 100%;
   z-index: 1000;
   padding-left: var(--main-spacing-horizontal);
@@ -393,7 +393,7 @@ html[data-show=true] .settings-button {
 }
 
 html[data-placement='horizontal'] main {
-  padding-top: 180px;
+  padding-top: 150px;
 }
 
 .table-container {
