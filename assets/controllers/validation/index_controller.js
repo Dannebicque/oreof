@@ -145,4 +145,33 @@ export default class extends Controller {
       // })
     }
   }
+
+  async valide_ouverture(event) {
+    const liste = document.querySelectorAll('.check-all:checked')
+    if (liste.length === 0) {
+      callOut('Veuillez sélectionner au moins un parcours', 'danger')
+    } else {
+      const parcours = []
+      liste.forEach((item) => {
+        parcours.push(item.value)
+      })
+
+      const body = new URLSearchParams({
+        parcours,
+      })
+
+      this.actionTarget.innerHTML = ''
+      const reponse = await fetch(`${event.params.url}?${body.toString()}`)
+      this.actionTarget.innerHTML = await reponse.text()
+
+      // await fetch(`${event.params.url}?${body.toString()}`).then((response) => {
+      //   if (response.status === 200) {
+      //     callOut('Fiches validées', 'success')
+      //     window.location.reload()
+      //   } else {
+      //     callOut('Une erreur est survenue', 'danger')
+      //   }
+      // })
+    }
+  }
 }

@@ -31,136 +31,134 @@
         <tbody>
         {% for dpeParcours in allparcours %}
             {% if dpeParcours.parcours != null %}
-            {% set parcours = dpeParcours.parcours %}
-            {% set formation = parcours.formation %}
-            <tr>
-                {% if isCfvu is not defined or not isCfvu %}
+                {% set parcours = dpeParcours.parcours %}
+                {% set formation = parcours.formation %}
+                <tr>
+                    {% if isCfvu is not defined or not isCfvu %}
+                        <td>
+                            <div class="checkbox">
+                                <label>
+                                    <input
+                                            {{ stimulus_action('check_all', 'check') }}
+                                            type="checkbox"
+                                            class="check-all"
+                                            name="parcours[]"
+                                            value="{{ dpeParcours.id }}"
+                                    >
+                                </label>
+                            </div>
+                        </td>
+                    {% endif %}
                     <td>
-                        <div class="checkbox">
-                            <label>
-                                <input
-                                        {{ stimulus_action('check_all', 'check') }}
-                                        type="checkbox"
-                                        class="check-all"
-                                        name="parcours[]"
-                                        value="{{ dpeParcours.id }}"
-                                >
-                            </label>
-                        </div>
+                        {% if formation.composantePorteuse != null %}
+                            {{ formation.composantePorteuse.libelle }}
+                        {% else %}
+                            <span class="badge bg-danger">Non définie</span>
+                        {% endif %}
                     </td>
-                {% endif %}
-                <td>
-                    {% if formation.composantePorteuse != null %}
-                        {{ formation.composantePorteuse.libelle }}
-                    {% else %}
-                        <span class="badge bg-danger">Non définie</span>
-                    {% endif %}
-                </td>
-                <td>
-                    {{ formation.typeDiplome|typeDiplome }}
-                </td>
-                <td>
-                    {% if formation.mention != null or formation.mentionTexte != null %}
-                        {{ formation.display }}
-                    {% else %}
-                        <span class="badge bg-danger">Non définie</span>
-                    {% endif %}
-                </td>
-                <td>
-                    {% if formation.hasParcours %}
-                        {{ parcours.libelle }}
-                    {% else %}
-                        Sans parcours
-                    {% endif %}
-                </td>
-                <td>
-                    {{ dpeParcours.etatReconduction|badgeEnum }}
-                </td>
+                    <td>
+                        {{ formation.typeDiplome|typeDiplome }}
+                    </td>
+                    <td>
+                        {% if formation.mention != null or formation.mentionTexte != null %}
+                            {{ formation.display }}
+                        {% else %}
+                            <span class="badge bg-danger">Non définie</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if formation.hasParcours %}
+                            {{ parcours.libelle }}
+                        {% else %}
+                            Sans parcours
+                        {% endif %}
+                    </td>
+                    <td>
+                        {{ dpeParcours.etatReconduction|badgeEnum }}
+                    </td>
 
-                <td class="text-end">
-                    {% if formation.hasParcours and formation.parcours|length > 0 %}
-                        <a href="{{ path('app_parcours_show',{'id': parcours.id}) }}"
-                           class="btn btn-sm text-info"
-                           data-bs-toggle="tooltip"
-                           data-bs-placement="bottom"
-                           target="_blank"
-                           title="Voir le parcours"
-                        >
-                            <i class="{{ iconShow }}"></i>
-                            <span> Voir</span>
-                        </a>
-                        <a href="#"
-                           class="btn btn-sm text-success"
-                                {{ stimulus_controller('modal', {
-                                    size: 'lg',
-                                    modalTitle: 'Vérifier la saisie',
-                                    modalUrl: path('app_parcours_state', {parcours:parcours.id}) }) }}
-                           data-action="click->modal#openModal"
-                           data-size="lg"
-                           data-bs-toggle="tooltip"
-                           data-bs-placement="bottom"
-                           title="Vérifier la saisie"
-                        >
-                            <i class="fal fa-binoculars"></i>
-                            <span> vérifier</span>
-                        </a>
-                        {% if isCfvu is not defined or not isCfvu %}
-                            {% if is_granted('CAN_PARCOURS_EDIT_MY', parcours) %}
-                                <a href="{{ path('app_parcours_edit',{'id': parcours.id}) }}"
+                    <td class="text-end">
+                        {% if formation.hasParcours and formation.parcours|length > 0 %}
+                            <a href="{{ path('app_parcours_show',{'id': parcours.id}) }}"
+                               class="btn btn-sm text-info"
+                               data-bs-toggle="tooltip"
+                               data-bs-placement="bottom"
+                               target="_blank"
+                               title="Voir le parcours"
+                            >
+                                <i class="{{ iconShow }}"></i>
+                                <span> Voir</span>
+                            </a>
+                            <a href="#"
+                               class="btn btn-sm text-success"
+                                    {{ stimulus_controller('modal', {
+                                        size: 'lg',
+                                        modalTitle: 'Vérifier la saisie',
+                                        modalUrl: path('app_parcours_state', {parcours:parcours.id}) }) }}
+                               data-action="click->modal#openModal"
+                               data-size="lg"
+                               data-bs-toggle="tooltip"
+                               data-bs-placement="bottom"
+                               title="Vérifier la saisie"
+                            >
+                                <i class="fal fa-binoculars"></i>
+                                <span> vérifier</span>
+                            </a>
+                            {% if isCfvu is not defined or not isCfvu %}
+                                {% if is_granted('CAN_PARCOURS_EDIT_MY', parcours) %}
+                                    <a href="{{ path('app_parcours_edit',{'id': parcours.id}) }}"
+                                       class="btn btn-sm text-warning"
+                                       data-bs-toggle="tooltip"
+                                       data-bs-placement="bottom"
+                                       title="Modifier la fiche d'identité du parcours"
+                                    >
+                                        <i class="{{ iconEdit }}"></i>
+                                        <span> Modifier</span>
+                                    </a>
+                                {% endif %}
+                            {% endif %}
+                        {% else %}
+                            <a href="{{ path('app_formation_show',{'slug': formation.slug}) }}"
+                               class="btn btn-sm text-info"
+                               data-bs-toggle="tooltip"
+                               data-bs-placement="bottom"
+                               title="Voir la formation"
+                               target="_blank"
+                            >
+                                <i class="{{ iconShow }}"></i>
+                                <span> Voir</span>
+                            </a>
+                            <a href="#"
+                               class="btn btn-sm text-success"
+                                    {{ stimulus_controller('modal', {
+                                        size: 'lg',
+                                        modalTitle: 'Vérifier la saisie',
+                                        modalUrl: path('app_formation_state', {formation:formation.id}) }) }}
+                               data-action="click->modal#openModal"
+                               data-size="lg"
+                               data-bs-toggle="tooltip"
+                               data-bs-placement="bottom"
+                               title="Vérifier la saisie"
+                            >
+                                <i class="fal fa-binoculars"></i>
+                                <span> vérifier</span>
+                            </a>
+
+                            {% if is_granted('CAN_FORMATION_EDIT_MY', formation) %}
+                                <a href="{{ path('app_formation_edit',{'slug': formation.slug}) }}"
                                    class="btn btn-sm text-warning"
                                    data-bs-toggle="tooltip"
                                    data-bs-placement="bottom"
-                                   title="Modifier la fiche d'identité du parcours"
+                                   target="_blank"
+                                   title="Modifier la fiche d'identité de la formation"
                                 >
                                     <i class="{{ iconEdit }}"></i>
                                     <span> Modifier</span>
                                 </a>
                             {% endif %}
                         {% endif %}
-                    {% else %}
-                        <a href="{{ path('app_formation_show',{'slug': formation.slug}) }}"
-                           class="btn btn-sm text-info"
-                           data-bs-toggle="tooltip"
-                           data-bs-placement="bottom"
-                           title="Voir la formation"
-                           target="_blank"
-                        >
-                            <i class="{{ iconShow }}"></i>
-                            <span> Voir</span>
-                        </a>
-                        <a href="#"
-                           class="btn btn-sm text-success"
-                                {{ stimulus_controller('modal', {
-                                    size: 'lg',
-                                    modalTitle: 'Vérifier la saisie',
-                                    modalUrl: path('app_formation_state', {formation:formation.id}) }) }}
-                           data-action="click->modal#openModal"
-                           data-size="lg"
-                           data-bs-toggle="tooltip"
-                           data-bs-placement="bottom"
-                           title="Vérifier la saisie"
-                        >
-                            <i class="fal fa-binoculars"></i>
-                            <span> vérifier</span>
-                        </a>
-
-                        {% if is_granted('CAN_FORMATION_EDIT_MY', formation) %}
-                            <a href="{{ path('app_formation_edit',{'slug': formation.slug}) }}"
-                               class="btn btn-sm text-warning"
-                               data-bs-toggle="tooltip"
-                               data-bs-placement="bottom"
-                               target="_blank"
-                               title="Modifier la fiche d'identité de la formation"
-                            >
-                                <i class="{{ iconEdit }}"></i>
-                                <span> Modifier</span>
-                            </a>
-                        {% endif %}
-                    {% endif %}
-
-
-                </td>
-            </tr>
+                    </td>
+                </tr>
             {% endif %}
         {% else %}
             <tr>
@@ -170,4 +168,38 @@
         </tbody>
     </table>
 
+    {% if etape != 'NON_OUVERTURE' or etape == 'OUVERTURE' %}
+        <div class="row mt-2">
+            <div class="col-3 d-grid">
+                <button class="btn btn-sm d-block btn-outline-success"
+                        type="button"
+                        data-action="validation--index#valide_ouverture"
+                        data-validation--index-url-param="{{ path('app_validation_valide_ouverture_lot', {etape:etape}) }}"
+                        data-controller="tooltip"
+                        data-tooltip-placement-value="bottom"
+                        aria-label="{{ ('validation.valider.'~etape)|trans({}, 'process') }}"
+                        data-bs-original-title="{{ ('validation.valider.'~etape)|trans({}, 'process') }}"
+                >
+                    <i class="fal fa-check"></i> {{ ('validation.valider.'~etape)|trans({}, 'process') }}
+                </button>
+            </div>
+
+
+            <div class="col-3 d-grid">
+                <button
+                        class="btn btn-sm d-block btn-outline-warning"
+                        data-action="validation--index#reserve_ouverture"
+                        data-validation--index-url-param="{{ path('app_validation_reserve_ouverture_lot', {etape:etape}) }}"
+                        data-controller="tooltip"
+                        data-tooltip-placement-value="bottom"
+                        aria-label="{{ ('validation.reserve.'~etape)|trans({}, 'process') }}"
+                        data-bs-original-title="{{ ('validation.reserve.'~etape)|trans({}, 'process') }}"
+                        type="button">
+                    <i class="fal fa-circle-exclamation-check"></i> {{ ('validation.reserve.'~etape)|trans({}, 'process') }}
+                </button>
+            </div>
+        </div>
+        <div class="row mt-2" {{ stimulus_target('validation--index', 'action') }}>
+        </div>
+    {% endif %}
 </div>

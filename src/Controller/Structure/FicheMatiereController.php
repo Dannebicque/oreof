@@ -17,22 +17,18 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[
-    Route('/structure/fiche-matiere', name: 'structure_fiche_matiere_')
-]
+#[Route('/structure/fiche-matiere', name: 'structure_fiche_matiere_')]
 class FicheMatiereController extends BaseController
 {
-    #[
-        Route('/', name: 'index')
-    ]
+    #[Route('/', name: 'index')]
     public function index(
         Request $request
-    ): Response
-    {
+    ): Response {
         return $this->render(
             'structure/fiche_matiere/index.html.twig',
             [
                 'type' => $request->query->get('type', 'parcours'),
+                'page' => $request->query->get('page', 1),
             ]
         );
     }
@@ -41,8 +37,7 @@ class FicheMatiereController extends BaseController
     public function liste(
         Request                $request,
         FicheMatiereRepository $ficheMatiereRepository
-    ): Response
-    {
+    ): Response {
 
         if ($this->isGranted('ROLE_ADMIN') || $this->isGranted('ROLE_SES')) {
             $ficheMatieres = $ficheMatiereRepository->findByAdmin(
@@ -105,8 +100,7 @@ class FicheMatiereController extends BaseController
     public function listeHorsDiplome(
         Request                $request,
         FicheMatiereRepository $ficheMatiereRepository
-    ): Response
-    {
+    ): Response {
         $ficheMatieres = $ficheMatiereRepository->findByHd(
             $this->getCampagneCollecte(),
             $request->query->all(),
@@ -126,14 +120,11 @@ class FicheMatiereController extends BaseController
         ]);
     }
 
-    #[
-        Route('/detail/ue/{ue}/{parcours}', name: 'detail_ue')
-    ]
+    #[Route('/detail/ue/{ue}/{parcours}', name: 'detail_ue')]
     public function detailComposante(
         ElementConstitutifRepository $elementConstitutifRepository,
         Ue                           $ue,
-    ): Response
-    {
+    ): Response {
         $ecs = $elementConstitutifRepository->findByUe($ue);
 
         return $this->render('structure/fiche_matiere/_liste.html.twig', [

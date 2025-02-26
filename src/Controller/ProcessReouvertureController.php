@@ -16,6 +16,7 @@ use App\Events\HistoriqueFormationEvent;
 use App\Events\HistoriqueParcoursEvent;
 use App\Repository\DpeDemandeRepository;
 use App\Repository\DpeParcoursRepository;
+use App\Repository\FicheMatiereRepository;
 use App\Service\VersioningFormation;
 use App\Service\VersioningParcours;
 use DateTimeImmutable;
@@ -322,6 +323,120 @@ class ProcessReouvertureController extends BaseController
             'type_modif' => $formation->getEtatReconduction()->value,
             'stringDifferencesParcours' => $textDifferencesParcours,
             'hasLastVersion' => $version,
+        ]);
+    }
+
+    #[Route('/validation/ouverture/reserve-lot/{etape}', name: 'app_validation_reserve_ouverture_lot')]
+    public function reserveLot(
+        DpeParcoursRepository $dpeParcoursRepository,
+        string                $etape,
+        Request               $request
+    ): Response {
+        if ($request->isMethod('POST')) {
+            $sParcours = $request->request->get('parcours');
+        } else {
+            $sParcours = $request->query->get('parcours');
+        }
+        $allParcours = explode(',', $sParcours);
+
+        $process = $this->validationProcess->getEtape($etape);
+        $meta = $this->validationProcess->getMetaFromTransition($transition);
+        $tParcours = [];
+        foreach ($allParcours as $id) {
+            $dpe = $dpeParcoursRepository->find($id);
+            if ($dpe === null) {
+                return JsonReponse::error('Parcours non trouvé');
+            }
+            $tParcours[] = $dpe;
+            $processData = $this->parcoursProcess->etatParcours($dpe, $process);
+
+            if ($request->isMethod('POST')) {
+                $this->parcoursProcess->reserveParcours($dpe, $this->getUser(), $transition, $request);
+            }
+        }
+
+        if ($request->isMethod('POST')) {
+            $this->toast('success', 'Formations marquées avec des réserves');
+            return $this->redirectToRoute('app_validation_index');
+        }
+
+        return $this->render('process_validation/_reserve_lot.html.twig', [
+            'formations' => $tParcours,
+            'sParcours' => $sParcours,
+            'process' => $process,
+            'meta' => $meta,
+            'transition' => $transition,
+            'objet' => $dpe,
+            'processData' => $processData ?? null,
+            'type' => 'lot',
+            'id' => $id,
+            'etape' => $etape,
+        ]);
+    }
+
+    #[Route('/validation/ouverture/valide-lot/{etape}', name: 'app_validation_valide_ouverture_lot')]
+    public function valideLot(
+        EntityManagerInterface $entityManager,
+        DpeParcoursRepository $dpeParcoursRepository,
+        string                $etape,
+        Request               $request
+    ): Response {
+        if ($request->isMethod('POST')) {
+            $sParcours = $request->request->get('parcours');
+            $nextStep = match($etape) {
+                'NON_OUVERTURE_SES' => TypeModificationDpeEnum::NON_OUVERTURE_CFVU,
+                'OUVERTURE_SES' => TypeModificationDpeEnum::OUVERTURE_CFVU,
+                'NON_OUVERTURE_CFVU' => TypeModificationDpeEnum::NON_OUVERTURE,
+                'OUVERTURE_CFVU' => TypeModificationDpeEnum::OUVERT
+            };
+        } else {
+            $sParcours = $request->query->get('parcours');
+        }
+
+        $allParcours = explode(',', $sParcours);
+        $tParcours = [];
+
+        foreach ($allParcours as $id) {
+            $dpe = $dpeParcoursRepository->find($id);
+            if ($dpe === null) {
+                return JsonReponse::error('Parcours non trouvé');
+            }
+            $tParcours[] = $dpe;
+
+            if ($request->isMethod('POST')) {
+                $dpe->setEtatReconduction($nextStep);
+                if ($nextStep === TypeModificationDpeEnum::NON_OUVERTURE) {
+                    $dpe->setEtatValidation(['non_ouvert' => 1]);
+                    if ($dpe->getParcours()?->isParcoursDefaut() === true) {
+                        $dpe->getParcours()?->setDescriptifHautPageAutomatique('Cette formation ne sera pas proposée pour la campagne ' . $this->getCampagneCollecte()->getLibelle() . '.');
+                    } else {
+                        $dpe->getParcours()?->setDescriptifHautPageAutomatique('Ce parcours ne sera pas proposé pour la campagne ' . $this->getCampagneCollecte()->getLibelle() . '.');
+                    }
+                }
+
+                if ($nextStep === TypeModificationDpeEnum::OUVERT) {
+                    $dpe->setEtatValidation(['soumis_ses' => 1]);
+                    $dpe->getParcours()?->setDescriptifHautPageAutomatique(null);
+                }
+            }
+        }
+
+        if ($request->isMethod('POST')) {
+            $entityManager->flush();
+            $this->toast('success', 'Parcours validés');
+
+            return $this->redirectToRoute('app_validation_index', [
+                'step' => 'ouverture',
+                'typeValidation' => $etape
+            ]);
+        }
+
+
+        return $this->render('process_validation/_valide_ouverture_lot.html.twig', [
+            'formations' => $tParcours,
+            'sParcours' => $sParcours,
+            'type' => 'lot',
+            'etape' => $etape,
         ]);
     }
 }

@@ -84,82 +84,89 @@
                 </div>
                 <div class="col-12">
                     <div class="row mt-2">
-                        {% if (isRefuse('parcours',this.parcours)) %}
+                        {% if this.dpeParcours.etatReconduction.value == 'NON_OUVERTURE' %}
                             <div class="col-6 d-grid">
-                                <button class="btn btn-sm btn-danger">
-                                    {{ ('validation.etat.refuser.'~this.place)|trans({}, 'process') }}
-                                </button>
-                            </div>
-                        {% elseif (isPublie(this.parcours, 'parcours')) %}
-                            <div class="col-6 d-grid">
-                                <button class="btn btn-sm btn-success">
-                                    {{ ('validation.etat.publie')|trans({}, 'process') }}
+                                <button class="btn btn-sm btn-warning">
+                                    Parcours non ouvert
                                 </button>
                             </div>
                         {% else %}
-                            {% if this.process[this.place] is defined %}
-                                <div class="col-6">
-                                    <div class="row gy-1">
-                                        {# todo: vérifier si le RP peut valider niveau RF? #}
-                                        {% if
-                                            (is_granted('CAN_FORMATION_VALIDATE_MY', this.formation) or is_granted('CAN_FORMATION_VALIDATE_ALL')) or
-                                            (is_granted('CAN_PARCOURS_VALIDATE_MY', this.parcours) or is_granted('CAN_PARCOURS_VALIDATE_ALL')) or
-                                            is_granted('CAN_PARCOURS_VALIDATE_MY', this.dpeParcours) %}
-                                            {% for key, state in hasTransitions(this.dpeParcours) %}
-                                                {% for keyTrans, transition in state %}
-                                                    <div class="col-4 d-grid">
-                                                        <button class="btn d-block text-wrap btn-outline-{{ transition.meta.btn }}"
-                                                                type="button"
-                                                                {{ stimulus_controller('modal', {
-                                                                    size: 'lg',
-                                                                    updateComponent: {
-                                                                        id: 'parcours_manage',
-                                                                        event: 'mention_manage:'~key,
-                                                                        event_type: key
-                                                                    },
-                                                                    modalTitle: ('validation.valider.'~prefix~'.'~keyTrans~'.title')|trans({}, 'process'),
-                                                                    modalUrl: path('app_validation_'~key, {
-                                                                        etape:this.place,
-                                                                        transition:keyTrans,
-                                                                        id:id,
-                                                                        type:'parcours'
-                                                                    }) }) }}
-                                                                data-action="click->modal#openModal"
-                                                                data-controller="tooltip"
-                                                                data-tooltip-placement-value="bottom"
-                                                                aria-label="{{ ('title.validation.'~prefix~'.'~keyTrans)|trans({}, 'process') }}"
-                                                                data-bs-original-title="{{ ('title.validation.'~prefix~'.'~keyTrans)|trans({}, 'process') }}"
-                                                        >
-                                                            <i class="fal {{ transition.meta.icon }}"></i> {{ ('btn.validation.'~prefix~'.'~keyTrans)|trans({}, 'process') }}
-                                                        </button>
-                                                    </div>
+                            {% if (isRefuse('parcours',this.parcours)) %}
+                                <div class="col-6 d-grid">
+                                    <button class="btn btn-sm btn-danger">
+                                        {{ ('validation.etat.refuser.'~this.place)|trans({}, 'process') }}
+                                    </button>
+                                </div>
+                            {% elseif (isPublie(this.parcours, 'parcours')) %}
+                                <div class="col-6 d-grid">
+                                    <button class="btn btn-sm btn-success">
+                                        {{ ('validation.etat.publie')|trans({}, 'process') }}
+                                    </button>
+                                </div>
+                            {% else %}
+                                {% if this.process[this.place] is defined %}
+                                    <div class="col-6">
+                                        <div class="row gy-1">
+                                            {# todo: vérifier si le RP peut valider niveau RF? #}
+                                            {% if
+                                                (is_granted('CAN_FORMATION_VALIDATE_MY', this.formation) or is_granted('CAN_FORMATION_VALIDATE_ALL')) or
+                                                (is_granted('CAN_PARCOURS_VALIDATE_MY', this.parcours) or is_granted('CAN_PARCOURS_VALIDATE_ALL')) or
+                                                is_granted('CAN_PARCOURS_VALIDATE_MY', this.dpeParcours) %}
+                                                {% for key, state in hasTransitions(this.dpeParcours) %}
+                                                    {% for keyTrans, transition in state %}
+                                                        <div class="col-4 d-grid">
+                                                            <button class="btn d-block text-wrap btn-outline-{{ transition.meta.btn }}"
+                                                                    type="button"
+                                                                    {{ stimulus_controller('modal', {
+                                                                        size: 'lg',
+                                                                        updateComponent: {
+                                                                            id: 'parcours_manage',
+                                                                            event: 'mention_manage:'~key,
+                                                                            event_type: key
+                                                                        },
+                                                                        modalTitle: ('validation.valider.'~prefix~'.'~keyTrans~'.title')|trans({}, 'process'),
+                                                                        modalUrl: path('app_validation_'~key, {
+                                                                            etape:this.place,
+                                                                            transition:keyTrans,
+                                                                            id:id,
+                                                                            type:'parcours'
+                                                                        }) }) }}
+                                                                    data-action="click->modal#openModal"
+                                                                    data-controller="tooltip"
+                                                                    data-tooltip-placement-value="bottom"
+                                                                    aria-label="{{ ('title.validation.'~prefix~'.'~keyTrans)|trans({}, 'process') }}"
+                                                                    data-bs-original-title="{{ ('title.validation.'~prefix~'.'~keyTrans)|trans({}, 'process') }}"
+                                                            >
+                                                                <i class="fal {{ transition.meta.icon }}"></i> {{ ('btn.validation.'~prefix~'.'~keyTrans)|trans({}, 'process') }}
+                                                            </button>
+                                                        </div>
+                                                    {% else %}
+                                                        <div class="col-4 d-grid">
+                                                        </div>
+                                                    {% endfor %}
                                                 {% else %}
-                                                    <div class="col-4 d-grid">
+                                                    <div class="col-6 d-grid">
+                                                        <button class="btn btn-sm btn-muted d-block">
+                                                            {{ 'validation.formation.indisponible'|trans({}, 'process') }}
+                                                        </button>
                                                     </div>
                                                 {% endfor %}
                                             {% else %}
-                                                <div class="col-6 d-grid">
+                                                <div class="col-2 d-grid">
                                                     <button class="btn btn-sm btn-muted d-block">
-                                                        {{ 'validation.formation.indisponible'|trans({}, 'process') }}
+                                                        {{ 'validation.indisponible'|trans({}, 'process') }}
                                                     </button>
                                                 </div>
-                                            {% endfor %}
-                                        {% else %}
-                                            <div class="col-2 d-grid">
-                                                <button class="btn btn-sm btn-muted d-block">
-                                                    {{ 'validation.indisponible'|trans({}, 'process') }}
-                                                </button>
-                                            </div>
-                                            <div class="col-4 d-grid">
-                                            </div>
-                                        {% endif %}
+                                                <div class="col-4 d-grid">
+                                                </div>
+                                            {% endif %}
+                                        </div>
                                     </div>
-                                </div>
-                            {% else %}
-                                <div class="col-6"></div>
+                                {% else %}
+                                    <div class="col-6"></div>
+                                {% endif %}
                             {% endif %}
                         {% endif %}
-
                         <div class="col-6 d-flex justify-content-center">
                             {% if this.parcours.isParcoursDefaut == false %}
                                 <a
@@ -283,26 +290,27 @@
                 <div class="col-12">
                     <div class="row mt-2">
                         <div class="col-3 d-grid">
-                            {% if not this.hasDemande and isPublie(this.parcours) %}
-                                <button class="btn btn-sm d-block btn-outline-warning"
-                                        type="button"
-                                        {{ stimulus_controller('modal', {
-                                            size: 'lg',
-                                            nomEvenement: 'redirectEdit',
-                                            modalTitle: ('demande.reouverture.title')|trans({}, 'process'),
-                                            modalUrl: path('app_validation_demande_reouverture', {
-                                                parcours: id
-                                            }) }) }}
-                                        {# todo:  gérer une redirection vers la page edit du parcours #}
-                                        data-action="click->modal#openModal"
-                                        data-controller="tooltip"
-                                        data-tooltip-placement-value="bottom"
-                                        aria-label="{{ ('demande.reouverture')|trans({}, 'process') }}"
-                                        data-bs-original-title="{{ ('demande.reouverture')|trans({}, 'process') }}"
-                                >
-                                    <i class="fal fa-question"></i> {{ ('demande.reouverture')|trans({}, 'process') }}
-                                </button>
-                                {# todo: fermeture que si pas de MCCC/Maquette pour revenir en SES sans CFVU avant publication #}
+                            {% if this.dpeParcours.etatReconduction.value != 'NON_OUVERTURE' %}
+                                {% if not this.hasDemande and isPublie(this.parcours) %}
+                                    <button class="btn btn-sm d-block btn-outline-warning"
+                                            type="button"
+                                            {{ stimulus_controller('modal', {
+                                                size: 'lg',
+                                                nomEvenement: 'redirectEdit',
+                                                modalTitle: ('demande.reouverture.title')|trans({}, 'process'),
+                                                modalUrl: path('app_validation_demande_reouverture', {
+                                                    parcours: id
+                                                }) }) }}
+                                            {# todo:  gérer une redirection vers la page edit du parcours #}
+                                            data-action="click->modal#openModal"
+                                            data-controller="tooltip"
+                                            data-tooltip-placement-value="bottom"
+                                            aria-label="{{ ('demande.reouverture')|trans({}, 'process') }}"
+                                            data-bs-original-title="{{ ('demande.reouverture')|trans({}, 'process') }}"
+                                    >
+                                        <i class="fal fa-question"></i> {{ ('demande.reouverture')|trans({}, 'process') }}
+                                    </button>
+                                    {# todo: fermeture que si pas de MCCC/Maquette pour revenir en SES sans CFVU avant publication #}
                                 {% elseif this.hasDemande %}
                                     <button class="btn btn-sm d-block btn-outline-warning"
                                             type="button"
@@ -322,9 +330,11 @@
                                     >
                                         <i class="fal fa-times"></i> {{ ('demande.reouverture.annuler')|trans({}, 'process') }}
                                     </button>
+                                {% endif %}
                             {% endif %}
                         </div>
                         <div class="col-3 d-grid">
+                            {% if this.dpeParcours.etatReconduction.value != 'NON_OUVERTURE' %}
                             {% if parcours.isParcoursDefaut == true %}
                                 <button
                                         href="#"
@@ -343,6 +353,7 @@
                                     <i class="fal fa-repeat"></i>
                                     <span> {{ 'formation.change_rf.label'|trans({}, 'form') }}</span>
                                 </button>
+                            {% endif %}
                             {% endif %}
                         </div>
                         <div class="col-3 d-grid">
