@@ -76,7 +76,7 @@ class ElementConstitutifMcccController extends AbstractController
                         $elementConstitutif->setEcts($elementConstitutif->getEcParent()?->getEcts());
                         $elementConstitutif->setEctsSpecifiques(true); //du coup ca devient spécifique ?
                     } else {
-                        $elementConstitutif->getFicheMatiere()->setEcts((float)$request->request->all()['ec_step4']['ects']);
+                        $elementConstitutif->getFicheMatiere()?->setEcts((float)$request->request->all()['ec_step4']['ects']);
                     }
 
                     $entityManager->flush();
