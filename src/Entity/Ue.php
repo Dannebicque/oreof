@@ -54,10 +54,10 @@ class Ue
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $libelle = null;
 
-    #[ORM\OneToMany(mappedBy: 'ue', targetEntity: UeMutualisable::class)]
+    #[ORM\OneToMany(mappedBy: 'ue', targetEntity: UeMutualisable::class, cascade: ['remove'])]
     private Collection $ueMutualisables;
 
-    #[ORM\ManyToOne(inversedBy: 'ues', fetch: 'EAGER')]
+    #[ORM\ManyToOne(inversedBy: 'ues', fetch: 'EAGER', cascade: ['remove'])]
     private ?UeMutualisable $ueRaccrochee = null;
 
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'ueEnfants')]
