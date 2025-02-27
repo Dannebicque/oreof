@@ -46,8 +46,8 @@ class ApiSiteWebController extends AbstractController
 
                 if($parcours->getDpeParcours()?->last() instanceof DpeParcours){
                     $etatValidation = $parcours->getDpeParcours()?->last()->getEtatValidation();
-
-                    if($etatValidation === ['valide_a_publier' => 1] || $etatValidation === ['publie' => 1]){
+                    $campagneCollecte = $parcours->getDpeParcours()?->last()->getCampagneCollecte()?->getId();
+                    if(($etatValidation === ['valide_a_publier' => 1] || $etatValidation === ['publie' => 1]) && $campagneCollecte === 1){
                         $isPubliable = true;
                         ++$countParcours;
                     }
@@ -62,15 +62,16 @@ class ApiSiteWebController extends AbstractController
                 }
             }
 
-
-            $data[] = [
-                'id' => $formation->getId(),
-                'libelle' => $formation->getDisplayLong(),
-                'parcours' => $tParcours,
-                //todo: on pourrait ajouter la version. Le Lheo doit dépendre de la version
-                // 'dateValidation' => $getHistorique->getHistoriqueFormationLastStep($formation, 'publication')?->getDate()?->format('Y-m-d H:i:s') ?? null,
-                'dateValidation' => $datePublication->format('Y-m-d H:i:s'),
-            ];
+            if(count($tParcours) > 0){
+                $data[] = [
+                    'id' => $formation->getId(),
+                    'libelle' => $formation->getDisplayLong(),
+                    'parcours' => $tParcours,
+                    //todo: on pourrait ajouter la version. Le Lheo doit dépendre de la version
+                    // 'dateValidation' => $getHistorique->getHistoriqueFormationLastStep($formation, 'publication')?->getDate()?->format('Y-m-d H:i:s') ?? null,
+                    'dateValidation' => $datePublication->format('Y-m-d H:i:s'),
+                ];
+            }
         }
 
         // VERIFICATION NOMBRE DE PARCOURS ENVOYÉS
