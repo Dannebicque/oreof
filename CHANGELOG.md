@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.32.3](https://github.com/Dannebicque/oreof/compare/v1.32.2...v1.32.3) (2025-02-27)
+
+
+### Bug Fixes
+
+* Création d'un nouveau parcours + init dpe ([91a0639](https://github.com/Dannebicque/oreof/commit/91a0639e376d7c2ad288f30ccb2128d2158a9709))
+* Sauvegarde ECTS dans fiche ou EC ([dfb309b](https://github.com/Dannebicque/oreof/commit/dfb309bfd44414b6a4ef8a09020d687c0a73eebc))
+
 ### [1.32.2](https://github.com/Dannebicque/oreof/compare/v1.32.1...v1.32.2) (2025-02-27)
 
 
