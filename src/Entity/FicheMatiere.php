@@ -219,7 +219,7 @@ class FicheMatiere
     private ?string $typeApogee = null;
 
     /** @var FicheMatiere $ficheMatiereOrigineCopie Référence la fiche matière d'origine, depuis la copie */
-    #[ORM\OneToOne(inversedBy: 'ficheMatiereCopieAnneeUniversitaire', targetEntity: self::class, cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(inversedBy: 'ficheMatiereCopieAnneeUniversitaire', targetEntity: self::class)]
     private ?self $ficheMatiereOrigineCopie = null;
 
     /** @var FicheMatiere $ficheMatiereCopieAnneeUniversitaire Accès à la fiche matière copiée, depuis celle d'origine */
