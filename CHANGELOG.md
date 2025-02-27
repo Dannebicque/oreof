@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.32.2](https://github.com/Dannebicque/oreof/compare/v1.32.1...v1.32.2) (2025-02-27)
+
+
+### Bug Fixes
+
+* filtre fiche matière ([38bb050](https://github.com/Dannebicque/oreof/commit/38bb0504845d63c8dd7d045580845d1065b37f17))
+
 ### [1.32.1](https://github.com/Dannebicque/oreof/compare/v1.32.0...v1.32.1) (2025-02-27)
 
 
