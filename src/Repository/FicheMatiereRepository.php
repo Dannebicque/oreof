@@ -96,7 +96,19 @@ class FicheMatiereRepository extends ServiceEntityRepository
             ->setParameter('campagneCollecte', $campagneCollecte);
 
         $this->addFiltres($qb, $options);
+        if (array_key_exists('utilise', $options) && "1" === $options['utilise']) {
+            $qb
+                ->leftJoin('f.elementConstitutifs', 'ec')
+                ->groupBy('f.id')
+                ->having('count(ec.id) > 0');
+        }
 
+        if (array_key_exists('utilise', $options) && "0" === $options['utilise']) {
+            $qb
+                ->leftJoin('f.elementConstitutifs', 'ec')
+                ->groupBy('f.id')
+                ->having('count(ec.id) = 0');
+        }
         return $qb->getQuery()->getResult();
     }
 
@@ -187,6 +199,21 @@ class FicheMatiereRepository extends ServiceEntityRepository
         if (array_key_exists('q', $options) && null !== $options['q']) {
             $query->andWhere('f.libelle LIKE :q')
                 ->setParameter('q', '%' . $options['q'] . '%');
+        }
+
+        if (array_key_exists('utilise', $options) && "1" === $options['utilise']) {
+            $query
+                ->leftJoin('f.elementConstitutifs', 'ec')
+                ->groupBy('f.id')
+                ->having('count(ec.id) > 0');
+        }
+
+        if (array_key_exists('utilise', $options) && "0" === $options['utilise']) {
+
+            $query
+                ->leftJoin('f.elementConstitutifs', 'ec')
+                ->groupBy('f.id')
+                ->having('count(ec.id) = 0');
         }
 
         return $query->getQuery()
