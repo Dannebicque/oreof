@@ -80,7 +80,7 @@ class Ue
     #[ORM\Column(length: 10, nullable: true)]
     private ?string $codeApogee = null;
 
-    #[ORM\OneToOne(targetEntity: self::class, cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(targetEntity: self::class)]
     private ?self $ueOrigineCopie = null;
 
     public function __construct()
