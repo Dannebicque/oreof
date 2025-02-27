@@ -18,7 +18,7 @@ class DpeParcours
     #[ORM\ManyToOne(inversedBy: 'dpeParcours')]
     private ?CampagneCollecte $campagneCollecte = null;
 
-    #[ORM\ManyToOne(inversedBy: 'dpeParcours')]
+    #[ORM\ManyToOne(inversedBy: 'dpeParcours', cascade: ['persist'])]
     private ?Parcours $parcours = null;
 
     #[ORM\Column]
