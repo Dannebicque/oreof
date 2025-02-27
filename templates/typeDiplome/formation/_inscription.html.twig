@@ -8,11 +8,20 @@
             </dd>
             <dt>Régime(s) d'inscription</dt>
             <dd>
-                {{ formation.regimeInscriptionTexte|raw }}
+                {% if formation.hasParcours %}
+                    {{ parcours.displayRegimeInscription|raw }}
+                {% else %}
+                    {{ formation.regimeInscriptionTexte|raw }}
+                {% endif %}
             </dd>
             <dt>Modalités de l'alternance</dt>
             <dd>
-                {{ formation.modalitesAlternance|raw }}
+                {% if formation.hasParcours %}
+                    {{ parcours.modalitesAlternance|raw }}
+                {% else %}
+                    {{ formation.modalitesAlternance|raw }}
+                {% endif %}
+
             </dd>
         </dl>
     </div>

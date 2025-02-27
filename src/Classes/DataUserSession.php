@@ -14,7 +14,6 @@ use App\Entity\Etablissement;
 use App\Repository\CampagneCollecteRepository;
 use Stringable;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -24,13 +23,13 @@ class DataUserSession
     private UserInterface $user;
 
     private string $dir;
-    private ?CampagneCollecte $dpe = null;
+    private ?CampagneCollecte $campagneCollecte = null;
     private ?Etablissement $etablissement = null;
 
 
     public function __construct(
         private RequestStack               $requestStack,
-        private CampagneCollecteRepository $dpeRepository,
+        private CampagneCollecteRepository $campagneCollecteRepository,
         TokenStorageInterface              $tokenStorage,
         KernelInterface                    $kernel,
     ) {
@@ -40,18 +39,18 @@ class DataUserSession
         }
     }
 
-    public function getDpe(): ?CampagneCollecte
+    public function getCampagneCollecte(): ?CampagneCollecte
     {
         $session = $this->requestStack->getSession();
-        if ($this->dpe === null) {
-            if ($session !== null && $session->get('dpe') !== null) {
-                $this->dpe = $this->dpeRepository->find($session->get('dpe'));
+        if ($this->campagneCollecte === null) {
+            if ($session !== null && $session->get('campagneCollecte') !== null) {
+                $this->campagneCollecte = $this->campagneCollecteRepository->find($session->get('campagneCollecte'));
             } else {
-                $this->dpe = $this->dpeRepository->findOneBy(['defaut' => true]);
+                $this->campagneCollecte = $this->campagneCollecteRepository->findOneBy(['defaut' => true]);
             }
         }
 
-        return $this->dpe;
+        return $this->campagneCollecte;
     }
 
     public function version(): ?string

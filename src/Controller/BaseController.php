@@ -54,12 +54,12 @@ class BaseController extends AbstractController
         ]);
     }
 
-    public function getDpe(): CampagneCollecte
+    public function getCampagneCollecte(): CampagneCollecte
     {
-        return $this->dataUserSession->getDpe();
+        return $this->dataUserSession->getCampagneCollecte();
     }
 
-    public function getEtablissement(): Etablissement
+    public function getEtablissement(): ?Etablissement
     {
         return $this->dataUserSession->getEtablissement();
     }

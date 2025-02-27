@@ -1,4 +1,4 @@
-{% set currentPage = params.start is defined ? params.start : 0 %}
+{% set currentPage = params.page is defined ? params.page : 0 %}
 {% set buffer = 4 %}
 {% set step = 5 %}
 {% set start = max(1, currentPage - buffer) %}
@@ -34,7 +34,7 @@
         {% endif %}
 
         {% for i in start .. end %}
-            <li class="page-item {% if (currentPage == i) or (params.start is not defined and loop.first) %}active{% endif %}">
+            <li class="page-item {% if (currentPage == i) or (params.page is not defined and loop.first) %}active{% endif %}">
                 <a class="page-link" href="#"
                         {{ stimulus_action('crud', 'page', 'click', {
                             'page': i,

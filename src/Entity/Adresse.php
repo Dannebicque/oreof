@@ -38,6 +38,9 @@ class Adresse
     #[ORM\Column(length: 100, nullable: true)]
     private ?string $ville = null;
 
+    #[ORM\OneToOne(targetEntity: self::class, cascade: ['persist', 'remove'])]
+    private ?self $adresseOrigineCopie = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -94,5 +97,17 @@ class Adresse
     public function display(): string
     {
         return $this->adresse1 . '<br> ' . $this->adresse2 . '<br> ' . $this->codePostal . ' ' . $this->ville;
+    }
+
+    public function getAdresseOrigineCopie(): ?self
+    {
+        return $this->adresseOrigineCopie;
+    }
+
+    public function setAdresseOrigineCopie(?self $adresseOrigineCopie): static
+    {
+        $this->adresseOrigineCopie = $adresseOrigineCopie;
+
+        return $this;
     }
 }

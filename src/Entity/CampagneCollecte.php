@@ -30,6 +30,9 @@ class CampagneCollecte
     #[ORM\Column(length: 30)]
     private ?string $libelle = null;
 
+    #[ORM\Column(length: 30)]
+    private ?string $couleur = 'primary';
+
     #[Groups('parcours_json_versioning')]
     #[ORM\Column]
     private ?int $annee = null;
@@ -55,7 +58,7 @@ class CampagneCollecte
     #[ORM\Column(length: 1)]
     private ?string $codeApogee = null; //todo: déplacer dans année ?
 
-    #[ORM\ManyToOne(inversedBy: 'dpes')]
+    #[ORM\ManyToOne(inversedBy: 'dpes', cascade: ['persist'])]
     private ?AnneeUniversitaire $annee_universitaire = null;
 
     #[ORM\OneToMany(mappedBy: 'campagneCollecte', targetEntity: DpeParcours::class)]
@@ -232,6 +235,18 @@ class CampagneCollecte
     public function setMailDpeEnvoye(bool $mailDpeEnvoye): static
     {
         $this->mailDpeEnvoye = $mailDpeEnvoye;
+
+        return $this;
+    }
+
+    public function getCouleur(): ?string
+    {
+        return $this->couleur;
+    }
+
+    public function setCouleur(string $couleur = 'primary'): static
+    {
+        $this->couleur = $couleur;
 
         return $this;
     }

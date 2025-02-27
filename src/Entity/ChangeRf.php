@@ -21,7 +21,7 @@ class ChangeRf
     private ?Formation $formation = null;
 
     #[ORM\Column(length: 20, enumType: TypeRfEnum::class)]
-    private ?TypeRfEnum $typeRf = null;
+    private ?TypeRfEnum $typeRf;
 
     #[ORM\Column(nullable: true)]
     private ?array $etatDemande = [];
@@ -50,7 +50,7 @@ class ChangeRf
     /**
      * @var Collection<int, HistoriqueFormation>
      */
-    #[ORM\OneToMany(mappedBy: 'changeRf', targetEntity: HistoriqueFormation::class)]
+    #[ORM\OneToMany(mappedBy: 'changeRf', targetEntity: HistoriqueFormation::class, cascade: ['persist', 'remove'])]
     private Collection $historiqueFormations;
 
     public function __construct()

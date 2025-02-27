@@ -14,7 +14,6 @@ use App\DTO\ProcessData;
 use App\Entity\ChangeRf;
 use App\Enums\TypeRfEnum;
 use App\Events\HistoriqueChangeRfEvent;
-use App\Events\HistoriqueFormationEvent;
 use App\Events\NotifCentreFormationEvent;
 use App\Utils\Tools;
 use Doctrine\ORM\EntityManagerInterface;

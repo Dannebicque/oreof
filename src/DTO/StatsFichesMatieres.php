@@ -11,10 +11,6 @@ namespace App\DTO;
  */
 
 
-use App\Entity\ElementConstitutif;
-use App\Entity\FicheMatiere;
-use App\Entity\Parcours;
-
 class StatsFichesMatieres
 {
     public int $nbFiches = 0;

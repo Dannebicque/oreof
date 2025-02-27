@@ -69,6 +69,18 @@ class CampagneCollecteType extends AbstractType
                 'label' => 'Date de publication ',
                 'widget' => 'single_text',
             ])
+            ->add('couleur', ChoiceType::class, [
+                'label' => 'Couleur de la campagne',
+                'choices' => [
+                    'Bleu' => 'primary',
+                    'Vert' => 'success',
+                    'Rouge' => 'danger',
+                    'Jaune' => 'warning',
+                    'Gris' => 'secondary',
+                    'Noir' => 'dark',
+                    'Blanc' => 'light',
+                ],
+            ])
         ;
     }
 

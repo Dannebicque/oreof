@@ -13,7 +13,6 @@ use App\Classes\GetElementConstitutif;
 use App\Entity\ElementConstitutif;
 use App\Entity\FicheMatiere;
 use App\Entity\Parcours;
-use Doctrine\Common\Collections\Collection;
 
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -56,23 +55,31 @@ class StructureEc
         ?Parcours $parcours,
         bool $isBut = false,
         bool $withEcts = true,
-        bool $withBcc = true
+        bool $withBcc = true,
+        bool $dataFromFicheMatiere = false //todo: mettre true par défaut ?
     ) {
         if($parcours) {
             $getElement = new GetElementConstitutif($elementConstitutif, $parcours);
             $this->withEcts = $withEcts;
             $this->withBcc = $withBcc;
-            $this->raccroche = $getElement->isRaccroche();
-            $this->elementRaccroche = $getElement->getElementConstitutif();
+//            $this->raccroche = $getElement->isRaccroche();
+//            $this->elementRaccroche = $getElement->getElementConstitutif();
         }
 
         $this->elementConstitutif = $elementConstitutif;
         if ($this->withEcts && $parcours) {
             $this->heuresEctsEc = new HeuresEctsEc();
-            $this->typeMccc = $getElement->getTypeMccc();
-            $this->heuresEctsEc->addEc($getElement->getElementConstitutifHeures(), $isBut);
-            $this->heuresEctsEc->addEcts($getElement->getEcts());
-            $this->mcccs = $getElement->getMcccsCollection()?->toArray();
+            if($dataFromFicheMatiere === false){
+                $this->heuresEctsEc->addEc($getElement->getElementConstitutifHeures(), $isBut, $dataFromFicheMatiere);
+                $this->heuresEctsEc->addEcts($getElement->getEcts());
+                $this->mcccs = $getElement->getMcccsCollection()?->toArray();
+                $this->typeMccc = $getElement->getTypeMccc();
+            } elseif ($dataFromFicheMatiere === true){
+                $this->heuresEctsEc->addEc($getElement->getFicheMatiereHeures(), $isBut, $dataFromFicheMatiere);
+                $this->heuresEctsEc->addEcts($getElement->getFicheMatiereEcts());
+                $this->mcccs = $getElement->getMcccsFromFicheMatiereCollection()?->toArray();
+                $this->typeMccc = $getElement->getTypeMcccFromFicheMatiere();
+            }
         }
 
         if ($this->withBcc && $parcours) {

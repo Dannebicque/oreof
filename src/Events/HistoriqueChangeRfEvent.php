@@ -10,7 +10,6 @@
 namespace App\Events;
 
 use App\Entity\ChangeRf;
-use App\Entity\Formation;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\User\UserInterface;
 

@@ -26,7 +26,7 @@ class SemestreParcours
     private ?int $id = null;
 
     #[Groups('parcours_json_versioning')]
-    #[ORM\ManyToOne(inversedBy: 'semestreParcours', fetch: 'EAGER')]
+    #[ORM\ManyToOne(inversedBy: 'semestreParcours', fetch: 'EAGER', cascade: ['persist'])]
     private ?Semestre $semestre = null;
 
     #[ORM\ManyToOne(inversedBy: 'semestreParcours')]

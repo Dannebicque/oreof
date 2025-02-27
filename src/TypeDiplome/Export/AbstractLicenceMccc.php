@@ -12,7 +12,6 @@ namespace App\TypeDiplome\Export;
 use App\Classes\Excel\ExcelWriter;
 use DateTimeInterface;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
-use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 class AbstractLicenceMccc
 {
@@ -78,8 +77,6 @@ class AbstractLicenceMccc
     protected string $fileName;
     protected array $lignesSemestre = [];
     protected array $lignesEcColorees = [];
-
-    private string $dir;
 
     public function __construct(
         protected ExcelWriter             $excelWriter,

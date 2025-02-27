@@ -4,41 +4,53 @@
         renseignées.'}) }}
     {% else %}
 
-            <dl>
-                <dt>Modalités d'enseignement</dt>
-                <dd>{{ ec.modaliteEnseignement.libelle }}</dd>
-            </dl>
-            <dl>
-                <dt>ECTS</dt>
-                <dd>{{ ec.ects }}</dd>
-            </dl>
+        <dl>
+            <dt>Modalités d'enseignement</dt>
+            <dd>{{ ec.modaliteEnseignement.libelle }}</dd>
+        </dl>
+        <dl>
+            <dt>ECTS</dt>
+            <dd>{{ ec.ects }}</dd>
+        </dl>
         {% if ec.modaliteEnseignement.value != 2 %} {# todo: utile ? peut être différent du parcours ? #}
             <h3>Volume Présentiel</h3>
-            <div class="row">
-                <div class="col-4">CM</div>
-                <div class="col-4">TD</div>
-                <div class="col-4">TP</div>
-            </div>
-            <div class="row">
-                <div class="col-4">{{ ec.volumeCmPresentiel }}</div>
-                <div class="col-4">{{ ec.volumeTdPresentiel }}</div>
-                <div class="col-4">{{ ec.volumeTpPresentiel }}</div>
-            </div>
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>CM</th>
+                    <th>TD</th>
+                    <th>TP</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>{{ ec.volumeCmPresentiel }}</td>
+                    <td>{{ ec.volumeTdPresentiel }}</td>
+                    <td>{{ ec.volumeTpPresentiel }}</td>
+                </tr>
+                </tbody>
+            </table>
         {% else %}
             {{ component('alerte', {type:'info', message:'Formation proposée uniquement en distanciel'}) }}
         {% endif %}
         {% if ec.modaliteEnseignement.value != 0 %}
             <h3 class="mt-2">Volume Distanciel</h3>
-            <div class="row">
-                <div class="col-4">CM</div>
-                <div class="col-4">TD</div>
-                <div class="col-4">TP</div>
-            </div>
-            <div class="row">
-                <div class="col-4">{{ ec.volumeCmDistanciel }}</div>
-                <div class="col-4">{{ ec.volumeTdDistanciel }}</div>
-                <div class="col-4">{{ ec.volumeTpDistanciel }}</div>
-            </div>
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>CM</th>
+                    <th>TD</th>
+                    <th>TP</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>{{ ec.volumeCmDistanciel }}</td>
+                    <td>{{ ec.volumeTdDistanciel }}</td>
+                    <td>{{ ec.volumeTpDistanciel }}</td>
+                </tr>
+                </tbody>
+            </table>
         {% else %}
             {{ component('alerte', {type:'info', message:'Formation proposée uniquement en présentiel'}) }}
         {% endif %}

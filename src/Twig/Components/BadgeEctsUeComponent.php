@@ -2,9 +2,7 @@
 
 namespace App\Twig\Components;
 
-use App\Classes\GetElementConstitutif;
 use App\Classes\GetUeEcts;
-use App\Entity\ElementConstitutif;
 use App\Entity\Parcours;
 use App\Entity\TypeDiplome;
 use App\Entity\Ue;

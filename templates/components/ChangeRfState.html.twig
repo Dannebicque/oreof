@@ -46,6 +46,7 @@
                                                 <div class="col-{{ 6 / state|length }} d-grid">
                                                     <button class="btn d-block text-wrap btn-outline-{{ transition.meta.btn }}"
                                                             type="button"
+                                                            {# todo: on pourrait reload juste le composant #}
                                                             {{ stimulus_controller('modal', {
                                                                 size: 'lg',
                                                                 updateComponent: {
@@ -53,6 +54,7 @@
                                                                     event: 'change_rf_state:'~key,
                                                                     event_type: key
                                                                 },
+                                                                nomEvenement: 'refreshPage',
                                                                 modalTitle: ('validation.valider.changeRf.'~keyTrans~'.title')|trans({}, 'process'),
                                                                 modalUrl: path('app_validation_change_rf_'~key, {
                                                                     transition:keyTrans,

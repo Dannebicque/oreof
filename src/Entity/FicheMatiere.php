@@ -112,7 +112,7 @@ class FicheMatiere
     private Collection $elementConstitutifs;
 
     #[Groups(['fiche_matiere_versioning', 'DTO_json_versioning'])]
-    #[ORM\ManyToOne(inversedBy: 'ficheMatieres')]
+    #[ORM\ManyToOne(inversedBy: 'ficheMatieres', cascade: ['persist'], fetch: 'EAGER')]
     private ?Parcours $parcours = null;
 
     #[Groups(['DTO_json_versioning', 'fiche_matiere_versioning'])]
@@ -193,6 +193,9 @@ class FicheMatiere
     #[ORM\Column(nullable: true)]
     private ?float $ects = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $quitus = false;
+
     #[ORM\ManyToMany(targetEntity: Composante::class, inversedBy: 'ficheMatieres')]
     /** @deprecated('encore utile?') */
     private Collection $composante;
@@ -214,6 +217,17 @@ class FicheMatiere
 
     #[ORM\Column(length: 4, nullable: true)]
     private ?string $typeApogee = null;
+
+    /** @var FicheMatiere $ficheMatiereOrigineCopie Référence la fiche matière d'origine, depuis la copie */
+    #[ORM\OneToOne(inversedBy: 'ficheMatiereCopieAnneeUniversitaire', targetEntity: self::class, cascade: ['persist', 'remove'])]
+    private ?self $ficheMatiereOrigineCopie = null;
+
+    /** @var FicheMatiere $ficheMatiereCopieAnneeUniversitaire Accès à la fiche matière copiée, depuis celle d'origine */
+    #[ORM\OneToOne(mappedBy: 'ficheMatiereOrigineCopie', targetEntity: self::class, cascade: ['persist', 'remove'])]
+    private ?self $ficheMatiereCopieAnneeUniversitaire = null;
+
+    #[ORM\ManyToOne]
+    private ?CampagneCollecte $campagneCollecte = null;
 
     public function __construct()
     {
@@ -1144,5 +1158,72 @@ class FicheMatiere
     public function getEtatValidation(): ?array
     {
         return $this->getEtatFiche();
+    }
+
+    public function isQuitus(): ?bool
+    {
+        return $this->quitus ?? false;
+    }
+
+    public function setQuitus(?bool $quitus): self
+    {
+        $this->quitus = $quitus;
+
+        return $this;
+    }
+
+    public function getFicheMatiereOrigineCopie(): ?self
+    {
+        return $this->ficheMatiereOrigineCopie;
+    }
+
+    public function setFicheMatiereOrigineCopie(?self $ficheMatiereOrigineCopie): static
+    {
+        $this->ficheMatiereOrigineCopie = $ficheMatiereOrigineCopie;
+
+        return $this;
+    }
+
+    public function getFicheMatiereCopieAnneeUniversitaire(): ?self
+    {
+        return $this->ficheMatiereCopieAnneeUniversitaire;
+    }
+
+    public function setFicheMatiereCopieAnneeUniversitaire(?self $ficheMatiereCopieAnneeUniversitaire): static
+    {
+        // unset the owning side of the relation if necessary
+        if ($ficheMatiereCopieAnneeUniversitaire === null && $this->ficheMatiereCopieAnneeUniversitaire !== null) {
+            $this->ficheMatiereCopieAnneeUniversitaire->setFicheMatiereOrigineCopie(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($ficheMatiereCopieAnneeUniversitaire !== null && $ficheMatiereCopieAnneeUniversitaire->getFicheMatiereOrigineCopie() !== $this) {
+            $ficheMatiereCopieAnneeUniversitaire->setFicheMatiereOrigineCopie($this);
+        }
+
+        $this->ficheMatiereCopieAnneeUniversitaire = $ficheMatiereCopieAnneeUniversitaire;
+
+        return $this;
+    }
+
+    public function getCampagneCollecte(): ?CampagneCollecte
+    {
+        return $this->campagneCollecte;
+    }
+
+    public function setCampagneCollecte(?CampagneCollecte $campagneCollecte): static
+    {
+        $this->campagneCollecte = $campagneCollecte;
+
+        return $this;
+    }
+
+    /**
+     * Méthode appelée lors de la duplication de l'année universitaire
+     */
+    public function prepareCloneForNewAnnee() : void {
+        // On initialise à vide, pour remplir selon le besoin
+        $this->competences = new ArrayCollection();
+        $this->apprentissagesCritiques = new ArrayCollection();
     }
 }

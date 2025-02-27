@@ -1,0 +1,28 @@
+<div {{ stimulus_controller('fichematiere--step4', {
+    url: path('app_fiche_matiere_save', {ficheMatiere:ficheMatiere.id}),
+}) }}>
+    <twig:alerte type="info"
+                 message="Les volumes horaires, les ECTS et les MCCC sont renseignés sur la fiche EC/matière et appliqués, par défaut, à tous les EC qui utilisent cette fiche EC/matière.<br>Les données peuvent être modifiées :
+                 <ul>
+<li>Depuis l'EC <strong>{{ ecProprietaire != null ? ecProprietaire.display : '-' }}</strong> du parcours <strong>{{ ecProprietaire != null ? ecProprietaire.parcours.display : '-' }}</strong> pour impacter tous les EC qui utilisent cette fiche EC/matière mutualisée</li>
+<li>Depuis l'EC de la structure qui utilise la fiche EC/matière mutualisée pour une application spécifique sur le parcours modifié</li></ul>"/>
+    <h2>Volumes horaires</h2>
+    {{ include('typeDiplome/ec/_structure.html.twig') }}
+
+    <h2>ECTS et MCCC</h2>
+
+    {{ include('typeDiplome/ec/_mccc.html.twig') }}
+
+
+    <div class="alert {% if ficheMatiere.getEtatStep(4) %}alert-success{% else %}alert-warning{% endif %} mt-2"
+         id="alertEtatStructure">
+        <input type="checkbox"
+               id="etatStructure"
+               class="form-check-inline"
+               {% if ficheMatiere.getEtatStep(4) %}checked{% endif %}
+                {{ stimulus_action('fichematiere--step4', 'etatStep', 'change') }}
+
+        ><label for="etatStructure">
+            Cochez cette case si vous avez terminé ...</label>
+    </div>
+</div>

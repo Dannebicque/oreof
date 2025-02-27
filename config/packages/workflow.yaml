@@ -1,101 +1,6 @@
 #bin/console workflow:dump dpe | dot -Tpng -o dpe.png
 framework:
   workflows:
-    dpe: # todo: Deprecated a retirer
-      type: 'workflow'
-      marking_store:
-        type: 'method'
-        property: 'etatDpe'
-      supports:
-        - App\Entity\Formation
-      initial_marking: 'initialisation_dpe'
-      places:
-        - 'initialisation_dpe'
-        - 'autorisation_saisie'
-        - 'en_cours_redaction'
-        - 'soumis_rf'
-        - 'soumis_dpe_composante'
-        - 'refuse_rf'
-        - 'refuse_dpe_composante'
-        - 'soumis_conseil'
-        - 'refuse_conseil'
-        - 'refuse_central'
-        - 'soumis_central'
-        - 'soumis_vp'
-        - 'soumis_cfvu'
-        - 'refuse_definitif_cfvu'
-        - 'valide_a_publier'
-        - 'publie'
-        - 'valide_pour_publication'
-        - 'soumis_conseil_reserve'
-      transitions:
-        initialiser:
-          guard: "is_granted('ROLE_ADMIN')"
-          from: 'initialisation_dpe'
-          to: 'autorisation_saisie' #evoi mail aux responsable de formation et aux responsable DPE
-        autoriser:
-          from: 'autorisation_saisie'
-          to: 'en_cours_redaction' # dès qu'un champs est modifié
-        valide_rf:
-          from: 'en_cours_redaction'
-          to: 'soumis_dpe_composante'
-        reserver_rf:
-          from: 'soumis_rf'
-          to: 'en_cours_redaction'
-        refuser_dpe_composante:
-          from: 'soumis_dpe_composante'
-          to: 'refuse_dpe_composante'
-        valide_dpe_composante:
-          from: 'soumis_dpe_composante'
-          to: 'soumis_conseil'
-        reserver_dpe_composante:
-          from: 'soumis_dpe_composante'
-          to: 'en_cours_redaction'
-        refuser_conseil:
-          from: 'soumis_conseil'
-          to: 'refuse_conseil'
-        valider_conseil:
-          from: 'soumis_conseil'
-          to: 'soumis_central'
-        reserver_conseil:
-          from: 'soumis_conseil'
-          to: 'en_cours_redaction'
-        refuser_central:
-          from: 'soumis_central'
-          to: 'refuse_central'
-        valider_central:
-          from: 'soumis_central'
-          to: 'soumis_cfvu'
-        reserver_central:
-          from: 'soumis_central'
-          to: 'en_cours_redaction'
-        transmettre_cfvu:
-          from: 'soumis_central' #TODO: VP + Central fusionné
-          to: 'soumis_cfvu'
-        refuser_definitif_cfvu:
-          from: 'soumis_cfvu'
-          to: 'refuse_definitif_cfvu'
-        refuser_revoir_cfvu:
-          from: 'soumis_cfvu'
-          to: 'en_cours_redaction'
-        valider_reserve_cfvu:
-          from: 'soumis_cfvu'
-          to: 'en_cours_redaction'
-        valider_reserve_conseil_cfvu:
-          from: 'soumis_cfvu'
-          to: 'soumis_conseil_reserve' #todo mais on court-circuite le retour directement vers valider publicatio
-        valider_reserve_central_cfvu:
-          from: 'soumis_conseil_reserve'
-          to: 'valide_pour_publication'
-        valider_cfvu:
-          from: 'soumis_cfvu'
-          to: 'valide_pour_publication' #todo: renommer en valide_cfvu
-        valider_publication:
-          from: 'valide_pour_publication' #todo: renommer en valide_cfvu
-          to: 'valide_a_publier'
-        publier:
-          from: 'valide_a_publier'
-          to: 'publie'
     dpeParcours:
       type: 'workflow'
       marking_store:
@@ -116,72 +21,26 @@ framework:
         en_cours_redaction:
           metadata:
             process: true
-            #page: 'parcours'
             icon: 'fa-paper-plane'
             label: 'validation.parcours'
-            #hasValid: true
-            #hasReserve: false
-            #hasRefuse: false
             hasUpload: false
-            #showOn: [ 'parcours', 'ficheMatiere' ]
             isTimeline: false
-            #hasDate: false
-            #transition: 'en_cours_redaction'
-            #canValide: 'valider_parcours'
             check: true
             templateCheck: '_checkParcours.html.twig'
         soumis_parcours:
           metadata:
             process: true
-            #page: 'parcours'
             icon: 'fa-memo-circle-check'
             label: 'validation.parcours_rf'
-            #hasValid: true
-            #hasReserve: true
-            #hasRefuse: false
-            #hasUpload: false
-            #showOn: [ 'parcours', 'ficheMatiere' ]
             isTimeline: false
-            # hasDate: false
-            #transition: 'soumis_parcours'
-            #canValide: 'valider_rf'
-            #canReserve: 'reserver_rf'
             check: true
             templateCheck: '_checkParcours.html.twig'
-        #                valide_parcours_rf:
-        #                    metadata:
-        #                        process: true
-        #                        #page: 'parcours'
-        #                        icon: 'fa-memo-circle-check'
-        #                        label: 'validation.parcours_rf'
-        #                        #hasValid: true
-        #                        #hasReserve: true
-        #                        #hasRefuse: false
-        #                        #hasUpload: false
-        #                        #showOn: [ 'parcours', 'ficheMatiere' ]
-        #                        isTimeline: false
-        #                       # hasDate: false
-        #                        #transition: 'soumis_parcours'
-        #                        #canValide: 'valider_rf'
-        #                        #canReserve: 'reserver_rf'
-        #                        check: true
         soumis_dpe_composante:
           metadata:
             process: true
-            #page: 'formation'
             icon: 'fa-check-to-slot'
             label: 'validation.dpe'
-            #hasValid: true
-            #hasReserve: true
-            #hasRefuse: true
-            #hasUpload: false
             isTimeline: true
-            #hasDate: false
-            # transition: 'soumis_dpe_composante'
-            #canValide: 'valide_dpe_composante' #todo: mettre sur les transitions les types valide, refuse reserve
-            #canRefuse: 'refuser_dpe_composante'
-            #canReserve: 'reserver_dpe_composante'
-            #todo: checkformation?
         refuse_rf:
           metadata:
             process: false
@@ -218,12 +77,6 @@ framework:
             icon: 'fa-shield-check'
             label: 'soumis.cfvu'
             hasDate: true
-            # hasValid:
-            #     - sousReserveModifications
-            #     - sousReserveConseil
-            # hasReserve: false
-            # hasRefuse:
-            #     - projetARevoir
             isTimeline: true
         refuse_definitif_cfvu:
           metadata:
@@ -286,20 +139,6 @@ framework:
             type: valider
             btn: success
             icon: fa-check
-        #                reserver_parcours_rf:
-        #                    from: 'soumis_parcours'
-        #                    to: 'en_cours_redaction'
-        #                    metadata:
-        #                        type: reserver
-        #                        btn: warning
-        #                        icon: fa-circle-exclamation-check
-        #                valider_parcours_rf:
-        #                    from: 'soumis_parcours'
-        #                    to: 'valide_parcours_rf'
-        #                    metadata:
-        #                        type: valider
-        #                        btn: success
-        #                        icon: fa-check
         valider_rf:
           from: 'soumis_parcours'
           to: 'soumis_dpe_composante'
@@ -506,37 +345,6 @@ framework:
             type: reserver
             btn: warning
             icon: fa-circle-exclamation-check
-    parcours: # todo: Deprecated a retirer
-      type: 'workflow'
-      marking_store:
-        type: 'method'
-        property: 'etatParcours'
-      supports:
-        - App\Entity\Parcours
-      initial_marking: 'initialisation_parcours'
-      places:
-        - 'initialisation_parcours'
-        - 'autorisation_saisie'
-        - 'en_cours_redaction'
-        - 'soumis_parcours'
-        #- 'reserve_parcours_rf'
-        - 'valide_parcours_rf'
-      transitions:
-        initialiser:
-          from: 'initialisation_parcours'
-          to: 'autorisation_saisie'
-        autoriser:
-          from: 'autorisation_saisie'
-          to: 'en_cours_redaction'
-        valider_parcours: # Soumettre du resp de parcours vers formation
-          from: 'en_cours_redaction'
-          to: 'soumis_parcours'
-        reserver_rf:
-          from: 'soumis_parcours'
-          to: 'en_cours_redaction'
-        valider_rf:
-          from: 'soumis_parcours'
-          to: 'valide_parcours_rf'
     composante: # todo: Deprecated pas utilisé ?
       type: 'workflow'
       marking_store:
@@ -654,6 +462,13 @@ framework:
           metadata:
         rouvrir_fiche_matiere:
           from: 'publie'
+          to: 'en_cours_redaction'
+          metadata:
+            type: valider
+            btn: warning
+            icon: 'fa-pencil'
+        rouvrir_fiche_matiere_b:
+          from: 'valide_pour_publication'
           to: 'en_cours_redaction'
           metadata:
             type: valider

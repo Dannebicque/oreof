@@ -67,7 +67,7 @@ abstract class ValideStructure extends AbstractValide
                         self::$structure['semestres'][$semestreParcour->getOrdre()]['global'] = $hasUe;
                     }
                 } else {
-                    if ($sem->isNonDispense() !== true) {
+                    if ($sem?->isNonDispense() !== true) {
                         self::$structure['semestres'][$semestreParcour->getOrdre()]['global'] = self::VIDE;
                         self::$structure['semestres'][$semestreParcour->getOrdre()]['erreur'][] = 'Semestre non renseigné';
                         self::$errors[] = 'Semestre ' . $semestreParcour->getOrdre() . ' non renseigné';
@@ -196,10 +196,9 @@ abstract class ValideStructure extends AbstractValide
             self::$errors[] = 'Type d\'EC non renseigné (disciplinaire, ...) pour l\'' . $ec->getCode() . ' de l\'' . $ue->display(self::$parcours);
         }
         $getElement = new GetElementConstitutif($ec, self::$parcours);
-        $raccroche = $getElement->isRaccroche();
         if ($ec->getNatureUeEc()?->isLibre() === true) {
             if (self::$typeDiplome !== null) {
-                $ects = $getElement->getEcts();
+                $ects = $getElement->getFicheMatiereEcts();
                 //todo: selon le type de diplôme, vérifier si les ECTS sont obligatoires
                 if (self::$typeDiplome->isEctsObligatoireSurEc() === false && ($ects === null || $ects === 0.0)) {
                     $t['erreur'][] = 'ECTS non renseignés, mais ce type de diplôme l\'autorise';
@@ -233,7 +232,7 @@ abstract class ValideStructure extends AbstractValide
                 self::$errors[] = 'MCCC non renseignées pour l\'' . $ec->getCode() . ' de l\'' . $ue->display(self::$parcours);
             }
             if (self::$typeDiplome !== null) {
-                $ects = $getElement->getEcts();
+                $ects = $getElement->getFicheMatiereEcts();
                 if (self::$typeDiplome->isEctsObligatoireSurEc() === false && ($ects === null || $ects === 0.0)) {
                     $t['erreur'][] = 'ECTS non renseignés, mais ce type de diplôme l\'autorise';
                     $etatEc = self::INCOMPLET_ECTS;

@@ -1,14 +1,14 @@
 {% if ue.ueRaccrochee == true %}
     {% set ue = ue.ueRaccrochee.ue %}
-    {% set raccrocheUe = true %}
+    {% set raccrocheUe = true or isSemestreRaccroche %}
 {% else %}
-    {% set raccrocheUe = false %}
+    {% set raccrocheUe = false or isSemestreRaccroche %}
 {% endif %}
 
 {% set editableCfvu = isAccessible(dpeParcours, 'cfvu') %}
 
 <tr>
-    <th colspan="7" class="font-weight-bold">{{ ue.display(parcours) }}</th>
+    <th colspan="7" class="font-weight-bold">{{ ue.display(parcours) }} {% if raccrocheUe == true %}<i class="fa fa-link"></i>{% endif %}</th>
 </tr>
 <tr>
     <th class="font-weight-bold">EC</th>
@@ -24,7 +24,7 @@
 {# todo: améliorer l'affichage et reprendre les éléments comme CalculStructure... #}
 {% for ec in tabEcs[semParc.ordre][ue.id] %}
     <tr>
-        <th>{{ ec.display }}</th>
+        <th>{{ ec.display }} {% if raccrocheUe == true %}<i class="fa fa-link"></i>{% endif %}</th>
         <td>
 
             {% if ec.natureUeEc != null and ec.natureUeEc.isLibre ==  true %}
@@ -35,7 +35,7 @@
                 {# todo: isGranted ? #}
                 {% if
                     isAccessible(dpeParcours, 'cfvu') and
-                    ec.ficheMatiere.parcours != null and ec.ficheMatiere.parcours.id == parcours.id and raccrocheSem == false and raccrocheUe == false %}
+                    ec.ficheMatiere.parcours != null and ec.ficheMatiere.parcours.id == parcours.id and isSemestreRaccroche == false and raccrocheUe == false %}
                     <a
                             href="{{ path('app_fiche_matiere_edit',{slug: ec.ficheMatiere.slug}) }}"
                             class="btn btn-sm btn-outline-info"
@@ -73,6 +73,7 @@
                         name="typeEc_{{ ec.id }}"
                         id="typeEc_{{ ec.id }}"
                         data-bs-toggle="tooltip"
+                        {% if raccrocheUe %}disabled{% endif %}
                         data-bs-placement="bottom"
                         title="Type EC"
                         {{ stimulus_action('parcours--ec', 'changeTypeEc', 'change', {
@@ -116,7 +117,7 @@
                 parcours: parcours,
                 dpeParcours: dpeParcours,
                 ue: ue,
-                editable: true,
+                editable: not raccrocheUe,
                 deplacer: true,
                 texte: true
             }) }}
@@ -127,92 +128,92 @@
                 parcours: parcours,
                 dpeParcours: dpeParcours,
                 ue: ue,
-                editable: true,
+                editable: not raccrocheUe,
                 deplacer: true,
                 texte: true
             }) }}
         </td>
     </tr>
-    {% if ec.ficheMatiere != null and ec.ficheMatiere.parcours != null and not (ec.ficheMatiere.parcours.id == parcours.id and raccrocheSem == false and raccrocheUe == false) %}
-        <tr>
-            <td colspan="3" class="text-end">Informations saisies sur la fiche EC/parcours</td>
-            <td>
-                <div class="form-check mb-2">
-                    <input class="form-check-input" type="checkbox"
-                           id="synchroEcts"
-                           {{ editableCfvu ? '' : 'disabled' }}
-                           name="synchroEcts"
-                            {{ stimulus_action('parcours--ec', 'synchro', 'change', {
-                                ec:ec.id,
-                                type: 'synchroEcts'
-                            }) }}
-                            {% if ec.synchroEcts == true %}checked{% endif %}
-                    >
-                    <label class="form-check-label"
-                           for="synchroEcts"> Raccrocher les ECTS
-                        <i class="fal fa-question-circle ms-1" data-controller="tooltip"
-                           data-tooltip-placement-value="bottom"
-                           title="{{ 'parcours_ec.helps.synchroEcts'|trans({}, 'help') }}"></i></label>
-                </div>
-            </td>
-            <td>
-                <div class="form-check mb-2">
-                    <input class="form-check-input" type="checkbox"
-                           id="synchroBcc"
-                            {{ editableCfvu ? '' : 'disabled' }}
-                           name="synchroBcc"
-                            {{ stimulus_action('parcours--ec', 'synchro', 'change', {
-                                ec:ec.id,
-                                type:'synchroBcc'
-                            }) }}
-                            {% if ec.synchroBcc == true %}checked{% endif %}
-                    >
-                    <label class="form-check-label"
-                           for="synchroBcc"> Raccrocher les BCC
-                        <i class="fal fa-question-circle ms-1" data-controller="tooltip"
-                           data-tooltip-placement-value="bottom"
-                           title="{{ 'parcours_ec.helps.synchroBcc'|trans({}, 'help') }}"></i></label>
-                </div>
-            </td>
-            <td>
-                <div class="form-check mb-2">
-                    <input class="form-check-input" type="checkbox"
-                           id="synchroHeures"
-                           name="synchroHeures"
-                            {{ editableCfvu ? '' : 'disabled' }}
-                            {{ stimulus_action('parcours--ec', 'synchro', 'change', {
-                                ec:ec.id,
-                                type:'synchroHeures'
-                            }) }}
-                            {% if ec.synchroHeures == true %}checked{% endif %}
-                    >
-                    <label class="form-check-label"
-                           for="synchroHeures"> Raccrocher les Heures
-                        <i class="fal fa-question-circle ms-1" data-controller="tooltip"
-                           data-tooltip-placement-value="bottom"
-                           title="{{ 'parcours_ec.helps.synchroHeures'|trans({}, 'help') }}"></i>
-                    </label>
-                </div>
-            </td>
-            <td>
-                <div class="form-check mb-2">
-                    <input class="form-check-input" type="checkbox"
-                           id="synchroMccc"
-                           name="synchroMccc"
-                            {{ editableCfvu ? '' : 'disabled' }}
-                            {{ stimulus_action('parcours--ec', 'synchro', 'change', {
-                                ec:ec.id,
-                                type:'synchroMccc'
-                            }) }}
-                            {% if ec.synchroMccc == true %}checked{% endif %}
-                    >
-                    <label class="form-check-label"
-                           for="synchroMccc"> Raccrocher les MCCC
-                        <i class="fal fa-question-circle ms-1" data-controller="tooltip"
-                           data-tooltip-placement-value="bottom"
-                           title="{{ 'parcours_ec.helps.synchroMccc'|trans({}, 'help') }}"></i></label>
-                </div>
-            </td>
-        </tr>
-    {% endif %}
+{#    {% if ec.ficheMatiere != null and ec.ficheMatiere.parcours != null and not (ec.ficheMatiere.parcours.id == parcours.id and raccrocheSem == false and raccrocheUe == false) %}#}
+{#        <tr>#}
+{#            <td colspan="3" class="text-end">Informations saisies sur la fiche EC/parcours</td>#}
+{#            <td>#}
+{#                <div class="form-check mb-2">#}
+{#                    <input class="form-check-input" type="checkbox"#}
+{#                           id="synchroEcts"#}
+{#                           {{ editableCfvu ? '' : 'disabled' }}#}
+{#                           name="synchroEcts"#}
+{#                            {{ stimulus_action('parcours--ec', 'synchro', 'change', {#}
+{#                                ec:ec.id,#}
+{#                                type: 'synchroEcts'#}
+{#                            }) }}#}
+{#                            {% if ec.synchroEcts == true %}checked{% endif %}#}
+{#                    >#}
+{#                    <label class="form-check-label"#}
+{#                           for="synchroEcts"> Raccrocher les ECTS#}
+{#                        <i class="fal fa-question-circle ms-1" data-controller="tooltip"#}
+{#                           data-tooltip-placement-value="bottom"#}
+{#                           title="{{ 'parcours_ec.helps.synchroEcts'|trans({}, 'help') }}"></i></label>#}
+{#                </div>#}
+{#            </td>#}
+{#            <td>#}
+{#                <div class="form-check mb-2">#}
+{#                    <input class="form-check-input" type="checkbox"#}
+{#                           id="synchroBcc"#}
+{#                            {{ editableCfvu ? '' : 'disabled' }}#}
+{#                           name="synchroBcc"#}
+{#                            {{ stimulus_action('parcours--ec', 'synchro', 'change', {#}
+{#                                ec:ec.id,#}
+{#                                type:'synchroBcc'#}
+{#                            }) }}#}
+{#                            {% if ec.synchroBcc == true %}checked{% endif %}#}
+{#                    >#}
+{#                    <label class="form-check-label"#}
+{#                           for="synchroBcc"> Raccrocher les BCC#}
+{#                        <i class="fal fa-question-circle ms-1" data-controller="tooltip"#}
+{#                           data-tooltip-placement-value="bottom"#}
+{#                           title="{{ 'parcours_ec.helps.synchroBcc'|trans({}, 'help') }}"></i></label>#}
+{#                </div>#}
+{#            </td>#}
+{#            <td>#}
+{#                <div class="form-check mb-2">#}
+{#                    <input class="form-check-input" type="checkbox"#}
+{#                           id="synchroHeures"#}
+{#                           name="synchroHeures"#}
+{#                            {{ editableCfvu ? '' : 'disabled' }}#}
+{#                            {{ stimulus_action('parcours--ec', 'synchro', 'change', {#}
+{#                                ec:ec.id,#}
+{#                                type:'synchroHeures'#}
+{#                            }) }}#}
+{#                            {% if ec.synchroHeures == true %}checked{% endif %}#}
+{#                    >#}
+{#                    <label class="form-check-label"#}
+{#                           for="synchroHeures"> Raccrocher les Heures#}
+{#                        <i class="fal fa-question-circle ms-1" data-controller="tooltip"#}
+{#                           data-tooltip-placement-value="bottom"#}
+{#                           title="{{ 'parcours_ec.helps.synchroHeures'|trans({}, 'help') }}"></i>#}
+{#                    </label>#}
+{#                </div>#}
+{#            </td>#}
+{#            <td>#}
+{#                <div class="form-check mb-2">#}
+{#                    <input class="form-check-input" type="checkbox"#}
+{#                           id="synchroMccc"#}
+{#                           name="synchroMccc"#}
+{#                            {{ editableCfvu ? '' : 'disabled' }}#}
+{#                            {{ stimulus_action('parcours--ec', 'synchro', 'change', {#}
+{#                                ec:ec.id,#}
+{#                                type:'synchroMccc'#}
+{#                            }) }}#}
+{#                            {% if ec.synchroMccc == true %}checked{% endif %}#}
+{#                    >#}
+{#                    <label class="form-check-label"#}
+{#                           for="synchroMccc"> Raccrocher les MCCC#}
+{#                        <i class="fal fa-question-circle ms-1" data-controller="tooltip"#}
+{#                           data-tooltip-placement-value="bottom"#}
+{#                           title="{{ 'parcours_ec.helps.synchroMccc'|trans({}, 'help') }}"></i></label>#}
+{#                </div>#}
+{#            </td>#}
+{#        </tr>#}
+{#    {% endif %}#}
 {% endfor %}

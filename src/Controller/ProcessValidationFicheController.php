@@ -7,7 +7,6 @@ use App\Classes\Process\FicheMatiereProcess;
 use App\Classes\ValidationProcessFicheMatiere;
 use App\Entity\FicheMatiere;
 use App\Repository\FicheMatiereRepository;
-use App\Utils\JsonRequest;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;

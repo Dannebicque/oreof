@@ -3,6 +3,8 @@
 namespace App\Repository;
 
 use App\Entity\DpeDemande;
+use App\Entity\Parcours;
+use App\Enums\EtatDpeEnum;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -21,28 +23,28 @@ class DpeDemandeRepository extends ServiceEntityRepository
         parent::__construct($registry, DpeDemande::class);
     }
 
-//    /**
-//     * @return DpeDemande[] Returns an array of DpeDemande objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('d')
-//            ->andWhere('d.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('d.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function findLastOpenedDemande(Parcours $parcours, EtatDpeEnum $etat): ?DpeDemande
+    {
+        return $this->createQueryBuilder('d')
+            ->where('d.parcours = :parcours')
+            ->andWhere('d.etatDemande = :etat')
+            ->andWhere('d.dateCloture IS NULL')
+            ->setParameter('parcours', $parcours)
+            ->setParameter('etat', $etat)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 
-//    public function findOneBySomeField($value): ?DpeDemande
-//    {
-//        return $this->createQueryBuilder('d')
-//            ->andWhere('d.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    public function findLastOpenedDemandeMention(\App\Entity\Formation $formation, EtatDpeEnum $etat)
+    {
+        return $this->createQueryBuilder('d')
+            ->where('d.formation = :formation')
+            ->andWhere('d.parcours IS NULL')
+            ->andWhere('d.etatDemande = :etat')
+            ->andWhere('d.dateCloture IS NULL')
+            ->setParameter('formation', $formation)
+            ->setParameter('etat', $etat)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 }

@@ -14,9 +14,7 @@ use App\Entity\Composante;
 use App\Entity\Formation;
 use App\Entity\Mention;
 use App\Entity\Parcours;
-use App\Entity\TypeDiplome;
 use App\Entity\User;
-use App\Enums\EtatDpeEnum;
 use App\Enums\TypeModificationDpeEnum;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -95,6 +93,8 @@ class ParcoursRepository extends ServiceEntityRepository
         return $query->getQuery()
             ->getResult();
     }
+
+
 
     public function findParcours(CampagneCollecte $campagneCollecte, array $options): array
     {
@@ -262,8 +262,8 @@ class ParcoursRepository extends ServiceEntityRepository
             ->join('p.formation', 'f', 'WITH', 'f.id = p.formation')
             ->select(
                 [
-                    'f.id AS formation_id', 'f.slug AS formation_slug', 'p.id AS parcours_id', 
-                    'f.contenuFormation', 'f.resultatsAttendus', 'f.objectifsFormation', 
+                    'f.id AS formation_id', 'f.slug AS formation_slug', 'p.id AS parcours_id',
+                    'f.contenuFormation', 'f.resultatsAttendus', 'f.objectifsFormation',
                     'p.poursuitesEtudes', 'p.libelle AS parcours_libelle', 'f.sigle AS formation_sigle'
                 ]
             )

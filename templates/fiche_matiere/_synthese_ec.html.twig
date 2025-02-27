@@ -9,10 +9,13 @@
                             <span class="badge bg-info">Fiche hors diplôme</span>
                         {% else %}
                             {% if ficheMatiere.parcours != null %}
-                                {{ ficheMatiere.parcours.formation.display }}
-                                {% if ficheMatiere.parcours.formation.hasParcours == true %}
-                                    / {{ ficheMatiere.parcours.libelle }}
-                                {% endif %}
+                                <a href="{{ path('app_parcours_edit', {id:ficheMatiere.parcours.id}) }}"
+                                   target="_blank">
+                                    {{ ficheMatiere.parcours.formation.display }}
+                                    {% if ficheMatiere.parcours.formation.hasParcours == true %}
+                                        / {{ ficheMatiere.parcours.libelle }}
+                                    {% endif %}
+                                </a>
                             {% else %}
                                 <span class="badge bg-warning">Sans parcours</span>
                             {% endif %}
@@ -23,7 +26,8 @@
             <div class="col-4">
                 <dl>
                     <dt>Fiche EC/matière (sigle)</dt>
-                    <dd id="fiche_matiere_libelle_dd">{{ ficheMatiere.display }}</dd>
+                    <dd id="fiche_matiere_libelle_dd">{{ ficheMatiere.libelle }} {% if ficheMatiere.ficheMatiereParcours|length > 0 %}
+                            <span class="badge bg-info">Mutualisée</span>{% endif %}</dd>
                 </dl>
             </div>
             <div class="col-4">
@@ -38,7 +42,7 @@
                                 {% for ec in ficheMatiere.ficheMatiereParcours %}
                                     <li>{{ (ec.parcours != null and ec.parcours.formation != null) ? ec.parcours.formation
                                         .display : 'non défini' }}
-                                        / {{ ec.parcours != null ? ec.parcours.libelle : 'non défini' }}</li>
+                                        / {{ ec.parcours != null ? ec.parcours.libelle : 'non défini' }} {{ ec.parcours.typeparcours|badgeTypeParcours }}</li>
                                 {% endfor %}
                             </ul>
                         {% else %}

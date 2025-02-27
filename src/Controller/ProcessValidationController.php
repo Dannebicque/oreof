@@ -3,16 +3,11 @@
 namespace App\Controller;
 
 use App\Classes\GetDpeParcours;
-use App\Classes\GetHistorique;
 use App\Classes\JsonReponse;
 use App\Classes\Process\FicheMatiereProcess;
-use App\Classes\Process\FormationProcess;
 use App\Classes\Process\ParcoursProcess;
 use App\Classes\ValidationProcess;
 use App\Classes\ValidationProcessFicheMatiere;
-use App\Entity\DpeDemande;
-use App\Enums\TypeModificationDpeEnum;
-use App\Events\DpeDemandeEvent;
 use App\Events\HistoriqueFormationEvent;
 use App\Events\HistoriqueParcoursEvent;
 use App\Repository\DpeParcoursRepository;
@@ -20,39 +15,36 @@ use App\Repository\FicheMatiereRepository;
 use App\Repository\FormationRepository;
 use App\Repository\ParcoursRepository;
 use App\Service\LheoXML;
-use App\Service\VersioningParcours;
-use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Workflow\WorkflowInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class ProcessValidationController extends BaseController
 {
     private string $dir;
+
     public function __construct(
-        private readonly EventDispatcherInterface $eventDispatcher,
-        private readonly EntityManagerInterface   $entityManager,
-        private readonly ValidationProcess        $validationProcess,
-        private readonly ValidationProcessFicheMatiere        $validationProcessFicheMatiere,
-        private readonly FormationProcess         $formationProcess,
-        private readonly ParcoursProcess          $parcoursProcess,
-        private readonly FicheMatiereProcess          $ficheMatiereProcess,
-        KernelInterface $kernel
+        private readonly EventDispatcherInterface      $eventDispatcher,
+        private readonly EntityManagerInterface        $entityManager,
+        private readonly ValidationProcess             $validationProcess,
+        private readonly ValidationProcessFicheMatiere $validationProcessFicheMatiere,
+        private readonly ParcoursProcess               $parcoursProcess,
+        private readonly FicheMatiereProcess           $ficheMatiereProcess,
+        KernelInterface                                $kernel
     ) {
-        $this->dir = $kernel->getProjectDir().'/public/uploads/conseils/';
+        $this->dir = $kernel->getProjectDir() . '/public/uploads/conseils/';
     }
 
     #[Route('/validation/valide/{etape}', name: 'app_validation_valider')]
     public function valide(
-        ParcoursRepository  $parcoursRepository,
+        ParcoursRepository     $parcoursRepository,
         FicheMatiereRepository $ficheMatiereRepository,
-        LheoXML             $lheoXML,
-        string              $etape,
-        Request             $request
+        LheoXML                $lheoXML,
+        string                 $etape,
+        Request                $request
     ): Response {
         $type = $request->query->get('type');
         $transition = $request->query->get('transition');
@@ -217,10 +209,10 @@ class ProcessValidationController extends BaseController
     #[Route('/validation/reserve/{etape}', name: 'app_validation_reserver')]
     public function reserve(
         FicheMatiereRepository $ficheMatiereRepository,
-        ParcoursRepository  $parcoursRepository,
-        FormationRepository $formationRepository,
-        string              $etape,
-        Request             $request
+        ParcoursRepository     $parcoursRepository,
+        FormationRepository    $formationRepository,
+        string                 $etape,
+        Request                $request
     ): Response {
         $type = $request->query->get('type');
         $transition = $request->query->get('transition');
@@ -292,12 +284,12 @@ class ProcessValidationController extends BaseController
 
     #[Route('/validation/edit/{type}/{id}', name: 'app_validation_edit')]
     public function edit(
-        DpeParcoursRepository  $dpeParcoursRepository,
-        ParcoursRepository  $parcoursRepository,
-        FormationRepository $formationRepository,
-        Request             $request,
-        string              $type,
-        int                 $id
+        DpeParcoursRepository $dpeParcoursRepository,
+        ParcoursRepository    $parcoursRepository,
+        FormationRepository   $formationRepository,
+        Request               $request,
+        string                $type,
+        int                   $id
     ) {
         if ($request->isMethod('POST')) {
             $data = $request->request->all();
@@ -314,7 +306,7 @@ class ProcessValidationController extends BaseController
 
                     if ($objet->isHasParcours() === false) {
                         //formation sans parcours
-                        $dpe = $dpeParcoursRepository->findOneBy(['parcours' => $objet->getParcours()->first(), 'campagneCollecte' => $this->getDpe()]);
+                        $dpe = $dpeParcoursRepository->findOneBy(['parcours' => $objet->getParcours()->first(), 'campagneCollecte' => $this->getCampagneCollecte()]);
                         if ($dpe === null) {
                             return JsonReponse::error('Formation non trouvée');
                         }
@@ -330,7 +322,7 @@ class ProcessValidationController extends BaseController
                     //récupérer la transition de départ en fonction de la place selectionnée
 
                     $objet = $parcoursRepository->find($id);
-                    $dpe = $dpeParcoursRepository->findOneBy(['parcours' => $objet, 'campagneCollecte' => $this->getDpe()]);
+                    $dpe = $dpeParcoursRepository->findOneBy(['parcours' => $objet, 'campagneCollecte' => $this->getCampagneCollecte()]);
                     if ($objet === null) {
                         return JsonReponse::error('Parcours non trouvé');
                     }
@@ -357,9 +349,9 @@ class ProcessValidationController extends BaseController
     #[Route('/validation/valide-lot/{etape}/{transition}', name: 'app_validation_valider_lot')]
     public function valideLot(
         DpeParcoursRepository $dpeParcoursRepository,
-        string              $etape,
-        string              $transition,
-        Request             $request
+        string                $etape,
+        string                $transition,
+        Request               $request
     ): Response {
         $fileName = null;
         if ($request->isMethod('POST')) {
@@ -435,9 +427,9 @@ class ProcessValidationController extends BaseController
     #[Route('/validation/refuse-lot/{etape}/{transition}', name: 'app_validation_refuser_lot')]
     public function refuseLot(
         DpeParcoursRepository $dpeParcoursRepository,
-        string              $etape,
-        string              $transition,
-        Request             $request
+        string                $etape,
+        string                $transition,
+        Request               $request
     ): Response {
         if ($request->isMethod('POST')) {
             $sParcours = $request->request->get('parcours');
@@ -484,9 +476,9 @@ class ProcessValidationController extends BaseController
     #[Route('/validation/reserve-lot/{etape}/{transition}', name: 'app_validation_reserver_lot')]
     public function reserveLot(
         DpeParcoursRepository $dpeParcoursRepository,
-        string              $etape,
-        string              $transition,
-        Request             $request
+        string                $etape,
+        string                $transition,
+        Request               $request
     ): Response {
         if ($request->isMethod('POST')) {
             $sParcours = $request->request->get('parcours');
@@ -528,205 +520,5 @@ class ProcessValidationController extends BaseController
             'id' => $id,
             'etape' => $etape,
         ]);
-    }
-
-    #[Route('/demande/reouverture', name: 'app_validation_demande_reouverture')]
-    public function demandeReouverture(
-        ParcoursRepository  $parcoursRepository,
-        FormationRepository $formationRepository,
-        VersioningParcours $versioningParcours,
-        Request             $request
-    ): Response {
-        $type = $request->query->get('type');
-        $id = $request->query->get('id');
-
-        $formation = null;
-        $parcours = null;
-
-        switch ($type) {
-            case 'formation':
-                $formation = $formationRepository->find($id);
-                $parcours = null;
-                $typeDpe = 'F';
-
-                if ($formation === null) {
-                    return JsonReponse::error('Formation non trouvée');
-                }
-                break;
-            case 'parcours':
-                $parcours = $parcoursRepository->find($id);
-
-                if ($parcours === null) {
-                    return JsonReponse::error('Parcours non trouvé');
-                }
-                $formation = $parcours->getFormation();
-                $typeDpe = 'P';
-                break;
-        }
-
-        if ($request->isMethod('POST')) {
-            $data = $request->request->all();
-
-            if ($this->isGranted('ROLE_SES')) {
-                $dpe = GetDpeParcours::getFromParcours($parcours);
-                if ($dpe === null) {
-                    return JsonReponse::error('DPE non trouvé');
-                }
-
-                //réouverture directe sans sauvegarde ou avec sauvegarde selon le choix
-                if ($data['demandeReouverture'] === 'MODIFICATION_SANS_CFVU') {
-
-                    $dpe->setEtatValidation(['en_cours_redaction_ss_cfvu' => 1]); //un état de processus différent pour connaitre le branchement ensuite
-                    $dpe->setEtatReconduction(TypeModificationDpeEnum::MODIFICATION_TEXTE);
-                    $now = new DateTimeImmutable('now');
-                    $versioningParcours->saveVersionOfParcours($parcours, $now, true, false);
-                    $histoEvent = new HistoriqueParcoursEvent($parcours, $this->getUser(), 'soumis_central', 'valide', $request);
-                    $this->eventDispatcher->dispatch($histoEvent, HistoriqueParcoursEvent::ADD_HISTORIQUE_PARCOURS);
-                    $this->entityManager->flush();
-                } elseif ($data['demandeReouverture'] === 'MODIFICATION_AVEC_CFVU') {
-                    $dpe->setEtatValidation(['soumis_central' => 1]);
-                    $dpe->setEtatReconduction(TypeModificationDpeEnum::MODIFICATION_MCCC);
-                    // todo: créer un nouveau DPE?
-                    // faire la copie de version
-                    $now = new DateTimeImmutable('now');
-                    $versioningParcours->saveVersionOfParcours($parcours, $now, true, true);
-
-                    $this->entityManager->flush();
-                }
-
-                return JsonReponse::success('DPE ouvert');
-            }
-
-            $demande = new DpeDemande();
-            $demande->setFormation($formation);
-            $demande->setParcours($parcours);
-            $demande->setNiveauDemande($typeDpe);
-            $demande->setArgumentaireDemande($data['argumentaire_demande_reouverture']);
-            $demande->setEtatDemande('attente');
-            $demande->setNiveauModification(TypeModificationDpeEnum::tryFrom($data['demandeReouverture']));
-            //$demande->setUser($this->getUser());
-            $this->entityManager->persist($demande);
-            $this->entityManager->flush();
-
-            //mail au SES
-            $dpeDemandeEvent = new DpeDemandeEvent($demande, $this->getUser());
-            $this->eventDispatcher->dispatch($dpeDemandeEvent, DpeDemandeEvent::DPE_DEMANDE_CREATED);
-
-            return JsonReponse::success('Demande de réouverture enregistrée');
-            //todo: gérer une redirection vers la page edit du parcours
-            //return $this->redirectToRoute('app_parcours_edit', ['id' => $parcours->getId()]);
-        }
-
-        if ($this->isGranted('ROLE_SES')) {
-            return $this->render('process_validation/_demande_reouverture_ses.html.twig', [
-                'type' => $type,
-                'id' => $id,
-            ]);
-        }
-
-        return $this->render('process_validation/_demande_reouverture.html.twig', [
-            'type' => $type,
-            'id' => $id,
-        ]);
-    }
-
-    #[Route('/demande/reouverture/cloture', name: 'app_validation_demande_reouverture_cloture')]
-    //autorisation de la cloture si pas de différence entre les versions
-    public function demandeReouvertureCloture(
-        DpeParcoursRepository  $dpeParcoursRepository,
-        ParcoursRepository  $parcoursRepository,
-        VersioningParcours $versioningParcours,
-        Request             $request
-    ): Response {
-        $type = $request->query->get('type');
-        $id = $request->query->get('id');
-
-        $parcours = null;
-
-        switch ($type) {
-            case 'parcours':
-                $parcours = $parcoursRepository->find($id);
-                $dpeParcours = $dpeParcoursRepository->findLastDpeForParcours($parcours);
-
-                if ($parcours === null ||  $dpeParcours === null) {
-                    return JsonReponse::error('Parcours non trouvé');
-                }
-
-                //todo: gérer le cas du parcours par défaut...
-                $textDifferencesParcours = $versioningParcours->getDifferencesBetweenParcoursAndLastVersion($parcours);
-                $version = $versioningParcours->hasLastVersion($parcours);
-
-                //parcourir toutes les clés de $textDifferencesParcours pour vérifier si il y a des différences (valeur non vide)
-                $hasDifferences = false;
-                foreach ($textDifferencesParcours as $key => $value) {
-                    if ($value !== '') {
-                        $hasDifferences = true;
-                        break;
-                    }
-                }
-
-                break;
-        }
-
-        if ($request->isMethod('POST')) {
-            $data = $request->request->all();
-
-            if ($this->isGranted('ROLE_SES')) {
-
-                $dpe = GetDpeParcours::getFromParcours($parcours);
-
-                if ($dpe === null) {
-                    return JsonReponse::error('DPE non trouvé');
-                }
-                //réouverture directe sans sauvegarde ou avec sauvegarde selon le choix
-                if ($dpe->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_TEXTE) {
-//todo: tester si pas de diff, et si oui revenir au contenu de départ
-                    if ($hasDifferences === true) {
-                        //rollback ds modifs depuis la dernière version
-                        $versioningParcours->rollbackToLastVersion($parcours);
-                    }
-                    $dpe->setEtatValidation(['publie' => 1]); //un état de processus différent pour connaitre le branchement ensuite
-                    $parcours->getDpeParcours()->first()->setEtatReconduction(TypeModificationDpeEnum::OUVERT);
-
-                    $histoEvent = new HistoriqueParcoursEvent($parcours, $this->getUser(), 'cloture_ses_ss_cfvu', 'valide', $request);
-                    $this->eventDispatcher->dispatch($histoEvent, HistoriqueParcoursEvent::ADD_HISTORIQUE_PARCOURS);
-
-                    $this->entityManager->flush();
-                } elseif ($dpe->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_MCCC || $dpe->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_MCCC_TEXTE) {
-                    $process = $this->validationProcess->getEtape('ses');
-                    $this->parcoursProcess->etatParcours($dpe, $process);
-                    $dpe->setEtatReconduction(TypeModificationDpeEnum::OUVERT);
-                    $this->parcoursProcess->valideParcours($dpe, $this->getUser(), $process, $request);
-
-                    //                    $parcours->getDpeParcours()?->first()->setEtatValidation(['central' => 1]); //un état de processus différent pour connaitre le branchement ensuite
-                    //                    $formation->getDpe()?->getDpeParcours()->first()->setEtatValidation(['soumis_central' => 1]);
-                    //processus de passage en cfvu
-
-                }
-
-                return JsonReponse::success('DPE cloturé');
-            }
-
-
-         //   return JsonReponse::success('Demande de réouverture enregistrée');
-        }
-
-
-        if ($this->isGranted('ROLE_SES')) {
-            return $this->render('process_validation/_demande_reouverture_cloture_ses.html.twig', [
-                'type' => $type,
-                'id' => $id,
-                'hasDifferences' => $hasDifferences,
-                'type_modif' =>$dpeParcours->getEtatReconduction()->value,
-                'stringDifferencesParcours' => $textDifferencesParcours,
-                'hasLastVersion' => $version,
-            ]);
-        }
-
-        return $this->render('process_validation/_demande_reouverture.html.twig', [
-            'type' => $type,
-            'id' => $id,
-        ]);
-
     }
 }

@@ -12,7 +12,6 @@ namespace App\Form;
 use App\Entity\Parcours;
 use App\Entity\User;
 use App\Enums\TypeParcoursEnum;
-use App\Form\Type\YesNoType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;

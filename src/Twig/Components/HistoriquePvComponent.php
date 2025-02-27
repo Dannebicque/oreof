@@ -15,6 +15,7 @@ final class HistoriquePvComponent
     public ?Parcours $parcours = null;
     public ?ChangeRf $changeRf = null;
     public string $type = 'parcours';
+    public bool $hasHistorique = false;
     public bool $hasPv = false;
     public ?string $fichier = null;
 
@@ -48,6 +49,7 @@ final class HistoriquePvComponent
 
 
         if ($historique !== null) {//état conseil avant, les deux pour compatibilité
+            $this->hasHistorique = true;
             if (array_key_exists('fichier', $historique->getComplements())) {
                 $this->hasPv = true;
                 $this->fichier = $historique->getComplements()['fichier'];

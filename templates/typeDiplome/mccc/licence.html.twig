@@ -1,6 +1,6 @@
 <div {{ stimulus_controller('mccc--licence', {
     url: path('type_diplome_licence_change', {elementConstitutif:ec.id, parcours: parcours.id}),
-    typeMccc: typeMccc,
+    typeMccc: typeMccc
 }) }}>
     {% set disabled = raccroche or isMcccImpose %}
     <label for="choix_type_mccc" class="form-label">{{ 'mccc_licence.labels.choix_type_mccc.label'|trans({},

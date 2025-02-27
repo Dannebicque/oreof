@@ -11,7 +11,6 @@ namespace App\Controller;
 
 use App\Classes\Bcc;
 use App\Entity\BlocCompetence;
-use App\Entity\Formation;
 use App\Entity\Parcours;
 use App\Form\BlocCompetenceType;
 use App\Repository\BlocCompetenceRepository;
@@ -79,8 +78,6 @@ class BlocCompetenceController extends AbstractController
         int $indexParcours
     ): Response
     {
-        $typeDiplome = $typeDiplomeRegistry->getTypeDiplome($parcours->getFormation()->getTypeDiplome()->getModeleMcc());
-
         return $this->render('typeDiplome/but/_refCompetences.versioning.html.twig', [
             'competences' => $parcours->getFormation()->getButCompetences(),
             'parcours' => $parcours,

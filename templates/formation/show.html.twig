@@ -35,18 +35,18 @@
       }
 
       function saveFormationVersion (event) {
-        if(isSaveClicked === false){
-            let spinnerFormation = document.querySelector('#spinnerFormation');
-            spinnerFormation.classList.remove('d-none');
-            spinnerFormation.classList.add('d-flex');
-            isSaveClicked = true;
+        if (isSaveClicked === false) {
+          let spinnerFormation = document.querySelector('#spinnerFormation')
+          spinnerFormation.classList.remove('d-none')
+          spinnerFormation.classList.add('d-flex')
+          isSaveClicked = true
         } else {
-            event.preventDefault();
-            return false;
+          event.preventDefault()
+          return false
         }
       }
 
-      function showFormationVersion(){
+      function showFormationVersion () {
         let select = document.querySelector('#selectVersionFormation')
         let versionSelected = select.options[select.selectedIndex].value
         if (versionSelected !== '#') {
@@ -103,12 +103,6 @@
                     </a>
                 </li>
                 {% if formation.isHasParcours == false %}
-                    <li>
-                        <a class="nav-link p-2" href="#descriptif">
-                            <i class="fal fa-chevron-right"></i>
-                            Descriptif de la formation
-                        </a>
-                    </li>
                     <li>
                         <a class="nav-link p-2" href="#competences">
                             <i class="fal fa-chevron-right"></i>
@@ -243,51 +237,90 @@
                 <a class="dropdown-item" href="{{ path('app_competence_export_croise', {parcours:parcours.id}) }}">
                     Export du tableau croisé BCC/EC, par semestre (pdf)
                 </a>
-                <a class="dropdown-item" href="{{ path('app_competence_export_croise_global', {parcours:parcours.id}) }}">
+                <a class="dropdown-item"
+                   href="{{ path('app_competence_export_croise_global', {parcours:parcours.id}) }}">
                     Export du tableau croisé BCC/EC, global (xslx)
                 </a>
             </div>
         </div>
+        <div class="btn-group">
+            <button type="button"
+                    class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2 dropdown-toggle mb-1"
+                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="{{ iconShow }}"></i> Voir / Télécharger
+            </button>
+            <div class="dropdown-menu" style="">
+                <a href="{{ path('app_formation_export', {slug:formation.slug}) }}"
+                   class="dropdown-item"
+                   data-bs-toggle="tooltip"
+                   data-bs-placement="bottom"
+                   title="Télécharger en PDF"
+                >
+                    <i class="{{ iconDownload }}"></i>
+                    <span> Fiche descriptive (PDF)</span>
+                </a>
+
+                <a href="{{ path('app_plaquette_formation_export', {slug:formation.slug}) }}"
+                   class="dropdown-item"
+                   data-bs-toggle="tooltip"
+                   data-bs-placement="bottom"
+                   title="Télécharger la plaquette en PDF"
+                >
+                    <i class="{{ iconDownload }}"></i>
+                    <span> Plaquette (PDF)</span>
+                </a>
+            </div>
+        </div>
     {% else %}
-        <a href="#presentation"
-           class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2"
-           data-bs-toggle="tooltip"
-           data-bs-placement="bottom"
-           title="Télécharger les MCCC"
-        >
-            <i class="{{ iconShow }}"></i>
-            <span> MCCC Parcours</span>
-        </a>
-        <a href="#presentation"
-           class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2"
-           data-bs-toggle="tooltip"
-           data-bs-placement="bottom"
-           title="Voir les BCC"
-        >
-            <i class="{{ iconShow }}"></i>
-            <span> BCC Parcours</span>
-        </a>
+        <div class="btn-group">
+            <button type="button"
+                    class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2 dropdown-toggle mb-1"
+                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="{{ iconShow }}"></i> Voir / Télécharger
+            </button>
+            <div class="dropdown-menu" style="">
+                <a class="dropdown-item"
+                   href="#presentation"
+                   data-bs-toggle="tooltip"
+                   data-bs-placement="bottom"
+                   title="Télécharger les MCCC"
+                >
+                    <i class="{{ iconShow }}"></i>
+                    <span> MCCC Parcours</span>
+                </a>
+                <a href="#presentation"
+                   class="dropdown-item"
+                   data-bs-toggle="tooltip"
+                   data-bs-placement="bottom"
+                   title="Voir les BCC"
+                >
+                    <i class="{{ iconShow }}"></i>
+                    <span> BCC Parcours</span>
+                </a>
+                <a href="{{ path('app_formation_export', {slug:formation.slug}) }}"
+                   class="dropdown-item"
+                   data-bs-toggle="tooltip"
+                   data-bs-placement="bottom"
+                   title="Télécharger en PDF"
+                >
+                    <i class="{{ iconDownload }}"></i>
+                    <span> Fiche descriptive (PDF)</span>
+                </a>
+
+                <a href="{{ path('app_plaquette_formation_export', {slug:formation.slug}) }}"
+                   class="dropdown-item"
+                   data-bs-toggle="tooltip"
+                   data-bs-placement="bottom"
+                   title="Télécharger la plaquette en PDF"
+                >
+                    <i class="{{ iconDownload }}"></i>
+                    <span> Plaquette (PDF)</span>
+                </a>
+            </div>
+        </div>
     {% endif %}
 
-    <a href="{{ path('app_formation_export', {slug:formation.slug}) }}"
-       class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2"
-       data-bs-toggle="tooltip"
-       data-bs-placement="bottom"
-       title="Télécharger en PDF"
-    >
-        <i class="{{ iconDownload }}"></i>
-        <span> Fiche descriptive (PDF)</span>
-    </a>
 
-    <a href="{{ path('app_plaquette_formation_export', {slug:formation.slug}) }}"
-       class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2"
-       data-bs-toggle="tooltip"
-       data-bs-placement="bottom"
-       title="Télécharger la plaquette en PDF"
-    >
-        <i class="{{ iconDownload }}"></i>
-        <span> Plaquette (PDF)</span>
-    </a>
 
     {% if is_granted('CAN_FORMATION_EDIT_MY', formation) %}
         <a href="{{ path('app_formation_edit', {slug:formation.slug}) }}"

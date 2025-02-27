@@ -27,28 +27,43 @@ class DpeDemandeSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            DpeDemandeEvent::DPE_DEMANDE_CREATED => 'onDpeDemandeCreated',
+            DpeDemandeEvent::DPE_DEMANDE_OPENED => 'onDpeDemandeOpened',
             DpeDemandeEvent::DPE_DEMANDE_UPDATED => 'onDpeDemandeUpdated',
+            DpeDemandeEvent::DPE_DEMANDE_CLOSED => 'onDpeDemandeClosed',
         ];
     }
 
-    public function onDpeDemandeCreated(DpeDemandeEvent $event): void
+    public function onDpeDemandeOpened(DpeDemandeEvent $event): void
     {
         $dpeDemande = $event->getDpeDemande();
         $user = $event->getUser();
         $this->mailer->initEmail();
         $this->mailer->setTemplate(
-            'mails/dpe_demande_created.txt.twig',
+            'mails/dpe/dpe_demande_created.html.twig',
             ['dpeDemande' => $dpeDemande]
         );
-        $this->mailer->sendMessage(['oreof@univ-reims.fr', $user->getEmail()], '[ORéOF] Demande de DPE créée');
+        $this->mailer->sendMessage(['oreof@univ-reims.fr', $user->getEmail()], '[ORéOF] Réouverture de DPE');
+        $dpe = $dpeDemande->getFormation()?->getComposantePorteuse()?->getResponsableDpe();
+        $mails = [
+            $user->getEmail()
+        ];
+        $withDpe = false;
 
+        if ($dpe !== null && $dpe->getId() !== $user->getId()) {
+            $mails[] = $dpe->getEmail();
+            $withDpe = true;
+        }
         $this->mailer->initEmail();
         $this->mailer->setTemplate(
-            'mails/dpe/dpe_demande_created_demandeur.txt.twig',
-            ['dpeDemande' => $dpeDemande]
+            'mails/dpe/dpe_demande_created_demandeur.html.twig',
+            [
+                'dpeDemande' => $dpeDemande,
+                'withDpe' => $withDpe
+            ]
         );
-        $this->mailer->sendMessage([$user->getEmail()], '[ORéOF] Demande de DPE créée');
+
+
+        $this->mailer->sendMessage($mails, '[ORéOF] Réouverture de DPE');
     }
 
     public function onDpeDemandeUpdated(DpeDemandeEvent $event): void

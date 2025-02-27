@@ -55,7 +55,7 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
 
     public function calculStructureParcours(Parcours $parcours, bool $withEcts = true, bool $withBcc = true): StructureParcours
     {
-        return $this->calculStructureParcours->calcul($parcours, $withEcts, $withBcc);
+        return $this->calculStructureParcours->calcul($parcours, $withEcts, $withBcc, true);
     }
 
     public function exportExcelMccc(

@@ -13,9 +13,7 @@ use App\Classes\JsonReponse;
 use App\Classes\verif\FicheMatiereValide;
 use App\DTO\ProcessData;
 use App\Entity\FicheMatiere;
-use App\Entity\User;
 use App\Events\HistoriqueFicheMatiereEvent;
-use App\Repository\FicheMatiereRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\DependencyInjection\Attribute\Target;
@@ -86,8 +84,14 @@ class FicheMatiereProcess extends AbstractProcess
 
     public function ouvertureFicheMatiere(FicheMatiere $ficheMatiere, UserInterface $user, Request $request)
     {
-        $this->ficheMatiereWorkflow->apply($ficheMatiere, 'rouvrir_fiche_matiere');
+        if ($this->ficheMatiereWorkflow->can($ficheMatiere, 'rouvrir_fiche_matiere')) {
+            $this->ficheMatiereWorkflow->apply($ficheMatiere, 'rouvrir_fiche_matiere');
+
+        } elseif ($this->ficheMatiereWorkflow->can($ficheMatiere, 'rouvrir_fiche_matiere_b')) {
+            $this->ficheMatiereWorkflow->apply($ficheMatiere, 'rouvrir_fiche_matiere_b');
+
+        }
         $this->entityManager->flush();
-        return $this->dispatchEventFicheMatiere($ficheMatiere, $user, 'rouvrir_fiche_matiere', $request, 'info');
+        return $this->dispatchEventFicheMatiere($ficheMatiere, $user, 'reouvrir_fiche_matiere', $request, 'info');
     }
 }

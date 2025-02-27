@@ -434,26 +434,33 @@ validation.valider.transmis_pour_publication: validation.valider.transmis_pour_p
 historique.validation.fiche_matiere.ses: 'Historique de validation fiche EC/matière'
 validation.valider.fiches_matieres: 'Valider et soumettre les fiches EC/matière'
 demande.reouverture: 'Demander la réouverture du DPE'
+demande.reouverture.formation: 'Demander de modification de la mention'
+demande.reouverture.formation.title: 'Demander de modification de la mention'
 demande.reouverture.fiche: 'Réouvrir la fiche'
 demande.reouverture.annuler: 'Annuler la demander de réouverture du DPE'
 demande.reouverture.title: 'Réouverture du DPE'
+demande.reouverture.mention.label: 'Précisez quelle(s) modification(s) vous souhaitez apporter à la mention'
 demande.reouverture.fiche.title: 'Réouverture de fiche EC/matière'
 demande.reouverture.annuler.title: 'Annuler la demande de réouverture du DPE'
 demande.reouverture.fiche.annuler.title: 'Annuler la demande de réouverture de fiche EC/matière'
 demande.reouverture.annuler.alerte: 'Annuler la réouverture du DPE, sous réserve qu''aucune modificaiton n''a été faite.' #todo: sauf si possible de retour...
 demande.reouverture.fiche.alerte: 'Réouverture de fiche EC/matière'
-demande.reouverture.alerte: 'La demande de réouverture permet la réouvertue des onglets du formulaire de saisie. Les demandes doivent être argumentés afin de déterminer si les modifications impliquent un passage en conseil de composantes, en CFVU ou peuvent être appliqués directement.'
-demande.reouverture.modification.mccc.label: 'modifications de la maquette et/ou des MCCC'
-demande.reouverture.modification.mccc.help: demande.reouverture.modification.mccc.help
-demande.reouverture.modification.maquette.label: 'modifications de la maquette et/ou des MCCC'
-demande.reouverture.modification.maquette.help: demande.reouverture.modification.maquette.help
+demande.reouverture.alerte: 'La demande de réouverture permet la réouverture des onglets du formulaire de saisie. Les demandes doivent être argumentées afin de déterminer si les modifications de maquette/MCCC impliquent un passage en conseil de composantes, en CFVU ou peuvent être appliquées directement.'
+demande.reouverture.mention.alerte: 'La demande de réouverture permet la réouverture des onglets du formulaire de saisie. Les demandes doivent être argumentées afin de déterminer si les modifications se structure impliquent un passage en conseil de composantes, en CFVU ou peuvent être appliquées directement.'
 demande.reouverture.modification.argumentaire.label: 'Motif(s) de la demande de réouverture (texte servant de justificatif en cas de passage en CFVU)'
 demande.reouverture.modification.argumentaire.help: demande.reouverture.modification.argumentaire.help
 btn.demande.reouverture.modification: 'Demander la réouverture du projet DPE'
-demande.reouverture.modification.texte.label: 'modifications des descriptifs'
-demande.reouverture.modification.texte.help: demande.reouverture.modification.texte.help
-demande.reouverture.modification.mccc.texte.label: 'modifications des descriptifs et de la maquette/MCCC'
-demande.reouverture.modification.mccc.texte.help: demande.reouverture.modification.mccc.texte.help
+
+demande.reouverture.modification.texte.label: 'Modifications des descriptifs (pas de passage en CFVU).'
+demande.reouverture.modification.texte.help: 'Les modifications des textes et descriptifs apportées au parcours ne nécessitent pas de passage en CFVU'
+demande.reouverture.modification.mccc.texte.label: 'Modifications des descriptifs et de la maquette/MCCC.'
+demande.reouverture.modification.mccc.texte.help: 'Les modifications apportées à la maquette du parcours nécessitent un passage en CFVU'
+
+demande.reouverture.mention.modification.texte.label: 'Modifications des descriptifs de la mention (pas de passage en CFVU).'
+demande.reouverture.mention.modification.texte.help: 'Les modifications des textes et descriptifs apportées à la formation ne nécessitent pas de passage en CFVU'
+demande.reouverture.mention.modification.mccc.texte.label: 'Modifications des parcours de la mention, de sa structure et des textes descriptifs.'
+demande.reouverture.mention.modification.mccc.texte.help: 'Les modifications apportées à la formation (modification d''un parcours, ajout d''un parcours,...) nécessitent un passage en CFVU'
+
 demande.reouverture.label: 'Précisez quelle(s) modification(s) vous souhaitez apporter à la formation'
 demande.reouverture.help: demande.reouverture.help
 historique.validation.fiche_matiere: 'Historique de validation fiche EC/matière'
@@ -489,14 +496,14 @@ ficheMatiere.reserve.soumis_central.flash.success: ficheMatiere.reserve.soumis_c
 demande.reouverture.ses.alerte: 'Vous avez demandé la réouverture du projet DPE pour y apporter des modifications.'
 demande.reouverture.ses.label: 'Précisez le type de réouverture souhaitée :'
 demande.reouverture.ses.help: ' '
-demande.reouverture.modification.ses.sans_cfvu.label: 'Demande de réouverture sans passage en CFVU'
+demande.reouverture.modification.ses.sans_cfvu.label: 'Demande de réouverture des textes. Pas de passage en CFVU'
 demande.reouverture.modification.ses.sans_cfvu.help: 'Les modifications apportées à la formation ne nécessitent pas de passage en CFVU'
-demande.reouverture.modification.ses.avec_cfvu.label: 'Demande de réouverture avec passage en CFVU'
+demande.reouverture.modification.ses.avec_cfvu.label: 'Demande de réouverture pour modification des textes et de la maquette (MCCC, heures, BCC). Passage en CFVU'
 demande.reouverture.modification.ses.avec_cfvu.help: 'Les modifications apportées à la formation nécessitent un passage en CFVU'
 historique.validation.ouverture_ses_ss_cfvu: 'Demande de réouverture du DPE'
 validation.ouverture_ses_ss_cfvu: 'Valider la demande de réouverture'
-demande.reouverture.clore.title: 'Fermeture de la demande de réouverture'
-demande.reouverture.clore: 'Valider et soumettre la formation'
+demande.reouverture.mention.clore.title: 'Valider et soumettre la formation'
+demande.reouverture.mention.clore: 'Valider et soumettre la formation'
 demande.reouverture.ses.cloture.alerte: 'La demande de réouverture sera clôturée et transmise au central pour traitement.'
 demande.reouverture.cloture.ses.label: 'Je confirme la clôture et soumets les modifications'
 demande.reouverture.cloture.ses.help: 'Confirmer la demande de réouverture et soumettre les modifications à la CFVU'

@@ -9,7 +9,6 @@
 
 namespace App\DTO;
 
-use App\Entity\ElementConstitutif;
 use App\Entity\Ue;
 
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -43,8 +42,8 @@ class StructureUe
     #[Groups(['DTO_json_versioning'])]
     public HeuresEctsUe $heuresEctsUe;
 
-    private bool $withEcts = true;
-    private bool $withBcc = true;
+    private bool $withEcts;
+    private bool $withBcc;
 
     public function __construct(?Ue $ue, bool $raccroche = false, ?string $display = null, ?Ue $ueOrigine = null, bool $withEcts = true, $withBcc = true)
     {

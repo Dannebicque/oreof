@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block content %}
+    {# todo: gérer le raccroché du semestre, ou UE #}
     {{ component('alerte', {type:'warning', message: 'Actuellement les indicateurs ne sont pas mis à jour en temps réel. Merci d\'actualiser cette page si nécessaire.'}) }}
     <div class="card"
             {{ stimulus_controller('parcours--ec', {
@@ -14,21 +15,21 @@
 
                     {% if semParc.semestre.semestreRaccroche != null %}
                         {% set semestre = semParc.semestre.semestreRaccroche %}
-                        {% set raccrocheSem = true %}
+                        {% set isSemestreRaccroche = true %}
                     {% else %}
                         {% set semestre = semParc %}
-                        {% set raccrocheSem = false %}
+                        {% set isSemestreRaccroche = false %}
                     {% endif %}
                     <tr>
                         <th colspan="7" class="text-center font-weight-bold">
-                            {{ semParc.display }}</th>
+                            {{ semParc.display }} {% if isSemestreRaccroche == true %}<i class="fa fa-link"></i>{% endif %}</th>
                     </tr>
 
 
                     {% for ue in semestre.semestre.ues|filter(ue => ue.ueParent == null) %}
-                        {{ include('parcours_ec/_ue.html.twig') }}
+                        {{ include('parcours_ec/_ue.html.twig', {isSemestreRaccroche: isSemestreRaccroche}) }}
                         {% for uee in ue.ueEnfants %}
-                            {{ include('parcours_ec/_ue.html.twig', {ue:uee}) }}
+                            {{ include('parcours_ec/_ue.html.twig', {ue:uee, isSemestreRaccroche: isSemestreRaccroche}) }}
                         {% endfor %}
                     {% endfor %}
 
@@ -73,14 +74,14 @@
             <span> Retour à la formation</span>
         </a>
     {% else %}
-    <a href="{{ path('app_parcours_edit', {id:parcours.id}) }}"
-       class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
-       data-bs-toggle="tooltip"
-       data-bs-placement="bottom"
-       title="Retour au parcours"
-    >
-        <i class="{{ iconBack }}"></i>
-        <span> Retour au parcours</span>
-    </a>
+        <a href="{{ path('app_parcours_edit', {id:parcours.id}) }}"
+           class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+           data-bs-toggle="tooltip"
+           data-bs-placement="bottom"
+           title="Retour au parcours"
+        >
+            <i class="{{ iconBack }}"></i>
+            <span> Retour au parcours</span>
+        </a>
     {% endif %}
 {% endblock %}

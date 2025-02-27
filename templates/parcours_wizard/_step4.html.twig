@@ -2,6 +2,8 @@
     url: path('structure_parcours_detail_formation_parcours', {parcours: parcours.id}),
     urlSave: path('app_parcours_save', {parcours:parcours.id}),
     urlGenereStructure: path('app_formation_genere_structure', {parcours:parcours.id}),
+    semestreAffiche: semestreAffiche,
+    ueAffichee: ueAffichee
 }) }}
         data-action="
         semestre--raccrocher:modalHide@window->parcours--step4#refreshListe semestre--manage:modalHide@window->parcours--step4#refreshListe structure--semestre:refreshListe@window->parcours--step4#refreshListe

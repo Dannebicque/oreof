@@ -1,9 +1,9 @@
 {% extends 'base.html.twig' %}
 
-{% block header %}Demandes Ouverture DPE{% endblock %}
+{% block header %}DPE ouverts{% endblock %}
 
 {% block content %}
-    <h2 class="small-title mt-3">Demandes en attente</h2>
+    <h2 class="small-title mt-3">DPE ouverts</h2>
     <div class="row">
         <div class="col-12">
             <div class="card">
@@ -13,49 +13,57 @@
                         <tr>
                             <th>Mention</th>
                             <th>Parcours</th>
+                            <th>Demande de ?</th>
                             <th>Date demande</th>
+                            <th>Date clôture</th>
                             <th>Niveau demande</th>
                             <th>Etat</th>
-                            <th>Actions</th>
+                            <th></th>
                         </tr>
                         </thead>
                         <tbody>
                         {% for demande in demandes %}
                             <tr>
-                                <td>{{ demande.formation.displayLong }}</td>
-                                <td>
+                                <td rowspan="2">{{ demande.formation.displayLong(false) }}</td>
+                                <td rowspan="2">
                                     {% if demande.niveauDemande == 'F' %}
-                                       <span class="badge bg-info">Tous les parcours</span>
+                                        <span class="badge bg-info">Mention</span>
                                     {% else %}
                                         {{ demande.parcours != null ? demande.parcours.libelle : '' }}
                                     {% endif %}
                                 </td>
+                                <td rowspan="2">
+                                    {{
+                                        demande.auteur != null ? demande.auteur.display : '-'
+                                    }}
+                                </td>
                                 <td>{{ demande.dateDemande|date('d/m/Y') }}</td>
+                                <td>{{ demande.dateCloture != null ?  demande.dateCloture|date('d/m/Y') : '-' }}</td>
                                 <td>
-                                    {{ demande.niveauModification|badgeEnum }} // {{ demande.niveauDemande }}</td>
-                                <td>{{ demande.etatDemande }}</td>
+                                    {{ demande.niveauModification|badgeEnum }}</td>
                                 <td>
-                                    <a type="button" class="btn btn-sm btn-outline-success"
-                                       href="">
-                                        Accepter
-                                    </a>
-                                    <button class="btn btn-sm btn-outline-danger"
-                                            type="button"
-                                            {{ stimulus_controller('modal', {
-                                                size: 'lg',
-                                                modalTitle: 'Refus de la demande de réouverture',
-                                                modalUrl: path('app_validation_demande_reouverture', {
-                                                    demande:demande.id,
-                                                }) }) }}
-                                            data-action="click->modal#openModal"
-                                            data-controller="tooltip"
-                                            data-tooltip-placement-value="bottom"
-
-                                            aria-label="Refus de la demande de réouverture"
-                                            data-bs-original-title="Refus de la demande de réouverture"
-                                    >
-                                        Refuser
-                                    </button>
+                                    {{ demande.etatDemande|badgeEnum }}
+                                </td>
+                                <td>
+                                    {% if demande.niveauDemande == 'F' %}
+                                        <a href="{{ path('app_formation_show', {'slug': demande.formation.slug}) }}"
+                                           target="_blank"
+                                           class="btn btn-sm btn-primary"
+                                           title="Voir la formation">
+                                            <i class="{{ iconShow }}"></i>
+                                        </a>
+                                        {% else %}
+                                        <a href="{{ path('app_parcours_show', {'id': demande.parcours.id}) }}"
+                                           target="_blank"
+                                           class="btn btn-sm btn-primary"
+                                           title="Voir le parcours">
+                                            <i class="{{ iconShow }}"></i>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="5">
+                                    {{ demande.argumentaireDemande }}
                                 </td>
                             </tr>
                         {% else %}

@@ -15,7 +15,6 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 #[ORM\Entity(repositoryClass: CompetenceRepository::class)]
 class Competence
@@ -26,7 +25,7 @@ class Competence
     private ?int $id = null;
 
     #[Groups('fiche_matiere_versioning')]
-    #[ORM\ManyToOne(fetch: 'EAGER', inversedBy: 'competences')]
+    #[ORM\ManyToOne(fetch: 'EAGER', inversedBy: 'competences', cascade: ['persist'])]
     private ?BlocCompetence $blocCompetence;
 
     #[Groups(['parcours_json_versioning', 'fiche_matiere_versioning', 'DTO_json_versioning'])]
@@ -46,6 +45,9 @@ class Competence
 
     #[ORM\ManyToMany(targetEntity: ElementConstitutif::class, mappedBy: 'competences')]
     private Collection $elementConstitutifs;
+
+    #[ORM\OneToOne(targetEntity: self::class, cascade: ['persist', 'remove'])]
+    private ?self $competenceOrigineCopie = null;
 
 
     public function __construct(?BlocCompetence $blocCompetence)
@@ -167,6 +169,18 @@ class Competence
         if ($this->elementConstitutifs->removeElement($elementConstitutif)) {
             $elementConstitutif->removeCompetence($this);
         }
+
+        return $this;
+    }
+
+    public function getCompetenceOrigineCopie(): ?self
+    {
+        return $this->competenceOrigineCopie;
+    }
+
+    public function setCompetenceOrigineCopie(?self $competenceOrigineCopie): static
+    {
+        $this->competenceOrigineCopie = $competenceOrigineCopie;
 
         return $this;
     }

@@ -3,7 +3,7 @@
     message: ('demande.reouverture.annuler.alerte')|trans({}, 'process')|nl2br|raw
 }) }}
 
-<form action="{{ path('app_validation_demande_reouverture_cloture', {type:type, id:id}) }}" method="post"
+<form action="{{ path('app_validation_demande_reouverture_cloture_mention', {formation:formation.id}) }}" method="post"
       enctype="multipart/form-data">
 
     {% if hasDifferences %}

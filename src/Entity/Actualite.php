@@ -16,7 +16,7 @@ class Actualite
     private ?int $id = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $datePublication = null;
+    private ?\DateTimeInterface $datePublication;
 
     #[ORM\Column(length: 255)]
     private ?string $titre = null;

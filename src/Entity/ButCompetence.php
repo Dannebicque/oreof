@@ -5,7 +5,6 @@ namespace App\Entity;
 use App\Repository\ButCompetenceRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -29,7 +28,7 @@ class ButCompetence
     #[Groups('parcours_json_versioning')]
     #[ORM\Column]
     private ?int $numero = null;
- 
+
     #[ORM\ManyToOne(inversedBy: 'butCompetences')]
     private ?Formation $formation = null;
 
@@ -45,6 +44,9 @@ class ButCompetence
     #[ORM\OneToMany(mappedBy: 'competence', targetEntity: ButNiveau::class)]
     #[ORM\OrderBy(['ordre' => 'ASC'])]
     private Collection $butNiveaux;
+
+    #[ORM\OneToOne(targetEntity: self::class, cascade: ['persist', 'remove'])]
+    private ?self $butCompetenceOrigineCopie = null;
 
     public function __construct()
     {
@@ -161,5 +163,17 @@ class ButCompetence
     public function getDisplay(): string
     {
         return '['.$this->getNomCourt().'] ' . $this->getLibelle();
+    }
+
+    public function getButCompetenceOrigineCopie(): ?self
+    {
+        return $this->butCompetenceOrigineCopie;
+    }
+
+    public function setButCompetenceOrigineCopie(?self $butCompetenceOrigineCopie): static
+    {
+        $this->butCompetenceOrigineCopie = $butCompetenceOrigineCopie;
+
+        return $this;
     }
 }

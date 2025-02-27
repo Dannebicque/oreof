@@ -3,6 +3,7 @@
 }) }}>
     {% form_theme form 'communs/form_theme.html.twig' %}
     {{ form_start(form) }}
+    {{ form_row(form.descriptifHautPageAutomatique) }}
     {{ form_row(form.descriptifHautPage) }}
     {{ form_row(form.descriptifBasPage) }}
     {{ form_row(form.codeRNCP) }}

@@ -1,6 +1,11 @@
 <div class="row">
     <div class="col-12">
         <dl>
+            {% if is_granted('ROLE_ADMIN') %}
+                <dt>Id Fiche</dt>
+                <dd>#{{ ficheMatiere.id }}</dd>
+            {% endif %}
+
             {% if ficheMatiere.horsDiplome == false %}
                 <dt>Type de diplôme</dt>
                 <dd>{{ typeDiplome != null ? typeDiplome|typeDiplome : 'N.C.' }}</dd>
@@ -51,21 +56,6 @@
                         {% endfor %}
                     </ul>
                 </dd>
-            {% endif %}
-
-                <dt>Parcours/formation dans lequel la fiche est utilisée</dt>
-            {% if ficheMatiere.elementConstitutifs|length > 0 %}
-                <dd>
-                    <ul>
-                        {% for ec in ficheMatiere.elementConstitutifs %}
-                            <li>
-                            <strong>{{ ec.parcours.libelle }} </strong> - {{ ec.ue.display(ec.parcours) }} | {{ ec.code}} - ({{ ec.parcours.formation.displayLong }})
-                           </li>
-                        {% endfor %}
-                    </ul>
-                </dd>
-                {% else %}
-                <dd><span class="badge bg-danger">Aucun EC n'utilise cette fiche</span></dd>
             {% endif %}
             <dt>Code Apogée</dt>
             <dd>{{ ficheMatiere.codeApogee ?? 'Non calculé' }}</dd>

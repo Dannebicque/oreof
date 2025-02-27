@@ -2,7 +2,6 @@
 
 namespace App\Service;
 
-use App\Classes\CalculStructureParcours;
 use App\Entity\Etablissement;
 use App\Entity\Parcours;
 use App\Enums\TypeParcoursEnum;

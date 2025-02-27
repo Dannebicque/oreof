@@ -4,20 +4,14 @@ namespace App\Controller;
 
 use App\Classes\GetHistorique;
 use App\Entity\DpeParcours;
-use App\Entity\Formation;
-use App\Entity\ParcoursVersioning;
 use App\Repository\FormationRepository;
-use App\Service\ApiJsonExport;
-use App\Service\VersioningParcours;
 use DateTime;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGenerator;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class ApiSiteWebController extends AbstractController
 {
@@ -28,7 +22,7 @@ class ApiSiteWebController extends AbstractController
     ): JsonResponse
     {
 
-        // DATE DE PUBLICATION : 30-09-2024 
+        // DATE DE PUBLICATION : 30-09-2024
         $datePublication = new DateTime();
         $datePublication->setDate(2024, 9, 30);
         $datePublication->setTime(0, 0, 0, 0);
@@ -41,17 +35,17 @@ class ApiSiteWebController extends AbstractController
 
         foreach ($formations as $formation) {
             /**
-             * 
+             *
              * NE PRENDRE QUE LES PARCOURS QUI SONT ÉTIQUETÉS COMME PUBLIÉS
              *  - Filtrer sur l'état de validation 'DpeParcours'
-             * 
+             *
              */
             $tParcours = [];
             foreach ($formation->getParcours() as $parcours) {
                 $isPubliable = false;
 
                 if($parcours->getDpeParcours()?->last() instanceof DpeParcours){
-                    $etatValidation = $parcours->getDpeParcours()?->last()->getEtatValidation();        
+                    $etatValidation = $parcours->getDpeParcours()?->last()->getEtatValidation();
 
                     if($etatValidation === ['valide_a_publier' => 1] || $etatValidation === ['publie' => 1]){
                         $isPubliable = true;

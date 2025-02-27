@@ -5,7 +5,6 @@ namespace App\Repository;
 use App\Entity\ButApprentissageCritique;
 use App\Entity\ButCompetence;
 use App\Entity\Semestre;
-use App\Entity\Ue;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

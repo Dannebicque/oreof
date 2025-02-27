@@ -17,7 +17,6 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 #[ORM\Entity(repositoryClass: UeRepository::class)]
 class Ue
@@ -37,11 +36,11 @@ class Ue
     #[ORM\ManyToOne(inversedBy: 'ues')]
     private ?Semestre $semestre = null;
 
-    #[ORM\ManyToOne(fetch: 'EAGER')]
+    #[ORM\ManyToOne(fetch: 'EAGER', cascade: ['persist'])]
     private ?TypeUe $typeUe = null;
 
     #[Groups(['DTO_json_versioning'])]
-    #[ORM\ManyToOne(fetch: 'EAGER')]
+    #[ORM\ManyToOne(fetch: 'EAGER', cascade: ['persist'])]
     private ?NatureUeEc $natureUeEc = null;
 
     #[ORM\OneToMany(mappedBy: 'ue', targetEntity: ElementConstitutif::class, cascade: [
@@ -80,6 +79,9 @@ class Ue
 
     #[ORM\Column(length: 10, nullable: true)]
     private ?string $codeApogee = null;
+
+    #[ORM\OneToOne(targetEntity: self::class, cascade: ['persist', 'remove'])]
+    private ?self $ueOrigineCopie = null;
 
     public function __construct()
     {
@@ -386,6 +388,18 @@ class Ue
     public function setCodeApogee(?string $codeApogee): static
     {
         $this->codeApogee = $codeApogee;
+
+        return $this;
+    }
+
+    public function getUeOrigineCopie(): ?self
+    {
+        return $this->ueOrigineCopie;
+    }
+
+    public function setUeOrigineCopie(?self $ueOrigineCopie): static
+    {
+        $this->ueOrigineCopie = $ueOrigineCopie;
 
         return $this;
     }

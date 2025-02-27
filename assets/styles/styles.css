@@ -3315,7 +3315,7 @@ img {
     --transition-time: 400ms;
     --transition-time-long: 1000ms;
     --transition-time-short: 200ms;
-    --nav-size-slim: 5rem;
+    --nav-size-slim: 4rem;
     --nav-size: 18rem;
     --footer-size: 4.5rem;
     --input-height: 2.25rem;
@@ -14715,8 +14715,8 @@ html[data-placement='horizontal'] .nav-container .menu-container {
 }
 
 html[data-placement='horizontal'] .nav-container .menu-container .menu {
-    margin-left: 5rem;
-    margin-right: 2rem;
+    margin-left: 1rem;
+    margin-right: 0.5rem;
     height: 100%;
     /* All li items - all of the items main and sub */
     /* Only top level li items - main menu items */
@@ -14744,7 +14744,7 @@ html[data-placement='horizontal'] .nav-container .menu-container .menu li a {
 }
 
 html[data-placement='horizontal'] .nav-container .menu-container .menu > li > a {
-    padding: 0 1.5rem;
+    padding: 0 1rem;
     height: 100%;
     display: inline-flex;
     align-items: center;

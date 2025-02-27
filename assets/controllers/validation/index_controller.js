@@ -9,6 +9,7 @@
 import { Controller } from '@hotwired/stimulus'
 import callOut from '../../js/callOut'
 import JsonResponse from '../../js/JsonResponse'
+import updateUrl from '../../js/updateUrl'
 
 export default class extends Controller {
   static values = {
@@ -28,6 +29,14 @@ export default class extends Controller {
   async _updateListe() {
     const composante = document.getElementById('composante').value
     const typeValidation = document.getElementById('type_validation').value
+
+    updateUrl({
+      composante,
+      typeValidation,
+    })
+
+    // mettre à jour l'URL pour ajouter ces paramètres, retirer si vide
+
     if (composante !== '' && typeValidation !== '') {
       const body = new URLSearchParams({
         composante,
@@ -120,6 +129,35 @@ export default class extends Controller {
 
       const body = new URLSearchParams({
         fiches,
+      })
+
+      this.actionTarget.innerHTML = ''
+      const reponse = await fetch(`${event.params.url}?${body.toString()}`)
+      this.actionTarget.innerHTML = await reponse.text()
+
+      // await fetch(`${event.params.url}?${body.toString()}`).then((response) => {
+      //   if (response.status === 200) {
+      //     callOut('Fiches validées', 'success')
+      //     window.location.reload()
+      //   } else {
+      //     callOut('Une erreur est survenue', 'danger')
+      //   }
+      // })
+    }
+  }
+
+  async valide_ouverture(event) {
+    const liste = document.querySelectorAll('.check-all:checked')
+    if (liste.length === 0) {
+      callOut('Veuillez sélectionner au moins un parcours', 'danger')
+    } else {
+      const parcours = []
+      liste.forEach((item) => {
+        parcours.push(item.value)
+      })
+
+      const body = new URLSearchParams({
+        parcours,
       })
 
       this.actionTarget.innerHTML = ''

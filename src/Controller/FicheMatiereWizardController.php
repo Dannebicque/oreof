@@ -9,6 +9,7 @@
 
 namespace App\Controller;
 
+use App\Classes\GetDpeParcours;
 use App\Entity\FicheMatiere;
 use App\Entity\FicheMatiereMutualisable;
 use App\Form\FicheMatiereStep1Type;
@@ -22,8 +23,9 @@ use App\Repository\ComposanteRepository;
 use App\Repository\FicheMatiereMutualisableRepository;
 use App\Repository\FormationRepository;
 use App\Repository\ParcoursRepository;
-use App\Repository\TypeDiplomeRepository;
+use App\Repository\TypeEpreuveRepository;
 use App\TypeDiplome\TypeDiplomeRegistry;
+use App\Utils\Access;
 use App\Utils\JsonRequest;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -240,12 +242,38 @@ class FicheMatiereWizardController extends AbstractController
     #[Route('/{ficheMatiere}/4/{type}', name: 'app_fiche_matiere_wizard_step_4', methods: ['GET'])]
     public function step4(
         TypeDiplomeRegistry $typeDiplomeRegistry,
+        TypeEpreuveRepository        $typeEpreuveRepository,
+
         FicheMatiere        $ficheMatiere,
         string              $type,
     ): Response {
+        if ($ficheMatiere->getParcours() !== null) {
+            $dpeParcours = GetDpeParcours::getFromParcours($ficheMatiere->getParcours());
+        }
+
+        if ($dpeParcours !==null && !Access::isAccessible($dpeParcours, 'cfvu')) {
+            return $this->render('fiche_matiere_wizard/_access_denied.html.twig');
+        }
+        // récupérer les parcours pour savoir si la fiche peut être éditée ou pas
+
+        $parcours = [];
+        $ecProprietaire = null;
+        foreach ($ficheMatiere->getElementConstitutifs() as $ec) {
+            if ($ec->getParcours() !== null) {
+                $parcours[] = $ec->getParcours();
+            }
+
+            if ($ec->getParcours() === $ficheMatiere->getParcours()) {
+                $ecProprietaire = $ec;
+            }
+        }
+
+
+        $typeDiplome = $ficheMatiere->getParcours()?->getFormation()?->getTypeDiplome();
+
+
         if ($type === 'but') {
             $form = $this->createForm(FicheMatiereStep4Type::class, $ficheMatiere);
-            $typeDiplome = $ficheMatiere->getParcours()?->getFormation()?->getTypeDiplome();
             $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());
 
             return $this->render('fiche_matiere_wizard/_step4But.html.twig', [
@@ -261,6 +289,22 @@ class FicheMatiereWizardController extends AbstractController
             return $this->render('fiche_matiere_wizard/_step4Hd.html.twig', [
                 'ficheMatiere' => $ficheMatiere,
                 'form' => $form->createView(),
+            ]);
+        }
+
+        if ($type === 'other') {
+            $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());
+            // $form = $this->createForm(FicheMatiereStep4HdType::class, $ficheMatiere);
+            return $this->render('fiche_matiere_wizard/_step4Other.html.twig', [
+                'ficheMatiere' => $ficheMatiere,
+               'parcours' => $parcours,
+                'typeEpreuves' => $typeEpreuveRepository->findByTypeDiplome($typeDiplome),
+
+                'mcccs' => $typeD !== null ? $typeD->getMcccs($ficheMatiere) : [],
+                'ecProprietaire' => $ecProprietaire,
+                'typeMccc' => $ficheMatiere->getTypeMccc(),
+                'templateForm' => $typeD !== null ? $typeD::TEMPLATE_FORM_MCCC : '',
+               // 'form' => $form->createView(),
             ]);
         }
     }

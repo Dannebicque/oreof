@@ -10,6 +10,7 @@
 namespace App\Utils;
 
 use App\Entity\DpeParcours;
+use App\Entity\Formation;
 use App\Enums\TypeModificationDpeEnum;
 
 abstract class Access {
@@ -21,5 +22,14 @@ abstract class Access {
         }
 
         return $dpeParcours->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_TEXTE;
+    }
+
+    public static function isAccessibleMention(Formation $formation, string $state): bool
+    {
+        if ($state === 'cfvu') {
+            return $formation->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION || $formation->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_PARCOURS;
+        }
+
+        return $formation->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_TEXTE;
     }
 }

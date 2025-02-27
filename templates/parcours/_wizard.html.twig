@@ -14,9 +14,8 @@
         role="tablist">
         {% if parcours.formation.isHasParcours == true %}
             <li class="nav-item" role="presentation">
-                <a class="nav-link {% if step == 1 %}active{% endif %} {% if not isAccessible(dpeParcours, 'ss_cfvu') %}disabled{% endif %}"
+                <a class="nav-link {% if step == 1 %}active{% endif %}"
                    data-bs-toggle="tab" href="#" role="tab"
-
                         {{ stimulus_action('parcours_wizard', 'changeStep', 'click', {step: 1}) }}
                 >
                     Présentation du parcours {{ parcoursState.onglets|etatRemplissage(1, 'parcours') }}
@@ -25,11 +24,10 @@
         {% endif %}
 
         <li class="nav-item" role="presentation">
-            <a class="nav-link {% if parcours.formation.isHasParcours == false %}{% if step == 2 %}active{% endif %}{% endif %} {% if not isAccessible(dpeParcours, 'ss_cfvu') %}disabled{% endif %}"
+            <a class="nav-link {% if parcours.formation.isHasParcours == false %}{% if step == 2 %}active{% endif %}{% endif %}"
                data-bs-toggle="tab" href="#" role="tab" aria-selected="{% if parcours.formation.isHasParcours ==
                 false %}true{% endif %}"
                     {{ stimulus_action('parcours_wizard', 'changeStep', 'click', {step: 2}) }}
-
             >
                 Descriptif {{ parcoursState.onglets|etatRemplissage(2, 'parcours') }}
             </a>
@@ -39,7 +37,6 @@
             <a class="nav-link {% if step == 3 %}active{% endif %}  {% if not isAccessible(dpeParcours, 'cfvu') %}disabled{% endif %}"
                data-bs-toggle="tab" href="#" role="tab"
                aria-selected="false"
-
                     {{ stimulus_action('parcours_wizard', 'changeStep', 'click', {step: 3}) }}
             >
                 Compétences {{ parcoursState.onglets|etatRemplissage(3, 'parcours') }}
@@ -56,7 +53,7 @@
             </a>
         </li>
         <li class="nav-item" role="presentation">
-            <a class="nav-link {% if step == 5 %}active{% endif %} {% if not isAccessible(dpeParcours, 'ss_cfvu') %}disabled{% endif %}"
+            <a class="nav-link {% if step == 5 %}active{% endif %}"
                data-bs-toggle="tab" href="#" role="tab"
                aria-selected="false"
                     {{ stimulus_action('parcours_wizard', 'changeStep', 'click', {step: 5}) }}
@@ -68,7 +65,6 @@
         <li class="nav-item" role="presentation">
             <a class="nav-link {% if step == 6 %}active{% endif %}" data-bs-toggle="tab" href="#" role="tab"
                aria-selected="false"
-               {% if not isAccessible(dpeParcours, 'ss_cfvu') %}disabled="disabled"{% endif %}
                     {{ stimulus_action('parcours_wizard', 'changeStep', 'click', {step: 6}) }}
             >
                 Et après... {{ parcoursState.onglets|etatRemplissage(6, 'parcours') }}
@@ -76,7 +72,7 @@
         </li>
         {% if is_granted('ROLE_SES') %}
             <li class="nav-item" role="presentation">
-                <a class="nav-link {% if step == 7 %}active{% endif %} {% if not isAccessible(dpeParcours, 'ss_cfvu') %}disabled{% endif %}"
+                <a class="nav-link {% if step == 7 %}active{% endif %}"
                    data-bs-toggle="tab" href="#" role="tab"
                    aria-selected="false"
                         {{ stimulus_action('parcours_wizard', 'changeStep', 'click', {step: 7}) }}
@@ -106,7 +102,6 @@
             <div class="tab-content">
                 <div class="tab-pane fade active show" id="step_1" role="tabpanel" {{ stimulus_target
                     ('parcours_wizard', 'content') }}>
-
                 </div>
             </div>
         </div>

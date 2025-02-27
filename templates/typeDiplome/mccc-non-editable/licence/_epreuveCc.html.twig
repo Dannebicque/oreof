@@ -1,0 +1,35 @@
+<div>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th></th>
+            <th>Pourcentage</th>
+            <th>Nb d'épreuve(s)</th>
+            <th>CC avec TP</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for mccc in mcccs %}
+        <tr>
+
+            <th>Contrôle continu ~° {{ loop.index }}</th>
+            <td>
+                {% if mccc.pourcentage is defined %}
+                {{ mccc.pourcentage }}%
+                {% else %}
+                   -%
+                {% endif %}
+            </td>
+            <td>2 épreuves</td>
+            <td>
+                {% if mccc.options is defined and mccc.options.cc_has_tp is defined and mccc.options.cc_has_tp == "on" %}
+                    Oui
+                {% else %}
+                    Non
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

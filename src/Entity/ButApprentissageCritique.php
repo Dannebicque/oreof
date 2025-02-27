@@ -36,6 +36,9 @@ class ButApprentissageCritique
     #[ORM\ManyToMany(targetEntity: FicheMatiere::class, mappedBy: 'apprentissagesCritiques')]
     private Collection $ficheMatieres;
 
+    #[ORM\OneToOne(targetEntity: self::class, cascade: ['persist', 'remove'])]
+    private ?self $butApprentissageCritiqueOrigineCopie = null;
+
     public function __construct()
     {
         $this->elementConstitutifs = new ArrayCollection();
@@ -140,5 +143,17 @@ class ButApprentissageCritique
     public function getDisplay(): string
     {
         return $this->code . ' - ' . $this->libelle;
+    }
+
+    public function getButApprentissageCritiqueOrigineCopie(): ?self
+    {
+        return $this->butApprentissageCritiqueOrigineCopie;
+    }
+
+    public function setButApprentissageCritiqueOrigineCopie(?self $butApprentissageCritiqueOrigineCopie): static
+    {
+        $this->butApprentissageCritiqueOrigineCopie = $butApprentissageCritiqueOrigineCopie;
+
+        return $this;
     }
 }

@@ -13,22 +13,10 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
-use Doctrine\Common\Annotations\AnnotationReader;
-use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
-use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
-use Symfony\Component\Serializer\Normalizer\BackedEnumNormalizer;
-use Symfony\Component\Serializer\Serializer;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-use Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use DateTimeImmutable;
-use App\Entity\ParcoursVersioning;
 use App\Service\VersioningParcours;
-use App\TypeDiplome\TypeDiplomeRegistry;
 use DateTime;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
 
 #[AsCommand(
     name: 'app:versioning-parcours',
@@ -59,7 +47,7 @@ class VersioningParcoursCommand extends Command
     protected function configure(): void
     {
         $this->addOption(
-            name: 'dpe-full-valid-database', 
+            name: 'dpe-full-valid-database',
             mode: InputOption::VALUE_NONE,
             description: 'Sauvegarde tous les parcours de la base de données en JSON'
         )
@@ -97,15 +85,15 @@ class VersioningParcoursCommand extends Command
             $dpe = $this->entityManager->getRepository(CampagneCollecte::class)->findOneBy(['defaut' => true]);
             $parcoursArray = $this->entityManager->getRepository(Parcours::class)->findAllParcoursForDpe($dpe);
             $parcoursArray = array_filter(
-                $parcoursArray, 
+                $parcoursArray,
                 fn($parcours) => $parcours->getFormation()->getTypeDiplome()->getLibelleCourt() !== "MEEF"
             );
-            $parcoursArray = array_filter($parcoursArray, 
+            $parcoursArray = array_filter($parcoursArray,
                 fn($p) => $p->getDpeParcours()->last() instanceof DpeParcours
-                    && ( 
+                    && (
                         $p->getDpeParcours()->last()->getEtatValidation() === ["publie" => 1]
                         || $p->getDpeParcours()->last()->getEtatValidation() === ["valide_a_publier" => 1]
-                    ) 
+                    )
             );
             $nombreParcours = count($parcoursArray);
             $io->progressStart($nombreParcours);
@@ -141,7 +129,7 @@ class VersioningParcoursCommand extends Command
 
             // Exclusion des MEEF
             $parcoursArray = array_filter(
-                $parcoursArray, 
+                $parcoursArray,
                 fn($p) => $p->getFormation()->getTypeDiplome()->getLibelleCourt() !== "MEEF"
             );
 
@@ -156,9 +144,9 @@ class VersioningParcoursCommand extends Command
 
                     $today = new DateTime('now');
                     $dateFormat = "d-m-Y";
-    
+
                     return $today->format($dateFormat) === $dateHistoriquePublication?->format($dateFormat);
-                }  
+                }
             );
 
             $nombreParcoursValides = count($parcoursArray);
@@ -169,8 +157,8 @@ class VersioningParcoursCommand extends Command
                     $io->progressStart($nombreParcoursValides);
                         foreach($parcoursArray as $parcoursCfvu){
                             $this->versioningParcours->saveVersionOfParcours(
-                                parcours: $parcoursCfvu, 
-                                now: new DateTimeImmutable(), 
+                                parcours: $parcoursCfvu,
+                                now: new DateTimeImmutable(),
                                 isCfvu: true
                             );
                             $io->progressAdvance(1);
@@ -246,7 +234,7 @@ class VersioningParcoursCommand extends Command
                 return Command::INVALID;
             }
         }
-        
+
         $io->warning("Option de la commande non reconnue. Choix possibles : ['single-parcours', 'dpe-full-valid-database', 'dpe-today-cfvu-valid']");
         return Command::INVALID;
     }

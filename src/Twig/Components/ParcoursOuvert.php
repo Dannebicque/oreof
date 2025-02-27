@@ -44,7 +44,11 @@ final class ParcoursOuvert
         $this->dpeParcours = GetDpeParcours::getFromParcours($this->parcours);
         if ($this->dpeParcours !== null) {
             $this->campagne = $this->dpeParcours->getCampagneCollecte();
-            if ($this->dpeParcours->getEtatReconduction() === TypeModificationDpeEnum::NON_OUVERTURE) {
+            if (
+                $this->dpeParcours->getEtatReconduction() === TypeModificationDpeEnum::NON_OUVERTURE ||
+                $this->dpeParcours->getEtatReconduction() === TypeModificationDpeEnum::NON_OUVERTURE_SES ||
+                $this->dpeParcours->getEtatReconduction() === TypeModificationDpeEnum::NON_OUVERTURE_CFVU
+            ) {
                 $this->isOuvert = false;
             } else {
                 $this->isOuvert = true;
@@ -59,9 +63,9 @@ final class ParcoursOuvert
         $this->campagne = $this->dpeParcours->getCampagneCollecte();
 
         if ($this->isOuvert) {
-            $this->dpeParcours->setEtatReconduction(TypeModificationDpeEnum::OUVERT);
+            $this->dpeParcours->setEtatReconduction(TypeModificationDpeEnum::OUVERTURE_SES);
         } else {
-            $this->dpeParcours->setEtatReconduction(TypeModificationDpeEnum::NON_OUVERTURE);
+            $this->dpeParcours->setEtatReconduction(TypeModificationDpeEnum::NON_OUVERTURE_SES);
         }
 
         $this->entityManager->flush();
@@ -70,9 +74,12 @@ final class ParcoursOuvert
     public function getColor(): string
     {
         if ($this->dpeParcours->getEtatReconduction() === TypeModificationDpeEnum::NON_OUVERTURE) {
+            return 'danger';
+        }
+
+        if ($this->dpeParcours->getEtatReconduction() === TypeModificationDpeEnum::NON_OUVERTURE_SES || $this->dpeParcours->getEtatReconduction() === TypeModificationDpeEnum::NON_OUVERTURE_CFVU) {
             return 'warning';
         }
         return 'success';
-
     }
 }

@@ -3,18 +3,27 @@
         <span class="badge bg-info ms-1 w-100">MCCC du parent</span>
     {% else %}
         <button
-                {% if this.deplacer == true and this.editable == true %}
+                {% if this.editable == false %}
                     {{ stimulus_controller('modal', {
                         size: 'lg',
                         nomEvenement: 'refreshListeEc',
                         details: {ue: this.ue.id, parcours: this.parcours.id},
                         modalTitle: 'Modalités de Contrôle des Connaissances et des Compétences',
-                        modalUrl: path('app_element_constitutif_mccc',{'id': this.elementConstitutif.id, parcours: this.parcours.id}) }) }}
+                        modalUrl: path('app_element_constitutif_mccc_non_editable',{'id': this.elementConstitutif.id, parcours: this.parcours.id}) }) }}
                 {% else %}
-                    {{ stimulus_controller('modal', {
-                        size: 'lg',
-                        modalTitle: 'Modalités de Contrôle des Connaissances et des Compétences',
-                        modalUrl: path('app_element_constitutif_mccc',{'id': this.elementConstitutif.id, parcours:this.parcours.id}) }) }}
+                    {% if this.deplacer == true and this.editable == true %}
+                        {{ stimulus_controller('modal', {
+                            size: 'lg',
+                            nomEvenement: 'refreshListeEc',
+                            details: {ue: this.ue.id, parcours: this.parcours.id},
+                            modalTitle: 'Modalités de Contrôle des Connaissances et des Compétences',
+                            modalUrl: path('app_element_constitutif_mccc',{'id': this.elementConstitutif.id, parcours: this.parcours.id}) }) }}
+                    {% else %}
+                        {{ stimulus_controller('modal', {
+                            size: 'lg',
+                            modalTitle: 'Modalités de Contrôle des Connaissances et des Compétences',
+                            modalUrl: path('app_element_constitutif_mccc',{'id': this.elementConstitutif.id, parcours:this.parcours.id}) }) }}
+                    {% endif %}
                 {% endif %}
                 data-action="click->modal#openModal"
                 class="btn btn-sm btn-outline-info ms-1 me-1 px-1 w-100"
@@ -25,8 +34,9 @@
         >
             {% if this.texte == true %}<i class="fal fa-marker"></i>{% endif %}
             <span class="badge bg-{% if this.etatMcccComplet == true %}success{% else %}warning{% endif %}">
-               {% if this.texte == true %}{% if this.etatMcccComplet == true %}Complet{% else %}A saisir{% endif %} {% else %}MCCC{% endif %} {% if this.isSynchroMccc %}
-                    <i class="fal fa-link"></i>{% endif %}
+               {% if this.texte == true %}{% if this.etatMcccComplet == true %}Complet{% else %}A saisir{% endif %} {% else %}MCCC{% endif %}
+                {% if this.isParcoursProprietaire == false and this.isMcccSpecifiques == false  %}
+                    <i class="fal fa-link" title="MCCC repris de la fiche matière"></i>{% endif %}
                 </span>
         </button>
     {% endif %}

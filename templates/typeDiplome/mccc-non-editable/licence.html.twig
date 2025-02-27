@@ -1,11 +1,11 @@
 {% if typeMccc == 'cci' %}
-    {{ include('typeDiplome/mccc/licence/_cci.html.twig', {disabled: true}) }}
+    {{ include('typeDiplome/mccc-non-editable/licence/_cci.html.twig') }}
 {% elseif typeMccc == 'cc' %}
-    {{ include('typeDiplome/mccc/licence/_cc.html.twig', {disabled: true}) }}
+    {{ include('typeDiplome/mccc-non-editable/licence/_cc.html.twig') }}
 {% elseif typeMccc == 'ct' %}
-    {{ include('typeDiplome/mccc/licence/_ct.html.twig', {disabled: true}) }}
+    {{ include('typeDiplome/mccc-non-editable/licence/_ct.html.twig') }}
 {% elseif typeMccc == 'cc_ct' %}
-    {{ include('typeDiplome/mccc/licence/_cc_ct.html.twig', {disabled: true}) }}
+    {{ include('typeDiplome/mccc-non-editable/licence/_cc_ct.html.twig') }}
 {% else %}
     <twig:alerte type="danger" message="Le type de MCCC est inconnu"/>
 {% endif %}

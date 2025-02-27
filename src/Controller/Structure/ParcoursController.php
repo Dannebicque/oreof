@@ -15,6 +15,7 @@ use App\Entity\Parcours;
 use App\Repository\ParcoursRepository;
 use App\Repository\SemestreParcoursRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -57,6 +58,7 @@ class ParcoursController extends AbstractController
 
     #[Route('/detail/parcours/{parcours}', name: 'detail_formation_parcours')]
     public function detailFormationTroncCommun(
+        Request $request,
         SemestreParcoursRepository $semestreRepository,
         Parcours $parcours
     ): Response
@@ -93,7 +95,9 @@ class ParcoursController extends AbstractController
             'dpeParcours' => $dpeParcours,
             'debut' => $debut,
             'fin' => $typeDiplome->getSemestreFin(),
-            'hasParcours' => $parcours->getFormation()?->isHasParcours()
+            'hasParcours' => $parcours->getFormation()?->isHasParcours(),
+            'semestreAffiche' => $request->getSession()->get('semestreAffiche'),
+            'ueAffichee' => $request->getSession()->get('ueAffichee'),
         ]);
     }
 }

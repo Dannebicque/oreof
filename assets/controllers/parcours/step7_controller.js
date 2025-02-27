@@ -21,6 +21,7 @@ export default class extends Controller {
   connect() {
     document.getElementById('parcours_step7_descriptifHautPage').addEventListener('trix-blur', this.saveDescriptifHautPage.bind(this))
     document.getElementById('parcours_step7_descriptifBasPage').addEventListener('trix-blur', this.saveDescriptifBasPage.bind(this))
+    document.getElementById('parcours_step7_descriptifHautPageAutomatique').addEventListener('trix-blur', this.saveDescriptifHautPageAutomatique.bind(this))
   }
 
   async _save(options) {
@@ -34,6 +35,14 @@ export default class extends Controller {
       field: 'descriptifHautPage',
       action: 'textarea',
       value: trixEditor('parcours_step7_descriptifHautPage'),
+    })
+  }
+
+  saveDescriptifHautPageAutomatique() {
+    this._save({
+      field: 'descriptifHautPageAutomatique',
+      action: 'textarea',
+      value: trixEditor('parcours_step7_descriptifHautPageAutomatique'),
     })
   }
 

@@ -78,7 +78,7 @@ class ElementConstitutif
     private ?bool $isTpDistancielMutualise;
 
     #[Groups('DTO_json_versioning')]
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(cascade: ['persist'])]
     private ?NatureUeEc $natureUeEc = null;
 
     #[Groups(['DTO_json_versioning'])]
@@ -94,14 +94,14 @@ class ElementConstitutif
     private ?int $ordre = null;
 
     #[Groups(['DTO_json_versioning'])]
-    #[ORM\ManyToOne(fetch: 'EAGER', inversedBy: 'elementConstitutifs')]
+    #[ORM\ManyToOne(fetch: 'EAGER', inversedBy: 'elementConstitutifs', cascade: ['persist'])]
     private ?FicheMatiere $ficheMatiere = null;
 
     #[Groups(['fiche_matiere_versioning_ec_parcours', 'DTO_json_versioning'])]
     #[ORM\ManyToOne(inversedBy: 'elementConstitutifs')]
     private ?Parcours $parcours = null;
 
-    #[ORM\ManyToOne(inversedBy: 'elementConstitutifs', fetch: 'EAGER')]
+    #[ORM\ManyToOne(inversedBy: 'elementConstitutifs', fetch: 'EAGER', cascade: ['persist'])]
     private ?Ue $ue = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -111,7 +111,7 @@ class ElementConstitutif
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $libelle = null;
 
-    #[ORM\ManyToOne(inversedBy: 'elementConstitutifs', fetch: 'EAGER')]
+    #[ORM\ManyToOne(inversedBy: 'elementConstitutifs', fetch: 'EAGER', cascade: ['persist'])]
     private ?TypeEc $typeEc = null;
 
     #[MaxDepth(1)]
@@ -146,19 +146,23 @@ class ElementConstitutif
     private Collection $competences;
 
     #[ORM\ManyToMany(targetEntity: ButApprentissageCritique::class, inversedBy: 'elementConstitutifs')]
-    /** @deprecated */
+    /** @deprecated("A supprimer une fois le transfert des données EC => Fiche") */
     private Collection $apprentissagesCritiques;
 
     #[ORM\Column(nullable: true)]
+    /** @deprecated("A supprimer une fois le transfert des données EC => Fiche") */
     private ?bool $synchroMccc = null;
 
     #[ORM\Column(nullable: true)]
+    /** @deprecated("A supprimer une fois le transfert des données EC => Fiche") */
     private ?bool $synchroHeures = null;
 
     #[ORM\Column(nullable: true)]
+    /** @deprecated("A supprimer une fois le transfert des données EC => Fiche") */
     private ?bool $synchroBcc = null;
 
     #[ORM\Column(nullable: true)]
+    /** @deprecated("A supprimer une fois le transfert des données EC => Fiche") */
     private ?bool $synchroEcts = null;
 
     #[ORM\Column(nullable: true)]
@@ -166,6 +170,18 @@ class ElementConstitutif
 
     #[ORM\Column(length: 10, nullable: true)]
     private ?string $codeApogee = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?bool $heuresSpecifiques = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?bool $mccc_specifiques = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?bool $ects_specifiques = null;
+
+    #[ORM\OneToOne(targetEntity: self::class, cascade: ['persist', 'remove'])]
+    private ?self $ecOrigineCopie = null;
 
 
     public function __construct()
@@ -732,39 +748,13 @@ class ElementConstitutif
         return $this;
     }
 
-    public function getHeures()
-    {
-    }
-
-    /**
-     * @return Collection<int, ButApprentissageCritique>
-     */
-    public function getApprentissagesCritiques(): Collection
-    {
-        return $this->apprentissagesCritiques;
-    }
-
-    public function addApprentissagesCritique(ButApprentissageCritique $apprentissagesCritique): static
-    {
-        if (!$this->apprentissagesCritiques->contains($apprentissagesCritique)) {
-            $this->apprentissagesCritiques->add($apprentissagesCritique);
-        }
-
-        return $this;
-    }
-
-    public function removeApprentissagesCritique(ButApprentissageCritique $apprentissagesCritique): static
-    {
-        $this->apprentissagesCritiques->removeElement($apprentissagesCritique);
-
-        return $this;
-    }
-
+    /** @deprecated("A supprimer une fois le transfert des données EC => Fiche") */
     public function isSynchroMccc(): ?bool
     {
         return $this->synchroMccc ?? false;
     }
 
+    /** @deprecated("A supprimer une fois le transfert des données EC => Fiche") */
     public function setSynchroMccc(?bool $synchroMccc): static
     {
         $this->synchroMccc = $synchroMccc;
@@ -772,11 +762,13 @@ class ElementConstitutif
         return $this;
     }
 
+    /** @deprecated("A supprimer une fois le transfert des données EC => Fiche") */
     public function isSynchroHeures(): ?bool
     {
         return $this->synchroHeures ?? false;
     }
 
+    /** @deprecated("A supprimer une fois le transfert des données EC => Fiche") */
     public function setSynchroHeures(?bool $synchroHeures): static
     {
         $this->synchroHeures = $synchroHeures;
@@ -784,11 +776,13 @@ class ElementConstitutif
         return $this;
     }
 
+    /** @deprecated("A supprimer une fois le transfert des données EC => Fiche") */
     public function isSynchroBcc(): ?bool
     {
         return $this->synchroBcc ?? false;
     }
 
+    /** @deprecated("A supprimer une fois le transfert des données EC => Fiche") */
     public function setSynchroBcc(?bool $synchroBcc): static
     {
         $this->synchroBcc = $synchroBcc;
@@ -796,11 +790,13 @@ class ElementConstitutif
         return $this;
     }
 
+    /** @deprecated("A supprimer une fois le transfert des données EC => Fiche") */
     public function isSynchroEcts(): ?bool
     {
         return $this->synchroEcts ?? false;
     }
 
+    /** @deprecated("A supprimer une fois le transfert des données EC => Fiche") */
     public function setSynchroEcts(?bool $synchroEcts): static
     {
         $this->synchroEcts = $synchroEcts;
@@ -871,5 +867,61 @@ class ElementConstitutif
         }
 
         return '-err-';
+    }
+
+    public function isHeuresSpecifiques(): ?bool
+    {
+        return $this->heuresSpecifiques ?? false;
+    }
+
+    public function setHeuresSpecifiques(?bool $heuresSpecifiques): static
+    {
+        $this->heuresSpecifiques = $heuresSpecifiques;
+
+        return $this;
+    }
+
+    public function isMcccSpecifiques(): ?bool
+    {
+        return $this->mccc_specifiques ?? false;
+    }
+
+    public function setMcccSpecifiques(?bool $mccc_specifiques): static
+    {
+        $this->mccc_specifiques = $mccc_specifiques;
+
+        return $this;
+    }
+
+    public function isEctsSpecifiques(): ?bool
+    {
+        return $this->ects_specifiques ?? false;
+    }
+
+    public function setEctsSpecifiques(?bool $ects_specifiques): static
+    {
+        $this->ects_specifiques = $ects_specifiques;
+
+        return $this;
+    }
+
+    public function getEcOrigineCopie(): ?self
+    {
+        return $this->ecOrigineCopie;
+    }
+
+    public function setEcOrigineCopie(?self $ecOrigineCopie): static
+    {
+        $this->ecOrigineCopie = $ecOrigineCopie;
+
+        return $this;
+    }
+
+    /**
+     * Méthode appelée lors de la duplication de l'année universitaire
+     */
+    public function prepareCloneForNewAnnee() : void {
+        $this->competences = new ArrayCollection();
+        $this->apprentissagesCritiques = new ArrayCollection();
     }
 }

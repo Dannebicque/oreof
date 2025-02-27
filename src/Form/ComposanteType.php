@@ -13,8 +13,6 @@ use App\Entity\Composante;
 use App\Entity\User;
 use App\Form\Type\EntityWithAddType;
 use App\Form\Type\YesNoType;
-use App\Repository\ComposanteRepository;
-use App\Repository\UserRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;

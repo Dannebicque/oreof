@@ -2,21 +2,26 @@
 
 namespace App\Entity;
 
+use App\Entity\Traits\LifeCycleTrait;
+use App\Enums\EtatDpeEnum;
 use App\Enums\TypeModificationDpeEnum;
 use App\Repository\DpeDemandeRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: DpeDemandeRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class DpeDemande
 {
+    use LifeCycleTrait;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $dateDemande = null;
+    private ?\DateTimeInterface $dateDemande;
 
     #[ORM\ManyToOne]
     private ?Parcours $parcours = null;
@@ -27,8 +32,8 @@ class DpeDemande
     #[ORM\Column(length: 50, enumType: TypeModificationDpeEnum::class)]
     private ?TypeModificationDpeEnum $niveauModification = null;
 
-    #[ORM\Column(length: 50)]
-    private ?string $etatDemande = null;
+    #[ORM\Column(length: 50, enumType: EtatDpeEnum::class)]
+    private ?EtatDpeEnum $etatDemande = null;
 
     #[ORM\Column(length: 1)]
     private ?string $niveauDemande = 'P'; //ou F
@@ -44,6 +49,12 @@ class DpeDemande
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $argumentaireSes = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $dateCloture = null;
+
+    #[ORM\ManyToOne(inversedBy: 'dpeDemandes')]
+    private ?User $auteur = null;
 
     //constructeur pour initialiser la date de demande
     public function __construct()
@@ -104,12 +115,12 @@ class DpeDemande
         return $this;
     }
 
-    public function getEtatDemande(): ?string
+    public function getEtatDemande(): ?EtatDpeEnum
     {
         return $this->etatDemande;
     }
 
-    public function setEtatDemande(string $etatDemande): static
+    public function setEtatDemande(EtatDpeEnum $etatDemande): static
     {
         $this->etatDemande = $etatDemande;
 
@@ -172,6 +183,30 @@ class DpeDemande
     public function setArgumentaireSes(?string $argumentaireSes): static
     {
         $this->argumentaireSes = $argumentaireSes;
+
+        return $this;
+    }
+
+    public function getDateCloture(): ?\DateTimeInterface
+    {
+        return $this->dateCloture;
+    }
+
+    public function setDateCloture(?\DateTimeInterface $dateCloture): static
+    {
+        $this->dateCloture = $dateCloture;
+
+        return $this;
+    }
+
+    public function getAuteur(): ?User
+    {
+        return $this->auteur;
+    }
+
+    public function setAuteur(?User $auteur): static
+    {
+        $this->auteur = $auteur;
 
         return $this;
     }

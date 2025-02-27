@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Formation;
 use App\Entity\FormationVersioning;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -21,28 +22,12 @@ class FormationVersioningRepository extends ServiceEntityRepository
         parent::__construct($registry, FormationVersioning::class);
     }
 
-//    /**
-//     * @return FormationVersioning[] Returns an array of FormationVersioning objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('f')
-//            ->andWhere('f.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('f.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
-
-//    public function findOneBySomeField($value): ?FormationVersioning
-//    {
-//        return $this->createQueryBuilder('f')
-//            ->andWhere('f.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    public function findLastVersion(Formation $formation){
+        return $this->createQueryBuilder('pv')
+            ->orderBy('pv.version_timestamp', 'DESC')
+            ->where('pv.formation = :formation')
+            ->setParameter('formation', $formation)
+            ->getQuery()
+            ->getResult();
+    }
 }

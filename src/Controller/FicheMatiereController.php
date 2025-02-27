@@ -9,6 +9,7 @@
 
 namespace App\Controller;
 
+use App\Classes\GetDpeParcours;
 use App\Classes\JsonReponse;
 use App\Classes\verif\FicheMatiereState;
 use App\DTO\StructureEc;
@@ -20,11 +21,12 @@ use App\Form\FicheMatiereType;
 use App\Repository\ElementConstitutifRepository;
 use App\Repository\FicheMatiereRepository;
 use App\Repository\LangueRepository;
+use App\Repository\TypeEpreuveRepository;
 use App\Repository\UeRepository;
 use App\Service\VersioningFicheMatiere;
+use App\TypeDiplome\TypeDiplomeRegistry;
 use App\Utils\JsonRequest;
 use DateTimeImmutable;
-use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\ORM\EntityManagerInterface;
 use Jfcherng\Diff\DiffHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -32,17 +34,8 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
-use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
-use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
-use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
-use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-use Symfony\Component\Serializer\Serializer;
 
 #[Route('/fiche/matiere')]
 class FicheMatiereController extends AbstractController
@@ -95,12 +88,14 @@ class FicheMatiereController extends AbstractController
      */
     #[Route('/{slug}', name: 'app_fiche_matiere_show', methods: ['GET'])]
     public function show(
-        FicheMatiere $ficheMatiere,
-        VersioningFicheMatiere $ficheMatiereVersioningService
+        TypeDiplomeRegistry          $typeDiplomeRegistry,
+        TypeEpreuveRepository        $typeEpreuveRepository,
+        FicheMatiere                 $ficheMatiere,
+        VersioningFicheMatiere       $ficheMatiereVersioningService
     ): Response {
         $formation = $ficheMatiere->getParcours()?->getFormation();
 
-//todo: supprimer la partie version pas utilisée sur les fiches
+        //todo: supprimer la partie version pas utilisée sur les fiches
         $bccs = [];
         foreach ($ficheMatiere->getCompetences() as $competence) {
             if (!array_key_exists($competence->getBlocCompetence()?->getId(), $bccs)) {
@@ -112,10 +107,11 @@ class FicheMatiereController extends AbstractController
 
         if ($formation !== null) {
             $typeDiplome = $formation->getTypeDiplome();
+            $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());
         } else {
             $typeDiplome = null;
+            $typeD = null;
         }
-
         $cssDiff = DiffHelper::getStyleSheet();
         $textDifferences = $ficheMatiereVersioningService
             ->getStringDifferencesWithBetweenFicheMatiereAndLastVersion($ficheMatiere);
@@ -123,8 +119,13 @@ class FicheMatiereController extends AbstractController
         return $this->render('fiche_matiere/show.html.twig', [
             'ficheMatiere' => $ficheMatiere,
             'formation' => $formation,
+            'typeEpreuves' => $typeDiplome !== null ? $typeEpreuveRepository->findByTypeDiplome($typeDiplome) : $typeEpreuveRepository->findAll(),
             'typeDiplome' => $typeDiplome,
+            'ects' => $ficheMatiere->getEcts(),
+            'templateForm' => $typeD !== null ? $typeD::TEMPLATE_FORM_MCCC : '',
+            'mcccs' => $typeD !== null ? $typeD->getMcccs($ficheMatiere) : [],
             'bccs' => $bccs,
+            'typeMccc' => $ficheMatiere->getTypeMccc(),
             'stringDifferences' => $textDifferences,
             'cssDiff' => $cssDiff
         ]);
@@ -167,6 +168,12 @@ class FicheMatiereController extends AbstractController
             return $this->redirectToRoute('app_fiche_matiere_show', ['slug' => $ficheMatiere->getSlug()]);
         }
 
+        if ($ficheMatiere->getParcours() !== null) {
+            $dpeParcours = GetDpeParcours::getFromParcours($ficheMatiere->getParcours());
+        } else {
+            $dpeParcours = null;
+        }
+
         $ficheMatiereState->setFicheMatiere($ficheMatiere);
 
         $referer = $request->headers->get('referer');
@@ -177,11 +184,11 @@ class FicheMatiereController extends AbstractController
             $source = 'parcours';
             $link = $referer.'?step=4';
         }
-
         return $this->render('fiche_matiere/edit.html.twig', [
             'fiche_matiere' => $ficheMatiere,
             'ficheMatiereState' => $ficheMatiereState,
             'source' => $source,
+            'dpeParcours' => $dpeParcours,
             'link' => $link ?? null,
         ]);
     }
@@ -238,7 +245,7 @@ class FicheMatiereController extends AbstractController
                 $ficheMatiere->removeHistoriqueFicheMatiere($historiqueFicheMatiere);
                 $entityManager->remove($historiqueFicheMatiere);
             }
-
+            //todo: gérer si champs dans fiche matière copie ?
             $ficheMatiereRepository->remove($ficheMatiere, true);
 
             return JsonReponse::success('La fiche matière a bien été supprimée.');
@@ -248,7 +255,8 @@ class FicheMatiereController extends AbstractController
     }
 
     #[Route('/{ec}/{parcours}/{ects}/maquette_iframe', name: 'app_fiche_matiere_maquette_iframe')]
-    public function getMaquetteIframe(ElementConstitutif $ec, Parcours $parcours, float $ects) : Response {
+    public function getMaquetteIframe(ElementConstitutif $ec, Parcours $parcours, float $ects) : Response
+    {
 
         $ficheMatiere = $ec->getFicheMatiere();
         $isBUT = $ficheMatiere->getParcours()?->getTypeDiplome()?->getLibelleCourt() === 'BUT';
@@ -308,8 +316,8 @@ class FicheMatiereController extends AbstractController
         EntityManagerInterface $entityManager,
         Filesystem $fileSystem,
         VersioningFicheMatiere $ficheMatiereVersioningService
-    ){
-        try{
+    ) {
+        try {
             // Date / Heure
             $now = new DateTimeImmutable('now');
             $dateHeure = $now->format('d-m-Y_H-i-s');
@@ -330,7 +338,7 @@ class FicheMatiereController extends AbstractController
                 'text' => 'La fiche matière a bien été sauvegardée.',
             ]);
             return $this->redirectToRoute('app_fiche_matiere_show', ['slug' => $ficheMatiere->getSlug()]);
-        }catch(\Exception $e){
+        } catch(\Exception $e) {
             // Log error
             $logTxt = "[{$dateHeure}] Le versioning de la fiche matière : "
                 . "{$ficheMatiere->getSlug()} - ID : {$ficheMatiere->getId()}"
@@ -351,8 +359,8 @@ class FicheMatiereController extends AbstractController
         FicheMatiereVersioning $ficheMatiereVersioning,
         VersioningFicheMatiere $ficheMatiereVersioningService,
         Filesystem $filesystem
-    ){
-        try{
+    ) {
+        try {
             $version = $ficheMatiereVersioningService->loadFicheMatiereVersion($ficheMatiereVersioning);
             $ficheMatiere = $version['ficheMatiere'];
 
@@ -373,7 +381,7 @@ class FicheMatiereController extends AbstractController
                 'dateHeure' => $version['dateVersion'],
                 'cssDiff' => ""
             ]);
-        }catch(\Exception $e){
+        } catch(\Exception $e) {
             // Log error
             $now = new DateTimeImmutable();
             $dateHeure = $now->format('d-m-Y_H-i-s');
@@ -394,7 +402,7 @@ class FicheMatiereController extends AbstractController
         EntityManagerInterface $entityManager,
         Parcours $parcours,
         string $keyword = ""
-    ){
+    ) {
         $associatedFicheMatiere = $entityManager
             ->getRepository(FicheMatiere::class)
             ->findForParcoursWithKeyword($parcours, $keyword);

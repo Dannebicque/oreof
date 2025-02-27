@@ -2,6 +2,48 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.31.80](https://github.com/Dannebicque/oreof/compare/v1.31.79...v1.31.80) (2025-01-27)
+
+
+### Features
+
+* affichage des MCCC en texte, sans formulaire ([0f107c2](https://github.com/Dannebicque/oreof/commit/0f107c260260fc88a7caca2b1d4340f3236b2409))
+* affichage des MCCC en texte, sans formulaire ([2a86ff3](https://github.com/Dannebicque/oreof/commit/2a86ff3549b7d13068f61d8747c9ff7ee5d3b773))
+* affichage des MCCC en texte, sans formulaire ([9f3f64d](https://github.com/Dannebicque/oreof/commit/9f3f64d38b7468a3b6d693843fdf23c5b8f28bee))
+* Affichage heures et MCCC sur fiche matière en edit ([06f28f1](https://github.com/Dannebicque/oreof/commit/06f28f1166da30246368147204ab1b1afff417a9))
+* Affichage heures et MCCC sur fiche matière en show ([faef840](https://github.com/Dannebicque/oreof/commit/faef840c01d38a27964f20a566ed3be2b44dc4ec))
+* Affichage heures et MCCC sur fiche matière en show ([3474b1b](https://github.com/Dannebicque/oreof/commit/3474b1b27b0e9985312aab17419f71efdfa51167))
+* export ([12f5d34](https://github.com/Dannebicque/oreof/commit/12f5d3441d5db0c87969c9f4b645478f1a022783))
+
+
+### Bug Fixes
+
+* adaptation GetElementConstitutif ([c7fec78](https://github.com/Dannebicque/oreof/commit/c7fec78707944eb4c3feb5bdd66402c67a48ddf1))
+* Affichage fiche matière + bouton. Debut processus sur formation. Correction sur ECTS/Heures avec changement de BDD ([5ffd3c5](https://github.com/Dannebicque/oreof/commit/5ffd3c593b0411850c75df4cb643866a92c76b6d))
+* Affichage uniquement des semestres ouverts dans le JSON ([080dfaa](https://github.com/Dannebicque/oreof/commit/080dfaae09c2bf3cd4128e1737b7c8f3d228ebce))
+* Bugs affichages ([f9cf08f](https://github.com/Dannebicque/oreof/commit/f9cf08f55896a8ec14e126fd097948e5ce73f053))
+* Bugs affichages ([ecc0ff8](https://github.com/Dannebicque/oreof/commit/ecc0ff8a2a55c575524c08b1cfe55a78ae2a3462))
+* cascade persist ([e1f22c7](https://github.com/Dannebicque/oreof/commit/e1f22c7f287df8f0ae08d47f30fc516401f25196))
+* changeRf (mail) + css onglets ([37210de](https://github.com/Dannebicque/oreof/commit/37210de8d6dfccb63a126a659e43c115e20d6a86))
+* commande pour copier vers la BD cible ([04fcc4b](https://github.com/Dannebicque/oreof/commit/04fcc4b07cabe95260c3a0a4ff4932fa8451f50b))
+* comparaison de durée MCCC ([d863b2d](https://github.com/Dannebicque/oreof/commit/d863b2d15c69c8bebc37bef0d99ed59cf6831403))
+* comparaison DTO avec copie ([e9a67e0](https://github.com/Dannebicque/oreof/commit/e9a67e09fedecb3bfa3c77faa22b576c9e8a975e))
+* Copie des ECTS ([67b53c5](https://github.com/Dannebicque/oreof/commit/67b53c565183c68e04d427067f62eb8afd4f1d47))
+* copie ECTS ([456a70e](https://github.com/Dannebicque/oreof/commit/456a70e11ebf63e1af25ab97006b6edc3ae5373c))
+* Copie heures fiche matière ([5a0d59d](https://github.com/Dannebicque/oreof/commit/5a0d59d533a401b2361fa6c730c511c35ec3776b))
+* ECTS fiche matière ([0572ee3](https://github.com/Dannebicque/oreof/commit/0572ee3bc4eda17f89ba9279a2afad16b09bf039))
+* HeuresEctsEc ([6a50b81](https://github.com/Dannebicque/oreof/commit/6a50b8153130eea4690ec0fb1406579020ac1d89))
+* markdown ([5922e43](https://github.com/Dannebicque/oreof/commit/5922e439366111d4c62639380d363cad5bf28c26))
+* mccc spécifiques ([47c09f7](https://github.com/Dannebicque/oreof/commit/47c09f71359ff614b516b2cfc7a9da02aa4fd8ae))
+* parcours copy data ([2e25ada](https://github.com/Dannebicque/oreof/commit/2e25ada8befdc83033b9b2fae790a1481ed33fb4))
+* parcours copy data ([62cdcd9](https://github.com/Dannebicque/oreof/commit/62cdcd954c2ce2570f39d960066054c24d75c26c))
+* ParcoursCopy ([aba5def](https://github.com/Dannebicque/oreof/commit/aba5def6c230ba4fff1788fe3fa1df0b7280c326))
+* ParcoursCopy Command ([949bf28](https://github.com/Dannebicque/oreof/commit/949bf28b10d5f79f939e5b8c522a5d16b0dbc496))
+* ParcoursCopy MCCC ([e3492c2](https://github.com/Dannebicque/oreof/commit/e3492c22d73d36708f477afe8429e0ce34a74dfb))
+* ParcoursCopy MCCC ([0c5512f](https://github.com/Dannebicque/oreof/commit/0c5512fa40efb5f096f3cbaec949d18113feb621))
+* ParcoursCopyData ([e8c6dd4](https://github.com/Dannebicque/oreof/commit/e8c6dd465f4f9f951be4fb8095a42729abf43e7f))
+* recopie ([d866815](https://github.com/Dannebicque/oreof/commit/d866815b1dbc74e9353e20178ffec87c76866d25))
+
 ### [1.31.79](https://github.com/Dannebicque/oreof/compare/v1.31.78...v1.31.79) (2025-01-22)
 
 

@@ -9,7 +9,6 @@ use App\Entity\Parcours;
 use App\Entity\Semestre;
 use App\Entity\TypeUe;
 use App\Entity\UeMutualisable;
-use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\User\UserInterface;

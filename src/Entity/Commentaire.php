@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-use App\Repository\CommentaireRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\MappedSuperclass;
@@ -21,19 +20,19 @@ abstract class Commentaire
     private ?int $id = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    private ?string $texte = null;
+    private ?string $texte;
 
     #[ORM\ManyToOne(inversedBy: 'commentaires')]
-    private ?User $user = null;
+    private ?User $user;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $created = null;
+    private ?\DateTimeInterface $created;
 
     #[ORM\Column]
     private ?bool $public = false;
 
     #[ORM\Column(length: 100)]
-    private ?string $zone = null;
+    private ?string $zone;
 
     public function __construct(UserInterface|User|null $user, ?string $message, string $zone)
     {

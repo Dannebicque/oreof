@@ -9,8 +9,6 @@
 
 namespace App\EventSubscriber;
 
-use App\Classes\Mailer;
-use App\Entity\Formation;
 use App\Entity\HistoriqueFicheMatiere;
 use App\Entity\HistoriqueFormation;
 use App\Entity\HistoriqueParcours;
@@ -29,7 +27,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\KernelInterface;
-use Symfony\Component\Workflow\Event\Event;
 
 class HistoriqueSubscriber implements EventSubscriberInterface
 {

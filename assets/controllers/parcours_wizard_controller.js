@@ -7,6 +7,7 @@
  */
 
 import { Controller } from '@hotwired/stimulus'
+import updateUrl from '../js/updateUrl'
 
 export default class extends Controller {
   static targets = [
@@ -24,6 +25,9 @@ export default class extends Controller {
   }
 
   changeStep(event) {
+    // mise à jour URL
+    updateUrl({ step: event.params.step })
+    updateUrl({ semestre: 0, ue: 0 }, 'remove') // on supprime les paramètres qui serait d'une step précédente
     this._loadStep(event.params.step)
   }
 

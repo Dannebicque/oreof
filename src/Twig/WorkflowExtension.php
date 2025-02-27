@@ -15,7 +15,6 @@ use App\Entity\DpeParcours;
 use App\Entity\FicheMatiere;
 use App\Entity\Formation;
 use App\Entity\Parcours;
-use App\Enums\TypeModificationDpeEnum;
 use App\Utils\Access;
 use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\Workflow\WorkflowInterface;
@@ -48,9 +47,13 @@ class WorkflowExtension extends AbstractExtension
         ];
     }
 
-    public function isAccessible(DpeParcours $dpeParcours, string $state = 'cfvu'): bool
+    public function isAccessible(DpeParcours|Formation $dpeParcours, string $state = 'cfvu'): bool
     {
+        if ($dpeParcours instanceof Formation) {
+            return Access::isAccessibleMention($dpeParcours, $state);
+        }
         return Access::isAccessible($dpeParcours, $state);
+
     }
 
     public function hasHistorique(

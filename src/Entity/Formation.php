@@ -14,6 +14,7 @@ use App\DTO\Remplissage;
 use App\Entity\Traits\LifeCycleTrait;
 use App\Enums\NiveauFormationEnum;
 use App\Enums\RegimeInscriptionEnum;
+use App\Enums\TypeModificationDpeEnum;
 use App\Repository\FormationRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -22,7 +23,6 @@ use Doctrine\ORM\Event\PreFlushEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 #[ORM\Entity(repositoryClass: FormationRepository::class)]
 #[ORM\Index(name: 'sigle_formation', columns: ['sigle'], flags: ['fulltext'])]
@@ -46,12 +46,12 @@ class Formation
     private ?Composante $composantePorteuse = null;
 
     #[Groups('parcours_json_versioning')]
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(cascade: ['persist'])]
     /** @deprecated("Sur le Dpe")  */
     private ?CampagneCollecte $dpe;
 
     #[Groups(['parcours_json_versioning', 'fiche_matiere_versioning', 'formation_json_versioning'])]
-    #[ORM\ManyToOne(targetEntity: Mention::class, inversedBy: 'formations', fetch: 'EAGER')]
+    #[ORM\ManyToOne(targetEntity: Mention::class, inversedBy: 'formations', fetch: 'EAGER', cascade: ['persist'])]
     private ?Mention $mention = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -83,11 +83,11 @@ class Formation
     private ?int $semestreDebut = 1;
 
     #[Groups(['parcours_json_versioning', 'formation_json_versioning'])]
-    #[ORM\ManyToMany(targetEntity: Ville::class)]
+    #[ORM\ManyToMany(targetEntity: Ville::class, cascade: ['persist'])]
     private Collection $localisationMention;
 
     #[Groups(['parcours_json_versioning', 'formation_json_versioning'])]
-    #[ORM\ManyToMany(targetEntity: Composante::class, inversedBy: 'formations')]
+    #[ORM\ManyToMany(targetEntity: Composante::class, inversedBy: 'formations', cascade: ['persist'])]
     private Collection $composantesInscription;
 
     #[Groups(['parcours_json_versioning', 'formation_json_versioning'])]
@@ -205,6 +205,17 @@ class Formation
     #[ORM\OneToMany(mappedBy: 'formation', targetEntity: ChangeRf::class)]
     private Collection $changeRves;
 
+    #[ORM\Column(length: 255, enumType: TypeModificationDpeEnum::class, nullable: true)]
+    private ?TypeModificationDpeEnum $etatReconduction = null;
+
+    /** @var Formation $formationOrigineCopie Référence la formation d'origine, depuis la copie */
+    #[ORM\OneToOne(inversedBy: 'formationCopieAnneeUniversitaire', targetEntity: self::class, cascade: ['persist', 'remove'])]
+    private ?self $formationOrigineCopie = null;
+
+    /** @var Formation $formationCopieAnneeUniversitaire Référence la formation copiée, depuis celle d'origine */
+    #[ORM\OneToOne(mappedBy: 'formationOrigineCopie', targetEntity: self::class, cascade: ['persist', 'remove'])]
+    private ?self $formationCopieAnneeUniversitaire = null;
+
     public function __construct(?CampagneCollecte $anneeUniversitaire)
     {
         $this->dpe = $anneeUniversitaire;
@@ -227,14 +238,14 @@ class Formation
         $this->changeRves = new ArrayCollection();
     }
 
-    #[ORM\PreFlush]
-    public function updateSlug(): void
-    {
-        $texte = $this->getMention() === null ? $this->getMentionTexte() : $this->getMention()->getLibelle();
-        $texte = ($this->getTypeDiplome() != null ? $this->getTypeDiplome()->getLibelleCourt() : '') . '-' . $texte . '-' . $this->getDpe()?->getAnneeUniversitaire()?->getAnnee();
+    // #[ORM\PreFlush]
+    // public function updateSlug(): void
+    // {
+    //     $texte = $this->getMention() === null ? $this->getMentionTexte() : $this->getMention()->getLibelle();
+    //     $texte = ($this->getTypeDiplome() != null ? $this->getTypeDiplome()->getLibelleCourt() : '') . '-' . $texte . '-' . $this->getDpe()?->getAnneeUniversitaire()?->getAnnee();
 
-        $this->setSlug($texte);
-    }
+    //     $this->setSlug($texte);
+    // }
 
 
     public function getEtatStep(int $step): bool
@@ -456,10 +467,10 @@ class Formation
     }
 
     #[Groups(['formation:read'])]
-    public function getDisplay(): ?string
+    public function getDisplay(bool $avecSigle = true): ?string
     {
         $texte = $this->getMention() === null ? $this->getMentionTexte() : $this->getMention()->getLibelle();
-        if ($this->sigle !== null && trim($this->sigle) !== '') {
+        if ($avecSigle && $this->sigle !== null && trim($this->sigle) !== '') {
             $texte .= ' (' . $this->sigle . ')';
         }
 
@@ -945,10 +956,10 @@ class Formation
         $this->setRemplissage($remplissage);
     }
 
-    public function getDisplayLong(): string
+    public function getDisplayLong(bool $avecSigle = true): string
     {
         $typeD = $this->getTypeDiplome() !== null ? $this->getTypeDiplome()->getLibelle() . ' - ' : '';
-        return $typeD . $this->getDisplay();
+        return $typeD . $this->getDisplay($avecSigle);
     }
 
     /**
@@ -1102,4 +1113,51 @@ class Formation
         }
         return array_merge(...$etatParcours);
     }
+
+    public function getEtatReconduction(): ?TypeModificationDpeEnum
+    {
+        return $this->etatReconduction ?? TypeModificationDpeEnum::OUVERT;
+    }
+
+    public function setEtatReconduction(TypeModificationDpeEnum $etatReconduction): static
+    {
+        $this->etatReconduction = $etatReconduction;
+
+        return $this;
+    }
+
+    public function getFormationOrigineCopie(): ?self
+    {
+        return $this->formationOrigineCopie;
+    }
+
+    public function setFormationOrigineCopie(?self $formationOrigineCopie): static
+    {
+        $this->formationOrigineCopie = $formationOrigineCopie;
+
+        return $this;
+    }
+
+    public function getFormationCopieAnneeUniversitaire(): ?self
+    {
+        return $this->formationCopieAnneeUniversitaire;
+    }
+
+    public function setFormationCopieAnneeUniversitaire(?self $formationCopieAnneeUniversitaire): static
+    {
+        // unset the owning side of the relation if necessary
+        if ($formationCopieAnneeUniversitaire === null && $this->formationCopieAnneeUniversitaire !== null) {
+            $this->formationCopieAnneeUniversitaire->setFormationOrigineCopie(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($formationCopieAnneeUniversitaire !== null && $formationCopieAnneeUniversitaire->getFormationOrigineCopie() !== $this) {
+            $formationCopieAnneeUniversitaire->setFormationOrigineCopie($this);
+        }
+
+        $this->formationCopieAnneeUniversitaire = $formationCopieAnneeUniversitaire;
+
+        return $this;
+    }
+
 }

@@ -9,42 +9,30 @@
 
 namespace App\Controller;
 
-use App\Classes\CalculButStructureParcours;
-use App\Classes\CalculStructureParcours;
 use App\Classes\GetDpeParcours;
 use App\Classes\JsonReponse;
 use App\Classes\ParcoursDupliquer;
 use App\Classes\verif\ParcoursState;
-use App\DTO\HeuresEctsFormation;
-use App\DTO\HeuresEctsSemestre;
-use App\DTO\HeuresEctsUe;
-use App\DTO\StructureParcours;
 use App\Entity\CampagneCollecte;
 use App\Entity\DpeParcours;
 use App\Entity\FicheMatiere;
 use App\Entity\Formation;
 use App\Entity\Parcours;
 use App\Entity\ParcoursVersioning;
-use App\Entity\SemestreParcours;
 use App\Enums\TypeModificationDpeEnum;
 use App\Enums\TypeParcoursEnum;
 use App\Events\AddCentreParcoursEvent;
 use App\Form\ParcoursType;
-use App\Repository\DpeParcoursRepository;
 use App\Repository\ElementConstitutifRepository;
 use App\Repository\ParcoursRepository;
-use App\Repository\ParcoursVersioningRepository;
-use App\Repository\UeRepository;
 use App\Service\LheoXML;
 use App\Service\VersioningFormation;
 use App\Service\VersioningParcours;
-use App\Service\VersioningStructure;
 use App\TypeDiplome\TypeDiplomeRegistry;
 use App\Utils\JsonRequest;
 use DateTimeImmutable;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\ORM\EntityManagerInterface;
-use Jfcherng\Diff\Differ;
 use Jfcherng\Diff\DiffHelper;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -59,9 +47,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
 use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
-use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
-use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
 use Symfony\Component\Serializer\Normalizer\BackedEnumNormalizer;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
@@ -71,7 +57,6 @@ use Symfony\Component\Serializer\Serializer;
 class ParcoursController extends BaseController
 {
     public function __construct(
-        private WorkflowInterface $parcoursWorkflow,
         private WorkflowInterface $dpeParcoursWorkflow,
         private readonly EntityManagerInterface $entityManager
     ) {
@@ -96,7 +81,7 @@ class ParcoursController extends BaseController
 
 
         $parcours = $parcoursRepository->findParcours(
-            $this->getDpe(),
+            $this->getCampagneCollecte(),
             [$sort => $direction, 'recherche' => $q]
         );
 
@@ -164,7 +149,7 @@ class ParcoursController extends BaseController
             $dpeParcours = new DpeParcours();
             $dpeParcours->setParcours($parcour);
             $dpeParcours->setFormation($formation);
-            $dpeParcours->setCampagneCollecte($this->getDpe());
+            $dpeParcours->setCampagneCollecte($this->getCampagneCollecte());
             $dpeParcours->setVersion('1.0');
             $dpeParcours->setEtatReconduction(TypeModificationDpeEnum::CREATION);
             $this->dpeParcoursWorkflow->apply($dpeParcours, 'initialiser');
@@ -285,6 +270,9 @@ class ParcoursController extends BaseController
         Parcours            $parcour,
         VersioningParcours $versioningParcours,
     ): Response {
+
+        $request->getSession()->set('semestreAffiche', $request->query->get('semestre') ?? null);
+        $request->getSession()->set('ueAffichee', $request->query->get('ue') ?? null);
 
         $dpeParcours = GetDpeParcours::getFromParcours($parcour);
 
@@ -662,9 +650,9 @@ class ParcoursController extends BaseController
         ParcoursRepository $parcoursRepo
     ): Response {
         $parcoursList = [
-            ...$parcoursRepo->findByTypeValidation($this->getDpe(), 'valide_pour_publication'),
-            ...$parcoursRepo->findByTypeValidation($this->getDpe(), 'publie'),
-            ...$parcoursRepo->findByTypeValidation($this->getDpe(), 'valide_a_publier')
+            ...$parcoursRepo->findByTypeValidation($this->getCampagneCollecte(), 'valide_pour_publication'),
+            ...$parcoursRepo->findByTypeValidation($this->getCampagneCollecte(), 'publie'),
+            ...$parcoursRepo->findByTypeValidation($this->getCampagneCollecte(), 'valide_a_publier')
         ];
 
         $errorArray = [];

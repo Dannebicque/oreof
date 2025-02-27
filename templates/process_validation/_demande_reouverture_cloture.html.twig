@@ -1,0 +1,34 @@
+{{ component('alerte', {
+    type: 'info',
+    message: ('demande.reouverture.annuler.alerte')|trans({}, 'process')|nl2br|raw
+}) }}
+
+<form action="{{ path('app_validation_demande_reouverture_cloture', {parcours:parcours.id}) }}" method="post"
+      enctype="multipart/form-data">
+
+    {% if hasDifferences %}
+        <twig:alerte type="danger" message="Des différences existent entre la version actuelle et la version précédente, si vous clôturez la demande, ces différences seront perdues." />
+
+        <p>Les différences sont sur les champs suivants</p>
+        <ul>
+            {% for key, diff in stringDifferencesParcours|filter(diff => diff != null) %}
+                <li>{{ key|trans({}, 'process') }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <twig:alerte type="success" message="Aucune différence n'a été détectée entre la version actuelle et la version précédente. Vous pouvez clôturer la demande sans risque." />
+    {% endif %}
+
+    <div class="mt-2">
+        <button type="submit" class="btn btn-success"
+                {{ stimulus_action('base','sauvegardeFormModal', 'click') }}
+        >
+            <i class="fal fa-floppy-disk"></i>
+            {% if type_modif == 'MODIFICATION_TEXTE' %}
+                {{ ('btn.demande.reouverture.cloture.sans_cfvu.ses')|trans({}, 'process') }}
+            {% else %}
+                {{ ('btn.demande.reouverture.cloture.ses')|trans({}, 'process') }}
+            {% endif %}
+        </button>
+    </div>
+</form>

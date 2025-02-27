@@ -104,11 +104,31 @@
                     </a>
                 </li>
                 <li>
-                    <a class="nav-link p-2" href="#objectifs">
+                    <a class="nav-link p-2" href="#volumes_horaires">
                         <i class="fal fa-chevron-right"></i>
-                        Objectifs / compétences acquises
+                        Volumes horaires
                     </a>
                 </li>
+                <li>
+                    <a class="nav-link p-2" href="#mccc">
+                        <i class="fal fa-chevron-right"></i>
+                        MCCC
+                    </a>
+                </li>
+                <li>
+                    <a class="nav-link p-2" href="#bcc">
+                        <i class="fal fa-chevron-right"></i>
+                        Compétences acquises
+                    </a>
+                </li>
+                {% if ficheMatiere.enseignementMutualise == true or ficheMatiere.elementConstitutifs|length > 0 %}
+                    <li>
+                        <a class="nav-link p-2" href="#parcours">
+                            <i class="fal fa-chevron-right"></i>
+                            Détail des mutualisations
+                        </a>
+                    </li>
+                {% endif %}
                 <li>
                     <a class="nav-link p-2" href="#infos">
                         <i class="fal fa-chevron-right"></i>
@@ -122,7 +142,7 @@
 {% endblock %}
 
 {% block header %}
-    Détail de la fiche EC/matière : {{ ficheMatiere.libelle }}
+    Fiche EC/matière <strong id="fiche_matiere_libelle">{{ ficheMatiere.libelle }}</strong> {% if ficheMatiere.ficheMatiereParcours|length > 0 %}<span class="badge bg-info">Mutualisée</span>{% endif %}
 {% endblock %}
 
 {% block breadcrumb %}
@@ -132,7 +152,7 @@
 {% endblock %}
 
 {% block bouton_header %}
-    {% if is_granted('ROLE_ADMIN') %}
+    {% if is_granted('CAN_EC_EDIT_MY', ficheMatiere) %}
         <a
                 href="{{ path('app_fiche_matiere_edit',{slug: ficheMatiere.slug}) }}"
                 class="btn btn-sm btn-outline-warning"

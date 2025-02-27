@@ -175,11 +175,11 @@ class FicheMatiereRepository extends ServiceEntityRepository
 
     public function findByHd(CampagneCollecte $campagneCollecte, array $options): array
     {
-        $start = $options['start'] ?? 0;
+        $start = $options['page'] ?? 1;
         $query = $this->createQueryBuilder('f')
-            ->where('f.horsDiplome = 1')
+            ->where('f.horsDiplome = 1') //todo: ajouter filtre sur campagneCollecte
             ->orderBy('f.libelle', 'ASC')
-            ->setFirstResult($start * 50)
+            ->setFirstResult(($start - 1) * 50)
             ->setMaxResults($options['length'] ?? 50);
 
         //$this->addFiltres($query, $options);
@@ -209,7 +209,7 @@ class FicheMatiereRepository extends ServiceEntityRepository
     public function countByHd(CampagneCollecte $campagneCollecte, array $options): ?int
     {
         $query = $this->createQueryBuilder('f')
-            ->select('count(f.id)')
+            ->select('count(f.id)') //todo: ajouter filtre sur campagneCollecte
             ->andWhere('f.horsDiplome = 1');
 
         if (array_key_exists('q', $options) && null !== $options['q']) {
@@ -345,7 +345,7 @@ class FicheMatiereRepository extends ServiceEntityRepository
             ->where(
                 $qb->expr()->like('UPPER(fm.description)', 'UPPER(:keyword)')
             )
-            ->join('fm.parcours', 'p', 'WITH', 'fm.parcours = :parcours')
+            ->andWhere('fm.parcours = :parcours')
             ->setParameter('keyword', '%' . $keyword . '%')
             ->setParameter('parcours', $parcours);
 
@@ -356,7 +356,7 @@ class FicheMatiereRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('fm');
 
         $qb = $qb->select('COUNT(fm.id) AS nombre_total')
-            ->join('fm.parcours', 'p', 'WITH', 'fm.parcours = p.id')
+            ->innerJoin('fm.parcours', 'p')
             ->join('p.formation', 'f', 'WITH', 'p.formation = f.id')
             ->join('f.mention', 'm')
             ->join('f.typeDiplome', 'td')
@@ -389,7 +389,7 @@ class FicheMatiereRepository extends ServiceEntityRepository
                 'p.sigle AS parcours_sigle'
             ]
         )
-        ->join('fm.parcours', 'p', 'WITH', 'fm.parcours = p.id')
+        ->innerJoin('fm.parcours', 'p')
         ->join('p.formation', 'f', 'WITH', 'p.formation = f.id')
         ->join('f.mention', 'm')
         ->join('f.typeDiplome', 'td')
@@ -408,5 +408,14 @@ class FicheMatiereRepository extends ServiceEntityRepository
             ->getResult();
 
         return $qb;
+    }
+
+    public function findAllWithPagination(int $pageNumber, int $pageLength) {
+        return $this->createQueryBuilder('fm')
+            ->orderBy('id', 'ASC')
+            ->setMaxResults($pageLength)
+            ->setFirstResult($pageNumber * $pageLength)
+            ->getQuery()
+            ->getResult();
     }
 }
