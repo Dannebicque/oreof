@@ -1,6 +1,6 @@
 {% block stylesheets %}
     <style>
-        {{ cssDiff }}
+        {{ cssDiff ?? "" }}
         {{ include('communs/versioning_view_style.html.twig') }}
     </style>
 {% endblock %}
