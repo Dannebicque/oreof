@@ -119,7 +119,7 @@ class FicheMatiereController extends AbstractController
         return $this->render('fiche_matiere/show.html.twig', [
             'ficheMatiere' => $ficheMatiere,
             'formation' => $formation,
-            'typeEpreuves' => $typeEpreuveRepository->findByTypeDiplome($typeDiplome),
+            'typeEpreuves' => $typeDiplome !== null ? $typeEpreuveRepository->findByTypeDiplome($typeDiplome) : $typeEpreuveRepository->findAll(),
             'typeDiplome' => $typeDiplome,
             'ects' => $ficheMatiere->getEcts(),
             'templateForm' => $typeD !== null ? $typeD::TEMPLATE_FORM_MCCC : '',
