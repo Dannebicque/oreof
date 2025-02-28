@@ -106,13 +106,13 @@ framework:
             label: 'validation.soumis_conseil_reserve'
         en_cours_redaction_ss_cfvu:
           metadata:
-            process: true
+            process: false
             icon: 'fa-paper-plane'
             isTimeline: false
             label: 'validation.en_cours_redaction_ss_cfvu'
         soumis_central_sans_cfvu:
           metadata:
-            process: true
+            process: false
             icon: 'fa-school-circle-check'
             isTimeline: false
             label: 'validation.soumis_central_sans_cfvu'

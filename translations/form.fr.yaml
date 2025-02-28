@@ -140,7 +140,7 @@ parcours_step7.labels.codeRome: 'Code(s) ROME'
 'Choisir une modalité': 'Choisir une modalité'
 fiche_matiere_step2.labels.typeEnseignement: "Précisez la nature de l'enseignement"
 "Choisissez un type d'enseignement": '-'
-fiche_matiere_step3.alerte.no_bcc: fiche_matiere_step3.alerte.no_bcc
+fiche_matiere_step3.alerte.no_bcc: 'Aucun bloc de compétences n''a été renseigné'
 parcours.labels.libelle: 'Libellé du parcours'
 parcours.labels.respParcours: 'Responsable du parcours'
 parcours.labels.sigle: 'Sigle du parcours'
@@ -268,7 +268,7 @@ ue.labels.libelle: "Libellé de l'UE"
 9: '9'
 10: '10'
 element_constitutif.labels.typeEc: "Type de l'EC"
-fiche_matiere.alerte.no_bcc: fiche_matiere.alerte.no_bcc
+fiche_matiere.alerte.no_bcc: 'Aucun bloc de compétences n''a été renseigné'
 element_constitutif.labels.typeEcTexte: "Type de l'EC si non présent dans la liste"
 ec_step4.labels.modaliteEnseignement: "Modalités d'enseignement de l'enseignement"
 ROLE_SES: ROLE_SES

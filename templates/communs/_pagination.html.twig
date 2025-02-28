@@ -41,7 +41,7 @@
                         }) }}
                 >{{ i }}</a></li>
         {% endfor %}
-        {% if end+step < endBuffer %}
+        {% if end+step < endBuffer-step %}
             {% for i in range(end+step, endBuffer, step) %}
                 <li class="page-item">
                     <a class="page-link" href="#"

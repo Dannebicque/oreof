@@ -64,6 +64,7 @@ parcours.'}) }}
                         title="{{ 'mccc.ec.helps.sansHeures'|trans({}, 'help') }}"></i></label>
         </div>
 
+        {% set disabled = disabled or ec.sansHeure  %}
         <div id="bloc_presentiel" style="display:{% if modalite != null and modalite.value != 2 %}block{% else
 %}none{% endif %}">
             <h3>Volume Présentiel</h3>

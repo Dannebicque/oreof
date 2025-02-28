@@ -210,7 +210,7 @@ class ElementConstitutifController extends AbstractController
     #[Route('/new-enfant/{ue}/{parcours}', name: 'app_element_constitutif_new_enfant', methods: ['GET', 'POST'])]
     public function newEnfant(
         NatureUeEcRepository         $natureUeEcRepository,
-        TypeEcRepository         $typeEcRepository,
+        TypeEcRepository             $typeEcRepository,
         EcOrdre                      $ecOrdre,
         Request                      $request,
         FicheMatiereRepository       $ficheMatiereRepository,
@@ -449,7 +449,7 @@ class ElementConstitutifController extends AbstractController
         ])]
     public function editEnfant(
         TypeEcRepository             $typeEcRepository,
-        NatureUeEcRepository             $natureUeEcRepository,
+        NatureUeEcRepository         $natureUeEcRepository,
         FicheMatiereRepository       $ficheMatiereRepository,
         Request                      $request,
         ElementConstitutifRepository $elementConstitutifRepository,
@@ -504,6 +504,7 @@ class ElementConstitutifController extends AbstractController
 
     #[Route('/{id}/structure-ec/{parcours}', name: 'app_element_constitutif_structure', methods: ['GET', 'POST'])]
     public function structureEc(
+        EntityManagerInterface       $entityManager,
         Request                      $request,
         ElementConstitutifRepository $elementConstitutifRepository,
         ElementConstitutif           $elementConstitutif,
@@ -532,10 +533,7 @@ class ElementConstitutifController extends AbstractController
         ]);
 
         $form->handleRequest($request);
-        if ($form->isSubmitted() &&
-            ($elementConstitutif->isSynchroHeures() === false ||
-            $elementConstitutif->getParcours()?->getId() === $parcours->getId())
-        ) {
+        if ($form->isSubmitted()) {
             if (array_key_exists('heuresEnfantsIdentiques', $request->request->all()['ec_step4'])) {
                 if ($elementConstitutif->getEcParent() !== null) {
                     $elementConstitutif->getEcParent()->setHeuresEnfantsIdentiques((bool)$request->request->all()['ec_step4']['heuresEnfantsIdentiques']);
@@ -546,8 +544,31 @@ class ElementConstitutifController extends AbstractController
                 $elementConstitutif->setHeuresEnfantsIdentiques(false);
             }
 
-            $elementConstitutif->setSansHeure((bool)$request->request->get('sansHeure'));
-            $elementConstitutifRepository->save($elementConstitutif, true);
+            if (array_key_exists('sansHeure', $request->request->all())) {
+                $elementConstitutif->setSansHeure($request->request->all()['sansHeure'] === 'on');
+            } else {
+                $elementConstitutif->setSansHeure(false);
+                if ($elementConstitutif->getFicheMatiere() !== null &&
+                    $elementConstitutif->getFicheMatiere()->getParcours() !== null &&
+                    $elementConstitutif->getFicheMatiere()->getParcours()->getId() === $parcours->getId()) {
+                    //sauvegarde des heures sur la fiche matière
+                    $elementConstitutif->setHeuresSpecifiques(false);
+                } else {
+                    //sauvegarde des heures sur l'EC
+                    $elementConstitutif->setVolumeCmPresentiel($ecHeures->getVolumeCmPresentiel());
+                    $elementConstitutif->setVolumeTdPresentiel($ecHeures->getVolumeTdDistanciel());
+                    $elementConstitutif->setVolumeTpPresentiel($ecHeures->getVolumeTpPresentiel());
+                    $elementConstitutif->setVolumeCmDistanciel($ecHeures->getVolumeCmDistanciel());
+                    $elementConstitutif->setVolumeTdDistanciel($ecHeures->getVolumeTdDistanciel());
+                    $elementConstitutif->setVolumeTpDistanciel($ecHeures->getVolumeTpDistanciel());
+                    $elementConstitutif->setVolumeTe($ecHeures->getVolumeTe());
+                    $elementConstitutif->setHeuresSpecifiques(true);
+                    $entityManager->detach($ecHeures);
+
+                }
+            }
+
+            $entityManager->flush();
 
             return $this->json(true);
         }
@@ -564,7 +585,7 @@ class ElementConstitutifController extends AbstractController
 
     #[Route('/{id}/structure-ec-non-editable', name: 'app_element_constitutif_structure_non_editable', methods: ['GET', 'POST'])]
     public function structureEcNonEditable(
-        ElementConstitutif           $elementConstitutif,
+        ElementConstitutif $elementConstitutif,
     ): Response {
         return $this->render('element_constitutif/_structureEcNonEditable.html.twig', [
             'ec' => $elementConstitutif,

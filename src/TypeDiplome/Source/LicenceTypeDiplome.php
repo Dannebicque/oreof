@@ -474,7 +474,6 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
                     return false;
                 }
 
-
                 if ($type === 'L') {
                     if (isset($mcccs[1]) && !isset($mcccs[1]['cc']) && count($mcccs[1]['cc']) !== 1) {
                         return false;
@@ -583,6 +582,8 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
                 }
                 return true;
         }
+
+        return false;
     }
 
     private function verificationEt(array $mcccs): bool

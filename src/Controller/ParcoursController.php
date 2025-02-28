@@ -144,17 +144,20 @@ class ParcoursController extends BaseController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $parcoursRepository->save($parcour, true);
+
 
             $dpeParcours = new DpeParcours();
             $dpeParcours->setParcours($parcour);
             $dpeParcours->setFormation($formation);
             $dpeParcours->setCampagneCollecte($this->getCampagneCollecte());
-            $dpeParcours->setVersion('1.0');
-            $dpeParcours->setEtatReconduction(TypeModificationDpeEnum::CREATION);
+            $dpeParcours->setVersion('0.1');
+            $dpeParcours->setEtatReconduction(TypeModificationDpeEnum::MODIFICATION_MCCC_TEXTE);
             $this->dpeParcoursWorkflow->apply($dpeParcours, 'initialiser');
+            $this->dpeParcoursWorkflow->apply($dpeParcours, 'autoriser');
             $this->entityManager->persist($dpeParcours);
             $this->entityManager->flush();
+            $parcour->addDpeParcour($dpeParcours);
+            $parcoursRepository->save($parcour, true);
 
             $event = new AddCentreParcoursEvent($parcour, ['ROLE_RESP_PARCOURS'], $parcour->getRespParcours());
             $eventDispatcher->dispatch($event, AddCentreParcoursEvent::ADD_CENTRE_PARCOURS);
@@ -386,6 +389,10 @@ class ParcoursController extends BaseController
 
             foreach ($parcour->getUeMutualisables() as $ueMutualisable) {
                 $entityManager->remove($ueMutualisable);
+            }
+
+            foreach ($parcour->getDpeParcours() as $dpe) {
+                $entityManager->remove($dpe);
             }
 
             $parcoursRepository->remove($parcour, true);

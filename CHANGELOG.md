@@ -2,6 +2,36 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.32.4](https://github.com/Dannebicque/oreof/compare/v1.32.3...v1.32.4) (2025-02-28)
+
+
+### Bug Fixes
+
+* MCCC ([a76afff](https://github.com/Dannebicque/oreof/commit/a76afff07d1e85767bc567fca911535e0f7c5892))
+* MCCC+heures sur EC ([30042e8](https://github.com/Dannebicque/oreof/commit/30042e82165a84b40685644754621f826e79df0d))
+
+### [1.32.3](https://github.com/Dannebicque/oreof/compare/v1.32.2...v1.32.3) (2025-02-27)
+
+
+### Bug Fixes
+
+* Création d'un nouveau parcours + init dpe ([91a0639](https://github.com/Dannebicque/oreof/commit/91a0639e376d7c2ad288f30ccb2128d2158a9709))
+* Sauvegarde ECTS dans fiche ou EC ([dfb309b](https://github.com/Dannebicque/oreof/commit/dfb309bfd44414b6a4ef8a09020d687c0a73eebc))
+
+### [1.32.2](https://github.com/Dannebicque/oreof/compare/v1.32.1...v1.32.2) (2025-02-27)
+
+
+### Bug Fixes
+
+* filtre fiche matière ([38bb050](https://github.com/Dannebicque/oreof/commit/38bb0504845d63c8dd7d045580845d1065b37f17))
+
+### [1.32.1](https://github.com/Dannebicque/oreof/compare/v1.32.0...v1.32.1) (2025-02-27)
+
+
+### Bug Fixes
+
+* pagination et buffer ([ddc8909](https://github.com/Dannebicque/oreof/commit/ddc89097853d4f1e47fbdd90fd412f88c9b5a132))
+
 ## [1.32.0](https://github.com/Dannebicque/oreof/compare/v1.31.80...v1.32.0) (2025-02-27)
 
 

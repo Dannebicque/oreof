@@ -252,7 +252,7 @@ class Parcours
     #[ORM\Column(length: 1, nullable: true)]
     private ?string $codeApogeeNumeroVersion = "1";
 
-    #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: DpeParcours::class)]
+    #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: DpeParcours::class, cascade: ['persist'])]
     #[ORM\OrderBy(['created' => 'DESC'])]
     private Collection $dpeParcours;
 
@@ -266,7 +266,7 @@ class Parcours
     #[Groups('parcours_json_versioning')]
     private ?NiveauLangueEnum $niveauFrancais;
 
-    /** @var Parcours $parcoursOrigineCopie Référence le parcours d'origine, depuis la copie */ 
+    /** @var Parcours $parcoursOrigineCopie Référence le parcours d'origine, depuis la copie */
     #[ORM\OneToOne(inversedBy: 'parcoursCopieAnneeUniversitaire', targetEntity: self::class, cascade: ['persist', 'remove'])]
     private ?self $parcoursOrigineCopie = null;
 

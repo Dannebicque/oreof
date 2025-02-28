@@ -29,70 +29,73 @@
                 </a>
 
             </th>
-            <th>Utilisé?</th>
+            <th>
+                    Utilisé ?
+            </th>
             <th>Remplissage</th>
             <th>Etat</th>
             <th></th>
 
         </tr>
-        {#        <tr> #}
-        {#            <th> #}
-        {#                <label for="filter-libelle" class="sr-only">libelle</label> #}
-        {#                <input #}
-        {#                        {{ stimulus_action('crud', 'filter', 'change', { #}
-        {#                            'field': 'libelle' #}
-        {#                        }) }} #}
-        {#                        value="{% if params['libelle'] is defined %}{{ params['libelle'] }}{% endif %}" #}
-        {#                        id="filter-libelle" class="form-control" #}
-        {#                > #}
-        {#            </th> #}
-        {#            <th> #}
-        {#                <label for="filter-referent" class="sr-only">referent</label> #}
-        {#                <select #}
-        {#                        {{ stimulus_action('crud', 'filter', 'change', { #}
-        {#                            'field': 'referent' #}
-        {#                        }) }} #}
-        {#                        {{ stimulus_controller('symfony/ux-autocomplete/autocomplete') }} #}
-        {#                        id="filter-referent" class="form-select"> #}
-        {#                    <option value="">Tous les référents</option> #}
-        {#                    <option value="vide" {% if params['referent'] is defined and params['referent']  == 'vide' %}selected{% endif %}>Non défini</option> #}
-        {#                    {% for user in users %} #}
-        {#                        <option value="{{ user.id }}" #}
-        {#                                {% if params['referent'] is defined and params['referent']  == user.id %}selected{% endif %} #}
-        {#                        >{{ user.display }}</option> #}
-        {#                    {% endfor %} #}
-        {#                </select> #}
-        {#            </th> #}
-        {#            <th> #}
-        {#                <label for="filter-utilise" class="sr-only">utilisé?</label> #}
-        {#                <select #}
-        {#                        {{ stimulus_action('crud', 'filter', 'change', { #}
-        {#                            'field': 'utilise' #}
-        {#                        }) }} #}
-        {#                        id="filter-utilise" class="form-select"> #}
-        {#                    <option value="">Tous</option> #}
-        {#                    <option value="1">Oui</option> #}
-        {#                    <option value="0">Non</option> #}
-        {#                </select> #}
-        {#            </th> #}
-        {#            <th> #}
-        {#                <label for="filter-remplissage" class="sr-only">remplissage</label> #}
-        {#                <select #}
-        {#                        {{ stimulus_action('crud', 'filter', 'change', { #}
-        {#                            'field': 'remplissage' #}
-        {#                        }) }} #}
-        {#                        id="filter-remplissage" class="form-select"> #}
-        {#                </select> #}
-        {#            </th> #}
-        {#            <th> #}
-        {#                <button class="btn btn-outline-danger" #}
-        {#                        {{ stimulus_action('crud', 'effaceFiltre', 'click', { #}
-        {#                        }) }} #}
-        {#                > #}
-        {#                    Effacer les filtres #}
-        {#                </button> #}
-        {#            </th> #}
-        {#        </tr> #}
+                <tr>
+                    <th>
+{#                        <label for="filter-libelle" class="sr-only">libelle</label> #}
+{#                        <input #}
+{#                                {{ stimulus_action('crud', 'filter', 'change', { #}
+{#                                    'field': 'libelle' #}
+{#                                }) }} #}
+{#                                value="{% if params['libelle'] is defined %}{{ params['libelle'] }}{% endif %}" #}
+{#                                id="filter-libelle" class="form-control" #}
+{#                        > #}
+                    </th>
+                    <th>
+{#                        <label for="filter-referent" class="sr-only">referent</label> #}
+{#                        <select #}
+{#                                {{ stimulus_action('crud', 'filter', 'change', { #}
+{#                                    'field': 'referent' #}
+{#                                }) }} #}
+{#                                {{ stimulus_controller('symfony/ux-autocomplete/autocomplete') }} #}
+{#                                id="filter-referent" class="form-select"> #}
+{#                            <option value="">Tous les référents</option> #}
+{#                            <option value="vide" {% if params['referent'] is defined and params['referent']  == 'vide' %}selected{% endif %}>Non défini</option> #}
+{#                            {% for user in users %} #}
+{#                                <option value="{{ user.id }}" #}
+{#                                        {% if params['referent'] is defined and params['referent']  == user.id %}selected{% endif %} #}
+{#                                >{{ user.display }}</option> #}
+{#                            {% endfor %} #}
+{#                        </select> #}
+                    </th>
+                    <th>
+                        <label for="filter-utilise" class="sr-only">utilisé?</label>
+                        <select
+                                {{ stimulus_action('crud', 'filter', 'change', {
+                                    'field': 'utilise'
+                                }) }}
+                                id="filter-utilise" class="form-select">
+                            <option value="all">Tous</option>
+                            <option value="1">Oui</option>
+                            <option value="0">Non</option>
+                        </select>
+                    </th>
+                    <th>
+{#                        <label for="filter-remplissage" class="sr-only">remplissage</label> #}
+{#                        <select #}
+{#                                {{ stimulus_action('crud', 'filter', 'change', { #}
+{#                                    'field': 'remplissage' #}
+{#                                }) }} #}
+{#                                id="filter-remplissage" class="form-select"> #}
+{#                        </select> #}
+                    </th>
+                    <th></th>
+                    <th class="text-end">
+                        <button class="btn btn-outline-danger"
+                                {{ stimulus_action('crud', 'effaceFiltre', 'click', {
+                                }) }}
+                        >
+                            Effacer les filtres
+                        </button>
+                    </th>
+                </tr>
         </thead>
         <tbody>
         {% for ficheMatiere in ficheMatieres %}
