@@ -72,7 +72,7 @@
                                                     <i class="fal fa-link"
                                                        data-controller="tooltip"
                                                        data-tooltip-placement-value="bottom"
-                                                       title="Raccrochée à l'UE {{ ue.ueRaccrochee.display(parcours) }}"></i>{% endif %}
+                                                       title="Raccrochée à l'{{ ue.ueRaccrochee.display(parcours) }}"></i>{% endif %}
                                                 {% if ue.ueMutualisables|length >0 and isSemestreRaccroche == false %}
                                                     <i class="fal fa-share-nodes"
                                                        data-controller="tooltip"
@@ -91,7 +91,9 @@
                                         <div class="col-md-1 d-flex flex-column justify-content-center">
                                             <div class="text-muted text-small d-md-none">NB. EC</div>
                                             {% if ue.natureUeEc != null and ue.natureUeEc.libre == true %}
-                                                <span class="badge bg-info">UE Libre</span>
+                                                <span class="badge bg-info">
+                                                    <abbr title="{{ ue.descriptionUeLibre }}">UE Libre</abbr>
+                                                </span>
                                             {% else %}
                                                 {% if ue.ueRaccrochee != null %}
                                                     {% if ue.ueRaccrochee.ue != null %}
@@ -164,7 +166,7 @@
                                                             <button
                                                                     {{ stimulus_controller('modal', {
                                                                         size: 'lg',
-                                                                        modalTitle: 'Modifier l\'UE ' ~ ue.display(parcours),
+                                                                        modalTitle: 'Modifier l\'' ~ ue.display(parcours),
                                                                         modalUrl: path('structure_ue_edit', {id:ue.id, parcours: parcours
                                                                         .id})
                                                                     }) }}
@@ -174,7 +176,7 @@
                                                                     data-bs-toggle="tooltip"
                                                                     {% if raccroche %}disabled{% endif %}
                                                                     data-bs-placement="bottom"
-                                                                    title="Modifier l'UE {{ ue.display(parcours) }}"
+                                                                    title="Modifier l'{{ ue.display(parcours) }}"
                                                             >
                                                                 <i class="{{ iconEdit }}"></i>
                                                                 <span> Modifier l'UE</span>
@@ -208,12 +210,12 @@
                                                                                 href="#"
                                                                                 {{ stimulus_controller('modal', {
                                                                                     size: 'lg',
-                                                                                    modalTitle: 'Dupliquer l\'UE ' ~ ue.display(parcours),
+                                                                                    modalTitle: 'Dupliquer l\'' ~ ue.display(parcours),
                                                                                     modalUrl:
                                                                                     path
                                                                                         ('structure_ue_dupliquer', {parcours:parcours.id, ue: ue.id})
                                                                                 }) }}
-                                                                                title="Dupliquer l'UE {{ ue.display(parcours) }}"
+                                                                                title="Dupliquer l'{{ ue.display(parcours) }}"
                                                                                 data-action="click->modal#openModal"
                                                                             {% endif %}
                                                                             class="dropdown-item text-primary"
@@ -231,7 +233,7 @@
                                                                             href="#"
                                                                             {{ stimulus_controller('modal', {
                                                                                 size: 'lg',
-                                                                                modalTitle: 'Déplacer l\'UE ' ~ ue.display(parcours),
+                                                                                modalTitle: 'Déplacer l\'' ~ ue.display(parcours),
                                                                                 modalUrl:
                                                                                 path
                                                                                     ('structure_ue_changer', {parcours:parcours.id, ue: ue.id})
@@ -242,7 +244,7 @@
                                                                             {% if raccroche %}disabled{% endif %}
                                                                             data-bs-toggle="tooltip"
                                                                             data-bs-placement="bottom"
-                                                                            title="Déplacer l\'UE {{ ue.display(parcours) }}"
+                                                                            title="Déplacer l\'{{ ue.display(parcours) }}"
                                                                     >
                                                                         <i class="fal fa-right-left"></i>
                                                                         <span> Déplacer l'UE</span>
@@ -253,7 +255,7 @@
                                                                             href="#"
                                                                             {{ stimulus_controller('modal', {
                                                                                 size: 'lg',
-                                                                                modalTitle: 'Mutualiser l\'UE ' ~ ue.display(parcours),
+                                                                                modalTitle: 'Mutualiser l\'' ~ ue.display(parcours),
                                                                                 modalUrl:
                                                                                 path
                                                                                     ('structure_ue_mutualiser', {semestre:semestre.id, ue: ue.id})
@@ -264,7 +266,7 @@
                                                                             {% if raccroche %}disabled{% endif %}
                                                                             data-bs-toggle="tooltip"
                                                                             data-bs-placement="bottom"
-                                                                            title="Modifier l\'UE {{ ue.display(parcours) }}"
+                                                                            title="Modifier l\'{{ ue.display(parcours) }}"
                                                                     >
                                                                         <i class="fal fa-share-nodes"></i>
                                                                         <span> Mutualiser l'UE</span>
@@ -275,7 +277,7 @@
                                                                             href="#"
                                                                             {{ stimulus_controller('modal', {
                                                                                 size: 'lg',
-                                                                                modalTitle: 'Raccrocher une UE mutualisé pour l\'UE ' ~
+                                                                                modalTitle: 'Raccrocher une UE mutualisé pour l\'' ~
                                                                                 ue.display(parcours),
                                                                                 modalUrl: path('structure_ue_raccrocher', {ue:ue.id, parcours: parcours.id})
                                                                             }) }}
@@ -417,7 +419,7 @@
                                                         <i class="fal fa-link"
                                                            data-controller="tooltip"
                                                            data-tooltip-placement-value="bottom"
-                                                           title="Raccrochée à l'UE {{ uee.display(parcours) }}"></i>
+                                                           title="Raccrochée à l'{{ uee.display(parcours) }}"></i>
                                                     {% endif %}
                                                 </p>
                                             </div>
@@ -432,7 +434,8 @@
                                             <div class="col-md-1 d-flex flex-column justify-content-center">
                                                 <div class="text-muted text-small d-md-none">NB. EC</div>
                                                 {% if uee.natureUeEc != null and uee.natureUeEc.libre == true %}
-                                                    <span class="badge bg-info">UE Libre</span>
+                                                    <span class="badge bg-info">
+                                                        <abbr title="{{ uee.descriptionUeLibre }}">UE Libre</abbr></span>
                                                 {% else %}
                                                     {{ uee.nbElementConstitutifs|badgeNb }}
                                                 {% endif %}
@@ -481,12 +484,12 @@
                                                                     {% else %}
                                                                         {{ stimulus_controller('modal', {
                                                                             size: 'lg',
-                                                                            modalTitle: 'Modifier l\'UE ' ~ uee.display(parcours),
+                                                                            modalTitle: 'Modifier l\'' ~ uee.display(parcours),
                                                                             modalUrl: path('structure_ue_edit', {id:uee.id, parcours: parcours
                                                                             .id})
                                                                         }) }}
                                                                         data-action="click->modal#openModal"
-                                                                        title="Modifier l'UE {{ uee.display(parcours) }}"
+                                                                        title="Modifier l'{{ uee.display(parcours) }}"
                                                                     {% endif %}
 
                                                                     class="btn btn-sm text-warning me-1"
@@ -518,7 +521,7 @@
                                                                                 {% else %}
                                                                                     {{ stimulus_controller('modal', {
                                                                                         size: 'lg',
-                                                                                        modalTitle: 'Mutualiser l\'UE ' ~ uee.display(parcours),
+                                                                                        modalTitle: 'Mutualiser l\'' ~ uee.display(parcours),
                                                                                         modalUrl:
                                                                                         path
                                                                                             ('structure_ue_mutualiser', {semestre:semestre.id, ue: uee.id})
@@ -529,7 +532,7 @@
                                                                                 data-size="lg"
                                                                                 data-bs-toggle="tooltip"
                                                                                 data-bs-placement="bottom"
-                                                                                title="Mutualiser l\'UE {{ uee.display(parcours) }}"
+                                                                                title="Mutualiser l\'{{ uee.display(parcours) }}"
                                                                         >
                                                                             <i class="fal fa-share-nodes"></i>
                                                                             <span> Mutualiser l'UE</span>
@@ -543,7 +546,7 @@
                                                                                 {#                                                                            {% else %} #}
                                                                                 {{ stimulus_controller('modal', {
                                                                                     size: 'lg',
-                                                                                    modalTitle: 'Raccrocher une UE mutualisé pour l\'UE ' ~
+                                                                                    modalTitle: 'Raccrocher une UE mutualisé pour l\'' ~
                                                                                     uee.display(parcours),
                                                                                     modalUrl: path('structure_ue_raccrocher', {ue:uee.id, parcours: parcours.id})
                                                                                 }) }}
@@ -684,7 +687,7 @@
                                                                 <i class="fal fa-link"
                                                                    data-controller="tooltip"
                                                                    data-tooltip-placement-value="bottom"
-                                                                   title="Raccrochée à l'UE {{ ueee.display(parcours) }}"></i>
+                                                                   title="Raccrochée à l'{{ ueee.display(parcours) }}"></i>
                                                             {% endif %}
                                                         </p>
                                                     </div>
@@ -699,7 +702,8 @@
                                                     <div class="col-md-1 d-flex flex-column justify-content-center">
                                                         <div class="text-muted text-small d-md-none">NB. EC</div>
                                                         {% if ueee.natureUeEc != null and ueee.natureUeEc.libre == true %}
-                                                            <span class="badge bg-info">UE Libre</span>
+                                                            <span class="badge bg-info">
+                                                                <abbr title="{{ ueee.descriptionUeLibre }}">UE Libre</abbr></span>
                                                         {% else %}
                                                             {{ ueee.nbElementConstitutifs|badgeNb }}
                                                         {% endif %}
@@ -738,12 +742,12 @@
                                                                         {% else %}
                                                                             {{ stimulus_controller('modal', {
                                                                                 size: 'lg',
-                                                                                modalTitle: 'Modifier l\'UE ' ~ uee.display(parcours),
+                                                                                modalTitle: 'Modifier l\'' ~ uee.display(parcours),
                                                                                 modalUrl: path('structure_ue_edit', {id:ueee.id, parcours: parcours
                                                                                 .id})
                                                                             }) }}
                                                                             data-action="click->modal#openModal"
-                                                                            title="Modifier l'UE {{ ueee.display(parcours) }}"
+                                                                            title="Modifier l'{{ ueee.display(parcours) }}"
                                                                         {% endif %}
 
                                                                         class="btn btn-sm text-warning me-1"
@@ -777,7 +781,7 @@
                                                                                     {% else %}
                                                                                         {{ stimulus_controller('modal', {
                                                                                             size: 'lg',
-                                                                                            modalTitle: 'Mutualiser l\'UE ' ~ ueee.display(parcours),
+                                                                                            modalTitle: 'Mutualiser l\'' ~ ueee.display(parcours),
                                                                                             modalUrl:
                                                                                             path
                                                                                                 ('structure_ue_mutualiser', {semestre:semestre.id, ue: ueee.id})
@@ -788,7 +792,7 @@
                                                                                     data-size="lg"
                                                                                     data-bs-toggle="tooltip"
                                                                                     data-bs-placement="bottom"
-                                                                                    title="Mutualiser l\'UE {{ ueee.display(parcours) }}"
+                                                                                    title="Mutualiser l\'{{ ueee.display(parcours) }}"
                                                                             >
                                                                                 <i class="fal fa-share-nodes"></i>
                                                                                 <span> Mutualiser l'UE</span>
@@ -802,7 +806,7 @@
                                                                                     {#                                                                            {% else %} #}
                                                                                     {{ stimulus_controller('modal', {
                                                                                         size: 'lg',
-                                                                                        modalTitle: 'Raccrocher une UE mutualisé pour l\'UE ' ~
+                                                                                        modalTitle: 'Raccrocher une UE mutualisé pour l\' ' ~
                                                                                         ueee.display(parcours),
                                                                                         modalUrl: path('structure_ue_raccrocher', {ue:ueee.id, parcours: parcours.id})
                                                                                     }) }}
