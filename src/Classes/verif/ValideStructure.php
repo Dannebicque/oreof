@@ -44,6 +44,7 @@ abstract class ValideStructure extends AbstractValide
                     $sem = $semestreParcour->getSemestre();
                 }
 
+                //todo: ne pas avoir si non ouvert ?
                 self::$structure['semestres'][$semestreParcour->getOrdre()]['global'] = self::COMPLET;
                 self::$structure['semestres'][$semestreParcour->getOrdre()]['erreur'] = [];
                 self::$structure['semestres'][$semestreParcour->getOrdre()]['ues'] = [];
