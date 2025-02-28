@@ -45,13 +45,18 @@ class Remplissage
         $this->total += $remp->total;
     }
 
-    public function empty()
+    public function empty() : bool
     {
         return $this->score === 0 && $this->total === 0;
     }
 
     public function isFull(): bool
     {
+        if (0 === $this->total || $this->empty()) {
+            return false;
+        }
+
+
         return $this->score === $this->total;
     }
 }
