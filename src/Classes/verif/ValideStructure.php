@@ -44,11 +44,12 @@ abstract class ValideStructure extends AbstractValide
                     $sem = $semestreParcour->getSemestre();
                 }
 
+                //todo: ne pas avoir si non ouvert ?
                 self::$structure['semestres'][$semestreParcour->getOrdre()]['global'] = self::COMPLET;
                 self::$structure['semestres'][$semestreParcour->getOrdre()]['erreur'] = [];
                 self::$structure['semestres'][$semestreParcour->getOrdre()]['ues'] = [];
 
-                if ($sem !== null && $sem->isNonDispense() !== true) {
+                if ($sem !== null && $sem->isNonDispense() !== true && $semestreParcour->isOuvert() === true) {
                     if ($sem->getUes()->count() === 0) {
                         self::$errors[] = 'Aucune UE renseignée pour le semestre ' . $semestreParcour->getOrdre();
                     }

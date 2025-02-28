@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.32.6](https://github.com/Dannebicque/oreof/compare/v1.32.5...v1.32.6) (2025-02-28)
+
+
+### Bug Fixes
+
+* reouverture formation ([64e2f64](https://github.com/Dannebicque/oreof/commit/64e2f6466f60e73cf0ec72ef0619522a45f9c45a))
+
+### [1.32.5](https://github.com/Dannebicque/oreof/compare/v1.32.4...v1.32.5) (2025-02-28)
+
+
+### Bug Fixes
+
+* Semestre ouvert pour vérification ([3e388ac](https://github.com/Dannebicque/oreof/commit/3e388ac95da69f2baef82e2c93173f2ef1bf1db8))
+
 ### [1.32.4](https://github.com/Dannebicque/oreof/compare/v1.32.3...v1.32.4) (2025-02-28)
 
 

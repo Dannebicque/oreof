@@ -99,7 +99,6 @@ class ElementConstitutifMcccController extends AbstractController
                         }
 
                         $typeD->saveMcccs($fm, $request->request);
-                    } else {
                     }
                 } else {
                     //MCCC sur EC

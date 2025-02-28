@@ -31,9 +31,6 @@ class FormationWizardController extends AbstractController
     #[Route('/{formation}/1', name: 'app_formation_wizard_step_1', methods: ['GET'])]
     public function step1(Formation $formation): Response
     {
-        if (!Access::isAccessibleMention($formation, 'ss_cfvu')) {
-            return $this->render('parcours_wizard/_access_denied.html.twig');
-        }
         $form = $this->createForm(FormationStep1Type::class, $formation);
 
         return $this->render('formation_wizard/_step1.html.twig', [
