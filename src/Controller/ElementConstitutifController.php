@@ -93,6 +93,7 @@ class ElementConstitutifController extends BaseController
 
     #[Route('/new/{ue}/{parcours}', name: 'app_element_constitutif_new', methods: ['GET', 'POST'])]
     public function new(
+        NatureUeEcRepository         $natureUeEcRepository,
         EcOrdre                      $ecOrdre,
         Request                      $request,
         TypeEcRepository             $typeEcRepository,
@@ -108,7 +109,7 @@ class ElementConstitutifController extends BaseController
 
         $elementConstitutif->setModaliteEnseignement($parcours?->getModalitesEnseignement());
         $elementConstitutif->setUe($ue);
-        $typeDiplome = $parcours->getFormation()->getTypeDiplome();
+        $typeDiplome = $parcours->getFormation()?->getTypeDiplome();
 
         if ($typeDiplome === null) {
             throw new RuntimeException('Type de diplôme non trouvé');
@@ -162,6 +163,7 @@ class ElementConstitutifController extends BaseController
                 $elementConstitutifRepository->save($elementConstitutif, true);
                 //on récupère le champs matières, on découpe selon la ,. Si ca commence par "id_", on récupère la matière, sinon on créé la matière
                 $matieres = explode(',', $request->request->get('matieres'));
+                $natureEc = $natureUeEcRepository->findOneBy(['choix' => false, 'libre' => false, 'type' => 'ec']);
                 foreach ($matieres as $matiere) {
                     $ec = new ElementConstitutif();
                     $nextSousEc = $ecOrdre->getOrdreEnfantSuivant($elementConstitutif);
@@ -169,7 +171,7 @@ class ElementConstitutifController extends BaseController
                     $ec->setParcours($parcours);
                     $ec->setModaliteEnseignement($parcours?->getModalitesEnseignement());
                     $ec->setUe($ue);
-                    $ec->setNatureUeEc($elementConstitutif->getNatureUeEc());
+                    $ec->setNatureUeEc($natureEc);
 
                     if (str_starts_with($matiere, 'id_')) {
                         $ficheMatiere = $ficheMatiereRepository->find((int)str_replace('id_', '', $matiere));
@@ -309,6 +311,7 @@ class ElementConstitutifController extends BaseController
 
     #[Route('/{id}/edit/{parcours}', name: 'app_element_constitutif_edit', methods: ['GET', 'POST'])]
     public function edit(
+        NatureUeEcRepository $natureUeEcRepository,
         EcOrdre                      $ecOrdre,
         FicheMatiereRepository       $ficheMatiereRepository,
         EntityManagerInterface       $entityManager,
@@ -351,9 +354,8 @@ class ElementConstitutifController extends BaseController
             $uow->computeChangeSets();
             $changeSet = $uow->getEntityChangeSet($elementConstitutif);
 
+
             if (isset($changeSet['natureUeEc'])) {
-                //die('changement');
-                //initial $changeSet['natureUeEc'][0]
                 if ($changeSet['natureUeEc'][0]->isChoix() === true) {
                     // c'était une EC à choix, on supprime les choix.
                     foreach ($elementConstitutif->getEcEnfants() as $ecEnfant) {
@@ -390,6 +392,7 @@ class ElementConstitutifController extends BaseController
                 //todo: supprimer MCCC...
 
             } elseif ($elementConstitutif->getNatureUeEc()?->isChoix() === true) {
+                $natureEc = $natureUeEcRepository->findOneBy(['choix' => false, 'libre' => false, 'type' => 'ec']);
                 $elementConstitutif->setLibelle($request->request->get('ficheMatiereLibre'));
                 $elementConstitutif->setFicheMatiere(null);
                 //on récupère le champs matières, on découpe selon la ,. Si ca commence par "id_", on récupère la matière, sinon on créé la matière
@@ -418,7 +421,7 @@ class ElementConstitutifController extends BaseController
                         $ec->setParcours($parcours);
                         $ec->setModaliteEnseignement($parcours?->getModalitesEnseignement());
                         $ec->setUe($elementConstitutif->getUe());
-                        $ec->setNatureUeEc($elementConstitutif->getNatureUeEc());
+                        $ec->setNatureUeEc($natureEc);
                         $ec->setFicheMatiere($ficheMatiere);
                         $ec->setOrdre($nextSousEc);
                         $ec->genereCode();
@@ -428,6 +431,7 @@ class ElementConstitutifController extends BaseController
             }
 
             $elementConstitutif->genereCode();
+
             $entityManager->flush();
 
             return $this->json(true);
