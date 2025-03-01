@@ -144,7 +144,8 @@ class ElementConstitutifController extends BaseController
                         $request->request->get('ficheMatiere')
                     ));
                 } else {
-                    $ficheMatiere = new FicheMatiere($this->getCampagneCollecte());
+                    $ficheMatiere = new FicheMatiere();
+                    $ficheMatiere->setCampagneCollecte($this->getCampagneCollecte());
                     $ficheMatiere->setLibelle($request->request->get('ficheMatiereLibelle'));
                     $ficheMatiere->setParcours($parcours); //todo: ajouter le semestre
                     $ficheMatiereRepository->save($ficheMatiere, true);
@@ -176,7 +177,8 @@ class ElementConstitutifController extends BaseController
                     if (str_starts_with($matiere, 'id_')) {
                         $ficheMatiere = $ficheMatiereRepository->find((int)str_replace('id_', '', $matiere));
                     } else {
-                        $ficheMatiere = new FicheMatiere($this->getCampagneCollecte());
+                        $ficheMatiere = new FicheMatiere();
+                        $ficheMatiere->setCampagneCollecte($this->getCampagneCollecte());
                         $ficheMatiere->setLibelle(str_replace('ac_', '', $matiere));
                         $ficheMatiere->setParcours($parcours); //todo: ajouter le semestre
                         $ficheMatiereRepository->save($ficheMatiere, true);
@@ -269,7 +271,9 @@ class ElementConstitutifController extends BaseController
                     $request->request->get('ficheMatiere')
                 ));
             } else {
-                $ficheMatiere = new FicheMatiere($this->getCampagneCollecte());
+                $ficheMatiere = new FicheMatiere();
+                $ficheMatiere->setCampagneCollecte($this->getCampagneCollecte());
+
                 $ficheMatiere->setLibelle($request->request->get('ficheMatiereLibelle'));
                 $ficheMatiere->setParcours($parcours);
                 $ficheMatiereRepository->save($ficheMatiere, true);
@@ -379,7 +383,8 @@ class ElementConstitutifController extends BaseController
                         $request->request->get('ficheMatiere')
                     ));
                 } else {
-                    $ficheMatiere = new FicheMatiere($this->getCampagneCollecte());
+                    $ficheMatiere = new FicheMatiere();
+                    $ficheMatiere->setCampagneCollecte($this->getCampagneCollecte());
                     $ficheMatiere->setLibelle($request->request->get('ficheMatiereLibelle'));
                     $ficheMatiere->setParcours($parcours); //todo: ajouter le semestre
                     $ficheMatiereRepository->save($ficheMatiere, true);
@@ -402,7 +407,8 @@ class ElementConstitutifController extends BaseController
                     if (str_starts_with($matiere, 'id_')) {
                         $ficheMatiere = $ficheMatiereRepository->find((int)str_replace('id_', '', $matiere));
                     } else {
-                        $ficheMatiere = new FicheMatiere($this->getCampagneCollecte());
+                        $ficheMatiere = new FicheMatiere();
+                        $ficheMatiere->setCampagneCollecte($this->getCampagneCollecte());
                         $ficheMatiere->setLibelle(str_replace('ac_', '', $matiere));
                         $ficheMatiere->setParcours($parcours); //todo: ajouter le semestre
                         $ficheMatiereRepository->save($ficheMatiere, true);
@@ -480,7 +486,8 @@ class ElementConstitutifController extends BaseController
                         $request->request->get('ficheMatiere')
                     ));
                 } else {
-                    $ficheMatiere = new FicheMatiere($this->getCampagneCollecte());
+                    $ficheMatiere = new FicheMatiere();
+                    $ficheMatiere->setCampagneCollecte($this->getCampagneCollecte());
                     $ficheMatiere->setLibelle($request->request->get('ficheMatiereLibelle'));
                     $ficheMatiere->setParcours($parcours); //todo: ajouter le semestre
                     $ficheMatiereRepository->save($ficheMatiere, true);

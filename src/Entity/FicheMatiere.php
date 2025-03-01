@@ -225,9 +225,8 @@ class FicheMatiere
     #[ORM\ManyToOne]
     private ?CampagneCollecte $campagneCollecte = null;
 
-    public function __construct(CampagneCollecte $campagneCollecte)
+    public function __construct()
     {
-        $this->campagneCollecte = $campagneCollecte;
         $this->mcccs = new ArrayCollection();
         $this->competences = new ArrayCollection();
         $this->langueDispense = new ArrayCollection();

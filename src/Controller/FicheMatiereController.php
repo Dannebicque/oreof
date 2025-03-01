@@ -47,7 +47,9 @@ class FicheMatiereController extends BaseController
         LangueRepository $langueRepository,
         Request $request,
     ): Response {
-        $ficheMatiere = new FicheMatiere($this->getCampagneCollecte());
+        $ficheMatiere = new FicheMatiere();
+        $ficheMatiere->setCampagneCollecte($this->getCampagneCollecte());
+
         if ($request->query->has('ue')) {
             $ue = $ueRepository->find($request->query->get('ue'));
             $ficheMatiere->setParcours($ue->getSemestre()?->getSemestreParcours()->first()->getParcours());

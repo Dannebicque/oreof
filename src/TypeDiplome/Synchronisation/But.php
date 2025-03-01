@@ -413,7 +413,9 @@ class But
 
     private function addRessource(array $ressource): void
     {
-        $fm = new FicheMatiere($this->campagneCollecte);
+        $fm = new FicheMatiere();
+        $fm->setCampagneCollecte($this->campagneCollecte);
+
         $fm->setTypeMatiere(FicheMatiere::TYPE_MATIERE_RESSOURCE);
         $fm->setLibelle($ressource['libelle']);
         $fm->setSigle($ressource['codeMatiere']);
@@ -468,7 +470,9 @@ class But
 
     private function addSae(array $sae): void
     {
-        $fm = new FicheMatiere($this->campagneCollecte);
+        $fm = new FicheMatiere();
+        $fm->setCampagneCollecte($this->campagneCollecte);
+
         $fm->setTypeMatiere(FicheMatiere::TYPE_MATIERE_SAE);
         $fm->setLibelle($sae['libelle']);
         $fm->setObjectifs($sae['objectifs']);
