@@ -38,7 +38,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/fiche/matiere')]
-class FicheMatiereController extends AbstractController
+class FicheMatiereController extends BaseController
 {
     #[Route('/new', name: 'app_fiche_matiere_new', methods: ['GET', 'POST'])]
     public function new(
@@ -47,7 +47,7 @@ class FicheMatiereController extends AbstractController
         LangueRepository $langueRepository,
         Request $request,
     ): Response {
-        $ficheMatiere = new FicheMatiere();
+        $ficheMatiere = new FicheMatiere($this->getCampagneCollecte());
         if ($request->query->has('ue')) {
             $ue = $ueRepository->find($request->query->get('ue'));
             $ficheMatiere->setParcours($ue->getSemestre()?->getSemestreParcours()->first()->getParcours());

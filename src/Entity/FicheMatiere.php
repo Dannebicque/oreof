@@ -196,10 +196,6 @@ class FicheMatiere
     #[ORM\Column(nullable: true)]
     private ?bool $quitus = false;
 
-    #[ORM\ManyToMany(targetEntity: Composante::class, inversedBy: 'ficheMatieres')]
-    /** @deprecated('encore utile?') */
-    private Collection $composante;
-
     #[ORM\OneToMany(mappedBy: 'ficheMatiere', targetEntity: CommentaireFicheMatiere::class)]
     private Collection $commentaires;
 
@@ -229,8 +225,9 @@ class FicheMatiere
     #[ORM\ManyToOne]
     private ?CampagneCollecte $campagneCollecte = null;
 
-    public function __construct()
+    public function __construct(CampagneCollecte $campagneCollecte)
     {
+        $this->campagneCollecte = $campagneCollecte;
         $this->mcccs = new ArrayCollection();
         $this->competences = new ArrayCollection();
         $this->langueDispense = new ArrayCollection();
@@ -1011,30 +1008,6 @@ class FicheMatiere
     public function setEcts(?float $ects): static
     {
         $this->ects = $ects;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Composante>
-     */
-    public function getComposante(): Collection
-    {
-        return $this->composante;
-    }
-
-    public function addComposante(Composante $composante): static
-    {
-        if (!$this->composante->contains($composante)) {
-            $this->composante->add($composante);
-        }
-
-        return $this;
-    }
-
-    public function removeComposante(Composante $composante): static
-    {
-        $this->composante->removeElement($composante);
 
         return $this;
     }

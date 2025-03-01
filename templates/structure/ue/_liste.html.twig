@@ -92,7 +92,7 @@
                                             <div class="text-muted text-small d-md-none">NB. EC</div>
                                             {% if ue.natureUeEc != null and ue.natureUeEc.libre == true %}
                                                 <span class="badge bg-info">
-                                                    <abbr title="{{ ue.descriptionUeLibre }}">UE Libre</abbr>
+                                                    UE Libre
                                                 </span>
                                             {% else %}
                                                 {% if ue.ueRaccrochee != null %}
@@ -435,7 +435,7 @@
                                                 <div class="text-muted text-small d-md-none">NB. EC</div>
                                                 {% if uee.natureUeEc != null and uee.natureUeEc.libre == true %}
                                                     <span class="badge bg-info">
-                                                        <abbr title="{{ uee.descriptionUeLibre }}">UE Libre</abbr></span>
+                                                        UE Libre</span>
                                                 {% else %}
                                                     {{ uee.nbElementConstitutifs|badgeNb }}
                                                 {% endif %}
@@ -703,7 +703,7 @@
                                                         <div class="text-muted text-small d-md-none">NB. EC</div>
                                                         {% if ueee.natureUeEc != null and ueee.natureUeEc.libre == true %}
                                                             <span class="badge bg-info">
-                                                                <abbr title="{{ ueee.descriptionUeLibre }}">UE Libre</abbr></span>
+                                                                UE Libre</span>
                                                         {% else %}
                                                             {{ ueee.nbElementConstitutifs|badgeNb }}
                                                         {% endif %}

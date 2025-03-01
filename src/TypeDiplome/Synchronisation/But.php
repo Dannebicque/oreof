@@ -12,6 +12,7 @@ namespace App\TypeDiplome\Synchronisation;
 use App\Entity\ButApprentissageCritique;
 use App\Entity\ButCompetence;
 use App\Entity\ButNiveau;
+use App\Entity\CampagneCollecte;
 use App\Entity\ElementConstitutif;
 use App\Entity\FicheMatiere;
 use App\Entity\FicheMatiereMutualisable;
@@ -58,6 +59,7 @@ class But
     private ?TypeUe $typeUe;
     private ?Langue $francais;
     private string $baseDir;
+    private CampagneCollecte $campagneCollecte;
 
     public function __construct(
         LangueRepository                       $langueRepository,
@@ -68,7 +70,7 @@ class But
         protected HttpClientInterface          $client,
         protected ParameterBagInterface        $container,
         protected ElementConstitutifRepository $elementConstitutifRepository,
-        private KernelInterface                $kernel
+        private KernelInterface                $kernel,
     ) {
         $this->typeEcRessource = $typeEcRepository->findOneBy(['libelle' => 'Ressource']);
         $this->typeEcSae = $typeEcRepository->findOneBy(['libelle' => 'SAE']);
@@ -85,8 +87,9 @@ class But
      * @throws RedirectionExceptionInterface
      * @throws ClientExceptionInterface|JsonException
      */
-    public function synchroniser(Formation $formation): bool
+    public function synchroniser(Formation $formation, CampagneCollecte $campagneCollecte): bool
     {
+        $this->campagneCollecte = $campagneCollecte;
         $this->formation = $formation;
         $response = $this->client->request(
             'GET',
@@ -410,7 +413,7 @@ class But
 
     private function addRessource(array $ressource): void
     {
-        $fm = new FicheMatiere();
+        $fm = new FicheMatiere($this->campagneCollecte);
         $fm->setTypeMatiere(FicheMatiere::TYPE_MATIERE_RESSOURCE);
         $fm->setLibelle($ressource['libelle']);
         $fm->setSigle($ressource['codeMatiere']);
@@ -465,7 +468,7 @@ class But
 
     private function addSae(array $sae): void
     {
-        $fm = new FicheMatiere();
+        $fm = new FicheMatiere($this->campagneCollecte);
         $fm->setTypeMatiere(FicheMatiere::TYPE_MATIERE_SAE);
         $fm->setLibelle($sae['libelle']);
         $fm->setObjectifs($sae['objectifs']);
