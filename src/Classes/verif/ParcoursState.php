@@ -205,7 +205,7 @@ class ParcoursState
 
     private function etatOnglet4(): bool|array
     {
-        $isBut = $this->parcours->getFormation()->getTypeDiplome()->getLibelleCourt() === 'BUT';
+        $isBut = $this->parcours->getFormation()?->getTypeDiplome()?->getLibelleCourt() === 'BUT';
         $tab['error'] = [];
 
         if ($this->parcours->getSemestreParcours()->count() === 0) {
