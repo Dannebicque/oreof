@@ -71,6 +71,18 @@ class FicheMatiereRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+//    /** @deprecated('pas de sens?') */
+//    public function findByComposante(Composante $composante): array
+//    {
+//        return $this->createQueryBuilder('f')
+//            ->join('f.composante', 'c')
+//            ->where('c = :composante')
+//            ->setParameter('composante', $composante)
+//            ->orderBy('f.libelle', 'ASC')
+//            ->getQuery()
+//            ->getResult();
+//    }
+
     public function findByAdmin(
         CampagneCollecte $campagneCollecte,
         array            $options = []

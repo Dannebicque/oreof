@@ -423,3 +423,11 @@ thead th {
 .nav-tabs .nav-link.disabled, .nav-tabs .nav-link:disabled {
   background-color: var(--muted);
 }
+
+.error {
+  border-color: var(--danger);
+}
+
+input[type="radio"].error {
+  border: 2px solid var(--danger);
+}
