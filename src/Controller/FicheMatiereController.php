@@ -21,6 +21,7 @@ use App\Form\FicheMatiereType;
 use App\Repository\ElementConstitutifRepository;
 use App\Repository\FicheMatiereRepository;
 use App\Repository\LangueRepository;
+use App\Repository\TypeDiplomeRepository;
 use App\Repository\TypeEpreuveRepository;
 use App\Repository\UeRepository;
 use App\Service\VersioningFicheMatiere;
@@ -90,6 +91,7 @@ class FicheMatiereController extends BaseController
      */
     #[Route('/{slug}', name: 'app_fiche_matiere_show', methods: ['GET'])]
     public function show(
+        TypeDiplomeRepository $typeDiplomeRepository,
         TypeDiplomeRegistry          $typeDiplomeRegistry,
         TypeEpreuveRepository        $typeEpreuveRepository,
         FicheMatiere                 $ficheMatiere,
@@ -111,8 +113,8 @@ class FicheMatiereController extends BaseController
             $typeDiplome = $formation->getTypeDiplome();
             $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());
         } else {
-            $typeDiplome = null;
-            $typeD = null;
+            $typeD = $typeDiplomeRegistry->getTypeDiplome('App\TypeDiplome\Source\LicenceTypeDiplome'); //par défaut Licence
+            $typeDiplome = $typeDiplomeRepository->find(1);
         }
         $cssDiff = DiffHelper::getStyleSheet();
         $textDifferences = $ficheMatiereVersioningService
