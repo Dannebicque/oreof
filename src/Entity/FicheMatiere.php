@@ -196,9 +196,8 @@ class FicheMatiere
     #[ORM\Column(nullable: true)]
     private ?bool $quitus = false;
 
-//    #[ORM\ManyToMany(targetEntity: Composante::class, inversedBy: 'ficheMatieres')]
-//    /** @deprecated('encore utile?') */
-//    private Collection $composante;
+    #[ORM\ManyToMany(targetEntity: Composante::class, inversedBy: 'ficheMatieres')]
+    private Collection $composante;
 
     #[ORM\OneToMany(mappedBy: 'ficheMatiere', targetEntity: CommentaireFicheMatiere::class)]
     private Collection $commentaires;
@@ -1015,29 +1014,29 @@ class FicheMatiere
         return $this;
     }
 
-//    /**
-//     * @return Collection<int, Composante>
-//     */
-//    public function getComposante(): Collection
-//    {
-//        return $this->composante;
-//    }
-//
-//    public function addComposante(Composante $composante): static
-//    {
-//        if (!$this->composante->contains($composante)) {
-//            $this->composante->add($composante);
-//        }
-//
-//        return $this;
-//    }
-//
-//    public function removeComposante(Composante $composante): static
-//    {
-//        $this->composante->removeElement($composante);
-//
-//        return $this;
-//    }
+    /**
+     * @return Collection<int, Composante>
+     */
+    public function getComposante(): Collection
+    {
+        return $this->composante;
+    }
+
+    public function addComposante(Composante $composante): static
+    {
+        if (!$this->composante->contains($composante)) {
+            $this->composante->add($composante);
+        }
+
+        return $this;
+    }
+
+    public function removeComposante(Composante $composante): static
+    {
+        $this->composante->removeElement($composante);
+
+        return $this;
+    }
 
     /**
      * @return Collection<int, CommentaireFicheMatiere>

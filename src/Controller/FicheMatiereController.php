@@ -124,7 +124,7 @@ class FicheMatiereController extends BaseController
             'typeEpreuves' => $typeDiplome !== null ? $typeEpreuveRepository->findByTypeDiplome($typeDiplome) : $typeEpreuveRepository->findAll(),
             'typeDiplome' => $typeDiplome,
             'ects' => $ficheMatiere->getEcts(),
-            'templateForm' => $typeD !== null ? $typeD::TEMPLATE_FORM_MCCC : '',
+            'templateForm' => $typeD !== null ? $typeD::TEMPLATE_FORM_MCCC : 'licence.html.twig',
             'mcccs' => $typeD !== null ? $typeD->getMcccs($ficheMatiere) : [],
             'bccs' => $bccs,
             'typeMccc' => $ficheMatiere->getTypeMccc(),
