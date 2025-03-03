@@ -357,4 +357,9 @@ class GetElementConstitutif
 
         return $this->elementConstitutif->getFicheMatiere()?->getEtatMccc() ?? null;
     }
+
+    public function isSansHeures()
+    {
+        return $this->elementConstitutif->isSansHeure() ?? false;
+    }
 }

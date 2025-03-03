@@ -246,7 +246,7 @@ abstract class ValideStructure extends AbstractValide
                 }
             }
 
-            if ($getElement->getEtatStructure() !== 'Complet') {
+            if ($getElement->getEtatStructure() !== 'Complet' && $getElement->isSansHeures() === false) {
                 //todo:gérer MCCC raccrochées, ou d'un parent
                 $t['erreur'][] = 'Volumes horaires non renseignés';
                 $etatEc = self::INCOMPLET;
@@ -339,7 +339,7 @@ abstract class ValideStructure extends AbstractValide
                                 self::$errors[] = 'BCC incomplet ou non renseignés pour l\'' . $ec->getFicheMatiere()?->getSigle() . ' de l\'' . $ue->display(self::$parcours);
                             }
 
-                            if ($ec->getFicheMatiere()?->etatStructure() !== 'Complet') {
+                            if ($ec->getFicheMatiere()?->etatStructure() !== 'Complet' && $ec->getFicheMatiere()->isSansHeures() === false) {
                                 self::$structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getId()]['ecs'][$ec->getId()]['erreur'][] = 'Volumes horaires incomplet ou non renseignés';
                                 self::$errors[] = 'Volumes horaires incomplet ou non renseignés pour l\'' . $ec->getFicheMatiere()?->getSigle() . ' de l\'' . $ue->display(self::$parcours);
                             }
