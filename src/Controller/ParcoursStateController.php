@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-class ParcoursStateController extends AbstractController
+class ParcoursStateController extends BaseController
 {
     #[Route('/parcours/state/{parcours}', name: 'app_parcours_state')]
     public function index(Parcours $parcours): Response
@@ -38,7 +38,7 @@ class ParcoursStateController extends AbstractController
 
         $entityManager->flush();
 
-        $this->addFlash('success', 'Remplissage mis à jour. ' . $remplissage->calcul().'%');
+        $this->addFlashBag('success', 'Remplissage mis à jour. ' . $remplissage->calcul().'%');
 
         // Redirect to the previous page
         $referer = $request->headers->get('referer');
