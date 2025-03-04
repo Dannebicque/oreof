@@ -117,6 +117,7 @@ class FicheMatiere
 
     #[Groups(['DTO_json_versioning', 'fiche_matiere_versioning'])]
     #[ORM\OneToMany(mappedBy: 'ficheMatiere', targetEntity: FicheMatiereMutualisable::class)]
+    #[ORM\OrderBy(['parcours.libelle' => 'ASC'])]
     private Collection $ficheMatiereParcours;
 
     #[ORM\Column(length: 255, nullable: true)]
