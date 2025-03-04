@@ -12,6 +12,7 @@ namespace App\Repository;
 use App\Entity\CampagneCollecte;
 use App\Entity\Composante;
 use App\Entity\ElementConstitutif;
+use App\Entity\FicheMatiere;
 use App\Entity\Formation;
 use App\Entity\Parcours;
 use App\Entity\Semestre;
@@ -230,12 +231,25 @@ class ElementConstitutifRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function countDuplicatesCode() : array {
+    public function countDuplicatesCode() : array
+    {
         return $this->createQueryBuilder('ec')
             ->select('count(ec.codeApogee)')
             ->where('ec.codeApogee IS NOT NULL')
             ->groupBy('ec.codeApogee')
             ->having('count(ec.codeApogee) > 1')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findByFicheMatiereParcours(FicheMatiere $ficheMatiere): array
+    {
+        return $this->createQueryBuilder('f')
+            ->where('f.ficheMatiere = :ficheMatiere')
+            ->join('f.parcours', 'p')
+            ->addSelect('p')
+            ->setParameter('ficheMatiere', $ficheMatiere)
+            ->orderBy('p.libelle', 'ASC')
             ->getQuery()
             ->getResult();
     }

@@ -92,6 +92,7 @@ class FicheMatiereController extends BaseController
      */
     #[Route('/{slug}', name: 'app_fiche_matiere_show', methods: ['GET'])]
     public function show(
+        ElementConstitutifRepository $elementConstitutifRepository,
         FicheMatiereMutualisableRepository $ficheMatiereMutualisableRepository,
         TypeDiplomeRepository $typeDiplomeRepository,
         TypeDiplomeRegistry          $typeDiplomeRegistry,
@@ -123,10 +124,12 @@ class FicheMatiereController extends BaseController
             ->getStringDifferencesWithBetweenFicheMatiereAndLastVersion($ficheMatiere);
 
         $ficheMatiereParcours = $ficheMatiereMutualisableRepository->findByFicheMatieres($ficheMatiere);
+        $ecParcours = $elementConstitutifRepository->findByFicheMatiereParcours($ficheMatiere);
 
         return $this->render('fiche_matiere/show.html.twig', [
             'ficheMatiere' => $ficheMatiere,
             'ficheMatiereParcours' => $ficheMatiereParcours,
+            'ecParcours' => $ecParcours,
             'formation' => $formation,
             'typeEpreuves' => $typeDiplome !== null ? $typeEpreuveRepository->findByTypeDiplome($typeDiplome) : $typeEpreuveRepository->findAll(),
             'typeDiplome' => $typeDiplome,
