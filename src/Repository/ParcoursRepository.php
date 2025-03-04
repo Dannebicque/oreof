@@ -284,4 +284,17 @@ class ParcoursRepository extends ServiceEntityRepository
 
             return $qb->getQuery()->getResult();
     }
+
+    public function findByCampagneCollecte(CampagneCollecte $getCampagneCollecte): array
+    {
+        return $this->createQueryBuilder('p')
+            ->join('p.dpeParcours', 'dp')
+            ->andWhere('dp.campagneCollecte = :campagneCollecte')
+            ->andWhere('p.libelle <> :libelle')
+            ->setParameter('libelle', Parcours::PARCOURS_DEFAUT)
+            ->setParameter('campagneCollecte', $getCampagneCollecte)
+            ->orderBy('p.libelle', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
 }

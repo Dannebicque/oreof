@@ -111,6 +111,7 @@ class FicheMatiereRepository extends ServiceEntityRepository
                 ->groupBy('f.id')
                 ->having('count(ec.id) = 0');
         }
+
         return $qb->getQuery()->getResult();
     }
 
@@ -137,6 +138,7 @@ class FicheMatiereRepository extends ServiceEntityRepository
     {
         $sort = $options['sort'] ?? 'mention';
         $direction = $options['direction'] ?? 'ASC';
+        $start = $options['page'] ?? 1;
 
         if (array_key_exists('parcours', $options) && null !== $options['parcours']) {
             $qb->andWhere('f.parcours = :parcours')
@@ -180,8 +182,6 @@ class FicheMatiereRepository extends ServiceEntityRepository
         }
 
         if ($count === false) {
-            $start = $options['start'] ?? 0;
-
             $qb->setFirstResult($start * 50)
                 ->setMaxResults($options['length'] ?? 50);
         }

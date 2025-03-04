@@ -145,6 +145,15 @@
                             'field': 'remplissage'
                         }) }}
                         id="filter-remplissage" class="form-select">
+                    <option value="all">Tous</option>
+                    <option value="0"
+                            {% if params['remplissage'] is defined and params['remplissage'] == 0 %}selected{% endif %}>
+                        Non complété
+                    </option>
+                    <option value="100"
+                            {% if params['remplissage'] is defined and params['remplissage'] == 100 %}selected{% endif %}>
+                        Complet
+                    </option>
                 </select>
             </th>
             <th></th>
@@ -160,6 +169,11 @@
         </thead>
         <tbody>
         {% for ficheMatiere in ficheMatieres %}
+            {# todo: a améliorer (ici et formation), car ca filtre que sur le résultat et pas sur l'ensemble des datas #}
+            {% set remplissage = params['remplissage']|default('all') %}
+            {% if remplissage == '100' and ficheMatiere.remplissage.calcul == 100 or
+                remplissage == '0' and ficheMatiere.remplissage.calcul < 100 or
+                remplissage == 'all' %}
             <tr>
                 <td>
                     {% if ficheMatiere.parcours != null %}
@@ -254,6 +268,7 @@
                     {% endif %}
                 </td>
             </tr>
+            {% endif %}
         {% else %}
             <tr>
                 <td colspan="{% if mode == 'liste' %}10{% else %}8{% endif %}" class="bg-warning">
