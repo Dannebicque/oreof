@@ -5,7 +5,7 @@
         {% if (isBut is defined and isBut == false) or isBut is not defined %}
             <strong>{{ ec.elementConstitutif.code }}</strong>{% endif %}
         {% if ec.elementConstitutif.ficheMatiere != null %}
-            <a href="{{ url('app_fiche_matiere_show', {slug: ec.elementConstitutif.ficheMatiere.slug}) }}">
+            <a href="{{ url('app_fiche_matiere_show', {slug: ec.elementConstitutif.ficheMatiere.slug}) }}" target="_blank">
                 {% if isBut is defined and isBut == true %}
                     <strong>{{ ec.elementConstitutif.ficheMatiere.sigle }}</strong> {{ ec.elementConstitutif.ficheMatiere.libelle }} ({{ ec.elementConstitutif.displayCodeApogee }})
                 {% else %}

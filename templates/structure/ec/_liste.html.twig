@@ -88,10 +88,8 @@
                                                     {% if isBut %}
                                                         <a
                                                                 href="{{ path('app_fiche_matiere_edit',{slug: ec.ficheMatiere.slug}) }}"
-                                                                class="btn btn-sm btn-outline-info  px-1"
-                                                                data-bs-toggle="tooltip"
-                                                                target="_blank"
-                                                                data-bs-placement="bottom"
+                                                                class="btn btn-sm btn-outline-info  px-1" data-bs-toggle="tooltip"
+                                                                target="_blank" data-bs-placement="bottom"
                                                                 title="Modifier la fiche EC/matière"
                                                         >
                                                             {% if ec.ficheMatiere.remplissage.isFull() == true %}
@@ -104,10 +102,8 @@
                                                         {% if ec.ficheMatiere.parcours != null and ec.ficheMatiere.parcours.id == parcours.id %}
                                                             <a
                                                                     href="{{ path('app_fiche_matiere_edit',{slug: ec.ficheMatiere.slug}) }}"
-                                                                    class="btn btn-sm btn-outline-info  px-1"
-                                                                    data-bs-toggle="tooltip"
-                                                                    target="_blank"
-                                                                    data-bs-placement="bottom"
+                                                                    class="btn btn-sm btn-outline-info  px-1" data-bs-toggle="tooltip"
+                                                                    target="_blank" data-bs-placement="bottom"
                                                                     title="Modifier la fiche EC/matière"
                                                             >
                                                                 {% if ec.ficheMatiere.remplissage.isFull() == true %}
@@ -119,10 +115,8 @@
                                                         {% else %}
                                                             <a
                                                                     href="{{ path('app_fiche_matiere_show',{slug: ec.ficheMatiere.slug}) }}"
-                                                                    class="btn btn-sm btn-outline-info  px-1"
-                                                                    data-bs-toggle="tooltip"
-                                                                    target="_blank"
-                                                                    data-bs-placement="bottom"
+                                                                    class="btn btn-sm btn-outline-info  px-1" data-bs-toggle="tooltip"
+                                                                    target="_blank" data-bs-placement="bottom"
                                                                     title="Voir la fiche EC/matière"
                                                             >
                                                                 <span class="badge bg-info">Voir la fiche</span>
@@ -503,8 +497,7 @@
                                                                         href="{{ path('app_fiche_matiere_edit',{slug: ece
                                                                         .ficheMatiere.slug}) }}"
                                                                         class="btn btn-sm btn-outline-info px-1"
-                                                                        data-bs-toggle="tooltip"
-                                                                        target="_blank"
+                                                                        data-bs-toggle="tooltip" target="_blank"
                                                                         data-bs-placement="bottom"
                                                                         title="Modifier la fiche EC/matière"
                                                                 >
