@@ -19,6 +19,7 @@ use App\Entity\FicheMatiereVersioning;
 use App\Entity\Parcours;
 use App\Form\FicheMatiereType;
 use App\Repository\ElementConstitutifRepository;
+use App\Repository\FicheMatiereMutualisableRepository;
 use App\Repository\FicheMatiereRepository;
 use App\Repository\LangueRepository;
 use App\Repository\TypeDiplomeRepository;
@@ -91,6 +92,7 @@ class FicheMatiereController extends BaseController
      */
     #[Route('/{slug}', name: 'app_fiche_matiere_show', methods: ['GET'])]
     public function show(
+        FicheMatiereMutualisableRepository $ficheMatiereMutualisableRepository,
         TypeDiplomeRepository $typeDiplomeRepository,
         TypeDiplomeRegistry          $typeDiplomeRegistry,
         TypeEpreuveRepository        $typeEpreuveRepository,
@@ -120,8 +122,11 @@ class FicheMatiereController extends BaseController
         $textDifferences = $ficheMatiereVersioningService
             ->getStringDifferencesWithBetweenFicheMatiereAndLastVersion($ficheMatiere);
 
+        $ficheMatiereParcours = $ficheMatiereMutualisableRepository->findByFicheMatieres($ficheMatiere);
+
         return $this->render('fiche_matiere/show.html.twig', [
             'ficheMatiere' => $ficheMatiere,
+            'ficheMatiereParcours' => $ficheMatiereParcours,
             'formation' => $formation,
             'typeEpreuves' => $typeDiplome !== null ? $typeEpreuveRepository->findByTypeDiplome($typeDiplome) : $typeEpreuveRepository->findAll(),
             'typeDiplome' => $typeDiplome,

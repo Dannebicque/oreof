@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Composante;
+use App\Entity\FicheMatiere;
 use App\Entity\FicheMatiereMutualisable;
 use App\Entity\Formation;
 use App\Entity\Mention;
@@ -147,5 +148,17 @@ class FicheMatiereMutualisableRepository extends ServiceEntityRepository
         }
 
         return $qb->getQuery()->getResult();
+    }
+
+    public function findByFicheMatieres(FicheMatiere $ficheMatiere): array
+    {
+        return $this->createQueryBuilder('f')
+            ->where('f.ficheMatiere = :ficheMatiere')
+            ->join('f.parcours', 'p')
+            ->addSelect('p')
+            ->setParameter('ficheMatiere', $ficheMatiere)
+            ->orderBy('p.libelle', 'ASC')
+            ->getQuery()
+            ->getResult();
     }
 }
