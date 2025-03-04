@@ -276,6 +276,14 @@
                                 >
                                     <i class="fal fa-wrench"></i>
                                 </a>
+                                <a href="{{ path('app_parcours_update_remplissage',{'parcours': this.parcours.id}) }}"
+                                   class="btn btn-sm btn-icon btn-icon-only btn-outline-secondary ms-1"
+                                   data-bs-toggle="tooltip"
+                                   data-bs-placement="bottom"
+                                   title="{{ 'mettre.a.jour.remplissage'|trans({}, 'process') }}"
+                                >
+                                    <i class="fal fa-percent"></i>
+                                </a>
                             {% endif %}
                         </div>
                     </div>
@@ -335,25 +343,25 @@
                         </div>
                         <div class="col-3 d-grid">
                             {% if this.dpeParcours.etatReconduction.value != 'NON_OUVERTURE' %}
-                            {% if parcours.isParcoursDefaut == true %}
-                                <button
-                                        href="#"
-                                        {{ stimulus_controller('modal', {
-                                            size: 'lg',
-                                            modalTitle: 'formation.change_rf.title'|trans({}, 'form'),
-                                            nomEvenement: 'refreshStep',
-                                            modalUrl: path('app_formation_change_rf', {formation: parcours.formation.id}) }) }}
-                                        data-action="click->modal#openModal"
-                                        data-size="lg"
-                                        class="btn btn-sm btn-outline-warning"
-                                        data-bs-toggle="tooltip"
-                                        data-bs-placement="bottom"
-                                        title="{{ 'formation.change_rf.title'|trans({}, 'form') }}"
-                                >
-                                    <i class="fal fa-repeat"></i>
-                                    <span> {{ 'formation.change_rf.label'|trans({}, 'form') }}</span>
-                                </button>
-                            {% endif %}
+                                {% if parcours.isParcoursDefaut == true %}
+                                    <button
+                                            href="#"
+                                            {{ stimulus_controller('modal', {
+                                                size: 'lg',
+                                                modalTitle: 'formation.change_rf.title'|trans({}, 'form'),
+                                                nomEvenement: 'refreshStep',
+                                                modalUrl: path('app_formation_change_rf', {formation: parcours.formation.id}) }) }}
+                                            data-action="click->modal#openModal"
+                                            data-size="lg"
+                                            class="btn btn-sm btn-outline-warning"
+                                            data-bs-toggle="tooltip"
+                                            data-bs-placement="bottom"
+                                            title="{{ 'formation.change_rf.title'|trans({}, 'form') }}"
+                                    >
+                                        <i class="fal fa-repeat"></i>
+                                        <span> {{ 'formation.change_rf.label'|trans({}, 'form') }}</span>
+                                    </button>
+                                {% endif %}
                             {% endif %}
                         </div>
                         <div class="col-3 d-grid">
