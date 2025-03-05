@@ -90,9 +90,8 @@ class FicheMatiereRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('f')
             ->leftJoin(Parcours::class, 'p', 'WITH', 'f.parcours = p.id')
             ->join(Formation::class, 'fo', 'WITH', 'p.formation = fo.id')
-            ->join(DpeParcours::class, 'dp', 'WITH', 'p.id = dp.parcours')
             ->leftJoin(User::class, 'u', 'WITH', 'f.responsableFicheMatiere = u.id')
-            ->andWhere('dp.campagneCollecte = :campagneCollecte')
+            ->andWhere('f.campagneCollecte = :campagneCollecte')
             ->andWhere('f.horsDiplome = 0')
             ->orWhere('f.horsDiplome IS NULL')
             ->setParameter('campagneCollecte', $campagneCollecte);
@@ -112,6 +111,8 @@ class FicheMatiereRepository extends ServiceEntityRepository
                 ->having('count(ec.id) = 0');
         }
 
+       // dd($qb->getQuery()->getSQL());
+
         return $qb->getQuery()->getResult();
     }
 
@@ -120,9 +121,8 @@ class FicheMatiereRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('f')
             ->leftJoin(Parcours::class, 'p', 'WITH', 'f.parcours = p.id')
             ->join(Formation::class, 'fo', 'WITH', 'p.formation = fo.id')
-            ->join(DpeParcours::class, 'dp', 'WITH', 'p.id = dp.parcours')
             ->leftJoin(User::class, 'u', 'WITH', 'f.responsableFicheMatiere = u.id')
-            ->andWhere('dp.campagneCollecte = :campagneCollecte')
+            ->andWhere('f.campagneCollecte = :campagneCollecte')
             ->andWhere('f.horsDiplome = 0')
             ->orWhere('f.horsDiplome IS NULL')
             ->setParameter('campagneCollecte', $campagneCollecte);
@@ -141,8 +141,13 @@ class FicheMatiereRepository extends ServiceEntityRepository
         $start = $options['page'] ?? 1;
 
         if (array_key_exists('parcours', $options) && null !== $options['parcours']) {
-            $qb->andWhere('f.parcours = :parcours')
+            $qb->andWhere('p.id = :parcours')
                 ->setParameter('parcours', $options['parcours']);
+        }
+
+        if (array_key_exists('mention', $options) && null !== $options['mention']) {
+            $qb->andWhere('fo.mention = :mention')
+                ->setParameter('mention', $options['mention']);
         }
 
         if (array_key_exists('referent', $options) && null !== $options['referent']) {
