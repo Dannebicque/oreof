@@ -51,6 +51,7 @@ class ExportListeFicheMatiere implements ExportInterface
         $this->excelWriter->writeCellXY(4, 1, 'Complet ?');
         $this->excelWriter->writeCellXY(5, 1, 'Utilisée ?');
         $this->excelWriter->writeCellXY(6, 1, 'Parcours porteur');
+        $this->excelWriter->writeCellXY(7, 1, 'Formation');
 
         $ligne = 2;
         /** @var ElementConstitutif $ec */
@@ -63,6 +64,9 @@ class ExportListeFicheMatiere implements ExportInterface
             $this->excelWriter->writeCellXY(6, $ligne,
             $fiche->isHorsDiplome() === true ? 'Hors diplôme' : ($fiche->getParcours() !== null ? $fiche->getParcours()->getLibelle() : ''
             ));
+            $this->excelWriter->writeCellXY(7, $ligne,
+                $fiche->isHorsDiplome() === true ? 'Hors diplôme' : ($fiche->getParcours() !== null && $fiche->getParcours()->getFormation() !== null ? $fiche->getParcours()->getFormation()->getDisplayLong() : ''
+                ));
 
             $this->excelWriter->getColumnsAutoSize('A', 'M');
             $ligne++;
