@@ -203,7 +203,7 @@
 {% endblock %}
 
 {% block header %}
-    Détail du parcours : {{ parcours.libelle }}
+    Détail du parcours : {{ parcours.libelle }} {{ parcours.typeParcours|badgeTypeParcours }}
 {% endblock %}
 
 {% block breadcrumb %}
