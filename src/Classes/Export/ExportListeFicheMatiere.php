@@ -59,9 +59,9 @@ class ExportListeFicheMatiere implements ExportInterface
             $this->excelWriter->writeCellXY(2, $ligne, $fiche->getLibelle());
             $this->excelWriter->writeCellXY(3, $ligne, $fiche->getResponsableFicheMatiere() !== null ? $fiche->getResponsableFicheMatiere()->getDisplay() : '');
             $this->excelWriter->writeCellXY(4, $ligne, $fiche->remplissageBrut()->isFull() ? 'Complet' : 'Incomplet');
-            $this->excelWriter->writeCellXY(5, $ligne, $fiche->getElementConstitutifs()->count() > 0 ? $fiche->getElementConstitutifs()->count() : 0);
+            $this->excelWriter->writeCellXY(5, $ligne, $fiche->getElementConstitutifs()->count());
             $this->excelWriter->writeCellXY(6, $ligne,
-            $fiche->isHorsDiplome() === true ? 'Hors diplôme' : ($fiche->getParcoursPorteur() !== null ? $fiche->getParcoursPorteur()->getLibelle() : ''
+            $fiche->isHorsDiplome() === true ? 'Hors diplôme' : ($fiche->getParcours() !== null ? $fiche->getParcours()->getLibelle() : ''
             ));
 
             $this->excelWriter->getColumnsAutoSize('A', 'M');
