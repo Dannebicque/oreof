@@ -425,7 +425,7 @@ thead th {
 }
 
 .error {
-  border-color: var(--danger);
+  border: 2px solid var(--danger);
 }
 
 input[type="radio"].error {

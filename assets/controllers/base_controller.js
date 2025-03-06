@@ -25,7 +25,7 @@ export default class extends Controller {
     let valid = true
     form.querySelectorAll('input, select, textarea').forEach((element) => {
       element.classList.remove('error')
-      if (element.required && element.value === '') {
+      if (element.required && element.value.trim() === '') {
         valid = false
         // ajouter la classe is-invalid à l'élément
         element.classList.add('error')
