@@ -119,8 +119,7 @@ class UpdateRemplissageCommand extends Command
 
 
         foreach ($parcours as $parcour) {
-            $remplissage = $parcour->remplissageBrut();
-            $parcour->setRemplissage($remplissage);
+            $parcour->setRemplissage(null);
             $io->progressAdvance();
             $this->entityManager->flush();
             unset($remplissage);

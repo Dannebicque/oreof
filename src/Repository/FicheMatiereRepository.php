@@ -188,7 +188,7 @@ class FicheMatiereRepository extends ServiceEntityRepository
         }
 
         if ($count === false) {
-            $qb->setFirstResult($start * 50)
+            $qb->setFirstResult(($start - 1) * 50)
                 ->setMaxResults($options['length'] ?? 50);
         }
     }
