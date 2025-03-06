@@ -341,20 +341,21 @@ class GetElementConstitutif
         $this->isRaccroche = $raccroche;
     }
 
-    public function getEtatMccc()
+    public function getEtatMccc(): ?string
     {
-        if ($this->elementConstitutif->isSynchroMccc()) {
+        if ($this->elementConstitutif->isMcccSpecifiques()) {
             return $this->elementConstitutif->getEtatMccc();
-        }
-
-        if ($this->elementConstitutif->getFicheMatiere()?->isMcccImpose()) {
-            return $this->elementConstitutif->getFicheMatiere()?->getEtatMccc();
         }
 
         if ($this->elementConstitutif->getEcParent() !== null && $this->elementConstitutif->getEcParent()->isMcccEnfantsIdentique() === true) {
             return (new GetElementConstitutif($this->elementConstitutif->getEcParent(), $this->parcours))->getEtatMccc();
         }
 
-        return $this->elementConstitutif->getFicheMatiere()?->getEtatMccc() ?? null;
+        return $this->elementConstitutif->getFicheMatiere()?->getEtatMccc();
+    }
+
+    public function isSansHeures(): bool
+    {
+        return $this->elementConstitutif->isSansHeure() ?? false;
     }
 }

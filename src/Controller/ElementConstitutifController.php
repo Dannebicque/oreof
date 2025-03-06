@@ -34,7 +34,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/element/constitutif')]
-class ElementConstitutifController extends AbstractController
+class ElementConstitutifController extends BaseController
 {
     #[Route('/', name: 'app_element_constitutif_index', methods: ['GET'])]
     public function index(FicheMatiereRepository $ficheMatiereRepository): Response
@@ -65,8 +65,8 @@ class ElementConstitutifController extends AbstractController
 
         $natureEc = $natureUeEcRepository->find($request->query->get('choix'));
         if ($natureEc !== null) {
-            $matieres[] = $ficheMatiereRepository->findByParcours($parcours);
-            $matieres[] = $ficheMatiereRepository->findByComposante($parcours->getFormation()->getComposantePorteuse());
+            $matieres[] = $ficheMatiereRepository->findByParcours($parcours, $this->getCampagneCollecte());
+            $matieres[] = $ficheMatiereRepository->findByHd($this->getCampagneCollecte(), []);
             $matieres = array_merge(...$matieres);
 
             if ($natureEc->isChoix() === true) {
@@ -93,9 +93,9 @@ class ElementConstitutifController extends AbstractController
 
     #[Route('/new/{ue}/{parcours}', name: 'app_element_constitutif_new', methods: ['GET', 'POST'])]
     public function new(
+        NatureUeEcRepository         $natureUeEcRepository,
         EcOrdre                      $ecOrdre,
         Request                      $request,
-        TypeDiplomeRegistry          $typeDiplomeRegistry,
         TypeEcRepository             $typeEcRepository,
         FicheMatiereRepository       $ficheMatiereRepository,
         ElementConstitutifRepository $elementConstitutifRepository,
@@ -109,7 +109,7 @@ class ElementConstitutifController extends AbstractController
 
         $elementConstitutif->setModaliteEnseignement($parcours?->getModalitesEnseignement());
         $elementConstitutif->setUe($ue);
-        $typeDiplome = $parcours->getFormation()->getTypeDiplome();
+        $typeDiplome = $parcours->getFormation()?->getTypeDiplome();
 
         if ($typeDiplome === null) {
             throw new RuntimeException('Type de diplôme non trouvé');
@@ -145,6 +145,7 @@ class ElementConstitutifController extends AbstractController
                     ));
                 } else {
                     $ficheMatiere = new FicheMatiere();
+                    $ficheMatiere->setCampagneCollecte($this->getCampagneCollecte());
                     $ficheMatiere->setLibelle($request->request->get('ficheMatiereLibelle'));
                     $ficheMatiere->setParcours($parcours); //todo: ajouter le semestre
                     $ficheMatiereRepository->save($ficheMatiere, true);
@@ -163,6 +164,7 @@ class ElementConstitutifController extends AbstractController
                 $elementConstitutifRepository->save($elementConstitutif, true);
                 //on récupère le champs matières, on découpe selon la ,. Si ca commence par "id_", on récupère la matière, sinon on créé la matière
                 $matieres = explode(',', $request->request->get('matieres'));
+                $natureEc = $natureUeEcRepository->findOneBy(['choix' => false, 'libre' => false, 'type' => 'ec']);
                 foreach ($matieres as $matiere) {
                     $ec = new ElementConstitutif();
                     $nextSousEc = $ecOrdre->getOrdreEnfantSuivant($elementConstitutif);
@@ -170,12 +172,13 @@ class ElementConstitutifController extends AbstractController
                     $ec->setParcours($parcours);
                     $ec->setModaliteEnseignement($parcours?->getModalitesEnseignement());
                     $ec->setUe($ue);
-                    $ec->setNatureUeEc($elementConstitutif->getNatureUeEc());
+                    $ec->setNatureUeEc($natureEc);
 
                     if (str_starts_with($matiere, 'id_')) {
                         $ficheMatiere = $ficheMatiereRepository->find((int)str_replace('id_', '', $matiere));
                     } else {
                         $ficheMatiere = new FicheMatiere();
+                        $ficheMatiere->setCampagneCollecte($this->getCampagneCollecte());
                         $ficheMatiere->setLibelle(str_replace('ac_', '', $matiere));
                         $ficheMatiere->setParcours($parcours); //todo: ajouter le semestre
                         $ficheMatiereRepository->save($ficheMatiere, true);
@@ -269,6 +272,8 @@ class ElementConstitutifController extends AbstractController
                 ));
             } else {
                 $ficheMatiere = new FicheMatiere();
+                $ficheMatiere->setCampagneCollecte($this->getCampagneCollecte());
+
                 $ficheMatiere->setLibelle($request->request->get('ficheMatiereLibelle'));
                 $ficheMatiere->setParcours($parcours);
                 $ficheMatiereRepository->save($ficheMatiere, true);
@@ -294,7 +299,9 @@ class ElementConstitutifController extends AbstractController
 
             return $this->json(true);
         }
-
+        $matieres[] = $ficheMatiereRepository->findByParcours($parcours, $this->getCampagneCollecte());
+        $matieres[] = $ficheMatiereRepository->findByHd($this->getCampagneCollecte(), []);
+        $matieres = array_merge(...$matieres);
 
         return $this->render('element_constitutif/new_enfant.html.twig', [
             'element_constitutif' => $elementConstitutif,
@@ -302,12 +309,13 @@ class ElementConstitutifController extends AbstractController
             'ue' => $ue,
             'parcours' => $parcours,
             'typeEcs' => $typeEcRepository->findByTypeDiplomeAndFormation($typeDiplome, $parcours->getFormation()),
-            'matieres' => $ficheMatiereRepository->findByParcours($parcours)
+            'matieres' => $matieres
         ]);
     }
 
     #[Route('/{id}/edit/{parcours}', name: 'app_element_constitutif_edit', methods: ['GET', 'POST'])]
     public function edit(
+        NatureUeEcRepository $natureUeEcRepository,
         EcOrdre                      $ecOrdre,
         FicheMatiereRepository       $ficheMatiereRepository,
         EntityManagerInterface       $entityManager,
@@ -350,9 +358,8 @@ class ElementConstitutifController extends AbstractController
             $uow->computeChangeSets();
             $changeSet = $uow->getEntityChangeSet($elementConstitutif);
 
+
             if (isset($changeSet['natureUeEc'])) {
-                //die('changement');
-                //initial $changeSet['natureUeEc'][0]
                 if ($changeSet['natureUeEc'][0]->isChoix() === true) {
                     // c'était une EC à choix, on supprime les choix.
                     foreach ($elementConstitutif->getEcEnfants() as $ecEnfant) {
@@ -377,6 +384,7 @@ class ElementConstitutifController extends AbstractController
                     ));
                 } else {
                     $ficheMatiere = new FicheMatiere();
+                    $ficheMatiere->setCampagneCollecte($this->getCampagneCollecte());
                     $ficheMatiere->setLibelle($request->request->get('ficheMatiereLibelle'));
                     $ficheMatiere->setParcours($parcours); //todo: ajouter le semestre
                     $ficheMatiereRepository->save($ficheMatiere, true);
@@ -389,6 +397,7 @@ class ElementConstitutifController extends AbstractController
                 //todo: supprimer MCCC...
 
             } elseif ($elementConstitutif->getNatureUeEc()?->isChoix() === true) {
+                $natureEc = $natureUeEcRepository->findOneBy(['choix' => false, 'libre' => false, 'type' => 'ec']);
                 $elementConstitutif->setLibelle($request->request->get('ficheMatiereLibre'));
                 $elementConstitutif->setFicheMatiere(null);
                 //on récupère le champs matières, on découpe selon la ,. Si ca commence par "id_", on récupère la matière, sinon on créé la matière
@@ -399,6 +408,7 @@ class ElementConstitutifController extends AbstractController
                         $ficheMatiere = $ficheMatiereRepository->find((int)str_replace('id_', '', $matiere));
                     } else {
                         $ficheMatiere = new FicheMatiere();
+                        $ficheMatiere->setCampagneCollecte($this->getCampagneCollecte());
                         $ficheMatiere->setLibelle(str_replace('ac_', '', $matiere));
                         $ficheMatiere->setParcours($parcours); //todo: ajouter le semestre
                         $ficheMatiereRepository->save($ficheMatiere, true);
@@ -417,7 +427,7 @@ class ElementConstitutifController extends AbstractController
                         $ec->setParcours($parcours);
                         $ec->setModaliteEnseignement($parcours?->getModalitesEnseignement());
                         $ec->setUe($elementConstitutif->getUe());
-                        $ec->setNatureUeEc($elementConstitutif->getNatureUeEc());
+                        $ec->setNatureUeEc($natureEc);
                         $ec->setFicheMatiere($ficheMatiere);
                         $ec->setOrdre($nextSousEc);
                         $ec->genereCode();
@@ -427,6 +437,7 @@ class ElementConstitutifController extends AbstractController
             }
 
             $elementConstitutif->genereCode();
+
             $entityManager->flush();
 
             return $this->json(true);
@@ -476,6 +487,7 @@ class ElementConstitutifController extends AbstractController
                     ));
                 } else {
                     $ficheMatiere = new FicheMatiere();
+                    $ficheMatiere->setCampagneCollecte($this->getCampagneCollecte());
                     $ficheMatiere->setLibelle($request->request->get('ficheMatiereLibelle'));
                     $ficheMatiere->setParcours($parcours); //todo: ajouter le semestre
                     $ficheMatiereRepository->save($ficheMatiere, true);
@@ -491,13 +503,17 @@ class ElementConstitutifController extends AbstractController
             return $this->json(true);
         }
 
+        $matieres[] = $ficheMatiereRepository->findByParcours($parcours, $this->getCampagneCollecte());
+        $matieres[] = $ficheMatiereRepository->findByHd($this->getCampagneCollecte(), []);
+        $matieres = array_merge(...$matieres);
+
 
         return $this->render('element_constitutif/_editEnfant.html.twig', [
             'element_constitutif' => $elementConstitutif,
             'parcours' => $parcours,
             'ue' => $ue,
             'typeEcs' => $typeEcRepository->findByTypeDiplomeAndFormation($typeDiplome, $parcours->getFormation()),
-            'matieres' => $ficheMatiereRepository->findByParcours($parcours),
+            'matieres' => $matieres,
             'isAdmin' => $isAdmin
         ]);
     }

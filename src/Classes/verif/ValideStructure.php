@@ -44,7 +44,6 @@ abstract class ValideStructure extends AbstractValide
                     $sem = $semestreParcour->getSemestre();
                 }
 
-                //todo: ne pas avoir si non ouvert ?
                 self::$structure['semestres'][$semestreParcour->getOrdre()]['global'] = self::COMPLET;
                 self::$structure['semestres'][$semestreParcour->getOrdre()]['erreur'] = [];
                 self::$structure['semestres'][$semestreParcour->getOrdre()]['ues'] = [];
@@ -60,7 +59,7 @@ abstract class ValideStructure extends AbstractValide
                             self::valideUe($ue, $semestreParcour->getOrdre());
                         }
                     }
-                    if ($sem->isNonDispense() === false && self::totalEctsSemestre($sem) !== 30.0) {
+                    if (($sem->isNonDispense() === false || $semestreParcour->isOuvert() === true) && self::totalEctsSemestre($sem) !== 30.0) {
                         self::$structure['semestres'][$semestreParcour->getOrdre()]['global'] = self::ERREUR;
                         self::$structure['semestres'][$semestreParcour->getOrdre()]['erreur'][] = 'Le semestre doit faire 30 ECTS';
                         self::$errors[] = 'Le semestre ' . $semestreParcour->getOrdre() . ' doit faire 30 ECTS';
@@ -68,10 +67,8 @@ abstract class ValideStructure extends AbstractValide
                         self::$structure['semestres'][$semestreParcour->getOrdre()]['global'] = $hasUe;
                     }
                 } else {
-                    if ($sem?->isNonDispense() !== true) {
-                        self::$structure['semestres'][$semestreParcour->getOrdre()]['global'] = self::VIDE;
-                        self::$structure['semestres'][$semestreParcour->getOrdre()]['erreur'][] = 'Semestre non renseigné';
-                        self::$errors[] = 'Semestre ' . $semestreParcour->getOrdre() . ' non renseigné';
+                    if ($sem?->isNonDispense() !== true || $semestreParcour->isOuvert()===false) {
+                        self::$structure['semestres'][$semestreParcour->getOrdre()]['global'] = self::NON_CONCERNE;
                     }
                 }
             }
@@ -152,7 +149,7 @@ abstract class ValideStructure extends AbstractValide
                 self::$errors[] = 'Type d\'EC non renseigné (disciplinaire, ...) pour l\'' . $ec->getCode() . ' de l\'' . $ue->display(self::$parcours);
             }
 
-        //vérification des ECTS, d'un libellé et d'une description
+            //vérification des ECTS, d'un libellé et d'une description
         } elseif ($ec->getNatureUeEc()?->isChoix() || $ec->getEcEnfants()->count() > 0) {
             if (self::$typeDiplome !== null) {
                 //si l'EC est un choix, on vérifie les enfants => todo: utiliser self::analyseEc ?
@@ -206,13 +203,13 @@ abstract class ValideStructure extends AbstractValide
                     $etatEc = self::INCOMPLET_ECTS;
                     self::$errors[] = 'ECTS non renseignés, mais ce type de diplôme l\'autorise pour l\'' . $ec->getCode() . ' de l\'' . $ue->display(self::$parcours);
                 } else {
-                if ($ects === null ||
-                    $ects <= 0.0 ||
-                    $ects > 30.0) {
-                    $t['erreur'][] = 'ECTS non renseignés';
-                    $etatEc = self::ERREUR;
-                    self::$errors[] = 'ECTS non renseignés pour l\'' . $ec->getCode() . ' de l\'' . $ue->display(self::$parcours);
-                }
+                    if ($ects === null ||
+                        $ects <= 0.0 ||
+                        $ects > 30.0) {
+                        $t['erreur'][] = 'ECTS non renseignés';
+                        $etatEc = self::ERREUR;
+                        self::$errors[] = 'ECTS non renseignés pour l\'' . $ec->getCode() . ' de l\'' . $ue->display(self::$parcours);
+                    }
                 }
             }
         } elseif ($ec->getFicheMatiere() === null) {
@@ -249,7 +246,7 @@ abstract class ValideStructure extends AbstractValide
                 }
             }
 
-            if ($getElement->getEtatStructure() !== 'Complet') {
+            if ($getElement->getEtatStructure() !== 'Complet' && $getElement->isSansHeures() === false) {
                 //todo:gérer MCCC raccrochées, ou d'un parent
                 $t['erreur'][] = 'Volumes horaires non renseignés';
                 $etatEc = self::INCOMPLET;
@@ -308,7 +305,7 @@ abstract class ValideStructure extends AbstractValide
 
                     self::$structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getId()]['ecs'] = [];
                     foreach ($ue->getElementConstitutifs() as $ec) {
-//                        if (!$ec->getNatureUeEc()?->isChoix()) {
+                        //                        if (!$ec->getNatureUeEc()?->isChoix()) {
                         self::$structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getId()]['ecs'][$ec->getId()]['display'] = $ec->display();
                         if ($ec->getFicheMatiere() === null || ($ec->getFicheMatiere()->getMcccs()->count() === 0 && $ec->getFicheMatiere()->isSansNote() === false) || $ec->getFicheMatiere()->etatStructure() !== 'Complet' || ($ec->getTypeEc() === null)) {
                             self::$structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getId()]['ecs'][$ec->getId()]['global'] = self::INCOMPLET;
@@ -342,7 +339,7 @@ abstract class ValideStructure extends AbstractValide
                                 self::$errors[] = 'BCC incomplet ou non renseignés pour l\'' . $ec->getFicheMatiere()?->getSigle() . ' de l\'' . $ue->display(self::$parcours);
                             }
 
-                            if ($ec->getFicheMatiere()?->etatStructure() !== 'Complet') {
+                            if ($ec->getFicheMatiere()?->etatStructure() !== 'Complet' && $ec->getFicheMatiere()->isSansHeures() === false) {
                                 self::$structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getId()]['ecs'][$ec->getId()]['erreur'][] = 'Volumes horaires incomplet ou non renseignés';
                                 self::$errors[] = 'Volumes horaires incomplet ou non renseignés pour l\'' . $ec->getFicheMatiere()?->getSigle() . ' de l\'' . $ue->display(self::$parcours);
                             }

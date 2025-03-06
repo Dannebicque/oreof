@@ -19,8 +19,10 @@ use App\Entity\FicheMatiereVersioning;
 use App\Entity\Parcours;
 use App\Form\FicheMatiereType;
 use App\Repository\ElementConstitutifRepository;
+use App\Repository\FicheMatiereMutualisableRepository;
 use App\Repository\FicheMatiereRepository;
 use App\Repository\LangueRepository;
+use App\Repository\TypeDiplomeRepository;
 use App\Repository\TypeEpreuveRepository;
 use App\Repository\UeRepository;
 use App\Service\VersioningFicheMatiere;
@@ -38,7 +40,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/fiche/matiere')]
-class FicheMatiereController extends AbstractController
+class FicheMatiereController extends BaseController
 {
     #[Route('/new', name: 'app_fiche_matiere_new', methods: ['GET', 'POST'])]
     public function new(
@@ -48,6 +50,8 @@ class FicheMatiereController extends AbstractController
         Request $request,
     ): Response {
         $ficheMatiere = new FicheMatiere();
+        $ficheMatiere->setCampagneCollecte($this->getCampagneCollecte());
+
         if ($request->query->has('ue')) {
             $ue = $ueRepository->find($request->query->get('ue'));
             $ficheMatiere->setParcours($ue->getSemestre()?->getSemestreParcours()->first()->getParcours());
@@ -88,6 +92,9 @@ class FicheMatiereController extends AbstractController
      */
     #[Route('/{slug}', name: 'app_fiche_matiere_show', methods: ['GET'])]
     public function show(
+        ElementConstitutifRepository $elementConstitutifRepository,
+        FicheMatiereMutualisableRepository $ficheMatiereMutualisableRepository,
+        TypeDiplomeRepository $typeDiplomeRepository,
         TypeDiplomeRegistry          $typeDiplomeRegistry,
         TypeEpreuveRepository        $typeEpreuveRepository,
         FicheMatiere                 $ficheMatiere,
@@ -109,20 +116,25 @@ class FicheMatiereController extends AbstractController
             $typeDiplome = $formation->getTypeDiplome();
             $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());
         } else {
-            $typeDiplome = null;
-            $typeD = null;
+            $typeD = $typeDiplomeRegistry->getTypeDiplome('App\TypeDiplome\Source\LicenceTypeDiplome'); //par défaut Licence
+            $typeDiplome = $typeDiplomeRepository->find(1);
         }
         $cssDiff = DiffHelper::getStyleSheet();
         $textDifferences = $ficheMatiereVersioningService
             ->getStringDifferencesWithBetweenFicheMatiereAndLastVersion($ficheMatiere);
 
+        $ficheMatiereParcours = $ficheMatiereMutualisableRepository->findByFicheMatieres($ficheMatiere);
+        $ecParcours = $elementConstitutifRepository->findByFicheMatiereParcours($ficheMatiere);
+
         return $this->render('fiche_matiere/show.html.twig', [
             'ficheMatiere' => $ficheMatiere,
+            'ficheMatiereParcours' => $ficheMatiereParcours,
+            'ecParcours' => $ecParcours,
             'formation' => $formation,
             'typeEpreuves' => $typeDiplome !== null ? $typeEpreuveRepository->findByTypeDiplome($typeDiplome) : $typeEpreuveRepository->findAll(),
             'typeDiplome' => $typeDiplome,
             'ects' => $ficheMatiere->getEcts(),
-            'templateForm' => $typeD !== null ? $typeD::TEMPLATE_FORM_MCCC : '',
+            'templateForm' => $typeD !== null ? $typeD::TEMPLATE_FORM_MCCC : 'licence.html.twig',
             'mcccs' => $typeD !== null ? $typeD->getMcccs($ficheMatiere) : [],
             'bccs' => $bccs,
             'typeMccc' => $ficheMatiere->getTypeMccc(),

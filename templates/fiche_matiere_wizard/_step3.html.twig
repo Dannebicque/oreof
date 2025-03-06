@@ -6,6 +6,7 @@
     {{ form_row(form.objectifs) }}
 
     {% if isBut == false %}
+        <twig:alerte type="info" message="Les compétences ci-dessous sont celles du parcours porteur de la fiche EC/matière." />
     <div class="mt-2">
         <p>
             <strong>{{ 'fiche_matiere_step3.labels.competence'|trans({}, 'form') }}</strong>

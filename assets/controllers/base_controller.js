@@ -20,10 +20,45 @@ export default class extends Controller {
 
   details = {}
 
+  _validForm(form) {
+    // fonction de validation du formulaire. Parcourir les objets de formulaire et vérifier si les champs "required" sont non vides
+    let valid = true
+    form.querySelectorAll('input, select, textarea').forEach((element) => {
+      element.classList.remove('error')
+      if (element.required && element.value === '') {
+        valid = false
+        // ajouter la classe is-invalid à l'élément
+        element.classList.add('error')
+      }
+
+      // tester si un radio est coché
+      if (element.type === 'radio') {
+        let radioChecked = false
+        form.querySelectorAll(`input[name="${element.name}"]`).forEach((radio) => {
+          if (radio.checked) {
+            radioChecked = true
+          }
+        })
+        if (!radioChecked) {
+          valid = false
+          form.querySelectorAll(`input[name="${element.name}"]`).forEach((radio) => {
+            radio.classList.add('error')
+          })
+        }
+      }
+    })
+    return valid
+  }
+
   sauvegardeFormModal(event) {
     event.preventDefault()
 
     const form = this.element.getElementsByTagName('form')[0]
+    if (!this._validForm(form)) {
+      console.log('form invalide')
+      return;
+    }
+
     fetch(form.action, {
       method: form.method,
       body: new FormData(form),

@@ -53,7 +53,7 @@ class FicheMatiere
 
     #[ORM\Column(nullable: true)]
     #[Groups(['fiche_matiere:read', 'fiche_matiere_versioning'])]
-    private ?bool $enseignementMutualise = null;
+    private ?bool $enseignementMutualise = false;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Groups(['fiche_matiere:read', 'fiche_matiere_versioning'])]
@@ -197,7 +197,6 @@ class FicheMatiere
     private ?bool $quitus = false;
 
     #[ORM\ManyToMany(targetEntity: Composante::class, inversedBy: 'ficheMatieres')]
-    /** @deprecated('encore utile?') */
     private Collection $composante;
 
     #[ORM\OneToMany(mappedBy: 'ficheMatiere', targetEntity: CommentaireFicheMatiere::class)]
@@ -897,7 +896,7 @@ class FicheMatiere
 
     public function getVolumeCmDistanciel(): ?float
     {
-        return $this->volumeCmDistanciel;
+        return $this->volumeCmDistanciel ?? 0;
     }
 
     public function setVolumeCmDistanciel(?float $volumeCmDistanciel): static
@@ -909,7 +908,7 @@ class FicheMatiere
 
     public function getVolumeTdDistanciel(): ?float
     {
-        return $this->volumeTdDistanciel;
+        return $this->volumeTdDistanciel ?? 0;
     }
 
     public function setVolumeTdDistanciel(?float $volumeTdDistanciel): static
@@ -921,7 +920,7 @@ class FicheMatiere
 
     public function getVolumeTpDistanciel(): ?float
     {
-        return $this->volumeTpDistanciel;
+        return $this->volumeTpDistanciel ?? 0;
     }
 
     public function setVolumeTpDistanciel(?float $volumeTpDistanciel): static

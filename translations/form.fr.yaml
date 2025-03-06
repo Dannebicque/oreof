@@ -398,12 +398,13 @@ Transport: Transport
 'Texte affiché en haut des pages parcours': 'Texte affiché en haut des pages parcours'
 'Texte affiché en bas des pages parcours': 'Texte affiché en bas des pages parcours'
 parcours_step7.labels.codeRNCP: parcours_step7.labels.codeRNCP
-parcours.labels.las1.label: parcours.labels.las1.label
-parcours.labels.las23.label: parcours.labels.las23.label
-parcours.labels.typeParcours: parcours.labels.typeParcours
-TYPE_PARCOURS_CLASSIQUE: TYPE_PARCOURS_CLASSIQUE
-TYPE_PARCOURS_LAS1: TYPE_PARCOURS_LAS1
-TYPE_PARCOURS_LAS23: TYPE_PARCOURS_LAS23
+parcours.labels.las1.label: 'Parcours LAS1'
+parcours.labels.las23.label: 'Parcours LAS2 ou 3'
+parcours.labels.typeParcours: 'Type de parcours'
+parcours.helps.typeParcours: 'Indiquez la spécificité du parcours'
+TYPE_PARCOURS_CLASSIQUE: 'Parcours Classique'
+TYPE_PARCOURS_LAS1: 'Parcours LAS1'
+TYPE_PARCOURS_LAS23: 'Parcours LAS2 ou 3'
 'Texte affiché si le parcours est une LAS1': 'Texte affiché si le parcours est une LAS1'
 'Texte affiché si le parcours est une LAS2 ou 3, avec les règles pour accéder à la LAS2': 'Texte affiché si le parcours est une LAS2 ou 3, avec les règles pour accéder à la LAS2'
 'Texte affiché si le parcours est une LAS1-2 ou 3, avec les règles pour accéder à la LAS3': 'Texte affiché si le parcours est une LAS1-2 ou 3, avec les règles pour accéder à la LAS3'
@@ -465,7 +466,8 @@ type_ec.labels.type.label: type_ec.labels.type.label
 fiche_matiere.step1_change_rf.title: fiche_matiere.step1_change_rf.title
 fiche_matiere.step1_change_rf.label: fiche_matiere.step1_change_rf.label
 ue.decrocher.bouton: 'Décrocher l''UE'
-parcours.labels.codeMentionApogee: parcours.labels.codeMentionApogee
+parcours.labels.codeMentionApogee: 'Code Apogée de la mention'
+parcours.helps.codeMentionApogee: ''
 element_constitutif_enfant.labels.typeEc: element_constitutif_enfant.labels.typeEc
 element_constitutif_enfant.labels.typeEcTexte: element_constitutif_enfant.labels.typeEcTexte
 parcours_step5.labels.niveauFrancais: 'Niveau de français requis'

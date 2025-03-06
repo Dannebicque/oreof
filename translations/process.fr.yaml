@@ -693,3 +693,4 @@ validation.valider.parcours.valider_ouverture_sans_cfvu.title: 'Valider et trans
 btn.validation.en_cours_redaction_ss_cfvu.valide: 'Valider et transmettre au SES'
 validation.valider.formation.valider_ouverture_sans_cfvu.title: 'Valider et transmettre au SES (sans CFVU)'
 btn.validation.formation.valider_ouverture_sans_cfvu: 'Valider et transmettre au SES'
+mettre.a.jour.remplissage: 'Mettre à jour le % de remplissage'

@@ -17,7 +17,7 @@
             UE à choix libre</span>
         {% endif %}
         {% if ue.uesEnfants|length > 0 %}<span class="badge bg-primary">
-            UE à choix restreint : {{ ue.uesEnfants|length }} choix possible(s)</span>{% endif %}
+            UE à choix restreint : {{ ue.uesEnfants|length }} choix possibles</span>{% endif %}
 
         {% if is_granted('ROLE_ADMIN') %}
             #{{ ue.ue.id }}

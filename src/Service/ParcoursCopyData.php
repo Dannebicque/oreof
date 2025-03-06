@@ -1193,7 +1193,7 @@ class ParcoursCopyData {
                 foreach($differentIndex as $diffIndex => $diffValue){
                     $differentMccc = $array2[$diffIndex];
                     self::$errorMcccMessageArray[$parcoursId][] = $debugText
-                    . " - EC ID ({$differentMccc->getEc()->getId()}) - Le MCCC est différent - ID : ({$differentMccc->getId()})";
+                    . " - EC ID ({$differentMccc->getEc()?->getId()}) - Le MCCC est différent - ID : ({$differentMccc->getId()})";
                 }
             }
 

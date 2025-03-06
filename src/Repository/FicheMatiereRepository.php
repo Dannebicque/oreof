@@ -55,31 +55,33 @@ class FicheMatiereRepository extends ServiceEntityRepository
         }
     }
 
-    public function findByParcours(Parcours $parcours): array
+    public function findByParcours(Parcours $parcours, CampagneCollecte $campagneCollecte): array
     {
         //soit la fiche est portée par le parcours, soit elle est mutualisée avec ce parcours
         return $this->createQueryBuilder('f')
             ->leftJoin('f.parcours', 'p')
             ->leftJoin('f.ficheMatiereParcours', 'pm')
-            ->where('p = :parcours')
+            ->where('f.campagneCollecte = :campagneCollecte')
+            ->andWhere('p = :parcours')
             ->orWhere('pm.parcours = :parcours')
             ->setParameter('parcours', $parcours)
+            ->setParameter('campagneCollecte', $campagneCollecte)
             ->orderBy('f.libelle', 'ASC')
             ->getQuery()
             ->getResult();
     }
 
-    /** @deprecated('pas de sens?') */
-    public function findByComposante(Composante $composante): array
-    {
-        return $this->createQueryBuilder('f')
-            ->join('f.composante', 'c')
-            ->where('c = :composante')
-            ->setParameter('composante', $composante)
-            ->orderBy('f.libelle', 'ASC')
-            ->getQuery()
-            ->getResult();
-    }
+//    /** @deprecated('pas de sens?') */
+//    public function findByComposante(Composante $composante): array
+//    {
+//        return $this->createQueryBuilder('f')
+//            ->join('f.composante', 'c')
+//            ->where('c = :composante')
+//            ->setParameter('composante', $composante)
+//            ->orderBy('f.libelle', 'ASC')
+//            ->getQuery()
+//            ->getResult();
+//    }
 
     public function findByAdmin(
         CampagneCollecte $campagneCollecte,
@@ -88,9 +90,8 @@ class FicheMatiereRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('f')
             ->leftJoin(Parcours::class, 'p', 'WITH', 'f.parcours = p.id')
             ->join(Formation::class, 'fo', 'WITH', 'p.formation = fo.id')
-            ->join(DpeParcours::class, 'dp', 'WITH', 'p.id = dp.parcours')
             ->leftJoin(User::class, 'u', 'WITH', 'f.responsableFicheMatiere = u.id')
-            ->andWhere('dp.campagneCollecte = :campagneCollecte')
+            ->andWhere('f.campagneCollecte = :campagneCollecte')
             ->andWhere('f.horsDiplome = 0')
             ->orWhere('f.horsDiplome IS NULL')
             ->setParameter('campagneCollecte', $campagneCollecte);
@@ -109,6 +110,9 @@ class FicheMatiereRepository extends ServiceEntityRepository
                 ->groupBy('f.id')
                 ->having('count(ec.id) = 0');
         }
+
+       // dd($qb->getQuery()->getSQL());
+
         return $qb->getQuery()->getResult();
     }
 
@@ -117,9 +121,8 @@ class FicheMatiereRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('f')
             ->leftJoin(Parcours::class, 'p', 'WITH', 'f.parcours = p.id')
             ->join(Formation::class, 'fo', 'WITH', 'p.formation = fo.id')
-            ->join(DpeParcours::class, 'dp', 'WITH', 'p.id = dp.parcours')
             ->leftJoin(User::class, 'u', 'WITH', 'f.responsableFicheMatiere = u.id')
-            ->andWhere('dp.campagneCollecte = :campagneCollecte')
+            ->andWhere('f.campagneCollecte = :campagneCollecte')
             ->andWhere('f.horsDiplome = 0')
             ->orWhere('f.horsDiplome IS NULL')
             ->setParameter('campagneCollecte', $campagneCollecte);
@@ -135,10 +138,16 @@ class FicheMatiereRepository extends ServiceEntityRepository
     {
         $sort = $options['sort'] ?? 'mention';
         $direction = $options['direction'] ?? 'ASC';
+        $start = $options['page'] ?? 1;
 
         if (array_key_exists('parcours', $options) && null !== $options['parcours']) {
-            $qb->andWhere('f.parcours = :parcours')
+            $qb->andWhere('p.id = :parcours')
                 ->setParameter('parcours', $options['parcours']);
+        }
+
+        if (array_key_exists('mention', $options) && null !== $options['mention']) {
+            $qb->andWhere('fo.mention = :mention')
+                ->setParameter('mention', $options['mention']);
         }
 
         if (array_key_exists('referent', $options) && null !== $options['referent']) {
@@ -178,8 +187,6 @@ class FicheMatiereRepository extends ServiceEntityRepository
         }
 
         if ($count === false) {
-            $start = $options['start'] ?? 0;
-
             $qb->setFirstResult($start * 50)
                 ->setMaxResults($options['length'] ?? 50);
         }
@@ -189,7 +196,9 @@ class FicheMatiereRepository extends ServiceEntityRepository
     {
         $start = $options['page'] ?? 1;
         $query = $this->createQueryBuilder('f')
-            ->where('f.horsDiplome = 1') //todo: ajouter filtre sur campagneCollecte
+            ->where('f.horsDiplome = 1')
+            ->andWhere('f.campagneCollecte = :campagneCollecte')
+            ->setParameter('campagneCollecte', $campagneCollecte)
             ->orderBy('f.libelle', 'ASC')
             ->setFirstResult(($start - 1) * 50)
             ->setMaxResults($options['length'] ?? 50);
@@ -244,7 +253,7 @@ class FicheMatiereRepository extends ServiceEntityRepository
                 ->setParameter('q', '%' . $options['q'] . '%');
         }
 
-       // $this->addFiltres($query, $all);
+        // $this->addFiltres($query, $all);
 
         return $query->getQuery()
             ->getSingleScalarResult();
@@ -343,7 +352,8 @@ class FicheMatiereRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
-    public function countDuplicatesCode() : array {
+    public function countDuplicatesCode() : array
+    {
         return $this->createQueryBuilder('fm')
             ->select('count(fm.codeApogee)')
             ->where('fm.codeApogee IS NOT NULL')
@@ -360,12 +370,13 @@ class FicheMatiereRepository extends ServiceEntityRepository
             //->andWhere('dp.campagneCollecte = :campagneCollecte')
             ->andWhere("JSON_CONTAINS(f.etatFiche, :transition) = 1")
             ->setParameter('transition', json_encode([$transition => 1]));
-           // ->setParameter('campagneCollecte', $campagneCollecte);
+        // ->setParameter('campagneCollecte', $campagneCollecte);
 
         return $qb->getQuery()->getResult();
     }
 
-    public function findForParcoursWithKeyword(Parcours $parcours, string $keyword){
+    public function findForParcoursWithKeyword(Parcours $parcours, string $keyword)
+    {
         $qb = $this->createQueryBuilder('fm');
 
         $qb = $qb->select('fm.id, fm.description, fm.objectifs, fm.slug, fm.libelle')
@@ -379,7 +390,8 @@ class FicheMatiereRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
-    public function findCountForKeyword(string $keyword) : array {
+    public function findCountForKeyword(string $keyword) : array
+    {
         $qb = $this->createQueryBuilder('fm');
 
         $qb = $qb->select('COUNT(fm.id) AS nombre_total')
@@ -401,7 +413,8 @@ class FicheMatiereRepository extends ServiceEntityRepository
 
     }
 
-    public function findFicheMatiereWithKeywordAndPagination(string $keyword, int $pageNumber, bool $paginate = true) : array {
+    public function findFicheMatiereWithKeywordAndPagination(string $keyword, int $pageNumber, bool $paginate = true) : array
+    {
         $qb = $this->createQueryBuilder('fm');
 
         $firstResults = $pageNumber > 1 ? ($pageNumber - 1) * 30 : 0;
@@ -427,7 +440,7 @@ class FicheMatiereRepository extends ServiceEntityRepository
             $qb->expr()->like('UPPER(fm.objectifs)', 'UPPER(:keyword)')
         )
         ->setParameter('keyword', '%' . $keyword . '%');
-        if($paginate){
+        if($paginate) {
             $qb = $qb->setFirstResult($firstResults)
                 ->setMaxResults(30);
         }
@@ -437,7 +450,8 @@ class FicheMatiereRepository extends ServiceEntityRepository
         return $qb;
     }
 
-    public function findAllWithPagination(int $pageNumber, int $pageLength) {
+    public function findAllWithPagination(int $pageNumber, int $pageLength)
+    {
         return $this->createQueryBuilder('fm')
             ->orderBy('id', 'ASC')
             ->setMaxResults($pageLength)

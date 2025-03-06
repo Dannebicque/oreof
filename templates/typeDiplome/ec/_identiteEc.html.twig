@@ -41,11 +41,11 @@
             <dd>{{ ficheMatiere.libelleAnglais }}</dd>
             <dt>Enseignement mutualisé ?</dt>
             <dd>{{ ficheMatiere.enseignementMutualise == true or ficheMatiere.ficheMatiereParcours|length > 0 ? 'Oui' : 'Non' }}</dd>
-            {% if ficheMatiere.enseignementMutualise == true or ficheMatiere.ficheMatiereParcours|length > 0 %}
+            {% if ficheMatiere.enseignementMutualise == true or ficheMatiereParcours|length > 0 %}
                 <dt>Parcours/formation avec lequel la fiche est mutualisée</dt>
                 <dd>
                     <ul>
-                        {% for parc in ficheMatiere.ficheMatiereParcours %}
+                        {% for parc in ficheMatiereParcours %}
                             {% if parc.parcours.formation is defined and parc.parcours.formation is not null %}
                                 {% if parc.parcours.isParcoursDefaut %}
                                     <li>{{ parc.parcours.formation.displayLong }} (mention sans parcours)</li>

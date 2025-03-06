@@ -167,7 +167,7 @@ bouton pour valider/invalide les étapes successives #}
                                     'field': 'remplissage'
                                 }) }}
                                 id="filter-remplissage" class="form-select">
-                            <option value=""></option>
+                            <option value="all">Tous</option>
                             <option value="0"
                                     {% if params['remplissage'] is defined and params['remplissage'] == 0 %}selected{% endif %}>
                                 Non complété
@@ -193,7 +193,10 @@ bouton pour valider/invalide les étapes successives #}
         </thead>
         <tbody>
         {% for formation in formations %}
-            {% if (params['remplissage'] is defined and formation.remplissage.calcul == params['remplissage']) or  params['remplissage'] is not defined %}
+            {% set remplissage = params['remplissage']|default('all') %}
+            {% if remplissage == '100' and formation.remplissage.calcul == 100 or
+                remplissage == '0' and formation.remplissage.calcul < 100 or
+                remplissage == 'all' %}
                 <tr>
                     <td>
                         {% if formation.composantePorteuse != null %}

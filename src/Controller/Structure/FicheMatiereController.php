@@ -13,6 +13,9 @@ use App\Controller\BaseController;
 use App\Entity\Ue;
 use App\Repository\ElementConstitutifRepository;
 use App\Repository\FicheMatiereRepository;
+use App\Repository\MentionRepository;
+use App\Repository\ParcoursRepository;
+use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -35,6 +38,9 @@ class FicheMatiereController extends BaseController
 
     #[Route('/liste', name: 'liste')]
     public function liste(
+        MentionRepository $mentionRepository,
+        ParcoursRepository $parcoursRepository,
+        UserRepository $userRepository,
         Request                $request,
         FicheMatiereRepository $ficheMatiereRepository
     ): Response {
@@ -59,32 +65,15 @@ class FicheMatiereController extends BaseController
             );
         }
 
-        $tFicheMatieres = [];
-
-
-        $tMentions = [];
-        $tParcours = [];
-        $tUsers = [];
-        foreach ($ficheMatieres as $fiche) {
-            $tFicheMatieres[$fiche->getId()] = $fiche;
-
-            if (null !== $fiche->getParcours()) {
-                $tParcours[$fiche->getParcours()->getId()] = $fiche->getParcours();
-                if ($fiche->getParcours()->getFormation() !== null) {
-                    $tMentions[$fiche->getParcours()->getFormation()->getId()] = $fiche->getParcours()->getFormation();
-                }
-            }
-
-            if (null !== $fiche->getResponsableFicheMatiere()) {
-                $tUsers[$fiche->getResponsableFicheMatiere()->getId()] = $fiche->getResponsableFicheMatiere();
-            }
-        }
+        $tMentions = $mentionRepository->findBy([], ['typeDiplome' => 'ASC', 'libelle' => 'ASC']);
+        $tParcours = $parcoursRepository->findByCampagneCollecte($this->getCampagneCollecte());
+        $tUsers = $userRepository->findBy([], ['nom' => 'ASC', 'prenom' => 'ASC']);
 
 
         $nbPages = ceil($totalFiches / 50);
 
         return $this->render('structure/fiche_matiere/_liste.html.twig', [
-            'ficheMatieres' => $tFicheMatieres,
+            'ficheMatieres' => $ficheMatieres,
             'deplacer' => false,
             'mode' => 'liste',
             'mentions' => $tMentions,

@@ -35,6 +35,7 @@ class Export
         protected ExportSynthese    $exportSynthese,
         protected ExportSeip        $exportSeip,
         protected ExportEc          $exportEc,
+        protected ExportListeFicheMatiere          $exportListeFicheMatiere,
         protected ExportMccc        $exportMccc,
         KernelInterface             $kernel,
         private TypeDiplomeRegistry $typeDiplomeRegistry,
@@ -68,6 +69,8 @@ class Export
         switch ($this->typeDocument) {
             case 'fiche':
                 return $this->exportConseil();
+            case 'listefiche':
+                return $this->exportListeFicheMatiere();
             case 'mccc':
                 return $this->exportMccc();
             case 'light_mccc':
@@ -138,6 +141,11 @@ class Export
     private function exportEc() : string
     {
         return $this->exportEc->exportLink($this->campagneCollecte);
+    }
+
+    private function exportListeFicheMatiere() : string
+    {
+        return $this->exportListeFicheMatiere->exportLink($this->campagneCollecte);
     }
 
     private function exportSynthese(): string

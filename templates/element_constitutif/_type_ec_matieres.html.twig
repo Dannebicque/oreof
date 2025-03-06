@@ -9,7 +9,7 @@
            data-bs-original-title="{{ 'ec_manage.helps.fiche_matieres_libelle_choix.help'|trans({}, 'help') }}"></i>
     </label>
     <textarea maxlength="255" type="text" id="ficheMatiereLibre" name="ficheMatiereLibre"
-              class="form-control">{{ ec.libelle }}</textarea>
+              class="form-control">{% if ec != null %}{{ ec.libelle }}{% endif %}</textarea>
 </div>
 
 <table class="table" id="tableFiches">

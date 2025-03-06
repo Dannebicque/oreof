@@ -119,7 +119,7 @@
         {% if (isBut is defined and isBut == false) or isBut is not defined %}
             <strong>{{ ec.elementConstitutif.code }}</strong>{% endif %}
         {% if ec.elementConstitutif.ficheMatiere != null %}
-            <a href="{{ url('app_fiche_matiere_show', {slug: ec.elementConstitutif.ficheMatiere.slug}) }}">
+            <a href="{{ url('app_fiche_matiere_show', {slug: ec.elementConstitutif.ficheMatiere.slug}) }}" target="_blank">
                 {% if isBut is defined and isBut == true %}
                     <strong>{{ ec.elementConstitutif.ficheMatiere.sigle }}</strong> {{ ec.elementConstitutif.ficheMatiere.libelle }}
                 {% else %}
@@ -134,7 +134,7 @@
         {% endif %}
         {% if ec.elementsConstitutifsEnfants|length > 0 %}
             <span class="badge bg-info">
-            EC à choix restreint : {{ ec.elementsConstitutifsEnfants|length }} choix possible(s)</span>
+            EC à choix restreint : {{ ec.elementsConstitutifsEnfants|length }} choix possibles</span>
         {% endif %}
     </td>
 </tr>
