@@ -180,7 +180,7 @@ class ElementConstitutif
     #[ORM\Column(nullable: true)]
     private ?bool $ects_specifiques = null;
 
-    #[ORM\OneToOne(targetEntity: self::class, cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(targetEntity: self::class)]
     private ?self $ecOrigineCopie = null;
 
 

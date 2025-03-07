@@ -54,7 +54,7 @@ class Ue
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $libelle = null;
 
-    #[ORM\OneToMany(mappedBy: 'ue', targetEntity: UeMutualisable::class)]
+    #[ORM\OneToMany(mappedBy: 'ue', targetEntity: UeMutualisable::class, cascade: ['remove'])]
     private Collection $ueMutualisables;
 
     #[ORM\ManyToOne(inversedBy: 'ues', fetch: 'EAGER')]
@@ -80,7 +80,7 @@ class Ue
     #[ORM\Column(length: 10, nullable: true)]
     private ?string $codeApogee = null;
 
-    #[ORM\OneToOne(targetEntity: self::class, cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(targetEntity: self::class)]
     private ?self $ueOrigineCopie = null;
 
     public function __construct()
