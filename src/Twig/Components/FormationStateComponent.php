@@ -152,14 +152,7 @@ class FormationStateComponent
             return EtatProcessMentionEnum::WIP;
         }
 
-        $steps = $this->formation->getEtatSteps(); //todo: est-ce fiable
-        foreach ($steps as $step) {
-            if ($step !== true) {
-                return EtatProcessMentionEnum::WIP;
-            }
-        }
-
-        return EtatProcessMentionEnum::COMPLETE;
+        return $this->formation->getRemplissage()->isFull() ? EtatProcessMentionEnum::COMPLETE : EtatProcessMentionEnum::WIP;
     }
 
     private function getEtatChangeRf(): EtatProcessMentionEnum

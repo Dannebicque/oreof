@@ -85,9 +85,6 @@ class FicheMatiereValideController extends BaseController
             return JsonReponse::error('Type de validation incorrect');
         }
 
-
-
-
         $fiches = JsonRequest::getValueFromRequest($request, 'fiches');
         $tFiches = explode(',', $fiches);
         //parcours toutes les fiches du tableau tFches, trouve la fiche et la valide
@@ -119,6 +116,44 @@ class FicheMatiereValideController extends BaseController
         $this->entityManager->flush();
 
         return JsonReponse::success('Fiches validées');
+    }
+
+    #[Route('/fiche-matiere/valide/update', name: 'fiche_matiere_valide_update', methods: ['GET'])]
+    public function valideParcoursValideUpdate(
+        FormationRepository $formationRepository,
+        ParcoursRepository   $parcoursRepository,
+        CalculStructureParcours $calculStructureParcours,
+        Request                $request,
+    ): Response {
+        $type = $request->query->get('type');
+        if ('formation' !== $type && 'parcours' !== $type) {
+            return JsonReponse::error('Type de validation incorrect');
+        }
+
+        if ('formation' === $type) {
+            $formation = $formationRepository->find($request->query->get('id'));
+            if ($formation !== null) {
+                $parcourss = $formation->getParcours();
+                foreach ($parcourss as $parcours) {
+                    $stats = $calculStructureParcours->calcul($parcours, false);
+                    $parcours->setEtatsFichesMatieres($stats->statsFichesMatieresParcours);
+                }
+            }
+        } else {
+            $parcours = $parcoursRepository->find($request->query->get('id'));
+            if ($parcours !== null) {
+                $stats = $calculStructureParcours->calcul($parcours, false, false);
+                $parcours->setEtatsFichesMatieres($stats->statsFichesMatieresParcours);
+            }
+        }
+
+        $this->entityManager->flush();
+$this->addFlashBag('success', '% mis à jour');
+
+//redirection sur page courage
+        $referer = $request->headers->get('referer');
+
+        return $this->redirect($referer);
     }
 
 }

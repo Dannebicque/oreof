@@ -161,7 +161,8 @@ class FicheMatiereRepository extends ServiceEntityRepository
 
         if (array_key_exists('q', $options) && null !== $options['q']) {
             $qb->andWhere('f.libelle LIKE :q')
-                ->setParameter('q', '%' . $options['q'] . '%');
+                ->orWhere('f.id LIKE :q')
+                ->setParameter('q', '%' . $options['q'] . '%'); //todo: ne fonctionne pas
         }
 
         if (array_key_exists('libelle', $options) && null !== $options['libelle']) {
@@ -187,7 +188,7 @@ class FicheMatiereRepository extends ServiceEntityRepository
         }
 
         if ($count === false) {
-            $qb->setFirstResult($start * 50)
+            $qb->setFirstResult(($start - 1) * 50)
                 ->setMaxResults($options['length'] ?? 50);
         }
     }

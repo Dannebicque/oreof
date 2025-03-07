@@ -12,18 +12,37 @@
                 message: 'Cocher les fiches EC/matière à valider puis cliquer sur le bouton "Valider et soumettre les fiches EC/matière.<br>
 Cela entrainera la vérification des informations saisies. Seules les fiches EC/matières complètes peuvent être validées et soumises pour publication.',
             }) }}
+            <div class="row">
+                <div class="col-3 d-grid">
 
-            <button class="btn btn-sm d-block btn-outline-success mb-2 mt-2"
-                    type="button"
-                    data-controller="tooltip"
-                    data-tooltip-placement-value="bottom"
-                    data-action="validation--fichematiere#valide"
-                    data-validation--fichematiere-url-param="{{ path('fiche_matiere_valide_valide', {type:'formation', id: formation.id}) }}"
-                    aria-label="{{ ('validation.valider.fiches_matieres.parcours')|trans({}, 'process') }}"
-                    data-bs-original-title="{{ ('validation.valider.fiches_matieres.parcours')|trans({}, 'process') }}"
-            >
-                <i class="fal fa-check"></i> {{ ('validation.valider.fiches_matieres')|trans({}, 'process') }}
-            </button>
+
+                    <button class="btn btn-sm d-block btn-outline-success mb-2 mt-2"
+                            type="button"
+                            data-controller="tooltip"
+                            data-tooltip-placement-value="bottom"
+                            data-action="validation--fichematiere#valide"
+                            data-validation--fichematiere-url-param="{{ path('fiche_matiere_valide_valide', {type:'formation', id: formation.id}) }}"
+                            aria-label="{{ ('validation.valider.fiches_matieres.parcours')|trans({}, 'process') }}"
+                            data-bs-original-title="{{ ('validation.valider.fiches_matieres.parcours')|trans({}, 'process') }}"
+                    >
+                        <i class="fal fa-check"></i> {{ ('validation.valider.fiches_matieres')|trans({}, 'process') }}
+                    </button>
+                </div>
+
+                {% if is_granted('ROLE_SES') %}
+                    <div class="col-3 d-grid">
+                        <a class="btn btn-sm d-block btn-outline-success mb-2 mt-2"
+                           type="button"
+                           data-controller="tooltip"
+                           data-tooltip-placement-value="bottom"
+                           href="{{ path('fiche_matiere_valide_update', {type:'formation', id: formation.id}) }}"
+                        >
+                            <i class="fal fa-percent"></i> Maj état
+                        </a>
+                    </div>
+                {% endif %}
+
+            </div>
             <div class="card mb-2 bg-transparent no-shadow d-none d-md-block sh-3">
                 <div class="card-body pt-0 pb-0 h-100">
                     <div class="row g-0 h-100 align-content-center">
