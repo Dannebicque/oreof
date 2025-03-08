@@ -45,7 +45,6 @@
                     <div {{ stimulus_controller('ec--liste') }}>
                         {% if ec.ecEnfants|length == 0 %}
                             <div class="card mb-2 sh-19 sh-md-8">
-                                {# todo: avoir en paramètre si c''est une ue d'enfant d'enfant #}
                                 <div class="card-body pt-0 pb-0 h-100 {% if ue.ueParent != null %}border-left-sousUe border-left-sousUe-{{ ue.ordre }}{% endif %}">
                                     <div class="row g-1 h-100 align-content-center">
                                         <div class="col-md-1 d-flex flex-column justify-content-center">

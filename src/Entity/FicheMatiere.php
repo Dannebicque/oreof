@@ -400,6 +400,7 @@ class FicheMatiere
             && array_key_exists('total', $this->remplissage)) {
             $remplissage->setScore($this->remplissage['score']);
             $remplissage->setTotal($this->remplissage['total']);
+            $remplissage->pourcentage = $remplissage->calcul();
         }
 
 
@@ -415,6 +416,7 @@ class FicheMatiere
         $this->remplissage = [
             'score' => $remplissage->score,
             'total' => $remplissage->total,
+            'pourcentage' => $remplissage->pourcentage,
         ];
 
         return $this;

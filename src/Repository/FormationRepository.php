@@ -102,7 +102,7 @@ class FormationRepository extends ServiceEntityRepository
         $sort = $options['sort'] ?? 'typeDiplome';
         $direction = $options['direction'] ?? 'ASC';
 
-        $filtres = [$sort => $direction]; //todo: pour gérer le cumul ?
+        $filtres = [$sort => $direction];
 
         $query = $this->createQueryBuilder('f')
             ->leftJoin('f.dpeParcours', 'p')

@@ -1,4 +1,9 @@
-{% set currentPage = params.page is defined ? params.page : 0 %}
+{% set currentPage = params.page is defined ? params.page : page %}
+
+{% if currentPage > nbPages %}
+    {% set currentPage = 1 %}
+{% endif %}
+
 {% set buffer = 4 %}
 {% set step = 5 %}
 {% set start = max(1, currentPage - buffer) %}

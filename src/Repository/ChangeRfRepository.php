@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\CampagneCollecte;
 use App\Entity\ChangeRf;
 use App\Entity\Composante;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -22,22 +23,28 @@ class ChangeRfRepository extends ServiceEntityRepository
         parent::__construct($registry, ChangeRf::class);
     }
 
-    //todo: mettre CampagneCollecte ?
-    public function findByComposanteTypeValidation(Composante $composante, ?string $etat): array
+    public function findByComposanteTypeValidation(
+        Composante $composante,
+        CampagneCollecte $campagneCollecte,
+        ?string $etat): array
     {
         if ($etat === null || $etat === 'all') {
             $qb = $this->createQueryBuilder('c')
                 ->innerJoin('c.formation', 'f')
                 ->andWhere('f.composantePorteuse = :composante')
+                ->andWhere('c.campagneCollecte = :campagneCollecte')
                 ->setParameter('composante', $composante)
+                ->setParameter('campagneCollecte', $campagneCollecte)
                 ->orderBy('c.dateDemande', 'DESC')
             ;
         } else {
             $qb = $this->createQueryBuilder('c')
                 ->innerJoin('c.formation', 'f')
+                ->andWhere('c.campagneCollecte = :campagneCollecte')
                 ->andWhere('f.composantePorteuse = :composante')
                 ->setParameter('composante', $composante)
                 ->andWhere("JSON_CONTAINS(c.etatDemande, :typeValidation) = 1")
+                ->setParameter('campagneCollecte', $campagneCollecte)
                 ->setParameter('typeValidation', json_encode([$etat => 1]))
                 ->orderBy('c.dateDemande', 'DESC');
         }
@@ -45,18 +52,23 @@ class ChangeRfRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
-    public function findByTypeValidation(?string $etat): array
+    public function findByTypeValidation(?string $etat,
+    CampagneCollecte $campagneCollecte): array
     {
         if ($etat === null || $etat === 'all') {
             $qb = $this->createQueryBuilder('c')
                 ->innerJoin('c.formation', 'f')
+                ->andWhere('c.campagneCollecte = :campagneCollecte')
+                ->setParameter('campagneCollecte', $campagneCollecte)
                 ->orderBy('c.dateDemande', 'DESC')
             ;
         } else {
             $qb = $this->createQueryBuilder('c')
                 ->innerJoin('c.formation', 'f')
+                ->andWhere('c.campagneCollecte = :campagneCollecte')
                 ->andWhere("JSON_CONTAINS(c.etatDemande, :typeValidation) = 1")
                 ->setParameter('typeValidation', json_encode([$etat => 1]))
+                ->setParameter('campagneCollecte', $campagneCollecte)
                 ->orderBy('c.dateDemande', 'DESC');
         }
 

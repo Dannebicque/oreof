@@ -16,8 +16,7 @@
         <div class="alert alert-info">
             <div class="row">
                 <div class="col-12">
-                    {# todo: parcours d'origine à afficher #}
-                    <p>Cet EC est raccroché, les données sont reprises par défaut de l'EC d'origine du parcours  xxx. Mais vous pouvez définir des données spécifiques sur cet EC.</p>
+                    <p>Cet EC est raccroché, les données sont reprises par défaut de l'EC d'origine du parcours <strong>{{ ec.parcours != null ? ec.parcours.libelle : '-non défini-' }}</strong>. Mais vous pouvez définir des données spécifiques sur cet EC.</p>
                 </div>
                 <div class="col-12">
                     <div class="form-check mb-2">

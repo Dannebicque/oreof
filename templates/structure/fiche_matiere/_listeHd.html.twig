@@ -108,11 +108,6 @@
         </thead>
         <tbody>
         {% for ficheMatiere in ficheMatieres %}
-            {# todo: a améliorer (ici et formation), car ca filtre que sur le résultat et pas sur l'ensemble des datas #}
-            {% set remplissage = params['remplissage']|default('all') %}
-            {% if remplissage == '100' and ficheMatiere.remplissage.calcul == 100 or
-                remplissage == '0' and ficheMatiere.remplissage.calcul < 100 or
-                remplissage == 'all' %}
             <tr>
                 <td>{{ ficheMatiere.libelle }} {% if ficheMatiere.sigle != null %}({{ ficheMatiere.sigle }}){% endif %}</td>
                 <td>
@@ -168,7 +163,6 @@
                     </button>
                 </td>
             </tr>
-            {% endif %}
         {% else %}
             <tr>
                 <td colspan="{% if mode == 'liste' %}10{% else %}8{% endif %}" class="bg-warning">

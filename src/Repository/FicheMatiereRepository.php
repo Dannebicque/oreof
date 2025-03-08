@@ -19,6 +19,7 @@ use App\Entity\Parcours;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -71,17 +72,17 @@ class FicheMatiereRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-//    /** @deprecated('pas de sens?') */
-//    public function findByComposante(Composante $composante): array
-//    {
-//        return $this->createQueryBuilder('f')
-//            ->join('f.composante', 'c')
-//            ->where('c = :composante')
-//            ->setParameter('composante', $composante)
-//            ->orderBy('f.libelle', 'ASC')
-//            ->getQuery()
-//            ->getResult();
-//    }
+    //    /** @deprecated('pas de sens?') */
+    //    public function findByComposante(Composante $composante): array
+    //    {
+    //        return $this->createQueryBuilder('f')
+    //            ->join('f.composante', 'c')
+    //            ->where('c = :composante')
+    //            ->setParameter('composante', $composante)
+    //            ->orderBy('f.libelle', 'ASC')
+    //            ->getQuery()
+    //            ->getResult();
+    //    }
 
     public function findByAdmin(
         CampagneCollecte $campagneCollecte,
@@ -111,27 +112,16 @@ class FicheMatiereRepository extends ServiceEntityRepository
                 ->having('count(ec.id) = 0');
         }
 
-       // dd($qb->getQuery()->getSQL());
+        $query =  $qb->getQuery();
 
-        return $qb->getQuery()->getResult();
-    }
+        $paginator = new Paginator($query, false);
 
-    public function countByAdmin(CampagneCollecte $campagneCollecte, array $options): ?int
-    {
-        $qb = $this->createQueryBuilder('f')
-            ->leftJoin(Parcours::class, 'p', 'WITH', 'f.parcours = p.id')
-            ->join(Formation::class, 'fo', 'WITH', 'p.formation = fo.id')
-            ->leftJoin(User::class, 'u', 'WITH', 'f.responsableFicheMatiere = u.id')
-            ->andWhere('f.campagneCollecte = :campagneCollecte')
-            ->andWhere('f.horsDiplome = 0')
-            ->orWhere('f.horsDiplome IS NULL')
-            ->setParameter('campagneCollecte', $campagneCollecte);
-
-        $this->addFiltres($qb, $options, true);
-
-        return $qb->select('count(f.id)')
-            ->getQuery()
-            ->getSingleScalarResult();
+        return [
+            'data' => iterator_to_array($paginator),
+            'total' => count($paginator),
+            'page' => $options['page'] ?? 1,
+            'limit' => 50,
+        ];
     }
 
     private function addFiltres(QueryBuilder $qb, array $options, bool $count = false): void
@@ -162,12 +152,17 @@ class FicheMatiereRepository extends ServiceEntityRepository
         if (array_key_exists('q', $options) && null !== $options['q']) {
             $qb->andWhere('f.libelle LIKE :q')
                 ->orWhere('f.id LIKE :q')
-                ->setParameter('q', '%' . $options['q'] . '%'); //todo: ne fonctionne pas
+                ->setParameter('q', '%' . $options['q'] . '%');
         }
 
         if (array_key_exists('libelle', $options) && null !== $options['libelle']) {
             $qb->andWhere('f.libelle LIKE :q')
                 ->setParameter('q', '%' . $options['libelle'] . '%');
+        }
+
+        if (isset($options['remplissage']) && null !== $options['remplissage'] && 'all' !== $options['remplissage']) {
+            $qb->andWhere('JSON_EXTRACT(f.remplissage, \'$.pourcentage\') = :remplissage')
+                ->setParameter('remplissage', $options['remplissage']);
         }
 
         if ($sort === 'responsableFicheMatiere') {
@@ -226,8 +221,16 @@ class FicheMatiereRepository extends ServiceEntityRepository
                 ->having('count(ec.id) = 0');
         }
 
-        return $query->getQuery()
-            ->getResult();
+        $qb = $query->getQuery();
+
+        $paginator = new Paginator($qb, false);
+
+        return [
+            'data' => iterator_to_array($paginator),
+            'total' => count($paginator),
+            'page' => $options['page'] ?? 1,
+            'limit' => 50,
+        ];
     }
 
     public function findByCodeAndFormation(mixed $codeMatiere, Formation $formation): array
@@ -241,23 +244,6 @@ class FicheMatiereRepository extends ServiceEntityRepository
             ->setParameter('code', $codeMatiere)
             ->getQuery()
             ->getResult();
-    }
-
-    public function countByHd(CampagneCollecte $campagneCollecte, array $options): ?int
-    {
-        $query = $this->createQueryBuilder('f')
-            ->select('count(f.id)') //todo: ajouter filtre sur campagneCollecte
-            ->andWhere('f.horsDiplome = 1');
-
-        if (array_key_exists('q', $options) && null !== $options['q']) {
-            $query->andWhere('f.libelle LIKE :q')
-                ->setParameter('q', '%' . $options['q'] . '%');
-        }
-
-        // $this->addFiltres($query, $all);
-
-        return $query->getQuery()
-            ->getSingleScalarResult();
     }
 
     public function findByResponsable(?UserInterface $user, CampagneCollecte $campagneCollecte, array $options): array
@@ -279,35 +265,17 @@ class FicheMatiereRepository extends ServiceEntityRepository
 
         $this->addFiltres($query, $options);
 
-        return $query->getQuery()
-            ->getResult();
-    }
+        $qb = $query->getQuery();
 
-    public function countByResponsable(?UserInterface $user, CampagneCollecte $campagneCollecte, array $options): ?int
-    {
-        $query = $this->createQueryBuilder('f')
-            ->leftJoin('f.parcours', 'p')
-            ->join('p.formation', 'fo')
-            ->join('p.dpeParcours', 'dp')
-            // Pour la première requête
-            ->andWhere('(fo.responsableMention = :parcours OR fo.coResponsable = :parcours)')
-            // Pour la deuxième requête
-            ->orWhere('(p.respParcours = :parcours OR p.coResponsable = :parcours)')
-            ->andWhere('dp.campagneCollecte = :campagneCollecte') // Pour la troisième requête
-            // Ajout condition à la derniere requete
-            ->andWhere('f.responsableFicheMatiere = :user')
-            ->orderBy('f.libelle', 'ASC')
-            ->setParameters([
-                'parcours' => $user,
-                'campagneCollecte' => $campagneCollecte,
-                'user' => $user
-            ]);
+        $paginator = new Paginator($qb, false);
 
-        $this->addFiltres($query, $options, true);
+        return [
+            'data' => iterator_to_array($paginator),
+            'total' => count($paginator),
+            'page' => $options['page'] ?? 1,
+            'limit' => 50,
+        ];
 
-        return $query->select('count(f.id)')
-            ->getQuery()
-            ->getSingleScalarResult();
     }
 
     public function findByComposanteTypeValidation(Composante $composante, CampagneCollecte $campagneCollecte, mixed $transition): array

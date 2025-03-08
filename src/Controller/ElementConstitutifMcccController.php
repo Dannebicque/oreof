@@ -170,11 +170,8 @@ class ElementConstitutifMcccController extends AbstractController
     #[
         Route('/{id}/mccc-ec/{parcours}/non-editable', name: 'app_element_constitutif_mccc_non_editable', methods: ['GET', 'POST'])]
     public function mcccEcNonEditable(
-        EntityManagerInterface       $entityManager,
         TypeDiplomeRegistry          $typeDiplomeRegistry,
         TypeEpreuveRepository        $typeEpreuveRepository,
-        Request                      $request,
-        ElementConstitutifRepository $elementConstitutifRepository,
         ElementConstitutif           $elementConstitutif,
         Parcours                     $parcours
     ): Response {
@@ -201,7 +198,7 @@ class ElementConstitutifMcccController extends AbstractController
 
         if ($elementConstitutif->getFicheMatiere() !== null && $elementConstitutif->getFicheMatiere()?->isMcccImpose()) {
             $typeEpreuve = $elementConstitutif->getFicheMatiere()?->getTypeMccc();
-        } elseif ($raccroche && $elementConstitutif->isSynchroMccc()) {
+        } elseif ($raccroche && $elementConstitutif->isMcccSpecifiques()) {
             $ec = $getElement->getElementConstitutif();
             $typeEpreuve = $ec->getTypeMccc();
         } else {

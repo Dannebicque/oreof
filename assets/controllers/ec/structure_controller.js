@@ -42,6 +42,30 @@ export default class extends Controller {
     })
   }
 
+  async heuresSpecifiques(event) {
+    const body = new FormData()
+    body.append('value', event.target.checked)
+    body.append('field', 'heuresSpecifiques')
+    body.append('ec', event.params.ec)
+
+    await fetch(this.urlUpdateValue, {
+      method: 'POST',
+      body,
+    }).then((response) => {
+      if (response.ok) {
+        const inputs = document.querySelectorAll('input[name^="ec_step4"]')
+        inputs.forEach((input) => {
+          if (event.target.checked) {
+            input.removeAttribute('disabled')
+          } else {
+            input.setAttribute('disabled', 'disabled')
+          }
+        })
+      }
+      JsonResponse(response)
+    })
+  }
+
   saveModaliteEnseignement(event) {
     const valeur = event.target.value
     this._save({

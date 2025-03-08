@@ -67,9 +67,16 @@ class CampagneCollecte
     #[ORM\Column]
     private ?bool $mailDpeEnvoye = false;
 
+    /**
+     * @var Collection<int, ChangeRf>
+     */
+    #[ORM\OneToMany(mappedBy: 'campagneCollecte', targetEntity: ChangeRf::class)]
+    private Collection $changeRves;
+
     public function __construct()
     {
         $this->dpeParcours = new ArrayCollection();
+        $this->changeRves = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -247,6 +254,36 @@ class CampagneCollecte
     public function setCouleur(string $couleur = 'primary'): static
     {
         $this->couleur = $couleur;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ChangeRf>
+     */
+    public function getChangeRves(): Collection
+    {
+        return $this->changeRves;
+    }
+
+    public function addChangeRf(ChangeRf $changeRf): static
+    {
+        if (!$this->changeRves->contains($changeRf)) {
+            $this->changeRves->add($changeRf);
+            $changeRf->setCampagneCollecte($this);
+        }
+
+        return $this;
+    }
+
+    public function removeChangeRf(ChangeRf $changeRf): static
+    {
+        if ($this->changeRves->removeElement($changeRf)) {
+            // set the owning side to null (unless already changed)
+            if ($changeRf->getCampagneCollecte() === $this) {
+                $changeRf->setCampagneCollecte(null);
+            }
+        }
 
         return $this;
     }
