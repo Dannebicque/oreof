@@ -433,8 +433,10 @@ fiche_matiere_step1.helps.codeApogee: fiche_matiere_step1.helps.codeApogee
 type_ec.helps.type.help: type_ec.helps.type.help
 type_diplome.helps.codifIntermediaire.help: type_diplome.helps.codifIntermediaire.help
 change_rf_formation.helps.user: change_rf_formation.helps.user
-change_rf_formation.helps.commentaire: change_rf_formation.helps.commentaire
-parcours.helps.codeMentionApogee: parcours.helps.codeMentionApogee
-element_constitutif_enfant.helps.typeEc: element_constitutif_enfant.helps.typeEc
-element_constitutif_enfant.helps.typeEcTexte: element_constitutif_enfant.helps.typeEcTexte
+change_rf_formation.helps.commentaire: 'Indiquez, si besoin, un commentaire pour expliquer la modification'
+parcours.helps.codeMentionApogee: 'Code Apogée de la mention'
+element_constitutif_enfant.helps.typeEc: '"'
+element_constitutif_enfant.helps.typeEcTexte: 'Précisez le type d’EC si il n’est pas présent dans la liste déroulante du champ précédent.'
 parcours_step5.helps.niveauFrancais: 'Indiquez le niveau de français souhaité pour intégrer la formation'
+parcours_ec.helps.mcccSpecifiques: 'Indiquez les modalités de contrôle des connaissances et compétences spécifiques à ce parcours.'
+parcours_ec.helps.ectsSpecifiques: 'Indiquez les ECTS spécifiques à ce parcours.'

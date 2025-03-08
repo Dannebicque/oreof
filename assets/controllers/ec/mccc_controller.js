@@ -40,6 +40,29 @@ export default class extends Controller {
     })
   }
 
+  async mcccSpecifiques(event) {
+    const body = new FormData()
+    body.append('value', event.target.checked)
+    body.append('field', 'mcccSpecifiques')
+    body.append('ec', event.params.ec)
+
+    await fetch(this.urlUpdateValue, {
+      method: 'POST',
+      body,
+    }).then((response) => {
+      const quitus = document.getElementById('ec_step4_quitus')
+      const choixMccc = document.getElementById('choix_type_mccc')
+      this.dispatch('update-form', { detail: { state: event.target.checked } })
+      if (event.target.checked) {
+        quitus.removeAttribute('disabled')
+        choixMccc.removeAttribute('disabled')
+      } else {
+        quitus.setAttribute('disabled', 'disabled')
+        choixMccc.setAttribute('disabled', 'disabled')
+      }
+    })
+  }
+
   async synchroMccc(event) {
     const body = new FormData()
     body.append('value', event.target.checked)

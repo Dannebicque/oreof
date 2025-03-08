@@ -11,6 +11,11 @@
         {% if ue.raccroche == true %}<i
                 class="fal fa-link"></i>
         {% endif %}
+        {% if ue.ue.ueMutualisables|length >0  %} {# and isSemestreRaccroche == false #}
+            <i class="fal fa-share-nodes"
+               data-controller="tooltip"
+               data-tooltip-placement-value="bottom"
+               title="UE mutualisée"></i>{% endif %}
 
         {% if ue.ue.natureUeEc is defined and ue.ue.natureUeEc != null and ue.ue.natureUeEc.libre == true %}
             <span class="badge bg-secondary">

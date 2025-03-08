@@ -88,8 +88,8 @@ class Composante
     #[ORM\Column(length: 20, nullable: true)]
     private ?string $sigle = null;
 
-//    #[ORM\ManyToMany(targetEntity: FicheMatiere::class, mappedBy: 'composante')]
-//    private Collection $ficheMatieres;
+    #[ORM\ManyToMany(targetEntity: FicheMatiere::class, mappedBy: 'composante')]
+    private Collection $ficheMatieres;
 
     #[ORM\Column(length: 3, nullable: true)]
     private ?string $codeComposante = null;
@@ -349,32 +349,32 @@ class Composante
         return $this;
     }
 
-//    /**
-//     * @return Collection<int, FicheMatiere>
-//     */
-//    public function getFicheMatieres(): Collection
-//    {
-//        return $this->ficheMatieres;
-//    }
+    /**
+     * @return Collection<int, FicheMatiere>
+     */
+    public function getFicheMatieres(): Collection
+    {
+        return $this->ficheMatieres;
+    }
 
-//    public function addFicheMatiere(FicheMatiere $ficheMatiere): static
-//    {
-//        if (!$this->ficheMatieres->contains($ficheMatiere)) {
-//            $this->ficheMatieres->add($ficheMatiere);
-//            $ficheMatiere->addComposante($this);
-//        }
-//
-//        return $this;
-//    }
-//
-//    public function removeFicheMatiere(FicheMatiere $ficheMatiere): static
-//    {
-//        if ($this->ficheMatieres->removeElement($ficheMatiere)) {
-//            $ficheMatiere->removeComposante($this);
-//        }
-//
-//        return $this;
-//    }
+    public function addFicheMatiere(FicheMatiere $ficheMatiere): static
+    {
+        if (!$this->ficheMatieres->contains($ficheMatiere)) {
+            $this->ficheMatieres->add($ficheMatiere);
+            $ficheMatiere->addComposante($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFicheMatiere(FicheMatiere $ficheMatiere): static
+    {
+        if ($this->ficheMatieres->removeElement($ficheMatiere)) {
+            $ficheMatiere->removeComposante($this);
+        }
+
+        return $this;
+    }
 
     public function getCodeComposante(): ?string
     {

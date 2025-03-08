@@ -1,7 +1,6 @@
 {% form_theme form 'communs/form_theme.html.twig' %}
 {{ form_start(form) }}
     {{ form_widget(form) }}
-{# todo: devrait déclencher la validation navigateur sur les modals ?? ajourer prvent du coup sur la gestion crud? #}
 <button type="submit" class="btn btn-success" {% if isModal is defined and isModal == true %}
     {{ stimulus_action('base','sauvegardeFormModal', 'click') }}
 {% endif %}>
