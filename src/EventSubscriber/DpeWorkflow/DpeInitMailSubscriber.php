@@ -20,8 +20,6 @@ use Symfony\Component\Workflow\Event\Event;
 
 class DpeInitMailSubscriber implements EventSubscriberInterface
 {
-    public const EMAIL_CENTRAL = 'cfvu-secretariat@univ-reims.fr'; //todo: a mettre sur établissement ?
-
     public function __construct(
         protected GetHistorique        $getHistorique,
         protected UserRepository       $userRepository,

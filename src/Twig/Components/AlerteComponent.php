@@ -16,7 +16,7 @@ use Symfony\UX\TwigComponent\Attribute\AsTwigComponent;
 final class AlerteComponent extends AbstractController
 {
     public string $type = 'info';
-    public string $message = 'message';
+    public string $message = '';
 
     public function getIcone(): string
     {
