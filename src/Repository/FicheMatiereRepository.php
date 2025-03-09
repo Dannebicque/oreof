@@ -428,4 +428,15 @@ class FicheMatiereRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function findAllByHd(CampagneCollecte $campagneCollecte): array
+    {
+        $query = $this->createQueryBuilder('f')
+            ->where('f.horsDiplome = 1')
+            ->andWhere('f.campagneCollecte = :campagneCollecte')
+            ->setParameter('campagneCollecte', $campagneCollecte)
+            ->orderBy('f.libelle', 'ASC');
+
+        return $query->getQuery()->getResult();
+    }
 }

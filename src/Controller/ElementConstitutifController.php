@@ -66,7 +66,7 @@ class ElementConstitutifController extends BaseController
         $natureEc = $natureUeEcRepository->find($request->query->get('choix'));
         if ($natureEc !== null) {
             $matieres[] = $ficheMatiereRepository->findByParcours($parcours, $this->getCampagneCollecte());
-            $matieres[] = $ficheMatiereRepository->findByHd($this->getCampagneCollecte(), []);
+            $matieres[] = $ficheMatiereRepository->findAllByHd($this->getCampagneCollecte());
             $matieres = array_merge(...$matieres);
 
             if ($natureEc->isChoix() === true) {
@@ -300,7 +300,7 @@ class ElementConstitutifController extends BaseController
             return $this->json(true);
         }
         $matieres[] = $ficheMatiereRepository->findByParcours($parcours, $this->getCampagneCollecte());
-        $matieres[] = $ficheMatiereRepository->findByHd($this->getCampagneCollecte(), []);
+        $matieres[] = $ficheMatiereRepository->findAllByHd($this->getCampagneCollecte());
         $matieres = array_merge(...$matieres);
 
         return $this->render('element_constitutif/new_enfant.html.twig', [
@@ -504,7 +504,7 @@ class ElementConstitutifController extends BaseController
         }
 
         $matieres[] = $ficheMatiereRepository->findByParcours($parcours, $this->getCampagneCollecte());
-        $matieres[] = $ficheMatiereRepository->findByHd($this->getCampagneCollecte(), []);
+        $matieres[] = $ficheMatiereRepository->findAllByHd($this->getCampagneCollecte());
         $matieres = array_merge(...$matieres);
 
 

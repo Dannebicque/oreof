@@ -669,6 +669,10 @@ class FicheMatiere
             $texte .= ' (mutualisée)';
         }
 
+        if ($this->isHorsDiplome() === true) {
+            $texte .= ' (hors diplôme)';
+        }
+
         return $texte;
     }
 
