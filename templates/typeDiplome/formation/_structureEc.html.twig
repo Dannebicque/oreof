@@ -48,6 +48,15 @@
         {% endif %}
     </td>
     <td>
+        {{ component('badge_mccc', {
+            elementConstitutif: ec.elementConstitutif,
+            parcours: parcours,
+            deplacer: false,
+            editable: false,
+            ue: ue.ue
+        }) }}
+    </td>
+    <td>
         <span class="show_versioning d-none d-print-none">{{ diffEc ? diffEc.heuresEctsEc.ects|displayDiff : '' }} ECTS</span>
         <p class="show_current">{{ ec.heuresEctsEc.ects|badgeEcts }}</p>
     </td>

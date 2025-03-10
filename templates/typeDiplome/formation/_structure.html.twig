@@ -64,7 +64,7 @@
                 <tr>
                     <th
                             class="border-left-semestre-{{ ordre }}"
-                            colspan=" {% if presentiel %}9{% else %}14{% endif %}">S{{ semestre.ordre }}
+                            colspan=" {% if presentiel %}10{% else %}15{% endif %}">S{{ semestre.ordre }}
                         {% if isVersioning is not defined or isVersioning == false %}
                             ({{ semestre.semestre.codeApogee }} | {{ semestre.semestreParcours.codeApogeeEtapeAnnee }}
                             - {{ semestre.semestreParcours.codeApogeeEtapeVersion }})
@@ -90,7 +90,7 @@
                     }) }}
                 {% endfor %}
                 <tr>
-                    <th class="border-left-semestre-{{ ordre }} text-end" colspan="3">Total Semestre {{ ordre }}</th>
+                    <th class="border-left-semestre-{{ ordre }} text-end" colspan="4">Total Semestre {{ ordre }}</th>
                     <th>
                         <span class="show_versioning d-none d-print-none">{{ diffSemestre is defined and diffSemestre != null ? diffSemestre.heuresEctsSemestre.sommeSemestreEcts|displayDiff : '' }} ECTS</span>
                         <p class="show_current">{{ semestre.heuresEctsSemestre.sommeSemestreEcts|filtreHeures }}</p>
@@ -147,7 +147,7 @@
                 </tr>
             {% endfor %}
             <tr>
-                <th colspan="3" class="text-end">Total formation</th>
+                <th colspan="4" class="text-end">Total formation</th>
                 <th>
                     <span class="show_versioning d-none d-print-none">{{ diffStructure is defined and diffStructure != null ? diffStructure.heuresEctsFormation.sommeFormationEcts|displayDiff : '' }} ECTS</span>
                     <p class="show_current">{{ dto.heuresEctsFormation.sommeFormationEcts }} ECTS</p>

@@ -1,6 +1,6 @@
 <tr>
     <th class="border-left-semestre-{{ semestreOrdre }}">&nbsp;</th>
-    <th colspan="4" {% if enfant %}class="border-left-ue-{{ ue.ordre }}"{% endif %}>
+    <th colspan="5" {% if enfant %}class="border-left-ue-{{ ue.ordre }}"{% endif %}>
         <span class="show_versioning d-none d-print-none">{{ diffUe ? diffUe.display|displayDiff : '' }}</span>
         <span class="show_current"> {{ ue.display }}</span> |
         <span class="show_versioning d-none d-print-none">{{ diffUe ? diffUe.libelle|displayDiff : '' }}</span>
@@ -55,7 +55,7 @@
     {% endif %}
     <tr class="ec">
         <th class="border-left-semestre-{{ semestreOrdre }}">&nbsp;</th>
-        <td {% if enfant %}class="border-left-ue-{{ ue.ordre }}"{% endif %} colspan="{{ colspan+4 }}">
+        <td {% if enfant %}class="border-left-ue-{{ ue.ordre }}"{% endif %} colspan="{{ colspan+5 }}">
             {{ ue.ue.descriptionUeLibre }}
         </td>
     </tr>
@@ -65,6 +65,7 @@
             <th class="border-left-semestre-{{ semestreOrdre }}">&nbsp;</th>
             <th {% if enfant %}class="border-left-ue-{{ ue.ordre }}"{% endif %}>&nbsp;</th>
             <th>Fiche EC/Matière</th>
+            <th>MCCC</th>
             <th>ECTS</th>
 
             {% if presentiel %}
@@ -114,7 +115,7 @@
 <tr>
     <th class="border-left-semestre-{{ semestreOrdre }}">&nbsp;</th>
     <th>&nbsp;</th>
-    <th class="text-end">
+    <th class="text-end" colspan="2">
         Total {{ ue.display }} {% if enfant == false and ue.ue.ueEnfants|length > 0 %}(Total max.){% endif %}</th>
 
     <th>
