@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.32.8](https://github.com/Dannebicque/oreof/compare/v1.32.7...v1.32.8) (2025-03-11)
+
+
+### Bug Fixes
+
+* target blank ([eb135a0](https://github.com/Dannebicque/oreof/commit/eb135a0a4855ebe144d5af1bfb867aa380f2acb6))
+
 ### [1.32.7](https://github.com/Dannebicque/oreof/compare/v1.32.6...v1.32.7) (2025-03-10)
 
 
