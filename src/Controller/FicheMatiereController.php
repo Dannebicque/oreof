@@ -17,6 +17,7 @@ use App\Entity\ElementConstitutif;
 use App\Entity\FicheMatiere;
 use App\Entity\FicheMatiereVersioning;
 use App\Entity\Parcours;
+use App\Entity\TypeEpreuve;
 use App\Form\FicheMatiereType;
 use App\Repository\ElementConstitutifRepository;
 use App\Repository\FicheMatiereMutualisableRepository;
@@ -26,6 +27,9 @@ use App\Repository\TypeDiplomeRepository;
 use App\Repository\TypeEpreuveRepository;
 use App\Repository\UeRepository;
 use App\Service\VersioningFicheMatiere;
+use App\TypeDiplome\Source\ButTypeDiplome;
+use App\TypeDiplome\Source\LicenceTypeDiplome;
+use App\TypeDiplome\Source\MeefTypeDiplome;
 use App\TypeDiplome\TypeDiplomeRegistry;
 use App\Utils\JsonRequest;
 use DateTimeImmutable;
@@ -370,12 +374,29 @@ class FicheMatiereController extends BaseController
     public function getJsonVersion(
         FicheMatiereVersioning $ficheMatiereVersioning,
         VersioningFicheMatiere $ficheMatiereVersioningService,
-        Filesystem $filesystem
+        Filesystem $filesystem,
+        EntityManagerInterface $em,
+        LicenceTypeDiplome $licenceTypeD,
+        ButTypeDiplome $butTypeD,
+        MeefTypeDiplome $meefTypeD
     ) {
         try {
             $version = $ficheMatiereVersioningService->loadFicheMatiereVersion($ficheMatiereVersioning);
             $ficheMatiere = $version['ficheMatiere'];
-
+            $ficheMatiereParcours = $version['ficheMatiere']->getFicheMatiereParcours();
+            $typeD = $version['ficheMatiere']->getParcours()->getFormation()->getTypeDiplome();
+            $templateFormArray = [
+                'Licence' => 'licence.html.twig',
+                'Bachelor Universitaire de Technologie' => 'but.html.twig',
+                'Master MEEF' => 'meef.html.twig'
+            ];
+            $mcccTypeDiplome = [
+                'Licence' => $licenceTypeD,
+                'Bachelor Universitaire de Technologie' => $butTypeD,
+                'Master MEEF' => $meefTypeD
+            ];
+            $templateForm = array_key_exists($typeD->getLibelle(), $templateFormArray) ? $templateFormArray[$typeD->getLibelle()] : [];
+            $mcccTypeDiplome = array_key_exists($typeD->getLibelle(), $mcccTypeDiplome) ? $mcccTypeDiplome[$typeD->getLibelle()] : [];
             $bccs = [];
             foreach ($ficheMatiere->getCompetences() as $competence) {
                 if (!array_key_exists($competence->getBlocCompetence()?->getId(), $bccs)) {
@@ -385,13 +406,23 @@ class FicheMatiereController extends BaseController
                 $bccs[$competence->getBlocCompetence()?->getId()]['competences'][] = $competence;
             }
 
+            $ecParcours = $em->getRepository(ElementConstitutif::class)
+                ->findByFicheMatiereParcours($ficheMatiereVersioning->getFicheMatiere());
+            $typeEpreuves = $em->getRepository(TypeEpreuve::class)->findByTypeDiplome($typeD);
+                
             return $this->render('fiche_matiere/show.versioning.html.twig', [
                 'ficheMatiere' => $ficheMatiere,
                 'formation' => $ficheMatiere->getParcours()?->getFormation(),
                 'typeDiplome' => $ficheMatiere->getParcours()?->getFormation()->getTypeDiplome(),
                 'bccs' => $bccs,
                 'dateHeure' => $version['dateVersion'],
-                'cssDiff' => ""
+                'cssDiff' => "",
+                'ficheMatiereParcours' => $ficheMatiereParcours,
+                'templateForm' => $templateForm,
+                'typeMccc' => $ficheMatiere->getTypeMccc(),
+                'ecParcours' => $ecParcours,
+                'mcccs' => $mcccTypeDiplome->getMcccs($ficheMatiere),
+                'typeEpreuves' => $typeEpreuves
             ]);
         } catch(\Exception $e) {
             // Log error
