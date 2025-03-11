@@ -416,7 +416,7 @@ class FicheMatiere
         $this->remplissage = [
             'score' => $remplissage->score,
             'total' => $remplissage->total,
-            'pourcentage' => $remplissage->pourcentage,
+            'pourcentage' => $remplissage->calcul(),
         ];
 
         return $this;
