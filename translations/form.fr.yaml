@@ -460,16 +460,16 @@ parcours.labels.parcoursOrigine: "Parcours d'origine"
 ec_manage.labels.fiche_matiere_titre_libre_edit.label: "Libellé libre de l'EC"
 ec.labels.typeEc.label: "Type de l'EC"
 semestre.decrocher.bouton: 'Décrocher le semestre'
-fiche_matiere_step1.labels.codeApogee: fiche_matiere_step1.labels.codeApogee
-type_ec.labels.type.label: type_ec.labels.type.label
+fiche_matiere_step1.labels.codeApogee: 'Code Element (apogée) de la fiche matière'
+type_ec.labels.type.label: 'Type d''EC'
 'Codification intermédiaire': 'Codification intermédiaire'
 fiche_matiere.step1_change_rf.title: fiche_matiere.step1_change_rf.title
 fiche_matiere.step1_change_rf.label: fiche_matiere.step1_change_rf.label
 ue.decrocher.bouton: 'Décrocher l''UE'
 parcours.labels.codeMentionApogee: 'Code Apogée de la mention'
 parcours.helps.codeMentionApogee: ''
-element_constitutif_enfant.labels.typeEc: element_constitutif_enfant.labels.typeEc
-element_constitutif_enfant.labels.typeEcTexte: element_constitutif_enfant.labels.typeEcTexte
+element_constitutif_enfant.labels.typeEc: 'Type de l''EC'
+element_constitutif_enfant.labels.typeEcTexte: 'Texte du type de l''EC si non présent dans la liste'
 parcours_step5.labels.niveauFrancais: 'Niveau de français requis'
 'Utilisateur élémentaire débutant': 'Utilisateur élémentaire débutant'
 'Utilisateur élémentaire intermédiaire': 'Utilisateur élémentaire intermédiaire'
