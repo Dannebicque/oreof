@@ -28,6 +28,10 @@ class FicheMatiereStep2Type extends AbstractType
                 'attr' => ['data-action' => 'change->fichematiere--step2#saveDescription', 'maxlength' => 3000, 'rows' => 20],
                 'help' => '-'
             ])
+            ->add('objectifs', TextareaAutoSaveType::class, [
+                'attr' => ['data-action' => 'change->fichematiere--step2#saveObjectifs', 'maxlength' => 3000, 'rows' => 20],
+                'help' => '-'
+            ])
             ->add('langueDispense', EntityType::class, [
                 'attr' => ['data-action' => 'change->fichematiere--step2#changeLangue', 'data-fichematiere--step2-type-param' => 'langueDispense' ],
                 'class' => Langue::class,

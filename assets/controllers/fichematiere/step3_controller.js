@@ -25,17 +25,9 @@ export default class extends Controller {
   }
 
   connect() {
-    if (document.getElementById('fiche_matiere_step3_objectifs')) {
-      document.getElementById('fiche_matiere_step3_objectifs').addEventListener('trix-blur', this.saveObjectifs.bind(this))
-    }
-  }
-
-  saveObjectifs() {
-    this._save({
-      field: 'objectifs',
-      action: 'textarea',
-      value: trixEditor('fiche_matiere_step3_objectifs'),
-    })
+    // if (document.getElementById('fiche_matiere_step3_objectifs')) {
+    //   document.getElementById('fiche_matiere_step3_objectifs').addEventListener('trix-blur', this.saveObjectifs.bind(this))
+    // }
   }
 
   changeBcc(event) {

@@ -45,12 +45,12 @@ class FicheMatiereState
 
     public function isEmptyOnglet2(): bool
     {
-        return $this->ficheMatiere->getDescription() === null && $this->ficheMatiere->getLangueDispense()->count() === 0 && $this->ficheMatiere->getLangueSupport()->count() === 0;
+        return $this->ficheMatiere->getDescription() === null && $this->ficheMatiere->getLangueDispense()->count() === 0 && $this->ficheMatiere->getLangueSupport()->count() === 0 && $this->ficheMatiere->getObjectifs() === null && $this->ficheMatiere->getCompetences() === null;
     }
 
     public function isEmptyOnglet3(): bool
     {
-        return $this->ficheMatiere->getObjectifs() === null && $this->ficheMatiere->getCompetences() === null;
+        return true;
     }
 
     public function isEmptyOnglet4(): bool
@@ -114,6 +114,10 @@ class FicheMatiereState
             $tab['error'][] = 'Vous devez indiquer une description.';
         }
 
+        if ($this->ficheMatiere->getObjectifs() === null || trim($this->ficheMatiere->getObjectifs()) === '') {
+            $tab['error'][] = 'Vous devez indiquer les objectifs.';
+        }
+
         if ($this->ficheMatiere->getLangueDispense()->count() === 0) {
             $tab['error'][] = 'Vous devez choisir au moins une langue de dispense.';
         }
@@ -122,16 +126,14 @@ class FicheMatiereState
             $tab['error'][] = 'Vous devez choisir au moins une langue de support.';
         }
 
+
+
         return count($tab['error']) > 0 ? $tab : true;
     }
 
     private function etatOnglet3(): bool|array
     {
         $tab['error'] = [];
-
-        if ($this->ficheMatiere->getObjectifs() === null || trim($this->ficheMatiere->getObjectifs()) === '') {
-            $tab['error'][] = 'VOus devez indiquer les objectifs.';
-        }
 
         if ($this->ficheMatiere->getCompetences()->count() === 0 && $this->ficheMatiere->getApprentissagesCritiques()->count() === 0) {
             $tab['error'][] = 'Vous devez associer au moins une compétence.';

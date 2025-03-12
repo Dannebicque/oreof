@@ -19,13 +19,13 @@ class FicheMatiereStep3Type extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder
-
-            ->add('objectifs', TextareaAutoSaveType::class, [
-                'attr' => ['data-action' => 'change->fichematiere--step3#saveObjectifs', 'maxlength' => 3000, 'rows' => 20],
-                'help' => '-'
-            ])
-        ;
+//        $builder
+//
+//            ->add('objectifs', TextareaAutoSaveType::class, [
+//                'attr' => ['data-action' => 'change->fichematiere--step3#saveObjectifs', 'maxlength' => 3000, 'rows' => 20],
+//                'help' => '-'
+//            ])
+//        ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

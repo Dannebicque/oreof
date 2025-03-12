@@ -52,7 +52,7 @@ fiche_matiere_step1.labels.responsableEc: "Responsable de l'enseignement"
 fiche_matiere_step2.labels.description: "Description de l'enseignement"
 fiche_matiere_step2.labels.langueDispense.label: 'Enseignement dispensé en :'
 fiche_matiere_step2.labels.langueSupport.label: 'Support de cours en :'
-fiche_matiere_step3.labels.objectifs: "Objectifs de l'enseignement"
+fiche_matiere_step2.labels.objectifs: "Objectifs de l'enseignement"
 ec_step4.labels.modaliteEnseignement.label: "Modalité(s) d'enseignement"
 ec_step4.labels.ects: 'Nombre d’ECTS'
 ec_step4.labels.volumeCmPresentiel: 'Volume horaire CM présentiel'

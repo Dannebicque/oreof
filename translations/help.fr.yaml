@@ -207,7 +207,7 @@ ec_manage.helps.fiche_matiere_libelle_unique.help: "Seulement si la fiche EC/mat
 fiche_matiere_step2.helps.description: 'Indiquez en 3000 caractères maximum le contenu de l’enseignement. Faites une description détaillée des différents sujets traités dans cet enseignement.'
 fiche_matiere_step2.helps.langueDispense.help: 'Plusieurs choix possibles.'
 fiche_matiere_step2.helps.langueSupport.help: 'Plusieurs choix possibles.'
-fiche_matiere_step3.helps.objectifs: 'Indiquez en 3000 caractères maximum les objectifs de l’enseignement.'
+fiche_matiere_step2.helps.objectifs: 'Indiquez en 3000 caractères maximum les objectifs de l’enseignement.'
 fiche_matiere_step3.labels.competence: "Choisissez d'abord le/les bloc(s) de compétences pour accéder aux compétences associées."
 fiche_matiere_step1.helps.responsableFicheMatiere: "Indiquez le référent de l'enseignement."
 user.add_missing.email.help: "Indiquez un email valide de l'utilisateur à ajouter pour récupérer ses informations."
