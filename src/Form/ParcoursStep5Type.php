@@ -43,6 +43,10 @@ class ParcoursStep5Type extends AbstractType
                 'choice_label' => 'libelle',
                 'multiple' => false,
                 'expanded' => false,
+                'query_builder' => static function ($er) {
+                    return $er->createQueryBuilder('c')
+                        ->orderBy('c.libelle', 'ASC');
+                },
                 'autocomplete' => true,
                 'attr' => ['data-action' => 'change->parcours--step5#changeComposanteInscription'],
             ])
