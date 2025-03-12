@@ -363,26 +363,38 @@ class FicheMatiere
 
         if ($this->langueDispense->isEmpty() === false) {
             $remplissage->add();
+        } else {
+            $remplissage->add(0);
         }
 
         if ($this->libelleAnglais !== null) {
             $remplissage->add();
+        } else {
+            $remplissage->add(0);
         }
 
         if ($this->enseignementMutualise !== null) {
             $remplissage->add();
+        } else {
+            $remplissage->add(0);
         }
 
         if ($this->description !== null) {
             $remplissage->add();
+        } else {
+            $remplissage->add(0);
         }
 
         if ($this->objectifs !== null) {
             $remplissage->add();
+        } else {
+            $remplissage->add(0);
         }
 
         if ($this->competences->isEmpty() === false) {
             $remplissage->add();
+        } else {
+            $remplissage->add(0);
         }
         //todo: ajouter MCCC et Apprentissages critiques pour le BUT
 
