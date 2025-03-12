@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.32.9](https://github.com/Dannebicque/oreof/compare/v1.32.8...v1.32.9) (2025-03-12)
+
+
+### Features
+
+* Add objectives field to step 2 form and implement save functionality ([520336c](https://github.com/Dannebicque/oreof/commit/520336cfb7a424052b1fb0a9927f7087766a2a25))
+* Add query builder for ordering choices in ParcoursStep5Type ([59c0937](https://github.com/Dannebicque/oreof/commit/59c09371ea5dbe66958e2f4fd204c10faea2d6f1))
+* Implement non-editable BCC functionality and update badge display logic ([c7a0417](https://github.com/Dannebicque/oreof/commit/c7a041796eac9d1cd1507a0c1910a5e2e02c8a04))
+* Refactor controllers to extend BaseController and update formation queries + liste autocomplete ([11441d6](https://github.com/Dannebicque/oreof/commit/11441d65e45b5d26ec1d911874214d55bb6366b7))
+
+
+### Bug Fixes
+
+* target blank ([f2f83d2](https://github.com/Dannebicque/oreof/commit/f2f83d258415868011fb4519e3e6357e39be7539))
+* target blank ([3bcabc9](https://github.com/Dannebicque/oreof/commit/3bcabc9f70d493fb4c91555411957b9b16ee0e3e))
+* Typo + remplissage des fiches ([4557116](https://github.com/Dannebicque/oreof/commit/455711603db3a1c71f4fe3f1c9fb7b55b7a62bc3))
+* Typo + remplissage des fiches ([4bd752d](https://github.com/Dannebicque/oreof/commit/4bd752d17ff664250b7bed9ef61a0ba6cc4e513c))
+* Update French localization for parcours and contact fields ([95ecec4](https://github.com/Dannebicque/oreof/commit/95ecec4cc9563468bf24ef3f01a4aa676458c392))
+
 ### [1.32.8](https://github.com/Dannebicque/oreof/compare/v1.32.7...v1.32.8) (2025-03-11)
 
 
