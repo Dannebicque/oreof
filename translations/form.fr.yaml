@@ -397,7 +397,7 @@ Transport: Transport
 "Numéro d'activité": "Numéro d'activité"
 'Texte affiché en haut des pages parcours': 'Texte affiché en haut des pages parcours'
 'Texte affiché en bas des pages parcours': 'Texte affiché en bas des pages parcours'
-parcours_step7.labels.codeRNCP: parcours_step7.labels.codeRNCP
+parcours_step7.labels.codeRNCP: 'Code RNCP du parcours, si spécifique'
 parcours.labels.las1.label: 'Parcours LAS1'
 parcours.labels.las23.label: 'Parcours LAS2 ou 3'
 parcours.labels.typeParcours: 'Type de parcours'
@@ -434,7 +434,7 @@ parcours_step5.labels.contacts.label.0.label.adresse.label: parcours_step5.label
 'Dénomination du contact': 'Dénomination du contact'
 Téléphone: Téléphone
 Email: Email
-contact.labels.adresse.label: contact.labels.adresse.label
+contact.labels.adresse.label: 'Adresse du contact'
 'Présentation des formations': 'Présentation des formations'
 'Pour en savoir plus sur ce type de formation': 'Pour en savoir plus sur ce type de formation'
 Chaumont: Chaumont

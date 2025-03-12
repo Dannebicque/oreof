@@ -342,19 +342,19 @@ etablissement.helps.numero_SIRET: etablissement.helps.numero_SIRET
 etablissement.helps.numero_activite: etablissement.helps.numero_activite
 etablissement.helps.etablissement_information.descriptifHautPage: etablissement.helps.etablissement_information.descriptifHautPage
 etablissement.helps.etablissement_information.descriptifBasPage: etablissement.helps.etablissement_information.descriptifBasPage
-parcours_step7.helps.descriptifHautPage: parcours_step7.helps.descriptifHautPage
-parcours_step7.helps.descriptifBasPage: parcours_step7.helps.descriptifBasPage
-parcours_step7.helps.codeRNCP: parcours_step7.helps.codeRNCP
-parcours.helps.las1.help: parcours.helps.las1.help
-parcours.helps.las23.help: parcours.helps.las23.help
-parcours.helps.typeParcours: parcours.helps.typeParcours
-etablissement.helps.etablissement_information.textLas1: etablissement.helps.etablissement_information.textLas1
-etablissement.helps.etablissement_information.textLas2: etablissement.helps.etablissement_information.textLas2
-etablissement.helps.etablissement_information.textLas3: etablissement.helps.etablissement_information.textLas3
-etablissement.helps.etablissement_information.secondeChance: etablissement.helps.etablissement_information.secondeChance
-parcours_step5.helps.adresses.help: parcours_step5.helps.adresses.help
-parcours_step5.helps.adresses.help.__name__.help: parcours_step5.helps.adresses.help.__name__.help
-parcours_step5.helps.adresses.__name__.adresse1: parcours_step5.helps.adresses.__name__.adresse1
+parcours_step7.helps.descriptifHautPage: 'Descriptif affiché en haut des pages formations sur le site de l''URCA'
+parcours_step7.helps.descriptifBasPage: ''
+parcours_step7.helps.codeRNCP: 'Code RNCP du parcours si spécifique'
+parcours.helps.las1.help: ''
+parcours.helps.las23.help: ''
+parcours.helps.typeParcours: ''
+etablissement.helps.etablissement_information.textLas1: ''
+etablissement.helps.etablissement_information.textLas2: ''
+etablissement.helps.etablissement_information.textLas3: ''
+etablissement.helps.etablissement_information.secondeChance: ''
+parcours_step5.helps.adresses.help: ''
+parcours_step5.helps.adresses.help.__name__.help: ''
+parcours_step5.helps.adresses.__name__.adresse1: ''
 parcours_step5.helps.adresses.__name__.adresse2: parcours_step5.helps.adresses.__name__.adresse2
 parcours_step5.helps.adresses.__name__.codePostal: parcours_step5.helps.adresses.__name__.codePostal
 parcours_step5.helps.adresses.__name__.ville: parcours_step5.helps.adresses.__name__.ville
