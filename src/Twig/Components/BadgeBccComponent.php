@@ -22,10 +22,13 @@ final class BadgeBccComponent
     public ?bool $etatBccComplet = false;
     public ?bool $isSynchroBcc = false;
     public ?bool $texte = false;
+    public ?bool $isParcoursProprietaire = false;
 
     #[PostMount]
     public function mounted(): void
     {
+        $this->isParcoursProprietaire = $this->elementConstitutif?->getParcours()?->getId() === $this->parcours->getId();
+
         $getElement = new GetElementConstitutif($this->elementConstitutif, $this->parcours);
 
         $this->isSynchroBcc = $this->elementConstitutif->isSynchroBcc() && $this->elementConstitutif->getFicheMatiere()?->getParcours()?->getId() !== $this->parcours->getId();

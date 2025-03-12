@@ -29,9 +29,52 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/element/constitutif')]
 class ElementConstitutifBccController extends AbstractController
 {
-    /**
-     * @throws \App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException
-     */
+
+    #[Route('/{id}/bcc-ec/{parcours}/non-editable', name: 'app_element_constitutif_bcc_non_editable', methods: ['GET', 'POST'])]
+    public function bccEcNonEditable(
+        ButCompetenceRepository            $butCompetenceRepository,
+        ButApprentissageCritiqueRepository $butApprentissageCritiqueRepository,
+        EntityManagerInterface             $entityManager,
+        CompetenceRepository               $competenceRepository,
+        BlocCompetenceRepository           $blocCompetenceRepository,
+        Request                            $request,
+        ElementConstitutif                 $elementConstitutif,
+        Parcours                           $parcours
+    ): Response {
+
+        $ecBccs = [];
+        $ecComps = [];
+        $bccs = $blocCompetenceRepository->findByParcours($parcours);
+
+        // competences du parcours
+        $tabCompetences = [];
+        foreach ($bccs as $bcc) {
+            foreach ($bcc->getCompetences() as $competence) {
+                $tabCompetences[$competence->getCode()] = $competence;
+            }
+        }
+        $getElement = new GetElementConstitutif($elementConstitutif, $parcours);
+        // competences de l'EC du parcours d'origine
+        $competences = $getElement->getBccs();
+
+        //on fait le lien entre la compétence et le code
+        foreach ($competences as $competence) {
+            if (array_key_exists($competence->getCode(), $tabCompetences)) {
+                $ecComps[] = $tabCompetences[$competence->getCode()]->getId();
+                $ecBccs[] = $tabCompetences[$competence->getCode()]->getBlocCompetence()?->getId();
+            }
+        }
+
+        return $this->render('element_constitutif/_bccEcNonEditable.html.twig', [
+            'ec' => $elementConstitutif,
+            'bccs' => $bccs,
+            'editable' => false,
+            'parcours' => $parcours,
+            'ecBccs' => array_flip(array_unique($ecBccs)),
+            'ecComps' => array_flip($ecComps),
+        ]);
+    }
+
     #[Route('/{id}/bcc-ec/{parcours}', name: 'app_element_constitutif_bcc', methods: ['GET', 'POST'])]
     public function bccEc(
         ButCompetenceRepository            $butCompetenceRepository,
