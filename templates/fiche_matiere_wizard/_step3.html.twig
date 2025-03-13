@@ -3,7 +3,6 @@
 }) }}>
     {% form_theme form 'communs/form_theme.html.twig' %}
     {{ form_start(form) }}
-    {{ form_row(form.objectifs) }}
 
     {% if isBut == false %}
         <twig:alerte type="info" message="Les compétences ci-dessous sont celles du parcours porteur de la fiche EC/matière." />

@@ -84,17 +84,20 @@ class UpdateRemplissageCommand extends Command
         $io->title('Update du remplissage des Fiches');
         $fiches = $this->ficheMatiereRepository->findAll();
         $io->info(count($fiches) . ' fiches à mettre à jour');
+        $totalFiches = count($fiches);
+        $io->progressStart($totalFiches);
 
         foreach ($fiches as $fiche) {
             $remplissage = $fiche->remplissageBrut();
             $fiche->setRemplissage($remplissage);
             $this->entityManager->flush();
+            $io->progressAdvance();
             unset($remplissage);
         }
         $io->success('Remplissages mis à jours pour les fiches');
     }
 
-    private function updateFormation(SymfonyStyle $io)
+    private function updateFormation(SymfonyStyle $io): void
     {
         $io->title('Update du remplissage des Fiches');
         $fiches = $this->formationRepository->findAll();
@@ -109,7 +112,7 @@ class UpdateRemplissageCommand extends Command
         $io->success('Remplissages mis à jours pour les formations');
     }
 
-    private function updateParcours(SymfonyStyle $io)
+    private function updateParcours(SymfonyStyle $io): void
     {
         $io->title('Update du remplissage des Formations');
         $parcours = $this->parcoursRepository->findAll();

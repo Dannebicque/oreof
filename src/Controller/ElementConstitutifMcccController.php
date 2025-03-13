@@ -14,14 +14,18 @@ use App\Classes\GetElementConstitutif;
 use App\Classes\JsonReponse;
 use App\Entity\ElementConstitutif;
 use App\Entity\FicheMatiere;
+use App\Entity\Mccc;
 use App\Entity\Parcours;
+use App\Events\McccUpdateEvent;
 use App\Repository\ElementConstitutifRepository;
 use App\Repository\TypeEpreuveRepository;
 use App\TypeDiplome\TypeDiplomeRegistry;
 use App\Utils\Access;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManagerInterface;
 use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -34,6 +38,7 @@ class ElementConstitutifMcccController extends AbstractController
      */
     #[Route('/{id}/mccc-ec/{parcours}', name: 'app_element_constitutif_mccc', methods: ['GET', 'POST'])]
     public function mcccEc(
+        EventDispatcherInterface $eventDispatcher,
         EntityManagerInterface       $entityManager,
         TypeDiplomeRegistry          $typeDiplomeRegistry,
         TypeEpreuveRepository        $typeEpreuveRepository,
@@ -66,6 +71,8 @@ class ElementConstitutifMcccController extends AbstractController
 
         if ($this->isGranted('CAN_PARCOURS_EDIT_MY', $dpeParcours) && Access::isAccessible($dpeParcours, 'cfvu')) {
             if ($request->isMethod('POST')) {
+                $originalMcccToText = $this->mcccToTexte($getElement->getMcccsFromFicheMatiereCollection());
+
                 if ($request->request->has('ec_step4') && array_key_exists('ects', $request->request->all()['ec_step4'])) {
                     if ($elementConstitutif->isEctsSpecifiques() === true &&
                         $elementConstitutif->getEcParent() === null &&
@@ -99,6 +106,7 @@ class ElementConstitutifMcccController extends AbstractController
                         }
 
                         $typeD->saveMcccs($fm, $request->request);
+                        $newMcccToText = $this->mcccToTexte($fm->getMcccs());
                     }
                 } else {
                     //MCCC sur EC
@@ -111,9 +119,8 @@ class ElementConstitutifMcccController extends AbstractController
                         $entityManager->flush();
                         $typeD->clearMcccs($elementConstitutif);
                     }
-
                     $typeD->saveMcccs($elementConstitutif, $request->request);
-
+                    $newMcccToText = $this->mcccToTexte($elementConstitutif->getMcccs());
                 }
 
                 if ($request->request->has('ec_step4') && array_key_exists('mcccEnfantsIdentique', $request->request->all()['ec_step4'])) {
@@ -126,6 +133,11 @@ class ElementConstitutifMcccController extends AbstractController
                     $elementConstitutif->setMcccEnfantsIdentique(false);
                 }
                 $entityManager->flush();
+
+                //evenement pour MCCC sur EC mis à jour
+                $event = new McccUpdateEvent($elementConstitutif, $parcours, $originalMcccToText, $newMcccToText);
+                $eventDispatcher->dispatch($event, McccUpdateEvent::UPDATE_MCCC);
+
                 return $this->json(true);
             }
 
@@ -152,17 +164,14 @@ class ElementConstitutifMcccController extends AbstractController
         'typeEpreuves' => $typeEpreuveRepository->findByTypeDiplome($typeDiplome),
         'ec' => $elementConstitutif,
         'templateForm' => $typeD::TEMPLATE_FORM_MCCC,
-        'mcccs' => $getElement->getMcccsFromFicheMatiereCollection($typeD),]);
+        'mcccs' => $getElement->getMcccsFromFicheMatiereCollection(),]);
     }
 
     #[
         Route('/{id}/mccc-ec/{parcours}/non-editable', name: 'app_element_constitutif_mccc_non_editable', methods: ['GET', 'POST'])]
     public function mcccEcNonEditable(
-        EntityManagerInterface       $entityManager,
         TypeDiplomeRegistry          $typeDiplomeRegistry,
         TypeEpreuveRepository        $typeEpreuveRepository,
-        Request                      $request,
-        ElementConstitutifRepository $elementConstitutifRepository,
         ElementConstitutif           $elementConstitutif,
         Parcours                     $parcours
     ): Response {
@@ -189,7 +198,7 @@ class ElementConstitutifMcccController extends AbstractController
 
         if ($elementConstitutif->getFicheMatiere() !== null && $elementConstitutif->getFicheMatiere()?->isMcccImpose()) {
             $typeEpreuve = $elementConstitutif->getFicheMatiere()?->getTypeMccc();
-        } elseif ($raccroche && $elementConstitutif->isSynchroMccc()) {
+        } elseif ($raccroche && $elementConstitutif->isMcccSpecifiques()) {
             $ec = $getElement->getElementConstitutif();
             $typeEpreuve = $ec->getTypeMccc();
         } else {
@@ -271,4 +280,18 @@ class ElementConstitutifMcccController extends AbstractController
     //            'mcccs' => $typeD->getMcccs($elementConstitutif),
     //        ]);
     //    }
+
+    private function mcccToTexte(Collection $getMcccs): string
+    {
+        //sérialisation de tous les champs de l'entité MCCC
+        $mcccs = [];
+        /** @var Mccc $mccc */
+        foreach ($getMcccs as $mccc) {
+            $mcccs[] = $mccc->getMcccTexte();
+        }
+
+        return implode(';', $mcccs);
+
+
+    }
 }

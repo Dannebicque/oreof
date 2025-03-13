@@ -24,7 +24,7 @@
             <div class="col-md-8">
 
                 <div class="alert alert-info mb-2 mt-2">
-                    Vous pouvez récupérer les compétences d'un parcours déjà créé en cliquant sur le bouton ci-dessous.
+                    Vous pouvez récupérer les compétences d'un parcours, de cette mention, déjà créé en cliquant sur le bouton ci-dessous.
                     Les compétences de l'autre parcours seront recopiées (et ajoutées) à ce parcours. Vous pourrez
                     ensuite
                     librement les gérer.
@@ -36,7 +36,7 @@
                                     compétences</label>
                                 <select {{ stimulus_target('parcours--step3', 'parcours') }} class="form-select"
                                                                                              id="parcoursSource">
-                                    <option value="">Choisissez un parcours</option>
+                                    <option value="">Choisissez un parcours de cette mention</option>
                                     {% for lp in listeParcours|filter(lp => lp.id != parcours.id) %}
                                         <option value="{{ lp.id }}">{{ lp.libelle }}</option>
                                     {% endfor %}

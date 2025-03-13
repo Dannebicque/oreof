@@ -372,26 +372,38 @@ class FicheMatiere
 
         if ($this->langueDispense->isEmpty() === false) {
             $remplissage->add();
+        } else {
+            $remplissage->add(0);
         }
 
         if ($this->libelleAnglais !== null) {
             $remplissage->add();
+        } else {
+            $remplissage->add(0);
         }
 
         if ($this->enseignementMutualise !== null) {
             $remplissage->add();
+        } else {
+            $remplissage->add(0);
         }
 
         if ($this->description !== null) {
             $remplissage->add();
+        } else {
+            $remplissage->add(0);
         }
 
         if ($this->objectifs !== null) {
             $remplissage->add();
+        } else {
+            $remplissage->add(0);
         }
 
         if ($this->competences->isEmpty() === false) {
             $remplissage->add();
+        } else {
+            $remplissage->add(0);
         }
         //todo: ajouter MCCC et Apprentissages critiques pour le BUT
 
@@ -409,6 +421,7 @@ class FicheMatiere
             && array_key_exists('total', $this->remplissage)) {
             $remplissage->setScore($this->remplissage['score']);
             $remplissage->setTotal($this->remplissage['total']);
+            $remplissage->pourcentage = $remplissage->calcul();
         }
 
 
@@ -424,6 +437,7 @@ class FicheMatiere
         $this->remplissage = [
             'score' => $remplissage->score,
             'total' => $remplissage->total,
+            'pourcentage' => $remplissage->calcul(),
         ];
 
         return $this;
@@ -674,6 +688,10 @@ class FicheMatiere
 
         if ($this->getFicheMatiereParcours()->count() > 0) {
             $texte .= ' (mutualisée)';
+        }
+
+        if ($this->isHorsDiplome() === true) {
+            $texte .= ' (hors diplôme)';
         }
 
         return $texte;
@@ -1233,5 +1251,10 @@ class FicheMatiere
         // On initialise à vide, pour remplir selon le besoin
         $this->competences = new ArrayCollection();
         $this->apprentissagesCritiques = new ArrayCollection();
+    }
+
+    public function getTotalHeures() : float
+    {
+        return $this->getVolumeCmPresentiel() + $this->getVolumeTdPresentiel() + $this->getVolumeTpPresentiel() + $this->getVolumeTe() + $this->getVolumeCmDistanciel() + $this->getVolumeTpDistanciel() + $this->getVolumeTpDistanciel();
     }
 }

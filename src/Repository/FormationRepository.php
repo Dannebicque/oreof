@@ -102,7 +102,7 @@ class FormationRepository extends ServiceEntityRepository
         $sort = $options['sort'] ?? 'typeDiplome';
         $direction = $options['direction'] ?? 'ASC';
 
-        $filtres = [$sort => $direction]; //todo: pour gérer le cumul ?
+        $filtres = [$sort => $direction];
 
         $query = $this->createQueryBuilder('f')
             ->leftJoin('f.dpeParcours', 'p')
@@ -335,12 +335,17 @@ class FormationRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findByComposantePorteuse(mixed $composante): array
+    public function findByComposantePorteuse(mixed $composante, CampagneCollecte $campagneCollecte): array
     {
         return $this->createQueryBuilder('f')
+            ->innerJoin('f.dpeParcours', 'dp')
             ->where('f.composantePorteuse = :composante')
+            ->andWhere('dp.campagneCollecte = :campagneCollecte')
             ->setParameter('composante', $composante)
+            ->setParameter('campagneCollecte', $campagneCollecte)
+
             ->leftJoin(Mention::class, 'm', 'WITH', 'f.mention = m.id')
+            ->addOrderBy('f.typeDiplome', 'ASC')
             ->addOrderBy(
                 'CASE
                             WHEN f.mention IS NOT NULL THEN m.libelle

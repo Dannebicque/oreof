@@ -32,9 +32,11 @@ export default class extends Controller {
       }
 
       // tester si un radio est coché
-      if (element.type === 'radio') {
+      if (element.type === 'radio' && element.required) {
         let radioChecked = false
         form.querySelectorAll(`input[name="${element.name}"]`).forEach((radio) => {
+          // vérifier s'il est required
+
           if (radio.checked) {
             radioChecked = true
           }

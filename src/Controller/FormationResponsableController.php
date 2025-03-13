@@ -53,6 +53,7 @@ class FormationResponsableController extends BaseController
             $commentaire = $datas->getCommentaire();
 
             $newRf = new \App\Entity\ChangeRf();
+            $newRf->setCampagneCollecte($this->getCampagneCollecte());
             $newRf->setFormation($formation);
             $newRf->setNouveauResponsable($user);
             $newRf->setTypeRf($datas->getTypeRf());
@@ -116,7 +117,7 @@ class FormationResponsableController extends BaseController
         ComposanteRepository $composanteRepository
     ): Response {
 
-        $demandes = $changeRfRepository->findByTypeValidation(EtatChangeRfEnum::soumis_cfvu->value);
+        $demandes = $changeRfRepository->findByTypeValidation(EtatChangeRfEnum::soumis_cfvu->value, $this->getCampagneCollecte());
 
         $composantes = $composanteRepository->findAll();
         $tDemandes = [];

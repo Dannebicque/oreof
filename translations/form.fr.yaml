@@ -52,7 +52,7 @@ fiche_matiere_step1.labels.responsableEc: "Responsable de l'enseignement"
 fiche_matiere_step2.labels.description: "Description de l'enseignement"
 fiche_matiere_step2.labels.langueDispense.label: 'Enseignement dispensé en :'
 fiche_matiere_step2.labels.langueSupport.label: 'Support de cours en :'
-fiche_matiere_step3.labels.objectifs: "Objectifs de l'enseignement"
+fiche_matiere_step2.labels.objectifs: "Objectifs de l'enseignement"
 ec_step4.labels.modaliteEnseignement.label: "Modalité(s) d'enseignement"
 ec_step4.labels.ects: 'Nombre d’ECTS'
 ec_step4.labels.volumeCmPresentiel: 'Volume horaire CM présentiel'
@@ -257,7 +257,7 @@ ec_manage.labels.fiche_matiere_libelle_libre.label: 'Décrivez les choix possibl
 ec_manage.labels.fiche_matiere_multiple.label: 'Choisissez la fiche EC/matière à raccrocher à cet EC '
 ec_manage.labels.fiche_matiere_libelle_multiple.label: 'Si non existant, précisez le libellé de la fiche EC/matière à raccrocher à cet EC'
 ec_manage.labels.fiche_matiere_unique.label: 'Choisissez la fiche EC/matière à raccrocher à cet EC '
-ec_manage.labels.fiche_matiere_libelle_unique.label: 'Si non existant, précisez le libellé de la fiche EC/matière  à raccrocher à cet EC '
+ec_manage.labels.fiche_matiere_libelle_unique.label: 'Si non existante, précisez le libellé de la fiche EC/matière  à raccrocher à cet EC '
 parcours_step5.labels.regimeInscription.label: "Régime(s) d'inscription"
 fiche_matiere_step1.labels.responsableFicheMatiere: "Référent de l'enseignement"
 fiche_matiere.step1_collegue_manquant.title: 'Ajouter un utilisateur manquant'
@@ -397,7 +397,7 @@ Transport: Transport
 "Numéro d'activité": "Numéro d'activité"
 'Texte affiché en haut des pages parcours': 'Texte affiché en haut des pages parcours'
 'Texte affiché en bas des pages parcours': 'Texte affiché en bas des pages parcours'
-parcours_step7.labels.codeRNCP: parcours_step7.labels.codeRNCP
+parcours_step7.labels.codeRNCP: 'Code RNCP du parcours, si spécifique'
 parcours.labels.las1.label: 'Parcours LAS1'
 parcours.labels.las23.label: 'Parcours LAS2 ou 3'
 parcours.labels.typeParcours: 'Type de parcours'
@@ -434,7 +434,7 @@ parcours_step5.labels.contacts.label.0.label.adresse.label: parcours_step5.label
 'Dénomination du contact': 'Dénomination du contact'
 Téléphone: Téléphone
 Email: Email
-contact.labels.adresse.label: contact.labels.adresse.label
+contact.labels.adresse.label: 'Adresse du contact'
 'Présentation des formations': 'Présentation des formations'
 'Pour en savoir plus sur ce type de formation': 'Pour en savoir plus sur ce type de formation'
 Chaumont: Chaumont
@@ -460,16 +460,16 @@ parcours.labels.parcoursOrigine: "Parcours d'origine"
 ec_manage.labels.fiche_matiere_titre_libre_edit.label: "Libellé libre de l'EC"
 ec.labels.typeEc.label: "Type de l'EC"
 semestre.decrocher.bouton: 'Décrocher le semestre'
-fiche_matiere_step1.labels.codeApogee: fiche_matiere_step1.labels.codeApogee
-type_ec.labels.type.label: type_ec.labels.type.label
+fiche_matiere_step1.labels.codeApogee: 'Code Element (apogée) de la fiche matière'
+type_ec.labels.type.label: 'Type d''EC'
 'Codification intermédiaire': 'Codification intermédiaire'
 fiche_matiere.step1_change_rf.title: fiche_matiere.step1_change_rf.title
 fiche_matiere.step1_change_rf.label: fiche_matiere.step1_change_rf.label
 ue.decrocher.bouton: 'Décrocher l''UE'
 parcours.labels.codeMentionApogee: 'Code Apogée de la mention'
 parcours.helps.codeMentionApogee: ''
-element_constitutif_enfant.labels.typeEc: element_constitutif_enfant.labels.typeEc
-element_constitutif_enfant.labels.typeEcTexte: element_constitutif_enfant.labels.typeEcTexte
+element_constitutif_enfant.labels.typeEc: 'Type de l''EC'
+element_constitutif_enfant.labels.typeEcTexte: 'Texte du type de l''EC si non présent dans la liste'
 parcours_step5.labels.niveauFrancais: 'Niveau de français requis'
 'Utilisateur élémentaire débutant': 'Utilisateur élémentaire débutant'
 'Utilisateur élémentaire intermédiaire': 'Utilisateur élémentaire intermédiaire'

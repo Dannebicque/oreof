@@ -23,6 +23,9 @@ export default class extends Controller {
 
   connect() {
     document.getElementById('fiche_matiere_step2_description').addEventListener('trix-blur', this.saveDescription.bind(this))
+    if (document.getElementById('fiche_matiere_step2_objectifs')) {
+      document.getElementById('fiche_matiere_step2_objectifs').addEventListener('trix-blur', this.saveObjectifs.bind(this))
+    }
   }
 
   saveDescription() {
@@ -30,6 +33,14 @@ export default class extends Controller {
       field: 'description',
       action: 'textarea',
       value: trixEditor('fiche_matiere_step2_description'),
+    })
+  }
+
+  saveObjectifs() {
+    this._save({
+      field: 'objectifs',
+      action: 'textarea',
+      value: trixEditor('fiche_matiere_step2_objectifs'),
     })
   }
 

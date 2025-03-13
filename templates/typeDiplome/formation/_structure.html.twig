@@ -6,10 +6,10 @@
             <div class="col-sm-12 text-end mb-2 pe-40px">
                 {% if source is defined and source == 'codification' %}
                     <a href="{{ path('app_codification_parcours_modifier', {parcours:parcours.id}) }}"
-                    class="btn btn-sm btn-outline-warning mx-2"
+                       class="btn btn-sm btn-outline-warning mx-2"
                     >Modifier codification parcours</a>
                     <a href="{{ path('app_codification_parcours_export', {parcours:parcours.id, _format:'xlsx'}) }}"
-                    class="btn btn-sm btn-outline-info mx-2"
+                       class="btn btn-sm btn-outline-info mx-2"
                     >Export codification parcours</a>
                 {% endif %}
                 <div class="btn-group">
@@ -36,13 +36,14 @@
                             <i class="{{ iconDownload }}"></i> Fiches EC/matières
                         </button>
                         <div class="dropdown-menu" style="">
-                            <a class="dropdown-item" href="{{ path('fiche_matiere_export_all', {parcours:parcours.id}) }}">
+                            <a class="dropdown-item"
+                               href="{{ path('fiche_matiere_export_all', {parcours:parcours.id}) }}">
                                 Version complète (toutes les fiches dans 1 pdf)
                             </a>
                             <a class="dropdown-item"
                                     {{ stimulus_controller('linkjs') }}
                                     {{ stimulus_action('linkjs', 'openLink') }}
-                            href="{{ path('fiche_matiere_export_zip', {parcours:parcours.id}) }}">
+                               href="{{ path('fiche_matiere_export_zip', {parcours:parcours.id}) }}">
                                 Version zip (1 pdf par fiche)
                             </a>
                         </div>
@@ -50,7 +51,7 @@
 
                     {{ include('btn/export_mccc.html.twig') }}
                 {% endif %}
-            </div>  
+            </div>
         {% endif %}
     {% endif %}
     <div class="col-sm-12">
@@ -63,14 +64,20 @@
                 <tr>
                     <th
                             class="border-left-semestre-{{ ordre }}"
-                            colspan=" {% if presentiel %}9{% else %}14{% endif %}">S{{ semestre.ordre }}
-                            {% if isVersioning is not defined or isVersioning == false %}
-                                ({{ semestre.semestre.codeApogee }} | {{ semestre.semestreParcours.codeApogeeEtapeAnnee }}
-                                - {{ semestre.semestreParcours.codeApogeeEtapeVersion }}) 
-                            {% endif %}
-                            {% if semestre.raccroche == true %}
-                                <i class="fal fa-link"></i>
-                            {% endif %}
+                            colspan=" {% if presentiel %}10{% else %}15{% endif %}">S{{ semestre.ordre }}
+                        {% if isVersioning is not defined or isVersioning == false %}
+                            ({{ semestre.semestre.codeApogee }} | {{ semestre.semestreParcours.codeApogeeEtapeAnnee }}
+                            - {{ semestre.semestreParcours.codeApogeeEtapeVersion }})
+                        {% endif %}
+                        {% if semestre.raccroche == true %}
+                            <i class="fal fa-link"></i>
+                        {% endif %}
+                        {% if semestre.semestre != null and semestre.semestre.semestreMutualisables|length > 0 %}
+                            <i class="fal fa-share-nodes"
+                               data-controller="tooltip"
+                               data-tooltip-placement-value="bottom"
+                               title="Semestre mutualisé"></i>
+                        {% endif %}
 
                     </th>
                 </tr>
@@ -83,7 +90,7 @@
                     }) }}
                 {% endfor %}
                 <tr>
-                    <th class="border-left-semestre-{{ ordre }} text-end" colspan="3">Total Semestre {{ ordre }}</th>
+                    <th class="border-left-semestre-{{ ordre }} text-end" colspan="4">Total Semestre {{ ordre }}</th>
                     <th>
                         <span class="show_versioning d-none d-print-none">{{ diffSemestre is defined and diffSemestre != null ? diffSemestre.heuresEctsSemestre.sommeSemestreEcts|displayDiff : '' }} ECTS</span>
                         <p class="show_current">{{ semestre.heuresEctsSemestre.sommeSemestreEcts|filtreHeures }}</p>
@@ -140,7 +147,7 @@
                 </tr>
             {% endfor %}
             <tr>
-                <th colspan="3" class="text-end">Total formation</th>
+                <th colspan="4" class="text-end">Total formation</th>
                 <th>
                     <span class="show_versioning d-none d-print-none">{{ diffStructure is defined and diffStructure != null ? diffStructure.heuresEctsFormation.sommeFormationEcts|displayDiff : '' }} ECTS</span>
                     <p class="show_current">{{ dto.heuresEctsFormation.sommeFormationEcts }} ECTS</p>

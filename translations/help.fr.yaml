@@ -207,7 +207,7 @@ ec_manage.helps.fiche_matiere_libelle_unique.help: "Seulement si la fiche EC/mat
 fiche_matiere_step2.helps.description: 'Indiquez en 3000 caractères maximum le contenu de l’enseignement. Faites une description détaillée des différents sujets traités dans cet enseignement.'
 fiche_matiere_step2.helps.langueDispense.help: 'Plusieurs choix possibles.'
 fiche_matiere_step2.helps.langueSupport.help: 'Plusieurs choix possibles.'
-fiche_matiere_step3.helps.objectifs: 'Indiquez en 3000 caractères maximum les objectifs de l’enseignement.'
+fiche_matiere_step2.helps.objectifs: 'Indiquez en 3000 caractères maximum les objectifs de l’enseignement.'
 fiche_matiere_step3.labels.competence: "Choisissez d'abord le/les bloc(s) de compétences pour accéder aux compétences associées."
 fiche_matiere_step1.helps.responsableFicheMatiere: "Indiquez le référent de l'enseignement."
 user.add_missing.email.help: "Indiquez un email valide de l'utilisateur à ajouter pour récupérer ses informations."
@@ -244,8 +244,8 @@ mccc_licence.helps.cc_ct.typeEpreuve_s2_et.help: ''
 mccc_licence.helps.cc.pourcentage_s1_et.help: ''
 mccc_licence.helps.cc.typeEpreuve_s1_cc.help: ''
 fiche_matiere_step3.labels.competence_transverse: fiche_matiere_step3.labels.competence_transverse
-formation_step1.helps.responsableMention: 'Non modifiable. Veuillez contacter le SES en cas de changement.'
-formation_step1.helps.coResponsable: 'Le cas échéant, précisez le nom du co-responsable de la formation.'
+formation_step1.helps.responsableMention: 'Non modifiable. Veuillez faire une demande de changement de RF/Co-RF.'
+formation_step1.helps.coResponsable: 'Le cas échéant, précisez le nom du co-responsable de la formation. Non modifiable. Veuillez faire une demande de changement de RF/Co-RF.'
 parcours_step1.helps.respParcours: 'Non modifiable. Veuillez contacter le responsable de la mention/spécialité en cas de changement.'
 parcours_step1.helps.coResponsable: 'Le cas échéant, indiquez le co-responsable de ce parcours.'
 parcours.helps.coResponsable: 'Le cas échéant, indiquez le co-responsable de ce parcours.'
@@ -316,13 +316,13 @@ parcours_ec.helps.recopieBcc: parcours_ec.helps.recopieBcc
 parcours_ec.helps.recopieHeures: parcours_ec.helps.recopieHeures
 mccc.ec.helps.sansHeures: 'Cochez cette case si votre EC ne contient pas de volume horaire.'
 parcours_bcc.helps.synchroBcc: parcours_bcc.helps.synchroBcc
-domaine.helps.codeApogee: domaine.helps.codeApogee
-type_diplome.helps.codeApogee: type_diplome.helps.codeApogee
-ville.helps.codeApogee: ville.helps.codeApogee
-composante.helps.codeComposante: composante.helps.codeComposante
-composante.helps.codeApogee: composante.helps.codeApogee
-mention.helps.codeApogee: mention.helps.codeApogee
-annee_universitaire.helps.codeApogee: annee_universitaire.helps.codeApogee
+domaine.helps.codeApogee: 'Code Apogée du domaine de formation.'
+type_diplome.helps.codeApogee: 'Code Apogée du type de diplôme.'
+ville.helps.codeApogee: 'Code Apogée de la ville.'
+composante.helps.codeComposante: 'Code de la composante.'
+composante.helps.codeApogee: 'Code Apogée de la composante.'
+mention.helps.codeApogee: 'Code Apogée de la mention.'
+annee_universitaire.helps.codeApogee: 'Code Apogée de l''année universitaire.'
 etablissement.helps.etablissement_information.help: etablissement.helps.etablissement_information.help
 etablissement.helps.etablissement_information.calendrier_universitaire: etablissement.helps.etablissement_information.calendrier_universitaire
 etablissement.helps.etablissement_information.calendrier_inscription: etablissement.helps.etablissement_information.calendrier_inscription
@@ -342,19 +342,19 @@ etablissement.helps.numero_SIRET: etablissement.helps.numero_SIRET
 etablissement.helps.numero_activite: etablissement.helps.numero_activite
 etablissement.helps.etablissement_information.descriptifHautPage: etablissement.helps.etablissement_information.descriptifHautPage
 etablissement.helps.etablissement_information.descriptifBasPage: etablissement.helps.etablissement_information.descriptifBasPage
-parcours_step7.helps.descriptifHautPage: parcours_step7.helps.descriptifHautPage
-parcours_step7.helps.descriptifBasPage: parcours_step7.helps.descriptifBasPage
-parcours_step7.helps.codeRNCP: parcours_step7.helps.codeRNCP
-parcours.helps.las1.help: parcours.helps.las1.help
-parcours.helps.las23.help: parcours.helps.las23.help
-parcours.helps.typeParcours: parcours.helps.typeParcours
-etablissement.helps.etablissement_information.textLas1: etablissement.helps.etablissement_information.textLas1
-etablissement.helps.etablissement_information.textLas2: etablissement.helps.etablissement_information.textLas2
-etablissement.helps.etablissement_information.textLas3: etablissement.helps.etablissement_information.textLas3
-etablissement.helps.etablissement_information.secondeChance: etablissement.helps.etablissement_information.secondeChance
-parcours_step5.helps.adresses.help: parcours_step5.helps.adresses.help
-parcours_step5.helps.adresses.help.__name__.help: parcours_step5.helps.adresses.help.__name__.help
-parcours_step5.helps.adresses.__name__.adresse1: parcours_step5.helps.adresses.__name__.adresse1
+parcours_step7.helps.descriptifHautPage: 'Descriptif affiché en haut des pages formations sur le site de l''URCA'
+parcours_step7.helps.descriptifBasPage: ''
+parcours_step7.helps.codeRNCP: 'Code RNCP du parcours si spécifique'
+parcours.helps.las1.help: ''
+parcours.helps.las23.help: ''
+parcours.helps.typeParcours: ''
+etablissement.helps.etablissement_information.textLas1: ''
+etablissement.helps.etablissement_information.textLas2: ''
+etablissement.helps.etablissement_information.textLas3: ''
+etablissement.helps.etablissement_information.secondeChance: ''
+parcours_step5.helps.adresses.help: ''
+parcours_step5.helps.adresses.help.__name__.help: ''
+parcours_step5.helps.adresses.__name__.adresse1: ''
 parcours_step5.helps.adresses.__name__.adresse2: parcours_step5.helps.adresses.__name__.adresse2
 parcours_step5.helps.adresses.__name__.codePostal: parcours_step5.helps.adresses.__name__.codePostal
 parcours_step5.helps.adresses.__name__.ville: parcours_step5.helps.adresses.__name__.ville
@@ -401,7 +401,7 @@ composante.helps.inscriptionUniquement.help: composante.helps.inscriptionUniquem
 composante.helps.composanteParent: composante.helps.composanteParent
 dpe.helps.libelle: dpe.helps.libelle
 dpe.helps.anneeUniversitaire: dpe.helps.anneeUniversitaire
-dpe.helps.codeApogee: dpe.helps.codeApogee
+dpe.helps.codeApogee: 'Code Apogée du DPE'
 dpe.helps.defaut.help: dpe.helps.defaut.help
 dpe.helps.dateOuvertureDpe: dpe.helps.dateOuvertureDpe
 dpe.helps.dateClotureDpe: dpe.helps.dateClotureDpe
@@ -410,7 +410,7 @@ dpe.helps.dateCfvu: dpe.helps.dateCfvu
 dpe.helps.datePublication: dpe.helps.datePublication
 campagne_collecte.helps.libelle: campagne_collecte.helps.libelle
 campagne_collecte.helps.anneeUniversitaire: campagne_collecte.helps.anneeUniversitaire
-campagne_collecte.helps.codeApogee: campagne_collecte.helps.codeApogee
+campagne_collecte.helps.codeApogee: 'Code Apogée de la campagne de collecte'
 campagne_collecte.helps.defaut.help: campagne_collecte.helps.defaut.help
 campagne_collecte.helps.dateOuvertureDpe: campagne_collecte.helps.dateOuvertureDpe
 campagne_collecte.helps.dateClotureDpe: campagne_collecte.helps.dateClotureDpe
@@ -429,12 +429,14 @@ form.helps.codeVersionDiplome: form.helps.codeVersionDiplome
 form.helps.codeEtape: form.helps.codeEtape
 form.helps.codeVersionEtape: form.helps.codeVersionEtape
 form.helps.codeMentionApogee: form.helps.codeMentionApogee
-fiche_matiere_step1.helps.codeApogee: fiche_matiere_step1.helps.codeApogee
+fiche_matiere_step1.helps.codeApogee: 'Code Apogée de la fiche matière'
 type_ec.helps.type.help: type_ec.helps.type.help
 type_diplome.helps.codifIntermediaire.help: type_diplome.helps.codifIntermediaire.help
 change_rf_formation.helps.user: change_rf_formation.helps.user
-change_rf_formation.helps.commentaire: change_rf_formation.helps.commentaire
-parcours.helps.codeMentionApogee: parcours.helps.codeMentionApogee
-element_constitutif_enfant.helps.typeEc: element_constitutif_enfant.helps.typeEc
-element_constitutif_enfant.helps.typeEcTexte: element_constitutif_enfant.helps.typeEcTexte
+change_rf_formation.helps.commentaire: 'Indiquez, si besoin, un commentaire pour expliquer la modification'
+parcours.helps.codeMentionApogee: 'Code Apogée de la mention'
+element_constitutif_enfant.helps.typeEc: '"'
+element_constitutif_enfant.helps.typeEcTexte: 'Précisez le type d’EC si il n’est pas présent dans la liste déroulante du champ précédent.'
 parcours_step5.helps.niveauFrancais: 'Indiquez le niveau de français souhaité pour intégrer la formation'
+parcours_ec.helps.mcccSpecifiques: 'Indiquez les modalités de contrôle des connaissances et compétences spécifiques à ce parcours.'
+parcours_ec.helps.ectsSpecifiques: 'Indiquez les ECTS spécifiques à ce parcours.'

@@ -53,6 +53,9 @@ class ChangeRf
     #[ORM\OneToMany(mappedBy: 'changeRf', targetEntity: HistoriqueFormation::class, cascade: ['persist', 'remove'])]
     private Collection $historiqueFormations;
 
+    #[ORM\ManyToOne(inversedBy: 'changeRves')]
+    private ?CampagneCollecte $campagneCollecte = null;
+
     public function __construct()
     {
         $this->typeRf = TypeRfEnum::RF;
@@ -210,6 +213,18 @@ class ChangeRf
                 $historiqueFormation->setChangeRf(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCampagneCollecte(): ?CampagneCollecte
+    {
+        return $this->campagneCollecte;
+    }
+
+    public function setCampagneCollecte(?CampagneCollecte $campagneCollecte): static
+    {
+        $this->campagneCollecte = $campagneCollecte;
 
         return $this;
     }

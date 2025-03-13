@@ -381,7 +381,7 @@
                             {% else %}
                                 {% set raccrocheEnfant = false %}
                             {% endif %}
-                            {% if loop.first and raccroche == false and isSemestreRaccroche == false %}
+                            {% if loop.first and raccroche == false and isSemestreRaccroche == false and raccroche == false %}
                                 <div class="text-divider">
                                     <button class="btn text-success btn-sm"
                                             {{ stimulus_controller('modal', {
@@ -410,16 +410,23 @@
                                                 <p>{% if uee.libelle != null %}
                                                     <abbr title="{{ uee.libelle }}">{% endif %}{{ displayUee }}{% if uee.libelle != null %}</abbr>{% endif %}
 
-                                                    {% if isSemestreRaccroche == true %}
+                                                    {% if isSemestreRaccroche == true  %}
                                                         <i class="fal fa-link"
                                                            data-controller="tooltip"
                                                            data-tooltip-placement-value="bottom"
                                                            title="Ue raccrochée en lien avec le semestre raccroché"></i>
-                                                    {% elseif raccrocheEnfant == true %}
+                                                    {% elseif raccrocheEnfant == true or raccroche == true %}
                                                         <i class="fal fa-link"
                                                            data-controller="tooltip"
                                                            data-tooltip-placement-value="bottom"
                                                            title="Raccrochée à l'{{ uee.display(parcours) }}"></i>
+                                                    {% endif %}
+
+                                                    {% if ue.ueMutualisables|length >0 and isSemestreRaccroche == false %}
+                                                        <i class="fal fa-share-nodes"
+                                                           data-controller="tooltip"
+                                                           data-tooltip-placement-value="bottom"
+                                                           title="UE mutualisée par son parent"></i>
                                                     {% endif %}
                                                 </p>
                                             </div>
@@ -471,6 +478,12 @@
                                                         <div class="col-12">
                                                             <p class="ms-2 mt-2">
                                                                 UE non modifiable car incluse dans un semestre raccroché
+                                                            </p>
+                                                        </div>
+                                                    {% elseif raccroche == true %}
+                                                        <div class="col-12">
+                                                            <p class="ms-2 mt-2">
+                                                                UE non modifiable car incluse dans une UE raccrochée
                                                             </p>
                                                         </div>
                                                     {% else %}

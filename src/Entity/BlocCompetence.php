@@ -50,9 +50,16 @@ class BlocCompetence
     #[ORM\OneToOne(targetEntity: self::class, cascade: ['persist', 'remove'])]
     private ?self $blocCompetenceOrigineCopie = null;
 
+    #[ORM\ManyToOne(inversedBy: 'blocCompetences')]
+    private ?CampagneCollecte $campagneCollecte = null;
+
     public function __construct()
     {
         $this->competences = new ArrayCollection();
+    }
+
+    public function __clone() {
+        $this->setBlocCompetenceOrigineCopie(null);
     }
 
     public function getId(): ?int
@@ -166,6 +173,18 @@ class BlocCompetence
     public function setBlocCompetenceOrigineCopie(?self $blocCompetenceOrigineCopie): static
     {
         $this->blocCompetenceOrigineCopie = $blocCompetenceOrigineCopie;
+
+        return $this;
+    }
+
+    public function getCampagneCollecte(): ?CampagneCollecte
+    {
+        return $this->campagneCollecte;
+    }
+
+    public function setCampagneCollecte(?CampagneCollecte $campagneCollecte): static
+    {
+        $this->campagneCollecte = $campagneCollecte;
 
         return $this;
     }

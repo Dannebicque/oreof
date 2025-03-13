@@ -1,3 +1,19 @@
+{% if ue.ueParent != null and ue.ueParent.ueMutualisables|length %}
+<twig:alerte type="info">
+    <p>
+        Cette UE est mutualisée automatiquement parce que l'UE parente est mutualisée avec d'autres parcours. Les parcours suivants utilisent cette UE :
+    </p>
+    <ul>
+        {% for u in ue.ueParent.ueMutualisables %}
+            <li>
+                {{ u.parcours != null  and u.parcours.formation != null ? u.parcours.formation.display : 'Erreur formation' }}
+                - {{ u.parcours != null  and u.parcours.formation != null ? u.parcours.libelle : 'Erreur formation' }}
+            </li>
+        {% endfor %}
+    </ul>
+</twig:alerte>
+{% endif %}
+
 <table class="table">
     <thead>
     <tr>
@@ -15,7 +31,9 @@
                 'Erreur formation' }}</td>
             <td>{{ u.parcours != null  and u.parcours.formation != null ? u.parcours.formation.display : 'Erreur formation' }}</td>
             <td>{{ u.parcours != null  and u.parcours.formation != null ? u.parcours.libelle : 'Erreur formation' }}</td>
-            <td></td>
+            <td>
+                {{ u|isUeUtilisee|badgeBoolean }}
+            </td>
             <td class="text-end">
                 <button {{ stimulus_action('ue--mutualise', 'delete', 'click', {ue:u.id}) }} class="btn
                     btn-sm text-danger">

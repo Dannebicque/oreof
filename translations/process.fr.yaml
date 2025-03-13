@@ -694,3 +694,8 @@ btn.validation.en_cours_redaction_ss_cfvu.valide: 'Valider et transmettre au SES
 validation.valider.formation.valider_ouverture_sans_cfvu.title: 'Valider et transmettre au SES (sans CFVU)'
 btn.validation.formation.valider_ouverture_sans_cfvu: 'Valider et transmettre au SES'
 mettre.a.jour.remplissage: 'Mettre à jour le % de remplissage'
+changeRf.valide.soumis_conseil.flash.success: 'Demande de changement de responsable de formation validée par le conseil de composante'
+changeRf.valide.soumis_ses.flash.success: 'Demande de changement de responsable de formation validée par le SES'
+changeRf.valide.soumis_cfvu.flash.success: 'Demande de changement de responsable de formation validée par la CFVU'
+
+

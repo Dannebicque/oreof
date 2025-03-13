@@ -169,11 +169,6 @@
         </thead>
         <tbody>
         {% for ficheMatiere in ficheMatieres %}
-            {# todo: a améliorer (ici et formation), car ca filtre que sur le résultat et pas sur l'ensemble des datas #}
-            {% set remplissage = params['remplissage']|default('all') %}
-            {% if remplissage == '100' and ficheMatiere.remplissage.calcul == 100 or
-                remplissage == '0' and ficheMatiere.remplissage.calcul < 100 or
-                remplissage == 'all' %}
             <tr>
                 <td>
                     {% if ficheMatiere.parcours != null %}
@@ -239,6 +234,7 @@
                                 href="{{ path('app_fiche_matiere_edit',{slug: ficheMatiere.slug}) }}"
                                 class="btn btn-sm text-warning"
                                 data-bs-toggle="tooltip"
+                                target="_blank"
                                 data-bs-placement="bottom"
                                 title="Modifier une fiche EC/matière"
                         >
@@ -268,7 +264,6 @@
                     {% endif %}
                 </td>
             </tr>
-            {% endif %}
         {% else %}
             <tr>
                 <td colspan="{% if mode == 'liste' %}10{% else %}8{% endif %}" class="bg-warning">

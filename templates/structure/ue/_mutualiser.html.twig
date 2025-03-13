@@ -14,8 +14,10 @@
     <div class="row">
         <div class="col-12">
             <label for="composante">Choisir une composante</label>
-            <select class="form-select" id="composante" name="composante" {{ stimulus_action('ue--mutualise',
-                'changeComposante') }}>
+            <select class="form-select" id="composante" name="composante"
+                    {{ stimulus_action('ue--mutualise', 'changeComposante') }}
+                    {{ stimulus_controller('symfony/ux-autocomplete/autocomplete') }}
+            >
                 <option value="0">Choisir une composante</option>
                 {% for composante in composantes %}
                     <option value="{{ composante.id }}">{{ composante.libelle }}</option>
@@ -26,8 +28,9 @@
     <div class="row">
         <div class="col-12">
             <label for="formation">Choisir une mention/spécialité</label>
-            <select class="form-select" id="formation" name="formation" {{ stimulus_action('ue--mutualise',
-                'changeFormation') }}>
+            <select class="form-select" id="formation" name="formation"
+                    {{ stimulus_controller('symfony/ux-autocomplete/autocomplete') }}
+                    {{ stimulus_action('ue--mutualise', 'changeFormation') }}>
                 <option value="0">Choisir d'abord une composante</option>
             </select>
         </div>
@@ -35,7 +38,9 @@
     <div class="row">
         <div class="col-12">
             <label for="parcours">Choisir un parcours</label>
-            <select class="form-select" id="parcours" name="parcours">
+            <select class="form-select" id="parcours" name="parcours"
+                    {{ stimulus_controller('symfony/ux-autocomplete/autocomplete') }}
+            >
                 <option value="0">Choisir d'abord une mention/spécialité</option>
             </select>
         </div>

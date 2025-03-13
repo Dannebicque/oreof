@@ -6,6 +6,7 @@ use App\Classes\GetDpeParcours;
 use App\Classes\GetHistorique;
 use App\Classes\JsonReponse;
 use App\Classes\Mailer;
+use App\Classes\Process\ChangeRfProcess;
 use App\Entity\ChangeRf;
 use App\Entity\HistoriqueFormation;
 use App\Entity\HistoriqueParcours;
@@ -90,6 +91,7 @@ class PvConseilController extends BaseController
 
     #[Route('/pv/conseil/change-rf/{changeRf}', name: 'app_deposer_pv_conseil_change_rf')]
     public function changeRfPv(
+        ChangeRfProcess $changeRfProcess,
         GetHistorique $getHistorique,
         Mailer $myMailer,
         KernelInterface $kernel,
@@ -127,14 +129,18 @@ class PvConseilController extends BaseController
                     );
                     $tab['fichier'] = $fileName;
                 } else {
-                    return JsonReponse::success($translator->trans('deposer.pv.flash.error', [], 'process'));
+                    return JsonReponse::error($translator->trans('deposer.pv.flash.error', [], 'process'));
                 }
 
                 $histo->setComplements($tab ?? []);
                 $entityManager->persist($histo);
                 $entityManager->flush();
 
-                //todo:  mail à la CFVU, avec un event ? ou workflow sur laisserPasser
+                //si déjà validé CFVU "sous réserve" de PV appliquer le changement
+//                if (true) {
+//                    $changeRfProcess->valideChangeRf($changeRf, $this->getUser(), $transition, $request, $fileName);
+//                }
+
                 $myMailer->initEmail();
                 $myMailer->setTemplate(
                     'mails/workflow/changerf/deposer_pv.html.twig',

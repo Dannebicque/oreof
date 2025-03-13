@@ -2,6 +2,86 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.32.9](https://github.com/Dannebicque/oreof/compare/v1.32.8...v1.32.9) (2025-03-12)
+
+
+### Features
+
+* Add objectives field to step 2 form and implement save functionality ([520336c](https://github.com/Dannebicque/oreof/commit/520336cfb7a424052b1fb0a9927f7087766a2a25))
+* Add query builder for ordering choices in ParcoursStep5Type ([59c0937](https://github.com/Dannebicque/oreof/commit/59c09371ea5dbe66958e2f4fd204c10faea2d6f1))
+* Implement non-editable BCC functionality and update badge display logic ([c7a0417](https://github.com/Dannebicque/oreof/commit/c7a041796eac9d1cd1507a0c1910a5e2e02c8a04))
+* Refactor controllers to extend BaseController and update formation queries + liste autocomplete ([11441d6](https://github.com/Dannebicque/oreof/commit/11441d65e45b5d26ec1d911874214d55bb6366b7))
+
+
+### Bug Fixes
+
+* target blank ([f2f83d2](https://github.com/Dannebicque/oreof/commit/f2f83d258415868011fb4519e3e6357e39be7539))
+* target blank ([3bcabc9](https://github.com/Dannebicque/oreof/commit/3bcabc9f70d493fb4c91555411957b9b16ee0e3e))
+* Typo + remplissage des fiches ([4557116](https://github.com/Dannebicque/oreof/commit/455711603db3a1c71f4fe3f1c9fb7b55b7a62bc3))
+* Typo + remplissage des fiches ([4bd752d](https://github.com/Dannebicque/oreof/commit/4bd752d17ff664250b7bed9ef61a0ba6cc4e513c))
+* Update French localization for parcours and contact fields ([95ecec4](https://github.com/Dannebicque/oreof/commit/95ecec4cc9563468bf24ef3f01a4aa676458c392))
+
+### [1.32.8](https://github.com/Dannebicque/oreof/compare/v1.32.7...v1.32.8) (2025-03-11)
+
+
+### Bug Fixes
+
+* target blank ([eb135a0](https://github.com/Dannebicque/oreof/commit/eb135a0a4855ebe144d5af1bfb867aa380f2acb6))
+
+### [1.32.7](https://github.com/Dannebicque/oreof/compare/v1.32.6...v1.32.7) (2025-03-10)
+
+
+### Features
+
+* blocage si form incomplet ([e22ddc3](https://github.com/Dannebicque/oreof/commit/e22ddc3b682b7533a647081ada45558cc21681fc))
+* campagne collecte sur change RF + filtre sur remplissage sur fichematiere ([724b761](https://github.com/Dannebicque/oreof/commit/724b761bd4eff2deb8eda258da2e17806f3672b3))
+* campagne collecte sur change RF + filtre sur remplissage sur fichematiere ([7300c82](https://github.com/Dannebicque/oreof/commit/7300c82f149322a9d7184b5e03b35a3c54657183))
+* changement MCCC spécifiques ([2e1930b](https://github.com/Dannebicque/oreof/commit/2e1930b070b13c50cb305df6e6d69b59a38b5bae))
+* Commande de mise à jour des remplissages ([16c63a8](https://github.com/Dannebicque/oreof/commit/16c63a8dfaa8626a2013b53edbc880918ad592a7))
+* fiche HD ([9fddd72](https://github.com/Dannebicque/oreof/commit/9fddd7298df01a1daf1348b9ffc68b05b855947b))
+* fiche HD ([ada7e8a](https://github.com/Dannebicque/oreof/commit/ada7e8a97e30f698ad7e5c36bae52a733257d00c))
+* MCCC sur fiche descriptive ([7fa963f](https://github.com/Dannebicque/oreof/commit/7fa963fa8b7a50f1643554f76ad7d354630fc8f0))
+* remplissage + recherche ([050e4b9](https://github.com/Dannebicque/oreof/commit/050e4b99b9bed765246ea4aa3e59d68590b937ec))
+* update % fiche ([abf8af0](https://github.com/Dannebicque/oreof/commit/abf8af0e95392da275fe2c57db62f9805f796e99))
+* update % fiche ([12a2d1f](https://github.com/Dannebicque/oreof/commit/12a2d1f9e418af67afe2f6b41e91a3d02ce38767))
+
+
+### Bug Fixes
+
+* Bug des EC obligatoire/restreint, sauvegarde du type ([a3a1d22](https://github.com/Dannebicque/oreof/commit/a3a1d2272f0ebca3d6748050d652f317ff365f3a))
+* Campagne collecte sur les fiches + filtre par année ([4f3f692](https://github.com/Dannebicque/oreof/commit/4f3f69236fc2357cfde89dc9e73746a6ddb4636e))
+* Campgne collecte sur fiche ([6b182ae](https://github.com/Dannebicque/oreof/commit/6b182ae36222095cda9b559eb6717c645d8b2132))
+* cascade persist sur élément cloné ([0c3017d](https://github.com/Dannebicque/oreof/commit/0c3017dd3330e142220aa05ea600241d014da221))
+* cascade remove ([eab4c94](https://github.com/Dannebicque/oreof/commit/eab4c94c7c305f59f44af518cf6d07d1d8452d84))
+* cascade remove ([1ef6cfd](https://github.com/Dannebicque/oreof/commit/1ef6cfd9c199bb46a802a022a630f87f18637ef2))
+* cascade remove EC / UC clonée ([8fb7889](https://github.com/Dannebicque/oreof/commit/8fb7889e683e69a0f4615cb3de3decb35ca4a368))
+* champs obligatoires dans modals ([b5b6898](https://github.com/Dannebicque/oreof/commit/b5b6898aadbd50a6187b7a399074e805d79e8a84))
+* cssDiff fichematière ([f0f0d22](https://github.com/Dannebicque/oreof/commit/f0f0d22e6a5de4c06a87206e04a1ba6158bbea3d))
+* Export fiches ([5aa4e83](https://github.com/Dannebicque/oreof/commit/5aa4e832504d555d49f34ef3cdcad69011687b91))
+* Export fiches ([d480d4b](https://github.com/Dannebicque/oreof/commit/d480d4b98aef4e3a060fce8cfbf6240cb41f602b))
+* Export fiches ([c9eb0de](https://github.com/Dannebicque/oreof/commit/c9eb0de471a5f032090de30d50f199066cba83c2))
+* Fiche matière (mutualisé et état ([8fcc537](https://github.com/Dannebicque/oreof/commit/8fcc5379ac305c0bcd12aab05218e3432c653d43))
+* fiches sans heures ([56d8521](https://github.com/Dannebicque/oreof/commit/56d8521d604ada73fd88badc12b1fe8b1a0cd1e0))
+* filtre "non complet/complet" ([f7f06bf](https://github.com/Dannebicque/oreof/commit/f7f06bf0ce8738b1489ab446784b08fe747a94d2))
+* filtre MCCC sans EC ([95cc410](https://github.com/Dannebicque/oreof/commit/95cc410e5d3b7d3699d16abecf106aeba204ffbb))
+* filtre MCCC sans EC ([020b827](https://github.com/Dannebicque/oreof/commit/020b827dd366a6d19f7f26b9066ae84fa5965b32))
+* filtre MCCC sans EC ([dbc042b](https://github.com/Dannebicque/oreof/commit/dbc042b31e97b806ffc796fdf55ed893f0bb5f91))
+* filtres et tris ([43a9f9f](https://github.com/Dannebicque/oreof/commit/43a9f9fc91563bea594dfccc9e0d7011a7e3d32b))
+* filtres et tris ([e46499d](https://github.com/Dannebicque/oreof/commit/e46499dbec597818442c346f3baf060a0ae6a97a))
+* get etat MCCC sur fiche ou EC ([b545349](https://github.com/Dannebicque/oreof/commit/b54534936fcb50d85b75cff1038ef5f66f6766fb))
+* mise à jour du remplissage ([57f198b](https://github.com/Dannebicque/oreof/commit/57f198b42e9ab2fc46c59cfe8316dc00bad9f52e))
+* mise à jour du remplissage ([1ddf33b](https://github.com/Dannebicque/oreof/commit/1ddf33b23d86375c0d54130f16bce19fe43c2d05))
+* possible avec un s, car plusieurs choix ([7b3c576](https://github.com/Dannebicque/oreof/commit/7b3c576301b7232bc5eca017c48b32bc9c682aa2))
+* Semestre non ouvert dans la vérif ([acc3db9](https://github.com/Dannebicque/oreof/commit/acc3db9ccdd3ce56ee20962270a73fb39117fea7))
+* Structure BUT ([198a769](https://github.com/Dannebicque/oreof/commit/198a7697f1d19bba960ccdb43916253bd1806520))
+* suppression doublons texte ue ue ([c650672](https://github.com/Dannebicque/oreof/commit/c6506726a67c641c398649771a31f0ad10b40d32))
+* target blank sur fiche ([626de81](https://github.com/Dannebicque/oreof/commit/626de81c1c22f74d3c9d39f4eb9c83ac5eb1744d))
+* tri des fiches ([f01a8a9](https://github.com/Dannebicque/oreof/commit/f01a8a9e8c115058fa3f568519d5e0fcbed0e6d7))
+* tri des fiches ([31f9690](https://github.com/Dannebicque/oreof/commit/31f9690b1011441e641ce0f6e875d1de40685bde))
+* tri sur EC ([58b0e46](https://github.com/Dannebicque/oreof/commit/58b0e46f9d943a723e7f8e404a497bb00d7cd948))
+* Type parcours header ([e963f94](https://github.com/Dannebicque/oreof/commit/e963f9401133496c3817057f8e54c455b8465217))
+* typediplome sur fiche hors diplome. ([c62bbba](https://github.com/Dannebicque/oreof/commit/c62bbbaa3b72dcd2c4a919c20301d16e1d8928e3))
+
 ### [1.32.6](https://github.com/Dannebicque/oreof/compare/v1.32.5...v1.32.6) (2025-02-28)
 
 

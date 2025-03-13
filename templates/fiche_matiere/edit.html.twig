@@ -13,7 +13,8 @@
     >
         <div {{ stimulus_target('fiche_matiere_wizard', 'synthese') }}></div>
         <div class="mt-3">
-            <ul class="nav nav-tabs nav-tabs-title nav-tabs-line-title responsive-tabs" id="lineTitleTabsContainer" role="tablist">
+            <ul class="nav nav-tabs nav-tabs-title nav-tabs-line-title responsive-tabs" id="lineTitleTabsContainer"
+                role="tablist">
                 <li class="nav-item" role="presentation">
                     <a class="nav-link active" data-bs-toggle="tab" href="#" role="tab" aria-selected="true"
                             {{ stimulus_action('fiche_matiere_wizard', 'changeStep', 'click', {step: 1}) }}
@@ -24,32 +25,37 @@
                 <li class="nav-item" role="presentation">
                     <a class="nav-link" data-bs-toggle="tab" href="#" role="tab"
                             {{ stimulus_action('fiche_matiere_wizard', 'changeStep', 'click', {step: 2}) }}
-                       aria-selected="false">Présentation  {{ ficheMatiereState.onglets|etatRemplissage(2, 'ec') }}</a>
+                       aria-selected="false">Présentation et
+                        objectifs {{ ficheMatiereState.onglets|etatRemplissage(2, 'ec') }}</a>
                 </li>
-                <li class="nav-item" role="presentation">
-                    <a class="nav-link" data-bs-toggle="tab" href="#" role="tab" aria-selected="false"
-                            {{ stimulus_action('fiche_matiere_wizard', 'changeStep', 'click', {step: 3}) }}
-                    >Objectifs et Compétences  {{ ficheMatiereState.onglets|etatRemplissage(3, 'ec') }}</a>
-                </li>
+                {% if fiche_matiere.parcours is defined and fiche_matiere.parcours != null and fiche_matiere.parcours.formation.typeDiplome.libelleCourt == 'BUT' %}
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link" data-bs-toggle="tab" href="#" role="tab" aria-selected="false"
+                                {{ stimulus_action('fiche_matiere_wizard', 'changeStep', 'click', {step: 3}) }}
+                        >Compétences {{ ficheMatiereState.onglets|etatRemplissage(3, 'ec') }}</a>
+                    </li>
+                {% endif %}
                 {% if fiche_matiere.horsDiplome == true %}
-                {# fiche commune #}
-                <li class="nav-item" role="presentation">
-                    <a class="nav-link" data-bs-toggle="tab" href="#" role="tab" aria-selected="false"
-                            {{ stimulus_action('fiche_matiere_wizard', 'changeStep', 'click', {step: 4, type:'hd'}) }}
-                    >Volumes horaires et MCCC  {{ ficheMatiereState.onglets|etatRemplissage(4, 'ec') }}</a>
-                </li>
+                    {# fiche commune #}
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link" data-bs-toggle="tab" href="#" role="tab" aria-selected="false"
+                                {{ stimulus_action('fiche_matiere_wizard', 'changeStep', 'click', {step: 4, type:'hd'}) }}
+                        >Volumes horaires et MCCC {{ ficheMatiereState.onglets|etatRemplissage(4, 'ec') }}</a>
+                    </li>
                 {% elseif fiche_matiere.parcours is defined and fiche_matiere.parcours != null and fiche_matiere.parcours.formation.typeDiplome.libelleCourt == 'BUT' %}
                     <li class="nav-item" role="presentation">
-                        <a class="nav-link {% if not isAccessible(dpeParcours, 'cfvu') %}disabled{% endif %}" data-bs-toggle="tab" href="#" role="tab" aria-selected="false"
+                        <a class="nav-link {% if not isAccessible(dpeParcours, 'cfvu') %}disabled{% endif %}"
+                           data-bs-toggle="tab" href="#" role="tab" aria-selected="false"
                                 {{ stimulus_action('fiche_matiere_wizard', 'changeStep', 'click', {step: 4, type:'but'}) }}
-                        >Volumes horaires et MCCC  {{ ficheMatiereState.onglets|etatRemplissage(4, 'ec') }}</a>
+                        >Volumes horaires et MCCC {{ ficheMatiereState.onglets|etatRemplissage(4, 'ec') }}</a>
                     </li>
                 {% else %}
                     {# fiche commune #}
                     <li class="nav-item" role="presentation">
-                        <a class="nav-link {% if not isAccessible(dpeParcours, 'cfvu') %}disabled{% endif %}" data-bs-toggle="tab" href="#" role="tab" aria-selected="false"
+                        <a class="nav-link"
+                           data-bs-toggle="tab" href="#" role="tab" aria-selected="false"
                                 {{ stimulus_action('fiche_matiere_wizard', 'changeStep', 'click', {step: 4, type:'other'}) }}
-                        >Volumes horaires et MCCC  {{ ficheMatiereState.onglets|etatRemplissage(4, 'ec') }}</a>
+                        >Volumes horaires et MCCC {{ ficheMatiereState.onglets|etatRemplissage(4, 'ec') }}</a>
                     </li>
                 {% endif %}
                 <!-- An empty list to put overflowed links -->
@@ -82,7 +88,9 @@
 {% endblock %}
 
 {% block header %}
-    Fiche EC/matière <strong id="fiche_matiere_libelle">{{ fiche_matiere.libelle }}</strong> {% if fiche_matiere.ficheMatiereParcours|length > 0 %}<span class="badge bg-info">Mutualisée</span>{% endif %}
+    Fiche EC/matière <strong
+        id="fiche_matiere_libelle">{{ fiche_matiere.libelle }}</strong> {% if fiche_matiere.ficheMatiereParcours|length > 0 %}
+    <span class="badge bg-info">Mutualisée</span>{% endif %}
 {% endblock %}
 
 {% block breadcrumb %}
@@ -102,15 +110,15 @@
         <span> Voir la fiche EC/matière</span>
     </a>
     {% if source == 'liste' %}
-    <a href="{{ path('structure_fiche_matiere_index') }}"
-       class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
-       data-bs-toggle="tooltip"
-       data-bs-placement="bottom"
-       title="Retour à la liste des fiches EC/matières"
-    >
-        <i class="{{ iconBack }}"></i>
-        <span> Retour à la liste des fiches EC/matières</span>
-    </a>
+        <a href="{{ path('structure_fiche_matiere_index') }}"
+           class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+           data-bs-toggle="tooltip"
+           data-bs-placement="bottom"
+           title="Retour à la liste des fiches EC/matières"
+        >
+            <i class="{{ iconBack }}"></i>
+            <span> Retour à la liste des fiches EC/matières</span>
+        </a>
     {% else %}
         <a href="{{ link }}"
            class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"

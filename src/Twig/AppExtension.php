@@ -9,6 +9,7 @@
 
 namespace App\Twig;
 
+use App\Entity\UeMutualisable;
 use App\Entity\UserCentre;
 use App\Enums\BadgeEnumInterface;
 use App\Enums\CentreGestionEnum;
@@ -48,7 +49,21 @@ class AppExtension extends AbstractExtension
             new TwigFilter('filtreHeures', [$this, 'filtreHeures'], ['is_safe' => ['html']]),
             new TwigFilter('badgeEnum', [$this, 'badgeEnum'], ['is_safe' => ['html']]),
             new TwigFilter('startWith', [$this, 'startWith'], ['is_safe' => ['html']]),
+            new TwigFilter('isUeUtilisee', [$this, 'isUeUtilisee'], ['is_safe' => ['html']]),
         ];
+    }
+
+    public function isUeUtilisee(UeMutualisable $ue): bool
+    {
+        foreach ($ue->getUes() as $u) {
+            foreach ($u->getSemestre()?->getSemestreParcours() as $semestre) {
+                if ($semestre->getParcours() !== null) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     public function badgeEnum(BadgeEnumInterface $value): string

@@ -11,6 +11,7 @@ namespace App\Controller\Structure;
 
 use App\Classes\JsonReponse;
 use App\Classes\UeOrdre;
+use App\Controller\BaseController;
 use App\Entity\FicheMatiereMutualisable;
 use App\Entity\Parcours;
 use App\Entity\Semestre;
@@ -31,13 +32,12 @@ use App\Repository\UeRepository;
 use App\Utils\JsonRequest;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/structure/ue', name: 'structure_ue_')]
-class UeController extends AbstractController
+class UeController extends BaseController
 {
     #[Route('/detail/semestre/{semestre}/{parcours}', name: 'detail_semestre')]
     public function detailComposante(
@@ -402,7 +402,7 @@ class UeController extends AbstractController
                     'ue' => $ue
                 ]);
             case 'formation':
-                $formations = $formationRepository->findBy(['composantePorteuse' => $data['value']]);
+                $formations = $formationRepository->findByComposantePorteuse($data['value'], $this->getCampagneCollecte());
                 foreach ($formations as $formation) {
                     $t[] = [
                         'id' => $formation->getId(),
@@ -411,7 +411,7 @@ class UeController extends AbstractController
                 }
                 break;
             case 'parcours':
-                $parcours = $parcoursRepository->findBy(['formation' => $data['value']]);
+                $parcours = $parcoursRepository->findBy(['formation' => $data['value']], ['libelle' => 'ASC']);
                 foreach ($parcours as $parcour) {
                     $t[] = [
                         'id' => $parcour->getId(),

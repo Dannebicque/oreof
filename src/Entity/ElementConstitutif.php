@@ -720,7 +720,6 @@ class ElementConstitutif
 
     public function isFicheFromParcours(): bool
     {
-        //todo: faux, provoque un faux résultat
         return $this->getParcours()?->getId() === $this->ficheMatiere?->getParcours()?->getId();
     }
 

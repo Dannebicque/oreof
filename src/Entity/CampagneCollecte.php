@@ -67,9 +67,23 @@ class CampagneCollecte
     #[ORM\Column]
     private ?bool $mailDpeEnvoye = false;
 
+    /**
+     * @var Collection<int, ChangeRf>
+     */
+    #[ORM\OneToMany(mappedBy: 'campagneCollecte', targetEntity: ChangeRf::class)]
+    private Collection $changeRves;
+
+    /**
+     * @var Collection<int, BlocCompetence>
+     */
+    #[ORM\OneToMany(mappedBy: 'campagneCollecte', targetEntity: BlocCompetence::class)]
+    private Collection $blocCompetences;
+
     public function __construct()
     {
         $this->dpeParcours = new ArrayCollection();
+        $this->changeRves = new ArrayCollection();
+        $this->blocCompetences = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -247,6 +261,66 @@ class CampagneCollecte
     public function setCouleur(string $couleur = 'primary'): static
     {
         $this->couleur = $couleur;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ChangeRf>
+     */
+    public function getChangeRves(): Collection
+    {
+        return $this->changeRves;
+    }
+
+    public function addChangeRf(ChangeRf $changeRf): static
+    {
+        if (!$this->changeRves->contains($changeRf)) {
+            $this->changeRves->add($changeRf);
+            $changeRf->setCampagneCollecte($this);
+        }
+
+        return $this;
+    }
+
+    public function removeChangeRf(ChangeRf $changeRf): static
+    {
+        if ($this->changeRves->removeElement($changeRf)) {
+            // set the owning side to null (unless already changed)
+            if ($changeRf->getCampagneCollecte() === $this) {
+                $changeRf->setCampagneCollecte(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, BlocCompetence>
+     */
+    public function getBlocCompetences(): Collection
+    {
+        return $this->blocCompetences;
+    }
+
+    public function addBlocCompetence(BlocCompetence $blocCompetence): static
+    {
+        if (!$this->blocCompetences->contains($blocCompetence)) {
+            $this->blocCompetences->add($blocCompetence);
+            $blocCompetence->setCampagneCollecte($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBlocCompetence(BlocCompetence $blocCompetence): static
+    {
+        if ($this->blocCompetences->removeElement($blocCompetence)) {
+            // set the owning side to null (unless already changed)
+            if ($blocCompetence->getCampagneCollecte() === $this) {
+                $blocCompetence->setCampagneCollecte(null);
+            }
+        }
 
         return $this;
     }

@@ -189,13 +189,17 @@ class ValidationController extends BaseController
             if ($request->query->get('composante') === 'all' && $typeValidation === 'all') {
                 $demandes = $changeRfRepository->findBy([], ['dateDemande' => 'DESC']);
             } elseif ($request->query->get('composante') === 'all' && $typeValidation !== 'all') {
-                $demandes = $changeRfRepository->findByTypeValidation($typeValidation);
+                $demandes = $changeRfRepository->findByTypeValidation($typeValidation, $this->getCampagneCollecte());
             } else {
                 $composante = $composanteRepository->find($request->query->get('composante'));
                 if (!$composante) {
                     throw $this->createNotFoundException('La composante n\'existe pas');
                 }
-                $demandes = $changeRfRepository->findByComposanteTypeValidation($composante, $typeValidation);
+                $demandes = $changeRfRepository->findByComposanteTypeValidation(
+                    $composante,
+                    $this->getCampagneCollecte(),
+                    $typeValidation
+                );
             }
         } else {
             $formations = [];

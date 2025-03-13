@@ -15,6 +15,7 @@ use App\Entity\User;
 use App\Entity\Ville;
 use App\Enums\RegimeInscriptionEnum;
 use App\Form\Type\TextareaAutoSaveType;
+use App\Repository\ComposanteRepository;
 use App\Repository\VilleRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -37,15 +38,15 @@ class FormationStep1Type extends AbstractType
             ])
             ->add('coResponsable', EntityType::class, [
                 'required' => false,
-                'autocomplete' => true,
+                'disabled' => true,
                 'help' => '',
                 'class' => User::class,
-                'query_builder' => function ($er) {
-                    return $er->createQueryBuilder('u')
-                        ->orderBy('u.nom', 'ASC')
-                        ->addOrderBy('u.prenom', 'ASC');
-                },
-                'attr' => ['data-action' => 'change->formation--step1#saveCoRespFormation'],
+//                'query_builder' => function ($er) {
+//                    return $er->createQueryBuilder('u')
+//                        ->orderBy('u.nom', 'ASC')
+//                        ->addOrderBy('u.prenom', 'ASC');
+//                },
+//                'attr' => ['data-action' => 'change->formation--step1#saveCoRespFormation'],
                 'choice_label' => 'display',
             ])
             ->add('sigle', TextType::class, [
@@ -73,6 +74,10 @@ class FormationStep1Type extends AbstractType
                 'help' => 'Plusieurs choix possibles',
                 'multiple' => true,
                 'expanded' => true,
+                'query_builder' => function (ComposanteRepository $composanteRepository) {
+                    return $composanteRepository->createQueryBuilder('comp')
+                        ->orderBy('comp.libelle', 'ASC');
+                },
                 'choice_attr' => function () {
                     return ['data-action' => 'change->formation--step1#changeComposanteInscription'];
                 },

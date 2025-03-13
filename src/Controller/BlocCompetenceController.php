@@ -24,16 +24,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/bloc/competence')]
-class BlocCompetenceController extends AbstractController
+class BlocCompetenceController extends BaseController
 {
-//    #[Route('/liste/formation/{slug}', name: 'app_bloc_competence_liste_formation', methods: ['GET'])]
-//    public function listeFormation(BlocCompetenceRepository $blocCompetenceRepository, Formation $formation): Response
-//    {
-//        return $this->render('bloc_competence/_liste.html.twig', [
-//            'bloc_competences' => $blocCompetenceRepository->findByFormation($formation),
-//        ]);
-//    }
-
     #[Route('/liste/parcours/{parcours}', name: 'app_bloc_competence_liste_parcours', methods: ['GET'])]
     public function listeParcours(
         TypeDiplomeRegistry      $typeDiplomeRegistry,
@@ -151,7 +143,7 @@ class BlocCompetenceController extends AbstractController
 
 
         return $this->render('bloc_competence/_listeTransverse.html.twig', [
-            'bccs' => $blocCompetenceRepository->findBy(['parcours' => null]),
+            'bccs' => $blocCompetenceRepository->findBy(['parcours' => null, 'campagneCollecte' => $this->getCampagneCollecte()], ['ordre' => 'ASC']),
             'parcours' => $parcours,
         ]);
     }

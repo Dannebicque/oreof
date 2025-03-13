@@ -66,6 +66,9 @@ class GetElementConstitutif
         return $typeD->getMcccs($this->elementConstitutif);
     }
 
+    /**
+     * @deprecated("Ne plus utiliser une fois la recopie des ECTS sur fiche matière validé")
+     */
     public function getMcccsCollection(): ?Collection
     {
         if ($this->elementConstitutif->getFicheMatiere()?->isMcccImpose()) {
@@ -302,6 +305,9 @@ class GetElementConstitutif
 
     }
 
+    /**
+     * @deprecated("Ne plus utiliser une fois la recopie des ECTS sur fiche matière validé")
+     */
     public function getTypeMccc(): ?string
     {
         if ($this->elementConstitutif->getEcParent() !== null && $this->elementConstitutif->getEcParent()->isMcccEnfantsIdentique() === true) {

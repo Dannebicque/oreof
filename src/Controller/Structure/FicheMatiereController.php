@@ -46,19 +46,13 @@ class FicheMatiereController extends BaseController
     ): Response {
 
         if ($this->isGranted('ROLE_ADMIN') || $this->isGranted('ROLE_SES')) {
-            $ficheMatieres = $ficheMatiereRepository->findByAdmin(
-                $this->getCampagneCollecte(),
-                $request->query->all()
-            );
-            $totalFiches = $ficheMatiereRepository->countByAdmin($this->getCampagneCollecte(), $request->query->all());
-        } else {
-            $ficheMatieres = $ficheMatiereRepository->findByResponsable(
-                $this->getUser(),
+            $results = $ficheMatiereRepository->findByAdmin(
                 $this->getCampagneCollecte(),
                 $request->query->all()
             );
 
-            $totalFiches = $ficheMatiereRepository->countByResponsable(
+        } else {
+            $results = $ficheMatiereRepository->findByResponsable(
                 $this->getUser(),
                 $this->getCampagneCollecte(),
                 $request->query->all()
@@ -69,19 +63,22 @@ class FicheMatiereController extends BaseController
         $tParcours = $parcoursRepository->findByCampagneCollecte($this->getCampagneCollecte());
         $tUsers = $userRepository->findBy([], ['nom' => 'ASC', 'prenom' => 'ASC']);
 
-
-        $nbPages = ceil($totalFiches / 50);
+        $nbPages = ceil($results['total'] / 50);
+        if ($results['page'] > $nbPages) {
+            $results['page'] = 1;
+        }
 
         return $this->render('structure/fiche_matiere/_liste.html.twig', [
-            'ficheMatieres' => $ficheMatieres,
+            'ficheMatieres' => $results['data'],
+            'page' => $results['page'],
             'deplacer' => false,
             'mode' => 'liste',
             'mentions' => $tMentions,
             'parcours' => $tParcours,
             'users' => $tUsers,
             'params' => $request->query->all(),
-            'totalFiches' => $totalFiches,
-            'nbPages' => $nbPages,
+            'totalFiches' => $results['total'],
+            'nbPages' =>$nbPages,
         ]);
     }
 
@@ -90,22 +87,24 @@ class FicheMatiereController extends BaseController
         Request                $request,
         FicheMatiereRepository $ficheMatiereRepository
     ): Response {
-        $ficheMatieres = $ficheMatiereRepository->findByHd(
+        $results = $ficheMatiereRepository->findByHd(
             $this->getCampagneCollecte(),
             $request->query->all(),
         );
 
-        $totalFiches = $ficheMatiereRepository->countByHd($this->getCampagneCollecte(), $request->query->all());
-        $nbPages = ceil($totalFiches / 50);
+        $nbPages = ceil($results['total'] / 50);
+        if ($results['page'] > $nbPages) {
+            $results['page'] = 1;
+        }
 
         return $this->render('structure/fiche_matiere/_listeHd.html.twig', [
-            'ficheMatieres' => $ficheMatieres,
+            'ficheMatieres' => $results['data'],
+            'page' => $results['page'],
             'deplacer' => false,
             'mode' => 'liste',
             'params' => $request->query->all(),
-            'totalFiches' => $totalFiches,
-            'nbPages' => $nbPages,
-
+            'totalFiches' => $results['total'],
+            'nbPages' =>$nbPages,
         ]);
     }
 

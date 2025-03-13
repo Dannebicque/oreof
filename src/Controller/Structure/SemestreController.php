@@ -9,10 +9,10 @@
 
 namespace App\Controller\Structure;
 
-use _PHPStan_a4fa95a42\Nette\Neon\Entity;
 use App\Classes\GetDpeParcours;
 use App\Classes\JsonReponse;
 use App\Classes\SemestreOrdre;
+use App\Controller\BaseController;
 use App\Entity\FicheMatiereMutualisable;
 use App\Entity\Parcours;
 use App\Entity\Semestre;
@@ -36,7 +36,7 @@ use Symfony\Component\Routing\Attribute\Route;
 #[
     Route('/structure/semestre', name: 'structure_semestre_')
 ]
-class SemestreController extends AbstractController
+class SemestreController extends BaseController
 {
     #[
         Route('/detail/parcours/{parcours}', name: 'detail_parcours')
@@ -567,7 +567,7 @@ class SemestreController extends AbstractController
                     'semestre' => $semestre
                 ]);
             case 'formation':
-                $formations = $formationRepository->findByComposantePorteuse($data['value']);
+                $formations = $formationRepository->findByComposantePorteuse($data['value'], $this->getCampagneCollecte());
                 foreach ($formations as $formation) {
                     $t[] = [
                         'id' => $formation->getId(),

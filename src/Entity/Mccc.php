@@ -256,4 +256,34 @@ class Mccc
     {
         $this->id = $id;
     }
+
+    public function getMcccTexte()
+    {
+        //fusion des champs textes pour affichage
+        $texte = $this->libelle;
+        $texte.= ' - ' . $this->numeroSession;
+        if ($this->secondeChance) {
+            $texte .= ' - Seconde chance';
+        }
+        if ($this->pourcentage !== null) {
+            $texte .= ' - ' . $this->pourcentage . '%';
+        }
+        if ($this->nbEpreuves !== null) {
+            $texte .= ' - ' . $this->nbEpreuves . ' épreuves';
+        }
+        if ($this->typeEpreuve !== null) {
+            $texte .= ' - ' . implode(', ', $this->typeEpreuve);
+        }
+        if ($this->controleContinu) {
+            $texte .= ' - Contrôle continu';
+        }
+        if ($this->examenTerminal) {
+            $texte .= ' - Examen terminal';
+        }
+        if ($this->duree !== null) {
+            $texte .= ' - ' . $this->duree->format('H:i');
+        }
+
+        return $texte;
+    }
 }

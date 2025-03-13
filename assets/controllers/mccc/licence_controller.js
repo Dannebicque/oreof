@@ -25,6 +25,14 @@ export default class extends Controller {
     }
   }
 
+  updateForm(event) {
+    console.log('updateForm')
+    console.log(this.typeMcccValue)
+    if (this.typeMcccValue !== null) {
+      this._loadTypeMccc(this.typeMcccValue)
+    }
+  }
+
   _verifyTypeEpreuveEt() {
     document.querySelectorAll('.typeEpreuveSelectEt').forEach((element) => {
       const name = element.getAttribute('name')

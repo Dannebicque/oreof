@@ -66,7 +66,7 @@ class ElementConstitutifController extends BaseController
         $natureEc = $natureUeEcRepository->find($request->query->get('choix'));
         if ($natureEc !== null) {
             $matieres[] = $ficheMatiereRepository->findByParcours($parcours, $this->getCampagneCollecte());
-            $matieres[] = $ficheMatiereRepository->findByHd($this->getCampagneCollecte(), []);
+            $matieres[] = $ficheMatiereRepository->findAllByHd($this->getCampagneCollecte());
             $matieres = array_merge(...$matieres);
 
             if ($natureEc->isChoix() === true) {
@@ -147,7 +147,7 @@ class ElementConstitutifController extends BaseController
                     $ficheMatiere = new FicheMatiere();
                     $ficheMatiere->setCampagneCollecte($this->getCampagneCollecte());
                     $ficheMatiere->setLibelle($request->request->get('ficheMatiereLibelle'));
-                    $ficheMatiere->setParcours($parcours); //todo: ajouter le semestre
+                    $ficheMatiere->setParcours($parcours);
                     $ficheMatiereRepository->save($ficheMatiere, true);
                 }
                 $lastEc = $ecOrdre->getOrdreSuivant($ue);
@@ -300,7 +300,7 @@ class ElementConstitutifController extends BaseController
             return $this->json(true);
         }
         $matieres[] = $ficheMatiereRepository->findByParcours($parcours, $this->getCampagneCollecte());
-        $matieres[] = $ficheMatiereRepository->findByHd($this->getCampagneCollecte(), []);
+        $matieres[] = $ficheMatiereRepository->findAllByHd($this->getCampagneCollecte());
         $matieres = array_merge(...$matieres);
 
         return $this->render('element_constitutif/new_enfant.html.twig', [
@@ -391,14 +391,15 @@ class ElementConstitutifController extends BaseController
                 }
                 $elementConstitutif->setFicheMatiere($ficheMatiere);
             } elseif ($elementConstitutif->getNatureUeEc()?->isLibre() === true) {
+                $elementConstitutif->setFicheMatiere(null);
                 $elementConstitutif->setTexteEcLibre($request->request->get('ficheMatiereLibre'));
                 $elementConstitutif->setLibelle($request->request->get('ficheMatiereLibreLibelle'));
-                //todo: supprimer les EC enfants le cas échéant.
                 //todo: supprimer MCCC...
 
             } elseif ($elementConstitutif->getNatureUeEc()?->isChoix() === true) {
                 $natureEc = $natureUeEcRepository->findOneBy(['choix' => false, 'libre' => false, 'type' => 'ec']);
                 $elementConstitutif->setLibelle($request->request->get('ficheMatiereLibre'));
+                $elementConstitutif->setNatureUeEc($natureEc);
                 $elementConstitutif->setFicheMatiere(null);
                 //on récupère le champs matières, on découpe selon la ,. Si ca commence par "id_", on récupère la matière, sinon on créé la matière
                 $matieres = explode(',', $request->request->get('matieres'));
@@ -437,7 +438,6 @@ class ElementConstitutifController extends BaseController
             }
 
             $elementConstitutif->genereCode();
-
             $entityManager->flush();
 
             return $this->json(true);
@@ -504,7 +504,7 @@ class ElementConstitutifController extends BaseController
         }
 
         $matieres[] = $ficheMatiereRepository->findByParcours($parcours, $this->getCampagneCollecte());
-        $matieres[] = $ficheMatiereRepository->findByHd($this->getCampagneCollecte(), []);
+        $matieres[] = $ficheMatiereRepository->findAllByHd($this->getCampagneCollecte());
         $matieres = array_merge(...$matieres);
 
 

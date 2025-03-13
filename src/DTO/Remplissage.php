@@ -13,6 +13,7 @@ class Remplissage
 {
     public int $score = 0;
     public int $total = 0;
+    public float $pourcentage = 0.0;
 
     public function add(int $param = 1)
     {
@@ -43,6 +44,7 @@ class Remplissage
     {
         $this->score += $remp->score;
         $this->total += $remp->total;
+        $this->pourcentage = $this->calcul();
     }
 
     public function empty() : bool
