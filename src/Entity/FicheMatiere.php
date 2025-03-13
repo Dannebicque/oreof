@@ -1243,4 +1243,9 @@ class FicheMatiere
         $this->competences = new ArrayCollection();
         $this->apprentissagesCritiques = new ArrayCollection();
     }
+
+    public function getTotalHeures() : float
+    {
+        return $this->getVolumeCmPresentiel() + $this->getVolumeTdPresentiel() + $this->getVolumeTpPresentiel() + $this->getVolumeTe() + $this->getVolumeCmDistanciel() + $this->getVolumeTpDistanciel() + $this->getVolumeTpDistanciel();
+    }
 }

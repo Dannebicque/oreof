@@ -144,7 +144,7 @@ class FicheMatiereState
 
     private function etatOnglet4(): bool|array
     {
-        $totalHeures = $this->ficheMatiere->getVolumeCmPresentiel() + $this->ficheMatiere->getVolumeTdPresentiel() + $this->ficheMatiere->getVolumeTpPresentiel() + $this->ficheMatiere->getVolumeTe();
+        $totalHeures = $this->ficheMatiere->getTotalHeures();
 
         $tab['error'] = [];
 
