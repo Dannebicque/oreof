@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.32.10](https://github.com/Dannebicque/oreof/compare/v1.32.9...v1.32.10) (2025-03-13)
+
+
+### Features
+
+* Implement clone method to reset origine copie in BlocCompetence ([e0bf1f1](https://github.com/Dannebicque/oreof/commit/e0bf1f180337bcc5a82e463aea7a9f570a85e81e))
+
+
+### Bug Fixes
+
+* Add getTotalHeures method to FicheMatiere and refactor etatOnglet4 to use it ([691898f](https://github.com/Dannebicque/oreof/commit/691898fb05fcccee62af4ec4cde16c4effd4da1f))
+* Refactor access check for parcours in FicheMatiereWizardController and clean up unused alert in _step4Other.html.twig ([81c9e18](https://github.com/Dannebicque/oreof/commit/81c9e187e88c8b331261567b47ac6ef5a823b5bc))
+* Remove conditional class from nav-link in edit.html.twig ([5995753](https://github.com/Dannebicque/oreof/commit/59957539071c0cdea582fd3be608adbf0c9d1dab))
+* Set origine copie to null for cloned entities in various controllers ([65443b7](https://github.com/Dannebicque/oreof/commit/65443b74c287629a9acd9c5679af66b647c9857e))
+* Update description handling in ParcoursExportController for element constitutifs ([fa6af19](https://github.com/Dannebicque/oreof/commit/fa6af19eb56b48b529d2cb4f77af31ef7c1cec49))
+
 ### [1.32.9](https://github.com/Dannebicque/oreof/compare/v1.32.8...v1.32.9) (2025-03-12)
 
 
