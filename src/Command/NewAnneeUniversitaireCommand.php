@@ -156,6 +156,7 @@ class NewAnneeUniversitaireCommand extends Command
                     $dpeParcoursClone->setFormation($newFormationDpe);
                     $dpeParcoursClone->setCampagneCollecte($newCampagneCollecte);
                     $dpeParcoursClone->setEtatValidation(['soumis_central' => 1]);
+                    $dpeParcoursClone->setCreated(new DateTime('now'));
                     $this->entityManager->persist($dpeParcoursClone);
                     $io->progressAdvance(1);                    
                 }
