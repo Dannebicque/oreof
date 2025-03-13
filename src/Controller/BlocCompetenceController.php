@@ -102,6 +102,7 @@ class BlocCompetenceController extends BaseController
                                 $bc = $b->getBlocCompetence();
                                 if ($bc !== null) {
                                     $bcc = clone $bc;
+                                    $bcc->setBlocCompetenceOrigineCopie(null);
                                     $ordre = $blocCompetenceRepository->getMaxOrdreParcours($parcours);
                                     $bcc->setOrdre($ordre + 1);
                                     $bcc->setParcours($parcours);
@@ -128,6 +129,7 @@ class BlocCompetenceController extends BaseController
                         $b = $blocCompetenceRepository->find($bcc);
                         if ($b !== null) {
                             $bcc = clone $b;
+                            $bcc->setBlocCompetenceOrigineCopie(null);
                             $ordre = $blocCompetenceRepository->getMaxOrdreParcours($parcours);
                             $bcc->setOrdre($ordre + 1);
                             $bcc->setParcours($parcours);
@@ -249,6 +251,7 @@ class BlocCompetenceController extends BaseController
         BlocCompetence           $blocCompetence
     ): Response {
         $blocCompetenceNew = clone $blocCompetence;
+        $blocCompetenceNew->setBlocCompetenceOrigineCopie(null);
         $blocCompetenceNew->setLibelle($blocCompetence->getLibelle() . ' - Copie');
 
         if ($blocCompetence->getFormation()) {

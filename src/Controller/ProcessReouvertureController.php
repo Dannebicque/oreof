@@ -66,18 +66,17 @@ class ProcessReouvertureController extends BaseController
                 $dpe->setEtatReconduction($etatTypeModification);
                 $now = new DateTimeImmutable('now');
                 $versioningParcours->saveVersionOfParcours($parcours, $now, true, false);
-                $histoEvent = new HistoriqueParcoursEvent($parcours, $this->getUser(), 'soumis_central', 'valide', $request);
+                $histoEvent = new HistoriqueParcoursEvent($parcours, $this->getUser(), 'en_cours_redaction_ss_cfvu', 'valide', $request);
                 $this->eventDispatcher->dispatch($histoEvent, HistoriqueParcoursEvent::ADD_HISTORIQUE_PARCOURS);
                 $this->entityManager->flush();
             } elseif ($data['demandeReouverture'] === 'MODIFICATION_MCCC_TEXTE') {
                 $etatTypeModification = TypeModificationDpeEnum::MODIFICATION_MCCC_TEXTE;
-                $dpe->setEtatValidation(['soumis_central' => 1]);
+                $dpe->setEtatValidation(['en_cours_redaction' => 1]);
                 $dpe->setEtatReconduction($etatTypeModification);
-                // todo: créer un nouveau DPE?
-                // faire la copie de version
                 $now = new DateTimeImmutable('now');
                 $versioningParcours->saveVersionOfParcours($parcours, $now, true, true);
-
+                $histoEvent = new HistoriqueParcoursEvent($parcours, $this->getUser(), 'en_cours_redaction', 'valide', $request);
+                $this->eventDispatcher->dispatch($histoEvent, HistoriqueParcoursEvent::ADD_HISTORIQUE_PARCOURS);
                 $this->entityManager->flush();
             }
 
@@ -151,8 +150,8 @@ class ProcessReouvertureController extends BaseController
             $this->entityManager->flush();
 
             //mail au SES
-            //            $dpeDemandeEvent = new DpeDemandeEvent($demande, $this->getUser());
-            //            $this->eventDispatcher->dispatch($dpeDemandeEvent, DpeDemandeEvent::DPE_DEMANDE_CREATED);
+            $dpeDemandeEvent = new DpeDemandeEvent($demande, $this->getUser());
+            $this->eventDispatcher->dispatch($dpeDemandeEvent, DpeDemandeEvent::DPE_DEMANDE_CREATED);
 
             $formation->setEtatReconduction($etat);
             $this->entityManager->flush();

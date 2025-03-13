@@ -205,6 +205,7 @@ class UeController extends BaseController
                 if ($natureUe->isChoix() === true) {
                     $ue->setOrdre(1);
                     $ue2 = clone $ue;
+                    $ue2->setUeOrigineCopie(null);
                     $ue2->setOrdre(2);
                     $ueRepository->save($ue2, true);
                 }
@@ -278,11 +279,13 @@ class UeController extends BaseController
                 if ($form->get('natureUeEc')->getData()->isChoix() === true) {
                     if ($ue->getUeEnfants()->count() === 0) {
                         $ue1 = clone $ue;
+                        $ue1->setUeOrigineCopie(null);
                         $ue1->setUeParent($ue);
                         $ue1->setOrdre(1);
                         $ueRepository->save($ue1, true);
 
                         $ue2 = clone $ue;
+                        $ue2->setUeOrigineCopie(null);
                         $ue2->setUeParent($ue);
                         $ue2->setOrdre(2);
                         $ueRepository->save($ue2, true);
@@ -634,6 +637,7 @@ class UeController extends BaseController
 
             //on clone le semestre et sa structure
             $newUe = clone $ue;
+            $newUe->setUeOrigineCopie(null);
             $newUe->setSemestre($semestre);
             $newUe->setOrdre($ordre);
             $entityManager->persist($newUe);
@@ -660,6 +664,7 @@ class UeController extends BaseController
                         if ($ec->getEcParent() === null) {
                             //faire le lien dans les deux UE
                             $newEc = clone $ec;
+                            $newEc->setEcOrigineCopie(null);
                             $newEc->setUe($newUe);
                             $entityManager->persist($newEc);
 
@@ -678,6 +683,7 @@ class UeController extends BaseController
 
                                 //faire le lien dans les deux UE
                                 $newEcEnfant = clone $ecEnfant;
+                                $newEcEnfant->setEcOrigineCopie(null);
                                 $newEcEnfant->setUe($newUe);
                                 $newEcEnfant->setEcParent($newEc);
                                 $newEcEnfant->setFicheMatiere($ecEnfant->getFicheMatiere());
@@ -690,10 +696,12 @@ class UeController extends BaseController
                     case 'recopie':
                         if ($ec->getEcParent() === null) {
                             $newEc = clone $ec;
+                            $newEc->setEcOrigineCopie(null);
                             $newEc->setUe($newUe);
                             $entityManager->persist($newEc);
                             if ($ec->getFicheMatiere() !== null) {
                                 $newFm = clone $ec->getFicheMatiere();
+                                $newFm->setFicheMatiereOrigineCopie(null);
                                 $newFm->setParcours($parcoursDestination);
                                 $newFm->setSlug($newFm->getSlug() . '-' . (new DateTime())->format('YmdHis'));
                                 $newEc->setFicheMatiere($newFm);
@@ -702,11 +710,13 @@ class UeController extends BaseController
 
                             foreach ($ec->getEcEnfants() as $ecEnfant) {
                                 $newEcEnfant = clone $ecEnfant;
+                                $newEcEnfant->setEcOrigineCopie(null);
                                 $newEcEnfant->setUe($newUe);
                                 $newEcEnfant->setEcParent($newEc);
                                 $entityManager->persist($newEcEnfant);
                                 if ($ecEnfant->getFicheMatiere() !== null) {
                                     $newFm = clone $ecEnfant->getFicheMatiere();
+                                    $newFm->setFicheMatiereOrigineCopie(numm);
                                     $newFm->setParcours($parcoursDestination);
                                     $newFm->setSlug($newFm->getSlug() . '-' . (new DateTime())->format('YmdHis'));
                                     $newEcEnfant->setFicheMatiere($newFm);
@@ -722,6 +732,7 @@ class UeController extends BaseController
             // on recopie les UE enfants
             foreach ($ue->getUeEnfants() as $ueEnfant) {
                 $newUeEnfant = clone $ueEnfant;
+                $newUeEnfant->setUeOrigineCopie(null);
                 $newUeEnfant->setSemestre($semestre);
                 $newUeEnfant->setUeParent($newUe);
                 $entityManager->persist($newUeEnfant);
@@ -746,6 +757,7 @@ class UeController extends BaseController
 
                             //faire le lien dans les deux UE
                             $newEc = clone $ec;
+                            $newEc->setEcOrigineCopie(null);
                             $newEc->setUe($newUeEnfant);
                             $entityManager->persist($newEc);
                             $entityManager->flush();
@@ -753,10 +765,12 @@ class UeController extends BaseController
                         case 'recopie':
                             if ($ec->getEcParent() === null) {
                                 $newEc = clone $ec;
+                                $newEc->setEcOrigineCopie(null);
                                 $newEc->setUe($newUeEnfant);
                                 $entityManager->persist($newEc);
                                 if ($ec->getFicheMatiere() !== null) {
                                     $newFm = clone $ec->getFicheMatiere();
+                                    $newFm->setFicheMatiereOrigineCopie(null);
                                     $newFm->setParcours($parcoursDestination);
                                     $newFm->setSlug($newFm->getSlug() . '-' . (new DateTime())->format('YmdHis'));
                                     $newEc->setFicheMatiere($newFm);
@@ -764,11 +778,13 @@ class UeController extends BaseController
                                 }
                                 foreach ($ec->getEcEnfants() as $ecEnfant) {
                                     $newEcEnfant = clone $ecEnfant;
+                                    $newEcEnfant->setEcOrigineCopie(null);
                                     $newEcEnfant->setUe($newUeEnfant);
                                     $newEcEnfant->setEcParent($newEc);
                                     $entityManager->persist($newEcEnfant);
                                     if ($ec->getFicheMatiere() !== null) {
                                         $newFm = clone $ec->getFicheMatiere();
+                                        $newFm->setFicheMatiereOrigineCopie(null);
                                         $newFm->setParcours($parcoursDestination);
                                         $newFm->setSlug($newFm->getSlug() . '-' . (new DateTime())->format('YmdHis'));
                                         $newEcEnfant->setFicheMatiere($newFm);

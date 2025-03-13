@@ -161,8 +161,13 @@ class FicheMatiereRepository extends ServiceEntityRepository
         }
 
         if (isset($options['remplissage']) && null !== $options['remplissage'] && 'all' !== $options['remplissage']) {
-            $qb->andWhere('JSON_EXTRACT(f.remplissage, \'$.pourcentage\') = :remplissage')
-                ->setParameter('remplissage', $options['remplissage']);
+            if ((float)$options['remplissage'] === 100.0) {
+                $qb->andWhere('JSON_EXTRACT(f.remplissage, \'$.pourcentage\') = :remplissage')
+                    ->setParameter('remplissage', 100.0);
+            } else {
+                $qb->andWhere('JSON_EXTRACT(f.remplissage, \'$.pourcentage\') < :remplissage')
+                    ->setParameter('remplissage', 100.0);
+            }
         }
 
         if ($sort === 'responsableFicheMatiere') {

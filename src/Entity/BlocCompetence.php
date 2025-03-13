@@ -58,10 +58,6 @@ class BlocCompetence
         $this->competences = new ArrayCollection();
     }
 
-    public function __clone() {
-        $this->setBlocCompetenceOrigineCopie(null);
-    }
-
     public function getId(): ?int
     {
         return $this->id;
