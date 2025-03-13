@@ -301,9 +301,14 @@ class ParcoursExportController extends AbstractController
     {
         $tEcs = [];
         foreach ($ue->elementConstitutifs as $ec) {
-            if ($ec->elementConstitutif->getNatureUeEc()?->isLibre()) {
-                $tEcs['description_libre_choix'] =  $ec->elementConstitutif->getTexteEcLibre();
-            } elseif ($ec->elementConstitutif->getNatureUeEc()?->isChoix()) {
+//            if ($ec->elementConstitutif->getNatureUeEc()?->isLibre()) {
+//                $tEc['ordre'] = $ec->elementConstitutif->getOrdre();
+//                $tEc['numero'] = $ec->elementConstitutif->getCode();
+//                $tEc['libelle'] = $ec->elementConstitutif?->getFicheMatiere()?->getLibelle() ?? '-';
+//                $tEc['description_libre_choix'] =  $ec->elementConstitutif->getTexteEcLibre();
+//                $tEc['ects'] = $ec->heuresEctsEc->ects;
+//                $tEcs[] = $tEc;
+            if ($ec->elementConstitutif->getNatureUeEc()?->isChoix()) {
                 $tEc['ordre'] = $ec->elementConstitutif->getOrdre();
                 $tEc['numero'] = $ec->elementConstitutif->getCode();
                 $tEc['libelle'] = $ec->elementConstitutif?->getFicheMatiere()?->getLibelle() ?? '-';
@@ -336,10 +341,12 @@ class ParcoursExportController extends AbstractController
         }
 
         if ($ec->elementConstitutif->getNatureUeEc()?->isLibre()) {
-            $libelle = $ec->elementConstitutif->getTexteEcLibre();
+            $libelle = $ec->elementConstitutif->getLibelle();
+            $description =  $ec->elementConstitutif->getTexteEcLibre();
             $ecLibre = true;
         } else {
             $libelle = $ec->elementConstitutif->getFicheMatiere()?->getLibelle() ?? $ec->elementConstitutif->getLibelle() ?? '-';
+            $description =  $ec->elementConstitutif->getFicheMatiere()?->getDescription() ?? '-';
             $ecLibre = false;
         }
 
@@ -357,7 +364,7 @@ class ParcoursExportController extends AbstractController
                 'nom'=> $ec->elementConstitutif->getFicheMatiere()?->getResponsableFicheMatiere()?->getDisplay() ?? '-',
                 'email'=> $ec->elementConstitutif->getFicheMatiere()?->getResponsableFicheMatiere()?->getEmail() ?? '-'
             ],
-            'description' => CleanTexte::cleanTextArea($ec->elementConstitutif->getFicheMatiere()?->getDescription(), false) ?? '-',
+            'description' => CleanTexte::cleanTextArea($description, false) ?? '-',
             'objectifs' => CleanTexte::cleanTextArea($ec->elementConstitutif->getFicheMatiere()?->getObjectifs(), false) ?? '-',
             'modalite_enseignement'=> $ec->elementConstitutif->getFicheMatiere()?->getModaliteEnseignement()->value ?? '-',
             'langues_supports' => $ec->elementConstitutif->getFicheMatiere()?->getLanguesSupportsArray() ?? [],
