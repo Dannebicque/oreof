@@ -251,9 +251,7 @@ class FicheMatiereWizardController extends AbstractController
             $dpeParcours = GetDpeParcours::getFromParcours($ficheMatiere->getParcours());
         }
 
-        if ($dpeParcours !==null && !Access::isAccessible($dpeParcours, 'cfvu')) {
-            return $this->render('fiche_matiere_wizard/_access_denied.html.twig');
-        }
+
         // récupérer les parcours pour savoir si la fiche peut être éditée ou pas
 
         $parcours = [];
@@ -273,6 +271,9 @@ class FicheMatiereWizardController extends AbstractController
 
 
         if ($type === 'but') {
+            if ($dpeParcours !==null && !Access::isAccessible($dpeParcours, 'cfvu')) {
+                return $this->render('fiche_matiere_wizard/_access_denied.html.twig');
+            }
             $form = $this->createForm(FicheMatiereStep4Type::class, $ficheMatiere);
             $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());
 
