@@ -81,13 +81,11 @@ class FormationController extends BaseController
         MentionProcess                $validationProcess,
         Request               $request,
     ): Response {
-        $isCfvu = false;
 
         $tFormations = $getFormations->getFormations(
             $this->getUser(),
             $this->getCampagneCollecte(),
-            $request->query->all(),
-            $isCfvu
+            $request->query->all()
         );
 
         return $this->render('formation/_liste.html.twig', [

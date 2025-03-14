@@ -106,7 +106,7 @@ class FormationRepository extends ServiceEntityRepository
 
         $query = $this->createQueryBuilder('f')
             ->leftJoin('f.dpeParcours', 'p')
-            ->join('p.parcours', 'parcours')
+            ->leftJoin('p.parcours', 'parcours')
             ->addSelect('p')
             ->where('p.campagneCollecte = :campagneCollecte')
             ->setParameter('campagneCollecte', $campagneCollecte)
