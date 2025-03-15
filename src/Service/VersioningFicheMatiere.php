@@ -9,7 +9,9 @@ use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\ORM\EntityManagerInterface;
 use Jfcherng\Diff\DiffHelper;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor;
 use Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor;
+use Symfony\Component\PropertyInfo\PropertyInfoExtractor;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
 use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
@@ -33,10 +35,12 @@ class VersioningFicheMatiere {
         $this->filesystem = $filesystem;
         // Serializer
         $classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
+        $extractors = new PropertyInfoExtractor([], [new PhpDocExtractor(), new ReflectionExtractor()]);
         $this->serializer = new Serializer(
             [
+                new DateTimeNormalizer(),
                 new ArrayDenormalizer(),
-                new ObjectNormalizer($classMetadataFactory, propertyTypeExtractor: new ReflectionExtractor())
+                new ObjectNormalizer($classMetadataFactory, propertyTypeExtractor: $extractors)
             ],
             [new JsonEncoder()]
         );
