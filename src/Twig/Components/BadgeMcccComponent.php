@@ -32,8 +32,12 @@ final class BadgeMcccComponent
         $this->isParcoursProprietaire = $this->elementConstitutif->getFicheMatiere()?->getParcours()?->getId() === $this->parcours->getId();
         $this->isMcccSpecifiques = $this->elementConstitutif->isMcccSpecifiques();
         if ($this->elementConstitutif !== null) {
-            $getElement = new GetElementConstitutif($this->elementConstitutif, $this->parcours);
-            $this->etatMcccComplet = $getElement->getEtatMccc()  === 'Complet';
+            if ($this->elementConstitutif->getNatureUeEc()?->isLibre()) {
+                $this->etatMcccComplet = $this->elementConstitutif->getEcts() !== 0; // sur un EC libre, juste des ECTS
+            } else {
+                $getElement = new GetElementConstitutif($this->elementConstitutif, $this->parcours);
+                $this->etatMcccComplet = $getElement->getEtatMccc() === 'Complet';
+            }
         }
     }
 }

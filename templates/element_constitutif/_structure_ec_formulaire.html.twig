@@ -16,7 +16,9 @@
         <div class="alert alert-info">
             <div class="row">
                 <div class="col-12">
-                    <p>Cet EC est raccroché, les données sont reprises par défaut de l'EC d'origine du parcours <strong>{{ ec.parcours != null ? ec.parcours.libelle : '-non défini-' }}</strong>. Mais vous pouvez définir des données spécifiques sur cet EC.</p>
+                    <p>Cet EC est raccroché, les données sont reprises par défaut de l'EC d'origine du parcours
+                        <strong>{{ ec.parcours != null ? ec.parcours.libelle : '-non défini-' }}</strong>. Mais vous
+                        pouvez définir des données spécifiques sur cet EC.</p>
                 </div>
                 <div class="col-12">
                     <div class="form-check mb-2">
@@ -51,6 +53,11 @@ parcours.'}) }}
             {{ form_row(form.modaliteEnseignement, {disabled: ec.heuresSpecifiques == false}) }}
         {% endif %}
 
+        {% if parcours.modalitesEnseignement == null %}
+            <div class="row">
+                <div class="col-12">{{ form_row(form.modaliteEnseignement) }}</div>
+            </div>
+        {% endif %}
 
         <div class="form-check mb-2">
             <input class="form-check-input" type="checkbox" id="sansHeure" name="sansHeure"
@@ -63,7 +70,7 @@ parcours.'}) }}
                         title="{{ 'mccc.ec.helps.sansHeures'|trans({}, 'help') }}"></i></label>
         </div>
 
-        {% set disabled = disabled or ec.sansHeure  %}
+        {% set disabled = disabled or ec.sansHeure %}
         <div id="bloc_presentiel" style="display:{% if modalite != null and modalite.value != 2 %}block{% else
 %}none{% endif %}">
             <h3>Volume Présentiel</h3>
