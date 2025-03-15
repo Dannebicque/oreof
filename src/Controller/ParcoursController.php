@@ -144,8 +144,6 @@ class ParcoursController extends BaseController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
-
             $dpeParcours = new DpeParcours();
             $dpeParcours->setParcours($parcour);
             $dpeParcours->setFormation($formation);

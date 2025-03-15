@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\DpeDemande;
+use App\Entity\Formation;
 use App\Entity\Parcours;
 use App\Enums\EtatDpeEnum;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -35,7 +36,17 @@ class DpeDemandeRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
-    public function findLastOpenedDemandeMention(\App\Entity\Formation $formation, EtatDpeEnum $etat)
+    public function findLastUnclosedDemande(Parcours $parcours): ?DpeDemande
+    {
+        return $this->createQueryBuilder('d')
+            ->where('d.parcours = :parcours')
+            ->andWhere('d.dateCloture IS NULL')
+            ->setParameter('parcours', $parcours)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+    public function findLastOpenedDemandeMention(Formation $formation, EtatDpeEnum $etat)
     {
         return $this->createQueryBuilder('d')
             ->where('d.formation = :formation')

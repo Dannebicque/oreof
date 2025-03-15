@@ -20,8 +20,9 @@ class ParcoursValide extends AbstractValide
     public array $bccs = [];
 
     public function __construct(
-        protected Parcours $parcours, protected TypeDiplome $typeDiplome)
-    {
+        protected Parcours $parcours,
+        protected TypeDiplome $typeDiplome
+    ) {
     }
 
     public function valideParcours(): ParcoursValide
@@ -249,7 +250,7 @@ class ParcoursValide extends AbstractValide
             if ($sem !== null) {
                 foreach ($sem->getUes() as $ue) {
                     foreach ($ue->getElementConstitutifs() as $ec) {
-                        if ($ec->getEcEnfants()->count() === 0 || !$ec->getNatureUeEc()?->isLibre() === false) {
+                       if ($ec->getEcEnfants()->count() === 0 && $ec->getNatureUeEc()?->isLibre() === false) {
                             $tFiches[$ec->getId()]['ec'] = $ec;
                             $tFiches[$ec->getId()]['fiche'] = $ec->getFicheMatiere();
                         }

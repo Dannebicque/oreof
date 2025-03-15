@@ -103,7 +103,7 @@ class FormationRepository extends ServiceEntityRepository
         $direction = $options['direction'] ?? 'ASC';
 
         $filtres = [$sort => $direction];
-
+//todo: ne fonctionne que si au moins un parcours existe, donc pas pour les nouveaux parcours
         $query = $this->createQueryBuilder('f')
             ->leftJoin('f.dpeParcours', 'p')
             ->leftJoin('p.parcours', 'parcours')

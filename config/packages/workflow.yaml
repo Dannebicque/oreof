@@ -21,8 +21,8 @@ framework:
         en_cours_redaction:
           metadata:
             process: true
-            icon: 'fa-paper-plane'
-            label: 'validation.parcours'
+            icon: 'fa-pencil'
+            label: 'en_cours_redaction.parcours'
             hasUpload: false
             isTimeline: false
             check: true
