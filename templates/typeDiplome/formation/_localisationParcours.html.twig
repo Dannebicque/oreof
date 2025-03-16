@@ -3,7 +3,7 @@
         <dl>
             <dt>Localisation du parcours</dt>
             <dd>
-                {{ parcours?.localisation != null ? parcours.localisation.libelle : 'Erreur' }}
+                {{ parcours != null and parcours.localisation != null ? parcours.localisation.libelle : 'Erreur' }}
             </dd>
             <dt>Régime(s) d'inscription</dt>
             <dd>
