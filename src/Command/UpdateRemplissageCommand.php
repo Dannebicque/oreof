@@ -56,7 +56,7 @@ class UpdateRemplissageCommand extends Command
 
         //je veux un argument pour préciser la campagne
 
-        $this->addOption('campagne', null, InputOption::VALUE_REQUIRED, 'Campagne à traiter');
+        $this->addArgument('campagne', null, InputOption::VALUE_REQUIRED, 'Campagne à traiter');
 
     }
 
