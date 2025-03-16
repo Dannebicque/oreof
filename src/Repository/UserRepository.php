@@ -9,6 +9,7 @@
 
 namespace App\Repository;
 
+use App\Entity\CampagneCollecte;
 use App\Entity\Composante;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -96,12 +97,15 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     }
 
     public function findEnable(
+        CampagneCollecte          $campagneCollecte,
         float|bool|int|string|null $sort,
         string|null                $direction
     ): array {
         return $this->createQueryBuilder('u')
             ->where('u.isEnable = :isEnable')
             ->andWhere('u.isDeleted = false')
+            ->andWhere('uc.campagneCollecte = :campagne OR uc.campagneCollecte IS NULL')
+            ->setParameter('campagne', $campagneCollecte)
             ->setParameter('isEnable', true)
             ->addOrderBy('u.' . $sort, $direction)
             ->getQuery()
@@ -109,6 +113,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     }
 
     public function findEnableBySearch(
+        CampagneCollecte          $campagneCollecte,
         string|null                $q,
         float|bool|int|string|null $sort,
         string|null                $direction
@@ -117,6 +122,8 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->where('u.isEnable = :isEnable')
             ->andWhere('u.nom LIKE :q OR u.prenom LIKE :q OR u.email LIKE :q OR u.username LIKE :q')
             ->andWhere('u.isDeleted = false')
+            ->andWhere('uc.campagneCollecte = :campagne OR uc.campagneCollecte IS NULL')
+            ->setParameter('campagneCollecte', $campagneCollecte)
             ->setParameter('isEnable', true)
             ->setParameter('q', '%' . $q . '%')
             ->addOrderBy('u.' . $sort, $direction)
@@ -125,6 +132,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     }
 
     public function findByComposanteEnableBySearch(
+        CampagneCollecte          $campagneCollecte,
         Composante                 $composante,
         string|null                $q,
         float|bool|int|string|null $sort,
@@ -135,10 +143,12 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->leftJoin('uc.formation', 'cf')
             ->where('u.isEnable = :isEnable')
             ->andWhere('u.isDeleted = false')
+            ->andWhere('uc.campagneCollecte = :campagne OR uc.campagneCollecte IS NULL')
             ->andWhere('u.nom LIKE :q OR u.prenom LIKE :q OR u.email LIKE :q OR u.username LIKE :q')
             ->andWhere('uc.composante = :composante')
             ->orWhere('cf.composantePorteuse = :composante')
             ->setParameter('isEnable', true)
+            ->setParameter('campagne', $campagneCollecte)
             ->setParameter('composante', $composante)
             ->setParameter('q', '%' . $q . '%')
             ->addOrderBy('u.' . $sort, $direction)
@@ -161,6 +171,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     }
 
     public function findByComposanteEnable(
+        CampagneCollecte          $campagneCollecte,
         Composante                 $composante,
         float|bool|int|string|null $sort,
         string|null                $direction
@@ -171,8 +182,10 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->where('u.isEnable = :isEnable')
             ->andWhere('u.isDeleted = false')
             ->andWhere('uc.composante = :composante')
+            ->andWhere('uc.campagneCollecte = :campagne OR uc.campagneCollecte IS NULL')
             ->orWhere('cf.composantePorteuse = :composante')
             ->setParameter('isEnable', true)
+            ->setParameter('campagne', $campagneCollecte)
             ->setParameter('composante', $composante)
             ->addOrderBy('u.' . $sort, $direction)
             ->getQuery()

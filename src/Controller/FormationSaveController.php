@@ -137,11 +137,11 @@ class FormationSaveController extends BaseController
 
                 return $this->json(true);
             case 'coRespFormation':
-                $event = new AddCentreFormationEvent($formation, $formation->getCoResponsable(), ['ROLE_CO_RESP_FORMATION']);
+                $event = new AddCentreFormationEvent($formation, $formation->getCoResponsable(), ['ROLE_CO_RESP_FORMATION'], $this->getCampagneCollecte());
                 $eventDispatcher->dispatch($event, AddCentreFormationEvent::REMOVE_CENTRE_FORMATION);
                 $user = $userRepository->find($data['value']);
                 $rep = $updateEntity->saveField($formation, 'coResponsable', $user);
-                $event = new AddCentreFormationEvent($formation, $user, ['ROLE_CO_RESP_FORMATION']);
+                $event = new AddCentreFormationEvent($formation, $user, ['ROLE_CO_RESP_FORMATION'], $this->getCampagneCollecte());
                 $eventDispatcher->dispatch($event, AddCentreFormationEvent::ADD_CENTRE_FORMATION);
                 return $this->json($rep);
             case 'etatStep':

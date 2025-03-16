@@ -79,11 +79,18 @@ class CampagneCollecte
     #[ORM\OneToMany(mappedBy: 'campagneCollecte', targetEntity: BlocCompetence::class)]
     private Collection $blocCompetences;
 
+    /**
+     * @var Collection<int, UserCentre>
+     */
+    #[ORM\OneToMany(mappedBy: 'campagneCollecte', targetEntity: UserCentre::class)]
+    private Collection $userCentres;
+
     public function __construct()
     {
         $this->dpeParcours = new ArrayCollection();
         $this->changeRves = new ArrayCollection();
         $this->blocCompetences = new ArrayCollection();
+        $this->userCentres = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -319,6 +326,36 @@ class CampagneCollecte
             // set the owning side to null (unless already changed)
             if ($blocCompetence->getCampagneCollecte() === $this) {
                 $blocCompetence->setCampagneCollecte(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, UserCentre>
+     */
+    public function getUserCentres(): Collection
+    {
+        return $this->userCentres;
+    }
+
+    public function addUserCentre(UserCentre $userCentre): static
+    {
+        if (!$this->userCentres->contains($userCentre)) {
+            $this->userCentres->add($userCentre);
+            $userCentre->setCampagneCollecte($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserCentre(UserCentre $userCentre): static
+    {
+        if ($this->userCentres->removeElement($userCentre)) {
+            // set the owning side to null (unless already changed)
+            if ($userCentre->getCampagneCollecte() === $this) {
+                $userCentre->setCampagneCollecte(null);
             }
         }
 

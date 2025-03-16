@@ -73,9 +73,9 @@ class UserController extends BaseController
 
         if ($this->isGranted('ROLE_ADMIN') || $this->isGranted('ROLE_SES')) {
             if ($q) {
-                $users = $userRepository->findEnableBySearch($q, $sort, $direction);
+                $users = $userRepository->findEnableBySearch($this->getCampagneCollecte(), $q, $sort, $direction);
             } else {
-                $users = $userRepository->findEnable($sort, $direction);
+                $users = $userRepository->findEnable($this->getCampagneCollecte(), $sort, $direction);
             }
         } elseif ($this->isGranted('CAN_COMPOSANTE_MANAGE_MY', $this->getUser())) {
             foreach ($this->getUser()?->getUserCentres() as $centre) {
@@ -85,9 +85,9 @@ class UserController extends BaseController
             }
             if ($composante !== null) {
                 if ($q) {
-                    $users = $userRepository->findByComposanteEnableBySearch($composante, $q, $sort, $direction);
+                    $users = $userRepository->findByComposanteEnableBySearch($this->getCampagneCollecte(), $composante, $q, $sort, $direction);
                 } else {
-                    $users = $userRepository->findByComposanteEnable($composante, $sort, $direction);
+                    $users = $userRepository->findByComposanteEnable($this->getCampagneCollecte(), $composante, $sort, $direction);
                 }
             } else {
                 $users = [];
