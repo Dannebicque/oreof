@@ -57,11 +57,14 @@ class ElementConstitutifBccController extends AbstractController
         // competences de l'EC du parcours d'origine
         $competences = $getElement->getBccs();
 
-        //on fait le lien entre la compétence et le code
-        foreach ($competences as $competence) {
-            if (array_key_exists($competence->getCode(), $tabCompetences)) {
-                $ecComps[] = $tabCompetences[$competence->getCode()]->getId();
-                $ecBccs[] = $tabCompetences[$competence->getCode()]->getBlocCompetence()?->getId();
+        if ($competences !== null) {
+
+            //on fait le lien entre la compétence et le code
+            foreach ($competences as $competence) {
+                if (array_key_exists($competence->getCode(), $tabCompetences)) {
+                    $ecComps[] = $tabCompetences[$competence->getCode()]->getId();
+                    $ecBccs[] = $tabCompetences[$competence->getCode()]->getBlocCompetence()?->getId();
+                }
             }
         }
 
@@ -75,7 +78,8 @@ class ElementConstitutifBccController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/bcc-ec/{parcours}', name: 'app_element_constitutif_bcc', methods: ['GET', 'POST'])]
+    #[
+        Route('/{id}/bcc-ec/{parcours}', name: 'app_element_constitutif_bcc', methods: ['GET', 'POST'])]
     public function bccEc(
         ButCompetenceRepository            $butCompetenceRepository,
         ButApprentissageCritiqueRepository $butApprentissageCritiqueRepository,

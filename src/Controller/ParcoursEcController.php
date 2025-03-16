@@ -43,7 +43,9 @@ class ParcoursEcController extends AbstractController
 
                     $tabEcs[$semestreParcour->getOrdre()][$ue->getId()] = [];
                     foreach ($ue->getElementConstitutifs() as $ec) {
-                        $tabEcs[$semestreParcour->getOrdre()][$ue->getId()][] = $ec;
+                        if ($ec->getEcParent() === null) {
+                            $tabEcs[$semestreParcour->getOrdre()][$ue->getId()][] = $ec;
+                        }
                     }
                 }
                 foreach ($ue->getUeEnfants() as $uee) {
@@ -53,7 +55,9 @@ class ParcoursEcController extends AbstractController
 
                     $tabEcs[$semestreParcour->getOrdre()][$uee->getId()] = [];
                     foreach ($uee->getElementConstitutifs() as $ec) {
-                        $tabEcs[$semestreParcour->getOrdre()][$uee->getId()][] = $ec;
+                        if ($ec->getEcParent() === null) {
+                            $tabEcs[$semestreParcour->getOrdre()][$uee->getId()][] = $ec;
+                        }
                     }
                 }
             }

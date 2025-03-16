@@ -1,0 +1,112 @@
+<tr style="{% if enfant %}border-left: 2px solid dodgerblue{% endif %}">
+    <th>{{ ec.display }} {% if raccrocheUe == true %}<i class="fa fa-link"></i>{% endif %}</th>
+    <td>
+
+        {% if ec.natureUeEc != null and ec.natureUeEc.isLibre ==  true %}
+            <span class="badge bg-info">EC Libre</span>
+        {% elseif ec.ecParent == null and ec.natureUeEc != null and ec.natureUeEc.isChoix ==  true %}
+            <span class="badge bg-info">EC à choix</span>
+        {% elseif ec.ficheMatiere != null %}
+            {# todo: isGranted ? #}
+            {% if
+                isAccessible(dpeParcours, 'cfvu') and
+                ec.ficheMatiere.parcours != null and ec.ficheMatiere.parcours.id == parcours.id and isSemestreRaccroche == false and raccrocheUe == false %}
+                <a
+                        href="{{ path('app_fiche_matiere_edit',{slug: ec.ficheMatiere.slug}) }}"
+                        class="btn btn-sm btn-outline-info"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="bottom"
+                        title="Modifier la fiche EC/matière"
+                >
+                    <i class="fal fa-file"></i>
+                    {% if ec.ficheMatiere.remplissage.isFull() == true %}
+                        <span class="badge bg-success"> Complet</span>
+                    {% else %}
+                        <span class="badge bg-warning"> À compléter</span>
+                    {% endif %}
+                </a>
+            {% else %}
+                <a
+                        href="{{ path('app_fiche_matiere_show',{slug: ec.ficheMatiere.slug}) }}"
+                        class="btn btn-sm btn-outline-info"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="bottom"
+                        target="_blank"
+                        title="Voir la fiche EC/matière"
+                >
+                    <span class="badge bg-info"> Voir la fiche</span>
+                </a>
+            {% endif %}
+        {% else %}
+            <span class="badge bg-danger"> Erreur</span>
+        {% endif %}
+    </td>
+    <td>
+        <label for="typeEc_{{ ec.id }}" class="sr-only">Type EC</label>
+        {% if isAccessible(dpeParcours, 'cfvu') %} {# todo: isGranted ? #}
+            <select
+                    class="form-select"
+                    name="typeEc_{{ ec.id }}"
+                    id="typeEc_{{ ec.id }}"
+                    data-bs-toggle="tooltip"
+                    {% if raccrocheUe %}disabled{% endif %}
+                    data-bs-placement="bottom"
+                    title="Type EC"
+                    {{ stimulus_action('parcours--ec', 'changeTypeEc', 'change', {
+                        ec:ec.id
+                    }) }}
+            >
+                <option value="">Choisir dans la liste</option>
+                {% for typeEc in typesEc %}
+                    <option
+                            value="{{ typeEc.id }}"
+                            {% if ec.typeEc != null and ec.typeEc.id == typeEc.id %}selected{% endif %}>
+                        {{ typeEc.libelle }}
+                    </option>
+                {% endfor %}
+            </select>
+        {% else %}
+            {% if ec.typeEc != null %}{{ ec.typeEc.libelle }}{% else %}<span
+                    class="text-danger">Non défini</span>{% endif %}
+        {% endif %}
+    </td>
+    <td>
+        {{ component('badge_ects', {
+            elementConstitutif: ec,
+            parcours: parcours,
+        }) }}
+    </td>
+    <td>
+        {{ component('badge_bcc', {
+            elementConstitutif: ec,
+            parcours: parcours,
+            dpeParcours: dpeParcours,
+            ue: ue,
+            editable: not raccrocheUe,
+            deplacer: true,
+            texte: true
+        }) }}
+    </td>
+    <td>
+        {{ component('badge_heures', {
+            elementConstitutif: ec,
+            parcours: parcours,
+            dpeParcours: dpeParcours,
+            ue: ue,
+            editable: not raccrocheUe,
+            deplacer: true,
+            texte: true
+        }) }}
+    </td>
+    <td>
+        {{ component('badge_mccc', {
+            elementConstitutif: ec,
+            parcours: parcours,
+            dpeParcours: dpeParcours,
+            ue: ue,
+            editable: not raccrocheUe,
+            deplacer: true,
+            texte: true
+        }) }}
+    </td>
+</tr>
