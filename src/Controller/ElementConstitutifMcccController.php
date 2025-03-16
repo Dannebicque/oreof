@@ -158,11 +158,15 @@ class ElementConstitutifMcccController extends AbstractController
             ]);
         }
 
+        $ec = new GetElementConstitutif($elementConstitutif, $parcours);
+        $ects = $ec->getFicheMatiereEcts();
+
         return $this->render('element_constitutif/_mcccEcNonEditable.html.twig', ['isMcccImpose' => $elementConstitutif->getFicheMatiere()?->isMcccImpose(),
         'isEctsImpose' => $elementConstitutif->getFicheMatiere()?->isEctsImpose(),
         'typeMccc' => $typeEpreuve,
         'typeEpreuves' => $typeEpreuveRepository->findByTypeDiplome($typeDiplome),
         'ec' => $elementConstitutif,
+        'ects' => $ects,
         'templateForm' => $typeD::TEMPLATE_FORM_MCCC,
         'mcccs' => $getElement->getMcccsFromFicheMatiereCollection(),]);
     }
@@ -205,12 +209,16 @@ class ElementConstitutifMcccController extends AbstractController
             $typeEpreuve = $elementConstitutif->getTypeMccc();
         }
 
+        $ec = new GetElementConstitutif($elementConstitutif, $parcours);
+        $ects = $ec->getFicheMatiereEcts();
+
         return $this->render('element_constitutif/_mcccEcNonEditable.html.twig', [
             'isMcccImpose' => $elementConstitutif->getFicheMatiere()?->isMcccImpose(),
             'isEctsImpose' => $elementConstitutif->getFicheMatiere()?->isEctsImpose(),
             'typeMccc' => $typeEpreuve,
             'typeEpreuves' => $typeEpreuveRepository->findByTypeDiplome($typeDiplome),
             'ec' => $elementConstitutif,
+            'ects' => $ects,
             'templateForm' => $typeD::TEMPLATE_FORM_MCCC,
             'mcccs' => $getElement->getMcccsFromFicheMatiere($typeD),
         ]);

@@ -606,8 +606,13 @@ dump($editable);
     public function structureEcNonEditable(
         ElementConstitutif $elementConstitutif,
     ): Response {
+
+        $ec = new GetElementConstitutif($elementConstitutif, $elementConstitutif->getParcours());
+        $ects = $ec->getFicheMatiereEcts();
+
         return $this->render('element_constitutif/_structureEcNonEditable.html.twig', [
             'ec' => $elementConstitutif,
+            'ects' => $ects
         ]);
     }
 

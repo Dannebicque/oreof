@@ -184,7 +184,6 @@ class GetElementConstitutif
         }
 
         return $this->elementConstitutif->getEcts();
-
     }
 
     /**
