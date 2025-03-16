@@ -356,8 +356,6 @@ class GetElementConstitutif
             return $this->elementConstitutif->getEtatMccc();
         }
 
-
-
         return $this->elementConstitutif->getFicheMatiere()?->getEtatMccc();
     }
 
