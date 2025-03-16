@@ -56,7 +56,7 @@ class UpdateRemplissageCommand extends Command
 
         //je veux un argument pour préciser la campagne
 
-        $this->addArgument('campagne', null, InputOption::VALUE_REQUIRED, 'Campagne à traiter');
+        $this->addOption('campagne', null, InputOption::VALUE_REQUIRED, 'Campagne à traiter');
 
     }
 
@@ -64,7 +64,7 @@ class UpdateRemplissageCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
-        $idCampagne = $input->getArgument('campagne');
+        $idCampagne = $input->getOption('campagne');
         $campagne = $this->collecteRepository->find($idCampagne);
 
         if (null === $campagne) {
