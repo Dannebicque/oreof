@@ -352,9 +352,16 @@ class GetElementConstitutif
             return $this->elementConstitutif->getEcParent()->getEtatMccc();
         }
 
+        if ($this->elementConstitutif->isMcccEnfantsIdentique() === false && $this->elementConstitutif->getEcEnfants()->count() > 0) {
+            return 'Complet';
+        }
+
         if ($this->elementConstitutif->isMcccSpecifiques() || $this->elementConstitutif->getNatureUeEc()?->isChoix() === true) {
             return $this->elementConstitutif->getEtatMccc();
         }
+
+        //si enfant et pas parent identique
+
 
         return $this->elementConstitutif->getFicheMatiere()?->getEtatMccc();
     }
