@@ -22,6 +22,8 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 class UpdateRemplissageCommand extends Command
 {
 
+    private $lastId;
+
     public function __construct(
         private CampagneCollecteRepository $collecteRepository,
         private FormationRepository    $formationRepository,
@@ -57,13 +59,14 @@ class UpdateRemplissageCommand extends Command
         //je veux un argument pour préciser la campagne
 
         $this->addOption('campagne', null, InputOption::VALUE_REQUIRED, 'Campagne à traiter');
+        $this->addOption('lastId', null, InputOption::VALUE_OPTIONAL, 'Last Id');
 
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-
+        $this->lastId = $input->getOption('lastId');
         $idCampagne = $input->getOption('campagne');
         $campagne = $this->collecteRepository->find($idCampagne);
 
@@ -96,6 +99,7 @@ class UpdateRemplissageCommand extends Command
 
     private function updateFiche(SymfonyStyle $io, CampagneCollecte $campagneCollecte): void
     {
+
         $io->title('Update du remplissage des Fiches');
         $fiches = $this->ficheMatiereRepository->findBy(['campagneCollecte' => $campagneCollecte]);
         $io->info(count($fiches) . ' fiches à mettre à jour');
@@ -103,16 +107,20 @@ class UpdateRemplissageCommand extends Command
         $io->progressStart($totalFiches);
 
         foreach ($fiches as $fiche) {
-            $remplissage = $fiche->remplissageBrut();
-            $fiche->setRemplissage($remplissage);
-            if ($remplissage->isFull()) {
-                $fiche->setEtatFiche(['soumis_central' => 1]);
+            if ($fiche->getId() > $this->lastId) {
+                $remplissage = $fiche->remplissageBrut();
+                $fiche->setRemplissage($remplissage);
+                if ($remplissage->isFull()) {
+                    $fiche->setEtatFiche(['soumis_central' => 1]);
+                } else {
+                    $fiche->setEtatFiche(['en_cours_redaction' => 1]);
+                }
+                $this->entityManager->flush();
+                $io->progressAdvance();
+                unset($remplissage);
             } else {
-                $fiche->setEtatFiche(['en_cours_redaction' => 1]);
+                $io->progressAdvance();
             }
-            $this->entityManager->flush();
-            $io->progressAdvance();
-            unset($remplissage);
         }
         $io->success('Remplissages mis à jours pour les fiches');
     }
