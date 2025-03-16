@@ -3,6 +3,7 @@
 namespace App\Command;
 
 use App\Entity\UserCentre;
+use App\Repository\FormationRepository;
 use App\Repository\UserCentreRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -22,7 +23,7 @@ class RecopieCentreCommand extends Command
     public function __construct(
         private UserCentreRepository   $userCentreRepository,
         private EntityManagerInterface $entityManager,
-
+        private readonly FormationRepository $formationRepository,
     )
     {
         parent::__construct();
@@ -44,7 +45,8 @@ class RecopieCentreCommand extends Command
             if ($centre->getFormation() !== null) {
                 $newCentre = new UserCentre();
                 $newCentre->setUser($centre->getUser());
-                $newCentre->setFormation($centre->getFormation()->getFormationOrigineCopie());
+                $formCopie = $this->formationRepository->findOneBy(['formationOrigineCopie' => $centre->getFormation()->getId()]);
+                $newCentre->setFormation($formCopie);
                 $newCentre->setDroits($centre->getDroits());
                 $this->entityManager->persist($newCentre);
                 unset($newCentre);
