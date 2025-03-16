@@ -58,7 +58,7 @@ export default class extends Controller {
     const form = this.element.getElementsByTagName('form')[0]
     if (!this._validForm(form)) {
       console.log('form invalide')
-      return;
+      return
     }
 
     fetch(form.action, {
@@ -144,6 +144,10 @@ export default class extends Controller {
 
   redirectEdit() {
     // ajouter /edt à l'URL et recharge la page
-    window.location.href = `${window.location.href}/edit`
+    // vérifier si l'URL contient déjà /edit
+    if (window.location.href.indexOf('/edit') === -1) {
+      window.location.href = `${window.location.href}/edit`
+    }
+    window.location.reload()
   }
 }

@@ -87,7 +87,8 @@
                                                     {% if isBut %}
                                                         <a
                                                                 href="{{ path('app_fiche_matiere_edit',{slug: ec.ficheMatiere.slug}) }}"
-                                                                class="btn btn-sm btn-outline-info  px-1" data-bs-toggle="tooltip"
+                                                                class="btn btn-sm btn-outline-info  px-1"
+                                                                data-bs-toggle="tooltip"
                                                                 target="_blank" data-bs-placement="bottom"
                                                                 title="Modifier la fiche EC/matière"
                                                         >
@@ -101,7 +102,8 @@
                                                         {% if ec.ficheMatiere.parcours != null and ec.ficheMatiere.parcours.id == parcours.id %}
                                                             <a
                                                                     href="{{ path('app_fiche_matiere_edit',{slug: ec.ficheMatiere.slug}) }}"
-                                                                    class="btn btn-sm btn-outline-info  px-1" data-bs-toggle="tooltip"
+                                                                    class="btn btn-sm btn-outline-info  px-1"
+                                                                    data-bs-toggle="tooltip"
                                                                     target="_blank" data-bs-placement="bottom"
                                                                     title="Modifier la fiche EC/matière"
                                                             >
@@ -114,7 +116,8 @@
                                                         {% else %}
                                                             <a
                                                                     href="{{ path('app_fiche_matiere_show',{slug: ec.ficheMatiere.slug}) }}"
-                                                                    class="btn btn-sm btn-outline-info  px-1" data-bs-toggle="tooltip"
+                                                                    class="btn btn-sm btn-outline-info  px-1"
+                                                                    data-bs-toggle="tooltip"
                                                                     target="_blank" data-bs-placement="bottom"
                                                                     title="Voir la fiche EC/matière"
                                                             >
@@ -148,36 +151,6 @@
                                                     editable: editable and isUeRaccrochee == false,
                                                     deplacer: true,
                                                 }) }}
-                                                {#                                                {% if ec.natureUeEc != null and ec.natureUeEc.isLibre ==  true %} #}
-                                                {#                                                    <span class="badge bg-info">EC Libre</span> #}
-                                                {#                                                {% else %} #}
-                                                {#                                                    <button #}
-                                                {#                                                            {% if deplacer is defined and deplacer == true and editable == #}
-                                                {#                                                                true %} #}
-                                                {#                                                                {{ stimulus_controller('modal', { #}
-                                                {#                                                                    size: 'lg', #}
-                                                {#                                                                    modalTitle: 'Volumes Horaires', #}
-                                                {#                                                                    nomEvenement: 'refreshListeEc' , #}
-                                                {#                                                                    details: {ue: ue.id, parcours: parcours.id}, #}
-                                                {#                                                                    modalUrl: path('app_element_constitutif_structure',{'id': ec.id, parcours:parcours.id}) }) }} #}
-                                                {#                                                            {% else %} #}
-                                                {#                                                                {{ stimulus_controller('modal', { #}
-                                                {#                                                                    size: 'lg', #}
-                                                {#                                                                    modalTitle: 'Volumes Horaires', #}
-                                                {#                                                                    modalUrl: path('app_element_constitutif_structure',{'id': ec.id, parcours:parcours.id}) }) }} #}
-                                                {#                                                            {% endif %} #}
-                                                {#                                                            data-action="click->modal#openModal" #}
-                                                {#                                                            class="btn btn-sm btn-outline-info px-1" #}
-                                                {#                                                            data-size="lg" #}
-                                                {#                                                            data-bs-toggle="tooltip" #}
-                                                {#                                                            data-bs-placement="bottom" #}
-                                                {#                                                            title="Volumes Horaires" #}
-                                                {#                                                    > #}
-                                                {#                                                <span class="badge bg-{% if ec.etatStructure == 'Complet' %}success{% else %}warning{% endif %}"> #}
-                                                {#                            Heures #}
-                                                {#                        </span> #}
-                                                {#                                                    </button> #}
-                                                {#                                                {% endif %} #}
                                             </div>
                                             <div class="col-md-1 d-flex flex-column justify-content-center">
                                                 <div class="text-muted text-small d-md-none">mccc</div>
@@ -305,17 +278,15 @@
                                                     parcours: parcours,
                                                     dpeParcours: dpeParcours,
                                                     ue: ue,
-                                                    editable: true,
+                                                    editable: editable and isUeRaccrochee == false,
                                                     deplacer: true,
                                                 }) }}
                                             {% endif %}
                                         </div>
                                         <div class="col-6 col-md-2 d-flex flex-column justify-content-center">
                                             <div class="text-muted text-small d-md-none">mccc</div>
-
                                             <button
-                                                    {% if deplacer is defined and deplacer == true and editable ==
-                                                        true %}
+                                                    {% if deplacer is defined and deplacer == true and (editable and isUeRaccrochee == false) %}
                                                         {{ stimulus_controller('modal', {
                                                             size: 'lg',
                                                             nomEvenement: 'refreshListeEc',
@@ -326,7 +297,7 @@
                                                         {{ stimulus_controller('modal', {
                                                             size: 'lg',
                                                             modalTitle: 'Modalités de Contrôle des Connaissances et des Compétences',
-                                                            modalUrl: path('app_element_constitutif_mccc',{'id': ec.id, parcours:parcours.id}) }) }}
+                                                            modalUrl: path('app_element_constitutif_mccc_non_editable',{'id': ec.id, parcours:parcours.id}) }) }}
                                                     {% endif %}
                                                     data-action="click->modal#openModal"
                                                     class="btn btn-sm btn-outline-info me-1 ms-1"
