@@ -8,9 +8,11 @@
             <dt>Régime(s) d'inscription</dt>
             <dd>
                 <ul>
+                    {% if parcours != null and parcours.regimeInscription != null %}
                     {% for regime in parcours.regimeInscription %}
                         <li>{{ regime.value }}</li>
                     {% endfor %}
+                    {% endif %}
                 </ul>
             </dd>
             {% if stringDifferencesParcours.regimeInscriptionParcours is defined %}
