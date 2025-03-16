@@ -3,7 +3,7 @@
         <dl>
             <dt>Localisation du parcours</dt>
             <dd>
-                {{ parcours.localisation != null ? parcours.localisation.libelle : 'Erreur' }}
+                {{ parcours?.localisation != null ? parcours.localisation.libelle : 'Erreur' }}
             </dd>
             <dt>Régime(s) d'inscription</dt>
             <dd>
@@ -17,7 +17,7 @@
                 {{ include("communs/_comparaison_versioning_big.html.twig", {
                         textDifferences: stringDifferencesParcours.regimeInscriptionParcours,
                         idCollapse: "diffParcoursRegimeInscription" ~ parcours.id
-                    }) 
+                    })
                 }}
             {% endif %}
             <dt>Modalités de l'alternance</dt>
