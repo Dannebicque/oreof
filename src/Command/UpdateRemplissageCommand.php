@@ -112,7 +112,6 @@ class UpdateRemplissageCommand extends Command
                 } else {
                     $fiche->setEtatFiche(['en_cours_redaction' => 1]);
                 }
-                $this->entityManager->persist($fiche);
                 $i++;
                 if (($i % $batchSize) === 0) {
                     $this->entityManager->flush();
