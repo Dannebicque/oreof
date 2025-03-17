@@ -163,7 +163,6 @@ class UpdateRemplissageCommand extends Command
         foreach ($parcours as $parcour) {
             $parcour->setRemplissage(null);
             $io->progressAdvance();
-            $this->entityManager->flush();
             $i++;
             if (($i % $batchSize) === 0) {
                 $this->entityManager->flush();
