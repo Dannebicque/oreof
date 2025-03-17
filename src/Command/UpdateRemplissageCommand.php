@@ -136,12 +136,17 @@ class UpdateRemplissageCommand extends Command
         $formations = $this->formationRepository->findAll();
         $io->info(count($formations) . ' formations à mettre à jour');
         $io->progressStart(count($formations));
+        $batchSize = 40;
+        $i = 0;
         foreach ($formations as $formation) {
             $formation->setRemplissage(null);
             $io->progressAdvance();
-            $this->entityManager->flush();
-            unset($remplissage);
+            $i++;
+            if (($i % $batchSize) === 0) {
+                $this->entityManager->flush();
+            }
         }
+        $this->entityManager->flush();
         $io->success('Remplissages mis à jours pour les formations');
     }
 
@@ -152,14 +157,19 @@ class UpdateRemplissageCommand extends Command
         $io->info(count($parcours) . ' parcours à mettre à jour');
         // mettre une progress bar
         $io->progressStart(count($parcours));
-
+        $batchSize = 40;
+        $i = 0;
 
         foreach ($parcours as $parcour) {
             $parcour->setRemplissage(null);
             $io->progressAdvance();
             $this->entityManager->flush();
-            unset($remplissage);
+            $i++;
+            if (($i % $batchSize) === 0) {
+                $this->entityManager->flush();
+            }
         }
+        $this->entityManager->flush();
         $io->success('Remplissages mis à jours pour les parcours');
     }
 }
