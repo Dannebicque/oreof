@@ -100,7 +100,7 @@ class UpdateRemplissageCommand extends Command
         $totalFiches = count($fiches);
         $io->progressStart($totalFiches);
 
-        $batchSize = 20;
+        $batchSize = 40;
         $i = 0;
 
         foreach ($fiches as $fiche) {
