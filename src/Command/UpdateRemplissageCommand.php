@@ -115,7 +115,7 @@ class UpdateRemplissageCommand extends Command
                 $i++;
                 if (($i % $batchSize) === 0) {
                     $this->entityManager->flush();
-                    $this->entityManager->clear();
+                   // $this->entityManager->clear();
                 }
                 $io->progressAdvance();
                 unset($remplissage);
@@ -125,7 +125,7 @@ class UpdateRemplissageCommand extends Command
         }
 
         $this->entityManager->flush();
-        $this->entityManager->clear();
+       // $this->entityManager->clear();
 
         $io->success('Remplissages mis à jours pour les fiches');
     }
