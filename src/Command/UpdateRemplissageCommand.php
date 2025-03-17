@@ -94,12 +94,14 @@ class UpdateRemplissageCommand extends Command
 
     private function updateFiche(SymfonyStyle $io, CampagneCollecte $campagneCollecte): void
     {
-
         $io->title('Update du remplissage des Fiches');
         $fiches = $this->ficheMatiereRepository->findBy(['campagneCollecte' => $campagneCollecte]);
         $io->info(count($fiches) . ' fiches à mettre à jour');
         $totalFiches = count($fiches);
         $io->progressStart($totalFiches);
+
+        $batchSize = 20;
+        $i = 0;
 
         foreach ($fiches as $fiche) {
             if ($fiche->getEtatFiche() === []) {
@@ -110,13 +112,22 @@ class UpdateRemplissageCommand extends Command
                 } else {
                     $fiche->setEtatFiche(['en_cours_redaction' => 1]);
                 }
-                $this->entityManager->flush();
+                $this->entityManager->persist($fiche);
+                $i++;
+                if (($i % $batchSize) === 0) {
+                    $this->entityManager->flush();
+                    $this->entityManager->clear();
+                }
                 $io->progressAdvance();
                 unset($remplissage);
             } else {
                 $io->progressAdvance();
             }
         }
+
+        $this->entityManager->flush();
+        $this->entityManager->clear();
+
         $io->success('Remplissages mis à jours pour les fiches');
     }
 
