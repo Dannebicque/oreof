@@ -21,15 +21,12 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 )]
 class UpdateRemplissageCommand extends Command
 {
-
-    private $lastId;
-
     public function __construct(
-        private CampagneCollecteRepository $collecteRepository,
-        private FormationRepository    $formationRepository,
-        private ParcoursRepository     $parcoursRepository,
-        private FicheMatiereRepository $ficheMatiereRepository,
-        private EntityManagerInterface $entityManager
+        private readonly CampagneCollecteRepository $collecteRepository,
+        private readonly FormationRepository        $formationRepository,
+        private readonly ParcoursRepository         $parcoursRepository,
+        private readonly FicheMatiereRepository     $ficheMatiereRepository,
+        private readonly EntityManagerInterface     $entityManager
     ) {
         parent::__construct();
     }
@@ -59,14 +56,12 @@ class UpdateRemplissageCommand extends Command
         //je veux un argument pour préciser la campagne
 
         $this->addOption('campagne', null, InputOption::VALUE_REQUIRED, 'Campagne à traiter');
-        $this->addOption('lastId', null, InputOption::VALUE_OPTIONAL, 'Last Id');
 
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-        $this->lastId = $input->getOption('lastId');
         $idCampagne = $input->getOption('campagne');
         $campagne = $this->collecteRepository->find($idCampagne);
 
@@ -107,7 +102,7 @@ class UpdateRemplissageCommand extends Command
         $io->progressStart($totalFiches);
 
         foreach ($fiches as $fiche) {
-            if ($fiche->getId() > $this->lastId) {
+            if ($fiche->getEtatFiche() === null) {
                 $remplissage = $fiche->remplissageBrut();
                 $fiche->setRemplissage($remplissage);
                 if ($remplissage->isFull()) {
