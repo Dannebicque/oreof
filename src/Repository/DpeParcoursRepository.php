@@ -87,24 +87,24 @@ class DpeParcoursRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function duplicateParcours(CampagneCollecte $campagneCollectePrecedente, CampagneCollecte $campagneCollecte): void
-    {
-        $parcours = $this->findBy(['campagneCollecte' => $campagneCollectePrecedente]);
-        foreach ($parcours as $p) {
-            $version = (int)(explode('.', $p->getVersion())[0]) + 1;
-            $newParcours = new DpeParcours();
-            $newParcours->setParcours($p->getParcours());
-            $newParcours->setFormation($p->getFormation());
-            $newParcours->setCampagneCollecte($campagneCollecte);
-            $newParcours->setVersion($version.'.0');
-            $newParcours->setEtatValidation($p->getEtatValidation());
-            $newParcours->setEtatReconduction(TypeModificationDpeEnum::OUVERT);
-            $newParcours->setCreated(new \DateTime());
-
-            $this->_em->persist($newParcours);
-        }
-        $this->_em->flush();
-    }
+//    public function duplicateParcours(CampagneCollecte $campagneCollectePrecedente, CampagneCollecte $campagneCollecte): void
+//    {
+//        $parcours = $this->findBy(['campagneCollecte' => $campagneCollectePrecedente]);
+//        foreach ($parcours as $p) {
+//            $version = (int)(explode('.', $p->getVersion())[0]) + 1;
+//            $newParcours = new DpeParcours();
+//            $newParcours->setParcours($p->getParcours());
+//            $newParcours->setFormation($p->getFormation());
+//            $newParcours->setCampagneCollecte($campagneCollecte);
+//            $newParcours->setVersion($version.'.0');
+//            $newParcours->setEtatValidation($p->getEtatValidation());
+//            $newParcours->setEtatReconduction(TypeModificationDpeEnum::OUVERT);
+//            $newParcours->setCreated(new \DateTime());
+//
+//            $this->_em->persist($newParcours);
+//        }
+//        $this->_em->flush();
+//    }
 
     public function findLastDpeForParcours(Parcours $objet): ?DpeParcours
     {

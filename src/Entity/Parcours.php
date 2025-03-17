@@ -640,7 +640,7 @@ class Parcours
 
     public function getRegimeInscription(): array
     {
-        if (count($this->regimeInscription) === 0) {
+        if ($this->regimeInscription !== null && count($this->regimeInscription) === 0) {
             if (count($this->getFormation()?->getRegimeInscription()) !== 0) {
                 return $this->getFormation()?->getRegimeInscription();
             }

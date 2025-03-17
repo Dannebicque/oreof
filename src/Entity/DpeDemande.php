@@ -38,17 +38,8 @@ class DpeDemande
     #[ORM\Column(length: 1)]
     private ?string $niveauDemande = 'P'; //ou F
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $dateReponseSes = null;
-
-    #[ORM\Column(nullable: true)]
-    private ?bool $reponseSes = false;
-
     #[ORM\Column(type: Types::TEXT)]
     private ?string $argumentaireDemande = null;
-
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private ?string $argumentaireSes = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $dateCloture = null;
@@ -139,30 +130,6 @@ class DpeDemande
         return $this;
     }
 
-    public function getDateReponseSes(): ?\DateTimeInterface
-    {
-        return $this->dateReponseSes;
-    }
-
-    public function setDateReponseSes(?\DateTimeInterface $dateReponseSes): static
-    {
-        $this->dateReponseSes = $dateReponseSes;
-
-        return $this;
-    }
-
-    public function isReponseSes(): ?bool
-    {
-        return $this->reponseSes;
-    }
-
-    public function setReponseSes(?bool $reponseSes): static
-    {
-        $this->reponseSes = $reponseSes;
-
-        return $this;
-    }
-
     public function getArgumentaireDemande(): ?string
     {
         return $this->argumentaireDemande;
@@ -171,18 +138,6 @@ class DpeDemande
     public function setArgumentaireDemande(string $argumentaireDemande): static
     {
         $this->argumentaireDemande = $argumentaireDemande;
-
-        return $this;
-    }
-
-    public function getArgumentaireSes(): ?string
-    {
-        return $this->argumentaireSes;
-    }
-
-    public function setArgumentaireSes(?string $argumentaireSes): static
-    {
-        $this->argumentaireSes = $argumentaireSes;
 
         return $this;
     }

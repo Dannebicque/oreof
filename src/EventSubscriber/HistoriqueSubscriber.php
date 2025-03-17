@@ -308,6 +308,8 @@ class HistoriqueSubscriber implements EventSubscriberInterface
     {
         if ($request->request->has('argumentaire')) {
             $commentaire = $request->request->get('argumentaire');
+        } elseif ($request->request->has('argumentaire_demande_reouverture')) {
+            $commentaire = $request->request->get('argumentaire_demande_reouverture');
         } else {
             $commentaire = '';
         }

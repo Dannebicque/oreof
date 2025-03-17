@@ -13,6 +13,7 @@ use App\Entity\ElementConstitutif;
 use App\Entity\Ue;
 use App\Repository\ElementConstitutifRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 class EcOrdre
 {
@@ -23,8 +24,29 @@ class EcOrdre
     }
 
 
-    public function getOrdreSuivant(Ue $ue): int
+    public function getOrdreSuivant(Ue $ue, Request $request): int
     {
+        if ($request->query->has('element')) {
+            $element = $this->elementConstitutifRepository->find($request->query->get('element'));
+            if (null !== $element) {
+                //décaler les autres
+
+                $ecs = $ue->getElementConstitutifs();
+                foreach ($ecs as $ec) {
+                    if ($ec->getOrdre() >= $element->getOrdre() && $ec->getId() !== $element->getId()) {
+                        $ec->setOrdre($ec->getOrdre() + 1);
+                        $ec->genereCode();
+                        foreach ($ec->getEcEnfants() as $ecEnfant) {
+                            $ecEnfant->genereCode();
+                        }
+                    }
+                }
+
+
+                return $element->getOrdre()+1;
+            }
+        }
+
         return $this->elementConstitutifRepository->findLastEc($ue) + 1;
     }
 

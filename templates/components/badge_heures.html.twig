@@ -10,12 +10,18 @@
                             modalTitle: 'Volumes Horaires',
                             nomEvenement: 'refreshListeEc' ,
                             details: {ue: ue.id, parcours: parcours.id},
-                            modalUrl: path('app_element_constitutif_structure',{'id': this.elementConstitutif.id, parcours: this.parcours.id}) }) }}
+                            modalUrl: path('app_element_constitutif_structure',{
+                                'id': this.elementConstitutif.id,
+                                'editable': this.editable,
+                                parcours: this.parcours.id}) }) }}
                     {% else %}
                         {{ stimulus_controller('modal', {
                             size: 'lg',
                             modalTitle: 'Volumes Horaires',
-                            modalUrl: path('app_element_constitutif_structure',{'id': this.elementConstitutif.id, parcours: this.parcours.id}) }) }}
+                            modalUrl: path('app_element_constitutif_structure',{
+                                'id': this.elementConstitutif.id,
+                                'editable': this.editable,
+                                parcours: this.parcours.id}) }) }}
                     {% endif %}
                 {% else %}
                     {{ stimulus_controller('modal', {

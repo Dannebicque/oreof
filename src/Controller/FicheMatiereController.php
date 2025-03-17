@@ -12,6 +12,7 @@ namespace App\Controller;
 use App\Classes\GetDpeParcours;
 use App\Classes\JsonReponse;
 use App\Classes\verif\FicheMatiereState;
+use App\DTO\Remplissage;
 use App\DTO\StructureEc;
 use App\Entity\ElementConstitutif;
 use App\Entity\FicheMatiere;
@@ -216,6 +217,7 @@ class FicheMatiereController extends BaseController
         EntityManagerInterface $entityManager,
     ): Response {
         $newFicheMatiere = clone $ficheMatiere;
+        $newFicheMatiere->setFicheMatiereCopieAnneeUniversitaire(null);
         $newFicheMatiere->setLibelle($ficheMatiere->getLibelle() . '-copie');
         $newFicheMatiere->setSlug(null);
         $entityManager->persist($newFicheMatiere);

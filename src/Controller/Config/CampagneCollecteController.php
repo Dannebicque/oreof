@@ -41,7 +41,7 @@ class CampagneCollecteController extends AbstractController
             throw $this->createNotFoundException('Aucune campagne précédente trouvée');
         }
 
-        $dpeParcoursRepository->duplicateParcours($campagneCollectePrecedente, $campagneCollecte);
+//        $dpeParcoursRepository->duplicateParcours($campagneCollectePrecedente, $campagneCollecte);
         $campagneCollectePrecedente->setDefaut(false);
         $campagneCollecte->setMailDpeEnvoye(true);
         $campagneCollecte->setDefaut(true);

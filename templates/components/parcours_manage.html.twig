@@ -299,7 +299,7 @@
                     <div class="row mt-2">
                         <div class="col-3 d-grid">
                             {% if this.dpeParcours.etatReconduction.value != 'NON_OUVERTURE' %}
-                                {% if not this.hasDemande and isPublie(this.parcours) %}
+                                {% if not this.hasDemande and isOuvrable(this.parcours) %}
                                     <button class="btn btn-sm d-block btn-outline-warning"
                                             type="button"
                                             {{ stimulus_controller('modal', {

@@ -118,7 +118,7 @@ class ElementConstitutifController extends BaseController
         $form = $this->createForm(ElementConstitutifType::class, $elementConstitutif, [
             'action' => $this->generateUrl(
                 'app_element_constitutif_new',
-                ['ue' => $ue->getId(), 'parcours' => $parcours->getId()]
+                ['ue' => $ue->getId(), 'parcours' => $parcours->getId(), 'element' => $request->query->get('element')]
             ),
             'typeDiplome' => $typeDiplome,
             'formation' => $parcours->getFormation(),
@@ -150,13 +150,13 @@ class ElementConstitutifController extends BaseController
                     $ficheMatiere->setParcours($parcours);
                     $ficheMatiereRepository->save($ficheMatiere, true);
                 }
-                $lastEc = $ecOrdre->getOrdreSuivant($ue);
+                $lastEc = $ecOrdre->getOrdreSuivant($ue, $request);
                 $elementConstitutif->setFicheMatiere($ficheMatiere);
                 $elementConstitutif->setOrdre($lastEc);
                 $elementConstitutif->genereCode();
                 $elementConstitutifRepository->save($elementConstitutif, true);
             } elseif ($elementConstitutif->getNatureUeEc()?->isChoix() === true) {
-                $lastEc = $ecOrdre->getOrdreSuivant($ue);
+                $lastEc = $ecOrdre->getOrdreSuivant($ue, $request);
                 $elementConstitutif->setLibelle($request->request->get('ficheMatiereLibre'));
                 $elementConstitutif->setFicheMatiere(null);
                 $elementConstitutif->setOrdre($lastEc);
@@ -190,7 +190,7 @@ class ElementConstitutifController extends BaseController
                     $elementConstitutifRepository->save($ec, true);
                 }
             } else {
-                $lastEc = $ecOrdre->getOrdreSuivant($ue);
+                $lastEc = $ecOrdre->getOrdreSuivant($ue, $request);
                 $elementConstitutif->setTexteEcLibre($request->request->get('ficheMatiereLibre'));
                 $elementConstitutif->setLibelle($request->request->get('ficheMatiereLibreLibelle'));
                 $elementConstitutif->setOrdre($lastEc);
@@ -589,10 +589,13 @@ class ElementConstitutifController extends BaseController
             return $this->json(true);
         }
 
+        $editable = $request->query->get('editable', true);
+dump($editable);
         return $this->render('element_constitutif/_structureEcModal.html.twig', [
             'ec' => $elementConstitutif,
             'form' => $form->createView(),
             'raccroche' => $raccroche,
+            'editable' => $editable,
             'parcours' => $parcours,
             'isParcoursProprietaire' => $isParcoursProprietaire,
             'modalite' => $parcours->getModalitesEnseignement()
@@ -603,8 +606,13 @@ class ElementConstitutifController extends BaseController
     public function structureEcNonEditable(
         ElementConstitutif $elementConstitutif,
     ): Response {
+
+        $ec = new GetElementConstitutif($elementConstitutif, $elementConstitutif->getParcours());
+        $ects = $ec->getFicheMatiereEcts();
+
         return $this->render('element_constitutif/_structureEcNonEditable.html.twig', [
             'ec' => $elementConstitutif,
+            'ects' => $ects
         ]);
     }
 

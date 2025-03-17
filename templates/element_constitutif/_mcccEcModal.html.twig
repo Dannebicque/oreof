@@ -1,4 +1,4 @@
-<h2>MCCC pour {{ ec.ficheMatiere != null ? ec.ficheMatiere.libelle : ec.texteEcLibre }}</h2>
+<h2>MCCC pour {{ ec.ficheMatiere != null ? ec.ficheMatiere.libelle : ec.libelle }}</h2>
 <form method="post"
         {{ stimulus_controller('ec--mccc', {
             urlUpdate: path('app_parcours_ec_update'),

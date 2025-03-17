@@ -39,20 +39,30 @@
             <tr>
                 <td>{{ val.ec.ue.semestre.display }} {{ val.ec.ue.display(objet) }} </td>
                 <td>{{ val.ec.code }}  {{ val.ec.libelle }}</td>
-                <td>{{ val.fiche.libelle }}</td>
                 <td>
-                    {% if val.fiche != null and val.fiche.libelle != null %}
-                        <span class="badge bg-success">Initiée</span>
-                    {% elseif val.fiche != null and val.fiche.libelle == null %}
-                        <span class="badge bg-warning">Non Initiée</span>
-                    {% else %}
-                        <span class="badge bg-danger">Manquante</span>
+                    {% if val.fiche != 'sans objet' %}
+                        {{ val.fiche.libelle }}
                     {% endif %}
                 </td>
                 <td>
-                    <a href="{{ path('app_fiche_matiere_show', {slug:val.fiche.slug}) }}"
-                       target="_blank"
-                       class="btn btn-outline-info btn-sm">Voir la fiche EC/matière et valider</a>
+                    {% if val.fiche == 'sans objet' %}
+                        <span class="badge bg-info">Non concerné</span>
+                    {% else %}
+                        {% if val.fiche != null and val.fiche.libelle != null %}
+                            <span class="badge bg-success">Initiée</span>
+                        {% elseif val.fiche != null and val.fiche.libelle == null %}
+                            <span class="badge bg-warning">Non Initiée</span>
+                        {% else %}
+                            <span class="badge bg-danger">Manquante</span>
+                        {% endif %}
+                    {% endif %}
+                </td>
+                <td>
+                    {% if val.fiche != 'sans objet' %}
+                        <a href="{{ path('app_fiche_matiere_show', {slug:val.fiche.slug}) }}"
+                           target="_blank"
+                           class="btn btn-outline-info btn-sm">Voir la fiche EC/matière et valider</a>
+                    {% endif %}
                 </td>
             </tr>
         {% else %}

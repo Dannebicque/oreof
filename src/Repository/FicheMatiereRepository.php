@@ -161,8 +161,13 @@ class FicheMatiereRepository extends ServiceEntityRepository
         }
 
         if (isset($options['remplissage']) && null !== $options['remplissage'] && 'all' !== $options['remplissage']) {
-            $qb->andWhere('JSON_EXTRACT(f.remplissage, \'$.pourcentage\') = :remplissage')
-                ->setParameter('remplissage', $options['remplissage']);
+            if ($options['remplissage'] === '100') {
+                $qb->andWhere('JSON_EXTRACT(f.remplissage, \'$.pourcentage\') = :remplissage')
+                    ->setParameter('remplissage', 100);
+            } else {
+                $qb->andWhere('JSON_EXTRACT(f.remplissage, \'$.pourcentage\') < :remplissage')
+                    ->setParameter('remplissage', 100);
+            }
         }
 
         if ($sort === 'responsableFicheMatiere') {
@@ -275,7 +280,6 @@ class FicheMatiereRepository extends ServiceEntityRepository
             'page' => $options['page'] ?? 1,
             'limit' => 50,
         ];
-
     }
 
     public function findByComposanteTypeValidation(Composante $composante, CampagneCollecte $campagneCollecte, mixed $transition): array

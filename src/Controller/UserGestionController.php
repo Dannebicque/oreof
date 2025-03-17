@@ -114,13 +114,13 @@ class UserGestionController extends BaseController
                     $parcours = $parcoursRepository->find($request->query->get('id'));
                     if ($parcours !== null) {
                         // retirer l'ancien resp des centres et droits et envoyer mail
-                        $event = new AddCentreParcoursEvent($parcours, ['ROLE_RESP_PARCOURS'], $parcours->getRespParcours());
+                        $event = new AddCentreParcoursEvent($parcours, ['ROLE_RESP_PARCOURS'], $parcours->getRespParcours(), $this->getCampagneCollecte());
                         $this->eventDispatcher->dispatch($event, AddCentreParcoursEvent::REMOVE_CENTRE_PARCOURS);
                         // ajouter le nouveau resp, ajouter centre et droits et envoyer mail
                         $event = new AddCentreParcoursEvent(
                             $parcours,
                             ['ROLE_RESP_PARCOURS'],
-                            $user
+                            $user, $this->getCampagneCollecte()
                         );
                         $this->eventDispatcher->dispatch($event, AddCentreParcoursEvent::ADD_CENTRE_PARCOURS);
 
@@ -135,15 +135,15 @@ class UserGestionController extends BaseController
                     $formation = $formationRepository->find($request->query->get('id'));
                     if ($formation !== null) {
                         // retirer l'ancien resp des centres et droits et envoyer mail
-                        $event = new AddCentreFormationEvent($formation, $formation->getResponsableMention(), ['ROLE_RESP_FORMATION']);
+                        $event = new AddCentreFormationEvent($formation, $formation->getResponsableMention(), ['ROLE_RESP_FORMATION'], $this->getCampagneCollecte());
                         $this->eventDispatcher->dispatch($event, AddCentreFormationEvent::REMOVE_CENTRE_FORMATION);
                         // ajouter le nouveau resp, ajouter centre et droits et envoyer mail
                         $event = new AddCentreFormationEvent(
                             $formation,
                             $user,
-                            ['ROLE_RESP_FORMATION']
+                            ['ROLE_RESP_FORMATION'], $this->getCampagneCollecte()
                         );
-                        $this->eventDispatcher->dispatch($event, AddCentreFormationEvent::ADD_CENTRE_FORMATION);
+                        $this->eventDispatcher->dispatch($event, AddCentreFormationEvent::ADD_CENTRE_FORMATION, $this->getCampagneCollecte());
 
                         $formation->setResponsableMention($user);
                         $entityManager->flush();
@@ -156,13 +156,13 @@ class UserGestionController extends BaseController
                     $parcours = $parcoursRepository->find($request->query->get('id'));
                     if ($parcours !== null) {
                         // retirer l'ancien resp des centres et droits et envoyer mail
-                        $event = new AddCentreParcoursEvent($parcours, ['ROLE_CO_RESP_PARCOURS'], $parcours->getCoResponsable());
+                        $event = new AddCentreParcoursEvent($parcours, ['ROLE_CO_RESP_PARCOURS'], $parcours->getCoResponsable(), $this->getCampagneCollecte());
                         $this->eventDispatcher->dispatch($event, AddCentreParcoursEvent::REMOVE_CENTRE_PARCOURS);
                         // ajouter le nouveau resp, ajouter centre et droits et envoyer mail
                         $event = new AddCentreParcoursEvent(
                             $parcours,
                             ['ROLE_CO_RESP_PARCOURS'],
-                            $user
+                            $user, $this->getCampagneCollecte()
                         );
                         $this->eventDispatcher->dispatch($event, AddCentreParcoursEvent::ADD_CENTRE_PARCOURS);
 
@@ -177,15 +177,15 @@ class UserGestionController extends BaseController
                     $formation = $formationRepository->find($request->query->get('id'));
                     if ($formation !== null) {
                         // retirer l'ancien resp des centres et droits et envoyer mail
-                        $event = new AddCentreFormationEvent($formation, $formation->getCoResponsable(), ['ROLE_CO_RESP_FORMATION']);
+                        $event = new AddCentreFormationEvent($formation, $formation->getCoResponsable(), ['ROLE_CO_RESP_FORMATION'], $this->getCampagneCollecte());
                         $this->eventDispatcher->dispatch($event, AddCentreFormationEvent::REMOVE_CENTRE_FORMATION);
                         // ajouter le nouveau resp, ajouter centre et droits et envoyer mail
                         $event = new AddCentreFormationEvent(
                             $formation,
                             $user,
-                            ['ROLE_CO_RESP_FORMATION']
+                            ['ROLE_CO_RESP_FORMATION'], $this->getCampagneCollecte()
                         );
-                        $this->eventDispatcher->dispatch($event, AddCentreFormationEvent::ADD_CENTRE_FORMATION);
+                        $this->eventDispatcher->dispatch($event, AddCentreFormationEvent::ADD_CENTRE_FORMATION, $this->getCampagneCollecte());
                     }
                     $formation->setCoResponsable($user);
                     $entityManager->flush();
@@ -413,6 +413,7 @@ class UserGestionController extends BaseController
                 }
 
                 $nCentre->setFormation($centre);
+                $nCentre->setCampagneCollecte($this->getCampagneCollecte());
                 $event = new NotifCentreFormationEvent($centre, $user, [$role->getCodeRole()]);
                 $eventDispatcher->dispatch($event, NotifCentreFormationEvent::NOTIF_ADD_CENTRE_FORMATION);
 

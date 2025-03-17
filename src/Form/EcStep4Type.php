@@ -23,10 +23,7 @@ class EcStep4Type extends AbstractType
     {
         $isModal = $options['isModal'];
 
-//        $modalites = $options['data']->getModaliteEnseignement();
-//        $modalitesParcours = $options['data']->getParcours()?->getModalitesEnseignement();
-
-        if ($options['modalite']) {
+        if ($options['modalite'] === null) {
             $builder->add('modaliteEnseignement', EnumType::class, [
                 'class' => ModaliteEnseignementEnum::class,
                 'choice_label' => fn ($choice) => match ($choice) {

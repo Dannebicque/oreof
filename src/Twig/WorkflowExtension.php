@@ -40,6 +40,7 @@ class WorkflowExtension extends AbstractExtension
             new TwigFunction('isPass', [$this, 'isPass']),
             new TwigFunction('isRefuse', [$this, 'isRefuse']),
             new TwigFunction('isPublie', [$this, 'isPublie']),
+            new TwigFunction('isOuvrable', [$this, 'isOuvrable']),
             new TwigFunction('isPlace', [$this, 'isPlace']),
             new TwigFunction('isAccessible', [$this, 'isAccessible']),
             new TwigFunction('hasHistorique', [$this, 'hasHistorique']),
@@ -151,6 +152,27 @@ class WorkflowExtension extends AbstractExtension
         $places = $this->getWorkflow('dpe')->getMarking($dpeParcours)->getPlaces();
         if (count($places) > 0) {
             return str_starts_with(array_keys($places)[0], 'publie');
+        }
+
+        return false;
+    }
+
+    public function isOuvrable(Parcours|Formation $entity, string $type = 'parcours'): bool
+    {
+        if ($type === 'formation') {
+            $dpeParcours = GetDpeParcours::getFromFormation($entity); //todo: comment gérer depuis Formation?
+        } elseif ($type === 'parcours') {
+            $dpeParcours = GetDpeParcours::getFromParcours($entity);
+        }
+        //passer par le DpeWorkflow
+
+        if (null === $dpeParcours) {
+            return false;
+        }
+
+        $places = $this->getWorkflow('dpe')->getMarking($dpeParcours)->getPlaces();
+        if (count($places) > 0) {
+            return str_starts_with(array_keys($places)[0], 'publie') || str_starts_with(array_keys($places)[0], 'soumis_central');//todo: soumis_central que si pas SES ou Admin. SES peut encore gérer sur cette étable
         }
 
         return false;

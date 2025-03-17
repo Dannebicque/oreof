@@ -2,7 +2,8 @@
 
 namespace App\Command;
 
-use App\Entity\Parcours;
+use App\Entity\CampagneCollecte;
+use App\Repository\CampagneCollecteRepository;
 use App\Repository\FicheMatiereRepository;
 use App\Repository\FormationRepository;
 use App\Repository\ParcoursRepository;
@@ -10,6 +11,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
@@ -20,12 +22,15 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 class UpdateRemplissageCommand extends Command
 {
 
+    private $lastId;
+
     public function __construct(
+        private CampagneCollecteRepository $collecteRepository,
         private FormationRepository    $formationRepository,
         private ParcoursRepository     $parcoursRepository,
         private FicheMatiereRepository $ficheMatiereRepository,
-        private EntityManagerInterface $entityManager)
-    {
+        private EntityManagerInterface $entityManager
+    ) {
         parent::__construct();
     }
 
@@ -51,11 +56,24 @@ class UpdateRemplissageCommand extends Command
                 'Mettre à jour les parcours'
             );
 
+        //je veux un argument pour préciser la campagne
+
+        $this->addOption('campagne', null, InputOption::VALUE_REQUIRED, 'Campagne à traiter');
+        $this->addOption('lastId', null, InputOption::VALUE_OPTIONAL, 'Last Id');
+
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
+        $this->lastId = $input->getOption('lastId');
+        $idCampagne = $input->getOption('campagne');
+        $campagne = $this->collecteRepository->find($idCampagne);
+
+        if (null === $campagne) {
+            $io->error('Campagne non trouvée');
+            return Command::FAILURE;
+        }
 
 
         $memory = ini_get('memory_limit');
@@ -63,7 +81,7 @@ class UpdateRemplissageCommand extends Command
         ini_set('memory_limit', '-1');
 
         if ($input->getOption('fiche')) {
-            $this->updateFiche($io);
+            $this->updateFiche($io, $campagne);
         } elseif ($input->getOption('formation')) {
             $this->updateFormation($io);
         } elseif ($input->getOption('parcours')) {
@@ -79,35 +97,45 @@ class UpdateRemplissageCommand extends Command
         return Command::SUCCESS;
     }
 
-    private function updateFiche(SymfonyStyle $io): void
+    private function updateFiche(SymfonyStyle $io, CampagneCollecte $campagneCollecte): void
     {
+
         $io->title('Update du remplissage des Fiches');
-        $fiches = $this->ficheMatiereRepository->findAll();
+        $fiches = $this->ficheMatiereRepository->findBy(['campagneCollecte' => $campagneCollecte]);
         $io->info(count($fiches) . ' fiches à mettre à jour');
         $totalFiches = count($fiches);
         $io->progressStart($totalFiches);
 
         foreach ($fiches as $fiche) {
-            $remplissage = $fiche->remplissageBrut();
-            $fiche->setRemplissage($remplissage);
-            $this->entityManager->flush();
-            $io->progressAdvance();
-            unset($remplissage);
+            if ($fiche->getId() > $this->lastId) {
+                $remplissage = $fiche->remplissageBrut();
+                $fiche->setRemplissage($remplissage);
+                if ($remplissage->isFull()) {
+                    $fiche->setEtatFiche(['soumis_central' => 1]);
+                } else {
+                    $fiche->setEtatFiche(['en_cours_redaction' => 1]);
+                }
+                $this->entityManager->flush();
+                $io->progressAdvance();
+                unset($remplissage);
+            } else {
+                $io->progressAdvance();
+            }
         }
         $io->success('Remplissages mis à jours pour les fiches');
     }
 
     private function updateFormation(SymfonyStyle $io): void
     {
-        $io->title('Update du remplissage des Fiches');
-        $fiches = $this->formationRepository->findAll();
-        $io->info(count($fiches) . ' formations à mettre à jour');
-
-        foreach ($fiches as $fiche) {
-            if ($fiche->getRemplissage()->empty() === true) {
-                $fiche->setRemplissage(null);
-                $this->entityManager->flush();
-            }
+        $io->title('Update du remplissage des formations');
+        $formations = $this->formationRepository->findAll();
+        $io->info(count($formations) . ' formations à mettre à jour');
+        $io->progressStart(count($formations));
+        foreach ($formations as $formation) {
+            $formation->setRemplissage(null);
+            $io->progressAdvance();
+            $this->entityManager->flush();
+            unset($remplissage);
         }
         $io->success('Remplissages mis à jours pour les formations');
     }

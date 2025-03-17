@@ -37,6 +37,9 @@ class UserCentre
     #[ORM\ManyToOne(inversedBy: 'userCentres')]
     private ?Etablissement $etablissement = null;
 
+    #[ORM\ManyToOne(inversedBy: 'userCentres')]
+    private ?CampagneCollecte $campagneCollecte = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -159,5 +162,17 @@ class UserCentre
     public function addRoleCode(string $role): void
     {
         $this->droits[] = $role;
+    }
+
+    public function getCampagneCollecte(): ?CampagneCollecte
+    {
+        return $this->campagneCollecte;
+    }
+
+    public function setCampagneCollecte(?CampagneCollecte $campagneCollecte): static
+    {
+        $this->campagneCollecte = $campagneCollecte;
+
+        return $this;
     }
 }

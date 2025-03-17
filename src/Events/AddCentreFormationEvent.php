@@ -9,6 +9,7 @@
 
 namespace App\Events;
 
+use App\Entity\CampagneCollecte;
 use App\Entity\Formation;
 use App\Entity\User;
 
@@ -22,6 +23,7 @@ class AddCentreFormationEvent
         public Formation $formation,
         public ?User $user,
         public array $droits = [],
+        public ?CampagneCollecte $campagneCollecte = null
     ) {
     }
 }

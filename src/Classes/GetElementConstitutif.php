@@ -184,7 +184,6 @@ class GetElementConstitutif
         }
 
         return $this->elementConstitutif->getEcts();
-
     }
 
     /**
@@ -349,13 +348,20 @@ class GetElementConstitutif
 
     public function getEtatMccc(): ?string
     {
-        if ($this->elementConstitutif->isMcccSpecifiques()) {
+        if ($this->elementConstitutif->getEcParent() !== null && $this->elementConstitutif->getEcParent()->isMcccEnfantsIdentique() === true) {
+            return $this->elementConstitutif->getEcParent()->getEtatMccc();
+        }
+
+        if ($this->elementConstitutif->isMcccEnfantsIdentique() === false && $this->elementConstitutif->getEcEnfants()->count() > 0) {
+            return 'Complet';
+        }
+
+        if ($this->elementConstitutif->isMcccSpecifiques() || $this->elementConstitutif->getNatureUeEc()?->isChoix() === true) {
             return $this->elementConstitutif->getEtatMccc();
         }
 
-        if ($this->elementConstitutif->getEcParent() !== null && $this->elementConstitutif->getEcParent()->isMcccEnfantsIdentique() === true) {
-            return (new GetElementConstitutif($this->elementConstitutif->getEcParent(), $this->parcours))->getEtatMccc();
-        }
+        //si enfant et pas parent identique
+
 
         return $this->elementConstitutif->getFicheMatiere()?->getEtatMccc();
     }

@@ -14,9 +14,11 @@ use App\Classes\verif\ParcoursValide;
 use App\DTO\ProcessData;
 use App\Entity\DpeParcours;
 use App\Entity\HistoriqueParcours;
+use App\Enums\EtatDpeEnum;
 use App\Enums\TypeModificationDpeEnum;
 use App\Events\HistoriqueParcoursEditEvent;
 use App\Events\HistoriqueParcoursEvent;
+use App\Repository\DpeDemandeRepository;
 use App\Utils\Tools;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
@@ -29,6 +31,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class ParcoursProcess extends AbstractProcess
 {
     public function __construct(
+        protected DpeDemandeRepository $dpeDemandeRepository,
         EntityManagerInterface $entityManager,
         EventDispatcherInterface $eventDispatcher,
         TranslatorInterface $translator,
@@ -102,6 +105,15 @@ class ParcoursProcess extends AbstractProcess
         }
 
         $this->dpeParcoursWorkflow->apply($dpeParcours, $valid, $motifs);
+        //todo: mettre à jour le DpeDemande en cours...
+        $dpeDemande = $this->dpeDemandeRepository->findLastUnclosedDemande($dpeParcours->getParcours());
+        if ($dpeDemande !== null) {
+            $dpeDemande->setEtatDemande(EtatDpeEnum::tryFrom($place));
+            if ($place === 'soumis_central') {
+                $dpeDemande->setDateCloture(new \DateTime());
+            }
+        }
+
         $this->entityManager->flush();
 
         return $reponse;

@@ -9,6 +9,7 @@
 
 namespace App\Controller;
 
+use App\Repository\DpeParcoursRepository;
 use App\Repository\FormationRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -17,25 +18,26 @@ use Symfony\Component\Routing\Attribute\Route;
 class FormationEtatController extends BaseController
 {
     //todo: a reprendre
-    #[Route('/send/ouverture', name: 'app_formation_etat_send_ouverture')]
-    public function sendOuverture(
-        FormationRepository $formationRepository
-    ): Response {
-        $formations = $formationRepository->findBy(['anneeUniversitaire' => $this->getCampagneCollecte()]);
-        $listeFormationsOuvrables = [];
-        foreach ($formations as $formation) {
-            if ($this->dpeWorkflow->can($formation, 'initialiser') && $formation->getResponsableMention() !== null) {
-                if (!array_key_exists($formation->getComposantePorteuse()?->getId(), $listeFormationsOuvrables)) {
-                    $listeFormationsOuvrables[$formation->getComposantePorteuse()?->getId()] = [];
-                }
-                $listeFormationsOuvrables[$formation->getComposantePorteuse()?->getId()][] = $formation;
-                $this->dpeWorkflow->apply($formation, 'initialiser');
-                $formationRepository->save($formation, true);
-            }
-        }
-
-        $this->addFlashBag('success', 'Les formations ont été ouvertes');
-
-        return $this->redirectToRoute('structure_composante_index');
-    }
+//    #[Route('/send/ouverture', name: 'app_formation_etat_send_ouverture')]
+//    public function sendOuverture(
+//        DpeParcoursRepository $dpeParcoursRepository,
+//        FormationRepository $formationRepository
+//    ): Response {
+//        $formations = $formationRepository->findBy(['anneeUniversitaire' => $this->getCampagneCollecte()]);
+//        $listeFormationsOuvrables = [];
+//        foreach ($formations as $formation) {
+//            if ($this->dpeWorkflow->can($formation, 'initialiser') && $formation->getResponsableMention() !== null) {
+//                if (!array_key_exists($formation->getComposantePorteuse()?->getId(), $listeFormationsOuvrables)) {
+//                    $listeFormationsOuvrables[$formation->getComposantePorteuse()?->getId()] = [];
+//                }
+//                $listeFormationsOuvrables[$formation->getComposantePorteuse()?->getId()][] = $formation;
+//                $this->dpeWorkflow->apply($formation, 'initialiser');
+//                $formationRepository->save($formation, true);
+//            }
+//        }
+//
+//        $this->addFlashBag('success', 'Les formations ont été ouvertes');
+//
+//        return $this->redirectToRoute('structure_composante_index');
+//    }
 }

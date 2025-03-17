@@ -40,6 +40,7 @@ class AddCentreParcoursSubscriber implements EventSubscriberInterface
     {
         $user = $event->user ?? $event->parcours->getRespParcours();
         $parcours = $event->parcours;
+        $campagneCollecte = $event->campagneCollecte;
 
         if ($user === null || $parcours === null) {
             return;
@@ -60,6 +61,7 @@ class AddCentreParcoursSubscriber implements EventSubscriberInterface
             $centre = new UserCentre();
             $centre->setUser($user);
             $centre->setFormation($parcours->getFormation());
+            $centre->setCampagneCollecte($campagneCollecte);
             $centre->setDroits($event->droits);
             $this->userCentreRepository->save($centre, true);
         }

@@ -31,7 +31,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Workflow\WorkflowInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-class ParcoursSaveController extends AbstractController
+class ParcoursSaveController extends BaseController
 {
     public function __construct(private WorkflowInterface $dpeParcoursWorkflow)
     {
@@ -126,19 +126,19 @@ class ParcoursSaveController extends AbstractController
 
                 return $this->json($rep);
             case 'respParcours':
-                $event = new AddCentreParcoursEvent($parcours, ['ROLE_RESP_PARCOURS'], $parcours->getRespParcours());
+                $event = new AddCentreParcoursEvent($parcours, ['ROLE_RESP_PARCOURS'], $parcours->getRespParcours(), $this->getCampagneCollecte());
                 $eventDispatcher->dispatch($event, AddCentreParcoursEvent::REMOVE_CENTRE_PARCOURS);
                 $user = $userRepository->find($data['value']);
                 $rep = $updateEntity->saveField($parcours, 'respParcours', $user);
-                $event = new AddCentreParcoursEvent($parcours, ['ROLE_RESP_PARCOURS'], $user);
+                $event = new AddCentreParcoursEvent($parcours, ['ROLE_RESP_PARCOURS'], $user, $this->getCampagneCollecte());
                 $eventDispatcher->dispatch($event, AddCentreParcoursEvent::ADD_CENTRE_PARCOURS);
                 return $this->json($rep);
             case 'coRespParcours':
-                $event = new AddCentreParcoursEvent($parcours, ['ROLE_CO_RESP_PARCOURS'], $parcours->getCoResponsable());
+                $event = new AddCentreParcoursEvent($parcours, ['ROLE_CO_RESP_PARCOURS'], $parcours->getCoResponsable(), $this->getCampagneCollecte());
                 $eventDispatcher->dispatch($event, AddCentreParcoursEvent::REMOVE_CENTRE_PARCOURS);
                 $user = $userRepository->find($data['value']);
                 $rep = $updateEntity->saveField($parcours, 'coResponsable', $user);
-                $event = new AddCentreParcoursEvent($parcours, ['ROLE_CO_RESP_PARCOURS'], $user);
+                $event = new AddCentreParcoursEvent($parcours, ['ROLE_CO_RESP_PARCOURS'], $user, $this->getCampagneCollecte());
                 $eventDispatcher->dispatch($event, AddCentreParcoursEvent::ADD_CENTRE_PARCOURS);
                 return $this->json($rep);
             case 'localisation':

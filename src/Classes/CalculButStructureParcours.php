@@ -31,7 +31,7 @@ class CalculButStructureParcours
                 $raccrocheSemestre = false;
             }
 
-            if ($semestre !== null) {
+            if ($semestre !== null && $semestre->isNonDispense() === false) {
                 $dtoSemestre = new StructureSemestre($semestre, $semestreParcours->getOrdre(), $raccrocheSemestre, $semestreParcours);
 
                 foreach ($semestre->getUes() as $ue) {

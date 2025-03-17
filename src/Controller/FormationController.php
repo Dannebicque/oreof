@@ -81,13 +81,11 @@ class FormationController extends BaseController
         MentionProcess                $validationProcess,
         Request               $request,
     ): Response {
-        $isCfvu = false;
 
         $tFormations = $getFormations->getFormations(
             $this->getUser(),
             $this->getCampagneCollecte(),
-            $request->query->all(),
-            $isCfvu
+            $request->query->all()
         );
 
         return $this->render('formation/_liste.html.twig', [
@@ -238,6 +236,7 @@ class FormationController extends BaseController
                 $uc = new UserCentre();
                 $uc->setUser($formation->getResponsableMention());
                 $uc->setFormation($formation);
+                $uc->setCampagneCollecte($this->getCampagneCollecte());
                 $uc->addRole($role);
                 $userCentreRepository->save($uc, true);
             }
@@ -289,6 +288,7 @@ class FormationController extends BaseController
                 $role = $roleRepository->findOneBy(['code_role' => 'ROLE_RESP_FORMATION']);
                 $uc = new UserCentre();
                 $uc->setUser($formation->getResponsableMention());
+                $uc->setCampagneCollecte($this->getCampagneCollecte());
                 $uc->setFormation($formation);
                 $uc->addRole($role);
                 $userCentreRepository->save($uc, true);
@@ -333,10 +333,10 @@ class FormationController extends BaseController
 
             if (isset($changeSet['responsableMention'])) {
                 // retirer l'ancien resp des centres et droits et envoyer mail
-                $event = new AddCentreFormationEvent($formation, $changeSet['responsableMention'][0], ['ROLE_RESP_FORMATION']);
+                $event = new AddCentreFormationEvent($formation, $changeSet['responsableMention'][0], ['ROLE_RESP_FORMATION'], $this->getCampagneCollecte());
                 $eventDispatcher->dispatch($event, AddCentreFormationEvent::REMOVE_CENTRE_FORMATION);
                 // ajouter le nouveau resp, ajouter centre et droits et envoyer mail
-                $event = new AddCentreFormationEvent($formation, $changeSet['responsableMention'][1], ['ROLE_RESP_FORMATION']);
+                $event = new AddCentreFormationEvent($formation, $changeSet['responsableMention'][1], ['ROLE_RESP_FORMATION'], $this->getCampagneCollecte());
                 $eventDispatcher->dispatch($event, AddCentreFormationEvent::ADD_CENTRE_FORMATION);
             }
 

@@ -37,6 +37,7 @@ class AddCentreFormationSubscriber implements EventSubscriberInterface
     {
         $user = $event->user;
         $formation = $event->formation;
+        $campagneCollecte = $event->campagneCollecte;
 
         if (($user === null) || ($formation === null)) {
             return;
@@ -57,6 +58,7 @@ class AddCentreFormationSubscriber implements EventSubscriberInterface
             $centre = new UserCentre();
             $centre->setUser($user);
             $centre->setFormation($formation);
+            $centre->setCampagneCollecte($campagneCollecte);
             $centre->setDroits($event->droits);
             $this->userCentreRepository->save($centre, true);
         }
