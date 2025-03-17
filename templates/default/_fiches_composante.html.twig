@@ -7,6 +7,7 @@
         <th>
                 Mention/spécialité
         </th>
+        <th>En cours <br>rédaction</th>
         <th>Etat remplissage</th>
         <th>En attente<br> validation</th>
         <th> En attente <br>
@@ -29,7 +30,7 @@
                         <span class="badge bg-danger">Non définie</span>
                     {% endif %}
                 </td>
-
+                <td>{{ stats[formation.id].stats.nbEnCoursRedaction }}</td>
                 <td>{{ stats[formation.id].stats.nbFichesCompletes }} / {{ stats[formation.id].stats.nbFiches }}</td>
                 <td>{{ stats[formation.id].stats.nbFichesNonValidees }}</td>
                 <td>{{ stats[formation.id].stats.nbFichesNonValideesSes }}</td>

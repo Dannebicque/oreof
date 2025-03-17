@@ -24,6 +24,7 @@ class StatsFichesMatieresParcours
     public int $nbFichesNonValidees = 0;
 
     public int $nbFichesPubliees = 0;
+    public int $nbEnCoursRedaction = 0;
 
     public function __construct(public Parcours $parcours)
     {
@@ -51,6 +52,10 @@ class StatsFichesMatieresParcours
 
         if (array_key_exists('soumis_central', $ficheMatiere->getEtatFiche())) {
             $this->nbFichesNonValideesSes++;
+        }
+
+        if (array_key_exists('en_cours_redaction', $ficheMatiere->getEtatFiche())) {
+            $this->nbEnCoursRedaction++;
         }
         if (array_key_exists('valide_pour_publication', $ficheMatiere->getEtatFiche())) {
             $this->nbFichesValidees++;
