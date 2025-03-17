@@ -61,7 +61,9 @@
             <td>{{ user.isEnable|badgeBoolean }}</td>
             <td>
                 {% for centre in user.userCentres %}
-                {{ centre|badgeCentre }}<br>
+                    {% if centre.campagneCollecte == null or centre.campagneCollecte.id == campagneCollecte.id %}
+                        {{ centre|badgeCentre }}<br>
+                    {% endif %}
                 {% endfor %}
             </td>
             <td class="text-end">

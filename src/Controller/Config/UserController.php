@@ -97,7 +97,8 @@ class UserController extends BaseController
         return $this->render('config/user/_liste.html.twig', [
             'users' => $users,
             'sort' => $sort,
-            'direction' => $direction
+            'direction' => $direction,
+            'campagneCollecte' => $this->getCampagneCollecte()
         ]);
     }
 
