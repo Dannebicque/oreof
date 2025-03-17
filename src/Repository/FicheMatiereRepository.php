@@ -93,8 +93,7 @@ class FicheMatiereRepository extends ServiceEntityRepository
             ->join(Formation::class, 'fo', 'WITH', 'p.formation = fo.id')
             ->leftJoin(User::class, 'u', 'WITH', 'f.responsableFicheMatiere = u.id')
             ->andWhere('f.campagneCollecte = :campagneCollecte')
-            ->andWhere('f.horsDiplome = 0')
-            ->orWhere('f.horsDiplome IS NULL')
+            ->andWhere('f.horsDiplome = 0 or f.horsDiplome IS NULL')
             ->setParameter('campagneCollecte', $campagneCollecte);
 
         $this->addFiltres($qb, $options);
@@ -150,8 +149,7 @@ class FicheMatiereRepository extends ServiceEntityRepository
         }
 
         if (array_key_exists('q', $options) && null !== $options['q']) {
-            $qb->andWhere('f.libelle LIKE :q')
-                ->orWhere('f.id LIKE :q')
+            $qb->andWhere('f.libelle LIKE :q or f.id LIKE :q')
                 ->setParameter('q', '%' . $options['q'] . '%');
         }
 
