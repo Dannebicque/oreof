@@ -102,7 +102,7 @@ class UpdateRemplissageCommand extends Command
         $io->progressStart($totalFiches);
 
         foreach ($fiches as $fiche) {
-            if ($fiche->getEtatFiche() === null) {
+            if ($fiche->getEtatFiche() === []) {
                 $remplissage = $fiche->remplissageBrut();
                 $fiche->setRemplissage($remplissage);
                 if ($remplissage->isFull()) {
