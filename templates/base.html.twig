@@ -162,12 +162,12 @@
                                     </a>
                                 </li>
                                 {% if is_granted('ROLE_ADMIN') %}
-                                <li>
-                                    <a href="{{ path('app_mutualise_index') }}">
-                                        <i class="fal fa-share-nodes icon"></i>
-                                        <span class="label">Détail des éléments mutualisés</span>
-                                    </a>
-                                </li>
+                                    <li>
+                                        <a href="{{ path('app_mutualise_index') }}">
+                                            <i class="fal fa-share-nodes icon"></i>
+                                            <span class="label">Détail des éléments mutualisés</span>
+                                        </a>
+                                    </li>
                                 {% endif %}
                                 <li>
                                     <a href="{{ path('app_search') }}">
@@ -221,13 +221,14 @@
                                         </a>
                                     </li>
                                 {% endif %}
-                                <li>
-                                    <a href="{{ path('app_codification_liste') }}">
-                                        <i class="fal fa-file-binary icon"></i>
-                                        <span class="label">Codification</span>
-                                    </a>
-                                </li>
                                 {% if is_granted('ROLE_SES') %}
+                                    <li>
+                                        <a href="{{ path('app_codification_liste') }}">
+                                            <i class="fal fa-file-binary icon"></i>
+                                            <span class="label">Codification</span>
+                                        </a>
+                                    </li>
+
                                     <li>
                                         <a href="{{ path('app_synthese_modification_export_pdf') }}">
                                             <i class="fal fa-book icon"></i>
