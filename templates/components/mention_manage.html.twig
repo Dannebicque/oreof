@@ -166,7 +166,7 @@
                 <div class="col-12">
                     <div class="row mt-2">
                         <div class="col-3 d-grid">
-                            {% if is_granted('CAN_FORMATION_MANAGE_MY') %}
+                            {% if is_granted('CAN_FORMATION_MANAGE_MY', formation) %}
                                 {% if not this.hasDemande %}
                                     <button class="btn btn-sm d-block btn-outline-warning"
                                             type="button"
@@ -208,7 +208,7 @@
                             {% endif %}
                         </div>
                         <div class="col-3 d-grid">
-                            {% if is_granted('CAN_FORMATION_MANAGE_MY') %}
+                            {% if is_granted('CAN_FORMATION_MANAGE_MY', formation) %}
                             <button
                                     href="#"
                                     {{ stimulus_controller('modal', {
