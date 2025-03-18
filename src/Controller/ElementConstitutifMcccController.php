@@ -206,21 +206,9 @@ class ElementConstitutifMcccController extends AbstractController
         }
         $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());
 
-        $raccroche = $elementConstitutif->getFicheMatiere()?->getParcours()?->getId() !== $parcours->getId();
         $getElement = new GetElementConstitutif($elementConstitutif, $parcours);
-        $getElement->setIsRaccroche($raccroche);
-
-        if ($elementConstitutif->getFicheMatiere() !== null && $elementConstitutif->getFicheMatiere()?->isMcccImpose()) {
-            $typeEpreuve = $elementConstitutif->getFicheMatiere()?->getTypeMccc();
-        } elseif ($raccroche && $elementConstitutif->isMcccSpecifiques()) {
-            $ec = $getElement->getElementConstitutif();
-            $typeEpreuve = $ec->getTypeMccc();
-        } else {
-            $typeEpreuve = $elementConstitutif->getTypeMccc();
-        }
-
-        $ec = new GetElementConstitutif($elementConstitutif, $parcours);
-        $ects = $ec->getFicheMatiereEcts();
+        $typeEpreuve = $getElement->getTypeMcccFromFicheMatiere();
+        $ects = $getElement->getFicheMatiereEcts();
 
         return $this->render('element_constitutif/_mcccEcNonEditable.html.twig', [
             'isMcccImpose' => $elementConstitutif->getFicheMatiere()?->isMcccImpose(),
