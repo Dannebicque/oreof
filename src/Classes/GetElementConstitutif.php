@@ -247,6 +247,12 @@ class GetElementConstitutif
             return $this->elementConstitutif->getEcParent()->getEtatMccc();
         }
 
+        if ($this->elementConstitutif->getEcEnfants()?->count() > 0) {
+            if ($this->elementConstitutif->isMcccEnfantsIdentique() === false) {
+                return $this->elementConstitutif->getEcts() > 0 ? 'Complet' : 'A saisir';
+            }
+        }
+
         if ($this->elementConstitutif->getFicheMatiere()?->isMcccImpose()) {
             return $this->elementConstitutif->getFicheMatiere()?->getEtatMccc();
         }
