@@ -1,7 +1,8 @@
 {% form_theme form 'communs/form_theme.html.twig' %}
 {{ form_start(form) }}
     {{ form_row(form.libelle, {label: texte == 'option' ? 'options.labels.libelle'|trans({}, 'form') : ''}) }}
-    {{ form_row(form.respParcours, {label: texte == 'option' ? 'options.labels.respParcours'|trans({}, 'form') : '', 'help': 'Si le responsable ou co-responsable n\'est pas dans la liste, mettre le responsable de mention, vous pourrez l\'ajouter lors de la configuration de votre parcours.'}) }}
+    {{ form_row(form.respParcours, {label: texte == 'option' ? 'options.labels.respParcours'|trans({}, 'form') : ''}) }}
+<small>Si le responsable n'est pas dans la liste, mettre le responsable de mention, vous pourrez l'ajouter lors de la configuration de votre parcours.</small>
 {# todo: modal dans une modal pose problème #}
 {# <a #}
 {#        href="#" #}
@@ -20,7 +21,9 @@
 {#    <i class="{{ iconAdd }}"></i> #}
 {#    <span> {{ 'fiche_matiere.step1_collegue_manquant.label'|trans({}, 'form') }}</span> #}
 {# </a> #}
-{{ form_row(form.coResponsable, {label: texte == 'option' ? 'options.labels.coResponsable'|trans({}, 'form') : '', 'help': 'Si le responsable ou co-responsable n\'est pas dans la liste, mettre le responsable de mention, vous pourrez l\'ajouter lors de la configuration de votre parcours.'}) }}
+{{ form_row(form.coResponsable, {label: texte == 'option' ? 'options.labels.coResponsable'|trans({}, 'form') : ''}) }}
+<small>Si le co-responsable n'est pas dans la liste, mettre le responsable de mention, vous pourrez l'ajouter lors de la configuration de votre parcours.</small>
+
 {# <a #}
 {#        href="#" #}
 {#        {{ stimulus_controller('modal', { #}
