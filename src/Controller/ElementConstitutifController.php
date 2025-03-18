@@ -16,6 +16,7 @@ use App\Entity\FicheMatiere;
 use App\Entity\Parcours;
 use App\Entity\TypeEc;
 use App\Entity\Ue;
+use App\Events\McccUpdateEvent;
 use App\Form\EcStep4Type;
 use App\Form\ElementConstitutifEnfantType;
 use App\Form\ElementConstitutifType;
@@ -32,6 +33,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 #[Route('/element/constitutif')]
 class ElementConstitutifController extends BaseController
@@ -520,9 +522,9 @@ class ElementConstitutifController extends BaseController
 
     #[Route('/{id}/structure-ec/{parcours}', name: 'app_element_constitutif_structure', methods: ['GET', 'POST'])]
     public function structureEc(
+        EventDispatcherInterface $eventDispatcher,
         EntityManagerInterface       $entityManager,
         Request                      $request,
-        ElementConstitutifRepository $elementConstitutifRepository,
         ElementConstitutif           $elementConstitutif,
         Parcours                     $parcours
     ): Response {
@@ -550,6 +552,7 @@ class ElementConstitutifController extends BaseController
 
         $form->handleRequest($request);
         if ($form->isSubmitted()) {
+            $originalHeuresToText = $this->heuresToTexte($getElement->getFicheMatiereHeures());
             if (array_key_exists('heuresEnfantsIdentiques', $request->request->all()['ec_step4'])) {
                 if ($elementConstitutif->getEcParent() !== null) {
                     $elementConstitutif->getEcParent()->setHeuresEnfantsIdentiques((bool)$request->request->all()['ec_step4']['heuresEnfantsIdentiques']);
@@ -562,6 +565,14 @@ class ElementConstitutifController extends BaseController
 
             if (array_key_exists('sansHeure', $request->request->all())) {
                 $elementConstitutif->setSansHeure($request->request->all()['sansHeure'] === 'on');
+                $elementConstitutif->setVolumeTdPresentiel(0);
+                $elementConstitutif->setVolumeTpPresentiel(0);
+                $elementConstitutif->setVolumeCmPresentiel(0);
+                $elementConstitutif->setVolumeCmDistanciel(0);
+                $elementConstitutif->setVolumeTdDistanciel(0);
+                $elementConstitutif->setVolumeTpDistanciel(0);
+                $elementConstitutif->setVolumeTe(0);
+                $newHeuresToText = '';
             } else {
                 $elementConstitutif->setSansHeure(false);
                 if ($elementConstitutif->getFicheMatiere() !== null &&
@@ -569,6 +580,7 @@ class ElementConstitutifController extends BaseController
                     $elementConstitutif->getFicheMatiere()->getParcours()->getId() === $parcours->getId()) {
                     //sauvegarde des heures sur la fiche matière
                     $elementConstitutif->setHeuresSpecifiques(false);
+                    $newHeuresToText = $this->heuresToTexte($ecHeures);
                 } else {
                     //sauvegarde des heures sur l'EC
                     $elementConstitutif->setVolumeCmPresentiel($ecHeures->getVolumeCmPresentiel());
@@ -580,17 +592,22 @@ class ElementConstitutifController extends BaseController
                     $elementConstitutif->setVolumeTe($ecHeures->getVolumeTe());
                     $elementConstitutif->setHeuresSpecifiques(true);
                     $entityManager->detach($ecHeures);
+                    $newHeuresToText = $this->heuresToTexte($elementConstitutif);
 
                 }
             }
 
             $entityManager->flush();
 
+            //evenement pour MCCC sur EC mis à jour
+            $event = new McccUpdateEvent($elementConstitutif, $parcours);
+            $event->setNewMccc($originalHeuresToText, $newHeuresToText);
+            $eventDispatcher->dispatch($event, McccUpdateEvent::UPDATE_MCCC);
+
             return $this->json(true);
         }
 
         $editable = $request->query->get('editable', true);
-dump($editable);
         return $this->render('element_constitutif/_structureEcModal.html.twig', [
             'ec' => $elementConstitutif,
             'form' => $form->createView(),
@@ -686,6 +703,11 @@ dump($editable);
         }
 
         return $this->json(false, 500);
+    }
+
+    private function heuresToTexte(ElementConstitutif|FicheMatiere $elt): string
+    {
+        return $elt->getVolumeCmPresentiel().$elt->getVolumeCmPresentiel().$elt->getVolumeTpPresentiel().$elt->getVolumeCmDistanciel().$elt->getVolumeTdDistanciel().$elt->getVolumeTpDistanciel().$elt->getVolumeTe();
     }
 
 }

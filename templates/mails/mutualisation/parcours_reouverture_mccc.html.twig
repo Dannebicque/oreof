@@ -2,7 +2,7 @@
 
 {% block content %}
     <p>Bonjour,</p>
-    <p>Les MCCC, heures ou ECTS de l’enseignement « {{ ficheMatiere.libelle }} » utilisé par votre parcours (UE {{ ec.ue.display(parcours) }} EC {{ ec.code }}) ont été modifiés par le parcours porteur ({{ ficheMatiere.parcours != null ? ficheMatiere.parcours.libelle : 'hors diplôme' }}) de cet enseignement mutualisé.
+    <p>Les MCCC, heures ou ECTS de l’enseignement « {{ ficheMatiere.libelle }} » utilisé par votre parcours ({{ ec.ue.display(parcours) }} - {{ ec.code }}) ont été modifiés par le parcours porteur ({{ ficheMatiere.parcours != null ? ficheMatiere.parcours.libelle : 'hors diplôme' }}) de cet enseignement mutualisé.
     </p>
     <p>Nous vous invitons à vérifier la cohérence de la maquette et des MCCC de votre parcours « {{ parcours.libelle}} ({{ formation.display }}) ». Si besoin, vous
         pourrez rouvrir votre DPE si vous avez des ajustements à effectuer.</p>
