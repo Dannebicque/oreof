@@ -298,69 +298,73 @@
                 <div class="col-12">
                     <div class="row mt-2">
                         <div class="col-3 d-grid">
-                            {% if this.dpeParcours.etatReconduction.value != 'NON_OUVERTURE' %}
-                                {% if not this.hasDemande and isOuvrable(this.parcours) %}
-                                    <button class="btn btn-sm d-block btn-outline-warning"
-                                            type="button"
-                                            {{ stimulus_controller('modal', {
-                                                size: 'lg',
-                                                nomEvenement: 'redirectEdit',
-                                                modalTitle: ('demande.reouverture.title')|trans({}, 'process'),
-                                                modalUrl: path('app_validation_demande_reouverture', {
-                                                    parcours: id
-                                                }) }) }}
-                                            {# todo:  gérer une redirection vers la page edit du parcours #}
-                                            data-action="click->modal#openModal"
-                                            data-controller="tooltip"
-                                            data-tooltip-placement-value="bottom"
-                                            aria-label="{{ ('demande.reouverture')|trans({}, 'process') }}"
-                                            data-bs-original-title="{{ ('demande.reouverture')|trans({}, 'process') }}"
-                                    >
-                                        <i class="fal fa-question"></i> {{ ('demande.reouverture')|trans({}, 'process') }}
-                                    </button>
-                                    {# todo: fermeture que si pas de MCCC/Maquette pour revenir en SES sans CFVU avant publication #}
-                                {% elseif this.hasDemande %}
-                                    <button class="btn btn-sm d-block btn-outline-warning"
-                                            type="button"
-                                            {{ stimulus_controller('modal', {
-                                                size: 'lg',
-                                                nomEvenement: 'refreshPage',
+                            {% if is_granted('CAN_PARCOURS_MANAGE_MY') %}
+                                {% if this.dpeParcours.etatReconduction.value != 'NON_OUVERTURE' %}
+                                    {% if not this.hasDemande and isOuvrable(this.parcours) %}
+                                        <button class="btn btn-sm d-block btn-outline-warning"
+                                                type="button"
+                                                {{ stimulus_controller('modal', {
+                                                    size: 'lg',
+                                                    nomEvenement: 'redirectEdit',
+                                                    modalTitle: ('demande.reouverture.title')|trans({}, 'process'),
+                                                    modalUrl: path('app_validation_demande_reouverture', {
+                                                        parcours: id
+                                                    }) }) }}
+                                                {# todo:  gérer une redirection vers la page edit du parcours #}
+                                                data-action="click->modal#openModal"
+                                                data-controller="tooltip"
+                                                data-tooltip-placement-value="bottom"
+                                                aria-label="{{ ('demande.reouverture')|trans({}, 'process') }}"
+                                                data-bs-original-title="{{ ('demande.reouverture')|trans({}, 'process') }}"
+                                        >
+                                            <i class="fal fa-question"></i> {{ ('demande.reouverture')|trans({}, 'process') }}
+                                        </button>
+                                        {# todo: fermeture que si pas de MCCC/Maquette pour revenir en SES sans CFVU avant publication #}
+                                    {% elseif this.hasDemande %}
+                                        <button class="btn btn-sm d-block btn-outline-warning"
+                                                type="button"
+                                                {{ stimulus_controller('modal', {
+                                                    size: 'lg',
+                                                    nomEvenement: 'refreshPage',
 
-                                                modalTitle: ('demande.reouverture.annuler.title')|trans({}, 'process'),
-                                                modalUrl: path('app_validation_demande_reouverture_cloture', {
-                                                    parcours:id
-                                                }) }) }}
-                                            data-action="click->modal#openModal"
-                                            data-controller="tooltip"
-                                            data-tooltip-placement-value="bottom"
-                                            aria-label="{{ ('demande.reouverture.annuler')|trans({}, 'process') }}"
-                                            data-bs-original-title="{{ ('demande.reouverture.annuler')|trans({}, 'process') }}"
-                                    >
-                                        <i class="fal fa-times"></i> {{ ('demande.reouverture.annuler')|trans({}, 'process') }}
-                                    </button>
+                                                    modalTitle: ('demande.reouverture.annuler.title')|trans({}, 'process'),
+                                                    modalUrl: path('app_validation_demande_reouverture_cloture', {
+                                                        parcours:id
+                                                    }) }) }}
+                                                data-action="click->modal#openModal"
+                                                data-controller="tooltip"
+                                                data-tooltip-placement-value="bottom"
+                                                aria-label="{{ ('demande.reouverture.annuler')|trans({}, 'process') }}"
+                                                data-bs-original-title="{{ ('demande.reouverture.annuler')|trans({}, 'process') }}"
+                                        >
+                                            <i class="fal fa-times"></i> {{ ('demande.reouverture.annuler')|trans({}, 'process') }}
+                                        </button>
+                                    {% endif %}
                                 {% endif %}
                             {% endif %}
                         </div>
                         <div class="col-3 d-grid">
-                            {% if this.dpeParcours.etatReconduction.value != 'NON_OUVERTURE' %}
-                                {% if parcours.isParcoursDefaut == true %}
-                                    <button
-                                            href="#"
-                                            {{ stimulus_controller('modal', {
-                                                size: 'lg',
-                                                modalTitle: 'formation.change_rf.title'|trans({}, 'form'),
-                                                nomEvenement: 'refreshStep',
-                                                modalUrl: path('app_formation_change_rf', {formation: parcours.formation.id}) }) }}
-                                            data-action="click->modal#openModal"
-                                            data-size="lg"
-                                            class="btn btn-sm btn-outline-warning"
-                                            data-bs-toggle="tooltip"
-                                            data-bs-placement="bottom"
-                                            title="{{ 'formation.change_rf.title'|trans({}, 'form') }}"
-                                    >
-                                        <i class="fal fa-repeat"></i>
-                                        <span> {{ 'formation.change_rf.label'|trans({}, 'form') }}</span>
-                                    </button>
+                            {% if is_granted('CAN_FORMATION_MANAGE_MY') %}
+                                {% if this.dpeParcours.etatReconduction.value != 'NON_OUVERTURE' %}
+                                    {% if parcours.isParcoursDefaut == true %}
+                                        <button
+                                                href="#"
+                                                {{ stimulus_controller('modal', {
+                                                    size: 'lg',
+                                                    modalTitle: 'formation.change_rf.title'|trans({}, 'form'),
+                                                    nomEvenement: 'refreshStep',
+                                                    modalUrl: path('app_formation_change_rf', {formation: parcours.formation.id}) }) }}
+                                                data-action="click->modal#openModal"
+                                                data-size="lg"
+                                                class="btn btn-sm btn-outline-warning"
+                                                data-bs-toggle="tooltip"
+                                                data-bs-placement="bottom"
+                                                title="{{ 'formation.change_rf.title'|trans({}, 'form') }}"
+                                        >
+                                            <i class="fal fa-repeat"></i>
+                                            <span> {{ 'formation.change_rf.label'|trans({}, 'form') }}</span>
+                                        </button>
+                                    {% endif %}
                                 {% endif %}
                             {% endif %}
                         </div>
@@ -368,7 +372,7 @@
                             <button class="btn btn-sm btn-outline-info d-block">Gérer les versions</button>
                         </div>
                         <div class="col-3 d-grid">
-                            {% if is_granted('ROLE_SES')  %}
+                            {% if is_granted('ROLE_SES') %}
                                 {# or is_granted('CAN_ETABLISSEMENT_SCOLARITE_ALL') or is_granted('CAN_FORMATION_SCOLARITE_MY', parcours.formation) #}
                                 <a href="{{ path('app_codification_index', {formation: formation.id, parcours:parcours.id}) }}"
                                    class="btn btn-sm btn-outline-info">Gérer la codification</a>
