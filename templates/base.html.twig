@@ -161,12 +161,14 @@
                                         <span class="label">Fiches EC/matière "hors diplôme"</span>
                                     </a>
                                 </li>
+                                {% if is_granted('ROLE_ADMIN') %}
                                 <li>
                                     <a href="{{ path('app_mutualise_index') }}">
                                         <i class="fal fa-share-nodes icon"></i>
                                         <span class="label">Détail des éléments mutualisés</span>
                                     </a>
                                 </li>
+                                {% endif %}
                                 <li>
                                     <a href="{{ path('app_search') }}">
                                         <i class="fal fa-magnifying-glass icon"></i>
