@@ -256,10 +256,9 @@ class FicheMatiereRepository extends ServiceEntityRepository
             ->join('p.formation', 'fo')
             ->join('p.dpeParcours', 'dp')
             ->andWhere('dp.campagneCollecte = :campagneCollecte')
-            ->orWhere('(fo.responsableMention = :parcours OR fo.coResponsable = :parcours OR p.respParcours = :parcours OR p.coResponsable = :parcours OR f.responsableFicheMatiere = :user)')
+            ->andWhere('(fo.responsableMention = :user OR fo.coResponsable = :user OR p.respParcours = :user OR p.coResponsable = :user OR f.responsableFicheMatiere = :user)')
             ->orderBy('f.libelle', 'ASC')
             ->setParameters([
-                'parcours' => $user,
                 'campagneCollecte' => $campagneCollecte,
                 'user' => $user
             ]);
