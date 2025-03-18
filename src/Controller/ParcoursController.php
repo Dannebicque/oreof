@@ -140,6 +140,7 @@ class ParcoursController extends BaseController
                 'formation' => $formation->getId(),
                 'parent' => $parent?->getId(),
             ]),
+            'isAdmin' => $this->isGranted('ROLE_ADMIN'),
         ]);
         $form->handleRequest($request);
 
@@ -189,6 +190,7 @@ class ParcoursController extends BaseController
             'action' => $this->generateUrl('app_parcours_edit_modal', [
                 'parcours' => $parcours->getId(),
             ]),
+            'isAdmin' => $this->isGranted('ROLE_ADMIN'),
         ]);
         $parent = $parcours->getParcoursParent();
         $form->handleRequest($request);
