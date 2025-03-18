@@ -158,6 +158,7 @@ class GlobalVoter extends Voter
     {
         $canEdit =
             $subject->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_TEXTE ||
+            $subject->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_MCCC_TEXTE ||
             $subject->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_PARCOURS ||
             $subject->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION;
 
