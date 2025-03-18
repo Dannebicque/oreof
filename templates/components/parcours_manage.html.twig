@@ -298,7 +298,7 @@
                 <div class="col-12">
                     <div class="row mt-2">
                         <div class="col-3 d-grid">
-                            {% if is_granted('CAN_PARCOURS_MANAGE_MY', parcours) %}
+                            {% if is_granted('CAN_PARCOURS_MANAGE_MY', this.dpeParcours) %}
                                 {% if this.dpeParcours.etatReconduction.value != 'NON_OUVERTURE' %}
                                     {% if not this.hasDemande and isOuvrable(this.parcours) %}
                                         <button class="btn btn-sm d-block btn-outline-warning"
@@ -344,9 +344,9 @@
                             {% endif %}
                         </div>
                         <div class="col-3 d-grid">
-                            {% if is_granted('CAN_FORMATION_MANAGE_MY', formation) %}
+                            {% if is_granted('CAN_FORMATION_MANAGE_MY', this.formation) %}
                                 {% if this.dpeParcours.etatReconduction.value != 'NON_OUVERTURE' %}
-                                    {% if parcours.isParcoursDefaut == true %}
+                                    {% if this.parcours.isParcoursDefaut == true %}
                                         <button
                                                 href="#"
                                                 {{ stimulus_controller('modal', {
