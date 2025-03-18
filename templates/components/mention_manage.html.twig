@@ -208,6 +208,7 @@
                             {% endif %}
                         </div>
                         <div class="col-3 d-grid">
+                            {% if is_granted('CAN_FORMATION_MANAGE_MY') %}
                             <button
                                     href="#"
                                     {{ stimulus_controller('modal', {
@@ -225,6 +226,7 @@
                                 <i class="fal fa-repeat"></i>
                                 <span> {{ 'formation.change_rf.label'|trans({}, 'form') }}</span>
                             </button>
+                            {% endif %}
                         </div>
                         <div class="col-3 d-grid">
                             {% if is_granted('ROLE_SES') %}
