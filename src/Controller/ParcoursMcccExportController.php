@@ -161,7 +161,7 @@ class ParcoursMcccExportController extends BaseController
             throw $this->createNotFoundException('File Type is invalid');
         }
 
-        $dpe = $entityManager->getRepository(CampagneCollecte::class)->findOneBy(['defaut' => true]);
+        $dpe = $entityManager->getRepository(CampagneCollecte::class)->findOneBy(['id' => 1]);
 
         $fileName = "MCCC-Parcours-{$parcours->getId()}-{$dpe->getAnnee()}";
         if($format === "simplifie"){
