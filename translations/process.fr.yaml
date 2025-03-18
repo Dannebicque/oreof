@@ -697,6 +697,7 @@ changeRf.valide.soumis_conseil.flash.success: 'Demande de changement de responsa
 changeRf.valide.soumis_ses.flash.success: 'Demande de changement de responsable de formation validée par le SES'
 changeRf.valide.soumis_cfvu.flash.success: 'Demande de changement de responsable de formation validée par la CFVU'
 historique.en_cours_redaction.parcours: 'Modification en cours'
+en_cours_redaction.parcours: 'Parcours en cours de rédaction'
 en_cours_redaction.parcours.valide.impossible.en_cours_redaction: 'Impossible de valider le parcours. Les informations de ce parcours sont incomplètes/erronées.'
 btn.en_cours_redaction.parcours.valide.en_cours_redaction: 'Valider le parcours et transmette au conseil de composante'
 parcours.en_cours_redaction.parcours.btn-info: 'Parcours en cours de rédaction'

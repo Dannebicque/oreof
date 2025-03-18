@@ -501,3 +501,4 @@ type_diplome:
       label: 'La formation prévoit-elle un projet tutoré ?'
     ectsObligatoireSurEc:
       label: 'Les ECTS sont-ils obligatoires sur les EC ?'
+en_cours_redaction.parcours: 'Parcours en cours de rédaction'
