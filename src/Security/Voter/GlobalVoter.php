@@ -2,6 +2,7 @@
 
 namespace App\Security\Voter;
 
+use App\Classes\GetDpeParcours;
 use App\Entity\Composante;
 use App\Entity\DpeParcours;
 use App\Entity\FicheMatiere;
@@ -104,11 +105,14 @@ class GlobalVoter extends Voter
                         }
                     }
 
-                    //                    if ($subject instanceof Parcours) {
-                    //                        if ($this->canAccessParcours($subject, $centre) === true) {
-                    //                            return true;
-                    //                        }
-                    //                    }
+                    if ($subject instanceof Parcours) {
+                        $dpeParcours = GetDpeParcours::getFromParcours($subject);
+                        if ($dpeParcours !== null) {
+                            if ($this->canAccessDpeParcours($dpeParcours, $centre) === true) {
+                                return true;
+                            }
+                        }
+                    }
 
                     if ($subject instanceof DpeParcours) {
                         if ($this->canAccessDpeParcours($subject, $centre) === true) {
