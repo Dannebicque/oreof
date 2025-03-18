@@ -250,7 +250,6 @@ class GlobalVoter extends Voter
 
         if ($this->security->isGranted('ROLE_SES')) {
             $canEdit =
-
                 $this->dpeParcoursWorkflow->can($subject, 'autoriser') ||
                 $this->dpeParcoursWorkflow->can($subject, 'valider_ouverture_sans_cfvu') ||
                 $this->dpeParcoursWorkflow->can($subject, 'valider_parcours') ||
