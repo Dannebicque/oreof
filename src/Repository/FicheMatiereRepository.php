@@ -249,12 +249,40 @@ class FicheMatiereRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function findByDpe(?UserInterface $user, CampagneCollecte $campagneCollecte, array $options): array
+    {
+        $query = $this->createQueryBuilder('f')
+            ->join('f.parcours', 'p')
+            ->join('p.formation', 'fo')
+            ->join('fo.composantePorteuse', 'co')
+            ->andWhere('f.campagneCollecte = :campagneCollecte')
+            ->andWhere('(fo.responsableMention = :user OR fo.coResponsable = :user OR p.respParcours = :user OR p.coResponsable = :user OR f.responsableFicheMatiere = :user OR co.responsableDpe = :user)')
+            ->orderBy('f.libelle', 'ASC')
+            ->setParameters([
+                'campagneCollecte' => $campagneCollecte,
+                'user' => $user
+            ]);
+
+        $this->addFiltres($query, $options);
+
+        $qb = $query->getQuery();
+
+        $paginator = new Paginator($qb, false);
+
+        return [
+            'data' => iterator_to_array($paginator),
+            'total' => count($paginator),
+            'page' => $options['page'] ?? 1,
+            'limit' => 50,
+        ];
+    }
+
+
     public function findByResponsable(?UserInterface $user, CampagneCollecte $campagneCollecte, array $options): array
     {
         $query = $this->createQueryBuilder('f')
-            ->leftJoin('f.parcours', 'p')
+            ->join('f.parcours', 'p')
             ->join('p.formation', 'fo')
-            ->join('p.dpeParcours', 'dp')
             ->andWhere('f.campagneCollecte = :campagneCollecte')
             ->andWhere('(fo.responsableMention = :user OR fo.coResponsable = :user OR p.respParcours = :user OR p.coResponsable = :user OR f.responsableFicheMatiere = :user)')
             ->orderBy('f.libelle', 'ASC')
