@@ -57,7 +57,6 @@ class GlobalVoter extends Voter
             if (!in_array($this->portee, PorteeEnum::getAvailableTypes())) {
                 return false;
             }
-
             return true;
         }
         return false;
@@ -92,9 +91,9 @@ class GlobalVoter extends Voter
                 if ($this->portee === PorteeEnum::MY->value) {
                     // Soit formation ou composante, on vérifie si le centre est dans la portée
                     // soit par héritage
-
                     if ($subject instanceof Formation) {
-                        if ($this->permission === PermissionEnum::MANAGE->value) {
+
+                        if (strtolower($this->permission) === PermissionEnum::MANAGE->value) {
                             return $this->canManageFormation($subject, $centre);
                         }
 
@@ -112,7 +111,7 @@ class GlobalVoter extends Voter
                     if ($subject instanceof Parcours) {
                         $dpeParcours = GetDpeParcours::getFromParcours($subject);
                         if ($dpeParcours !== null) {
-                            if ($this->permission === PermissionEnum::MANAGE->value) {
+                            if (strtolower($this->permission) === PermissionEnum::MANAGE->value) {
                                 return $this->canManageDpeParcours($dpeParcours, $centre);
                             }
 
@@ -123,7 +122,7 @@ class GlobalVoter extends Voter
                     }
 
                     if ($subject instanceof DpeParcours) {
-                        if ($this->permission === PermissionEnum::MANAGE->value) {
+                        if (strtolower($this->permission) === PermissionEnum::MANAGE->value) {
                             return $this->canManageDpeParcours($subject, $centre);
                         }
 
