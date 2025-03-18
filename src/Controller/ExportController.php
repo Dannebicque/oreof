@@ -46,7 +46,6 @@ class ExportController extends BaseController
         $this->denyAccessUnlessGranted('ROLE_SES');
 
         return $this->render('export/index.html.twig', [
-            'annees' => $anneeUniversitaireRepository->findAll(),
             'composantes' => $composanteRepository->findAll(),
             'ses' => true,
             'isCfvu' => false,
@@ -133,11 +132,6 @@ class ExportController extends BaseController
         CampagneCollecteRepository $anneeUniversitaireRepository,
         Request                    $request,
     ): Response {
-        $annee = $anneeUniversitaireRepository->find($request->request->get('annee_universitaire'));
-        if (!$annee) {
-            throw $this->createNotFoundException('L\'année universitaire n\'existe pas');
-        }
-
         $messageBus->dispatch(new Export(
             $this->getUser()?->getId(),
             $request->request->get('type_document'),

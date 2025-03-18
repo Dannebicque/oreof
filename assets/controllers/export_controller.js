@@ -93,11 +93,9 @@ export default class extends Controller {
   }
 
   async _updateListe() {
-    const annee = document.getElementById('annee_universitaire').value
     const composante = document.getElementById('composante').value
-    if (annee !== '' && composante !== '') {
+    if (composante !== '') {
       const body = new URLSearchParams({
-        annee,
         composante,
       })
 
