@@ -2,7 +2,7 @@
 {{ form_start(form) }}
     {{ form_row(form.libelle, {label: texte == 'option' ? 'options.labels.libelle'|trans({}, 'form') : ''}) }}
     {{ form_row(form.respParcours, {label: texte == 'option' ? 'options.labels.respParcours'|trans({}, 'form') : ''}) }}
-<small>Si le responsable n'est pas dans la liste, mettre le responsable de mention, vous pourrez l'ajouter lors de la configuration de votre parcours.</small>
+<small>Si le responsable n'est pas dans la liste, vous pourrez l'ajouter lors de la configuration de votre parcours.</small>
 {# todo: modal dans une modal pose problème #}
 {# <a #}
 {#        href="#" #}
@@ -22,7 +22,7 @@
 {#    <span> {{ 'fiche_matiere.step1_collegue_manquant.label'|trans({}, 'form') }}</span> #}
 {# </a> #}
 {{ form_row(form.coResponsable, {label: texte == 'option' ? 'options.labels.coResponsable'|trans({}, 'form') : ''}) }}
-<small>Si le co-responsable n'est pas dans la liste, mettre le responsable de mention, vous pourrez l'ajouter lors de la configuration de votre parcours.</small>
+<small>Si le co-responsable n'est pas dans la liste, vous pourrez l'ajouter lors de la configuration de votre parcours.</small>
 
 {# <a #}
 {#        href="#" #}
