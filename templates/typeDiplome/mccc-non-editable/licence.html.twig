@@ -9,3 +9,13 @@
 {% else %}
     <twig:alerte type="danger" message="Le type de MCCC est inconnu"/>
 {% endif %}
+
+{% if (isVersioning is not defined or isVersioning == false) and codeVersion is defined %}
+<div class="row justify-content-start mt-5">
+    <div class="col-4"> 
+        <button class="btn btn-sm btn-primary" data-action="click->modal#refreshModal">
+            Dernière version
+        </div>
+    </div>
+</div>
+{% endif %}

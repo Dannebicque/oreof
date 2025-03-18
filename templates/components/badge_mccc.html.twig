@@ -24,7 +24,11 @@
                                 }
                             ) 
                             : path('app_element_constitutif_mccc_non_editable',
-                                {'id': this.elementConstitutif.id, parcours: parcoursId }
+                                {
+                                    'id': this.elementConstitutif.id, 
+                                    parcours: parcoursId,
+                                    codeVersion: UeDisplay ~ "##" ~ indexEc ~ "##" ~ indexEcEnfant
+                                }
                             )
                             }
                         ) 

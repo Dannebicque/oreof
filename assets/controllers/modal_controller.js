@@ -9,6 +9,8 @@
 import { Controller } from '@hotwired/stimulus'
 
 export default class extends Controller {
+  static targets = ['zoneToRefresh'];
+
   static values = {
     modalUrl: String,
     nomEvenement: { type: String, default: 'refreshListe' },
@@ -40,5 +42,11 @@ export default class extends Controller {
         updateComponent: this.updateComponentValue,
       },
     })
+  }
+
+  async refreshModal(){
+    this.zoneToRefreshTarget.innerHTML = ''
+    const response = await fetch(`${this.modalUrlValue}`)
+    this.zoneToRefreshTarget.innerHTML = await response.text()
   }
 }

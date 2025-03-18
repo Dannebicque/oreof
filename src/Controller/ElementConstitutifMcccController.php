@@ -175,13 +175,14 @@ class ElementConstitutifMcccController extends AbstractController
         'mcccs' => $getElement->getMcccsFromFicheMatiereCollection(),]);
     }
 
-    #[
-        Route('/{id}/mccc-ec/{parcours}/non-editable', name: 'app_element_constitutif_mccc_non_editable', methods: ['GET', 'POST'])]
+    #[Route('/{id}/mccc-ec/{parcours}/non-editable/{codeVersion}', name: 'app_element_constitutif_mccc_non_editable', methods: ['GET', 'POST'])]
     public function mcccEcNonEditable(
         TypeDiplomeRegistry          $typeDiplomeRegistry,
         TypeEpreuveRepository        $typeEpreuveRepository,
         ElementConstitutif           $elementConstitutif,
-        Parcours                     $parcours
+        Parcours                     $parcours,
+        string                       $codeVersion = "",
+        EntityManagerInterface       $entityManager
     ): Response {
 
         $dpeParcours = GetDpeParcours::getFromParcours($parcours);
@@ -216,6 +217,9 @@ class ElementConstitutifMcccController extends AbstractController
         $ec = new GetElementConstitutif($elementConstitutif, $parcours);
         $ects = $ec->getFicheMatiereEcts();
 
+        $lastVersion = $entityManager->getRepository(ParcoursVersioning::class)->findLastCfvuVersion($parcours);
+        $lastVersion = $lastVersion[0] ?? -1;
+
         return $this->render('element_constitutif/_mcccEcNonEditable.html.twig', [
             'isMcccImpose' => $elementConstitutif->getFicheMatiere()?->isMcccImpose(),
             'isEctsImpose' => $elementConstitutif->getFicheMatiere()?->isEctsImpose(),
@@ -225,6 +229,8 @@ class ElementConstitutifMcccController extends AbstractController
             'ects' => $ects,
             'templateForm' => $typeD::TEMPLATE_FORM_MCCC,
             'mcccs' => $getElement->getMcccsFromFicheMatiere($typeD),
+            'lastVersion' => $lastVersion,
+            'codeVersion' => $codeVersion
         ]);
     }
 
