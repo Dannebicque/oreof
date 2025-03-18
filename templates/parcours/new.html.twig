@@ -1,42 +1,43 @@
 {% form_theme form 'communs/form_theme.html.twig' %}
 {{ form_start(form) }}
     {{ form_row(form.libelle, {label: texte == 'option' ? 'options.labels.libelle'|trans({}, 'form') : ''}) }}
-    {{ form_row(form.respParcours, {label: texte == 'option' ? 'options.labels.respParcours'|trans({}, 'form') : ''}) }}
-<a
-        href="#"
-        {{ stimulus_controller('modal', {
-            size: 'lg',
-            modalTitle: 'fiche_matiere.step1_collegue_manquant.title'|trans({}, 'form'),
-            nomEvenement: 'refreshStep',
-            modalUrl: path('app_user_missing', {action: 'responsableParcours', id: parcour is defined ? parcour.id : null}) }) }}
-        data-action="click->modal#openModal"
-        data-size="lg"
-        class="ms-4"
-        data-bs-toggle="tooltip"
-        data-bs-placement="bottom"
-        title="{{ 'fiche_matiere.step1_collegue_manquant.title'|trans({}, 'form') }}"
->
-    <i class="{{ iconAdd }}"></i>
-    <span> {{ 'fiche_matiere.step1_collegue_manquant.label'|trans({}, 'form') }}</span>
-</a>
-{{ form_row(form.coResponsable, {label: texte == 'option' ? 'options.labels.coResponsable'|trans({}, 'form') : ''}) }}
-<a
-        href="#"
-        {{ stimulus_controller('modal', {
-            size: 'lg',
-            modalTitle: 'fiche_matiere.step1_collegue_manquant.title'|trans({}, 'form'),
-            nomEvenement: 'refreshStep',
-            modalUrl: path('app_user_missing', {action: 'coResponsableParcours', id: parcour is defined ? parcour.id : null}) }) }}
-        data-action="click->modal#openModal"
-        data-size="lg"
-        class="ms-4"
-        data-bs-toggle="tooltip"
-        data-bs-placement="bottom"
-        title="{{ 'fiche_matiere.step1_collegue_manquant.title'|trans({}, 'form') }}"
->
-    <i class="{{ iconAdd }}"></i>
-    <span> {{ 'fiche_matiere.step1_collegue_manquant.label'|trans({}, 'form') }}</span>
-</a>
+    {{ form_row(form.respParcours, {label: texte == 'option' ? 'options.labels.respParcours'|trans({}, 'form') : '', 'help': 'Si le responsable ou co-responsable n\'est pas dans la liste, mettre le responsable de mention, vous pourrez l\'ajouter lors de la configuration de votre parcours.'}) }}
+{# todo: modal dans une modal pose problème #}
+{# <a #}
+{#        href="#" #}
+{#        {{ stimulus_controller('modal', { #}
+{#            size: 'lg', #}
+{#            modalTitle: 'fiche_matiere.step1_collegue_manquant.title'|trans({}, 'form'), #}
+{#            nomEvenement: 'refreshStep', #}
+{#            modalUrl: path('app_user_missing', {action: 'responsableParcours', id: parcour is defined ? parcour.id : null}) }) }} #}
+{#        data-action="click->modal#openModal" #}
+{#        data-size="lg" #}
+{#        class="ms-4" #}
+{#        data-bs-toggle="tooltip" #}
+{#        data-bs-placement="bottom" #}
+{#        title="{{ 'fiche_matiere.step1_collegue_manquant.title'|trans({}, 'form') }}" #}
+{# > #}
+{#    <i class="{{ iconAdd }}"></i> #}
+{#    <span> {{ 'fiche_matiere.step1_collegue_manquant.label'|trans({}, 'form') }}</span> #}
+{# </a> #}
+{{ form_row(form.coResponsable, {label: texte == 'option' ? 'options.labels.coResponsable'|trans({}, 'form') : '', 'help': 'Si le responsable ou co-responsable n\'est pas dans la liste, mettre le responsable de mention, vous pourrez l\'ajouter lors de la configuration de votre parcours.'}) }}
+{# <a #}
+{#        href="#" #}
+{#        {{ stimulus_controller('modal', { #}
+{#            size: 'lg', #}
+{#            modalTitle: 'fiche_matiere.step1_collegue_manquant.title'|trans({}, 'form'), #}
+{#            nomEvenement: 'refreshStep', #}
+{#            modalUrl: path('app_user_missing', {action: 'coResponsableParcours', id: parcour is defined ? parcour.id : null}) }) }} #}
+{#        data-action="click->modal#openModal" #}
+{#        data-size="lg" #}
+{#        class="ms-4" #}
+{#        data-bs-toggle="tooltip" #}
+{#        data-bs-placement="bottom" #}
+{#        title="{{ 'fiche_matiere.step1_collegue_manquant.title'|trans({}, 'form') }}" #}
+{# > #}
+{#    <i class="{{ iconAdd }}"></i> #}
+{#    <span> {{ 'fiche_matiere.step1_collegue_manquant.label'|trans({}, 'form') }}</span> #}
+{# </a> #}
 
 {{ form_row(form.sigle, {label: texte == 'option' ? 'options.labels.sigle'|trans({}, 'form') : ''}) }}
 
