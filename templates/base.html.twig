@@ -474,6 +474,7 @@
                                     <a href="#scolarite">
                                         <span class="label">Scolarité</span>
                                     </a>
+                                    {% if is_granted('ROLE_ADMIN') %}
                                     <ul id="scolarite">
                                         <li>
                                             <a href="{{ path('app_codification_liste') }}">
@@ -481,6 +482,7 @@
                                             </a>
                                         </li>
                                     </ul>
+                                    {% endif %}
                                 </li>
                                 {% for composante in app.user.composanteResponsableDpe %}
                                     {% if is_granted('CAN_COMPOSANTE_VALIDATE_MY', composante) %}

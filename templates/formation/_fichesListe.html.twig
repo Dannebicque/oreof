@@ -41,6 +41,7 @@ bouton pour valider/invalide les étapes successives #}
                     {{ displaySort('mention', sort, direction) }}
                 </a>
             </th>
+            <th>En cours<br>rédaction</th>
             <th>Etat remplissage</th>
             <th>En attente<br> validation</th>
             <th> En attente <br>
@@ -104,6 +105,7 @@ bouton pour valider/invalide les étapes successives #}
                     </select>
                 </th>
 
+                <th>En cours<br>rédaction</th>
                 <th>Etat remplissage</th>
                 <th>En attente<br> validation</th>
                 <th> En attente <br>
@@ -143,6 +145,7 @@ bouton pour valider/invalide les étapes successives #}
                         {% endif %}
                     </td>
 
+                    <td>{{ stats[formation.id].stats.nbEnCoursRedaction }}</td>
                     <td>{{ stats[formation.id].stats.nbFichesCompletes }} / {{ stats[formation.id].stats.nbFiches }}</td>
                     <td>{{ stats[formation.id].stats.nbFichesNonValidees }}</td>
                     <td>{{ stats[formation.id].stats.nbFichesNonValideesSes }}</td>
