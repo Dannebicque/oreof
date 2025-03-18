@@ -160,6 +160,7 @@ class GlobalVoter extends Voter
 
     private function canAccessFormation(Formation $subject, mixed $centre): bool
     {
+        $canOpen = true;
         $canEdit =
             $subject->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_TEXTE ||
             $subject->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_MCCC_TEXTE ||
@@ -168,7 +169,7 @@ class GlobalVoter extends Voter
 
         $centre = ($centre->getFormation() === $subject && ($subject->getCoResponsable()?->getId() === $this->user || $subject->getResponsableMention()?->getId() === $this->user))|| $centre->getComposante() === $subject->getComposantePorteuse() || $this->security->isGranted('ROLE_SES');
 
-        return $canEdit && $centre;
+        return ($canEdit || $canOpen) && $centre;
     }
 
     //    private function canAccessParcours(Parcours $subject, mixed $centre): bool
@@ -222,8 +223,10 @@ class GlobalVoter extends Voter
             return false;
         }
         $canEdit = false;
+        $canOpen = false;
         if ($parcours->getRespParcours() === $this->user || $parcours->getCoResponsable() === $this->user) {
             $canEdit = $this->dpeParcoursWorkflow->can($subject, 'autoriser') || $this->dpeParcoursWorkflow->can($subject, 'valider_parcours');
+            $canOpen = true;
         }
 
         if ($parcours->getFormation()?->getResponsableMention() === $this->user || $parcours->getFormation()?->getCoResponsable() === $this->user) {
@@ -231,6 +234,7 @@ class GlobalVoter extends Voter
                 $this->dpeParcoursWorkflow->can($subject, 'valider_parcours') ||
               //  $this->dpeParcoursWorkflow->can(subject, 'valider_ouverture_sans_cfvu') || todo: a mettre dès l'ouverture
                 $this->dpeParcoursWorkflow->can($subject, 'valider_rf');
+            $canOpen = true;
         }
 
         if (
@@ -241,6 +245,7 @@ class GlobalVoter extends Voter
                 $this->dpeParcoursWorkflow->can($subject, 'valider_parcours') ||
                 //$this->dpeParcoursWorkflow->can(subject, 'valider_ouverture_sans_cfvu') ||
                 $this->dpeParcoursWorkflow->can($subject, 'valider_rf');
+            $canOpen = true;
         }
 
         if ($this->security->isGranted('ROLE_SES')) {
@@ -251,10 +256,11 @@ class GlobalVoter extends Voter
                 $this->dpeParcoursWorkflow->can($subject, 'valider_parcours') ||
                 $this->dpeParcoursWorkflow->can($subject, 'valider_rf') ||
                 $this->dpeParcoursWorkflow->can($subject, 'valider_central');
+            $canOpen = true;
         }
 
 
-        return $canEdit;
+        return $canEdit || $canOpen;
     }
 
     private function canAccessComposante(Composante $subject, mixed $centre): bool
