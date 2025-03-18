@@ -17,6 +17,7 @@ use App\Entity\FicheMatiere;
 use App\Entity\Mccc;
 use App\Entity\Parcours;
 use App\Entity\ParcoursVersioning;
+use App\Entity\TypeDiplome;
 use App\Entity\TypeEpreuve;
 use App\Events\McccUpdateEvent;
 use App\Repository\ElementConstitutifRepository;
@@ -227,24 +228,22 @@ class ElementConstitutifMcccController extends AbstractController
         ]);
     }
 
-    #[Route('/{UeDisplay}/{indexEc}/{indexEcEnfant}/mccc-ec-versioning/{parcours}/non-editable', name: 'app_element_constitutif_mccc_versioning')]
+    #[Route('/{UeDisplay}/{indexEc}/{indexEcEnfant}/mccc-ec-versioning/{parcoursVersioning}/non-editable', name: 'app_element_constitutif_mccc_versioning')]
     public function mcccVersioning(
         string $UeDisplay,
         int $indexEc,
         int $indexEcEnfant,
-        Parcours $parcours,
+        ParcoursVersioning $parcoursVersioning,
         TypeDiplomeRegistry $typeDiplomeReg,
         VersioningParcours $versioningParcours,
         EntityManagerInterface $entityManager
     ){
-        $typeDiplome = $parcours->getFormation()->getTypeDiplome();
+        $versionData = $versioningParcours->loadParcoursFromVersion($parcoursVersioning);
+        $libelleTypeDiplome = $versionData['parcours']->getFormation()->getTypeDiplome()->getLibelle();
+        $typeDiplome = $entityManager->getRepository(TypeDiplome::class)->findOneBy(['libelle' => $libelleTypeDiplome]);
         $templateForm = $typeDiplomeReg->getTypeDiplome($typeDiplome->getModeleMcc())::TEMPLATE_FORM_MCCC;
         $typeEpreuveDiplome = $entityManager->getRepository(TypeEpreuve::class)->findByTypeDiplome($typeDiplome);
 
-        $lastVersion = $entityManager->getRepository(ParcoursVersioning::class)->findLastVersion($parcours)[0];
-        // On récupère la dernière version
-        $lastVersionDataParcours = $versioningParcours->loadParcoursFromVersion($lastVersion);
-        
         // On rassemble toutes les UE
         $ueArray = array_map(function($semestre) use ($UeDisplay) {
             $ueFromSemestre = [...$semestre->ues];
@@ -264,7 +263,7 @@ class ElementConstitutifMcccController extends AbstractController
             );
             $uesEnfantsDeuxiemeNiveau = array_merge(...$uesEnfantsDeuxiemeNiveau);
             return array_merge($ueFromSemestre, $uesEnfants, $uesEnfantsDeuxiemeNiveau);
-        }, $lastVersionDataParcours['dto']->semestres);
+        }, $versionData['dto']->semestres);
 
         $ueArray = array_merge(...$ueArray);
 

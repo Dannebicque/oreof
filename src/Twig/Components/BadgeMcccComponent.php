@@ -6,6 +6,7 @@ use App\Classes\GetElementConstitutif;
 use App\Entity\DpeParcours;
 use App\Entity\ElementConstitutif;
 use App\Entity\Parcours;
+use App\Entity\ParcoursVersioning;
 use App\Entity\Ue;
 use Symfony\UX\TwigComponent\Attribute\AsTwigComponent;
 use Symfony\UX\TwigComponent\Attribute\PostMount;
@@ -25,6 +26,7 @@ final class BadgeMcccComponent
     public ?bool $texte = false;
     public ?bool $isParcoursProprietaire = false;
 
+    public ?ParcoursVersioning $parcoursVersioning = null;
 
     #[PostMount]
     public function mounted(): void

@@ -3,13 +3,32 @@
         <span class="badge bg-info ms-1 w-100">MCCC du parent</span>
     {% else %}
         <button
-                {% if this.editable == false %}
+                {% if this.editable == false or (isVersioning is defined and isVersioning == true) %}
+                    {% set parcoursId = this.parcours.id %}
+                    {% if isVersioning == true %}
+                        {% set parcoursId = parcoursVersioning.parcours.id %}
+                    {% endif %}
                     {{ stimulus_controller('modal', {
                         size: 'lg',
                         nomEvenement: 'refreshListeEc',
-                        details: {ue: this.ue.id, parcours: this.parcours.id},
+                        details: {ue: this.ue.id, parcours: parcoursId},
                         modalTitle: 'Modalités de Contrôle des Connaissances et des Compétences',
-                        modalUrl: path('app_element_constitutif_mccc_non_editable',{'id': this.elementConstitutif.id, parcours: this.parcours.id}) }) }}
+                        modalUrl: 
+                            isVersioning == true
+                            ? path('app_element_constitutif_mccc_versioning', 
+                                {
+                                    parcoursVersioning: parcoursVersioning.id,
+                                    UeDisplay: UeDisplay,
+                                    indexEc: indexEc,
+                                    indexEcEnfant: indexEcEnfant
+                                }
+                            ) 
+                            : path('app_element_constitutif_mccc_non_editable',
+                                {'id': this.elementConstitutif.id, parcours: parcoursId }
+                            )
+                            }
+                        ) 
+                    }}
                 {% else %}
                     {% if this.deplacer == true and this.editable == true %}
                         {{ stimulus_controller('modal', {
@@ -33,7 +52,9 @@
                 title="Modalités de Contrôle des Connaissances et des Compétences"
         >
             {% if this.texte == true %}<i class="fal fa-marker"></i>{% endif %}
-            <span class="badge bg-{% if this.etatMcccComplet == true %}success{% else %}warning{% endif %}">
+            <span class="badge bg-{% if this.etatMcccComplet == true 
+                or (isVersioning is defined and isVersioning == true) 
+                %}success{% else %}warning{% endif %}">
                {% if this.texte == true %}{% if this.etatMcccComplet == true %}Complet{% else %}A saisir{% endif %} {% else %}MCCC{% endif %}
                 {% if this.isParcoursProprietaire == false and this.isMcccSpecifiques == false  %}
                     <i class="fal fa-link" title="MCCC repris de la fiche matière"></i>{% endif %}
