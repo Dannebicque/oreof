@@ -468,7 +468,7 @@ framework:
             btn: warning
             icon: 'fa-pencil'
         rouvrir_fiche_matiere_b:
-          from: 'valide_pour_publication'
+          from: 'soumis_central'
           to: 'en_cours_redaction'
           metadata:
             type: valider
