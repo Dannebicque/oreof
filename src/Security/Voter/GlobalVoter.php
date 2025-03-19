@@ -92,9 +92,11 @@ class GlobalVoter extends Voter
                     // Soit formation ou composante, on vérifie si le centre est dans la portée
                     // soit par héritage
                     if ($subject instanceof Formation) {
-
-                        if (strtolower($this->permission) === PermissionEnum::MANAGE->value) {
-                            return $this->canManageFormation($subject, $centre);
+                        if (
+                            strtolower($this->permission) === PermissionEnum::MANAGE->value &&
+                        $this->canManageFormation($subject, $centre) === true
+                        ) {
+                            return true;
                         }
 
                         if ($this->canAccessFormation($subject, $centre) === true) {
@@ -111,8 +113,8 @@ class GlobalVoter extends Voter
                     if ($subject instanceof Parcours) {
                         $dpeParcours = GetDpeParcours::getFromParcours($subject);
                         if ($dpeParcours !== null) {
-                            if (strtolower($this->permission) === PermissionEnum::MANAGE->value) {
-                                return $this->canManageDpeParcours($dpeParcours, $centre);
+                            if (strtolower($this->permission) === PermissionEnum::MANAGE->value && $this->canManageDpeParcours($dpeParcours, $centre) === true) {
+                                return true;
                             }
 
                             if ($this->canAccessDpeParcours($dpeParcours, $centre) === true) {
@@ -122,8 +124,8 @@ class GlobalVoter extends Voter
                     }
 
                     if ($subject instanceof DpeParcours) {
-                        if (strtolower($this->permission) === PermissionEnum::MANAGE->value) {
-                            return $this->canManageDpeParcours($subject, $centre);
+                        if (strtolower($this->permission) === PermissionEnum::MANAGE->value && $this->canManageDpeParcours($subject, $centre) === true) {
+                            return true;
                         }
 
                         if ($this->canAccessDpeParcours($subject, $centre) === true) {
@@ -177,19 +179,18 @@ class GlobalVoter extends Voter
             $subject->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_PARCOURS ||
             $subject->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION;
 
-        $centre = ($centre->getFormation() === $subject && ($subject->getCoResponsable()?->getId() === $this->user || $subject->getResponsableMention()?->getId() === $this->user))|| $centre->getComposante() === $subject->getComposantePorteuse() || $this->security->isGranted('ROLE_SES');
+        $canCentre = ($centre->getFormation() === $subject && ($subject->getCoResponsable()?->getId() === $this->user || $subject->getResponsableMention()?->getId() === $this->user))|| $centre->getComposante() === $subject->getComposantePorteuse() || $this->security->isGranted('ROLE_SES');
 
-        return $canEdit && $centre;
+        return $canEdit && $canCentre;
     }
 
     private function canManageFormation(Formation $subject, mixed $centre): bool
     {
         $canEdit =
             $subject->getEtatReconduction() === TypeModificationDpeEnum::OUVERT || $subject->getEtatReconduction() === null;
+        $canCentre = ($centre->getFormation() === $subject && ($subject->getCoResponsable()?->getId() === $this->user->getId() || $subject->getResponsableMention()?->getId() === $this->user->getId()))|| $centre->getComposante()?->getId() === $subject->getComposantePorteuse()?->getId() || $this->security->isGranted('ROLE_SES');
 
-        $centre = ($centre->getFormation() === $subject && ($subject->getCoResponsable()?->getId() === $this->user->getId() || $subject->getResponsableMention()?->getId() === $this->user->getId()))|| $centre->getComposante()?->getId() === $subject->getComposantePorteuse()?->getId() || $this->security->isGranted('ROLE_SES');
-
-        return $canEdit && $centre;
+        return $canEdit && $canCentre;
     }
 
     //    private function canAccessParcours(Parcours $subject, mixed $centre): bool
