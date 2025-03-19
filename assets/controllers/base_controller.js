@@ -143,11 +143,10 @@ export default class extends Controller {
   }
 
   redirectEdit() {
-    // ajouter /edt à l'URL et recharge la page
-    // vérifier si l'URL contient déjà /edit
-    if (window.location.href.indexOf('/edit') === -1) {
-      window.location.href = `${window.location.href}/edit`
+    if (!window.location.href.includes('/edit')) {
+      window.location.assign(`${window.location.href}/edit`);
     }
+
     window.location.reload()
   }
 }
