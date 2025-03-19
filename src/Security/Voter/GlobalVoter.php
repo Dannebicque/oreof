@@ -187,7 +187,7 @@ class GlobalVoter extends Voter
         $canEdit =
             $subject->getEtatReconduction() === TypeModificationDpeEnum::OUVERT || $subject->getEtatReconduction() === null;
 
-        $centre = ($centre->getFormation() === $subject && ($subject->getCoResponsable()?->getId() === $this->user || $subject->getResponsableMention()?->getId() === $this->user))|| $centre->getComposante() === $subject->getComposantePorteuse() || $this->security->isGranted('ROLE_SES');
+        $centre = ($centre->getFormation() === $subject && ($subject->getCoResponsable()?->getId() === $this->user->getId() || $subject->getResponsableMention()?->getId() === $this->user->getId()))|| $centre->getComposante()?->getId() === $subject->getComposantePorteuse()?->getId() || $this->security->isGranted('ROLE_SES');
 
         return $canEdit && $centre;
     }
