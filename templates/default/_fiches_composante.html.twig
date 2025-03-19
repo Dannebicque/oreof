@@ -48,10 +48,6 @@
                         <i class="fas fa-check"></i>
                         <span> Voir les fiches</span>
                     </a>
-                    {% if formation.hasParcours and formation.parcours|length > 0 %}
-                            {{ formation.parcours|length }} parcours
-                    {% endif %}
-
                 </td>
             </tr>
     {% else %}
