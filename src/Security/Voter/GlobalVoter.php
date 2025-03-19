@@ -185,7 +185,7 @@ class GlobalVoter extends Voter
     private function canManageFormation(Formation $subject, mixed $centre): bool
     {
         $canEdit =
-            $subject->getEtatReconduction() === TypeModificationDpeEnum::OUVERT;
+            $subject->getEtatReconduction() === TypeModificationDpeEnum::OUVERT || $subject->getEtatReconduction() === null;
 
         $centre = ($centre->getFormation() === $subject && ($subject->getCoResponsable()?->getId() === $this->user || $subject->getResponsableMention()?->getId() === $this->user))|| $centre->getComposante() === $subject->getComposantePorteuse() || $this->security->isGranted('ROLE_SES');
 
