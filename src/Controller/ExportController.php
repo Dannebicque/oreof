@@ -41,7 +41,6 @@ class ExportController extends BaseController
 
     #[Route('/export', name: 'app_export_index')]
     public function index(
-        CampagneCollecteRepository $anneeUniversitaireRepository,
         ComposanteRepository       $composanteRepository,
     ): Response {
         $this->denyAccessUnlessGranted('ROLE_SES');
@@ -57,7 +56,6 @@ class ExportController extends BaseController
 
     #[Route('/export/cfvu', name: 'app_export_cfvu')]
     public function exportCfvu(
-        CampagneCollecteRepository $anneeUniversitaireRepository,
         ComposanteRepository       $composanteRepository,
     ): Response {
         $autorise = $this->isGranted('CAN_ETABLISSEMENT_CONSEILLER_ALL', $this->getUser()) or $this->isGranted('CAN_ETABLISSEMENT_SHOW_ALL', $this->getUser());
@@ -67,7 +65,6 @@ class ExportController extends BaseController
         }
 
         return $this->render('export/index.html.twig', [
-            'annees' => $anneeUniversitaireRepository->findAll(),
             'composantes' => $composanteRepository->findAll(),
             'ses' => false,
             'isCfvu' => true,
@@ -77,13 +74,11 @@ class ExportController extends BaseController
 
     #[Route('/export/consultation', name: 'app_export_show')]
     public function exportShow(
-        CampagneCollecteRepository $anneeUniversitaireRepository,
         ComposanteRepository       $composanteRepository,
     ): Response {
         $this->denyAccessUnlessGranted('CAN_ETABLISSEMENT_SHOW_ALL', $this->getUser());
 
         return $this->render('export/index.html.twig', [
-            'annees' => $anneeUniversitaireRepository->findAll(),
             'composantes' => $composanteRepository->findAll(),
             'ses' => false,
             'isCfvu' => true,
@@ -94,11 +89,9 @@ class ExportController extends BaseController
 
     #[Route('/export/composante/{composante}', name: 'app_export_composante_index')]
     public function composante(
-        CampagneCollecteRepository $anneeUniversitaireRepository,
         Composante                 $composante,
     ): Response {
         return $this->render('export/index.html.twig', [
-            'annees' => $anneeUniversitaireRepository->findAll(),
             'composante' => $composante,
             'isCfvu' => false,
             'ses' => false,
@@ -118,10 +111,13 @@ class ExportController extends BaseController
             throw $this->createNotFoundException('La composante n\'existe pas');
         }
 
-        if ($this->isGranted('ROLE_SES') || $this->isGranted('CAN_ETABLISSEMENT_SHOW_ALL', $this->getUser())) {
+        if ($this->isGranted('ROLE_SES') ||
+            $this->isGranted('CAN_ETABLISSEMENT_SHOW_ALL', $this->getUser())) {
             $dpes = $dpeParcoursRepository->findParcoursByComposante($this->getCampagneCollecte(), $composante);
         } elseif ($this->isGranted('CAN_ETABLISSEMENT_CONSEILLER_ALL', $this->getUser())) {
             $dpes = $dpeParcoursRepository->findParcoursByComposanteCfvu($this->getCampagneCollecte(), $composante);
+        } elseif ($this->isGranted('CAN_COMPOSANTE_SHOW_MY', $this->getUser())) {
+            $dpes = $dpeParcoursRepository->findParcoursByComposante($this->getCampagneCollecte(), $composante);
         } else {
             $dpes = [];
         }

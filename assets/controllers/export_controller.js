@@ -90,7 +90,7 @@ export default class extends Controller {
       const body = new URLSearchParams({
         composante,
       })
-
+      this.listeTarget.innerHTML = ''
       const response = await fetch(`${this.urlValue}?${body.toString()}`)
       this.listeTarget.innerHTML = await response.text()
     }

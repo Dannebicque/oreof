@@ -30,8 +30,8 @@
             {% else %}
                 {{ stimulus_controller('export',
                     {
-                        url: path('app_export_liste', {composante:composante.id}),
-                        urlValide: path('app_export_valide', {composante:composante.id})
+                        url: path('app_export_liste'),
+                        urlValide: path('app_export_valide')
                     }) }}
             {% endif %}
     >
