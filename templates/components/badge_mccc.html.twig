@@ -3,36 +3,36 @@
         <span class="badge bg-info ms-1 w-100">MCCC du parent</span>
     {% else %}
         <button
-                {% if this.editable == false or (isVersioning is defined and isVersioning == true) %}
-                    {% set parcoursId = this.parcours.id %}
-                    {% if isVersioning == true %}
-                        {% set parcoursId = parcoursVersioning.parcours.id %}
-                    {% endif %}
-                    {{ stimulus_controller('modal', {
-                        size: 'lg',
-                        nomEvenement: 'refreshListeEc',
-                        details: {ue: this.ue.id, parcours: parcoursId},
-                        modalTitle: 'Modalités de Contrôle des Connaissances et des Compétences',
-                        modalUrl: 
-                            isVersioning == true
-                            ? path('app_element_constitutif_mccc_versioning', 
+                {% if this.editable == false %}
+                    {% if parcoursVersioning is defined and parcoursVersioning != null 
+                        and isVersioning is defined and isVersioning == true
+                    %}
+                        {% set modalUrl = path('app_element_constitutif_mccc_versioning', 
                                 {
                                     parcoursVersioning: parcoursVersioning.id,
                                     UeDisplay: UeDisplay,
                                     indexEc: indexEc,
-                                    indexEcEnfant: indexEcEnfant
-                                }
-                            ) 
-                            : path('app_element_constitutif_mccc_non_editable',
-                                {
-                                    'id': this.elementConstitutif.id, 
-                                    parcours: parcoursId,
-                                    codeVersion: UeDisplay ~ "##" ~ indexEc ~ "##" ~ indexEcEnfant
+                                    indexEcEnfant: indexEcEnfant,
+                                    elementConstitutif: -1,
+                                    isFromVersioning: 1
                                 }
                             )
-                            }
-                        ) 
-                    }}
+                        %}
+                    {% else %}
+                        {% set modalUrl = path('app_element_constitutif_mccc_non_editable', {
+                                    'id': this.elementConstitutif.id, 
+                                    parcours: this.parcours.id,
+                                    codeVersion: UeDisplay ~ "##" ~ indexEc ~ "##" ~ indexEcEnfant })
+                        %}
+                    {% endif %} 
+                    {{ stimulus_controller('modal', {
+                        size: 'lg',
+                        nomEvenement: 'refreshListeEc',
+                        details: {ue: this.ue.id, parcours: this.parcours.id},
+                        modalTitle: 'Modalités de Contrôle des Connaissances et des Compétences',
+                        modalUrl: modalUrl,
+                        }
+                    )}}
                 {% else %}
                     {% if this.deplacer == true and this.editable == true %}
                         {{ stimulus_controller('modal', {

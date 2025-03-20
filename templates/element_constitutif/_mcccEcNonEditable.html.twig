@@ -1,26 +1,14 @@
-{% if codeVersion is defined %}
-    {% set codeVersionDecode = codeVersion|split('##') %}
-{% endif %}
 <div {{ stimulus_controller('modal', {
+        size: 'lg',
         modalTitle: 'Modalités de Contrôle des Connaissances et des Compétences',
-        modalUrl: 
-        codeVersion is defined 
-            ? path('app_element_constitutif_mccc_versioning', {
-                parcoursVersioning: lastVersion.id,
-                UeDisplay: codeVersionDecode[0],
-                indexEc: codeVersionDecode[1],
-                indexEcEnfant: codeVersionDecode[2]
-            })
-            : ""
-        })
-    }}
->
-    <div {{ stimulus_target('modal', 'zoneToRefresh') }}>
-        <h2>MCCC pour {{ ec.libelle }}</h2>
+    }) 
+}}>
+<div {{ stimulus_target('modal', 'zoneToRefresh') }}>
+    <h2>MCCC pour {{ ec.libelle }}</h2>
 
-        <h3>ECTS</h3>
-        <p>{{ ects }}</p>
+    <h3>ECTS</h3>
+    <p>{{ ects }}</p>
 
-        {{ include('typeDiplome/mccc-non-editable/'~templateForm) }}
+    {{ include('typeDiplome/mccc-non-editable/'~templateForm) }}
     </div>
 </div>

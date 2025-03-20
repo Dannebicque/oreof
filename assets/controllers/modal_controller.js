@@ -44,9 +44,10 @@ export default class extends Controller {
     })
   }
 
-  async refreshModal(){
-    this.zoneToRefreshTarget.innerHTML = ''
-    const response = await fetch(`${this.modalUrlValue}`)
-    this.zoneToRefreshTarget.innerHTML = await response.text()
+  async refreshModalWithUrl(event){
+    let url = event.params.url;
+    this.zoneToRefreshTarget.innerHTML = '<div class="text-center">... Chargement en cours ...</div>';
+    const response = await fetch(`${url}`);
+    this.zoneToRefreshTarget.innerHTML = await response.text();
   }
 }

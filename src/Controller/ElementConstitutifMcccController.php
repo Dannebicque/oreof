@@ -230,15 +230,18 @@ class ElementConstitutifMcccController extends AbstractController
             'templateForm' => $typeD::TEMPLATE_FORM_MCCC,
             'mcccs' => $getElement->getMcccsFromFicheMatiere($typeD),
             'lastVersion' => $lastVersion,
-            'codeVersion' => $codeVersion
+            'codeVersion' => $codeVersion,
+            'isFromVersioning' => 0
         ]);
     }
 
-    #[Route('/{UeDisplay}/{indexEc}/{indexEcEnfant}/mccc-ec-versioning/{parcoursVersioning}/non-editable', name: 'app_element_constitutif_mccc_versioning')]
+    #[Route('/{UeDisplay}/{indexEc}/{indexEcEnfant}/{elementConstitutif}/mccc-ec-versioning/{parcoursVersioning}/non-editable/{isFromVersioning}', name: 'app_element_constitutif_mccc_versioning')]
     public function mcccVersioning(
         string $UeDisplay,
         int $indexEc,
         int $indexEcEnfant,
+        int $isFromVersioning,
+        ElementConstitutif|int $elementConstitutif = -1,
         ParcoursVersioning $parcoursVersioning,
         TypeDiplomeRegistry $typeDiplomeReg,
         VersioningParcours $versioningParcours,
@@ -304,6 +307,9 @@ class ElementConstitutifMcccController extends AbstractController
             }
         }
 
+        $codeVersion = $UeDisplay . "##" . $indexEc . "##";
+        $codeVersion .= isset($indexEcEnfant) ? "{$indexEcEnfant}" : "-1";
+
         return $this->render('element_constitutif/_mcccEcNonEditable.html.twig', [
             'isMcccImpose' => $structureEc->elementConstitutif->getFicheMatiere()?->isMcccImpose(),
             'isEctsImpose' => $structureEc->elementConstitutif->getFicheMatiere()?->isEctsImpose(),
@@ -312,7 +318,12 @@ class ElementConstitutifMcccController extends AbstractController
             'ec' => $structureEc->elementConstitutif,
             'ects' => $structureEc->heuresEctsEc->ects,
             'templateForm' => $templateForm,
-            'mcccs' => $tabMcccs
+            'mcccs' => $tabMcccs,
+            'codeVersion' => $codeVersion,
+            'isMcccFromVersion' => true,
+            'parcoursId' => $parcoursVersioning->getParcours()->getId(),
+            'ecFromDb' => $elementConstitutif,
+            'isFromVersioning' => $isFromVersioning
         ]);
     }
 
