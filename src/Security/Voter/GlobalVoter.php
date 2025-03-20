@@ -280,7 +280,13 @@ class GlobalVoter extends Voter
 
     private function canAccessComposante(Composante $subject, mixed $centre): bool
     {
-        return true;
+        if (
+            ($centre->getComposante() === $subject && (in_array('Gestionnaire', $centre->getDroits()) || in_array('Directeur', $centre->getDroits()) || $subject->getResponsableDpe() === $this->user)) || $this->security->isGranted('ROLE_SES')
+        ) {
+            return true;
+        }
+
+        return false;
     }
 
     private function canUserAccessComposante(User $subject, UserCentre $centre): bool

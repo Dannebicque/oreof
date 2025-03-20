@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Composante;
 use App\Entity\DpeDemande;
 use App\Entity\Formation;
 use App\Entity\Parcours;
@@ -57,5 +58,16 @@ class DpeDemandeRepository extends ServiceEntityRepository
             ->setParameter('etat', $etat)
             ->getQuery()
             ->getOneOrNullResult();
+    }
+
+    public function findByComposante(Composante $composante): array
+    {
+        return $this->createQueryBuilder('d')
+            ->innerJoin('d.parcours', 'p')
+            ->innerJoin('p.formation', 'f')
+            ->where('f.composantePorteuse = :composante')
+            ->setParameter('composante', $composante)
+            ->getQuery()
+            ->getResult();
     }
 }

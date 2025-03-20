@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\Composante;
+use App\Repository\ComposanteRepository;
 use App\Repository\DpeDemandeRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,6 +20,19 @@ class DemandeDpeController extends AbstractController
     {
         return $this->render('demande_dpe/index.html.twig', [
             'demandes' => $dpeDemandeRepository->findAll(),
+        ]);
+    }
+
+    #[Route('/demande/dpe/composante/{composante}', name: 'app_demande_dpe_composante')]
+    public function dpeComposante(
+        Composante $composante,
+        DpeDemandeRepository $dpeDemandeRepository,
+    ): Response
+    {
+        $this->denyAccessUnlessGranted('CAN_COMPOSANTE_SHOW_MY', $composante);
+
+        return $this->render('demande_dpe/index.html.twig', [
+            'demandes' => $dpeDemandeRepository->findByComposante($composante),
         ]);
     }
 
