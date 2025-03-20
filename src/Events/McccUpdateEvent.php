@@ -19,12 +19,12 @@ class McccUpdateEvent extends Event
 
     public ElementConstitutif $elementConstitutif;
     public Parcours $parcours;
-    public $newMcccToText;
-    public $oldMcccToText;
-    public $newEctsToText;
-    public $oldEctsToText;
-    public $newStructureToText;
-    public $oldStructureToText;
+    public string $newMcccToText = '';
+    public string $oldMcccToText = '';
+    public string $newEctsToText = '';
+    public string $oldEctsToText = '';
+    public string $newStructureToText = '';
+    public string $oldStructureToText = '';
 
     public function __construct(
         ElementConstitutif $elementConstitutif,

@@ -601,7 +601,7 @@ class ElementConstitutifController extends BaseController
 
             //evenement pour MCCC sur EC mis à jour
             $event = new McccUpdateEvent($elementConstitutif, $parcours);
-            $event->setNewMccc($originalHeuresToText, $newHeuresToText);
+            $event->setNewStructure($originalHeuresToText, $newHeuresToText);
             $eventDispatcher->dispatch($event, McccUpdateEvent::UPDATE_MCCC);
 
             return $this->json(true);

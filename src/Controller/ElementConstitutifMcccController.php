@@ -73,6 +73,7 @@ class ElementConstitutifMcccController extends AbstractController
             if ($request->isMethod('POST')) {
                 $originalMcccToText = $this->mcccToTexte($getElement->getMcccsFromFicheMatiereCollection());
                 $originalEcts = $getElement->getFicheMatiereEcts();
+                $event = new McccUpdateEvent($elementConstitutif, $parcours);
 
                 if ($request->request->has('ec_step4') && array_key_exists('ects', $request->request->all()['ec_step4'])) {
                     if ($elementConstitutif->isEctsSpecifiques() === true &&
@@ -90,9 +91,7 @@ class ElementConstitutifMcccController extends AbstractController
                     }
 
                     //evenement pour ECTS sur EC mis à jour
-                    $event = new McccUpdateEvent($elementConstitutif, $parcours);
-                    $event->setNewMccc($originalEcts, $newEcts);
-                    $eventDispatcher->dispatch($event, McccUpdateEvent::UPDATE_MCCC);
+                    $event->setNewEcts($originalEcts, $newEcts);
 
                     $entityManager->flush();
                 }
