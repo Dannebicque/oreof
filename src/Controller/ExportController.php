@@ -23,6 +23,7 @@ class ExportController extends BaseController
         "pdf-mccc" => 'MCCC format PDF',
         "xlsx-light_mccc" => 'MCCC simplifiées format Excel (xslx)',
         "xlsx-version_mccc" => 'MCCC versionnées format Excel (xslx)',
+        "xlsx-responsable_compo" => 'Tableau des responsables / compo (xslx)',
         "pdf-light_mccc" => 'MCCC simplifiées format PDF',
         "pdf-fiches" => 'Fiches descriptions format PDF'
     ];
@@ -59,7 +60,11 @@ class ExportController extends BaseController
         CampagneCollecteRepository $anneeUniversitaireRepository,
         ComposanteRepository       $composanteRepository,
     ): Response {
-        $this->denyAccessUnlessGranted('CAN_ETABLISSEMENT_CONSEILLER_ALL', $this->getUser());
+        $autorise = $this->isGranted('CAN_ETABLISSEMENT_CONSEILLER_ALL', $this->getUser()) or $this->isGranted('CAN_ETABLISSEMENT_SHOW_ALL', $this->getUser());
+
+        if (!$autorise) {
+            throw $this->createAccessDeniedException();
+        }
 
         return $this->render('export/index.html.twig', [
             'annees' => $anneeUniversitaireRepository->findAll(),
@@ -129,7 +134,6 @@ class ExportController extends BaseController
     #[Route('/export/valide', name: 'app_export_valide')]
     public function valide(
         MessageBusInterface        $messageBus,
-        CampagneCollecteRepository $anneeUniversitaireRepository,
         Request                    $request,
     ): Response {
         $messageBus->dispatch(new Export(
@@ -137,7 +141,8 @@ class ExportController extends BaseController
             $request->request->get('type_document'),
             $request->request->all()['liste'] ?? [],
             $this->getCampagneCollecte(),
-            Tools::convertDate($request->request->get('date', null))
+            Tools::convertDate($request->request->get('date', null)),
+            $request->request->get('composante', null),
         ));
 
         return JsonReponse::success('Les documents sont en cours de génération, vous recevrez un mail lorsque les documents seront prêts');
