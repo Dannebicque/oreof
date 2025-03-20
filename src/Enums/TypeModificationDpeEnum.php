@@ -49,7 +49,7 @@ enum TypeModificationDpeEnum: string implements BadgeEnumInterface
             self::MODIFICATION => 'modification(s) MCCC, Maquette ou textes',
             self::MODIFICATION_PARCOURS => 'modification des parcours (ajout, suppression)',
             self::MODIFICATION_INTITULE => 'modification intitulé parcours',
-            self::MODIFICATION_MCCC => 'modification MCCC et Maquette',
+            self::MODIFICATION_MCCC => 'modification MCCC et Maquette et des textes',
             self::MODIFICATION_TEXTE => 'modification des textes',
             self::MODIFICATION_MCCC_TEXTE => 'modification MCCC, maquettes et des textes',
             self::ANNULATION_REOUVERTURE => 'Annulation de la réouverture',
