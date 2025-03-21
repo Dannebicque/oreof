@@ -231,7 +231,8 @@ class ElementConstitutifMcccController extends AbstractController
             'mcccs' => $getElement->getMcccsFromFicheMatiere($typeD),
             'lastVersion' => $lastVersion,
             'codeVersion' => $codeVersion,
-            'isFromVersioning' => 0
+            'isFromVersioning' => 0,
+            'libelleQuelleVersion' => 'Version actuelle'
         ]);
     }
 
@@ -323,7 +324,8 @@ class ElementConstitutifMcccController extends AbstractController
             'isMcccFromVersion' => true,
             'parcoursId' => $parcoursVersioning->getParcours()->getId(),
             'ecFromDb' => $elementConstitutif,
-            'isFromVersioning' => $isFromVersioning
+            'isFromVersioning' => $isFromVersioning,
+            'libelleQuelleVersion' => 'Version validée CFVU'
         ]);
     }
 
