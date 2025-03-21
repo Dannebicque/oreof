@@ -11,6 +11,7 @@ namespace App\MessageHandler;
 
 use App\Classes\Export\Export;
 use App\Repository\CampagneCollecteRepository;
+use App\Repository\ComposanteRepository;
 use App\Repository\UserRepository;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\MailerInterface;
@@ -20,6 +21,7 @@ use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 class ExportHandler
 {
     public function __construct(
+        private ComposanteRepository $composanteRepository,
         private UserRepository             $userRepository,
         private CampagneCollecteRepository $campagneCollecteRepository,
         private readonly MailerInterface   $mailer,
@@ -32,6 +34,11 @@ class ExportHandler
     {
         $this->export->setTypeDocument($exportMessage->getTypeDocument());
         $this->export->setDate($exportMessage->getDate());
+
+        if (null !== $exportMessage->getComposante()) {
+            $composante = $this->composanteRepository->find($exportMessage->getComposante());
+            $this->export->setComposante($composante);
+        }
 
         $user = $this->userRepository->find($exportMessage->getUser());
 

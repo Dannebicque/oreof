@@ -28,13 +28,6 @@ export default class extends Controller {
     let liste = []
     let typeDocs = null
     let isValid = true
-    // vérifier les champs obligatoires et mettre en surbrillance les champs non remplis
-    if (document.getElementById('annee_universitaire').value === '') {
-      document.getElementById('annee_universitaire').classList.add('is-invalid')
-      isValid = false
-    } else {
-      document.getElementById('annee_universitaire').classList.remove('is-invalid')
-    }
 
     if (!document.getElementById('type_document_global') || document.getElementById('type_document_global').value === '') {
       if (document.getElementById('composante').value === '') {
@@ -70,7 +63,6 @@ export default class extends Controller {
       })
 
       // ajoute les données du formulaire au formulaire
-      data.append('annee_universitaire', document.getElementById('annee_universitaire').value)
       data.append('composante', document.getElementById('composante').value)
       data.append('type_document', typeDocs)
       // data.append('type_document_global', document.getElementById('type_document_global').value)
@@ -93,14 +85,12 @@ export default class extends Controller {
   }
 
   async _updateListe() {
-    const annee = document.getElementById('annee_universitaire').value
     const composante = document.getElementById('composante').value
-    if (annee !== '' && composante !== '') {
+    if (composante !== '') {
       const body = new URLSearchParams({
-        annee,
         composante,
       })
-
+      this.listeTarget.innerHTML = ''
       const response = await fetch(`${this.urlValue}?${body.toString()}`)
       this.listeTarget.innerHTML = await response.text()
     }

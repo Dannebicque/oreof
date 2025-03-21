@@ -19,7 +19,9 @@ class Export
         private readonly string $typeDocument,
         private readonly array $formations,
         private readonly ?CampagneCollecte $campagneCollecte = null,
-        private readonly ?DateTimeInterface $date = null)
+        private readonly ?DateTimeInterface $date = null,
+        private readonly ?string $composante = null,
+    )
     {
     }
     public  function getDate(): ?DateTimeInterface
@@ -42,5 +44,10 @@ class Export
     public  function getCampagneCollecte(): ?CampagneCollecte
     {
         return $this->campagneCollecte;
+    }
+
+    public function getComposante(): ?string
+    {
+        return $this->composante;
     }
 }

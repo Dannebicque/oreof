@@ -32,29 +32,20 @@ class McccUpdateSubscriber implements EventSubscriberInterface
 
     public function onMcccUpdate(McccUpdateEvent $event)
     {
-        dump($event->getNewMcccToText());
-        dump($event->getOldMcccToText());
-        if ($event->getNewMcccToText() !== $event->getOldMcccToText()) {
-            dump('MCCC modifié');
-            // todo: réouvrir les parcours utilisant cet EC (fiche matière ou UE ou semestre si mutualisé)
+        if ($event->hasDiff()) {
             // mail au responsable de la formation/RP si réouverture
             $ficheMatiere = $event->getElementConstitutif()->getFicheMatiere();
             $ecs = $ficheMatiere->getElementConstitutifs();
             foreach ($ecs as $ec) {
                 $parcours = $ec->getParcours();
-                if ($parcours !== null) {
-                    $dpeParcours = GetDpeParcours::getFromParcours($parcours);
-                    if ($dpeParcours !== null && $dpeParcours->getEtatReconduction() === TypeModificationDpeEnum::OUVERT) {
-                        $dpeParcours->setEtatReconduction(TypeModificationDpeEnum::MODIFICATION_MCCC_TEXTE);
-                        $dpeParcours->setEtatValidation([1 => 'en_cours_redaction']);
+                if ($parcours !== null && $parcours->getId() !== $event->getParcours()->getId()) {
                         //mail
                         $this->mailer->initEmail();
                         $this->mailer->setTemplate('mails/mutualisation/parcours_reouverture_mccc.html.twig', [
                             'parcours' => $parcours,
+                            'formation' => $parcours->getFormation(),
                             'ec' => $ec,
-                            'ficheMatiere' => $ficheMatiere,
-                            'oldMccc' => $event->getOldMcccToText(),
-                            'newMccc' => $event->getNewMcccToText(),
+                            'ficheMatiere' => $ficheMatiere
                         ]);
                         $this->mailer->sendMessage(
                             [
@@ -63,10 +54,9 @@ class McccUpdateSubscriber implements EventSubscriberInterface
                             $parcours->getFormation()?->getResponsableMention()?->getEmail(),
                             $parcours->getFormation()?->getCoResponsable()?->getEmail(),
                     ],
-                            'Réouverture des parcours pour modification des MCCC sur une fiche mutualisée'
+                            '[ORéOF] Un élément mutualisé avec l\'un de vos parcours a été modifié'
                         );
                     }
-                }
             }
         }
     }

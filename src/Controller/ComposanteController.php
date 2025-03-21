@@ -29,29 +29,6 @@ class ComposanteController extends BaseController
         ]);
     }
 
-    #[Route('/composante/campagne-collecte/{composante}', name: 'app_composante_campagne_collecte')]
-    public function campagneCollecte(
-        DpeParcoursRepository $dpeParcoursRepository,
-        Composante $composante): Response
-    {
-        $parcours = $dpeParcoursRepository->findByComposanteAndCampagne($composante, $this->getCampagneCollecte());
-
-        $tFormations = [];
-
-        foreach ($parcours as $p) {
-            $tFormations[$p->getFormation()?->getId()]['formation'] = $p->getFormation();
-            $tFormations[$p->getFormation()?->getId()]['parcours'][] = $p;
-        }
-
-
-        return $this->render('composante/campagne_collecte.html.twig', [
-            'composante' => $composante,
-            'formations' => $tFormations,
-            'campagne' => $this->getCampagneCollecte()->isDefaut() && $this->getCampagneCollecte()->isMailDpeEnvoye(),
-            'etats' => TypeModificationDpeEnum::cases()
-        ]);
-    }
-
     #[IsGranted("ROLE_PDF_DOWNLOADER")]
     #[Route('/composante/{composante_id}/synthese_modification/pdf', 'export_pdf_synthese_modification_composante')]
     public function exportSyntheseAsPdfForComposante(

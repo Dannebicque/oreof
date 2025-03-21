@@ -13,12 +13,13 @@ use App\Classes\CalculStructureParcours;
 use App\Classes\GetFormations;
 use App\DTO\StatsFichesMatieres;
 use App\Repository\ComposanteRepository;
+use App\Repository\FormationRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-class DefaultController extends AbstractController
+class DefaultController extends BaseController
 {
     #[Route('/', name: 'app_homepage')]
     public function index(
@@ -83,8 +84,8 @@ class DefaultController extends AbstractController
     #[Route('/ses/fiches-composante', name: 'app_fiches_composantes')]
     public function fichesComposante(
         ComposanteRepository   $composanteRepository,
+        FormationRepository $formationRepository,
         CalculStructureParcours $calculStructureParcours,
-        GetFormations         $getFormations,
         Request               $request,
     ): Response {
         $composante = $composanteRepository->find($request->query->get('value'));
@@ -93,7 +94,7 @@ class DefaultController extends AbstractController
             throw $this->createNotFoundException('La composante n\'existe pas');
         }
 
-        $tFormations = $composante->getFormations();
+        $tFormations = $formationRepository->findByComposanteAndDpe($composante->getId(), $this->getCampagneCollecte());
 
         $stats = [];
         foreach ($tFormations as $formation) {

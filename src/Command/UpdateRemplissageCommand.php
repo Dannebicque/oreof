@@ -21,15 +21,12 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 )]
 class UpdateRemplissageCommand extends Command
 {
-
-    private $lastId;
-
     public function __construct(
-        private CampagneCollecteRepository $collecteRepository,
-        private FormationRepository    $formationRepository,
-        private ParcoursRepository     $parcoursRepository,
-        private FicheMatiereRepository $ficheMatiereRepository,
-        private EntityManagerInterface $entityManager
+        private readonly CampagneCollecteRepository $collecteRepository,
+        private readonly FormationRepository        $formationRepository,
+        private readonly ParcoursRepository         $parcoursRepository,
+        private readonly FicheMatiereRepository     $ficheMatiereRepository,
+        private readonly EntityManagerInterface     $entityManager
     ) {
         parent::__construct();
     }
@@ -59,14 +56,12 @@ class UpdateRemplissageCommand extends Command
         //je veux un argument pour préciser la campagne
 
         $this->addOption('campagne', null, InputOption::VALUE_REQUIRED, 'Campagne à traiter');
-        $this->addOption('lastId', null, InputOption::VALUE_OPTIONAL, 'Last Id');
 
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-        $this->lastId = $input->getOption('lastId');
         $idCampagne = $input->getOption('campagne');
         $campagne = $this->collecteRepository->find($idCampagne);
 
@@ -99,15 +94,17 @@ class UpdateRemplissageCommand extends Command
 
     private function updateFiche(SymfonyStyle $io, CampagneCollecte $campagneCollecte): void
     {
-
         $io->title('Update du remplissage des Fiches');
         $fiches = $this->ficheMatiereRepository->findBy(['campagneCollecte' => $campagneCollecte]);
         $io->info(count($fiches) . ' fiches à mettre à jour');
         $totalFiches = count($fiches);
         $io->progressStart($totalFiches);
 
+        $batchSize = 40;
+        $i = 0;
+
         foreach ($fiches as $fiche) {
-            if ($fiche->getId() > $this->lastId) {
+            if ($fiche->getEtatFiche() === []) {
                 $remplissage = $fiche->remplissageBrut();
                 $fiche->setRemplissage($remplissage);
                 if ($remplissage->isFull()) {
@@ -115,13 +112,21 @@ class UpdateRemplissageCommand extends Command
                 } else {
                     $fiche->setEtatFiche(['en_cours_redaction' => 1]);
                 }
-                $this->entityManager->flush();
+                $i++;
+                if (($i % $batchSize) === 0) {
+                    $this->entityManager->flush();
+                   // $this->entityManager->clear();
+                }
                 $io->progressAdvance();
                 unset($remplissage);
             } else {
                 $io->progressAdvance();
             }
         }
+
+        $this->entityManager->flush();
+       // $this->entityManager->clear();
+
         $io->success('Remplissages mis à jours pour les fiches');
     }
 
@@ -131,12 +136,17 @@ class UpdateRemplissageCommand extends Command
         $formations = $this->formationRepository->findAll();
         $io->info(count($formations) . ' formations à mettre à jour');
         $io->progressStart(count($formations));
+        $batchSize = 40;
+        $i = 0;
         foreach ($formations as $formation) {
             $formation->setRemplissage(null);
             $io->progressAdvance();
-            $this->entityManager->flush();
-            unset($remplissage);
+            $i++;
+            if (($i % $batchSize) === 0) {
+                $this->entityManager->flush();
+            }
         }
+        $this->entityManager->flush();
         $io->success('Remplissages mis à jours pour les formations');
     }
 
@@ -147,14 +157,18 @@ class UpdateRemplissageCommand extends Command
         $io->info(count($parcours) . ' parcours à mettre à jour');
         // mettre une progress bar
         $io->progressStart(count($parcours));
-
+        $batchSize = 40;
+        $i = 0;
 
         foreach ($parcours as $parcour) {
             $parcour->setRemplissage(null);
             $io->progressAdvance();
-            $this->entityManager->flush();
-            unset($remplissage);
+            $i++;
+            if (($i % $batchSize) === 0) {
+                $this->entityManager->flush();
+            }
         }
+        $this->entityManager->flush();
         $io->success('Remplissages mis à jours pour les parcours');
     }
 }

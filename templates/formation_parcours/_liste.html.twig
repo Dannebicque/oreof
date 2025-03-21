@@ -69,12 +69,6 @@
                     <span> vérifier</span>
                 </a><br>
 
-                {#                <button {{ stimulus_action('formation--step3', 'dupliquerParcours', 'click', { #}
-                {#                    url:path('app_parcours_dupliquer',{'id': parcour.id}), #}
-                {#                    id: parcour.id}) }} class="btn btn-sm text-primary"> #}
-                {#                    <i class="{{ iconDuplicate }}"></i> Dupliquer #}
-                {#                </button> #}
-
                 <button
                         {{ stimulus_controller('modal', {
                             size: 'lg',

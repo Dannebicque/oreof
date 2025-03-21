@@ -46,16 +46,20 @@ Cela entrainera la vérification des informations saisies. Seules les fiches EC/
             <div class="card mb-2 bg-transparent no-shadow d-none d-md-block sh-3">
                 <div class="card-body pt-0 pb-0 h-100">
                     <div class="row g-0 h-100 align-content-center">
-                        <div class="col-12 col-md-5 d-flex align-items-center mb-2 text-secondary mb-md-0">
+                        <div class="col-12 col-md-4 d-flex align-items-center mb-2 text-secondary mb-md-0">
                             Parcours
-                        </div>
-                        <div class="col-6 col-md-2 d-flex align-items-center
-                        text-secondary">
-                            Etat remplissage
                         </div>
                         <div class="col-6 col-md-1 d-flex align-items-center
                         text-secondary">
-                            En attente<br> validation
+                            En cours de rédaction
+                        </div>
+                        <div class="col-6 col-md-2 d-flex align-items-center
+                        text-secondary">
+                            Etat de remplissage <br>(nb complet / nb fiches total)
+                        </div>
+                        <div class="col-6 col-md-1 d-flex align-items-center
+                        text-secondary">
+                            En attente<br> validation RP, RF ou DPE
                         </div>
                         <div class="col-6 col-md-1 d-flex align-items-center text-medium
                          text-secondary">
@@ -84,9 +88,13 @@ Cela entrainera la vérification des informations saisies. Seules les fiches EC/
                     <div class="card mb-2 sh-19 sh-md-8">
                         <div class="card-body pt-0 pb-0 h-100">
                             <div class="row g-0 h-100 align-content-center">
-                                <div class="col-12 col-md-5 d-flex flex-column justify-content-center mb-1 mb-md-0">
+                                <div class="col-12 col-md-4 d-flex flex-column justify-content-center mb-1 mb-md-0">
                                     <div class="text-muted d-md-none">Parcours</div>
                                     {{ parcours.libelle }} <span>{{ parcours.typeParcours|badgeTypeParcours }}</span>
+                                </div>
+                                <div class="col-6 col-md-1 d-flex flex-column justify-content-center mb-1 mb-md-0">
+                                    <div class="text-muted d-md-none">En Cours rédaction</div>
+                                    {{ stats.nbEnCoursRedaction }}
                                 </div>
                                 <div class="col-6 col-md-2 d-flex flex-column justify-content-center mb-1 mb-md-0">
                                     <div class="text-muted d-md-none">Etat remplissage</div>

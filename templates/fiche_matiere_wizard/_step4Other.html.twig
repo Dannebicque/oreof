@@ -2,10 +2,10 @@
     url: path('app_fiche_matiere_save', {ficheMatiere:ficheMatiere.id}),
 }) }}>
     <twig:alerte type="info"
-                 message="Les volumes horaires, les ECTS et les MCCC sont renseignés sur la fiche EC/matière et appliqués, par défaut, à tous les EC qui utilisent cette fiche EC/matière.<br>Les données peuvent être modifiées :
+                 message="Les volumes horaires, les ECTS et les MCCC sont renseignés sur la fiche EC/matière et appliqués, par défaut, à tous les EC qui utilisent cette fiche EC/matière.<br>Les données peuvent être modifiées à partir de l'onglet <strong>structure de la maquette</strong> de la fiche parcours ou formation  :
                  <ul>
 <li>Depuis l'EC <strong>{{ ecProprietaire != null ? ecProprietaire.display : '-' }}</strong> du parcours <strong>{{ ecProprietaire != null ? ecProprietaire.parcours.display : '-' }}</strong> pour impacter tous les EC qui utilisent cette fiche EC/matière mutualisée</li>
-<li>Depuis l'EC de la structure qui utilise la fiche EC/matière mutualisée pour une application spécifique sur le parcours modifié</li></ul>"/>
+                     <li>Depuis l'EC de la structure qui utilise la fiche EC/matière mutualisée pour une application spécifique <strong>sur le parcours modifié</strong></li></ul>"/>
     <h2>Volumes horaires</h2>
     {{ include('typeDiplome/ec/_structure.html.twig') }}
 

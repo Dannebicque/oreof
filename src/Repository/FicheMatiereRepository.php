@@ -93,8 +93,7 @@ class FicheMatiereRepository extends ServiceEntityRepository
             ->join(Formation::class, 'fo', 'WITH', 'p.formation = fo.id')
             ->leftJoin(User::class, 'u', 'WITH', 'f.responsableFicheMatiere = u.id')
             ->andWhere('f.campagneCollecte = :campagneCollecte')
-            ->andWhere('f.horsDiplome = 0')
-            ->orWhere('f.horsDiplome IS NULL')
+            ->andWhere('f.horsDiplome = 0 or f.horsDiplome IS NULL')
             ->setParameter('campagneCollecte', $campagneCollecte);
 
         $this->addFiltres($qb, $options);
@@ -150,8 +149,7 @@ class FicheMatiereRepository extends ServiceEntityRepository
         }
 
         if (array_key_exists('q', $options) && null !== $options['q']) {
-            $qb->andWhere('f.libelle LIKE :q')
-                ->orWhere('f.id LIKE :q')
+            $qb->andWhere('f.libelle LIKE :q or f.id LIKE :q')
                 ->setParameter('q', '%' . $options['q'] . '%');
         }
 
@@ -251,19 +249,44 @@ class FicheMatiereRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function findByDpe(?UserInterface $user, CampagneCollecte $campagneCollecte, array $options): array
+    {
+        $query = $this->createQueryBuilder('f')
+            ->join('f.parcours', 'p')
+            ->join('p.formation', 'fo')
+            ->join('fo.composantePorteuse', 'co')
+            ->andWhere('f.campagneCollecte = :campagneCollecte')
+            ->andWhere('(fo.responsableMention = :user OR fo.coResponsable = :user OR p.respParcours = :user OR p.coResponsable = :user OR f.responsableFicheMatiere = :user OR co.responsableDpe = :user)')
+            ->orderBy('f.libelle', 'ASC')
+            ->setParameters([
+                'campagneCollecte' => $campagneCollecte,
+                'user' => $user
+            ]);
+
+        $this->addFiltres($query, $options);
+
+        $qb = $query->getQuery();
+
+        $paginator = new Paginator($qb, false);
+
+        return [
+            'data' => iterator_to_array($paginator),
+            'total' => count($paginator),
+            'page' => $options['page'] ?? 1,
+            'limit' => 50,
+        ];
+    }
+
+
     public function findByResponsable(?UserInterface $user, CampagneCollecte $campagneCollecte, array $options): array
     {
         $query = $this->createQueryBuilder('f')
-            ->leftJoin('f.parcours', 'p')
+            ->join('f.parcours', 'p')
             ->join('p.formation', 'fo')
-            ->join('p.dpeParcours', 'dp')
-            ->orWhere('(fo.responsableMention = :parcours OR fo.coResponsable = :parcours)')
-            ->orWhere('(p.respParcours = :parcours OR p.coResponsable = :parcours)')
-            ->orWhere('f.responsableFicheMatiere = :user')
-            ->andWhere('dp.campagneCollecte = :campagneCollecte') // Pour la troisième requête
+            ->andWhere('f.campagneCollecte = :campagneCollecte')
+            ->andWhere('(fo.responsableMention = :user OR fo.coResponsable = :user OR p.respParcours = :user OR p.coResponsable = :user OR f.responsableFicheMatiere = :user)')
             ->orderBy('f.libelle', 'ASC')
             ->setParameters([
-                'parcours' => $user,
                 'campagneCollecte' => $campagneCollecte,
                 'user' => $user
             ]);

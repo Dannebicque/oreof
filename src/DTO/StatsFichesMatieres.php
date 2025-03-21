@@ -20,6 +20,7 @@ class StatsFichesMatieres
     public int $nbFichesNonValidees = 0;
 
     public int $nbFichesPubliees = 0;
+    public int $nbEnCoursRedaction = 0;
 
     public function addStatsParcours(StatsFichesMatieresParcours $statsFichesMatieresParcours): void
     {
@@ -29,5 +30,6 @@ class StatsFichesMatieres
         $this->nbFichesCompletes += $statsFichesMatieresParcours->nbFichesCompletes;
         $this->nbFichesNonValidees += $statsFichesMatieresParcours->nbFichesNonValidees;
         $this->nbFichesPubliees += $statsFichesMatieresParcours->nbFichesPubliees;
+        $this->nbEnCoursRedaction += $statsFichesMatieresParcours->nbEnCoursRedaction;
     }
 }

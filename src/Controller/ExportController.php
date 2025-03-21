@@ -23,6 +23,7 @@ class ExportController extends BaseController
         "pdf-mccc" => 'MCCC format PDF',
         "xlsx-light_mccc" => 'MCCC simplifiées format Excel (xslx)',
         "xlsx-version_mccc" => 'MCCC versionnées format Excel (xslx)',
+        "xlsx-responsable_compo" => 'Tableau des responsables / compo (xslx)',
         "pdf-light_mccc" => 'MCCC simplifiées format PDF',
         "pdf-fiches" => 'Fiches descriptions format PDF'
     ];
@@ -40,13 +41,11 @@ class ExportController extends BaseController
 
     #[Route('/export', name: 'app_export_index')]
     public function index(
-        CampagneCollecteRepository $anneeUniversitaireRepository,
         ComposanteRepository       $composanteRepository,
     ): Response {
         $this->denyAccessUnlessGranted('ROLE_SES');
 
         return $this->render('export/index.html.twig', [
-            'annees' => $anneeUniversitaireRepository->findAll(),
             'composantes' => $composanteRepository->findAll(),
             'ses' => true,
             'isCfvu' => false,
@@ -57,13 +56,15 @@ class ExportController extends BaseController
 
     #[Route('/export/cfvu', name: 'app_export_cfvu')]
     public function exportCfvu(
-        CampagneCollecteRepository $anneeUniversitaireRepository,
         ComposanteRepository       $composanteRepository,
     ): Response {
-        $this->denyAccessUnlessGranted('CAN_ETABLISSEMENT_CONSEILLER_ALL', $this->getUser());
+        $autorise = $this->isGranted('CAN_ETABLISSEMENT_CONSEILLER_ALL', $this->getUser()) or $this->isGranted('CAN_ETABLISSEMENT_SHOW_ALL', $this->getUser());
+
+        if (!$autorise) {
+            throw $this->createAccessDeniedException();
+        }
 
         return $this->render('export/index.html.twig', [
-            'annees' => $anneeUniversitaireRepository->findAll(),
             'composantes' => $composanteRepository->findAll(),
             'ses' => false,
             'isCfvu' => true,
@@ -73,13 +74,11 @@ class ExportController extends BaseController
 
     #[Route('/export/consultation', name: 'app_export_show')]
     public function exportShow(
-        CampagneCollecteRepository $anneeUniversitaireRepository,
         ComposanteRepository       $composanteRepository,
     ): Response {
         $this->denyAccessUnlessGranted('CAN_ETABLISSEMENT_SHOW_ALL', $this->getUser());
 
         return $this->render('export/index.html.twig', [
-            'annees' => $anneeUniversitaireRepository->findAll(),
             'composantes' => $composanteRepository->findAll(),
             'ses' => false,
             'isCfvu' => true,
@@ -90,11 +89,9 @@ class ExportController extends BaseController
 
     #[Route('/export/composante/{composante}', name: 'app_export_composante_index')]
     public function composante(
-        CampagneCollecteRepository $anneeUniversitaireRepository,
         Composante                 $composante,
     ): Response {
         return $this->render('export/index.html.twig', [
-            'annees' => $anneeUniversitaireRepository->findAll(),
             'composante' => $composante,
             'isCfvu' => false,
             'ses' => false,
@@ -114,10 +111,13 @@ class ExportController extends BaseController
             throw $this->createNotFoundException('La composante n\'existe pas');
         }
 
-        if ($this->isGranted('ROLE_SES') || $this->isGranted('CAN_ETABLISSEMENT_SHOW_ALL', $this->getUser())) {
+        if ($this->isGranted('ROLE_SES') ||
+            $this->isGranted('CAN_ETABLISSEMENT_SHOW_ALL', $this->getUser())) {
             $dpes = $dpeParcoursRepository->findParcoursByComposante($this->getCampagneCollecte(), $composante);
         } elseif ($this->isGranted('CAN_ETABLISSEMENT_CONSEILLER_ALL', $this->getUser())) {
             $dpes = $dpeParcoursRepository->findParcoursByComposanteCfvu($this->getCampagneCollecte(), $composante);
+        } elseif ($this->isGranted('CAN_COMPOSANTE_SHOW_MY', $this->getUser())) {
+            $dpes = $dpeParcoursRepository->findParcoursByComposante($this->getCampagneCollecte(), $composante);
         } else {
             $dpes = [];
         }
@@ -130,20 +130,15 @@ class ExportController extends BaseController
     #[Route('/export/valide', name: 'app_export_valide')]
     public function valide(
         MessageBusInterface        $messageBus,
-        CampagneCollecteRepository $anneeUniversitaireRepository,
         Request                    $request,
     ): Response {
-        $annee = $anneeUniversitaireRepository->find($request->request->get('annee_universitaire'));
-        if (!$annee) {
-            throw $this->createNotFoundException('L\'année universitaire n\'existe pas');
-        }
-
         $messageBus->dispatch(new Export(
             $this->getUser()?->getId(),
             $request->request->get('type_document'),
             $request->request->all()['liste'] ?? [],
             $this->getCampagneCollecte(),
-            Tools::convertDate($request->request->get('date', null))
+            Tools::convertDate($request->request->get('date', null)),
+            $request->request->get('composante', null),
         ));
 
         return JsonReponse::success('Les documents sont en cours de génération, vous recevrez un mail lorsque les documents seront prêts');

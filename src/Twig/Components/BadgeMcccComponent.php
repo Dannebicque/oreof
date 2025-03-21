@@ -38,7 +38,7 @@ final class BadgeMcccComponent
                 $this->etatMcccComplet = $this->elementConstitutif->getEcts() !== 0; // sur un EC libre, juste des ECTS
             } else {
                 $getElement = new GetElementConstitutif($this->elementConstitutif, $this->parcours);
-                $this->etatMcccComplet = $getElement->getEtatMccc() === 'Complet';
+                $this->etatMcccComplet = $getElement->getEtatsMccc() === 'Complet';
             }
         }
     }

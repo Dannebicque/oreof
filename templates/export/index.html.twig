@@ -30,28 +30,14 @@
             {% else %}
                 {{ stimulus_controller('export',
                     {
-                        url: path('app_export_liste', {composante:composante.id}),
-                        urlValide: path('app_export_valide', {composante:composante.id})
+                        url: path('app_export_liste'),
+                        urlValide: path('app_export_valide')
                     }) }}
             {% endif %}
     >
         <div class="card mt-2">
             <div class="card-body">
                 <div class="row">
-                    <div class="col-12">
-                        <div>
-                            <label for="annee_universitaire" class="required">Annnée Universitaire</label>
-                            <select name="annee_universitaire"
-                                    {{ stimulus_action('export', 'changeListe') }}
-                                    id="annee_universitaire"
-                                    class="form-select">
-                                {% for annee in annees %}
-                                    <option value="{{ annee.id }}"
-                                            {% if annee.defaut == true %}selected{% endif %}>{{ annee.libelle }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                    </div>
                     <div class="col-6">
                         {% if ses is defined and ses == true or isCfvu is defined and isCfvu == true %}
                             <div>

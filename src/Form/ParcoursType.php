@@ -63,13 +63,6 @@ class ParcoursType extends AbstractType
                 'class' => TypeParcoursEnum::class,
                 'translation_domain' => 'form',
             ])
-            ->add('codeMentionApogee', TextType::class, [
-                'help' => 'Code de la mention dans Apogée',
-                'attr' => [
-                    'maxlength' => '1',
-                ],
-                'required' => false,
-            ])
             ->add('parcoursOrigine', EntityType::class, [
                 'required' => false,
                 'help' => '',
@@ -82,8 +75,17 @@ class ParcoursType extends AbstractType
                         ->orderBy('p.libelle', 'ASC');
                 },
                 'choice_label' => 'getDisplay',
-            ])
-        ;
+            ]);
+
+        if ($options['isAdmin'] === true) {
+            $builder->add('codeMentionApogee', TextType::class, [
+                'help' => 'Code de la mention dans Apogée',
+                'attr' => [
+                    'maxlength' => '1',
+                ],
+                'required' => false,
+            ]);
+        }
     }
 
     public function configureOptions(OptionsResolver $resolver): void
@@ -92,6 +94,7 @@ class ParcoursType extends AbstractType
             'data_class' => Parcours::class,
             'translation_domain' => 'form',
             'formation' => null,
+            'isAdmin' => false,
         ]);
     }
 }

@@ -34,7 +34,7 @@ class ComposanteType extends AbstractType
                 'required' => false,
             ])
             ->add('inscriptionUniquement', YesNoType::class, [
-                'label' => 'Composante d\'inscription uniquement',
+                'label' => 'Composante d\'inscription et où se déroulent les cours',
             ])
             ->add('composanteParent', EntityType::class, [
                 'class' => Composante::class,

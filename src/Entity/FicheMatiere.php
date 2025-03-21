@@ -376,7 +376,19 @@ class FicheMatiere
             $remplissage->add(0);
         }
 
+        if ($this->langueSupport->isEmpty() === false) {
+            $remplissage->add();
+        } else {
+            $remplissage->add(0);
+        }
+
         if ($this->libelleAnglais !== null) {
+            $remplissage->add();
+        } else {
+            $remplissage->add(0);
+        }
+
+        if ($this->libelle !== null) {
             $remplissage->add();
         } else {
             $remplissage->add(0);
@@ -400,11 +412,11 @@ class FicheMatiere
             $remplissage->add(0);
         }
 
-        if ($this->competences->isEmpty() === false) {
-            $remplissage->add();
-        } else {
-            $remplissage->add(0);
-        }
+//        if ($this->competences->isEmpty() === false) {
+//            $remplissage->add();
+//        } else {
+//            $remplissage->add(0);
+//        }
         //todo: ajouter MCCC et Apprentissages critiques pour le BUT
 
         return $remplissage;

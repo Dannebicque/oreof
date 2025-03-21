@@ -115,13 +115,6 @@ class ValidationController extends BaseController
                     'idComposante' => $idComposante,
                     'typeValidation' => $typeValidation,
                 ]);
-            case 'ouverture':
-                return $this->render('validation/_ouverture.html.twig', [
-                    'composantes' => $composanteRepository->findAll(),
-                    'types_validation' => TypeModificationDpeEnum::listeEtatParcours(),
-                    'idComposante' => $idComposante,
-                    'typeValidation' => $typeValidation,
-                ]);
         }
     }
 
@@ -207,36 +200,6 @@ class ValidationController extends BaseController
 
         return $this->render('validation/_listeChangeRf.html.twig', [
             'demandes' => $demandes,
-            'etape' => $typeValidation ?? null,
-        ]);
-    }
-
-    #[Route('/validation/liste-ouverture', name: 'app_validation_formation_liste_ouverture')]
-    public function listeOuverture(
-        DpeParcoursRepository $dpeParcoursRepository,
-        ComposanteRepository $composanteRepository,
-        Request              $request
-    ): Response {
-        $typeValidation = $request->query->get('typeValidation');
-
-        if ($request->query->has('composante')) {
-            if ($request->query->get('composante') === 'all' && $typeValidation === 'all') {
-                $allparcours = $dpeParcoursRepository->findByCampagneCollecte($this->getCampagneCollecte());
-            } elseif ($request->query->get('composante') === 'all' && $typeValidation !== 'all') {
-                $allparcours = $dpeParcoursRepository->findByTypeOuverture($typeValidation, $this->getCampagneCollecte());
-            } else {
-                $composante = $composanteRepository->find($request->query->get('composante'));
-                if (!$composante) {
-                    throw $this->createNotFoundException('La composante n\'existe pas');
-                }
-                $allparcours = $dpeParcoursRepository->findByComposanteTypeOuverture($typeValidation, $composante, $this->getCampagneCollecte());
-            }
-        } else {
-            $allparcours = [];
-        }
-
-        return $this->render('validation/_listeOuverture.html.twig', [
-            'allparcours' => $allparcours,
             'etape' => $typeValidation ?? null,
         ]);
     }

@@ -11,6 +11,7 @@ namespace App\Classes\Export;
 
 use App\Classes\MyPDF;
 use App\Entity\CampagneCollecte;
+use App\Entity\Composante;
 use App\TypeDiplome\TypeDiplomeRegistry;
 use DateTimeInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -25,22 +26,25 @@ class Export
     private string $dir;
     private mixed $export;
 
+    private ?Composante $composante = null;
+
     public function __construct(
         protected ExportFicheMatiere $exportFicheMatiere,
         protected ExportRegime      $exportRegime,
+        protected ExportResponsable      $exportResponsable,
         protected ExportCfvu        $exportCfvu,
         protected ExportCarif       $exportCarif,
-        protected ExportCap         $exportCap,
-        protected ExportFiabilisation         $exportFiabilisation,
-        protected ExportSynthese    $exportSynthese,
-        protected ExportSeip        $exportSeip,
-        protected ExportEc          $exportEc,
-        protected ExportListeFicheMatiere          $exportListeFicheMatiere,
-        protected ExportMccc        $exportMccc,
-        KernelInterface             $kernel,
-        private TypeDiplomeRegistry $typeDiplomeRegistry,
-        private MyPDF               $myPDF,
-        private readonly ExportSyntheseModification $exportSyntheseModification
+        protected ExportCap                         $exportCap,
+        protected ExportFiabilisation               $exportFiabilisation,
+        protected ExportSynthese                    $exportSynthese,
+        protected ExportSeip                        $exportSeip,
+        protected ExportEc                          $exportEc,
+        protected ExportListeFicheMatiere           $exportListeFicheMatiere,
+        protected ExportMccc                        $exportMccc,
+        KernelInterface                             $kernel,
+        private TypeDiplomeRegistry                 $typeDiplomeRegistry,
+        private MyPDF                               $myPDF,
+        private readonly ExportSyntheseModification $exportSyntheseModification,
     ) {
         $this->dir = $kernel->getProjectDir().'/public/temp';
     }
@@ -83,6 +87,8 @@ class Export
                 return $this->exportRegime();
             case 'responsable':
                 return $this->exportRegime();
+            case 'responsable_compo':
+                return $this->exportResponsableComposante();
             case 'cfvu':
                 return $this->exportCfvu();
             case 'cap':
@@ -156,6 +162,16 @@ class Export
     private function exportRegime() : string
     {
         return $this->exportRegime->exportLink($this->campagneCollecte);
+    }
+
+    public function setComposante(?Composante $composante)
+    {
+        $this->composante = $composante;
+    }
+
+    private function exportResponsableComposante() : string
+    {
+        return $this->exportResponsable->exportLink($this->formations);
     }
 
     private function exportCfvu() : string

@@ -4,11 +4,11 @@
 <p>Bonjour,</p>
 
     {% if dpeDemande.niveauDemande == 'F'  %}
-    <p>Une nouvelle demande d'ouverture de DPE a été faite pour la formation {{ dpeDemande.formation.displayLong(false) }}.</p>
+    <p>Pour information, une demande d'ouverture de DPE a été faite pour la formation {{ dpeDemande.formation.displayLong(false) }}.</p>
 
     <p>Pour consulter la formation, cliquez sur le lien suivant : <a href="{{ url('app_formation_show', {'slug': dpeDemande.formation.slug}) }}">voir la formation</a>.</p>
     {% else %}
-    <p>Une nouvelle demande d'ouverture de DPE a été faite pour le parcours {{ dpeDemande.parcours.libelle }} ({{ dpeDemande.formation.displayLong(false) }}).</p>
+    <p>Pour information, une demande d'ouverture de DPE a été faite pour le parcours {{ dpeDemande.parcours.libelle }} ({{ dpeDemande.formation.displayLong(false) }}).</p>
 
     <p>Pour consulter le parcours, cliquez sur le lien suivant : <a href="{{ url('app_parcours_show', {'id': dpeDemande.parcours.id}) }}">voir le parcours</a>.</p>
     {% endif %}
@@ -21,4 +21,7 @@
     {% else %}
     <p>L'argumentaire est : non précisé.</p>
     {% endif %}
+
+    <p>En tant que responsable de formation/parcours, vous pouvez saisir vos modifications.<br>
+        A ce stade, aucune action n'est requise pour le responsable DPE de la composante.</p>
 {% endblock %}

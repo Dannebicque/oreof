@@ -19,15 +19,43 @@ class McccUpdateEvent extends Event
 
     public ElementConstitutif $elementConstitutif;
     public Parcours $parcours;
-    public $newMcccToText;
-    public $oldMcccToText;
+    public string $newMcccToText = '';
+    public string $oldMcccToText = '';
+    public string $newEctsToText = '';
+    public string $oldEctsToText = '';
+    public string $newStructureToText = '';
+    public string $oldStructureToText = '';
 
-    public function __construct(ElementConstitutif $elementConstitutif, Parcours $parcours, string $oldMcccToText, string $newMcccToText)
-    {
+    public function __construct(
+        ElementConstitutif $elementConstitutif,
+        Parcours $parcours,
+    ) {
         $this->elementConstitutif = $elementConstitutif;
         $this->parcours = $parcours;
+    }
+
+    public function setNewMccc(
+        string $oldMcccToText,
+        string $newMcccToText
+    ) {
         $this->oldMcccToText = $oldMcccToText;
         $this->newMcccToText = $newMcccToText;
+    }
+
+    public function setNewEcts(
+        string $oldEctsToText,
+        string $newEctsToText
+    ) {
+        $this->oldEctsToText = $oldEctsToText;
+        $this->newEctsToText = $newEctsToText;
+    }
+
+    public function setNewStructure(
+        string $oldStructureToText,
+        string $newStructureToText
+    ) {
+        $this->oldStructureToText = $oldStructureToText;
+        $this->newStructureToText = $newStructureToText;
     }
 
     public function getElementConstitutif(): ElementConstitutif
@@ -48,5 +76,10 @@ class McccUpdateEvent extends Event
     public function getOldMcccToText()
     {
         return $this->oldMcccToText;
+    }
+
+    public function hasDiff(): bool
+    {
+        return $this->oldMcccToText !== $this->newMcccToText || $this->oldEctsToText !== $this->newEctsToText || $this->oldStructureToText !== $this->newStructureToText;
     }
 }

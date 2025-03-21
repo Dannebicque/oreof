@@ -161,12 +161,14 @@
                                         <span class="label">Fiches EC/matière "hors diplôme"</span>
                                     </a>
                                 </li>
-                                <li>
-                                    <a href="{{ path('app_mutualise_index') }}">
-                                        <i class="fal fa-share-nodes icon"></i>
-                                        <span class="label">Détail des éléments mutualisés</span>
-                                    </a>
-                                </li>
+                                {% if is_granted('ROLE_ADMIN') %}
+                                    <li>
+                                        <a href="{{ path('app_mutualise_index') }}">
+                                            <i class="fal fa-share-nodes icon"></i>
+                                            <span class="label">Détail des éléments mutualisés</span>
+                                        </a>
+                                    </li>
+                                {% endif %}
                                 <li>
                                     <a href="{{ path('app_search') }}">
                                         <i class="fal fa-magnifying-glass icon"></i>
@@ -185,6 +187,48 @@
                         {% endif %}
                     {% endif %}
 
+                    {% if (is_granted('CAN_ETABLISSEMENT_SHOW_ALL')) and not is_granted('ROLE_ADMIN') and not is_granted('ROLE_SES') %}
+                        <li>
+                            <a href="#offre_formation" data-href="offre_formation">
+                                <i class="fal fa-chalkboard-user icon"></i>
+                                <span class="label">Offre de formation</span>
+                            </a>
+                            <ul id="offre_formation">
+                                <li>
+                                    <a href="{{ path('app_formation_index') }}">
+                                        <i class="fal fa-book icon"></i>
+                                        <span class="label">Détail des mentions/spécialités</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ path('structure_fiche_matiere_index') }}">
+                                        <i class="fal fa-person-chalkboard icon"></i>
+                                        <span class="label">Détail des fiches EC/matière</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ path('structure_fiche_matiere_index', {type:'hd'}) }}">
+                                        <i class="fal fa-person-chalkboard icon"></i>
+                                        <span class="label">Fiches EC/matière "hors diplôme"</span>
+                                    </a>
+                                </li>
+                                {% if is_granted('ROLE_ADMIN') %}
+                                    <li>
+                                        <a href="{{ path('app_mutualise_index') }}">
+                                            <i class="fal fa-share-nodes icon"></i>
+                                            <span class="label">Détail des éléments mutualisés</span>
+                                        </a>
+                                    </li>
+                                {% endif %}
+                                <li>
+                                    <a href="{{ path('app_search') }}">
+                                        <i class="fal fa-magnifying-glass icon"></i>
+                                        <span class="label">Effectuer une recherche</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    {% endif %}
                     {% if is_granted('ROLE_SES') or is_granted('CAN_ETABLISSEMENT_SCOLARITE_ALL') %}
                         <li>
                             <a href="#gestion_offre_formation" data-href="gestion_offre_formation">
@@ -209,7 +253,7 @@
                                     <li>
                                         <a href="{{ path('app_demande_dpe') }}">
                                             <i class="fal fa-person-chalkboard icon"></i>
-                                            <span class="label">Demandes DPE</span>
+                                            <span class="label">DPE ouverts</span>
                                         </a>
                                     </li>
                                     <li>
@@ -219,13 +263,14 @@
                                         </a>
                                     </li>
                                 {% endif %}
-                                <li>
-                                    <a href="{{ path('app_codification_liste') }}">
-                                        <i class="fal fa-file-binary icon"></i>
-                                        <span class="label">Codification</span>
-                                    </a>
-                                </li>
                                 {% if is_granted('ROLE_SES') %}
+                                    <li>
+                                        <a href="{{ path('app_codification_liste') }}">
+                                            <i class="fal fa-file-binary icon"></i>
+                                            <span class="label">Codification</span>
+                                        </a>
+                                    </li>
+
                                     <li>
                                         <a href="{{ path('app_synthese_modification_export_pdf') }}">
                                             <i class="fal fa-book icon"></i>
@@ -471,13 +516,15 @@
                                     <a href="#scolarite">
                                         <span class="label">Scolarité</span>
                                     </a>
-                                    <ul id="scolarite">
-                                        <li>
-                                            <a href="{{ path('app_codification_liste') }}">
-                                                <span class="label">Codification</span>
-                                            </a>
-                                        </li>
-                                    </ul>
+                                    {% if is_granted('ROLE_ADMIN') %}
+                                        <ul id="scolarite">
+                                            <li>
+                                                <a href="{{ path('app_codification_liste') }}">
+                                                    <span class="label">Codification</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    {% endif %}
                                 </li>
                                 {% for composante in app.user.composanteResponsableDpe %}
                                     {% if is_granted('CAN_COMPOSANTE_VALIDATE_MY', composante) %}
@@ -492,8 +539,9 @@
                                                     </a>
                                                 </li>
                                                 <li>
-                                                    <a href="{{ path('app_composante_campagne_collecte', {composante:composante.id}) }}">
-                                                        <span class="label">Campagne de collecte</span>
+                                                    <a href="{{ path('app_demande_dpe_composante', {composante:composante.id}) }}">
+                                                        <i class="fal fa-person-chalkboard icon"></i>
+                                                        <span class="label">DPE ouverts</span>
                                                     </a>
                                                 </li>
                                                 <li>

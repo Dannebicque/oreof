@@ -76,18 +76,26 @@ class ElementConstitutifMcccController extends AbstractController
         if ($this->isGranted('CAN_PARCOURS_EDIT_MY', $dpeParcours) && Access::isAccessible($dpeParcours, 'cfvu')) {
             if ($request->isMethod('POST')) {
                 $originalMcccToText = $this->mcccToTexte($getElement->getMcccsFromFicheMatiereCollection());
+                $originalEcts = $getElement->getFicheMatiereEcts();
+                $event = new McccUpdateEvent($elementConstitutif, $parcours);
 
                 if ($request->request->has('ec_step4') && array_key_exists('ects', $request->request->all()['ec_step4'])) {
                     if ($elementConstitutif->isEctsSpecifiques() === true &&
                         $elementConstitutif->getEcParent() === null &&
                         $elementConstitutif->getFicheMatiere()?->isEctsImpose() === false) {
                         $elementConstitutif->setEcts((float)$request->request->all()['ec_step4']['ects']);
+                        $newEcts = $elementConstitutif->getEcts();
                     } elseif ($elementConstitutif->getEcParent() !== null) {
                         $elementConstitutif->setEcts($elementConstitutif->getEcParent()?->getEcts());
                         $elementConstitutif->setEctsSpecifiques(true); //du coup ca devient spécifique ?
+                        $newEcts = $elementConstitutif->getEcts();
                     } else {
                         $elementConstitutif->getFicheMatiere()?->setEcts((float)$request->request->all()['ec_step4']['ects']);
+                        $newEcts = $elementConstitutif->getFicheMatiere()?->getEcts();
                     }
+
+                    //evenement pour ECTS sur EC mis à jour
+                    $event->setNewEcts($originalEcts, $newEcts);
 
                     $entityManager->flush();
                 }
@@ -139,7 +147,8 @@ class ElementConstitutifMcccController extends AbstractController
                 $entityManager->flush();
 
                 //evenement pour MCCC sur EC mis à jour
-                $event = new McccUpdateEvent($elementConstitutif, $parcours, $originalMcccToText, $newMcccToText);
+                $event = new McccUpdateEvent($elementConstitutif, $parcours);
+                $event->setNewMccc($originalMcccToText, $newMcccToText);
                 $eventDispatcher->dispatch($event, McccUpdateEvent::UPDATE_MCCC);
 
                 return $this->json(true);
@@ -201,21 +210,9 @@ class ElementConstitutifMcccController extends AbstractController
         }
         $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());
 
-        $raccroche = $elementConstitutif->getFicheMatiere()?->getParcours()?->getId() !== $parcours->getId();
         $getElement = new GetElementConstitutif($elementConstitutif, $parcours);
-        $getElement->setIsRaccroche($raccroche);
-
-        if ($elementConstitutif->getFicheMatiere() !== null && $elementConstitutif->getFicheMatiere()?->isMcccImpose()) {
-            $typeEpreuve = $elementConstitutif->getFicheMatiere()?->getTypeMccc();
-        } elseif ($raccroche && $elementConstitutif->isMcccSpecifiques()) {
-            $ec = $getElement->getElementConstitutif();
-            $typeEpreuve = $ec->getTypeMccc();
-        } else {
-            $typeEpreuve = $elementConstitutif->getTypeMccc();
-        }
-
-        $ec = new GetElementConstitutif($elementConstitutif, $parcours);
-        $ects = $ec->getFicheMatiereEcts();
+        $typeEpreuve = $getElement->getTypeMcccFromFicheMatiere();
+        $ects = $getElement->getFicheMatiereEcts();
 
         $lastVersion = $entityManager->getRepository(ParcoursVersioning::class)->findLastCfvuVersion($parcours);
         $lastVersion = isset($lastVersion[0]) ? $lastVersion[0] : null;
