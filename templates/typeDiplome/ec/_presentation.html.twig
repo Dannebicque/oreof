@@ -12,7 +12,9 @@
             <dd>
                 <p>{{ ficheMatiere.description|raw }}</p>
             </dd>
-            {% if stringDifferences.descriptionEnseignement is defined %}
+            {% if stringDifferences.descriptionEnseignement is defined
+                and stringDifferences.descriptionEnseignement|length > 0
+             %}
                 {{ include("communs/_comparaison_versioning_big.html.twig", {
                         textDifferences: stringDifferences.descriptionEnseignement,
                         idCollapse: "diffDescriptionFicheMatiere"
@@ -31,7 +33,9 @@
                     {% endfor %}
                 </ul>
             </dd>
-            {% if stringDifferences.languesEnseignement is defined %}
+            {% if stringDifferences.languesEnseignement is defined
+                and stringDifferences.languesEnseignement|length > 0
+             %}
                 {{ include("communs/_comparaison_versioning_big.html.twig", {
                         textDifferences: stringDifferences.languesEnseignement,
                         idCollapse: "diffLanguesDispense"
@@ -58,20 +62,13 @@
             <dd>
                 <p>{{ ficheMatiere.objectifs|raw }}</p>
             </dd>
-            {% if is_granted('ROLE_ADMIN') 
-               and stringDifferences is defined
-               and stringDifferences.objectifsEnseignement is defined
+            {% if stringDifferences.objectifsEnseignement is defined
                and stringDifferences.objectifsEnseignement|length > 0%}
-                <div class="col-sm-4 col-md-3 col-lg-2 col-xl-1">
-                    <button class="btn btn-primary btn-sm my-3"
-                        data-bs-toggle="collapse" data-bs-target="#diffObjectifsEnseignement"
-                    >
-                        Voir les différences
-                    </button>
-                </div>
-                <div class="col-sm-12 collapse" id="diffObjectifsEnseignement">
-                    {{ stringDifferences.objectifsEnseignement|raw  }} 
-                </div>
+                {{ include("communs/_comparaison_versioning_big.html.twig", {
+                        textDifferences: stringDifferences.objectifsEnseignement,
+                        idCollapse: "diffObjectifsEnseignement"
+                    }) 
+                }}
             {% endif %}
         </dl>
     </div>

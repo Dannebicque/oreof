@@ -167,6 +167,31 @@ class VersioningFicheMatiere {
                         )
                     )
                 ),
+                'supportDeCoursEn' => VersioningParcours::cleanUpComparison(
+                    html_entity_decode(
+                        DiffHelper::calculate(
+                            "<p class=\"list-item\">"
+                            . implode(
+                                "</p><p class=\"list-item\">",
+                                array_map(
+                                    fn ($langue) => $langue->getLibelle(),
+                                    $lastVersion->getLangueSupport()->toArray()
+                                )
+                            ) . "</p>",
+                            "<p class=\"list-item\">"
+                            . implode(
+                                "</p><p class=\"list-item\">",
+                                array_map(
+                                    fn ($langue) => $langue->getLibelle(),
+                                    $ficheMatiere->getLangueSupport()->toArray()
+                                )
+                            ) . "</p>",
+                            $rendererName,
+                            $differOptions,
+                            $rendererOptions
+                        )
+                    )
+                )
             ];
 
         }
