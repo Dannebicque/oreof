@@ -12,7 +12,9 @@
             <dd>
                 <p>{{ ficheMatiere.description|raw }}</p>
             </dd>
-            {% if stringDifferences.descriptionEnseignement is defined
+            {% if 
+                is_granted('ROLE_ADMIN')  
+                and stringDifferences.descriptionEnseignement is defined
                 and stringDifferences.descriptionEnseignement|length > 0
              %}
                 {{ include("communs/_comparaison_versioning_big.html.twig", {
@@ -33,7 +35,8 @@
                     {% endfor %}
                 </ul>
             </dd>
-            {% if stringDifferences.languesEnseignement is defined
+            {% if is_granted('ROLE_ADMIN')  
+                and stringDifferences.languesEnseignement is defined
                 and stringDifferences.languesEnseignement|length > 0
              %}
                 {{ include("communs/_comparaison_versioning_big.html.twig", {
@@ -54,6 +57,16 @@
                     {% endfor %}
                 </ul>
             </dd>
+            {% if is_granted('ROLE_ADMIN')  
+                and stringDifferences.supportDeCoursEn is defined 
+                and stringDifferences.supportDeCoursEn|length > 0
+            %}
+                {{ include("communs/_comparaison_versioning_big.html.twig", {
+                        textDifferences: stringDifferences.supportDeCoursEn,
+                        idCollapse: "diffSupportDeCoursEn"
+                    }) 
+                }}
+            {% endif %}
         </dl>
     </div>
     <div class="col-sm-12">
@@ -62,7 +75,8 @@
             <dd>
                 <p>{{ ficheMatiere.objectifs|raw }}</p>
             </dd>
-            {% if stringDifferences.objectifsEnseignement is defined
+            {% if is_granted('ROLE_ADMIN')  
+                and stringDifferences.objectifsEnseignement is defined
                and stringDifferences.objectifsEnseignement|length > 0%}
                 {{ include("communs/_comparaison_versioning_big.html.twig", {
                         textDifferences: stringDifferences.objectifsEnseignement,
