@@ -218,7 +218,7 @@ class ElementConstitutifMcccController extends AbstractController
         $ects = $ec->getFicheMatiereEcts();
 
         $lastVersion = $entityManager->getRepository(ParcoursVersioning::class)->findLastCfvuVersion($parcours);
-        $lastVersion = $lastVersion[0] ?? -1;
+        $lastVersion = isset($lastVersion[0]) ? $lastVersion[0] : null;
 
         return $this->render('element_constitutif/_mcccEcNonEditable.html.twig', [
             'isMcccImpose' => $elementConstitutif->getFicheMatiere()?->isMcccImpose(),
