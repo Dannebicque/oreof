@@ -74,7 +74,7 @@ class LicenceMcccVersion extends AbstractLicenceMccc
             throw new \Exception('La formation n\'existe pas');
         }
 
-        $dto = $this->calculStructureParcours->calcul($parcours);
+        $dto = $this->calculStructureParcours->calcul($parcours, dataFromFicheMatiere: true);
 
         // version
         $structureDifferencesParcours = $this->versioningParcours->getStructureDifferencesBetweenParcoursAndLastVersion($parcours);
