@@ -31,6 +31,13 @@
                     {% endfor %}
                 </ul>
             </dd>
+            {% if stringDifferences.languesEnseignement is defined %}
+                {{ include("communs/_comparaison_versioning_big.html.twig", {
+                        textDifferences: stringDifferences.languesEnseignement,
+                        idCollapse: "diffLanguesDispense"
+                    }) 
+                }}
+            {% endif %}
         </dl>
     </div>
     <div class="col-md-6 col-sm-12">
