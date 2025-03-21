@@ -6,10 +6,13 @@ use App\Entity\FicheMatiere;
 use App\Entity\FicheMatiereVersioning;
 use DateTimeImmutable;
 use Doctrine\Common\Annotations\AnnotationReader;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManagerInterface;
 use Jfcherng\Diff\DiffHelper;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor;
 use Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor;
+use Symfony\Component\PropertyInfo\PropertyInfoExtractor;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
 use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
@@ -33,10 +36,12 @@ class VersioningFicheMatiere {
         $this->filesystem = $filesystem;
         // Serializer
         $classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
+        $extractors = new PropertyInfoExtractor([], [new PhpDocExtractor(), new ReflectionExtractor()]);
         $this->serializer = new Serializer(
             [
+                new DateTimeNormalizer(),
                 new ArrayDenormalizer(),
-                new ObjectNormalizer($classMetadataFactory, propertyTypeExtractor: new ReflectionExtractor())
+                new ObjectNormalizer($classMetadataFactory, propertyTypeExtractor: $extractors)
             ],
             [new JsonEncoder()]
         );
@@ -136,11 +141,70 @@ class VersioningFicheMatiere {
                             $rendererOptions
                         )
                     )  
+                ),
+                'languesEnseignement' => VersioningParcours::cleanUpComparison(
+                    html_entity_decode(
+                        DiffHelper::calculate(
+                            "<p class=\"list-item\">"
+                            . implode(
+                                "</p><p class=\"list-item\">",
+                                array_map(
+                                    fn ($langue) => $langue->getLibelle(),
+                                    $lastVersion->getLangueDispense()->toArray()
+                                )
+                            ) . "</p>",
+                            "<p class=\"list-item\">"
+                            . implode(
+                                "</p><p class=\"list-item\">",
+                                array_map(
+                                    fn ($langue) => $langue->getLibelle(),
+                                    $ficheMatiere->getLangueDispense()->toArray()
+                                )
+                            ) . "</p>",
+                            $rendererName,
+                            $differOptions,
+                            $rendererOptions
+                        )
+                    )
+                ),
+                'supportDeCoursEn' => VersioningParcours::cleanUpComparison(
+                    html_entity_decode(
+                        DiffHelper::calculate(
+                            "<p class=\"list-item\">"
+                            . implode(
+                                "</p><p class=\"list-item\">",
+                                array_map(
+                                    fn ($langue) => $langue->getLibelle(),
+                                    $lastVersion->getLangueSupport()->toArray()
+                                )
+                            ) . "</p>",
+                            "<p class=\"list-item\">"
+                            . implode(
+                                "</p><p class=\"list-item\">",
+                                array_map(
+                                    fn ($langue) => $langue->getLibelle(),
+                                    $ficheMatiere->getLangueSupport()->toArray()
+                                )
+                            ) . "</p>",
+                            $rendererName,
+                            $differOptions,
+                            $rendererOptions
+                        )
+                    )
                 )
             ];
 
         }
 
         return $textDifferences;
+    }
+
+    private function getArrayDisplayAsList(array|Collection $array, string $keyIndex){
+        $list = "<ul>";
+        foreach($array as $value){
+            $list .= "<li>" . $array[$keyIndex] . "</li>";
+        }
+        $list .= "</ul>";
+        return $list;
     }
 }

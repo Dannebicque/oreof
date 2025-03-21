@@ -16,9 +16,13 @@ use App\Entity\ElementConstitutif;
 use App\Entity\FicheMatiere;
 use App\Entity\Mccc;
 use App\Entity\Parcours;
+use App\Entity\ParcoursVersioning;
+use App\Entity\TypeDiplome;
+use App\Entity\TypeEpreuve;
 use App\Events\McccUpdateEvent;
 use App\Repository\ElementConstitutifRepository;
 use App\Repository\TypeEpreuveRepository;
+use App\Service\VersioningParcours;
 use App\TypeDiplome\TypeDiplomeRegistry;
 use App\Utils\Access;
 use Doctrine\Common\Collections\Collection;
@@ -180,13 +184,14 @@ class ElementConstitutifMcccController extends AbstractController
         'mcccs' => $getElement->getMcccsFromFicheMatiereCollection(),]);
     }
 
-    #[
-        Route('/{id}/mccc-ec/{parcours}/non-editable', name: 'app_element_constitutif_mccc_non_editable', methods: ['GET', 'POST'])]
+    #[Route('/{id}/mccc-ec/{parcours}/non-editable/{codeVersion}', name: 'app_element_constitutif_mccc_non_editable', methods: ['GET', 'POST'])]
     public function mcccEcNonEditable(
         TypeDiplomeRegistry          $typeDiplomeRegistry,
         TypeEpreuveRepository        $typeEpreuveRepository,
         ElementConstitutif           $elementConstitutif,
-        Parcours                     $parcours
+        Parcours                     $parcours,
+        string                       $codeVersion = "",
+        EntityManagerInterface       $entityManager
     ): Response {
 
         $dpeParcours = GetDpeParcours::getFromParcours($parcours);
@@ -209,6 +214,9 @@ class ElementConstitutifMcccController extends AbstractController
         $typeEpreuve = $getElement->getTypeMcccFromFicheMatiere();
         $ects = $getElement->getFicheMatiereEcts();
 
+        $lastVersion = $entityManager->getRepository(ParcoursVersioning::class)->findLastCfvuVersion($parcours);
+        $lastVersion = isset($lastVersion[0]) ? $lastVersion[0] : null;
+
         return $this->render('element_constitutif/_mcccEcNonEditable.html.twig', [
             'isMcccImpose' => $elementConstitutif->getFicheMatiere()?->isMcccImpose(),
             'isEctsImpose' => $elementConstitutif->getFicheMatiere()?->isEctsImpose(),
@@ -218,10 +226,105 @@ class ElementConstitutifMcccController extends AbstractController
             'ects' => $ects,
             'templateForm' => $typeD::TEMPLATE_FORM_MCCC,
             'mcccs' => $getElement->getMcccsFromFicheMatiere($typeD),
+            'lastVersion' => $lastVersion,
+            'codeVersion' => $codeVersion,
+            'isFromVersioning' => 0,
+            'libelleQuelleVersion' => 'Version actuelle'
         ]);
     }
 
+    #[Route('/{UeDisplay}/{indexEc}/{indexEcEnfant}/{elementConstitutif}/mccc-ec-versioning/{parcoursVersioning}/non-editable/{isFromVersioning}', name: 'app_element_constitutif_mccc_versioning')]
+    public function mcccVersioning(
+        string $UeDisplay,
+        int $indexEc,
+        int $indexEcEnfant,
+        int $isFromVersioning,
+        ElementConstitutif|int $elementConstitutif = -1,
+        ParcoursVersioning $parcoursVersioning,
+        TypeDiplomeRegistry $typeDiplomeReg,
+        VersioningParcours $versioningParcours,
+        EntityManagerInterface $entityManager
+    ){
+        $versionData = $versioningParcours->loadParcoursFromVersion($parcoursVersioning);
+        $libelleTypeDiplome = $versionData['parcours']->getFormation()->getTypeDiplome()->getLibelle();
+        $typeDiplome = $entityManager->getRepository(TypeDiplome::class)->findOneBy(['libelle' => $libelleTypeDiplome]);
+        $templateForm = $typeDiplomeReg->getTypeDiplome($typeDiplome->getModeleMcc())::TEMPLATE_FORM_MCCC;
+        $typeEpreuveDiplome = $entityManager->getRepository(TypeEpreuve::class)->findByTypeDiplome($typeDiplome);
 
+        // On rassemble toutes les UE
+        $ueArray = array_map(function($semestre) use ($UeDisplay) {
+            $ueFromSemestre = [...$semestre->ues];
+            $uesEnfants = array_filter(
+                array_map(
+                    fn($ue) => $ue->uesEnfants(), 
+                    $ueFromSemestre
+                ), 
+                fn($array) => count($array) > 0);
+            $uesEnfants = array_merge(...$uesEnfants);
+            $uesEnfantsDeuxiemeNiveau = array_filter(
+                array_map(
+                    fn($ueEnfant) => $ueEnfant->uesEnfants(), 
+                    $uesEnfants
+                ),
+                fn($array) => count($array) > 0
+            );
+            $uesEnfantsDeuxiemeNiveau = array_merge(...$uesEnfantsDeuxiemeNiveau);
+            return array_merge($ueFromSemestre, $uesEnfants, $uesEnfantsDeuxiemeNiveau);
+        }, $versionData['dto']->semestres);
+
+        $ueArray = array_merge(...$ueArray);
+
+        // Et on cherche le StructureEc qui fait partie de l'UE à l'index précisé
+        $structureEc = null;
+        foreach($ueArray as $ue){
+            if($ue->display === $UeDisplay){
+                if($indexEcEnfant !== -1){
+                    $indexKey = array_keys($ue->elementConstitutifs[$indexEc]->elementsConstitutifsEnfants);
+                    $structureEc = $ue->elementConstitutifs[$indexEc]->elementsConstitutifsEnfants[$indexKey[$indexEcEnfant]];
+                }else {
+                    $structureEc = $ue->elementConstitutifs[$indexEc];
+                }   
+            }
+        }
+
+        // Mise en forme du tableau des MCCC
+        $tabMcccs = [];
+        if ($structureEc->typeMccc === 'cci') {
+            foreach ($structureEc->mcccs as $mccc) {
+                $tabMcccs[$mccc['numeroSession']] = $mccc;
+            }
+        } else {
+            foreach ($structureEc->mcccs as $mccc) {
+                if ($mccc['secondeChance']) {
+                    $tabMcccs[3]['chance'] = $mccc;
+                } elseif ($mccc['controleContinu'] === true && $mccc['examenTerminal'] === false) {
+                    $tabMcccs[$mccc['numeroSession']]['cc'][$mccc['numeroEpreuve'] ?? 1] = $mccc;
+                } elseif ($mccc['controleContinu'] === false && $mccc['examenTerminal'] === true) {
+                    $tabMcccs[$mccc['numeroSession']]['et'][$mccc['numeroEpreuve'] ?? 1] = $mccc;
+                }
+            }
+        }
+
+        $codeVersion = $UeDisplay . "##" . $indexEc . "##";
+        $codeVersion .= isset($indexEcEnfant) ? "{$indexEcEnfant}" : "-1";
+
+        return $this->render('element_constitutif/_mcccEcNonEditable.html.twig', [
+            'isMcccImpose' => $structureEc->elementConstitutif->getFicheMatiere()?->isMcccImpose(),
+            'isEctsImpose' => $structureEc->elementConstitutif->getFicheMatiere()?->isEctsImpose(),
+            'typeMccc' => $structureEc->typeMccc,
+            'typeEpreuves' => $typeEpreuveDiplome,
+            'ec' => $structureEc->elementConstitutif,
+            'ects' => $structureEc->heuresEctsEc->ects,
+            'templateForm' => $templateForm,
+            'mcccs' => $tabMcccs,
+            'codeVersion' => $codeVersion,
+            'isMcccFromVersion' => true,
+            'parcoursId' => $parcoursVersioning->getParcours()->getId(),
+            'ecFromDb' => $elementConstitutif,
+            'isFromVersioning' => $isFromVersioning,
+            'libelleQuelleVersion' => 'Version validée CFVU'
+        ]);
+    }
 
     #[Route('/{id}/mccc-ec-but', name: 'app_element_constitutif_mccc_but', methods: ['GET', 'POST'])]
     public function mcccEcBut(
