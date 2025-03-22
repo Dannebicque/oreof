@@ -42,31 +42,34 @@
             <div class="form-check mb-2">
                 <input class="form-check-input synchro-mccc" type="checkbox" id="cc_has_tp" name="cc_has_tp"
                        {% if mcccs[1]['cc'][1].options is defined and mcccs[1]['cc'][1].options.cc_has_tp is defined and mcccs[1]['cc'][1].options.cc_has_tp == "on" %}checked{% endif %}
+                        {{ stimulus_action('mccc--licence', "ccHasTp", 'change') }}
                 >
                 <label class="form-check-label" for="cc_has_tp"> {{ 'mccc.licence.labels.cc_has_tp'|trans({}, 'form') }}
                     <i
-                        class="fal fa-question-circle ms-1" data-controller="tooltip"
-                        data-tooltip-placement-value="bottom"
-                        title="{{ 'mccc.licence.helps.cc_has_tp'|trans({}, 'help') }}"></i></label>
+                            class="fal fa-question-circle ms-1" data-controller="tooltip"
+                            data-tooltip-placement-value="bottom"
+                            title="{{ 'mccc.licence.helps.cc_has_tp'|trans({}, 'help') }}"></i></label>
             </div>
         </div>
         <div class="col-4">
-            <label for="cc_has_tp_pourcentage">
-                {{ 'mccc_licence.labels.cc.cc_has_tp_pourcentage'|trans({}, 'form') }}
-                <i class="fal fa-question-circle ms-1"
-                   data-controller="tooltip"
-                   data-tooltip-placement-value="bottom"
-                   aria-label="{{ 'mccc_licence.helps.cc.cc_has_tp_pourcentage.help'|trans({}, 'help') }}"
-                   data-bs-original-title="{{ 'mccc_licence.helps.cc.cc_has_tp_pourcentage.help'|trans({}, 'help') }}"></i>
-            </label>
-            <div class="input-group">
-                <input type="text" class="form-control"
-                       id="cc_has_tp_pourcentage"
-                       name="cc_has_tp_pourcentage"
-                       disabled
-                       value="50">
-                <span class="input-group-text">%</span>
-            </div>{# forcément 50% par défaut dans ce cas de figure #}
+            <div id="ccHasTpBlock" class="{% if mcccs[1]['cc'][1].options is defined and mcccs[1]['cc'][1].options.cc_has_tp is defined and mcccs[1]['cc'][1].options.cc_has_tp == "on" %}d-block{% else %}d-none{% endif %}">
+                <label for="cc_has_tp_pourcentage">
+                    {{ 'mccc_licence.labels.cc.cc_has_tp_pourcentage'|trans({}, 'form') }}
+                    <i class="fal fa-question-circle ms-1"
+                       data-controller="tooltip"
+                       data-tooltip-placement-value="bottom"
+                       aria-label="{{ 'mccc_licence.helps.cc.cc_has_tp_pourcentage.help'|trans({}, 'help') }}"
+                       data-bs-original-title="{{ 'mccc_licence.helps.cc.cc_has_tp_pourcentage.help'|trans({}, 'help') }}"></i>
+                </label>
+                <div class="input-group">
+                    <input type="text" class="form-control"
+                           id="cc_has_tp_pourcentage"
+                           name="cc_has_tp_pourcentage"
+                           disabled
+                           value="50">
+                    <span class="input-group-text">%</span>
+                </div>{# forcément 50% par défaut dans ce cas de figure #}
+            </div>
         </div>
     </div>
 </div>
