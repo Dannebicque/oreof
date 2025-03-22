@@ -194,7 +194,8 @@ class VersioningStructure
             }
 
             foreach ($ueNouvelle->uesEnfants() as $ordreUeEnfant => $ueEnfant) {
-                if (array_key_exists($ordreUeEnfant, $ueNouvelle->uesEnfants())) {
+                //UE n'existait pas avant, on ajoute
+                if (array_key_exists($ordreUeEnfant, $ueOriginale->uesEnfants())) {
                     $diff['uesEnfants'][$ordreUeEnfant] = $this->compareUe(null, $ueNouvelle->uesEnfants()[$ordreUeEnfant]);
                 }
             }
@@ -230,6 +231,7 @@ class VersioningStructure
 
             $diff['heuresEctsUe'] = $this->compareHeuresEctsUe(null, $ueNouvelle->heuresEctsUe);
         }
+
         return $diff;
     }
 
@@ -284,9 +286,6 @@ class VersioningStructure
 
             return $diff;
         }
-
-
-
 
         if ($ecOriginal->elementConstitutif->getFicheMatiere() !== null) {
             $libelleOriginal = $ecOriginal->elementConstitutif->getFicheMatiere()->getLibelle();
