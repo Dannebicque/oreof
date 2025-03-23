@@ -74,7 +74,8 @@ class LicenceMcccVersion extends AbstractLicenceMccc
             throw new \Exception('La formation n\'existe pas');
         }
 
-        $dto = $this->calculStructureParcours->calcul($parcours);
+        $dto = $this->calculStructureParcours->calcul($parcours, dataFromFicheMatiere: true);
+
         // version
         $structureDifferencesParcours = $this->versioningParcours->getStructureDifferencesBetweenParcoursAndLastVersion($parcours);
         if ($structureDifferencesParcours !== null) {
@@ -245,7 +246,6 @@ class LicenceMcccVersion extends AbstractLicenceMccc
                             );
                             $this->excelWriter->writeCellXYDiff(self::COL_INTITULE_UE, $debut, $diffUe['libelle'], ['wrap' => true]);
                         }
-
                         //Affichage des UE enfants
                         foreach ($ue->uesEnfants() as $ordUee => $uee) {
 
@@ -262,6 +262,9 @@ class LicenceMcccVersion extends AbstractLicenceMccc
                                             if (array_key_exists('ecEnfants', $diffEc)) {
                                                 $ligne = $this->afficheEc($ligne, $ece, $diffEc['ecEnfants'][$ordEce]);
                                             }
+                                            //                                            else {
+                                            //                                                $ligne = $this->afficheEc($ligne, $ece, []);
+                                            //                                            }
                                         }
                                     }
 
