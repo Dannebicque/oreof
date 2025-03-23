@@ -44,7 +44,7 @@
                     </li>
                 {% elseif fiche_matiere.parcours is defined and fiche_matiere.parcours != null and fiche_matiere.parcours.formation.typeDiplome.libelleCourt == 'BUT' %}
                     <li class="nav-item" role="presentation">
-                        <a class="nav-link {% if not isAccessible(dpeParcours, 'cfvu') %}disabled{% endif %}"
+                        <a class="nav-link"
                            data-bs-toggle="tab" href="#" role="tab" aria-selected="false"
                                 {{ stimulus_action('fiche_matiere_wizard', 'changeStep', 'click', {step: 4, type:'but'}) }}
                         >Volumes horaires et MCCC {{ ficheMatiereState.onglets|etatRemplissage(4, 'ec') }}</a>
