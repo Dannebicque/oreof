@@ -10,10 +10,7 @@
                         {% set modalUrl = path('app_element_constitutif_mccc_versioning', 
                                 {
                                     parcoursVersioning: parcoursVersioning.id,
-                                    UeDisplay: UeDisplay,
-                                    indexEc: indexEc,
-                                    indexEcEnfant: indexEcEnfant,
-                                    elementConstitutif: -1,
+                                    elementConstitutif: this.elementConstitutif.id ?? this.elementConstitutif.deserializedId,
                                     isFromVersioning: 1
                                 }
                             )
@@ -22,7 +19,7 @@
                         {% set modalUrl = path('app_element_constitutif_mccc_non_editable', {
                                     'id': this.elementConstitutif.id, 
                                     parcours: this.parcours.id,
-                                    codeVersion: UeDisplay ~ "##" ~ indexEc ~ "##" ~ indexEcEnfant })
+                            })
                         %}
                     {% endif %} 
                     {{ stimulus_controller('modal', {

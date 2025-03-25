@@ -184,13 +184,12 @@ class ElementConstitutifMcccController extends AbstractController
         'mcccs' => $getElement->getMcccsFromFicheMatiereCollection(),]);
     }
 
-    #[Route('/{id}/mccc-ec/{parcours}/non-editable/{codeVersion}', name: 'app_element_constitutif_mccc_non_editable', methods: ['GET', 'POST'])]
+    #[Route('/{id}/mccc-ec/{parcours}/non-editable', name: 'app_element_constitutif_mccc_non_editable', methods: ['GET', 'POST'])]
     public function mcccEcNonEditable(
         TypeDiplomeRegistry          $typeDiplomeRegistry,
         TypeEpreuveRepository        $typeEpreuveRepository,
         ElementConstitutif           $elementConstitutif,
         Parcours                     $parcours,
-        string                       $codeVersion = "",
         EntityManagerInterface       $entityManager
     ): Response {
 
@@ -226,20 +225,17 @@ class ElementConstitutifMcccController extends AbstractController
             'ects' => $ects,
             'templateForm' => $typeD::TEMPLATE_FORM_MCCC,
             'mcccs' => $getElement->getMcccsFromFicheMatiere($typeD),
-            'lastVersion' => $lastVersion,
-            'codeVersion' => $codeVersion,
             'isFromVersioning' => 0,
-            'libelleQuelleVersion' => 'Version actuelle'
+            'lastVersion' => $lastVersion,
+            'libelleQuelleVersion' => 'Version actuelle',
+            'parcoursId' => $parcours->getId()
         ]);
     }
 
-    #[Route('/{UeDisplay}/{indexEc}/{indexEcEnfant}/{elementConstitutif}/mccc-ec-versioning/{parcoursVersioning}/non-editable/{isFromVersioning}', name: 'app_element_constitutif_mccc_versioning')]
+    #[Route('/{elementConstitutif}/mccc-ec-versioning/{parcoursVersioning}/non-editable/{isFromVersioning}', name: 'app_element_constitutif_mccc_versioning')]
     public function mcccVersioning(
-        string $UeDisplay,
-        int $indexEc,
-        int $indexEcEnfant,
         int $isFromVersioning,
-        ElementConstitutif|int $elementConstitutif = -1,
+        ElementConstitutif $elementConstitutif,
         ParcoursVersioning $parcoursVersioning,
         TypeDiplomeRegistry $typeDiplomeReg,
         VersioningParcours $versioningParcours,
@@ -252,7 +248,7 @@ class ElementConstitutifMcccController extends AbstractController
         $typeEpreuveDiplome = $entityManager->getRepository(TypeEpreuve::class)->findByTypeDiplome($typeDiplome);
 
         // On rassemble toutes les UE
-        $ueArray = array_map(function($semestre) use ($UeDisplay) {
+        $ueArray = array_map(function($semestre) {
             $ueFromSemestre = [...$semestre->ues];
             $uesEnfants = array_filter(
                 array_map(
@@ -274,17 +270,23 @@ class ElementConstitutifMcccController extends AbstractController
 
         $ueArray = array_merge(...$ueArray);
 
-        // Et on cherche le StructureEc qui fait partie de l'UE à l'index précisé
+        // Et on cherche le StructureEc de la version qui a le même Id
         $structureEc = null;
-        foreach($ueArray as $ue){
-            if($ue->display === $UeDisplay){
-                if($indexEcEnfant !== -1){
-                    $indexKey = array_keys($ue->elementConstitutifs[$indexEc]->elementsConstitutifsEnfants);
-                    $structureEc = $ue->elementConstitutifs[$indexEc]->elementsConstitutifsEnfants[$indexKey[$indexEcEnfant]];
-                }else {
-                    $structureEc = $ue->elementConstitutifs[$indexEc];
-                }   
+        foreach($ueArray as $structUe) {
+            foreach($structUe->elementConstitutifs as $structEc){
+                if($structEc->elementConstitutif->getDeserializedId() === $elementConstitutif->getId()){
+                    $structureEc = $structEc;
+                }
+                foreach($structEc->elementsConstitutifsEnfants as $structEcEnfant){
+                    if($structEcEnfant->elementConstitutif->getDeserializedId() === $elementConstitutif->getId()){
+                        $structureEc = $structEcEnfant;
+                    }
+                }
             }
+        }
+
+        if($structureEc === null){
+            return new Response("L'EC demandé n'a pas été trouvé.", headers: ['Content-Type' => 'text/html']);
         }
 
         // Mise en forme du tableau des MCCC
@@ -305,9 +307,6 @@ class ElementConstitutifMcccController extends AbstractController
             }
         }
 
-        $codeVersion = $UeDisplay . "##" . $indexEc . "##";
-        $codeVersion .= isset($indexEcEnfant) ? "{$indexEcEnfant}" : "-1";
-
         return $this->render('element_constitutif/_mcccEcNonEditable.html.twig', [
             'isMcccImpose' => $structureEc->elementConstitutif->getFicheMatiere()?->isMcccImpose(),
             'isEctsImpose' => $structureEc->elementConstitutif->getFicheMatiere()?->isEctsImpose(),
@@ -317,7 +316,6 @@ class ElementConstitutifMcccController extends AbstractController
             'ects' => $structureEc->heuresEctsEc->ects,
             'templateForm' => $templateForm,
             'mcccs' => $tabMcccs,
-            'codeVersion' => $codeVersion,
             'isMcccFromVersion' => true,
             'parcoursId' => $parcoursVersioning->getParcours()->getId(),
             'ecFromDb' => $elementConstitutif,

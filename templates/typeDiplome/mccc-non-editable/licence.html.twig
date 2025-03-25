@@ -10,44 +10,38 @@
     <twig:alerte type="danger" message="Le type de MCCC est inconnu"/>
 {% endif %}
 
-{% if (isFromVersioning is defined and isFromVersioning != 1) 
-    and (codeVersion is defined and codeVersion != "")  
-%}
+{% if (isFromVersioning is defined and isFromVersioning != 1) %}
     <div class="row justify-content-start mt-5">
     {% if (isMcccFromVersion is not defined or isMcccFromVersion == false) 
         and (lastVersion is defined and lastVersion != null)
     %}
-        {% set codeVersionDecode = codeVersion|split('##') %}
-        {% set urlVersioning = path('app_element_constitutif_mccc_versioning', {
-                                        parcoursVersioning: lastVersion.id,
-                                        UeDisplay: codeVersionDecode[0],
-                                        indexEc: codeVersionDecode[1],
-                                        indexEcEnfant: codeVersionDecode[2] ?? -1,
-                                        elementConstitutif: ec.id,
-                                        isFromVersioning: isFromVersioning
-                                    })
-        %}
         <div class="col-4"> 
             <button class="btn btn-sm btn-primary" 
-                {{ stimulus_action('modal', 'refreshModalWithUrl', 'click', { url: urlVersioning }) }}
+                {{ stimulus_action('modal', 'refreshModalWithUrl', 'click', 
+                    { url: path('app_element_constitutif_mccc_versioning', {
+                            parcoursVersioning: lastVersion.id,
+                            elementConstitutif: ec.id,
+                            isFromVersioning: isFromVersioning
+                        }) 
+                    }) 
+                }}
             >
                 Dernière version
             </button>
         </div>
     {% else %}
-        {% if ecFromDb is defined %}
-            {% set ecFromDbId = ecFromDb != -1 ? ecFromDb : -1 %}
-            {% set modalUrl = path('app_element_constitutif_mccc_non_editable', 
-                {id: ecFromDbId, parcours: parcoursId, codeVersion: codeVersion }) 
-            %}
-                <div class="col-4">
-                    <button class="btn btn-sm btn-primary"
-                        {{ stimulus_action('modal', 'refreshModalWithUrl', 'click', { url: modalUrl }) }}
-                    >
-                        Version actuelle
-                    </button>
-                </div>
-        {% endif %}
+        <div class="col-4">
+            <button class="btn btn-sm btn-primary"
+                {{ stimulus_action('modal', 'refreshModalWithUrl', 'click', 
+                    { url: path('app_element_constitutif_mccc_non_editable', 
+                        {id: ec.deserializedId, parcours: parcoursId}
+                        ) 
+                    }) 
+                }}
+            >
+                Version actuelle
+            </button>
+        </div>
     {% endif %}
     </div>
 {% endif %}

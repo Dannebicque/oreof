@@ -183,6 +183,7 @@ class ElementConstitutif
     #[ORM\OneToOne(targetEntity: self::class)]
     private ?self $ecOrigineCopie = null;
 
+    private ?int $deserializedId = null;
 
     public function __construct()
     {
@@ -922,5 +923,14 @@ class ElementConstitutif
     public function prepareCloneForNewAnnee() : void {
         $this->competences = new ArrayCollection();
         $this->apprentissagesCritiques = new ArrayCollection();
+    }
+
+    public function getDeserializedId() : ?int {
+        return $this->deserializedId;
+    }
+
+    public function setDeserializedId(?int $id) : self {
+        $this->deserializedId = $id;
+        return $this;
     }
 }
