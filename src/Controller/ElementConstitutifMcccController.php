@@ -32,6 +32,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/element/constitutif')]
@@ -286,7 +287,7 @@ class ElementConstitutifMcccController extends AbstractController
         }
 
         if($structureEc === null){
-            return new Response("L'EC demandé n'a pas été trouvé.", headers: ['Content-Type' => 'text/html']);
+            throw new NotFoundHttpException("Aucun EC versionné.");
         }
 
         // Mise en forme du tableau des MCCC
