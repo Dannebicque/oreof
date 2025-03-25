@@ -225,7 +225,7 @@ class ElementConstitutifMcccController extends AbstractController
             'ects' => $ects,
             'templateForm' => $typeD::TEMPLATE_FORM_MCCC,
             'mcccs' => $getElement->getMcccsFromFicheMatiere($typeD),
-            'isFromVersioning' => 0,
+            'isFromVersioning' => 'false',
             'lastVersion' => $lastVersion,
             'libelleQuelleVersion' => 'Version actuelle',
             'parcoursId' => $parcours->getId()
@@ -234,7 +234,7 @@ class ElementConstitutifMcccController extends AbstractController
 
     #[Route('/{elementConstitutif}/mccc-ec-versioning/{parcoursVersioning}/non-editable/{isFromVersioning}', name: 'app_element_constitutif_mccc_versioning')]
     public function mcccVersioning(
-        int $isFromVersioning,
+        string $isFromVersioning,
         ElementConstitutif $elementConstitutif,
         ParcoursVersioning $parcoursVersioning,
         TypeDiplomeRegistry $typeDiplomeReg,

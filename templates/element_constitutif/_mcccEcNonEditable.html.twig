@@ -4,7 +4,7 @@
     }) 
 }}>
 <div {{ stimulus_target('modal', 'zoneToRefresh') }}>
-    {% if isFromVersioning is defined and isFromVersioning != 1 %}
+    {% if isFromVersioning is defined and isFromVersioning != 'true' %}
         <h4 class="text-center text-primary mb-2">{{ libelleQuelleVersion }}</h4>
     {% endif %}
     <h2>MCCC pour {{ ec.libelle }}</h2>

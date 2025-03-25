@@ -10,7 +10,7 @@
     <twig:alerte type="danger" message="Le type de MCCC est inconnu"/>
 {% endif %}
 
-{% if (isFromVersioning is defined and isFromVersioning != 1) %}
+{% if (isFromVersioning is defined and isFromVersioning != 'true') %}
     <div class="row justify-content-start mt-5">
     {% if (isMcccFromVersion is not defined or isMcccFromVersion == false) 
         and (lastVersion is defined and lastVersion != null)
