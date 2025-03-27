@@ -23,7 +23,7 @@ class EcStep4Type extends AbstractType
     {
         $isModal = $options['isModal'];
 
-        if ($options['modalite'] === null) {
+        if ($options['modalite'] === null || $options['modalite'] === ModaliteEnseignementEnum::HYBRIDE || $options['modalite'] === ModaliteEnseignementEnum::NON_DEFINI) {
             $builder->add('modaliteEnseignement', EnumType::class, [
                 'class' => ModaliteEnseignementEnum::class,
                 'choice_label' => fn ($choice) => match ($choice) {
@@ -36,7 +36,6 @@ class EcStep4Type extends AbstractType
                 'attr' => ['data-action' => !$isModal ? 'change->ec--structure#saveModaliteEnseignement' : 'change->ec--structureparcours#changeModalite'],
             ]);
         }
-
 
         $builder->add('volumeCmPresentiel', FloatType::class, [
             'html5' => true,

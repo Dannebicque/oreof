@@ -548,8 +548,7 @@ class ElementConstitutifController extends BaseController
                 'app_element_constitutif_structure',
                 [
                     'id' => $elementConstitutif->getId(),
-                    'parcours' => $parcours->getId(),
-                    'modalite' => $parcours->getModalitesEnseignement(),
+                    'parcours' => $parcours->getId()
                 ]
             ),
         ]);
