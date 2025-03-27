@@ -111,6 +111,7 @@ class GlobalVoter extends Voter
                     }
 
                     if ($subject instanceof Parcours) {
+
                         $dpeParcours = GetDpeParcours::getFromParcours($subject);
                         if ($dpeParcours !== null) {
                             if (strtolower($this->permission) === PermissionEnum::MANAGE->value && $this->canManageDpeParcours($dpeParcours, $centre) === true) {
@@ -249,6 +250,7 @@ class GlobalVoter extends Voter
         }
 
         if ($parcours->getFormation()?->getResponsableMention() === $this->user || $parcours->getFormation()?->getCoResponsable() === $this->user) {
+
             $canEdit = $this->dpeParcoursWorkflow->can($subject, 'autoriser') ||
                 $this->dpeParcoursWorkflow->can($subject, 'valider_parcours') ||
               //  $this->dpeParcoursWorkflow->can(subject, 'valider_ouverture_sans_cfvu') || todo: a mettre dès l'ouverture

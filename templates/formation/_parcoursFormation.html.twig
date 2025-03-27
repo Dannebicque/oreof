@@ -145,7 +145,7 @@
                                 <span> vérifier</span>
                             </a><br>
 
-                            {% if is_granted('CAN_FORMATION_EDIT_MY', formation) %}
+                            {% if is_granted('CAN_FORMATION_EDIT_MY', formation) or is_granted('CAN_PARCOURS_EDIT_MY', formation.parcours[0]) %}
                                 <a href="{{ path('app_formation_edit',{'slug':  formation.slug}) }}"
                                    class="btn btn-sm text-warning"
                                    data-bs-toggle="tooltip"

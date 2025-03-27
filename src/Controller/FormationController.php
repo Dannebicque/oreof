@@ -433,8 +433,15 @@ class FormationController extends BaseController
         Formation           $formation,
         TypeDiplomeRegistry $typeDiplomeRegistry
     ): Response {
+
         if (!$this->isGranted('CAN_FORMATION_EDIT_MY', $formation)) {
-            return $this->redirectToRoute('app_formation_show', ['slug' => $formation->getSlug()]);
+            if($formation->isHasParcours() === false && count($formation->getParcours()) === 1) {
+                if (!$this->isGranted('CAN_PARCOURS_EDIT_MY', $formation->getParcours()->first())) {
+                    return $this->redirectToRoute('app_formation_show', ['slug' => $formation->getSlug()]);
+                }
+            } else {
+                return $this->redirectToRoute('app_formation_show', ['slug' => $formation->getSlug()]);
+            }
         }
 
         $formationState->setFormation($formation);
