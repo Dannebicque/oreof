@@ -10,7 +10,10 @@
                 <div class="row">
                     {% if isMcccImpose == false and isEctsImpose == false %}
                         <div class="col-12">
-                            <p>Cet EC est raccroché, par défaut, les données sont celles de l'EC d'origine issue du parcours <strong>{{ ec.parcours != null ? ec.parcours.display : '-non précisé-' }}</strong></p>{# todo: Si UE ou Semestre raccroché mettre le modal non editable et impossible spécifique #}
+                            <p>Cet EC est raccroché, par défaut, les données sont celles de l'EC d'origine issue du
+                                parcours
+                                <strong>{{ ec.parcours != null ? ec.parcours.display : '-non précisé-' }}</strong>
+                            </p>{# todo: Si UE ou Semestre raccroché mettre le modal non editable et impossible spécifique #}
                         </div>
                         <div class="col-6">
                             <div class="form-check mb-2">
@@ -106,7 +109,7 @@
             <div class="form-check mb-2">
                 <input class="form-check-input" type="checkbox" id="ec_step4_quitus" name="ec_step4[quitus]"
                        {% if isParcoursProprietaire == false and ec.ectsSpecifiques == false %}disabled{% endif %}
-                       {% if ec.quitus == true %}checked{% endif %}
+                        {% if ec.quitus == true %}checked{% endif %}
                 >
                 <label class="form-check-label" for="ec_step4_quitus"> {{ 'ec_step4.labels.quitus'|trans({}, 'form') }}
                     <i
@@ -118,14 +121,16 @@
 
         {% if typeDiplome.controleAssiduite == true %}
             <div class="form-check mb-2">
-                <input class="form-check-input" type="checkbox" id="ec_step4_controleAssiduite" name="ec_step4[controleAssiduite]"
+                <input class="form-check-input" type="checkbox" id="ec_step4_controleAssiduite"
+                       name="ec_step4[controleAssiduite]"
                         {{ stimulus_action('ec--mccc', 'controleAssiduite', 'change', {
                             ec:ec.id
                         }) }}
-                       {% if isParcoursProprietaire == false and ec.ectsSpecifiques == false %}disabled{% endif %}
+                        {% if isParcoursProprietaire == false and ec.ectsSpecifiques == false %}disabled{% endif %}
                         {% if ec.controleAssiduite == true %}checked{% endif %}
                 >
-                <label class="form-check-label" for="ec_step4_controleAssiduite"> {{ 'ec_step4.labels.controleAssiduite'|trans({}, 'form') }}
+                <label class="form-check-label"
+                       for="ec_step4_controleAssiduite"> {{ 'ec_step4.labels.controleAssiduite'|trans({}, 'form') }}
                     <i
                             class="fal fa-question-circle ms-1" data-controller="tooltip"
                             data-tooltip-placement-value="bottom"
@@ -160,8 +165,10 @@
         </div>
     {% endif %}
 
-    {% if (ec.natureUeEc != null and ec.natureUeEc.isLibre == false) or ec.natureUeEc == null %}
-        {{ include('typeDiplome/mccc/'~templateForm, {raccroche: ec.mcccSpecifiques == false and raccroche }) }}
+    {% if ((ec.natureUeEc != null and ec.natureUeEc.isLibre == false) or ec.natureUeEc == null) %}
+        {{ include('typeDiplome/mccc/'~templateForm, {
+            raccroche: ec.mcccSpecifiques == false and raccroche,
+        }) }}
     {% endif %}
 
     <button type="submit" class="btn btn-success"

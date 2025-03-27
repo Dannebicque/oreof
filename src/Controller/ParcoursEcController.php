@@ -228,6 +228,14 @@ class ParcoursEcController extends AbstractController
 
                 $ec->setControleAssiduite($request->request->get('value') === 'true');
 
+                if ($ec->isControleAssiduite() === true) {
+                    $ec->setTypeMccc(null);
+                    //supprimer les MCCC associées
+                    foreach ($ec->getMcccs() as $mccc) {
+                        $ec->removeMccc($mccc);
+                    }
+                }
+
                 $ecRepository->save($ec, true);
                 return JsonReponse::success('EC mis à jour, Contrôle assiduité enregistré');
             case 'mcccSpecifiques':

@@ -661,52 +661,54 @@ class LicenceMcccVersion extends AbstractLicenceMccc
         }
 
         // MCCC
+        if ($structureEc->elementConstitutif->isControleAssiduite() === true) {
+            $this->excelWriter->writeCellXY(self::COL_MCCC_CCI, $ligne, 'Contrôle d\'assiduité');
+        } else {
+            if (array_key_exists('mcccs', $diffEc) && array_key_exists('original', $diffEc['mcccs']) && array_key_exists('new', $diffEc['mcccs'])) {
+                $mcccsOriginal = $this->getMcccs($diffEc['mcccs']['original'], $diffEc['typeMccc']->original);
+                $mcccsNew = $this->getMcccs($diffEc['mcccs']['new'], $diffEc['typeMccc']->new);
 
-        if (array_key_exists('mcccs', $diffEc) && array_key_exists('original', $diffEc['mcccs']) && array_key_exists('new', $diffEc['mcccs'])) {
-            $mcccsOriginal = $this->getMcccs($diffEc['mcccs']['original'], $diffEc['typeMccc']->original);
-            $mcccsNew = $this->getMcccs($diffEc['mcccs']['new'], $diffEc['typeMccc']->new);
-
-            //cas Original sans écrire dans les cellules
-            $displayMcccOriginal = $this->calculDisplayMccc($mcccsOriginal, $diffEc['typeMccc']->original, false);
-            $displayMcccNew =$this->calculDisplayMccc($mcccsNew, $diffEc['typeMccc']->new, false);
+                //cas Original sans écrire dans les cellules
+                $displayMcccOriginal = $this->calculDisplayMccc($mcccsOriginal, $diffEc['typeMccc']->original, false);
+                $displayMcccNew = $this->calculDisplayMccc($mcccsNew, $diffEc['typeMccc']->new, false);
 
 
-            //fusionner les deux tableaux $displayMcccOriginal et $displayMcccNew en construisant un objet DiffObject
-            foreach ($displayMcccOriginal as $key => $value) {
-                if (array_key_exists($key, $displayMcccNew)) {
-                    $diffMccc[$key] = new DiffObject($value, $displayMcccNew[$key]);
-                } else {
-                    $diffMccc[$key] = new DiffObject($value, '');
+                //fusionner les deux tableaux $displayMcccOriginal et $displayMcccNew en construisant un objet DiffObject
+                foreach ($displayMcccOriginal as $key => $value) {
+                    if (array_key_exists($key, $displayMcccNew)) {
+                        $diffMccc[$key] = new DiffObject($value, $displayMcccNew[$key]);
+                    } else {
+                        $diffMccc[$key] = new DiffObject($value, '');
+                    }
                 }
-            }
 
-            foreach ($displayMcccNew as $key => $value) {
-                if (!array_key_exists($key, $displayMcccOriginal)) {
+                foreach ($displayMcccNew as $key => $value) {
+                    if (!array_key_exists($key, $displayMcccOriginal)) {
+                        $diffMccc[$key] = new DiffObject('', $value);
+                    }
+                }
+
+                foreach ($diffMccc as $key => $value) {
+                    $this->excelWriter->writeCellXYDiff($key, $ligne, $value);
+
+                }
+            } elseif (array_key_exists('mcccs', $diffEc) && array_key_exists('new', $diffEc['mcccs'])) {
+                $mcccsNew = $this->getMcccs($diffEc['mcccs']['new'], $diffEc['typeMccc']->new);
+
+                $displayMcccNew = $this->calculDisplayMccc($mcccsNew, $diffEc['typeMccc']->new, false);
+
+                foreach ($displayMcccNew as $key => $value) {
                     $diffMccc[$key] = new DiffObject('', $value);
                 }
+
+                foreach ($diffMccc as $key => $value) {
+                    $this->excelWriter->writeCellXYDiff($key, $ligne, $value);
+
+                }
             }
 
-            foreach ($diffMccc as $key => $value) {
-                $this->excelWriter->writeCellXYDiff($key, $ligne, $value);
-
-            }
-        } elseif (array_key_exists('mcccs', $diffEc) && array_key_exists('new', $diffEc['mcccs'])) {
-            $mcccsNew = $this->getMcccs($diffEc['mcccs']['new'], $diffEc['typeMccc']->new);
-
-            $displayMcccNew =$this->calculDisplayMccc($mcccsNew, $diffEc['typeMccc']->new, false);
-
-            foreach ($displayMcccNew as $key => $value) {
-                $diffMccc[$key] = new DiffObject('', $value);
-            }
-
-            foreach ($diffMccc as $key => $value) {
-                $this->excelWriter->writeCellXYDiff($key, $ligne, $value);
-
-            }
+            $this->excelWriter->writeCellXY(self::COL_TYPE_EC, $ligne, $ec->getTypeEc() ? $ec->getTypeEc()->getLibelle() : '');
         }
-
-        $this->excelWriter->writeCellXY(self::COL_TYPE_EC, $ligne, $ec->getTypeEc() ? $ec->getTypeEc()->getLibelle() : '');
-
         // Heures
         $this->excelWriter->writeCellXYDiff(self::COL_ECTS, $ligne, $diffEc['heuresEctsEc']['ects']);
         $this->excelWriter->writeCellXYDiff(self::COL_HEURES_PRES_CM, $ligne, $diffEc['heuresEctsEc']['cmPres']);

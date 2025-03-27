@@ -223,7 +223,7 @@ abstract class ValideStructure extends AbstractValide
             // Si MCCC raccrochée
             // Si Enfants et MCCC du parent
             // Sinon
-            if ($getElement->getEtatsMccc() !== 'Complet') {
+            if ($getElement->getEtatsMccc() !== 'Complet' && $getElement->getElementConstitutif()->isControleAssiduite() === false) {
                 //todo: gérer MCCC raccrochées, ou d'un parent
                 $t['erreur'][] = 'MCCC non renseignées';
                 $etatEc = self::INCOMPLET;

@@ -14,10 +14,11 @@ export default class extends Controller {
   static values = {
     url: String,
     typeMccc: String,
+    afficheMccc: Boolean,
   }
 
   connect() {
-    if (this.typeMcccValue !== null) {
+    if (this.typeMcccValue !== null && this.afficheMcccValue === true) {
       this._loadTypeMccc(this.typeMcccValue).then(() => {
         this._verifyTypeEpreuveCt()
         this._verifyTypeEpreuveEt()
@@ -26,7 +27,7 @@ export default class extends Controller {
   }
 
   updateForm(event) {
-    if (this.typeMcccValue !== null) {
+    if (this.typeMcccValue !== null && this.afficheMcccValue === true) {
       this._loadTypeMccc(this.typeMcccValue)
     }
   }
