@@ -26,6 +26,9 @@ class FicheMatiereVersioning
     #[ORM\Column(length: 255)]
     private ?string $slug = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $version_valide = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -75,6 +78,18 @@ class FicheMatiereVersioning
     public function setSlug(string $slug): static
     {
         $this->slug = $slug;
+
+        return $this;
+    }
+
+    public function isVersionValide(): ?bool
+    {
+        return $this->version_valide;
+    }
+
+    public function setVersionValide(?bool $version_valide): static
+    {
+        $this->version_valide = $version_valide;
 
         return $this;
     }

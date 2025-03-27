@@ -1,6 +1,17 @@
-<h2>MCCC pour {{ ec.libelle }}</h2>
+<div {{ stimulus_controller('modal', {
+        size: 'lg',
+        modalTitle: 'Modalités de Contrôle des Connaissances et des Compétences',
+    }) 
+}}>
+<div {{ stimulus_target('modal', 'zoneToRefresh') }}>
+    {% if isFromVersioning is defined and isFromVersioning != 'true' %}
+        <h4 class="text-center text-primary mb-2">{{ libelleQuelleVersion }}</h4>
+    {% endif %}
+    <h2>MCCC pour {{ ec.libelle }}</h2>
 
-<h3>ECTS</h3>
-<p>{{ ects }}</p>
+    <h3>ECTS</h3>
+    <p>{{ ects }}</p>
 
-{{ include('typeDiplome/mccc-non-editable/'~templateForm) }}
+    {{ include('typeDiplome/mccc-non-editable/'~templateForm) }}
+    </div>
+</div>

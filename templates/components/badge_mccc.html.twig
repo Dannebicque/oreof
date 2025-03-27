@@ -4,12 +4,32 @@
     {% else %}
         <button
                 {% if this.editable == false %}
+                    {% if parcoursVersioning is defined and parcoursVersioning != null 
+                        and isVersioning is defined and isVersioning == true
+                    %}
+                        {% set modalUrl = path('app_element_constitutif_mccc_versioning', 
+                                {
+                                    parcoursVersioning: parcoursVersioning.id,
+                                    elementConstitutif: this.elementConstitutif.id ?? this.elementConstitutif.deserializedId,
+                                    isFromVersioning: 'true'
+                                }
+                            )
+                        %}
+                    {% else %}
+                        {% set modalUrl = path('app_element_constitutif_mccc_non_editable', {
+                                    'id': this.elementConstitutif.id, 
+                                    parcours: this.parcours.id,
+                            })
+                        %}
+                    {% endif %} 
                     {{ stimulus_controller('modal', {
                         size: 'lg',
                         nomEvenement: 'refreshListeEc',
                         details: {ue: this.ue.id, parcours: this.parcours.id},
                         modalTitle: 'Modalités de Contrôle des Connaissances et des Compétences',
-                        modalUrl: path('app_element_constitutif_mccc_non_editable',{'id': this.elementConstitutif.id, parcours: this.parcours.id}) }) }}
+                        modalUrl: modalUrl,
+                        }
+                    )}}
                 {% else %}
                     {% if this.deplacer == true and this.editable == true %}
                         {{ stimulus_controller('modal', {
@@ -33,7 +53,9 @@
                 title="Modalités de Contrôle des Connaissances et des Compétences"
         >
             {% if this.texte == true %}<i class="fal fa-marker"></i>{% endif %}
-            <span class="badge bg-{% if this.etatMcccComplet == true %}success{% else %}warning{% endif %}">
+            <span class="badge bg-{% if this.etatMcccComplet == true 
+                or (isVersioning is defined and isVersioning == true) 
+                %}success{% else %}warning{% endif %}">
                {% if this.texte == true %}{% if this.etatMcccComplet == true %}Complet{% else %}A saisir{% endif %} {% else %}MCCC{% endif %}
                 {% if this.isParcoursProprietaire == false and this.isMcccSpecifiques == false  %}
                     <i class="fal fa-link" title="MCCC repris de la fiche matière"></i>{% endif %}

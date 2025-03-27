@@ -17,33 +17,33 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity(repositoryClass: McccRepository::class)]
 class Mccc
 {
-    #[Groups(['DTO_json_versioning'])]
+    #[Groups(['DTO_json_versioning', 'fiche_matiere_versioning'])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups(['DTO_json_versioning'])]
+    #[Groups(['DTO_json_versioning', 'fiche_matiere_versioning'])]
     #[ORM\Column(length: 150)]
     private ?string $libelle = null;
 
-    #[Groups(['DTO_json_versioning'])]
+    #[Groups(['DTO_json_versioning', 'fiche_matiere_versioning'])]
     #[ORM\Column]
     private ?int $numeroSession = null;
 
-    #[Groups(['DTO_json_versioning'])]
+    #[Groups(['DTO_json_versioning', 'fiche_matiere_versioning'])]
     #[ORM\Column]
     private ?bool $secondeChance = false;
 
-    #[Groups(['DTO_json_versioning'])]
+    #[Groups(['DTO_json_versioning', 'fiche_matiere_versioning'])]
     #[ORM\Column]
     private ?float $pourcentage = 0;
 
-    #[Groups(['DTO_json_versioning'])]
+    #[Groups(['DTO_json_versioning', 'fiche_matiere_versioning'])]
     #[ORM\Column]
     private ?int $nbEpreuves = 0;
 
-    #[Groups(['DTO_json_versioning'])]
+    #[Groups(['DTO_json_versioning', 'fiche_matiere_versioning'])]
     #[ORM\Column(type: Types::JSON, nullable: true)]
     private ?array $typeEpreuve = [];
 
@@ -53,23 +53,23 @@ class Mccc
     #[ORM\ManyToOne(inversedBy: 'mcccs')]
     private ?FicheMatiere $ficheMatiere = null;
 
-    #[Groups(['DTO_json_versioning'])]
+    #[Groups(['DTO_json_versioning', 'fiche_matiere_versioning'])]
     #[ORM\Column]
     private ?bool $controleContinu = null;
 
-    #[Groups(['DTO_json_versioning'])]
+    #[Groups(['DTO_json_versioning', 'fiche_matiere_versioning'])]
     #[ORM\Column]
     private ?bool $examenTerminal = null;
 
-    #[Groups(['DTO_json_versioning'])]
+    #[Groups(['DTO_json_versioning', 'fiche_matiere_versioning'])]
     #[ORM\Column(type: Types::TIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $duree = null;
 
-    #[Groups(['DTO_json_versioning'])]
+    #[Groups(['DTO_json_versioning', 'fiche_matiere_versioning'])]
     #[ORM\Column(nullable: true)]
     private ?int $numeroEpreuve = null;
 
-    #[Groups(['DTO_json_versioning'])]
+    #[Groups(['DTO_json_versioning', 'fiche_matiere_versioning'])]
     #[ORM\Column(nullable: true)]
     private ?array $options = null;
 

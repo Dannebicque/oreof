@@ -5,6 +5,7 @@ namespace App\Service;
 use App\DTO\StructureParcours;
 use App\Entity\Parcours;
 use App\Entity\ParcoursVersioning;
+use App\Serializer\IdEntityDenormalizer;
 use App\TypeDiplome\TypeDiplomeRegistry;
 use DateTimeImmutable;
 use Doctrine\Common\Annotations\AnnotationReader;
@@ -46,11 +47,11 @@ class VersioningParcours
         $classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
         $extractors = new PropertyInfoExtractor([], [new PhpDocExtractor(), new ReflectionExtractor()]);
         $this->serializer = new Serializer(
-            [
+        [
+            new IdEntityDenormalizer(),
             new DateTimeNormalizer(),
             new BackedEnumNormalizer(),
             new ArrayDenormalizer(),
-
             new ObjectNormalizer($classMetadataFactory, propertyTypeExtractor: $extractors)
         ],
             [new JsonEncoder()]

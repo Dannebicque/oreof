@@ -9,6 +9,8 @@
 import { Controller } from '@hotwired/stimulus'
 
 export default class extends Controller {
+  static targets = ['zoneToRefresh'];
+
   static values = {
     modalUrl: String,
     nomEvenement: { type: String, default: 'refreshListe' },
@@ -40,5 +42,23 @@ export default class extends Controller {
         updateComponent: this.updateComponentValue,
       },
     })
+  }
+
+  async refreshModalWithUrl(event){
+    let errorText = '<div class="text-center">Une erreur est survenue lors du chargement.</div>';
+    let url = event.params.url;
+    this.zoneToRefreshTarget.innerHTML = '<div class="text-center">... Chargement en cours ...</div>';
+    await fetch(url)
+      .then(async (response) => {
+        if(response.status === 500){
+          this.zoneToRefreshTarget.innerHTML = errorText;
+          return;
+        }
+        else if (response.status === 200){
+          await response.text()
+            .then(responseText => this.zoneToRefreshTarget.innerHTML = responseText) ;
+        }
+      })
+      .catch(error => this.zoneToRefreshTarget.innerHTML = errorText);
   }
 }

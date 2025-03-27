@@ -91,18 +91,26 @@
 
 
     {% for ordEc, ec in ue.elementConstitutifs %}
+        {% set indexEc = loop.index0 %}
         {{ include('typeDiplome/formation/_structureEc.html.twig', {
             ec:ec,
             semestreOrdre:semestreOrdre,
             ecEnfant:false,
-            diffEc: diffUe.elementConstitutifs[ordEc] ?? null
+            diffEc: diffUe.elementConstitutifs[ordEc] ?? null,
+            indexEc: indexEc,
+            indexEcEnfant: -1,
+            UeDisplay: ue.display
         }) }}
         {% for ordEce, ece in ec.elementsConstitutifsEnfants %}
+            {% set indexEcEnfant = loop.index0 %}
             {{ include('typeDiplome/formation/_structureEc.html.twig', {
                 ec:ece,
                 semestreOrdre:semestreOrdre,
                 ecEnfant:true,
-                diffEc: diffUe.elementConstitutifs[ordEc].ecEnfants[ordEce] ?? null
+                diffEc: diffUe.elementConstitutifs[ordEc].ecEnfants[ordEce] ?? null,
+                indexEc: indexEc,
+                indexEcEnfant: indexEcEnfant,
+                UeDisplay: ue.display
             }) }}
         {% endfor %}
     {% endfor %}
