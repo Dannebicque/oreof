@@ -27,6 +27,7 @@ use App\TypeDiplome\TypeDiplomeRegistry;
 use App\Utils\Access;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -236,12 +237,18 @@ class ElementConstitutifMcccController extends AbstractController
     #[Route('/{elementConstitutif}/mccc-ec-versioning/{parcoursVersioning}/non-editable/{isFromVersioning}', name: 'app_element_constitutif_mccc_versioning')]
     public function mcccVersioning(
         string $isFromVersioning,
-        ElementConstitutif $elementConstitutif,
+        ?ElementConstitutif $elementConstitutif,
         ParcoursVersioning $parcoursVersioning,
         TypeDiplomeRegistry $typeDiplomeReg,
         VersioningParcours $versioningParcours,
         EntityManagerInterface $entityManager
     ){
+        if($elementConstitutif === null){
+            return $this->render("element_constitutif/_versioning_ecNotFound.html.twig", [
+                'ecNotFound' => true
+            ]);
+        }
+
         $versionData = $versioningParcours->loadParcoursFromVersion($parcoursVersioning);
         $libelleTypeDiplome = $versionData['parcours']->getFormation()->getTypeDiplome()->getLibelle();
         $typeDiplome = $entityManager->getRepository(TypeDiplome::class)->findOneBy(['libelle' => $libelleTypeDiplome]);
@@ -285,9 +292,11 @@ class ElementConstitutifMcccController extends AbstractController
                 }
             }
         }
-
+        
         if($structureEc === null){
-            throw new NotFoundHttpException("Aucun EC versionné.");
+            return $this->render("element_constitutif/_versioning_ecNotFound.html.twig", [
+                'structureEcNotFound' => true
+            ]);
         }
 
         // Mise en forme du tableau des MCCC

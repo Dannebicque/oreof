@@ -1,0 +1,9 @@
+{% if ecNotFound is defined and ecNotFound == true %}
+    <div class="text-center">
+        Une erreur est survenue lors du chargement.
+    </div>
+{% elseif structureEcNotFound is defined and structureEcNotFound == true %}
+    <div class="text-center">
+        L'EC demandé n'a pas encore été versionné.
+    </div>
+{% endif %}
