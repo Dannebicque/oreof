@@ -47,7 +47,12 @@ class VersioningFicheMatiere {
         );
     }
 
-    public function saveFicheMatiereVersion(FicheMatiere $ficheMatiere, DateTimeImmutable $now, bool $withFlush = false){
+    public function saveFicheMatiereVersion(
+        FicheMatiere $ficheMatiere, 
+        DateTimeImmutable $now, 
+        bool $withFlush = false,
+        bool $isVersionValide = false,    
+    ){
         $dateHeure = $now->format('d-m-Y_H-i-s');
         // Objet BD fiche matiere versioning
         $ficheMatiereVersioning = new FicheMatiereVersioning();
@@ -57,6 +62,10 @@ class VersioningFicheMatiere {
         // Fichier Json
         $ficheMatiereFileName = "fiche-matiere-{$ficheMatiere->getId()}-{$dateHeure}";
         $ficheMatiereVersioning->setFilename($ficheMatiereFileName);
+        // Version validée
+        if($isVersionValide === true){
+            $ficheMatiereVersioning->setVersionValide(true);
+        }
         // Serialization
         $ficheMatiereJson = $this->serializer->serialize($ficheMatiere, 'json', [
             AbstractObjectNormalizer::GROUPS => ['fiche_matiere_versioning', 'fiche_matiere_versioning_ec_parcours'],
