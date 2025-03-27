@@ -270,12 +270,13 @@ ec_step4.helps.mccc_enfants_identique: 'Cocher cette case pour appliquer les mê
 ec_step4.helps.heures_enfants_edentiques: "Cocher cette case pour appliquer les mêmes volumes horaires d'enseignement à tous les EC enfants de cet EC."
 ec_step4.helps.mccc_enfants_identique_parent: "Cocher cette case pour récupérer les mêmes modalités de contrôle des connaissances et compétences de l'EC parent, s'appliquera à tous les EC enfants."
 ec_step4.helps.heures_enfants_edentiques_parent: "Cocher cette case pour récupérer les mêmes volumes horaires d'enseignement de l'EC parent, s'appliquera à tous les EC enfants."
+ec_step4.helps.controleAssiduite: 'L''EC est validé par un contrôle d''assiduité'
 ue.helps.descriptionUeLibre: 'Décrivez en quelques mots les choix pour cette UE libre (255 caractères maximum).'
 ec_step4.helps.quitus: "L'utilisation du quitus est exceptionnelle. Son utilisation est soumise à autorisation de la présidence."
 ue.helps.ects: "ECTS associés à l'UE, uniquement pour les UE libres ou les BUT, ne seront pas pris en compte dans les autres cas."
-mccc_licence.helps.ct.duree_s2_et.help: mccc_licence.helps.ct.duree_s2_et.help
-mccc_licence.helps.ct.duree_s1_et.help: mccc_licence.helps.ct.duree_s1_et.help
-type_epreuve.helps.sigle: type_epreuve.helps.sigle
+mccc_licence.helps.ct.duree_s2_et.help: ''
+mccc_licence.helps.ct.duree_s1_et.help: ''
+type_epreuve.helps.sigle: ''
 type_epreuve.helps.hasDuree.help: type_epreuve.helps.hasDuree.help
 mccc.licence.helps.cc_has_tp: mccc.licence.helps.cc_has_tp
 mccc.licence.helps.ct_has_tp: mccc.licence.helps.ct_has_tp

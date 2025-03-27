@@ -166,6 +166,7 @@ class ElementConstitutif
     private ?bool $synchroEcts = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups('DTO_json_versioning')]
     private ?bool $sansHeure = false;
 
     #[ORM\Column(length: 10, nullable: true)]
@@ -182,6 +183,10 @@ class ElementConstitutif
 
     #[ORM\OneToOne(targetEntity: self::class)]
     private ?self $ecOrigineCopie = null;
+
+    #[ORM\Column(nullable: true)]
+    #[Groups('DTO_json_versioning')]
+    private ?bool $controleAssiduite = null;
 
 
     public function __construct()
@@ -922,5 +927,17 @@ class ElementConstitutif
     public function prepareCloneForNewAnnee() : void {
         $this->competences = new ArrayCollection();
         $this->apprentissagesCritiques = new ArrayCollection();
+    }
+
+    public function isControleAssiduite(): ?bool
+    {
+        return $this->controleAssiduite ?? false;
+    }
+
+    public function setControleAssiduite(?bool $controleAssiduite): static
+    {
+        $this->controleAssiduite = $controleAssiduite;
+
+        return $this;
     }
 }
