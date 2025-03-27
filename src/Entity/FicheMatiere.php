@@ -40,7 +40,7 @@ class FicheMatiere
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['fiche_matiere:read', 'DTO_json_versioning'])]
+    #[Groups(['fiche_matiere:read', 'DTO_json_versioning', 'fiche_matiere_versioning'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 250)]
@@ -68,7 +68,7 @@ class FicheMatiere
     private Collection $competences;
 
     #[ORM\Column(length: 30, nullable: true, enumType: ModaliteEnseignementEnum::class)]
-    #[Groups(['fiche_matiere:read'])]
+    #[Groups(['fiche_matiere:read', 'fiche_matiere_versioning'])]
     private ?ModaliteEnseignementEnum $modaliteEnseignement = null;
 
     #[ORM\Column(nullable: true)]
@@ -120,7 +120,7 @@ class FicheMatiere
     private Collection $ficheMatiereParcours;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['fiche_matiere:read', 'DTO_json_versioning'])]
+    #[Groups(['fiche_matiere:read', 'DTO_json_versioning', 'fiche_matiere_versioning'])]
     private ?string $sigle = null;
 
     #[ORM\Column(length: 20, nullable: true)]
