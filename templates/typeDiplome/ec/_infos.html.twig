@@ -3,8 +3,32 @@
         {% if ficheMatiere.responsableFicheMatiere != null %}
             <dt>Responsable de l'enseignement</dt>
             <dd>{{ ficheMatiere.responsableFicheMatiere.display }}</dd>
+            {% if 
+                is_granted('ROLE_ADMIN')  
+                and stringDifferences.responsableEnseignement is defined
+                and stringDifferences.responsableEnseignement|length > 0
+             %}
+                {{ include("communs/_comparaison_versioning_big.html.twig", {
+                        textDifferences: stringDifferences.responsableEnseignement,
+                        idCollapse: "diffResponsableEnseignement"
+                    }) 
+                }}
+            {% endif %}
+
             <dt>Email</dt>
             <dd>{{ ficheMatiere.responsableFicheMatiere.email }}</dd>
+            {% if is_granted('ROLE_ADMIN')  
+                and stringDifferences.emailResponsableEnseignement is defined
+                and stringDifferences.emailResponsableEnseignement|length > 0
+             %}
+                {{ include("communs/_comparaison_versioning_big.html.twig", {
+                        textDifferences: stringDifferences.emailResponsableEnseignement,
+                        idCollapse: "diffEmailResponsable"
+                    }) 
+                }}
+            {% endif %}
+
+
         {% elseif ficheMatiere.parcours != null %}
             {% if ficheMatiere.parcours.isParcoursDefaut == true and ficheMatiere.parcours.formation != null and ficheMatiere.parcours.formation.responsableMention != null %}
                 <dt>Responsable de l'enseignement (mention)</dt>

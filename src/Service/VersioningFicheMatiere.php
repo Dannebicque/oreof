@@ -212,6 +212,28 @@ class VersioningFicheMatiere {
                             $rendererOptions
                         )
                     )
+                ),
+                'responsableEnseignement' => VersioningParcours::cleanUpComparison(
+                    html_entity_decode(
+                        DiffHelper::calculate(
+                            $lastVersion->getResponsableFicheMatiere()->getNom() . " " . $lastVersion->getResponsableFicheMatiere()->getPrenom(),
+                            $ficheMatiere->getResponsableFicheMatiere()->getNom() . " " . $ficheMatiere->getResponsableFicheMatiere()->getPrenom(),
+                            $rendererName,
+                            $differOptions,
+                            $rendererOptions
+                        )
+                    )
+                ),
+                'emailResponsableEnseignement' => VersioningParcours::cleanUpComparison(
+                    html_entity_decode(
+                        DiffHelper::calculate(
+                            $lastVersion->getResponsableFicheMatiere()->getEmail(),
+                            $ficheMatiere->getResponsableFicheMatiere()->getEmail(),
+                            $rendererName,
+                            $differOptions,
+                            $rendererOptions
+                        )
+                    )
                 )
             ];
 
