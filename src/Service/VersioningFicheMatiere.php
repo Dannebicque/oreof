@@ -101,12 +101,24 @@ class VersioningFicheMatiere {
         ];
     }
 
-    public function getStringDifferencesWithBetweenFicheMatiereAndLastVersion(FicheMatiere $ficheMatiere){
-        $lastVersion = $this->entityManager->getRepository(FicheMatiereVersioning::class)
-            ->findBy(
-                ['ficheMatiere' => $ficheMatiere], 
-                ['version_timestamp' => 'DESC']
-            );
+    public function getStringDifferencesWithBetweenFicheMatiereAndLastVersion(
+        FicheMatiere $ficheMatiere, 
+        bool $lastVersionValide = true
+    ){
+        if($lastVersionValide){
+            $lastVersion = $this->entityManager->getRepository(FicheMatiereVersioning::class)
+                ->findBy(
+                    ['ficheMatiere' => $ficheMatiere, 'version_valide' => true],
+                    ['version_timestamp' => 'DESC']
+                );
+        }
+        else {
+            $lastVersion = $this->entityManager->getRepository(FicheMatiereVersioning::class)
+                ->findBy(
+                    ['ficheMatiere' => $ficheMatiere], 
+                    ['version_timestamp' => 'DESC']
+                );
+        }
         $lastVersion = count($lastVersion) > 0 
             ? $this->loadFicheMatiereVersion($lastVersion[0])['ficheMatiere'] 
             : null;
