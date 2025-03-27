@@ -80,7 +80,8 @@ class TypeDiplomeType extends AbstractType
             ->add('hasSituationPro', YesNoType::class)
             ->add('hasProjet', YesNoType::class)
             ->add('ectsObligatoireSurEc', YesNoType::class, ['empty_data' => true])
-            ->add('mcccObligatoireSurEc', YesNoType::class, ['empty_data' => true]);
+            ->add('mcccObligatoireSurEc', YesNoType::class, ['empty_data' => true])
+            ->add('controleAssiduite', YesNoType::class, ['empty_data' => true]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

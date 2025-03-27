@@ -111,6 +111,9 @@ class TypeDiplome
     #[ORM\Column]
     private ?bool $mcccObligatoireSurEc = true;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $controleAssiduite = null;
+
     public function __construct()
     {
         $this->formations = new ArrayCollection();
@@ -593,6 +596,18 @@ class TypeDiplome
     public function setMcccObligatoireSurEc(?bool $mcccObligatoireSurEc): void
     {
         $this->mcccObligatoireSurEc = $mcccObligatoireSurEc;
+    }
+
+    public function isControleAssiduite(): ?bool
+    {
+        return $this->controleAssiduite ?? false;
+    }
+
+    public function setControleAssiduite(?bool $controleAssiduite): static
+    {
+        $this->controleAssiduite = $controleAssiduite;
+
+        return $this;
     }
 
 

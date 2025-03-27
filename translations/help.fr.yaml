@@ -441,3 +441,5 @@ parcours_step5.helps.niveauFrancais: 'Indiquez le niveau de français souhaité 
 parcours_ec.helps.mcccSpecifiques: 'Indiquez les modalités de contrôle des connaissances et compétences spécifiques à ce parcours.'
 parcours_ec.helps.ectsSpecifiques: 'Indiquez les ECTS spécifiques à ce parcours.'
 parcours_ec.helps.heuresSpecifique: 'Indiquez si les heures sont spécifiques à ce parcours.'
+type_diplome.labels.mcccObligatoireSurEc.help: 'Les MCCC sont-ils obligatoires sur les EC ?'
+type_diplome.labels.controleAssiduite.help: 'Le contrôle d''assiduité est-il la modalité d''évaluation ?'

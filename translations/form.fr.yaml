@@ -502,3 +502,5 @@ type_diplome:
     ectsObligatoireSurEc:
       label: 'Les ECTS sont-ils obligatoires sur les EC ?'
 en_cours_redaction.parcours: 'Parcours en cours de rédaction'
+type_diplome.labels.mcccObligatoireSurEc.label: 'Les MCCC sont-ils obligatoires sur les EC ?'
+type_diplome.labels.controleAssiduite.label: 'Le contrôle d''assiduité est-il la modalité d''évaluation ?'

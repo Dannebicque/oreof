@@ -33,7 +33,6 @@ class FicheMatiereSaveController extends BaseController
      */
     #[Route('/fiche_matiere/save/{ficheMatiere}', name: 'app_fiche_matiere_save')]
     public function save(
-        FicheMatiereRepository $ficheMatiereRepository,
         ButApprentissageCritiqueRepository $butApprentissageCritiqueRepository,
         FicheMatiereState      $ficheMatiereState,
         EntityManagerInterface $entityManager,
