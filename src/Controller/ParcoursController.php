@@ -14,11 +14,13 @@ use App\Classes\JsonReponse;
 use App\Classes\ParcoursDupliquer;
 use App\Classes\verif\ParcoursState;
 use App\Entity\CampagneCollecte;
+use App\Entity\DpeDemande;
 use App\Entity\DpeParcours;
 use App\Entity\FicheMatiere;
 use App\Entity\Formation;
 use App\Entity\Parcours;
 use App\Entity\ParcoursVersioning;
+use App\Enums\EtatDpeEnum;
 use App\Enums\TypeModificationDpeEnum;
 use App\Enums\TypeParcoursEnum;
 use App\Events\AddCentreParcoursEvent;
@@ -154,6 +156,18 @@ class ParcoursController extends BaseController
             $this->dpeParcoursWorkflow->apply($dpeParcours, 'initialiser');
             $this->dpeParcoursWorkflow->apply($dpeParcours, 'autoriser');
             $this->entityManager->persist($dpeParcours);
+
+            $dpeDemande = new DpeDemande();
+            $dpeDemande->setParcours($parcour);
+            $dpeDemande->setFormation($formation);
+            $dpeDemande->setNiveauDemande('P');
+            $dpeDemande->setEtatDemande(EtatDpeEnum::en_cours_redaction);
+            $dpeDemande->setArgumentaireDemande('Création d\'un nouveau parcours');
+            $dpeDemande->setNiveauModification(TypeModificationDpeEnum::CREATION);
+            $dpeDemande->setAuteur($this->getUser());
+
+            $this->entityManager->persist($dpeDemande);
+
             $this->entityManager->flush();
             $parcour->addDpeParcour($dpeParcours);
             $parcoursRepository->save($parcour, true);
