@@ -29,7 +29,7 @@
                 Dernière version
             </button>
         </div>
-    {% else %}
+    {% elseif ec.deserializedId is defined and ec.deserializedId != null %}
         <div class="col-4">
             <button class="btn btn-sm btn-primary"
                 {{ stimulus_action('modal', 'refreshModalWithUrl', 'click', 
