@@ -201,33 +201,33 @@
                                                             </button>
                                                             <ul class="dropdown-menu"
                                                                 aria-labelledby="dropdownMenuClickableInside">
-                                                                <li>
-                                                                    <a
-                                                                            {% if raccroche == true %}
-                                                                                disabled
-                                                                                title="UE raccrochée, modifiable uniquement depuis le parcours d'origine"
-                                                                            {% else %}
-                                                                                href="#"
-                                                                                {{ stimulus_controller('modal', {
-                                                                                    size: 'lg',
-                                                                                    modalTitle: 'Dupliquer l\'' ~ ue.display(parcours),
-                                                                                    modalUrl:
-                                                                                    path
-                                                                                        ('structure_ue_dupliquer', {parcours:parcours.id, ue: ue.id})
-                                                                                }) }}
-                                                                                title="Dupliquer l'{{ ue.display(parcours) }}"
-                                                                                data-action="click->modal#openModal"
-                                                                            {% endif %}
-                                                                            class="dropdown-item text-primary"
-                                                                            data-size="lg"
-                                                                            data-bs-toggle="tooltip"
-                                                                            data-bs-placement="bottom"
+{#                                                                <li>#}
+{#                                                                    <a#}
+{#                                                                            {% if raccroche == true %}#}
+{#                                                                                disabled#}
+{#                                                                                title="UE raccrochée, modifiable uniquement depuis le parcours d'origine"#}
+{#                                                                            {% else %}#}
+{#                                                                                href="#"#}
+{#                                                                                {{ stimulus_controller('modal', {#}
+{#                                                                                    size: 'lg',#}
+{#                                                                                    modalTitle: 'Dupliquer l\'' ~ ue.display(parcours),#}
+{#                                                                                    modalUrl:#}
+{#                                                                                    path#}
+{#                                                                                        ('structure_ue_dupliquer', {parcours:parcours.id, ue: ue.id})#}
+{#                                                                                }) }}#}
+{#                                                                                title="Dupliquer l'{{ ue.display(parcours) }}"#}
+{#                                                                                data-action="click->modal#openModal"#}
+{#                                                                            {% endif %}#}
+{#                                                                            class="dropdown-item text-primary"#}
+{#                                                                            data-size="lg"#}
+{#                                                                            data-bs-toggle="tooltip"#}
+{#                                                                            data-bs-placement="bottom"#}
 
-                                                                    >
-                                                                        <i class="{{ iconDuplicate }}"></i>
-                                                                        <span> Dupliquer l'UE</span>
-                                                                    </a>
-                                                                </li>
+{#                                                                    >#}
+{#                                                                        <i class="{{ iconDuplicate }}"></i>#}
+{#                                                                        <span> Dupliquer l'UE</span>#}
+{#                                                                    </a>#}
+{#                                                                </li>#}
                                                                 <li>
                                                                     <a
                                                                             href="#"

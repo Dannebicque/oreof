@@ -192,26 +192,26 @@
                                                         </button>
                                                         <ul class="dropdown-menu"
                                                             aria-labelledby="dropdownMenuClickableInside">
-                                                            <li>
-                                                                <a
-                                                                        href="#"
-                                                                        {{ stimulus_controller('modal', {
-                                                                            size: 'lg',
-                                                                            modalTitle: 'Dupliquer le semestre ' ~ sem.display,
-                                                                            modalUrl: path('structure_semestre_dupliquer', {semestre:sem.id, parcours: parcours.id})
-                                                                        }) }}
-                                                                        data-action="click->modal#openModal"
-                                                                        class="dropdown-item text-primary"
-                                                                        data-size="lg"
-                                                                        {% if raccroche %}disabled{% endif %}
-                                                                        data-bs-toggle="tooltip"
-                                                                        data-bs-placement="bottom"
-                                                                        title="Dupliquer l\'UE {{ sem.display }}"
-                                                                >
-                                                                    <i class="{{ iconDuplicate }}"></i>
-                                                                    <span> Dupliquer le semestre</span>
-                                                                </a>
-                                                            </li>
+{#                                                            <li>#}
+{#                                                                <a#}
+{#                                                                        href="#"#}
+{#                                                                        {{ stimulus_controller('modal', {#}
+{#                                                                            size: 'lg',#}
+{#                                                                            modalTitle: 'Dupliquer le semestre ' ~ sem.display,#}
+{#                                                                            modalUrl: path('structure_semestre_dupliquer', {semestre:sem.id, parcours: parcours.id})#}
+{#                                                                        }) }}#}
+{#                                                                        data-action="click->modal#openModal"#}
+{#                                                                        class="dropdown-item text-primary"#}
+{#                                                                        data-size="lg"#}
+{#                                                                        {% if raccroche %}disabled{% endif %}#}
+{#                                                                        data-bs-toggle="tooltip"#}
+{#                                                                        data-bs-placement="bottom"#}
+{#                                                                        title="Dupliquer l\'UE {{ sem.display }}"#}
+{#                                                                >#}
+{#                                                                    <i class="{{ iconDuplicate }}"></i>#}
+{#                                                                    <span> Dupliquer le semestre</span>#}
+{#                                                                </a>#}
+{#                                                            </li>#}
                                                             <li>
                                                                 <a
                                                                         href="#"
