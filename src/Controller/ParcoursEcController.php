@@ -219,6 +219,25 @@ class ParcoursEcController extends AbstractController
                 $ec->setEctsSpecifiques($request->request->get('value') === 'true');
                 $ecRepository->save($ec, true);
                 return JsonReponse::success('EC mis à jour, ECTS spécifiques');
+            case 'controleAssiduite':
+                $ec = $ecRepository->find($request->request->get('ec'));
+
+                if ($ec === null) {
+                    return JsonReponse::error('EC introuvable');
+                }
+
+                $ec->setControleAssiduite($request->request->get('value') === 'true');
+
+                if ($ec->isControleAssiduite() === true) {
+                    $ec->setTypeMccc(null);
+                    //supprimer les MCCC associées
+                    foreach ($ec->getMcccs() as $mccc) {
+                        $ec->removeMccc($mccc);
+                    }
+                }
+
+                $ecRepository->save($ec, true);
+                return JsonReponse::success('EC mis à jour, Contrôle assiduité enregistré');
             case 'mcccSpecifiques':
                 $ec = $ecRepository->find($request->request->get('ec'));
 

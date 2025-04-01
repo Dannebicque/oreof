@@ -546,7 +546,10 @@ class ElementConstitutifController extends BaseController
             'modalite' => $parcours->getModalitesEnseignement(),
             'action' => $this->generateUrl(
                 'app_element_constitutif_structure',
-                ['id' => $elementConstitutif->getId(), 'parcours' => $parcours->getId()]
+                [
+                    'id' => $elementConstitutif->getId(),
+                    'parcours' => $parcours->getId()
+                ]
             ),
         ]);
 

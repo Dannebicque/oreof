@@ -574,171 +574,176 @@ class LicenceMccc extends AbstractLicenceMccc
         }
 
         // MCCC
-        $mcccs = $this->getMcccs($structureEc);
-
-        switch ($structureEc->typeMccc) {
-            case 'cc':
-                $texte = '';
-                $texteAvecTp = '';
-                $hasTp = false;
-                $pourcentageTp = 0;
-                if (array_key_exists(1, $mcccs) && array_key_exists('cc', $mcccs[1])) {
-                    $nb = 1;
-                    $nb2 = 1;
-                    foreach ($mcccs[1]['cc'] as $mccc) {
-                        for ($i = 1; $i <= $mccc->getNbEpreuves(); $i++) {
-                            $texte .= 'CC' . $nb . ' (' . $mccc->getPourcentage() . '%); ';
-                            $nb++;
-                        }
-
-                        if ($mccc->hasTp()) {
-                            $hasTp = true;
-                            if ($mccc->getNbEpreuves() === 1) {
-                                //si une seule épreuve de CC, pas de prise en compte du %de TP en seconde session
-                                //todo: interdire la saisie d'un pourcentage de TP si une seule épreuve de CC
-                                $pourcentageTp += $mccc->getPourcentage();
-                                $texteAvecTp .= 'TPr' . $nb2 . ' (' . $mccc->getPourcentage() . '%); ';
-                            } else {
-                                $pourcentageTp += $mccc->pourcentageTp();
-                                $texteAvecTp .= 'TPr' . $nb2 . ' (' . $mccc->getPourcentage() . '%); ';
+        if ($structureEc->elementConstitutif->isControleAssiduite() === false) {
+            $mcccs = $this->getMcccs($structureEc);
+            switch ($structureEc->typeMccc) {
+                case 'cc':
+                    $texte = '';
+                    $texteAvecTp = '';
+                    $hasTp = false;
+                    $pourcentageTp = 0;
+                    if (array_key_exists(1, $mcccs) && array_key_exists('cc', $mcccs[1])) {
+                        $nb = 1;
+                        $nb2 = 1;
+                        foreach ($mcccs[1]['cc'] as $mccc) {
+                            for ($i = 1; $i <= $mccc->getNbEpreuves(); $i++) {
+                                $texte .= 'CC' . $nb . ' (' . $mccc->getPourcentage() . '%); ';
+                                $nb++;
                             }
 
+                            if ($mccc->hasTp()) {
+                                $hasTp = true;
+                                if ($mccc->getNbEpreuves() === 1) {
+                                    //si une seule épreuve de CC, pas de prise en compte du %de TP en seconde session
+                                    //todo: interdire la saisie d'un pourcentage de TP si une seule épreuve de CC
+                                    $pourcentageTp += $mccc->getPourcentage();
+                                    $texteAvecTp .= 'TPr' . $nb2 . ' (' . $mccc->getPourcentage() . '%); ';
+                                } else {
+                                    $pourcentageTp += $mccc->pourcentageTp();
+                                    $texteAvecTp .= 'TPr' . $nb2 . ' (' . $mccc->getPourcentage() . '%); ';
+                                }
 
-                            $nb2++;
-                        }
-                    }
 
-                    $texte = substr($texte, 0, -2);
-                    $this->excelWriter->writeCellXY(self::COL_MCCC_CC, $ligne, $texte);
-                }
-
-                if (array_key_exists(2, $mcccs) && array_key_exists('et', $mcccs[2]) && is_array($mcccs[2]['et'])) {
-                    $texte = '';
-                    $pourcentageTpEt = $pourcentageTp / count($mcccs[2]['et']);
-                    foreach ($mcccs[2]['et'] as $mccc) {
-                        $texte .= $this->displayTypeEpreuveWithDureePourcentage($mccc);
-                        $texteAvecTp .= $this->displayTypeEpreuveWithDureePourcentageTp($mccc, $pourcentageTpEt);
-                    }
-
-                    $texte = substr($texte, 0, -2);
-                }
-
-                if ($hasTp) {
-                    $texteAvecTp = substr($texteAvecTp, 0, -2);
-                    $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE_CC_AVEC_TP, $ligne, str_replace(';', '+', $texteAvecTp));
-                } else {
-                    $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE_CC_SANS_TP, $ligne, $texte);
-                }
-
-                break;
-            case 'cci':
-                $texte = '';
-                foreach ($mcccs as $mccc) {
-                    $texte .= 'CC' . $mccc->getNumeroSession() . ' (' . $mccc->getPourcentage() . '%); ';
-                }
-                $texte = substr($texte, 0, -2);
-                $this->excelWriter->writeCellXY(self::COL_MCCC_CCI, $ligne, $texte);
-
-                break;
-            case 'cc_ct':
-                if (array_key_exists(1, $mcccs) && array_key_exists('cc', $mcccs[1]) && $mcccs[1]['cc'] !== null) {
-                    $texte = '';
-                    foreach ($mcccs[1]['cc'] as $mccc) {
-                        $texte .= 'CC ' . $mccc->getNbEpreuves() . ' épreuve(s) (' . $mccc->getPourcentage() . '%); ';
-                    }
-                    $texte = substr($texte, 0, -2);
-                    $this->excelWriter->writeCellXY(self::COL_MCCC_CC, $ligne, $texte);
-                }
-
-                $texteAvecTp = '';
-                $texteCc = '';
-                $pourcentageTp = 0;
-                $pourcentageCc = 0;
-                $nb = 1;
-                $hasTp = false;
-                if (array_key_exists(1, $mcccs) && array_key_exists('cc', $mcccs[1])) {
-                    foreach ($mcccs[1]['cc'] as $mccc) {
-                        if ($mccc->hasTp()) {
-                            $hasTp = true;
-                            if ($mccc->getNbEpreuves() === 1) {
-                                //si une seule épreuve de CC, pas de prise en compte du %de TP en seconde session
-                                $pourcentageTp += $mccc->getPourcentage();
-                            } else {
-                                $pourcentageTp += $mccc->pourcentageTp();
+                                $nb2++;
                             }
                         }
-                        $pourcentageCc += $mccc->getPourcentage();
-                        $texteCc .= 'CC (' . $mccc->getPourcentage() . '%); ';
+
+                        $texte = substr($texte, 0, -2);
+                        $this->excelWriter->writeCellXY(self::COL_MCCC_CC, $ligne, $texte);
+                    }
+
+                    if (array_key_exists(2, $mcccs) && array_key_exists('et', $mcccs[2]) && is_array($mcccs[2]['et'])) {
+                        $texte = '';
+                        $pourcentageTpEt = $pourcentageTp / count($mcccs[2]['et']);
+                        foreach ($mcccs[2]['et'] as $mccc) {
+                            $texte .= $this->displayTypeEpreuveWithDureePourcentage($mccc);
+                            $texteAvecTp .= $this->displayTypeEpreuveWithDureePourcentageTp($mccc, $pourcentageTpEt);
+                        }
+
+                        $texte = substr($texte, 0, -2);
                     }
 
                     if ($hasTp) {
-                        $texteAvecTp .= 'TPr (' . $pourcentageTp . '%); ';
+                        $texteAvecTp = substr($texteAvecTp, 0, -2);
+                        $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE_CC_AVEC_TP, $ligne, str_replace(';', '+', $texteAvecTp));
+                    } else {
+                        $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE_CC_SANS_TP, $ligne, $texte);
                     }
 
-                    if (array_key_exists('et', $mcccs[1]) && $mcccs[1]['et'] !== null) {
+                    break;
+                case 'cci':
+                    $texte = '';
+                    foreach ($mcccs as $mccc) {
+                        $texte .= 'CC' . $mccc->getNumeroSession() . ' (' . $mccc->getPourcentage() . '%); ';
+                    }
+                    $texte = substr($texte, 0, -2);
+                    $this->excelWriter->writeCellXY(self::COL_MCCC_CCI, $ligne, $texte);
+
+                    break;
+                case 'cc_ct':
+                    if (array_key_exists(1, $mcccs) && array_key_exists('cc', $mcccs[1]) && $mcccs[1]['cc'] !== null) {
+                        $texte = '';
+                        foreach ($mcccs[1]['cc'] as $mccc) {
+                            $texte .= 'CC ' . $mccc->getNbEpreuves() . ' épreuve(s) (' . $mccc->getPourcentage() . '%); ';
+                        }
+                        $texte = substr($texte, 0, -2);
+                        $this->excelWriter->writeCellXY(self::COL_MCCC_CC, $ligne, $texte);
+                    }
+
+                    $texteAvecTp = '';
+                    $texteCc = '';
+                    $pourcentageTp = 0;
+                    $pourcentageCc = 0;
+                    $nb = 1;
+                    $hasTp = false;
+                    if (array_key_exists(1, $mcccs) && array_key_exists('cc', $mcccs[1])) {
+                        foreach ($mcccs[1]['cc'] as $mccc) {
+                            if ($mccc->hasTp()) {
+                                $hasTp = true;
+                                if ($mccc->getNbEpreuves() === 1) {
+                                    //si une seule épreuve de CC, pas de prise en compte du %de TP en seconde session
+                                    $pourcentageTp += $mccc->getPourcentage();
+                                } else {
+                                    $pourcentageTp += $mccc->pourcentageTp();
+                                }
+                            }
+                            $pourcentageCc += $mccc->getPourcentage();
+                            $texteCc .= 'CC (' . $mccc->getPourcentage() . '%); ';
+                        }
+
+                        if ($hasTp) {
+                            $texteAvecTp .= 'TPr (' . $pourcentageTp . '%); ';
+                        }
+
+                        if (array_key_exists('et', $mcccs[1]) && $mcccs[1]['et'] !== null) {
+                            $texteEpreuve = '';
+                            foreach ($mcccs[1]['et'] as $mccc) {
+                                $texteEpreuve .= $this->displayTypeEpreuveWithDureePourcentage($mccc);
+                            }
+
+                            $texteEpreuve = substr($texteEpreuve, 0, -2);
+                            $this->excelWriter->writeCellXY(self::COL_MCCC_CT, $ligne, $texteEpreuve);
+                        }
+                    }
+
+                    if (array_key_exists(2, $mcccs) && array_key_exists('et', $mcccs[2]) && $mcccs[2]['et'] !== null) {
                         $texteEpreuve = '';
-                        foreach ($mcccs[1]['et'] as $mccc) {
+                        $pourcentageTpEt = $pourcentageTp / count($mcccs[2]['et']);
+                        $pourcentageCcEt = $pourcentageCc / count($mcccs[2]['et']);
+                        foreach ($mcccs[2]['et'] as $mccc) {
                             $texteEpreuve .= $this->displayTypeEpreuveWithDureePourcentage($mccc);
+                            $texteAvecTp .= $this->displayTypeEpreuveWithDureePourcentageTp($mccc, $pourcentageTpEt);
+                            $texteCc .= $this->displayTypeEpreuveWithDureePourcentageTp($mccc, $pourcentageCcEt);
                         }
 
                         $texteEpreuve = substr($texteEpreuve, 0, -2);
+                        $texteCc = substr($texteCc, 0, -2);
+                        $texteCc = str_replace('CC', 'CCr', $texteCc);
+                        $texteAvecTp = substr($texteAvecTp, 0, -2);
+
+
+                        if ($hasTp) {
+                            $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE_CC_AVEC_TP, $ligne, str_replace(';', '+', $texteAvecTp));
+                        } else {
+                            //si TP cette celulle est vide...
+                            $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE_CC_SANS_TP, $ligne, $texteEpreuve);
+                        }
+                        $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE_CC_SUP_10, $ligne, str_replace(';', '+', $texteCc));
+                    }
+
+                    //on garde CC et on complète avec le reste de pourcentage de l'ET
+
+
+                    break;
+                case 'ct':
+                    $quitus = $ec->isQuitus();
+                    if (array_key_exists(1, $mcccs) && array_key_exists('et', $mcccs[1]) && $mcccs[1]['et'] !== null) {
+                        $texteEpreuve = '';
+                        foreach ($mcccs[1]['et'] as $mccc) {
+                            $texteEpreuve .= $this->displayTypeEpreuveWithDureePourcentage($mccc, $quitus);
+                        }
+
+                        $texteEpreuve = substr($texteEpreuve, 0, -2);
+
                         $this->excelWriter->writeCellXY(self::COL_MCCC_CT, $ligne, $texteEpreuve);
                     }
-                }
 
-                if (array_key_exists(2, $mcccs) && array_key_exists('et', $mcccs[2]) && $mcccs[2]['et'] !== null) {
-                    $texteEpreuve = '';
-                    $pourcentageTpEt = $pourcentageTp / count($mcccs[2]['et']);
-                    $pourcentageCcEt = $pourcentageCc / count($mcccs[2]['et']);
-                    foreach ($mcccs[2]['et'] as $mccc) {
-                        $texteEpreuve .= $this->displayTypeEpreuveWithDureePourcentage($mccc);
-                        $texteAvecTp .= $this->displayTypeEpreuveWithDureePourcentageTp($mccc, $pourcentageTpEt);
-                        $texteCc .= $this->displayTypeEpreuveWithDureePourcentageTp($mccc, $pourcentageCcEt);
+                    if (array_key_exists(2, $mcccs) && array_key_exists('et', $mcccs[2]) && $mcccs[2]['et'] !== null) {
+                        $texteEpreuve = '';
+                        foreach ($mcccs[2]['et'] as $mccc) {
+                            $texteEpreuve .= $this->displayTypeEpreuveWithDureePourcentage($mccc, $quitus);
+                        }
+
+                        $texteEpreuve = substr($texteEpreuve, 0, -2);
+                        $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE_CT, $ligne, $texteEpreuve);
                     }
-
-                    $texteEpreuve = substr($texteEpreuve, 0, -2);
-                    $texteCc = substr($texteCc, 0, -2);
-                    $texteCc = str_replace('CC', 'CCr', $texteCc);
-                    $texteAvecTp = substr($texteAvecTp, 0, -2);
-
-
-                    if ($hasTp) {
-                        $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE_CC_AVEC_TP, $ligne, str_replace(';', '+', $texteAvecTp));
-                    } else {
-                        //si TP cette celulle est vide...
-                        $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE_CC_SANS_TP, $ligne, $texteEpreuve);
-                    }
-                    $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE_CC_SUP_10, $ligne, str_replace(';', '+', $texteCc));
-                }
-
-                //on garde CC et on complète avec le reste de pourcentage de l'ET
-
-
-                break;
-            case 'ct':
-                $quitus = $ec->isQuitus();
-                if (array_key_exists(1, $mcccs) && array_key_exists('et', $mcccs[1]) && $mcccs[1]['et'] !== null) {
-                    $texteEpreuve = '';
-                    foreach ($mcccs[1]['et'] as $mccc) {
-                        $texteEpreuve .= $this->displayTypeEpreuveWithDureePourcentage($mccc, $quitus);
-                    }
-
-                    $texteEpreuve = substr($texteEpreuve, 0, -2);
-
-                    $this->excelWriter->writeCellXY(self::COL_MCCC_CT, $ligne, $texteEpreuve);
-                }
-
-                if (array_key_exists(2, $mcccs) && array_key_exists('et', $mcccs[2]) && $mcccs[2]['et'] !== null) {
-                    $texteEpreuve = '';
-                    foreach ($mcccs[2]['et'] as $mccc) {
-                        $texteEpreuve .= $this->displayTypeEpreuveWithDureePourcentage($mccc, $quitus);
-                    }
-
-                    $texteEpreuve = substr($texteEpreuve, 0, -2);
-                    $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE_CT, $ligne, $texteEpreuve);
-                }
-                break;
+                    break;
+            }
+        } else {
+            $this->excelWriter->writeCellXY(self::COL_MCCC_CCI, $ligne, 'Contrôle d\'assiduité');
         }
+
+
 
 
         $this->excelWriter->writeCellXY(self::COL_TYPE_EC, $ligne, $ec->getTypeEc() ? $ec->getTypeEc()->getLibelle() : '');

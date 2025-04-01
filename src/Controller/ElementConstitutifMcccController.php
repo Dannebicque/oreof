@@ -49,7 +49,6 @@ class ElementConstitutifMcccController extends AbstractController
         TypeDiplomeRegistry          $typeDiplomeRegistry,
         TypeEpreuveRepository        $typeEpreuveRepository,
         Request                      $request,
-        ElementConstitutifRepository $elementConstitutifRepository,
         ElementConstitutif           $elementConstitutif,
         Parcours                     $parcours
     ): Response {
@@ -69,6 +68,7 @@ class ElementConstitutifMcccController extends AbstractController
         if ($typeDiplome === null) {
             throw new RuntimeException('Type de diplome non trouvé');
         }
+
         $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());
 
         $raccroche = $elementConstitutif->getFicheMatiere()?->getParcours()?->getId() !== $parcours->getId();

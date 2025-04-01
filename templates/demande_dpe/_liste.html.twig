@@ -1,0 +1,75 @@
+<table class="table">
+    <thead>
+    <tr>
+        <th>Mention</th>
+        <th>Parcours</th>
+        <th>Demande de ?</th>
+        <th>Date demande</th>
+        <th>Date clôture</th>
+        <th>Niveau demande</th>
+        <th>Etat</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for demande in demandes %}
+        <tr>
+            <td rowspan="2">{{ demande.formation.displayLong(false) }}</td>
+            <td rowspan="2">
+                {% if demande.niveauDemande == 'F' %}
+                    <span class="badge bg-info">Mention</span>
+                {% else %}
+                    {{ demande.parcours != null ? demande.parcours.libelle : '' }}
+                {% endif %}
+            </td>
+            <td rowspan="2">
+                {{ demande.auteur != null ? demande.auteur.display : '-' }}
+            </td>
+            <td>{{ demande.dateDemande|date('d/m/Y') }}</td>
+            <td>{{ demande.dateCloture != null ?  demande.dateCloture|date('d/m/Y') : '-' }}</td>
+            <td>
+                {{ demande.niveauModification|badgeEnum }}</td>
+            <td>
+                {% if demande.dateCloture == null %}
+                    {{ demande.etatDemande|badgeEnum }}
+                {% else %}
+                    <span class="badge bg-success">Demande clôturée</span>
+                {% endif %}
+            </td>
+            <td>
+                {% if demande.niveauDemande == 'F' %}
+                    <a href="{{ path('app_formation_show', {'slug': demande.formation.slug}) }}"
+                       target="_blank"
+                       class="btn btn-sm text-info"
+                       title="Voir la formation">
+                        <i class="{{ iconShow }}"></i> Voir la formation
+                    </a>
+                {% else %}
+                    <a href="{{ path('app_parcours_show', {'id': demande.parcours.id}) }}"
+                       target="_blank"
+                       class="btn btn-sm text-info"
+                       title="Voir le parcours">
+                        <i class="{{ iconShow }}"></i> Voir le parcours
+                    </a>
+                {% endif %}
+                {% if is_granted('ROLE_SES') %}
+                    <button {{ stimulus_action('crud', 'delete', 'click', {
+                        url:path('app_dpe_demande_delete',{id: demande.id}),
+                        csrf: csrf_token('delete' ~ demande.id)
+                    }) }} class="btn btn-sm text-danger">
+                        <i class="{{ iconDelete }}"></i> Supprimer
+                    </button>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td colspan="5">
+                {{ demande.argumentaireDemande }}
+            </td>
+        </tr>
+    {% else %}
+        <tr>
+            <td colspan="8">Aucune demande en attente</td>
+        </tr>
+    {% endfor %}
+</table>

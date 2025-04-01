@@ -14,10 +14,11 @@ export default class extends Controller {
   static values = {
     url: String,
     typeMccc: String,
+    afficheMccc: Boolean,
   }
 
   connect() {
-    if (this.typeMcccValue !== null) {
+    if (this.typeMcccValue !== null && this.afficheMcccValue === true) {
       this._loadTypeMccc(this.typeMcccValue).then(() => {
         this._verifyTypeEpreuveCt()
         this._verifyTypeEpreuveEt()
@@ -26,9 +27,7 @@ export default class extends Controller {
   }
 
   updateForm(event) {
-    console.log('updateForm')
-    console.log(this.typeMcccValue)
-    if (this.typeMcccValue !== null) {
+    if (this.typeMcccValue !== null && this.afficheMcccValue === true) {
       this._loadTypeMccc(this.typeMcccValue)
     }
   }
@@ -406,5 +405,7 @@ export default class extends Controller {
 
   ccHasTp(event) {
     document.getElementById('cc_has_tp_pourcentage').disabled = !event.target.checked
+    document.getElementById('ccHasTpBlock').classList.remove(event.target.checked ? 'd-none' : 'd-block')
+    document.getElementById('ccHasTpBlock').classList.add(event.target.checked ? 'd-block' : 'd-none')
   }
 }

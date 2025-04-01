@@ -19,17 +19,21 @@ use App\DTO\StructureSemestre;
 use App\DTO\StructureUe;
 use App\Entity\Mccc;
 use App\Utils\Tools;
+use Doctrine\Common\Collections\Collection;
 
 class VersioningStructure
 {
+    private bool $isBut = false;
+
     public function __construct(
         private StructureParcours $dtoOrigine,
         private StructureParcours $dtoNouveau
     ) {
     }
 
-    public function calculDiff(): array
+    public function calculDiff($isBut = false): array
     {
+        $this->isBut = $isBut;
         // parcourir les deux structures et comparer. Construire un tableau de différences
         $diff = [];
         foreach ($this->dtoOrigine->semestres as $ordreSemestre => $semestre) {
@@ -194,7 +198,8 @@ class VersioningStructure
             }
 
             foreach ($ueNouvelle->uesEnfants() as $ordreUeEnfant => $ueEnfant) {
-                if (array_key_exists($ordreUeEnfant, $ueNouvelle->uesEnfants())) {
+                //UE n'existait pas avant, on ajoute
+                if (array_key_exists($ordreUeEnfant, $ueOriginale->uesEnfants())) {
                     $diff['uesEnfants'][$ordreUeEnfant] = $this->compareUe(null, $ueNouvelle->uesEnfants()[$ordreUeEnfant]);
                 }
             }
@@ -230,6 +235,7 @@ class VersioningStructure
 
             $diff['heuresEctsUe'] = $this->compareHeuresEctsUe(null, $ueNouvelle->heuresEctsUe);
         }
+
         return $diff;
     }
 
@@ -285,9 +291,6 @@ class VersioningStructure
             return $diff;
         }
 
-
-
-
         if ($ecOriginal->elementConstitutif->getFicheMatiere() !== null) {
             $libelleOriginal = $ecOriginal->elementConstitutif->getFicheMatiere()->getLibelle();
         } else {
@@ -304,9 +307,14 @@ class VersioningStructure
         $diff['code'] = new DiffObject($ecOriginal->elementConstitutif->getCode(), $ecNouveau->elementConstitutif->getCode());
         $diff['raccroche'] = new DiffObject($ecOriginal->raccroche, $ecNouveau->raccroche);
         $diff['heuresEctsEc'] = $this->compareHeuresEctsEc($ecOriginal->heuresEctsEc, $ecNouveau->heuresEctsEc);
-        if ($ecOriginal->typeMccc !== null && $ecNouveau->typeMccc !== null) {
-            $diff['typeMccc'] = new DiffObject($ecOriginal->typeMccc, $ecNouveau->typeMccc);
-            $diff['mcccs'] = $this->compareMcccs($ecOriginal->mcccs, $ecNouveau->mcccs);
+
+        if ($this->isBut) {
+            $diff['mcccs'] = $this->compareMcccsBUT($ecOriginal->elementConstitutif->getFicheMatiere()->getMcccs(), $ecNouveau->elementConstitutif->getFicheMatiere()->getMcccs());
+        } else {
+            if ($ecOriginal->typeMccc !== null && $ecNouveau->typeMccc !== null) {
+                $diff['typeMccc'] = new DiffObject($ecOriginal->typeMccc, $ecNouveau->typeMccc);
+                $diff['mcccs'] = $this->compareMcccs($ecOriginal->mcccs, $ecNouveau->mcccs);
+            }
         }
 
         if ($ecNouveau->elementConstitutif->getNatureUeEc()?->isChoix()) {
@@ -508,7 +516,7 @@ class VersioningStructure
         );
     }
 
-    private function compareMcccs(?array $mcccsOriginal, ?array $mcccsNouveau): array
+    private function compareMcccs(array|Collection|null $mcccsOriginal, array|Collection|null $mcccsNouveau): array
     {
         if (null === $mcccsOriginal && null === $mcccsNouveau) {
             return [];
@@ -521,12 +529,45 @@ class VersioningStructure
         }
 
         foreach ($mcccsOriginal as $mcccOriginal) {
-            $diff['original'][$mcccOriginal['id']] = $this->createMcccFromArray($mcccOriginal);
+            if (is_array($mcccOriginal)) {
+                $mcccOriginal = $this->createMcccFromArray($mcccOriginal);
+            }
+            $diff['original'][$mcccOriginal->getId()] = $mcccOriginal;
         }
 
 
         return $diff;
     }
+
+    private function compareMcccsBUT(array|Collection|null $mcccsOriginal, array|Collection|null $mcccsNouveau): array
+    {
+        if (null === $mcccsOriginal && null === $mcccsNouveau) {
+            return [];
+        }
+
+        $diff = [];
+        $t = [];
+
+        foreach ($mcccsNouveau as $mcccNouveau) {
+            $t[$mcccNouveau->getId()]['pourcentage'] = $mcccNouveau->getPourcentage() !== 0.0 ? $mcccNouveau->getPourcentage() : '';
+            $t[$mcccNouveau->getId()]['nbEpreuves'] = $mcccNouveau->getNbEpreuves() !== 0 ? $mcccNouveau->getNbEpreuves() : '';
+            $t[$mcccNouveau->getId()]['libelle'] = $mcccNouveau->getLibelle();
+        }
+
+        foreach ($mcccsOriginal as $mcccOriginal) {
+            if (is_array($mcccOriginal)) {
+                $mcccOriginal = $this->createMcccFromArray($mcccOriginal);
+            }
+            //todo: test d'array_key_exists
+            $diff[$mcccOriginal->getId()]['pourcentage'] = new DiffObject($mcccOriginal->getPourcentage() !== 0.0 ? $mcccOriginal->getPourcentage() : '', $t[$mcccOriginal->getId()]['pourcentage'] ?? null);
+            $diff[$mcccOriginal->getId()]['nbEpreuves'] = new DiffObject($mcccOriginal->getNbEpreuves() !== 0 ?  $mcccOriginal->getNbEpreuves() : '', $t[$mcccOriginal->getId()]['nbEpreuves'] ?? null);
+            $diff[$mcccOriginal->getId()]['libelle'] = new DiffObject($mcccOriginal->getLibelle(), $t[$mcccOriginal->getId()]['libelle'] ?? null);
+        }
+
+
+        return $diff;
+    }
+
 
     private function createMcccFromArray(array $mcccOriginal): Mccc
     {

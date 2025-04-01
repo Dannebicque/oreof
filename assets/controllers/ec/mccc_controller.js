@@ -40,6 +40,36 @@ export default class extends Controller {
     })
   }
 
+  async controleAssiduite(event) {
+    const body = new FormData()
+    body.append('value', event.target.checked)
+    body.append('field', 'controleAssiduite')
+    body.append('ec', event.params.ec)
+
+    await fetch(this.urlUpdateValue, {
+      method: 'POST',
+      body,
+    }).then((response) => {
+      if (response.ok) {
+        if (event.target.checked) {
+          document.getElementById('choix_type_mccc').setAttribute('disabled', 'disabled')
+        } else {
+          document.getElementById('choix_type_mccc').removeAttribute('disabled')
+        }
+
+        const inputs = document.querySelectorAll('.synchro-mccc')
+        inputs.forEach((input) => {
+          if (event.target.checked) {
+            input.setAttribute('disabled', 'disabled')
+          } else {
+            input.removeAttribute('disabled')
+          }
+        })
+      }
+      JsonResponse(response)
+    })
+  }
+
   async mcccSpecifiques(event) {
     const body = new FormData()
     body.append('value', event.target.checked)

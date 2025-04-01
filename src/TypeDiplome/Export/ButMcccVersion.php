@@ -93,7 +93,8 @@ class ButMcccVersion
         ?DateTimeInterface $dateCfvu = null,
         ?DateTimeInterface $dateConseil = null,
         bool               $versionFull = true
-    ): void {
+    ): bool
+    {
         $tabColonnes = [
             'td_tp_oral' => ['pourcentage' => 'L', 'nombre' => 'M'],
             'td_tp_ecrit' => ['pourcentage' => 'N', 'nombre' => 'O'],
@@ -123,9 +124,9 @@ class ButMcccVersion
         // version
         $structureDifferencesParcours = $this->versioningParcours->getStructureDifferencesBetweenParcoursAndLastVersion($parcours);
         if ($structureDifferencesParcours !== null) {
-            $diffStructure = (new VersioningStructure($structureDifferencesParcours, $dto))->calculDiff();
+            $diffStructure = (new VersioningStructure($structureDifferencesParcours, $dto))->calculDiff(true);
         } else {
-            //return false;
+            return false;
         }
 
         $this->excelWriter->createFromTemplate('Annexe_MCCC_BUT.xlsx');
@@ -198,6 +199,9 @@ class ButMcccVersion
 
         //recopie du modèle sur chaque année, puis remplissage
         foreach ($tabSemestres as $i => $semestres) {
+            $diffSemestre = $diffStructure['semestres'][$i];
+//            $totalAnnee->addSemestre($semestre->heuresEctsSemestre);
+//            $totalAnneeOriginal->addSemestreDiff($diffSemestre['heuresEctsSemestre']);
             $tabColUes = [];
             $clonedWorksheet = clone $modele;
             $clonedWorksheet->setTitle('Semestre S' . $i);
@@ -229,18 +233,23 @@ class ButMcccVersion
                         $ue = $ue->getUeRaccrochee()->getUe();
                     }
 
+                    $diffUe = $diffSemestre['ues'][$ue->getId()];
 
-                    foreach ($ue->getElementConstitutifs() as $ec) {
+                    foreach ($ue->getElementConstitutifs() as $keyEc => $ec) {
                         $fiche = $ec->getFicheMatiere();
+                        $diffFiche = $diffUe['elementConstitutifs'][$keyEc];
+
                         if ($fiche !== null) {
                             if ($fiche->getTypeMatiere() === FicheMatiere::TYPE_MATIERE_RESSOURCE) {
-                                $tabFichesRessources[$fiche->getSigle()] = $ec;
-                                $tabFichesUes[$fiche->getSigle()][$ue->getId()] = $ec->getEcts();
+                                $tabFichesRessources[$fiche->getSigle()]['ec'] = $ec;
+                                $tabFichesRessources[$fiche->getSigle()]['diff'] = $diffFiche;
+                                $tabFichesUes[$fiche->getSigle()][$ue->getId()] = $diffFiche['heuresEctsEc']['ects'];
                             }
 
                             if ($fiche->getTypeMatiere() === FicheMatiere::TYPE_MATIERE_SAE) {
-                                $tabFichesSaes[$fiche->getSigle()] = $ec;
-                                $tabFichesUes[$fiche->getSigle()][$ue->getId()] = $ec->getEcts();
+                                $tabFichesSaes[$fiche->getSigle()]['ec'] = $ec;
+                                $tabFichesSaes[$fiche->getSigle()]['diff'] = $diffFiche;
+                                $tabFichesUes[$fiche->getSigle()][$ue->getId()] = $diffFiche['heuresEctsEc']['ects'];
                             }
                         }
                     }
@@ -267,18 +276,18 @@ class ButMcccVersion
                 ksort($tabFichesSaes);
 
                 foreach ($tabFichesRessources as $ec) {
-                    $fiche = $ec->getFicheMatiere();
+                    $fiche = $ec['ec']->getFicheMatiere();
                     $this->excelWriter->insertNewRowBefore($ligne);
                     $this->excelWriter->writeCellXY(self::COL_CODE_ELEMENT, $ligne, '', ['style' => 'HORIZONTAL_CENTER']);
                     $this->excelWriter->writeCellXY(self::COL_CODE_EC, $ligne, $fiche->getSigle(), ['style' => 'HORIZONTAL_CENTER']);
-                    $this->excelWriter->writeCellXY(self::COL_INTITULE, $ligne, $fiche->getLibelle(), ['style' => 'HORIZONTAL_CENTER']);
-                    $this->excelWriter->writeCellXY(self::COL_VOL_ETUDIANT, $ligne, $fiche->getVolumeEtudiant(), ['style' => 'HORIZONTAL_CENTER']);
-                    $this->excelWriter->writeCellXY(self::COL_CM, $ligne, $fiche->getVolumeCmPresentiel() === 0.0 ? '' : $fiche->getVolumeCmPresentiel(), ['style' => 'HORIZONTAL_CENTER']);
-                    $this->excelWriter->writeCellXY(self::COL_TD, $ligne, $fiche->getVolumeTdPresentiel() === 0.0 ? '' : $fiche->getVolumeTdPresentiel(), ['style' => 'HORIZONTAL_CENTER']);
-                    $this->excelWriter->writeCellXY(self::COL_TP, $ligne, $fiche->getVolumeTpPresentiel() === 0.0 ? '' : $fiche->getVolumeTpPresentiel(), ['style' => 'HORIZONTAL_CENTER']);
+                    $this->excelWriter->writeCellXYDiff(self::COL_INTITULE, $ligne, $ec['diff']['libelle'], ['style' => 'HORIZONTAL_CENTER']);
+                    $this->excelWriter->writeCellXYDiff(self::COL_VOL_ETUDIANT, $ligne, $ec['diff']['heuresEctsEc']['sommeEcTotalPres'], ['style' => 'HORIZONTAL_CENTER']);
+                    $this->excelWriter->writeCellXYDiff(self::COL_CM, $ligne, $ec['diff']['heuresEctsEc']['cmPres'], ['style' => 'HORIZONTAL_CENTER']);
+                    $this->excelWriter->writeCellXYDiff(self::COL_TD, $ligne, $ec['diff']['heuresEctsEc']['tdPres'], ['style' => 'HORIZONTAL_CENTER']);
+                    $this->excelWriter->writeCellXYDiff(self::COL_TP, $ligne, $ec['diff']['heuresEctsEc']['tpPres'], ['style' => 'HORIZONTAL_CENTER']);
 
                     //MCCC
-                    $this->writeMccc($fiche, $tabColonnes, $ligne);
+                    $this->writeMccc($ec, $tabColonnes, $ligne);
                     $this->writeAcUe($fiche, $ligne, $tabColUes, $tabFichesUes);
 
 
@@ -292,19 +301,19 @@ class ButMcccVersion
                 $debutSae = $ligne;
 
                 foreach ($tabFichesSaes as $ec) {
-                    $fiche = $ec->getFicheMatiere();
+                    $fiche = $ec['ec']->getFicheMatiere();
                     $this->excelWriter->insertNewRowBefore($ligne);
                     $this->excelWriter->writeCellXY(self::COL_CODE_ELEMENT, $ligne, '', ['style' => 'HORIZONTAL_CENTER']);
                     $this->excelWriter->writeCellXY(self::COL_CODE_EC, $ligne, $fiche->getSigle(), ['style' => 'HORIZONTAL_CENTER']);
-                    $this->excelWriter->writeCellXY(self::COL_INTITULE, $ligne, $fiche->getLibelle(), ['style' => 'HORIZONTAL_CENTER']);
-                    $this->excelWriter->writeCellXY(self::COL_VOL_ETUDIANT, $ligne, $fiche->getVolumeEtudiant(), ['style' => 'HORIZONTAL_CENTER']);
-                    $this->excelWriter->writeCellXY(self::COL_CM, $ligne, $fiche->getVolumeCmPresentiel() === 0.0 ? '' : $fiche->getVolumeCmPresentiel(), ['style' => 'HORIZONTAL_CENTER']);
-                    $this->excelWriter->writeCellXY(self::COL_TD, $ligne, $fiche->getVolumeTdPresentiel() === 0.0 ? '' : $fiche->getVolumeTdPresentiel(), ['style' => 'HORIZONTAL_CENTER']);
-                    $this->excelWriter->writeCellXY(self::COL_TP, $ligne, $fiche->getVolumeTpPresentiel() === 0.0 ? '' : $fiche->getVolumeTpPresentiel(), ['style' => 'HORIZONTAL_CENTER']);
-                    $this->excelWriter->writeCellXY(self::COL_HEURE_AUTONOMIE, $ligne, $fiche->getVolumeTe() === 0.0 ? '' : $fiche->getVolumeTe());
+                    $this->excelWriter->writeCellXYDiff(self::COL_INTITULE, $ligne, $ec['diff']['libelle'], ['style' => 'HORIZONTAL_CENTER']);
+                    $this->excelWriter->writeCellXYDiff(self::COL_VOL_ETUDIANT, $ligne, $ec['diff']['heuresEctsEc']['sommeEcTotalPres'], ['style' => 'HORIZONTAL_CENTER']);
+                    $this->excelWriter->writeCellXYDiff(self::COL_CM, $ligne, $ec['diff']['heuresEctsEc']['cmPres'] , ['style' => 'HORIZONTAL_CENTER']);
+                    $this->excelWriter->writeCellXYDiff(self::COL_TD, $ligne, $ec['diff']['heuresEctsEc']['tdPres'], ['style' => 'HORIZONTAL_CENTER']);
+                    $this->excelWriter->writeCellXYDiff(self::COL_TP, $ligne, $ec['diff']['heuresEctsEc']['tpPres'], ['style' => 'HORIZONTAL_CENTER']);
+                    $this->excelWriter->writeCellXYDiff(self::COL_HEURE_AUTONOMIE, $ligne, $ec['diff']['heuresEctsEc']['tePres']);
 
                     //MCCC
-                    $this->writeMccc($fiche, $tabColonnes, $ligne);
+                    $this->writeMccc($ec, $tabColonnes, $ligne);
                     $this->writeAcUe($fiche, $ligne, $tabColUes, $tabFichesUes);
 
                     $ligne++;
@@ -335,6 +344,8 @@ class ButMcccVersion
         $this->excelWriter->setSelectedCells('A1');
 
         $this->fileName = Tools::FileName('MCCC - ' . $anneeUniversitaire->getLibelle() . ' - ' . $formation->gettypeDiplome()?->getLibelleCourt() . ' ' . $formation->getSigle(). ' ' . $parcours->getSigle(), 40);
+
+        return true;
     }
 
     public function exportExcelbutMccc(
@@ -384,22 +395,23 @@ class ButMcccVersion
         return $this->fileName . '.xlsx';
     }
 
-    private function writeMccc(mixed $fiche, array $tabColonnes, int $ligne): void
+    private function writeMccc(mixed $ec, array $tabColonnes, int $ligne): void
     {
-        $mcccs = $fiche->getMcccs();
+        $mcccs = $ec['ec']->getFicheMatiere()->getMcccs();
+        $diffMccc = $ec['diff']['mcccs'];
         foreach ($mcccs as $mccc) {
             if ($mccc->getLibelle() !== '' && array_key_exists($mccc->getLibelle(), $tabColonnes)) {
-                $this->excelWriter->writeCellXY(
+                $this->excelWriter->writeCellXYDiff(
                     //convertir chiffre en lettre excel
                     Coordinate::columnIndexFromString($tabColonnes[$mccc->getLibelle()]['pourcentage']),
                     $ligne,
-                    $mccc->getPourcentage() === 0.0 ? '' : $mccc->getPourcentage() . '%',
+                    $diffMccc[$mccc->getId()]['pourcentage'] ?? '',
                     ['style' => 'HORIZONTAL_CENTER']
                 );
-                $this->excelWriter->writeCellXY(
+                $this->excelWriter->writeCellXYDiff(
                     Coordinate::columnIndexFromString($tabColonnes[$mccc->getLibelle()]['nombre']),
                     $ligne,
-                    $mccc->getNbEpreuves() === 0 ? '' : $mccc->getNbEpreuves(),
+                    $diffMccc[$mccc->getId()]['nbEpreuves'] ?? '',
                     ['style' => 'HORIZONTAL_CENTER']
                 );
             }
@@ -411,10 +423,10 @@ class ButMcccVersion
         if (array_key_exists($fiche->getSigle(), $tabFichesUes)) {
             foreach ($tabFichesUes[$fiche->getSigle()] as $ueId => $ects) {
                 if (array_key_exists($ueId, $tabColUes)) {
-                    $this->excelWriter->writeCellXY(
+                    $this->excelWriter->writeCellXYDiff(
                         $tabColUes[$ueId],
                         $ligne,
-                        $ects === 0.0 ? '' : $ects,
+                        $ects,
                         ['style' => 'HORIZONTAL_CENTER']
                     );
                 }
