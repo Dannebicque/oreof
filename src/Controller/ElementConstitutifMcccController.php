@@ -20,7 +20,6 @@ use App\Entity\ParcoursVersioning;
 use App\Entity\TypeDiplome;
 use App\Entity\TypeEpreuve;
 use App\Events\McccUpdateEvent;
-use App\Repository\ElementConstitutifRepository;
 use App\Repository\TypeEpreuveRepository;
 use App\Service\VersioningParcours;
 use App\TypeDiplome\TypeDiplomeRegistry;
@@ -77,8 +76,10 @@ class ElementConstitutifMcccController extends AbstractController
 
         if ($this->isGranted('CAN_PARCOURS_EDIT_MY', $dpeParcours) && Access::isAccessible($dpeParcours, 'cfvu')) {
             if ($request->isMethod('POST')) {
+                $newMcccToText = '';
+                $newEcts = '';
                 $originalMcccToText = $this->mcccToTexte($getElement->getMcccsFromFicheMatiereCollection());
-                $originalEcts = $getElement->getFicheMatiereEcts();
+                $originalEcts = $getElement->getFicheMatiereEcts() ?? '';
                 $event = new McccUpdateEvent($elementConstitutif, $parcours);
 
                 if ($request->request->has('ec_step4') && array_key_exists('ects', $request->request->all()['ec_step4'])) {
@@ -90,10 +91,10 @@ class ElementConstitutifMcccController extends AbstractController
                     } elseif ($elementConstitutif->getEcParent() !== null) {
                         $elementConstitutif->setEcts($elementConstitutif->getEcParent()?->getEcts());
                         $elementConstitutif->setEctsSpecifiques(true); //du coup ca devient spécifique ?
-                        $newEcts = $elementConstitutif->getEcts();
+                        $newEcts = $elementConstitutif->getEcts() ?? '';
                     } else {
                         $elementConstitutif->getFicheMatiere()?->setEcts((float)$request->request->all()['ec_step4']['ects']);
-                        $newEcts = $elementConstitutif->getFicheMatiere()?->getEcts();
+                        $newEcts = $elementConstitutif->getFicheMatiere()?->getEcts() ?? '';
                     }
 
                     //evenement pour ECTS sur EC mis à jour
@@ -242,8 +243,8 @@ class ElementConstitutifMcccController extends AbstractController
         TypeDiplomeRegistry $typeDiplomeReg,
         VersioningParcours $versioningParcours,
         EntityManagerInterface $entityManager
-    ){
-        if($elementConstitutif === null){
+    ) {
+        if($elementConstitutif === null) {
             return $this->render("element_constitutif/_versioning_ecNotFound.html.twig", [
                 'ecNotFound' => true
             ]);
@@ -256,21 +257,22 @@ class ElementConstitutifMcccController extends AbstractController
         $typeEpreuveDiplome = $entityManager->getRepository(TypeEpreuve::class)->findByTypeDiplome($typeDiplome);
 
         // On rassemble toutes les UE
-        $ueArray = array_map(function($semestre) {
+        $ueArray = array_map(function ($semestre) {
             $ueFromSemestre = [...$semestre->ues];
             $uesEnfants = array_filter(
                 array_map(
-                    fn($ue) => $ue->uesEnfants(), 
+                    fn ($ue) => $ue->uesEnfants(),
                     $ueFromSemestre
-                ), 
-                fn($array) => count($array) > 0);
+                ),
+                fn ($array) => count($array) > 0
+            );
             $uesEnfants = array_merge(...$uesEnfants);
             $uesEnfantsDeuxiemeNiveau = array_filter(
                 array_map(
-                    fn($ueEnfant) => $ueEnfant->uesEnfants(), 
+                    fn ($ueEnfant) => $ueEnfant->uesEnfants(),
                     $uesEnfants
                 ),
-                fn($array) => count($array) > 0
+                fn ($array) => count($array) > 0
             );
             $uesEnfantsDeuxiemeNiveau = array_merge(...$uesEnfantsDeuxiemeNiveau);
             return array_merge($ueFromSemestre, $uesEnfants, $uesEnfantsDeuxiemeNiveau);
@@ -281,19 +283,19 @@ class ElementConstitutifMcccController extends AbstractController
         // Et on cherche le StructureEc de la version qui a le même Id
         $structureEc = null;
         foreach($ueArray as $structUe) {
-            foreach($structUe->elementConstitutifs as $structEc){
-                if($structEc->elementConstitutif->getDeserializedId() === $elementConstitutif->getId()){
+            foreach($structUe->elementConstitutifs as $structEc) {
+                if($structEc->elementConstitutif->getDeserializedId() === $elementConstitutif->getId()) {
                     $structureEc = $structEc;
                 }
-                foreach($structEc->elementsConstitutifsEnfants as $structEcEnfant){
-                    if($structEcEnfant->elementConstitutif->getDeserializedId() === $elementConstitutif->getId()){
+                foreach($structEc->elementsConstitutifsEnfants as $structEcEnfant) {
+                    if($structEcEnfant->elementConstitutif->getDeserializedId() === $elementConstitutif->getId()) {
                         $structureEc = $structEcEnfant;
                     }
                 }
             }
         }
-        
-        if($structureEc === null){
+
+        if($structureEc === null) {
             return $this->render("element_constitutif/_versioning_ecNotFound.html.twig", [
                 'structureEcNotFound' => true
             ]);
@@ -366,6 +368,7 @@ class ElementConstitutifMcccController extends AbstractController
                 'typeDiplome' => $typeDiplome,
             ]);
         }
+        //todo: else ?
     }
 
     //    /**

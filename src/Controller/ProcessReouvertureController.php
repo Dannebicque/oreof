@@ -151,7 +151,7 @@ class ProcessReouvertureController extends BaseController
 
             //mail au SES
             $dpeDemandeEvent = new DpeDemandeEvent($demande, $this->getUser());
-            $this->eventDispatcher->dispatch($dpeDemandeEvent, DpeDemandeEvent::DPE_DEMANDE_CREATED);
+            $this->eventDispatcher->dispatch($dpeDemandeEvent, DpeDemandeEvent::DPE_DEMANDE_OPENED);
 
             $formation->setEtatReconduction($etat);
             $this->entityManager->flush();
