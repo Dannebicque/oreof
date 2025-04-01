@@ -81,7 +81,7 @@ class GlobalVoter extends Voter
         // si oui, vérifier la portée du rôle, si besoin vérifier par hierarchie
         $roles = $this->roleRepository->findByPermission($this->getRoleFromAttribute()); // on récupère les rôles qui ont la permission demandée
         foreach ($this->user->getUserCentres()  as $centre) {
-            if (array_intersect($centre->getDroits(), $roles) || $this->security->isGranted('ROLE_SES')) {
+            if (array_intersect($centre->getDroits(), $roles) || $this->security->isGranted('ROLE_ADMIN')) {
                 // on a au moins un centre en commun, on vérifie la portée
                 if ($this->portee === PorteeEnum::ALL->value) {
                     return true; //pas de portée, c'est OK
@@ -177,10 +177,11 @@ class GlobalVoter extends Voter
         $canEdit =
             $subject->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_TEXTE ||
             $subject->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_MCCC_TEXTE ||
+            $subject->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_MCCC ||
             $subject->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_PARCOURS ||
             $subject->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION;
 
-        $canCentre = ($centre->getFormation() === $subject && ($subject->getCoResponsable()?->getId() === $this->user || $subject->getResponsableMention()?->getId() === $this->user))|| $centre->getComposante() === $subject->getComposantePorteuse() || $this->security->isGranted('ROLE_SES');
+        $canCentre = ($centre->getFormation() === $subject && ($subject->getCoResponsable()?->getId() === $this->user->getId() || $subject->getResponsableMention()?->getId() === $this->user->getId()))|| $centre->getComposante() === $subject->getComposantePorteuse() || $this->security->isGranted('ROLE_ADMIN');
 
         return $canEdit && $canCentre;
     }
@@ -189,7 +190,7 @@ class GlobalVoter extends Voter
     {
         $canEdit =
             $subject->getEtatReconduction() === TypeModificationDpeEnum::OUVERT || $subject->getEtatReconduction() === null;
-        $canCentre = ($centre->getFormation() === $subject && ($subject->getCoResponsable()?->getId() === $this->user->getId() || $subject->getResponsableMention()?->getId() === $this->user->getId()))|| $centre->getComposante()?->getId() === $subject->getComposantePorteuse()?->getId() || $this->security->isGranted('ROLE_SES');
+        $canCentre = ($centre->getFormation() === $subject && ($subject->getCoResponsable()?->getId() === $this->user->getId() || $subject->getResponsableMention()?->getId() === $this->user->getId()))|| $centre->getComposante()?->getId() === $subject->getComposantePorteuse()?->getId() || $this->security->isGranted('ROLE_ADMIN');
 
         return $canEdit && $canCentre;
     }
@@ -267,7 +268,7 @@ class GlobalVoter extends Voter
                 $this->dpeParcoursWorkflow->can($subject, 'valider_rf');
         }
 
-        if ($this->security->isGranted('ROLE_SES')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $canEdit =
                 $this->dpeParcoursWorkflow->can($subject, 'autoriser') ||
                 $this->dpeParcoursWorkflow->can($subject, 'valider_ouverture_sans_cfvu') ||
@@ -283,7 +284,7 @@ class GlobalVoter extends Voter
     private function canAccessComposante(Composante $subject, mixed $centre): bool
     {
         if (
-            ($centre->getComposante() === $subject && (in_array('Gestionnaire', $centre->getDroits()) || in_array('Directeur', $centre->getDroits()) || $subject->getResponsableDpe() === $this->user)) || $this->security->isGranted('ROLE_SES')
+            ($centre->getComposante() === $subject && (in_array('Gestionnaire', $centre->getDroits()) || in_array('Directeur', $centre->getDroits()) || $subject->getResponsableDpe() === $this->user)) || $this->security->isGranted('ROLE_ADMIN')
         ) {
             return true;
         }
@@ -318,7 +319,7 @@ class GlobalVoter extends Voter
             $canEdit = $this->ficheWorkflow->can($subject, 'valider_fiche_compo');
         }
 
-        if ($this->security->isGranted('ROLE_SES')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $canEdit =
                 $this->ficheWorkflow->can($subject, 'valider_fiche_compo') ||
                 $this->ficheWorkflow->can($subject, 'valider_fiche_ses');
@@ -350,7 +351,7 @@ class GlobalVoter extends Voter
                 $this->dpeParcoursWorkflow->can($subject, 'valider_rf') || $this->dpeParcoursWorkflow->can($subject, 'valider_central');
         }
 
-        if ($this->security->isGranted('ROLE_SES')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $canEdit =
                 $this->dpeParcoursWorkflow->can($subject, 'autoriser') ||
                 $this->dpeParcoursWorkflow->can($subject, 'valider_ouverture_sans_cfvu') ||
