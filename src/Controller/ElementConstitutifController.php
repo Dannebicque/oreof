@@ -104,7 +104,7 @@ class ElementConstitutifController extends BaseController
         Ue                           $ue,
         Parcours                     $parcours
     ): Response {
-        $isAdmin = $this->isGranted('ROLE_SES');
+        $isAdmin = $this->isGranted('ROLE_ADMIN');
         $elementConstitutif = new ElementConstitutif();
         $elementConstitutif->setFicheMatiere(null);
         $elementConstitutif->setParcours($parcours);
@@ -333,7 +333,7 @@ class ElementConstitutifController extends BaseController
             throw new RuntimeException('Type de diplôme non trouvé');
         }
 
-        $isAdmin = $this->isGranted('ROLE_SES');
+        $isAdmin = $this->isGranted('ROLE_ADMIN');
         $isBut = $parcours->getFormation()?->getTypeDiplome()?->getLibelleCourt() === 'BUT';
         $form = $this->createForm(ElementConstitutifType::class, $elementConstitutif, [
             'action' => $this->generateUrl(
@@ -470,7 +470,7 @@ class ElementConstitutifController extends BaseController
         Parcours                     $parcours,
         Ue                           $ue
     ): Response {
-        $isAdmin = $this->isGranted('ROLE_SES');
+        $isAdmin = $this->isGranted('ROLE_ADMIN');
         $typeDiplome = $parcours->getFormation()?->getTypeDiplome();
 
         if ($request->isMethod('POST')) {
@@ -555,6 +555,7 @@ class ElementConstitutifController extends BaseController
 
         $form->handleRequest($request);
         if ($form->isSubmitted()) {
+            $newHeuresToText = '';
             $originalHeuresToText = $this->heuresToTexte($getElement->getFicheMatiereHeures());
             if (array_key_exists('heuresEnfantsIdentiques', $request->request->all()['ec_step4'])) {
                 if ($elementConstitutif->getEcParent() !== null) {
@@ -587,16 +588,14 @@ class ElementConstitutifController extends BaseController
                 } else {
                     //sauvegarde des heures sur l'EC
                     $elementConstitutif->setVolumeCmPresentiel($ecHeures->getVolumeCmPresentiel());
-                    $elementConstitutif->setVolumeTdPresentiel($ecHeures->getVolumeTdDistanciel());
+                    $elementConstitutif->setVolumeTdPresentiel($ecHeures->getVolumeTdPresentiel());
                     $elementConstitutif->setVolumeTpPresentiel($ecHeures->getVolumeTpPresentiel());
                     $elementConstitutif->setVolumeCmDistanciel($ecHeures->getVolumeCmDistanciel());
                     $elementConstitutif->setVolumeTdDistanciel($ecHeures->getVolumeTdDistanciel());
                     $elementConstitutif->setVolumeTpDistanciel($ecHeures->getVolumeTpDistanciel());
                     $elementConstitutif->setVolumeTe($ecHeures->getVolumeTe());
                     $elementConstitutif->setHeuresSpecifiques(true);
-                    $entityManager->detach($ecHeures);
                     $newHeuresToText = $this->heuresToTexte($elementConstitutif);
-
                 }
             }
 
@@ -710,7 +709,7 @@ class ElementConstitutifController extends BaseController
 
     private function heuresToTexte(ElementConstitutif|FicheMatiere $elt): string
     {
-        return $elt->getVolumeCmPresentiel().$elt->getVolumeCmPresentiel().$elt->getVolumeTpPresentiel().$elt->getVolumeCmDistanciel().$elt->getVolumeTdDistanciel().$elt->getVolumeTpDistanciel().$elt->getVolumeTe();
+        return $elt->getVolumeCmPresentiel().$elt->getVolumeTdPresentiel().$elt->getVolumeTpPresentiel().$elt->getVolumeCmDistanciel().$elt->getVolumeTdDistanciel().$elt->getVolumeTpDistanciel().$elt->getVolumeTe();
     }
 
 }
