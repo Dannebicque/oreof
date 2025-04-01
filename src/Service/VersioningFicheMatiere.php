@@ -6,10 +6,13 @@ use App\Entity\FicheMatiere;
 use App\Entity\FicheMatiereVersioning;
 use DateTimeImmutable;
 use Doctrine\Common\Annotations\AnnotationReader;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManagerInterface;
 use Jfcherng\Diff\DiffHelper;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor;
 use Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor;
+use Symfony\Component\PropertyInfo\PropertyInfoExtractor;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
 use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
@@ -33,16 +36,23 @@ class VersioningFicheMatiere {
         $this->filesystem = $filesystem;
         // Serializer
         $classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
+        $extractors = new PropertyInfoExtractor([], [new PhpDocExtractor(), new ReflectionExtractor()]);
         $this->serializer = new Serializer(
             [
+                new DateTimeNormalizer(),
                 new ArrayDenormalizer(),
-                new ObjectNormalizer($classMetadataFactory, propertyTypeExtractor: new ReflectionExtractor())
+                new ObjectNormalizer($classMetadataFactory, propertyTypeExtractor: $extractors)
             ],
             [new JsonEncoder()]
         );
     }
 
-    public function saveFicheMatiereVersion(FicheMatiere $ficheMatiere, DateTimeImmutable $now, bool $withFlush = false){
+    public function saveFicheMatiereVersion(
+        FicheMatiere $ficheMatiere, 
+        DateTimeImmutable $now, 
+        bool $withFlush = false,
+        bool $isVersionValide = false,    
+    ){
         $dateHeure = $now->format('d-m-Y_H-i-s');
         // Objet BD fiche matiere versioning
         $ficheMatiereVersioning = new FicheMatiereVersioning();
@@ -52,6 +62,10 @@ class VersioningFicheMatiere {
         // Fichier Json
         $ficheMatiereFileName = "fiche-matiere-{$ficheMatiere->getId()}-{$dateHeure}";
         $ficheMatiereVersioning->setFilename($ficheMatiereFileName);
+        // Version validée
+        if($isVersionValide === true){
+            $ficheMatiereVersioning->setVersionValide(true);
+        }
         // Serialization
         $ficheMatiereJson = $this->serializer->serialize($ficheMatiere, 'json', [
             AbstractObjectNormalizer::GROUPS => ['fiche_matiere_versioning', 'fiche_matiere_versioning_ec_parcours'],
@@ -87,12 +101,24 @@ class VersioningFicheMatiere {
         ];
     }
 
-    public function getStringDifferencesWithBetweenFicheMatiereAndLastVersion(FicheMatiere $ficheMatiere){
-        $lastVersion = $this->entityManager->getRepository(FicheMatiereVersioning::class)
-            ->findBy(
-                ['ficheMatiere' => $ficheMatiere], 
-                ['version_timestamp' => 'DESC']
-            );
+    public function getStringDifferencesWithBetweenFicheMatiereAndLastVersion(
+        FicheMatiere $ficheMatiere, 
+        bool $lastVersionValide = true
+    ){
+        if($lastVersionValide){
+            $lastVersion = $this->entityManager->getRepository(FicheMatiereVersioning::class)
+                ->findBy(
+                    ['ficheMatiere' => $ficheMatiere, 'version_valide' => true],
+                    ['version_timestamp' => 'DESC']
+                );
+        }
+        else {
+            $lastVersion = $this->entityManager->getRepository(FicheMatiereVersioning::class)
+                ->findBy(
+                    ['ficheMatiere' => $ficheMatiere], 
+                    ['version_timestamp' => 'DESC']
+                );
+        }
         $lastVersion = count($lastVersion) > 0 
             ? $this->loadFicheMatiereVersion($lastVersion[0])['ficheMatiere'] 
             : null;
@@ -136,11 +162,92 @@ class VersioningFicheMatiere {
                             $rendererOptions
                         )
                     )  
+                ),
+                'languesEnseignement' => VersioningParcours::cleanUpComparison(
+                    html_entity_decode(
+                        DiffHelper::calculate(
+                            "<p class=\"list-item\">"
+                            . implode(
+                                "</p><p class=\"list-item\">",
+                                array_map(
+                                    fn ($langue) => $langue->getLibelle(),
+                                    $lastVersion->getLangueDispense()->toArray()
+                                )
+                            ) . "</p>",
+                            "<p class=\"list-item\">"
+                            . implode(
+                                "</p><p class=\"list-item\">",
+                                array_map(
+                                    fn ($langue) => $langue->getLibelle(),
+                                    $ficheMatiere->getLangueDispense()->toArray()
+                                )
+                            ) . "</p>",
+                            $rendererName,
+                            $differOptions,
+                            $rendererOptions
+                        )
+                    )
+                ),
+                'supportDeCoursEn' => VersioningParcours::cleanUpComparison(
+                    html_entity_decode(
+                        DiffHelper::calculate(
+                            "<p class=\"list-item\">"
+                            . implode(
+                                "</p><p class=\"list-item\">",
+                                array_map(
+                                    fn ($langue) => $langue->getLibelle(),
+                                    $lastVersion->getLangueSupport()->toArray()
+                                )
+                            ) . "</p>",
+                            "<p class=\"list-item\">"
+                            . implode(
+                                "</p><p class=\"list-item\">",
+                                array_map(
+                                    fn ($langue) => $langue->getLibelle(),
+                                    $ficheMatiere->getLangueSupport()->toArray()
+                                )
+                            ) . "</p>",
+                            $rendererName,
+                            $differOptions,
+                            $rendererOptions
+                        )
+                    )
+                ),
+                'responsableEnseignement' => VersioningParcours::cleanUpComparison(
+                    html_entity_decode(
+                        DiffHelper::calculate(
+                            $lastVersion->getResponsableFicheMatiere()->getNom() . " " . $lastVersion->getResponsableFicheMatiere()->getPrenom(),
+                            $ficheMatiere->getResponsableFicheMatiere()->getNom() . " " . $ficheMatiere->getResponsableFicheMatiere()->getPrenom(),
+                            $rendererName,
+                            $differOptions,
+                            $rendererOptions
+                        )
+                    )
+                ),
+                'emailResponsableEnseignement' => VersioningParcours::cleanUpComparison(
+                    html_entity_decode(
+                        DiffHelper::calculate(
+                            $lastVersion->getResponsableFicheMatiere()->getEmail(),
+                            $ficheMatiere->getResponsableFicheMatiere()->getEmail(),
+                            $rendererName,
+                            $differOptions,
+                            $rendererOptions
+                        )
+                    )
                 )
             ];
 
         }
 
         return $textDifferences;
+    }
+
+    private function getArrayDisplayAsList(array|Collection $array, string $keyIndex){
+        $list = "<ul>";
+        foreach($array as $value){
+            $list .= "<li>" . $array[$keyIndex] . "</li>";
+        }
+        $list .= "</ul>";
+        return $list;
     }
 }
