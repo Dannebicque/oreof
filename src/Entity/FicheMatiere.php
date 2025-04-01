@@ -40,7 +40,7 @@ class FicheMatiere
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['fiche_matiere:read', 'DTO_json_versioning'])]
+    #[Groups(['fiche_matiere:read', 'DTO_json_versioning', 'fiche_matiere_versioning'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 250)]
@@ -68,7 +68,7 @@ class FicheMatiere
     private Collection $competences;
 
     #[ORM\Column(length: 30, nullable: true, enumType: ModaliteEnseignementEnum::class)]
-    #[Groups(['fiche_matiere:read'])]
+    #[Groups(['fiche_matiere:read', 'fiche_matiere_versioning'])]
     private ?ModaliteEnseignementEnum $modaliteEnseignement = null;
 
     #[ORM\Column(nullable: true)]
@@ -120,7 +120,7 @@ class FicheMatiere
     private Collection $ficheMatiereParcours;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['fiche_matiere:read', 'DTO_json_versioning'])]
+    #[Groups(['fiche_matiere:read', 'DTO_json_versioning', 'fiche_matiere_versioning'])]
     private ?string $sigle = null;
 
     #[ORM\Column(length: 20, nullable: true)]
@@ -134,19 +134,23 @@ class FicheMatiere
     #[Gedmo\Slug(fields: ['libelle'])]
     private ?string $slug = null;
 
+    #[Groups(['fiche_matiere_versioning'])]
     #[ORM\Column(nullable: true)]
     private ?float $volumeCmPresentiel;
 
+    #[Groups(['fiche_matiere_versioning'])]
     #[ORM\Column(nullable: true)]
     private ?float $volumeTdPresentiel;
 
+    #[Groups(['fiche_matiere_versioning'])]
     #[ORM\Column(nullable: true)]
     private ?float $volumeTpPresentiel;
 
+    #[Groups(['fiche_matiere_versioning'])]
     #[ORM\Column(nullable: true)]
     private ?float $volumeTe = null;
 
-    #[Groups(['DTO_json_versioning'])]
+    #[Groups(['DTO_json_versioning', 'fiche_matiere_versioning'])]
     #[ORM\OneToMany(mappedBy: 'ficheMatiere', targetEntity: Mccc::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $mcccs;
 
@@ -162,15 +166,19 @@ class FicheMatiere
     #[ORM\Column(nullable: true)]
     private ?bool $sansHeures = null;
 
+    #[Groups(['fiche_matiere_versioning'])]
     #[ORM\Column(nullable: true)]
     private ?float $volumeCmDistanciel = null;
 
+    #[Groups(['fiche_matiere_versioning'])]
     #[ORM\Column(nullable: true)]
     private ?float $volumeTdDistanciel = null;
 
+    #[Groups(['fiche_matiere_versioning'])]
     #[ORM\Column(nullable: true)]
     private ?float $volumeTpDistanciel = null;
 
+    #[Groups(['fiche_matiere_versioning'])]
     #[ORM\Column(length: 10, nullable: true)]
     private ?string $typeMccc = null;
 
@@ -190,6 +198,7 @@ class FicheMatiere
     #[ORM\Column(nullable: true)]
     private ?bool $mcccImpose = null;
 
+    #[Groups(['fiche_matiere_versioning'])]
     #[ORM\Column(nullable: true)]
     private ?float $ects = null;
 

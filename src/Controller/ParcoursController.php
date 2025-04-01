@@ -650,7 +650,8 @@ class ParcoursController extends BaseController
                 'hasParcours' => $loadedVersion['parcours']->getFormation()->isHasParcours(),
                 // 'isBut' => $loadedVersion['parcours']->getTypeDiplome()->getLibelleCourt() === 'BUT',
                 'dateVersion' => $loadedVersion['dateVersion'],
-                'isVersioning' => true
+                'isVersioning' => true,
+                'parcoursVersioning' => $parcours_versioning,
             ]);
         } catch(\Exception $e) {
             $now = new DateTimeImmutable('now');

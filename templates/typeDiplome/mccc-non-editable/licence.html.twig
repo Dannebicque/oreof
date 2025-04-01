@@ -9,3 +9,39 @@
 {% else %}
     <twig:alerte type="danger" message="Le type de MCCC est inconnu"/>
 {% endif %}
+
+{% if (isFromVersioning is defined and isFromVersioning != 'true') %}
+    <div class="row justify-content-start mt-5">
+    {% if (isMcccFromVersion is not defined or isMcccFromVersion == false) 
+        and (lastVersion is defined and lastVersion != null)
+    %}
+        <div class="col-4"> 
+            <button class="btn btn-sm btn-primary" 
+                {{ stimulus_action('modal', 'refreshModalWithUrl', 'click', 
+                    {   url: path('app_element_constitutif_mccc_versioning', {
+                            parcoursVersioning: lastVersion.id,
+                            elementConstitutif: ec.id,
+                            isFromVersioning: isFromVersioning
+                        })                         
+                    }) 
+                }}
+            >
+                Dernière version
+            </button>
+        </div>
+    {% elseif ec.deserializedId is defined and ec.deserializedId != null %}
+        <div class="col-4">
+            <button class="btn btn-sm btn-primary"
+                {{ stimulus_action('modal', 'refreshModalWithUrl', 'click', 
+                    { url: path('app_element_constitutif_mccc_non_editable', 
+                        {id: ec.deserializedId, parcours: parcoursId}
+                        ) 
+                    }) 
+                }}
+            >
+                Version actuelle
+            </button>
+        </div>
+    {% endif %}
+    </div>
+{% endif %}
