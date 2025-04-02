@@ -53,6 +53,7 @@ class ParcoursDupliquer
         $newDpeDemande->setCreated(new DateTime());
         $newDpeDemande->setEtatDemande(EtatDpeEnum::en_cours_redaction);
         $newDpeDemande->setParcours($newParcours);
+        $newDpeDemande->setNiveauModification(TypeModificationDpeEnum::CREATION);
         $newDpeDemande->setDateDemande(new DateTime());
         $newDpeDemande->setAuteur($formation?->getResponsableMention());
         $newDpeDemande->setFormation($formation);
