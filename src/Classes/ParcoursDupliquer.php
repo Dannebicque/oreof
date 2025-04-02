@@ -64,6 +64,12 @@ class ParcoursDupliquer
         foreach($parcours->getContacts() as $contact) {
             $newContact = clone $contact;
             $newContact->setParcours($newParcours);
+            $adresse = $contact->getAdresse();
+            if (null !== $adresse) {
+                $newAdresse = clone $adresse;
+                $newAdresse->setAdresseOrigineCopie(null);
+                $newContact->setAdresse($newAdresse);
+            }
             $this->entityManager->persist($newContact);
         }
 
@@ -87,7 +93,7 @@ class ParcoursDupliquer
 
         // on duplique les semestres
         foreach ($parcours->getSemestreParcours() as $sp) {
-            if ($sp->getSemestre()->isTroncCommun()) {
+            if ($sp->getSemestre()?->isTroncCommun()) {
                 //tronc commun, on duplique uniquement la liaison.
                 $newSp = clone $sp;
                 $newSp->setParcours($newParcours);
@@ -101,7 +107,7 @@ class ParcoursDupliquer
                 $newSp->setOrdre($sp->getOrdre());
                 $this->entityManager->persist($newSp);
 
-                foreach ($sp->getSemestre()->getUes() as $ue) {
+                foreach ($sp->getSemestre()?->getUes() as $ue) {
                     if ($ue->getUeParent() === null) {
                         $newUe = clone $ue;
                         $newUe->setUeOrigineCopie(null);
