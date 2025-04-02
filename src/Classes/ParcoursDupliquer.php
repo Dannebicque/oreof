@@ -95,9 +95,9 @@ class ParcoursDupliquer
         foreach ($parcours->getSemestreParcours() as $sp) {
             if ($sp->getSemestre()?->isTroncCommun()) {
                 //tronc commun, on duplique uniquement la liaison.
-                $newSp = clone $sp;
-                $newSp->setParcours($newParcours);
-                $this->entityManager->persist($newSp);
+//                $newSp = clone $sp;
+//                $newSp->setParcours($newParcours);
+//                $this->entityManager->persist($newSp);
             } else {
                 //Pas tronc commun, on duplique semestre, UE et EC
                 $newSemestre = clone $sp->getSemestre();
