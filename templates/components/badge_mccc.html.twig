@@ -4,10 +4,10 @@
     {% else %}
         <button
                 {% if this.editable == false %}
-                    {% if parcoursVersioning is defined and parcoursVersioning != null 
+                    {% if parcoursVersioning is defined and parcoursVersioning != null
                         and isVersioning is defined and isVersioning == true
                     %}
-                        {% set modalUrl = path('app_element_constitutif_mccc_versioning', 
+                        {% set modalUrl = path('app_element_constitutif_mccc_versioning',
                                 {
                                     parcoursVersioning: parcoursVersioning.id,
                                     elementConstitutif: this.elementConstitutif.id ?? this.elementConstitutif.deserializedId,
@@ -15,13 +15,14 @@
                                 }
                             )
                         %}
+
                     {% else %}
                         {% set modalUrl = path('app_element_constitutif_mccc_non_editable', {
-                                    'id': this.elementConstitutif.id, 
+                                    'id': this.elementConstitutif.id,
                                     parcours: this.parcours.id,
                             })
                         %}
-                    {% endif %} 
+                    {% endif %}
                     {{ stimulus_controller('modal', {
                         size: 'lg',
                         nomEvenement: 'refreshListeEc',
@@ -53,8 +54,8 @@
                 title="Modalités de Contrôle des Connaissances et des Compétences"
         >
             {% if this.texte == true %}<i class="fal fa-marker"></i>{% endif %}
-            <span class="badge bg-{% if this.etatMcccComplet == true 
-                or (isVersioning is defined and isVersioning == true) 
+            <span class="badge bg-{% if this.etatMcccComplet == true
+                or (isVersioning is defined and isVersioning == true)
                 %}success{% else %}warning{% endif %}">
                {% if this.texte == true %}{% if this.etatMcccComplet == true %}Complet{% else %}A saisir{% endif %} {% else %}MCCC{% endif %}
                 {% if this.isParcoursProprietaire == false and this.isMcccSpecifiques == false  %}
