@@ -2,7 +2,7 @@
     url: path('app_parcours_save', {parcours:parcours.id}),
 }) }}>
     {% form_theme form 'communs/form_theme.html.twig' %}
-    {% if is_granted('CAN_FORMATION_EDIT_MY', parcours.formation) or is_granted('ROLE_SES') %}
+    {% if is_granted('CAN_FORMATION_EDIT_MY', parcours.formation) or is_granted('ROLE_ADMIN') %}
         {{ form_row(form.respParcours) }}
         <a
                 href="#"
