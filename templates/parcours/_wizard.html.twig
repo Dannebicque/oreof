@@ -70,7 +70,7 @@
                 Et après... {{ parcoursState.onglets|etatRemplissage(6, 'parcours') }}
             </a>
         </li>
-        {% if is_granted('ROLE_SES') %}
+        {% if is_granted('ROLE_ADMIN') %}
             <li class="nav-item" role="presentation">
                 <a class="nav-link {% if step == 7 %}active{% endif %}"
                    data-bs-toggle="tab" href="#" role="tab"
