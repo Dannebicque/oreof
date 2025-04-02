@@ -9,9 +9,12 @@
 
 namespace App\Classes;
 
+use App\Entity\CampagneCollecte;
+use App\Entity\DpeParcours;
 use App\Entity\Parcours;
 use App\Entity\SemestreParcours;
 use App\Entity\Ue;
+use App\Enums\TypeModificationDpeEnum;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -22,25 +25,46 @@ class ParcoursDupliquer
     ) {
     }
 
-    public function recopie(Parcours $parcours)
+    public function recopie(Parcours $parcours, CampagneCollecte $campagneCollecte)
     {
         $formation = $parcours->getFormation();
 
         // on clone la structure du parcours
         $newParcours = clone $parcours;
         $newParcours->setLibelle($parcours->getLibelle() . ' (copie)');
+        $newParcours->setParcoursOrigineCopie(null);
         $this->entityManager->persist($newParcours);
+
+        $newDpe = new DpeParcours();
+        $newDpe->setParcours($newParcours);
+        $newDpe->setFormation($formation);
+        $newDpe->setVersion('0.1');
+        $newDpe->setEtatReconduction(TypeModificationDpeEnum::MODIFICATION_MCCC_TEXTE);
+        $newDpe->setCreated(new DateTime());
+        $newDpe->setCampagneCollecte($campagneCollecte);
+        $newDpe->setEtatValidation(['en_cours_redaction' => 1]);
+        $this->entityManager->persist($newDpe);
+
+        //recopie des contacts du parcours
+        foreach($parcours->getContacts() as $contact) {
+            $newContact = clone $contact;
+            $newContact->setParcours($newParcours);
+            $this->entityManager->persist($newContact);
+        }
+
         $tabCompetences = [];
 
         //on duplique les blocs et les compétences
         foreach ($parcours->getBlocCompetences() as $bloc) {
             $newBloc = clone $bloc;
             $newBloc->setParcours($newParcours);
+            $newBloc->setBlocCompetenceOrigineCopie(null);
             $this->entityManager->persist($newBloc);
 
             foreach ($bloc->getCompetences() as $competence) {
                 $newCompetence = clone $competence;
                 $newCompetence->setBlocCompetence($newBloc);
+                $newCompetence->setCompetenceOrigineCopie(null);
                 $tabCompetences[$competence->getCode()] = $newCompetence;
                 $this->entityManager->persist($newCompetence);
             }
@@ -56,6 +80,7 @@ class ParcoursDupliquer
             } else {
                 //Pas tronc commun, on duplique semestre, UE et EC
                 $newSemestre = clone $sp->getSemestre();
+                $newSemestre->setSemestreOrigineCopie(null);
                 $this->entityManager->persist($newSemestre);
                 $newSp = new SemestreParcours($newSemestre, $newParcours);
                 $newSp->setOrdre($sp->getOrdre());
@@ -64,12 +89,14 @@ class ParcoursDupliquer
                 foreach ($sp->getSemestre()->getUes() as $ue) {
                     if ($ue->getUeParent() === null) {
                         $newUe = clone $ue;
+                        $newUe->setUeOrigineCopie(null);
                         $newUe->setSemestre($newSemestre);
                         $this->entityManager->persist($newUe);
 
                         if ($ue->getUeEnfants()->count() > 0) {
                             foreach ($ue->getUeEnfants() as $ueEnfant) {
                                 $newUeEnfant = clone $ueEnfant;
+                                $newUeEnfant->setUeOrigineCopie(null);
                                 $newUeEnfant->setUeParent($newUe);
                                 $newUeEnfant->setSemestre($newSemestre);
                                 $this->entityManager->persist($newUeEnfant);
@@ -98,6 +125,7 @@ class ParcoursDupliquer
         foreach ($ue->getElementConstitutifs() as $ec) {
             if ($ec->getEcParent() === null) {
                 $newEc = clone $ec;
+                $newEc->setEcOrigineCopie(null);
                 $newEc->setUe($newUe);
                 $newEc->setParcours($newParcours);
                 $this->entityManager->persist($newEc);
@@ -110,6 +138,7 @@ class ParcoursDupliquer
                 //Dupliquer la fiche associée à l'EC
                 if (null !== $ec->getFicheMatiere()) {
                     $newFiche = clone $ec->getFicheMatiere();
+                    $newFiche->setFicheMatiereOrigineCopie(null);
                     $date = new DateTime();
                     $newFiche->setSlug($newFiche->getSlug() . '-' . $date->format('YmdHis'));
                     $newFiche->setParcours($newParcours);
@@ -151,6 +180,7 @@ class ParcoursDupliquer
                 // EC enfants
                 foreach ($ec->getEcEnfants() as $ece) {
                     $newEce = clone $ece;
+                    $newEce->setEcOrigineCopie(null);
                     $newEce->setUe($newUe);
                     $newEce->setParcours($newParcours);
                     $newEce->setEcParent($newEc);
@@ -164,6 +194,7 @@ class ParcoursDupliquer
                     //Dupliquer la fiche associée à l'EC
                     if (null !== $ece->getFicheMatiere()) {
                         $newFiche = clone $ece->getFicheMatiere();
+                        $newFiche->setFicheMatiereOrigineCopie(null);
                         $date = new DateTime();
                         $newFiche->setSlug($newFiche->getSlug() . '-' . $date->format('YmdHis'));
                         $newFiche->setParcours($newParcours);

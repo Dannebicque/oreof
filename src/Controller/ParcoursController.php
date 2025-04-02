@@ -337,7 +337,7 @@ class ParcoursController extends BaseController
         $typeDuplication = JsonRequest::getValueFromRequest($request, 'dupliquer');
 
         if ($typeDuplication === 'recopie') {
-            return $parcoursDupliquer->recopie($parcours);
+            return $parcoursDupliquer->recopie($parcours, $this->getCampagneCollecte());
         }
 
         if ($typeDuplication === 'mutualise') {
