@@ -10,10 +10,12 @@
 namespace App\Classes;
 
 use App\Entity\CampagneCollecte;
+use App\Entity\DpeDemande;
 use App\Entity\DpeParcours;
 use App\Entity\Parcours;
 use App\Entity\SemestreParcours;
 use App\Entity\Ue;
+use App\Enums\EtatDpeEnum;
 use App\Enums\TypeModificationDpeEnum;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
@@ -44,6 +46,18 @@ class ParcoursDupliquer
         $newDpe->setCampagneCollecte($campagneCollecte);
         $newDpe->setEtatValidation(['en_cours_redaction' => 1]);
         $this->entityManager->persist($newDpe);
+
+        $newDpeDemande = new DpeDemande();
+        $newDpeDemande->setArgumentaireDemande('Création de la copie du parcours');
+        $newDpeDemande->setNiveauDemande('P');
+        $newDpeDemande->setCreated(new DateTime());
+        $newDpeDemande->setEtatDemande(EtatDpeEnum::en_cours_redaction);
+        $newDpeDemande->setParcours($newParcours);
+        $newDpeDemande->setDateDemande(new DateTime());
+        $newDpeDemande->setAuteur($formation?->getResponsableMention());
+        $newDpeDemande->setFormation($formation);
+
+        $this->entityManager->persist($newDpeDemande);
 
         //recopie des contacts du parcours
         foreach($parcours->getContacts() as $contact) {
