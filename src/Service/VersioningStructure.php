@@ -199,7 +199,7 @@ class VersioningStructure
 
             foreach ($ueNouvelle->uesEnfants() as $ordreUeEnfant => $ueEnfant) {
                 //UE n'existait pas avant, on ajoute
-                if (array_key_exists($ordreUeEnfant, $ueOriginale->uesEnfants())) {
+                if (!array_key_exists($ordreUeEnfant, $ueOriginale->uesEnfants())) {
                     $diff['uesEnfants'][$ordreUeEnfant] = $this->compareUe(null, $ueNouvelle->uesEnfants()[$ordreUeEnfant]);
                 }
             }
