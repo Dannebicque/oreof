@@ -6,20 +6,20 @@
                 <dt>Contenu de la formation</dt>
                 <dd>{{ formation.contenuFormation|raw }}</dd>
                 {% if stringDifferencesFormation.presentationFormationContenuFormation is defined %}
-                    {{ include('communs/_comparaison_versioning_big.html.twig',
+                    {{ include('communs/_comparaison_versioning_no_button.html.twig',
                         {
                             textDifferences: stringDifferencesFormation.presentationFormationContenuFormation,
-                            idCollapse: "diffContenuFormation"
+                            idCollapse: 'diffGlobalParcours'
                         }
                     ) }}
                 {% endif %}
                 <dt>Résultats attendus de la formation</dt>
                 <dd>{{ formation.resultatsAttendus|raw }}</dd>
                 {% if stringDifferencesFormation.presentationFormationResultatsAttendus is defined %}
-                    {{ include('communs/_comparaison_versioning_big.html.twig',
+                    {{ include('communs/_comparaison_versioning_no_button.html.twig',
                         {
                             textDifferences: stringDifferencesFormation.presentationFormationResultatsAttendus,
-                            idCollapse: "diffResultatsAttendus"
+                            idCollapse: 'diffGlobalParcours'
                         }
                     ) }}
                 {% endif %}
@@ -41,10 +41,10 @@
                     {{ formation.objectifsFormation|raw }}
                 </dd>
                 {% if stringDifferencesFormation.presentationFormationObjectifsFormation is defined %}
-                    {{ include('communs/_comparaison_versioning_big.html.twig',
+                    {{ include('communs/_comparaison_versioning_no_button.html.twig',
                         {
                             textDifferences: stringDifferencesFormation.presentationFormationObjectifsFormation,
-                            idCollapse: "diffObjectifsFormation"
+                            idCollapse: 'diffGlobalParcours'
                         }
                     ) }}
                 {% endif %}

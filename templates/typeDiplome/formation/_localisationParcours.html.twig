@@ -16,9 +16,9 @@
                 </ul>
             </dd>
             {% if stringDifferencesParcours.regimeInscriptionParcours is defined %}
-                {{ include("communs/_comparaison_versioning_big.html.twig", {
+                {{ include("communs/_comparaison_versioning_no_button.html.twig", {
                         textDifferences: stringDifferencesParcours.regimeInscriptionParcours,
-                        idCollapse: "diffParcoursRegimeInscription" ~ parcours.id
+                        idCollapse: 'diffGlobalParcours'
                     })
                 }}
             {% endif %}
