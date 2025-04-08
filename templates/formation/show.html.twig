@@ -218,6 +218,19 @@
 {% endblock %}
 
 {% block bouton_header %}
+
+    {% if is_granted('ROLE_ADMIN') 
+        and versioningParcours is defined
+        and versioningParcours != null
+    %}
+        <a class ="btn btn-sm btn-outline-info d-block mx-2 mb-1"
+            data-bs-toggle="collapse" data-bs-target="#diffGlobalParcours"
+        >
+            <i class="fa-light fa-not-equal"></i>
+            Comparer les descriptifs
+        </a>
+    {% endif %}
+
     {% if formation.isHasParcours == false and formation.parcours|length == 1 %}
         {% set parcours = formation.parcours[0] %}
         {{ include('btn/export_mccc.html.twig') }}
