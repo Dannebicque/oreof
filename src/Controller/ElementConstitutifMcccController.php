@@ -113,6 +113,10 @@ class ElementConstitutifMcccController extends AbstractController
                         if ($request->request->has('ec_step4') && array_key_exists('quitus', $request->request->all()['ec_step4'])) {
                             $fm->setQuitus((bool)$request->request->all()['ec_step4']['quitus']);
                         }
+                        // Si la checkbox est décochée, 'quitus' ne fait pas partie de la requête POST
+                        elseif ($request->request->has('ec_step4') && $fm->isQuitus() !== false) {
+                            $fm->setQuitus(false);
+                        }
 
                         if ($request->request->get('choix_type_mccc') !== $fm->getTypeMccc()) {
                             $fm->setTypeMccc($request->request->get('choix_type_mccc'));

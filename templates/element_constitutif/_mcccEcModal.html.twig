@@ -108,8 +108,11 @@
         {% if isMcccImpose == false %}
             <div class="form-check mb-2">
                 <input class="form-check-input" type="checkbox" id="ec_step4_quitus" name="ec_step4[quitus]"
-                       {% if isParcoursProprietaire == false and ec.ectsSpecifiques == false %}disabled{% endif %}
-                        {% if ec.quitus == true %}checked{% endif %}
+                        {% if isParcoursProprietaire == false and ec.ectsSpecifiques == false %}disabled{% endif %}
+                            {% if (ec.quitus == true and ec.mcccSpecifiques == true) 
+                                or ec.ficheMatiere.quitus == true %}
+                                    checked
+                            {% endif %}
                 >
                 <label class="form-check-label" for="ec_step4_quitus"> {{ 'ec_step4.labels.quitus'|trans({}, 'form') }}
                     <i
