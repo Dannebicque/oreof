@@ -17,8 +17,6 @@ export default class extends Controller {
     urlUpdate: String,
   }
 
-  static targets = ["quitusArgumentaire", "quitusTextArea"];
-
   async ectsSpecifiques(event) {
     const body = new FormData()
     body.append('value', event.target.checked)
