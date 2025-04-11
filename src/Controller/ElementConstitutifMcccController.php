@@ -74,6 +74,20 @@ class ElementConstitutifMcccController extends AbstractController
         $getElement = new GetElementConstitutif($elementConstitutif, $parcours);
         $typeEpreuve = $getElement->getTypeMcccFromFicheMatiere();
 
+        /**
+         * Contrôles du formulaire
+         */
+        if($request->request->has('ec_step4') && array_key_exists('quitus', $request->request->all()['ec_step4'])){
+            $argumentQuitus = $request->request->all()['ec_step4']['quitus_argument'] ?? null;
+            if(mb_strlen($argumentQuitus) < 15){
+                return $this->json(
+                    ['message' => "L'argumentaire du quitus doit faire au moins 15 caractères."],
+                    500, 
+                    ['Content-Type' => 'application/json']
+                );
+            }
+        }
+
         if ($this->isGranted('CAN_PARCOURS_EDIT_MY', $dpeParcours) && Access::isAccessible($dpeParcours, 'cfvu')) {
             if ($request->isMethod('POST')) {
                 $newMcccToText = '';
@@ -112,10 +126,15 @@ class ElementConstitutifMcccController extends AbstractController
 
                         if ($request->request->has('ec_step4') && array_key_exists('quitus', $request->request->all()['ec_step4'])) {
                             $fm->setQuitus((bool)$request->request->all()['ec_step4']['quitus']);
+                            $fm->setQuitusText($request->request->all()['ec_step4']['quitus_argument']);
                         }
                         // Si la checkbox est décochée, 'quitus' ne fait pas partie de la requête POST
-                        elseif ($request->request->has('ec_step4') && $fm->isQuitus() !== false) {
+                        elseif ($request->request->has('ec_step4') 
+                            && array_key_exists('quitus', $request->request->all()['ec_step4']) === false
+                            && $fm->isQuitus() !== false
+                        ) {
                             $fm->setQuitus(false);
+                            $fm->setQuitusText(null);
                         }
 
                         if ($request->request->get('choix_type_mccc') !== $fm->getTypeMccc()) {
@@ -131,6 +150,15 @@ class ElementConstitutifMcccController extends AbstractController
                     //MCCC sur EC
                     if ($request->request->has('ec_step4') && array_key_exists('quitus', $request->request->all()['ec_step4'])) {
                         $elementConstitutif->setQuitus((bool)$request->request->all()['ec_step4']['quitus']);
+                        $elementConstitutif->setQuitusText($request->request->all()['ec_step4']['quitus_argument']);
+                    }
+                    // Si la checkbox est décochée, 'quitus' ne fait pas partie de la requête POST
+                    elseif ($request->request->has('ec_step4') 
+                        && array_key_exists('quitus', $request->request->all()['ec_step4']) === false
+                        && $elementConstitutif->isQuitus() !== false
+                    ) {
+                        $elementConstitutif->setQuitus(false);
+                        $elementConstitutif->setQuitusText(null);
                     }
 
                     if ($request->request->get('choix_type_mccc') !== $elementConstitutif->getTypeMccc()) {

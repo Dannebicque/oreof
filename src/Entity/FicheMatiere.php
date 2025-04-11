@@ -237,6 +237,9 @@ class FicheMatiere
     #[ORM\ManyToOne]
     private ?CampagneCollecte $campagneCollecte = null;
 
+    #[ORM\Column(length: 1000, nullable: true)]
+    private ?string $quitusText = null;
+
     public function __construct()
     {
         $this->mcccs = new ArrayCollection();
@@ -1268,5 +1271,17 @@ class FicheMatiere
     public function getTotalHeures() : float
     {
         return $this->getVolumeCmPresentiel() + $this->getVolumeTdPresentiel() + $this->getVolumeTpPresentiel() + $this->getVolumeTe() + $this->getVolumeCmDistanciel() + $this->getVolumeTpDistanciel() + $this->getVolumeTpDistanciel();
+    }
+
+    public function getQuitusText(): ?string
+    {
+        return $this->quitusText;
+    }
+
+    public function setQuitusText(?string $quitusText): static
+    {
+        $this->quitusText = $quitusText;
+
+        return $this;
     }
 }

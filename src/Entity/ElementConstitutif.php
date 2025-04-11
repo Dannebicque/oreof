@@ -191,6 +191,9 @@ class ElementConstitutif
     #[Groups('DTO_json_versioning')]
     private ?bool $controleAssiduite = null;
 
+    #[ORM\Column(length: 1000, nullable: true)]
+    private ?string $quitusText = null;
+
     public function __construct()
     {
         $this->mcccs = new ArrayCollection();
@@ -950,6 +953,18 @@ class ElementConstitutif
     public function setControleAssiduite(?bool $controleAssiduite): static
     {
         $this->controleAssiduite = $controleAssiduite;
+
+        return $this;
+    }
+
+    public function getQuitusText(): ?string
+    {
+        return $this->quitusText;
+    }
+
+    public function setQuitusText(?string $quitusText): static
+    {
+        $this->quitusText = $quitusText;
 
         return $this;
     }
