@@ -78,7 +78,7 @@ class ElementConstitutifMcccController extends AbstractController
          * Contrôles du formulaire
          */
         if($request->request->has('ec_step4') && array_key_exists('quitus', $request->request->all()['ec_step4'])){
-            $argumentQuitus = $request->request->all()['ec_step4']['quitus_argument'] ?? null;
+            $argumentQuitus = $request->request->all()['ec_step4']['quitus_argument'] ?? "";
             if(mb_strlen($argumentQuitus) < 15){
                 return $this->json(
                     ['message' => "L'argumentaire du quitus doit faire au moins 15 caractères."],
