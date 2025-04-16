@@ -34,7 +34,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/fiche-matiere/step')]
-class FicheMatiereWizardController extends AbstractController
+class FicheMatiereWizardController extends BaseController
 {
     #[Route('/', name: 'app_fiche_matiere_wizard', methods: ['GET'])]
     public function index(): Response
@@ -114,7 +114,11 @@ class FicheMatiereWizardController extends AbstractController
         $t = [];
         switch ($data['field']) {
             case 'formation':
-                $formations = $formationRepository->findBy(['composantePorteuse' => $data['value']]);
+                $composante = $composanteRepository->find($data['value']);
+                if ($composante === null) {
+                    return $this->json([]);
+                }
+                $formations = $formationRepository->findByComposante($composante, $this->getCampagneCollecte());
                 foreach ($formations as $formation) {
                     $t[] = [
                         'id' => $formation->getId(),
@@ -123,7 +127,11 @@ class FicheMatiereWizardController extends AbstractController
                 }
                 break;
             case 'parcours':
-                $parcours = $parcoursRepository->findBy(['formation' => $data['value']]);
+                $formation = $formationRepository->find($data['formation']);
+                if ($formation === null) {
+                    return $this->json([]);
+                }
+                $parcours = $parcoursRepository->findByFormation($formation);
                 foreach ($parcours as $parcour) {
                     $t[] = [
                         'id' => $parcour->getId(),
