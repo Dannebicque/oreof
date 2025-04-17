@@ -127,7 +127,7 @@ class FicheMatiereWizardController extends BaseController
                 }
                 break;
             case 'parcours':
-                $formation = $formationRepository->find($data['formation']);
+                $formation = $formationRepository->find($data['value']);
                 if ($formation === null) {
                     return $this->json([]);
                 }
