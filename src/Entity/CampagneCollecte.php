@@ -85,11 +85,11 @@ class CampagneCollecte
     #[ORM\OneToMany(mappedBy: 'campagneCollecte', targetEntity: UserCentre::class)]
     private Collection $userCentres;
 
-    /**
-     * @var Collection<int, UserProfil>
-     */
-    #[ORM\OneToMany(mappedBy: 'campagneCollecte', targetEntity: UserProfil::class)]
-    private Collection $userProfils;
+//    /**
+//     * @var Collection<int, UserProfil>
+//     */
+//    #[ORM\OneToMany(mappedBy: 'campagneCollecte', targetEntity: UserProfil::class)]
+//    private Collection $userProfils;
 
     /**
      * @var Collection<int, ButCompetence>
@@ -103,7 +103,7 @@ class CampagneCollecte
         $this->changeRves = new ArrayCollection();
         $this->blocCompetences = new ArrayCollection();
         $this->userCentres = new ArrayCollection();
-        $this->userProfils = new ArrayCollection();
+        // $this->userProfils = new ArrayCollection();
         $this->butCompetences = new ArrayCollection();
     }
 
@@ -376,35 +376,35 @@ class CampagneCollecte
         return $this;
     }
 
-    /**
-     * @return Collection<int, UserProfil>
-     */
-    public function getUserProfils(): Collection
-    {
-        return $this->userProfils;
-    }
-
-    public function addUserProfil(UserProfil $userProfil): static
-    {
-        if (!$this->userProfils->contains($userProfil)) {
-            $this->userProfils->add($userProfil);
-            $userProfil->setCampagneCollecte($this);
-        }
-
-        return $this;
-    }
-
-    public function removeUserProfil(UserProfil $userProfil): static
-    {
-        if ($this->userProfils->removeElement($userProfil)) {
-            // set the owning side to null (unless already changed)
-            if ($userProfil->getCampagneCollecte() === $this) {
-                $userProfil->setCampagneCollecte(null);
-            }
-        }
-
-        return $this;
-    }
+//    /**
+//     * @return Collection<int, UserProfil>
+//     */
+//    public function getUserProfils(): Collection
+//    {
+//        return $this->userProfils;
+//    }
+//
+//    public function addUserProfil(UserProfil $userProfil): static
+//    {
+//        if (!$this->userProfils->contains($userProfil)) {
+//            $this->userProfils->add($userProfil);
+//            $userProfil->setCampagneCollecte($this);
+//        }
+//
+//        return $this;
+//    }
+//
+//    public function removeUserProfil(UserProfil $userProfil): static
+//    {
+//        if ($this->userProfils->removeElement($userProfil)) {
+//            // set the owning side to null (unless already changed)
+//            if ($userProfil->getCampagneCollecte() === $this) {
+//                $userProfil->setCampagneCollecte(null);
+//            }
+//        }
+//
+//        return $this;
+//    }
 
     /**
      * @return Collection<int, ButCompetence>
