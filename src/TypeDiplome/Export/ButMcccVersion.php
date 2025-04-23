@@ -405,13 +405,13 @@ class ButMcccVersion
                     //convertir chiffre en lettre excel
                     Coordinate::columnIndexFromString($tabColonnes[$mccc->getLibelle()]['pourcentage']),
                     $ligne,
-                    $diffMccc[$mccc->getId()]['pourcentage'] ?? '',
+                    $diffMccc[$mccc->getId()]['pourcentage'] ?? null,
                     ['style' => 'HORIZONTAL_CENTER']
                 );
                 $this->excelWriter->writeCellXYDiff(
                     Coordinate::columnIndexFromString($tabColonnes[$mccc->getLibelle()]['nombre']),
                     $ligne,
-                    $diffMccc[$mccc->getId()]['nbEpreuves'] ?? '',
+                    $diffMccc[$mccc->getId()]['nbEpreuves'] ?? null,
                     ['style' => 'HORIZONTAL_CENTER']
                 );
             }
