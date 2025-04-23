@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\ButCompetence;
+use App\Entity\CampagneCollecte;
 use App\Entity\Formation;
 use App\Entity\Ue;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -41,13 +42,15 @@ class ButCompetenceRepository extends ServiceEntityRepository
         }
     }
 
-    public function findOneByUe(Ue $ue, Formation $formation): ?ButCompetence
+    public function findOneByUe(Ue $ue, Formation $formation, CampagneCollecte $campagneCollecte): ?ButCompetence
     {
         return $this->createQueryBuilder('b')
             ->where('b.numero = :ue')
             ->andWhere('b.formation = :formation')
+            ->andWhere('b.campagneCollecte = :campagneCollecte')
             ->setParameter('ue', $ue->getOrdre())
             ->setParameter('formation', $formation)
+            ->setParameter('campagneCollecte', $campagneCollecte)
             ->getQuery()
             ->getOneOrNullResult();
     }

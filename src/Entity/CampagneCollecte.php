@@ -85,12 +85,26 @@ class CampagneCollecte
     #[ORM\OneToMany(mappedBy: 'campagneCollecte', targetEntity: UserCentre::class)]
     private Collection $userCentres;
 
+    /**
+     * @var Collection<int, UserProfil>
+     */
+    #[ORM\OneToMany(mappedBy: 'campagneCollecte', targetEntity: UserProfil::class)]
+    private Collection $userProfils;
+
+    /**
+     * @var Collection<int, ButCompetence>
+     */
+    #[ORM\OneToMany(mappedBy: 'campagneCollecte', targetEntity: ButCompetence::class)]
+    private Collection $butCompetences;
+
     public function __construct()
     {
         $this->dpeParcours = new ArrayCollection();
         $this->changeRves = new ArrayCollection();
         $this->blocCompetences = new ArrayCollection();
         $this->userCentres = new ArrayCollection();
+        $this->userProfils = new ArrayCollection();
+        $this->butCompetences = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -356,6 +370,66 @@ class CampagneCollecte
             // set the owning side to null (unless already changed)
             if ($userCentre->getCampagneCollecte() === $this) {
                 $userCentre->setCampagneCollecte(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, UserProfil>
+     */
+    public function getUserProfils(): Collection
+    {
+        return $this->userProfils;
+    }
+
+    public function addUserProfil(UserProfil $userProfil): static
+    {
+        if (!$this->userProfils->contains($userProfil)) {
+            $this->userProfils->add($userProfil);
+            $userProfil->setCampagneCollecte($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserProfil(UserProfil $userProfil): static
+    {
+        if ($this->userProfils->removeElement($userProfil)) {
+            // set the owning side to null (unless already changed)
+            if ($userProfil->getCampagneCollecte() === $this) {
+                $userProfil->setCampagneCollecte(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ButCompetence>
+     */
+    public function getButCompetences(): Collection
+    {
+        return $this->butCompetences;
+    }
+
+    public function addButCompetence(ButCompetence $butCompetence): static
+    {
+        if (!$this->butCompetences->contains($butCompetence)) {
+            $this->butCompetences->add($butCompetence);
+            $butCompetence->setCampagneCollecte($this);
+        }
+
+        return $this;
+    }
+
+    public function removeButCompetence(ButCompetence $butCompetence): static
+    {
+        if ($this->butCompetences->removeElement($butCompetence)) {
+            // set the owning side to null (unless already changed)
+            if ($butCompetence->getCampagneCollecte() === $this) {
+                $butCompetence->setCampagneCollecte(null);
             }
         }
 
