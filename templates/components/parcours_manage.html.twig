@@ -47,11 +47,7 @@
                             </div>
                         </div>
                         <div class="col-{{ col_process }} d-flex align-items-center justify-content-center">
-                            {#                            {% if this.formation.isHasParcours == true %} #}
-                            {#                                {{ component('formation_parcours', {formation: this.formation}) }} #}
-                            {#                            {% endif %} #}
                             {% for key, etape in this.process %}
-                                {#                                {% if (etape.showOn is defined and (this.type in etape.showOn and etape.showOn != false) ) or etape.showOn is not defined %} #}
                                 {% set class = 'btn-muted' %}
                                 {% if (isPlace('parcours', this.parcours, key)) %}
                                     {% set class = 'btn-info' %}
@@ -69,7 +65,6 @@
                                         <i class="fal {{ etape.icon }}"></i>
                                     </button>
                                 {% endif %}
-                                {#                                {% endif %} #}
                             {% endfor %}
                         </div>
                     </div>
@@ -88,6 +83,12 @@
                             <div class="col-6 d-grid">
                                 <button class="btn btn-sm btn-warning">
                                     Parcours non ouvert
+                                </button>
+                            </div>
+                        {% elseif this.dpeParcours.etatReconduction.value == 'NON_OUVERTURE_SES' %}
+                            <div class="col-6 d-grid">
+                                <button class="btn btn-sm btn-warning">
+                                    Non ouverture demandée. Attente de la réponse du SES
                                 </button>
                             </div>
                         {% else %}
@@ -256,7 +257,7 @@
                                 </button>
                             {% endif %}
 
-                            {% if is_granted('ROLE_SES') %}
+                            {% if is_granted('ROLE_ADMIN') %}
                                 <a href="{{ path('app_formation_edit_modal',{'slug': this.formation.slug}) }}"
                                    class="btn btn-sm btn-icon btn-icon-only btn-outline-secondary ms-1"
                                    data-bs-toggle="tooltip"
@@ -344,7 +345,7 @@
                         </div>
                         <div class="col-3 d-grid">
                             {% if is_granted('CAN_FORMATION_MANAGE_MY', this.formation) %}
-                                {% if this.dpeParcours.etatReconduction.value != 'NON_OUVERTURE' %}
+                                {% if this.dpeParcours.etatReconduction.value != 'NON_OUVERTURE' and this.dpeParcours.etatReconduction.value != 'NON_OUVERTURE_SES' %}
                                     {% if this.parcours.isParcoursDefaut == true %}
                                         <button
                                                 href="#"
@@ -371,8 +372,7 @@
                            &nbsp;
                         </div>
                         <div class="col-3 d-grid">
-                            {% if is_granted('ROLE_SES') %}
-                                {# or is_granted('CAN_ETABLISSEMENT_SCOLARITE_ALL') or is_granted('CAN_FORMATION_SCOLARITE_MY', parcours.formation) #}
+                            {% if is_granted('ROLE_ADMIN') %}
                                 <a href="{{ path('app_codification_index', {formation: formation.id, parcours:parcours.id}) }}"
                                    class="btn btn-sm btn-outline-info">Gérer la codification</a>
                             {% endif %}
