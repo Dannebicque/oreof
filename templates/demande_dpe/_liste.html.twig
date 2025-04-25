@@ -31,7 +31,7 @@
                 {{ demande.niveauModification|badgeEnum }}</td>
             <td>
                 {% if demande.dateCloture == null %}
-                    {{ demande.etatDemande|badgeEnum }}
+                    {{ demande.etatValidation|badgeEnum }}
                 {% else %}
                     <span class="badge bg-success">Demande clôturée</span>
                 {% endif %}
@@ -52,7 +52,7 @@
                         <i class="{{ iconShow }}"></i> Voir le parcours
                     </a>
                 {% endif %}
-                {% if is_granted('ROLE_SES') %}
+                {% if is_granted('ROLE_ADMIN') %}
                     <button {{ stimulus_action('crud', 'delete', 'click', {
                         url:path('app_dpe_demande_delete',{id: demande.id}),
                         csrf: csrf_token('delete' ~ demande.id)
