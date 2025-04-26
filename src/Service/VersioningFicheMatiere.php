@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Entity\FicheMatiere;
 use App\Entity\FicheMatiereVersioning;
+use App\Enums\ModaliteEnseignementEnum;
 use DateTimeImmutable;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Collections\Collection;
@@ -18,6 +19,7 @@ use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
 use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
 use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
 use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
+use Symfony\Component\Serializer\Normalizer\BackedEnumNormalizer;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
@@ -40,6 +42,7 @@ class VersioningFicheMatiere {
         $this->serializer = new Serializer(
             [
                 new DateTimeNormalizer(),
+                new BackedEnumNormalizer(),
                 new ArrayDenormalizer(),
                 new ObjectNormalizer($classMetadataFactory, propertyTypeExtractor: $extractors)
             ],
@@ -48,10 +51,10 @@ class VersioningFicheMatiere {
     }
 
     public function saveFicheMatiereVersion(
-        FicheMatiere $ficheMatiere, 
-        DateTimeImmutable $now, 
+        FicheMatiere      $ficheMatiere,
+        DateTimeImmutable $now,
         bool $withFlush = false,
-        bool $isVersionValide = false,    
+        bool              $isVersionValide = false,
     ){
         $dateHeure = $now->format('d-m-Y_H-i-s');
         // Objet BD fiche matiere versioning
@@ -66,13 +69,17 @@ class VersioningFicheMatiere {
         if($isVersionValide === true){
             $ficheMatiereVersioning->setVersionValide(true);
         }
+
+        $modaliteEnseignement = $ficheMatiere->getModaliteEnseignement();
+
         // Serialization
         $ficheMatiereJson = $this->serializer->serialize($ficheMatiere, 'json', [
             AbstractObjectNormalizer::GROUPS => ['fiche_matiere_versioning', 'fiche_matiere_versioning_ec_parcours'],
             'circular_reference_limit' => 2,
             AbstractObjectNormalizer::SKIP_NULL_VALUES => true,
             AbstractObjectNormalizer::ENABLE_MAX_DEPTH => true,
-            DateTimeNormalizer::FORMAT_KEY => 'Y-m-d H:i:s'
+            DateTimeNormalizer::FORMAT_KEY => 'Y-m-d H:i:s',
+            'modalite_enseignement' => $modaliteEnseignementLibelle
         ]);
         // Enregistrement du fichier
         $this->filesystem->appendToFile(
@@ -102,7 +109,7 @@ class VersioningFicheMatiere {
     }
 
     public function getStringDifferencesWithBetweenFicheMatiereAndLastVersion(
-        FicheMatiere $ficheMatiere, 
+        FicheMatiere $ficheMatiere,
         bool $lastVersionValide = true
     ){
         if($lastVersionValide){
@@ -115,14 +122,14 @@ class VersioningFicheMatiere {
         else {
             $lastVersion = $this->entityManager->getRepository(FicheMatiereVersioning::class)
                 ->findBy(
-                    ['ficheMatiere' => $ficheMatiere], 
+                    ['ficheMatiere' => $ficheMatiere],
                     ['version_timestamp' => 'DESC']
                 );
         }
-        $lastVersion = count($lastVersion) > 0 
-            ? $this->loadFicheMatiereVersion($lastVersion[0])['ficheMatiere'] 
+        $lastVersion = count($lastVersion) > 0
+            ? $this->loadFicheMatiereVersion($lastVersion[0])['ficheMatiere']
             : null;
-        
+
 
         $textDifferences = [];
 
@@ -148,7 +155,7 @@ class VersioningFicheMatiere {
                             $rendererName,
                             $differOptions,
                             $rendererOptions
-                
+
                         )
                     )
                 ),
@@ -161,7 +168,7 @@ class VersioningFicheMatiere {
                             $differOptions,
                             $rendererOptions
                         )
-                    )  
+                    )
                 ),
                 'languesEnseignement' => VersioningParcours::cleanUpComparison(
                     html_entity_decode(
