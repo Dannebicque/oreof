@@ -319,6 +319,15 @@ class GlobalVoter extends Voter
             $canEdit = $this->ficheWorkflow->can($subject, 'valider_fiche_compo');
         }
 
+        //cas hors diplôme, on vérifie si le centre est dans la liste des composantes de la fiche
+        if ($subject->isHorsDiplome()) {
+            foreach ($subject->getComposante() as $composante) {
+                if ($composante->getId() === $centre->getComposante()?->getId()) {
+                    $canEdit = $this->ficheWorkflow->can($subject, 'valider_fiche_compo');
+                }
+            }
+        }
+
         if ($this->security->isGranted('ROLE_ADMIN')) {
             $canEdit =
                 $this->ficheWorkflow->can($subject, 'valider_fiche_compo') ||
