@@ -111,16 +111,22 @@ class DemandeDpeController extends AbstractController
         $excelWriter->writeCellName('I1', 'Commentaire');
         $ligne = 2;
         foreach ($demandes as $demande) {
-            $parcours = $demande->getParcours();
-            $formation = $parcours->getFormation();
-            $composante = $formation->getComposantePorteuse();
+            if ($demande->getNiveauDemande() === 'F') {
+                $formation = $demande->getFormation();
+                $composante = $formation?->getComposantePorteuse();
+            } else {
+                $parcours = $demande->getParcours();
+                $formation = $parcours?->getFormation();
+                $composante = $formation?->getComposantePorteuse();
+            }
+
             $excelWriter->writeCellName('A' . $ligne, $composante->getLibelle());
-            $excelWriter->writeCellName('B' . $ligne, $formation->getDisplay());
+            $excelWriter->writeCellName('B' . $ligne, $formation?->getDisplay());
 
             if ($demande->getNiveauDemande() === 'F') {
                 $excelWriter->writeCellName('C' . $ligne, 'Niveau Mention');
             } else {
-                $excelWriter->writeCellName('C' . $ligne, $parcours->getDisplay());
+                $excelWriter->writeCellName('C' . $ligne, $parcours?->getDisplay());
             }
 
             $excelWriter->writeCellName('D' . $ligne, $demande->getAuteur() ? $demande->getAuteur()->getDisplay() : '');
