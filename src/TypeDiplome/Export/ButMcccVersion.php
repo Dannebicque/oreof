@@ -129,6 +129,8 @@ class ButMcccVersion
             return false;
         }
 
+        //dd($diffStructure);
+
         $this->excelWriter->createFromTemplate('Annexe_MCCC_BUT.xlsx');
 
         // Prépare le modèle avant de dupliquer
@@ -257,7 +259,6 @@ class ButMcccVersion
 
                     $tabColUes[$ue->getId()] = $colUe;
                     $this->excelWriter->writeCellXY($colUe, 18, 'BC' . $ue->getOrdre(), ['style' => 'HORIZONTAL_CENTER']);
-                    $this->excelWriter->writeCellXY($colUe, 26, $ue->getEcts(), ['style' => 'HORIZONTAL_CENTER']);
                     $this->excelWriter->writeCellXY($colUe, 19, $ue->getLibelle(), ['style' => 'HORIZONTAL_CENTER']);
                     $this->excelWriter->mergeCellsCaR($colUe, 19, $colUe, 22);
                     $colUe++;
@@ -324,14 +325,25 @@ class ButMcccVersion
                 $this->excelWriter->colorCells('H23:H' . $finRessource, 'FFCCCCCC');
                 $a = $ligne + 4;
                 $b = $ligne + 3;
-                foreach ($tabColUes as $colUe) {
+                foreach ($tabColUes as $keyUe => $colUe) {
+                    $diffUe = $diffSemestre['ues'][$keyUe];
+                    // dump($diffUe);
                     $lettreCol = Coordinate::stringFromColumnIndex($colUe);
                     //pour chaque colonne d'uE on met à jour la somme des ECTS dans la formule
-                    $this->excelWriter->writeCellXY($colUe, $ligne + 3, '=SUM(' . Coordinate::stringFromColumnIndex($colUe) . '23:' . $lettreCol . ($ligne - 1) . ')', ['style' => 'HORIZONTAL_CENTER']);
+                    $this->excelWriter->writeCellXYDiff($colUe, $ligne + 2, $diffUe['heuresEctsUe']['sommeUeEcts'], ['style' => 'HORIZONTAL_CENTER']);
+                    //somme des coeffs
+                    $this->excelWriter->writeCellXYDiff($colUe, $ligne + 3, $diffUe['heuresEctsUe']['sommeUeEcts'], ['style' => 'HORIZONTAL_CENTER']);
                     $this->excelWriter->writeCellXY($colUe, $ligne + 4, '=SUM(' . $lettreCol . $debutSae . ':' . $lettreCol . ($ligne - 1) . ')', ['style' => 'HORIZONTAL_CENTER']);
 
                     $this->excelWriter->writeCellXY($colUe, $ligne + 5, '=' . $lettreCol . $a . '/' . $lettreCol . $b, ['style' => 'HORIZONTAL_CENTER']);
                 }
+
+                // affichage des "totaux"
+                $this->excelWriter->writeCellXYDiff(self::COL_CM, $ligne + 2, $diffSemestre['heuresEctsSemestre']['sommeSemestreCmPres'], ['style' => 'HORIZONTAL_CENTER']);
+                $this->excelWriter->writeCellXYDiff(self::COL_TD, $ligne + 2, $diffSemestre['heuresEctsSemestre']['sommeSemestreTdPres'], ['style' => 'HORIZONTAL_CENTER']);
+                $this->excelWriter->writeCellXYDiff(self::COL_TP, $ligne + 2, $diffSemestre['heuresEctsSemestre']['sommeSemestreTpPres'], ['style' => 'HORIZONTAL_CENTER']);
+                $this->excelWriter->writeCellXYDiff(self::COL_HEURE_AUTONOMIE, $ligne + 2, $diffSemestre['heuresEctsSemestre']['sommeSemestreTePres'], ['style' => 'HORIZONTAL_CENTER']);
+                $this->excelWriter->writeCellXYDiff(self::COL_CM, $ligne + 3, $diffSemestre['heuresEctsSemestre']['sommeSemestreTotalPres'], ['style' => 'HORIZONTAL_CENTER']);
             }
 
             //suppression de la ligne modèle 18
