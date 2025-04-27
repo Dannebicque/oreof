@@ -113,7 +113,7 @@
                                 </div>
                         {% else %}
                             {% if
-                                ((is_granted('CAN_EC_VALIDATE_MY', this.ficheMatiere) or is_granted('CAN_PARCOURS_VALIDATE_MY', this.ficheMatiere))  and  this.process[this.place].transition == 'en_cours_redaction') or is_granted('ROLE_SES') %}
+                                ((is_granted('CAN_EC_VALIDATE_MY', this.ficheMatiere) or is_granted('CAN_PARCOURS_VALIDATE_MY', this.ficheMatiere))  and  this.process[this.place].transition == 'en_cours_redaction') or is_granted('ROLE_ADMIN') %}
                                 <div class="col-6">
                                     <div class="row">
                                         {% for key, state in hasTransitions(this.ficheMatiere, 'fiche') %}
@@ -196,29 +196,6 @@
                             >
                                 <i class="fal fa-timeline"></i>
                             </button>
-
-
-                            {% if is_granted('ROLE_SES') %}
-                                {#                                <a href="{{ path('app_formation_edit_modal',{'slug': this.formation.slug}) }}" #}
-                                {#                                   class="btn btn-sm btn-icon btn-icon-only btn-outline-secondary ms-1" #}
-                                {#                                   data-bs-toggle="tooltip" #}
-                                {#                                   data-bs-placement="bottom" #}
-                                {#                                   title="{{ 'modifier.la.validation.infobulle'|trans({}, 'process') }}" #}
-                                {#                                        {{ stimulus_controller('modal', { #}
-                                {#                                            size: 'large', #}
-                                {#                                            modalTitle: 'modifier.la.validation.title'|trans({}, 'process'), #}
-                                {#                                            right: false, #}
-                                {#                                            updateComponent: { #}
-                                {#                                                id: 'mention_manage', #}
-                                {#                                                event: 'mention_manage:edit' #}
-                                {#                                            }, #}
-                                {#                                            modalUrl: path('app_validation_edit', {id:0, type:'a'}) }) }} #}
-                                {#                                   data-action="click->modal#openModal" #}
-                                {#                                   data-size="lg" #}
-                                {#                                > #}
-                                {#                                    <i class="fal fa-wrench"></i> #}
-                                {#                                </a> #}
-                            {% endif %}
                         </div>
                     </div>
                 </div>

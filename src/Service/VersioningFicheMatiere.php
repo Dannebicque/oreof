@@ -4,7 +4,7 @@ namespace App\Service;
 
 use App\Entity\FicheMatiere;
 use App\Entity\FicheMatiereVersioning;
-use App\Enums\ModaliteEnseignementEnum;
+use App\Serializer\ModaliteEnseignementEnumNormalizer;
 use DateTimeImmutable;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Collections\Collection;
@@ -42,6 +42,7 @@ class VersioningFicheMatiere {
         $this->serializer = new Serializer(
             [
                 new DateTimeNormalizer(),
+                new ModaliteEnseignementEnumNormalizer(),
                 new BackedEnumNormalizer(),
                 new ArrayDenormalizer(),
                 new ObjectNormalizer($classMetadataFactory, propertyTypeExtractor: $extractors)
@@ -100,6 +101,8 @@ class VersioningFicheMatiere {
             . "{$ficheMatiereVersioning->getFilename()}.json"
         );
         $ficheMatiere = $this->serializer->deserialize($ficheMatiereJson, FicheMatiere::class, 'json');
+
+
         $dateVersion = $ficheMatiereVersioning->getVersionTimestamp()->format('d-m-Y à H:i');
 
         return [

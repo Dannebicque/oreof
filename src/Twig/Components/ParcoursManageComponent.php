@@ -54,6 +54,9 @@ final class ParcoursManageComponent extends AbstractController
         'publie' => 'publication',
         'valide_pour_publication' => 'publication',
         'soumis_conseil_reserve' => 'cfvu',
+        'non_ouverture_ses' => 'ses',
+        'non_ouverture_cfvu' => 'cfvu',
+        'non_ouverture' => 'publication',
     ];
 
     public const TAB_PROCESS = [
@@ -78,7 +81,10 @@ final class ParcoursManageComponent extends AbstractController
         'cfvu' => 6,
         'publication' => 8,
         'publie' => 8,
-        'valide_a_publier' => 8
+        'valide_a_publier' => 8,
+        'non_ouverture_ses' => 5,
+        'non_ouverture_cfvu' => 7,
+        'non_ouverture' => 8,
     ];
 
     use DefaultActionTrait;

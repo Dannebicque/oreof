@@ -49,8 +49,8 @@ class DpeCentralMailSubscriber extends AbstractDpeMailSubscriber implements Even
 
         $context = $event->getContext();
         $titre = $this->hasParcours ?
-            'Votre parcours ' . $this->parcours->getLibelle().' de la formation '.$this->formation->getDisplay(). ' a été refusé par le SES' :
-            'Votre formation ' . $this->formation->getDisplay(). ' a été refusée par le SES';
+            'La fiche du parcours ' . $this->parcours->getLibelle() . ' de la formation ' . $this->formation->getDisplay() . ' a été refusée par le SES' :
+            'La fiche de la formation ' . $this->formation->getDisplay() . ' a été refusée par le SES';
 
         $this->myMailer->initEmail();
         $this->myMailer->setTemplate(
@@ -72,8 +72,8 @@ class DpeCentralMailSubscriber extends AbstractDpeMailSubscriber implements Even
         }
 
         $titre = $this->hasParcours ?
-            'Votre parcours ' . $this->parcours->getLibelle().' de la formation '.$this->formation->getDisplay(). ' a été validé par le SES' :
-            'Votre formation ' . $this->formation->getDisplay(). ' a été validée par le SES';
+            'La fiche du parcours ' . $this->parcours->getLibelle() . ' de la formation ' . $this->formation->getDisplay() . ' a été validée par le SES' :
+            'La fiche de la formation ' . $this->formation->getDisplay() . ' a été validée par le SES';
 
         $this->myMailer->initEmail();
         $this->myMailer->setTemplate(
@@ -95,8 +95,8 @@ class DpeCentralMailSubscriber extends AbstractDpeMailSubscriber implements Even
         }
 
         $titre = $this->hasParcours ?
-            'Votre parcours ' . $this->parcours->getLibelle().' de la formation '.$this->formation->getDisplay(). ' a été validé par le SES et va être publié' :
-            'Votre formation ' . $this->formation->getDisplay(). ' a été validée par le SES et va être publiée';
+            'La fiche du parcours ' . $this->parcours->getLibelle() . ' de la formation ' . $this->formation->getDisplay() . ' a été validée par le SES et va être publié' :
+            'La fiche de la formation ' . $this->formation->getDisplay() . ' a été validée par le SES et va être publiée';
 
         $this->myMailer->initEmail();
         $this->myMailer->setTemplate(
@@ -120,8 +120,8 @@ class DpeCentralMailSubscriber extends AbstractDpeMailSubscriber implements Even
         $context = $event->getContext();
 
         $titre = $this->hasParcours ?
-            'Votre parcours ' . $this->parcours->getLibelle().' de la formation '.$this->formation->getDisplay(). ' a reçu des réserves par le SES' :
-            'Votre formation ' . $this->formation->getDisplay(). ' a reçue des réserves par le SES';
+            'La fiche du parcours ' . $this->parcours->getLibelle() . ' de la formation ' . $this->formation->getDisplay() . ' a reçu des réserves par le SES' :
+            'La fiche de la formation ' . $this->formation->getDisplay() . ' a reçue des réserves par le SES';
 
         $this->myMailer->initEmail();
         $this->myMailer->setTemplate(

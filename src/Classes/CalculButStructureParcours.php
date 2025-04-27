@@ -45,7 +45,6 @@ class CalculButStructureParcours
                             $raccrocheUe = $raccrocheSemestre;
                         }
 
-                        //si des UE enfants, on ne regarde pas s'il y a des EC
                         $dtoUe = new StructureUe($ue, $raccrocheUe, $display, $ueOrigine ?? null);
                         foreach ($ue->getElementConstitutifs() as $elementConstitutif) {
                             if ($elementConstitutif !== null && $elementConstitutif->getEcParent() === null) {

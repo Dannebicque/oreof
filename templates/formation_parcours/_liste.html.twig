@@ -28,70 +28,94 @@
                 {{ parcour.etatDpeParcours|badgeDpe }} {{ parcours.withCfvu is defined and parcours.withCfvu == true ? '<span class="badge bg-warning">CFVU</span>' : '' }}
             </td>
             <td class="text-end">
-                <button
-                        {{ stimulus_controller('modal', {
-                            size: 'lg',
-                            nomEvenement: 'parcoursAdded',
-                            modalTitle: 'Modifier un parcours',
-                            modalUrl: path('app_parcours_edit_modal', {parcours:parcour.id}) }) }}
-                        data-action="click->modal#openModal"
-                        class="btn btn-sm text-warning btn-icon"
-                        data-size="lg"
-                        data-bs-toggle="tooltip"
-                        data-bs-placement="bottom"
-                        title="Modifier un parcours"
-                >
-                    <i class="{{ iconEdit }}"></i>
-                    <span> Modifier le libellé/Responsable du parcours</span>
-                </button>
-                {% if constant('SOURCE', typeDiplome) != 'meef' %}
-                    <a href="{{ path('app_parcours_edit', {id:parcour.id}) }}"
-                       class="btn btn-sm text-warning btn-icon"
-                       target="_blank"
+                {% if not('non_ouverture' in parcour.etatDpeParcours|keys or 'non_ouverture_cfvu' in parcour.etatDpeParcours|keys or 'non_ouverture_ses' in parcour.etatDpeParcours|keys) %}
+                    <button
+                            {{ stimulus_controller('modal', {
+                                size: 'lg',
+                                nomEvenement: 'parcoursAdded',
+                                modalTitle: 'Modifier un parcours',
+                                modalUrl: path('app_parcours_edit_modal', {parcours:parcour.id}) }) }}
+                            data-action="click->modal#openModal"
+                            class="btn btn-sm text-warning btn-icon"
+                            data-size="lg"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="bottom"
+                            title="Modifier un parcours"
                     >
                         <i class="{{ iconEdit }}"></i>
-                        Editer la fiche du parcours
-                    </a>
+                        <span> Modifier le libellé/Responsable du parcours</span>
+                    </button>
+                    {% if constant('SOURCE', typeDiplome) != 'meef' %}
+                        <a href="{{ path('app_parcours_edit', {id:parcour.id}) }}"
+                           class="btn btn-sm text-warning btn-icon"
+                           target="_blank"
+                        >
+                            <i class="{{ iconEdit }}"></i>
+                            Editer la fiche du parcours
+                        </a>
+                    {% endif %}
+                    <a href="#"
+                       class="btn btn-sm text-success"
+                            {{ stimulus_controller('modal', {
+                                size: 'lg',
+                                modalTitle: 'Vérifier la saisie',
+                                modalUrl: path('app_parcours_state', {parcours:parcour.id}) }) }}
+                       data-action="click->modal#openModal"
+                       data-size="lg"
+                       data-bs-toggle="tooltip"
+                       data-bs-placement="bottom"
+                       title="Vérifier la saisie"
+                    >
+                        <i class="fal fa-binoculars"></i>
+                        <span> vérifier</span>
+                    </a><br>
+
+                    <button
+                            {{ stimulus_controller('modal', {
+                                size: 'lg',
+                                modalTitle: 'Dupliquer le parcours ' ~ parcour.display,
+                                modalUrl: path('app_parcours_dupliquer_modal', {'id': parcour.id}) }) }}
+                            data-action="click->modal#openModal"
+                            class="btn btn-sm text-primary"
+                            data-size="lg"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="bottom"
+                            title="Dupliquer le parcours {{ parcour.display }}"
+                    >
+                        <i class="{{ iconDuplicate }}"></i> Dupliquer
+                    </button>
+
+
+                    <button {{ stimulus_action('formation--step3', 'deleteParcours', 'click', {
+                        url:path('app_parcours_delete',{'id': parcour.id}),
+                        id: parcour.id,
+                        csrf: csrf_token('delete' ~ parcour.id)
+                    }) }} class="btn btn-sm text-danger">
+                        <i class="{{ iconDelete }}"></i> Supprimer
+                    </button>
+
+                    <button
+                            {{ stimulus_controller('modal', {
+                                size: 'lg',
+                                modalTitle: 'Demande de non ouverture du parcours ' ~ parcour.display ~ ' pour ' ~ user_data.campagneCollecte.libelle,
+                                modalUrl: path('app_validation_demande_non_ouverture', {parcours: parcour.id}) }) }}
+                            data-action="click->modal#openModal"
+                            class="btn btn-sm text-danger"
+                            data-size="lg"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="bottom"
+                            title="Demande de non ouverture du parcours {{ parcour.display }} pour {{ user_data.campagneCollecte.libelle }}"
+                    >
+                        <i class="fas fa-close"></i> Demande de non ouverture du parcours
+                        pour {{ user_data.campagneCollecte.libelle }}
+                    </button>
+                {% else %}
+                    {% if 'non_ouverture' in parcour.etatDpeParcours|keys %}
+                        <span class="text-info">Parcours non ouvert pour {{ user_data.campagneCollecte.libelle }}</span>
+                    {% else %}
+                        <span class="text-warning">Demande de non ouverture en cours</span>
+                    {% endif %}
                 {% endif %}
-                <a href="#"
-                   class="btn btn-sm text-success"
-                        {{ stimulus_controller('modal', {
-                            size: 'lg',
-                            modalTitle: 'Vérifier la saisie',
-                            modalUrl: path('app_parcours_state', {parcours:parcour.id}) }) }}
-                   data-action="click->modal#openModal"
-                   data-size="lg"
-                   data-bs-toggle="tooltip"
-                   data-bs-placement="bottom"
-                   title="Vérifier la saisie"
-                >
-                    <i class="fal fa-binoculars"></i>
-                    <span> vérifier</span>
-                </a><br>
-
-                <button
-                        {{ stimulus_controller('modal', {
-                            size: 'lg',
-                            modalTitle: 'Dupliquer le parcours ' ~ parcour.display,
-                            modalUrl: path('app_parcours_dupliquer_modal', {'id': parcour.id}) }) }}
-                        data-action="click->modal#openModal"
-                        class="btn btn-sm text-primary"
-                        data-size="lg"
-                        data-bs-toggle="tooltip"
-                        data-bs-placement="bottom"
-                        title="Dupliquer le parcours {{ parcour.display }}"
-                >
-                    <i class="{{ iconDuplicate }}"></i> Dupliquer
-                </button>
-
-
-                <button {{ stimulus_action('formation--step3', 'deleteParcours', 'click', {
-                    url:path('app_parcours_delete',{'id': parcour.id}),
-                    id: parcour.id,
-                    csrf: csrf_token('delete' ~ parcour.id)
-                }) }} class="btn btn-sm text-danger">
-                    <i class="{{ iconDelete }}"></i> Supprimer
-                </button>
             </td>
         </tr>
         {% if constant('SOURCE', typeDiplome) == 'meef' %}
@@ -133,7 +157,7 @@
                             <i class="{{ iconEdit }}"></i>
                             Editer la fiche de l'option
                         </a>
-                        {% if is_granted('ROLE_SES') %}
+                        {% if is_granted('ROLE_ADMIN') %}
                             <button {{ stimulus_action('formation--step3', 'dupliquerParcours', 'click', {
                                 url:path('app_parcours_dupliquer',{'id': parc.id}),
                                 id: parc.id}) }} class="btn btn-sm text-primary">
