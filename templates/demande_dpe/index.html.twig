@@ -15,3 +15,26 @@
         </div>
     </div>
 {% endblock %}
+
+{% block breadcrumb %}
+    {{ include('communs/_breadcrumb.html.twig', {liens:[
+        {
+            href:'',
+            title: 'Dpe ouverts',
+        }
+    ]}) }}
+{% endblock %}
+
+{% block bouton_header %}
+    <a
+            href="{{ path('app_demande_dpe_export', {type:type, composante: composante is defined ? composante.id:0}) }}"
+            class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+            data-bs-toggle="tooltip"
+            data-bs-placement="bottom"
+            title="Exporter les demandes DPE"
+    >
+        <i class="{{ iconDownload }}"></i>
+        <span> Exporter</span>
+    </a>
+{% endblock %}
+
