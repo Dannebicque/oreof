@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.33.2](https://github.com/Dannebicque/oreof/compare/v1.33.1...v1.33.2) (2025-04-28)
+
+
+### Features
+
+* Add CFVU request switch functionality for DPE demands ([2ade9b5](https://github.com/Dannebicque/oreof/commit/2ade9b50c2b4587bd90e265899e9a13f930577a7))
+
 ### [1.33.1](https://github.com/Dannebicque/oreof/compare/v1.33.0...v1.33.1) (2025-04-27)
 
 ## [1.33.0](https://github.com/Dannebicque/oreof/compare/v1.32.10...v1.33.0) (2025-04-27)
