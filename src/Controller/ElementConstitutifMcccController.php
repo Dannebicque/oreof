@@ -53,7 +53,7 @@ class ElementConstitutifMcccController extends AbstractController
     ): Response {
         //todo: sans doute à simplifier. Les cas sont : EC parent, EC enfant, EC propriétaire de la fiche, EC raccroché ? récupérer les infos du badge ?l
         $dpeParcours = GetDpeParcours::getFromParcours($parcours);
-        $isParcoursProprietaire = $elementConstitutif->getFicheMatiere()?->getParcours()?->getId() === $parcours->getId();
+        $isParcoursProprietaire = (($elementConstitutif->getFicheMatiere()?->getParcours()?->getId() === $parcours->getId()) || ($elementConstitutif->getNatureUeEc()?->isChoix() && $elementConstitutif->getParcours()?->getId() === $parcours->getId()));
 
         if ($dpeParcours === null) {
             throw new RuntimeException('DPE Parcours non trouvé');
@@ -88,6 +88,9 @@ class ElementConstitutifMcccController extends AbstractController
                         $elementConstitutif->getFicheMatiere()?->isEctsImpose() === false) {
                         $elementConstitutif->setEcts((float)$request->request->all()['ec_step4']['ects']);
                         $newEcts = $elementConstitutif->getEcts();
+                    } elseif ($elementConstitutif->getNatureUeEc()?->isChoix() && $elementConstitutif->getEcParent() === null) {
+                        //cas de l'EC parent d'un choix. ECTS géré par le choix
+                        $elementConstitutif->setEcts((float)$request->request->all()['ec_step4']['ects']);
                     } elseif ($elementConstitutif->getEcParent() !== null) {
                         $elementConstitutif->setEcts($elementConstitutif->getEcParent()?->getEcts());
                         $elementConstitutif->setEctsSpecifiques(true); //du coup ca devient spécifique ?
