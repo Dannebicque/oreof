@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.33.4](https://github.com/Dannebicque/oreof/compare/v1.33.3...v1.33.4) (2025-04-28)
+
+
+### Bug Fixes
+
+* Refactor template to use 'modalite' instead of 'ec.modaliteEnseignement' ([fd6ca69](https://github.com/Dannebicque/oreof/commit/fd6ca69cbcc4213c403fbbea2b63deaad87fecbe))
+
 ### [1.33.3](https://github.com/Dannebicque/oreof/compare/v1.33.2...v1.33.3) (2025-04-28)
 
 
