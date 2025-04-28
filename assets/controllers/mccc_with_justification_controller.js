@@ -41,7 +41,7 @@ export default class extends Controller {
     getFullDisplay(templateName){
         let fullDisplay = "";
         switch(templateName){
-            case "justificationAssiduiteMccc":
+            case "justificationSaisieMccc":
                 fullDisplay = `<div class="col-12">
                                     <textarea class="form-control my-2" 
                                         id="${this.textAreaFormNameValue}_ID" 

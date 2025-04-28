@@ -31,8 +31,8 @@
     {% endfor %}
     <div class="col-4"
         {{ stimulus_controller('mccc-with-justification', {
-            'templateName': 'justificationAssiduiteMccc',
-            'textAreaFormName': 'justificationAssiduite_ct_' ~ index,
+            'templateName': 'justificationSaisieMccc',
+            'textAreaFormName': 'justification_s1_ct' ~ index,
             'minlength': 15,
             'hasJustification': hasJustification,
             'justificationText': mcccs[1]['et'][index].justificationText ?? ""
@@ -52,7 +52,7 @@
                   |stimulus_action('mccc-with-justification', 'updateJustification', 'change') 
                 }}
         >
-            <option value="">Choisir</option>
+            <option value="" data-has-justification="false">Choisir</option>
             {% for typeE in typeEpreuves %}
                 <option value="{{ typeE.id }}"
                         data-hasduree="{{ typeE.hasDuree }}"
