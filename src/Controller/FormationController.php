@@ -17,11 +17,14 @@ use App\Classes\verif\FormationState;
 use App\Classes\verif\ParcoursState;
 use App\DTO\StatsFichesMatieres;
 use App\Entity\Composante;
+use App\Entity\DpeParcours;
 use App\Entity\Formation;
 use App\Entity\FormationDemande;
 use App\Entity\FormationVersioning;
+use App\Entity\Parcours;
 use App\Entity\ParcoursVersioning;
 use App\Entity\UserCentre;
+use App\Enums\TypeModificationDpeEnum;
 use App\Events\AddCentreFormationEvent;
 use App\Form\FormationDemandeType;
 use App\Form\FormationSesType;
@@ -47,10 +50,15 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\Workflow\WorkflowInterface;
 
 #[Route('/formation')]
 class FormationController extends BaseController
 {
+    public function __construct(private readonly EntityManagerInterface $entityManager)
+    {
+    }
+
     #[Route('/', name: 'app_formation_index', methods: ['GET'])]
     public function index(): Response
     {
@@ -199,59 +207,9 @@ class FormationController extends BaseController
         ]);
     }
 
-    #[Route('/demande', name: 'app_formation_demande_new', methods: ['GET', 'POST'])]
-    public function demande(
-        RoleRepository       $roleRepository,
-        MentionRepository    $mentionRepository,
-        UserCentreRepository $userCentreRepository,
-        Request              $request,
-        FormationRepository  $formationRepository
-    ): Response {
-        $formationDemande = new FormationDemande();
-        $form = $this->createForm(FormationDemandeType::class, $formationDemande, [
-            'action' => $this->generateUrl('app_formation_demande_new'),
-        ]);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted()) {
-            if (array_key_exists(
-                'mention',
-                $request->request->all()['formation_ses']
-            ) && $request->request->all()['formation_ses']['mention'] !== null && $request->request->all()['formation_ses']['mention'] !== 'autre') {
-                $mention = $mentionRepository->find($request->request->all()['formation_ses']['mention']);
-                $formation->setMentionTexte(null);
-                $formation->setMention($mention);
-            }
-
-            $formation->addComposantesInscription($formation->getComposantePorteuse());
-            $formationRepository->save($formation, true);
-
-            //on vérifie si le responsable de formation à le centre
-            $hasCentre = $userCentreRepository->findOneBy([
-                'user' => $formation->getResponsableMention(),
-                'formation' => $formation->getId()
-            ]);
-            if ($hasCentre === null) {
-                $role = $roleRepository->findOneBy(['code_role' => 'ROLE_RESP_FORMATION']);
-                $uc = new UserCentre();
-                $uc->setUser($formation->getResponsableMention());
-                $uc->setFormation($formation);
-                $uc->setCampagneCollecte($this->getCampagneCollecte());
-                $uc->addRole($role);
-                $userCentreRepository->save($uc, true);
-            }
-
-            return $this->redirectToRoute('app_formation_index');
-        }
-
-        return $this->render('formation/new.html.twig', [
-            'formationDemande' => $formationDemande,
-            'form' => $form->createView()
-        ]);
-    }
-
     #[Route('/new', name: 'app_formation_new', methods: ['GET', 'POST'])]
     public function new(
+        WorkflowInterface $dpeParcoursWorkflow,
         RoleRepository       $roleRepository,
         MentionRepository    $mentionRepository,
         UserCentreRepository $userCentreRepository,
@@ -277,7 +235,29 @@ class FormationController extends BaseController
             }
 
             $formation->addComposantesInscription($formation->getComposantePorteuse());
+            $formation->setHasParcours(true);
+            $formation->setEtatReconduction(TypeModificationDpeEnum::MODIFICATION_PARCOURS);
             $formationRepository->save($formation, true);
+
+            $parcours = new Parcours($formation);
+            $parcours->setLibelle('Parcours de formation à définir (création formation)');
+            $parcours->setRespParcours($formation->getResponsableMention());
+
+            $this->entityManager->persist($parcours);
+
+            //création d'un DPE => Faudrait créer un parcours.
+            $dpeParcours = new DpeParcours();
+            $dpeParcours->setParcours($parcours);
+            $dpeParcours->setFormation($formation);
+            $dpeParcours->setCampagneCollecte($this->getCampagneCollecte());
+            $dpeParcours->setVersion('0.1');
+            $dpeParcours->setEtatReconduction(TypeModificationDpeEnum::MODIFICATION_MCCC_TEXTE);
+            $dpeParcoursWorkflow->apply($dpeParcours, 'initialiser');
+            $dpeParcoursWorkflow->apply($dpeParcours, 'autoriser');
+            $parcours->addDpeParcour($dpeParcours);
+            $this->entityManager->persist($dpeParcours);
+            $this->entityManager->flush();
+
 
             //on vérifie si le responsable de formation à le centre
             $hasCentre = $userCentreRepository->findOneBy([
