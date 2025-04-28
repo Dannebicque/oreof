@@ -21,7 +21,7 @@
                id="modificationMCCCTexte"
                name="demandeNonOuverture">
         <label class="form-check-label" for="modificationMCCCTexte">
-            <strong>{{ ('demande.non.ouverture.confirmation.label')|trans({}, 'process') }}</strong>
+            <strong>{{ ('demande.non.ouverture.confirmation.label')|trans({'%parcours%': parcours.libelle}, 'process') }}</strong>
             <i
                     class="fal fa-question-circle ms-1"
                     data-controller="tooltip"
