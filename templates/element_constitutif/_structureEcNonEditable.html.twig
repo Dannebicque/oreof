@@ -1,18 +1,18 @@
 <div>
-    {% if ec.modaliteEnseignement == null %}
+    {% if modalite == null %}
         {{ component('alerte', {type:'danger', message:'Informations sur les modalités d\'enseignement non
         renseignées.'}) }}
     {% else %}
 
         <dl>
             <dt>Modalités d'enseignement</dt>
-            <dd>{{ ec.modaliteEnseignement.libelle }}</dd>
+            <dd>{{ modalite.libelle }}</dd>
         </dl>
         <dl>
             <dt>ECTS</dt>
             <dd>{{ ects }}</dd>
         </dl>
-        {% if ec.modaliteEnseignement.value != 2 %} {# todo: utile ? peut être différent du parcours ? #}
+        {% if modalite.value != 2 %} {# todo: utile ? peut être différent du parcours ? #}
             <h3>Volume Présentiel</h3>
             <table class="table table-bordered">
                 <thead>
@@ -33,7 +33,7 @@
         {% else %}
             {{ component('alerte', {type:'info', message:'Formation proposée uniquement en distanciel'}) }}
         {% endif %}
-        {% if ec.modaliteEnseignement.value != 0 %}
+        {% if modalite.value != 0 %}
             <h3 class="mt-2">Volume Distanciel</h3>
             <table class="table table-bordered">
                 <thead>

@@ -631,6 +631,7 @@ class ElementConstitutifController extends BaseController
 
         return $this->render('element_constitutif/_structureEcNonEditable.html.twig', [
             'ec' => $ec->getFicheMatiereHeures(),
+            'modalite' => $elementConstitutif->getParcours()?->getModalitesEnseignement(),
             'ects' => $ects
         ]);
     }
