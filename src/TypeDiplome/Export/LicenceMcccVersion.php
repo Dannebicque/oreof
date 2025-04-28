@@ -77,11 +77,14 @@ class LicenceMcccVersion extends AbstractLicenceMccc
         $dto = $this->calculStructureParcours->calcul($parcours, dataFromFicheMatiere: true);
 
         // version
-        $structureDifferencesParcours = $this->versioningParcours->getStructureDifferencesBetweenParcoursAndLastVersion($parcours);
-        if ($structureDifferencesParcours !== null) {
-            $diffStructure = (new VersioningStructure($structureDifferencesParcours, $dto))->calculDiff();
-        } else {
-            return false;
+        if ($parcours->getParcoursOrigineCopie() !== null) {
+            //Todo: cette année on repart de la version validée en N-1
+            $structureDifferencesParcours = $this->versioningParcours->getStructureDifferencesBetweenParcoursAndLastVersion($parcours->getParcoursOrigineCopie());
+            if ($structureDifferencesParcours !== null) {
+                $diffStructure = (new VersioningStructure($structureDifferencesParcours, $dto))->calculDiff();
+            } else {
+                return false;
+            }
         }
 
         $this->excelWriter->createFromTemplate('Annexe_MCCC.xlsx');
