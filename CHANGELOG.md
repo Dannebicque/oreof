@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.33.3](https://github.com/Dannebicque/oreof/compare/v1.33.2...v1.33.3) (2025-04-28)
+
+
+### Bug Fixes
+
+* Add support for non-opening demands with detailed argumentation ([0d2a766](https://github.com/Dannebicque/oreof/commit/0d2a766f1cc11e9fdf4c94c3a634592adc6299fa))
+* Update EC rendering to use fiche matiere hours data ([7335bc6](https://github.com/Dannebicque/oreof/commit/7335bc6eb459aeb279236d55994e0a52e9c6b212))
+
 ### [1.33.2](https://github.com/Dannebicque/oreof/compare/v1.33.1...v1.33.2) (2025-04-28)
 
 
