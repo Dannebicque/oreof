@@ -339,6 +339,26 @@
                                         >
                                             <i class="fal fa-times"></i> {{ ('demande.reouverture.annuler')|trans({}, 'process') }}
                                         </button>
+
+                                        {% if this.dpeParcours.etatReconduction.value == 'MODIFICATION_TEXTE' %}
+                                            <button class="btn btn-sm mt-1 d-block btn-outline-warning"
+                                                    type="button"
+                                                    {{ stimulus_controller('modal', {
+                                                        size: 'lg',
+                                                        nomEvenement: 'refreshPage',
+                                                        modalTitle: ('demande.reouverture.basculer.cfvu.title')|trans({}, 'process'),
+                                                        modalUrl: path('app_validation_demande_switch', {
+                                                            parcours:id
+                                                        }) }) }}
+                                                    data-action="click->modal#openModal"
+                                                    data-controller="tooltip"
+                                                    data-tooltip-placement-value="bottom"
+                                                    aria-label="{{ ('demande.reouverture.basculer.cfvu')|trans({}, 'process') }}"
+                                                    data-bs-original-title="{{ ('demande.reouverture.basculer.cfvu')|trans({}, 'process') }}"
+                                            >
+                                                <i class="fal fa-random"></i> {{ ('demande.reouverture.basculer.cfvu')|trans({}, 'process') }}
+                                            </button>
+                                        {% endif %}
                                     {% endif %}
                                 {% endif %}
                             {% endif %}
@@ -369,7 +389,7 @@
                             {% endif %}
                         </div>
                         <div class="col-3 d-grid">
-                           &nbsp;
+                            &nbsp;
                         </div>
                         <div class="col-3 d-grid">
                             {% if is_granted('ROLE_ADMIN') %}

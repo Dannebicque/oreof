@@ -7,6 +7,7 @@ use App\Entity\DpeDemande;
 use App\Entity\Formation;
 use App\Entity\Parcours;
 use App\Enums\EtatDpeEnum;
+use App\Enums\TypeModificationDpeEnum;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -25,15 +26,21 @@ class DpeDemandeRepository extends ServiceEntityRepository
         parent::__construct($registry, DpeDemande::class);
     }
 
-    public function findLastOpenedDemande(Parcours $parcours, EtatDpeEnum $etat): ?DpeDemande
+    public function findLastOpenedDemande(Parcours $parcours, EtatDpeEnum $etat, ?TypeModificationDpeEnum $typeModificationDpeEnum = null): ?DpeDemande
     {
-        return $this->createQueryBuilder('d')
+        $query = $this->createQueryBuilder('d')
             ->where('d.parcours = :parcours')
             ->andWhere('d.etatDemande = :etat')
             ->andWhere('d.dateCloture IS NULL')
             ->setParameter('parcours', $parcours)
-            ->setParameter('etat', $etat)
-            ->getQuery()
+            ->setParameter('etat', $etat);
+
+        if (null !== $typeModificationDpeEnum) {
+            $query->andWhere('d.niveauModification = :typeModificationDpeEnum')
+                ->setParameter('typeModificationDpeEnum', $typeModificationDpeEnum);
+        }
+
+        return $query->getQuery()
             ->getOneOrNullResult();
     }
 

@@ -702,3 +702,7 @@ en_cours_redaction.parcours.valide.impossible.en_cours_redaction: 'Impossible de
 btn.en_cours_redaction.parcours.valide.en_cours_redaction: 'Valider le parcours et transmette au conseil de composante'
 parcours.en_cours_redaction.parcours.btn-info: 'Parcours en cours de rédaction'
 title.validation.parcours.valider_parcours: 'Valider et soumettre le parcours'
+btn.demande.switch.modification: Confirmer le changement de demande de DPE
+demande.switch.alerte: Vous souhaitez modifier votre demande initiale sans CFVU en une demande avec CFVU pour pouvoir modifier les maquettes et les BCC. Vous pouvez compléter votre argumentaire le cas échéant.
+demande.reouverture.basculer.cfvu.title: 'Basculer la demande de réouverture sans CFVU en demande de passage avec CFVU'
+demande.reouverture.basculer.cfvu: 'Modifier la demande pour accéder à la maquette et aux BCC (CFVU)'
