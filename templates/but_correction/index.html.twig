@@ -7,16 +7,30 @@
         <p>{{ sem.semestre.display }}</p>
         {% for ue in sem.semestre.ues %}
             <p>&nbsp;&nbsp;{{ ue.display }} - {{ ue.libelle }}</p>
+
             {% for ec in ue.elementConstitutifs %}
+                {% set requete = '' %}
                 <div>
                     <p>&nbsp;&nbsp;&nbsp;&nbsp;{{ ec.display }} - {{ ec.ficheMatiere.sigle }}</p>
                     <ul>
                         {% for ece in tableau[sem.semestre.id][ec.ficheMatiere.sigle] %}
-                            <li>#EC : {{ ece.id }} - #FM : {{ ece.ficheMatiere.id }} ({{ ece.ficheMatiere.sigle }})</li>
+                            {% if loop.first %}
+                                {% set fiche = ece.ficheMatiere.id %}
+                            {% endif %}
+                            <li>#EC : {{ ece.id }} - #FM : {{ ece.ficheMatiere.id }} ({{ ece.ficheMatiere.sigle }})
+                                (CM: {{ ece.ficheMatiere.volumeCmPresentiel }},
+                                TD: {{ ece.ficheMatiere.volumeTdPresentiel }},
+                                TP: {{ ece.ficheMatiere.volumeTpPresentiel }})
+                            </li>
+                            {% if not loop.first %}
+                                {% set requete = requete ~ 'UPDATE element_constitutif SET fiche_matiere_id = '~fiche~ ' WHERE id = '~ece.id ~'; ' %}
+                            {% endif %}
                         {% endfor %}
                     </ul>
                 </div>
+                <pre wrap>{{ requete }}</pre>
             {% endfor %}
+
         {% endfor %}
     {% endfor %}
 {% endblock %}
