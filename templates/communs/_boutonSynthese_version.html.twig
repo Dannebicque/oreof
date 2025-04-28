@@ -11,14 +11,19 @@
             <i class="fas fa-check"></i>
             Contrôler les AC/Compétences
         </a>
-        <a class="btn btn-outline-primary d-block mt-1" href="{{ path('app_parcours_ressources_sae_but', {parcours:parcours.id}) }}">
+        <a class="btn btn-outline-primary d-block mt-1"
+           href="{{ path('app_parcours_ressources_sae_but', {parcours:parcours.id}) }}">
             <i class="fas fa-check"></i>
             Contrôler les Ressources/SAE
         </a>
-        <a class="btn btn-outline-primary d-block mt-1" href="{{ path('app_parcours_ressources_sae_but_coeff', {parcours:parcours.id}) }}">
+        <a class="btn btn-outline-primary d-block mt-1"
+           href="{{ path('app_parcours_ressources_sae_but_coeff', {parcours:parcours.id}) }}">
             <i class="fas fa-check"></i>
             Coeff. / UE / Ressources/SAE
         </a>
+        {% if is_granted('ROLE_ADMIN') %}
+            <a href="{{ path('app_but_correction',{parcours:parcours.id}) }}">Correction BUT</a>
+        {% endif %}
     {% else %}
         <a class="btn btn-outline-primary d-block"
            href="{{ path('app_parcours_bcc', {parcours:parcours.id}) }}">
@@ -31,33 +36,32 @@
         </a>
     {% endif %}
 
-    {% if parcours.dpeParcours.last.getEtatValidation == {'valide_a_publier': 1} 
-          or parcours.dpeParcours.last.getEtatValidation == {'publie': 1} 
-    %}
-    <div class="btn-group">
-        <button class="btn btn-outline-primary d-block mt-1 dropdown-toggle" data-bs-toggle="dropdown">
-            <i class="{{ iconDownload }}"></i> Exports MCCC
-        </button>
-        <div class="dropdown-menu">
-            <a class="dropdown-item" 
-            href="{{ path('app_parcours_mccc_export_cfvu_valid', {parcours:parcours.id, format: 'simplifie'}) }}">
-                <i class="{{ iconDownload }}"></i> Export MCCC simplifié (pdf)
-            </a>
-            <a class="dropdown-item"
-                href="{{ path('app_parcours_mccc_export', {parcours:parcours.id, _format:'xlsx'}) }}">
-                <i class="{{ iconDownload }}"></i> Export MCCC (xlsx)
-            </a>
-            <a class="dropdown-item"
-                href="{{ path('app_parcours_mccc_export_versionning', {parcours:parcours.id, _format:'xlsx'}) }}">
-                <i class="{{ iconDownload }}"></i> Export MCCC Version (xlsx)
-            </a>
+    {% if parcours.dpeParcours.last.getEtatValidation == {'valide_a_publier': 1}
+        or parcours.dpeParcours.last.getEtatValidation == {'publie': 1} %}
+        <div class="btn-group">
+            <button class="btn btn-outline-primary d-block mt-1 dropdown-toggle" data-bs-toggle="dropdown">
+                <i class="{{ iconDownload }}"></i> Exports MCCC
+            </button>
+            <div class="dropdown-menu">
+                <a class="dropdown-item"
+                   href="{{ path('app_parcours_mccc_export_cfvu_valid', {parcours:parcours.id, format: 'simplifie'}) }}">
+                    <i class="{{ iconDownload }}"></i> Export MCCC simplifié (pdf)
+                </a>
+                <a class="dropdown-item"
+                   href="{{ path('app_parcours_mccc_export', {parcours:parcours.id, _format:'xlsx'}) }}">
+                    <i class="{{ iconDownload }}"></i> Export MCCC (xlsx)
+                </a>
+                <a class="dropdown-item"
+                   href="{{ path('app_parcours_mccc_export_versionning', {parcours:parcours.id, _format:'xlsx'}) }}">
+                    <i class="{{ iconDownload }}"></i> Export MCCC Version (xlsx)
+                </a>
+            </div>
         </div>
-    </div>
     {% else %}
-    <a class="btn btn-outline-warning d-block mt-1"
-       href="{{ path('app_parcours_mccc_export_versionning', {parcours:parcours.id, _format:'xlsx'}) }}">
-        <i class="{{ iconDownload }}"></i>
-        Export MCCC Version (xlsx)
-    </a>
+        <a class="btn btn-outline-warning d-block mt-1"
+           href="{{ path('app_parcours_mccc_export_versionning', {parcours:parcours.id, _format:'xlsx'}) }}">
+            <i class="{{ iconDownload }}"></i>
+            Export MCCC Version (xlsx)
+        </a>
     {% endif %}
 </div>

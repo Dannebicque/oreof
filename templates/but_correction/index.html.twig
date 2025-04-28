@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ButCorrectionController!{% endblock %}
+
+{% block content %}
+    {% for sem in parcours.semestreParcours %}
+        <p>{{ sem.semestre.display }}</p>
+        {% for ue in sem.semestre.ues %}
+            <p>&nbsp;&nbsp;{{ ue.display }} - {{ ue.libelle }}</p>
+            {% for ec in ue.elementConstitutifs %}
+                <div>
+                    <p>&nbsp;&nbsp;&nbsp;&nbsp;{{ ec.display }} - {{ ec.ficheMatiere.sigle }}</p>
+                    <ul>
+                        {% for ece in tableau[sem.semestre.id][ec.ficheMatiere.sigle] %}
+                            <li>#EC : {{ ece.id }} - #FM : {{ ece.ficheMatiere.id }} ({{ ece.ficheMatiere.sigle }})</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endfor %}
+        {% endfor %}
+    {% endfor %}
+{% endblock %}
