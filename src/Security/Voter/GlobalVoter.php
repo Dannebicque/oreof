@@ -29,8 +29,6 @@ class GlobalVoter extends Voter
     private User|UserInterface $user;
 
     public function __construct(
-        //        private WorkflowInterface       $dpeWorkflow,
-        //        private WorkflowInterface       $parcoursWorkflow,
         private WorkflowInterface       $dpeParcoursWorkflow,
         private WorkflowInterface       $ficheWorkflow,
         private readonly Security       $security,
@@ -316,14 +314,14 @@ class GlobalVoter extends Voter
             ($subject->getParcours()?->getFormation()?->getComposantePorteuse() === $centre->getComposante() &&
                 in_array('Gestionnaire', $centre->getDroits()))
         ) {
-            $canEdit = $this->ficheWorkflow->can($subject, 'valider_fiche_compo');
+            $canEdit = $this->ficheWorkflow->can($subject, 'valider_fiche_compo') || $this->ficheWorkflow->can($subject, 'rouvrir_fiche_matiere');
         }
 
         //cas hors diplôme, on vérifie si le centre est dans la liste des composantes de la fiche
         if ($subject->isHorsDiplome()) {
             foreach ($subject->getComposante() as $composante) {
                 if ($composante->getId() === $centre->getComposante()?->getId()) {
-                    $canEdit = $this->ficheWorkflow->can($subject, 'valider_fiche_compo');
+                    $canEdit = $this->ficheWorkflow->can($subject, 'valider_fiche_compo') || $this->ficheWorkflow->can($subject, 'rouvrir_fiche_matiere');
                 }
             }
         }
