@@ -226,8 +226,8 @@ class VersioningFicheMatiere {
                 'responsableEnseignement' => VersioningParcours::cleanUpComparison(
                     html_entity_decode(
                         DiffHelper::calculate(
-                            $lastVersion->getResponsableFicheMatiere()->getNom() . " " . $lastVersion->getResponsableFicheMatiere()->getPrenom(),
-                            $ficheMatiere->getResponsableFicheMatiere()->getNom() . " " . $ficheMatiere->getResponsableFicheMatiere()->getPrenom(),
+                            $lastVersion->getResponsableFicheMatiere()?->getNom() . " " . $lastVersion->getResponsableFicheMatiere()?->getPrenom(),
+                            $ficheMatiere->getResponsableFicheMatiere()?->getNom() . " " . $ficheMatiere->getResponsableFicheMatiere()?->getPrenom(),
                             $rendererName,
                             $differOptions,
                             $rendererOptions
@@ -237,8 +237,8 @@ class VersioningFicheMatiere {
                 'emailResponsableEnseignement' => VersioningParcours::cleanUpComparison(
                     html_entity_decode(
                         DiffHelper::calculate(
-                            $lastVersion->getResponsableFicheMatiere()->getEmail(),
-                            $ficheMatiere->getResponsableFicheMatiere()->getEmail(),
+                            $lastVersion->getResponsableFicheMatiere()?->getEmail(),
+                            $ficheMatiere->getResponsableFicheMatiere()?->getEmail(),
                             $rendererName,
                             $differOptions,
                             $rendererOptions
