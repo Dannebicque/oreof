@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.33.7](https://github.com/Dannebicque/oreof/compare/v1.33.6...v1.33.7) (2025-04-29)
+
+
+### Bug Fixes
+
+* Refactor key usage from IDs to unique identifiers. ([a0b30f1](https://github.com/Dannebicque/oreof/commit/a0b30f1d5793a1e9c66f011cb50f542faeaf1bb4))
+
 ### [1.33.6](https://github.com/Dannebicque/oreof/compare/v1.33.5...v1.33.6) (2025-04-28)
 
 ### [1.33.5](https://github.com/Dannebicque/oreof/compare/v1.33.4...v1.33.5) (2025-04-28)
