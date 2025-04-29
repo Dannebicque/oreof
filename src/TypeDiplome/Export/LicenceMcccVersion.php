@@ -75,7 +75,6 @@ class LicenceMcccVersion extends AbstractLicenceMccc
         }
 
         $dto = $this->calculStructureParcours->calcul($parcours, dataFromFicheMatiere: true);
-
         // version
         if ($parcours->getParcoursOrigineCopie() !== null) {
             //Todo: cette année on repart de la version validée en N-1

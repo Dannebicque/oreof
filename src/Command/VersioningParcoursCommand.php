@@ -82,7 +82,8 @@ class VersioningParcoursCommand extends Command
 
         if($dpeFullValidDatabase){
             $io->writeln("Sauvegarde de tous les parcours valides en cours...");
-            $dpe = $this->entityManager->getRepository(CampagneCollecte::class)->findOneBy(['defaut' => true]);
+//            $dpe = $this->entityManager->getRepository(CampagneCollecte::class)->findOneBy(['defaut' => true]);
+            $dpe = $this->entityManager->getRepository(CampagneCollecte::class)->find(1);
             $parcoursArray = $this->entityManager->getRepository(Parcours::class)->findAllParcoursForDpe($dpe);
             $parcoursArray = array_filter(
                 $parcoursArray,

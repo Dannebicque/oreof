@@ -59,7 +59,7 @@ class CalculButStructureParcours
 
                         }
                         $dtoUe->heuresEctsUe->sommeUeEcts = $ue->getEcts();
-                        $dtoSemestre->addUe($ue->getId(), $dtoUe);
+                        $dtoSemestre->addUe($ue->getOrdre(), $dtoUe);//todo: utilisation de l'ordre de l'ue plutôt que l'id pour la comparaison
                     }
                 }
                 $dtoStructure->addSemestre($semestreParcours->getOrdre(), $dtoSemestre);

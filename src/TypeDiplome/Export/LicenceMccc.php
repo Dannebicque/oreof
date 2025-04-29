@@ -743,9 +743,6 @@ class LicenceMccc extends AbstractLicenceMccc
             $this->excelWriter->writeCellXY(self::COL_MCCC_CCI, $ligne, 'Contrôle d\'assiduité');
         }
 
-
-
-
         $this->excelWriter->writeCellXY(self::COL_TYPE_EC, $ligne, $ec->getTypeEc() ? $ec->getTypeEc()->getLibelle() : '');
 
         // Heures
