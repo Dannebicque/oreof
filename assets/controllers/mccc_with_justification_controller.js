@@ -48,7 +48,7 @@ export default class extends Controller {
                                         name="${this.textAreaFormNameValue}"
                                         data-mccc-with-justification-target="textarea"
                                         data-action="input->mccc-with-justification#checkTextAreaLength"
-                                        required
+                                        ${this.hasJustificationValue === 'true' ? 'required' : ''}
                                         rows="4"
                                         placeholder="Argumentaire pour ce type d'épreuve"
                                     >${this.justificationTextValue}</textarea>

@@ -236,6 +236,9 @@ export default class extends Controller {
       index++
     })
 
+    // fix ajout nouvelle épreuve
+    this.cleanUpNewEpreuveNode(numEp, 2);
+
     this._verifyTypeEpreuveEt()
   }
 
@@ -259,6 +262,16 @@ export default class extends Controller {
     // récupérer le contenu de la première épreuve, et le dupliquer
     const html = document.querySelector('.epreuve_ct').cloneNode(true)
     html.innerHTML = html.innerHTML.replace(/ct1/g, `ct${numEp}`)
+
+    // Initialisation de la nouvelle épreuve
+    // À ce moment là, l'index 'idx' a la bonne valeur 
+    // car incrémenté en fin de boucle précédente
+    let newEpreuve = [];
+    newEpreuve[`pourcentage_s1_ct${idx}`] = "";
+    newEpreuve[`typeEpreuve_s1_ct${idx}`] = "";
+    newEpreuve[`duree_s1_ct${idx}`] = "";
+    tab[idx] = newEpreuve;
+
     // ajouter le numéro de l'epreuve dans le texte
     // parcours tous les éléments da epreuve_et et numéroter le texte
 
@@ -292,6 +305,9 @@ export default class extends Controller {
       // }
       index++
     })
+
+    // fix ajout nouvelle épreuve
+    this.cleanUpNewEpreuveNode(numEp, 1);
 
     this._verifyTypeEpreuveCt()
   }
@@ -348,10 +364,15 @@ export default class extends Controller {
     // renuméroter les épreuves
     let numEp = 1
     document.querySelectorAll('.epreuve_ct').forEach((element) => {
-      let html = element.innerHTML
-      html = html.replace(/Contrôle terminal N°[0-9]/g, `Contrôle terminal N°${numEp}`)
-      html = html.replace(/ct[0-9]/g, `ct${numEp}`)
-      element.innerHTML = html
+      // let html = element.innerHTML
+      // html = html.replace(/Contrôle terminal N°[0-9]/g, `Contrôle terminal N°${numEp}`)
+      // html = html.replace(/ct[0-9]/g, `ct${numEp}`)
+      // element.innerHTML = html
+
+      // La modification du DOM peut se faire directement sur l'élément
+      element.innerHTML.replace(/Contrôle terminal N°[0-9]/g, `Contrôle terminal N°${numEp}`);
+      element.innerHTML.replace(/ct[0-9]/g, `ct${numEp}`);
+
       numEp++
     })
   }
@@ -364,10 +385,15 @@ export default class extends Controller {
     // renuméroter les épreuves
     let numEp = 1
     document.querySelectorAll('.epreuve_s2_ct').forEach((element) => {
-      let html = element.innerHTML
-      html = html.replace(/Examen 2ᵉ Session N°[0-9]/g, `Examen 2ᵉ Session N°${numEp}`)
-      html = html.replace(/et[0-9]/g, `et${numEp}`)
-      element.innerHTML = html
+      // let html = element.innerHTML
+      // html = html.replace(/Examen 2ᵉ Session N°[0-9]/g, `Examen 2ᵉ Session N°${numEp}`)
+      // html = html.replace(/et[0-9]/g, `et${numEp}`)
+      // element.innerHTML = html
+
+      // La modification du DOM peut se faire directement sur l'élément
+      element.innerHTML.replace(/Examen 2ᵉ Session N°[0-9]/g, `Examen 2ᵉ Session N°${numEp}`);
+      element.innerHTML.replace(/et[0-9]/g, `et${numEp}`);
+
       numEp++
     })
   }
@@ -407,5 +433,16 @@ export default class extends Controller {
     document.getElementById('cc_has_tp_pourcentage').disabled = !event.target.checked
     document.getElementById('ccHasTpBlock').classList.remove(event.target.checked ? 'd-none' : 'd-block')
     document.getElementById('ccHasTpBlock').classList.add(event.target.checked ? 'd-block' : 'd-none')
+  }
+
+  cleanUpNewEpreuveNode(epreuveIndex, numeroSession){
+      document.querySelector(`#typeEpreuve_s${numeroSession}_ct${epreuveIndex}`).selectedIndex = 0;
+      document.querySelector(`#justification_s${numeroSession}_ct${epreuveIndex}_ID`).required = false;
+      let selectorDisplayJustification = `.epreuve_ct`;
+      if(numeroSession === 2){
+        selectorDisplayJustification = `.epreuve_s2_ct`;
+      }
+      document.querySelectorAll(selectorDisplayJustification)[epreuveIndex - 1]
+        .querySelector('div[data-mccc-with-justification-target="displayDiv"]').classList.add('d-none');     
   }
 }
