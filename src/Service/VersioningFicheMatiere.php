@@ -114,7 +114,9 @@ class VersioningFicheMatiere {
     public function getStringDifferencesWithBetweenFicheMatiereAndLastVersion(
         FicheMatiere $ficheMatiere,
         bool $lastVersionValide = true
-    ){
+    ): array
+
+    {
         if($lastVersionValide){
             $lastVersion = $this->entityManager->getRepository(FicheMatiereVersioning::class)
                 ->findBy(
@@ -237,8 +239,8 @@ class VersioningFicheMatiere {
                 'emailResponsableEnseignement' => VersioningParcours::cleanUpComparison(
                     html_entity_decode(
                         DiffHelper::calculate(
-                            $lastVersion->getResponsableFicheMatiere()?->getEmail(),
-                            $ficheMatiere->getResponsableFicheMatiere()?->getEmail(),
+                            $lastVersion->getResponsableFicheMatiere()?->getEmail() ?? "",
+                            $ficheMatiere->getResponsableFicheMatiere()?->getEmail() ?? "",
                             $rendererName,
                             $differOptions,
                             $rendererOptions

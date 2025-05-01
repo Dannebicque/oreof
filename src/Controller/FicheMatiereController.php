@@ -107,7 +107,6 @@ class FicheMatiereController extends BaseController
     ): Response {
         $formation = $ficheMatiere->getParcours()?->getFormation();
 
-        //todo: supprimer la partie version pas utilisée sur les fiches
         $bccs = [];
         foreach ($ficheMatiere->getCompetences() as $competence) {
             if (!array_key_exists($competence->getBlocCompetence()?->getId(), $bccs)) {
@@ -121,7 +120,7 @@ class FicheMatiereController extends BaseController
             $typeDiplome = $formation->getTypeDiplome();
             $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());
         } else {
-            $typeD = $typeDiplomeRegistry->getTypeDiplome('App\TypeDiplome\Source\LicenceTypeDiplome'); //par défaut Licence
+            $typeD = $typeDiplomeRegistry->getTypeDiplome(LicenceTypeDiplome::class); //par défaut Licence
             $typeDiplome = $typeDiplomeRepository->find(1);
         }
         $cssDiff = DiffHelper::getStyleSheet();
@@ -411,7 +410,7 @@ class FicheMatiereController extends BaseController
             $ecParcours = $em->getRepository(ElementConstitutif::class)
                 ->findByFicheMatiereParcours($ficheMatiereVersioning->getFicheMatiere());
             $typeEpreuves = $em->getRepository(TypeEpreuve::class)->findByTypeDiplome($typeD);
-                
+
             return $this->render('fiche_matiere/show.versioning.html.twig', [
                 'ficheMatiere' => $ficheMatiere,
                 'formation' => $ficheMatiere->getParcours()?->getFormation(),
