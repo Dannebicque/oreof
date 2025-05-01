@@ -277,17 +277,15 @@ class GlobalVoter extends Voter
         //cas hors diplôme, on vérifie si le centre est dans la liste des composantes de la fiche
         if ($subject->isHorsDiplome()) {
             if ($subject->getresponsableFicheMatiere()?->getId() === $this->user->getId()) {
+                //si c'est l'auteur de la fiche il peut
                 $access = true;
             } else {
-                foreach ($subject->getComposante() as $composante) {
-                    if ($composante->getId() === $centre->getComposante()?->getId()) {
-                        $access = true;
-                    }
+                if ($this->user->getComposanteResponsableDpe()->count() > 0) {
+                    $access = true; //si c'est un DPE alors il peut.
                 }
             }
 
             $canEdit = ($this->ficheWorkflow->can($subject, 'valider_fiche_compo') || $this->ficheWorkflow->can($subject, 'rouvrir_fiche_matiere')) && $access;
-
         }
 
         if ($this->security->isGranted('ROLE_ADMIN')) {
