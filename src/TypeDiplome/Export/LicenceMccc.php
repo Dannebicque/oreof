@@ -68,7 +68,7 @@ class LicenceMccc extends AbstractLicenceMccc
         $this->versionFull = $versionFull;
         $formation = $parcours->getFormation();
         $parcours1 = $parcours;
-        $dto = $this->calculStructureParcours->calcul($parcours1);
+        $dto = $this->calculStructureParcours->calcul($parcours1, dataFromFicheMatiere: true);
         $totalFormation = $dto->heuresEctsFormation;
 
         if (null === $formation) {
