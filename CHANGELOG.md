@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.33.11](https://github.com/Dannebicque/oreof/compare/v1.33.10...v1.33.11) (2025-05-03)
+
+
+### Bug Fixes
+
+* Update calcul call to include dataFromFicheMatiere flag ([7ce3404](https://github.com/Dannebicque/oreof/commit/7ce3404494774b9e8e300540fe564c66e7ed3918))
+
 ### [1.33.10](https://github.com/Dannebicque/oreof/compare/v1.33.9...v1.33.10) (2025-05-01)
 
 ### [1.33.9](https://github.com/Dannebicque/oreof/compare/v1.33.8...v1.33.9) (2025-04-30)
