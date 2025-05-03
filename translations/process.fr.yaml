@@ -711,3 +711,4 @@ demande.non.ouverture.confirmation.label: 'Je confirme la demande de non ouvertu
 demande.non.ouverture.argumentaire.label: 'Argumentaire de la demande de non ouverture du parcours'
 btn.demande.non.ouverture: 'Valider la demande de non ouverture du parcours'
 demande.non.ouverture.alerte: 'Vous pouvez demander la non ouverture du parcours. Cette demande sera transmise au SES puis en CFVU avec votre argumentaire.'
+demande.reouverture.mention.annuler: 'Annuler la demande de réouverture de la mention'

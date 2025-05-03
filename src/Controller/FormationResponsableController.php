@@ -17,17 +17,21 @@ use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Workflow\WorkflowInterface;
 
 class FormationResponsableController extends BaseController
 {
+    private string $dir;
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
         private readonly WorkflowInterface $changeRfWorkflow,
         private readonly ValidationProcessChangeRf $validationProcess,
         private readonly ChangeRfProcess $changeRfProcess,
+        KernelInterface $kernel,
     ) {
+        $this->dir = $kernel->getProjectDir() . '/public/uploads/change_rf/pv/';
     }
 
     #[Route('/formation/change-responsable/ajout/{formation}', name: 'app_formation_change_rf')]
