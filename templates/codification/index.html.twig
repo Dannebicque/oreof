@@ -101,7 +101,7 @@
         <i class="{{ iconBack }}"></i>
         <span> Retour à la codification</span>
     </a>
-    {% if is_granted('ROLE_SES') %}
+    {% if is_granted('ROLE_ADMIN') %}
         <span {{ stimulus_controller('modal_confirm', {
             titre: 'Générer la codification basse',
             body: 'Êtes-vous sûr de vouloir recalculer la codification basse de cette formation ?',

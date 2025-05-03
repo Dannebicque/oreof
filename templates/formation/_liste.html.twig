@@ -5,7 +5,7 @@ bouton pour valider/invalide les étapes successives #}
 }) }}>
     {% set sort = params.sort is defined ? params.sort : 'typeDiplome' %}
     {% set direction = params.direction is defined ? params.direction : 'asc' %}
-    {% set isGranted = is_granted('ROLE_SES') or is_granted('CAN_ETABLISSEMENT_SHOW_ALL', app.user) or isCfvu %}
+    {% set isGranted = is_granted('ROLE_ADMIN') or is_granted('CAN_ETABLISSEMENT_SHOW_ALL', app.user) or isCfvu %}
     <table class="table">
         <thead>
         <tr>
@@ -288,7 +288,7 @@ bouton pour valider/invalide les étapes successives #}
                             </a>
                         {% endif %}
 
-                        {% if is_granted('ROLE_SES') %}
+                        {% if is_granted('ROLE_ADMIN') %}
                             <a href="#" {{ stimulus_action('crud', 'delete', 'click', {
                                 url:path('app_formation_delete',{'id': formation.id}),
                                 csrf: csrf_token('delete' ~ formation.id)
