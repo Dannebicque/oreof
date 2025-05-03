@@ -44,7 +44,7 @@ class UsersFixtures extends Fixture
         $userSes->setUsername('ses');
         $userSes->setNom('Scolarité');
         $userSes->setPrenom('John');
-        $userSes->setRoles(['ROLE_SES']);
+        $userSes->setRoles(['ROLE_ADMIN']);
         $password = $this->encoder->hashPassword($userSes, 'test');
         $userSes->setPassword($password);
         $manager->persist($userSes);

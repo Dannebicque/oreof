@@ -22,7 +22,7 @@ class FormationSynchronisationController extends AbstractController
         FicheMatiereRepository $ficheMatiereRepository,
         Formation $formation
     ): Response {
-        $this->denyAccessUnlessGranted('ROLE_SES');
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
 
         $page = 1;
         $response2 = $client->request(
@@ -106,7 +106,7 @@ class FormationSynchronisationController extends AbstractController
         TypeDiplomeRegistry $typeDiplomeRegistry,
         Formation $formation
     ): Response {
-        $this->denyAccessUnlessGranted('ROLE_SES');
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
 
         $typeDiplome = $typeDiplomeRegistry->getTypeDiplome($formation->getTypeDiplome()->getModeleMcc());
         $state = $typeDiplome->synchroniser($formation);
@@ -127,7 +127,7 @@ class FormationSynchronisationController extends AbstractController
         TypeDiplomeRegistry $typeDiplomeRegistry,
         Formation $formation
     ): Response {
-        $this->denyAccessUnlessGranted('ROLE_SES');
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
 
         $typeDiplome = $typeDiplomeRegistry->getTypeDiplome($formation->getTypeDiplome()->getModeleMcc());
         $state = $typeDiplome->synchroniserMccc($formation);

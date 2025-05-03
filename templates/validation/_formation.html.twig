@@ -23,7 +23,7 @@
                                     {{ stimulus_controller('symfony/ux-autocomplete/autocomplete') }}
                             >
                                 <option value="">Choisir une composante</option>
-                                {% if is_granted('ROLE_SES') %}
+                                {% if is_granted('ROLE_ADMIN') %}
                                     <option value="all">Toutes les composantes de l'établissement</option>
                                 {% endif %}
                                 {% for composante in composantes %}

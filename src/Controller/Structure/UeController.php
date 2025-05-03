@@ -77,7 +77,7 @@ class UeController extends BaseController
         Semestre             $semestre,
         Parcours             $parcours
     ): Response {
-        $isAdmin = $this->isGranted('ROLE_SES');
+        $isAdmin = $this->isGranted('ROLE_ADMIN');
         $ue = new Ue();
         $ueOrigine = $request->query->get('ue', null);
         if ($ueOrigine !== null) {
@@ -254,7 +254,7 @@ class UeController extends BaseController
         if ($typeDiplome === null) {
             throw new \Exception('Type de diplôme non trouvé');
         }
-        $isAdmin = $this->isGranted('ROLE_SES');
+        $isAdmin = $this->isGranted('ROLE_ADMIN');
         $form = $this->createForm(UeType::class, $ue, [
             'action' => $this->generateUrl('structure_ue_edit', [
                 'id' => $ue->getId(),

@@ -87,7 +87,7 @@ class ValidationController extends BaseController
         $typeValidation = $request->query->get('typeValidation', null);
         $step = $request->query->get('step', 'formation');
         $composante = null;
-        $isSes = $this->isGranted('ROLE_SES');
+        $isSes = $this->isGranted('ROLE_ADMIN');
 
         if (!$isSes && $idComposante !== null) {
             $composante = $composanteRepository->find($idComposante);
@@ -117,8 +117,6 @@ class ValidationController extends BaseController
                 ]);
         }
     }
-
-
 
     #[Route('/validation/composante/{composante}', name: 'app_validation_composante_index')]
     public function composante(

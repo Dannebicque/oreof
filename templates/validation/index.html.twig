@@ -10,7 +10,7 @@
 {% endblock %}
 
 {% block bouton_header %}
-    {% if is_granted('ROLE_SES') %}
+    {% if is_granted('ROLE_ADMIN') %}
         <a href="{{ path('app_validation_verification_fiche_export') }}"
            class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
            data-bs-toggle="tooltip"
@@ -51,7 +51,7 @@
                     Valider les fiches EC/matières
                 </a>
             </li>
-            {% if is_granted('ROLE_SES') %}
+            {% if is_granted('ROLE_ADMIN') %}
             <li class="nav-item" role="presentation">
                 <a class="nav-link {% if step == 'changeRf' %}active{% endif %}" data-bs-toggle="tab" href="#" role="tab"
                    aria-selected="false"

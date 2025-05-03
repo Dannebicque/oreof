@@ -43,7 +43,7 @@ class ExportController extends BaseController
     public function index(
         ComposanteRepository       $composanteRepository,
     ): Response {
-        $this->denyAccessUnlessGranted('ROLE_SES');
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
 
         return $this->render('export/index.html.twig', [
             'composantes' => $composanteRepository->findAll(),
@@ -111,7 +111,7 @@ class ExportController extends BaseController
             throw $this->createNotFoundException('La composante n\'existe pas');
         }
 
-        if ($this->isGranted('ROLE_SES') ||
+        if ($this->isGranted('ROLE_ADMIN') ||
             $this->isGranted('CAN_ETABLISSEMENT_SHOW_ALL', $this->getUser())) {
             $dpes = $dpeParcoursRepository->findParcoursByComposante($this->getCampagneCollecte(), $composante);
         } elseif ($this->isGranted('CAN_ETABLISSEMENT_CONSEILLER_ALL', $this->getUser())) {
