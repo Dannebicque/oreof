@@ -168,7 +168,7 @@ class ElementConstitutifMcccController extends AbstractController
                 'ec' => $elementConstitutif,
                 'ects' => $getElement->getFicheMatiereEcts(),
                 'templateForm' => $typeD::TEMPLATE_FORM_MCCC,
-                'mcccs' => $getElement->getMcccsFromFicheMatiereCollection($typeD),
+                'mcccs' => $getElement->getMcccsFromFicheMatiereCollection(),
                 'wizard' => false,
                 'typeDiplome' => $typeDiplome,
                 'parcours' => $parcours,
@@ -373,34 +373,6 @@ class ElementConstitutifMcccController extends AbstractController
         }
         //todo: else ?
     }
-
-    //    /**
-    //     * @throws \App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException
-    //     */
-    //    public function displayMcccEc(
-    //        TypeDiplomeRegistry   $typeDiplomeRegistry,
-    //        TypeEpreuveRepository $typeEpreuveRepository,
-    //        ElementConstitutif    $elementConstitutif
-    //    ): Response {
-    //        $formation = $elementConstitutif->getParcours()->getFormation();
-    //        if ($formation === null) {
-    //            throw new RuntimeException('Formation non trouvée');
-    //        }
-    //        $typeDiplome = $formation->getTypeDiplome();
-    //
-    //        if ($typeDiplome === null) {
-    //            throw new RuntimeException('Type de diplome non trouvé');
-    //        }
-    //
-    //        $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());
-    //
-    //        return $this->render('element_constitutif/_mcccEcNonEditable.html.twig', [
-    //            'ec' => $elementConstitutif,
-    //            'typeEpreuves' => $typeEpreuveRepository->findByTypeDiplome($typeDiplome),
-    //            'templateForm' => $typeD::TEMPLATE_FORM_MCCC,
-    //            'mcccs' => $typeD->getMcccs($elementConstitutif),
-    //        ]);
-    //    }
 
     private function mcccToTexte(Collection $getMcccs): string
     {
