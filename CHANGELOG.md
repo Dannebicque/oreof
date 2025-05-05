@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.34.0](https://github.com/Dannebicque/oreof/compare/v1.33.11...v1.34.0) (2025-05-03)
+
+
+### Features
+
+* add new label for reopening request cancellation in French translations ([2b8a878](https://github.com/Dannebicque/oreof/commit/2b8a87899e6ad0c06cb39281a06212fd0c342bbd))
+* replace ROLE_SES with ROLE_ADMIN across controllers and fixtures ([9c3baef](https://github.com/Dannebicque/oreof/commit/9c3baef7be62dbf9d85f85de86acb2d267b70f4f))
+* update role-based access from ROLE_SES to ROLE_ADMIN ([85e6b71](https://github.com/Dannebicque/oreof/commit/85e6b71609aea83df0c8ea7c0aa2e411766b76aa))
+
+
+### Bug Fixes
+
+* adjust workflow transition condition in `ChangeRfProcess` to apply changes at the CFVU submission step ([2b8a878](https://github.com/Dannebicque/oreof/commit/2b8a87899e6ad0c06cb39281a06212fd0c342bbd))
+
 ## [1.33.11](https://github.com/Dannebicque/oreof/compare/v1.33.10...v1.33.11) (2025-05-03)
 
 
