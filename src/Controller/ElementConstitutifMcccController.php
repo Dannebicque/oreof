@@ -87,6 +87,24 @@ class ElementConstitutifMcccController extends AbstractController
                 );
             }
         }
+        // Contrôle de la justification de MCCC
+        $typeEpreuvesArray = $typeEpreuveRepository->findByTypeDiplome($typeDiplome);
+        foreach($request->request->all() as $fieldName => $fieldValue){
+            if(preg_match('/typeEpreuve_s([0-9])_ct([0-9])/', $fieldName, $matches) === 1){
+                $hasJustification = array_values(
+                    array_filter(
+                        $typeEpreuvesArray,
+                        fn($type) => $type->getId() === (int)$fieldValue)
+                    )[0]->hasJustification();
+                if($hasJustification && mb_strlen($request->request->all()["justification_s{$matches[1]}_ct{$matches[2]}"]) < 15){
+                    return $this->json(
+                        ['message' => "La justification d'un MCCC est inférieure à 15 caractères."],
+                        500,
+                        ['Content-Type' => 'application/json']
+                    );
+                }
+            }
+        }
 
         if ($this->isGranted('CAN_PARCOURS_EDIT_MY', $dpeParcours) && Access::isAccessible($dpeParcours, 'cfvu')) {
             if ($request->isMethod('POST')) {

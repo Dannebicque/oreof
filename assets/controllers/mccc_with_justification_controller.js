@@ -44,7 +44,7 @@ export default class extends Controller {
             case "justificationSaisieMccc":
                 fullDisplay = `<div class="col-12">
                                     <textarea class="form-control my-2" 
-                                        id="${this.textAreaFormNameValue}_ID" 
+                                        id="${this.textAreaFormNameValue}" 
                                         name="${this.textAreaFormNameValue}"
                                         data-mccc-with-justification-target="textarea"
                                         data-action="input->mccc-with-justification#checkTextAreaLength"

@@ -211,7 +211,7 @@ export default class extends Controller {
     // let html = epreuve1.innerHTML
     // html = html.replace(/ct1/g, `ct${numEp}`)
     const html = document.querySelector('.epreuve_s2_ct').cloneNode(true);
-    this._renumberMcccFormFields(html, /_ct1/, `_ct${numEp}`);
+    this._renumberMcccFormFields(html, /_ct1/, `_ct${numEp}`, true);
 
     // ajouter le numéro de l'epreuve dans le texte
     // parcours tous les éléments da epreuve_et et numéroter le texte
@@ -240,9 +240,6 @@ export default class extends Controller {
       index++
     })
 
-    // fix ajout nouvelle épreuve
-    this.cleanUpNewEpreuveNode(numEp, 2);
-
     this._verifyTypeEpreuveEt()
   }
 
@@ -266,7 +263,7 @@ export default class extends Controller {
     // récupérer le contenu de la première épreuve, et le dupliquer
     const html = document.querySelector('.epreuve_ct').cloneNode(true)
     // html.innerHTML = html.innerHTML.replace(/ct1/g, `ct${numEp}`)
-    this._renumberMcccFormFields(html, /_ct1/, `_ct${numEp}`);
+    this._renumberMcccFormFields(html, /_ct1/, `_ct${numEp}`, true);
 
     // Initialisation de la nouvelle épreuve
     // À ce moment là, l'index 'idx' a la bonne valeur 
@@ -311,9 +308,6 @@ export default class extends Controller {
       // }
       index++
     })
-
-    // fix ajout nouvelle épreuve
-    this.cleanUpNewEpreuveNode(numEp, 1);
 
     this._verifyTypeEpreuveCt()
   }
@@ -437,25 +431,12 @@ export default class extends Controller {
     document.getElementById('ccHasTpBlock').classList.add(event.target.checked ? 'd-block' : 'd-none')
   }
 
-  cleanUpNewEpreuveNode(epreuveIndex, numeroSession){
-      document.querySelector(`#typeEpreuve_s${numeroSession}_ct${epreuveIndex}`).selectedIndex = 0;
-      document.querySelector(`#justification_s${numeroSession}_ct${epreuveIndex}_ID`).required = false;
-      document.querySelector(`#justification_s${numeroSession}_ct${epreuveIndex}_ID`).value = "";
-      document.querySelector(`#pourcentage_s${numeroSession}_ct${epreuveIndex}`).value = "";
-      let selectorDisplayJustification = `.epreuve_ct`;
-      if(numeroSession === 2){
-        selectorDisplayJustification = `.epreuve_s2_ct`;
-      }
-      document.querySelectorAll(selectorDisplayJustification)[epreuveIndex - 1]
-        .querySelector('div[data-mccc-with-justification-target="displayDiv"]').classList.add('d-none');     
-  }
-
   /**
    * Renumérote les éléments d'une épreuve
    * en modifiant leurs attributs HTML
    * id, name, for
    */
-  _renumberMcccFormFields(epreuveElement, selector, newValue){
+  _renumberMcccFormFields(epreuveElement, selector, newValue, withReset = false){
     // Pourcentage
     let labelPourcentage = epreuveElement.querySelector('label[for^="pourcentage"]');
     let pourcentage = epreuveElement.querySelector('input[id^="pourcentage"]');
@@ -467,6 +448,15 @@ export default class extends Controller {
     let duree = epreuveElement.querySelector('input[id^="duree"]');
     // Justification
     let textJustification = epreuveElement.querySelector('textarea[id^="justification"]');
+    // Contrôleur Stimulus
+    let justificationController = epreuveElement.querySelector('div[data-controller="mccc-with-justification"]');
+    let attrJustifController = "mcccWithJustificationTextAreaFormNameValue";
+
+    justificationController.dataset[attrJustifController] = this._replaceHTMLAttributeValue(
+      justificationController.dataset[attrJustifController], 
+      selector, 
+      newValue
+    );
 
     [
       labelPourcentage,
@@ -483,6 +473,14 @@ export default class extends Controller {
           }
         })
     });
+
+    if(withReset){
+      textJustification.required = false;
+      textJustification.value = "";
+      typeEpreuve.selectedIndex = 0;
+      pourcentage.value = "";
+      epreuveElement.querySelector('div[data-mccc-with-justification-target="displayDiv"]').classList.add('d-none');
+    }
   }
 
   _renameEpreuveTitle(epreuveElement, selector, newValue){
