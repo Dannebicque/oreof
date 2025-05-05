@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.35.0](https://github.com/Dannebicque/oreof/compare/v1.34.0...v1.35.0) (2025-05-05)
+
+
+### Features
+
+* **dpe-demande:** add edit functionality for argumentaireDemande ([3644516](https://github.com/Dannebicque/oreof/commit/364451600bc5c1dc1509e3f0fe36847fe5ce28af))
+* **mccc:** enhance display logic for MCCC CC with table structure ([90831a2](https://github.com/Dannebicque/oreof/commit/90831a2442d008ef3d70544da02905022fd7399d))
+
 ## [1.34.0](https://github.com/Dannebicque/oreof/compare/v1.33.11...v1.34.0) (2025-05-03)
 
 
