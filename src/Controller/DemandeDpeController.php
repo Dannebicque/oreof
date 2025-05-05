@@ -4,8 +4,12 @@ namespace App\Controller;
 
 use App\Classes\Excel\ExcelWriter;
 use App\Classes\JsonReponse;
+use App\Entity\Actualite;
 use App\Entity\Composante;
 use App\Entity\DpeDemande;
+use App\Form\ActualiteType;
+use App\Form\DpeDemandeTexteType;
+use App\Repository\ActualiteRepository;
 use App\Repository\ComposanteRepository;
 use App\Repository\DpeDemandeRepository;
 use App\Utils\JsonRequest;
@@ -70,6 +74,34 @@ class DemandeDpeController extends AbstractController
         return $this->render('demande_dpe/index.html.twig', [
             'type' => 'composante',
             'composante' => $composante,
+        ]);
+    }
+
+    #[Route('/demande/dpe/{id}/edit', name: 'app_demande_dpe_edit', methods: ['GET', 'POST'])]
+    public function edit(
+        EntityManagerInterface $entityManager,
+        Request                $request, DpeDemande $dpeDemande, DpeDemandeRepository $dpeDemandeRepository): Response
+    {
+
+
+        $form = $this->createForm(DpeDemandeTexteType::class, $dpeDemande, [
+            'action' => $this->generateUrl('app_demande_dpe_edit', ['id' => $dpeDemande->getId()]),
+        ]);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            if (trim($dpeDemande->getArgumentaireDemande()) === '') {
+                $this->addFlash('error', 'Le champ "Argumentaire de la demande" ne peut pas être vide.');
+                return $this->json(false);
+            }
+            $entityManager->flush();
+
+            return $this->json(true);
+        }
+
+        return $this->render('demande_dpe/edit.html.twig', [
+            'dpeDemande' => $dpeDemande,
+            'form' => $form->createView(),
         ]);
     }
 
