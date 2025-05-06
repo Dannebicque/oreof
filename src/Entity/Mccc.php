@@ -291,7 +291,7 @@ class Mccc
     public function getCleUnique(): string
     {
         $slug = Tools::slug($this->libelle);
-        $slug .= '-' . $this->numeroSession;
+        $slug .= '-' . $this->numeroSession . '-' . $this->numeroEpreuve;
 
         return $slug;
     }
