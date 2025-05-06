@@ -228,10 +228,20 @@ export default class extends Controller {
     document.getElementById('epreuves_s2_ct').appendChild(div)
 
     let index = 1
-    document.querySelectorAll('.epreuve_s2_ct').forEach((element) => {
+    document.querySelectorAll('.epreuve_s2_ct').forEach((element, indexLoop) => {
       // const htmlTitre = element.innerHTML
       // element.innerHTML = htmlTitre.replace(/Session N°[0-9]/g, `Session N°${index}`)
       this._renameEpreuveTitle(element, /Session N°[0-9]/, `Session N°${index}`);
+
+      // On remet à zéro la nouvelle épreuve (dernière de la liste)
+      if(indexLoop === nbEpreuves){
+        element.querySelector('input[id^="pourcentage"]').value = "";
+        element.querySelector('select[id^="typeEpreuve"]').selectedIndex = 0;
+        element.querySelector('input[id^="duree"]').value = "";
+        element.querySelector('textarea[id^="justification"]').required = false;
+        element.querySelector('textarea[id^="justification"]').value = "";
+      }
+
       if (numEp > 1) {
         element.querySelector('input').disabled = false
       } else {
@@ -450,13 +460,23 @@ export default class extends Controller {
     let textJustification = epreuveElement.querySelector('textarea[id^="justification"]');
     // Contrôleur Stimulus
     let justificationController = epreuveElement.querySelector('div[data-controller="mccc-with-justification"]');
-    let attrJustifController = "mcccWithJustificationTextAreaFormNameValue";
+    let nameJustifController = "mcccWithJustificationTextAreaFormNameValue";
+    let hasJustificationController = "mcccWithJustificationHasJustificationValue";
+    let justificationTextController = "mcccWithJustificationJustificationTextValue";
 
-    justificationController.dataset[attrJustifController] = this._replaceHTMLAttributeValue(
-      justificationController.dataset[attrJustifController], 
+
+    // Modification du contrôleur Stimulus
+    justificationController.dataset[nameJustifController] = this._replaceHTMLAttributeValue(
+      justificationController.dataset[nameJustifController], 
       selector, 
       newValue
     );
+
+    if(withReset){
+      justificationController.dataset[hasJustificationController] = "false";
+      justificationController.dataset[justificationTextController] = "";
+      epreuveElement.querySelector('div[data-mccc-with-justification-target="displayDiv"]').classList.add('d-none');
+    }
 
     [
       labelPourcentage,
@@ -473,14 +493,6 @@ export default class extends Controller {
           }
         })
     });
-
-    if(withReset){
-      textJustification.required = false;
-      textJustification.value = "";
-      typeEpreuve.selectedIndex = 0;
-      pourcentage.value = "";
-      epreuveElement.querySelector('div[data-mccc-with-justification-target="displayDiv"]').classList.add('d-none');
-    }
   }
 
   _renameEpreuveTitle(epreuveElement, selector, newValue){
