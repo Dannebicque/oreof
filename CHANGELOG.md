@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.36.0](https://github.com/Dannebicque/oreof/compare/v1.35.0...v1.36.0) (2025-05-06)
+
+
+### Features
+
+* **entity:** include numeroEpreuve in CleUnique generation ([41df5d0](https://github.com/Dannebicque/oreof/commit/41df5d02d26cbc1edf157d73005ac4af623f5eaa))
+
 ## [1.35.0](https://github.com/Dannebicque/oreof/compare/v1.34.0...v1.35.0) (2025-05-05)
 
 
