@@ -10,6 +10,7 @@
 namespace App\Entity;
 
 use App\Repository\McccRepository;
+use App\Utils\Tools;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -300,5 +301,13 @@ class Mccc
         $this->justificationText = $justificationText;
 
         return $this;
+    }
+
+    public function getCleUnique(): string
+    {
+        $slug = Tools::slug($this->libelle);
+        $slug .= '-' . $this->numeroSession . '-' . $this->numeroEpreuve;
+
+        return $slug;
     }
 }

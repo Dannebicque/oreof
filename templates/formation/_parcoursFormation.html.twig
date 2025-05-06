@@ -81,7 +81,7 @@
                                 </a>
                             {% endif %}
 
-                            {% if is_granted('CAN_FORMATION_DELETE_MY') or is_granted('ROLE_SES') %}
+                            {% if is_granted('CAN_FORMATION_DELETE_MY') or is_granted('ROLE_ADMIN') %}
                                 {# todo manque formation sur le isgranted #}
                                 <button {{ stimulus_action('crud', 'delete', 'click', {
                                     url:path('app_parcours_delete',{'id': parcours.id}),
@@ -102,7 +102,7 @@
                     {% set parcours = formation.parcours[0] %}
                     <tr>
                         <td>{{ formation.display }}</td>
-                        <td>{{ formation.localisationMention != null ? formation.localisationMention[0].libelle : 'Non défini' }}</td>
+                        <td>{{ formation.localisationMention != null and formation.localisationMention|length >= 1 ? formation.localisationMention[0].libelle : 'Non défini' }}</td>
                         <td>{{ formation.responsableMention != null ? formation.responsableMention.display : 'Non défini' }}</td>
                         <td>{{ dpesParcours[parcours.id].etatValidation|badgeDpe }}</td>
                         <td>
@@ -158,7 +158,7 @@
                                 </a>
                             {% endif %}
 
-                            {% if is_granted('CAN_FORMATION_DELETE_MY') or is_granted('ROLE_SES') %}
+                            {% if is_granted('CAN_FORMATION_DELETE_MY') or is_granted('ROLE_ADMIN') %}
                                 {# todo manque formation sur le isgranted #}
                                 <button {{ stimulus_action('crud', 'delete', 'click', {
                                     url:path('app_formation_delete',{'id': formation.id}),

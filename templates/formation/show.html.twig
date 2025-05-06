@@ -63,7 +63,7 @@
 
     {{ include('formation/_synthese_formation.html.twig') }}
 
-    {% if is_granted('ROLE_SES') or is_granted('CAN_ETABLISSEMENT_SCOLARITE_ALL') or is_granted('CAN_FORMATION_SCOLARITE_MY', formation) %}
+    {% if is_granted('ROLE_ADMIN') or is_granted('CAN_ETABLISSEMENT_SCOLARITE_ALL') or is_granted('CAN_FORMATION_SCOLARITE_MY', formation) %}
         {# Versioning pour les parcours par défaut #}
         {% if formation.isHasParcours == false and formation.parcours|length == 1 %}
             {{ include('formation/_manage_versioning_parcours.html.twig', {parcours: formation.parcours[0]}) }}

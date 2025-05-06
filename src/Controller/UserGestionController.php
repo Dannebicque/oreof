@@ -143,7 +143,7 @@ class UserGestionController extends BaseController
                             $user,
                             ['ROLE_RESP_FORMATION'], $this->getCampagneCollecte()
                         );
-                        $this->eventDispatcher->dispatch($event, AddCentreFormationEvent::ADD_CENTRE_FORMATION, $this->getCampagneCollecte());
+                        $this->eventDispatcher->dispatch($event, AddCentreFormationEvent::ADD_CENTRE_FORMATION);
 
                         $formation->setResponsableMention($user);
                         $entityManager->flush();
@@ -185,7 +185,7 @@ class UserGestionController extends BaseController
                             $user,
                             ['ROLE_CO_RESP_FORMATION'], $this->getCampagneCollecte()
                         );
-                        $this->eventDispatcher->dispatch($event, AddCentreFormationEvent::ADD_CENTRE_FORMATION, $this->getCampagneCollecte());
+                        $this->eventDispatcher->dispatch($event, AddCentreFormationEvent::ADD_CENTRE_FORMATION);
                     }
                     $formation->setCoResponsable($user);
                     $entityManager->flush();

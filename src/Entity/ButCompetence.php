@@ -48,6 +48,9 @@ class ButCompetence
     #[ORM\OneToOne(targetEntity: self::class, cascade: ['persist', 'remove'])]
     private ?self $butCompetenceOrigineCopie = null;
 
+    #[ORM\ManyToOne(inversedBy: 'butCompetences')]
+    private ?CampagneCollecte $campagneCollecte = null;
+
     public function __construct()
     {
         $this->butNiveaux = new ArrayCollection();
@@ -173,6 +176,18 @@ class ButCompetence
     public function setButCompetenceOrigineCopie(?self $butCompetenceOrigineCopie): static
     {
         $this->butCompetenceOrigineCopie = $butCompetenceOrigineCopie;
+
+        return $this;
+    }
+
+    public function getCampagneCollecte(): ?CampagneCollecte
+    {
+        return $this->campagneCollecte;
+    }
+
+    public function setCampagneCollecte(?CampagneCollecte $campagneCollecte): static
+    {
+        $this->campagneCollecte = $campagneCollecte;
 
         return $this;
     }

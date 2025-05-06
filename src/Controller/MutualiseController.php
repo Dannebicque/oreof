@@ -38,7 +38,7 @@ class MutualiseController extends AbstractController
         $direction = $request->query->get('direction') ?? 'asc';
         $q = $request->query->get('q') ?? null;
 
-        if ($this->isGranted('ROLE_ADMIN') || $this->isGranted('ROLE_SES')) {
+        if ($this->isGranted('ROLE_ADMIN')) {
             //pas de filtre, toutes les UE
             $fiches = $ficheMatiereRepository->findAllBy([$sort => $direction], $q);
         } else {
@@ -68,7 +68,7 @@ class MutualiseController extends AbstractController
         $sort = $request->query->get('sort') ?? 'libelle';
         $direction = $request->query->get('direction') ?? 'asc';
 
-        if ($this->isGranted('ROLE_ADMIN') || $this->isGranted('ROLE_SES')) {
+        if ($this->isGranted('ROLE_ADMIN')) {
             //pas de filtre, toutes les UE
             $ues = $ueRepository->findAllBy([$sort => $direction]);
         } else {
@@ -101,7 +101,7 @@ class MutualiseController extends AbstractController
         $direction = $request->query->get('direction') ?? 'asc';
         $q = $request->query->get('q') ?? null;
 
-        if ($this->isGranted('ROLE_ADMIN') || $this->isGranted('ROLE_SES')) {
+        if ($this->isGranted('ROLE_ADMIN')) {
             //pas de filtre, toutes les UE
             $semestres = $semestreRepository->findAllBy([$sort => $direction], $q);
         } else {

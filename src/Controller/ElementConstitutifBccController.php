@@ -27,17 +27,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/element/constitutif')]
-class ElementConstitutifBccController extends AbstractController
+class ElementConstitutifBccController extends BaseController
 {
 
     #[Route('/{id}/bcc-ec/{parcours}/non-editable', name: 'app_element_constitutif_bcc_non_editable', methods: ['GET', 'POST'])]
     public function bccEcNonEditable(
-        ButCompetenceRepository            $butCompetenceRepository,
-        ButApprentissageCritiqueRepository $butApprentissageCritiqueRepository,
-        EntityManagerInterface             $entityManager,
-        CompetenceRepository               $competenceRepository,
         BlocCompetenceRepository           $blocCompetenceRepository,
-        Request                            $request,
         ElementConstitutif                 $elementConstitutif,
         Parcours                           $parcours
     ): Response {
@@ -141,7 +136,7 @@ class ElementConstitutifBccController extends AbstractController
                 }
             }
 
-            $competence = $butCompetenceRepository->findOneByUe($elementConstitutif->getUe(), $formation);
+            $competence = $butCompetenceRepository->findOneByUe($elementConstitutif->getUe(), $formation, $this->getCampagneCollecte());
             if ($competence !== null) {
                 $apprentissageCritiques = $butApprentissageCritiqueRepository->findByCompetenceSemestre($competence, $elementConstitutif->getUe()?->getSemestre());
             } else {

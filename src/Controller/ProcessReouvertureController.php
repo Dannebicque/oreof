@@ -39,6 +39,64 @@ class ProcessReouvertureController extends BaseController
     ) {
     }
 
+    #[Route('/demande/non-ouverture/{parcours}', name: 'app_validation_demande_non_ouverture')]
+    public function demandeNonOuverture(
+        Parcours           $parcours,
+        VersioningParcours $versioningParcours,
+        Request            $request
+    ): Response
+    {
+        if ($parcours === null) {
+            return JsonReponse::error('Parcours non trouvé');
+        }
+        $formation = $parcours->getFormation();
+        $typeDpe = 'P';
+
+        if ($request->isMethod('POST')) {
+            $data = $request->request->all();
+
+            $dpe = GetDpeParcours::getFromParcours($parcours);
+            if ($dpe === null) {
+                return JsonReponse::error('DPE non trouvé');
+            }
+
+            //réouverture directe sans sauvegarde ou avec sauvegarde selon le choix
+            if ($data['demandeNonOuverture'] === 'NON_OUVERTURE') {
+                $etatTypeModification = TypeModificationDpeEnum::NON_OUVERTURE_SES;
+                $dpe->setEtatReconduction($etatTypeModification);
+                $dpe->setEtatValidation(['non_ouverture_ses' => 1]); //un état de processus différent pour connaitre le branchement ensuite
+
+                $now = new DateTimeImmutable('now');
+                $histoEvent = new HistoriqueParcoursEvent($parcours, $this->getUser(), 'non_ouverture_ses', 'valide', $request);
+                $this->eventDispatcher->dispatch($histoEvent, HistoriqueParcoursEvent::ADD_HISTORIQUE_PARCOURS);
+                $this->entityManager->flush();
+
+
+                $demande = new DpeDemande();
+                $demande->setFormation($formation);
+                $demande->setParcours($parcours);
+                $demande->setAuteur($this->getUser());
+                $demande->setEtatDemande(EtatDpeEnum::non_ouverture_ses);
+                $demande->setNiveauDemande($typeDpe);
+                $demande->setArgumentaireDemande(array_key_exists('argumentaire_demande_non_ouverture', $data) ? $data['argumentaire_demande_non_ouverture'] : '');
+                $demande->setNiveauModification($etatTypeModification);
+                $this->entityManager->persist($demande);
+                $this->entityManager->flush();
+
+                //mail au SES
+                $dpeDemandeEvent = new DpeDemandeEvent($demande, $this->getUser());
+                $this->eventDispatcher->dispatch($dpeDemandeEvent, DpeDemandeEvent::DPE_DEMANDE_OPENED);
+
+                return JsonReponse::success('Demande de non ouverture envoyée');
+            }
+            return JsonReponse::error('Erreur lors de la demande de non ouverture');
+        }
+
+        return $this->render('process_validation/_demande_non_ouverture.html.twig', [
+            'parcours' => $parcours
+        ]);
+    }
+
     #[Route('/demande/reouverture/{parcours}', name: 'app_validation_demande_reouverture')]
     public function demandeReouverture(
         Parcours  $parcours,
@@ -100,6 +158,54 @@ class ProcessReouvertureController extends BaseController
 
         return $this->render('process_validation/_demande_reouverture.html.twig', [
             'parcours' => $parcours
+        ]);
+    }
+
+    #[Route('/demande/switch/{parcours}', name: 'app_validation_demande_switch')]
+    public function demandeSwitch(
+        DpeDemandeRepository $dpeDemandeRepository,
+        Parcours             $parcours,
+        Request              $request
+    ): Response
+    {
+        if ($parcours === null) {
+            return JsonReponse::error('Parcours non trouvé');
+        }
+
+        $demande = $dpeDemandeRepository->findLastOpenedDemande($parcours, EtatDpeEnum::en_cours_redaction, TypeModificationDpeEnum::MODIFICATION_TEXTE);
+
+        if ($demande === null) {
+            return JsonReponse::error('Demande non trouvée');
+        }
+
+        if ($request->isMethod('POST')) {
+            $data = $request->request->all();
+
+            $dpe = GetDpeParcours::getFromParcours($parcours);
+            if ($dpe === null) {
+                return JsonReponse::error('DPE non trouvé');
+            }
+
+            //réouverture directe sans sauvegarde ou avec sauvegarde selon le choix
+
+            $etatTypeModification = TypeModificationDpeEnum::MODIFICATION_MCCC_TEXTE;
+            $dpe->setEtatValidation(['en_cours_redaction' => 1]);
+            $dpe->setEtatReconduction($etatTypeModification);
+            $this->entityManager->flush();
+
+
+            $demande->setArgumentaireDemande(array_key_exists('argumentaire_demande_reouverture', $data) ? $data['argumentaire_demande_reouverture'] : '');
+            $demande->setEtatDemande(EtatDpeEnum::en_cours_redaction);
+            $demande->setNiveauModification($etatTypeModification);
+
+            $this->entityManager->flush();
+
+            return JsonReponse::success('DPE ouvert avec modification de la structure');
+        }
+
+        return $this->render('process_validation/_demande_switch.html.twig', [
+            'parcours' => $parcours,
+            'demande' => $demande
         ]);
     }
 

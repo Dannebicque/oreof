@@ -202,7 +202,7 @@
                             <td>{{ parcours.codeEtape(annee) }}</td>
                             <td>{{ parcours.codeVersionEtape(annee) }}</td>
                             <td>
-                                {% if is_granted('ROLE_SES') %}
+                                {% if is_granted('ROLE_ADMIN') %}
 
                                     <a href="#"
                                        class="text-warning"
@@ -264,7 +264,7 @@
                         <td>{{ parcours.codeEtape(annee) }}</td>
                         <td>{{ parcours.codeVersionEtape(annee) }}</td>
                         <td>
-                            {% if is_granted('ROLE_SES') %}
+                            {% if is_granted('ROLE_ADMIN') %}
                                 <a href="#"
                                    class="btn btn-sm text-warning"
                                         {{ stimulus_controller('modal', {

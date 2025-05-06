@@ -60,8 +60,8 @@ class DpeComposanteMailSubscriber extends AbstractDpeMailSubscriber implements E
         );
 
         $titre = $this->hasParcours ?
-            'Votre parcours ' . $this->parcours->getLibelle().' de la formation '.$this->formation->getDisplay(). ' a été refusé par le conseil de votre composante' :
-            'Votre formation ' . $this->formation->getDisplay(). ' a été refusée par le conseil de votre composante';
+            'La fiche du parcours ' . $this->parcours->getLibelle() . ' de la formation ' . $this->formation->getDisplay() . ' a été refusée par le conseil de votre composante' :
+            'La fiche de la formation ' . $this->formation->getDisplay() . ' a été refusée par le conseil de votre composante';
 
         $this->myMailer->sendMessage(
             $this->getDestinataires(),
@@ -88,8 +88,8 @@ class DpeComposanteMailSubscriber extends AbstractDpeMailSubscriber implements E
         );
 
         $titre = $this->hasParcours ?
-            'Votre parcours ' . $this->parcours->getLibelle().' de la formation '.$this->formation->getDisplay(). ' a été validé par le conseil de la composante' :
-            'Votre formation ' . $this->formation->getDisplay(). ' a été validée par le conseil de la composante';
+            'La fiche du parcours ' . $this->parcours->getLibelle() . ' de la formation ' . $this->formation->getDisplay() . ' a été validée par le conseil de la composante' :
+            'La fiche de la formation ' . $this->formation->getDisplay() . ' a été validée par le conseil de la composante';
 
         $this->myMailer->sendMessage(
             [self::EMAIL_CENTRAL, 'oreof@univ-reims.fr'],
@@ -139,8 +139,8 @@ class DpeComposanteMailSubscriber extends AbstractDpeMailSubscriber implements E
         );
 
         $titre = $this->hasParcours ?
-            'Votre parcours ' . $this->parcours->getLibelle().' de la formation '.$this->formation->getDisplay(). ' a reçu des réserves de la part du DPE de votre composante' :
-            'Votre formation ' . $this->formation->getDisplay(). ' a reçu des réserves de la part du DPE de votre composante';
+            'La fiche du parcours ' . $this->parcours->getLibelle() . ' de la formation ' . $this->formation->getDisplay() . ' a reçu des réserves de la part du DPE de votre composante' :
+            'La fiche de la formation ' . $this->formation->getDisplay() . ' a reçu des réserves de la part du DPE de votre composante';
 
         $this->myMailer->sendMessage(
             $this->getDestinataires(),
@@ -165,8 +165,8 @@ class DpeComposanteMailSubscriber extends AbstractDpeMailSubscriber implements E
         );
 
         $titre = $this->hasParcours ?
-            'Votre parcours ' . $this->parcours->getLibelle().' de la formation '.$this->formation->getDisplay(). ' a reçu des réserves du conseil de votre composante' :
-            'Votre formation ' . $this->formation->getDisplay(). ' a reçu des réserves du conseil de votre composante';
+            'La fiche du parcours ' . $this->parcours->getLibelle() . ' de la formation ' . $this->formation->getDisplay() . ' a reçu des réserves du conseil de votre composante' :
+            'La fiche de la formation ' . $this->formation->getDisplay() . ' a reçu des réserves du conseil de votre composante';
 
         $this->myMailer->sendMessage(
             $this->getDestinataires(),
@@ -191,8 +191,8 @@ class DpeComposanteMailSubscriber extends AbstractDpeMailSubscriber implements E
         );
 
         $titre = $this->hasParcours ?
-            'Votre parcours ' . $this->parcours->getLibelle().' de la formation '.$this->formation->getDisplay(). ' a été refusé par le DPE de votre composante' :
-            'Votre formation ' . $this->formation->getDisplay(). ' a été refusée par le DPE de votre composante';
+            'La fiche du parcours ' . $this->parcours->getLibelle() . ' de la formation ' . $this->formation->getDisplay() . ' a été refusée par le DPE de votre composante' :
+            'La fiche de la formation ' . $this->formation->getDisplay() . ' a été refusée par le DPE de votre composante';
 
         $this->myMailer->sendMessage(
             $this->getDestinataires(),

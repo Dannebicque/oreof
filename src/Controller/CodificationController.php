@@ -68,7 +68,6 @@ class CodificationController extends BaseController
         $filtres['typeDiplome'] = $typeDiplome->getId();
 
         if ($this->isGranted('ROLE_ADMIN') ||
-            $this->isGranted('ROLE_SES') ||
             $this->isGranted('CAN_COMPOSANTE_SHOW_ALL', $this->getUser()) ||
             $this->isGranted('CAN_COMPOSANTE_SCOLARITE_ALL', $this->getUser()) ||
             $this->isGranted('CAN_ETABLISSEMENT_SHOW_ALL', $this->getUser()) ||
@@ -140,7 +139,6 @@ class CodificationController extends BaseController
         FormationRepository $formationRepository,
     ): Response {
         if ($this->isGranted('ROLE_ADMIN') ||
-            $this->isGranted('ROLE_SES') ||
             $this->isGranted('CAN_COMPOSANTE_SHOW_ALL', $this->getUser()) ||
             $this->isGranted('CAN_COMPOSANTE_SCOLARITE_ALL', $this->getUser()) ||
             $this->isGranted('CAN_ETABLISSEMENT_SHOW_ALL', $this->getUser()) ||

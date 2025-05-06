@@ -108,7 +108,9 @@ class ParcoursProcess extends AbstractProcess
         //todo: mettre à jour le DpeDemande en cours...
         $dpeDemande = $this->dpeDemandeRepository->findLastUnclosedDemande($dpeParcours->getParcours());
         if ($dpeDemande !== null) {
-            $dpeDemande->setEtatDemande(EtatDpeEnum::tryFrom($place));
+            //récupérer le premier élément d'un tableau associatif EtatValidation
+            $etatValidation = array_keys($this->dpeParcoursWorkflow->getMarking($dpeParcours)->getPlaces())[0];
+            $dpeDemande->setEtatDemande(EtatDpeEnum::tryFrom($etatValidation));
             if ($place === 'soumis_central') {
                 $dpeDemande->setDateCloture(new \DateTime());
             }

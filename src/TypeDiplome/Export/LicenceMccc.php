@@ -68,7 +68,7 @@ class LicenceMccc extends AbstractLicenceMccc
         $this->versionFull = $versionFull;
         $formation = $parcours->getFormation();
         $parcours1 = $parcours;
-        $dto = $this->calculStructureParcours->calcul($parcours1);
+        $dto = $this->calculStructureParcours->calcul($parcours1, dataFromFicheMatiere: true);
         $totalFormation = $dto->heuresEctsFormation;
 
         if (null === $formation) {
@@ -742,9 +742,6 @@ class LicenceMccc extends AbstractLicenceMccc
         } else {
             $this->excelWriter->writeCellXY(self::COL_MCCC_CCI, $ligne, 'Contrôle d\'assiduité');
         }
-
-
-
 
         $this->excelWriter->writeCellXY(self::COL_TYPE_EC, $ligne, $ec->getTypeEc() ? $ec->getTypeEc()->getLibelle() : '');
 

@@ -1,9 +1,38 @@
 <h3>1ᵉ Session</h3>
-<input type="hidden" value="cc_autre" name="type_cc">
+<div>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th></th>
+            <th>Pourcentage</th>
+            <th>CC avec TP</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for mccc in mcccs[1]['cc'] %}
+            <tr>
 
-    {% if mcccs[1]['cc'] is defined and mcccs[1]['cc']|length > 2 %}
-        {{ include('typeDiplome/mccc-non-editable/licence/_epreuveCc.html.twig', {mcccs:mcccs[1]['cc']}) }}
-    {% endif %}
+                <th>Contrôle continu N° {{ loop.index }}</th>
+                <td>
+                    {% if mccc.pourcentage is defined %}
+                        {{ mccc.pourcentage }}%
+                    {% else %}
+                        -%
+                    {% endif %}
+                </td>
+                <td>
+                    {% if mccc.options is defined and mccc.options.cc_has_tp is defined and mccc.options.cc_has_tp == "on" %}
+                        Oui
+                    {% else %}
+                        Non
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
 
 
 

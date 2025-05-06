@@ -50,7 +50,7 @@ bouton pour valider/invalide les étapes successives #}
             <th>Publiées</th>
             <th></th>
         </tr>
-        {% if is_granted('ROLE_SES') or is_granted('CAN_ETABLISSEMENT_SHOW_ALL', app.user) %}
+        {% if is_granted('ROLE_ADMIN') or is_granted('CAN_ETABLISSEMENT_SHOW_ALL', app.user) %}
             <tr>
                 <th>
                     <label for="filter-composante" class="sr-only">Composante</label>

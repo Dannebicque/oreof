@@ -53,7 +53,7 @@ class ElementConstitutifMcccController extends AbstractController
     ): Response {
         //todo: sans doute à simplifier. Les cas sont : EC parent, EC enfant, EC propriétaire de la fiche, EC raccroché ? récupérer les infos du badge ?l
         $dpeParcours = GetDpeParcours::getFromParcours($parcours);
-        $isParcoursProprietaire = $elementConstitutif->getFicheMatiere()?->getParcours()?->getId() === $parcours->getId();
+        $isParcoursProprietaire = (($elementConstitutif->getFicheMatiere()?->getParcours()?->getId() === $parcours->getId()) || ($elementConstitutif->getNatureUeEc()?->isChoix() && $elementConstitutif->getParcours()?->getId() === $parcours->getId()));
 
         if ($dpeParcours === null) {
             throw new RuntimeException('DPE Parcours non trouvé');
@@ -122,6 +122,9 @@ class ElementConstitutifMcccController extends AbstractController
                         $elementConstitutif->getFicheMatiere()?->isEctsImpose() === false) {
                         $elementConstitutif->setEcts((float)$request->request->all()['ec_step4']['ects']);
                         $newEcts = $elementConstitutif->getEcts();
+                    } elseif ($elementConstitutif->getNatureUeEc()?->isChoix() && $elementConstitutif->getEcParent() === null) {
+                        //cas de l'EC parent d'un choix. ECTS géré par le choix
+                        $elementConstitutif->setEcts((float)$request->request->all()['ec_step4']['ects']);
                     } elseif ($elementConstitutif->getEcParent() !== null) {
                         $elementConstitutif->setEcts($elementConstitutif->getEcParent()?->getEcts());
                         $elementConstitutif->setEctsSpecifiques(true); //du coup ca devient spécifique ?
@@ -217,7 +220,7 @@ class ElementConstitutifMcccController extends AbstractController
                 'ec' => $elementConstitutif,
                 'ects' => $getElement->getFicheMatiereEcts(),
                 'templateForm' => $typeD::TEMPLATE_FORM_MCCC,
-                'mcccs' => $getElement->getMcccsFromFicheMatiereCollection($typeD),
+                'mcccs' => $getElement->getMcccsFromFicheMatiereCollection(),
                 'wizard' => false,
                 'typeDiplome' => $typeDiplome,
                 'parcours' => $parcours,
@@ -422,34 +425,6 @@ class ElementConstitutifMcccController extends AbstractController
         }
         //todo: else ?
     }
-
-    //    /**
-    //     * @throws \App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException
-    //     */
-    //    public function displayMcccEc(
-    //        TypeDiplomeRegistry   $typeDiplomeRegistry,
-    //        TypeEpreuveRepository $typeEpreuveRepository,
-    //        ElementConstitutif    $elementConstitutif
-    //    ): Response {
-    //        $formation = $elementConstitutif->getParcours()->getFormation();
-    //        if ($formation === null) {
-    //            throw new RuntimeException('Formation non trouvée');
-    //        }
-    //        $typeDiplome = $formation->getTypeDiplome();
-    //
-    //        if ($typeDiplome === null) {
-    //            throw new RuntimeException('Type de diplome non trouvé');
-    //        }
-    //
-    //        $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());
-    //
-    //        return $this->render('element_constitutif/_mcccEcNonEditable.html.twig', [
-    //            'ec' => $elementConstitutif,
-    //            'typeEpreuves' => $typeEpreuveRepository->findByTypeDiplome($typeDiplome),
-    //            'templateForm' => $typeD::TEMPLATE_FORM_MCCC,
-    //            'mcccs' => $typeD->getMcccs($elementConstitutif),
-    //        ]);
-    //    }
 
     private function mcccToTexte(Collection $getMcccs): string
     {

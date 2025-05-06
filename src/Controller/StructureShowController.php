@@ -41,7 +41,7 @@ class StructureShowController extends AbstractController
         Parcours $parcours,
         bool $hasLastVersion = false
     ): Response {
-        $dto = $typeD->calculStructureParcours($parcours, true, false);
+        $dto = $typeD->calculStructureParcours($parcours);
         $structureDifferencesParcours = $versioningParcours->getStructureDifferencesBetweenParcoursAndLastVersion($parcours);
         if ($structureDifferencesParcours !== null) {
             $diffStructure = (new VersioningStructure($structureDifferencesParcours, $dto))->calculDiff();

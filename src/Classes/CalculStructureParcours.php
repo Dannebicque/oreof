@@ -82,7 +82,7 @@ class CalculStructureParcours
                                 foreach ($elementConstitutif->getEcEnfants() as $elementConstitutifEnfant) {
                                     $dtoEcEnfant = new StructureEc($elementConstitutifEnfant, $parcours, false, $withEcts, $withBcc, $dataFromFicheMatiere);
                                     $dtoStructure->statsFichesMatieresParcours->addEc($elementConstitutifEnfant, $raccrocheUe);
-                                    $dtoEc->addEcEnfant($elementConstitutifEnfant->getId(), $dtoEcEnfant);
+                                    $dtoEc->addEcEnfant($elementConstitutifEnfant->getOrdre(), $dtoEcEnfant);
                                 }
                                 $dtoUe->addEc($dtoEc);
                             }
@@ -108,7 +108,7 @@ class CalculStructureParcours
                                         foreach ($elementConstitutif->getEcEnfants() as $elementConstitutifEnfant) {
                                             $dtoEcEnfant = new StructureEc($elementConstitutifEnfant, $parcours, false, $withEcts, $withBcc, $dataFromFicheMatiere);
                                             $dtoStructure->statsFichesMatieresParcours->addEc($elementConstitutifEnfant, $raccrocheUeEnfant);
-                                            $dtoEc->addEcEnfant($elementConstitutifEnfant->getId(), $dtoEcEnfant);
+                                            $dtoEc->addEcEnfant($elementConstitutifEnfant->getOrdre(), $dtoEcEnfant);
                                         }
                                         $dtoUeEnfant->addEc($dtoEc);
                                     }
@@ -137,7 +137,7 @@ class CalculStructureParcours
                                                 foreach ($elementConstitutif->getEcEnfants() as $elementConstitutifEnfant) {
                                                     $dtoEcEnfant = new StructureEc($elementConstitutifEnfant, $parcours, false, $withEcts, $withBcc, $dataFromFicheMatiere);
                                                     $dtoStructure->statsFichesMatieresParcours->addEc($elementConstitutifEnfant, $raccrocheUeEnfant2);
-                                                    $dtoEc->addEcEnfant($elementConstitutifEnfant->getId(), $dtoEcEnfant);
+                                                    $dtoEc->addEcEnfant($elementConstitutifEnfant->getOrdre(), $dtoEcEnfant);
                                                 }
                                                 $dtoUeEnfant2->addEc($dtoEc);
                                             }
@@ -198,7 +198,7 @@ class CalculStructureParcours
                                 $dtoEc = new StructureEcVersioning($elementConstitutif, $parcours);
                                 foreach ($elementConstitutif->getEcEnfants() as $elementConstitutifEnfant) {
                                     $dtoEcEnfant = new StructureEcVersioning($elementConstitutifEnfant, $parcours);
-                                    $dtoEc->addEcEnfant($elementConstitutifEnfant->getId(), $dtoEcEnfant);
+                                    $dtoEc->addEcEnfant($elementConstitutifEnfant->getOrdre(), $dtoEcEnfant);
                                 }
                                 $dtoUe->addEc($dtoEc);
                             }
@@ -224,7 +224,7 @@ class CalculStructureParcours
 
                                         foreach ($elementConstitutif->getEcEnfants() as $elementConstitutifEnfant) {
                                             $dtoEcEnfant = new StructureEcVersioning($elementConstitutifEnfant, $parcours);
-                                            $dtoEc->addEcEnfant($elementConstitutifEnfant->getId(), $dtoEcEnfant);
+                                            $dtoEc->addEcEnfant($elementConstitutifEnfant->getOrdre(), $dtoEcEnfant);
                                         }
                                         $dtoUeEnfant->addEc($dtoEc);
                                     }

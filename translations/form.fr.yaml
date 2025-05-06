@@ -260,8 +260,8 @@ ec_manage.labels.fiche_matiere_unique.label: 'Choisissez la fiche EC/matière à
 ec_manage.labels.fiche_matiere_libelle_unique.label: 'Si non existante, précisez le libellé de la fiche EC/matière  à raccrocher à cet EC '
 parcours_step5.labels.regimeInscription.label: "Régime(s) d'inscription"
 fiche_matiere_step1.labels.responsableFicheMatiere: "Référent de l'enseignement"
-fiche_matiere.step1_collegue_manquant.title: 'Ajouter un utilisateur manquant'
-fiche_matiere.step1_collegue_manquant.label: 'Ajouter un utilisateur manquant'
+fiche_matiere.step1_collegue_manquant.title: 'Ajouter un contact/utilisateur manquant'
+fiche_matiere.step1_collegue_manquant.label: 'Ajouter un contact/utilisateur manquant'
 user.add_missing.email.label: "Indiquer l'email URCA de l'utilisateur à ajouter"
 ue.labels.libelle: "Libellé de l'UE"
 8: '8'

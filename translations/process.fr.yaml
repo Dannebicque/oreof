@@ -538,7 +538,7 @@ historique:
     avant_publication: 'Relecture avant publication. Visé pour publication le %date%'
   fiche_matiere:
     rouvrir_fiche_matiere: 'Demande de réouverture de la fiche EC/matière'
-fiche_matiere.demande.reouverture.ses.alerte : 'Vous avez demandé la réouverture de la fiche EC/matière pour y apporter des modifications.'
+fiche_matiere.demande.reouverture.ses.alerte: 'Vous avez demandé la réouverture de la fiche EC/matière pour y apporter des modifications.'
 supprimer.historique: 'Supprimer de l''historique'
 relecture:
   avant_publication:
@@ -702,3 +702,13 @@ en_cours_redaction.parcours.valide.impossible.en_cours_redaction: 'Impossible de
 btn.en_cours_redaction.parcours.valide.en_cours_redaction: 'Valider le parcours et transmette au conseil de composante'
 parcours.en_cours_redaction.parcours.btn-info: 'Parcours en cours de rédaction'
 title.validation.parcours.valider_parcours: 'Valider et soumettre le parcours'
+btn.demande.switch.modification: 'Confirmer le changement de demande de DPE'
+demande.switch.alerte: 'Vous souhaitez modifier votre demande initiale sans CFVU en une demande avec CFVU pour pouvoir modifier les maquettes et les BCC. Vous pouvez compléter votre argumentaire le cas échéant.'
+demande.reouverture.basculer.cfvu.title: 'Basculer la demande de réouverture sans CFVU en demande de passage avec CFVU'
+demande.reouverture.basculer.cfvu: 'Modifier la demande pour accéder à la maquette et aux BCC (CFVU)'
+demande.non.ouverture.label: 'Confirmer la demande de non ouverture du parcours'
+demande.non.ouverture.confirmation.label: 'Je confirme la demande de non ouverture du parcours %parcours%'
+demande.non.ouverture.argumentaire.label: 'Argumentaire de la demande de non ouverture du parcours'
+btn.demande.non.ouverture: 'Valider la demande de non ouverture du parcours'
+demande.non.ouverture.alerte: 'Vous pouvez demander la non ouverture du parcours. Cette demande sera transmise au SES puis en CFVU avec votre argumentaire.'
+demande.reouverture.mention.annuler: 'Annuler la demande de réouverture de la mention'

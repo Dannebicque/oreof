@@ -32,9 +32,6 @@ use Symfony\Component\HttpKernel\KernelInterface;
 
 class ButMcccVersion
 {
-    //todo: ajouter un watermark sur le doc ou une mention que la mention est définitive ou pas.
-    //todo: gérer la date de vote
-
     // Pages
     public const PAGE_MODELE = 'modele';
     // Cellules
@@ -111,7 +108,6 @@ class ButMcccVersion
             'hors_iut_soutenance' => ['pourcentage' => 'AJ', 'nombre' => 'AK'],
         ];
 
-        //todo: gérer la date de publication et un "marquage" sur le document si pré-CFVU
         $formation = $parcours->getFormation();
         $this->parcours = $parcours;
 
@@ -119,14 +115,16 @@ class ButMcccVersion
             throw new \Exception('La formation n\'existe pas');
         }
 
-        $dto = $this->calculStructureParcours->calcul($parcours);
+        $dto = $this->calculStructureParcours->calcul($parcours);//todo: devrait passer par le typeDiplome?
 
         // version
-        $structureDifferencesParcours = $this->versioningParcours->getStructureDifferencesBetweenParcoursAndLastVersion($parcours);
-        if ($structureDifferencesParcours !== null) {
-            $diffStructure = (new VersioningStructure($structureDifferencesParcours, $dto))->calculDiff(true);
-        } else {
-            return false;
+        if ($parcours->getParcoursOrigineCopie() !== null) {
+            $structureDifferencesParcours = $this->versioningParcours->getStructureDifferencesBetweenParcoursAndLastVersion($parcours->getParcoursOrigineCopie());//todo: a traiter selon BUT ou pas ?
+            if ($structureDifferencesParcours !== null) {
+                $diffStructure = (new VersioningStructure($structureDifferencesParcours, $dto))->calculDiff(true);
+            } else {
+                return false;
+            }
         }
 
         $this->excelWriter->createFromTemplate('Annexe_MCCC_BUT.xlsx');
@@ -200,8 +198,6 @@ class ButMcccVersion
         //recopie du modèle sur chaque année, puis remplissage
         foreach ($tabSemestres as $i => $semestres) {
             $diffSemestre = $diffStructure['semestres'][$i];
-//            $totalAnnee->addSemestre($semestre->heuresEctsSemestre);
-//            $totalAnneeOriginal->addSemestreDiff($diffSemestre['heuresEctsSemestre']);
             $tabColUes = [];
             $clonedWorksheet = clone $modele;
             $clonedWorksheet->setTitle('Semestre S' . $i);
@@ -233,7 +229,7 @@ class ButMcccVersion
                         $ue = $ue->getUeRaccrochee()->getUe();
                     }
 
-                    $diffUe = $diffSemestre['ues'][$ue->getId()];
+                    $diffUe = $diffSemestre['ues'][$ue->getOrdre()];
 
                     foreach ($ue->getElementConstitutifs() as $keyEc => $ec) {
                         $fiche = $ec->getFicheMatiere();
@@ -243,21 +239,19 @@ class ButMcccVersion
                             if ($fiche->getTypeMatiere() === FicheMatiere::TYPE_MATIERE_RESSOURCE) {
                                 $tabFichesRessources[$fiche->getSigle()]['ec'] = $ec;
                                 $tabFichesRessources[$fiche->getSigle()]['diff'] = $diffFiche;
-                                $tabFichesUes[$fiche->getSigle()][$ue->getId()] = $diffFiche['heuresEctsEc']['ects'];
+                                $tabFichesUes[$fiche->getSigle()][$ue->getOrdre()] = $diffFiche['heuresEctsEc']['ects'];
                             }
 
                             if ($fiche->getTypeMatiere() === FicheMatiere::TYPE_MATIERE_SAE) {
                                 $tabFichesSaes[$fiche->getSigle()]['ec'] = $ec;
                                 $tabFichesSaes[$fiche->getSigle()]['diff'] = $diffFiche;
-                                $tabFichesUes[$fiche->getSigle()][$ue->getId()] = $diffFiche['heuresEctsEc']['ects'];
+                                $tabFichesUes[$fiche->getSigle()][$ue->getOrdre()] = $diffFiche['heuresEctsEc']['ects'];
                             }
                         }
                     }
 
-
-                    $tabColUes[$ue->getId()] = $colUe;
+                    $tabColUes[$ue->getOrdre()] = $colUe;
                     $this->excelWriter->writeCellXY($colUe, 18, 'BC' . $ue->getOrdre(), ['style' => 'HORIZONTAL_CENTER']);
-                    $this->excelWriter->writeCellXY($colUe, 26, $ue->getEcts(), ['style' => 'HORIZONTAL_CENTER']);
                     $this->excelWriter->writeCellXY($colUe, 19, $ue->getLibelle(), ['style' => 'HORIZONTAL_CENTER']);
                     $this->excelWriter->mergeCellsCaR($colUe, 19, $colUe, 22);
                     $colUe++;
@@ -270,7 +264,6 @@ class ButMcccVersion
                 $this->excelWriter->cellStyle('AM17', ['alignment' => [
                     'horizontal' => Alignment::HORIZONTAL_CENTER,
                 ]]);
-
 
                 ksort($tabFichesRessources);
                 ksort($tabFichesSaes);
@@ -289,7 +282,6 @@ class ButMcccVersion
                     //MCCC
                     $this->writeMccc($ec, $tabColonnes, $ligne);
                     $this->writeAcUe($fiche, $ligne, $tabColUes, $tabFichesUes);
-
 
                     $ligne++;
                 }
@@ -324,14 +316,24 @@ class ButMcccVersion
                 $this->excelWriter->colorCells('H23:H' . $finRessource, 'FFCCCCCC');
                 $a = $ligne + 4;
                 $b = $ligne + 3;
-                foreach ($tabColUes as $colUe) {
+                foreach ($tabColUes as $keyUe => $colUe) {
+                    $diffUe = $diffSemestre['ues'][$keyUe];
                     $lettreCol = Coordinate::stringFromColumnIndex($colUe);
                     //pour chaque colonne d'uE on met à jour la somme des ECTS dans la formule
-                    $this->excelWriter->writeCellXY($colUe, $ligne + 3, '=SUM(' . Coordinate::stringFromColumnIndex($colUe) . '23:' . $lettreCol . ($ligne - 1) . ')', ['style' => 'HORIZONTAL_CENTER']);
+                    $this->excelWriter->writeCellXYDiff($colUe, $ligne + 2, $diffUe['heuresEctsUe']['sommeUeEcts'], ['style' => 'HORIZONTAL_CENTER']);
+                    //somme des coeffs
+                    $this->excelWriter->writeCellXYDiff($colUe, $ligne + 3, $diffUe['heuresEctsUe']['sommeUeEcts'], ['style' => 'HORIZONTAL_CENTER']);
                     $this->excelWriter->writeCellXY($colUe, $ligne + 4, '=SUM(' . $lettreCol . $debutSae . ':' . $lettreCol . ($ligne - 1) . ')', ['style' => 'HORIZONTAL_CENTER']);
 
                     $this->excelWriter->writeCellXY($colUe, $ligne + 5, '=' . $lettreCol . $a . '/' . $lettreCol . $b, ['style' => 'HORIZONTAL_CENTER']);
                 }
+
+                // affichage des "totaux"
+                $this->excelWriter->writeCellXYDiff(self::COL_CM, $ligne + 2, $diffSemestre['heuresEctsSemestre']['sommeSemestreCmPres'], ['style' => 'HORIZONTAL_CENTER']);
+                $this->excelWriter->writeCellXYDiff(self::COL_TD, $ligne + 2, $diffSemestre['heuresEctsSemestre']['sommeSemestreTdPres'], ['style' => 'HORIZONTAL_CENTER']);
+                $this->excelWriter->writeCellXYDiff(self::COL_TP, $ligne + 2, $diffSemestre['heuresEctsSemestre']['sommeSemestreTpPres'], ['style' => 'HORIZONTAL_CENTER']);
+                $this->excelWriter->writeCellXYDiff(self::COL_HEURE_AUTONOMIE, $ligne + 2, $diffSemestre['heuresEctsSemestre']['sommeSemestreTePres'], ['style' => 'HORIZONTAL_CENTER']);
+                $this->excelWriter->writeCellXYDiff(self::COL_CM, $ligne + 3, $diffSemestre['heuresEctsSemestre']['sommeSemestreTotalPres'], ['style' => 'HORIZONTAL_CENTER']);
             }
 
             //suppression de la ligne modèle 18
@@ -405,13 +407,13 @@ class ButMcccVersion
                     //convertir chiffre en lettre excel
                     Coordinate::columnIndexFromString($tabColonnes[$mccc->getLibelle()]['pourcentage']),
                     $ligne,
-                    $diffMccc[$mccc->getId()]['pourcentage'] ?? '',
+                    $diffMccc[$mccc->getCleUnique()]['pourcentage'] ?? null,
                     ['style' => 'HORIZONTAL_CENTER']
                 );
                 $this->excelWriter->writeCellXYDiff(
                     Coordinate::columnIndexFromString($tabColonnes[$mccc->getLibelle()]['nombre']),
                     $ligne,
-                    $diffMccc[$mccc->getId()]['nbEpreuves'] ?? '',
+                    $diffMccc[$mccc->getCleUnique()]['nbEpreuves'] ?? null,
                     ['style' => 'HORIZONTAL_CENTER']
                 );
             }

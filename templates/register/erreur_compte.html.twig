@@ -3,13 +3,13 @@
 {% block content %}
     <div class="mb-2 mt-4">
         <h2 class="cta-1 mb-0 text-primary">Bienvenue,</h2>
-        <h2 class="cta-1 text-primary">Un compte existe déjà</h2>
+        <h2 class="cta-1 text-primary">Domaine interdit</h2>
     </div>
 
     <div>
         <p><strong>{{ user.display }},</strong></p>
-        <p>Votre demande n'a pu aboutir, votre email n'est pas un mail de l'Université de Reims Champagne-Ardenne : {{
-            user.email }}.</p>
+        <p>Votre demande n'a pu aboutir, votre email n'est pas un mail de l'Université de Reims Champagne-Ardenne
+            : {{ user.email }}.</p>
         <p>En cas de besoin, merci de contacter l'administrateur : {{ mail_contact|mailto }}.</p>
     </div>
     <p class="text-center mt-3">OU</p>

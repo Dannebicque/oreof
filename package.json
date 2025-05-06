@@ -1,18 +1,22 @@
 {
-    "version": "1.32.10",
+    "version": "1.36.0",
     "devDependencies": {
         "@babel/core": "^7.17.0",
         "@babel/preset-env": "^7.16.0",
+        "@commitlint/cli": "^19.8.0",
+        "@commitlint/config-conventional": "^19.8.0",
         "@symfony/stimulus-bridge": "^3.2.0",
         "@symfony/ux-autocomplete": "file:vendor/symfony/ux-autocomplete/assets",
         "@symfony/ux-live-component": "file:vendor/symfony/ux-live-component/assets",
         "@symfony/webpack-encore": "^4.0.0",
+        "commitizen": "^4.3.1",
         "core-js": "^3.23.0",
         "dotenv": "^16.0.3",
         "eslint": "^7.32.0 || ^8.2.0",
         "eslint-config-airbnb-base": "^15.0.0",
         "eslint-plugin-import": "^2.25.2",
         "regenerator-runtime": "^0.13.9",
+        "release-please": "^17.0.0",
         "sass": "^1.57.1",
         "sass-loader": "^13.0.0",
         "webpack": "^5.74.0",
@@ -23,11 +27,17 @@
     "author": "David Annebicque",
     "private": true,
     "scripts": {
+        "commit": "cz",
         "dev-server": "encore dev-server",
         "dev": "encore dev",
         "watch": "encore dev --watch",
         "build": "encore production --progress",
         "lint": "eslint assets/js/ assets/controllers/"
+    },
+    "config": {
+        "commitizen": {
+            "path": "cz-conventional-changelog"
+        }
     },
     "dependencies": {
         "@fortawesome/fontawesome-pro": "^6.5.1",

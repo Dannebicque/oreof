@@ -525,14 +525,14 @@ class VersioningStructure
         $diff = [];
 
         foreach ($mcccsNouveau as $mcccNouveau) {
-            $diff['new'][$mcccNouveau->getId()] = $mcccNouveau;
+            $diff['new'][$mcccNouveau->getCleUnique()] = $mcccNouveau;
         }
 
         foreach ($mcccsOriginal as $mcccOriginal) {
             if (is_array($mcccOriginal)) {
                 $mcccOriginal = $this->createMcccFromArray($mcccOriginal);
             }
-            $diff['original'][$mcccOriginal->getId()] = $mcccOriginal;
+            $diff['original'][$mcccOriginal->getCleUnique()] = $mcccOriginal;
         }
 
 
@@ -549,9 +549,9 @@ class VersioningStructure
         $t = [];
 
         foreach ($mcccsNouveau as $mcccNouveau) {
-            $t[$mcccNouveau->getId()]['pourcentage'] = $mcccNouveau->getPourcentage() !== 0.0 ? $mcccNouveau->getPourcentage() : '';
-            $t[$mcccNouveau->getId()]['nbEpreuves'] = $mcccNouveau->getNbEpreuves() !== 0 ? $mcccNouveau->getNbEpreuves() : '';
-            $t[$mcccNouveau->getId()]['libelle'] = $mcccNouveau->getLibelle();
+            $t[$mcccNouveau->getCleUnique()]['pourcentage'] = $mcccNouveau->getPourcentage() !== 0.0 ? $mcccNouveau->getPourcentage() : '';
+            $t[$mcccNouveau->getCleUnique()]['nbEpreuves'] = $mcccNouveau->getNbEpreuves() !== 0 ? $mcccNouveau->getNbEpreuves() : '';
+            $t[$mcccNouveau->getCleUnique()]['libelle'] = $mcccNouveau->getLibelle();
         }
 
         foreach ($mcccsOriginal as $mcccOriginal) {
@@ -559,9 +559,9 @@ class VersioningStructure
                 $mcccOriginal = $this->createMcccFromArray($mcccOriginal);
             }
             //todo: test d'array_key_exists
-            $diff[$mcccOriginal->getId()]['pourcentage'] = new DiffObject($mcccOriginal->getPourcentage() !== 0.0 ? $mcccOriginal->getPourcentage() : '', $t[$mcccOriginal->getId()]['pourcentage'] ?? null);
-            $diff[$mcccOriginal->getId()]['nbEpreuves'] = new DiffObject($mcccOriginal->getNbEpreuves() !== 0 ?  $mcccOriginal->getNbEpreuves() : '', $t[$mcccOriginal->getId()]['nbEpreuves'] ?? null);
-            $diff[$mcccOriginal->getId()]['libelle'] = new DiffObject($mcccOriginal->getLibelle(), $t[$mcccOriginal->getId()]['libelle'] ?? null);
+            $diff[$mcccOriginal->getCleUnique()]['pourcentage'] = new DiffObject($mcccOriginal->getPourcentage() !== 0.0 ? $mcccOriginal->getPourcentage() : '', $t[$mcccOriginal->getCleUnique()]['pourcentage'] ?? null);
+            $diff[$mcccOriginal->getCleUnique()]['nbEpreuves'] = new DiffObject($mcccOriginal->getNbEpreuves() !== 0 ? $mcccOriginal->getNbEpreuves() : '', $t[$mcccOriginal->getCleUnique()]['nbEpreuves'] ?? null);
+            $diff[$mcccOriginal->getCleUnique()]['libelle'] = new DiffObject($mcccOriginal->getLibelle(), $t[$mcccOriginal->getCleUnique()]['libelle'] ?? null);
         }
 
 

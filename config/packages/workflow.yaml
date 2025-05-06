@@ -124,6 +124,18 @@ framework:
           metadata:
             process: false
             label: 'validation.soumis_dpe_composante_reserve_cfvu'
+        non_ouverture_ses:
+          metadata:
+            process: false
+            label: 'validation.non_ouverture_ses'
+        non_ouverture_cfvu:
+          metadata:
+            process: false
+            label: 'validation.non_ouverture_cfvu'
+        non_ouverture:
+          metadata:
+            process: false
+            label: 'validation.non_ouverture'
       transitions:
         initialiser:
           guard: "is_granted('ROLE_ADMIN')"
@@ -345,6 +357,20 @@ framework:
             type: reserver
             btn: warning
             icon: fa-circle-exclamation-check
+        valider_non_ouverture_ses:
+          from: 'non_ouverture_ses'
+          to: 'non_ouverture_cfvu'
+          metadata:
+            type: valider
+            btn: success
+            icon: fa-check
+        valider_non_ouverture_cfvu:
+          from: 'non_ouverture_cfvu'
+          to: 'non_ouverture'
+          metadata:
+            type: valider
+            btn: success
+            icon: fa-check
     composante: # todo: Deprecated pas utilisé ?
       type: 'workflow'
       marking_store:
@@ -564,10 +590,10 @@ framework:
           from: 'attente_pv'
           to: 'verification_pv' #etape intermédiaire de contrôle
           metadata:
-              type: valider
-              btn: success
-              icon: fa-check
-              hasUpload: true
+            type: valider
+            btn: success
+            icon: fa-check
+            hasUpload: true
         valider_pv:
           from: 'verification_pv'
           to: 'effectuee'

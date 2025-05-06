@@ -49,7 +49,7 @@ class DefaultController extends BaseController
                     ]
                 );
             case 'fiche':
-                if ($this->isGranted('ROLE_SES')) {
+                if ($this->isGranted('ROLE_ADMIN')) {
                     return $this->render(
                         'default/_fichesSes.html.twig',
                         [

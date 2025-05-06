@@ -43,12 +43,15 @@ class RegisterController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $existUser = $userRepository->findOneBy(['email' => $user->getEmail()]);
             if (!str_ends_with($user->getEmail(), '@univ-reims.fr')) {
                 return $this->render('register/erreur_compte.html.twig', [
-                    'user' => $existUser,
+                    'user' => null,
+                    'erreur' => 'domain_invalide',
                 ]);
             }
+
+            $existUser = $userRepository->findOneBy(['email' => $user->getEmail()]);
+
             if ($existUser === null) {
                 $ldapUser = $ldap->getDatas($user->getEmail());
                 if ($ldapUser !== null) {
@@ -90,6 +93,7 @@ class RegisterController extends AbstractController
                     $this->addFlash('Erreur', 'Une erreur est survenue, le centre n\'existe pas');
                     return $this->redirectToRoute('app_register');
                 }
+
                 $this->addFlash('danger', 'Cet utilisateur n\'est pas dans le LDAP');
 
                 return $this->render('register/compte_existe.html.twig', [

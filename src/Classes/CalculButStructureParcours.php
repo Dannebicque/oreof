@@ -45,7 +45,6 @@ class CalculButStructureParcours
                             $raccrocheUe = $raccrocheSemestre;
                         }
 
-                        //si des UE enfants, on ne regarde pas s'il y a des EC
                         $dtoUe = new StructureUe($ue, $raccrocheUe, $display, $ueOrigine ?? null);
                         foreach ($ue->getElementConstitutifs() as $elementConstitutif) {
                             if ($elementConstitutif !== null && $elementConstitutif->getEcParent() === null) {
@@ -60,7 +59,7 @@ class CalculButStructureParcours
 
                         }
                         $dtoUe->heuresEctsUe->sommeUeEcts = $ue->getEcts();
-                        $dtoSemestre->addUe($ue->getId(), $dtoUe);
+                        $dtoSemestre->addUe($ue->getOrdre(), $dtoUe);//todo: utilisation de l'ordre de l'ue plutôt que l'id pour la comparaison
                     }
                 }
                 $dtoStructure->addSemestre($semestreParcours->getOrdre(), $dtoSemestre);

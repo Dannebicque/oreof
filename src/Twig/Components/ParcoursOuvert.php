@@ -15,6 +15,7 @@ use Symfony\UX\LiveComponent\DefaultActionTrait;
 use Symfony\UX\TwigComponent\Attribute\PostMount;
 
 #[AsLiveComponent]
+/** @deprecated */
 final class ParcoursOuvert
 {
     use DefaultActionTrait;

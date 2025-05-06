@@ -2,7 +2,9 @@
 
 namespace App\Entity;
 
+use App\Classes\GetDpeParcours;
 use App\Entity\Traits\LifeCycleTrait;
+use App\Enums\BadgeEnumInterface;
 use App\Enums\EtatDpeEnum;
 use App\Enums\TypeModificationDpeEnum;
 use App\Repository\DpeDemandeRepository;
@@ -164,5 +166,19 @@ class DpeDemande
         $this->auteur = $auteur;
 
         return $this;
+    }
+
+    public function etatValidation(): ?BadgeEnumInterface
+    {
+        if ($this->niveauDemande === 'P') {
+            $dpeParcours = GetDpeParcours::getFromParcours($this->parcours) ?? null;
+            if ($dpeParcours !== null) {
+                return EtatDpeEnum::tryFrom(array_keys($dpeParcours->getEtatValidation())[0]);
+            }
+        }
+
+        if ($this->niveauDemande === 'F') {
+            return $this->getEtatDemande();
+        }
     }
 }

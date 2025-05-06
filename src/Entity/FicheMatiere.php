@@ -69,7 +69,7 @@ class FicheMatiere
 
     #[ORM\Column(length: 30, nullable: true, enumType: ModaliteEnseignementEnum::class)]
     #[Groups(['fiche_matiere:read', 'fiche_matiere_versioning'])]
-    private ?ModaliteEnseignementEnum $modaliteEnseignement = null;
+    private ?ModaliteEnseignementEnum $modaliteEnseignement = ModaliteEnseignementEnum::NON_DEFINI;
 
     #[ORM\Column(nullable: true)]
     private ?bool $isCmPresentielMutualise = null;
@@ -569,7 +569,7 @@ class FicheMatiere
 
     public function getModaliteEnseignement(): ?ModaliteEnseignementEnum
     {
-        return $this->modaliteEnseignement;
+        return $this->modaliteEnseignement ?? ModaliteEnseignementEnum::NON_DEFINI;
     }
 
     public function setModaliteEnseignement(?ModaliteEnseignementEnum $modaliteEnseignement): self

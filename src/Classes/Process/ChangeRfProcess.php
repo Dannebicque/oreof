@@ -13,15 +13,15 @@ use App\Classes\JsonReponse;
 use App\DTO\ProcessData;
 use App\Entity\ChangeRf;
 use App\Enums\TypeRfEnum;
+use App\Events\AddCentreFormationEvent;
 use App\Events\HistoriqueChangeRfEvent;
-use App\Events\NotifCentreFormationEvent;
 use App\Utils\Tools;
 use Doctrine\ORM\EntityManagerInterface;
-use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Workflow\WorkflowInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ChangeRfProcess extends AbstractProcess
@@ -73,7 +73,7 @@ class ChangeRfProcess extends AbstractProcess
 
         //vérifier la place pour savoir si on doit envoyer une notification
         $newPlace = array_keys($this->changeRfWorkflow->getMarking($changeRf)->getPlaces())[0];
-        if ($newPlace === 'effectuee') {
+        if ($newPlace === 'soumis_cfvu') { // on applique les changements dès qu'on est soumis au CFVU
             $this->updateChangeRf($changeRf);
         }
 
@@ -115,8 +115,12 @@ class ChangeRfProcess extends AbstractProcess
         }
 
         if ($demande->getNouveauResponsable() !== null) {
-            $this->eventDispatcher->dispatch(new NotifCentreFormationEvent($demande->getFormation(), $demande->getNouveauResponsable(), $droits), NotifCentreFormationEvent::NOTIF_ADD_CENTRE_FORMATION);
-
+            $event = new AddCentreFormationEvent(
+                $formation,
+                $demande->getNouveauResponsable(),
+                ['ROLE_RESP_FORMATION'], $demande->getCampagneCollecte()
+            );
+            $this->eventDispatcher->dispatch($event, AddCentreFormationEvent::ADD_CENTRE_FORMATION);
             if ($demande->getTypeRf() === TypeRfEnum::RF) {
                 $formation->setResponsableMention($demande->getNouveauResponsable());
             } else {
@@ -125,7 +129,12 @@ class ChangeRfProcess extends AbstractProcess
         }
 
         if ($demande->getAncienResponsable() !== null) {
-            $this->eventDispatcher->dispatch(new NotifCentreFormationEvent($demande->getFormation(), $demande->getAncienResponsable(), $droits), NotifCentreFormationEvent::NOTIF_REMOVE_CENTRE_FORMATION);
+            $event = new AddCentreFormationEvent(
+                $formation,
+                $demande->getAncienResponsable(),
+                ['ROLE_RESP_FORMATION'], $demande->getCampagneCollecte()
+            );
+            $this->eventDispatcher->dispatch($event, AddCentreFormationEvent::REMOVE_CENTRE_FORMATION);
         }
     }
 }

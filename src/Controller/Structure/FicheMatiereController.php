@@ -46,7 +46,7 @@ class FicheMatiereController extends BaseController
         FicheMatiereRepository $ficheMatiereRepository
     ): Response {
 
-        if ($this->isGranted('ROLE_ADMIN') || $this->isGranted('ROLE_SES')) {
+        if ($this->isGranted('ROLE_ADMIN')) {
             $results = $ficheMatiereRepository->findByAdmin(
                 $this->getCampagneCollecte(),
                 $request->query->all()

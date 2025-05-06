@@ -20,7 +20,7 @@
 {% endblock %}
 
 {% block bouton_header %}
-    {% if is_granted('ROLE_SES') %}
+    {% if is_granted('ROLE_ADMIN') %}
         <a href="{{ path('app_parcours_lheo_invalid_list') }}"
            class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
            data-bs-toggle="tooltip"
