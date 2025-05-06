@@ -313,6 +313,13 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
         }
 
         foreach ($typeEpreuve_s1_ct as $numEp) {
+            $justificationText = null;
+            if(array_key_exists((int)$data["typeEpreuve_{$cle}{$numEp}"], $this->typeEpreuves)){
+                if($this->typeEpreuves[(int)$data["typeEpreuve_{$cle}{$numEp}"]]->hasJustification()){
+                    $justificationText = $data["justification_{$cle}{$numEp}"] ?? "";
+                }
+            }
+
             if (isset($mcccs[$session]) && isset($mcccs[$session]['et']) && isset($mcccs[$session]['et'][$numEp])) {
                 if (array_key_exists('typeEpreuve_' . $cle . $numEp, $data) && $data['typeEpreuve_' . $cle . $numEp] === "") {
                     $mcccs[$session]['et'][$numEp]->setTypeEpreuve(null);
@@ -321,6 +328,7 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
                 }
 
                 $mcccs[$session]['et'][$numEp]->setNumeroEpreuve($numEp);
+                $mcccs[$session]['et'][$numEp]->setJustificationText($justificationText);
             } else {
                 //n'existe pas à créer.
                 $mccc = new Mccc();
@@ -336,7 +344,7 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
                 $mccc->setNbEpreuves(1);
                 $mccc->setNumeroEpreuve($numEp);
                 $mccc->setTypeEpreuve([$data['typeEpreuve_' . $cle . $numEp]]);
-
+                $mccc->setJustificationText($justificationText);
 
                 $this->entityManager->persist($mccc);
                 $mcccs[$session]['et'][$numEp] = $mccc;
