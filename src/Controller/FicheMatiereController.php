@@ -216,7 +216,7 @@ class FicheMatiereController extends BaseController
         EntityManagerInterface $entityManager,
     ): Response {
         $newFicheMatiere = clone $ficheMatiere;
-        $newFicheMatiere->setFicheMatiereCopieAnneeUniversitaire(null);
+        $newFicheMatiere->setFicheMatiereOrigineCopie(null);
         $newFicheMatiere->setLibelle($ficheMatiere->getLibelle() . '-copie');
         $newFicheMatiere->setSlug(null);
         $entityManager->persist($newFicheMatiere);
