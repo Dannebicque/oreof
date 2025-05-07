@@ -155,6 +155,8 @@ class ParcoursController extends BaseController
             $dpeParcours->setEtatReconduction(TypeModificationDpeEnum::MODIFICATION_MCCC_TEXTE);
             $this->dpeParcoursWorkflow->apply($dpeParcours, 'initialiser');
             $this->dpeParcoursWorkflow->apply($dpeParcours, 'autoriser');
+            $parcour->addDpeParcour($dpeParcours);
+
             $this->entityManager->persist($dpeParcours);
 
             $dpeDemande = new DpeDemande();
