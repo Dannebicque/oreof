@@ -401,7 +401,6 @@ class ElementConstitutifController extends BaseController
             } elseif ($elementConstitutif->getNatureUeEc()?->isChoix() === true) {
                 $natureEc = $natureUeEcRepository->findOneBy(['choix' => false, 'libre' => false, 'type' => 'ec']);
                 $elementConstitutif->setLibelle($request->request->get('ficheMatiereLibre'));
-                $elementConstitutif->setNatureUeEc($natureEc);
                 $elementConstitutif->setFicheMatiere(null);
                 //on récupère le champs matières, on découpe selon la ,. Si ca commence par "id_", on récupère la matière, sinon on créé la matière
                 $matieres = explode(',', $request->request->get('matieres'));
@@ -412,7 +411,7 @@ class ElementConstitutifController extends BaseController
                     } else {
                         $ficheMatiere = new FicheMatiere();
                         $ficheMatiere->setCampagneCollecte($this->getCampagneCollecte());
-                        $ficheMatiere->setLibelle(str_replace('ac_', '', $matiere));
+                        $ficheMatiere->setLibelle(trim(str_replace('ac_', '', $matiere)));
                         $ficheMatiere->setParcours($parcours); //todo: ajouter le semestre
                         $ficheMatiereRepository->save($ficheMatiere, true);
                     }
@@ -422,7 +421,7 @@ class ElementConstitutifController extends BaseController
                         'ecParent' => $elementConstitutif
                     ]);
 
-                    if (!$existe) {
+                    if (!$existe && $ficheMatiere->getLibelle() !== '' && $ficheMatiere->getLibelle() !== null) {
                         //sinon on ajoute
                         $ec = new ElementConstitutif();
                         $nextSousEc = $ecOrdre->getOrdreEnfantSuivant($elementConstitutif);
