@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.37.0](https://github.com/Dannebicque/oreof/compare/v1.36.0...v1.37.0) (2025-05-08)
+
+
+### Features
+
+* **controller:** ensure DPE parcours is added to parcour during initialization ([a90a3e1](https://github.com/Dannebicque/oreof/commit/a90a3e18ec474ecb93cb2a7e15b5bf1d2bde09d2))
+* **workflow:** remove admin guard from "initialiser" transition ([a90a3e1](https://github.com/Dannebicque/oreof/commit/a90a3e18ec474ecb93cb2a7e15b5bf1d2bde09d2))
+
+
+### Bug Fixes
+
+* **controller:** dispatch McccUpdateEvent only for owner parcours ([2e4aa13](https://github.com/Dannebicque/oreof/commit/2e4aa131ded8287d8600431dfef8978f4d27df69))
+* **controller:** simplify MCCC logic and remove commented code ([f233c0e](https://github.com/Dannebicque/oreof/commit/f233c0e4446a5308860c37b7386a72042a59f527))
+* **ec-controller:** ensure FicheMatiere libelle is trimmed and validated ([845bb4b](https://github.com/Dannebicque/oreof/commit/845bb4b74dc8f68f338c863d2afbf0fd19be17bb))
+* **ec-controller:** remove redundant setNatureUeEc assignment ([845bb4b](https://github.com/Dannebicque/oreof/commit/845bb4b74dc8f68f338c863d2afbf0fd19be17bb))
+* **FicheMatiereController:** update property name for copied fiche matiere ([16df861](https://github.com/Dannebicque/oreof/commit/16df8616f03b6237d932d5c063fe0a4b7b430c10))
+* **js:** update placeholder text for TomSelect dropdown ([845bb4b](https://github.com/Dannebicque/oreof/commit/845bb4b74dc8f68f338c863d2afbf0fd19be17bb))
+* **js:** validate matieres existence based on both input array and table rows ([845bb4b](https://github.com/Dannebicque/oreof/commit/845bb4b74dc8f68f338c863d2afbf0fd19be17bb))
+* **parcours:** handle linked UEs in element constitutifs processing ([a28c32f](https://github.com/Dannebicque/oreof/commit/a28c32fe9c13d8a11ec9910452fbb6685d084f8c))
+* **twig:** refine condition for ECTS input visibility ([845bb4b](https://github.com/Dannebicque/oreof/commit/845bb4b74dc8f68f338c863d2afbf0fd19be17bb))
+
 ## [1.36.0](https://github.com/Dannebicque/oreof/compare/v1.35.0...v1.36.0) (2025-05-06)
 
 
