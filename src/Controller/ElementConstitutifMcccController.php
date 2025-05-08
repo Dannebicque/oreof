@@ -153,9 +153,13 @@ class ElementConstitutifMcccController extends AbstractController
                 $entityManager->flush();
 
                 //evenement pour MCCC sur EC mis à jour
-                $event = new McccUpdateEvent($elementConstitutif, $parcours);
+
                 $event->setNewMccc($originalMcccToText, $newMcccToText);
-                $eventDispatcher->dispatch($event, McccUpdateEvent::UPDATE_MCCC);
+
+                // on emet l'évent vers les abonnés que si c'est un parcours propriétaire
+                if ($isParcoursProprietaire) {
+                    $eventDispatcher->dispatch($event, McccUpdateEvent::UPDATE_MCCC);
+                }
 
                 return $this->json(true);
             }
