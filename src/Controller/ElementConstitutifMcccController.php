@@ -107,8 +107,7 @@ class ElementConstitutifMcccController extends AbstractController
                 }
 
                 if ($elementConstitutif->isMcccSpecifiques() === false
-                   // && $elementConstitutif->getFicheMatiere()?->isMcccImpose() === false
-                    && $elementConstitutif->getParcours()->getId() === $parcours->getId()) {
+                    && $isParcoursProprietaire) {
                     //MCCC sur fiche matière
                     if ($elementConstitutif->getFicheMatiere() !== null) {
                         $fm = $elementConstitutif->getFicheMatiere();
@@ -128,17 +127,19 @@ class ElementConstitutifMcccController extends AbstractController
                     }
                 } else {
                     //MCCC sur EC
-                    if ($request->request->has('ec_step4') && array_key_exists('quitus', $request->request->all()['ec_step4'])) {
-                        $elementConstitutif->setQuitus((bool)$request->request->all()['ec_step4']['quitus']);
-                    }
+                    if ($elementConstitutif->isMcccSpecifiques() === true || $elementConstitutif->getNatureUeEc()?->isLibre() || ($elementConstitutif->getNatureUeEc()?->isChoix())) {
+                        if ($request->request->has('ec_step4') && array_key_exists('quitus', $request->request->all()['ec_step4'])) {
+                            $elementConstitutif->setQuitus((bool)$request->request->all()['ec_step4']['quitus']);
+                        }
 
-                    if ($request->request->get('choix_type_mccc') !== $elementConstitutif->getTypeMccc()) {
-                        $elementConstitutif->setTypeMccc($request->request->get('choix_type_mccc'));
-                        $entityManager->flush();
-                        $typeD->clearMcccs($elementConstitutif);
+                        if ($request->request->has('choix_type_mccc') && $request->request->get('choix_type_mccc') !== $elementConstitutif->getTypeMccc()) {
+                            $elementConstitutif->setTypeMccc($request->request->get('choix_type_mccc'));
+                            $entityManager->flush();
+                            $typeD->clearMcccs($elementConstitutif);
+                        }
+                        $typeD->saveMcccs($elementConstitutif, $request->request);
+                        $newMcccToText = $this->mcccToTexte($elementConstitutif->getMcccs());
                     }
-                    $typeD->saveMcccs($elementConstitutif, $request->request);
-                    $newMcccToText = $this->mcccToTexte($elementConstitutif->getMcccs());
                 }
 
                 if ($request->request->has('ec_step4') && array_key_exists('mcccEnfantsIdentique', $request->request->all()['ec_step4'])) {
