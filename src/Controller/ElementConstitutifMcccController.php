@@ -388,7 +388,7 @@ class ElementConstitutifMcccController extends AbstractController
             'ects' => $structureEc->heuresEctsEc->ects,
             'templateForm' => $templateForm,
             'mcccVersioning' => $tabMcccVersioning,
-            'mcccs' => $tabMcccActuels,
+            'mcccs' => $isFromVersioning === 'true' ? $tabMcccVersioning : $tabMcccActuels,
             'isMcccFromVersion' => true,
             'parcoursId' => $parcoursVersioning->getParcours()->getId(),
             'isFromVersioning' => $isFromVersioning,

@@ -12,6 +12,7 @@
         </thead>
         <tbody>
 
+        {% set hasDisplayComparaison = isFromVersioning != 'true' and isMcccFromVersion ?? false == true %}
         {% set mcccArray = mcccs %}
         {% set currentMcccLength = mcccArray|length %}
         {% if mcccs|length < mcccVersioning|length %}
@@ -28,7 +29,7 @@
                             loop.index <= currentMcccLength ? mccc.pourcentage : false, 
                             mcccVersioning[loop.index].pourcentage ?? false, 
                             "%",
-                            isMcccFromVersion ?? false)  
+                            hasDisplayComparaison)  
                         }}
                     {% else %}
                         100%
@@ -49,7 +50,7 @@
                                     mcccLoopIndex <= currentMcccLength ? typeE.display : false,
                                     typeEpreuveVersion,
                                     "",
-                                    isMcccFromVersion ?? false
+                                    hasDisplayComparaison
                                 )
                             }}
                         {% endif %}
