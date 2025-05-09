@@ -1,3 +1,5 @@
+{% import "typeDiplome/mccc-non-editable/licence/_compareMcccVersioning.macro.html.twig" as compareMccc %}
+
 <div>
     <table class="table table-bordered">
         <thead>
@@ -9,23 +11,73 @@
         </tr>
         </thead>
         <tbody>
-        {% for mccc in mcccs %}
+        {% set hasDisplayComparaison = isFromVersioning != 'true' and isMcccFromVersion ?? false == true %}
+        {% set mcccArray = mcccs %}
+        {% set currentMcccLength = mcccs|length %}
+        {% if mcccs|length < mcccVersioning|length %}
+            {% set lengthDiff = mcccVersioning|length - mcccs|length %}
+            {% set mcccArray = mcccs|merge(mcccVersioning|slice( (mcccs|length - 1), lengthDiff)) %}
+        {% endif %}
+        {% for mccc in mcccArray %}
+            {% set mcccIndex = loop.index %}
             <tr>
                 <th>Examen 2ᵉ Session N°{{ loop.index }}</th>
                 <td>
-                    {% if mccc.pourcentage is defined %}
-                    {{ mccc.pourcentage }}%
+                    {% set currentPourcentage = mccc.pourcentage ?? '100' %}
+                    {{
+                        compareMccc.displayMccc(
+                            mcccIndex <= currentMcccLength ? currentPourcentage : false,
+                            mcccVersioning[mcccIndex].pourcentage ?? false,
+                            '%',
+                            hasDisplayComparaison
+                        )  
+                    }}
+                    {# {% if mccc.pourcentage is defined %}
+                        {{ mccc.pourcentage }}%
                     {% else %}
                         100%
-                        {% endif %}
+                    {% endif %} #}
                 </td>
                 <td>
                     {% for typeE in typeEpreuves %}
-                        {% if mccc.typeEpreuve[0] is defined and mccc.typeEpreuve[0] == typeE.id %}{{ typeE.display }}{% endif %}
+                        {% if mccc.typeEpreuve[0] is defined and mccc.typeEpreuve[0] == typeE.id %}
+                            {% if mcccVersioning[mcccIndex].typeEpreuve[0] is defined %}
+                                {% set typeEpreuveVersion = typeEpreuves|find(
+                                    t => t.id == mcccVersioning[mcccIndex].typeEpreuve[0]
+                                ).display %}
+                            {% else %}
+                                {% set typeEpreuveVersion = false %}
+                            {% endif %}
+                                {{
+                                    compareMccc.displayMccc(
+                                        mcccIndex <= currentMcccLength ? typeE.display : false,
+                                        typeEpreuveVersion,
+                                        "",
+                                        hasDisplayComparaison
+                                    )
+                                }}
+                        {% endif %}
                     {% endfor %}
                 </td>
                 <td>
-                    {% if mccc.duree is defined and mccc.duree != null %}{{ mccc.duree|date('H:i') }}{% else %}-{% endif %}
+                    {% if mccc.duree is defined and mccc.duree != null %}
+                        {% set currentDuree = mccc.duree|date('H:i') %}
+                    {% else %}
+                        {% set currentDuree = '-' %}
+                    {% endif %}
+                    {% if mcccVersioning[mcccIndex].duree is defined and mcccVersioning[mcccIndex].duree != null %}
+                        {% set previousDuree = mcccVersioning[mcccIndex].duree|date('H:i') %}
+                    {% else %}
+                        {% set previousDuree = '-' %}
+                    {% endif %}
+                    {{
+                        compareMccc.displayMccc(
+                            mcccIndex <= currentMcccLength ? currentDuree : false,
+                            previousDuree,
+                            '',
+                            hasDisplayComparaison
+                        )
+                    }}
                 </td>
             </tr>
         {% endfor %}

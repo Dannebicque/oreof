@@ -36,7 +36,12 @@
 <h3>2ᵉ Session</h3>
 <div>
     {% if mcccs[2]['et'] is defined %}
-        {{ include('typeDiplome/mccc-non-editable/licence/_secondeChance.html.twig',{mcccs:mcccs[2]['et'] }) }}
+        {{ include('typeDiplome/mccc-non-editable/licence/_secondeChance.html.twig',
+            {
+                mcccs:mcccs[2]['et'],
+                mcccVersioning: mcccVersioning[2]['et'] ?? ""
+            }) 
+        }}
     {% endif %}
 </div>
 
