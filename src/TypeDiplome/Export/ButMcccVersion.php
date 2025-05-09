@@ -201,6 +201,7 @@ class ButMcccVersion
             $totalHeuresAvant = ['CM' => 0, 'TD' => 0, 'TP' => 0, 'TE' => 0];
             $totalHeuresApres = ['CM' => 0, 'TD' => 0, 'TP' => 0, 'TE' => 0];
 
+
             $diffSemestre = $diffStructure['semestres'][$i];
             $tabColUes = [];
             $clonedWorksheet = clone $modele;
@@ -235,6 +236,9 @@ class ButMcccVersion
 
                     $diffUe = $diffSemestre['ues'][$ue->getOrdre()];
 
+                    $totalCoeffAvant[$ue->getOrdre()] = ['Ressource' => 0, 'Sae' => 0];
+                    $totalCoeffApres[$ue->getOrdre()] = ['Ressource' => 0, 'Sae' => 0];
+
                     foreach ($ue->getElementConstitutifs() as $keyEc => $ec) {
                         $fiche = $ec->getFicheMatiere();
                         $diffFiche = $diffUe['elementConstitutifs'][$keyEc];
@@ -244,12 +248,16 @@ class ButMcccVersion
                                 $tabFichesRessources[$fiche->getSigle()]['ec'] = $ec;
                                 $tabFichesRessources[$fiche->getSigle()]['diff'] = $diffFiche;
                                 $tabFichesUes[$fiche->getSigle()][$ue->getOrdre()] = $diffFiche['heuresEctsEc']['ects'];
+                                $totalCoeffAvant[$ue->getOrdre()]['Ressource'] += $diffFiche['heuresEctsEc']['ects']->getOriginalFloat();
+                                $totalCoeffApres[$ue->getOrdre()]['Ressource'] += $diffFiche['heuresEctsEc']['ects']->getNewFloat();
                             }
 
                             if ($fiche->getTypeMatiere() === FicheMatiere::TYPE_MATIERE_SAE) {
                                 $tabFichesSaes[$fiche->getSigle()]['ec'] = $ec;
                                 $tabFichesSaes[$fiche->getSigle()]['diff'] = $diffFiche;
                                 $tabFichesUes[$fiche->getSigle()][$ue->getOrdre()] = $diffFiche['heuresEctsEc']['ects'];
+                                $totalCoeffAvant[$ue->getOrdre()]['Sae'] += $diffFiche['heuresEctsEc']['ects']->getOriginalFloat();
+                                $totalCoeffApres[$ue->getOrdre()]['Sae'] += $diffFiche['heuresEctsEc']['ects']->getNewFloat();
                             }
                         }
                     }
@@ -343,10 +351,14 @@ class ButMcccVersion
                     $diffUe = $diffSemestre['ues'][$keyUe];
                     $lettreCol = Coordinate::stringFromColumnIndex($colUe);
                     //pour chaque colonne d'uE on met à jour la somme des ECTS dans la formule
+                    $sommeEctsAvant = $totalCoeffAvant[$keyUe]['Ressource'] + $totalCoeffAvant[$keyUe]['Sae'];
+                    $sommeEctsApres = $totalCoeffApres[$keyUe]['Ressource'] + $totalCoeffApres[$keyUe]['Sae'];
+
+
                     $this->excelWriter->writeCellXYDiff($colUe, $ligne + 2, $diffUe['heuresEctsUe']['sommeUeEcts'], ['style' => 'HORIZONTAL_CENTER']);
                     //somme des coeffs
-                    $this->excelWriter->writeCellXYDiff($colUe, $ligne + 3, $diffUe['heuresEctsUe']['sommeUeEcts'], ['style' => 'HORIZONTAL_CENTER']);
-                    $this->excelWriter->writeCellXY($colUe, $ligne + 4, '=SUM(' . $lettreCol . $debutSae . ':' . $lettreCol . ($ligne - 1) . ')', ['style' => 'HORIZONTAL_CENTER']);
+                    $this->excelWriter->writeCellXYDiff($colUe, $ligne + 3, new DiffObject($sommeEctsAvant, $sommeEctsApres), ['style' => 'HORIZONTAL_CENTER']);
+                    $this->excelWriter->writeCellXYDiff($colUe, $ligne + 4, new DiffObject($totalCoeffAvant[$keyUe]['Sae'], $totalCoeffApres[$keyUe]['Sae']), ['style' => 'HORIZONTAL_CENTER']);
 
                     $this->excelWriter->writeCellXY($colUe, $ligne + 5, '=' . $lettreCol . $a . '/' . $lettreCol . $b, ['style' => 'HORIZONTAL_CENTER']);
                 }
