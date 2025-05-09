@@ -31,4 +31,14 @@ class DiffObject {
     {
         return $this->new . ' (au lieu de ' . $this->original.')';
     }
+
+    public function getOriginalFloat(): float
+    {
+        return $this->original !== '-' ? (float)$this->original : 0.0;
+    }
+
+    public function getNewFloat(): float
+    {
+        return $this->new !== '-' ? (float)$this->new : 0.0;
+    }
 }
