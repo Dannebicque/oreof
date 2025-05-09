@@ -57,7 +57,28 @@
                     {% endfor %}
                 </td>
                 <td>
-                    {% if mccc.duree is defined and mccc.duree != null %}{{ mccc.duree|date('H:i') }}{% else %}-{% endif %}
+                {% if mccc.duree is defined and mccc.duree != null %}
+                    {% set mcccDuree = mccc.duree|date('H:i') %}
+                {% else %}
+                    {% set mcccDuree = '-' %}
+                {% endif %}
+                {% if mcccVersioning[mcccLoopIndex].duree is defined 
+                    and mcccVersioning[mcccLoopIndex].duree != null
+                %}
+                    {% set dureeMcccVersion = mcccVersioning[mcccLoopIndex].duree|date('H:i') %}
+                {% else %}
+                    {% set dureeMcccVersion = '-' %}
+                {% endif %}
+                
+                {{
+                    compareMccc.displayMccc(
+                        mcccDuree,      
+                        dureeMcccVersion,
+                        "",
+                        hasDisplayComparaison
+                    )
+                }}
+                    
                 </td>
             </tr>
         {% endfor %}
