@@ -299,9 +299,9 @@ class ButMcccVersion
                     $totalHeuresAvant['TD'] += $ec['diff']['heuresEctsEc']['tdPres']->getOriginalFloat();
                     $totalHeuresAvant['TP'] += $ec['diff']['heuresEctsEc']['tpPres']->getOriginalFloat();
 
-                    $totalHeuresApres['CM'] += $ec['diff']['heuresEctsEc']['cmPres']->getOriginalFloat();
-                    $totalHeuresApres['TD'] += $ec['diff']['heuresEctsEc']['tdPres']->getOriginalFloat();
-                    $totalHeuresApres['TP'] += $ec['diff']['heuresEctsEc']['tpPres']->getOriginalFloat();
+                    $totalHeuresApres['CM'] += $ec['diff']['heuresEctsEc']['cmPres']->getNewFloat();
+                    $totalHeuresApres['TD'] += $ec['diff']['heuresEctsEc']['tdPres']->getNewFloat();
+                    $totalHeuresApres['TP'] += $ec['diff']['heuresEctsEc']['tpPres']->getNewFloat();
 
 
                     $ligne++;
@@ -334,10 +334,10 @@ class ButMcccVersion
                     $totalHeuresAvant['TP'] += $ec['diff']['heuresEctsEc']['tpPres']->getOriginalFloat();
                     $totalHeuresAvant['TE'] += $ec['diff']['heuresEctsEc']['tePres']->getOriginalFloat();
 
-                    $totalHeuresApres['CM'] += $ec['diff']['heuresEctsEc']['cmPres']->getOriginalFloat();
-                    $totalHeuresApres['TD'] += $ec['diff']['heuresEctsEc']['tdPres']->getOriginalFloat();
-                    $totalHeuresApres['TP'] += $ec['diff']['heuresEctsEc']['tpPres']->getOriginalFloat();
-                    $totalHeuresApres['TE'] += $ec['diff']['heuresEctsEc']['tePres']->getOriginalFloat();
+                    $totalHeuresApres['CM'] += $ec['diff']['heuresEctsEc']['cmPres']->getNewFloat();
+                    $totalHeuresApres['TD'] += $ec['diff']['heuresEctsEc']['tdPres']->getNewFloat();
+                    $totalHeuresApres['TP'] += $ec['diff']['heuresEctsEc']['tpPres']->getNewFloat();
+                    $totalHeuresApres['TE'] += $ec['diff']['heuresEctsEc']['tePres']->getNewFloat();
 
                     $ligne++;
                 }
@@ -360,7 +360,10 @@ class ButMcccVersion
                     $this->excelWriter->writeCellXYDiff($colUe, $ligne + 3, new DiffObject($sommeEctsAvant, $sommeEctsApres), ['style' => 'HORIZONTAL_CENTER']);
                     $this->excelWriter->writeCellXYDiff($colUe, $ligne + 4, new DiffObject($totalCoeffAvant[$keyUe]['Sae'], $totalCoeffApres[$keyUe]['Sae']), ['style' => 'HORIZONTAL_CENTER']);
 
-                    $this->excelWriter->writeCellXY($colUe, $ligne + 5, '=' . $lettreCol . $a . '/' . $lettreCol . $b, ['style' => 'HORIZONTAL_CENTER']);
+                    $pourcentageSaeAvant = $sommeEctsAvant > 0 ? round($totalCoeffAvant[$keyUe]['Sae'] / $sommeEctsAvant * 100, 2) : 0;
+                    $pourcentageSaeApres = $sommeEctsApres > 0 ? round($totalCoeffApres[$keyUe]['Sae'] / $sommeEctsApres * 100, 2) : 0;
+
+                    $this->excelWriter->writeCellXYDiff($colUe, $ligne + 5, new DiffObject($pourcentageSaeAvant, $pourcentageSaeApres), ['style' => 'numerique']);
                 }
 
                 // affichage des "totaux"
