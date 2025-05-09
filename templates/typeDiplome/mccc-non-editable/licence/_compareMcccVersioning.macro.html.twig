@@ -1,0 +1,20 @@
+{% macro displayMccc(currentValue, previousValue, suffixString = "", withComparaison = false) %}
+    {% if withComparaison %}
+        {% if currentValue != previousValue %}
+            {% if previousValue != false %}
+            <p class="text-danger text-center text-decoration-line-through">
+                {{ previousValue }}{{ suffixString }}
+            </p>
+            {% endif %}
+            {% if currentValue != false %}
+            <p class="text-success text-center ">
+                {{ currentValue }}{{ suffixString }}
+            </p>
+            {% endif %}
+        {% else %}
+            {{ currentValue }}{{ suffixString }}
+        {% endif %}
+    {% else %}
+        {{ currentValue }}{{ suffixString }}
+    {% endif %}
+{% endmacro %}

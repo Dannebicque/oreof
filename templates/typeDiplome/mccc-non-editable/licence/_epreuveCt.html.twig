@@ -1,3 +1,5 @@
+{% import "typeDiplome/mccc-non-editable/licence/_compareMcccVersioning.macro.html.twig" as compareMccc %}
+
 <div>
     <table class="table table-bordered">
         <thead>
@@ -9,19 +11,48 @@
         </tr>
         </thead>
         <tbody>
-        {% for mccc in mcccs %}
+
+        {% set mcccArray = mcccs %}
+        {% set currentMcccLength = mcccArray|length %}
+        {% if mcccs|length < mcccVersioning|length %}
+            {% set lengthDiff = mcccVersioning|length - mcccs|length %}
+            {% set mcccArray = mcccs|merge(mcccVersioning|slice( (mcccs|length - 1), lengthDiff)) %}
+        {% endif %}
+        {% for mccc in mcccArray %}
+            {% set mcccLoopIndex = loop.index %}
             <tr>
                 <th>Contrôle terminal N°{{ loop.index }}</th>
                 <td>
                     {% if mccc.pourcentage is defined %}
-                        {{ mccc.pourcentage }}%
+                        {{ compareMccc.displayMccc(
+                            loop.index <= currentMcccLength ? mccc.pourcentage : false, 
+                            mcccVersioning[loop.index].pourcentage ?? false, 
+                            "%",
+                            isMcccFromVersion ?? false)  
+                        }}
                     {% else %}
                         100%
                     {% endif %}
                 </td>
                 <td>
                     {% for typeE in typeEpreuves %}
-                        {% if mccc.typeEpreuve[0] is defined and mccc.typeEpreuve[0] == typeE.id %}{{ typeE.display }}{% endif %}
+                        {% if mccc.typeEpreuve[0] is defined and mccc.typeEpreuve[0] == typeE.id %}
+                            {% if mcccVersioning[mcccLoopIndex].typeEpreuve[0] is defined %}
+                                {% set typeEpreuveVersion = typeEpreuves|find(
+                                    t => t.id == mcccVersioning[mcccLoopIndex].typeEpreuve[0]
+                                ).display %}
+                            {% else %}
+                                {% set typeEpreuveVersion = false %}
+                            {% endif %}
+                            {{
+                                compareMccc.displayMccc(
+                                    mcccLoopIndex <= currentMcccLength ? typeE.display : false,
+                                    typeEpreuveVersion,
+                                    "",
+                                    isMcccFromVersion ?? false
+                                )
+                            }}
+                        {% endif %}
                     {% endfor %}
                 </td>
                 <td>

@@ -357,22 +357,27 @@ class ElementConstitutifMcccController extends AbstractController
         }
 
         // Mise en forme du tableau des MCCC
-        $tabMcccs = [];
+        $tabMcccVersioning = [];
         if ($structureEc->typeMccc === 'cci') {
             foreach ($structureEc->mcccs as $mccc) {
-                $tabMcccs[$mccc['numeroSession']] = $mccc;
+                $tabMcccVersioning[$mccc['numeroSession']] = $mccc;
             }
         } else {
             foreach ($structureEc->mcccs as $mccc) {
                 if ($mccc['secondeChance']) {
-                    $tabMcccs[3]['chance'] = $mccc;
+                    $tabMcccVersioning[3]['chance'] = $mccc;
                 } elseif ($mccc['controleContinu'] === true && $mccc['examenTerminal'] === false) {
-                    $tabMcccs[$mccc['numeroSession']]['cc'][$mccc['numeroEpreuve'] ?? 1] = $mccc;
+                    $tabMcccVersioning[$mccc['numeroSession']]['cc'][$mccc['numeroEpreuve'] ?? 1] = $mccc;
                 } elseif ($mccc['controleContinu'] === false && $mccc['examenTerminal'] === true) {
-                    $tabMcccs[$mccc['numeroSession']]['et'][$mccc['numeroEpreuve'] ?? 1] = $mccc;
+                    $tabMcccVersioning[$mccc['numeroSession']]['et'][$mccc['numeroEpreuve'] ?? 1] = $mccc;
                 }
             }
         }
+
+        $getElement = new GetElementConstitutif($elementConstitutif, $parcoursVersioning->getParcours());
+        $tabMcccActuels = $getElement->getMcccsFromFicheMatiere(
+            $typeDiplomeReg->getTypeDiplome($typeDiplome->getModeleMcc())
+        );
 
         return $this->render('element_constitutif/_mcccEcNonEditable.html.twig', [
             'isMcccImpose' => $structureEc->elementConstitutif->getFicheMatiere()?->isMcccImpose(),
@@ -382,7 +387,8 @@ class ElementConstitutifMcccController extends AbstractController
             'ec' => $structureEc->elementConstitutif,
             'ects' => $structureEc->heuresEctsEc->ects,
             'templateForm' => $templateForm,
-            'mcccs' => $tabMcccs,
+            'mcccVersioning' => $tabMcccVersioning,
+            'mcccs' => $tabMcccActuels,
             'isMcccFromVersion' => true,
             'parcoursId' => $parcoursVersioning->getParcours()->getId(),
             'isFromVersioning' => $isFromVersioning,
