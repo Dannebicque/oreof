@@ -373,8 +373,8 @@ class ButMcccVersion
                 $this->excelWriter->writeCellXYDiff(self::COL_TP, $ligne + 2, new DiffObject($totalHeuresAvant['TP'], $totalHeuresApres['TP']), ['style' => 'HORIZONTAL_CENTER']);
                 $this->excelWriter->writeCellXYDiff(self::COL_HEURE_AUTONOMIE, $ligne + 2, new DiffObject($totalHeuresAvant['TE'], $totalHeuresApres['TE']), ['style' => 'HORIZONTAL_CENTER']);
 
-                $sommeAvant = $totalHeuresAvant['CM'] + $totalHeuresAvant['TD'] + $totalHeuresAvant['TP'] + $totalHeuresAvant['TE'];
-                $sommeApres = $totalHeuresApres['CM'] + $totalHeuresApres['TD'] + $totalHeuresApres['TP'] + $totalHeuresApres['TE'];
+                $sommeAvant = $totalHeuresAvant['CM'] + $totalHeuresAvant['TD'] + $totalHeuresAvant['TP'];
+                $sommeApres = $totalHeuresApres['CM'] + $totalHeuresApres['TD'] + $totalHeuresApres['TP'];
 
                 $this->excelWriter->writeCellXYDiff(self::COL_CM, $ligne + 3, new DiffObject($sommeAvant, $sommeApres), ['style' => 'HORIZONTAL_CENTER']);
             }
