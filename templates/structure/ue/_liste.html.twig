@@ -201,33 +201,6 @@
                                                             </button>
                                                             <ul class="dropdown-menu"
                                                                 aria-labelledby="dropdownMenuClickableInside">
-{#                                                                <li>#}
-{#                                                                    <a#}
-{#                                                                            {% if raccroche == true %}#}
-{#                                                                                disabled#}
-{#                                                                                title="UE raccrochée, modifiable uniquement depuis le parcours d'origine"#}
-{#                                                                            {% else %}#}
-{#                                                                                href="#"#}
-{#                                                                                {{ stimulus_controller('modal', {#}
-{#                                                                                    size: 'lg',#}
-{#                                                                                    modalTitle: 'Dupliquer l\'' ~ ue.display(parcours),#}
-{#                                                                                    modalUrl:#}
-{#                                                                                    path#}
-{#                                                                                        ('structure_ue_dupliquer', {parcours:parcours.id, ue: ue.id})#}
-{#                                                                                }) }}#}
-{#                                                                                title="Dupliquer l'{{ ue.display(parcours) }}"#}
-{#                                                                                data-action="click->modal#openModal"#}
-{#                                                                            {% endif %}#}
-{#                                                                            class="dropdown-item text-primary"#}
-{#                                                                            data-size="lg"#}
-{#                                                                            data-bs-toggle="tooltip"#}
-{#                                                                            data-bs-placement="bottom"#}
-
-{#                                                                    >#}
-{#                                                                        <i class="{{ iconDuplicate }}"></i>#}
-{#                                                                        <span> Dupliquer l'UE</span>#}
-{#                                                                    </a>#}
-{#                                                                </li>#}
                                                                 <li>
                                                                     <a
                                                                             href="#"
@@ -311,7 +284,7 @@
                                                     </div>
                                                 {% endif %}
                                                 <div class="col-4 text-end">
-                                                    {% if (is_granted('CAN_FORMATION_EDIT_MY', parcours.formation)) %} {#  and
+                                                    {% if (is_granted('CAN_PARCOURS_EDIT_MY', parcours)) and isSemestreRaccroche == false %} {#  and
                                             (workflow_can(ec,
                                                 'valider_parcours') or workflow_can(ec,
                                                 'initialiser'))) or (is_granted
@@ -320,7 +293,7 @@
 
                                                         {% if not loop.first %}
                                                             <button class="btn btn-sm btn-outline-info"
-                                                                    {% if raccroche %}disabled{% endif %}
+                                                                    {% if isSemestreRaccroche %}disabled{% endif %}{# si semestre raccroché on ne peux pas déplacer une UE parent. #}
                                                                     {{ stimulus_action
                                                                         ('structure--ue', 'deplacerUe',
                                                                         'click', {url: path('structure_ue_deplacer',{sens: 'up', ue:ue
@@ -333,7 +306,7 @@
                                                         {% endif %}
                                                         {% if not loop.last %}
                                                             <button class="btn btn-sm btn-outline-info"
-                                                                    {% if raccroche %}disabled{% endif %}
+                                                                    {% if isSemestreRaccroche %}disabled{% endif %}
                                                                     {{ stimulus_action('structure--ue', 'deplacerUe',
                                                                         'click', {url: path('structure_ue_deplacer',{sens: 'down', ue:ue.id}), ue:ue.id, parcours:parcours.id}) }}>
                                                                 <i class="fal
