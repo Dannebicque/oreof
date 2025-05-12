@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.38.0](https://github.com/Dannebicque/oreof/compare/v1.37.0...v1.38.0) (2025-05-11)
+
+
+### Features
+
+* **but-mccc-version:** add methods to retrieve original and new float values for hours ([be1f913](https://github.com/Dannebicque/oreof/commit/be1f9138524d8a2b3072fc6bc2f9cdc3c6df65cb))
+* **security:** enhance GlobalVoter permissions ([ac3d397](https://github.com/Dannebicque/oreof/commit/ac3d397c7613736b904f082ba73b22039d4d3ca8))
+* **translations:** update labels and help texts for validation and profile fields ([ac3d397](https://github.com/Dannebicque/oreof/commit/ac3d397c7613736b904f082ba73b22039d4d3ca8))
+
+
+### Bug Fixes
+
+* **but-mccc-version:** adjust total hours calculation to exclude TE from sums ([a394341](https://github.com/Dannebicque/oreof/commit/a3943410c15793ad0ffb86f97b4f12d6bc8b6d64))
+* **but-mccc-version:** calculate and update total coefficients for resources and SAEs ([c1d71a6](https://github.com/Dannebicque/oreof/commit/c1d71a6b5aab5dd575389624a53574ff2f4b132b))
+* **but-mccc-version:** update total hours calculation to use new float values ([d070c39](https://github.com/Dannebicque/oreof/commit/d070c39ba27dba3dcba816676a36130d97889cf3))
+* **liste:** update conditions for button disabling based on semester status ([4c102b0](https://github.com/Dannebicque/oreof/commit/4c102b080c5d1a92c8fafb7c1b78fdef48f9af39))
+
 ## [1.37.0](https://github.com/Dannebicque/oreof/compare/v1.36.0...v1.37.0) (2025-05-08)
 
 
