@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.38.1](https://github.com/Dannebicque/oreof/compare/v1.38.0...v1.38.1) (2025-05-13)
+
+
+### Bug Fixes
+
+* **SemestreController:** adjust condition for semester open status message ([ec6b928](https://github.com/Dannebicque/oreof/commit/ec6b928e998b07e18919112fe96ab64c524058b3))
+* **step4Hd:** enable MCCC display in the stimulus controller ([f9a6ff5](https://github.com/Dannebicque/oreof/commit/f9a6ff5556ca05f8ac583360859d05a96f6e5a2d))
+
 ## [1.38.0](https://github.com/Dannebicque/oreof/compare/v1.37.0...v1.38.0) (2025-05-11)
 
 
