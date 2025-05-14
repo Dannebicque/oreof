@@ -437,7 +437,7 @@
                                                                 {ue:uee.id, parcours: parcours.id, url: path
                                                                     ('structure_ec_detail_ue', {
                                                                         ue:uee.id, parcours: parcours.id,
-                                                                        raccroche: (isSemestreRaccroche or raccroche)})}
+                                                                        raccroche: (isSemestreRaccroche or raccrocheEnfant)})}
                                                             ) }}
                                                     >
                                                         <i class="fal fa-caret-right"></i> Voir les EC
@@ -630,10 +630,10 @@
                                 {% for ueee in uee.ueEnfants %}
                                     {% set displayUeee = ueee.display(parcours) %}
                                     {% if ueee.ueRaccrochee != null %}
-                                        {% set raccrocheEnfant = true %}
+                                        {% set raccrocheEnfantEnfant = true %}
                                         {% set ueee = ueee.ueRaccrochee.ue %}
                                     {% else %}
-                                        {% set raccrocheEnfant = false %}
+                                        {% set raccrocheEnfantEnfant = false %}
                                     {% endif %}
                                     {#                                    {% if loop.first and raccroche == false %} #}
                                     {#                                        <div class="text-divider"> #}
@@ -669,7 +669,7 @@
                                                                    data-controller="tooltip"
                                                                    data-tooltip-placement-value="bottom"
                                                                    title="Ue raccrochée en lien avec le semestre raccroché"></i>
-                                                            {% elseif raccrocheEnfant == true %}
+                                                            {% elseif raccrocheEnfantEnfant == true or raccrocheEnfant == true %}
                                                                 <i class="fal fa-link"
                                                                    data-controller="tooltip"
                                                                    data-tooltip-placement-value="bottom"
@@ -710,7 +710,7 @@
                                                                     {ue:ueee.id, parcours: parcours.id, url: path
                                                                         ('structure_ec_detail_ue', {
                                                                             ue:ueee.id, parcours: parcours.id,
-                                                                            raccroche: (isSemestreRaccroche or raccroche)})}
+                                                                            raccroche: (isSemestreRaccroche or raccrocheEnfantEnfant or raccrocheEnfant)})}
                                                                 ) }}
                                                         >
                                                             <i class="fal fa-caret-right"></i> Voir les EC
