@@ -75,16 +75,19 @@ class LicenceMcccVersion extends AbstractLicenceMccc
         }
 
         $dto = $this->calculStructureParcours->calcul($parcours, dataFromFicheMatiere: true);
+        //dump($dto->semestres[1]->ues[1]);
         // version
         if ($parcours->getParcoursOrigineCopie() !== null) {
             //Todo: cette année on repart de la version validée en N-1
             $structureDifferencesParcours = $this->versioningParcours->getStructureDifferencesBetweenParcoursAndLastVersion($parcours->getParcoursOrigineCopie());
+            // dump($structureDifferencesParcours->semestres[1]->ues[1]);
             if ($structureDifferencesParcours !== null) {
                 $diffStructure = (new VersioningStructure($structureDifferencesParcours, $dto))->calculDiff();
             } else {
                 return false;
             }
         }
+        //dump($diffStructure['semestres'][1]['ues'][1]);
 
         $this->excelWriter->createFromTemplate('Annexe_MCCC.xlsx');
 
@@ -99,7 +102,7 @@ class LicenceMcccVersion extends AbstractLicenceMccc
         $tabSemestresAnnee = $dto->getTabAnnee();
 
         //en-tête du fichier
-        $modele->setCellValue(self::CEL_ANNEE_UNIVERSITAIRE, 'Année Universitaire ' . $formation->getDpe()?->getLibelle());
+        $modele->setCellValue(self::CEL_ANNEE_UNIVERSITAIRE, 'Année Universitaire ' . $anneeUniversitaire->getAnneeUniversitaire()?->getLibelle());
         $modele->setCellValue(self::CEL_TYPE_FORMATION, $formation->getTypeDiplome()?->getLibelle());
         $modele->setCellValue(self::CEL_INTITULE_FORMATION, $formation->getDisplay());
         $modele->setCellValue(self::CEL_INTITULE_PARCOURS, $parcours->isParcoursDefaut() === false ? $parcours->getDisplay() : '');
@@ -667,11 +670,11 @@ class LicenceMcccVersion extends AbstractLicenceMccc
             $this->excelWriter->writeCellXY(self::COL_MCCC_CCI, $ligne, 'Contrôle d\'assiduité');
         } else {
             if (array_key_exists('mcccs', $diffEc) && array_key_exists('original', $diffEc['mcccs']) && array_key_exists('new', $diffEc['mcccs'])) {
-                $mcccsOriginal = $this->getMcccs($diffEc['mcccs']['original'], $diffEc['typeMccc']->original);
+                $mcccsOriginal = $this->getMcccs($diffEc['mcccs']['original'], $diffEc['typeMccc']->original ?? '');
                 $mcccsNew = $this->getMcccs($diffEc['mcccs']['new'], $diffEc['typeMccc']->new);
 
                 //cas Original sans écrire dans les cellules
-                $displayMcccOriginal = $this->calculDisplayMccc($mcccsOriginal, $diffEc['typeMccc']->original, false);
+                $displayMcccOriginal = $this->calculDisplayMccc($mcccsOriginal, $diffEc['typeMccc']->original ?? '', false);
                 $displayMcccNew = $this->calculDisplayMccc($mcccsNew, $diffEc['typeMccc']->new, false);
 
 
