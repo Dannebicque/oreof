@@ -274,11 +274,19 @@ class ElementConstitutifMcccController extends AbstractController
         $lastVersion = $entityManager->getRepository(ParcoursVersioning::class)->findLastCfvuVersion($parcours);
         $lastVersion = isset($lastVersion[0]) ? $lastVersion[0] : null;
 
+        $typeMcccLibelle = [
+            'ct' => 'Contrôle Terminal',
+            'cc' => 'Contrôle Continu',
+            'cci' => 'Contrôle Continu Intégral',
+            'cc_ct' => 'Contrôle Continu + Contrôle Terminal'
+        ];
+
         return $this->render('element_constitutif/_mcccEcNonEditable.html.twig', [
             'isMcccImpose' => $elementConstitutif->getFicheMatiere()?->isMcccImpose(),
             'isEctsImpose' => $elementConstitutif->getFicheMatiere()?->isEctsImpose(),
             'typeMccc' => $typeEpreuve,
             'typeEpreuves' => $typeEpreuveRepository->findByTypeDiplome($typeDiplome),
+            'typeMcccLibelle' => $typeMcccLibelle,
             'ec' => $elementConstitutif,
             'ects' => $ects,
             'templateForm' => $typeD::TEMPLATE_FORM_MCCC,
@@ -312,6 +320,12 @@ class ElementConstitutifMcccController extends AbstractController
         $typeEpreuveDiplome = $entityManager->getRepository(TypeEpreuve::class)->findByTypeDiplome($typeDiplome);
 
         $typeMccc = (new GetElementConstitutif($elementConstitutif, $parcoursVersioning->getParcours()))->getTypeMcccFromFicheMatiere();
+        $typeMcccLibelle = [
+            'ct' => 'Contrôle Terminal',
+            'cc' => 'Contrôle Continu',
+            'cci' => 'Contrôle Continu Intégral',
+            'cc_ct' => 'Contrôle Continu + Contrôle Terminal'
+        ];
 
         // On rassemble toutes les UE
         $ueArray = array_map(function ($semestre) {
@@ -381,17 +395,23 @@ class ElementConstitutifMcccController extends AbstractController
             $typeDiplomeReg->getTypeDiplome($typeDiplome->getModeleMcc())
         );
 
+        $mcccsToDisplay = $tabMcccActuels;
+        if($isFromVersioning === 'true' || ($structureEc->typeMccc !== $typeMccc)){
+            $mcccsToDisplay = $tabMcccVersioning;
+        }
+
         return $this->render('element_constitutif/_mcccEcNonEditable.html.twig', [
             'isMcccImpose' => $structureEc->elementConstitutif->getFicheMatiere()?->isMcccImpose(),
             'isEctsImpose' => $structureEc->elementConstitutif->getFicheMatiere()?->isEctsImpose(),
             'typeMccc' => $structureEc->typeMccc, //Versioning
             'typeMcccActuel' => $typeMccc, // Actuel
             'typeEpreuves' => $typeEpreuveDiplome,
+            'typeMcccLibelle' => $typeMcccLibelle,
             'ec' => $structureEc->elementConstitutif,
             'ects' => $structureEc->heuresEctsEc->ects,
             'templateForm' => $templateForm,
             'mcccVersioning' => $tabMcccVersioning,
-            'mcccs' => $isFromVersioning === 'true' ? $tabMcccVersioning : $tabMcccActuels,
+            'mcccs' => $mcccsToDisplay,
             'isMcccFromVersion' => true,
             'parcoursId' => $parcoursVersioning->getParcours()->getId(),
             'isFromVersioning' => $isFromVersioning,

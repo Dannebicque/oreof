@@ -21,6 +21,16 @@
     <h3>ECTS</h3>
     <p>{{ ects }}</p>
 
+    <h3>{{ typeMcccLibelle[typeMccc] }}</h3>
+
+    {% if hasChangedTypeMccc and isFromVersioning is defined and isFromVersioning != 'true' %}
+        <twig:alerte 
+            type="info"
+            message="Le type de MCCC a changé depuis la dernière version sauvegardée.<br>Vous pouvez retrouver les anciennes données ci-dessous."
+        >
+        </twig:alerte>
+    {% endif %}
+
     {{ include('typeDiplome/mccc-non-editable/'~templateForm) }}
     </div>
 </div>
