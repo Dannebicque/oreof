@@ -3,6 +3,15 @@
         modalTitle: 'Modalités de Contrôle des Connaissances et des Compétences',
     }) 
 }}>
+
+
+{# Versioning #}
+{% if typeMcccActuel is not defined %}
+    {% set typeMcccActuel = typeMccc %}
+{% endif %}
+
+{% set hasChangedTypeMccc = not (typeMccc == typeMcccActuel) %}
+
 <div {{ stimulus_target('modal', 'zoneToRefresh') }}>
     {% if isFromVersioning is defined and isFromVersioning != 'true' %}
         <h4 class="text-center text-primary mb-2">{{ libelleQuelleVersion }}</h4>

@@ -311,6 +311,8 @@ class ElementConstitutifMcccController extends AbstractController
         $templateForm = $typeDiplomeReg->getTypeDiplome($typeDiplome->getModeleMcc())::TEMPLATE_FORM_MCCC;
         $typeEpreuveDiplome = $entityManager->getRepository(TypeEpreuve::class)->findByTypeDiplome($typeDiplome);
 
+        $typeMccc = (new GetElementConstitutif($elementConstitutif, $parcoursVersioning->getParcours()))->getTypeMcccFromFicheMatiere();
+
         // On rassemble toutes les UE
         $ueArray = array_map(function ($semestre) {
             $ueFromSemestre = [...$semestre->ues];
@@ -382,7 +384,8 @@ class ElementConstitutifMcccController extends AbstractController
         return $this->render('element_constitutif/_mcccEcNonEditable.html.twig', [
             'isMcccImpose' => $structureEc->elementConstitutif->getFicheMatiere()?->isMcccImpose(),
             'isEctsImpose' => $structureEc->elementConstitutif->getFicheMatiere()?->isEctsImpose(),
-            'typeMccc' => $structureEc->typeMccc,
+            'typeMccc' => $structureEc->typeMccc, //Versioning
+            'typeMcccActuel' => $typeMccc, // Actuel
             'typeEpreuves' => $typeEpreuveDiplome,
             'ec' => $structureEc->elementConstitutif,
             'ects' => $structureEc->heuresEctsEc->ects,

@@ -12,10 +12,17 @@
         </thead>
         <tbody>
 
-        {% set hasDisplayComparaison = isFromVersioning != 'true' and isMcccFromVersion ?? false == true %}
-        {% set mcccArray = mcccs %}
+        {% set hasDisplayComparaison = (isFromVersioning != 'true')
+            and (isMcccFromVersion ?? false == true)
+            and (hasChangedTypeMccc == false)
+        %}
+        {% if hasChangedTypeMccc %}
+            {% set mcccArray = mcccVersioning %}
+        {% else %}
+            {% set mcccArray = mcccs %}
+        {% endif %}
         {% set currentMcccLength = mcccArray|length %}
-        {% if mcccs|length < mcccVersioning|length %}
+        {% if mcccs|length < mcccVersioning|length and hasChangedTypeMccc == false %}
             {% set lengthDiff = mcccVersioning|length - mcccs|length %}
             {% set mcccArray = mcccs|merge(mcccVersioning|slice( (mcccs|length - 1), lengthDiff)) %}
         {% endif %}
