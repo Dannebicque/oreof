@@ -25,7 +25,7 @@ export default class extends Controller {
      * Si la taille est inférieure, affiche le contenu de : invalidFieldText
      */
     checkTextAreaLength() {
-        if(this.textareaTarget.value.length > this.minlengthValue){
+        if(this.textareaTarget.value.length >= this.minlengthValue){
             this.invalidFieldTextTarget.classList.add('d-none');
         }
         if(this.textareaTarget.value.length < this.minlengthValue){
@@ -49,11 +49,12 @@ export default class extends Controller {
                                         data-mccc-with-justification-target="textarea"
                                         data-action="input->mccc-with-justification#checkTextAreaLength"
                                         ${this.hasJustificationValue === 'true' ? 'required' : ''}
+                                        data-minlength="${this.minlengthValue}"
                                         rows="4"
                                         placeholder="Argumentaire pour ce type d'épreuve"
                                     >${this.justificationTextValue}</textarea>
                                     <div class="text-danger small my-2 
-                                        ${this.justificationTextValue.length > this.minlengthValue ? "d-none" : ""}"
+                                        ${this.justificationTextValue.length >= this.minlengthValue ? "d-none" : ""}"
                                         data-mccc-with-justification-target="invalidFieldText"
                                     >
                                         L'argumentaire doit faire au moins ${this.minlengthValue} caractères
