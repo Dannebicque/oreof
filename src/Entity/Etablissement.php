@@ -60,6 +60,12 @@ class Etablissement
     #[ORM\Column(length: 255)]
     private ?string $emailCentral = null;
 
+    /**
+     * @var Collection<int, UserProfil>
+     */
+    #[ORM\OneToMany(mappedBy: 'etablissement', targetEntity: UserProfil::class)]
+    private Collection $userProfils;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -70,6 +76,7 @@ class Etablissement
         $this->configureOptions($resolver);
         $this->setOptions($resolver->resolve($this->options));
         $this->composantes = new ArrayCollection();
+        $this->userProfils = new ArrayCollection();
     }
 
     public function configureOptions(OptionsResolver $resolver): void
@@ -284,12 +291,42 @@ class Etablissement
 
     public function getEmailCentral(): ?string
     {
-        return $this->emailCentral;
+        return $this->emailCentral ?? 'cfvu-secretariat@univ-reims.fr';
     }
 
     public function setEmailCentral(string $emailCentral): static
     {
         $this->emailCentral = $emailCentral;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, UserProfil>
+     */
+    public function getUserProfils(): Collection
+    {
+        return $this->userProfils;
+    }
+
+    public function addUserProfil(UserProfil $userProfil): static
+    {
+        if (!$this->userProfils->contains($userProfil)) {
+            $this->userProfils->add($userProfil);
+            $userProfil->setEtablissement($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserProfil(UserProfil $userProfil): static
+    {
+        if ($this->userProfils->removeElement($userProfil)) {
+            // set the owning side to null (unless already changed)
+            if ($userProfil->getEtablissement() === $this) {
+                $userProfil->setEtablissement(null);
+            }
+        }
 
         return $this;
     }
