@@ -182,7 +182,7 @@ class GlobalVoter extends Voter
         if ($subject->isHasParcours() === false) {
             // parcours par défaut
             $parcours = $subject->getParcours()->first();
-            if ($parcours !== null) {
+            if ($parcours !== null && $parcours instanceof Parcours) {
                 $dpeParcours = GetDpeParcours::getFromParcours($parcours);
                 if ($dpeParcours !== null) {
                     $canEdit = $canEdit || $this->canAccessDpeParcours($dpeParcours, $centre);
