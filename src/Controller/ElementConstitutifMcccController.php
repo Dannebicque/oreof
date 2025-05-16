@@ -421,7 +421,7 @@ class ElementConstitutifMcccController extends AbstractController
             'isMcccFromVersion' => true,
             'parcoursId' => $parcoursVersioning->getParcours()->getId(),
             'isFromVersioning' => $isFromVersioning,
-            'libelleQuelleVersion' => 'Version validée CFVU'
+            'libelleQuelleVersion' => 'Comparaison des versions'
         ]);
     }
 
