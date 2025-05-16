@@ -78,6 +78,9 @@ class AbstractLicenceMccc
     protected array $lignesSemestre = [];
     protected array $lignesEcColorees = [];
 
+    protected string $dir;
+
+
     public function __construct(
         protected ExcelWriter             $excelWriter,
     ) {
