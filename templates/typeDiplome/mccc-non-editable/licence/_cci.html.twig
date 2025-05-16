@@ -35,7 +35,16 @@
         <tbody>
         {% for mccc in mcccArray %}
             <tr>
-                <th>Epreuve N°{{ loop.index }}</th>
+                <th>
+                    {{
+                        compareMccc.displayMccc(
+                            loop.index <= currentMcccLength ? 'Epreuve N°' ~ loop.index : false,
+                            mcccVersioning[loop.index] is defined ? 'Epreuve N°' ~ loop.index : false,
+                            '',
+                            hasDisplayComparaison)
+                    }}
+                    
+                </th>
                 <td>{{ compareMccc.displayMccc(
                         loop.index <= currentMcccLength ? mccc.pourcentage : false,
                         mcccVersioning[loop.index].pourcentage ?? false,
