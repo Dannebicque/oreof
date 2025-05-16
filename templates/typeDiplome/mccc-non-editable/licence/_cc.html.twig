@@ -1,3 +1,10 @@
+{% import "typeDiplome/mccc-non-editable/licence/_compareMcccVersioning.macro.html.twig" as compareMccc %}
+
+{% set hasDisplayComparaison = (isFromVersioning != 'true') 
+    and (isMcccFromVersion ?? false == true)
+    and (hasChangedTypeMccc == false)
+%}
+
 <h3>1ᵉ Session</h3>
 <div>
     <table class="table table-bordered">
@@ -16,18 +23,36 @@
             <td>50%</td>
             <td>2 épreuves</td>
             <td>
+                {% set hasOptionVersioning = mcccVersioning[1]['cc'][1].options.cc_has_tp ?? false %}
                 {% if mcccs[1]['cc'][1].options is defined and mcccs[1]['cc'][1].options.cc_has_tp is defined and mcccs[1]['cc'][1].options.cc_has_tp == "on" %}
-                    Oui
+                    {% set libelleHasTp = 'Oui' %}
                 {% else %}
-                    Non
+                    {% set libelleHasTp = 'Non' %}
                 {% endif %}
+                {{
+                    compareMccc.displayMccc(
+                        libelleHasTp,
+                        hasOptionVersioning == 'on' ? 'Oui' : 'Non',
+                        "",
+                        hasDisplayComparaison
+                    )
+                }}
             </td>
             <td>
+                {% set pourcentageTpVersioning = mcccVersioning[1]['cc'][1].options.cc_has_tp ?? false %}
                 {% if mcccs[1]['cc'][1].options is defined and mcccs[1]['cc'][1].options.cc_has_tp is defined and mcccs[1]['cc'][1].options.cc_has_tp == "on" %}
-                    50%
+                    {% set pourcentageTp = '50%' %}
                 {% else %}
-                    -
+                    {% set pourcentageTp = '-' %}
                 {% endif %}
+                {{
+                    compareMccc.displayMccc(
+                        pourcentageTp,
+                        pourcentageTpVersioning == 'on' ? '50%' : '-',
+                        "",
+                        hasDisplayComparaison
+                    )
+                }}
             </td>
         </tr>
         </tbody>
