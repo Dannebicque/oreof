@@ -28,7 +28,16 @@
         {% for mccc in mcccArray %}
             {% set mcccIndex = loop.index %}
             <tr>
-                <th>Examen 2ᵉ Session N°{{ loop.index }}</th>
+                <th>
+                    {{
+                        compareMccc.displayMccc(
+                            loop.index <= currentMcccLength ? 'Examen 2ᵉ Session N°' ~ loop.index : false,
+                            mcccVersioning[loop.index] is defined ? 'Examen 2ᵉ Session N°' ~ loop.index : false,
+                            "",
+                            hasDisplayComparaison
+                        )
+                    }}
+                </th>
                 <td>
                     {% set currentPourcentage = mccc.pourcentage ?? '100' %}
                     {{

@@ -29,7 +29,16 @@
         {% for mccc in mcccArray %}
             {% set mcccLoopIndex = loop.index %}
             <tr>
-                <th>Contrôle terminal N°{{ loop.index }}</th>
+                <th>
+                    {{
+                        compareMccc.displayMccc(
+                            mcccLoopIndex <= currentMcccLength ? 'Contrôle terminal N°' ~ mcccLoopIndex : false,
+                            mcccVersioning[mcccLoopIndex] is defined ? 'Contrôle terminal N°' ~ mcccLoopIndex : false,
+                            "",
+                            hasDisplayComparaison
+                        )
+                    }}
+                </th>
                 <td>
                     {% if mccc.pourcentage is defined %}
                         {{ compareMccc.displayMccc(
