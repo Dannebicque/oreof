@@ -1,4 +1,29 @@
+{% import "typeDiplome/mccc-non-editable/licence/_compareMcccVersioning.macro.html.twig" as compareMccc %}
+
 <h3>1ᵉ Session</h3>
+
+{% set hasDisplayComparaison = (isFromVersioning != 'true') 
+    and (isMcccFromVersion ?? false == true)
+    and (hasChangedTypeMccc == false)
+%}
+
+{% if mcccVersioning is not defined %}
+    {% set mcccVersioning = [] %}
+{% endif %}
+
+{% if hasChangedTypeMccc %}
+    {% set mcccArray = mcccVersioning %}
+{% else %}
+    {% set mcccArray = mcccs %}
+{% endif %}
+
+{% set currentMcccLength = mcccArray|length %}
+
+{% if mcccs|length < mcccVersioning|length and hasChangedTypeMccc == false %}
+    {% set lengthDiff = mcccVersioning|length - mcccs|length %}
+    {% set mcccArray = mcccs|merge(mcccVersioning|slice( (mcccs|length - 1), lengthDiff)) %}
+{% endif %}
+
 <div>
     <table class="table table-bordered">
         <thead>
@@ -8,10 +33,16 @@
         </tr>
         </thead>
         <tbody>
-        {% for mccc in mcccs %}
+        {% for mccc in mcccArray %}
             <tr>
                 <th>Epreuve N°{{ loop.index }}</th>
-                <td>{{ mccc.pourcentage ?? '' }}%</td>
+                <td>{{ compareMccc.displayMccc(
+                        loop.index <= currentMcccLength ? mccc.pourcentage : false,
+                        mcccVersioning[loop.index].pourcentage ?? false,
+                        '%',
+                        hasDisplayComparaison) 
+                    }}
+                </td>
             </tr>
         {% endfor %}
         </tbody>
