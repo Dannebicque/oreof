@@ -138,7 +138,6 @@ framework:
             label: 'validation.non_ouverture'
       transitions:
         initialiser:
-          guard: "is_granted('ROLE_ADMIN')"
           from: 'initialisation_dpe'
           to: 'autorisation_saisie'
         autoriser:

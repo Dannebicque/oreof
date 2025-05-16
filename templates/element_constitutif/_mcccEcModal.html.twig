@@ -65,7 +65,7 @@
             </div>
         {% endif %}
 
-        {% if (ec.ecParent == null and isEctsImpose == false) or isParcoursProprietaire == true %}
+        {% if (ec.ecParent == null and isEctsImpose == false) or (isParcoursProprietaire == true and ec.ecParent == null) %}
             {# Uniquement sur le parent. #}
             <div class="mb-2">
                 <label for="ec_step4_ects" class="form-label">

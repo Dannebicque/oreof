@@ -141,8 +141,7 @@ class ElementConstitutifMcccController extends AbstractController
                 }
 
                 if ($elementConstitutif->isMcccSpecifiques() === false
-                   // && $elementConstitutif->getFicheMatiere()?->isMcccImpose() === false
-                    && $elementConstitutif->getParcours()->getId() === $parcours->getId()) {
+                    && $isParcoursProprietaire) {
                     //MCCC sur fiche matière
                     if ($elementConstitutif->getFicheMatiere() !== null) {
                         $fm = $elementConstitutif->getFicheMatiere();
@@ -171,9 +170,11 @@ class ElementConstitutifMcccController extends AbstractController
                     }
                 } else {
                     //MCCC sur EC
-                    if ($request->request->has('ec_step4') && array_key_exists('quitus', $request->request->all()['ec_step4'])) {
-                        $elementConstitutif->setQuitus((bool)$request->request->all()['ec_step4']['quitus']);
-                        $elementConstitutif->setQuitusText($request->request->all()['ec_step4']['quitus_argument']);
+                    if ($elementConstitutif->isMcccSpecifiques() === true || $elementConstitutif->getNatureUeEc()?->isLibre() || ($elementConstitutif->getNatureUeEc()?->isChoix())){
+                        if ($request->request->has('ec_step4') && array_key_exists('quitus', $request->request->all()['ec_step4'])) {
+                            $elementConstitutif->setQuitus((bool)$request->request->all()['ec_step4']['quitus']);
+                            $elementConstitutif->setQuitusText($request->request->all()['ec_step4']['quitus_argument']);
+                        }
                     }
                     // Si la checkbox est décochée, 'quitus' ne fait pas partie de la requête POST
                     elseif ($request->request->has('ec_step4') 
@@ -184,13 +185,14 @@ class ElementConstitutifMcccController extends AbstractController
                         $elementConstitutif->setQuitusText(null);
                     }
 
-                    if ($request->request->get('choix_type_mccc') !== $elementConstitutif->getTypeMccc()) {
-                        $elementConstitutif->setTypeMccc($request->request->get('choix_type_mccc'));
-                        $entityManager->flush();
-                        $typeD->clearMcccs($elementConstitutif);
+                        if ($request->request->has('choix_type_mccc') && $request->request->get('choix_type_mccc') !== $elementConstitutif->getTypeMccc()) {
+                            $elementConstitutif->setTypeMccc($request->request->get('choix_type_mccc'));
+                            $entityManager->flush();
+                            $typeD->clearMcccs($elementConstitutif);
+                        }
+                        $typeD->saveMcccs($elementConstitutif, $request->request);
+                        $newMcccToText = $this->mcccToTexte($elementConstitutif->getMcccs());
                     }
-                    $typeD->saveMcccs($elementConstitutif, $request->request);
-                    $newMcccToText = $this->mcccToTexte($elementConstitutif->getMcccs());
                 }
 
                 if ($request->request->has('ec_step4') && array_key_exists('mcccEnfantsIdentique', $request->request->all()['ec_step4'])) {
@@ -205,9 +207,13 @@ class ElementConstitutifMcccController extends AbstractController
                 $entityManager->flush();
 
                 //evenement pour MCCC sur EC mis à jour
-                $event = new McccUpdateEvent($elementConstitutif, $parcours);
+
                 $event->setNewMccc($originalMcccToText, $newMcccToText);
-                $eventDispatcher->dispatch($event, McccUpdateEvent::UPDATE_MCCC);
+
+                // on emet l'évent vers les abonnés que si c'est un parcours propriétaire
+                if ($isParcoursProprietaire) {
+                    $eventDispatcher->dispatch($event, McccUpdateEvent::UPDATE_MCCC);
+                }
 
                 return $this->json(true);
             }

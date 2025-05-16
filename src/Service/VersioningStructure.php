@@ -314,7 +314,11 @@ class VersioningStructure
             if ($ecOriginal->typeMccc !== null && $ecNouveau->typeMccc !== null) {
                 $diff['typeMccc'] = new DiffObject($ecOriginal->typeMccc, $ecNouveau->typeMccc);
                 $diff['mcccs'] = $this->compareMcccs($ecOriginal->mcccs, $ecNouveau->mcccs);
+            } elseif (($ecOriginal->typeMccc === null && $ecNouveau->typeMccc !== null)) {
+                $diff['typeMccc'] = new DiffObject(null, $ecNouveau->typeMccc);
+                $diff['mcccs'] = $this->compareMcccs(null, $ecNouveau->mcccs);
             }
+
         }
 
         if ($ecNouveau->elementConstitutif->getNatureUeEc()?->isChoix()) {
@@ -528,11 +532,15 @@ class VersioningStructure
             $diff['new'][$mcccNouveau->getCleUnique()] = $mcccNouveau;
         }
 
-        foreach ($mcccsOriginal as $mcccOriginal) {
-            if (is_array($mcccOriginal)) {
-                $mcccOriginal = $this->createMcccFromArray($mcccOriginal);
+        if (null === $mcccsOriginal) {
+            $diff['original'] = [];
+        } else {
+            foreach ($mcccsOriginal as $mcccOriginal) {
+                if (is_array($mcccOriginal)) {
+                    $mcccOriginal = $this->createMcccFromArray($mcccOriginal);
+                }
+                $diff['original'][$mcccOriginal->getCleUnique()] = $mcccOriginal;
             }
-            $diff['original'][$mcccOriginal->getCleUnique()] = $mcccOriginal;
         }
 
 

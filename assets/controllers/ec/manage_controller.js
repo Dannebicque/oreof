@@ -79,7 +79,7 @@ export default class extends Controller {
     this.matieresTarget.innerHTML = await response.text()
     if (document.getElementById('ficheMatiere')) {
       this.tom = new TomSelect('#ficheMatiere', { allowEmptyOption: true })
-      this.tom.settings.placeholder = 'New placeholder';
+      this.tom.settings.placeholder = 'Choisir une fiche matière'
       this.tom.inputState();
     }
   }
@@ -173,10 +173,16 @@ export default class extends Controller {
     const form = document.getElementById('formEc')
     if (isChoixEc === 'true') {
       // choix multiple
-      if (this.matieres.length === 0) {
+      // compter le nombre de matières dans le tableau #tableFiches, partie body
+      const table = document.getElementById('tableFiches')
+      const tbody = table.getElementsByTagName('tbody')[0]
+      const lignes = tbody.getElementsByTagName('tr')
+
+      if (this.matieres.length === 0 && lignes.length === 0) {
         callOut('Vous devez choisir ou créer au moins une matière', 'warning')
         return
       }
+
       const input = document.createElement('input')
       input.type = 'hidden'
       input.name = 'matieres'

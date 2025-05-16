@@ -179,16 +179,6 @@ class ParcoursEcController extends AbstractController
 
 
         switch ($field) {
-            //            case 'synchroMccc':
-            //                $ec = $ecRepository->find($request->request->get('ec'));
-            //
-            //                if ($ec === null) {
-            //                    return JsonReponse::error('EC introuvable');
-            //                }
-            //
-            //                $ec->setSynchroMccc($request->request->get('value') === 'true');
-            //                $ecRepository->save($ec, true);
-            //                return JsonReponse::success('EC mis à jour, MCCC raccrochées');
             case 'synchroBcc':
                 $ec = $ecRepository->find($request->request->get('ec'));
 
@@ -199,16 +189,6 @@ class ParcoursEcController extends AbstractController
                 $ec->setSynchroBcc($request->request->get('value') === 'true');
                 $ecRepository->save($ec, true);
                 return JsonReponse::success('EC mis à jour, BCC raccrochés');
-                //            case 'synchroHeures':
-                //                $ec = $ecRepository->find($request->request->get('ec'));
-                //
-                //                if ($ec === null) {
-                //                    return JsonReponse::error('EC introuvable');
-                //                }
-                //
-                //                $ec->setSynchroHeures($request->request->get('value') === 'true');
-                //                $ecRepository->save($ec, true);
-                //                return JsonReponse::success('EC mis à jour, Heures raccrochées');
             case 'ectsSpecifiques':
                 $ec = $ecRepository->find($request->request->get('ec'));
 

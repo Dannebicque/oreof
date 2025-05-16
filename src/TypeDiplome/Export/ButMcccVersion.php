@@ -11,6 +11,7 @@ namespace App\TypeDiplome\Export;
 
 use App\Classes\CalculButStructureParcours;
 use App\Classes\Excel\ExcelWriter;
+use App\DTO\DiffObject;
 use App\Entity\CampagneCollecte;
 use App\Entity\FicheMatiere;
 use App\Entity\Parcours;
@@ -153,6 +154,7 @@ class ButMcccVersion
         //en-tête du fichier
         $modele->setCellValue(self::CEL_DOMAINE, $formation->getDomaine()?->getLibelle());
         $modele->setCellValue(self::CEL_COMPOSANTE, $formation->getComposantePorteuse()?->getLibelle());
+        $modele->setCellValue(self::CEL_ANNEE_UNIVERSITAIRE, $anneeUniversitaire->getAnneeUniversitaire()?->getLibelle());
         $modele->setCellValue(self::CEL_INTITULE_FORMATION, $formation->getDisplay());
 
         if ($formation->isHasParcours() === false) {
@@ -197,6 +199,10 @@ class ButMcccVersion
 
         //recopie du modèle sur chaque année, puis remplissage
         foreach ($tabSemestres as $i => $semestres) {
+            $totalHeuresAvant = ['CM' => 0, 'TD' => 0, 'TP' => 0, 'TE' => 0];
+            $totalHeuresApres = ['CM' => 0, 'TD' => 0, 'TP' => 0, 'TE' => 0];
+
+
             $diffSemestre = $diffStructure['semestres'][$i];
             $tabColUes = [];
             $clonedWorksheet = clone $modele;
@@ -231,6 +237,9 @@ class ButMcccVersion
 
                     $diffUe = $diffSemestre['ues'][$ue->getOrdre()];
 
+                    $totalCoeffAvant[$ue->getOrdre()] = ['Ressource' => 0, 'Sae' => 0];
+                    $totalCoeffApres[$ue->getOrdre()] = ['Ressource' => 0, 'Sae' => 0];
+
                     foreach ($ue->getElementConstitutifs() as $keyEc => $ec) {
                         $fiche = $ec->getFicheMatiere();
                         $diffFiche = $diffUe['elementConstitutifs'][$keyEc];
@@ -240,12 +249,16 @@ class ButMcccVersion
                                 $tabFichesRessources[$fiche->getSigle()]['ec'] = $ec;
                                 $tabFichesRessources[$fiche->getSigle()]['diff'] = $diffFiche;
                                 $tabFichesUes[$fiche->getSigle()][$ue->getOrdre()] = $diffFiche['heuresEctsEc']['ects'];
+                                $totalCoeffAvant[$ue->getOrdre()]['Ressource'] += $diffFiche['heuresEctsEc']['ects']->getOriginalFloat();
+                                $totalCoeffApres[$ue->getOrdre()]['Ressource'] += $diffFiche['heuresEctsEc']['ects']->getNewFloat();
                             }
 
                             if ($fiche->getTypeMatiere() === FicheMatiere::TYPE_MATIERE_SAE) {
                                 $tabFichesSaes[$fiche->getSigle()]['ec'] = $ec;
                                 $tabFichesSaes[$fiche->getSigle()]['diff'] = $diffFiche;
                                 $tabFichesUes[$fiche->getSigle()][$ue->getOrdre()] = $diffFiche['heuresEctsEc']['ects'];
+                                $totalCoeffAvant[$ue->getOrdre()]['Sae'] += $diffFiche['heuresEctsEc']['ects']->getOriginalFloat();
+                                $totalCoeffApres[$ue->getOrdre()]['Sae'] += $diffFiche['heuresEctsEc']['ects']->getNewFloat();
                             }
                         }
                     }
@@ -283,6 +296,15 @@ class ButMcccVersion
                     $this->writeMccc($ec, $tabColonnes, $ligne);
                     $this->writeAcUe($fiche, $ligne, $tabColUes, $tabFichesUes);
 
+                    $totalHeuresAvant['CM'] += $ec['diff']['heuresEctsEc']['cmPres']->getOriginalFloat();
+                    $totalHeuresAvant['TD'] += $ec['diff']['heuresEctsEc']['tdPres']->getOriginalFloat();
+                    $totalHeuresAvant['TP'] += $ec['diff']['heuresEctsEc']['tpPres']->getOriginalFloat();
+
+                    $totalHeuresApres['CM'] += $ec['diff']['heuresEctsEc']['cmPres']->getNewFloat();
+                    $totalHeuresApres['TD'] += $ec['diff']['heuresEctsEc']['tdPres']->getNewFloat();
+                    $totalHeuresApres['TP'] += $ec['diff']['heuresEctsEc']['tpPres']->getNewFloat();
+
+
                     $ligne++;
                 }
 
@@ -308,6 +330,16 @@ class ButMcccVersion
                     $this->writeMccc($ec, $tabColonnes, $ligne);
                     $this->writeAcUe($fiche, $ligne, $tabColUes, $tabFichesUes);
 
+                    $totalHeuresAvant['CM'] += $ec['diff']['heuresEctsEc']['cmPres']->getOriginalFloat();
+                    $totalHeuresAvant['TD'] += $ec['diff']['heuresEctsEc']['tdPres']->getOriginalFloat();
+                    $totalHeuresAvant['TP'] += $ec['diff']['heuresEctsEc']['tpPres']->getOriginalFloat();
+                    $totalHeuresAvant['TE'] += $ec['diff']['heuresEctsEc']['tePres']->getOriginalFloat();
+
+                    $totalHeuresApres['CM'] += $ec['diff']['heuresEctsEc']['cmPres']->getNewFloat();
+                    $totalHeuresApres['TD'] += $ec['diff']['heuresEctsEc']['tdPres']->getNewFloat();
+                    $totalHeuresApres['TP'] += $ec['diff']['heuresEctsEc']['tpPres']->getNewFloat();
+                    $totalHeuresApres['TE'] += $ec['diff']['heuresEctsEc']['tePres']->getNewFloat();
+
                     $ligne++;
                 }
 
@@ -320,20 +352,32 @@ class ButMcccVersion
                     $diffUe = $diffSemestre['ues'][$keyUe];
                     $lettreCol = Coordinate::stringFromColumnIndex($colUe);
                     //pour chaque colonne d'uE on met à jour la somme des ECTS dans la formule
+                    $sommeEctsAvant = $totalCoeffAvant[$keyUe]['Ressource'] + $totalCoeffAvant[$keyUe]['Sae'];
+                    $sommeEctsApres = $totalCoeffApres[$keyUe]['Ressource'] + $totalCoeffApres[$keyUe]['Sae'];
+
+
                     $this->excelWriter->writeCellXYDiff($colUe, $ligne + 2, $diffUe['heuresEctsUe']['sommeUeEcts'], ['style' => 'HORIZONTAL_CENTER']);
                     //somme des coeffs
-                    $this->excelWriter->writeCellXYDiff($colUe, $ligne + 3, $diffUe['heuresEctsUe']['sommeUeEcts'], ['style' => 'HORIZONTAL_CENTER']);
-                    $this->excelWriter->writeCellXY($colUe, $ligne + 4, '=SUM(' . $lettreCol . $debutSae . ':' . $lettreCol . ($ligne - 1) . ')', ['style' => 'HORIZONTAL_CENTER']);
+                    $this->excelWriter->writeCellXYDiff($colUe, $ligne + 3, new DiffObject($sommeEctsAvant, $sommeEctsApres), ['style' => 'HORIZONTAL_CENTER']);
+                    $this->excelWriter->writeCellXYDiff($colUe, $ligne + 4, new DiffObject($totalCoeffAvant[$keyUe]['Sae'], $totalCoeffApres[$keyUe]['Sae']), ['style' => 'HORIZONTAL_CENTER']);
 
-                    $this->excelWriter->writeCellXY($colUe, $ligne + 5, '=' . $lettreCol . $a . '/' . $lettreCol . $b, ['style' => 'HORIZONTAL_CENTER']);
+                    $pourcentageSaeAvant = $sommeEctsAvant > 0 ? round($totalCoeffAvant[$keyUe]['Sae'] / $sommeEctsAvant * 100, 2) : 0;
+                    $pourcentageSaeApres = $sommeEctsApres > 0 ? round($totalCoeffApres[$keyUe]['Sae'] / $sommeEctsApres * 100, 2) : 0;
+
+                    $this->excelWriter->writeCellXYDiff($colUe, $ligne + 5, new DiffObject($pourcentageSaeAvant, $pourcentageSaeApres), ['style' => 'numerique']);
                 }
 
                 // affichage des "totaux"
-                $this->excelWriter->writeCellXYDiff(self::COL_CM, $ligne + 2, $diffSemestre['heuresEctsSemestre']['sommeSemestreCmPres'], ['style' => 'HORIZONTAL_CENTER']);
-                $this->excelWriter->writeCellXYDiff(self::COL_TD, $ligne + 2, $diffSemestre['heuresEctsSemestre']['sommeSemestreTdPres'], ['style' => 'HORIZONTAL_CENTER']);
-                $this->excelWriter->writeCellXYDiff(self::COL_TP, $ligne + 2, $diffSemestre['heuresEctsSemestre']['sommeSemestreTpPres'], ['style' => 'HORIZONTAL_CENTER']);
-                $this->excelWriter->writeCellXYDiff(self::COL_HEURE_AUTONOMIE, $ligne + 2, $diffSemestre['heuresEctsSemestre']['sommeSemestreTePres'], ['style' => 'HORIZONTAL_CENTER']);
-                $this->excelWriter->writeCellXYDiff(self::COL_CM, $ligne + 3, $diffSemestre['heuresEctsSemestre']['sommeSemestreTotalPres'], ['style' => 'HORIZONTAL_CENTER']);
+                $this->excelWriter->writeCellXYDiff(self::COL_CM, $ligne + 2, new DiffObject($totalHeuresAvant['CM'], $totalHeuresApres['CM']), ['style' => 'HORIZONTAL_CENTER']);
+                $this->excelWriter->writeCellXYDiff(self::COL_TD, $ligne + 2,
+                    new DiffObject($totalHeuresAvant['TD'], $totalHeuresApres['TD']), ['style' => 'HORIZONTAL_CENTER']);
+                $this->excelWriter->writeCellXYDiff(self::COL_TP, $ligne + 2, new DiffObject($totalHeuresAvant['TP'], $totalHeuresApres['TP']), ['style' => 'HORIZONTAL_CENTER']);
+                $this->excelWriter->writeCellXYDiff(self::COL_HEURE_AUTONOMIE, $ligne + 2, new DiffObject($totalHeuresAvant['TE'], $totalHeuresApres['TE']), ['style' => 'HORIZONTAL_CENTER']);
+
+                $sommeAvant = $totalHeuresAvant['CM'] + $totalHeuresAvant['TD'] + $totalHeuresAvant['TP'];
+                $sommeApres = $totalHeuresApres['CM'] + $totalHeuresApres['TD'] + $totalHeuresApres['TP'];
+
+                $this->excelWriter->writeCellXYDiff(self::COL_CM, $ligne + 3, new DiffObject($sommeAvant, $sommeApres), ['style' => 'HORIZONTAL_CENTER']);
             }
 
             //suppression de la ligne modèle 18

@@ -38,9 +38,7 @@ use Symfony\Component\Routing\Attribute\Route;
 ]
 class SemestreController extends BaseController
 {
-    #[
-        Route('/detail/parcours/{parcours}', name: 'detail_parcours')
-    ]
+    #[Route('/detail/parcours/{parcours}', name: 'detail_parcours')]
     public function detailParcours(
         Request                    $request,
         SemestreParcoursRepository $semestreRepository,
@@ -114,6 +112,7 @@ class SemestreController extends BaseController
 
         //parcours les semestres et construire la phrase si le parcours est ouvert, sinon laisser la phrase par défaut
         $phrase = '';
+        $tSemestre = [];
 
         if ($dpeParcours->getEtatReconduction() === TypeModificationDpeEnum::NON_OUVERTURE) {
             $phrase = 'Ce parcours ne sera pas proposé pour la campagne ' . $dpeParcours->getCampagneCollecte()->getLibelle() . '.';
@@ -126,10 +125,12 @@ class SemestreController extends BaseController
             }
 
             $phrase = 'Ce parcours sera proposé pour la campagne ' . $dpeParcours->getCampagneCollecte()->getLibelle() . '.';
-            if (count($tSemestre) === 1) {
-                $phrase .= ' Le semestre ' . $tSemestre[0] . ' n\'est pas ouvert.';
-            } elseif (count($tSemestre) > 1) {
-                $phrase .= ' Les semestres ' . implode(', ', $tSemestre) . ' ne seront pas ouverts.';
+            if (count($tSemestre) > 0) {
+                if (count($tSemestre) === 1) {
+                    $phrase .= ' Le semestre ' . $tSemestre[0] . ' n\'est pas ouvert.';
+                } elseif (count($tSemestre) > 1) {
+                    $phrase .= ' Les semestres ' . implode(', ', $tSemestre) . ' ne seront pas ouverts.';
+                }
             }
         }
 

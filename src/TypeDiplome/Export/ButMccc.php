@@ -139,6 +139,7 @@ class ButMccc
         //en-tête du fichier
         $modele->setCellValue(self::CEL_DOMAINE, $formation->getDomaine()?->getLibelle());
         $modele->setCellValue(self::CEL_COMPOSANTE, $formation->getComposantePorteuse()?->getLibelle());
+        $modele->setCellValue(self::CEL_ANNEE_UNIVERSITAIRE, $anneeUniversitaire->getAnneeUniversitaire()?->getLibelle());
         $modele->setCellValue(self::CEL_INTITULE_FORMATION, $formation->getDisplay());
 
         if ($formation->isHasParcours() === false) {

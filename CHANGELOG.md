@@ -2,6 +2,52 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.38.1](https://github.com/Dannebicque/oreof/compare/v1.38.0...v1.38.1) (2025-05-13)
+
+
+### Bug Fixes
+
+* **SemestreController:** adjust condition for semester open status message ([ec6b928](https://github.com/Dannebicque/oreof/commit/ec6b928e998b07e18919112fe96ab64c524058b3))
+* **step4Hd:** enable MCCC display in the stimulus controller ([f9a6ff5](https://github.com/Dannebicque/oreof/commit/f9a6ff5556ca05f8ac583360859d05a96f6e5a2d))
+
+## [1.38.0](https://github.com/Dannebicque/oreof/compare/v1.37.0...v1.38.0) (2025-05-11)
+
+
+### Features
+
+* **but-mccc-version:** add methods to retrieve original and new float values for hours ([be1f913](https://github.com/Dannebicque/oreof/commit/be1f9138524d8a2b3072fc6bc2f9cdc3c6df65cb))
+* **security:** enhance GlobalVoter permissions ([ac3d397](https://github.com/Dannebicque/oreof/commit/ac3d397c7613736b904f082ba73b22039d4d3ca8))
+* **translations:** update labels and help texts for validation and profile fields ([ac3d397](https://github.com/Dannebicque/oreof/commit/ac3d397c7613736b904f082ba73b22039d4d3ca8))
+
+
+### Bug Fixes
+
+* **but-mccc-version:** adjust total hours calculation to exclude TE from sums ([a394341](https://github.com/Dannebicque/oreof/commit/a3943410c15793ad0ffb86f97b4f12d6bc8b6d64))
+* **but-mccc-version:** calculate and update total coefficients for resources and SAEs ([c1d71a6](https://github.com/Dannebicque/oreof/commit/c1d71a6b5aab5dd575389624a53574ff2f4b132b))
+* **but-mccc-version:** update total hours calculation to use new float values ([d070c39](https://github.com/Dannebicque/oreof/commit/d070c39ba27dba3dcba816676a36130d97889cf3))
+* **liste:** update conditions for button disabling based on semester status ([4c102b0](https://github.com/Dannebicque/oreof/commit/4c102b080c5d1a92c8fafb7c1b78fdef48f9af39))
+
+## [1.37.0](https://github.com/Dannebicque/oreof/compare/v1.36.0...v1.37.0) (2025-05-08)
+
+
+### Features
+
+* **controller:** ensure DPE parcours is added to parcour during initialization ([a90a3e1](https://github.com/Dannebicque/oreof/commit/a90a3e18ec474ecb93cb2a7e15b5bf1d2bde09d2))
+* **workflow:** remove admin guard from "initialiser" transition ([a90a3e1](https://github.com/Dannebicque/oreof/commit/a90a3e18ec474ecb93cb2a7e15b5bf1d2bde09d2))
+
+
+### Bug Fixes
+
+* **controller:** dispatch McccUpdateEvent only for owner parcours ([2e4aa13](https://github.com/Dannebicque/oreof/commit/2e4aa131ded8287d8600431dfef8978f4d27df69))
+* **controller:** simplify MCCC logic and remove commented code ([f233c0e](https://github.com/Dannebicque/oreof/commit/f233c0e4446a5308860c37b7386a72042a59f527))
+* **ec-controller:** ensure FicheMatiere libelle is trimmed and validated ([845bb4b](https://github.com/Dannebicque/oreof/commit/845bb4b74dc8f68f338c863d2afbf0fd19be17bb))
+* **ec-controller:** remove redundant setNatureUeEc assignment ([845bb4b](https://github.com/Dannebicque/oreof/commit/845bb4b74dc8f68f338c863d2afbf0fd19be17bb))
+* **FicheMatiereController:** update property name for copied fiche matiere ([16df861](https://github.com/Dannebicque/oreof/commit/16df8616f03b6237d932d5c063fe0a4b7b430c10))
+* **js:** update placeholder text for TomSelect dropdown ([845bb4b](https://github.com/Dannebicque/oreof/commit/845bb4b74dc8f68f338c863d2afbf0fd19be17bb))
+* **js:** validate matieres existence based on both input array and table rows ([845bb4b](https://github.com/Dannebicque/oreof/commit/845bb4b74dc8f68f338c863d2afbf0fd19be17bb))
+* **parcours:** handle linked UEs in element constitutifs processing ([a28c32f](https://github.com/Dannebicque/oreof/commit/a28c32fe9c13d8a11ec9910452fbb6685d084f8c))
+* **twig:** refine condition for ECTS input visibility ([845bb4b](https://github.com/Dannebicque/oreof/commit/845bb4b74dc8f68f338c863d2afbf0fd19be17bb))
+
 ## [1.36.0](https://github.com/Dannebicque/oreof/compare/v1.35.0...v1.36.0) (2025-05-06)
 
 

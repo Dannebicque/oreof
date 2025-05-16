@@ -87,7 +87,7 @@ class LicenceMccc extends AbstractLicenceMccc
         $tabSemestresAnnee = $dto->getTabAnnee();
 
         //en-tête du fichier
-        $modele->setCellValue(self::CEL_ANNEE_UNIVERSITAIRE, 'Année Universitaire ' . $formation->getDpe()?->getLibelle());
+        $modele->setCellValue(self::CEL_ANNEE_UNIVERSITAIRE, 'Année Universitaire ' . $anneeUniversitaire->getAnneeUniversitaire()?->getLibelle());
         $modele->setCellValue(self::CEL_TYPE_FORMATION, $formation->getTypeDiplome()?->getLibelle());
         $modele->setCellValue(self::CEL_INTITULE_FORMATION, $formation->getDisplay());
         $modele->setCellValue(self::CEL_INTITULE_PARCOURS, $parcours->isParcoursDefaut() === false ? $parcours->getDisplay() : '');

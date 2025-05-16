@@ -78,6 +78,7 @@
     <div {{ stimulus_controller('mccc--licence', {
         url: path('type_diplome_licence_change_hd', {ficheMatiere:ficheMatiere.id}),
         typeMccc: ficheMatiere.typeMccc,
+        afficheMccc: true
     }) }}>
         <form method="post"
               id="formMccc"

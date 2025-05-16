@@ -218,7 +218,8 @@ class GlobalVoter extends Voter
             //todo: filtre pas si les bons droits... Edit ou lecture ?
             $canEdit = $this->dpeParcoursWorkflow->can($subject, 'autoriser') ||
                 $this->dpeParcoursWorkflow->can($subject, 'valider_parcours') ||
-                //$this->dpeParcoursWorkflow->can(subject, 'valider_ouverture_sans_cfvu') ||
+                $this->dpeParcoursWorkflow->can($subject, 'valider_dpe_composante') ||
+                $this->dpeParcoursWorkflow->can($subject, 'valider_conseil') ||
                 $this->dpeParcoursWorkflow->can($subject, 'valider_rf');
         }
 
@@ -228,6 +229,8 @@ class GlobalVoter extends Voter
                 $this->dpeParcoursWorkflow->can($subject, 'valider_ouverture_sans_cfvu') ||
                 $this->dpeParcoursWorkflow->can($subject, 'valider_parcours') ||
                 $this->dpeParcoursWorkflow->can($subject, 'valider_rf') ||
+                $this->dpeParcoursWorkflow->can($subject, 'valider_dpe_composante') ||
+                $this->dpeParcoursWorkflow->can($subject, 'valider_conseil') ||
                 $this->dpeParcoursWorkflow->can($subject, 'valider_central');
         }
 
