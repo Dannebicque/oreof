@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.38.2](https://github.com/Dannebicque/oreof/compare/v1.38.1...v1.38.2) (2025-05-16)
+
+
+### Bug Fixes
+
+* **GlobalVoter:** add default parcours handling for edit permissions ([4094fdd](https://github.com/Dannebicque/oreof/commit/4094fddfd8ab0d528704c0159bceabc1becb4e90))
+* **GlobalVoter:** ensure parcours is an instance of Parcours before accessing its methods ([7de5081](https://github.com/Dannebicque/oreof/commit/7de5081aa01afbac196b64eeb2d5d6c5f09562b6))
+* **liste:** rename raccrocheEnfant variable and update conditions for child links ([1912919](https://github.com/Dannebicque/oreof/commit/19129191f152d337e03b7a3a2330eef4be858ae2))
+* **valider_ses:** add confirmation message for effective change of responsible/co-responsible ([0a8c570](https://github.com/Dannebicque/oreof/commit/0a8c57095ece40aea2940c278c632c4d24fbcc52))
+* **versioning:** handle null values for MCCC and update university year display ([f162a01](https://github.com/Dannebicque/oreof/commit/f162a0179b01ad525aea4bf30385a6f0f85c7af5))
+
 ## [1.38.1](https://github.com/Dannebicque/oreof/compare/v1.38.0...v1.38.1) (2025-05-13)
 
 
