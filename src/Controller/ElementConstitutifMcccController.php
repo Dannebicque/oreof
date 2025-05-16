@@ -185,13 +185,13 @@ class ElementConstitutifMcccController extends AbstractController
                             $elementConstitutif->setQuitusText(null);
                         }
 
-                            if ($request->request->has('choix_type_mccc') && $request->request->get('choix_type_mccc') !== $elementConstitutif->getTypeMccc()) {
-                                $elementConstitutif->setTypeMccc($request->request->get('choix_type_mccc'));
-                                $entityManager->flush();
-                                $typeD->clearMcccs($elementConstitutif);
-                            }
-                            $typeD->saveMcccs($elementConstitutif, $request->request);
-                            $newMcccToText = $this->mcccToTexte($elementConstitutif->getMcccs());
+                        if ($request->request->has('choix_type_mccc') && $request->request->get('choix_type_mccc') !== $elementConstitutif->getTypeMccc()) {
+                            $elementConstitutif->setTypeMccc($request->request->get('choix_type_mccc'));
+                            $entityManager->flush();
+                            $typeD->clearMcccs($elementConstitutif);
+                        }
+                        $typeD->saveMcccs($elementConstitutif, $request->request);
+                        $newMcccToText = $this->mcccToTexte($elementConstitutif->getMcccs());
                     }
                 }
 
