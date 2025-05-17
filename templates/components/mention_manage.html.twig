@@ -168,6 +168,7 @@
                         <div class="col-3 d-grid">
                             {% if is_granted('CAN_FORMATION_MANAGE_MY', this.formation) %}
                                 {% if not this.hasDemande %}
+
                                     <button class="btn btn-sm d-block btn-outline-warning"
                                             type="button"
                                             {{ stimulus_controller('modal', {
@@ -203,6 +204,12 @@
                                             data-bs-original-title="{{ ('demande.reouverture.mention.annuler')|trans({}, 'process') }}"
                                     >
                                         <i class="fal fa-times"></i> {{ ('demande.reouverture.mention.annuler')|trans({}, 'process') }}
+                                    </button>
+                                {% endif %}
+                            {% else %}
+                                {% if not this.hasDemande and this.formation.etatReconduction.value == 'FORMATION_SOUMIS_SES' %}
+                                    <button class="btn btn-sm d-block btn-outline-warning">
+                                        Soumis SES, attente validation
                                     </button>
                                 {% endif %}
                             {% endif %}
