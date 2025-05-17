@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.39.0](https://github.com/Dannebicque/oreof/compare/v1.38.2...v1.39.0) (2025-05-17)
+
+
+### Features
+
+* **AbstractLicenceMccc:** add dir property to manage directory path ([eeb055b](https://github.com/Dannebicque/oreof/commit/eeb055b5ea53b5adb70d0d49cd4a71e7d55006bf))
+* **Etablissement:** add userProfils relationship and methods for managing user profiles ([64b0181](https://github.com/Dannebicque/oreof/commit/64b01811777aee99e9a2b4f02f7a30af2508f471))
+* **ProcessValidationMentionController:** add validation and history logging for formation submission ([f86118d](https://github.com/Dannebicque/oreof/commit/f86118de581bf13a7c9b5f5f7a1e7864d3569343))
+
+
+### Bug Fixes
+
+* **ButTypeDiplome, LicenceTypeDiplome:** add missing fichier parameter to export methods ([87b814a](https://github.com/Dannebicque/oreof/commit/87b814a083978d29cd9b47f07f15de2b2db532dd))
+* **GetElementConstitutif:** reorder ECTS calculation logic for clarity ([e6440c9](https://github.com/Dannebicque/oreof/commit/e6440c9de4c7a6a37014c27e20b128e5a88bbab6))
+* **help.fr.yaml:** add help text for specific hours in parcours ([4cc11f9](https://github.com/Dannebicque/oreof/commit/4cc11f930b3d1e15d0225565784392e935a0e635))
+* **licence:** update disabled condition for choix_type_mccc select based on natureUeEc ([2180d3d](https://github.com/Dannebicque/oreof/commit/2180d3d3c83be08f8f63443ee6f9412b1e26bf37))
+* **McccUpdateSubscriber:** ensure ficheMatiere is not null before processing element constitutifs ([e2096d6](https://github.com/Dannebicque/oreof/commit/e2096d66f919ff8d862566d7593304fcf0adf090))
+
 ## [1.38.2](https://github.com/Dannebicque/oreof/compare/v1.38.1...v1.38.2) (2025-05-16)
 
 
