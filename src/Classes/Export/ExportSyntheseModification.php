@@ -48,7 +48,7 @@ class ExportSyntheseModification
             foreach ($formation['parcours'] as $parc) {
                 $typeD = $this->typeDiplomeRegistry->getTypeDiplome($form?->getTypeDiplome()?->getModeleMcc());
                 $dto = $typeD->calculStructureParcours($parc, true, false);
-                $structureDifferencesParcours = $this->versioningParcours->getStructureDifferencesBetweenParcoursAndLastVersion($parc);
+                $structureDifferencesParcours = $this->versioningParcours->getStructureDifferencesBetweenParcoursAndLastVersion($parc->getParcoursOrigineCopie());
                 if ($structureDifferencesParcours !== null) {
                     $diffStructure = new VersioningStructureExtractDiff($structureDifferencesParcours, $dto, $typeEpreuves);
                     $diffStructure->extractDiff();
