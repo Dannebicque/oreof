@@ -12,8 +12,10 @@ namespace App\Classes\Export;
 use App\Classes\MyGotenbergPdf;
 use App\Entity\CampagneCollecte;
 use App\Repository\FormationRepository;
+use App\Repository\ParcoursRepository;
 use App\Repository\TypeEpreuveRepository;
 use App\Service\VersioningParcours;
+use App\Service\VersioningStructure;
 use App\Service\VersioningStructureExtractDiff;
 use App\TypeDiplome\TypeDiplomeRegistry;
 use App\Utils\Tools;
@@ -24,6 +26,7 @@ class ExportSyntheseModification
     private string $dir;
 
     public function __construct(
+        protected ParcoursRepository $parcoursRepository,
         protected TypeEpreuveRepository $typeEpreuveRepository,
         protected TypeDiplomeRegistry $typeDiplomeRegistry,
         protected VersioningParcours $versioningParcours,
@@ -47,6 +50,7 @@ class ExportSyntheseModification
             $form = $formation['formation'];
             foreach ($formation['parcours'] as $parc) {
                 $typeD = $this->typeDiplomeRegistry->getTypeDiplome($form?->getTypeDiplome()?->getModeleMcc());
+                $parc = $this->parcoursRepository->find($parc->getId());
                 $dto = $typeD->calculStructureParcours($parc, true, false);
                 $structureDifferencesParcours = $this->versioningParcours->getStructureDifferencesBetweenParcoursAndLastVersion($parc->getParcoursOrigineCopie());
                 if ($structureDifferencesParcours !== null) {
@@ -55,6 +59,7 @@ class ExportSyntheseModification
                 } else {
                     $diffStructure = null;
                 }
+
                 $tDemandes[] = [
                     'formation' => $form,
                     'composante' => $formation['composante'],
@@ -64,8 +69,6 @@ class ExportSyntheseModification
                     'dto' => $dto
                 ];
             }
-//            dump($form->getSlug());
-//            dump($tDemandes);
 
             $fichiers[] = $this->myGotenbergPdf->renderAndSave(
                 'pdf/synthese_modifications.html.twig',
