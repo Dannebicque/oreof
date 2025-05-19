@@ -35,10 +35,11 @@ class McccUpdateSubscriber implements EventSubscriberInterface
         if ($event->hasDiff()) {
             // mail au responsable de la formation/RP si réouverture
             $ficheMatiere = $event->getElementConstitutif()->getFicheMatiere();
-            $ecs = $ficheMatiere->getElementConstitutifs();
-            foreach ($ecs as $ec) {
-                $parcours = $ec->getParcours();
-                if ($parcours !== null && $parcours->getId() !== $event->getParcours()->getId()) {
+            if ($ficheMatiere !== null) {
+                $ecs = $ficheMatiere->getElementConstitutifs();
+                foreach ($ecs as $ec) {
+                    $parcours = $ec->getParcours();
+                    if ($parcours !== null && $parcours->getId() !== $event->getParcours()->getId()) {
                         //mail
                         $this->mailer->initEmail();
                         $this->mailer->setTemplate('mails/mutualisation/parcours_reouverture_mccc.html.twig', [
@@ -49,14 +50,15 @@ class McccUpdateSubscriber implements EventSubscriberInterface
                         ]);
                         $this->mailer->sendMessage(
                             [
-                            $parcours->getRespParcours()?->getEmail(),
-                            $parcours->getCoResponsable()?->getEmail(),
-                            $parcours->getFormation()?->getResponsableMention()?->getEmail(),
-                            $parcours->getFormation()?->getCoResponsable()?->getEmail(),
-                    ],
+                                $parcours->getRespParcours()?->getEmail(),
+                                $parcours->getCoResponsable()?->getEmail(),
+                                $parcours->getFormation()?->getResponsableMention()?->getEmail(),
+                                $parcours->getFormation()?->getCoResponsable()?->getEmail(),
+                            ],
                             '[ORéOF] Un élément mutualisé avec l\'un de vos parcours a été modifié'
                         );
                     }
+                }
             }
         }
     }

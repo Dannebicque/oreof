@@ -60,8 +60,11 @@ class HistoriqueExtension extends AbstractExtension
             return 'changeRf.'.$this->validationProcessChangeRf->getEtapeCle($etape, 'label');
         }
 
+        if ($etape === 'cloture') {
+            return 'cloture';
+        }
+
         if (str_starts_with($etape, 'publie')) {
-            //            $etape = str_replace('changeRf.', '', $etape);
             return 'publie';
         }
 
@@ -110,6 +113,10 @@ class HistoriqueExtension extends AbstractExtension
 
         if ($etape === 'change_rf_co' || $etape === 'change_rf') {
             return 'fal fa-repeat';
+        }
+
+        if ($etape === 'cloture') {
+            return 'fal fa-close';
         }
 
         if (str_starts_with($etape, 'publie')) {

@@ -179,6 +179,17 @@ class GlobalVoter extends Voter
             $subject->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_PARCOURS ||
             $subject->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION;
 
+        if ($subject->isHasParcours() === false) {
+            // parcours par défaut
+            $parcours = $subject->getParcours()->first();
+            if ($parcours !== null && $parcours instanceof Parcours) {
+                $dpeParcours = GetDpeParcours::getFromParcours($parcours);
+                if ($dpeParcours !== null) {
+                    $canEdit = $canEdit || $this->canAccessDpeParcours($dpeParcours, $centre);
+                }
+            }
+        }
+
         $canCentre = ($centre->getFormation() === $subject && ($subject->getCoResponsable()?->getId() === $this->user->getId() || $subject->getResponsableMention()?->getId() === $this->user->getId()))|| $centre->getComposante() === $subject->getComposantePorteuse() || $this->security->isGranted('ROLE_ADMIN');
 
         return $canEdit && $canCentre;

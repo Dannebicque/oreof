@@ -171,12 +171,12 @@ class GetElementConstitutif
     {
         $isEctsImpose = $this->elementConstitutif->getFicheMatiere()?->isEctsImpose();
 
-        if($this->elementConstitutif->isEctsSpecifiques() && !$isEctsImpose) {
-            return $this->elementConstitutif->getEcts();
+        if ($this->elementConstitutif->getEcParent() !== null && !$isEctsImpose) {
+            return $this->elementConstitutif->getEcParent()->getEcts();
         }
 
-        if($this->elementConstitutif->getEcParent() !== null && !$isEctsImpose) {
-            return $this->elementConstitutif->getEcParent()->getEcts();
+        if($this->elementConstitutif->isEctsSpecifiques() && !$isEctsImpose) {
+            return $this->elementConstitutif->getEcts();
         }
 
         if($this->elementConstitutif->getFicheMatiere() !== null) {

@@ -447,3 +447,4 @@ type_diplome.labels.controleAssiduite.help: 'Le contrôle d''assiduité est-il l
 profil.helps.libelle: 'Indiquez le libellé exact du profil.'
 profil.helps.code: 'Indiquez le code du profil. Le code commence par ROLE_ et est suivi du nom du profil.'
 profil.helps.centre.help: 'Préciser quelles sont les centres qui peuvent utiliser ce profil'
+parcours_ec.helps.heuresSpecifiques: 'Indiquez si les heures sont spécifiques à ce parcours.'

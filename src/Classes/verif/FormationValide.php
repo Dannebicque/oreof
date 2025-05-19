@@ -88,9 +88,9 @@ class FormationValide extends AbstractValide
                     return false;
                 }
 
-                if (!array_key_exists('valide_parcours_rf', $parcours->getEtatParcours())) {
-                    return false;
-                }
+//                if (!array_key_exists('valide_parcours_rf', $parcours->getEtatParcours())) {
+//                    return false;
+//                }
             }
         }
 

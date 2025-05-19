@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Classes\JsonReponse;
 use App\Classes\MentionProcess;
 use App\Classes\Process\FicheMatiereProcess;
 use App\Classes\Process\ParcoursProcess;
@@ -9,6 +10,9 @@ use App\Classes\ValidationProcess;
 use App\Classes\ValidationProcessFicheMatiere;
 use App\Classes\verif\FormationValide;
 use App\Entity\Formation;
+use App\Entity\Historique;
+use App\Entity\HistoriqueFormation;
+use App\Enums\TypeModificationDpeEnum;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -26,6 +30,7 @@ class ProcessValidationMentionController extends BaseController
         private readonly ValidationProcess             $validationProcess,
         private readonly ValidationProcessFicheMatiere $validationProcessFicheMatiere,
         private readonly ParcoursProcess               $parcoursProcess,
+        private readonly MentionProcess $mentionProcess,
         private readonly FicheMatiereProcess           $ficheMatiereProcess,
         KernelInterface                                $kernel
     ) {
@@ -34,16 +39,26 @@ class ProcessValidationMentionController extends BaseController
 
     #[Route('/validation-mention/valide/{etape}/{formation}', name: 'app_validation_formation_valide')]
     public function valide(
-        MentionProcess         $mentionProcess,
+        EntityManagerInterface $entityManager,
         Formation $formation,
         string                 $etape,
         Request                $request
     ): Response {
         $valideFormation = new FormationValide($formation);
-//        $process = $this->validationProcess->getEtape($etape);
-//        $processData = $this->parcoursProcess->etatParcours($parcours, $process);//todo: process??
-        if ($request->isMethod('POST')) {
-            return $this->parcoursProcess->valideParcours($parcours, $this->getUser(), $transition, $request, $fileName);
+        if ($request->isMethod('POST') && $valideFormation->isFormationValide()) {
+            $formation->setEtatReconduction(TypeModificationDpeEnum::FORMATION_SOUMIS_SES);
+            //creation de l'historique
+            $histo = new HistoriqueFormation();
+            $histo->setFormation($formation);
+            $histo->setDate(new \DateTime());
+            $histo->setEtape($etape);
+            $histo->setEtat('valide');
+            $histo->setUser($this->getUser());
+
+            $entityManager->persist($histo);
+            $entityManager->flush();
+
+            return JsonReponse::success('La formation a été validée avec succès.');
         }
 
 
