@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.39.1](https://github.com/Dannebicque/oreof/compare/v1.39.0...v1.39.1) (2025-05-19)
+
+
+### Bug Fixes
+
+* **_semestre_heures.html.twig:** correct variable path for nonDispense check ([7451585](https://github.com/Dannebicque/oreof/commit/7451585556b9ef2c7498f1be6a7bfec1a4d9d432))
+* **_semestre_heures.html.twig:** correct variable path for nonDispense check ([ac85407](https://github.com/Dannebicque/oreof/commit/ac85407d9e62a884b942e9bf29aeb865a5e05cd5))
+* **ExportSyntheseModification, SyntheseModificationController, synthese_modifications.html.twig:** refactor parcours handling and update data structure for DPE requests ([9d962eb](https://github.com/Dannebicque/oreof/commit/9d962eb8bd791e9711f152ecdcc46593add7b1c9))
+* **ExportSyntheseModification:** handle null parcoursOrigineCopie and update structure differences calculation ([777e50f](https://github.com/Dannebicque/oreof/commit/777e50f532e2b5d45195a6f8eed67653dc2db608))
+* **ExportSyntheseModification:** improve structure differences calculation by integrating ParcoursRepository ([54d4e12](https://github.com/Dannebicque/oreof/commit/54d4e12f7d2241e98d6dba2b9c86a18b3d4216ac))
+* **ExportSyntheseModification:** improve structure differences calculation by integrating ParcoursRepository ([9223fbf](https://github.com/Dannebicque/oreof/commit/9223fbfc571daa6f176a9e7be5555ec9c1870a63))
+* **ExportSyntheseModification:** update structure differences calculation to use original parcours copy ([c8b0f9a](https://github.com/Dannebicque/oreof/commit/c8b0f9a87c2b0ae15c741b846e65d3eae59c7955))
+* **synthese_modifications.html.twig:** update niveauModification checks for non-dispensation and creation cases ([edecbca](https://github.com/Dannebicque/oreof/commit/edecbca1149f36cc6320a1e2204f0a2c64ff3e58))
+
 ## [1.39.0](https://github.com/Dannebicque/oreof/compare/v1.38.2...v1.39.0) (2025-05-19)
 
 
