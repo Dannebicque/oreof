@@ -34,7 +34,7 @@ class ExportSyntheseModification
         $this->dir = $kernel->getProjectDir() . '/public/';
     }
 
-    public function exportLink(array $formations, CampagneCollecte $dpe): string
+    public function exportLink(array $formations, CampagneCollecte $campagneCollecte): string
     {
         $epreuves = $this->typeEpreuveRepository->findAll();
         foreach ($epreuves as $epreuve) {
@@ -43,10 +43,9 @@ class ExportSyntheseModification
 
         foreach ($formations as $formation) {
             $tDemandes = [];
-            $form = $formation['formation'];
-            $composante = $form->getComposantePorteuse();
-            foreach ($formation['parcours'] as $parc) {
 
+            $form = $formation['formation'];
+            foreach ($formation['parcours'] as $parc) {
                 $typeD = $this->typeDiplomeRegistry->getTypeDiplome($form?->getTypeDiplome()?->getModeleMcc());
                 $dto = $typeD->calculStructureParcours($parc, true, false);
                 $structureDifferencesParcours = $this->versioningParcours->getStructureDifferencesBetweenParcoursAndLastVersion($parc);
@@ -56,7 +55,14 @@ class ExportSyntheseModification
                 } else {
                     $diffStructure = null;
                 }
-                $tDemandes[] = ['parcours' => $parc, 'diffStructure' => $diffStructure, 'dto' => $dto];
+                $tDemandes[] = [
+                    'formation' => $form,
+                    'composante' => $formation['composante'],
+                    'dpeDemande' => $formation['dpeDemande'],
+                    'parcours' => $parc,
+                    'diffStructure' => $diffStructure,
+                    'dto' => $dto
+                ];
             }
 //            dump($form->getSlug());
 //            dump($tDemandes);
@@ -67,9 +73,7 @@ class ExportSyntheseModification
                 [
                     'titre' => 'Liste des demande de changement MCCC et maquettes',
                     'demandes' => $tDemandes,
-                    'formation' => $form,
-                    'dpe' => $dpe,
-                    'composante' => $composante,
+                    'dpe' => $campagneCollecte,
                 ],
                 Tools::FileName($form->getSlug())
             );

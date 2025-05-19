@@ -35,7 +35,6 @@ class GetFormations
         $q = $options['q'] ?? null;
 
         if ($this->authorizationChecker->isGranted('ROLE_ADMIN') ||
-            $this->authorizationChecker->isGranted('ROLE_SES') ||
             $this->authorizationChecker->isGranted('CAN_COMPOSANTE_SHOW_ALL', $user) ||
             $this->authorizationChecker->isGranted('CAN_ETABLISSEMENT_SHOW_ALL', $user) ||
             $this->authorizationChecker->isGranted('CAN_FORMATION_SHOW_ALL', $user)) {

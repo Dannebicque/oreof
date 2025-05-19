@@ -4,7 +4,10 @@
     <h1 class="text-center">CFVU du {{ dpe.dateCfvu|date('d/m/Y') }}</h1>
     {% for demande in demandes %}
         {% set parcours = demande.parcours %}
+        {% set formation = demande.formation %}
         {% set dto = demande.dto %}
+        {% set composante = demande.composante %}
+        {% set dpeDemande = demande.dpeDemande %}
         {% set diffStructure = demande.diffStructure %}
         {% set diffSemestres = diffStructure.diff.semestres is defined ? diffStructure.diff.semestres :  [] %}
         {% set diffUe = diffStructure.diffUe %}
@@ -15,6 +18,12 @@
         <h2 class="text-center">{{ formation.displayLong }}</h2>
         <h3 class="text-center">Parcours {{ parcours.display }}</h3>
         <h4 class="text-center">Composante {{ composante.libelle }}</h4>
+        <div>
+            <strong>Argumentaire de la demande</strong>
+            <p>
+                {{ dpeDemande.argumentaireDemande }}
+            </p>
+        </div>
         <div>
             {# todo: gérer les UE/EC à choix #}
 

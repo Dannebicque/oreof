@@ -49,6 +49,9 @@ class DpeDemande
     #[ORM\ManyToOne(inversedBy: 'dpeDemandes')]
     private ?User $auteur = null;
 
+    #[ORM\ManyToOne(inversedBy: 'dpeDemandes')]
+    private ?CampagneCollecte $campagneCollecte = null;
+
     //constructeur pour initialiser la date de demande
     public function __construct()
     {
@@ -180,5 +183,17 @@ class DpeDemande
         if ($this->niveauDemande === 'F') {
             return $this->getEtatDemande();
         }
+    }
+
+    public function getCampagneCollecte(): ?CampagneCollecte
+    {
+        return $this->campagneCollecte;
+    }
+
+    public function setCampagneCollecte(?CampagneCollecte $campagneCollecte): static
+    {
+        $this->campagneCollecte = $campagneCollecte;
+
+        return $this;
     }
 }

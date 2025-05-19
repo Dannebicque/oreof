@@ -130,9 +130,9 @@ class ExportMccc
                             $this->annee,
                             $parcours,
                             $dir,
+                            $fichierXlsx,
                             null,
-                            null,
-                            $fichierXlsx
+                            null
                         );
 
                         $tabFiles[] = $fichier;
