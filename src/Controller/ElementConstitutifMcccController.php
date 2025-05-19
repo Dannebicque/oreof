@@ -299,7 +299,7 @@ class ElementConstitutifMcccController extends AbstractController
             'mcccs' => $getElement->getMcccsFromFicheMatiere($typeD),
             'isFromVersioning' => 'false',
             'lastVersion' => $lastVersion,
-            'libelleQuelleVersion' => 'Version actuelle',
+            'libelleQuelleVersion' => 'Version actuellement saisie en attente de validation',
             'parcoursId' => $parcours->getId()
         ]);
     }
