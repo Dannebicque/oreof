@@ -43,7 +43,15 @@
         </twig:alerte>
     {% endif %}
 
-    <h3>{{ typeMcccLibelle[typeMccc] ?? "" }}</h3>
+    <h3 class="mt-3">
+        {{ isMcccFromVersion ?? false == true and isFromVersioning != 'true' 
+            ? 'Type de MCCC précédemment validé : ' 
+            : 'Type de MCCC : '
+        }}
+    </h3>
+    <h3 class="mb-3">
+        {{ typeMcccLibelle[typeMccc] ?? "" }}
+    </h3>
 
     {{ include('typeDiplome/mccc-non-editable/'~templateForm) }}
     </div>
