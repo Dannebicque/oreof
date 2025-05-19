@@ -86,7 +86,7 @@ class SyntheseModificationController extends BaseController
         foreach ($dpes as $dpe) {
             $formation = $dpe->getFormation();
             if (!array_key_exists($formation?->getId(), $formations)) {
-                $formations[$formation?->getId()]['parcours']['parcours'] = [];
+                $formations[$formation?->getId()]['parcours'] = [];
                 $formations[$formation?->getId()]['formation'] = $formation;
                 $formations[$formation?->getId()]['dpeDemande'] = null;
                 $formations[$formation?->getId()]['composante'] = $composante;
@@ -98,8 +98,8 @@ class SyntheseModificationController extends BaseController
             } else {
                 //dpe si c'est un parcours
                 $parcours = $dpe->getParcours();
-                $formations[$formation?->getId()]['parcours']['parcours'][] = $parcours;
-                $formations[$formation?->getId()]['parcours']['dpeDemande'] = $dpe;
+                $formations[$formation?->getId()]['parcours'][$parcours->getId()]['parcours'] = $parcours;
+                $formations[$formation?->getId()]['parcours'][$parcours->getId()]['dpeDemande'] = $dpe;
             }
         }
 

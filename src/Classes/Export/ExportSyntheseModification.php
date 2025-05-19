@@ -48,14 +48,14 @@ class ExportSyntheseModification
             $tDemandes = [];
 
             $form = $formation['formation'];
-            foreach ($formation['parcours']['parcours'] as $parc) {
-                if ($parc->getParcoursOrigineCopie() === null) {
+            foreach ($formation['parcours'] as $parc) {
+                if ($parc['parcours']->getParcoursOrigineCopie() === null) {
                     $dto = null;
                 } else {
                     $typeD = $this->typeDiplomeRegistry->getTypeDiplome($form?->getTypeDiplome()?->getModeleMcc());
-                    $parc = $this->parcoursRepository->find($parc->getId());
-                    $dto = $typeD->calculStructureParcours($parc, true, false);
-                    $structureDifferencesParcours = $this->versioningParcours->getStructureDifferencesBetweenParcoursAndLastVersion($parc->getParcoursOrigineCopie());
+                    $parco = $this->parcoursRepository->find($parc['parcours']->getId());
+                    $dto = $typeD->calculStructureParcours($parco, true, false);
+                    $structureDifferencesParcours = $this->versioningParcours->getStructureDifferencesBetweenParcoursAndLastVersion($parco->getParcoursOrigineCopie());
                     if ($structureDifferencesParcours !== null) {
                         $diffStructure = new VersioningStructureExtractDiff($structureDifferencesParcours, $dto, $typeEpreuves);
                         $diffStructure->extractDiff();
@@ -68,8 +68,8 @@ class ExportSyntheseModification
                     'formation' => $form,
                     'composante' => $formation['composante'],
                     'dpeDemandeFormation' => $formation['dpeDemande'],
-                    'dpeDemandeParcours' => $formation['parcours']['dpeDemande'],
-                    'parcours' => $parc,
+                    'dpeDemandeParcours' => $parc['dpeDemande'],
+                    'parcours' => $parco,
                     'diffStructure' => $diffStructure,
                     'dto' => $dto
                 ];
