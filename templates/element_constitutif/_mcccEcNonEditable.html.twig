@@ -1,3 +1,5 @@
+{% import "typeDiplome/mccc-non-editable/licence/_compareMcccVersioning.macro.html.twig" as compareMacro %}
+
 <div {{ stimulus_controller('modal', {
         size: 'lg',
         modalTitle: 'Modalités de Contrôle des Connaissances et des Compétences',
@@ -12,6 +14,11 @@
 
 {% set hasChangedTypeMccc = not (typeMccc == typeMcccActuel) %}
 
+{% set hasDisplayComparaison = (isFromVersioning ?? 'false' != 'true') 
+    and (isMcccFromVersion ?? false == true)
+    and (hasChangedTypeMccc == false)
+%}
+
 <div {{ stimulus_target('modal', 'zoneToRefresh') }}>
     {% if isFromVersioning is defined and isFromVersioning != 'true' %}
         <h4 class="text-center text-primary mb-2">{{ libelleQuelleVersion }}</h4>
@@ -19,7 +26,14 @@
     <h2>MCCC pour {{ ec.libelle }}</h2>
 
     <h3>ECTS</h3>
-    <p>{{ ects }}</p>
+    {{
+        compareMacro.displayMccc(
+            ects,
+            ectsVersioning ?? false,
+            "",
+            hasDisplayComparaison
+        )
+    }}
 
     <h3>{{ typeMcccLibelle[typeMccc] ?? "" }}</h3>
 

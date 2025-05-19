@@ -324,8 +324,10 @@ class ElementConstitutifMcccController extends AbstractController
         $typeDiplome = $entityManager->getRepository(TypeDiplome::class)->findOneBy(['libelle' => $libelleTypeDiplome]);
         $templateForm = $typeDiplomeReg->getTypeDiplome($typeDiplome->getModeleMcc())::TEMPLATE_FORM_MCCC;
         $typeEpreuveDiplome = $entityManager->getRepository(TypeEpreuve::class)->findByTypeDiplome($typeDiplome);
-
-        $typeMccc = (new GetElementConstitutif($elementConstitutif, $parcoursVersioning->getParcours()))->getTypeMcccFromFicheMatiere();
+        
+        $getElement = new GetElementConstitutif($elementConstitutif, $parcoursVersioning->getParcours());
+        $typeMccc = $getElement->getTypeMcccFromFicheMatiere();
+        $ectsActuel = $getElement->getFicheMatiereEcts();
         $typeMcccLibelle = [
             'ct' => 'Contrôle Terminal',
             'cc' => 'Contrôle Continu',
@@ -414,7 +416,8 @@ class ElementConstitutifMcccController extends AbstractController
             'typeEpreuves' => $typeEpreuveDiplome,
             'typeMcccLibelle' => $typeMcccLibelle,
             'ec' => $structureEc->elementConstitutif,
-            'ects' => $structureEc->heuresEctsEc->ects,
+            'ects' => $ectsActuel, // Actuel
+            'ectsVersioning' => $structureEc->heuresEctsEc->ects, // Versioning
             'templateForm' => $templateForm,
             'mcccVersioning' => $tabMcccVersioning,
             'mcccs' => $mcccsToDisplay,

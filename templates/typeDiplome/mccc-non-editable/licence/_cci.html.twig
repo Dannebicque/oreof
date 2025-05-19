@@ -2,7 +2,11 @@
 
 <h3>1ᵉ Session</h3>
 
-{% set hasDisplayComparaison = (isFromVersioning != 'true') 
+{% if hasChangedTypeMccc is not defined %}
+    {% set hasChangedTypeMccc = false %}
+{% endif %}
+
+{% set hasDisplayComparaison = (isFromVersioning ?? 'false' != 'true') 
     and (isMcccFromVersion ?? false == true)
     and (hasChangedTypeMccc == false)
 %}
