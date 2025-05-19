@@ -49,15 +49,19 @@ class ExportSyntheseModification
 
             $form = $formation['formation'];
             foreach ($formation['parcours']['parcours'] as $parc) {
-                $typeD = $this->typeDiplomeRegistry->getTypeDiplome($form?->getTypeDiplome()?->getModeleMcc());
-                $parc = $this->parcoursRepository->find($parc->getId());
-                $dto = $typeD->calculStructureParcours($parc, true, false);
-                $structureDifferencesParcours = $this->versioningParcours->getStructureDifferencesBetweenParcoursAndLastVersion($parc->getParcoursOrigineCopie());
-                if ($structureDifferencesParcours !== null) {
-                    $diffStructure = new VersioningStructureExtractDiff($structureDifferencesParcours, $dto, $typeEpreuves);
-                    $diffStructure->extractDiff();
+                if ($parc->getParcoursOrigineCopie() === null) {
+                    $dto = null;
                 } else {
-                    $diffStructure = null;
+                    $typeD = $this->typeDiplomeRegistry->getTypeDiplome($form?->getTypeDiplome()?->getModeleMcc());
+                    $parc = $this->parcoursRepository->find($parc->getId());
+                    $dto = $typeD->calculStructureParcours($parc, true, false);
+                    $structureDifferencesParcours = $this->versioningParcours->getStructureDifferencesBetweenParcoursAndLastVersion($parc->getParcoursOrigineCopie());
+                    if ($structureDifferencesParcours !== null) {
+                        $diffStructure = new VersioningStructureExtractDiff($structureDifferencesParcours, $dto, $typeEpreuves);
+                        $diffStructure->extractDiff();
+                    } else {
+                        $diffStructure = null;
+                    }
                 }
 
                 $tDemandes[] = [

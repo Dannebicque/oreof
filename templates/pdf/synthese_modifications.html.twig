@@ -31,6 +31,11 @@
                 campagne {{ dpe.annee_universitaire.libelle }}
                 .
             </strong> {{ dpeDemandeParcours.argumentaireDemande }}
+        {% elseif dpeDemandeParcours.niveauModification == 'CREATION' %}
+            <strong>Création du parcours {{ parcours.libelle }} pour la
+                campagne {{ dpe.annee_universitaire.libelle }}
+                .
+            </strong>
         {% else %}
 
 
