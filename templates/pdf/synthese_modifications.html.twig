@@ -26,12 +26,12 @@
                 {{ dpeDemandeFormation.argumentaireDemande ?? '-' }}
             </p>
         </div>
-        {% if dpeDemandeParcours.niveauModification == 'CLOTURE' %}
+        {% if dpeDemandeParcours.niveauModification.value == 'NON_OUVERTURE_SES' or dpeDemandeParcours.niveauModification.value == 'NON_OUVERTURE_CFVU' or dpeDemandeParcours.niveauModification.value == 'NON_OUVERTURE' %}
             <strong>Le parcours {{ parcours.libelle }} ne sera pas dispensé pour la
                 campagne {{ dpe.annee_universitaire.libelle }}
                 .
             </strong> {{ dpeDemandeParcours.argumentaireDemande }}
-        {% elseif dpeDemandeParcours.niveauModification == 'CREATION' %}
+        {% elseif dpeDemandeParcours.niveauModification.value == 'CREATION' %}
             <strong>Création du parcours {{ parcours.libelle }} pour la
                 campagne {{ dpe.annee_universitaire.libelle }}
                 .
