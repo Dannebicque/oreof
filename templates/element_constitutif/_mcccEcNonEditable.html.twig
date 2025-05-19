@@ -21,7 +21,7 @@
     <h3>ECTS</h3>
     <p>{{ ects }}</p>
 
-    <h3>{{ typeMcccLibelle[typeMccc] }}</h3>
+    <h3>{{ typeMcccLibelle[typeMccc] ?? "" }}</h3>
 
     {% if hasChangedTypeMccc and isFromVersioning is defined and isFromVersioning != 'true' %}
         <twig:alerte 
