@@ -162,6 +162,7 @@ class ParcoursController extends BaseController
             $dpeDemande = new DpeDemande();
             $dpeDemande->setParcours($parcour);
             $dpeDemande->setFormation($formation);
+            $dpeDemande->setCampagneCollecte($this->getCampagneCollecte());
             $dpeDemande->setNiveauDemande('P');
             $dpeDemande->setEtatDemande(EtatDpeEnum::en_cours_redaction);
             $dpeDemande->setArgumentaireDemande('Création d\'un nouveau parcours');

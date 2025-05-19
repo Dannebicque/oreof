@@ -74,6 +74,7 @@ class ProcessReouvertureController extends BaseController
 
                 $demande = new DpeDemande();
                 $demande->setFormation($formation);
+                $demande->setCampagneCollecte($this->getCampagneCollecte());
                 $demande->setParcours($parcours);
                 $demande->setAuteur($this->getUser());
                 $demande->setEtatDemande(EtatDpeEnum::non_ouverture_ses);
@@ -141,6 +142,7 @@ class ProcessReouvertureController extends BaseController
             $demande = new DpeDemande();
             $demande->setFormation($formation);
             $demande->setParcours($parcours);
+            $demande->setCampagneCollecte($this->getCampagneCollecte());
             $demande->setAuteur($this->getUser());
             $demande->setNiveauDemande($typeDpe);
             $demande->setArgumentaireDemande(array_key_exists('argumentaire_demande_reouverture', $data) ? $data['argumentaire_demande_reouverture'] : '');
@@ -248,6 +250,7 @@ class ProcessReouvertureController extends BaseController
             $demande->setFormation($formation);
             $demande->setParcours(null);
             $demande->setAuteur($this->getUser());
+            $demande->setCampagneCollecte($this->getCampagneCollecte());
             $demande->setNiveauDemande($typeDpe);
             $demande->setArgumentaireDemande(array_key_exists('argumentaire_demande_reouverture', $data) ? $data['argumentaire_demande_reouverture'] : '');
             $demande->setEtatDemande(EtatDpeEnum::en_cours_redaction);
