@@ -35,8 +35,6 @@
         )
     }}
 
-    <h3>{{ typeMcccLibelle[typeMccc] ?? "" }}</h3>
-
     {% if hasChangedTypeMccc and isFromVersioning is defined and isFromVersioning != 'true' %}
         <twig:alerte 
             type="info"
@@ -44,6 +42,8 @@
         >
         </twig:alerte>
     {% endif %}
+
+    <h3>{{ typeMcccLibelle[typeMccc] ?? "" }}</h3>
 
     {{ include('typeDiplome/mccc-non-editable/'~templateForm) }}
     </div>
