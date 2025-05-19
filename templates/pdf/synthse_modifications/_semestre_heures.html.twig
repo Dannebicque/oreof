@@ -1,10 +1,3 @@
-{% if semestre.semestre.nonDispense == true %}
-    <p>
-        <strong>Le semestre {{ ordre }} ne sera pas dispensé pour la campagne {{ dpe.annee_universitaire.libelle }}
-            .</strong>
-    </p>
-{% endif %}
-
 <p>
     Nombre d'ECTS du semestre {{ ordre }} : <strong>{{ heuresEctsSemestre.sommeSemestreEcts.new }} ECTS</strong>.
 
