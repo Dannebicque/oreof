@@ -3,11 +3,12 @@
 {% block content %}
     <h1 class="text-center">CFVU du {{ dpe.dateCfvu|date('d/m/Y') }}</h1>
     {% for demande in demandes %}
-        {% set parcours = demande.parcours %}
         {% set formation = demande.formation %}
         {% set dto = demande.dto %}
+        {% set parcours = demande.parcours %}
         {% set composante = demande.composante %}
-        {% set dpeDemande = demande.dpeDemande %}
+        {% set dpeDemandeParcours = demande.dpeDemandeParcours %}
+        {% set dpeDemandeFormation = demande.dpeDemandeFormation %}
         {% set diffStructure = demande.diffStructure %}
         {% set diffSemestres = diffStructure.diff.semestres is defined ? diffStructure.diff.semestres :  [] %}
         {% set diffUe = diffStructure.diffUe %}
@@ -16,45 +17,61 @@
             <br><br>
         {% endif %}
         <h2 class="text-center">{{ formation.displayLong }}</h2>
-        <h3 class="text-center">Parcours {{ parcours.display }}</h3>
         <h4 class="text-center">Composante {{ composante.libelle }}</h4>
+        <h3 class="text-center">Parcours {{ parcours.display }}</h3>
+
         <div>
-            <strong>Argumentaire de la demande</strong>
+            <strong>Argumentaire de la demande (formation)</strong>
             <p>
-                {{ dpeDemande.argumentaireDemande }}
+                {{ dpeDemandeFormation.argumentaireDemande ?? '-' }}
             </p>
         </div>
-        <div>
-            {# todo: gérer les UE/EC à choix #}
+        {% if dpeDemandeParcours.niveauModification == 'CLOTURE' %}
+            <strong>Le parcours {{ parcours.libelle }} ne sera pas dispensé pour la
+                campagne {{ dpe.annee_universitaire.libelle }}
+                .
+            </strong> {{ dpeDemandeParcours.argumentaireDemande }}
+        {% else %}
 
-            {% for key, ues in diffUe %}
-                <p><strong>Semestre {{ key }}</strong></p>
-                {% for ue in ues %}
-{#                    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>{{ ue.ue.display }}</strong></p>#}
-                    {% if ue.modifications.elementConstitutifs is defined %}
-                        {% for ec in ue.modifications.elementConstitutifs %}
-                            {{ include('pdf/synthse_modifications/_ec.html.twig', {ec:ec, ued: ue.ue.display}) }}
-                        {% endfor %}
-                    {% endif %}
-                    {% if ue.modifications.uesEnfants is defined %}
-                        {% for uee in ue.modifications.uesEnfants %}
-{#                            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>{{ uee.display.new }}</strong></p>#}
-                            {% if uee.elementConstitutifs is defined %}
-                                {% for ec in uee.elementConstitutifs %}
-                                    {{ include('pdf/synthse_modifications/_ec.html.twig', {ec:ec, ued: uee.display.new}) }}
-                                {% endfor %}
-                            {% endif %}
-                        {% endfor %}
-                    {% endif %}
+
+            <div>
+                <strong>Argumentaire de la demande (parcours)</strong>
+                <p>
+                    {{ dpeDemandeParcours.argumentaireDemande }}
+                </p>
+            </div>
+            <div>
+                {# todo: gérer les UE/EC à choix #}
+
+                {% for key, ues in diffUe %}
+                    <p><strong>Semestre {{ key }}</strong></p>
+                    {% for ue in ues %}
+                        {#                    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>{{ ue.ue.display }}</strong></p> #}
+                        {% if ue.modifications.elementConstitutifs is defined %}
+                            {% for ec in ue.modifications.elementConstitutifs %}
+                                {{ include('pdf/synthse_modifications/_ec.html.twig', {ec:ec, ued: ue.ue.display}) }}
+                            {% endfor %}
+                        {% endif %}
+                        {% if ue.modifications.uesEnfants is defined %}
+                            {% for uee in ue.modifications.uesEnfants %}
+                                {#                            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>{{ uee.display.new }}</strong></p> #}
+                                {% if uee.elementConstitutifs is defined %}
+                                    {% for ec in uee.elementConstitutifs %}
+                                        {{ include('pdf/synthse_modifications/_ec.html.twig', {ec:ec, ued: uee.display.new}) }}
+                                    {% endfor %}
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    {% endfor %}
                 {% endfor %}
-            {% endfor %}
-            <hr>
-            <h4>Bilan des semestres</h4>
-            {% for ordre, sem in diffSemestres %}
-                {{ include('pdf/synthse_modifications/_semestre_heures.html.twig', {heuresEctsSemestre: sem.heuresEctsSemestre}) }}
-            {% endfor %}
-            {# bilan pour la formation #}
-            {{ include('pdf/synthse_modifications/_formation_heures.html.twig', {heuresEctsFormation: diffStructure.diff.heuresEctsFormation}) }}
-        </div>
+                <hr>
+                <h4>Bilan des semestres</h4>
+                {% for ordre, sem in diffSemestres %}
+                    {{ include('pdf/synthse_modifications/_semestre_heures.html.twig', {heuresEctsSemestre: sem.heuresEctsSemestre, semestre:sem.semestre}) }}
+                {% endfor %}
+                {# bilan pour la formation #}
+                {{ include('pdf/synthse_modifications/_formation_heures.html.twig', {heuresEctsFormation: diffStructure.diff.heuresEctsFormation}) }}
+            </div>
+        {% endif %}
     {% endfor %}
 {% endblock %}

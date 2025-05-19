@@ -1,25 +1,32 @@
+{% if semestre.semestre.nonDispense == true %}
+    <p>
+        <strong>Le semestre {{ ordre }} ne sera pas dispensé pour la campagne {{ dpe.annee_universitaire.libelle }}
+            .</strong>
+    </p>
+{% endif %}
+
 <p>
     Nombre d'ECTS du semestre {{ ordre }} : <strong>{{ heuresEctsSemestre.sommeSemestreEcts.new }} ECTS</strong>.
 
 
-{% if heuresEctsSemestre.sommeSemestreCmPres.isDifferent == true or
-    heuresEctsSemestre.sommeSemestreTdPres.isDifferent == true or
-    heuresEctsSemestre.sommeSemestreTpPres.isDifferent == true %}
-    Modification du total des heures présentielles du semestre {{ ordre }}, Soit un total présentiel
+    {% if heuresEctsSemestre.sommeSemestreCmPres.isDifferent == true or
+        heuresEctsSemestre.sommeSemestreTdPres.isDifferent == true or
+        heuresEctsSemestre.sommeSemestreTpPres.isDifferent == true %}
+        Modification du total des heures présentielles du semestre {{ ordre }}, Soit un total présentiel
         de {{ heuresEctsSemestre.sommeSemestreTotalPres|diffNewOriginal }}.
-{% endif %}
+    {% endif %}
 
- {% if heuresEctsSemestre.sommeSemestreCmDist.isDifferent == true or
-     heuresEctsSemestre.sommeSemestreTdDist.isDifferent == true or
-     heuresEctsSemestre.sommeSemestreTpDist.isDifferent == true %}
-     Modification du total des heures du semestre {{ ordre }}, soit un total distanciel
-         de {{ heuresEctsSemestre.sommeSemestreTotalDist|diffNewOriginal }}.
- {% endif %}
+    {% if heuresEctsSemestre.sommeSemestreCmDist.isDifferent == true or
+        heuresEctsSemestre.sommeSemestreTdDist.isDifferent == true or
+        heuresEctsSemestre.sommeSemestreTpDist.isDifferent == true %}
+        Modification du total des heures du semestre {{ ordre }}, soit un total distanciel
+        de {{ heuresEctsSemestre.sommeSemestreTotalDist|diffNewOriginal }}.
+    {% endif %}
 
- {% if heuresEctsSemestre.sommeSemestreTotalPresDist.isDifferent == true %}
-     Modification du total des heures totales (pres. et dist.) du semestre {{ ordre }} :
-         {{ heuresEctsSemestre.sommeSemestreTotalPresDist|diffNewOriginal }}
- {% else %}
-     Pas de modification des heures du semestre.
- {% endif %}
+    {% if heuresEctsSemestre.sommeSemestreTotalPresDist.isDifferent == true %}
+        Modification du total des heures totales (pres. et dist.) du semestre {{ ordre }} :
+        {{ heuresEctsSemestre.sommeSemestreTotalPresDist|diffNewOriginal }}
+    {% else %}
+        Pas de modification des heures du semestre.
+    {% endif %}
 </p>

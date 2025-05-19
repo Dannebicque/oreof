@@ -55,6 +55,7 @@ class VersioningStructureExtractDiff
         // parcourir les deux structures et comparer. Construire un tableau de différences
         foreach ($this->dtoOrigine->semestres as $ordreSemestre => $semestre) {
             if (array_key_exists($ordreSemestre, $this->dtoNouveau->semestres)) {
+                $this->diff['semestres'][$ordreSemestre]['semestre'] = $this->dtoNouveau->semestres[$ordreSemestre];
                 $this->diff['semestres'][$ordreSemestre]['heuresEctsSemestre'] = $this->compareHeuresEctsSemestre($semestre->heuresEctsSemestre, $this->dtoNouveau->semestres[$ordreSemestre]->heuresEctsSemestre);
                 $this->diffAdd['semestres'][$ordreSemestre] = [];
                 $this->diffRemove['semestres'][$ordreSemestre] = [];

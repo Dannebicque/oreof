@@ -84,20 +84,28 @@ class SyntheseModificationController extends BaseController
 
         $formations = [];
         foreach ($dpes as $dpe) {
-            $parcours = $dpe->getParcours();
-            $formation = $parcours->getFormation();
+            $formation = $dpe->getFormation();
             if (!array_key_exists($formation?->getId(), $formations)) {
-                $formations[$formation?->getId()]['parcours'] = [];
+                $formations[$formation?->getId()]['parcours']['parcours'] = [];
                 $formations[$formation?->getId()]['formation'] = $formation;
-                $formations[$formation?->getId()]['dpeDemande'] = $dpe;
+                $formations[$formation?->getId()]['dpeDemande'] = null;
                 $formations[$formation?->getId()]['composante'] = $composante;
             }
-            $formations[$formation?->getId()]['parcours'][] = $parcours;
+
+            if ($dpe->getParcours() === null) {
+                //dpe si c'est une formation
+                $formations[$formation?->getId()]['dpeDemande'] = $dpe;
+            } else {
+                //dpe si c'est un parcours
+                $parcours = $dpe->getParcours();
+                $formations[$formation?->getId()]['parcours']['parcours'][] = $parcours;
+                $formations[$formation?->getId()]['parcours']['dpeDemande'] = $dpe;
+            }
         }
 
 
-//        $link = $exportSyntheseModification->exportLink($formations, $this->getDpe());
-////
+//        $link = $exportSyntheseModification->exportLink($formations, $this->getCampagneCollecte());
+//
 //        dd($link);
         $messageBus->dispatch(
             new Export(

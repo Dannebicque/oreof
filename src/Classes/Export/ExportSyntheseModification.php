@@ -48,7 +48,7 @@ class ExportSyntheseModification
             $tDemandes = [];
 
             $form = $formation['formation'];
-            foreach ($formation['parcours'] as $parc) {
+            foreach ($formation['parcours']['parcours'] as $parc) {
                 $typeD = $this->typeDiplomeRegistry->getTypeDiplome($form?->getTypeDiplome()?->getModeleMcc());
                 $parc = $this->parcoursRepository->find($parc->getId());
                 $dto = $typeD->calculStructureParcours($parc, true, false);
@@ -63,7 +63,8 @@ class ExportSyntheseModification
                 $tDemandes[] = [
                     'formation' => $form,
                     'composante' => $formation['composante'],
-                    'dpeDemande' => $formation['dpeDemande'],
+                    'dpeDemandeFormation' => $formation['dpeDemande'],
+                    'dpeDemandeParcours' => $formation['parcours']['dpeDemande'],
                     'parcours' => $parc,
                     'diffStructure' => $diffStructure,
                     'dto' => $dto
@@ -74,7 +75,7 @@ class ExportSyntheseModification
                 'pdf/synthese_modifications.html.twig',
                 'pdftests/',
                 [
-                    'titre' => 'Liste des demande de changement MCCC et maquettes',
+                    'titre' => 'Liste des demandes de changement MCCC et maquettes',
                     'demandes' => $tDemandes,
                     'dpe' => $campagneCollecte,
                 ],

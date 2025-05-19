@@ -94,7 +94,7 @@ class DpeDemandeRepository extends ServiceEntityRepository
     public function findParcoursByComposante(CampagneCollecte $campagneCollecte, Composante $composante): array
     {
         return $this->createQueryBuilder('d')
-            ->innerJoin('d.parcours', 'p')
+            ->leftJoin('d.parcours', 'p')
             ->innerJoin('p.formation', 'f')
             ->where('d.campagneCollecte = :campagne')
             ->addSelect('f')
