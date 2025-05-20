@@ -12,8 +12,10 @@ namespace App\Classes\Export;
 use App\Classes\MyGotenbergPdf;
 use App\Entity\CampagneCollecte;
 use App\Repository\FormationRepository;
+use App\Repository\ParcoursRepository;
 use App\Repository\TypeEpreuveRepository;
 use App\Service\VersioningParcours;
+use App\Service\VersioningStructure;
 use App\Service\VersioningStructureExtractDiff;
 use App\TypeDiplome\TypeDiplomeRegistry;
 use App\Utils\Tools;
@@ -24,6 +26,7 @@ class ExportSyntheseModification
     private string $dir;
 
     public function __construct(
+        protected ParcoursRepository $parcoursRepository,
         protected TypeEpreuveRepository $typeEpreuveRepository,
         protected TypeDiplomeRegistry $typeDiplomeRegistry,
         protected VersioningParcours $versioningParcours,
@@ -34,7 +37,7 @@ class ExportSyntheseModification
         $this->dir = $kernel->getProjectDir() . '/public/';
     }
 
-    public function exportLink(array $formations, CampagneCollecte $dpe): string
+    public function exportLink(array $formations, CampagneCollecte $campagneCollecte): string
     {
         $epreuves = $this->typeEpreuveRepository->findAll();
         foreach ($epreuves as $epreuve) {
@@ -43,33 +46,42 @@ class ExportSyntheseModification
 
         foreach ($formations as $formation) {
             $tDemandes = [];
-            $form = $formation['formation'];
-            $composante = $form->getComposantePorteuse();
-            foreach ($formation['parcours'] as $parc) {
 
-                $typeD = $this->typeDiplomeRegistry->getTypeDiplome($form?->getTypeDiplome()?->getModeleMcc());
-                $dto = $typeD->calculStructureParcours($parc, true, false);
-                $structureDifferencesParcours = $this->versioningParcours->getStructureDifferencesBetweenParcoursAndLastVersion($parc);
-                if ($structureDifferencesParcours !== null) {
-                    $diffStructure = new VersioningStructureExtractDiff($structureDifferencesParcours, $dto, $typeEpreuves);
-                    $diffStructure->extractDiff();
+            $form = $formation['formation'];
+            foreach ($formation['parcours'] as $parc) {
+                if ($parc['parcours']->getParcoursOrigineCopie() === null) {
+                    $dto = null;
                 } else {
-                    $diffStructure = null;
+                    $typeD = $this->typeDiplomeRegistry->getTypeDiplome($form?->getTypeDiplome()?->getModeleMcc());
+                    $parco = $this->parcoursRepository->find($parc['parcours']->getId());
+                    $dto = $typeD->calculStructureParcours($parco, true, false);
+                    $structureDifferencesParcours = $this->versioningParcours->getStructureDifferencesBetweenParcoursAndLastVersion($parco->getParcoursOrigineCopie());
+                    if ($structureDifferencesParcours !== null) {
+                        $diffStructure = new VersioningStructureExtractDiff($structureDifferencesParcours, $dto, $typeEpreuves);
+                        $diffStructure->extractDiff();
+                    } else {
+                        $diffStructure = null;
+                    }
                 }
-                $tDemandes[] = ['parcours' => $parc, 'diffStructure' => $diffStructure, 'dto' => $dto];
+
+                $tDemandes[] = [
+                    'formation' => $form,
+                    'composante' => $formation['composante'],
+                    'dpeDemandeFormation' => $formation['dpeDemande'],
+                    'dpeDemandeParcours' => $parc['dpeDemande'],
+                    'parcours' => $parco,
+                    'diffStructure' => $diffStructure,
+                    'dto' => $dto
+                ];
             }
-//            dump($form->getSlug());
-//            dump($tDemandes);
 
             $fichiers[] = $this->myGotenbergPdf->renderAndSave(
                 'pdf/synthese_modifications.html.twig',
                 'pdftests/',
                 [
-                    'titre' => 'Liste des demande de changement MCCC et maquettes',
+                    'titre' => 'Liste des demandes de changement MCCC et maquettes',
                     'demandes' => $tDemandes,
-                    'formation' => $form,
-                    'dpe' => $dpe,
-                    'composante' => $composante,
+                    'dpe' => $campagneCollecte,
                 ],
                 Tools::FileName($form->getSlug())
             );

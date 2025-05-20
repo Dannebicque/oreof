@@ -2,6 +2,43 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.39.1](https://github.com/Dannebicque/oreof/compare/v1.39.0...v1.39.1) (2025-05-19)
+
+
+### Bug Fixes
+
+* **_semestre_heures.html.twig:** correct variable path for nonDispense check ([7451585](https://github.com/Dannebicque/oreof/commit/7451585556b9ef2c7498f1be6a7bfec1a4d9d432))
+* **_semestre_heures.html.twig:** correct variable path for nonDispense check ([ac85407](https://github.com/Dannebicque/oreof/commit/ac85407d9e62a884b942e9bf29aeb865a5e05cd5))
+* **ExportSyntheseModification, SyntheseModificationController, synthese_modifications.html.twig:** refactor parcours handling and update data structure for DPE requests ([9d962eb](https://github.com/Dannebicque/oreof/commit/9d962eb8bd791e9711f152ecdcc46593add7b1c9))
+* **ExportSyntheseModification:** handle null parcoursOrigineCopie and update structure differences calculation ([777e50f](https://github.com/Dannebicque/oreof/commit/777e50f532e2b5d45195a6f8eed67653dc2db608))
+* **ExportSyntheseModification:** improve structure differences calculation by integrating ParcoursRepository ([54d4e12](https://github.com/Dannebicque/oreof/commit/54d4e12f7d2241e98d6dba2b9c86a18b3d4216ac))
+* **ExportSyntheseModification:** improve structure differences calculation by integrating ParcoursRepository ([9223fbf](https://github.com/Dannebicque/oreof/commit/9223fbfc571daa6f176a9e7be5555ec9c1870a63))
+* **ExportSyntheseModification:** update structure differences calculation to use original parcours copy ([c8b0f9a](https://github.com/Dannebicque/oreof/commit/c8b0f9a87c2b0ae15c741b846e65d3eae59c7955))
+* **synthese_modifications.html.twig:** update niveauModification checks for non-dispensation and creation cases ([edecbca](https://github.com/Dannebicque/oreof/commit/edecbca1149f36cc6320a1e2204f0a2c64ff3e58))
+
+## [1.39.0](https://github.com/Dannebicque/oreof/compare/v1.38.2...v1.39.0) (2025-05-19)
+
+
+### Features
+
+* **AbstractLicenceMccc:** add dir property to manage directory path ([eeb055b](https://github.com/Dannebicque/oreof/commit/eeb055b5ea53b5adb70d0d49cd4a71e7d55006bf))
+* **Etablissement:** add userProfils relationship and methods for managing user profiles ([64b0181](https://github.com/Dannebicque/oreof/commit/64b01811777aee99e9a2b4f02f7a30af2508f471))
+* **ProcessValidationMentionController:** add validation and history logging for formation submission ([f86118d](https://github.com/Dannebicque/oreof/commit/f86118de581bf13a7c9b5f5f7a1e7864d3569343))
+
+
+### Bug Fixes
+
+* **BadgeHeuresComponent:** update ownership check logic and adjust completion state handling ([2bef0a0](https://github.com/Dannebicque/oreof/commit/2bef0a0bd8a5496481befe85dcca8659b479bae0))
+* **ButTypeDiplome, LicenceTypeDiplome:** add missing fichier parameter to export methods ([87b814a](https://github.com/Dannebicque/oreof/commit/87b814a083978d29cd9b47f07f15de2b2db532dd))
+* **DpeDemande:** add campagneCollecte parameter to DpeDemande instances in multiple controllers ([d4dbae9](https://github.com/Dannebicque/oreof/commit/d4dbae9365663cb9cde6219cbfb2eee411a3ffc7))
+* **Export:** enhance export functionality by adding missing parameters and improving data structure handling ([2391ad6](https://github.com/Dannebicque/oreof/commit/2391ad66dfa08262eac1ee09021c828df718334c))
+* **FormationValide:** comment out validation check for 'valide_parcours_rf' ([237b899](https://github.com/Dannebicque/oreof/commit/237b899b861e930bd32a0d3fe578b45fbdcdd595))
+* **FormationWizardController:** remove access check for 'ss_cfvu' in step2 method ([89960d7](https://github.com/Dannebicque/oreof/commit/89960d778b187d0a14f3d57c4a6e3c51f434768b))
+* **GetElementConstitutif:** reorder ECTS calculation logic for clarity ([e6440c9](https://github.com/Dannebicque/oreof/commit/e6440c9de4c7a6a37014c27e20b128e5a88bbab6))
+* **help.fr.yaml:** add help text for specific hours in parcours ([4cc11f9](https://github.com/Dannebicque/oreof/commit/4cc11f930b3d1e15d0225565784392e935a0e635))
+* **licence:** update disabled condition for choix_type_mccc select based on natureUeEc ([2180d3d](https://github.com/Dannebicque/oreof/commit/2180d3d3c83be08f8f63443ee6f9412b1e26bf37))
+* **McccUpdateSubscriber:** ensure ficheMatiere is not null before processing element constitutifs ([e2096d6](https://github.com/Dannebicque/oreof/commit/e2096d66f919ff8d862566d7593304fcf0adf090))
+
 ## [1.38.2](https://github.com/Dannebicque/oreof/compare/v1.38.1...v1.38.2) (2025-05-16)
 
 

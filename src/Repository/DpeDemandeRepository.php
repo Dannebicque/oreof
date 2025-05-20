@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\CampagneCollecte;
 use App\Entity\Composante;
 use App\Entity\DpeDemande;
 use App\Entity\Formation;
@@ -54,7 +55,7 @@ class DpeDemandeRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
-    public function findLastOpenedDemandeMention(Formation $formation, EtatDpeEnum $etat)
+    public function findLastOpenedDemandeMention(Formation $formation, EtatDpeEnum $etat): ?DpeDemande
     {
         return $this->createQueryBuilder('d')
             ->where('d.formation = :formation')
@@ -73,6 +74,35 @@ class DpeDemandeRepository extends ServiceEntityRepository
             ->innerJoin('d.parcours', 'p')
             ->innerJoin('p.formation', 'f')
             ->where('f.composantePorteuse = :composante')
+            ->setParameter('composante', $composante)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findByCampagneWithModification(CampagneCollecte $campagneCollecte): array
+    {
+        return $this->createQueryBuilder('d')
+            ->leftJoin('d.parcours', 'p')
+            ->innerJoin('p.formation', 'f')
+            ->where('d.campagneCollecte = :campagne')
+            ->andWhere('d.niveauModification IS NOT NULL')
+            ->setParameter('campagne', $campagneCollecte)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findParcoursByComposante(CampagneCollecte $campagneCollecte, Composante $composante): array
+    {
+        return $this->createQueryBuilder('d')
+            ->leftJoin('d.parcours', 'p')
+            ->innerJoin('p.formation', 'f')
+            ->where('d.campagneCollecte = :campagne')
+            ->addSelect('f')
+            ->addSelect('p')
+            ->where('d.campagneCollecte = :campagne')
+            ->andWhere('f.composantePorteuse = :composante')
+            ->andWhere('d.niveauModification IS NOT NULL')
+            ->setParameter('campagne', $campagneCollecte)
             ->setParameter('composante', $composante)
             ->getQuery()
             ->getResult();

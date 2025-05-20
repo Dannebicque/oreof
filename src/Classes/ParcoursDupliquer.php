@@ -51,6 +51,7 @@ class ParcoursDupliquer
         $newDpeDemande->setArgumentaireDemande('Création de la copie du parcours');
         $newDpeDemande->setNiveauDemande('P');
         $newDpeDemande->setCreated(new DateTime());
+        $newDpeDemande->setCampagneCollecte($campagneCollecte);
         $newDpeDemande->setEtatDemande(EtatDpeEnum::en_cours_redaction);
         $newDpeDemande->setParcours($newParcours);
         $newDpeDemande->setNiveauModification(TypeModificationDpeEnum::CREATION);

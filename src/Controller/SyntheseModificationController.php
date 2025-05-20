@@ -6,6 +6,7 @@ use App\Classes\Export\ExportSyntheseModification;
 use App\Entity\Composante;
 use App\Message\Export;
 use App\Repository\ComposanteRepository;
+use App\Repository\DpeDemandeRepository;
 use App\Repository\DpeParcoursRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -15,7 +16,7 @@ class SyntheseModificationController extends BaseController
 {
     #[Route('/synthese/modifications', name: 'app_synthese_modification_export_pdf')]
     public function exportSynthese(
-        DpeParcoursRepository $dpeParcoursRepository,
+        DpeDemandeRepository $dpeParcoursRepository,
         ComposanteRepository $composanteRepository,
     ): Response {
         $dpes = $dpeParcoursRepository->findByCampagneWithModification($this->getCampagneCollecte());
@@ -35,7 +36,7 @@ class SyntheseModificationController extends BaseController
 
     #[Route('/synthese/modifications/all', name: 'app_synthese_modification_export_all')]
     public function exportSyntheseAll(
-        DpeParcoursRepository $dpeParcoursRepository,
+        DpeDemandeRepository $dpeParcoursRepository,
         MessageBusInterface $messageBus,
     ): Response {
         // récupèrer les formations qui sont ouvertes avec CFVU
@@ -43,10 +44,17 @@ class SyntheseModificationController extends BaseController
         $formations = [];
         foreach ($dpes as $dpe) {
             $formation = $dpe->getFormation();
-            if (!array_key_exists($formation?->getId(), $formations)) {
-                $formations[$formation?->getId()] = [];
-            }
-            $formations[$formation?->getId()][] = $dpe->getParcours();
+            if ($formation !== null) {
+
+                if (!array_key_exists($formation?->getId(), $formations)) {
+                    $formations[$formation?->getId()]['parcours'] = [];
+                    $formations[$formation?->getId()]['formation'] = $formation;
+                    $formations[$formation?->getId()]['dpeDemande'] = $dpe;
+                    $formations[$formation?->getId()]['composante'] = $formation->getComposantePorteuse();
+                }
+
+                $formations[$formation?->getId()]['parcours'][] = $dpe->getParcours();
+        }
         }
 
         $messageBus->dispatch(
@@ -68,7 +76,7 @@ class SyntheseModificationController extends BaseController
     public function exportSyntheseComposante(
         ExportSyntheseModification $exportSyntheseModification,
         MessageBusInterface $messageBus,
-        DpeParcoursRepository $dpeParcoursRepository,
+        DpeDemandeRepository $dpeParcoursRepository,
         Composante          $composante
     ): Response {
         //récupère toutes les formations de la composante qui sont ouvertes en CFVU
@@ -76,18 +84,28 @@ class SyntheseModificationController extends BaseController
 
         $formations = [];
         foreach ($dpes as $dpe) {
-            $parcours = $dpe->getParcours();
-            $formation = $parcours->getFormation();
+            $formation = $dpe->getFormation();
             if (!array_key_exists($formation?->getId(), $formations)) {
                 $formations[$formation?->getId()]['parcours'] = [];
                 $formations[$formation?->getId()]['formation'] = $formation;
+                $formations[$formation?->getId()]['dpeDemande'] = null;
+                $formations[$formation?->getId()]['composante'] = $composante;
             }
-            $formations[$formation?->getId()]['parcours'][] = $parcours;
+
+            if ($dpe->getParcours() === null) {
+                //dpe si c'est une formation
+                $formations[$formation?->getId()]['dpeDemande'] = $dpe;
+            } else {
+                //dpe si c'est un parcours
+                $parcours = $dpe->getParcours();
+                $formations[$formation?->getId()]['parcours'][$parcours->getId()]['parcours'] = $parcours;
+                $formations[$formation?->getId()]['parcours'][$parcours->getId()]['dpeDemande'] = $dpe;
+            }
         }
 
 
-//        $link = $exportSyntheseModification->exportLink($formations, $this->getDpe());
-////
+//        $link = $exportSyntheseModification->exportLink($formations, $this->getCampagneCollecte());
+//
 //        dd($link);
         $messageBus->dispatch(
             new Export(
