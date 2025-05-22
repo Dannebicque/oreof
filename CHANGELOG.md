@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.39.2](https://github.com/Dannebicque/oreof/compare/v1.39.1...v1.39.2) (2025-05-19)
+
+
+### Bug Fixes
+
+* **_semestre_heures.html.twig, synthese_modifications.html.twig:** remove nonDispense check and add semester opening comments ([ad1e59c](https://github.com/Dannebicque/oreof/commit/ad1e59cb0ae1187f19815df9227ac5771e44f9ef))
+* **SemestreController:** handle null checks for parcours and DPE, improve phrase construction ([149ac4f](https://github.com/Dannebicque/oreof/commit/149ac4f36427f78ee8dd07b24557f2455f6071d8))
+
 ## [1.39.1](https://github.com/Dannebicque/oreof/compare/v1.39.0...v1.39.1) (2025-05-19)
 
 
