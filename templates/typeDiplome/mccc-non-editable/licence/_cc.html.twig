@@ -1,3 +1,14 @@
+{% import "typeDiplome/mccc-non-editable/licence/_compareMcccVersioning.macro.html.twig" as compareMccc %}
+
+{% if hasChangedTypeMccc is not defined %}
+    {% set hasChangedTypeMccc = false %}
+{% endif %}
+
+{% set hasDisplayComparaison = (isFromVersioning ?? 'false' != 'true') 
+    and (isMcccFromVersion ?? false == true)
+    and (hasChangedTypeMccc == false)
+%}
+
 <h3>1ᵉ Session</h3>
 <div>
     <table class="table table-bordered">
@@ -16,18 +27,38 @@
             <td>50%</td>
             <td>2 épreuves</td>
             <td>
+                {% set hasOptionVersioning = mcccVersioning[1]['cc'][1].options.cc_has_tp ?? false %}
                 {% if mcccs[1]['cc'][1].options is defined and mcccs[1]['cc'][1].options.cc_has_tp is defined and mcccs[1]['cc'][1].options.cc_has_tp == "on" %}
-                    Oui
+                    {% set libelleHasTp = 'Oui' %}
                 {% else %}
-                    Non
+                    {% set libelleHasTp = 'Non' %}
                 {% endif %}
+                {{
+                    compareMccc.displayMccc(
+                        libelleHasTp,
+                        hasOptionVersioning == 'on' ? 'Oui' : 'Non',
+                        "",
+                        hasDisplayComparaison,
+                        isFromVersioning ?? 'false'
+                    )
+                }}
             </td>
             <td>
+                {% set pourcentageTpVersioning = mcccVersioning[1]['cc'][1].options.cc_has_tp ?? false %}
                 {% if mcccs[1]['cc'][1].options is defined and mcccs[1]['cc'][1].options.cc_has_tp is defined and mcccs[1]['cc'][1].options.cc_has_tp == "on" %}
-                    50%
+                    {% set pourcentageTp = '50%' %}
                 {% else %}
-                    -
+                    {% set pourcentageTp = '-' %}
                 {% endif %}
+                {{
+                    compareMccc.displayMccc(
+                        pourcentageTp,
+                        pourcentageTpVersioning == 'on' ? '50%' : '-',
+                        "",
+                        hasDisplayComparaison,
+                        isFromVersioning ?? 'false'
+                    )
+                }}
             </td>
         </tr>
         </tbody>
@@ -36,7 +67,12 @@
 <h3>2ᵉ Session</h3>
 <div>
     {% if mcccs[2]['et'] is defined %}
-        {{ include('typeDiplome/mccc-non-editable/licence/_secondeChance.html.twig',{mcccs:mcccs[2]['et'] }) }}
+        {{ include('typeDiplome/mccc-non-editable/licence/_secondeChance.html.twig',
+            {
+                mcccs:mcccs[2]['et'],
+                mcccVersioning: mcccVersioning[2]['et'] ?? ""
+            }) 
+        }}
     {% endif %}
 </div>
 

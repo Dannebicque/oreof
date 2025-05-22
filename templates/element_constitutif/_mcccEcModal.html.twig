@@ -106,20 +106,58 @@
         {% endif %}
 
         {% if isMcccImpose == false %}
-            <div class="form-check mb-2">
-                <input class="form-check-input" type="checkbox" id="ec_step4_quitus" name="ec_step4[quitus]"
-                       {% if isParcoursProprietaire == false and ec.ectsSpecifiques == false %}disabled{% endif %}
-                        {% if ec.quitus == true %}checked{% endif %}
+            {% set quitusDisabled = isParcoursProprietaire == false and ec.ectsSpecifiques == false %}
+            {% set quitusChecked = 
+                (ec.quitus == true and ec.mcccSpecifiques == true) 
+                or (ec.ficheMatiere.quitus == true and ec.mcccSpecifiques == false)
+            %}
+            {% set minimumLengthTextArea = 15 %}
+            <div {{ stimulus_controller('required_text_area') }}
+                data-required-text-area-minlength-value="{{ minimumLengthTextArea }}"
+            >
+                <div class="form-check mb-2">
+                    <input class="form-check-input" type="checkbox" id="ec_step4_quitus" name="ec_step4[quitus]"
+                        {{ stimulus_action('required_text_area', 'showDisplay', 'click') }}
+                            {% if quitusDisabled %} disabled {% endif %}
+                            {% if quitusChecked %} checked {% endif %}
+                    >
+                    <label class="form-check-label" for="ec_step4_quitus"> {{ 'ec_step4.labels.quitus'|trans({}, 'form') }}
+                        <i
+                                class="fal fa-question-circle ms-1" data-controller="tooltip"
+                                data-tooltip-placement-value="bottom"
+                                title="{{ 'ec_step4.helps.quitus'|trans({}, 'help') }}"></i></label>
+                </div>
+                <div class="{{ quitusChecked ? '' : 'd-none' }}"
+                    {{ stimulus_target('required_text_area', 'displayDiv') }}
                 >
-                <label class="form-check-label" for="ec_step4_quitus"> {{ 'ec_step4.labels.quitus'|trans({}, 'form') }}
-                    <i
-                            class="fal fa-question-circle ms-1" data-controller="tooltip"
-                            data-tooltip-placement-value="bottom"
-                            title="{{ 'ec_step4.helps.quitus'|trans({}, 'help') }}"></i></label>
+                    <label for="quitusArgumentaire" class="form-label">
+                        Argumentaire du quitus<span class="required"></span>
+                    </label>
+                    {% set quitusText = ec.mcccSpecifiques and ec.quitus 
+                        ? ec.quitusText 
+                        : ec.ficheMatiere.quitus and ec.mcccSpecifiques == false
+                        ? ec.ficheMatiere.quitusText
+                        : '' 
+                    %}
+                    <textarea 
+                        class="form-control mb-2"
+                        name="ec_step4[quitus_argument]" 
+                        id="quitusArgumentaire"
+                        {{ stimulus_target('required_text_area', 'textarea') }}
+                        {{ stimulus_action('required_text_area', 'checkTextAreaLength', 'input') }}
+                        {{ quitusChecked ? 'required' : '' }}
+                        {{ quitusDisabled ? 'disabled' : '' }}
+                    >{{ quitusText }}</textarea>  
+                    <div class="text-danger small my-2 {{ quitusText|length > minimumLengthTextArea ? 'd-none' : ''}}"
+                        {{ stimulus_target('required_text_area', 'invalidFieldText') }}
+                    >
+                        L'argumentaire doit faire au moins 15 caractères.
+                    </div>          
+                </div>
             </div>
         {% endif %}
 
-        {% if typeDiplome.controleAssiduite == true %}
+        {# {% if typeDiplome.controleAssiduite == true %}
             <div class="form-check mb-2">
                 <input class="form-check-input" type="checkbox" id="ec_step4_controleAssiduite"
                        name="ec_step4[controleAssiduite]"
@@ -136,7 +174,7 @@
                             data-tooltip-placement-value="bottom"
                             title="{{ 'ec_step4.helps.controleAssiduite'|trans({}, 'help') }}"></i></label>
             </div>
-        {% endif %}
+        {% endif %} #}
     {% endif %}
 
     {% if ec.ecEnfants|length > 0 and isMcccImpose == false %}

@@ -1,0 +1,24 @@
+{% macro displayMccc(currentValue, previousValue, suffixString = "", withComparaison = false, isFromVersioning = "false") %}
+    {% if withComparaison %}
+        {% if currentValue != previousValue %}
+            {% if previousValue != false %}
+            <span class="text-danger text-decoration-line-through mx-2">
+                {{ previousValue }}{{ suffixString }}
+            </span>
+            {% endif %}
+            {% if currentValue != false %}
+            <span class="text-success mx-2">
+                {{ currentValue }}{{ suffixString }}
+            </span>
+            {% endif %}
+        {% else %}
+            {{ currentValue }}{{ suffixString }}
+        {% endif %}
+    {% else %}
+        {% if isFromVersioning == 'true' %}
+            {{ previousValue}}{{ suffixString }}
+        {% else %}
+            {{ currentValue }}{{ suffixString }}
+        {% endif %}
+    {% endif %}
+{% endmacro %}

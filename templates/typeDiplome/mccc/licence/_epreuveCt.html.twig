@@ -21,7 +21,23 @@
             <span class="input-group-text">%</span>
         </div>
     </div>
-    <div class="col-4">
+    {% set hasJustification = "not_set" %}
+    {% for typeE in typeEpreuves %}
+        {% if mcccs[1]['et'][index].typeEpreuve[0] is defined %}
+            {% if mcccs[1]['et'][index].typeEpreuve[0] == typeE.id %}
+                {% set hasJustification = typeE.hasJustification ? "true" : "false" %}
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+    <div class="col-4"
+        {{ stimulus_controller('mccc-with-justification', {
+            'templateName': 'justificationSaisieMccc',
+            'textAreaFormName': 'justification_s1_ct' ~ index,
+            'minlength': 15,
+            'hasJustification': hasJustification,
+            'justificationText': mcccs[1]['et'][index].justificationText ?? ""
+        }) }}
+        > 
         <label for="typeEpreuve_s1_ct{{ index }}">
             Type d'épreuve
             <i class="fal fa-question-circle ms-1"
@@ -32,18 +48,25 @@
         </label>
         <select class="form-select typeEpreuveSelectCt synchro-mccc" id="typeEpreuve_s1_ct{{ index }}"
                 name="typeEpreuve_s1_ct{{ index }}"
-                {{ stimulus_action('mccc--licence', 'changeTypeEpreuveCt', 'change') }}
+                {{ stimulus_action('mccc--licence', 'changeTypeEpreuveCt', 'change')
+                  |stimulus_action('mccc-with-justification', 'updateJustification', 'change') 
+                }}
         >
-            <option value="">Choisir</option>
+            <option value="" data-has-justification="false">Choisir</option>
             {% for typeE in typeEpreuves %}
                 <option value="{{ typeE.id }}"
                         data-hasduree="{{ typeE.hasDuree }}"
+                        data-has-justification="{{ typeE.hasJustification ? 'true' : 'false' }}"
                         {% if mcccs[1]['et'][index] is defined %}
                             {% if mcccs[1]['et'][index].typeEpreuve[0] is defined and mcccs[1]['et'][index].typeEpreuve[0] == typeE.id %}selected{% endif %}
                         {% endif %}
                 >{{ typeE.display }}</option>
             {% endfor %}
         </select>
+        <div class="col-12 {{ hasJustification == 'true' ? '' : 'd-none' }}" 
+            {{ stimulus_target('mccc-with-justification', 'displayDiv') }}
+        >    
+        </div>
     </div>
     <div class="col-4">
         &nbsp;

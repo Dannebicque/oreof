@@ -34,6 +34,9 @@ class TypeEpreuve
     #[ORM\Column(nullable: true)]
     private ?bool $hasDuree = false;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $hasJustification = null;
+
     public function __construct()
     {
         $this->typeDiplomes = new ArrayCollection();
@@ -120,6 +123,18 @@ class TypeEpreuve
     public function setHasDuree(?bool $hasDuree): static
     {
         $this->hasDuree = $hasDuree;
+
+        return $this;
+    }
+
+    public function hasJustification(): ?bool
+    {
+        return $this->hasJustification;
+    }
+
+    public function setHasJustification(?bool $hasJustification): static
+    {
+        $this->hasJustification = $hasJustification;
 
         return $this;
     }

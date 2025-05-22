@@ -6,10 +6,10 @@
                 {% for ville in formation.localisationMention %}{{ ville.libelle }}{% if not loop.last %}, {% endif %}{% endfor %}
             </dd>
             {% if stringDifferencesFormation.localisationMention is defined %}
-                {{ include('communs/_comparaison_versioning_big.html.twig', 
+                {{ include('communs/_comparaison_versioning_no_button.html.twig', 
                         {
                             textDifferences: stringDifferencesFormation.localisationMention,
-                            idCollapse: "diffLocalisationMention"
+                            idCollapse: 'diffGlobalParcours'
                         }
                     ) 
                 }}
@@ -23,9 +23,9 @@
                 </ul>
                 {{ formation.regimeInscriptionTexte }}
                 {% if stringDifferencesFormation.regimeInscriptionFormation is defined %}
-                    {{ include("communs/_comparaison_versioning_big.html.twig", {
+                    {{ include("communs/_comparaison_versioning_no_button.html.twig", {
                             textDifferences: stringDifferencesFormation.regimeInscriptionFormation,
-                            idCollapse: "diffRegimeInscriptionFormation"
+                            idCollapse: 'diffGlobalParcours'
                         })
                     }}
                 {% endif %}
@@ -39,9 +39,9 @@
     <div class="col-6">
         <strong>Composante(s) d'inscription</strong>
         {% if stringDifferencesFormation.composanteInscriptionFormation is defined %}
-            {{ include("communs/_comparaison_versioning_big.html.twig", {
+            {{ include("communs/_comparaison_versioning_no_button.html.twig", {
                     textDifferences: stringDifferencesFormation.composanteInscriptionFormation,
-                    idCollapse: "diffComposantesInscriptionFormation"
+                    idCollapse: 'diffGlobalParcours'
                 }) 
             }}
         {% endif %}

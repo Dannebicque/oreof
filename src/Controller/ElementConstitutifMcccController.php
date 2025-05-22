@@ -74,6 +74,40 @@ class ElementConstitutifMcccController extends AbstractController
         $getElement = new GetElementConstitutif($elementConstitutif, $parcours);
         $typeEpreuve = $getElement->getTypeMcccFromFicheMatiere();
 
+        /**
+         * Contrôles du formulaire
+         */
+        if($request->request->has('ec_step4') && array_key_exists('quitus', $request->request->all()['ec_step4'])){
+            $argumentQuitus = $request->request->all()['ec_step4']['quitus_argument'] ?? "";
+            if(mb_strlen($argumentQuitus) < 15){
+                return $this->json(
+                    ['message' => "L'argumentaire du quitus doit faire au moins 15 caractères."],
+                    500, 
+                    ['Content-Type' => 'application/json']
+                );
+            }
+        }
+        // Contrôle de la justification de MCCC
+        $typeEpreuvesArray = $typeEpreuveRepository->findByTypeDiplome($typeDiplome);
+        $minLengthJustification = 15;
+
+        foreach($request->request->all() as $fieldName => $fieldValue){
+            if(preg_match('/typeEpreuve_s([0-9])_ct([0-9])/', $fieldName, $matches) === 1){
+                $hasJustification = array_values(
+                    array_filter(
+                        $typeEpreuvesArray,
+                        fn($type) => $type->getId() === (int)$fieldValue)
+                    )[0]->hasJustification();
+                if($hasJustification && mb_strlen($request->request->all()["justification_s{$matches[1]}_ct{$matches[2]}"]) < $minLengthJustification){
+                    return $this->json(
+                        ['message' => "La justification d'un MCCC doit être supérieure à {$minLengthJustification} caractères."],
+                        500,
+                        ['Content-Type' => 'application/json']
+                    );
+                }
+            }
+        }
+
         if ($this->isGranted('CAN_PARCOURS_EDIT_MY', $dpeParcours) && Access::isAccessible($dpeParcours, 'cfvu')) {
             if ($request->isMethod('POST')) {
                 $newMcccToText = '';
@@ -114,6 +148,15 @@ class ElementConstitutifMcccController extends AbstractController
 
                         if ($request->request->has('ec_step4') && array_key_exists('quitus', $request->request->all()['ec_step4'])) {
                             $fm->setQuitus((bool)$request->request->all()['ec_step4']['quitus']);
+                            $fm->setQuitusText($request->request->all()['ec_step4']['quitus_argument']);
+                        }
+                        // Si la checkbox est décochée, 'quitus' ne fait pas partie de la requête POST
+                        elseif ($request->request->has('ec_step4') 
+                            && array_key_exists('quitus', $request->request->all()['ec_step4']) === false
+                            && $fm->isQuitus() !== false
+                        ) {
+                            $fm->setQuitus(false);
+                            $fm->setQuitusText(null);
                         }
 
                         if ($request->request->get('choix_type_mccc') !== $fm->getTypeMccc()) {
@@ -127,9 +170,19 @@ class ElementConstitutifMcccController extends AbstractController
                     }
                 } else {
                     //MCCC sur EC
-                    if ($elementConstitutif->isMcccSpecifiques() === true || $elementConstitutif->getNatureUeEc()?->isLibre() || ($elementConstitutif->getNatureUeEc()?->isChoix())) {
+                    if ($elementConstitutif->isMcccSpecifiques() === true || $elementConstitutif->getNatureUeEc()?->isLibre() || ($elementConstitutif->getNatureUeEc()?->isChoix())){
                         if ($request->request->has('ec_step4') && array_key_exists('quitus', $request->request->all()['ec_step4'])) {
                             $elementConstitutif->setQuitus((bool)$request->request->all()['ec_step4']['quitus']);
+                            $elementConstitutif->setQuitusText($request->request->all()['ec_step4']['quitus_argument']);
+                        }
+                        
+                        // Si la checkbox est décochée, 'quitus' ne fait pas partie de la requête POST
+                        elseif ($request->request->has('ec_step4') 
+                            && array_key_exists('quitus', $request->request->all()['ec_step4']) === false
+                            && $elementConstitutif->isQuitus() !== false
+                        ) {
+                            $elementConstitutif->setQuitus(false);
+                            $elementConstitutif->setQuitusText(null);
                         }
 
                         if ($request->request->has('choix_type_mccc') && $request->request->get('choix_type_mccc') !== $elementConstitutif->getTypeMccc()) {
@@ -227,18 +280,26 @@ class ElementConstitutifMcccController extends AbstractController
         $lastVersion = $entityManager->getRepository(ParcoursVersioning::class)->findLastCfvuVersion($parcours);
         $lastVersion = isset($lastVersion[0]) ? $lastVersion[0] : null;
 
+        $typeMcccLibelle = [
+            'ct' => 'Contrôle Terminal',
+            'cc' => 'Contrôle Continu',
+            'cci' => 'Contrôle Continu Intégral',
+            'cc_ct' => 'Contrôle Continu + Contrôle Terminal'
+        ];
+
         return $this->render('element_constitutif/_mcccEcNonEditable.html.twig', [
             'isMcccImpose' => $elementConstitutif->getFicheMatiere()?->isMcccImpose(),
             'isEctsImpose' => $elementConstitutif->getFicheMatiere()?->isEctsImpose(),
             'typeMccc' => $typeEpreuve,
             'typeEpreuves' => $typeEpreuveRepository->findByTypeDiplome($typeDiplome),
+            'typeMcccLibelle' => $typeMcccLibelle,
             'ec' => $elementConstitutif,
             'ects' => $ects,
             'templateForm' => $typeD::TEMPLATE_FORM_MCCC,
             'mcccs' => $getElement->getMcccsFromFicheMatiere($typeD),
             'isFromVersioning' => 'false',
             'lastVersion' => $lastVersion,
-            'libelleQuelleVersion' => 'Version actuelle',
+            'libelleQuelleVersion' => 'Version actuellement saisie en attente de validation',
             'parcoursId' => $parcours->getId()
         ]);
     }
@@ -263,6 +324,16 @@ class ElementConstitutifMcccController extends AbstractController
         $typeDiplome = $entityManager->getRepository(TypeDiplome::class)->findOneBy(['libelle' => $libelleTypeDiplome]);
         $templateForm = $typeDiplomeReg->getTypeDiplome($typeDiplome->getModeleMcc())::TEMPLATE_FORM_MCCC;
         $typeEpreuveDiplome = $entityManager->getRepository(TypeEpreuve::class)->findByTypeDiplome($typeDiplome);
+        
+        $getElement = new GetElementConstitutif($elementConstitutif, $parcoursVersioning->getParcours());
+        $typeMccc = $getElement->getTypeMcccFromFicheMatiere();
+        $ectsActuel = $getElement->getFicheMatiereEcts();
+        $typeMcccLibelle = [
+            'ct' => 'Contrôle Terminal',
+            'cc' => 'Contrôle Continu',
+            'cci' => 'Contrôle Continu Intégral',
+            'cc_ct' => 'Contrôle Continu + Contrôle Terminal'
+        ];
 
         // On rassemble toutes les UE
         $ueArray = array_map(function ($semestre) {
@@ -310,36 +381,50 @@ class ElementConstitutifMcccController extends AbstractController
         }
 
         // Mise en forme du tableau des MCCC
-        $tabMcccs = [];
+        $tabMcccVersioning = [];
         if ($structureEc->typeMccc === 'cci') {
             foreach ($structureEc->mcccs as $mccc) {
-                $tabMcccs[$mccc['numeroSession']] = $mccc;
+                $tabMcccVersioning[$mccc['numeroSession']] = $mccc;
             }
         } else {
             foreach ($structureEc->mcccs as $mccc) {
                 if ($mccc['secondeChance']) {
-                    $tabMcccs[3]['chance'] = $mccc;
+                    $tabMcccVersioning[3]['chance'] = $mccc;
                 } elseif ($mccc['controleContinu'] === true && $mccc['examenTerminal'] === false) {
-                    $tabMcccs[$mccc['numeroSession']]['cc'][$mccc['numeroEpreuve'] ?? 1] = $mccc;
+                    $tabMcccVersioning[$mccc['numeroSession']]['cc'][$mccc['numeroEpreuve'] ?? 1] = $mccc;
                 } elseif ($mccc['controleContinu'] === false && $mccc['examenTerminal'] === true) {
-                    $tabMcccs[$mccc['numeroSession']]['et'][$mccc['numeroEpreuve'] ?? 1] = $mccc;
+                    $tabMcccVersioning[$mccc['numeroSession']]['et'][$mccc['numeroEpreuve'] ?? 1] = $mccc;
                 }
             }
+        }
+
+        $getElement = new GetElementConstitutif($elementConstitutif, $parcoursVersioning->getParcours());
+        $tabMcccActuels = $getElement->getMcccsFromFicheMatiere(
+            $typeDiplomeReg->getTypeDiplome($typeDiplome->getModeleMcc())
+        );
+
+        $mcccsToDisplay = $tabMcccActuels;
+        if($isFromVersioning === 'true' || ($structureEc->typeMccc !== $typeMccc)){
+            $mcccsToDisplay = $tabMcccVersioning;
         }
 
         return $this->render('element_constitutif/_mcccEcNonEditable.html.twig', [
             'isMcccImpose' => $structureEc->elementConstitutif->getFicheMatiere()?->isMcccImpose(),
             'isEctsImpose' => $structureEc->elementConstitutif->getFicheMatiere()?->isEctsImpose(),
-            'typeMccc' => $structureEc->typeMccc,
+            'typeMccc' => $structureEc->typeMccc, //Versioning
+            'typeMcccActuel' => $typeMccc, // Actuel
             'typeEpreuves' => $typeEpreuveDiplome,
+            'typeMcccLibelle' => $typeMcccLibelle,
             'ec' => $structureEc->elementConstitutif,
-            'ects' => $structureEc->heuresEctsEc->ects,
+            'ects' => $ectsActuel, // Actuel
+            'ectsVersioning' => $structureEc->heuresEctsEc->ects, // Versioning
             'templateForm' => $templateForm,
-            'mcccs' => $tabMcccs,
+            'mcccVersioning' => $tabMcccVersioning,
+            'mcccs' => $mcccsToDisplay,
             'isMcccFromVersion' => true,
             'parcoursId' => $parcoursVersioning->getParcours()->getId(),
             'isFromVersioning' => $isFromVersioning,
-            'libelleQuelleVersion' => 'Version validée CFVU'
+            'libelleQuelleVersion' => 'Comparaison des versions'
         ]);
     }
 

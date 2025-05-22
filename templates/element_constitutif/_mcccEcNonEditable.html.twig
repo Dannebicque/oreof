@@ -1,16 +1,59 @@
+{% import "typeDiplome/mccc-non-editable/licence/_compareMcccVersioning.macro.html.twig" as compareMacro %}
+
 <div {{ stimulus_controller('modal', {
         size: 'lg',
         modalTitle: 'Modalités de Contrôle des Connaissances et des Compétences',
     }) 
 }}>
+
+
+{# Versioning #}
+{% if typeMcccActuel is not defined %}
+    {% set typeMcccActuel = typeMccc %}
+{% endif %}
+
+{% set hasChangedTypeMccc = not (typeMccc == typeMcccActuel) %}
+
+{% set hasDisplayComparaison = (isFromVersioning ?? 'false' != 'true') 
+    and (isMcccFromVersion ?? false == true)
+    and (hasChangedTypeMccc == false)
+%}
+
 <div {{ stimulus_target('modal', 'zoneToRefresh') }}>
     {% if isFromVersioning is defined and isFromVersioning != 'true' %}
         <h4 class="text-center text-primary mb-2">{{ libelleQuelleVersion }}</h4>
     {% endif %}
     <h2>MCCC pour {{ ec.libelle }}</h2>
 
+    {% set displayComparaisonEcts = (isFromVersioning ?? 'false' != 'true') and (isMcccFromVersion ?? false == true) %}
     <h3>ECTS</h3>
-    <p>{{ ects }}</p>
+    {{
+        compareMacro.displayMccc(
+            ects,
+            ectsVersioning ?? false,
+            "",
+            displayComparaisonEcts,
+            isFromVersioning ?? 'false'
+        )
+    }}
+
+    {% if hasChangedTypeMccc and isFromVersioning is defined and isFromVersioning != 'true' %}
+        <twig:alerte 
+            type="info"
+            message="Le type de MCCC a changé depuis la dernière version validée par la CFVU.<br>Vous pouvez retrouver les anciennes données ci-dessous."
+        >
+        </twig:alerte>
+    {% endif %}
+
+    <h3 class="mt-3">
+        {{ isMcccFromVersion ?? false == true and isFromVersioning != 'true' 
+            ? 'Type de MCCC précédemment validé : ' 
+            : 'Type de MCCC : '
+        }}
+    </h3>
+    <h3 class="mb-3">
+        {{ typeMcccLibelle[typeMccc] ?? "" }}
+    </h3>
 
     {{ include('typeDiplome/mccc-non-editable/'~templateForm) }}
     </div>

@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Classes\GetHistorique;
+use App\Entity\DpeParcours;
 use App\Entity\Formation;
 use App\Entity\ParcoursVersioning;
 use Doctrine\ORM\EntityManagerInterface;
@@ -36,18 +37,31 @@ class ApiJsonExport {
         SymfonyStyle $io = null
     ){
         $dataJSON = [];
-        $formationArray = $this->entityManager->getRepository(Formation::class)->findAll();
-        $countParcours = 0;
+        $formationArray = $this->entityManager->getRepository(Formation::class)->findAll();       
+        $urlPrefix = "https://" . $hostname;
+        
+        /**
+         * Filtrage sur la campagne de collecte en cours
+         */
+        $formationArray = array_filter($formationArray, function($f){
+            $parcoursCampagneActuelle = array_filter($f->getParcours()->toArray(), 
+                function($p) {
+                    $dpeParcours = $p->getDpeParcours()?->last();
+                    if($dpeParcours instanceof DpeParcours){
+                        return $dpeParcours->getCampagneCollecte()?->getId() === 1;
+                    }
+                    return false;
+                }
+            );
+            return count($parcoursCampagneActuelle) > 0;
+        });
 
-        $countProgress = $this->entityManager
-            ->getRepository(ParcoursVersioning::class)
-            ->countSavedParcours()[0]['nb_parcours'];
+        $countParcours = 0;
+        $countProgress = count($formationArray);
 
         if($io){
             $io->progressStart($countProgress);
         }
-        
-        $urlPrefix = "https://" . $hostname;
 
         foreach($formationArray as $formation){
             $dateValidationFormation = [];
@@ -81,9 +95,7 @@ class ApiJsonExport {
                         $dateValidationFormation[] = $dateValideAPublier;
                     }
                     ++$countParcours;
-                    if($io){
-                        $io->progressAdvance();
-                    }
+                    
                 }
             }
             // Date de validation : la plus récente des dates de publication de parcours
@@ -101,6 +113,10 @@ class ApiJsonExport {
                     'parcours' => $tParcours,
                     'dateValidation' => $dateValidationFormation?->format('Y-m-d H:i:s') ?? null
                 ];
+            }
+
+            if($io){
+                $io->progressAdvance();
             }
         }
 
