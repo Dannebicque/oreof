@@ -25,20 +25,21 @@
     {% endif %}
     <h2>MCCC pour {{ ec.libelle }}</h2>
 
+    {% set displayComparaisonEcts = (isFromVersioning ?? 'false' != 'true') and (isMcccFromVersion ?? false == true) %}
     <h3>ECTS</h3>
     {{
         compareMacro.displayMccc(
             ects,
             ectsVersioning ?? false,
             "",
-            hasDisplayComparaison
+            displayComparaisonEcts
         )
     }}
 
     {% if hasChangedTypeMccc and isFromVersioning is defined and isFromVersioning != 'true' %}
         <twig:alerte 
             type="info"
-            message="Le type de MCCC a changé depuis la dernière version sauvegardée.<br>Vous pouvez retrouver les anciennes données ci-dessous."
+            message="Le type de MCCC a changé depuis la dernière version validée par la CFVU.<br>Vous pouvez retrouver les anciennes données ci-dessous."
         >
         </twig:alerte>
     {% endif %}

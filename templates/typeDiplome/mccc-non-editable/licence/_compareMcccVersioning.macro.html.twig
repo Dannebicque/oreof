@@ -2,14 +2,14 @@
     {% if withComparaison %}
         {% if currentValue != previousValue %}
             {% if previousValue != false %}
-            <p class="text-danger text-decoration-line-through">
+            <span class="text-danger text-decoration-line-through mx-2">
                 {{ previousValue }}{{ suffixString }}
-            </p>
+            </span>
             {% endif %}
             {% if currentValue != false %}
-            <p class="text-success">
+            <span class="text-success mx-2">
                 {{ currentValue }}{{ suffixString }}
-            </p>
+            </span>
             {% endif %}
         {% else %}
             {{ currentValue }}{{ suffixString }}
