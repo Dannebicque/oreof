@@ -39,7 +39,8 @@
                             mcccLoopIndex <= currentMcccLength ? 'Contrôle terminal N°' ~ mcccLoopIndex : false,
                             mcccVersioning[mcccLoopIndex] is defined ? 'Contrôle terminal N°' ~ mcccLoopIndex : false,
                             "",
-                            hasDisplayComparaison
+                            hasDisplayComparaison,
+                            isFromVersioning ?? 'false'
                         )
                     }}
                 </th>
@@ -49,7 +50,9 @@
                             loop.index <= currentMcccLength ? mccc.pourcentage : false, 
                             mcccVersioning[loop.index].pourcentage ?? false, 
                             "%",
-                            hasDisplayComparaison)  
+                            hasDisplayComparaison,
+                            isFromVersioning ?? 'false'
+                            )  
                         }}
                     {% else %}
                         100%
@@ -70,7 +73,8 @@
                                     mcccLoopIndex <= currentMcccLength ? typeE.display : false,
                                     typeEpreuveVersion,
                                     "",
-                                    hasDisplayComparaison
+                                    hasDisplayComparaison,
+                                    isFromVersioning ?? 'false'
                                 )
                             }}
                         {% endif %}
@@ -95,7 +99,8 @@
                         mcccLoopIndex <= currentMcccLength ? mcccDuree : false,      
                         dureeMcccVersion,
                         "",
-                        hasDisplayComparaison
+                        hasDisplayComparaison,
+                        isFromVersioning ?? 'false'
                     )
                 }}
                     

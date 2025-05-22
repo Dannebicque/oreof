@@ -38,7 +38,8 @@
                         libelleHasTp,
                         hasOptionVersioning == 'on' ? 'Oui' : 'Non',
                         "",
-                        hasDisplayComparaison
+                        hasDisplayComparaison,
+                        isFromVersioning ?? 'false'
                     )
                 }}
             </td>
@@ -54,7 +55,8 @@
                         pourcentageTp,
                         pourcentageTpVersioning == 'on' ? '50%' : '-',
                         "",
-                        hasDisplayComparaison
+                        hasDisplayComparaison,
+                        isFromVersioning ?? 'false'
                     )
                 }}
             </td>

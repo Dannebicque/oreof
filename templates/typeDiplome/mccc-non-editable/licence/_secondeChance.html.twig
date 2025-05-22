@@ -39,7 +39,8 @@
                             loop.index <= currentMcccLength ? 'Examen 2ᵉ Session N°' ~ loop.index : false,
                             mcccVersioning[loop.index] is defined ? 'Examen 2ᵉ Session N°' ~ loop.index : false,
                             "",
-                            hasDisplayComparaison
+                            hasDisplayComparaison,
+                            isFromVersioning ?? 'false'
                         )
                     }}
                 </th>
@@ -50,7 +51,8 @@
                             mcccIndex <= currentMcccLength ? currentPourcentage : false,
                             mcccVersioning[mcccIndex].pourcentage ?? false,
                             '%',
-                            hasDisplayComparaison
+                            hasDisplayComparaison,
+                            isFromVersioning ?? 'false'
                         )  
                     }}
                     {# {% if mccc.pourcentage is defined %}
@@ -74,7 +76,8 @@
                                         mcccIndex <= currentMcccLength ? typeE.display : false,
                                         typeEpreuveVersion,
                                         "",
-                                        hasDisplayComparaison
+                                        hasDisplayComparaison,
+                                        isFromVersioning ?? 'false'
                                     )
                                 }}
                         {% endif %}
@@ -96,7 +99,8 @@
                             mcccIndex <= currentMcccLength ? currentDuree : false,
                             previousDuree,
                             '',
-                            hasDisplayComparaison
+                            hasDisplayComparaison,
+                            isFromVersioning ?? 'false'
                         )
                     }}
                 </td>

@@ -1,4 +1,4 @@
-{% macro displayMccc(currentValue, previousValue, suffixString = "", withComparaison = false) %}
+{% macro displayMccc(currentValue, previousValue, suffixString = "", withComparaison = false, isFromVersioning = "false") %}
     {% if withComparaison %}
         {% if currentValue != previousValue %}
             {% if previousValue != false %}
@@ -15,6 +15,10 @@
             {{ currentValue }}{{ suffixString }}
         {% endif %}
     {% else %}
-        {{ currentValue }}{{ suffixString }}
+        {% if isFromVersioning == 'true' %}
+            {{ previousValue}}{{ suffixString }}
+        {% else %}
+            {{ currentValue }}{{ suffixString }}
+        {% endif %}
     {% endif %}
 {% endmacro %}

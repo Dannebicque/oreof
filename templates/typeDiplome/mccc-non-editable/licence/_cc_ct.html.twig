@@ -35,7 +35,9 @@
                             mcccs[1]['cc'][1].pourcentage ?? false,
                             mcccVersioning[1]['cc'][1].pourcentage ?? false,
                             "%",
-                            hasDisplayComparaison)
+                            hasDisplayComparaison,
+                            isFromVersioning ?? 'false'
+                        )
                     }}
                 {% else %}
                     -%
@@ -52,7 +54,8 @@
                             mcccs[1]['cc'][1].nbEpreuves ~ ' épreuve(s)',
                             nbEpreuvesVersioning,
                             "",
-                            hasDisplayComparaison
+                            hasDisplayComparaison,
+                            isFromVersioning ?? 'false'
                         )
                     }}
                 {% else %}
@@ -76,7 +79,8 @@
                         libelleOption,
                         libelleOptionVersioning == 'on' ? 'Oui' : 'Non',
                         "",
-                        hasDisplayComparaison
+                        hasDisplayComparaison,
+                        isFromVersioning ?? 'false'
                     )
                 }}
             </td>
@@ -86,7 +90,8 @@
                         pourcentageOptionTP,
                         pourcentageOptionTPVersioning,
                         "",
-                        hasDisplayComparaison
+                        hasDisplayComparaison,
+                        isFromVersioning ?? 'false'
                     )
                 }}
             </td>

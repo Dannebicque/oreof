@@ -45,7 +45,9 @@
                             loop.index <= currentMcccLength ? 'Epreuve N°' ~ loop.index : false,
                             mcccVersioning[loop.index] is defined ? 'Epreuve N°' ~ loop.index : false,
                             '',
-                            hasDisplayComparaison)
+                            hasDisplayComparaison,
+                            isFromVersioning ?? 'false'
+                        )
                     }}
                     
                 </th>
@@ -53,7 +55,9 @@
                         loop.index <= currentMcccLength ? mccc.pourcentage : false,
                         mcccVersioning[loop.index].pourcentage ?? false,
                         '%',
-                        hasDisplayComparaison) 
+                        hasDisplayComparaison,
+                        isFromVersioning ?? 'false'
+                        ) 
                     }}
                 </td>
             </tr>
