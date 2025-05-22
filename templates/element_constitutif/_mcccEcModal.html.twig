@@ -157,7 +157,7 @@
             </div>
         {% endif %}
 
-        {% if typeDiplome.controleAssiduite == true %}
+        {# {% if typeDiplome.controleAssiduite == true %}
             <div class="form-check mb-2">
                 <input class="form-check-input" type="checkbox" id="ec_step4_controleAssiduite"
                        name="ec_step4[controleAssiduite]"
@@ -174,7 +174,7 @@
                             data-tooltip-placement-value="bottom"
                             title="{{ 'ec_step4.helps.controleAssiduite'|trans({}, 'help') }}"></i></label>
             </div>
-        {% endif %}
+        {% endif %} #}
     {% endif %}
 
     {% if ec.ecEnfants|length > 0 and isMcccImpose == false %}
