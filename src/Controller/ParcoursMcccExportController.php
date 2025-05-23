@@ -71,6 +71,7 @@ class ParcoursMcccExportController extends BaseController
 
     #[Route('/parcours/mccc/export-version/{parcours}.{_format}', name: 'app_parcours_mccc_export_versionning')]
     public function exportMcccVersionXlsx(
+        GetHistorique $getHistorique,
         TypeDiplomeRegistry $typeDiplomeRegistry,
         Parcours $parcours,
         string $_format = 'xlsx'
@@ -87,20 +88,25 @@ class ParcoursMcccExportController extends BaseController
             throw new \Exception('Aucun modèle MCC n\'est défini pour ce diplôme');
         }
 
-
+        //date conseil
+        $dpe = GetDpeParcours::getFromParcours($parcours);
+        if ($dpe !== null) {
+            $dateCfvu = $getHistorique->getHistoriqueParcoursLastStep($dpe, 'soumis_cfvu');
+            $dateConseil = $getHistorique->getHistoriqueParcoursLastStep($dpe, 'soumis_conseil');
+        }
 
         return match ($_format) {
             'xlsx' => $typeDiplome->exportExcelVersionMccc(
                 $this->getCampagneCollecte(),
                 $parcours,
-                 null,
-                 null
+                $dateCfvu?->getDate() ?? null,
+                $dateConseil?->getDate() ?? null
             ),
             'pdf' => $typeDiplome->exportPdfMccc(
                 $this->getCampagneCollecte(),
                 $parcours,
-                null,
-                 null
+                $dateCfvu?->getDate() ?? null,
+                $dateConseil?->getDate() ?? null
             ),
             default => throw new \Exception('Format non géré'),
         };
