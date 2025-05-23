@@ -10,9 +10,9 @@
                     {% if parcours.hasStage == true %}
                         Oui ({{ parcours.nbHeuresStages }} heures). {{ parcours.stageText|printTexte }}
                         {% if stringDifferencesParcours.stageTextParcours is defined %}
-                            {{ include('communs/_comparaison_versioning_big.html.twig', {
+                            {{ include('communs/_comparaison_versioning_no_button.html.twig', {
                                     textDifferences: stringDifferencesParcours.stageTextParcours,
-                                    idCollapse: "diffStageTextParcours" ~ parcours.id
+                                    idCollapse: 'diffGlobalParcours'
                                 }) 
                             }}
                         {% endif %}
@@ -37,9 +37,9 @@
                     {% if parcours.hasMemoire == true %}
                         Oui. {{ parcours.memoireText|printTexte }}
                         {% if stringDifferencesParcours.memoireTextParcours is defined %}
-                            {{ include('communs/_comparaison_versioning_big.html.twig', {
+                            {{ include('communs/_comparaison_versioning_no_button.html.twig', {
                                     textDifferences: stringDifferencesParcours.memoireTextParcours,
-                                    idCollapse: "diffMemoireTextParcours" ~ parcours.id
+                                    idCollapse: 'diffGlobalParcours'
                                 }) 
                             }}
                         {% endif %}

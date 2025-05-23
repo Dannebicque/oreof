@@ -1,4 +1,33 @@
+{% import "typeDiplome/mccc-non-editable/licence/_compareMcccVersioning.macro.html.twig" as compareMccc %}
+
 <h3>1ᵉ Session</h3>
+
+{% if hasChangedTypeMccc is not defined %}
+    {% set hasChangedTypeMccc = false %}
+{% endif %}
+
+{% set hasDisplayComparaison = (isFromVersioning ?? 'false' != 'true') 
+    and (isMcccFromVersion ?? false == true)
+    and (hasChangedTypeMccc == false)
+%}
+
+{% if mcccVersioning is not defined %}
+    {% set mcccVersioning = [] %}
+{% endif %}
+
+{% if hasChangedTypeMccc %}
+    {% set mcccArray = mcccVersioning %}
+{% else %}
+    {% set mcccArray = mcccs %}
+{% endif %}
+
+{% set currentMcccLength = mcccArray|length %}
+
+{% if mcccs|length < mcccVersioning|length and hasChangedTypeMccc == false %}
+    {% set lengthDiff = mcccVersioning|length - mcccs|length %}
+    {% set mcccArray = mcccs|merge(mcccVersioning|slice( (mcccs|length - 1), lengthDiff)) %}
+{% endif %}
+
 <div>
     <table class="table table-bordered">
         <thead>
@@ -8,10 +37,29 @@
         </tr>
         </thead>
         <tbody>
-        {% for mccc in mcccs %}
+        {% for mccc in mcccArray %}
             <tr>
-                <th>Epreuve N°{{ loop.index }}</th>
-                <td>{{ mccc.pourcentage ?? '' }}%</td>
+                <th>
+                    {{
+                        compareMccc.displayMccc(
+                            loop.index <= currentMcccLength ? 'Epreuve N°' ~ loop.index : false,
+                            mcccVersioning[loop.index] is defined ? 'Epreuve N°' ~ loop.index : false,
+                            '',
+                            hasDisplayComparaison,
+                            isFromVersioning ?? 'false'
+                        )
+                    }}
+                    
+                </th>
+                <td>{{ compareMccc.displayMccc(
+                        loop.index <= currentMcccLength ? mccc.pourcentage : false,
+                        mcccVersioning[loop.index].pourcentage ?? false,
+                        '%',
+                        hasDisplayComparaison,
+                        isFromVersioning ?? 'false'
+                        ) 
+                    }}
+                </td>
             </tr>
         {% endfor %}
         </tbody>

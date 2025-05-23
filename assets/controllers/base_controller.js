@@ -30,6 +30,12 @@ export default class extends Controller {
         // ajouter la classe is-invalid à l'élément
         element.classList.add('error')
       }
+      // tester si un élément a une longueur minimale : data-minlength
+      if(element.required && element.dataset.minlength !== undefined){
+        if(element.dataset.minlength > element.value.length){
+          valid = false;
+        }
+      }
 
       // tester si un radio est coché
       if (element.type === 'radio' && element.required) {

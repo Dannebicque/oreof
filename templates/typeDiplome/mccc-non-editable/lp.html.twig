@@ -1,3 +1,14 @@
+{% import "typeDiplome/mccc-non-editable/licence/_compareMcccVersioning.macro.html.twig" as compareMccc %}
+
+{% set hasDisplayComparaison = (isFromVersioning != 'true')
+    and (isMcccFromVersion ?? false == true)
+    and (hasChangedTypeMccc == false)
+%}
+
+{% if mcccVersioning is not defined %}
+    {% set mcccVersioning = [] %}
+{% endif %}
+
 <h3>1ère Session</h3>
 <div>
     <div class="row mb-2">
@@ -6,11 +17,25 @@
         </div>
         <div class="col-4">
             <span>Pourcentage</span><br>
-            {{ mcccs[1]['cc'].pourcentage }}%
+            {{
+                compareMccc.displayMccc(
+                    mcccs[1]['cc'].pourcentage,
+                    mcccVersioning[1]['cc'].pourcentage ?? false,
+                    '%',
+                    hasDisplayComparaison
+                )
+            }}
         </div>
         <div class="col-4">
             <span>Nb d'épreuve(s)</span><br>
-            {{ mcccs[1]['cc'].nbEpreuves }}
+            {{ 
+                compareMccc.displayMccc(
+                    mcccs[1]['cc'].nbEpreuves,
+                    mcccVersioning[1]['cc'].nbEpreuves ?? false,
+                    '',
+                    hasDisplayComparaison
+                )
+            }}
         </div>
     </div>
     <div class="row">
@@ -19,12 +44,29 @@
         </div>
         <div class="col-4">
             <span>Pourcentage</span><br>
-            {{ mcccs[1]['et'].pourcentage }}%
+            {{
+                compareMccc.displayMccc(
+                    mcccs[1]['et'].pourcentage,
+                    mcccVersioning[1]['et'].pourcentage ?? false,
+                    '',
+                    hasDisplayComparaison
+                )
+            }}
         </div>
         <div class="col-4">
             <span>Type d'épreuve</span><br>
-            {% if mcccs[1]['et'].typeEpreuve[0] is defined and typeEpreuves[mcccs[1]['et'].typeEpreuve[0]] is defined
-            %}{{ typeEpreuves[mcccs[1]['et'].typeEpreuve[0]].display }}{% else %}erreur{% endif %}
+            {% if mcccs[1]['et'].typeEpreuve[0] is defined and typeEpreuves[mcccs[1]['et'].typeEpreuve[0]] is defined%}
+                {{
+                    compareMccc.displayMccc(
+                        typeEpreuves[mcccs[1]['et'].typeEpreuve[0]].display 
+                        typeEpreuves[mcccVersioning[1]['et'].typeEpreuve[0]].display ?? false,
+                        "",
+                        hasDisplayComparaison
+                    ) 
+                }}
+            {% else %}
+                erreur
+            {% endif %}
         </div>
     </div>
 </div>
@@ -37,15 +79,24 @@
         </div>
         <div class="col-4">
             <span>Pourcentage</span><br>
-            {{ mcccs[3]['chance'].pourcentage }}%
+            {{
+                compareMccc.displayMccc(
+                    mcccs[3]['chance'].pourcentage,
+                    mcccVersioning[3]['chance'].pourcentage ?? false,
+                    "%",
+                    hasDisplayComparaison
+                )
+            }}
         </div>
         <div class="col-4">
             <span>Type d'épreuve</span><br>
 
             {% for typeE in mcccs[3]['chance'].typeEpreuve %}
-
-                {% if typeEpreuves[typeE] is defined %}{{ typeEpreuves[typeE].display}} {% else %}Erreur{% endif %}
-
+                {% if typeEpreuves[typeE] is defined %}
+                    {{ typeEpreuves[typeE].display}}
+                {% else %}
+                    Erreur
+                {% endif %}
             {% endfor %}
         </div>
     </div>
@@ -62,8 +113,18 @@
         </div>
         <div class="col-4">
             <span>Type d'épreuve</span><br>
-            {% if mcccs[2]['et'].typeEpreuve[0] is defined and typeEpreuves[mcccs[2]['et'].typeEpreuve[0]] is defined
-            %}{{ typeEpreuves[mcccs[2]['et'].typeEpreuve[0]].display }}{% else %}erreur{% endif %}
+            {% if mcccs[2]['et'].typeEpreuve[0] is defined and typeEpreuves[mcccs[2]['et'].typeEpreuve[0]] is defined %}
+                {{ 
+                    compareMccc.displayMccc(
+                        typeEpreuves[mcccs[2]['et'].typeEpreuve[0]].display,
+                        typeEpreuves[mcccVersioning[2]['et'].typeEpreuve[0]].display ?? false,
+                        "",
+                        hasDisplayComparaison
+                    )
+                }}
+            {% else %}
+                erreur
+            {% endif %}
         </div>
     </div>
 </div>

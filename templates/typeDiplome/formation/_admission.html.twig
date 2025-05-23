@@ -6,9 +6,9 @@
             <dt>Prérequis recommandés</dt>
             <dd>{{ parcours.prerequis|raw }}</dd>
             {% if stringDifferencesParcours.prerequisRecommandesParcours is defined %}
-                {{ include("communs/_comparaison_versioning_big.html.twig", {
+                {{ include("communs/_comparaison_versioning_no_button.html.twig", {
                         textDifferences: stringDifferencesParcours.prerequisRecommandesParcours,
-                        idCollapse: "diffParcoursPrerequisRecommandes" ~ parcours.id
+                        idCollapse: "diffGlobalParcours"
                     })
                 }}
             {% endif %}

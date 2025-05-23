@@ -1,3 +1,5 @@
+{% import "typeDiplome/mccc-non-editable/licence/_compareMcccVersioning.macro.html.twig" as compareMccc %}
+
 <div>
     <table class="table table-bordered">
         <thead>
@@ -9,23 +11,99 @@
         </tr>
         </thead>
         <tbody>
-        {% for mccc in mcccs %}
+
+        {% if hasChangedTypeMccc is not defined %}
+            {% set hasChangedTypeMccc = false %}
+        {% endif %}
+
+        {% set hasDisplayComparaison = (isFromVersioning ?? 'false' != 'true')
+            and (isMcccFromVersion ?? false == true)
+            and (hasChangedTypeMccc == false)
+        %}
+        {% if hasChangedTypeMccc %}
+            {% set mcccArray = mcccVersioning %}
+        {% else %}
+            {% set mcccArray = mcccs %}
+        {% endif %}
+        {% set currentMcccLength = mcccArray|length %}
+        {% if mcccs|length < mcccVersioning|length and hasChangedTypeMccc == false %}
+            {% set lengthDiff = mcccVersioning|length - mcccs|length %}
+            {% set mcccArray = mcccs|merge(mcccVersioning|slice( (mcccs|length - 1), lengthDiff)) %}
+        {% endif %}
+        {% for mccc in mcccArray %}
+            {% set mcccLoopIndex = loop.index %}
             <tr>
-                <th>Contrôle terminal N°{{ loop.index }}</th>
+                <th>
+                    {{
+                        compareMccc.displayMccc(
+                            mcccLoopIndex <= currentMcccLength ? 'Contrôle terminal N°' ~ mcccLoopIndex : false,
+                            mcccVersioning[mcccLoopIndex] is defined ? 'Contrôle terminal N°' ~ mcccLoopIndex : false,
+                            "",
+                            hasDisplayComparaison,
+                            isFromVersioning ?? 'false'
+                        )
+                    }}
+                </th>
                 <td>
                     {% if mccc.pourcentage is defined %}
-                        {{ mccc.pourcentage }}%
+                        {{ compareMccc.displayMccc(
+                            loop.index <= currentMcccLength ? mccc.pourcentage : false, 
+                            mcccVersioning[loop.index].pourcentage ?? false, 
+                            "%",
+                            hasDisplayComparaison,
+                            isFromVersioning ?? 'false'
+                            )  
+                        }}
                     {% else %}
                         100%
                     {% endif %}
                 </td>
                 <td>
                     {% for typeE in typeEpreuves %}
-                        {% if mccc.typeEpreuve[0] is defined and mccc.typeEpreuve[0] == typeE.id %}{{ typeE.display }}{% endif %}
+                        {% if mccc.typeEpreuve[0] is defined and mccc.typeEpreuve[0] == typeE.id %}
+                            {% if mcccVersioning[mcccLoopIndex].typeEpreuve[0] is defined %}
+                                {% set typeEpreuveVersion = typeEpreuves|find(
+                                    t => t.id == mcccVersioning[mcccLoopIndex].typeEpreuve[0]
+                                ).display %}
+                            {% else %}
+                                {% set typeEpreuveVersion = false %}
+                            {% endif %}
+                            {{
+                                compareMccc.displayMccc(
+                                    mcccLoopIndex <= currentMcccLength ? typeE.display : false,
+                                    typeEpreuveVersion,
+                                    "",
+                                    hasDisplayComparaison,
+                                    isFromVersioning ?? 'false'
+                                )
+                            }}
+                        {% endif %}
                     {% endfor %}
                 </td>
                 <td>
-                    {% if mccc.duree is defined and mccc.duree != null %}{{ mccc.duree|date('H:i') }}{% else %}-{% endif %}
+                {% if mccc.duree is defined and mccc.duree != null %}
+                    {% set mcccDuree = mccc.duree|date('H:i') %}
+                {% else %}
+                    {% set mcccDuree = '-' %}
+                {% endif %}
+                {% if mcccVersioning[mcccLoopIndex].duree is defined 
+                    and mcccVersioning[mcccLoopIndex].duree != null
+                %}
+                    {% set dureeMcccVersion = mcccVersioning[mcccLoopIndex].duree|date('H:i') %}
+                {% else %}
+                    {% set dureeMcccVersion = '-' %}
+                {% endif %}
+                
+                {{
+                    compareMccc.displayMccc(
+                        mcccLoopIndex <= currentMcccLength ? mcccDuree : false,      
+                        dureeMcccVersion,
+                        "",
+                        hasDisplayComparaison,
+                        isFromVersioning ?? 'false'
+                    )
+                }}
+                    
                 </td>
             </tr>
         {% endfor %}

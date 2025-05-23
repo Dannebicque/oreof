@@ -74,6 +74,9 @@ class Mccc
     #[ORM\Column(nullable: true)]
     private ?array $options = null;
 
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $justificationText = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -286,6 +289,18 @@ class Mccc
         }
 
         return $texte;
+    }
+
+    public function getJustificationText(): ?string
+    {
+        return $this->justificationText;
+    }
+
+    public function setJustificationText(?string $justificationText): static
+    {
+        $this->justificationText = $justificationText;
+
+        return $this;
     }
 
     public function getCleUnique(): string
