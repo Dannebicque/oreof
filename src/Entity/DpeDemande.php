@@ -58,6 +58,29 @@ class DpeDemande
         $this->dateDemande = new \DateTime();
     }
 
+    public static function getListeNiveauDemande(): array
+    {
+        return [
+            'F' => 'Parcours',
+            'P' => 'Formation',
+        ];
+    }
+
+    public static function getListeNiveauModification(): array
+    {
+        return [
+            TypeModificationDpeEnum::ANNULATION_REOUVERTURE->value => TypeModificationDpeEnum::ANNULATION_REOUVERTURE->getLibelle(),
+            TypeModificationDpeEnum::CREATION->value => TypeModificationDpeEnum::CREATION->getLibelle(),
+            TypeModificationDpeEnum::MODIFICATION_MCCC_TEXTE->value => TypeModificationDpeEnum::MODIFICATION_MCCC_TEXTE->getLibelle(),
+            TypeModificationDpeEnum::MODIFICATION_PARCOURS->value => TypeModificationDpeEnum::MODIFICATION_PARCOURS->getLibelle(),
+            TypeModificationDpeEnum::MODIFICATION_TEXTE->value => TypeModificationDpeEnum::MODIFICATION_TEXTE->getLibelle(),
+            TypeModificationDpeEnum::NON_OUVERTURE_SES->value => TypeModificationDpeEnum::NON_OUVERTURE_SES->getLibelle(),
+
+        ];
+
+    }
+
+
     public function getId(): ?int
     {
         return $this->id;

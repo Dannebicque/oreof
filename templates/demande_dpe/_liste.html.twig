@@ -1,19 +1,94 @@
 <table class="table">
     <thead>
     <tr>
+        {% if is_admin %}
+            <th>Composante</th>
+        {% endif %}
         <th>Mention</th>
         <th>Parcours</th>
-        <th>Demande de ?</th>
         <th>Date demande</th>
         <th>Date clôture</th>
         <th>Niveau demande</th>
         <th>Etat</th>
         <th></th>
     </tr>
+    <tr>
+        {% if is_admin %}
+            <th>
+
+                <label for="filter-composantePorteuse" class="sr-only">Composante</label>
+                <select
+                        {{ stimulus_action('crud', 'filter', 'change', {
+                            'field': 'composantePorteuse'
+                        }) }}
+                        id="filter-composantePorteuse"
+                        {{ stimulus_controller('symfony/ux-autocomplete/autocomplete') }}
+                        class="form-select">
+                    <option value="">Toutes les composantes</option>
+                    {% for composante in composantes %}
+                        <option value="{{ composante.id }}"
+                                {% if params['composantePorteuse'] is defined and params['composantePorteuse']  == composante.id %}selected{% endif %}
+                        >{{ composante.libelle }}</option>
+                    {% endfor %}
+                </select>
+            </th>
+        {% endif %}
+        <th>
+            <label for="filter-mention" class="sr-only">mention</label>
+            <select
+                    {{ stimulus_action('crud', 'filter', 'change', {
+                        'field': 'mention'
+                    }) }}
+                    id="filter-mention" class="form-select"
+                    {{ stimulus_controller('symfony/ux-autocomplete/autocomplete') }}
+            >
+                <option value="">Toutes les mentions</option>
+                {% for mention in mentions %}
+                    <option value="{{ mention.id }}"
+                            {% if params['mention'] is defined and params['mention']  == mention.id %}selected{% endif %}
+                    >{{ mention.libelle }}</option>
+                {% endfor %}
+
+            </select>
+        </th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th>
+            <label for="filter-niveauModification" class="sr-only">mention</label>
+            <select
+                    {{ stimulus_action('crud', 'filter', 'change', {
+                        'field': 'niveauModification'
+                    }) }}
+                    id="filter-niveauModification" class="form-select"
+                    {{ stimulus_controller('symfony/ux-autocomplete/autocomplete') }}
+            >
+                <option value="">Tous les niveaux</option>
+                {% for key, niveau in listeNiveauModification %}
+                    <option value="{{ key }}"
+                            {% if params['niveauModification'] is defined and params['niveauModification']  == key %}selected{% endif %}
+                    >{{ niveau }}</option>
+                {% endfor %}
+            </select>
+        </th>
+        <th></th>
+
+        <th>
+            <button class="btn btn-outline-danger"
+                    {{ stimulus_action('crud', 'effaceFiltre', 'click', {
+                    }) }}
+            >
+                Effacer les filtres
+            </button>
+        </th>
+    </tr>
     </thead>
     <tbody>
     {% for demande in demandes %}
         <tr>
+            {% if is_admin %}
+                <td rowspan="2">{{ demande.formation.composantePorteuse.libelle }}</td>
+            {% endif %}
             <td rowspan="2">{{ demande.formation.displayLong(false) }}</td>
             <td rowspan="2">
                 {% if demande.niveauDemande == 'F' %}
@@ -22,19 +97,16 @@
                     {{ demande.parcours != null ? demande.parcours.libelle : '' }}
                 {% endif %}
             </td>
-            <td rowspan="2">
-                {{ demande.auteur != null ? demande.auteur.display : '-' }}
-            </td>
             <td>{{ demande.dateDemande|date('d/m/Y') }}</td>
             <td>{{ demande.dateCloture != null ?  demande.dateCloture|date('d/m/Y') : '-' }}</td>
             <td>
                 {{ demande.niveauModification|badgeEnum }}</td>
             <td>
-                {% if demande.dateCloture == null %}
+                {#                {% if demande.dateCloture == null %} #}
                     {{ demande.etatValidation|badgeEnum }}
-                {% else %}
-                    <span class="badge bg-success">Demande clôturée</span>
-                {% endif %}
+                {#                {% else %} #}
+                {#                    <span class="badge bg-success">Demande clôturée</span> #}
+                {#                {% endif %} #}
             </td>
             <td>
                 {% if demande.niveauDemande == 'F' %}
@@ -55,7 +127,8 @@
             </td>
         </tr>
         <tr>
-            <td colspan="4">
+            <td colspan="2"> {{ demande.auteur != null ? demande.auteur.display : '-' }}</td>
+            <td colspan="2">
                 {{ demande.argumentaireDemande }}
             </td>
             <td>

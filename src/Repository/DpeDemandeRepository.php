@@ -107,4 +107,36 @@ class DpeDemandeRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function findByComposanteAndSearch(Composante $composante, CampagneCollecte $campagneCollecte, array $params): array
+    {
+    }
+
+    public function findBySearch(CampagneCollecte $campagneCollecte, array $params): array
+    {
+        $query = $this->createQueryBuilder('d')
+            ->leftJoin('d.parcours', 'p')
+            ->leftJoin('p.formation', 'f')
+            ->where('d.campagneCollecte = :campagne')
+            ->setParameter('campagne', $campagneCollecte);
+
+        if (isset($params['composantePorteuse']) && $params['composantePorteuse'] !== '') {
+            $query->andWhere('f.composantePorteuse = :composante')
+                ->setParameter('composante', $params['composantePorteuse']);
+        }
+
+        if (isset($params['mention']) && $params['mention'] !== '') {
+            $query->andWhere('f.mention = :mention')
+                ->setParameter('mention', $params['mention']);
+        }
+
+        if (isset($params['niveauModification']) && $params['niveauModification'] !== '') {
+            $query->andWhere('d.niveauModification = :niveauModification')
+                ->setParameter('niveauModification', $params['niveauModification']);
+        }
+
+
+        return $query->getQuery()
+            ->getResult();
+    }
 }

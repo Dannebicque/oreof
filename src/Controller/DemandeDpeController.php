@@ -12,6 +12,7 @@ use App\Form\DpeDemandeTexteType;
 use App\Repository\ActualiteRepository;
 use App\Repository\ComposanteRepository;
 use App\Repository\DpeDemandeRepository;
+use App\Repository\MentionRepository;
 use App\Utils\JsonRequest;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -20,7 +21,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-class DemandeDpeController extends AbstractController
+class DemandeDpeController extends BaseController
 {
     #[Route('/demande/dpe', name: 'app_demande_dpe')]
     #[IsGranted('ROLE_ADMIN')]
@@ -34,6 +35,7 @@ class DemandeDpeController extends AbstractController
 
     #[Route('/demande/dpe/liste/{type}', name: 'app_dpe_demande_liste')]
     public function liste(
+        MentionRepository $mentionRepository,
         ComposanteRepository $composanteRepository,
         DpeDemandeRepository $dpeDemandeRepository,
         Request $request,
@@ -49,7 +51,12 @@ class DemandeDpeController extends AbstractController
             }
 
             return $this->render('demande_dpe/_liste.html.twig', [
-                'demandes' => $dpeDemandeRepository->findByComposante($composante),
+                'is_admin' => false,
+                'params' => $request->query->all(),
+                'demandes' => $dpeDemandeRepository->findByComposanteAndSearch(
+                    $composante,
+                    $this->getCampagneCollecte(),
+                    $request->query->all()),
             ]);
         }
 
@@ -57,7 +64,15 @@ class DemandeDpeController extends AbstractController
             $this->denyAccessUnlessGranted('ROLE_ADMIN');
 
             return $this->render('demande_dpe/_liste.html.twig', [
-                'demandes' => $dpeDemandeRepository->findAll(),
+                'is_admin' => true,
+                'listeNiveauModification' => DpeDemande::getListeNiveauModification(),
+                'demandes' => $dpeDemandeRepository->findBySearch(
+                    $this->getCampagneCollecte(),
+                    $request->query->all()
+                ),
+                'params' => $request->query->all(),
+                'composantes' => $composanteRepository->findPorteuse(),
+                'mentions' => $mentionRepository->findBy([], ['libelle' => 'ASC']),
             ]);
         }
 

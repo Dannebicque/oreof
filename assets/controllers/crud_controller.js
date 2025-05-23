@@ -23,14 +23,50 @@ export default class extends Controller {
 
   scrollPosition = 0
 
+  // Clé utilisée pour stocker l'état dans localStorage
+  storageKey = 'crud_state'
+
   connect() {
     useDebounce(this)
-    this.fields = {
-      page: this.pageValue ?? 1,
+
+    // Restaurer l'état depuis localStorage si disponible
+    const savedState = this.getSavedState()
+    if (savedState) {
+      this.fields = savedState
+
+      // Restaurer la valeur du champ de recherche si elle existe
+      if (savedState.q) {
+        const searchInput = document.getElementById('filtre_crud')
+        if (searchInput) {
+          searchInput.value = savedState.q
+        }
+      }
+
+      // Restaurer la valeur du sélecteur de limite si elle existe
+      if (savedState.limit) {
+        const limitSelect = document.querySelector('select[data-action*="crud#filter"]')
+        if (limitSelect) {
+          limitSelect.value = savedState.limit
+        }
+      }
+    } else {
+      this.fields = {
+        page: this.pageValue ?? 1,
+      }
     }
-    this._updateListe({
-      page: this.pageValue,
-    })
+
+    this._updateListe(this.fields)
+  }
+
+  // Sauvegarde l'état actuel dans localStorage
+  saveState() {
+    localStorage.setItem(this.storageKey, JSON.stringify(this.fields))
+  }
+
+  // Récupère l'état sauvegardé depuis localStorage
+  getSavedState() {
+    const savedState = localStorage.getItem(this.storageKey)
+    return savedState ? JSON.parse(savedState) : null
   }
 
   filter(event) {
@@ -39,18 +75,21 @@ export default class extends Controller {
     } else {
       this.fields[event.params.field] = event.target.value
     }
+    this.saveState()
     this._updateListe(this.fields)
   }
 
   page(event) {
     this.fields.page = event.params.page
     updateUrl({ page: event.params.page })
+    this.saveState()
     this._updateListe(this.fields)
   }
 
   rechercher(event) {
     event.preventDefault()
     this.fields.q = event.target.value
+    this.saveState()
     this._updateListe(this.fields)
   }
 
@@ -58,6 +97,7 @@ export default class extends Controller {
     event.preventDefault()
     this.fields = {}
     document.getElementById('filtre_crud').value = ''
+    localStorage.removeItem(this.storageKey)
     this._updateListe(this.fields)
   }
 
@@ -80,7 +120,7 @@ export default class extends Controller {
       await fetch(url, body).then(async (e) => {
         if (e.status === 200) {
           callOut('Suppression effectuée', 'success')
-          console.log(this.fields)
+          // Après une suppression, on reste sur la même page si possible
           this._updateListe(this.fields)
         } else {
           const data = await e.json()
@@ -100,12 +140,19 @@ export default class extends Controller {
     const { url } = event.params
     await fetch(url).then(() => {
       callOut('Duplication effectuée', 'success')
-      this._updateListe()
+      // Après une duplication, on reste sur la même page
+      this._updateListe(this.fields)
     })
   }
 
   refreshListe() {
-    this._updateListe()
+    // Lors d'un rafraîchissement, on utilise les paramètres sauvegardés
+    const savedState = this.getSavedState()
+    if (savedState) {
+      this._updateListe(savedState)
+    } else {
+      this._updateListe(this.fields)
+    }
   }
 
   async _updateListe(params) {
