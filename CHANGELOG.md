@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.40.0](https://github.com/Dannebicque/oreof/compare/v1.39.2...v1.40.0) (2025-05-24)
+
+
+### Features
+
+* **crud_controller:** add localStorage key value for state persistence ([a1a4463](https://github.com/Dannebicque/oreof/commit/a1a4463c23af6596b7adcb2a780413048ae7e6d0))
+* **DemandeDpe:** enhance DPE request management with search filters and localStorage state persistence ([3a17c0b](https://github.com/Dannebicque/oreof/commit/3a17c0b950a04aa62f1592ffd8e32bd552efb795))
+
+
+### Bug Fixes
+
+* **ParcoursMcccExportController:** add historical date retrieval for DPE in export functions ([2971305](https://github.com/Dannebicque/oreof/commit/2971305b3afc19aa4dbd8659dcf20e25dbf8b88e))
+
 ## [1.39.2](https://github.com/Dannebicque/oreof/compare/v1.39.1...v1.39.2) (2025-05-19)
 
 
