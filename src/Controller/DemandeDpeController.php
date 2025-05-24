@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Classes\Excel\ExcelWriter;
 use App\Classes\JsonReponse;
+use App\Classes\ValidationProcess;
 use App\Entity\Actualite;
 use App\Entity\Composante;
 use App\Entity\DpeDemande;
@@ -35,6 +36,7 @@ class DemandeDpeController extends BaseController
 
     #[Route('/demande/dpe/liste/{type}', name: 'app_dpe_demande_liste')]
     public function liste(
+        ValidationProcess $validationProcess,
         MentionRepository $mentionRepository,
         ComposanteRepository $composanteRepository,
         DpeDemandeRepository $dpeDemandeRepository,
@@ -66,6 +68,7 @@ class DemandeDpeController extends BaseController
             return $this->render('demande_dpe/_liste.html.twig', [
                 'is_admin' => true,
                 'listeNiveauModification' => DpeDemande::getListeNiveauModification(),
+                'listeEtatValidation' => $validationProcess->getProcessAll(),
                 'demandes' => $dpeDemandeRepository->findBySearch(
                     $this->getCampagneCollecte(),
                     $request->query->all()

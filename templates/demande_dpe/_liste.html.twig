@@ -7,7 +7,6 @@
         <th>Mention</th>
         <th>Parcours</th>
         <th>Date demande</th>
-        <th>Date clôture</th>
         <th>Niveau demande</th>
         <th>Etat</th>
         <th></th>
@@ -53,7 +52,6 @@
         </th>
         <th></th>
         <th></th>
-        <th></th>
         <th>
             <label for="filter-niveauModification" class="sr-only">mention</label>
             <select
@@ -71,7 +69,22 @@
                 {% endfor %}
             </select>
         </th>
-        <th></th>
+        <th>
+            <label for="filter-etatValidation" class="sr-only">mention</label>
+            <select
+                    {{ stimulus_action('crud', 'filter', 'change', {
+                        'field': 'etatValidation'
+                    }) }}
+                    id="filter-etatValidation" class="form-select"
+                    {{ stimulus_controller('symfony/ux-autocomplete/autocomplete') }}
+            >
+                <option value="">Choisir l'état</option>
+                {% for value, type in listeEtatValidation %}
+                    <option value="{{ value }}"
+                            {% if params['etatValidation'] is defined and params['etatValidation']  == value %}selected{% endif %}>{{ type.label|trans({}, 'process') }}</option>
+                {% endfor %}
+            </select>
+        </th>
 
         <th>
             <button class="btn btn-outline-danger"
@@ -98,15 +111,10 @@
                 {% endif %}
             </td>
             <td>{{ demande.dateDemande|date('d/m/Y') }}</td>
-            <td>{{ demande.dateCloture != null ?  demande.dateCloture|date('d/m/Y') : '-' }}</td>
             <td>
                 {{ demande.niveauModification|badgeEnum }}</td>
             <td>
-                {#                {% if demande.dateCloture == null %} #}
                     {{ demande.etatValidation|badgeEnum }}
-                {#                {% else %} #}
-                {#                    <span class="badge bg-success">Demande clôturée</span> #}
-                {#                {% endif %} #}
             </td>
             <td>
                 {% if demande.niveauDemande == 'F' %}
