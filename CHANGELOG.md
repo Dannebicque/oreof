@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.41.0](https://github.com/Dannebicque/oreof/compare/v1.40.0...v1.41.0) (2025-05-24)
+
+
+### Features
+
+* **BadgeEcts:** update ECTS validation logic to include upper boundary ([8d4157f](https://github.com/Dannebicque/oreof/commit/8d4157f2f2f8ee19142aea42b97710cbf2d143c9))
+* **BadgeHeures:** improve logic for editable state and enhance display for admin users ([b95b2bc](https://github.com/Dannebicque/oreof/commit/b95b2bcbb4e54f4820b8d1814b558f7897726386))
+* **DemandeDpe:** add validation state filter and update list view ([ef3b635](https://github.com/Dannebicque/oreof/commit/ef3b6353ace96d28a5a94b5fc3ebf8bea0c167eb))
+* **index:** refine semester filtering to include only open semesters ([a23811f](https://github.com/Dannebicque/oreof/commit/a23811fa5094544cc039b407f89e150db01b9b8f))
+
 ## [1.40.0](https://github.com/Dannebicque/oreof/compare/v1.39.2...v1.40.0) (2025-05-24)
 
 
