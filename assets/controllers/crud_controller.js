@@ -15,16 +15,17 @@ import updateUrl from '../js/updateUrl'
 export default class extends Controller {
   static targets = ['liste']
 
-  static values = { url: String, page: Number }
+  static values = {
+    url: String,
+    page: Number,
+    storageKey: { type: String, default: 'crud_state' }, // Clé pour localStorage
+  }
 
   static debounces = ['rechercher']
 
   fields = {}
 
   scrollPosition = 0
-
-  // Clé utilisée pour stocker l'état dans localStorage
-  storageKey = 'crud_state'
 
   connect() {
     useDebounce(this)
@@ -60,12 +61,12 @@ export default class extends Controller {
 
   // Sauvegarde l'état actuel dans localStorage
   saveState() {
-    localStorage.setItem(this.storageKey, JSON.stringify(this.fields))
+    localStorage.setItem(this.storageKeyValue, JSON.stringify(this.fields))
   }
 
   // Récupère l'état sauvegardé depuis localStorage
   getSavedState() {
-    const savedState = localStorage.getItem(this.storageKey)
+    const savedState = localStorage.getItem(this.storageKeyValue)
     return savedState ? JSON.parse(savedState) : null
   }
 
@@ -97,7 +98,7 @@ export default class extends Controller {
     event.preventDefault()
     this.fields = {}
     document.getElementById('filtre_crud').value = ''
-    localStorage.removeItem(this.storageKey)
+    localStorage.removeItem(this.storageKeyValue)
     this._updateListe(this.fields)
   }
 
