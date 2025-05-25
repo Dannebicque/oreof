@@ -116,6 +116,7 @@ class FormationResponsableController extends BaseController
 
     #[Route('/formation/change-responsable/export', name: 'app_formation_responsable_liste_export')]
     public function listeDemandeExport(
+        Request $request,
         MyGotenbergPdf $myGotenbergPdf,
         ChangeRfRepository $changeRfRepository,
         ComposanteRepository $composanteRepository
@@ -123,7 +124,15 @@ class FormationResponsableController extends BaseController
 
         $demandes = $changeRfRepository->findByTypeValidation(EtatChangeRfEnum::soumis_cfvu->value, $this->getCampagneCollecte());
 
-        $composantes = $composanteRepository->findAll();
+        if ($request->query->has('composante')) {
+            $composanteId = $request->query->get('composante');
+            $composantes = $composanteRepository->findBy(['id' => $composanteId]);
+        } else if ($this->isGranted('ROLE_ADMIN')) {
+            $composantes = $composanteRepository->findAll();
+        } else {
+            throw new AccessDeniedException("Vous n'avez pas les droits pour accéder à cette page.");
+        }
+
         $tDemandes = [];
         foreach ($composantes as $composante) {
             $tDemandes[$composante->getId()] = [];

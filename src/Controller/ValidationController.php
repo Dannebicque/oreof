@@ -111,8 +111,9 @@ class ValidationController extends BaseController
             case 'changeRf':
                 return $this->render('validation/_changeRf.html.twig', [
                     'composantes' => $composanteRepository->findAll(),
+                    'ses' => $isSes,
+                    'composante' => $composante,
                     'types_validation' => $validationProcessChangeRf->getProcess(),
-                    'idComposante' => $idComposante,
                     'typeValidation' => $typeValidation,
                 ]);
         }
@@ -158,11 +159,9 @@ class ValidationController extends BaseController
             $process = null;
         }
 
-        $composantes = $composanteRepository->findAll();
         return $this->render('validation/_liste.html.twig', [
             'process' => $process,
             'allparcours' => $allparcours,
-          //  'composantes' => $composantes,
             'etape' => $typeValidation ?? null,
         ]);
     }
