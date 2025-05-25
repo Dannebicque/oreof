@@ -114,7 +114,9 @@
             <td>
                 {{ demande.niveauModification|badgeEnum }}</td>
             <td>
+                {% if demande.niveauDemande == 'P' %}
                     {{ demande.etatValidation|badgeEnum }}
+                {% endif %}
             </td>
             <td>
                 {% if demande.niveauDemande == 'F' %}
@@ -135,7 +137,7 @@
             </td>
         </tr>
         <tr>
-            <td colspan="2"> {{ demande.auteur != null ? demande.auteur.display : '-' }}</td>
+            <td> {{ demande.auteur != null ? demande.auteur.display : '-' }}</td>
             <td colspan="2">
                 {{ demande.argumentaireDemande }}
             </td>
