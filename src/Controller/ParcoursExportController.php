@@ -13,8 +13,10 @@ use App\Classes\CalculStructureParcours;
 use App\Classes\MyGotenbergPdf;
 use App\DTO\StructureEc;
 use App\DTO\StructureUe;
+use App\Entity\CampagneCollecte;
 use App\Entity\Parcours;
 use App\Entity\ParcoursVersioning;
+use App\Repository\ParcoursRepository;
 use App\Service\ParcoursExport;
 use App\Service\VersioningParcours;
 use App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException;
@@ -23,9 +25,12 @@ use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -386,5 +391,36 @@ class ParcoursExportController extends AbstractController
                 'autonomie'=> $ec->heuresEctsEc->tePres
             ],
         ];
+    }
+
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route('/parcours/export/generique', name: 'app_parcours_export_generique')]
+    public function exportGenerique(){
+
+
+        return $this->render('export/parcours_generique.html.twig', [
+
+        ]);
+    }
+
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route('/parcours/export/generique/search_by_name', name: 'app_parcours_export_generique_search_by_name')]
+    public function searchByName(
+        EntityManagerInterface $em
+    ){
+        $request = Request::createFromGlobals();
+        $inputText = $request->query->get('inputText', '');
+        $campagne = $request->query->get(
+            'campagneCollecte', 
+            $em->getRepository(CampagneCollecte::class)->findOneBy(['defaut' => 1])->getId()
+        );
+        // Minimum de caractères pour la recherche
+        if(mb_strlen($inputText) >= 4){
+            $searchResults = $em->getRepository(Parcours::class)->findAllByDisplayName($inputText, $campagne);
+            return new JsonResponse($searchResults);
+        }
+        else {
+            return;
+        }
     }
 }

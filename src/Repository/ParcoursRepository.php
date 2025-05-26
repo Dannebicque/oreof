@@ -297,4 +297,43 @@ class ParcoursRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function findAllByDisplayName(string $displayName, int $campagneCollecteId){
+        $result = $this->createQueryBuilder('p');
+
+        $patternLibelle = $result->expr()->concat(
+            'td.libelle', 
+            $result->expr()->literal(' - '),
+            'p.libelle', 
+            $result->expr()->literal(' '),
+            $result->expr()->literal('('),
+            'p.sigle', 
+            $result->expr()->literal(')'),
+        );
+
+        $patternLibelleUpper = $result->expr()->concat(
+            'UPPER(td.libelle)', 
+            $result->expr()->literal(' - '),
+            'UPPER(p.libelle)', 
+            $result->expr()->literal(' '),
+            $result->expr()->literal('('),
+            'UPPER(p.sigle)', 
+            $result->expr()->literal(')'),
+        );
+
+        $result = $result
+            ->select('p.id AS parcours_id')
+            ->addSelect($patternLibelle . ' AS parcours_libelle')
+            ->join('p.formation', 'f')
+            ->join('f.typeDiplome', 'td')
+            ->join('p.dpeParcours', 'dpe')
+            ->where($result->expr()->like($patternLibelleUpper, 'UPPER(:displayName)'))
+            ->andWhere('dpe.campagneCollecte = :campagneCollecte')
+            ->setParameter(':displayName', '%' . $displayName . '%')
+            ->setParameter(':campagneCollecte', $campagneCollecteId);
+        
+        
+        return $result->getQuery()->getResult();
+
+    }
 }
