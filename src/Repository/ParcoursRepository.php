@@ -330,7 +330,8 @@ class ParcoursRepository extends ServiceEntityRepository
             ->where($result->expr()->like($patternLibelleUpper, 'UPPER(:displayName)'))
             ->andWhere('dpe.campagneCollecte = :campagneCollecte')
             ->setParameter(':displayName', '%' . $displayName . '%')
-            ->setParameter(':campagneCollecte', $campagneCollecteId);
+            ->setParameter(':campagneCollecte', $campagneCollecteId)
+            ->orderBy('parcours_libelle', 'ASC');
         
         
         return $result->getQuery()->getResult();
