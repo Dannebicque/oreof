@@ -407,7 +407,7 @@ class ParcoursExportController extends AbstractController
     #[Route('/parcours/export/generique/search_by_name', name: 'app_parcours_export_generique_search_by_name')]
     public function searchByName(
         EntityManagerInterface $em
-    ){
+    ) : Response {
         $request = Request::createFromGlobals();
         $inputText = $request->query->get('inputText', '');
         $campagne = $request->query->get(
@@ -419,8 +419,9 @@ class ParcoursExportController extends AbstractController
             $searchResults = $em->getRepository(Parcours::class)->findAllByDisplayName($inputText, $campagne);
             return new JsonResponse($searchResults);
         }
+
         else {
-            return;
+            return new JsonResponse([]);
         }
     }
 }
