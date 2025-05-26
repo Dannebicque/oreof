@@ -58,6 +58,12 @@
             </div>
         </div>
     {% else %}
+        {% if isBut %}
+            <a class="dropdown-item"
+               href="{{ path('app_parcours_mccc_export', {parcours:parcours.id, _format:'xlsx'}) }}">
+                <i class="{{ iconDownload }}"></i> Export MCCC (xlsx)
+            </a>
+        {% endif %}
         <a class="btn btn-outline-warning d-block mt-1"
            href="{{ path('app_parcours_mccc_export_versionning', {parcours:parcours.id, _format:'xlsx'}) }}">
             <i class="{{ iconDownload }}"></i>
