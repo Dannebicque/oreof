@@ -6,6 +6,9 @@ export default class extends Controller {
         'searchForm',
         'searchInput',
         'searchResult',
+        'emptySearchListButton',
+        'selectAllParcoursButton',
+        'loadingIcon'
     ];
 
     static values = {
@@ -31,9 +34,12 @@ export default class extends Controller {
 
     async loadResultList(){
         if(this.searchInputTarget.value.length >= this._minLength){    
-            let searchResult = await this.fetchResults(this.searchInputTarget.value);
             this.emptyResultList();
+            this.loadingIconTarget.classList.remove('d-none');
+            let searchResult = await this.fetchResults(this.searchInputTarget.value);
             this.createResultList(searchResult);
+            this.loadingIconTarget.classList.add('d-none');
+            this.emptySearchListButtonTarget.classList.remove('d-none');
         } else {
 
         }
@@ -62,5 +68,24 @@ export default class extends Controller {
         while(this.searchResultTarget.hasChildNodes()){
             this.searchResultTarget.removeChild(this.searchResultTarget.firstChild);
         }
+    }
+
+    emptyResultListEvent(){
+        this.emptyResultList();
+        this.emptySearchListButtonTarget.classList.add('d-none');
+        this.selectAllParcoursButtonTarget.classList.remove('d-none');
+    }
+
+    selectAllParcours(){
+        this.emptyResultList();
+        let row = document.createElement('div');
+        row.classList.add('row', 'mt-5');
+        let textDiv = document.createElement('div');
+        textDiv.classList.add('allParcoursTextNode', 'text-center', 'text-primary');
+        textDiv.textContent = "Tous les parcours ont été sélectionnés";
+        row.appendChild(textDiv);
+        this.selectAllParcoursButtonTarget.classList.add('d-none');
+        this.emptySearchListButtonTarget.classList.remove('d-none');
+        this.searchResultTarget.appendChild(row);
     }
 }

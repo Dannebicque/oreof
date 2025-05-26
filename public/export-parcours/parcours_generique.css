@@ -3,3 +3,24 @@
     color: white;
     cursor: pointer;
 }
+
+.badgeSearchAction:hover {
+    cursor: pointer;
+}
+
+.loading-icon {
+    animation-name: spin;
+    animation-duration: 1.5s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    font-size: 4.25em;
+}   
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);;
+    }
+}
