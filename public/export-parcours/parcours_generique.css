@@ -16,6 +16,11 @@
     font-size: 4.25em;
 }   
 
+#searchResultNode {
+    max-height: 20em;
+    overflow-y: scroll;
+}
+
 @keyframes spin {
     0% {
         transform: rotate(0deg);
