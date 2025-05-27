@@ -43,9 +43,12 @@ export default class extends Controller {
     }
 
     async sendPdfRequest(){
-        let firstParcoursIdPostName = 'parcoursIdArray[]=';
-        let parcoursIdPostName = '&parcoursIdArray[]=';
+        // Champs souhaités
+        let parcoursIdPostName = 'parcoursIdArray[]=';
+        let fieldPostName = 'fieldValueArray[]=';
+
         let parcoursIdArray = [];
+        // Construction des parcours voulus
         if(this._selectedParcours['all'] === true){
             parcoursIdArray.push("all");
         }
@@ -54,9 +57,18 @@ export default class extends Controller {
                 parcoursIdArray.push(p);
             }
         }
+        // Construction des champs souhaités
+        let fieldValueArray = [];
+        for(const f in this._selectedFields){
+            fieldValueArray.push(f);
+        }
 
-        let postParcours =  firstParcoursIdPostName + parcoursIdArray.join(parcoursIdPostName);
-        let url = `${this.downloadPdfUrlValue}?${postParcours}&campagneCollecte=${this.campagneCollecteValue}`;
+        let postParcours =  parcoursIdPostName + parcoursIdArray.join('&' + parcoursIdPostName);
+        let postFields = fieldPostName + fieldValueArray.join('&' + fieldPostName)
+
+        let url = this.downloadPdfUrlValue + '?'
+            + postParcours + '&' + postFields
+            '&campagneCollecte=' + this.campagneCollecteValue;
 
         window.open(url, '_blank');
     }

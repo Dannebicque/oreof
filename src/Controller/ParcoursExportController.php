@@ -439,7 +439,7 @@ class ParcoursExportController extends AbstractController
             ->findOneById($campagneCollecte)
             ?? $em->getRepository(CampagneCollecte::class)->findOneBy(['defaut' => true]);
 
-        $parcoursIdArray = $request->query->all()['parcoursIdArray'];
+        $parcoursIdArray = $request->query->all()['parcoursIdArray'] ?? [];
         if($parcoursIdArray[0] === 'all'){
             $parcoursData = $em->getRepository(Parcours::class)->findByCampagneCollecte($campagneCollecte);
         }
@@ -448,11 +448,47 @@ class ParcoursExportController extends AbstractController
             $parcoursData = $em->getRepository(Parcours::class)->findById($parcoursIdArray);
         }
 
-        $txtData = array_map(
-            fn($parcours) => $parcours->getResultatsAttendus(),
-            $parcoursData
-        );
+        $fieldValueArray = $request->query->all()['fieldValueArray'] ?? [];
 
-        dump($txtData);exit;
+        $dataStructure = [];
+        foreach($parcoursData as $parcours){
+            $dataStructure[] = [
+                'idParcours' => $parcours->getId(),
+                'libelleLong' => $parcours->getFormation()->getDisplayLong(),
+                'valueExport' => [...array_map(
+                        fn($field) => ["{$field}" => $this->mapParcoursExportWithValues($field, $parcours)],
+                        $fieldValueArray
+                    )
+                ]
+            ];
+        }
+
+        dump($dataStructure);exit;
+    }
+
+    private function mapParcoursExportWithValues(string $fieldValue, Parcours $parcours){
+        switch($fieldValue){
+            case 'respParcours':
+                return [
+                    'responsableParcours' => $parcours->getRespParcours()?->getDisplay(),
+                    'coResponsableParcours' => $parcours->getCoResponsable()?->getDisplay()
+                ];
+                break;
+            case 'respFormation':
+                return [
+                    'responsableFormation' => $parcours->getFormation()->getResponsableMention()?->getDisplay(),
+                    'coResponsableFormation' => $parcours->getFormation()->getCoResponsable()?->getDisplay()
+                ];
+                break;
+            case 'resultatsAttendusParcours':
+                return $parcours->getResultatsAttendus();
+                break;
+            case 'objectifsParcours':
+                return $parcours->getObjectifsParcours();
+                break;
+            case 'objectifsFormation':
+                return $parcours->getFormation()?->getObjectifsFormation();
+                break;
+        }
     }
 }
