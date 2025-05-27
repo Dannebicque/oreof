@@ -12,7 +12,8 @@
 {% block content %}
     <div 
         {{ stimulus_controller('export-generique--parcours-search', {
-                'searchUrl': path('app_parcours_export_generique_search_by_name')
+                'searchUrl': path('app_parcours_export_generique_search_by_name'),
+                'campagneCollecte': campagneCollecte
             }) 
         }}
         class="row justify-content-center"

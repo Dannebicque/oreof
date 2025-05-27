@@ -10,6 +10,7 @@
 namespace App\Controller;
 
 use App\Classes\CalculStructureParcours;
+use App\Classes\DataUserSession;
 use App\Classes\MyGotenbergPdf;
 use App\DTO\StructureEc;
 use App\DTO\StructureUe;
@@ -395,11 +396,12 @@ class ParcoursExportController extends AbstractController
 
     #[IsGranted('ROLE_ADMIN')]
     #[Route('/parcours/export/generique', name: 'app_parcours_export_generique')]
-    public function exportGenerique(){
-
-
+    public function exportGenerique(
+        DataUserSession $dataUserSession
+    ){
         return $this->render('export/parcours_generique.html.twig', [
-
+            'campagneCollecte' => $dataUserSession->getCampagneCollecte()->getId(),
+            'periodeAnnee' => $dataUserSession->getCampagneCollecte()->getLibelle()
         ]);
     }
 

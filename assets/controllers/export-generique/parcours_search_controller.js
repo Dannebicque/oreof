@@ -13,7 +13,8 @@ export default class extends Controller {
     ];
 
     static values = {
-        searchUrl: String
+        searchUrl: String,
+        campagneCollecte: Number
     };
 
     _minLength = 4;
@@ -33,7 +34,7 @@ export default class extends Controller {
     }
 
     async fetchResults(searchText){
-        let url = `${this.searchUrlValue}?inputText=${searchText}`;
+        let url = `${this.searchUrlValue}?inputText=${searchText}&campagneCollecte=${this.campagneCollecteValue}`;
         return await fetch(url)
             .then(response => response.json())
             .then(jsonData => jsonData)
