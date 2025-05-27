@@ -20,11 +20,16 @@ export default class extends Controller {
 
     _selectedParcours = {};
 
+    _selectedFields = {};
+
     connect(){
         this.searchFormTarget.addEventListener('submit', async (event)=> {
             event.preventDefault();
             await this.loadResultList();
         })
+
+        document.querySelectorAll('.textDivFieldChoice')
+            .forEach(choice => this.createListenerForFieldChoice(choice));
     }
 
     async fetchResults(searchText){
@@ -87,7 +92,7 @@ export default class extends Controller {
     selectAllParcours(){
         this.emptyResultList();
         let row = document.createElement('div');
-        row.classList.add('row', 'mt-5', 'allParcoursDiv');
+        row.classList.add('row', 'mt-3', 'allParcoursDiv');
         let textDiv = document.createElement('div');
         textDiv.classList.add('text-center', 'text-primary');
         textDiv.textContent = "Tous les parcours ont été sélectionnés";
@@ -146,5 +151,21 @@ export default class extends Controller {
                 });
         }
 
+    }
+
+    createListenerForFieldChoice(node){
+        node.addEventListener('click', (event) => {
+            let badgeClassList = ['bg-info', 'text-white'];
+            // Sélection
+            if(this._selectedFields[event.target.dataset.exportField] === undefined){
+                node.classList.add(...badgeClassList);
+                this._selectedFields[event.target.dataset.exportField] = true;
+            }
+            // Déselection
+            else if (this._selectedFields[event.target.dataset.exportField] !== undefined){
+                node.classList.remove(...badgeClassList);
+                delete this._selectedFields[event.target.dataset.exportField]
+            }
+        });
     }
 }

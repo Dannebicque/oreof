@@ -29,11 +29,30 @@
     cursor: pointer;
 } 
 
+.divFieldChoice {
+    min-height: 3.5em;
+}
+
+.textDivFieldChoice {
+    padding: .75em;
+    border-radius: 0.5em;
+    border-color: black;
+    border-style: solid;
+    border-width: 1.5px;
+    cursor: pointer;
+}
+
 @keyframes spin {
     0% {
         transform: rotate(0deg);
     }
     100% {
         transform: rotate(360deg);;
+    }
+}
+
+@media screen and (max-width: 768px){
+    .textDivFieldChoice {
+        padding: .45em;
     }
 }
