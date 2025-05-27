@@ -25,6 +25,10 @@
     font-size: 1.25em;
 }
 
+.badge i.fa-xmark:hover {
+    cursor: pointer;
+} 
+
 @keyframes spin {
     0% {
         transform: rotate(0deg);
