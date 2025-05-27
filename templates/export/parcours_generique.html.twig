@@ -24,6 +24,11 @@
                 method="get"
             >
                 <div class="row justify-content-center">
+                    <div class="col-3 col-lg-2 mb-3 mb-lg-0 text-center">
+                        <span class="badge rounded-pill text-white fw-bold bg-warning fs-6">
+                            {{ periodeAnnee }}
+                        </span>
+                    </div>
                     <div class="col-lg-6 col-md-8 col-sm-10">
                         <div class="row">
                             <div class="input-group">
@@ -46,7 +51,7 @@
                             'click'
                             ) 
                         }}
-                        class="col-1 text-center"
+                        class="col-1 text-center mt-2 mt-md-0"
                     >
                         <span class="badge bg-primary text-light px-3 py-2 rounded">
                             <i class="fa-light fa-magnifying-glass fs-6"></i>
@@ -140,9 +145,9 @@
                 </div>
                 <div class="row justify-content-center mt-5">
                     <div class="col-xs-9 col-sm-6 col-lg-3 text-center">
-                        <button class="btn btn-success">
+                        <span class="btn btn-success" id="downloadExport">
                             Télécharger l'export (PDF)
-                        </button>
+                        </span>
                     </div>
                 </div>
             </form>
