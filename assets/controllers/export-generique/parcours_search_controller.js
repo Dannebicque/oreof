@@ -79,25 +79,32 @@ export default class extends Controller {
     emptyResultListEvent(){
         this.emptyResultList();
         this.emptySearchListButtonTarget.classList.add('d-none');
-        this.selectAllParcoursButtonTarget.classList.remove('d-none');
+        if(this._selectedParcours['all'] !== true){
+            this.selectAllParcoursButtonTarget.classList.remove('d-none');
+        }
     }
 
     selectAllParcours(){
         this.emptyResultList();
         let row = document.createElement('div');
-        row.classList.add('row', 'mt-5');
+        row.classList.add('row', 'mt-5', 'allParcoursDiv');
         let textDiv = document.createElement('div');
-        textDiv.classList.add('allParcoursTextNode', 'text-center', 'text-primary');
+        textDiv.classList.add('text-center', 'text-primary');
         textDiv.textContent = "Tous les parcours ont été sélectionnés";
         row.appendChild(textDiv);
         this.selectAllParcoursButtonTarget.classList.add('d-none');
-        this.emptySearchListButtonTarget.classList.remove('d-none');
-        this.searchResultTarget.appendChild(row);
+        this.selectedParcoursTarget.appendChild(row);
+
+        document.querySelectorAll('.badgeSelectedDiv').forEach(div => div.remove());
+        this._selectedParcours = {'all': true};
     }
 
     createClickListenerForListParcoursItem(htmlNode){
         htmlNode.addEventListener('click', (event) => {
             if(this._selectedParcours[`${event.target.dataset.parcoursId}`] === undefined){
+                if(this._selectedParcours['all'] !== undefined){
+                    delete this._selectedParcours['all'];
+                }
                 this._selectedParcours[`${event.target.dataset.parcoursId}`] = event.target.dataset.parcoursLibelle;
                 this.selectedParcoursTarget.appendChild(
                     this.createSelectedItemBadge(
@@ -105,8 +112,10 @@ export default class extends Controller {
                         event.target.dataset.parcoursId
                     )
                 );
+                this.selectedParcoursTarget.querySelector('.allParcoursDiv')?.remove();
             }
         })
+
     }
 
     createSelectedItemBadge(name, id){
@@ -136,5 +145,6 @@ export default class extends Controller {
                     }
                 });
         }
+
     }
 }
