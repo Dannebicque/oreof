@@ -3,6 +3,7 @@ import { Controller } from "@hotwired/stimulus";
 export default class extends Controller {
     
     static targets = [
+        'selectedParcours',
         'searchForm',
         'searchInput',
         'searchResult',
@@ -16,6 +17,8 @@ export default class extends Controller {
     };
 
     _minLength = 4;
+
+    _selectedParcours = {};
 
     connect(){
         this.searchFormTarget.addEventListener('submit', async (event)=> {
@@ -59,7 +62,9 @@ export default class extends Controller {
         let textDiv = document.createElement('div');
         textDiv.classList.add('resultSearchNode');
         textDiv.dataset.parcoursId = resultId;
+        textDiv.dataset.parcoursLibelle = resultName;
         textDiv.textContent = resultName;
+        this.createClickListenerForListParcoursItem(textDiv);
         row.appendChild(textDiv);
 
         return row;
@@ -88,5 +93,48 @@ export default class extends Controller {
         this.selectAllParcoursButtonTarget.classList.add('d-none');
         this.emptySearchListButtonTarget.classList.remove('d-none');
         this.searchResultTarget.appendChild(row);
+    }
+
+    createClickListenerForListParcoursItem(htmlNode){
+        htmlNode.addEventListener('click', (event) => {
+            if(this._selectedParcours[`${event.target.dataset.parcoursId}`] === undefined){
+                this._selectedParcours[`${event.target.dataset.parcoursId}`] = event.target.dataset.parcoursLibelle;
+                this.selectedParcoursTarget.appendChild(
+                    this.createSelectedItemBadge(
+                        event.target.dataset.parcoursLibelle,
+                        event.target.dataset.parcoursId
+                    )
+                );
+            }
+        })
+    }
+
+    createSelectedItemBadge(name, id){
+        let badgeDiv = document.createElement('div');
+        badgeDiv.classList.add('col-auto', 'my-2', 'badgeSelectedDiv');
+        let textDiv = document.createElement('span');
+        textDiv.classList.add('badge', 'rounded-pill', 'fw-bold', 'text-white', 'bg-primary');
+        textDiv.textContent = name;
+        textDiv.dataset.parcoursId = id;
+        textDiv.dataset.parcoursLibelle = name;
+        let crossIcon = document.createElement('i');
+        crossIcon.classList.add('fa-regular', 'fa-xmark', 'text-white', 'ms-3');
+        crossIcon.addEventListener('click', e => this.removeSelectedItemBadge(id));
+        textDiv.appendChild(crossIcon);
+        badgeDiv.appendChild(textDiv);
+
+        return badgeDiv;
+    }
+
+    removeSelectedItemBadge(id){
+        if(this._selectedParcours[`${id}`] !== undefined){
+            document.querySelectorAll('.badgeSelectedDiv')
+                .forEach(badgeDiv => {
+                    if(badgeDiv.querySelector('.badge.rounded-pill').dataset.parcoursId === `${id}`){
+                        badgeDiv.remove();
+                        delete this._selectedParcours[`${id}`];
+                    }
+                });
+        }
     }
 }

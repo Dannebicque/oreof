@@ -21,6 +21,10 @@
     overflow-y: auto;
 }
 
+.badgeSelectedDiv {
+    font-size: 1.25em;
+}
+
 @keyframes spin {
     0% {
         transform: rotate(0deg);

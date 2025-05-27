@@ -1,0 +1,97 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('export-parcours/parcours_generique.css') }}">
+{% endblock %}
+
+{% block header %}
+    Outil d'export des parcours
+{% endblock %}
+
+{% block content %}
+    <div 
+        {{ stimulus_controller('export-generique--parcours-search', {
+                'searchUrl': path('app_parcours_export_generique_search_by_name')
+            }) 
+        }}
+        class="row justify-content-center"
+    >
+        <div class="col-10">
+            <form 
+                {{ stimulus_target('export-generique--parcours-search', 'searchForm') }}
+                method="get"
+            >
+                <div class="row justify-content-center">
+                    <div class="col-lg-6 col-md-8 col-sm-10">
+                        <div class="row">
+                            <div class="input-group">
+                                <span class="input-group-text bg-primary text-white">
+                                    Recherche de parcours
+                                </span>
+                                <input 
+                                    {{ stimulus_target('export-generique--parcours-search', 'searchInput') }}
+                                    type="text" 
+                                    class="form-control" 
+                                    placeholder="Nom, sigle, type de diplôme..."
+                                >
+                            </div>
+                        </div>
+                    </div>
+                    <div 
+                        {{ stimulus_action(
+                            'export-generique--parcours-search', 
+                            'loadResultList',
+                            'click'
+                            ) 
+                        }}
+                        class="col-1 text-center"
+                    >
+                        <span class="badge bg-primary text-light px-3 py-2 rounded">
+                            <i class="fa-light fa-magnifying-glass fs-6"></i>
+                        </span>
+                    </div>
+                </div>
+                <div class="row justify-content-center mt-3">
+                    <div class="col-12 text-center">
+                        <span 
+                            {{ stimulus_target('export-generique--parcours-search', 'selectAllParcoursButton') }}
+                            {{ stimulus_action('export-generique--parcours-search', 'selectAllParcours', 'click') }}
+                            class="badgeSearchAction badge rounded-pill text-bg-success fw-bold text-white mx-1"
+                        >
+                            Sélectionner tous les parcours de cette année
+                        </span>
+                        <span 
+                            {{ stimulus_target('export-generique--parcours-search', 'emptySearchListButton') }}
+                            {{ stimulus_action('export-generique--parcours-search', 'emptyResultListEvent', 'click') }}
+                            class="badgeSearchAction badge rounded-pill text-white fw-bold text-bg-info mx-1 d-none"
+                        >
+                            Cacher la liste de recherche
+                        </span>
+                    </div>
+                </div>
+                <div class="row justify-content-center mt-4">
+                    <div 
+                        {{ stimulus_target('export-generique--parcours-search', 'loadingIcon') }}
+                        class="col-12 text-center d-none"
+                    >
+                        <i class="fa-duotone fa-solid fa-spinner loading-icon"></i>
+                    </div>
+                    <div 
+                        {{ stimulus_target('export-generique--parcours-search', 'searchResult') }}
+                        class="col-lg-8 col-md-9 col-sm-10"
+                        id="searchResultNode"
+                    >
+
+                    </div>
+                </div>
+                <div 
+                    {{ stimulus_target('export-generique--parcours-search', 'selectedParcours') }}
+                    class="row justify-content-center mt-3"
+                >
+
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
