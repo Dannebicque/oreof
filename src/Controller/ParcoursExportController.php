@@ -456,7 +456,7 @@ class ParcoursExportController extends AbstractController
                 'idParcours' => $parcours->getId(),
                 'libelleLong' => $parcours->getFormation()->getDisplayLong(),
                 'valueExport' => [...array_map(
-                        fn($field) => ["{$field}" => $this->mapParcoursExportWithValues($field, $parcours)],
+                        fn($field) => $this->mapParcoursExportWithValues($field, $parcours),
                         $fieldValueArray
                     )
                 ]
@@ -470,24 +470,54 @@ class ParcoursExportController extends AbstractController
         switch($fieldValue){
             case 'respParcours':
                 return [
-                    'responsableParcours' => $parcours->getRespParcours()?->getDisplay(),
-                    'coResponsableParcours' => $parcours->getCoResponsable()?->getDisplay()
+                    'type' => 'list',
+                    'value' => [
+                        [
+                            'libelle' => 'Responsable du parcours',
+                            'content' =>  $parcours->getRespParcours()?->getDisplay(),
+                        ],
+                        [
+                            'libelle' => 'Co-responsable du parcours',
+                            'content' =>  $parcours->getCoResponsable()?->getDisplay()
+                        ]
+                    ]
                 ];
                 break;
             case 'respFormation':
                 return [
-                    'responsableFormation' => $parcours->getFormation()->getResponsableMention()?->getDisplay(),
-                    'coResponsableFormation' => $parcours->getFormation()->getCoResponsable()?->getDisplay()
+                    'type' => 'list',
+                    'value' => [
+                        [
+                            'libelle' => 'Responsable de la formation',
+                            'content' =>  $parcours->getFormation()->getResponsableMention()?->getDisplay()
+                        ],
+                        [
+                            'libelle' => 'Co-responsable de la formation',
+                            'content' =>  $parcours->getFormation()->getCoResponsable()?->getDisplay()
+                        ]
+                    ]
                 ];
                 break;
             case 'resultatsAttendusParcours':
-                return $parcours->getResultatsAttendus();
+                return [
+                    'type' => 'longtext',
+                    'libelle' => 'Résultats attendus du parcours',
+                    'value' => $parcours->getResultatsAttendus()
+                ];
                 break;
             case 'objectifsParcours':
-                return $parcours->getObjectifsParcours();
+                return [
+                    'type' => 'longtext',
+                    'libelle' => 'Objectifs du parcours',
+                    'value' => $parcours->getObjectifsParcours()
+                ];
                 break;
             case 'objectifsFormation':
-                return $parcours->getFormation()?->getObjectifsFormation();
+                return [
+                    'type' => 'longtext',
+                    'libelle' => 'Objectifs de la formation',
+                    'value' => $parcours->getFormation()?->getObjectifsFormation()
+                ];
                 break;
         }
     }
