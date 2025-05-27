@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.42.0](https://github.com/Dannebicque/oreof/compare/v1.41.0...v1.42.0) (2025-05-27)
+
+
+### Features
+
+* **SyntheseModificationController.php:** add validation checks for parcours before adding to formations ([2fb3a50](https://github.com/Dannebicque/oreof/commit/2fb3a50c1c4849905879e4d6c69483b2476c56e7))
+
+
+### Bug Fixes
+
+* **valide_conseil_composante.html.twig:** correct spelling of 'laisser passer' to 'laissez-passer' ([2ce78f7](https://github.com/Dannebicque/oreof/commit/2ce78f73e51f6173c645ce551c06b9fb56082d19))
+
 ## [1.41.0](https://github.com/Dannebicque/oreof/compare/v1.40.0...v1.41.0) (2025-05-26)
 
 
