@@ -426,4 +426,33 @@ class ParcoursExportController extends AbstractController
             return new JsonResponse([]);
         }
     }
+
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route('/parcours/export/generique/pdf', name: 'app_parcours_export_generique_download_pdf')]
+    public function getExportGeneriquePdf(
+        EntityManagerInterface $em
+    ) : Response {
+        $request = Request::createFromGlobals();
+
+        $campagneCollecte = $request->query->get('campagneCollecte', 2);
+        $campagneCollecte = $em->getRepository(CampagneCollecte::class)
+            ->findOneById($campagneCollecte)
+            ?? $em->getRepository(CampagneCollecte::class)->findOneBy(['defaut' => true]);
+
+        $parcoursIdArray = $request->query->all()['parcoursIdArray'];
+        if($parcoursIdArray[0] === 'all'){
+            $parcoursData = $em->getRepository(Parcours::class)->findByCampagneCollecte($campagneCollecte);
+        }
+        else {
+            $parcoursIdArray = array_map(fn($id) => (int)$id, $parcoursIdArray);
+            $parcoursData = $em->getRepository(Parcours::class)->findById($parcoursIdArray);
+        }
+
+        $txtData = array_map(
+            fn($parcours) => $parcours->getResultatsAttendus(),
+            $parcoursData
+        );
+
+        dump($txtData);exit;
+    }
 }

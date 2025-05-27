@@ -14,6 +14,7 @@ export default class extends Controller {
 
     static values = {
         searchUrl: String,
+        downloadPdfUrl: String,
         campagneCollecte: Number
     };
 
@@ -39,6 +40,25 @@ export default class extends Controller {
             .then(response => response.json())
             .then(jsonData => jsonData)
             .catch(error => console.log(error));
+    }
+
+    async sendPdfRequest(){
+        let firstParcoursIdPostName = 'parcoursIdArray[]=';
+        let parcoursIdPostName = '&parcoursIdArray[]=';
+        let parcoursIdArray = [];
+        if(this._selectedParcours['all'] === true){
+            parcoursIdArray.push("all");
+        }
+        else {
+            for(const p in this._selectedParcours){
+                parcoursIdArray.push(p);
+            }
+        }
+
+        let postParcours =  firstParcoursIdPostName + parcoursIdArray.join(parcoursIdPostName);
+        let url = `${this.downloadPdfUrlValue}?${postParcours}&campagneCollecte=${this.campagneCollecteValue}`;
+
+        window.open(url, '_blank');
     }
 
     async loadResultList(){
