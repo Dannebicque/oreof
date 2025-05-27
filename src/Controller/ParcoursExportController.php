@@ -454,7 +454,7 @@ class ParcoursExportController extends AbstractController
         foreach($parcoursData as $parcours){
             $dataStructure[] = [
                 'idParcours' => $parcours->getId(),
-                'libelleLong' => $parcours->getFormation()->getDisplayLong(),
+                'libelleLong' => $parcours->getFormation()->getDisplayLong() . " " . $parcours->getDisplay(),
                 'valueExport' => [...array_map(
                         fn($field) => $this->mapParcoursExportWithValues($field, $parcours),
                         $fieldValueArray
@@ -463,7 +463,12 @@ class ParcoursExportController extends AbstractController
             ];
         }
 
-        dump($dataStructure);exit;
+        $fileName = 'export_pdf_generique';
+
+        return $this->myPdf->render('export/export_parcours_generique.html.twig', [
+            'parcoursData' => $dataStructure,
+            'titre' => 'Export des données de parcours'
+        ], $fileName);
     }
 
     private function mapParcoursExportWithValues(string $fieldValue, Parcours $parcours){

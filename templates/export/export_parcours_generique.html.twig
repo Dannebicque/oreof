@@ -1,0 +1,26 @@
+{% extends 'pdf/base-pdf.html.twig' %}
+
+{% block content %}
+    {% for p in parcoursData %}
+        <h3>{{ p.libelleLong }}</h3>
+        {% for v in p.valueExport %}
+            {% if v.type == 'longtext' %}
+                <h5>{{ v.libelle }}</h5>
+                <div class="col-12">
+                    {{ v.value|raw }}
+                </div>
+            {% elseif v.type == 'list' %}
+                <ul>
+                    {% for listElement in v.value %}
+                        {% if listElement.content != null %}
+                        <li>
+                            <b>{{ listElement.libelle}} : </b>
+                            {{ listElement.content }}
+                        </li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endfor %}
+    {% endfor %}
+{% endblock %}
