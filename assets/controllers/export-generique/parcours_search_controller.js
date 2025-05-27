@@ -48,16 +48,17 @@ export default class extends Controller {
     createResultList(resultArray){
         resultArray.forEach(parcours => {
             this.searchResultTarget.appendChild(
-                this.createSearchResultNode(parcours.parcours_libelle)
+                this.createSearchResultNode(parcours.parcours_libelle, parcours.parcours_id)
             );
         });
     }
 
-    createSearchResultNode(resultName){
+    createSearchResultNode(resultName, resultId){
         let row = document.createElement('div');
         row.classList.add('row', 'my-1');
         let textDiv = document.createElement('div');
-        textDiv.classList.add('resultSearchNode')
+        textDiv.classList.add('resultSearchNode');
+        textDiv.dataset.parcoursId = resultId;
         textDiv.textContent = resultName;
         row.appendChild(textDiv);
 
