@@ -1,11 +1,41 @@
 {% extends 'base.html.twig' %}
 
 {% block content %}
-    <h2 id="title" class="display-4 mb-5 text-center">{{ titre ?: '' }}</h2>
-    <div class="row justify-content-center">
-        <div class="col-10 col-lg-8 col-xl-6">
+    <div class="card">
+        <div class="card-body">
             {{ include('communs/_form.html.twig') }}
         </div>
     </div>
 {% endblock %}
+
+{% block header %}
+    {{ titre }}
+{% endblock %}
+
+{% block breadcrumb %}
+    {{ include('communs/_breadcrumb.html.twig', {liens:[
+        {
+            href:'',
+            title: 'Administration',
+        },{
+            href:'',
+            title: 'Types de diplôme',
+        }
+    ]}) }}
+{% endblock %}
+
+{% block bouton_header %}
+<a href="{{ path('app_type_diplome_index') }}">
+    <button
+            class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2 text-dark"
+            data-size="lg"
+            data-bs-toggle="tooltip"
+            data-bs-placement="bottom"
+            title="Retour à la liste"
+    >
+
+        <i class="{{ iconBack }}"></i>
+        <span> Retour à la liste</span>
+    </button>
+    {% endblock %}
 
