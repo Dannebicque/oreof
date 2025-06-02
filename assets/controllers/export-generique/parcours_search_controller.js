@@ -15,6 +15,7 @@ export default class extends Controller {
     static values = {
         searchUrl: String,
         downloadPdfUrl: String,
+        downloadXlsxUrl: String,
         campagneCollecte: Number
     };
 
@@ -42,7 +43,7 @@ export default class extends Controller {
             .catch(error => console.log(error));
     }
 
-    async sendPdfRequest(){
+    async sendExportRequest(event){
         // Champs souhaités
         let parcoursIdPostName = 'parcoursIdArray[]=';
         let fieldPostName = 'fieldValueArray[]=';
@@ -66,11 +67,22 @@ export default class extends Controller {
         let postParcours =  parcoursIdPostName + parcoursIdArray.join('&' + parcoursIdPostName);
         let postFields = fieldPostName + fieldValueArray.join('&' + fieldPostName)
 
-        let url = this.downloadPdfUrlValue + '?'
-            + postParcours + '&' + postFields
-            '&campagneCollecte=' + this.campagneCollecteValue;
+        let type = event.params.type;
 
-        window.open(url, '_blank');
+        let url = "#";
+
+        if(type === 'pdf'){
+            url = this.downloadPdfUrlValue + '?'
+                + postParcours + '&' + postFields
+                '&campagneCollecte=' + this.campagneCollecteValue;
+        }
+        else if (type === 'xlsx'){
+            url = this.downloadXlsxUrlValue + '?'
+                + postParcours + '&' + postFields
+                '&campagneCollecte=' + this.campagneCollecteValue;
+        }
+
+        window.open(url, url !== "#" ? '_blank' : undefined);
     }
 
     async loadResultList(){

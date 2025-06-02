@@ -25,10 +25,13 @@ use App\Utils\CleanTexte;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -471,7 +474,80 @@ class ParcoursExportController extends AbstractController
         ], $fileName);
     }
 
-    private function mapParcoursExportWithValues(string $fieldValue, Parcours $parcours){
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route('/parcours/export/generique/xlsx', name: 'app_parcours_export_generique_xlsx')]
+    public function getExportGeneriqueXlsx(
+        EntityManagerInterface $em,
+        Request $request
+    ){
+        $campagneCollecte = $request->query->get('campagneCollecte', 2);
+        $campagneCollecte = $em->getRepository(CampagneCollecte::class)
+            ->findOneById($campagneCollecte)
+            ?? $em->getRepository(CampagneCollecte::class)->findOneBy(['defaut' => true]);
+
+        $parcoursIdArray = $request->query->all()['parcoursIdArray'] ?? [];
+        if($parcoursIdArray[0] === 'all'){
+            $parcoursData = $em->getRepository(Parcours::class)->findByCampagneCollecte($campagneCollecte);
+        }
+        else {
+            $parcoursIdArray = array_map(fn($id) => (int)$id, $parcoursIdArray);
+            $parcoursData = $em->getRepository(Parcours::class)->findById($parcoursIdArray);
+        }
+
+        $fieldValueArray = $request->query->all()['fieldValueArray'] ?? [];
+
+        $headerDeBase = ["Type de diplôme", "Intitulé de la formation", "Intitulé du parcours"];
+        $headersExcel = array_map(
+            fn($f) => is_array($this->mapParcoursExportWithValues($f, null)['value'])
+            ? array_map(fn($v) => $v['libelle'], $this->mapParcoursExportWithValues($f, null)['value'])
+            : $this->mapParcoursExportWithValues($f, null)['libelle']           
+            , $fieldValueArray
+        );
+        $headersExcel = array_merge($headerDeBase, ...$headersExcel);
+
+        $dataExcel = array_map(
+            fn($parcours) => array_merge(
+                [
+                    $parcours->getFormation()?->getTypeDiplome()->getLibelle(),
+                    $parcours->getFormation()?->getDisplay(),
+                    $parcours->getDisplay()
+                ]
+               , array_merge(
+                    ...array_map(
+                            fn($field) => is_array($this->mapParcoursExportWithValues($field, $parcours)['value'])
+                                ? array_map(fn($value) => $value['content'], $this->mapParcoursExportWithValues($field, $parcours)['value'])
+                                : $this->mapParcoursExportWithValues($field, $parcours)['value'] 
+                                , $fieldValueArray
+                        )
+                    )   
+            )
+            , $parcoursData
+        );
+        foreach($dataExcel as $index => $dataParcours){
+            $dataExcel[$index] = array_merge($dataParcours);
+        }
+
+        $spreadSheet = new Spreadsheet();
+        $activeWS = $spreadSheet->getActiveSheet();
+        $activeWS->fromArray($headersExcel);
+        $activeWS->fromArray($dataExcel, startCell: 'A2');
+        $writer = new Xlsx($spreadSheet);
+
+        $filename = 'export_generique_excel';
+
+        return new StreamedResponse(
+            function () use ($writer) {
+                $writer->save('php://output');
+            },
+            200,
+            [
+                'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                'Content-Disposition' => 'attachment;filename="' . $filename . '.xlsx"',
+            ]
+        );
+    }
+
+    private function mapParcoursExportWithValues(string $fieldValue, ?Parcours $parcours){
         switch($fieldValue){
             case 'respParcours':
                 return [
@@ -479,11 +555,11 @@ class ParcoursExportController extends AbstractController
                     'value' => [
                         [
                             'libelle' => 'Responsable du parcours',
-                            'content' =>  $parcours->getRespParcours()?->getDisplay(),
+                            'content' =>  $parcours?->getRespParcours()?->getDisplay(),
                         ],
                         [
                             'libelle' => 'Co-responsable du parcours',
-                            'content' =>  $parcours->getCoResponsable()?->getDisplay()
+                            'content' =>  $parcours?->getCoResponsable()?->getDisplay()
                         ]
                     ]
                 ];
@@ -494,11 +570,11 @@ class ParcoursExportController extends AbstractController
                     'value' => [
                         [
                             'libelle' => 'Responsable de la formation',
-                            'content' =>  $parcours->getFormation()->getResponsableMention()?->getDisplay()
+                            'content' =>  $parcours?->getFormation()->getResponsableMention()?->getDisplay()
                         ],
                         [
                             'libelle' => 'Co-responsable de la formation',
-                            'content' =>  $parcours->getFormation()->getCoResponsable()?->getDisplay()
+                            'content' =>  $parcours?->getFormation()->getCoResponsable()?->getDisplay()
                         ]
                     ]
                 ];
@@ -507,21 +583,21 @@ class ParcoursExportController extends AbstractController
                 return [
                     'type' => 'longtext',
                     'libelle' => 'Résultats attendus du parcours',
-                    'value' => $parcours->getResultatsAttendus()
+                    'value' => $parcours?->getResultatsAttendus()
                 ];
                 break;
             case 'objectifsParcours':
                 return [
                     'type' => 'longtext',
                     'libelle' => 'Objectifs du parcours',
-                    'value' => $parcours->getObjectifsParcours()
+                    'value' => $parcours?->getObjectifsParcours()
                 ];
                 break;
             case 'objectifsFormation':
                 return [
                     'type' => 'longtext',
                     'libelle' => 'Objectifs de la formation',
-                    'value' => $parcours->getFormation()?->getObjectifsFormation()
+                    'value' => $parcours?->getFormation()?->getObjectifsFormation()
                 ];
                 break;
         }
