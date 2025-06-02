@@ -1,10 +1,12 @@
 <tr style="{% if enfant %}border-left: 2px solid dodgerblue{% endif %}">
-    <th>{{ ec.code }} {{ ec.display }} {% if raccrocheUe == true %}<i class="fa fa-link"></i>{% endif %}</th>
+    <th>
+        {{ ec.code }} {{ ec.display }} {% if raccrocheUe == true %}<i class="fa fa-link"></i>{% endif %}
+        {% if is_granted('ROLE_ADMIN') %}<span style="font-weight: normal">(#{{ ec.id }})</span>{% endif %}
+    </th>
     <td>
-
-        {% if ec.natureUeEc != null and ec.natureUeEc.isLibre ==  true %}
+        {% if ec.natureUeEc != null and ec.natureUeEc.isLibre == true %}
             <span class="badge bg-info">EC Libre</span>
-        {% elseif ec.ecParent == null and ec.natureUeEc != null and ec.natureUeEc.isChoix ==  true %}
+        {% elseif ec.ecParent == null and ec.natureUeEc != null and ec.natureUeEc.isChoix == true %}
             <span class="badge bg-info">EC à choix</span>
         {% elseif ec.ficheMatiere != null %}
             {# todo: isGranted ? #}

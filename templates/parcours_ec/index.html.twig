@@ -10,7 +10,7 @@
         <div class="card-body">
             <table class="table table-bordered table-hover">
                 <tbody>
-                {% for semParc in parcours.semestreParcours|filter(semestre => semestre.semestre.nonDispense == false) %}
+                {% for semParc in parcours.semestreParcours|filter(semestre => semestre.semestre.nonDispense == false and semestre.isOuvert == true) %}
 
                     {% if semParc.semestre.semestreRaccroche != null %}
                         {% set semestre = semParc.semestre.semestreRaccroche %}

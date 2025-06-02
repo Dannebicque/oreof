@@ -715,3 +715,6 @@ demande.reouverture.mention.annuler: 'Annuler la demande de réouverture de la m
 en_cours_redaction.parcours.valide.alerte: 'La validation du parcours permet sa transmission au RF en vue du passage en conseil de composante. Après transmission, le parcours ne sera plus modifiable. Toutes les fiches EC/matières doivent être complétées avant la validation du parcours.'
 btn.formation.valide: 'Valider la formation'
 historique.cloture: 'Demande de réouverture clôturée le %date%'
+validation.non_ouverture_ses: 'Validation de la demande de non ouverture du parcours par le SES'
+validation.non_ouverture_cfvu: 'Validation de la demande de non ouverture du parcours par la CFVU'
+validation.non_ouverture: 'Demande de non ouverture du parcours'

@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Classes\Export\ExportSyntheseModification;
+use App\Classes\GetDpeParcours;
 use App\Entity\Composante;
 use App\Message\Export;
 use App\Repository\ComposanteRepository;
@@ -53,8 +54,13 @@ class SyntheseModificationController extends BaseController
                     $formations[$formation?->getId()]['composante'] = $formation->getComposantePorteuse();
                 }
 
-                $formations[$formation?->getId()]['parcours'][] = $dpe->getParcours();
-        }
+                if ($dpe->getParcours() !== null) {
+                    $dpeParcours = GetDpeParcours::getFromParcours($dpe->getParcours());
+                    if ($dpeParcours !== null && array_key_exists('soumis_cfvu', $dpeParcours->getEtatValidation())) {
+                        $formations[$formation?->getId()]['parcours'][] = $dpe->getParcours();
+                    }
+                }
+            }
         }
 
         $messageBus->dispatch(
@@ -98,8 +104,11 @@ class SyntheseModificationController extends BaseController
             } else {
                 //dpe si c'est un parcours
                 $parcours = $dpe->getParcours();
-                $formations[$formation?->getId()]['parcours'][$parcours->getId()]['parcours'] = $parcours;
-                $formations[$formation?->getId()]['parcours'][$parcours->getId()]['dpeDemande'] = $dpe;
+                $dpeParcours = GetDpeParcours::getFromParcours($parcours);
+                if ($dpeParcours !== null && array_key_exists('soumis_cfvu', $dpeParcours->getEtatValidation())) {
+                    $formations[$formation?->getId()]['parcours'][$parcours->getId()]['parcours'] = $parcours;
+                    $formations[$formation?->getId()]['parcours'][$parcours->getId()]['dpeDemande'] = $dpe;
+                }
             }
         }
 

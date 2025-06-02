@@ -2,6 +2,35 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.41.0](https://github.com/Dannebicque/oreof/compare/v1.40.0...v1.41.0) (2025-05-26)
+
+
+### Features
+
+* **_boutonSynthese_version.html.twig:** add export option for MCCC based on button condition ([408e313](https://github.com/Dannebicque/oreof/commit/408e3135ead1a95aef4eb00e345ca8451c618769))
+* **_boutonSynthese_version.html.twig:** update export buttons for MCCC with improved styling ([e585127](https://github.com/Dannebicque/oreof/commit/e5851273c3516cda9529a7b5956808fdef571592))
+* **_liste.html.twig, process.fr.yaml:** add conditional display for validation state and new validation messages ([8ff127a](https://github.com/Dannebicque/oreof/commit/8ff127a63ecdd1715d6160e8714d4b9b2aec82e5))
+* **BadgeEcts:** update ECTS validation logic to include upper boundary ([8d4157f](https://github.com/Dannebicque/oreof/commit/8d4157f2f2f8ee19142aea42b97710cbf2d143c9))
+* **BadgeHeures:** improve logic for editable state and enhance display for admin users ([b95b2bc](https://github.com/Dannebicque/oreof/commit/b95b2bcbb4e54f4820b8d1814b558f7897726386))
+* **DemandeDpe:** add validation state filter and update list view ([ef3b635](https://github.com/Dannebicque/oreof/commit/ef3b6353ace96d28a5a94b5fc3ebf8bea0c167eb))
+* **DpeDemandeRepository:** enhance search functionality with additional filters and nullable return type ([59c11cf](https://github.com/Dannebicque/oreof/commit/59c11cf325e8b94dd206f2b939b801c25104507c))
+* **FormationResponsableController, ValidationController, _changeRf.html.twig:** implement conditional composante selection and export functionality based on user roles ([e372383](https://github.com/Dannebicque/oreof/commit/e3723833ded9076db6d8ef05104a5202006698f8))
+* **FormationResponsableController, ValidationController, _changeRf.html.twig:** implement conditional composante selection and export functionality based on user roles ([2558b47](https://github.com/Dannebicque/oreof/commit/2558b47757f20d5def46c08ab367bab3178da6c1))
+* **index:** refine semester filtering to include only open semesters ([a23811f](https://github.com/Dannebicque/oreof/commit/a23811fa5094544cc039b407f89e150db01b9b8f))
+
+## [1.40.0](https://github.com/Dannebicque/oreof/compare/v1.39.2...v1.40.0) (2025-05-24)
+
+
+### Features
+
+* **crud_controller:** add localStorage key value for state persistence ([a1a4463](https://github.com/Dannebicque/oreof/commit/a1a4463c23af6596b7adcb2a780413048ae7e6d0))
+* **DemandeDpe:** enhance DPE request management with search filters and localStorage state persistence ([3a17c0b](https://github.com/Dannebicque/oreof/commit/3a17c0b950a04aa62f1592ffd8e32bd552efb795))
+
+
+### Bug Fixes
+
+* **ParcoursMcccExportController:** add historical date retrieval for DPE in export functions ([2971305](https://github.com/Dannebicque/oreof/commit/2971305b3afc19aa4dbd8659dcf20e25dbf8b88e))
+
 ## [1.39.2](https://github.com/Dannebicque/oreof/compare/v1.39.1...v1.39.2) (2025-05-19)
 
 
