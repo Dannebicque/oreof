@@ -15,7 +15,6 @@ use App\Repository\FormationRepository;
 use App\Repository\ParcoursRepository;
 use App\Repository\TypeEpreuveRepository;
 use App\Service\VersioningParcours;
-use App\Service\VersioningStructure;
 use App\Service\VersioningStructureExtractDiff;
 use App\TypeDiplome\TypeDiplomeRegistry;
 use App\Utils\Tools;
@@ -49,6 +48,7 @@ class ExportSyntheseModification
 
             $form = $formation['formation'];
             foreach ($formation['parcours'] as $parc) {
+                $parco = $this->parcoursRepository->find($parc['parcours']->getId());
                 if ($parc['parcours']->getParcoursOrigineCopie() === null) {
                     $dto = null;
                 } else {
@@ -71,7 +71,8 @@ class ExportSyntheseModification
                     'dpeDemandeParcours' => $parc['dpeDemande'],
                     'parcours' => $parco,
                     'diffStructure' => $diffStructure,
-                    'dto' => $dto
+                    'dto' => $dto,
+                    'dpe' => $campagneCollecte,
                 ];
             }
 
