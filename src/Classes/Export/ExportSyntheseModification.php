@@ -47,45 +47,46 @@ class ExportSyntheseModification
             $tDemandes = [];
 
             $form = $formation['formation'];
-            foreach ($formation['parcours'] as $parc) {
-                $parco = $this->parcoursRepository->find($parc['parcours']->getId());
-                if ($parc['parcours']->getParcoursOrigineCopie() === null) {
-                    $dto = null;
-                } else {
-                    $typeD = $this->typeDiplomeRegistry->getTypeDiplome($form?->getTypeDiplome()?->getModeleMcc());
+            if ($form['hasModif'] === true) {
+                foreach ($formation['parcours'] as $parc) {
                     $parco = $this->parcoursRepository->find($parc['parcours']->getId());
-                    $dto = $typeD->calculStructureParcours($parco, true, false);
-                    $structureDifferencesParcours = $this->versioningParcours->getStructureDifferencesBetweenParcoursAndLastVersion($parco->getParcoursOrigineCopie());
-                    if ($structureDifferencesParcours !== null) {
-                        $diffStructure = new VersioningStructureExtractDiff($structureDifferencesParcours, $dto, $typeEpreuves);
-                        $diffStructure->extractDiff();
+                    if ($parc['parcours']->getParcoursOrigineCopie() === null) {
+                        $dto = null;
                     } else {
-                        $diffStructure = null;
+                        $typeD = $this->typeDiplomeRegistry->getTypeDiplome($form?->getTypeDiplome()?->getModeleMcc());
+                        $parco = $this->parcoursRepository->find($parc['parcours']->getId());
+                        $dto = $typeD->calculStructureParcours($parco, true, false);
+                        $structureDifferencesParcours = $this->versioningParcours->getStructureDifferencesBetweenParcoursAndLastVersion($parco->getParcoursOrigineCopie());
+                        if ($structureDifferencesParcours !== null) {
+                            $diffStructure = new VersioningStructureExtractDiff($structureDifferencesParcours, $dto, $typeEpreuves);
+                            $diffStructure->extractDiff();
+                        } else {
+                            $diffStructure = null;
+                        }
                     }
+
+                    $tDemandes[] = [
+                        'formation' => $form,
+                        'composante' => $formation['composante'],
+                        'dpeDemandeFormation' => $formation['dpeDemande'],
+                        'dpeDemandeParcours' => $parc['dpeDemande'],
+                        'parcours' => $parco,
+                        'diffStructure' => $diffStructure,
+                        'dto' => $dto
+                    ];
                 }
 
-                $tDemandes[] = [
-                    'formation' => $form,
-                    'composante' => $formation['composante'],
-                    'dpeDemandeFormation' => $formation['dpeDemande'],
-                    'dpeDemandeParcours' => $parc['dpeDemande'],
-                    'parcours' => $parco,
-                    'diffStructure' => $diffStructure,
-                    'dto' => $dto,
-                    'dpe' => $campagneCollecte,
-                ];
+                $fichiers[] = $this->myGotenbergPdf->renderAndSave(
+                    'pdf/synthese_modifications.html.twig',
+                    'pdftests/',
+                    [
+                        'titre' => 'Liste des demandes de changement MCCC et maquettes',
+                        'demandes' => $tDemandes,
+                        'dpe' => $campagneCollecte,
+                    ],
+                    Tools::FileName($form->getSlug())
+                );
             }
-
-            $fichiers[] = $this->myGotenbergPdf->renderAndSave(
-                'pdf/synthese_modifications.html.twig',
-                'pdftests/',
-                [
-                    'titre' => 'Liste des demandes de changement MCCC et maquettes',
-                    'demandes' => $tDemandes,
-                    'dpe' => $campagneCollecte,
-                ],
-                Tools::FileName($form->getSlug())
-            );
         }
 
         $zip = new \ZipArchive();
