@@ -16,6 +16,7 @@ use App\Entity\Mention;
 use App\Entity\Parcours;
 use App\Entity\User;
 use App\Enums\TypeModificationDpeEnum;
+use App\Enums\TypeParcoursEnum;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -304,6 +305,12 @@ class ParcoursRepository extends ServiceEntityRepository
         $patternLibelle = $result->expr()->concat(
             'td.libelle', 
             $result->expr()->literal(' - '),
+            'm.libelle',
+            $result->expr()->literal(' '),
+            $result->expr()->literal('('),
+            'f.sigle',
+            $result->expr()->literal(')'),
+            $result->expr()->literal(' - '),
             'p.libelle', 
             $result->expr()->literal(' '),
             $result->expr()->literal('('),
@@ -314,6 +321,12 @@ class ParcoursRepository extends ServiceEntityRepository
         $patternLibelleUpper = $result->expr()->concat(
             'UPPER(td.libelle)', 
             $result->expr()->literal(' - '),
+            'UPPER(m.libelle)',
+            $result->expr()->literal(' '),
+            $result->expr()->literal('('),
+            'UPPER(f.sigle)',
+            $result->expr()->literal(')'),
+            $result->expr()->literal(' - '),
             'UPPER(p.libelle)', 
             $result->expr()->literal(' '),
             $result->expr()->literal('('),
@@ -322,10 +335,11 @@ class ParcoursRepository extends ServiceEntityRepository
         );
 
         $result = $result
-            ->select('p.id AS parcours_id')
+            ->select('p.id AS parcours_id, p.typeParcours AS typeParcours')
             ->addSelect($patternLibelle . ' AS parcours_libelle')
             ->join('p.formation', 'f')
             ->join('f.typeDiplome', 'td')
+            ->join('f.mention', 'm')
             ->join('p.dpeParcours', 'dpe')
             ->where($result->expr()->like($patternLibelleUpper, 'UPPER(:displayName)'))
             ->andWhere('dpe.campagneCollecte = :campagneCollecte')
