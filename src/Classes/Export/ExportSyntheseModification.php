@@ -47,7 +47,7 @@ class ExportSyntheseModification
             $tDemandes = [];
 
             $form = $formation['formation'];
-            if ($form['hasModif'] === true) {
+            if ($formation['hasModif'] === true) {
                 foreach ($formation['parcours'] as $parc) {
                     $parco = $this->parcoursRepository->find($parc['parcours']->getId());
                     if ($parc['parcours']->getParcoursOrigineCopie() === null) {
