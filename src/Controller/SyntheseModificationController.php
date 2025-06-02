@@ -46,7 +46,6 @@ class SyntheseModificationController extends BaseController
         foreach ($dpes as $dpe) {
             $formation = $dpe->getFormation();
             if ($formation !== null) {
-
                 if (!array_key_exists($formation?->getId(), $formations)) {
                     $formations[$formation?->getId()]['parcours'] = [];
                     $formations[$formation?->getId()]['hasModif'] = false;

@@ -42,7 +42,7 @@ class ExportSyntheseModification
         foreach ($epreuves as $epreuve) {
             $typeEpreuves[$epreuve->getId()] = $epreuve;
         }
-
+        $fichiers = [];
         foreach ($formations as $formation) {
             $tDemandes = [];
 
