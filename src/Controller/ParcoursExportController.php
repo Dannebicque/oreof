@@ -538,10 +538,18 @@ class ParcoursExportController extends AbstractController
             $dataExcel[$index] = array_merge($dataParcours);
         }
 
+        $columnsIndex = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P'];
+
         $spreadSheet = new Spreadsheet();
         $activeWS = $spreadSheet->getActiveSheet();
+        // Taille des colonnes
+        foreach($columnsIndex as $colI){
+            $activeWS->getColumnDimension($colI)->setAutoSize(true);
+        }
         $activeWS->fromArray($headersExcel);
         $activeWS->fromArray($dataExcel, startCell: 'A2');
+
+
         $writer = new Xlsx($spreadSheet);
 
         $filename = 'export_generique_excel';
