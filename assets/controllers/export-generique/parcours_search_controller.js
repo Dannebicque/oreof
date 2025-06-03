@@ -129,19 +129,23 @@ export default class extends Controller {
     createResultList(resultArray){
         resultArray.forEach(parcours => {
             this.searchResultTarget.appendChild(
-                this.createSearchResultNode(parcours.parcours_libelle, parcours.parcours_id)
+                this.createSearchResultNode(parcours.parcours_libelle, parcours.parcours_id, parcours.typeParcours)
             );
         });
     }
 
-    createSearchResultNode(resultName, resultId){
+    createSearchResultNode(resultName, resultId, typeParcours){
         let row = document.createElement('div');
         row.classList.add('row', 'my-1');
         let textDiv = document.createElement('div');
         textDiv.classList.add('resultSearchNode');
         textDiv.dataset.parcoursId = resultId;
-        textDiv.dataset.parcoursLibelle = resultName;
-        textDiv.textContent = resultName;
+        let infoLibelle = this.displayTypeParcoursLibelle(typeParcours);
+        if(infoLibelle.length > 0){
+            infoLibelle = ' - ' + infoLibelle;
+        }
+        textDiv.dataset.parcoursLibelle = resultName + infoLibelle;
+        textDiv.textContent = resultName + infoLibelle;
         this.createClickListenerForListParcoursItem(textDiv);
         row.appendChild(textDiv);
 
@@ -260,5 +264,21 @@ export default class extends Controller {
                 this.needDataSelectTarget.classList.remove('d-none');
             }
         });
+    }
+
+    displayTypeParcoursLibelle(type){
+        let libelleType = { 
+            las1: 'Accès santé',
+            las23: 'Accès santé',
+            cpi: 'CPI',
+            alternance: 'En alternance'
+        };
+
+        if(type === 'classique' || type === null){
+            return "";
+        }
+        else {
+            return libelleType[type];
+        }
     }
 }
