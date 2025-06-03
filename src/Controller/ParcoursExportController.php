@@ -526,6 +526,17 @@ class ParcoursExportController extends AbstractController
         if(count($fieldValueArray) === 0){
             throw $this->createNotFoundException('Aucun champ précisé.');
         }
+        
+        // Vérifications sur les champs demandés (les champs sont corrects)
+        $fieldsAreCompatible = array_reduce(
+            $fieldValueArray,
+            fn($previous, $f) => $previous && array_key_exists($f, $this->getFieldOrderForExportGenerique()),
+            true
+        );
+        if(!$fieldsAreCompatible){
+            throw $this->createNotFoundException("Un des champs demandés n'est pas pris en charge.");
+        }
+
         // On trie les colonnes dans un certain ordre
         usort($fieldValueArray, 
             fn($f1, $f2) => $this->getFieldOrderForExportGenerique()[$f1] 
