@@ -12,6 +12,7 @@ namespace App\Classes\Export;
 use App\Classes\Excel\ExcelWriter;
 use App\Classes\GetDpeParcours;
 use App\Entity\CampagneCollecte;
+use App\Entity\Parcours;
 use App\Entity\SemestreParcours;
 use App\Repository\FormationRepository;
 use App\Utils\CleanTexte;
@@ -65,6 +66,7 @@ class ExportSemestresOuverts implements ExportInterface
 
         $ligne = 2;
         foreach ($formations as $formation) {
+            /** @var Parcours $parcours */
             foreach ($formation->getParcours() as $parcours) {
                 //Composante	Type de diplôme	mention	parcours	état	remplissage	nom responsable
                 $this->excelWriter->writeCellXY('A', $ligne, $formation->getComposantePorteuse()?->getLibelle());
@@ -84,7 +86,7 @@ class ExportSemestresOuverts implements ExportInterface
                 }
 
                 // pour chaque semestre, on récupère les infos
-                $semestres = $parcours->getSemestres();
+                $semestres = $parcours->getSemestreParcours();
                 /** @var SemestreParcours $semestre */
                 foreach ($semestres as $semestre) {
                     $semestreIndex = $semestre->getNumero() - 1; // Semestre 1 est à l'index 0
