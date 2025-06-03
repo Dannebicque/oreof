@@ -442,8 +442,9 @@ class ParcoursExportController extends AbstractController
             ->findOneById($campagneCollecte)
             ?? $em->getRepository(CampagneCollecte::class)->findOneBy(['defaut' => true]);
 
+        $parcoursData = [];
         $parcoursIdArray = $request->query->all()['parcoursIdArray'] ?? [];
-        if($parcoursIdArray[0] === 'all'){
+        if(isset($parcoursIdArray[0]) && $parcoursIdArray[0] === 'all'){
             $parcoursData = $em->getRepository(Parcours::class)->findByCampagneCollecte($campagneCollecte);
         }
         else {
@@ -508,8 +509,9 @@ class ParcoursExportController extends AbstractController
             ->findOneById($campagneCollecte)
             ?? $em->getRepository(CampagneCollecte::class)->findOneBy(['defaut' => true]);
 
+        $parcoursData = [];
         $parcoursIdArray = $request->query->all()['parcoursIdArray'] ?? [];
-        if($parcoursIdArray[0] === 'all'){
+        if(isset($parcoursIdArray[0]) && $parcoursIdArray[0] === 'all'){
             $parcoursData = $em->getRepository(Parcours::class)->findByCampagneCollecte($campagneCollecte);
         }
         else {
