@@ -89,7 +89,7 @@ class ExportSemestresOuverts implements ExportInterface
                 $semestres = $parcours->getSemestreParcours();
                 /** @var SemestreParcours $semestre */
                 foreach ($semestres as $semestre) {
-                    $semestreIndex = $semestre->getNumero() - 1; // Semestre 1 est à l'index 0
+                    $semestreIndex = $semestre->getOrdre() - 1; // Semestre 1 est à l'index 0
                     $this->excelWriter->writeCellXY(chr(72 + $semestreIndex), $ligne, $semestre->isOuvert() ? 'Ouvert' : 'Fermé');
                 }
 
