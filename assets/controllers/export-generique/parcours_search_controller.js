@@ -9,7 +9,9 @@ export default class extends Controller {
         'searchResult',
         'emptySearchListButton',
         'selectAllParcoursButton',
-        'loadingIcon'
+        'loadingIcon',
+        'needParcoursSelect',
+        'needDataSelect'
     ];
 
     static values = {
@@ -44,48 +46,71 @@ export default class extends Controller {
     }
 
     async sendExportRequest(event){
-        // Champs souhaités
-        let parcoursIdPostName = 'parcoursIdArray[]=';
-        let fieldPostName = 'fieldValueArray[]=';
+        let isParcoursSelected = Object.keys(this._selectedParcours).length > 0;
+        let isDataSelected = Object.keys(this._selectedFields).length > 0;
 
-        let parcoursIdArray = [];
-        // Construction des parcours voulus
-        if(this._selectedParcours['all'] === true){
-            parcoursIdArray.push("all");
+        if(isParcoursSelected && isDataSelected){
+            // Champs souhaités
+            let parcoursIdPostName = 'parcoursIdArray[]=';
+            let fieldPostName = 'fieldValueArray[]=';
+
+            let parcoursIdArray = [];
+            // Construction des parcours voulus
+            if(this._selectedParcours['all'] === true){
+                parcoursIdArray.push("all");
+            }
+            else {
+                for(const p in this._selectedParcours){
+                    parcoursIdArray.push(p);
+                }
+            }
+            // Construction des champs souhaités
+            let fieldValueArray = [];
+            for(const f in this._selectedFields){
+                fieldValueArray.push(f);
+            }
+
+            let postParcours =  parcoursIdPostName + parcoursIdArray.join('&' + parcoursIdPostName);
+            let postFields = fieldPostName + fieldValueArray.join('&' + fieldPostName)
+
+            let type = event.params.type;
+
+            let url = "#";
+            let targetNewTab;
+
+            if(type === 'pdf'){
+                url = this.downloadPdfUrlValue + '?'
+                    + postParcours + '&' + postFields
+                    '&campagneCollecte=' + this.campagneCollecteValue;
+                targetNewTab = '_blank';
+            }
+            else if (type === 'xlsx'){
+                url = this.downloadXlsxUrlValue + '?'
+                    + postParcours + '&' + postFields
+                    '&campagneCollecte=' + this.campagneCollecteValue;
+                targetNewTab = '_self';
+            }
+
+            this.needDataSelectTarget.classList.add('d-none');
+            this.needParcoursSelectTarget.classList.add('d-none');
+
+            window.open(url, targetNewTab);
         }
         else {
-            for(const p in this._selectedParcours){
-                parcoursIdArray.push(p);
+            if(!isParcoursSelected){
+                this.needParcoursSelectTarget.classList.remove('d-none');
+            }
+            else {
+                this.needParcoursSelectTarget.classList.add('d-none');
+            }
+            if(!isDataSelected){
+                this.needDataSelectTarget.classList.remove('d-none');
+            }
+            else {
+                this.needDataSelectTarget.classList.add('d-none');
             }
         }
-        // Construction des champs souhaités
-        let fieldValueArray = [];
-        for(const f in this._selectedFields){
-            fieldValueArray.push(f);
-        }
-
-        let postParcours =  parcoursIdPostName + parcoursIdArray.join('&' + parcoursIdPostName);
-        let postFields = fieldPostName + fieldValueArray.join('&' + fieldPostName)
-
-        let type = event.params.type;
-
-        let url = "#";
-        let targetNewTab;
-
-        if(type === 'pdf'){
-            url = this.downloadPdfUrlValue + '?'
-                + postParcours + '&' + postFields
-                '&campagneCollecte=' + this.campagneCollecteValue;
-            targetNewTab = '_blank';
-        }
-        else if (type === 'xlsx'){
-            url = this.downloadXlsxUrlValue + '?'
-                + postParcours + '&' + postFields
-                '&campagneCollecte=' + this.campagneCollecteValue;
-            targetNewTab = '_self';
-        }
-
-        window.open(url, targetNewTab);
+        
     }
 
     async loadResultList(){
@@ -167,6 +192,12 @@ export default class extends Controller {
                 );
                 this.selectedParcoursTarget.querySelector('.allParcoursDiv')?.remove();
             }
+            // Affiche un message si aucun parcours sélectionné
+            if(Object.keys(this._selectedParcours).length > 0){
+                this.needParcoursSelectTarget.classList.add('d-none');
+            }else {
+                this.needParcoursSelectTarget.classList.remove('d-none');
+            }
         })
 
     }
@@ -181,7 +212,15 @@ export default class extends Controller {
         textDiv.dataset.parcoursLibelle = name;
         let crossIcon = document.createElement('i');
         crossIcon.classList.add('fa-regular', 'fa-xmark', 'text-white', 'ms-3');
-        crossIcon.addEventListener('click', e => this.removeSelectedItemBadge(id));
+        crossIcon.addEventListener('click', e => {
+            this.removeSelectedItemBadge(id)
+            // Affiche un message si aucun parcours sélectionné
+            if(Object.keys(this._selectedParcours).length > 0){
+                this.needParcoursSelectTarget.classList.add('d-none');
+            }else {
+                this.needParcoursSelectTarget.classList.remove('d-none');
+            }   
+        });
         textDiv.appendChild(crossIcon);
         badgeDiv.appendChild(textDiv);
 
@@ -213,6 +252,12 @@ export default class extends Controller {
             else if (this._selectedFields[event.target.dataset.exportField] !== undefined){
                 node.classList.remove(...badgeClassList);
                 delete this._selectedFields[event.target.dataset.exportField]
+            }
+            // Affiche un message si aucune donnée sélectionnée
+            if(Object.keys(this._selectedFields).length > 0){
+                this.needDataSelectTarget.classList.add('d-none');
+            } else {
+                this.needDataSelectTarget.classList.remove('d-none');
             }
         });
     }
