@@ -178,6 +178,7 @@ export default class extends Controller {
         this.selectedParcoursTarget.appendChild(row);
 
         document.querySelectorAll('.badgeSelectedDiv').forEach(div => div.remove());
+        this.needParcoursSelectTarget.classList.add('d-none');
         this._selectedParcours = {'all': true};
     }
 
