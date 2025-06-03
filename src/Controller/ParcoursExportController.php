@@ -456,6 +456,11 @@ class ParcoursExportController extends AbstractController
         }
 
         $fieldValueArray = $request->query->all()['fieldValueArray'] ?? [];
+        // Vérification sur les champs demandés (non vide)
+        if(count($fieldValueArray) === 0){
+            throw $this->createNotFoundException('Aucun champ précisé.');
+        }
+
         // On trie les colonnes dans un certain ordre
         usort($fieldValueArray, 
             fn($f1, $f2) => $this->getFieldOrderForExportGenerique()[$f1] 
@@ -508,6 +513,10 @@ class ParcoursExportController extends AbstractController
         }
 
         $fieldValueArray = $request->query->all()['fieldValueArray'] ?? [];
+        // Vérification sur les champs demandés (non vide)
+        if(count($fieldValueArray) === 0){
+            throw $this->createNotFoundException('Aucun champ précisé.');
+        }
         // On trie les colonnes dans un certain ordre
         usort($fieldValueArray, 
             fn($f1, $f2) => $this->getFieldOrderForExportGenerique()[$f1] 
