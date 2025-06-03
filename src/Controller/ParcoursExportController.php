@@ -451,6 +451,10 @@ class ParcoursExportController extends AbstractController
             $parcoursData = $em->getRepository(Parcours::class)->findById($parcoursIdArray);
         }
 
+        if(count($parcoursData) < 1){
+            throw $this->createNotFoundException('Aucun parcours sélectionné.');
+        }
+
         $fieldValueArray = $request->query->all()['fieldValueArray'] ?? [];
         // On trie les colonnes dans un certain ordre
         usort($fieldValueArray, 
@@ -497,6 +501,10 @@ class ParcoursExportController extends AbstractController
         else {
             $parcoursIdArray = array_map(fn($id) => (int)$id, $parcoursIdArray);
             $parcoursData = $em->getRepository(Parcours::class)->findById($parcoursIdArray);
+        }
+
+        if(count($parcoursData) < 1){
+            throw $this->createNotFoundException('Aucun parcours sélectionné.');
         }
 
         $fieldValueArray = $request->query->all()['fieldValueArray'] ?? [];
