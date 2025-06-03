@@ -79,14 +79,14 @@ class ExportSemestresOuverts implements ExportInterface
                 if ($formation->isHasParcours()) {
                     $this->excelWriter->writeCellXY('D', $ligne, $parcours->getDisplay());
                     $this->excelWriter->writeCellXY('F', $ligne, $parcours->getRespParcours()?->getDisplay());
-                    if ($parcours->is)
-                    $dpeParcours = GetDpeParcours::getFromParcours($parcours);
-                    $this->excelWriter->writeCellXY('G', $ligne, $dpeParcours?->getEtatReconduction()?->getLibelle());
+
                 } else {
                     $this->excelWriter->writeCellXY('D', $ligne, 'N/A');
                     $this->excelWriter->writeCellXY('F', $ligne, 'N/A');
-                    $this->excelWriter->writeCellXY('G', $ligne, $formation?->getEtatReconduction()?->getLibelle());
                 }
+
+                $dpeParcours = GetDpeParcours::getFromParcours($parcours);
+                $this->excelWriter->writeCellXY('G', $ligne, $dpeParcours?->getEtatReconduction()?->getLibelle());
 
                 // pour chaque semestre, on récupère les infos
                 $semestres = $parcours->getSemestreParcours();
