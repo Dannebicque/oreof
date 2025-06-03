@@ -62,6 +62,8 @@ class ExportSemestresOuverts implements ExportInterface
         $this->excelWriter->writeCellXY('K', 1, 'Semestre 4');
         $this->excelWriter->writeCellXY('L', 1, 'Semestre 5');
         $this->excelWriter->writeCellXY('M', 1, 'Semestre 6');
+        $this->excelWriter->writeCellXY('N', 1, '# Mention');
+        $this->excelWriter->writeCellXY('O', 1, '# parcours');
 
 
         $ligne = 2;
@@ -75,8 +77,9 @@ class ExportSemestresOuverts implements ExportInterface
                 $this->excelWriter->writeCellXY('E', $ligne, $formation->getResponsableMention()?->getDisplay());
 
                 if ($formation->isHasParcours()) {
-                    $this->excelWriter->writeCellXY('D', $ligne, $parcours->getLibelle());
+                    $this->excelWriter->writeCellXY('D', $ligne, $parcours->getDisplay());
                     $this->excelWriter->writeCellXY('F', $ligne, $parcours->getRespParcours()?->getDisplay());
+                    if ($parcours->is)
                     $dpeParcours = GetDpeParcours::getFromParcours($parcours);
                     $this->excelWriter->writeCellXY('G', $ligne, $dpeParcours?->getEtatReconduction()?->getLibelle());
                 } else {
@@ -90,9 +93,11 @@ class ExportSemestresOuverts implements ExportInterface
                 /** @var SemestreParcours $semestre */
                 foreach ($semestres as $semestre) {
                     $semestreIndex = $semestre->getOrdre() - 1; // Semestre 1 est à l'index 0
-                    $this->excelWriter->writeCellXY(chr(72 + $semestreIndex), $ligne, $semestre->isOuvert() ? 'Ouvert' : 'Fermé');
+                    $this->excelWriter->writeCellXY(chr(72 + $semestreIndex), $ligne, $semestre->getSemestre()?->isNonDispense() || !$semestre->isOuvert() ? 'Fermé' : 'Ouvert');
                 }
 
+                $this->excelWriter->writeCellXY('N', $ligne, $formation->getId());
+                $this->excelWriter->writeCellXY('O', $ligne, $parcours->getId());
 
                 $ligne++;
 
