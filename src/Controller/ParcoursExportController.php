@@ -452,6 +452,11 @@ class ParcoursExportController extends AbstractController
         }
 
         $fieldValueArray = $request->query->all()['fieldValueArray'] ?? [];
+        // On trie les colonnes dans un certain ordre
+        usort($fieldValueArray, 
+            fn($f1, $f2) => $this->getFieldOrderForExportGenerique()[$f1] 
+            <=> $this->getFieldOrderForExportGenerique()[$f2]
+        );
 
         $dataStructure = [];
         foreach($parcoursData as $parcours){
@@ -495,6 +500,11 @@ class ParcoursExportController extends AbstractController
         }
 
         $fieldValueArray = $request->query->all()['fieldValueArray'] ?? [];
+        // On trie les colonnes dans un certain ordre
+        usort($fieldValueArray, 
+            fn($f1, $f2) => $this->getFieldOrderForExportGenerique()[$f1] 
+            <=> $this->getFieldOrderForExportGenerique()[$f2]
+        );
 
         $headerDeBase = ["Type de diplôme", "Intitulé de la formation", "Intitulé du parcours"];
         $headersExcel = array_map(
@@ -602,5 +612,15 @@ class ParcoursExportController extends AbstractController
                 ];
                 break;
         }
+    }
+
+    private function getFieldOrderForExportGenerique(){
+        return [
+            'respFormation' => 1,
+            'respParcours' => 2,
+            'objectifsFormation' => 3,
+            'objectifsParcours' => 4,
+            'resultatsAttendusParcours' => 5,
+        ];
     }
 }
