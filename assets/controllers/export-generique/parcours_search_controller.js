@@ -70,19 +70,22 @@ export default class extends Controller {
         let type = event.params.type;
 
         let url = "#";
+        let targetNewTab;
 
         if(type === 'pdf'){
             url = this.downloadPdfUrlValue + '?'
                 + postParcours + '&' + postFields
                 '&campagneCollecte=' + this.campagneCollecteValue;
+            targetNewTab = '_blank';
         }
         else if (type === 'xlsx'){
             url = this.downloadXlsxUrlValue + '?'
                 + postParcours + '&' + postFields
                 '&campagneCollecte=' + this.campagneCollecteValue;
+            targetNewTab = '_self';
         }
 
-        window.open(url, url !== "#" ? '_blank' : undefined);
+        window.open(url, targetNewTab);
     }
 
     async loadResultList(){

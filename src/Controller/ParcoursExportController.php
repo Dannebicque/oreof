@@ -500,9 +500,10 @@ class ParcoursExportController extends AbstractController
         $headersExcel = array_map(
             fn($f) => is_array($this->mapParcoursExportWithValues($f, null)['value'])
             ? array_map(fn($v) => $v['libelle'], $this->mapParcoursExportWithValues($f, null)['value'])
-            : $this->mapParcoursExportWithValues($f, null)['libelle']           
+            : [$this->mapParcoursExportWithValues($f, null)['libelle']]
             , $fieldValueArray
         );
+
         $headersExcel = array_merge($headerDeBase, ...$headersExcel);
 
         $dataExcel = array_map(
@@ -516,7 +517,7 @@ class ParcoursExportController extends AbstractController
                     ...array_map(
                             fn($field) => is_array($this->mapParcoursExportWithValues($field, $parcours)['value'])
                                 ? array_map(fn($value) => $value['content'], $this->mapParcoursExportWithValues($field, $parcours)['value'])
-                                : $this->mapParcoursExportWithValues($field, $parcours)['value'] 
+                                : [$this->mapParcoursExportWithValues($field, $parcours)['value']]
                                 , $fieldValueArray
                         )
                     )   
