@@ -7,7 +7,7 @@
  * @lastUpdate 19/05/2024 20:35
  */
 
-namespace App\TypeDiplome\Licence\Services;
+namespace App\TypeDiplome\Export;
 
 use App\Classes\Excel\ExcelWriter;
 use DateTimeInterface;
