@@ -254,7 +254,7 @@ class VersioningStructure
             $diff['raccroche'] = new DiffObject(null, $ecNouveau->raccroche);
             $diff['heuresEctsEc'] = $this->compareHeuresEctsEc(null, $ecNouveau->heuresEctsEc);
             $diff['typeMccc'] = new DiffObject('', $ecNouveau->typeMccc);
-            $diff['quitus'] = new DiffObject('', $ecNouveau->elementConstitutif->isQuitus());
+            $diff['quitus'] = new DiffObject('', $ecNouveau->elementConstitutif->getHasQuitus());
             $diff['mcccs'] = $this->compareMcccs([], $ecNouveau->mcccs);
 
             //EC enfants
@@ -321,11 +321,11 @@ class VersioningStructure
         } else {
             if ($ecOriginal->typeMccc !== null && $ecNouveau->typeMccc !== null) {
                 $diff['typeMccc'] = new DiffObject($ecOriginal->typeMccc, $ecNouveau->typeMccc);
-                $diff['quitus'] = new DiffObject($ecOriginal->elementConstitutif->isQuitus(), $ecNouveau->elementConstitutif->isQuitus());
+                $diff['quitus'] = new DiffObject($ecOriginal->elementConstitutif->getHasQuitus(), $ecNouveau->elementConstitutif->getHasQuitus());
                 $diff['mcccs'] = $this->compareMcccs($ecOriginal->mcccs, $ecNouveau->mcccs);
             } elseif (($ecOriginal->typeMccc === null && $ecNouveau->typeMccc !== null)) {
                 $diff['typeMccc'] = new DiffObject(null, $ecNouveau->typeMccc);
-                $diff['quitus'] = new DiffObject(null, $ecNouveau->elementConstitutif->isQuitus());
+                $diff['quitus'] = new DiffObject(null, $ecNouveau->elementConstitutif->getHasQuitus());
                 $diff['mcccs'] = $this->compareMcccs(null, $ecNouveau->mcccs);
             }
 
