@@ -7,7 +7,7 @@
  * @lastUpdate 24/05/2023 16:14
  */
 
-namespace App\TypeDiplome\Export;
+namespace App\TypeDiplome\Licence\Services;
 
 use App\Classes\CalculStructureParcours;
 use App\Classes\Excel\ExcelWriter;
@@ -855,6 +855,9 @@ class LicenceMcccVersion extends AbstractLicenceMccc
                     }
 
                     $texte = substr($texte, 0, -2);
+                    if (!str_starts_with('QUITUS', $texte) && $isQuitus) {
+                        $texte = 'QUITUS ' . $texte;
+                    }
                     $tDisplay[self::COL_MCCC_CC] = $texte;
                 }
 
@@ -884,6 +887,9 @@ class LicenceMcccVersion extends AbstractLicenceMccc
                     $texte .= 'CC' . $mccc->getNumeroSession() . ' (' . $mccc->getPourcentage() . '%); ';
                 }
                 $texte = substr($texte, 0, -2);
+                if (!str_starts_with('QUITUS', $texte) && $isQuitus) {
+                    $texte = 'QUITUS ' . $texte;
+                }
                 $tDisplay[self::COL_MCCC_CCI] = $texte;
 
                 break;
@@ -895,6 +901,9 @@ class LicenceMcccVersion extends AbstractLicenceMccc
                         $texte .= 'CC ' . $mccc->getNbEpreuves() . ' épreuve(s) (' . $mccc->getPourcentage() . '%); ';
                     }
                     $texte = substr($texte, 0, -2);
+                    if (!str_starts_with('QUITUS', $texte) && $isQuitus) {
+                        $texte = 'QUITUS ' . $texte;
+                    }
                     $tDisplay[self::COL_MCCC_CC] = $texte;
                 }
 
@@ -930,6 +939,9 @@ class LicenceMcccVersion extends AbstractLicenceMccc
                         }
 
                         $texteEpreuve = substr($texteEpreuve, 0, -2);
+                        if (!str_starts_with('QUITUS', $texteEpreuve) && $isQuitus) {
+                            $texteEpreuve = 'QUITUS ' . $texteEpreuve;
+                        }
                         $tDisplay[self::COL_MCCC_CT] = $texteEpreuve;
                     }
                 }
@@ -969,6 +981,10 @@ class LicenceMcccVersion extends AbstractLicenceMccc
                     }
 
                     $texteEpreuve = substr($texteEpreuve, 0, -2);
+
+                    if (!str_starts_with('QUITUS', $texteEpreuve) && $isQuitus) {
+                        $texteEpreuve = 'QUITUS ' . $texteEpreuve;
+                    }
 
                     $tDisplay[self::COL_MCCC_CT] = $texteEpreuve;
                 }
