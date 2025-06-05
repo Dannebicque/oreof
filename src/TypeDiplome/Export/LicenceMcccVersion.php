@@ -696,8 +696,14 @@ class LicenceMcccVersion extends AbstractLicenceMccc
 
                 if ($hasTp) {
                     $texteAvecTp = substr($texteAvecTp, 0, -2);
+                    if (!str_starts_with('QUITUS', $texteAvecTp) && $isQuitus) {
+                        $texteAvecTp = 'QUITUS ' . $texteAvecTp;
+                    }
                     $tDisplay[self::COL_MCCC_SECONDE_CHANCE_CC_AVEC_TP] = str_replace(';', '+', $texteAvecTp);
                 } else {
+                    if (!str_starts_with('QUITUS', $texte) && $isQuitus) {
+                        $texte = 'QUITUS ' . $texte;
+                    }
                     $tDisplay[self::COL_MCCC_SECONDE_CHANCE_CC_SANS_TP] = $texte;
                 }
 
@@ -784,10 +790,19 @@ class LicenceMcccVersion extends AbstractLicenceMccc
                     $texteAvecTp = substr($texteAvecTp, 0, -2);
 
                     if ($hasTp) {
+                        if (!str_starts_with('QUITUS', $texteAvecTp) && $isQuitus) {
+                            $texteAvecTp = 'QUITUS ' . $texteAvecTp;
+                        }
                         $tDisplay[self::COL_MCCC_SECONDE_CHANCE_CC_AVEC_TP] = str_replace(';', '+', $texteAvecTp);
                     } else {
+                        if (!str_starts_with('QUITUS', $texteEpreuve) && $isQuitus) {
+                            $texteEpreuve = 'QUITUS ' . $texteEpreuve;
+                        }
                         //si TP cette celulle est vide...
                         $tDisplay[self::COL_MCCC_SECONDE_CHANCE_CC_SANS_TP] = $texteEpreuve;
+                    }
+                    if (!str_starts_with('QUITUS', $texteCc) && $isQuitus) {
+                        $texteCc = 'QUITUS ' . $texteCc;
                     }
                     $tDisplay[self::COL_MCCC_SECONDE_CHANCE_CC_SUP_10] = str_replace(';', '+', $texteCc);
                 }
@@ -818,6 +833,9 @@ class LicenceMcccVersion extends AbstractLicenceMccc
                     }
 
                     $texteEpreuve = substr($texteEpreuve, 0, -2);
+                    if (!str_starts_with('QUITUS', $texteEpreuve) && $isQuitus) {
+                        $texteEpreuve = 'QUITUS ' . $texteEpreuve;
+                    }
                     $tDisplay[self::COL_MCCC_SECONDE_CHANCE_CT] = $texteEpreuve;
                 }
                 break;
