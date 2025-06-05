@@ -551,8 +551,8 @@ class LicenceMcccVersion extends AbstractLicenceMccc
                 $mcccsNew = $this->getMcccs($diffEc['mcccs']['new'], $diffEc['typeMccc']->new);
 
                 //cas Original sans écrire dans les cellules
-                $displayMcccOriginal = $this->calculDisplayMccc($mcccsOriginal, $diffEc['typeMccc']->original ?? '', false);
-                $displayMcccNew = $this->calculDisplayMccc($mcccsNew, $diffEc['typeMccc']->new, false);
+                $displayMcccOriginal = $this->calculDisplayMccc($mcccsOriginal, $diffEc['typeMccc']->original ?? '', $diffEc['quitus']->original);
+                $displayMcccNew = $this->calculDisplayMccc($mcccsNew, $diffEc['typeMccc']->new, $diffEc['quitus']->new);
 
 
                 //fusionner les deux tableaux $displayMcccOriginal et $displayMcccNew en construisant un objet DiffObject
@@ -577,7 +577,7 @@ class LicenceMcccVersion extends AbstractLicenceMccc
             } elseif (array_key_exists('mcccs', $diffEc) && array_key_exists('new', $diffEc['mcccs'])) {
                 $mcccsNew = $this->getMcccs($diffEc['mcccs']['new'], $diffEc['typeMccc']->new);
 
-                $displayMcccNew = $this->calculDisplayMccc($mcccsNew, $diffEc['typeMccc']->new, false);
+                $displayMcccNew = $this->calculDisplayMccc($mcccsNew, $diffEc['typeMccc']->new, $diffEc['quitus']->new);
 
                 foreach ($displayMcccNew as $key => $value) {
                     $diffMccc[$key] = new DiffObject('', $value);
