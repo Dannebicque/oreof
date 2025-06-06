@@ -202,6 +202,7 @@ class FicheMatiere
     #[ORM\Column(nullable: true)]
     private ?float $ects = null;
 
+    #[Groups('DTO_json_versioning')]
     #[ORM\Column(nullable: true)]
     private ?bool $quitus = false;
 
@@ -237,6 +238,7 @@ class FicheMatiere
     #[ORM\ManyToOne]
     private ?CampagneCollecte $campagneCollecte = null;
 
+    #[Groups('DTO_json_versioning')]
     #[ORM\Column(length: 1000, nullable: true)]
     private ?string $quitusText = null;
 
