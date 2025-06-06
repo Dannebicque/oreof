@@ -1,29 +1,64 @@
 <div
-        {{ stimulus_controller('validation--index',
-            {
-                urlListe: path('app_validation_formation_liste_changerf'),
-            }) }}
+        {% if ses is defined and ses == true %}
+            {{ stimulus_controller('validation--index',
+                {
+                    urlListe: path('app_validation_formation_liste_changerf'),
+                }) }}
+        {% else %}
+            {{ stimulus_controller('validation--index',
+                {
+                    urlListe: path('app_validation_formation_liste_changerf', {composante:composante.id}),
+                }) }}
+        {% endif %}
 >
     <div class="card mt-2">
         <div class="card-body">
             <div class="row">
                 <div class="col-6">
-                    <div>
-                        <label for="composante" class="required">Composante</label>
-                        <select name="composante" id="composante" class="form-select"
-                                {{ stimulus_action('validation--index', 'changeListe') }}
-                                {{ stimulus_controller('symfony/ux-autocomplete/autocomplete') }}
-                        >
-                            <option value="">Choisir une composante</option>
-                            <option value="all">Toutes les composantes de l'établissement</option>
-                            {% for composante in composantes %}
-                                <option
-                                        value="{{ composante.id }}"
-                                {% if idComposante == composante.id %}selected{% endif %}
-                                >{{ composante.libelle }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
+                    {#                    <div> #}
+                    {#                        <label for="composante" class="required">Composante</label> #}
+                    {#                        <select name="composante" id="composante" class="form-select" #}
+                    {#                                {{ stimulus_action('validation--index', 'changeListe') }} #}
+                    {#                                {{ stimulus_controller('symfony/ux-autocomplete/autocomplete') }} #}
+                    {#                        > #}
+                    {#                            <option value="">Choisir une composante</option> #}
+                    {#                            <option value="all">Toutes les composantes de l'établissement</option> #}
+                    {#                            {% for composante in composantes %} #}
+                    {#                                <option #}
+                    {#                                        value="{{ composante.id }}" #}
+                    {#                                {% if idComposante == composante.id %}selected{% endif %} #}
+                    {#                                >{{ composante.libelle }}</option> #}
+                    {#                            {% endfor %} #}
+                    {#                        </select> #}
+                    {#                    </div> #}
+                    {% if ses is defined and ses == true %}
+                        <div>
+                            <label for="composante" class="required">Composante</label>
+                            <select name="composante" id="composante" class="form-select"
+                                    {{ stimulus_action('validation--index', 'changeListe') }}
+                                    {{ stimulus_controller('symfony/ux-autocomplete/autocomplete') }}
+                            >
+                                <option value="">Choisir une composante</option>
+                                {% if is_granted('ROLE_ADMIN') %}
+                                    <option value="all">Toutes les composantes de l'établissement</option>
+                                {% endif %}
+                                {% for composante in composantes %}
+                                    <option value="{{ composante.id }}">{{ composante.libelle }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    {% else %}
+                        <div>
+                            <label for="composante" class="required">Composante</label>
+                            <select name="composante" id="composante" class="form-select"
+                                    disabled
+                                    {{ stimulus_action('validation--index', 'changeListe') }}
+                                    {{ stimulus_controller('symfony/ux-autocomplete/autocomplete') }}
+                            >
+                                <option value="{{ composante.id }}">{{ composante.libelle }}</option>
+                            </select>
+                        </div>
+                    {% endif %}
                 </div>
                 <div class="col-6">
                     <div>
@@ -43,6 +78,7 @@
                     </div>
                 </div>
                 <div class="col-6">
+                    {% if ses is defined and ses == true %}
                     <a href="{{ path('app_formation_responsable_liste_export') }}"
                        class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2 mt-2"
                        data-bs-toggle="tooltip"
@@ -52,6 +88,17 @@
                         <i class="{{ iconDownload }}"></i>
                         <span> Exporter les données en PDF</span>
                     </a>
+                    {% else %}
+                        <a href="{{ path('app_formation_responsable_liste_export', {composante:composante.id}) }}"
+                           class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2 mt-2"
+                           data-bs-toggle="tooltip"
+                           data-bs-placement="bottom"
+                           title="Exporter les données en PDF"
+                        >
+                            <i class="{{ iconDownload }}"></i>
+                            <span> Exporter les données en PDF</span>
+                        </a>
+                    {% endif %}
                 </div>
             </div>
         </div>

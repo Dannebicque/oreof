@@ -25,10 +25,6 @@ final class BadgeHeuresComponent
 
     public ?bool $texte = false;
 
-    public function __construct(private readonly ElementConstitutifController $elementConstitutifController)
-    {
-    }
-
     #[PostMount]
     public function mounted(): void
     {
@@ -43,7 +39,13 @@ final class BadgeHeuresComponent
             $this->etatHeuresComplet = $this->elementConstitutif->etatStructure() === 'Complet';
         }
 
+        if ($this->elementConstitutif->getEcParent() !== null && $this->elementConstitutif->getEcParent()->isHeuresEnfantsIdentiques() === true) {
+            $this->editable = false;
+            $this->etatHeuresComplet = 'Complet';
+        }
+
         if ($this->elementConstitutif->getNatureUeEc()?->isChoix() && $this->elementConstitutif->isHeuresEnfantsIdentiques() === false) {
+
             $this->etatHeuresComplet = 'Complet';
         }
     }

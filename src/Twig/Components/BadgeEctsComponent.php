@@ -27,7 +27,7 @@ final class BadgeEctsComponent
         $getElement = new GetElementConstitutif($this->elementConstitutif, $this->parcours);
         $this->ects = $getElement->getFicheMatiereEcts();
 
-        if ($this->ects > 0.0 && $this->ects < 30.0) {
+        if ($this->ects > 0.0 && $this->ects <= 30.0) {
             $this->etatEcts = 'success';
         } else {
             $this->etatEcts = 'danger';

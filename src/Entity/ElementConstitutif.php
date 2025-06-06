@@ -941,7 +941,7 @@ class ElementConstitutif
 
     public function setDeserializedId(?int $id) : self {
         $this->deserializedId = $id;
-      
+
         return $this;
     }
 
@@ -967,5 +967,19 @@ class ElementConstitutif
         $this->quitusText = $quitusText;
 
         return $this;
+    }
+
+    public function getHasQuitus(): bool
+    {
+        // si MCCC spécifiques alors le quitus est sur l'element constitutif, sinon sur la fiche matière
+        if ($this->isMcccSpecifiques()) {
+            return $this->quitus ?? false;
+        }
+
+        if ($this->ficheMatiere !== null) {
+            return $this->ficheMatiere->isQuitus() ?? false;
+        }
+
+        return false;
     }
 }

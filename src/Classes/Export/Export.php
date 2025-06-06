@@ -34,6 +34,7 @@ class Export
         protected ExportResponsable      $exportResponsable,
         protected ExportCfvu        $exportCfvu,
         protected ExportCarif       $exportCarif,
+        protected ExportSemestresOuverts $exportSemestresOuverts,
         protected ExportCap                         $exportCap,
         protected ExportFiabilisation               $exportFiabilisation,
         protected ExportSynthese                    $exportSynthese,
@@ -42,7 +43,6 @@ class Export
         protected ExportListeFicheMatiere           $exportListeFicheMatiere,
         protected ExportMccc                        $exportMccc,
         KernelInterface                             $kernel,
-        private TypeDiplomeRegistry                 $typeDiplomeRegistry,
         private MyPDF                               $myPDF,
         private readonly ExportSyntheseModification $exportSyntheseModification,
     ) {
@@ -103,6 +103,8 @@ class Export
                 return $this->exportEc();
             case 'synthese':
                 return $this->exportSynthese();
+            case 'semestres_ouverts':
+                return $this->exportSemestresOuverts();
             case 'synthese_modification':
                 return $this->exportSyntheseModifications();
         }
@@ -124,7 +126,7 @@ class Export
     {
         $this->exportMccc->export(
             $this->dir,
-            $this->typeDiplomeRegistry,
+            $this->typeDiplomeResolver,
             $this->formations,
             $this->campagneCollecte,
             $this->date,
@@ -177,6 +179,11 @@ class Export
     private function exportCfvu() : string
     {
         return $this->exportCfvu->exportLink($this->campagneCollecte);
+    }
+
+    private function exportSemestresOuverts(): string
+    {
+        return $this->exportSemestresOuverts->exportLink($this->campagneCollecte);
     }
 
     private function exportFicheMatiere() : string

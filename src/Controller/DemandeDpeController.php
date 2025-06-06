@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Classes\Excel\ExcelWriter;
 use App\Classes\JsonReponse;
+use App\Classes\ValidationProcess;
 use App\Entity\Actualite;
 use App\Entity\Composante;
 use App\Entity\DpeDemande;
@@ -12,6 +13,7 @@ use App\Form\DpeDemandeTexteType;
 use App\Repository\ActualiteRepository;
 use App\Repository\ComposanteRepository;
 use App\Repository\DpeDemandeRepository;
+use App\Repository\MentionRepository;
 use App\Utils\JsonRequest;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -20,7 +22,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-class DemandeDpeController extends AbstractController
+class DemandeDpeController extends BaseController
 {
     #[Route('/demande/dpe', name: 'app_demande_dpe')]
     #[IsGranted('ROLE_ADMIN')]
@@ -34,6 +36,8 @@ class DemandeDpeController extends AbstractController
 
     #[Route('/demande/dpe/liste/{type}', name: 'app_dpe_demande_liste')]
     public function liste(
+        ValidationProcess $validationProcess,
+        MentionRepository $mentionRepository,
         ComposanteRepository $composanteRepository,
         DpeDemandeRepository $dpeDemandeRepository,
         Request $request,
@@ -49,7 +53,12 @@ class DemandeDpeController extends AbstractController
             }
 
             return $this->render('demande_dpe/_liste.html.twig', [
-                'demandes' => $dpeDemandeRepository->findByComposante($composante),
+                'is_admin' => false,
+                'params' => $request->query->all(),
+                'demandes' => $dpeDemandeRepository->findByComposanteAndSearch(
+                    $composante,
+                    $this->getCampagneCollecte(),
+                    $request->query->all()),
             ]);
         }
 
@@ -57,7 +66,16 @@ class DemandeDpeController extends AbstractController
             $this->denyAccessUnlessGranted('ROLE_ADMIN');
 
             return $this->render('demande_dpe/_liste.html.twig', [
-                'demandes' => $dpeDemandeRepository->findAll(),
+                'is_admin' => true,
+                'listeNiveauModification' => DpeDemande::getListeNiveauModification(),
+                'listeEtatValidation' => $validationProcess->getProcessAll(),
+                'demandes' => $dpeDemandeRepository->findBySearch(
+                    $this->getCampagneCollecte(),
+                    $request->query->all()
+                ),
+                'params' => $request->query->all(),
+                'composantes' => $composanteRepository->findPorteuse(),
+                'mentions' => $mentionRepository->findBy([], ['libelle' => 'ASC']),
             ]);
         }
 
@@ -129,6 +147,8 @@ class DemandeDpeController extends AbstractController
             $demandes = $dpeDemandeRepository->findAll();
         }
 
+        $isAdmin = $this->isGranted('ROLE_ADMIN');
+
         $filename = 'demandes_dpe_' . date('Y-m-d_H-i-s') . '.xlsx';
         $excelWriter->nouveauFichier('Export Demande DPE');
         $excelWriter->setActiveSheetIndex(0);
@@ -141,6 +161,10 @@ class DemandeDpeController extends AbstractController
         $excelWriter->writeCellName('G1', 'Niveau demande');
         $excelWriter->writeCellName('H1', 'Etat');
         $excelWriter->writeCellName('I1', 'Commentaire');
+        if ($isAdmin) {
+            $excelWriter->writeCellName('J1', 'Id Parcours');
+            $excelWriter->writeCellName('K1', 'Id Mention');
+        }
         $ligne = 2;
         foreach ($demandes as $demande) {
             if ($demande->getNiveauDemande() === 'F') {
@@ -167,6 +191,10 @@ class DemandeDpeController extends AbstractController
             $excelWriter->writeCellName('G' . $ligne, $demande->getNiveauModification() ? $demande->getNiveauModification()->getLibelle() : '');
             $excelWriter->writeCellName('H' . $ligne, $demande->getEtatDemande()?->getLibelle());
             $excelWriter->writeCellName('I' . $ligne, $demande->getArgumentaireDemande());
+            if ($isAdmin) {
+                $excelWriter->writeCellName('J' . $ligne, $demande->getParcours()?->getId());
+                $excelWriter->writeCellName('K' . $ligne, $demande->getFormation()?->getId());
+            }
             $ligne++;
         }
 
