@@ -658,6 +658,22 @@ class ParcoursExportController extends AbstractController
                     'value' => $parcours?->getFormation()?->getObjectifsFormation()
                 ];
                 break;
+            case 'competencesAcquises': 
+                return [
+                    'type' => 'nested_list',
+                    'libelle' => 'Compétences Acquises',
+                    'value' => array_map(
+                        fn($bloc) => [
+                            'nested_libelle' => $bloc->display(),
+                            'nested_value' => array_map(
+                                fn($comp) => $comp->display(),
+                                $bloc->getCompetences()?->toArray() ?? []
+                            )
+                        ]
+                        , $parcours?->getBlocCompetences()?->toArray() ?? []
+                    )
+                ];
+                break;
         }
     }
 
@@ -668,6 +684,7 @@ class ParcoursExportController extends AbstractController
             'objectifsFormation' => 3,
             'objectifsParcours' => 4,
             'resultatsAttendusParcours' => 5,
+            'competencesAcquises' => 6,
         ];
     }
 }

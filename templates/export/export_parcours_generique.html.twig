@@ -20,6 +20,22 @@
                         {% endif %}
                     {% endfor %}
                 </ul>
+            {% elseif v.type == 'nested_list' %}
+                <h4>{{ v.libelle }}</h4>
+                <ul>
+                    {% for elt in v.value %}
+                        <li>
+                            {{ elt.nested_libelle }}
+                            <ul>
+                            {% for nestV in elt.nested_value %}
+                                <li>
+                                    {{ nestV }}
+                                </li>
+                            {% endfor %}
+                            </ul>
+                        </li>
+                    {% endfor %}
+                </ul>
             {% endif %}
         {% endfor %}
     {% endfor %}
