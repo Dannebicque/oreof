@@ -138,6 +138,7 @@ class ElementConstitutif
     #[ORM\Column]
     private ?bool $heuresEnfantsIdentiques = false;
 
+    #[Groups('DTO_json_versioning')]
     #[ORM\Column(nullable: true)]
     private ?bool $quitus = false;
 
@@ -175,6 +176,7 @@ class ElementConstitutif
     #[ORM\Column(nullable: true)]
     private ?bool $heuresSpecifiques = null;
 
+    #[Groups('DTO_json_versioning')]
     #[ORM\Column(nullable: true)]
     private ?bool $mccc_specifiques = null;
 
@@ -191,6 +193,7 @@ class ElementConstitutif
     #[Groups('DTO_json_versioning')]
     private ?bool $controleAssiduite = null;
 
+    #[Groups('DTO_json_versioning')]
     #[ORM\Column(length: 1000, nullable: true)]
     private ?string $quitusText = null;
 
