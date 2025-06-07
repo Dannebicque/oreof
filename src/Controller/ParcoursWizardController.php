@@ -21,17 +21,15 @@ use App\Form\ParcoursStep7Type;
 use App\Repository\ComposanteRepository;
 use App\Repository\FormationRepository;
 use App\Repository\ParcoursRepository;
-use App\TypeDiplome\TypeDiplomeRegistry;
 use App\Utils\Access;
 use App\Utils\JsonRequest;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/parcours/step')]
-class ParcoursWizardController extends AbstractController
+class ParcoursWizardController extends BaseController
 {
     #[Route('/', name: 'app_parcours_wizard', methods: ['GET'])]
     public function index(): Response
@@ -75,7 +73,6 @@ class ParcoursWizardController extends AbstractController
 
     #[Route('/{dpeParcours}/3', name: 'app_parcours_wizard_step_3', methods: ['GET'])]
     public function step3(
-        TypeDiplomeRegistry $typeDiplomeRegistry,
         ParcoursRepository $parcoursRepository,
         DpeParcours $dpeParcours
     ): Response {
@@ -85,7 +82,15 @@ class ParcoursWizardController extends AbstractController
 
         $parcours = $dpeParcours->getParcours();
 
-        $typeDiplome = $typeDiplomeRegistry->getTypeDiplome($parcours->getFormation()->getTypeDiplome()->getModeleMcc());
+        if ($parcours === null) {
+            throw new \Exception('Le parcours n\'existe pas.');
+        }
+
+        if ($parcours->getFormation() === null) {
+            throw new \Exception('Le parcours n\'est pas lié à une formation.');
+        }
+
+        $typeDiplome = $this->typeDiplomeResolver->get($parcours->getFormation()->getTypeDiplome());
         $listeParcours = $parcoursRepository->findBy(['formation' => $parcours->getFormation()]);
         return $this->render('parcours_wizard/_step3.html.twig', [
             'parcours' => $parcours,

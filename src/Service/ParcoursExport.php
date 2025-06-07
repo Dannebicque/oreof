@@ -165,7 +165,7 @@ class ParcoursExport {
                             ],
                             'autonomie' => $ue->heuresEctsUe->sommeUeTePres
                         ],
-                        'ects' => $ue->heuresEctsUe->sommeUeEcts,
+                        'ects' => $ue->heuresEctsUe->sommeUeEcts
                     ];
 
                     if ($ue->ue->getNatureUeEc()?->isLibre()) {

@@ -30,7 +30,6 @@ use App\Repository\ParcoursRepository;
 use App\Service\LheoXML;
 use App\Service\VersioningFormation;
 use App\Service\VersioningParcours;
-use App\TypeDiplome\TypeDiplomeRegistry;
 use App\Utils\JsonRequest;
 use DateTimeImmutable;
 use Doctrine\Common\Annotations\AnnotationReader;
@@ -240,7 +239,6 @@ class ParcoursController extends BaseController
 
     #[Route('/{id}', name: 'app_parcours_show', methods: ['GET'])]
     public function show(
-        TypeDiplomeRegistry $typeDiplomeRegistry,
         Parcours            $parcours,
         LheoXML             $lheoXML,
         VersioningParcours $versioningParcours,
@@ -255,7 +253,7 @@ class ParcoursController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());
+        $typeD = $this->typeDiplomeResolver->get($typeDiplome);
 
         $textDifferencesParcours = $versioningParcours->getDifferencesBetweenParcoursAndLastVersion($parcours);
         $textDifferencesFormation = $versioningFormation->getDifferencesBetweenFormationAndLastVersion($formation);
@@ -284,7 +282,6 @@ class ParcoursController extends BaseController
      */
     #[Route('/{id}/edit', name: 'app_parcours_edit', methods: ['GET', 'POST'])]
     public function edit(
-        TypeDiplomeRegistry $typeDiplomeRegistry,
         Request             $request,
         ParcoursState       $parcoursState,
         Parcours            $parcour,
@@ -308,7 +305,12 @@ class ParcoursController extends BaseController
 
         $parcoursState->setParcours($parcour);
         $typeDiplome = $parcour->getFormation()?->getTypeDiplome();
-        $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());
+
+        if ($typeDiplome === null) {
+            throw $this->createNotFoundException('Type de diplôme non trouvé pour le parcours.');
+        }
+
+        $typeD = $this->typeDiplomeResolver->get($typeDiplome);
         return $this->render('parcours/edit.html.twig', [
             'dpeParcours' => $dpeParcours,
             'parcours' => $parcour,
@@ -486,10 +488,14 @@ class ParcoursController extends BaseController
     #[Route('/{parcours}/export-json-urca', name: 'app_parcours_export_json_urca')]
     public function getJsonExportUrca(
         Parcours            $parcours,
-        TypeDiplomeRegistry $typeDiplomeRegistry,
     ): Response {
         $typeDiplome = $parcours->getFormation()?->getTypeDiplome();
-        $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());
+
+        if ($typeDiplome === null) {
+            throw $this->createNotFoundException('Type de diplôme non trouvé pour le parcours.');
+        }
+
+        $typeD = $this->typeDiplomeResolver->get($typeDiplome);
 
         $ects = $typeD->calculStructureParcours($parcours)->heuresEctsFormation->sommeFormationEcts;
 
@@ -639,7 +645,6 @@ class ParcoursController extends BaseController
         ParcoursVersioning $parcours_versioning,
         Filesystem $fileSystem,
         VersioningParcours $versioningParcours,
-        TypeDiplomeRegistry $typeDiplomeRegistry
     ): Response {
         try {
             $loadedVersion = $versioningParcours->loadParcoursFromVersion($parcours_versioning);
@@ -648,7 +653,7 @@ class ParcoursController extends BaseController
                 'parcours' => $loadedVersion['parcours'],
                 'formation' => $loadedVersion['parcours']->getFormation(),
                 'typeDiplome' => $loadedVersion['parcours']->getTypeDiplome(),
-                'typeD' => $typeDiplomeRegistry->getTypeDiplome($loadedVersion['parcours']->getTypeDiplome()->getModeleMcc()),
+                'typeD' => $this->typeDiplomeResolver->get($loadedVersion['parcours']->getTypeDiplome()),
                 'dto' => $loadedVersion['dto'],
                 'hasParcours' => $loadedVersion['parcours']->getFormation()->isHasParcours(),
                 // 'isBut' => $loadedVersion['parcours']->getTypeDiplome()->getLibelleCourt() === 'BUT',

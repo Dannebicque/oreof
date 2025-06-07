@@ -6,7 +6,6 @@ use App\DTO\StructureParcours;
 use App\Entity\Parcours;
 use App\Entity\ParcoursVersioning;
 use App\Serializer\IdEntityDenormalizer;
-use App\TypeDiplome\TypeDiplomeRegistry;
 use DateTimeImmutable;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\ORM\EntityManagerInterface;
@@ -33,12 +32,12 @@ class VersioningParcours
 
     private array $textDifferences = [];
     private Filesystem $fileSystem;
-    private TypeDiplomeRegistry $typeD;
+    private TypeDiplomeResolver $typeD;
 
     public function __construct(
         EntityManagerInterface $entityManager,
         Filesystem $fileSystem,
-        TypeDiplomeRegistry $typeD
+        TypeDiplomeResolver $typeD
     ) {
         $this->entityManager = $entityManager;
         $this->typeD = $typeD;
@@ -83,7 +82,7 @@ class VersioningParcours
             DateTimeNormalizer::FORMAT_KEY => 'Y-m-d H:i:s',
         ]);
         // DTO
-        $typeD = $this->typeD->getTypeDiplome($parcours->getFormation()?->getTypeDiplome()?->getModeleMcc());
+        $typeD = $this->typeD->get($parcours->getFormation()?->getTypeDiplome());
         $dto = $typeD->calculStructureParcours($parcours);
         $dtoJson = $this->serializer->serialize($dto, 'json', [
             AbstractObjectNormalizer::GROUPS => ['DTO_json_versioning'],
@@ -413,7 +412,7 @@ class VersioningParcours
     {
 
         // DTO
-        $typeD = $this->typeD->getTypeDiplome($parcours->getFormation()?->getTypeDiplome()?->getModeleMcc());
+        $typeD = $this->typeD->get($parcours->getFormation()?->getTypeDiplome());
         $dto = $typeD->calculStructureParcours($parcours);
         $dtoJson = $this->serializer->serialize($dto, 'json', [
             AbstractObjectNormalizer::GROUPS => ['DTO_json_versioning'],

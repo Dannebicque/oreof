@@ -11,6 +11,8 @@ namespace App\Utils;
 
 use DateTime;
 use DateTimeInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\PersistentCollection;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 use function Symfony\Component\String\u;
 use Transliterator;
@@ -120,8 +122,29 @@ abstract class Tools
         if($inputString !== null){
             $rules = "À > A; Ç > C; É > E; È > E; é > e; è > e; à > a; â > a; ô > o; ù > u; î > i; :: NFC;";
             $transliterator = Transliterator::createFromRules($rules);
-    
+
             return $transliterator->transliterate($inputString);
         }
+    }
+
+    public static function isEmptyArrayOrCollection(array|ArrayCollection|null|PersistentCollection $array): bool
+    {
+        if ($array === null) {
+            return true;
+        }
+
+        if (is_array($array)) {
+            return empty($array) || count($array) === 0;
+        }
+
+        if ($array instanceof ArrayCollection) {
+            return $array->count() === 0;
+        }
+
+        if ($array instanceof PersistentCollection) {
+            return $array->count() === 0;
+        }
+
+        return false;
     }
 }

@@ -38,7 +38,6 @@ use App\Repository\TypeDiplomeRepository;
 use App\Repository\UserCentreRepository;
 use App\Service\VersioningFormation;
 use App\Service\VersioningParcours;
-use App\TypeDiplome\TypeDiplomeRegistry;
 use App\Utils\JsonRequest;
 use DateTime;
 use DateTimeImmutable;
@@ -362,7 +361,6 @@ class FormationController extends BaseController
      */
     #[Route('/{slug}', name: 'app_formation_show', methods: ['GET'])]
     public function show(
-        TypeDiplomeRegistry     $typeDiplomeRegistry,
         Formation               $formation,
         VersioningParcours $versioningParcours,
         VersioningFormation $versioningFormation
@@ -373,7 +371,7 @@ class FormationController extends BaseController
             throw new \Exception('Type de diplôme non trouvé');
         }
 
-        $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());
+        $typeD = $this->typeDiplomeResolver->get($typeDiplome);
         $hasLastVersion = false;
         /**
          * VERSIONING PARCOURS PAR DÉFAUT
@@ -411,7 +409,6 @@ class FormationController extends BaseController
         FormationState      $formationState,
         Request             $request,
         Formation           $formation,
-        TypeDiplomeRegistry $typeDiplomeRegistry
     ): Response {
 
         if (!$this->isGranted('CAN_FORMATION_EDIT_MY', $formation)) {
@@ -425,7 +422,7 @@ class FormationController extends BaseController
         }
 
         $formationState->setFormation($formation);
-        $typeD = $typeDiplomeRegistry->getTypeDiplome($formation->getTypeDiplome()->getModeleMcc());
+        $typeD = $$this->typeDiplomeResolver->get($formation->getTypeDiplome());
         if ($formation->getParcours()?->first() !== false) {
             $parcoursState->setParcours($formation->getParcours()?->first());
         }
@@ -564,12 +561,11 @@ class FormationController extends BaseController
         VersioningFormation $versionFormationService,
         VersioningParcours $versionParcoursService,
         Filesystem $filesystem,
-        TypeDiplomeRegistry $typeDiplomeRegistry,
         EntityManagerInterface $entityManager
     ) {
         try {
             $formation = $versionFormationService->loadFormationFromVersion($versionFormation);
-            $typeD = $typeDiplomeRegistry->getTypeDiplome($versionFormation->getFormation()->getTypeDiplome()->getModeleMcc());
+            $typeD = $this->typeDiplomeResolver->get($versionFormation->getFormation()?->getTypeDiplome());
             $dateHeureVersion = $versionFormation->getVersionTimestamp()->format('d/m/Y à H:i');
 
             $parcoursVersionArray = [];

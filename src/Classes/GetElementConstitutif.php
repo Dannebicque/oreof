@@ -13,6 +13,7 @@ use App\Entity\ElementConstitutif;
 use App\Entity\FicheMatiere;
 use App\Entity\Parcours;
 use App\TypeDiplome\Source\TypeDiplomeInterface;
+use App\TypeDiplome\TypeDiplomeHandlerInterface;
 use Doctrine\Common\Collections\Collection;
 
 class GetElementConstitutif
@@ -86,7 +87,7 @@ class GetElementConstitutif
         return $this->elementConstitutif->getMcccs();
     }
 
-    public function getMcccsFromFicheMatiere(TypeDiplomeInterface $typeD) : array
+    public function getMcccsFromFicheMatiere(TypeDiplomeHandlerInterface $typeD): array
     {
         $isMcccImpose = $this->elementConstitutif->getFicheMatiere()?->isMcccImpose();
         // MCCC spécifiques sur EC

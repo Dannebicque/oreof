@@ -13,17 +13,16 @@ use App\Classes\GetDpeParcours;
 use App\Classes\GetHistorique;
 use App\Entity\CampagneCollecte;
 use App\Entity\Parcours;
-use App\TypeDiplome\TypeDiplomeRegistry;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 class ParcoursMcccExportController extends BaseController
 {
+
     #[Route('/parcours/mccc/export/{parcours}.{_format}', name: 'app_parcours_mccc_export')]
     public function exportMcccXlsx(
         GetHistorique $getHistorique,
-        TypeDiplomeRegistry $typeDiplomeRegistry,
         Parcours $parcours,
         string $_format = 'xlsx',
         EntityManagerInterface $entityManager
@@ -39,11 +38,7 @@ class ParcoursMcccExportController extends BaseController
             throw new \Exception('Pas de formation.');
         }
 
-        $typeDiplome = $typeDiplomeRegistry->getTypeDiplome($formation->getTypeDiplome()?->getModeleMcc());
-
-        if (null === $typeDiplome) {
-            throw new \Exception('Aucun modèle MCC n\'est défini pour ce diplôme');
-        }
+        $typeDiplome = $this->typeDiplomeResolver->get($formation->getTypeDiplome());
 
         $dpe = GetDpeParcours::getFromParcours($parcours);
 
@@ -72,7 +67,6 @@ class ParcoursMcccExportController extends BaseController
     #[Route('/parcours/mccc/export-version/{parcours}.{_format}', name: 'app_parcours_mccc_export_versionning')]
     public function exportMcccVersionXlsx(
         GetHistorique $getHistorique,
-        TypeDiplomeRegistry $typeDiplomeRegistry,
         Parcours $parcours,
         string $_format = 'xlsx'
     ) {
@@ -82,11 +76,7 @@ class ParcoursMcccExportController extends BaseController
             throw new \Exception('Pas de formation.');
         }
 
-        $typeDiplome = $typeDiplomeRegistry->getTypeDiplome($formation->getTypeDiplome()?->getModeleMcc());
-
-        if (null === $typeDiplome) {
-            throw new \Exception('Aucun modèle MCC n\'est défini pour ce diplôme');
-        }
+        $typeDiplome = $this->typeDiplomeResolver->get($formation->getTypeDiplome());
 
         //date conseil
         $dpe = GetDpeParcours::getFromParcours($parcours);
@@ -115,7 +105,6 @@ class ParcoursMcccExportController extends BaseController
     #[Route('/parcours/mccc/export-light/{parcours}.{_format}', name: 'app_parcours_mccc_export_light')]
     public function exportMcccLightXlsx(
         GetHistorique $getHistorique,
-        TypeDiplomeRegistry $typeDiplomeRegistry,
         Parcours $parcours,
         string $_format = 'xlsx'
     ) {
@@ -125,11 +114,7 @@ class ParcoursMcccExportController extends BaseController
             throw new \Exception('Pas de formation.');
         }
 
-        $typeDiplome = $typeDiplomeRegistry->getTypeDiplome($formation->getTypeDiplome()?->getModeleMcc());
-
-        if (null === $typeDiplome) {
-            throw new \Exception('Aucun modèle MCC n\'est défini pour ce diplôme');
-        }
+        $typeDiplome = $this->typeDiplomeResolver->get($formation->getTypeDiplome());
 
         $dpe = GetDpeParcours::getFromParcours($parcours);
 
@@ -159,9 +144,9 @@ class ParcoursMcccExportController extends BaseController
 
     #[Route('/parcours/mccc/export/cfvu_valid/{parcours}/{format}', name: 'app_parcours_mccc_export_cfvu_valid')]
     public function getCfvuMcccExportFromFile(
-        string $format = 'complet',
+        EntityManagerInterface $entityManager,
         Parcours $parcours,
-        EntityManagerInterface $entityManager
+        string                 $format = 'complet'
     ) {
         if(in_array($format, ['complet', 'simplifie']) === false){
             throw $this->createNotFoundException('File Type is invalid');

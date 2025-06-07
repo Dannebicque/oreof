@@ -2,8 +2,6 @@
 
 namespace App\Command;
 
-use App\Classes\CalculButStructureParcours;
-use App\Classes\CalculStructureParcours;
 use App\DTO\StructureEc;
 use App\DTO\StructureParcours;
 use App\DTO\StructureSemestre;
@@ -26,6 +24,7 @@ use App\Service\Apogee\Classes\ParametrageAnnuelCeDTO2;
 use App\Service\Apogee\Classes\TableauParametrageChargeEnseignementDTO2;
 use App\Service\Apogee\Classes\TableauTypeHeureDTO;
 use App\Service\Apogee\Classes\TypeHeureDTO;
+use App\Service\TypeDiplomeResolver;
 use DateTime;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
@@ -50,17 +49,17 @@ class ExportElpApogeeCommand extends Command
 {
 
     // Données extraites d'APOTEST
-    private static $codElpApogeeDataTest = "COD_ELP_APOGEE-TEST-20-06-2024-10_13.json";
-    private static $codLseApogeeDataTest = "COD_LSE-LISTE_APOGEE-TEST-20-06-2024-10_14.json";
+    private static string $codElpApogeeDataTest = "COD_ELP_APOGEE-TEST-20-06-2024-10_13.json";
+    private static string $codLseApogeeDataTest = "COD_LSE-LISTE_APOGEE-TEST-20-06-2024-10_14.json";
     // Données exportées depuis ORéOF
-    private static $fullLseExportDataTest = "OREOF-COD_LSE_TEST-16-04-2024_15-31-27.json";
-    private static $allParcoursCodElpExport = "OREOF-COD_ELP-ALL_PARCOURS-filtered-EXCLUDED-20-06-2024_11-25-51.json";
+    private static string $fullLseExportDataTest = "OREOF-COD_LSE_TEST-16-04-2024_15-31-27.json";
+    private static string $allParcoursCodElpExport = "OREOF-COD_ELP-ALL_PARCOURS-filtered-EXCLUDED-20-06-2024_11-25-51.json";
     // Fichier contenant les formations à exclure
-    private static $formationToExcludeFile = "INSERTION-INCLUSION-APOGEE-20062024-09_44 FR.txt";
-    private static $formationToExcludeJSON = "Formations-a-inclure-20-06-2024_10-46-58.json";
+    private static string $formationToExcludeFile = "INSERTION-INCLUSION-APOGEE-20062024-09_44 FR.txt";
+    private static string $formationToExcludeJSON = "Formations-a-inclure-20-06-2024_10-46-58.json";
     // Vérifications entre deux fichiers JSON
-    private static $oldJsonFile = "COD_ELP_APOGEE-PRODUCTION-18-04-2024-10-42.json";
-    private static $newJsonFile = "COD_ELP_APOGEE-PRODUCTION-APRES-INSERTION-18-04-2024-11-45.json";
+    private static string $oldJsonFile = "COD_ELP_APOGEE-PRODUCTION-18-04-2024-10-42.json";
+    private static string $newJsonFile = "COD_ELP_APOGEE-PRODUCTION-APRES-INSERTION-18-04-2024-11-45.json";
 
     private EntityManagerInterface $entityManager;
     private ElementConstitutifRepository $elementConstitutifRepository;
@@ -70,13 +69,15 @@ class ExportElpApogeeCommand extends Command
     private ?\SoapClient $soapClient;
 
     public static array $errorMessagesArray = [];
+    private TypeDiplomeResolver $typeDiplomeResolver;
 
     public function __construct(
         EntityManagerInterface $entityManager,
         ElementConstitutifRepository $elementConstitutifRepository,
-        UeRepository $ueRepository,
-        Filesystem $filesystem,
-        ParameterBagInterface $parameterBag
+        UeRepository           $ueRepository,
+        Filesystem             $filesystem,
+        ParameterBagInterface  $parameterBag,
+        TypeDiplomeResolver    $typeDiplomeResolver
     )
     {
         parent::__construct();
@@ -86,6 +87,7 @@ class ExportElpApogeeCommand extends Command
         $this->filesystem = $filesystem;
         $this->parameterBag = $parameterBag;
         $this->soapClient = null;
+        $this->typeDiplomeResolver = $typeDiplomeResolver;
     }
 
     protected function configure(): void
@@ -1157,14 +1159,12 @@ class ExportElpApogeeCommand extends Command
      * @param Parcours $parcours
      * @return StructureParcours DTO du parcours
      */
-    private function getDTOForParcours(Parcours $parcours){
-        if($parcours->getFormation()->getTypeDiplome()->getLibelleCourt() === "BUT"){
-            $calculStructure = new CalculButStructureParcours();
-        }
-        else {
-            $calculStructure = new CalculStructureParcours($this->entityManager, $this->elementConstitutifRepository, $this->ueRepository);
-        }
-        return $calculStructure->calcul($parcours);
+    private function getDTOForParcours(Parcours $parcours): StructureParcours
+    {
+
+        $typeD = $this->typeDiplomeResolver->get($parcours->getTypeDiplome());
+
+        return $typeD->calculStructureParcours($parcours);
     }
 
     /**

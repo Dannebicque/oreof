@@ -31,12 +31,10 @@ use App\Service\VersioningFicheMatiere;
 use App\TypeDiplome\Source\ButTypeDiplome;
 use App\TypeDiplome\Source\LicenceTypeDiplome;
 use App\TypeDiplome\Source\MeefTypeDiplome;
-use App\TypeDiplome\TypeDiplomeRegistry;
 use App\Utils\JsonRequest;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Jfcherng\Diff\DiffHelper;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -100,7 +98,6 @@ class FicheMatiereController extends BaseController
         ElementConstitutifRepository $elementConstitutifRepository,
         FicheMatiereMutualisableRepository $ficheMatiereMutualisableRepository,
         TypeDiplomeRepository $typeDiplomeRepository,
-        TypeDiplomeRegistry          $typeDiplomeRegistry,
         TypeEpreuveRepository        $typeEpreuveRepository,
         FicheMatiere                 $ficheMatiere,
         VersioningFicheMatiere       $ficheMatiereVersioningService
@@ -118,10 +115,10 @@ class FicheMatiereController extends BaseController
 
         if ($formation !== null) {
             $typeDiplome = $formation->getTypeDiplome();
-            $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());
+            $typeD = $this->typeDiplomeResolver->get($typeDiplome->getModeleMcc());
         } else {
-            $typeD = $typeDiplomeRegistry->getTypeDiplome(LicenceTypeDiplome::class); //par défaut Licence
-            $typeDiplome = $typeDiplomeRepository->find(1);
+            $typeDiplome = $typeDiplomeRepository->findOneBy(['libelle_court' => 'L']);
+            $typeD = $this->typeDiplomeResolver->get($typeDiplome); //par défaut Licence
         }
         $cssDiff = DiffHelper::getStyleSheet();
         $textDifferences = $ficheMatiereVersioningService

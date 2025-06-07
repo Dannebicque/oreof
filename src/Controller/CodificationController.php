@@ -16,7 +16,6 @@ use App\Repository\MentionRepository;
 use App\Repository\ParcoursRepository;
 use App\Repository\TypeDiplomeRepository;
 use App\Repository\VilleRepository;
-use App\TypeDiplome\TypeDiplomeRegistry;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -273,7 +272,6 @@ class CodificationController extends BaseController
     public function parcoursWizard(
         Request             $request,
         ParcoursRepository  $parcoursRepository,
-        TypeDiplomeRegistry $typeDiplomeRegistry,
         Formation           $formation
     ): Response {
         $idParcours = $request->query->get('step');
@@ -290,7 +288,7 @@ class CodificationController extends BaseController
             throw new \Exception('Type de diplôme non trouvé');
         }
 
-        $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());
+        $typeD = $this->typeDiplomeResolver->get($typeDiplome);
         $tParcours = $typeD->calculStructureParcours($parcours);
 
         return $this->render('codification/_parcours.html.twig', [

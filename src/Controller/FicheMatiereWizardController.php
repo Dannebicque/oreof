@@ -24,11 +24,8 @@ use App\Repository\FicheMatiereMutualisableRepository;
 use App\Repository\FormationRepository;
 use App\Repository\ParcoursRepository;
 use App\Repository\TypeEpreuveRepository;
-use App\TypeDiplome\TypeDiplomeRegistry;
-use App\Utils\Access;
 use App\Utils\JsonRequest;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -249,7 +246,6 @@ class FicheMatiereWizardController extends BaseController
 
     #[Route('/{ficheMatiere}/4/{type}', name: 'app_fiche_matiere_wizard_step_4', methods: ['GET'])]
     public function step4(
-        TypeDiplomeRegistry $typeDiplomeRegistry,
         TypeEpreuveRepository        $typeEpreuveRepository,
 
         FicheMatiere        $ficheMatiere,
@@ -279,7 +275,7 @@ class FicheMatiereWizardController extends BaseController
 //                return $this->render('fiche_matiere_wizard/_access_denied.html.twig');
 //            }
             $form = $this->createForm(FicheMatiereStep4Type::class, $ficheMatiere);
-            $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());
+            $typeD = $this->typeDiplomeResolver->get($typeDiplome);
 
             return $this->render('fiche_matiere_wizard/_step4But.html.twig', [
                 'mcccs' => $typeD->getMcccs($ficheMatiere),
@@ -298,8 +294,7 @@ class FicheMatiereWizardController extends BaseController
         }
 
         if ($type === 'other') {
-            $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());
-            // $form = $this->createForm(FicheMatiereStep4HdType::class, $ficheMatiere);
+            $typeD = $this->typeDiplomeResolver->get($typeDiplome);
             return $this->render('fiche_matiere_wizard/_step4Other.html.twig', [
                 'ficheMatiere' => $ficheMatiere,
                'parcours' => $parcours,
@@ -309,7 +304,6 @@ class FicheMatiereWizardController extends BaseController
                 'ecProprietaire' => $ecProprietaire,
                 'typeMccc' => $ficheMatiere->getTypeMccc(),
                 'templateForm' => $typeD !== null ? $typeD::TEMPLATE_FORM_MCCC : '',
-               // 'form' => $form->createView(),
             ]);
         }
     }

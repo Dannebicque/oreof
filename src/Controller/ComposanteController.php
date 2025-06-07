@@ -24,6 +24,7 @@ class ComposanteController extends BaseController
     #[Route('/composante/{composante<\d+>}', name: 'app_composante')]
     public function index(Composante $composante): Response
     {
+        //deprecated
         return $this->render('composante/index.html.twig', [
             'composante' => $composante,
         ]);

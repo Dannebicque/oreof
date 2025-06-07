@@ -22,7 +22,6 @@ class Kernel extends BaseKernel
 
     protected function build(ContainerBuilder $container): void
     {
-        $container->addCompilerPass(new TypeDiplomeCompilerPass(), PassConfig::TYPE_BEFORE_OPTIMIZATION, 0);
     }
 
     protected function configureContainer(ContainerConfigurator $container): void
@@ -37,6 +36,5 @@ class Kernel extends BaseKernel
             $container->import('../config/{services}.php');
         }
 
-        $container->import('../src/TypeDiplome/DependencyInjection/{services}.php');
     }
 }

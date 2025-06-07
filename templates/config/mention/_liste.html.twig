@@ -117,3 +117,24 @@
     {% endfor %}
     </tbody>
 </table>
+
+<div class="d-flex justify-content-between align-items-center mt-3">
+    <div>
+        <select class="form-select form-select-sm" {{ stimulus_action('crud', 'filter', 'change', { field: 'limit' }) }}>
+            <option value="10" {{ limit == 10 ? 'selected' : '' }}>10 par page</option>
+            <option value="20" {{ limit == 20 ? 'selected' : '' }}>20 par page</option>
+            <option value="50" {{ limit == 50 ? 'selected' : '' }}>50 par page</option>
+            <option value="100" {{ limit == 100 ? 'selected' : '' }}>100 par page</option>
+        </select>
+    </div>
+    <div>
+        {{ page }}
+        {% if total is defined %}
+            {% set nbPages = (total / limit)|round(0, 'ceil') %}
+            {% include 'communs/_pagination.html.twig' with {
+                'page': page,
+                'nbPages': nbPages
+            } %}
+        {% endif %}
+    </div>
+</div>

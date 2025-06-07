@@ -14,9 +14,9 @@ use App\Entity\CampagneCollecte;
 use App\Repository\FormationRepository;
 use App\Repository\ParcoursRepository;
 use App\Repository\TypeEpreuveRepository;
+use App\Service\TypeDiplomeResolver;
 use App\Service\VersioningParcours;
 use App\Service\VersioningStructureExtractDiff;
-use App\TypeDiplome\TypeDiplomeRegistry;
 use App\Utils\Tools;
 use Symfony\Component\HttpKernel\KernelInterface;
 
@@ -27,7 +27,7 @@ class ExportSyntheseModification
     public function __construct(
         protected ParcoursRepository $parcoursRepository,
         protected TypeEpreuveRepository $typeEpreuveRepository,
-        protected TypeDiplomeRegistry $typeDiplomeRegistry,
+        protected TypeDiplomeResolver $typeDiplomeResolver,
         protected VersioningParcours $versioningParcours,
         protected MyGotenbergPdf      $myGotenbergPdf,
         KernelInterface               $kernel,
@@ -53,7 +53,7 @@ class ExportSyntheseModification
                     if ($parc['parcours']->getParcoursOrigineCopie() === null) {
                         $dto = null;
                     } else {
-                        $typeD = $this->typeDiplomeRegistry->getTypeDiplome($form?->getTypeDiplome()?->getModeleMcc());
+                        $typeD = $this->typeDiplomeResolver->get($form?->getTypeDiplome());
                         $parco = $this->parcoursRepository->find($parc['parcours']->getId());
                         $dto = $typeD->calculStructureParcours($parco, true, false);
                         $structureDifferencesParcours = $this->versioningParcours->getStructureDifferencesBetweenParcoursAndLastVersion($parco->getParcoursOrigineCopie());

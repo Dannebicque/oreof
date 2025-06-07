@@ -12,7 +12,7 @@ namespace App\Classes\Export;
 use App\Classes\MyPDF;
 use App\Entity\CampagneCollecte;
 use App\Entity\Composante;
-use App\TypeDiplome\TypeDiplomeRegistry;
+use App\Service\TypeDiplomeResolver;
 use DateTimeInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 
@@ -29,6 +29,7 @@ class Export
     private ?Composante $composante = null;
 
     public function __construct(
+        protected TypeDiplomeResolver $typeDiplomeResolver,
         protected ExportFicheMatiere $exportFicheMatiere,
         protected ExportRegime      $exportRegime,
         protected ExportResponsable      $exportResponsable,
@@ -210,7 +211,7 @@ class Export
     {
         $this->exportMccc->exportVersion(
             $this->dir,
-            $this->typeDiplomeRegistry,
+            $this->TypeDiplomeResolver,
             $this->formations,
             $this->campagneCollecte,
         );

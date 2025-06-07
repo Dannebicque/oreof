@@ -12,14 +12,14 @@ namespace App\Classes\Export;
 use App\Entity\CampagneCollecte;
 use App\Repository\DpeParcoursRepository;
 use App\Repository\FormationRepository;
-use App\TypeDiplome\TypeDiplomeRegistry;
+use App\Service\TypeDiplomeResolver;
 use App\Utils\Tools;
 use DateTimeInterface;
 
 class ExportMccc
 {
     private string $dir;
-    private TypeDiplomeRegistry $typeDiplomeRegistry;
+    private TypeDiplomeResolver $typeDiplomeResolver;
     private array $formations;
     private CampagneCollecte $annee;
     private ?DateTimeInterface $date = null;
@@ -51,7 +51,7 @@ class ExportMccc
         foreach ($this->formations as $formationId) {
             $formation = $this->formationRepository->findOneBy(['id' => $formationId, 'anneeUniversitaire' => $this->annee->getId()]);
             if ($formation !== null && $formation->getTypeDiplome()?->getModeleMcc() !== null) {
-                $typeDiplome = $this->typeDiplomeRegistry->getTypeDiplome($formation->getTypeDiplome()?->getModeleMcc());
+                $typeDiplome = $this->typeDiplomeResolver->get($formation->getTypeDiplome());
                 if (null !== $typeDiplome) {
                     foreach ($formation->getParcours() as $parcours) {
                         if ($this->format === 'xlsx') {
@@ -116,7 +116,7 @@ class ExportMccc
             $formation = $parcours->getFormation();
 
             if ($formation !== null && $formation->getTypeDiplome()?->getModeleMcc() !== null) {
-                $typeDiplome = $this->typeDiplomeRegistry->getTypeDiplome($formation->getTypeDiplome()?->getModeleMcc());
+                $typeDiplome = $this->typeDiplomeResolver->get($formation->getTypeDiplome());
                 if (null !== $typeDiplome) {
 
                         if ($formation->isHasParcours() === true) {
@@ -158,7 +158,7 @@ class ExportMccc
 
     public function export(
         string              $dir,
-        TypeDiplomeRegistry $typeDiplomeRegistry,
+        TypeDiplomeResolver $typeDiplomeResolver,
         array               $formations,
         CampagneCollecte    $annee,
         DateTimeInterface   $date,
@@ -166,7 +166,7 @@ class ExportMccc
         bool                $isLight = false
     ): void {
         $this->dir = $dir;
-        $this->typeDiplomeRegistry = $typeDiplomeRegistry;
+        $this->typeDiplomeResolver = $typeDiplomeResolver;
         $this->formations = $formations;
         $this->annee = $annee;
         $this->date = $date;
@@ -174,10 +174,10 @@ class ExportMccc
         $this->isLight = $isLight;
     }
 
-    public function exportVersion(string $dir, TypeDiplomeRegistry $typeDiplomeRegistry, array $formations, ?CampagneCollecte $campagneCollecte)
+    public function exportVersion(string $dir, TypeDiplomeResolver $typeDiplomeResolver, array $formations, ?CampagneCollecte $campagneCollecte)
     {
         $this->dir = $dir;
-        $this->typeDiplomeRegistry = $typeDiplomeRegistry;
+        $this->typeDiplomeResolver = $typeDiplomeResolver;
         $this->formations = $formations;
         $this->annee = $campagneCollecte;
         $this->format = 'xlsx';

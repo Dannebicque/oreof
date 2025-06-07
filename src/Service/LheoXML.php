@@ -6,31 +6,19 @@ use App\Entity\Etablissement;
 use App\Entity\Parcours;
 use App\Enums\TypeParcoursEnum;
 use App\Repository\ElementConstitutifRepository;
-use App\TypeDiplome\TypeDiplomeRegistry;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
 
 class LheoXML
 {
-    private EntityManagerInterface $entityManager;
-
-    private TypeDiplomeRegistry $typeDiplomeR;
-
-    private UrlGeneratorInterface $router;
-
-    private ElementConstitutifRepository $ecRepo;
 
     public function __construct(
-        EntityManagerInterface       $entityManager,
-        TypeDiplomeRegistry          $typeDiplomeR,
-        UrlGeneratorInterface        $router,
-        ElementConstitutifRepository $ecRepo,
+        private EntityManagerInterface       $entityManager,
+        private TypeDiplomeResolver          $typeDiplomeResolver,
+        private UrlGeneratorInterface        $router,
+        private ElementConstitutifRepository $ecRepo,
     ) {
-        $this->entityManager = $entityManager;
-        $this->typeDiplomeR = $typeDiplomeR;
-        $this->router = $router;
-        $this->ecRepo = $ecRepo;
     }
 
     /**
@@ -223,8 +211,8 @@ HTML;
         }
         // Si le Parcours EST un BUT
         if ($parcours->getTypeDiplome()?->getLibelleCourt() === "BUT") {
-            $typeD = $this->typeDiplomeR->getTypeDiplome($parcours->getFormation()->getTypeDiplome()->getModeleMcc());
-            $competences = $typeD->getRefCompetences($parcours);
+            $typeD = $this->typeDiplomeResolver->get($parcours->getFormation()->getTypeDiplome());
+            $competences = $typeD->getStructureCompetences($parcours);
             if ($competences) {
                 $competencesAcquisesExtra = $competencesAcquisesExtraTitre . "<ul>";
                 foreach ($competences as $comp) {

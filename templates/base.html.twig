@@ -21,7 +21,6 @@
 <body>
 <!-- Content Container Start -->
 <div id="root">
-
     <!-- Nav Content Start -->
     <div id="nav" class="nav-container d-flex">
         <div class="nav-content d-flex">
@@ -36,11 +35,7 @@
                     <div class="logo-but">
                         <i class="fa-duotone fa-pencil-ruler" style="--fa-primary-color: var(--complementaire);
 "></i>&nbsp;{{ product_name }}
-                        {% if is_granted('ROLE_ADMIN') %} / Adm.
-                        {% else %}
-                            {% if is_granted('ROLE_SES') %} / SES.
-                            {% endif %}
-                        {% endif %}
+                        {% if is_granted('ROLE_ADMIN') %} / Adm.{% endif %}
                     </div>
                 </a>
             </div>
@@ -102,6 +97,7 @@
             <!-- Menu Start -->
             <div class="menu-container flex-grow-1">
                 <ul id="menu" class="menu">
+                    {# accessible à tous #}
                     <li>
                         <a href="{{ path('app_homepage') }}">
                             <i class="fal fa-home icon"></i>
@@ -109,172 +105,196 @@
                         </a>
                     </li>
 
-                    {% if (is_granted('CAN_ETABLISSEMENT_CONSEILLER_ALL', app.user)) and not is_granted('ROLE_ADMIN') and not is_granted('ROLE_SES') %}
+                    {# accessible à tous #}
+                    <li>
+                        <a href="#offre_formation" data-href="offre_formation">
+                            <i class="fal fa-chalkboard-user icon"></i>
+                            <span class="label">Offre de formation</span>
+                        </a>
+                        <ul id="offre_formation">
+                            <li>
+                                <a href="{{ path('app_formation_index') }}">
+                                    <span class="label">Détail des mentions/spécialités</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ path('structure_fiche_matiere_index') }}">
+                                    <span class="label">Détail des fiches EC/matière</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ path('structure_fiche_matiere_index', {type:'hd'}) }}">
+                                    <span class="label">Détails fiches EC/matières "hors diplômes"</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ path('app_mutualise_index') }}">
+                                    <span class="label">Détail des éléments mutualisés</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ path('app_export_index') }}">
+                                    <span class="label">Exports</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    {% if is_granted('ROLE_ADMIN') %}
                         <li>
-                            <a href="{{ path('app_export_cfvu') }}" data-href="exports">
-                                <i class="fal fa-chalkboard-user icon"></i>
-                                <span class="label">Exports</span>
+                            <a href="#pilotage_admin">
+                                <i class="fal fa-school icon"></i>
+                                <span class="label">
+                                    Pilotage
+                                </span>
                             </a>
-                        </li>
-                        <li>
-                            <a href="#outils_cfvu" data-href="outils_cfvu">
-                                <i class="fal fa-chalkboard-user icon"></i>
-                                <span class="label">Outils conseil</span>
-                            </a>
-                            <ul id="outils_cfvu">
+                            <ul id="pilotage_admin">
                                 <li>
-                                    <a href="{{ path('app_formation_responsable_liste') }}">
-                                        <i class="fal fa-book icon"></i>
-                                        <span class="label">Changement RF/CO-RF</span>
+                                    <a href="{{ path('structure_composante_index') }}">
+                                        <span class="label">Consulter l'offre de formation</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{{ path('app_synthese_modification_export_pdf') }}">
-                                        <i class="fal fa-book icon"></i>
-                                        <span class="label">Synthèse Modifications</span>
+                                    <a href="{{ path('app_demande_dpe') }}">
+                                        <span class="label">DPE ouverts</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ path('app_validation_index') }}">
+                                        <span class="label">Validation DPE</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ path('app_validation_index') }}">
+                                        <span class="label">Validation Fiches EC/matières</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ path('app_validation_index') }}">
+                                        <span class="label">Validation RF/co-RF</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ path('app_export_index') }}">
+                                        <span class="label">Export</span>
                                     </a>
                                 </li>
                             </ul>
                         </li>
                     {% else %}
-                        <li>
-                            <a href="#offre_formation" data-href="offre_formation">
-                                <i class="fal fa-chalkboard-user icon"></i>
-                                <span class="label">Offre de formation</span>
-                            </a>
-                            <ul id="offre_formation">
-                                <li>
-                                    <a href="{{ path('app_formation_index') }}">
-                                        <i class="fal fa-book icon"></i>
-                                        <span class="label">Détail des mentions/spécialités</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="{{ path('structure_fiche_matiere_index') }}">
-                                        <i class="fal fa-person-chalkboard icon"></i>
-                                        <span class="label">Détail des fiches EC/matière</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="{{ path('structure_fiche_matiere_index', {type:'hd'}) }}">
-                                        <i class="fal fa-person-chalkboard icon"></i>
-                                        <span class="label">Fiches EC/matière "hors diplôme"</span>
-                                    </a>
-                                </li>
-                                {% if is_granted('ROLE_ADMIN') %}
-                                    <li>
-                                        <a href="{{ path('app_mutualise_index') }}">
-                                            <i class="fal fa-share-nodes icon"></i>
-                                            <span class="label">Détail des éléments mutualisés</span>
-                                        </a>
-                                    </li>
-                                {% endif %}
-                                <li>
-                                    <a href="{{ path('app_search') }}">
-                                        <i class="fal fa-magnifying-glass icon"></i>
-                                        <span class="label">Effectuer une recherche</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        {% if (is_granted('CAN_ETABLISSEMENT_SHOW_ALL')) and not is_granted('ROLE_ADMIN') and not is_granted('ROLE_SES') %}
-                            <li>
-                                <a href="{{ path('app_export_show') }}" data-href="exports">
-                                    <i class="fal fa-chalkboard-user icon"></i>
-                                    <span class="label">Exports</span>
+                        {% if is_granted('SHOW', {route: 'app_composante_show', subject: 'composante'}) %}
+                            <li class="mega">
+                                <a href="#pilotage" data-href="pilotage">
+                                    <i class="fal fa-school icon"></i>
+                                    <span class="label">
+                                    Pilotage
+                                </span>
                                 </a>
+                                <ul id="pilotage">
+                                    {% for composante in app.user.composanteResponsableDpe %}
+                                        {% if is_granted('SHOW', {route: 'app_composante_show', subject: composante}) %}
+                                            <li>
+                                                <a href="#composante_{{ composante.id }}">
+                                                    <span class="label">{{ composante.libelle }}</span>
+                                                </a>
+                                                <ul id="composante_{{ composante.id }}">
+                                                    <li>
+                                                        <a href="{{ path('structure_composante_index') }}">
+                                                            <span class="label">Consulter l'offre de formation</span>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="{{ path('app_demande_dpe_composante', {composante:composante.id}) }}">
+                                                            <span class="label">DPE ouverts</span>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="{{ path('app_validation_composante_dpe_index', {composante:composante.id}) }}">
+                                                            <span class="label">Validation DPE</span>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="{{ path('app_validation_composante_fiche_index', {composante:composante.id}) }}">
+                                                            <span class="label">Validation Fiches EC/matières</span>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="{{ path('app_validation_composante_change_rf_index', {composante:composante.id}) }}">
+                                                            <span class="label">Validation RF/co-RF</span>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="{{ path('app_export_composante_index', {composante:composante.id}) }}">
+                                                            <span class="label">Export</span>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="{{ path('app_plaquette', {composante:composante.id}) }}">
+                                                            <span class="label">Communication</span>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                        {% endif %}
+                                    {% endfor %}
+                                </ul>
                             </li>
                         {% endif %}
                     {% endif %}
 
-                    {% if (is_granted('CAN_ETABLISSEMENT_SHOW_ALL')) and not is_granted('ROLE_ADMIN') and not is_granted('ROLE_SES') %}
+                    {% if is_granted('EDIT', {route: 'app_etablissement_manage', subject: 'etablissement'}) or is_granted('ROLE_ADMIN') %}
                         <li>
-                            <a href="#offre_formation" data-href="offre_formation">
+                            <a href="#conseils" data-href="conseils">
                                 <i class="fal fa-chalkboard-user icon"></i>
-                                <span class="label">Offre de formation</span>
+                                <span class="label">Conseils</span>
                             </a>
-                            <ul id="offre_formation">
+                            <ul id="conseils">
                                 <li>
-                                    <a href="{{ path('app_formation_index') }}">
-                                        <i class="fal fa-book icon"></i>
-                                        <span class="label">Détail des mentions/spécialités</span>
+                                    <a href="{{ path('app_formation_responsable_liste') }}">
+                                        <span class="label">Changement RF/co RF</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{{ path('structure_fiche_matiere_index') }}">
-                                        <i class="fal fa-person-chalkboard icon"></i>
-                                        <span class="label">Détail des fiches EC/matière</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="{{ path('structure_fiche_matiere_index', {type:'hd'}) }}">
-                                        <i class="fal fa-person-chalkboard icon"></i>
-                                        <span class="label">Fiches EC/matière "hors diplôme"</span>
-                                    </a>
-                                </li>
-                                {% if is_granted('ROLE_ADMIN') %}
-                                    <li>
-                                        <a href="{{ path('app_mutualise_index') }}">
-                                            <i class="fal fa-share-nodes icon"></i>
-                                            <span class="label">Détail des éléments mutualisés</span>
-                                        </a>
-                                    </li>
-                                {% endif %}
-                                <li>
-                                    <a href="{{ path('app_search') }}">
-                                        <i class="fal fa-magnifying-glass icon"></i>
-                                        <span class="label">Effectuer une recherche</span>
+                                    <a href="{{ path('app_synthese_modification_export_pdf') }}">
+                                        <span class="label">Synthèse des modifications</span>
                                     </a>
                                 </li>
                             </ul>
                         </li>
                     {% endif %}
-                    {% if is_granted('ROLE_SES') or is_granted('CAN_ETABLISSEMENT_SCOLARITE_ALL') %}
+
+                    {% if is_granted('EDIT', {route: 'app_user_show', subject: 'composante'}) or is_granted('ROLE_ADMIN') %}
                         <li>
-                            <a href="#gestion_offre_formation" data-href="gestion_offre_formation">
-                                <i class="fal fa-school icon"></i>
-                                <span class="label">Gestion de l'offre</span>
+                            <a href="#droits" data-href="droits">
+                                <i class="fal fa-chalkboard-user icon"></i>
+                                <span class="label">Utilisateurs et droits</span>
                             </a>
-                            <ul id="gestion_offre_formation">
+                            <ul id="droits">
                                 <li>
-                                    <a href="{{ path('structure_composante_index') }}">
-                                        <i class="fal fa-book icon"></i>
-                                        <span class="label">Consulter l'offre de formation</span>
+                                    <a href="{{ path('app_user_attente') }}">
+                                        <span class="label">Utilisateurs en attente</span>
                                     </a>
                                 </li>
-
                                 <li>
-                                    <a href="{{ path('app_export_index') }}">
-                                        <i class="fal fa-download icon"></i>
-                                        <span class="label">Export de fichier</span>
+                                    <a href="{{ path('app_user_profil_index') }}">
+                                        <span class="label">Utilisateurs : Affectation des profils</span>
                                     </a>
                                 </li>
-                                {% if is_granted('ROLE_SES') %}
+                                {% if is_granted('ROLE_ADMIN') %}
                                     <li>
-                                        <a href="{{ path('app_demande_dpe') }}">
-                                            <i class="fal fa-person-chalkboard icon"></i>
-                                            <span class="label">DPE ouverts</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ path('app_validation_index') }}">
-                                            <i class="fal fa-person-chalkboard icon"></i>
-                                            <span class="label">Validations</span>
-                                        </a>
-                                    </li>
-                                {% endif %}
-                                {% if is_granted('ROLE_SES') %}
-                                    <li>
-                                        <a href="{{ path('app_codification_liste') }}">
-                                            <i class="fal fa-file-binary icon"></i>
-                                            <span class="label">Codification</span>
+                                        <a href="{{ path('app_user_index') }}">
+                                            <span class="label">Affectation des profils (ancienne page)</span>
                                         </a>
                                     </li>
 
                                     <li>
-                                        <a href="{{ path('app_synthese_modification_export_pdf') }}">
-                                            <i class="fal fa-book icon"></i>
-                                            <span class="label">Synthèse Modifications</span>
+                                        <a href="{{ path('app_user_repertoire') }}">
+                                            <span class="label">Répertoire des contacts</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ path('app_administration_profils_index') }}">
+                                            <span class="label">Gestion des profils</span>
                                         </a>
                                     </li>
                                 {% endif %}
@@ -291,12 +311,12 @@
                             <ul id="administration">
                                 <li>
                                     <a href="#structure">
-                                        <span class="label">Structure de l'établissement</span>
+                                        <span class="label">Configuration établissement</span>
                                     </a>
                                     <ul id="structure">
                                         <li>
-                                            <a href="{{ path('app_campagne_collecte_index') }}">
-                                                <span class="label">Campagne Collecte</span>
+                                            <a href="{{ path('app_etablissement_index') }}">
+                                                <span class="label">Etablissement</span>
                                             </a>
                                         </li>
                                         <li>
@@ -309,31 +329,14 @@
                                                 <span class="label">Villes</span>
                                             </a>
                                         </li>
-                                        <li>
-                                            <a href="{{ path('app_etablissement_index') }}">
-                                                <span class="label">Etablissement</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="{{ path('app_actualite_index') }}">
-                                                <span class="label">Actualités ORéOF</span>
-                                            </a>
-                                        </li>
-                                        {% if is_granted('ROLE_ADMIN') %}
-                                            <li>
-                                                <a href="{{ path('app_composante_list_for_cfvu') }}">
-                                                    <span class="label">
-                                                        Synthèse par composante
-                                                    </span>
-                                                </a>
-                                            </li>
-                                        {% endif %}
+
+
                                     </ul>
                                 </li>
 
                                 <li>
                                     <a href="#struct_formation">
-                                        <span class="label">Structure de formation</span>
+                                        <span class="label">Configuration Offre de formation</span>
                                     </a>
                                     <ul id="struct_formation">
                                         <li>
@@ -344,6 +347,11 @@
                                         <li>
                                             <a href="{{ path('app_domaine_index') }}">
                                                 <span class="label">Domaines</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ path('app_type_diplome_index') }}">
+                                                <span class="label">Type de diplôme</span>
                                             </a>
                                         </li>
                                         <li>
@@ -367,27 +375,15 @@
                                                 <span class="label">Type d'épreuve</span>
                                             </a>
                                         </li>
-                                    </ul>
-                                </li>
+                                        <li>
+                                            <a href="{{ path('app_langue_index') }}">
+                                                <span class="label">Langues</span>
+                                            </a>
+                                        </li>
 
-                                <li>
-                                    <a href="#utilisateurs">
-                                        <span class="label">Utilisateurs et droits</span>
-                                    </a>
-                                    <ul id="utilisateurs">
                                         <li>
-                                            <a href="{{ path('app_user_attente') }}">
-                                                <span class="label">Utilisateurs en attente</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="{{ path('app_user_index') }}">
-                                                <span class="label">Utilisateurs</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="{{ path('app_droits_access') }}">
-                                                <span class="label">Droits d'accès et rôles</span>
+                                            <a href="{{ path('app_rythme_formation_index') }}">
+                                                <span class="label">Rythmes de formation</span>
                                             </a>
                                         </li>
                                     </ul>
@@ -395,12 +391,12 @@
 
                                 <li>
                                     <a href="#configuration">
-                                        <span class="label">Configuration</span>
+                                        <span class="label">Configuration générale</span>
                                     </a>
                                     <ul id="configuration">
                                         <li>
-                                            <a href="{{ path('app_notication_liste') }}">
-                                                <span class="label">Notifications et mails</span>
+                                            <a href="{{ path('app_campagne_collecte_index') }}">
+                                                <span class="label">Campagne Collecte</span>
                                             </a>
                                         </li>
                                         <li>
@@ -409,171 +405,18 @@
                                             </a>
                                         </li>
                                         <li>
-                                            <a href="{{ path('app_langue_index') }}">
-                                                <span class="label">Langues</span>
+                                            <a href="{{ path('app_actualite_index') }}">
+                                                <span class="label">Actualités ORéOF</span>
                                             </a>
                                         </li>
                                         <li>
-                                            <a href="{{ path('app_type_diplome_index') }}">
-                                                <span class="label">Type de diplôme</span>
+                                            <a href="{{ path('app_notication_liste') }}">
+                                                <span class="label">Notifications et mails</span>
                                             </a>
                                         </li>
-                                        <li>
-                                            <a href="{{ path('app_rythme_formation_index') }}">
-                                                <span class="label">Rythmes de formation</span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </li>
-                    {% elseif is_granted('ROLE_SES') %}
-                        <li class="mega">
-                            <a href="#administration" data-href="administration">
-                                <i class="fal fa-wrench icon"></i>
-                                <span class="label">Administration</span>
-                            </a>
-                            <ul id="administration">
-                                <li>
-                                    <a href="#structure">
-                                        <span class="label">Structure de l'établissement</span>
-                                    </a>
-                                    <ul id="structure">
-                                        <li>
-                                            <a href="{{ path('app_composante_index') }}">
-                                                <span class="label">Composantes</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="{{ path('app_ville_index') }}">
-                                                <span class="label">Villes</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="{{ path('app_etablissement_index') }}">
-                                                <span class="label">Etablissement</span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    <a href="#struct_formation">
-                                        <span class="label">Structure de formation</span>
-                                    </a>
-                                    <ul id="struct_formation">
-                                        <li>
-                                            <a href="{{ path('app_mention_index') }}">
-                                                <span class="label">Mentions</span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </li>
 
-                                <li>
-                                    <a href="#utilisateurs">
-                                        <span class="label">Utilisateurs et droits</span>
-                                    </a>
-                                    <ul id="utilisateurs">
-                                        <li>
-                                            <a href="{{ path('app_user_attente') }}">
-                                                <span class="label">Utilisateurs en attente</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="{{ path('app_user_index') }}">
-                                                <span class="label">Utilisateurs</span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </li>
-                    {% elseif is_granted('CAN_COMPOSANTE_MANAGE_MY', app.user) or is_granted('CAN_COMPOSANTE_SCOLARITE_MY', app.user) %}
-                        <li class="mega">
-                            <a href="#administration" data-href="administration">
-                                <i class="fal fa-wrench icon"></i>
-                                <span class="label">Mes composantes</span>
-                            </a>
-                            <ul id="administration">
-                                <li>
-                                    <a href="#utilisateurs">
-                                        <span class="label">Utilisateurs et droits</span>
-                                    </a>
-                                    <ul id="utilisateurs">
-                                        <li>
-                                            <a href="{{ path('app_user_attente') }}">
-                                                <span class="label">Utilisateurs en attente</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="{{ path('app_user_index') }}">
-                                                <span class="label">Utilisateurs</span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    <a href="#scolarite">
-                                        <span class="label">Scolarité</span>
-                                    </a>
-                                    {% if is_granted('ROLE_ADMIN') %}
-                                        <ul id="scolarite">
-                                            <li>
-                                                <a href="{{ path('app_codification_liste') }}">
-                                                    <span class="label">Codification</span>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    {% endif %}
-                                </li>
-                                {% for composante in app.user.composanteResponsableDpe %}
-                                    {% if is_granted('CAN_COMPOSANTE_VALIDATE_MY', composante) %}
-                                        <li>
-                                            <a href="#utilisateurs">
-                                                <span class="label">{{ composante.libelle }}</span>
-                                            </a>
-                                            <ul id="utilisateurs">
-                                                <li>
-                                                    <a href="{{ path('app_composante', {composante:composante.id}) }}">
-                                                        <span class="label">Détails de la composante</span>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="{{ path('app_demande_dpe_composante', {composante:composante.id}) }}">
-                                                        <i class="fal fa-person-chalkboard icon"></i>
-                                                        <span class="label">DPE ouverts</span>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="{{ path('app_validation_composante_index', {composante:composante.id}) }}">
-                                                        <span class="label">Processus validation</span>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="{{ path('app_export_composante_index', {composante:composante.id}) }}">
-                                                        <span class="label">Export</span>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </li>
-                                    {% endif %}
-                                {% endfor %}
-                            </ul>
-                        </li>
-                    {% endif %}
 
-                    {% if is_granted('CAN_COMPOSANTE_SHOW_MY', app.user) %}
-                        <li>
-                            <a href="#gestion_offre_formation" data-href="gestion_offre_formation">
-                                <i class="fal fa-book icon"></i>
-                                <span class="label">Communication</span>
-                            </a>
-                            <ul id="gestion_offre_formation">
-                                <li>
-                                    <a href="{{ path('app_plaquette') }}">
-                                        <i class="fal fa-random icon"></i>
-                                        <span class="label">Configurer les plaquettes</span>
-                                    </a>
+                                    </ul>
                                 </li>
                             </ul>
                         </li>
@@ -750,11 +593,6 @@
                                 <a href="https://github.com/Dannebicque/oreof" target="_blank"
                                    class="btn-link"><i class="text-primary icon-14
                                     fa-brands fa-github"></i></a>
-                            </li>
-                            <li class="breadcrumb-item mb-0 text-medium">
-                                <a href="https://twitter.com/davidannebicque" target="_blank" class="btn-link">
-                                    <i class="text-primary icon-14 fa-brands fa-twitter"></i>
-                                </a>
                             </li>
                         </ul>
                     </div>
