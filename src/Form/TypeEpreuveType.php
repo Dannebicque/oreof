@@ -32,6 +32,9 @@ class TypeEpreuveType extends AbstractType
             ->add('hasDuree', YesNoType::class, [
                 'label' => 'hasDuree',
             ])
+            ->add('hasJustification', YesNoType::class, [
+                'label' => 'Nécessite une justification',
+            ])
             ->add('typeDiplomes', EntityType::class, [
                 'class' =>TypeDiplome::class,
                 'choice_label' => 'libelle',
