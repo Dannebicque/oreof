@@ -2,6 +2,37 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.42.0](https://github.com/Dannebicque/oreof/compare/v1.41.0...v1.42.0) (2025-06-05)
+
+
+### Features
+
+* **DemandeDpeController.php:** add admin-specific columns for parcours and mention IDs in DPE export ([57264d2](https://github.com/Dannebicque/oreof/commit/57264d20920d57c0cb3ef8f67b76b23c493ea5f5))
+* **ElementConstitutif:** add getHasQuitus method for quitus status retrieval ([f1b75f5](https://github.com/Dannebicque/oreof/commit/f1b75f5998a185cc0afd102d8eec8c61e940eaee))
+* **Export:** add export functionality for semestres ouverts ([1ca8295](https://github.com/Dannebicque/oreof/commit/1ca82954667c94914cc276d30110f3e7c46478a9))
+* **Export:** add export functionality for semestres ouverts ([a8d6afe](https://github.com/Dannebicque/oreof/commit/a8d6afeff24c1c581ae3acb12732f46a161860c1))
+* **Export:** add export functionality for semestres ouverts ([b58cc63](https://github.com/Dannebicque/oreof/commit/b58cc632a79383d857b07921c580f047178c4df2))
+* **Export:** add export functionality for semestres ouverts ([4d14ffa](https://github.com/Dannebicque/oreof/commit/4d14ffa7c2ab7d438e893255d5890235c36f5e14))
+* **Export:** add mention and parcours IDs to semestres export ([4c75de3](https://github.com/Dannebicque/oreof/commit/4c75de37de81b349bd49f221a42dc9984541c72e))
+* **Export:** add mention and parcours IDs to semestres export ([91b0958](https://github.com/Dannebicque/oreof/commit/91b0958cda8cc1cbf59b2a0b2c717cdb9c8b4f8e))
+* **Licence:** prepend 'QUITUS' to texte if applicable ([fea3f01](https://github.com/Dannebicque/oreof/commit/fea3f01710051f9b73fbb250528782298e486127))
+* **Licence:** prepend 'QUITUS' to texte if applicable ([0cb158a](https://github.com/Dannebicque/oreof/commit/0cb158a2aade9aebdefdc2be0f4d2ded93f17057))
+* **Licence:** prepend 'QUITUS' to texte if applicable ([3f62ee0](https://github.com/Dannebicque/oreof/commit/3f62ee09ab2cef0b5504a4ca1d163bc8de02d728))
+* **Licence:** prepend 'QUITUS' to texte if applicable ([6a0c38f](https://github.com/Dannebicque/oreof/commit/6a0c38ff89773de727f955f3a9b8e9f3bded0005))
+* **Licence:** prepend 'QUITUS' to texte if applicable ([b2004b5](https://github.com/Dannebicque/oreof/commit/b2004b5e7cc431ebe312bd1f2b8921fb01e4e0b2))
+* **SyntheseModificationController.php:** add validation checks for parcours before adding to formations ([2fb3a50](https://github.com/Dannebicque/oreof/commit/2fb3a50c1c4849905879e4d6c69483b2476c56e7))
+
+
+### Bug Fixes
+
+* **ExportSyntheseModification.php, SyntheseModificationController.php:** add modification check for formations and update demand array accordingly ([c8a80f4](https://github.com/Dannebicque/oreof/commit/c8a80f46220f4d7556d681d7496b82343b5225c6))
+* **ExportSyntheseModification.php, SyntheseModificationController.php:** add modification check for formations and update demand array accordingly ([1f13bcb](https://github.com/Dannebicque/oreof/commit/1f13bcb39add24bc23e5ae450f7b8ddd28a674dd))
+* **ExportSyntheseModification.php, SyntheseModificationController.php:** add modification check for formations and update demand array accordingly ([f8af902](https://github.com/Dannebicque/oreof/commit/f8af90236a192e337b051ecbb8ac24595f6c918c))
+* **ExportSyntheseModification.php, SyntheseModificationController.php:** add modification check for formations and update demand array accordingly ([657d222](https://github.com/Dannebicque/oreof/commit/657d2222744c0cd8012609372d97605b406160ca))
+* **ExportSyntheseModification.php:** retrieve parcours entity and add dpe to the data array ([145c04b](https://github.com/Dannebicque/oreof/commit/145c04b1be00ccb8e9432648c3fa5030dd06f18e))
+* **new.html.twig:** restructure layout and add breadcrumb and back button ([1509314](https://github.com/Dannebicque/oreof/commit/1509314189d4a84db3c25a0217ed1f4fc9d3fb58))
+* **valide_conseil_composante.html.twig:** correct spelling of 'laisser passer' to 'laissez-passer' ([2ce78f7](https://github.com/Dannebicque/oreof/commit/2ce78f73e51f6173c645ce551c06b9fb56082d19))
+
 ## [1.41.0](https://github.com/Dannebicque/oreof/compare/v1.40.0...v1.41.0) (2025-05-26)
 
 
