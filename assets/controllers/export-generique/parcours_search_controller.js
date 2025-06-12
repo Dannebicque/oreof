@@ -81,13 +81,13 @@ export default class extends Controller {
             if(type === 'pdf'){
                 url = this.downloadPdfUrlValue + '?'
                     + postParcours + '&' + postFields
-                    '&campagneCollecte=' + this.campagneCollecteValue;
+                    + '&campagneCollecte=' + this.campagneCollecteValue;
                 targetNewTab = '_blank';
             }
             else if (type === 'xlsx'){
                 url = this.downloadXlsxUrlValue + '?'
                     + postParcours + '&' + postFields
-                    '&campagneCollecte=' + this.campagneCollecteValue;
+                    + '&campagneCollecte=' + this.campagneCollecteValue;
                 targetNewTab = '_self';
             }
 
