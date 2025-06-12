@@ -600,7 +600,10 @@ class ParcoursExportController extends AbstractController
                                 return array_merge(...array_map(
                                     function ($fieldBlock) {
                                         if($fieldBlock['type'] ?? 'none' === 'list_enum'){
-                                            return [implode(" - ", array_map(fn($value) => $value->value, $fieldBlock['content']))];
+                                            return [implode(" - ", array_map(fn($value) => $value->value ?? $value, $fieldBlock['content']))];
+                                        }
+                                        elseif ($fieldBlock['type'] ?? 'none' === 'list') {
+                                            return [implode(" | ", $fieldBlock['content'])];
                                         }
                                         else {
                                             return [$fieldBlock['content']];
@@ -621,7 +624,13 @@ class ParcoursExportController extends AbstractController
             $dataExcel[$index] = array_merge($dataParcours);
         }
 
-        $columnsIndex = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V'];
+        $columnsIndex = [
+            'A', 'B', 'C', 'D', 'E', 'F', 'G', 
+            'H', 'I', 'J', 'K', 'L', 'M', 'N',
+            'O', 'P', 'Q', 'R', 'S', 'T', 'U',
+            'V', 'W', 'X', 'Y', 'Z', 'AA', 'AB',
+            'AC', 'AD', 'AE', 'AF', 'AG', 'AH', 'AI'
+        ];
 
         $spreadSheet = new Spreadsheet();
         $activeWS = $spreadSheet->getActiveSheet();
