@@ -50,6 +50,17 @@
                                 </li>
                             {% endfor %}
                         </ul>
+                    {% elseif elt.type ?? 'none' == 'list' %}
+                        <h4>
+                            {{ elt.libelle }}
+                        </h4>
+                        <ul>
+                            {% for listElt in elt.content %}
+                                <li>
+                                    {{ listElt }}
+                                </li>
+                            {% endfor %}
+                        </ul>
                     {% else %}
                         <h4>
                             {{ elt.libelle }}

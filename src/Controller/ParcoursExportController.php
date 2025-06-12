@@ -781,20 +781,69 @@ class ParcoursExportController extends AbstractController
                     ]
                 ];
                 break;
+            case 'identiteFormation':
+                return [
+                    'type' => 'full_block',
+                    'libelle' => 'Identité de la formation',
+                    'value' => [
+                        [
+                            'libelle' => 'Id formation',
+                            'content' => "#{$parcours?->getFormation()?->getId()}"
+                        ],
+                        [
+                            'libelle' => 'Type de diplôme',
+                            'content' => $parcours?->getFormation()?->getTypeDiplome()?->getLibelle()
+                        ],
+                        [
+                            'libelle' => 'Mention / Spécialité',
+                            'content' => $parcours?->getFormation()?->getDisplay()
+                        ],
+                        [
+                            'libelle' => 'Parcours',
+                            'content' => array_map(
+                                fn($p) => $p->getLibelle()
+                                , $parcours?->getFormation()?->getParcours()->toArray() ?? []
+                            ),
+                            'type' => 'list'
+                        ],
+                        [
+                            'libelle' => 'Domaine',
+                            'content' => $parcours?->getFormation()?->getDomaine()?->getLibelle()
+                        ],
+                        [
+                            'libelle' => 'Composante porteuse',
+                            'content' => $parcours?->getFormation()?->getComposantePorteuse()?->getLibelle()
+                        ],
+                        [
+                            'libelle' => 'Inscription au RNCP',
+                            'content' => $parcours?->getFormation()->isInRncp() ? $parcours?->getFormation()?->getCodeRNCP() : 'Non inscrit'
+                        ],
+                        [
+                            'libelle' => "Niveau à l'entrée de la formation",
+                            'content' => $parcours?->getFormation()?->getNiveauEntree()?->libelle()
+                        ],
+                        [
+                            'libelle' => "Niveau à la sortie de la formation",
+                            'content' => $parcours?->getFormation()?->getNiveauSortie()?->libelle()
+                        ],
+                    ]
+                ];
+                break;
         }
     }
 
     private function getFieldOrderForExportGenerique(){
         return [
-            'respFormation' => 1,
-            'respParcours' => 2,
-            'objectifsFormation' => 3,
-            'objectifsParcours' => 4,
-            'resultatsAttendusParcours' => 5,
-            'competencesAcquises' => 6,
-            'poursuiteEtudes' => 7,
-            'debouchesParcours' => 8,
-            'localisationParcours' => 9,
+            'identiteFormation' => 1,
+            'respFormation' => 2,
+            'respParcours' => 3,
+            'objectifsFormation' => 4,
+            'objectifsParcours' => 5,
+            'resultatsAttendusParcours' => 6,
+            'competencesAcquises' => 7,
+            'poursuiteEtudes' => 8,
+            'debouchesParcours' => 9,
+            'localisationParcours' => 10,
         ];
     }
 }
