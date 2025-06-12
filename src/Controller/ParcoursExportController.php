@@ -560,6 +560,12 @@ class ParcoursExportController extends AbstractController
                 elseif($this->mapParcoursExportWithValues($field, null)['type'] === 'nested_list'){
                     return [$this->mapParcoursExportWithValues($field, null)['libelle']];
                 }
+                elseif($this->mapParcoursExportWithValues($field, null)['type'] === 'full_block'){
+                    return array_map(
+                        fn($fieldBlock) => $fieldBlock['libelle']
+                        , $this->mapParcoursExportWithValues($field, null)['value']
+                    );
+                }
             }
             , $fieldValueArray
         );
@@ -590,6 +596,19 @@ class ParcoursExportController extends AbstractController
                                 $blocsIntoString = implode(' - ', $blocsIntoString);
                                 return [$blocsIntoString];
                             }
+                            elseif ($this->mapParcoursExportWithValues($field, $parcours)['type'] === 'full_block') {
+                                return array_merge(...array_map(
+                                    function ($fieldBlock) {
+                                        if($fieldBlock['type'] ?? 'none' === 'list_enum'){
+                                            return [implode(" - ", array_map(fn($value) => $value->value, $fieldBlock['content']))];
+                                        }
+                                        else {
+                                            return [$fieldBlock['content']];
+                                        }
+                                    }
+                                    , $this->mapParcoursExportWithValues($field, $parcours, 'xlsx')['value']
+                                ));
+                            }
 
                         }
                         , $fieldValueArray
@@ -602,7 +621,7 @@ class ParcoursExportController extends AbstractController
             $dataExcel[$index] = array_merge($dataParcours);
         }
 
-        $columnsIndex = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P'];
+        $columnsIndex = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V'];
 
         $spreadSheet = new Spreadsheet();
         $activeWS = $spreadSheet->getActiveSheet();
@@ -634,7 +653,7 @@ class ParcoursExportController extends AbstractController
         );
     }
 
-    private function mapParcoursExportWithValues(string $fieldValue, ?Parcours $parcours){
+    private function mapParcoursExportWithValues(string $fieldValue, ?Parcours $parcours, string $exportType = 'pdf'){
         switch($fieldValue){
             case 'respParcours':
                 return [
@@ -717,6 +736,51 @@ class ParcoursExportController extends AbstractController
                     'value' => $parcours?->getDebouches()
                 ];
                 break;
+            case 'localisationParcours':
+                return [
+                    'type' => 'full_block',
+                    'libelle' => 'Localisation du parcours',
+                    'value' => [
+                        [
+                            'libelle' => "Localisation du parcours",
+                            'content' => $parcours?->getLocalisation()?->getLibelle()
+                        ],
+                        [
+                            'libelle' => "Régime(s) d'inscription",
+                            'content' => $parcours?->getRegimeInscription() ?? [],
+                            'type' => 'list_enum'
+                        ],
+                        [
+                            'libelle' => "Modalités de l'alternance",
+                            'content' => $parcours?->getModalitesAlternance() ?? "Pas d'alternance"
+                        ],
+                        [
+                            'libelle' => "Composante d'inscription",
+                            'content' => $parcours?->getComposanteInscription()?->getLibelle()
+                        ],
+                        [
+                            'libelle' => "Adresse",
+                            'content' => $parcours?->getComposanteInscription()?->getAdresse()?->display()
+                        ],
+                        [
+                            'libelle' => "Téléphone",
+                            'content' => $parcours?->getComposanteInscription()?->getTelStandard()
+                        ],
+                        [
+                            'libelle' => "Email",
+                            'content' => $exportType === 'pdf' 
+                                ? "<a href=\"mailto:{$parcours?->getComposanteInscription()?->getMailContact()}\">{$parcours?->getComposanteInscription()?->getMailContact()}</a>"
+                                : $parcours?->getComposanteInscription()?->getMailContact()
+                        ],
+                        [
+                            'libelle' => "Site web",
+                            'content' => $exportType === 'pdf' 
+                                ? "<a href=\"{$parcours?->getComposanteInscription()?->getUrlSite()}\">{$parcours?->getComposanteInscription()?->getUrlSite()}</a>"
+                                : $parcours?->getComposanteInscription()?->getUrlSite()
+                        ],
+                    ]
+                ];
+                break;
         }
     }
 
@@ -730,6 +794,7 @@ class ParcoursExportController extends AbstractController
             'competencesAcquises' => 6,
             'poursuiteEtudes' => 7,
             'debouchesParcours' => 8,
+            'localisationParcours' => 9,
         ];
     }
 }

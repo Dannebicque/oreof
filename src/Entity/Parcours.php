@@ -647,7 +647,7 @@ class Parcours
         }
 
         $t = [];
-        foreach ($this->regimeInscription as $value) {
+        foreach ($this->regimeInscription ?? [] as $value) {
             if ($value instanceof RegimeInscriptionEnum) {
                 $t[] = $value;
             } else {

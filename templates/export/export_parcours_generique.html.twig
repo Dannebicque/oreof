@@ -2,10 +2,10 @@
 
 {% block content %}
     {% for p in parcoursData %}
-        <h3>{{ p.libelleLong }}</h3>
+        <h1>{{ p.libelleLong }}</h1>
         {% for v in p.valueExport %}
             {% if v.type == 'longtext' %}
-                <h5>{{ v.libelle }}</h5>
+                <h3>{{ v.libelle }}</h3>
                 <div class="col-12">
                     {{ v.value|raw }}
                 </div>
@@ -21,7 +21,7 @@
                     {% endfor %}
                 </ul>
             {% elseif v.type == 'nested_list' %}
-                <h4>{{ v.libelle }}</h4>
+                <h3>{{ v.libelle }}</h3>
                 <ul>
                     {% for elt in v.value %}
                         <li>
@@ -36,7 +36,31 @@
                         </li>
                     {% endfor %}
                 </ul>
+            {% elseif v.type == 'full_block' %}
+                <h3>{{ v.libelle }}</h3>
+                {% for elt in v.value %}
+                    {% if elt.type ?? 'none' == 'list_enum' %}
+                        <h4>
+                            {{ elt.libelle }}
+                        </h4>
+                        <ul>
+                            {% for listElement in elt.content %}
+                                <li>
+                                    {{ listElement.value }}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <h4>
+                            {{ elt.libelle }}
+                        </h4>
+                        <div class="col-12">
+                            {{ elt.content|raw }}
+                        </div>
+                    {% endif %}
+                {% endfor %}
             {% endif %}
         {% endfor %}
+    <br><br>
     {% endfor %}
 {% endblock %}
