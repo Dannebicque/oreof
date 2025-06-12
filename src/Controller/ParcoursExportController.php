@@ -703,6 +703,20 @@ class ParcoursExportController extends AbstractController
                     )
                 ];
                 break;
+            case 'poursuiteEtudes': 
+                return [
+                    'type' => 'longtext',
+                    'libelle' => "Poursuites d'études envisageables",
+                    'value' => $parcours?->getPoursuitesEtudes()
+                ];
+                break;
+            case 'debouchesParcours':
+                return [
+                    'type' => 'longtext',
+                    'libelle' => 'Débouchés',
+                    'value' => $parcours?->getDebouches()
+                ];
+                break;
         }
     }
 
@@ -714,6 +728,8 @@ class ParcoursExportController extends AbstractController
             'objectifsParcours' => 4,
             'resultatsAttendusParcours' => 5,
             'competencesAcquises' => 6,
+            'poursuiteEtudes' => 7,
+            'debouchesParcours' => 8,
         ];
     }
 }
