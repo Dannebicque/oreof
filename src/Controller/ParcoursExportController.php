@@ -547,9 +547,17 @@ class ParcoursExportController extends AbstractController
 
         $headerDeBase = ["Type de diplôme", "Intitulé de la formation", "Intitulé du parcours"];
         $headersExcel = array_map(
-            fn($f) => is_array($this->mapParcoursExportWithValues($f, null)['value'])
-            ? array_map(fn($v) => $v['libelle'], $this->mapParcoursExportWithValues($f, null)['value'])
-            : [$this->mapParcoursExportWithValues($f, null)['libelle']]
+            function($field){
+                if($this->mapParcoursExportWithValues($field, null)['type'] === 'longtext'){
+                    return [$this->mapParcoursExportWithValues($field, null)['libelle']];
+                }
+                elseif($this->mapParcoursExportWithValues($field, null)['type'] === 'list'){
+                    return array_map(fn($v) => $v['libelle'], $this->mapParcoursExportWithValues($field, null)['value']);
+                }
+                elseif($this->mapParcoursExportWithValues($field, null)['type'] === 'nested_list'){
+                    return [$this->mapParcoursExportWithValues($field, null)['libelle']];
+                }
+            }
             , $fieldValueArray
         );
 
@@ -564,10 +572,24 @@ class ParcoursExportController extends AbstractController
                 ]
                , array_merge(
                     ...array_map(
-                            fn($field) => is_array($this->mapParcoursExportWithValues($field, $parcours)['value'])
-                                ? array_map(fn($value) => $value['content'], $this->mapParcoursExportWithValues($field, $parcours)['value'])
-                                : [$this->mapParcoursExportWithValues($field, $parcours)['value']]
-                                , $fieldValueArray
+                        function($field) use ($parcours) {
+                            if($this->mapParcoursExportWithValues($field, $parcours)['type'] === 'list'){
+                                return array_map(fn($value) => $value['content'], $this->mapParcoursExportWithValues($field, $parcours)['value']);
+                            }
+                            elseif ($this->mapParcoursExportWithValues($field, $parcours)['type'] === 'longtext') {
+                                return [$this->mapParcoursExportWithValues($field, $parcours)['value']];
+                            }
+                            elseif ($this->mapParcoursExportWithValues($field, $parcours)['type'] === 'nested_list') {
+                                $blocsIntoString = array_map(function($list) {
+                                    return $list['nested_libelle'] . ' - ' . implode($list['nested_value']);
+                                }, $this->mapParcoursExportWithValues($field, $parcours)['value']);
+
+                                $blocsIntoString = implode(' - ', $blocsIntoString);
+                                return [$blocsIntoString];
+                            }
+
+                        }
+                        , $fieldValueArray
                         )
                     )   
             )
