@@ -490,7 +490,10 @@ class ParcoursExportController extends AbstractController
             ];
         }
 
-        $fileName = 'export_pdf_generique';
+        $dateNow = new DateTime();
+        $dateFormat = $dateNow->format("d-m-Y_H-i");
+
+        $fileName = "export_pdf_generique_{$dateFormat}";
 
         return $this->myPdf->render('export/export_parcours_generique.html.twig', [
             'parcoursData' => $dataStructure,
