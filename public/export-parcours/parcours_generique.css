@@ -43,6 +43,10 @@
     font-size: .95em;
 }
 
+#searchButton {
+    cursor: pointer;
+}
+
 @keyframes spin {
     0% {
         transform: rotate(0deg);
