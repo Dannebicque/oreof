@@ -616,7 +616,11 @@ class ParcoursExportController extends AbstractController
 
         $writer = new Xlsx($spreadSheet);
 
-        $filename = 'export_generique_excel';
+
+        $dateNow = new DateTime();
+        $dateFormat = $dateNow->format("d-m-Y_H-i");
+
+        $filename = "export_generique_excel_{$dateFormat}";
 
         return new StreamedResponse(
             function () use ($writer) {
