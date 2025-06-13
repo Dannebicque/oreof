@@ -2,12 +2,13 @@
 
 {% block content %}
     {% for p in parcoursData %}
+    <dl>
         <h1>{{ p.libelleLong }}</h1>
         {% for v in p.valueExport %}
             {% if v.type == 'longtext' %}
-                <h3>{{ v.libelle }}</h3>
                 <div class="col-12">
-                    {{ v.value|raw }}
+                    <dt>{{ v.libelle }}</dt>
+                    <dd>{{ v.value|raw }}</dd>
                 </div>
             {% elseif v.type == 'list' %}
                 <ul>
@@ -21,57 +22,63 @@
                     {% endfor %}
                 </ul>
             {% elseif v.type == 'nested_list' %}
-                <h3>{{ v.libelle }}</h3>
-                <ul>
-                    {% for elt in v.value %}
-                        <li>
-                            {{ elt.nested_libelle }}
-                            <ul>
-                            {% for nestV in elt.nested_value %}
-                                <li>
-                                    {{ nestV }}
-                                </li>
-                            {% endfor %}
-                            </ul>
-                        </li>
-                    {% endfor %}
-                </ul>
+                <dt>{{ v.libelle }}</dt>
+                <dd>
+                    <ul>
+                        {% for elt in v.value %}
+                            <li>
+                                {{ elt.nested_libelle }}
+                                <ul>
+                                {% for nestV in elt.nested_value %}
+                                    <li>
+                                        {{ nestV }}
+                                    </li>
+                                {% endfor %}
+                                </ul>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </dd>
             {% elseif v.type == 'full_block' %}
-                <h3>{{ v.libelle }}</h3>
+                <h2>{{ v.libelle }}</h2>
                 {% for elt in v.value %}
                     {% if elt.type ?? 'none' == 'list_enum' %}
-                        <h4>
+                        <dt>
                             {{ elt.libelle }}
-                        </h4>
-                        <ul>
-                            {% for listElement in elt.content %}
-                                <li>
-                                    {{ listElement.value }}
-                                </li>
-                            {% endfor %}
-                        </ul>
+                        </dt>
+                        <dd>
+                            <ul>
+                                {% for listElement in elt.content %}
+                                    <li>
+                                        {{ listElement.value }}
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </dd>
                     {% elseif elt.type ?? 'none' == 'list' %}
-                        <h4>
+                        <dt>
                             {{ elt.libelle }}
-                        </h4>
-                        <ul>
-                            {% for listElt in elt.content %}
-                                <li>
-                                    {{ listElt }}
-                                </li>
-                            {% endfor %}
-                        </ul>
+                        </dt>
+                        <dd>
+                            <ul>
+                                {% for listElt in elt.content %}
+                                    <li>
+                                        {{ listElt }}
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </dd>
                     {% else %}
-                        <h4>
+                        <dt>
                             {{ elt.libelle }}
-                        </h4>
+                        </dt>
                         <div class="col-12">
-                            {{ elt.content|raw }}
+                            <dd>{{ elt.content|raw }}</dd>
                         </div>
                     {% endif %}
                 {% endfor %}
             {% endif %}
         {% endfor %}
-    <br><br>
+    </dl><br><br>
     {% endfor %}
 {% endblock %}
