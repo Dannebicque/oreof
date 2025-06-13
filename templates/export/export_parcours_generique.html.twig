@@ -52,8 +52,7 @@
                     </ul>
                 </dd>
             {% elseif v.type == 'full_block' %}
-                <br>
-                <h2>{{ v.libelle }}</h2>
+                {{ v.libelle|length > 0 ? "<br><h2>#{v.libelle}</h2>"|raw : ""}}
                 <br>
                 {% for elt in v.value %}
                     {% if elt.type ?? 'none' == 'list_enum' %}

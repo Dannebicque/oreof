@@ -491,6 +491,7 @@ class ParcoursExportController extends AbstractController
                     'objectifsParcours',
                     'resultatsAttendusParcours',
                     'rythmeFormation',
+                    'organisationParcours'
                     ]
                 ) && isset($headersSectionPdf[$f]) === false){
                     $headersSectionPdf[$f] = [
@@ -876,6 +877,13 @@ class ParcoursExportController extends AbstractController
                     ]
                 ];
                 break;
+            case 'organisationParcours':
+                return [
+                    'type' => 'longtext',
+                    'libelle' => 'Organisation de la formation',
+                    'value' => $parcours?->getContenuFormation()
+                ];
+                break;
         }
     }
 
@@ -885,13 +893,14 @@ class ParcoursExportController extends AbstractController
             'respFormation' => 2,
             'respParcours' => 3,
             'objectifsFormation' => 4,
-            'objectifsParcours' => 5,
-            'resultatsAttendusParcours' => 6,
-            'rythmeFormation' => 7,
-            'competencesAcquises' => 8,
-            'poursuiteEtudes' => 9,
-            'debouchesParcours' => 10,
-            'localisationParcours' => 11,
+            'organisationParcours' => 5,
+            'objectifsParcours' => 6,
+            'resultatsAttendusParcours' => 7,
+            'rythmeFormation' => 8,
+            'localisationParcours' => 9,
+            'competencesAcquises' => 10,
+            'poursuiteEtudes' => 11,
+            'debouchesParcours' => 12,
         ];
     }
 }
