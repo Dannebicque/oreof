@@ -9,7 +9,6 @@
 
 namespace App\Controller;
 
-use App\Classes\CalculStructureParcours;
 use App\Classes\GetDpeParcours;
 use App\Classes\GetFormations;
 use App\Classes\MentionProcess;
@@ -19,14 +18,12 @@ use App\DTO\StatsFichesMatieres;
 use App\Entity\Composante;
 use App\Entity\DpeParcours;
 use App\Entity\Formation;
-use App\Entity\FormationDemande;
 use App\Entity\FormationVersioning;
 use App\Entity\Parcours;
 use App\Entity\ParcoursVersioning;
 use App\Entity\UserCentre;
 use App\Enums\TypeModificationDpeEnum;
 use App\Events\AddCentreFormationEvent;
-use App\Form\FormationDemandeType;
 use App\Form\FormationSesType;
 use App\Repository\ComposanteRepository;
 use App\Repository\DomaineRepository;
@@ -137,7 +134,6 @@ class FormationController extends BaseController
 
     #[Route('/fiches/liste', name: 'app_fiches_formation_liste', methods: ['GET'])]
     public function fichesFormation(
-        CalculStructureParcours $calculStructureParcours,
         GetFormations         $getFormations,
         MentionRepository     $mentionRepository,
         ComposanteRepository  $composanteRepository,
@@ -156,9 +152,10 @@ class FormationController extends BaseController
 
             $parcourss = $formation->getParcours();
             $stats[$formation->getId()]['stats'] = new StatsFichesMatieres();
-
+            $typeD = $this->typeDiplomeResolver->get($formation->getTypeDiplome());
             foreach ($parcourss as $parcours) {
-                $stats[$formation->getId()][$parcours->getId()] = $calculStructureParcours->calcul($parcours, false, false);
+
+                $stats[$formation->getId()][$parcours->getId()] = $typeD->calculStructureParcours($parcours, false, false);
                 $stats[$formation->getId()]['stats']->addStatsParcours(
                     $stats[$formation->getId()][$parcours->getId()]->statsFichesMatieresParcours
                 );

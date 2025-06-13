@@ -37,6 +37,11 @@ export default class extends Controller {
         }
       }
 
+      if (element.dataset.minlength && element.value.trim().length < element.dataset.minlength) {
+        valid = false
+        element.classList.add('error')
+      }
+
       // tester si un radio est coché
       if (element.type === 'radio' && element.required) {
         let radioChecked = false

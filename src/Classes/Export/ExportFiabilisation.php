@@ -9,13 +9,13 @@
 
 namespace App\Classes\Export;
 
-use App\Classes\CalculStructureParcours;
 use App\Classes\Excel\ExcelWriter;
 use App\DTO\StructureEc;
 use App\DTO\StructureUe;
 use App\Entity\SemestreParcours;
 use App\Repository\DpeParcoursRepository;
 use App\Repository\FormationRepository;
+use App\Service\TypeDiplomeResolver;
 use App\Utils\Tools;
 use DateTime;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -29,7 +29,7 @@ class ExportFiabilisation
     private array $data;
 
     public function __construct(
-        protected CalculStructureParcours $calculStructureParcours,
+        protected TypeDiplomeResolver $typeDiplomeResolver,
         protected ExcelWriter             $excelWriter,
         KernelInterface                   $kernel,
         protected FormationRepository     $formationRepository,
@@ -71,6 +71,7 @@ class ExportFiabilisation
                 $parcours = $dpeParcours->getParcours();
                 $formation = $dpeParcours->getParcours()?->getFormation();
                 if ($formation !== null && $parcours !== null) {
+                    $typeD = $this->typeDiplomeResolver->get($formation->getTypeDiplome());
                     //                    foreach ($formation->getParcours() as $parcours) {
                     $this->data[1] = $formation->getComposantePorteuse()?->getLibelle();
                     $this->data[2] = $formation->getTypeDiplome()?->getLibelle();
@@ -82,7 +83,7 @@ class ExportFiabilisation
                     }
 
                     //récuération de la structure et des EC
-                    $dto = $this->calculStructureParcours->calcul($parcours);
+                    $dto = $typeD->calculStructureParcours($parcours);
                     foreach ($dto->semestres as $ordre => $sem) {
                         foreach ($sem->ues as $ue) {
                             if ($ue->ue->getNatureUeEc()?->isChoix()) {

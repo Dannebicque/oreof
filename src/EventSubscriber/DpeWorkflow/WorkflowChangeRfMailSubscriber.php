@@ -63,12 +63,13 @@ class WorkflowChangeRfMailSubscriber extends AbstractDpeMailSubscriber implement
         if ($data === null) {
             return;
         }
-
+//todo: mail aux chef ancien et nouveau + SES
         $this->myMailer->initEmail();
         $this->myMailer->setTemplate(
             'mails/workflow/changerf/valider_ses.html.twig',
             $this->getDataChangeRf()
         );
+
         $this->myMailer->sendMessage(
             [$this->responsableDpe->getEmail()],
             '[ORéOF]  Un changement de responsable de formation a été validé par le SES'

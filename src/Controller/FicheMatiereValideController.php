@@ -9,7 +9,6 @@
 
 namespace App\Controller;
 
-use App\Classes\CalculStructureParcours;
 use App\Classes\JsonReponse;
 use App\Classes\Process\FicheMatiereProcess;
 use App\Classes\ValidationProcessFicheMatiere;

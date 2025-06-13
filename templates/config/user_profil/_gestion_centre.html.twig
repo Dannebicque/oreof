@@ -1,0 +1,17 @@
+<div {{ stimulus_controller('centre', {
+    urlListe: path('app_user_profils_liste', {user:user.id}),
+    urlAdd: path('app_user_profil_add', {user:user.id}),
+}) }}>
+    <div class="alert alert-info mb-2">
+        Nom : {{ user.nom }} <br>
+        Prénom : {{ user.prenom }}
+    </div>
+    <div {{ stimulus_target('centre', 'liste') }}>
+
+    </div>
+    <div>
+        <h3>Ajouter un centre</h3>
+        <twig:select_centre/>
+        <button class="btn btn-success" {{ stimulus_action('centre', 'addCentre') }}>Ajouter le centre</button>
+    </div>
+</div>

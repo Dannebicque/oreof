@@ -216,6 +216,12 @@ class Formation
     #[ORM\OneToOne(mappedBy: 'formationOrigineCopie', targetEntity: self::class, cascade: ['persist', 'remove'])]
     private ?self $formationCopieAnneeUniversitaire = null;
 
+    /**
+     * @var Collection<int, UserProfil>
+     */
+    #[ORM\OneToMany(mappedBy: 'formation', targetEntity: UserProfil::class)]
+    private Collection $userProfils;
+
     public function __construct(?CampagneCollecte $anneeUniversitaire)
     {
         $this->dpe = $anneeUniversitaire;
@@ -236,6 +242,7 @@ class Formation
         $this->dpeParcours = new ArrayCollection();
         $this->formationVersionings = new ArrayCollection();
         $this->changeRves = new ArrayCollection();
+        $this->userProfils = new ArrayCollection();
     }
 
     // #[ORM\PreFlush]
@@ -1156,6 +1163,36 @@ class Formation
         }
 
         $this->formationCopieAnneeUniversitaire = $formationCopieAnneeUniversitaire;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, UserProfil>
+     */
+    public function getUserProfils(): Collection
+    {
+        return $this->userProfils;
+    }
+
+    public function addUserProfil(UserProfil $userProfil): static
+    {
+        if (!$this->userProfils->contains($userProfil)) {
+            $this->userProfils->add($userProfil);
+            $userProfil->setFormation($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserProfil(UserProfil $userProfil): static
+    {
+        if ($this->userProfils->removeElement($userProfil)) {
+            // set the owning side to null (unless already changed)
+            if ($userProfil->getFormation() === $this) {
+                $userProfil->setFormation(null);
+            }
+        }
 
         return $this;
     }

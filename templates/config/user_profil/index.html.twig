@@ -1,0 +1,83 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <div class="card"
+            {{ stimulus_controller('crud', {
+                url: path('app_user_profil_liste')
+            }) }}
+         data-action="base:refreshListe@window->crud#refreshListe base:modalClose@window->crud#refreshListe"
+    >
+        <div class="card-body">
+            {{ include('communs/_recherche.html.twig') }}
+            <div {{ stimulus_target('crud', 'liste') }}></div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block header %}
+    Affectation des profils
+{% endblock %}
+
+{% block breadcrumb %}
+    {{ include('communs/_breadcrumb.html.twig', {liens:[
+        {
+            href:'',
+            title: 'Administration',
+        },
+        {
+            href:'',
+            title: 'Affectation des profils',
+        }
+    ]}) }}
+{% endblock %}
+
+{% block bouton_header %}
+    {% if is_granted('ROLE_ADMIN') %}
+        <button
+                {{ stimulus_controller('modal', {
+                    size: 'lg',
+                    modalTitle: 'Ajouter un utilisateur hors URCA',
+                    modalUrl: path('app_user_new_hors_urca') }) }}
+                data-action="click->modal#openModal"
+                class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+                data-size="lg"
+                data-bs-toggle="tooltip"
+                data-bs-placement="bottom"
+                title="Ajouter un utilisateur hors URCA"
+        >
+            <i class="{{ iconAdd }}"></i>
+            <span> Ajouter un utilisateur hors URCA</span>
+        </button>
+        <button
+                {{ stimulus_controller('modal', {
+                    size: 'lg',
+                    modalTitle: 'Ajouter un utilisateur depuis le LDAP',
+                    modalUrl: path('app_user_new_ldap') }) }}
+                data-action="click->modal#openModal"
+                class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+                data-size="lg"
+                data-bs-toggle="tooltip"
+                data-bs-placement="bottom"
+                title="Ajouter un utilisateur depuis le LDAP"
+        >
+            <i class="{{ iconAdd }}"></i>
+            <span> Ajouter un utilisateur depuis le LDAP</span>
+        </button>
+    {% else %}
+        <button
+                {{ stimulus_controller('modal', {
+                    size: 'lg',
+                    modalTitle: 'Ajouter un utilisateur depuis le LDAP',
+                    modalUrl: path('app_user_new_ldap', {acces:'dpe'}) }) }}
+                data-action="click->modal#openModal"
+                class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+                data-size="lg"
+                data-bs-toggle="tooltip"
+                data-bs-placement="bottom"
+                title="Ajouter un utilisateur depuis le LDAP"
+        >
+            <i class="{{ iconAdd }}"></i>
+            <span> Ajouter un utilisateur depuis le LDAP</span>
+        </button>
+    {% endif %}
+{% endblock %}

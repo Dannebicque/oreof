@@ -78,7 +78,7 @@ class MentionRepository extends ServiceEntityRepository
         return $result;
     }
 
-    public function findBySearch(string|null $q, string|null $sort, string|null $direction): array
+    public function findBySearch(string|null $q, string|null $sort, string|null $direction, ?int $limit = null, ?int $offset = null): array
     {
         $query = $this->createQueryBuilder('m');
 
@@ -100,6 +100,34 @@ class MentionRepository extends ServiceEntityRepository
             }
         }
 
+        if ($limit !== null) {
+            $query->setMaxResults($limit);
+        }
+
+        if ($offset !== null) {
+            $query->setFirstResult($offset);
+        }
+
         return $query->getQuery()->getResult();
+    }
+
+    /**
+     * Compte le nombre total de mentions correspondant aux critères de recherche.
+     *
+     * @param string|null $q Terme de recherche
+     * @return int Nombre total de mentions
+     */
+    public function countBySearch(string|null $q): int
+    {
+        $query = $this->createQueryBuilder('m')
+            ->select('COUNT(m.id)');
+
+        if ($q !== null && $q !== '') {
+            $query->andWhere('m.libelle LIKE :q')
+                ->orWhere('m.sigle LIKE :q')
+                ->setParameter('q', '%' . $q . '%');
+        }
+
+        return (int)$query->getQuery()->getSingleScalarResult();
     }
 }

@@ -1,0 +1,34 @@
+<div {{ stimulus_controller('profil--user', {
+    urlConfigProfil: path('app_user_profils_config', {user:user.id}),
+    urlListe: path('app_user_profils_liste', {user:user.id}),
+    urlAdd: path('app_user_profils_add', {user:user.id}),
+}) }}>
+    <div class="alert alert-info mb-2">
+        Nom : {{ user.nom }} <br>
+        Prénom : {{ user.prenom }}
+    </div>
+    <div {{ stimulus_target('profil--user', 'liste') }}>
+
+    </div>
+    <div class="mt-2">
+        <h3>Ajouter un profil</h3>
+        <div>
+            <label class="form-label required" for="typeCentre">Choisir le profil</label>
+            <select id="typeCentre" class="form-select" {{ stimulus_action('profil--user', 'changeProfil') }}
+                    required
+                    {{ stimulus_controller('symfony/ux-autocomplete/autocomplete') }}
+            >
+                <option value="">Choisir un centre</option>
+                {% for profil in profils %}
+                    <option value="{{ profil.id }}">{{ profil.libelle }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div
+                class="mt-2"
+                {{ stimulus_target('profil--user', 'configProfil') }}
+        ></div>
+        <button class="btn btn-success mt-2" {{ stimulus_action('profil--user', 'addProfil') }}>Ajouter le centre
+        </button>
+    </div>
+</div>

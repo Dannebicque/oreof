@@ -31,16 +31,64 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class UserController extends BaseController
 {
     #[Route('/', name: 'app_user_index', methods: ['GET'])]
+    /** @deprecated("User profil") */
     public function index(): Response
     {
         return $this->render('config/user/index.html.twig');
+    }
+
+    #[Route('/repertoire', name: 'app_user_repertoire', methods: ['GET'])]
+    public function repertoire(): Response
+    {
+        return $this->render('config/user/repertoire.html.twig');
+    }
+
+    #[Route('/repertoire/liste', name: 'app_user_repertoire_liste', methods: ['GET'])]
+    public function repertoireListe(
+        Request        $request,
+        UserRepository $userRepository
+    ): Response
+    {
+        $sort = $request->query->get('sort') ?? 'nom';
+        $direction = $request->query->get('direction') ?? 'asc';
+        $q = $request->query->get('q') ?? null;
+
+        if ($this->isGranted('ROLE_ADMIN')) {
+            if ($q) {
+                $users = $userRepository->findEnableBySearch($this->getCampagneCollecte(), $q, $sort, $direction);
+            } else {
+                $users = $userRepository->findEnable($this->getCampagneCollecte(), $sort, $direction);
+            }
+        } elseif ($this->isGranted('CAN_COMPOSANTE_MANAGE_MY', $this->getUser())) {
+            foreach ($this->getUser()?->getUserCentres() as $centre) {
+                if ($centre->getComposante() !== null) {
+                    $composante = $centre->getComposante(); //au moins une composante, todo: si plusieurs ?
+                }
+            }
+            if ($composante !== null) {
+                if ($q) {
+                    $users = $userRepository->findByComposanteEnableBySearch($this->getCampagneCollecte(), $composante, $q, $sort, $direction);
+                } else {
+                    $users = $userRepository->findByComposanteEnable($this->getCampagneCollecte(), $composante, $sort, $direction);
+                }
+            } else {
+                $users = [];
+            }
+        }
+
+        return $this->render('config/user/_repertoireListe.html.twig', [
+            'users' => $users,
+            'sort' => $sort,
+            'direction' => $direction,
+            'campagneCollecte' => $this->getCampagneCollecte()
+        ]);
     }
 
     #[Route('/attente-validation', name: 'app_user_attente', methods: ['GET'])]
     public function attente(UserRepository $userRepository): Response
     {
         //todo: gérer par le responsable de DPE ?? pour affecter les droits et "pré-valider" les utilisateurs
-        if ($this->isGranted('ROLE_ADMIN') || $this->isGranted('ROLE_SES')) {
+        if ($this->isGranted('ROLE_ADMIN')) {
             $users = $userRepository->findNotEnableAvecDemande();
             $dpe = false;
         } elseif ($this->isGranted('CAN_COMPOSANTE_MANAGE_MY', $this->getUser())) {
@@ -61,8 +109,8 @@ class UserController extends BaseController
         ]);
     }
 
-    #[
-        Route('/liste', name: 'app_user_liste', methods: ['GET'])]
+    #[Route('/liste', name: 'app_user_liste', methods: ['GET'])]
+    /** @deprecated("User profil") */
     public function liste(
         Request        $request,
         UserRepository $userRepository
@@ -71,7 +119,7 @@ class UserController extends BaseController
         $direction = $request->query->get('direction') ?? 'asc';
         $q = $request->query->get('q') ?? null;
 
-        if ($this->isGranted('ROLE_ADMIN') || $this->isGranted('ROLE_SES')) {
+        if ($this->isGranted('ROLE_ADMIN')) {
             if ($q) {
                 $users = $userRepository->findEnableBySearch($this->getCampagneCollecte(), $q, $sort, $direction);
             } else {
@@ -164,11 +212,6 @@ class UserController extends BaseController
                 $this->addFlash('danger', 'L\'utilisateur n\'a pas été trouvé dans l\'annuaire LDAP');
                 return $this->json(false, 500);
             }
-//            $dataUsers = [
-//                'username' => $email,
-//                'nom' => 'nom',
-//                'prenom' => 'prenom'
-//            ];
 
             $user->setUsername($dataUsers['username']);
             $user->setNom($dataUsers['nom']);
@@ -219,7 +262,8 @@ class UserController extends BaseController
 
         return $this->json([
             'success' => true,
-            'url' => $this->generateUrl('app_user_gestion_centre', ['user' => $user->getId()])
+            'url' => $this->generateUrl('app_user_profils_gestion', ['user' => $user->getId()])
+            // 'url' => $this->generateUrl('app_user_gestion_centre', ['user' => $user->getId()])
         ]);
     }
 
@@ -331,7 +375,7 @@ class UserController extends BaseController
     }
 
     #[Route('/{id}/edit', name: 'app_user_edit', methods: ['GET', 'POST'])]
-    #[IsGranted('ROLE_SES')]
+    #[IsGranted('ROLE_ADMIN')]
     public function edit(Request $request, User $user, UserRepository $userRepository): Response
     {
         $form = $this->createForm(

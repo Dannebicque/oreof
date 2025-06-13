@@ -9,7 +9,6 @@
 
 namespace App\TypeDiplome\But\Services;
 
-use App\Classes\CalculButStructureParcours;
 use App\Classes\Excel\ExcelWriter;
 use App\DTO\DiffObject;
 use App\Entity\CampagneCollecte;
@@ -72,7 +71,7 @@ class ButMcccVersion
     public function __construct(
         KernelInterface                  $kernel,
         protected ClientInterface        $client,
-        protected CalculButStructureParcours $calculStructureParcours,
+        protected CalculStructureParcoursBut $calculStructureParcours,
         protected VersioningParcours      $versioningParcours,
         protected FicheMatiereRepository $ficheMatiereRepository,
         protected ExcelWriter            $excelWriter,

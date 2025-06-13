@@ -10,7 +10,7 @@
 namespace App\EventSubscriber\DpeWorkflow;
 
 use App\Entity\DpeParcours;
-use App\TypeDiplome\TypeDiplomeRegistry;
+use App\Service\TypeDiplomeResolver;
 use App\Utils\Tools;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -21,7 +21,7 @@ class DpeSauvegardeSubscriber implements EventSubscriberInterface
 {
     private string $dir;
     public function __construct(
-        private TypeDiplomeRegistry $typeDiplomeRegistry,
+        private TypeDiplomeResolver $typeDiplomeResolver,
         KernelInterface             $kernel,
         private readonly EntityManagerInterface $entityManager
     ) {
@@ -55,7 +55,7 @@ class DpeSauvegardeSubscriber implements EventSubscriberInterface
         } else {
             return ;
         }
-        $typeDiplome = $this->typeDiplomeRegistry->getTypeDiplome($formation->getTypeDiplome()?->getModeleMcc());
+        $typeDiplome = $this->typeDiplomeResolver->get($formation->getTypeDiplome());
 
         if (null === $typeDiplome) {
             throw new \Exception('Aucun modèle MCC n\'est défini pour ce diplôme');
@@ -73,9 +73,9 @@ class DpeSauvegardeSubscriber implements EventSubscriberInterface
             $dpe,
             $parcours,
             $this->dir,
+            $fichier,
             null,
-            null,
-            $fichier
+            null
         );
 
         if ($export !== false) {

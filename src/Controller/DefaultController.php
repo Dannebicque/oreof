@@ -9,12 +9,9 @@
 
 namespace App\Controller;
 
-use App\Classes\CalculStructureParcours;
-use App\Classes\GetFormations;
 use App\DTO\StatsFichesMatieres;
 use App\Repository\ComposanteRepository;
 use App\Repository\FormationRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;

@@ -11,28 +11,18 @@ namespace App\Enums;
 
 enum PermissionEnum: string
 {
-    case CREATE = 'create';
     case EDIT = 'edit';
-    case DELETE = 'delete';
     case SHOW = 'show';
-    case VALIDATE = 'validate';
-    case SUBMIT = 'submit';
     case MANAGE = 'manage';
-    case EXPORT = 'export';
     case CONSEILLER = 'conseiller';
     case SCOLARITE = 'scolarite';
 
     public static function getAvailableTypes()
     {
         return [
-            strtoupper(self::CREATE->value),
             strtoupper(self::EDIT->value),
-            strtoupper(self::DELETE->value),
             strtoupper(self::SHOW->value),
-            strtoupper(self::VALIDATE->value),
-            strtoupper(self::SUBMIT->value),
             strtoupper(self::MANAGE->value),
-            strtoupper(self::EXPORT->value),
             strtoupper(self::CONSEILLER->value),
             strtoupper(self::SCOLARITE->value),
         ];
@@ -41,15 +31,9 @@ enum PermissionEnum: string
     public function libelle(): string
     {
         return match ($this) {
-            self::CREATE => 'Créer (et modifier)',
-            self::EDIT => 'Modifier (sans droit de création)',
-            self::DELETE => 'Supprimer',
-            self::SHOW => 'Voir',
-            self::VALIDATE => 'Valider ou refuser (avec avis ou réserve)',
-            self::SUBMIT => 'Soumettre (et passer à l\'étape suivante)',
-            self::MANAGE => 'Gérer les droits',
-            self::EXPORT => 'Exporter',
-            self::CONSEILLER => 'Conseiller',
+            self::EDIT => 'Créer, Modifier, supprimer',
+            self::SHOW => 'Consultation',
+            self::MANAGE => 'Gérer les validations',
             self::SCOLARITE => 'Scolarité',
         };
     }

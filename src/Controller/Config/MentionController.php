@@ -9,239 +9,249 @@
 
 namespace App\Controller\Config;
 
+use App\DTO\MentionDto;
 use App\Entity\Mention;
-use App\Form\MentionType;
+use App\Form\MentionDtoType;
 use App\Repository\DomaineRepository;
-use App\Repository\MentionRepository;
 use App\Repository\TypeDiplomeRepository;
+use App\Service\MentionService;
 use App\Utils\JsonRequest;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 
+/**
+ * Contrôleur pour la gestion des mentions.
+ * Utilise une architecture en couches avec DTO et service pour une meilleure séparation des responsabilités.
+ */
 #[Route('/administration/mention')]
 class MentionController extends AbstractController
 {
-    public const TAB_CODE_PARCOURS = [
+    public function __construct(
+        private readonly MentionService        $mentionService,
+        private readonly DomaineRepository     $domaineRepository,
+        private readonly TypeDiplomeRepository $typeDiplomeRepository
+    )
+    {
+    }
 
-        'A',
-        'B',
-        'C',
-        'D',
-        'E',
-        'F',
-        'G',
-        'H',
-        'I',
-        'J',
-        'K',
-        'L',
-        'M',
-        'N',
-        'P',
-        'Q',
-        'R',
-        'S',
-        'T',
-        'U',
-        'V',
-        'W',
-        'Y',
-        'Z',
-        '0',
-        '1',
-        '2',
-        '3',
-        '4',
-        '5',
-        '6',
-        '7',
-        '8',
-        '9',
-    ];
-
+    /**
+     * Affiche la page d'index des mentions.
+     */
     #[Route('/', name: 'app_mention_index', methods: ['GET'])]
     public function index(): Response
     {
         return $this->render('config/mention/index.html.twig');
     }
 
+    /**
+     * Affiche le modal de codification des mentions.
+     */
     #[Route('/codification-modal', name: 'app_mention_codification_modal', methods: ['GET'])]
-    public function codificationModal(
-        DomaineRepository     $domaineRepository,
-        TypeDiplomeRepository $typeDiplomeRepository
-    ): Response {
+    public function codificationModal(): Response
+    {
         return $this->render('config/mention/_codificationModal.html.twig', [
-            'typeDiplomes' => $typeDiplomeRepository->findBy([], ['libelle' => 'ASC']),
-            'domaines' => $domaineRepository->findBy([], ['libelle' => 'ASC']),
-
+            'typeDiplomes' => $this->typeDiplomeRepository->findBy([], ['libelle' => 'ASC']),
+            'domaines' => $this->domaineRepository->findBy([], ['libelle' => 'ASC']),
         ]);
     }
 
+    /**
+     * Génère les codes Apogée pour les mentions selon les critères spécifiés.
+     */
     #[Route('/codification', name: 'app_mention_codification', methods: ['POST'])]
-    public function codification(
-        Request               $request,
-        DomaineRepository      $domaineRepository,
-        TypeDiplomeRepository  $typeDiplomeRepository,
-        MentionRepository      $mentionRepository,
-        EntityManagerInterface $entityManager
-    ): Response {
-        $checkTypeDiplome = $request->request->all()['typediplome'];
-        $checkTypeDomaine = $request->request->all()['domaine'];
+    public function codification(Request $request): Response
+    {
+        $success = $this->mentionService->generateCodification($request);
 
-        if (null === $checkTypeDiplome || null === $checkTypeDomaine) {
-            return $this->redirectToRoute('app_mention_index');
-        }
-
-        if ($checkTypeDiplome === 'all') {
-            $typeDiplomes = $typeDiplomeRepository->findBy([], ['libelle' => 'ASC']);
+        if (!$success) {
+            $this->addFlash('error', 'Une erreur est survenue lors de la génération des codes.');
         } else {
-            $typeDiplomes = $checkTypeDiplome;
+            $this->addFlash('success', 'Les codes ont été générés avec succès.');
         }
-
-        if ($checkTypeDomaine === 'all') {
-            $domaines = $domaineRepository->findBy([], ['libelle' => 'ASC']);
-        } else {
-            $domaines = $checkTypeDomaine;
-        }
-
-        foreach ($typeDiplomes as $typeDiplome) {
-            foreach ($domaines as $domaine) {
-                $mentions = $mentionRepository->findBy(['typeDiplome' => $typeDiplome, 'domaine' => $domaine], ['libelle' => 'ASC']);
-                $codeLettre = 0;
-                foreach ($mentions as $mention) {
-                    $mention->setCodeApogee(self::TAB_CODE_PARCOURS[$codeLettre]);
-                    //si LP + plusieurs parcours sur différentes composantes alors mention lettre !=
-                    foreach ($mention->getFormations() as $formation) {
-                        $offset = 1;
-                        foreach ($formation->getParcours() as $parcours) {
-                            if (
-                                count($formation->getParcours()) > 1 &&
-                                $parcours->isParcoursDefaut() === false &&
-                                $parcours->getComposanteInscription() !== $formation->getComposantePorteuse() &&
-                                $parcours->getComposanteInscription()?->getComposanteParent() === null) {
-                                //plusieurs parcours sur des composantes porteurs différentes
-                                $parcours->setCodeMentionApogee(self::TAB_CODE_PARCOURS[$codeLettre]);
-                                $offset++;
-                            } else {
-                                $parcours->setCodeMentionApogee(self::TAB_CODE_PARCOURS[$codeLettre]);
-                            }
-                        }
-                    }
-                    $codeLettre = $codeLettre + $offset;
-                }
-            }
-        }
-
-        $entityManager->flush();
 
         return $this->redirectToRoute('app_mention_index');
     }
 
+    /**
+     * Affiche la liste des mentions avec possibilité de filtrage et tri.
+     */
     #[Route('/liste', name: 'app_mention_liste', methods: ['GET'])]
-    public function liste(
-        Request           $request,
-        MentionRepository $mentionRepository
-    ): Response {
+    public function liste(Request $request): Response
+    {
         $sort = $request->query->get('sort') ?? 'type_diplome';
         $direction = $request->query->get('direction') ?? 'asc';
         $q = $request->query->get('q') ?? '';
+        $page = $request->query->getInt('page', 1);
+        $limit = $request->query->getInt('limit', 20);
+        // Calcul de l'offset en tenant compte que la page commence à 1
+        $offset = ($page) * $limit;
 
-        $mentions = $mentionRepository->findBySearch($q, $sort, $direction);
+        // Récupération des mentions pour la page courante
+        $mentions = $this->mentionService->getAllMentions($q, $sort, $direction, $limit, $offset);
 
+        // Comptage du nombre total de mentions pour la pagination
+        $total = $this->mentionService->countAllMentions($q);
 
         return $this->render('config/mention/_liste.html.twig', [
             'mentions' => $mentions,
             'sort' => $sort,
             'direction' => $direction,
+            'query' => $q,
+            'page' => $page,
+            'limit' => $limit,
+            'total' => $total,
         ]);
-    }
-
-    #[Route('/new', name: 'app_mention_new', methods: ['GET', 'POST'])]
-    public function new(
-        Request           $request,
-        MentionRepository $mentionRepository
-    ): Response {
-        $mention = new Mention();
-        $form = $this->createForm(MentionType::class, $mention, [
-            'action' => $this->generateUrl('app_mention_new'),
-        ]);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $mentionRepository->save($mention, true);
-            return $this->json(true);
-        }
-
-        return $this->render('config/mention/new.html.twig', [
-            'mention' => $mention,
-            'form' => $form->createView(),
-        ]);
-    }
-
-    #[Route('/{id}', name: 'app_mention_show', methods: ['GET'])]
-    public function show(Mention $mention): Response
-    {
-        return $this->render('config/mention/show.html.twig', [
-            'mention' => $mention,
-        ]);
-    }
-
-    #[Route('/{id}/edit', name: 'app_mention_edit', methods: ['GET', 'POST'])]
-    public function edit(
-        Request           $request,
-        Mention           $mention,
-        MentionRepository $mentionRepository
-    ): Response {
-        $form = $this->createForm(MentionType::class, $mention, [
-            'action' => $this->generateUrl('app_mention_edit', ['id' => $mention->getId()]),
-        ]);
-
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $mentionRepository->save($mention, true);
-
-            return $this->json(true);
-        }
-
-        return $this->render('config/mention/new.html.twig', [
-            'mention' => $mention,
-            'form' => $form->createView(),
-        ]);
-    }
-
-    #[Route('/{id}/duplicate', name: 'app_mention_duplicate', methods: ['GET'])]
-    public function duplicate(
-        MentionRepository $mentionRepository,
-        Mention           $mention
-    ): Response {
-        $mentionNew = clone $mention;
-        $mentionNew->setLibelle($mention->getLibelle() . ' - Copie');
-        $mentionRepository->save($mentionNew, true);
-        return $this->json(true);
     }
 
     /**
-     * @throws \JsonException
+     * Affiche le formulaire de création d'une nouvelle mention.
      */
-    #[Route('/{id}', name: 'app_mention_delete', methods: ['DELETE'])]
-    public function delete(
-        Request           $request,
-        Mention           $mention,
-        MentionRepository $mentionRepository
-    ): Response {
-        if ($this->isCsrfTokenValid(
-            'delete' . $mention->getId(),
-            JsonRequest::getValueFromRequest($request, 'csrf')
-        )) {
-            $mentionRepository->remove($mention, true);
+    #[Route('/new', name: 'app_mention_new', methods: ['GET', 'POST'])]
+    public function new(Request $request): Response
+    {
+        $mentionDto = MentionDto::createEmpty();
+        $form = $this->createForm(MentionDtoType::class, $mentionDto, [
+            'action' => $this->generateUrl('app_mention_new'),
+        ]);
 
-            return $this->json(true);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            try {
+                $this->mentionService->createMention($mentionDto);
+                $this->addFlash('success', 'La mention a été créée avec succès.');
+                return $this->json(['success' => true]);
+            } catch (\Exception $e) {
+                return $this->json([
+                    'success' => false,
+                    'error' => $e->getMessage()
+                ], Response::HTTP_BAD_REQUEST);
+            }
         }
 
-        return $this->json(false);
+        return $this->render('config/mention/new.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * Affiche les détails d'une mention.
+     */
+    #[Route('/{id}', name: 'app_mention_show', methods: ['GET'])]
+    public function show(int $id): Response
+    {
+        try {
+            $mention = $this->mentionService->getMentionById($id);
+            return $this->render('config/mention/show.html.twig', [
+                'mention' => $mention,
+            ]);
+        } catch (NotFoundHttpException $e) {
+            $this->addFlash('error', $e->getMessage());
+            return $this->redirectToRoute('app_mention_index');
+        }
+    }
+
+    /**
+     * Affiche le formulaire d'édition d'une mention existante.
+     */
+    #[Route('/{id}/edit', name: 'app_mention_edit', methods: ['GET', 'POST'])]
+    public function edit(Request $request, int $id): Response
+    {
+        try {
+            $mention = $this->mentionService->getMentionById($id);
+            $mentionDto = MentionDto::createFromEntity($mention);
+
+            $form = $this->createForm(MentionDtoType::class, $mentionDto, [
+                'action' => $this->generateUrl('app_mention_edit', ['id' => $id]),
+            ]);
+
+            $form->handleRequest($request);
+
+            if ($form->isSubmitted() && $form->isValid()) {
+                try {
+                    $this->mentionService->updateMention($mention, $mentionDto);
+                    $this->addFlash('success', 'La mention a été mise à jour avec succès.');
+                    return $this->json(['success' => true]);
+                } catch (\Exception $e) {
+                    return $this->json([
+                        'success' => false,
+                        'error' => $e->getMessage()
+                    ], Response::HTTP_BAD_REQUEST);
+                }
+            }
+
+            return $this->render('config/mention/new.html.twig', [
+                'mention' => $mention,
+                'form' => $form->createView(),
+            ]);
+        } catch (NotFoundHttpException $e) {
+            $this->addFlash('error', $e->getMessage());
+            return $this->redirectToRoute('app_mention_index');
+        }
+    }
+
+    /**
+     * Duplique une mention existante.
+     */
+    #[Route('/{id}/duplicate', name: 'app_mention_duplicate', methods: ['GET'])]
+    public function duplicate(int $id): JsonResponse
+    {
+        try {
+            $mention = $this->mentionService->getMentionById($id);
+            $this->mentionService->duplicateMention($mention);
+
+            return $this->json(['success' => true]);
+        } catch (\Exception $e) {
+            return $this->json([
+                'success' => false,
+                'error' => $e->getMessage()
+            ], Response::HTTP_BAD_REQUEST);
+        }
+    }
+
+    /**
+     * Supprime une mention existante.
+     */
+    #[Route('/{id}', name: 'app_mention_delete', methods: ['DELETE'])]
+    public function delete(Request $request, int $id): JsonResponse
+    {
+        try {
+            $mention = $this->mentionService->getMentionById($id);
+
+            if ($this->isCsrfTokenValid(
+                'delete' . $mention->getId(),
+                JsonRequest::getValueFromRequest($request, 'csrf')
+            )) {
+                $success = $this->mentionService->deleteMention($mention);
+
+                if ($success) {
+                    return $this->json(['success' => true]);
+                }
+
+                return $this->json([
+                    'success' => false,
+                    'error' => 'Impossible de supprimer cette mention. Elle est peut-être utilisée par des formations.'
+                ], Response::HTTP_BAD_REQUEST);
+            }
+
+            return $this->json([
+                'success' => false,
+                'error' => 'Token CSRF invalide'
+            ], Response::HTTP_BAD_REQUEST);
+        } catch (NotFoundHttpException $e) {
+            return $this->json([
+                'success' => false,
+                'error' => $e->getMessage()
+            ], Response::HTTP_NOT_FOUND);
+        } catch (\Exception $e) {
+            return $this->json([
+                'success' => false,
+                'error' => $e->getMessage()
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 }

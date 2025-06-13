@@ -28,7 +28,7 @@
 {% endblock %}
 
 {% block bouton_header %}
-    {% if is_granted('ROLE_SES') %}
+    {% if is_granted('ROLE_ADMIN') %}
         <button
                 {{ stimulus_controller('modal', {
                     size: 'lg',

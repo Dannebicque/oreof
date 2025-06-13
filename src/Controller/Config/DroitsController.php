@@ -20,6 +20,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
+/** @deprecated("remplacée par la gestion des profils") */
 class DroitsController extends AbstractController
 {
     #[Route('/administration/droits/access', name: 'app_droits_access')]

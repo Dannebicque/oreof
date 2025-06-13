@@ -126,6 +126,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'auteur', targetEntity: DpeDemande::class)]
     private Collection $dpeDemandes;
 
+    /**
+     * @var Collection<int, UserProfil>
+     */
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: UserProfil::class)]
+    private Collection $userProfils;
+
     public function __construct()
     {
         $this->composantes = new ArrayCollection();
@@ -138,6 +144,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->historiques = new ArrayCollection();
         $this->commentaires = new ArrayCollection();
         $this->dpeDemandes = new ArrayCollection();
+        $this->userProfils = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -693,6 +700,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($dpeDemande->getAuteur() === $this) {
                 $dpeDemande->setAuteur(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, UserProfil>
+     */
+    public function getUserProfils(): Collection
+    {
+        return $this->userProfils;
+    }
+
+    public function addUserProfil(UserProfil $userProfil): static
+    {
+        if (!$this->userProfils->contains($userProfil)) {
+            $this->userProfils->add($userProfil);
+            $userProfil->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserProfil(UserProfil $userProfil): static
+    {
+        if ($this->userProfils->removeElement($userProfil)) {
+            // set the owning side to null (unless already changed)
+            if ($userProfil->getUser() === $this) {
+                $userProfil->setUser(null);
             }
         }
 

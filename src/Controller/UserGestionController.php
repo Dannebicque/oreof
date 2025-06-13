@@ -12,6 +12,7 @@ namespace App\Controller;
 use App\Classes\Ldap;
 use App\Entity\User;
 use App\Entity\UserCentre;
+use App\Entity\UserProfil;
 use App\Enums\CentreGestionEnum;
 use App\Events\AddCentreFormationEvent;
 use App\Events\AddCentreParcoursEvent;
@@ -25,8 +26,10 @@ use App\Repository\EtablissementRepository;
 use App\Repository\FicheMatiereRepository;
 use App\Repository\FormationRepository;
 use App\Repository\ParcoursRepository;
+use App\Repository\ProfilRepository;
 use App\Repository\RoleRepository;
 use App\Repository\UserCentreRepository;
+use App\Repository\UserProfilRepository;
 use App\Repository\UserRepository;
 use App\Utils\JsonRequest;
 use DateTime;
@@ -280,20 +283,22 @@ class UserGestionController extends BaseController
         return $this->redirectToRoute('app_user_attente');
     }
 
-    #[Route('/gestion/centre/{user}', name: 'app_user_gestion_centre')]
-    public function gestionCentre(
-        RoleRepository $roleRepository,
-        User           $user
-    ): Response {
-//        $this->denyAccessUnlessGranted('CAN_EDIT_CENTRE');
+//    #[Route('/gestion/centre/{user}', name: 'app_user_gestion_centre')]
+//    public function gestionCentre(
+//        RoleRepository $roleRepository,
+//        User           $user
+//    ): Response {
+////        $this->denyAccessUnlessGranted('CAN_EDIT_CENTRE');
+//
+//        return $this->render('user/_gestion_centre.html.twig', [
+//            'user' => $user,
+//            'centres' => CentreGestionEnum::cases(),
+//            'centresUser' => $user->getUserCentres(),
+//            'roles' => $roleRepository->findAll()
+//        ]);
+//    }
 
-        return $this->render('user/_gestion_centre.html.twig', [
-            'user' => $user,
-            'centres' => CentreGestionEnum::cases(),
-            'centresUser' => $user->getUserCentres(),
-            'roles' => $roleRepository->findAll()
-        ]);
-    }
+
 
     #[Route('/liste/centre/{user}', name: 'app_user_gestion_liste')]
     public function listeCentre(User $user): Response
@@ -301,12 +306,13 @@ class UserGestionController extends BaseController
         return $this->render('user/_liste_centre.html.twig', [
             'user' => $user,
             'centres' => CentreGestionEnum::cases(),
-            'centresUser' => $user->getUserCentres()
+            'userProfils' => $user->getUserProfils()
         ]);
     }
 
     /**
      * @throws \JsonException
+     * @deprecated
      */
     #[Route('/add/centre/{user}', name: 'app_user_gestion_add_centre')]
     public function addCentre(

@@ -9,13 +9,13 @@
 
 namespace App\Classes\Export;
 
-use App\Classes\CalculStructureParcours;
 use App\Classes\Excel\ExcelWriter;
 use App\DTO\StructureEc;
 use App\DTO\StructureUe;
 use App\Entity\SemestreParcours;
 use App\Repository\DpeParcoursRepository;
 use App\Repository\FormationRepository;
+use App\Service\TypeDiplomeResolver;
 use App\Utils\Tools;
 use DateTime;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -29,7 +29,7 @@ class ExportCap
     private array $data;
 
     public function __construct(
-        protected CalculStructureParcours $calculStructureParcours,
+        protected TypeDiplomeResolver $typeDiplomeResolver,
         protected ExcelWriter             $excelWriter,
         KernelInterface                   $kernel,
         protected FormationRepository     $formationRepository,
@@ -68,6 +68,7 @@ class ExportCap
             if ($dpeParcours !== null) {
                 $parcours = $dpeParcours->getParcours();
                 $formation = $dpeParcours->getParcours()?->getFormation();
+                $typeDiplome = $this->typeDiplomeResolver->get($formation?->getTypeDiplome());
                 if ($formation !== null && $parcours !== null) {
 //                foreach ($formation->getParcours() as $parcours) {
                     $this->data[1] = $formation->getComposantePorteuse()?->getLibelle();
@@ -80,7 +81,7 @@ class ExportCap
                     }
 
                     //récuération de la structure et des EC
-                    $dto = $this->calculStructureParcours->calcul($parcours);
+                    $dto = $typeDiplome->calculStructureParcours($parcours);
                     foreach ($dto->semestres as $ordre => $sem) {
                         $this->data[5] = 'S'.$ordre;
                         foreach ($sem->ues as $ue) {

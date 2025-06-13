@@ -9,14 +9,16 @@
 
 namespace App\Classes\Codification;
 
-use App\Classes\CalculStructureParcours;
 use App\DTO\StructureEc;
+use App\DTO\StructureParcours;
 use App\DTO\StructureSemestre;
 use App\DTO\StructureUe;
 use App\Entity\FicheMatiere;
 use App\Entity\Formation;
 use App\Entity\Parcours;
 use App\Enums\TypeParcoursEnum;
+use App\Service\TypeDiplomeResolver;
+use App\TypeDiplome\TypeDiplomeHandlerInterface;
 use Doctrine\ORM\EntityManagerInterface;
 
 class CodificationFormation
@@ -62,7 +64,7 @@ class CodificationFormation
 
     public function __construct(
         protected EntityManagerInterface $entityManager,
-        protected CalculStructureParcours $calculStructreParcours
+        protected TypeDiplomeHandlerInterface $typeDiplomeResolver
     ) {
     }
 
@@ -200,7 +202,7 @@ class CodificationFormation
     public function setCodificationSemestre(Parcours $parcours): void
     {
         // structure semestre
-        $structureParcours = $this->calculStructreParcours->calcul($parcours, false, false);
+        $structureParcours = $this->typeDiplomeResolver->calculStructureParcours($parcours);
 
 
         $semestres = $structureParcours->semestres;

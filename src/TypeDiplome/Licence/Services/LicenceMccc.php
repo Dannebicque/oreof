@@ -9,7 +9,6 @@
 
 namespace App\TypeDiplome\Licence\Services;
 
-use App\Classes\CalculStructureParcours;
 use App\Classes\Excel\ExcelWriter;
 use App\DTO\StructureEc;
 use App\DTO\StructureSemestre;
@@ -21,7 +20,7 @@ use App\Entity\Mccc;
 use App\Entity\Parcours;
 use App\Enums\RegimeInscriptionEnum;
 use App\Repository\TypeEpreuveRepository;
-use App\TypeDiplome\Licence\Services\AbstractLicenceMccc;
+use App\Service\TypeDiplomeResolver;
 use App\Utils\Tools;
 use DateTimeInterface;
 use Gotenberg\Gotenberg;
@@ -44,7 +43,7 @@ class LicenceMccc extends AbstractLicenceMccc
     public function __construct(
         KernelInterface                   $kernel,
         protected ClientInterface         $client,
-        protected CalculStructureParcours $calculStructureParcours,
+        protected TypeDiplomeResolver $calculStructureParcours,
         protected ExcelWriter             $excelWriter,
         protected TypeEpreuveRepository             $typeEpreuveRepository
     ) {

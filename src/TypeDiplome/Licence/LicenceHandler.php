@@ -18,8 +18,6 @@ use App\Entity\Parcours;
 use App\Repository\BlocCompetenceRepository;
 use App\TypeDiplome\Licence\Services\LicenceMccc;
 use App\TypeDiplome\Licence\Services\LicenceMcccVersion;
-use App\TypeDiplome\Licence\StructureParcoursLicence;
-use App\TypeDiplome\Source\LicenceTypeDiplome;
 use App\TypeDiplome\TypeDiplomeHandlerInterface;
 use App\Utils\Tools;
 use DateTimeInterface;

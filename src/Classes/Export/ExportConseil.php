@@ -9,7 +9,6 @@
 
 namespace App\Classes\Export;
 
-use App\Classes\CalculStructureParcours;
 use App\Classes\MyPDF;
 use App\Entity\CampagneCollecte;
 use DateTimeInterface;

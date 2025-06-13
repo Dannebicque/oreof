@@ -274,6 +274,12 @@ class Parcours
     #[ORM\OneToOne(mappedBy: 'parcoursOrigineCopie', targetEntity: self::class, cascade: ['persist', 'remove'])]
     private ?self $parcoursCopieAnneeUniversitaire = null;
 
+    /**
+     * @var Collection<int, UserProfil>
+     */
+    #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: UserProfil::class)]
+    private Collection $userProfils;
+
     public function __construct(?Formation $formation)
     {
         $this->formation = $formation;
@@ -296,6 +302,7 @@ class Parcours
         $this->contacts = new ArrayCollection();
         $this->dpeParcours = new ArrayCollection();
         $this->niveauFrancais = NiveauLangueEnum::B2;
+        $this->userProfils = new ArrayCollection();
     }
 
 
@@ -644,6 +651,10 @@ class Parcours
             if (count($this->getFormation()?->getRegimeInscription()) !== 0) {
                 return $this->getFormation()?->getRegimeInscription();
             }
+        }
+
+        if ($this->regimeInscription === null) {
+            return [];
         }
 
         $t = [];
@@ -1569,6 +1580,36 @@ class Parcours
         }
 
         $this->parcoursCopieAnneeUniversitaire = $parcoursCopieAnneeUniversitaire;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, UserProfil>
+     */
+    public function getUserProfils(): Collection
+    {
+        return $this->userProfils;
+    }
+
+    public function addUserProfil(UserProfil $userProfil): static
+    {
+        if (!$this->userProfils->contains($userProfil)) {
+            $this->userProfils->add($userProfil);
+            $userProfil->setParcours($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserProfil(UserProfil $userProfil): static
+    {
+        if ($this->userProfils->removeElement($userProfil)) {
+            // set the owning side to null (unless already changed)
+            if ($userProfil->getParcours() === $this) {
+                $userProfil->setParcours(null);
+            }
+        }
 
         return $this;
     }

@@ -9,6 +9,7 @@
 
 namespace App\Enums;
 
+/** @deprecated("Profil et centre ?") */
 enum PorteeEnum: string
 {
     case ALL = 'ALL';

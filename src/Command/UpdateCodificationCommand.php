@@ -2,11 +2,11 @@
 
 namespace App\Command;
 
-use App\Classes\CalculStructureParcours;
 use App\Classes\Codification\CodificationFormation;
 use App\Repository\CampagneCollecteRepository;
 use App\Repository\FormationRepository;
 use App\Repository\TypeDiplomeRepository;
+use App\Service\TypeDiplomeResolver;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -22,7 +22,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 class UpdateCodificationCommand extends Command
 {
     public function __construct(
-        protected CalculStructureParcours $calculStructureParcours,
+        protected TypeDiplomeResolver $typeDiplomeResolver,
         protected CampagneCollecteRepository $campagneCollecteRepository,
         protected FormationRepository $formationRepository,
         protected TypeDiplomeRepository $typeDiplomeRepository,
@@ -73,7 +73,8 @@ class UpdateCodificationCommand extends Command
 
         $formations = $this->formationRepository->findByDpeAndTypeDiplome($campagne, $td);
         foreach ($formations as $formation) {
-            $codification = new CodificationFormation($this->entityManager, $this->calculStructureParcours);
+            $typeD = $this->typeDiplomeResolver->get($formation->getTypeDiplome());
+            $codification = new CodificationFormation($this->entityManager, $typeD);
             //utiliser la bonne méthode selon le niveau de codification
 
             if ($niveauCodification === 'haute') {

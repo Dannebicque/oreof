@@ -40,3 +40,16 @@ services:
 
     App\Serializer\ModaliteEnseignementEnumNormalizer:
         tags: [ 'serializer.normalizer' ]
+
+    App\TypeDiplome\Daeu\DaeuHandler:
+        tags: [ 'app.type_diplome_handler' ]
+
+    App\TypeDiplome\Licence\LicenceHandler:
+        tags: [ 'app.type_diplome_handler' ]
+
+    App\TypeDiplome\But\ButHandler:
+        tags: [ 'app.type_diplome_handler' ]
+
+    App\Service\TypeDiplomeResolver:
+        arguments:
+            $handlers: !tagged app.type_diplome_handler

@@ -97,7 +97,7 @@
                     <i class="{{ iconEdit }}"></i>
                     <span> Gestion des accès</span>
                 </button>
-                {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_SES') %}
+                {% if is_granted('ROLE_ADMIN') %}
                     <button
                             {{ stimulus_controller('modal', {
                                 size: 'lg',
