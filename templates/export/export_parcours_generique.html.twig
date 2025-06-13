@@ -1,10 +1,21 @@
 {% extends 'pdf/base-pdf.html.twig' %}
 
+
 {% block content %}
     {% for p in parcoursData %}
+    {% set sectionHeader = [] %}
     <dl>
         <h1>{{ p.libelleLong }}</h1>
         {% for v in p.valueExport %}
+            {% if v.fieldName in p["headersSectionPdf"]|keys %}
+                {% if p["headersSectionPdf"][v.fieldName]["libelle"] not in sectionHeader %}
+                    <br>
+                    <h2>
+                        {{ p["headersSectionPdf"][v.fieldName]["content"] }}
+                    </h2>
+                    {% set sectionHeader = sectionHeader|merge([p["headersSectionPdf"][v.fieldName]["libelle"]]) %}
+                {% endif %}
+            {% endif %}
             {% if v.type == 'longtext' %}
                 <div class="col-12">
                     <dt>{{ v.libelle }}</dt>

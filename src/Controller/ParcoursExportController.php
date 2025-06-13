@@ -479,14 +479,36 @@ class ParcoursExportController extends AbstractController
 
         $dataStructure = [];
         foreach($parcoursData as $parcours){
+            $headersSectionPdf = [];
+            foreach($fieldValueArray as $f){
+                if(in_array($f, ['objectifsFormation']) && isset($headersSectionPdf[$f]) === false){
+                    $headersSectionPdf[$f] = [
+                        'libelle' => 'presentationFormationHeader',
+                        'content' => "Présentation formation {$parcours->getFormation()->getDisplay()}"
+                    ];
+                }
+                elseif(in_array($f, [
+                    'objectifsParcours',
+                    'resultatsAttendusParcours',
+                    'rythmeFormation',
+                    ]
+                ) && isset($headersSectionPdf[$f]) === false){
+                    $headersSectionPdf[$f] = [
+                        'libelle' => 'presentationParcoursHeader',
+                        'content' => "Présentation du parcours {$parcours->getLibelle()}",
+                    ];
+                }
+            }
+
             $dataStructure[] = [
                 'idParcours' => $parcours->getId(),
                 'libelleLong' => $parcours->getFormation()->getDisplayLong() . " " . $parcours->getDisplay(),
                 'valueExport' => [...array_map(
-                        fn($field) => $this->mapParcoursExportWithValues($field, $parcours),
+                        fn($field) => [...$this->mapParcoursExportWithValues($field, $parcours), 'fieldName' => $field],
                         $fieldValueArray
                     )
-                ]
+                ],
+                'headersSectionPdf' => $headersSectionPdf
             ];
         }
 
@@ -711,7 +733,7 @@ class ParcoursExportController extends AbstractController
             case 'objectifsFormation':
                 return [
                     'type' => 'longtext',
-                    'libelle' => 'Objectifs de la formation',
+                    'libelle' => 'Organisation et objectifs de la formation',
                     'value' => $parcours?->getFormation()?->getObjectifsFormation()
                 ];
                 break;
