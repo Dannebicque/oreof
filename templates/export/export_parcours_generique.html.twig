@@ -13,6 +13,7 @@
                     <h2>
                         {{ p["headersSectionPdf"][v.fieldName]["content"] }}
                     </h2>
+                    <br>
                     {% set sectionHeader = sectionHeader|merge([p["headersSectionPdf"][v.fieldName]["libelle"]]) %}
                 {% endif %}
             {% endif %}
@@ -51,7 +52,9 @@
                     </ul>
                 </dd>
             {% elseif v.type == 'full_block' %}
+                <br>
                 <h2>{{ v.libelle }}</h2>
+                <br>
                 {% for elt in v.value %}
                     {% if elt.type ?? 'none' == 'list_enum' %}
                         <dt>
