@@ -23,7 +23,7 @@
     {% if isFromVersioning is defined and isFromVersioning != 'true' %}
         <h4 class="text-center text-primary mb-2">{{ libelleQuelleVersion }}</h4>
     {% endif %}
-    <h2>MCCC pour {{ ec.libelle }}</h2>
+    <h2>MCCC pour {{ ec.ficheMatiere.libelle ?? ec.libelle }}</h2>
 
     {% set displayComparaisonEcts = (isFromVersioning ?? 'false' != 'true') and (isMcccFromVersion ?? false == true) %}
     <h3>ECTS</h3>

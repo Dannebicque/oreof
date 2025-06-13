@@ -147,6 +147,8 @@ class DemandeDpeController extends BaseController
             $demandes = $dpeDemandeRepository->findAll();
         }
 
+        $isAdmin = $this->isGranted('ROLE_ADMIN');
+
         $filename = 'demandes_dpe_' . date('Y-m-d_H-i-s') . '.xlsx';
         $excelWriter->nouveauFichier('Export Demande DPE');
         $excelWriter->setActiveSheetIndex(0);
@@ -159,6 +161,10 @@ class DemandeDpeController extends BaseController
         $excelWriter->writeCellName('G1', 'Niveau demande');
         $excelWriter->writeCellName('H1', 'Etat');
         $excelWriter->writeCellName('I1', 'Commentaire');
+        if ($isAdmin) {
+            $excelWriter->writeCellName('J1', 'Id Parcours');
+            $excelWriter->writeCellName('K1', 'Id Mention');
+        }
         $ligne = 2;
         foreach ($demandes as $demande) {
             if ($demande->getNiveauDemande() === 'F') {
@@ -185,6 +191,10 @@ class DemandeDpeController extends BaseController
             $excelWriter->writeCellName('G' . $ligne, $demande->getNiveauModification() ? $demande->getNiveauModification()->getLibelle() : '');
             $excelWriter->writeCellName('H' . $ligne, $demande->getEtatDemande()?->getLibelle());
             $excelWriter->writeCellName('I' . $ligne, $demande->getArgumentaireDemande());
+            if ($isAdmin) {
+                $excelWriter->writeCellName('J' . $ligne, $demande->getParcours()?->getId());
+                $excelWriter->writeCellName('K' . $ligne, $demande->getFormation()?->getId());
+            }
             $ligne++;
         }
 

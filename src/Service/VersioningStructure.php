@@ -254,6 +254,7 @@ class VersioningStructure
             $diff['raccroche'] = new DiffObject(null, $ecNouveau->raccroche);
             $diff['heuresEctsEc'] = $this->compareHeuresEctsEc(null, $ecNouveau->heuresEctsEc);
             $diff['typeMccc'] = new DiffObject('', $ecNouveau->typeMccc);
+            $diff['quitus'] = new DiffObject('', $ecNouveau->elementConstitutif->getHasQuitus());
             $diff['mcccs'] = $this->compareMcccs([], $ecNouveau->mcccs);
 
             //EC enfants
@@ -309,13 +310,22 @@ class VersioningStructure
         $diff['heuresEctsEc'] = $this->compareHeuresEctsEc($ecOriginal->heuresEctsEc, $ecNouveau->heuresEctsEc);
 
         if ($this->isBut) {
-            $diff['mcccs'] = $this->compareMcccsBUT($ecOriginal->elementConstitutif->getFicheMatiere()->getMcccs(), $ecNouveau->elementConstitutif->getFicheMatiere()->getMcccs());
+            if ($ecOriginal === null && $ecNouveau !== null) {
+                $diff['mcccs'] = $this->compareMcccsBUT(null, $ecNouveau->elementConstitutif->getFicheMatiere()->getMcccs());
+            } elseif ($ecOriginal !== null && $ecNouveau === null) {
+                $diff['mcccs'] = $this->compareMcccsBUT($ecOriginal->elementConstitutif->getFicheMatiere()->getMcccs(), null);
+            } else {
+                $diff['mcccs'] = $this->compareMcccsBUT($ecOriginal->elementConstitutif->getFicheMatiere()->getMcccs(), $ecNouveau->elementConstitutif->getFicheMatiere()->getMcccs());
+            }
+
         } else {
             if ($ecOriginal->typeMccc !== null && $ecNouveau->typeMccc !== null) {
                 $diff['typeMccc'] = new DiffObject($ecOriginal->typeMccc, $ecNouveau->typeMccc);
+                $diff['quitus'] = new DiffObject($ecOriginal->elementConstitutif->getHasQuitus(), $ecNouveau->elementConstitutif->getHasQuitus());
                 $diff['mcccs'] = $this->compareMcccs($ecOriginal->mcccs, $ecNouveau->mcccs);
             } elseif (($ecOriginal->typeMccc === null && $ecNouveau->typeMccc !== null)) {
                 $diff['typeMccc'] = new DiffObject(null, $ecNouveau->typeMccc);
+                $diff['quitus'] = new DiffObject(null, $ecNouveau->elementConstitutif->getHasQuitus());
                 $diff['mcccs'] = $this->compareMcccs(null, $ecNouveau->mcccs);
             }
 
@@ -549,29 +559,44 @@ class VersioningStructure
 
     private function compareMcccsBUT(array|Collection|null $mcccsOriginal, array|Collection|null $mcccsNouveau): array
     {
-        if (null === $mcccsOriginal && null === $mcccsNouveau) {
+        if (Tools::isEmptyArrayOrCollection($mcccsOriginal) && Tools::isEmptyArrayOrCollection($mcccsNouveau)) {
             return [];
         }
 
         $diff = [];
         $t = [];
 
-        foreach ($mcccsNouveau as $mcccNouveau) {
-            $t[$mcccNouveau->getCleUnique()]['pourcentage'] = $mcccNouveau->getPourcentage() !== 0.0 ? $mcccNouveau->getPourcentage() : '';
-            $t[$mcccNouveau->getCleUnique()]['nbEpreuves'] = $mcccNouveau->getNbEpreuves() !== 0 ? $mcccNouveau->getNbEpreuves() : '';
-            $t[$mcccNouveau->getCleUnique()]['libelle'] = $mcccNouveau->getLibelle();
-        }
 
-        foreach ($mcccsOriginal as $mcccOriginal) {
-            if (is_array($mcccOriginal)) {
-                $mcccOriginal = $this->createMcccFromArray($mcccOriginal);
+        if (Tools::isEmptyArrayOrCollection($mcccsOriginal)) {
+            foreach ($mcccsNouveau as $mcccNouveau) {
+                if (is_array($mcccNouveau)) {
+                    $mcccNouveau = $this->createMcccFromArray($mcccNouveau);
+                }
+//                dump($mcccNouveau);
+                $cleUnique = $mcccNouveau->getCleUnique();
+                $diff[$cleUnique]['pourcentage'] = new DiffObject($mcccNouveau->getPourcentage() !== 0.0 ? $mcccNouveau->getPourcentage() : '', $t[$cleUnique]['pourcentage'] ?? null);
+                $diff[$cleUnique]['nbEpreuves'] = new DiffObject($mcccNouveau->getNbEpreuves() !== 0 ? $mcccNouveau->getNbEpreuves() : '', $t[$cleUnique]['nbEpreuves'] ?? null);
+                $diff[$cleUnique]['libelle'] = new DiffObject($mcccNouveau->getLibelle(), $t[$cleUnique]['libelle'] ?? null);
+
             }
-            //todo: test d'array_key_exists
-            $diff[$mcccOriginal->getCleUnique()]['pourcentage'] = new DiffObject($mcccOriginal->getPourcentage() !== 0.0 ? $mcccOriginal->getPourcentage() : '', $t[$mcccOriginal->getCleUnique()]['pourcentage'] ?? null);
-            $diff[$mcccOriginal->getCleUnique()]['nbEpreuves'] = new DiffObject($mcccOriginal->getNbEpreuves() !== 0 ? $mcccOriginal->getNbEpreuves() : '', $t[$mcccOriginal->getCleUnique()]['nbEpreuves'] ?? null);
-            $diff[$mcccOriginal->getCleUnique()]['libelle'] = new DiffObject($mcccOriginal->getLibelle(), $t[$mcccOriginal->getCleUnique()]['libelle'] ?? null);
+//            dump($diff);
+        } else {
+            foreach ($mcccsNouveau as $mcccNouveau) {
+                $t[$mcccNouveau->getCleUnique()]['pourcentage'] = $mcccNouveau->getPourcentage() !== 0.0 ? $mcccNouveau->getPourcentage() : '';
+                $t[$mcccNouveau->getCleUnique()]['nbEpreuves'] = $mcccNouveau->getNbEpreuves() !== 0 ? $mcccNouveau->getNbEpreuves() : '';
+                $t[$mcccNouveau->getCleUnique()]['libelle'] = $mcccNouveau->getLibelle();
+            }
+            foreach ($mcccsOriginal as $mcccOriginal) {
+                if (is_array($mcccOriginal)) {
+                    $mcccOriginal = $this->createMcccFromArray($mcccOriginal);
+                }
+                //todo: test d'array_key_exists
+                $cleUnique = $mcccOriginal->getCleUnique();
+                $diff[$cleUnique]['pourcentage'] = new DiffObject($mcccOriginal->getPourcentage() !== 0.0 ? $mcccOriginal->getPourcentage() : '', $t[$cleUnique]['pourcentage'] ?? null);
+                $diff[$cleUnique]['nbEpreuves'] = new DiffObject($mcccOriginal->getNbEpreuves() !== 0 ? $mcccOriginal->getNbEpreuves() : '', $t[$cleUnique]['nbEpreuves'] ?? null);
+                $diff[$cleUnique]['libelle'] = new DiffObject($mcccOriginal->getLibelle(), $t[$cleUnique]['libelle'] ?? null);
+            }
         }
-
 
         return $diff;
     }
