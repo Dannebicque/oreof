@@ -9,7 +9,6 @@
 
 namespace App\TypeDiplome\Licence\Services;
 
-use App\Classes\CalculStructureParcours;
 use App\Classes\Excel\ExcelWriter;
 use App\DTO\DiffObject;
 use App\DTO\StructureEc;
@@ -44,7 +43,7 @@ class LicenceMcccVersion extends AbstractLicenceMccc
     public function __construct(
         KernelInterface                   $kernel,
         protected ClientInterface         $client,
-        protected CalculStructureParcours $calculStructureParcours,
+        protected CalculStructureParcoursLicence $calculStructureParcours,
         protected VersioningParcours      $versioningParcours,
         protected ExcelWriter             $excelWriter,
         protected TypeEpreuveRepository   $typeEpreuveRepository
@@ -639,7 +638,7 @@ class LicenceMcccVersion extends AbstractLicenceMccc
         return $tabMcccs;
     }
 
-    private function calculDisplayMccc(array $mcccs, string $typeMccc, bool $isQuitus): array
+    private function calculDisplayMccc(array $mcccs, string $typeMccc, bool $isQuitus = false): array
     {
         $tDisplay = [];
 
