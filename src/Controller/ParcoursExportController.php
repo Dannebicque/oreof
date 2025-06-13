@@ -838,6 +838,22 @@ class ParcoursExportController extends AbstractController
                     ]
                 ];
                 break;
+            case 'rythmeFormation': 
+                return [
+                    'type' => 'full_block',
+                    'libelle' => '',
+                    'value' => [
+                        [
+                            'libelle' => 'Rythme de formation',
+                            'content' => $parcours?->getRythmeFormation()?->getLibelle() ?? 'Non précisé'
+                        ],
+                        [
+                            'libelle' => 'Précisions sur le rythme de formation',
+                            'content' => $parcours?->getRythmeFormationTexte()
+                        ]
+                    ]
+                ];
+                break;
         }
     }
 
@@ -849,10 +865,11 @@ class ParcoursExportController extends AbstractController
             'objectifsFormation' => 4,
             'objectifsParcours' => 5,
             'resultatsAttendusParcours' => 6,
-            'competencesAcquises' => 7,
-            'poursuiteEtudes' => 8,
-            'debouchesParcours' => 9,
-            'localisationParcours' => 10,
+            'rythmeFormation' => 7,
+            'competencesAcquises' => 8,
+            'poursuiteEtudes' => 9,
+            'debouchesParcours' => 10,
+            'localisationParcours' => 11,
         ];
     }
 }
