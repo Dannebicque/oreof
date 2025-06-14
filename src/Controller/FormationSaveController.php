@@ -22,6 +22,7 @@ use App\Repository\UserRepository;
 use App\Repository\VilleRepository;
 use App\Utils\JsonRequest;
 use Doctrine\ORM\EntityManagerInterface;
+use JsonException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -35,7 +36,7 @@ class FormationSaveController extends BaseController
 
 
     /**
-     * @throws \JsonException
+     * @throws JsonException
      */
     #[Route('/formation/save/{formation}', name: 'app_formation_save')]
     public function save(
@@ -52,13 +53,11 @@ class FormationSaveController extends BaseController
         Formation $formation
     ): Response {
         $updateEntity->setGroups(['formation:read']);
-        $this->denyAccessUnlessGranted('CAN_FORMATION_EDIT_MY', $formation);
 
-
-//        if ($this->dpeWorkflow->can($formation, 'autoriser')) {
-//            //un champ est modifié, on met à jour l'état
-//            $this->dpeWorkflow->apply($formation, 'autoriser');
-//        }
+        $this->denyAccessUnlessGranted('EDIT', [
+            'route' => 'app_formation',
+            'subject' => $formation
+        ]);
 
         $data = JsonRequest::getFromRequest($request);
         $formationState->setFormation($formation);

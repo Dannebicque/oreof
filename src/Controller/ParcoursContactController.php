@@ -8,6 +8,7 @@ use App\Form\ContactType;
 use App\Repository\ContactRepository;
 use App\Utils\JsonRequest;
 use Doctrine\ORM\EntityManagerInterface;
+use JsonException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -107,7 +108,7 @@ class ParcoursContactController extends BaseController
     }
 
     /**
-     * @throws \JsonException
+     * @throws JsonException
      */
     #[Route('/{id}', name: 'app_parcours_contact_delete', methods: ['DELETE'])]
     public function delete(

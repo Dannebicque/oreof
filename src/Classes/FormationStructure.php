@@ -218,8 +218,6 @@ class FormationStructure
             }
 
             ksort($semestres);
-            $formation->setStructureSemestres($semestres);
-            $this->entityManager->flush();
         } else {
             //on supprime
             for ($i = 0; $i < $semestreNouveauDebut; $i++) {
@@ -238,8 +236,8 @@ class FormationStructure
                     $this->entityManager->remove($semestre);
                 }
             }
-            $formation->setStructureSemestres($semestres);
-            $this->entityManager->flush();
         }
+        $formation->setStructureSemestres($semestres);
+        $this->entityManager->flush();
     }
 }

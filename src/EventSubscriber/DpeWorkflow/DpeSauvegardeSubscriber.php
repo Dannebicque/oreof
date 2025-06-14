@@ -13,6 +13,7 @@ use App\Entity\DpeParcours;
 use App\Service\TypeDiplomeResolver;
 use App\Utils\Tools;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Workflow\Event\Event;
@@ -45,12 +46,12 @@ class DpeSauvegardeSubscriber implements EventSubscriberInterface
             $parcours = $dpeParcours->getParcours();
             $dpe = $dpeParcours->getCampagneCollecte();
             if (null === $parcours) {
-                throw new \Exception('Parcours non trouvé');
+                throw new Exception('Parcours non trouvé');
             }
             $formation = $parcours->getFormation();
 
             if (null === $formation) {
-                throw new \Exception('Pas de formation.');
+                throw new Exception('Pas de formation.');
             }
         } else {
             return ;
@@ -58,11 +59,11 @@ class DpeSauvegardeSubscriber implements EventSubscriberInterface
         $typeDiplome = $this->typeDiplomeResolver->get($formation->getTypeDiplome());
 
         if (null === $typeDiplome) {
-            throw new \Exception('Aucun modèle MCC n\'est défini pour ce diplôme');
+            throw new Exception('Aucun modèle MCC n\'est défini pour ce diplôme');
         }
 
         if (null === $dpe) {
-            throw new \Exception('Aucune campagne de collecte n\'est définie pour ce diplôme');
+            throw new Exception('Aucune campagne de collecte n\'est définie pour ce diplôme');
         }
 
 

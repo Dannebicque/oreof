@@ -74,18 +74,13 @@ class UserProfil
     public function getDisplayCentre(): string
     { // affiche la bonne info selon le centre du profil
         if ($this->getProfil() !== null) {
-            switch ($this->getProfil()->getCentre()) {
-                case CentreGestionEnum::CENTRE_GESTION_ETABLISSEMENT:
-                    return $this->getEtablissement()?->getLibelle();
-                case CentreGestionEnum::CENTRE_GESTION_COMPOSANTE:
-                    return $this->getComposante()?->getLibelle();
-                case CentreGestionEnum::CENTRE_GESTION_FORMATION:
-                    return $this->getFormation()?->getDisplayLong();
-                case CentreGestionEnum::CENTRE_GESTION_PARCOURS:
-                    return $this->getParcours()?->getDisplay();
-                default:
-                    return '';
-            }
+            return match ($this->getProfil()->getCentre()) {
+                CentreGestionEnum::CENTRE_GESTION_ETABLISSEMENT => $this->getEtablissement()?->getLibelle(),
+                CentreGestionEnum::CENTRE_GESTION_COMPOSANTE => $this->getComposante()?->getLibelle(),
+                CentreGestionEnum::CENTRE_GESTION_FORMATION => $this->getFormation()?->getDisplayLong(),
+                CentreGestionEnum::CENTRE_GESTION_PARCOURS => $this->getParcours()?->getDisplay(),
+                default => '',
+            };
         }
 
         return 'non précisé';

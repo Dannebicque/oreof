@@ -5,7 +5,7 @@ bouton pour valider/invalide les étapes successives #}
 }) }}>
     {% set sort = params.sort is defined ? params.sort : 'typeDiplome' %}
     {% set direction = params.direction is defined ? params.direction : 'asc' %}
-    {% set isGranted = is_granted('ROLE_ADMIN') or is_granted('CAN_ETABLISSEMENT_SHOW_ALL', app.user) or isCfvu %}
+    {% set isGranted = is_granted('ROLE_ADMIN') or is_granted('SHOW', {route: 'app_etablissement', subject: 'etablissement'}) or isCfvu %}
     <table class="table">
         <thead>
         <tr>
@@ -275,7 +275,7 @@ bouton pour valider/invalide les étapes successives #}
                             <span> vérifier</span>
                         </a>
 
-                        {% if is_granted('CAN_FORMATION_EDIT_MY', formation) %}
+                        {% if is_granted('EDIT', {route: 'app_formation', subject: formation}) %}
                             <a href="{{ path('app_formation_edit',{'slug': formation.slug}) }}"
                                class="btn btn-sm text-warning"
                                data-bs-toggle="tooltip"

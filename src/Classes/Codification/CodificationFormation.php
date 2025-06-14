@@ -10,14 +10,12 @@
 namespace App\Classes\Codification;
 
 use App\DTO\StructureEc;
-use App\DTO\StructureParcours;
 use App\DTO\StructureSemestre;
 use App\DTO\StructureUe;
 use App\Entity\FicheMatiere;
 use App\Entity\Formation;
 use App\Entity\Parcours;
 use App\Enums\TypeParcoursEnum;
-use App\Service\TypeDiplomeResolver;
 use App\TypeDiplome\TypeDiplomeHandlerInterface;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -263,12 +261,11 @@ class CodificationFormation
                     foreach ($ue->uesEnfants() as $ueEnfant) {
                         if ($ueEnfant->ue->getNatureUeEc()?->isLibre() === true) {
                             $ueEnfant->ueOrigine->setCodeApogee($codeUe. chr(64+$ordreUe).'X');
-                            $ordreUe++;
                         } else {
                             $ueEnfant->ueOrigine->setCodeApogee($codeUe. chr(64+$ordreUe));
                             $this->setCodificationEc($ueEnfant, true, $isLasEc);
-                            $ordreUe++;
                         }
+                        $ordreUe++;
                     }
                 } else {
                     $ue->ueOrigine->setCodeApogee($codeUe);

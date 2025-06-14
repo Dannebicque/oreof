@@ -63,7 +63,7 @@ class FormationResponsableController extends BaseController
             $newRf->setNouveauResponsable($user);
             $newRf->setTypeRf($datas->getTypeRf());
             $newRf->setCommentaire($commentaire);
-            $newRf->setDateDemande(new \DateTime());
+            $newRf->setDateDemande(new DateTime());
             //initialiser le marking du workflow
             $this->changeRfWorkflow->apply($newRf, 'effectuer_demande');
 

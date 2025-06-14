@@ -35,10 +35,12 @@ use App\Repository\TypeDiplomeRepository;
 use App\Repository\UserCentreRepository;
 use App\Service\VersioningFormation;
 use App\Service\VersioningParcours;
+use App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException;
 use App\Utils\JsonRequest;
 use DateTime;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Jfcherng\Diff\DiffHelper;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Filesystem\Filesystem;
@@ -65,12 +67,13 @@ class FormationController extends BaseController
     public function listeCfvu(
         DpeParcoursRepository $dpeParcoursRepository,
     ) {
-        if ($this->isGranted('CAN_ETABLISSEMENT_CONSEILLER_ALL')) {
+        $allparcours = [];
+        if ($this->isGranted('SHOW', ['route' => 'app_etablissement', 'subject' => 'etablissement'])) {
             $allparcours = $dpeParcoursRepository->findByCampagneAndTypeValidation($this->getCampagneCollecte(), 'soumis_cfvu');
         }
 
         return $this->render('validation/_liste.html.twig', [
-            'allparcours' => $allparcours,
+            'allparcours' => $allparcours ?? [],
             'etape' => 'cfvu',
             'isCfvu' => true,
         ]);
@@ -111,10 +114,10 @@ class FormationController extends BaseController
         if ($request->query->has('formation')) {
             $formation = $formationRepository->find($request->query->get('formation'));
             if ($formation === null) {
-                throw new \Exception('Formation non trouvée');
+                throw new Exception('Formation non trouvée');
             }
         } else {
-            throw new \Exception('Formation non trouvée');
+            throw new Exception('Formation non trouvée');
         }
 
         $parcourss = $formation->getParcours();
@@ -212,7 +215,10 @@ class FormationController extends BaseController
         Request              $request,
         FormationRepository  $formationRepository
     ): Response {
-        $this->denyAccessUnlessGranted('CAN_FORMATION_CREATE_ALL', $this->getUser());
+        $this->denyAccessUnlessGranted('MANAGE', [
+            'route' => 'app_formation',
+            'subject' => 'formation'
+        ]);
 
         $formation = new Formation($this->getCampagneCollecte());
         $form = $this->createForm(FormationSesType::class, $formation, [
@@ -328,7 +334,7 @@ class FormationController extends BaseController
     }
 
     /**
-     * @throws \App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException
+     * @throws TypeDiplomeNotFoundException
      */
     #[Route('/api', name: 'app_formation_api', methods: ['GET'])]
     public function api(
@@ -354,7 +360,7 @@ class FormationController extends BaseController
     }
 
     /**
-     * @throws \App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException
+     * @throws TypeDiplomeNotFoundException
      */
     #[Route('/{slug}', name: 'app_formation_show', methods: ['GET'])]
     public function show(
@@ -365,7 +371,7 @@ class FormationController extends BaseController
         $typeDiplome = $formation->getTypeDiplome();
 
         if ($typeDiplome === null) {
-            throw new \Exception('Type de diplôme non trouvé');
+            throw new Exception('Type de diplôme non trouvé');
         }
 
         $typeD = $this->typeDiplomeResolver->get($typeDiplome);
@@ -397,7 +403,7 @@ class FormationController extends BaseController
     }
 
     /**
-     * @throws \App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException
+     * @throws TypeDiplomeNotFoundException
      */
     #[Route('/{slug}/edit', name: 'app_formation_edit', methods: ['GET', 'POST'])]
     public function edit(
@@ -408,9 +414,17 @@ class FormationController extends BaseController
         Formation           $formation,
     ): Response {
 
-        if (!$this->isGranted('CAN_FORMATION_EDIT_MY', $formation)) {
+        if (!$this->isGranted('EDIT',
+            [
+                'route' => 'app_formation',
+                'subject' => $formation,
+            ])) {
             if($formation->isHasParcours() === false && count($formation->getParcours()) === 1) {
-                if (!$this->isGranted('CAN_PARCOURS_EDIT_MY', $formation->getParcours()->first())) {
+                if (!$this->isGranted('EDIT',
+                    [
+                        'route' => 'app_parcours',
+                        'subject' => $formation->getParcours()->first(),
+                    ])) {
                     return $this->redirectToRoute('app_formation_show', ['slug' => $formation->getSlug()]);
                 }
             } else {
@@ -419,7 +433,7 @@ class FormationController extends BaseController
         }
 
         $formationState->setFormation($formation);
-        $typeD = $$this->typeDiplomeResolver->get($formation->getTypeDiplome());
+        $typeD = $this->typeDiplomeResolver->get($formation->getTypeDiplome());
         if ($formation->getParcours()?->first() !== false) {
             $parcoursState->setParcours($formation->getParcours()?->first());
         }
@@ -540,7 +554,7 @@ class FormationController extends BaseController
 
             $this->addFlashBag('success', 'La formation a bien été sauvegardée.');
             return $this->redirectToRoute('app_formation_show', ['slug' => $formation->getSlug()]);
-        } catch(\Exception $e) {
+        } catch (Exception $e) {
             $errorMessage = "[{$dateHeure}] Le versioning de la formation a rencontré une erreur."
                 . "\nUtilisateur : {$utilisateur->getPrenom()} {$utilisateur->getNom()} - ID : {$utilisateur->getUsername()}"
                 ."\nMessage : {$e->getMessage()}\n";
@@ -588,7 +602,7 @@ class FormationController extends BaseController
                 // 'isBut' => $versionFormation->getFormation()->getTypeDiplome()->getLibelleCourt() === "BUT"
             ]);
 
-        } catch(\Exception $e) {
+        } catch (Exception $e) {
             $now = new DateTime();
             $dateHeure = $now->format('d-m-Y_H-i-s');
             $errorMessage = "[{$dateHeure}] La visualisation de version de la formation a rencontré une erreur."

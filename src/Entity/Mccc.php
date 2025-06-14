@@ -11,6 +11,7 @@ namespace App\Entity;
 
 use App\Repository\McccRepository;
 use App\Utils\Tools;
+use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -64,7 +65,7 @@ class Mccc
 
     #[Groups(['DTO_json_versioning', 'fiche_matiere_versioning'])]
     #[ORM\Column(type: Types::TIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $duree = null;
+    private ?DateTimeInterface $duree = null;
 
     #[Groups(['DTO_json_versioning', 'fiche_matiere_versioning'])]
     #[ORM\Column(nullable: true)]
@@ -190,12 +191,12 @@ class Mccc
         return $this;
     }
 
-    public function getDuree(): ?\DateTimeInterface
+    public function getDuree(): ?DateTimeInterface
     {
         return $this->duree;
     }
 
-    public function setDuree(?\DateTimeInterface $duree): static
+    public function setDuree(?DateTimeInterface $duree): static
     {
         $this->duree = $duree;
 

@@ -2,6 +2,8 @@
 
 namespace App\Service\Apogee\Classes;
 
+use InvalidArgumentException;
+
 class TableauComposanteDTO2
 {
     /**
@@ -17,8 +19,8 @@ class TableauComposanteDTO2
 
     private function add(string $codComposante){
         if(strlen($codComposante) !== 3){
-            throw new \InvalidArgumentException(
-                "Le code de composante associée est invalide. Il doit avoir une longueur de 3 (actuel : " 
+            throw new InvalidArgumentException(
+                "Le code de composante associée est invalide. Il doit avoir une longueur de 3 (actuel : "
                 . strlen($codComposante) . ")
             ");
         }

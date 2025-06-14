@@ -10,12 +10,12 @@
 namespace App\Controller\Config;
 
 use App\DTO\MentionDto;
-use App\Entity\Mention;
 use App\Form\MentionDtoType;
 use App\Repository\DomaineRepository;
 use App\Repository\TypeDiplomeRepository;
 use App\Service\MentionService;
 use App\Utils\JsonRequest;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -125,7 +125,7 @@ class MentionController extends AbstractController
                 $this->mentionService->createMention($mentionDto);
                 $this->addFlash('success', 'La mention a été créée avec succès.');
                 return $this->json(['success' => true]);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 return $this->json([
                     'success' => false,
                     'error' => $e->getMessage()
@@ -176,7 +176,7 @@ class MentionController extends AbstractController
                     $this->mentionService->updateMention($mention, $mentionDto);
                     $this->addFlash('success', 'La mention a été mise à jour avec succès.');
                     return $this->json(['success' => true]);
-                } catch (\Exception $e) {
+                } catch (Exception $e) {
                     return $this->json([
                         'success' => false,
                         'error' => $e->getMessage()
@@ -205,7 +205,7 @@ class MentionController extends AbstractController
             $this->mentionService->duplicateMention($mention);
 
             return $this->json(['success' => true]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return $this->json([
                 'success' => false,
                 'error' => $e->getMessage()
@@ -247,7 +247,7 @@ class MentionController extends AbstractController
                 'success' => false,
                 'error' => $e->getMessage()
             ], Response::HTTP_NOT_FOUND);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return $this->json([
                 'success' => false,
                 'error' => $e->getMessage()

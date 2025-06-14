@@ -15,7 +15,6 @@ use App\Entity\CampagneCollecte;
 use App\Entity\Parcours;
 use App\Entity\SemestreParcours;
 use App\Repository\FormationRepository;
-use App\Utils\CleanTexte;
 use App\Utils\Tools;
 use DateTime;
 use Symfony\Component\HttpFoundation\StreamedResponse;

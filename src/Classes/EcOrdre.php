@@ -15,11 +15,11 @@ use App\Repository\ElementConstitutifRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
-class EcOrdre
+readonly class EcOrdre
 {
     public function __construct(
-        private readonly EntityManagerInterface       $entityManager,
-        private readonly ElementConstitutifRepository $elementConstitutifRepository
+        private EntityManagerInterface       $entityManager,
+        private ElementConstitutifRepository $elementConstitutifRepository
     ) {
     }
 

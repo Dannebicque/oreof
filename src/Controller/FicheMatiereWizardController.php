@@ -24,6 +24,7 @@ use App\Repository\FicheMatiereMutualisableRepository;
 use App\Repository\FormationRepository;
 use App\Repository\ParcoursRepository;
 use App\Repository\TypeEpreuveRepository;
+use App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException;
 use App\Utils\JsonRequest;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -40,7 +41,7 @@ class FicheMatiereWizardController extends BaseController
     }
 
     /**
-     * @throws \App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException
+     * @throws TypeDiplomeNotFoundException
      */
     #[Route('/{id}/synthese', name: 'app_fiche_matiere_wizard_synthese', methods: ['GET'])]
     public function synthese(
@@ -251,10 +252,6 @@ class FicheMatiereWizardController extends BaseController
         FicheMatiere        $ficheMatiere,
         string              $type,
     ): Response {
-        if ($ficheMatiere->getParcours() !== null) {
-            $dpeParcours = GetDpeParcours::getFromParcours($ficheMatiere->getParcours());
-        }
-
         $parcours = [];
         $ecProprietaire = null;
         foreach ($ficheMatiere->getElementConstitutifs() as $ec) {
@@ -269,11 +266,11 @@ class FicheMatiereWizardController extends BaseController
 
         $typeDiplome = $ficheMatiere->getParcours()?->getFormation()?->getTypeDiplome();
 
+        if ($typeDiplome === null) {
+            throw new TypeDiplomeNotFoundException('Type de diplôme non trouvé pour la fiche matière.');
+        }
+
         if ($type === 'but') {
-//            dump($dpeParcours);
-//            if ($dpeParcours !==null && !Access::isAccessible($dpeParcours, 'cfvu')) {
-//                return $this->render('fiche_matiere_wizard/_access_denied.html.twig');
-//            }
             $form = $this->createForm(FicheMatiereStep4Type::class, $ficheMatiere);
             $typeD = $this->typeDiplomeResolver->get($typeDiplome);
 

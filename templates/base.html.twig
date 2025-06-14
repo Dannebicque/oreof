@@ -182,7 +182,7 @@
                             </ul>
                         </li>
                     {% else %}
-                        {% if is_granted('SHOW', {route: 'app_composante_show', subject: 'composante'}) %}
+                        {% if is_granted('SHOW', {route: 'app_composante', subject: 'composante'}) %}
                             <li class="mega">
                                 <a href="#pilotage" data-href="pilotage">
                                     <i class="fal fa-school icon"></i>
@@ -192,7 +192,7 @@
                                 </a>
                                 <ul id="pilotage">
                                     {% for composante in app.user.composanteResponsableDpe %}
-                                        {% if is_granted('SHOW', {route: 'app_composante_show', subject: composante}) %}
+                                        {% if is_granted('SHOW', {route: 'app_composante', subject: composante}) %}
                                             <li>
                                                 <a href="#composante_{{ composante.id }}">
                                                     <span class="label">{{ composante.libelle }}</span>
@@ -242,7 +242,7 @@
                         {% endif %}
                     {% endif %}
 
-                    {% if is_granted('EDIT', {route: 'app_etablissement_manage', subject: 'etablissement'}) or is_granted('ROLE_ADMIN') %}
+                    {% if is_granted('EDIT', {route: 'app_etablissement', subject: 'etablissement'}) or is_granted('ROLE_ADMIN') %}
                         <li>
                             <a href="#conseils" data-href="conseils">
                                 <i class="fal fa-chalkboard-user icon"></i>
@@ -263,7 +263,7 @@
                         </li>
                     {% endif %}
 
-                    {% if is_granted('EDIT', {route: 'app_user_show', subject: 'composante'}) or is_granted('ROLE_ADMIN') %}
+                    {% if is_granted('EDIT', {route: 'app_composante', subject: 'composante'}) or is_granted('ROLE_ADMIN') %}
                         <li>
                             <a href="#droits" data-href="droits">
                                 <i class="fal fa-chalkboard-user icon"></i>
@@ -271,7 +271,7 @@
                             </a>
                             <ul id="droits">
                                 <li>
-                                    <a href="{{ path('app_user_attente') }}">
+                                    <a href="{{ path('app_user_profil_attente') }}">
                                         <span class="label">Utilisateurs en attente</span>
                                     </a>
                                 </li>
@@ -281,12 +281,6 @@
                                     </a>
                                 </li>
                                 {% if is_granted('ROLE_ADMIN') %}
-                                    <li>
-                                        <a href="{{ path('app_user_index') }}">
-                                            <span class="label">Affectation des profils (ancienne page)</span>
-                                        </a>
-                                    </li>
-
                                     <li>
                                         <a href="{{ path('app_user_repertoire') }}">
                                             <span class="label">Répertoire des contacts</span>

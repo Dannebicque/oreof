@@ -69,7 +69,7 @@ class AppExtension extends AbstractExtension
         return false;
     }
 
-    public function badgeEnum(BadgeEnumInterface $value): string
+    public function badgeEnum(?BadgeEnumInterface $value): string
     {
         return ($value !== null) ? '<span class="badge '.$value->getBadge().'">' . $value->getLibelle() . '</span>' : '<span class="badge bg-danger">Non renseigné</span>';
     }

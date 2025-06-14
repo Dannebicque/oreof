@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Classes\JsonReponse;
 use App\Entity\Composante;
 use App\Message\Export;
-use App\Repository\CampagneCollecteRepository;
 use App\Repository\ComposanteRepository;
 use App\Repository\DpeParcoursRepository;
 use App\Utils\Tools;
@@ -77,7 +76,10 @@ class ExportController extends BaseController
     public function exportShow(
         ComposanteRepository       $composanteRepository,
     ): Response {
-        $this->denyAccessUnlessGranted('CAN_ETABLISSEMENT_SHOW_ALL', $this->getUser());
+        $this->denyAccessUnlessGranted('SHOW', [
+            'route' => 'app_etablissement',
+            'subject' => 'etablissement'
+        ]);
 
         return $this->render('export/index.html.twig', [
             'composantes' => $composanteRepository->findAll(),

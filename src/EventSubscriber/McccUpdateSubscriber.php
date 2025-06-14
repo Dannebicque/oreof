@@ -9,9 +9,7 @@
 
 namespace App\EventSubscriber;
 
-use App\Classes\GetDpeParcours;
 use App\Classes\Mailer;
-use App\Enums\TypeModificationDpeEnum;
 use App\Events\McccUpdateEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 

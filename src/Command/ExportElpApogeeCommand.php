@@ -28,8 +28,10 @@ use App\Service\TypeDiplomeResolver;
 use DateTime;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use SoapClient;
 use stdClass;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -66,7 +68,7 @@ class ExportElpApogeeCommand extends Command
     private UeRepository $ueRepository;
     private Filesystem $filesystem;
     private ParameterBagInterface $parameterBag;
-    private ?\SoapClient $soapClient;
+    private ?SoapClient $soapClient;
 
     public static array $errorMessagesArray = [];
     private TypeDiplomeResolver $typeDiplomeResolver;
@@ -296,7 +298,7 @@ class ExportElpApogeeCommand extends Command
                                 $this->insertSeveralElp($soapObjectArray);
                                 $io->success("Commande exécutée avec succès");
                                 return Command::SUCCESS;
-                            }catch(\Exception $e){
+                            } catch (Exception $e) {
                                 $io->writeln("Une erreur est survenue durant l'insertion.");
                                 $io->writeln("Message : " . $e->getMessage());
                                 return Command::FAILURE;
@@ -339,7 +341,7 @@ class ExportElpApogeeCommand extends Command
                             $io->writeln("\nInsertion réussie !");
                             $io->writeln("{$nbElpInsere} ELP Insérés !");
                             return Command::SUCCESS;
-                        }catch(\Exception $e){
+                        } catch (Exception $e) {
                             $io->writeln("\nUne erreur est survenue durant l'insertion.");
                             $io->writeln("Message : " . $e->getMessage());
                             return Command::FAILURE;
@@ -528,12 +530,11 @@ class ExportElpApogeeCommand extends Command
                     );
                     $io->writeln("\nRapport généré !");
                     $io->warning("Des erreurs de codes APOGEE ont été détectées.");
-                    return Command::SUCCESS;
                 }
                 else {
                     $io->success("Aucun code APOGEE invalide détecté.");
-                    return Command::SUCCESS;
                 }
+                return Command::SUCCESS;
 
             }
             // Export Excel des LSE de tous les parcours disponibles
@@ -632,12 +633,10 @@ class ExportElpApogeeCommand extends Command
                         }
                         $io->writeln("\nInsertion réussie !");
                         $io->writeln("{$nbLseInsere} LSE Insérés.");
-                        return Command::SUCCESS;
-                    }
-                    else {
+                    } else {
                         $io->warning("La commande d'insertion a été annulée.");
-                        return Command::SUCCESS;
                     }
+                    return Command::SUCCESS;
                 }
                 else {
                     $io->warning("La commande d'insertion a été annulée.");
@@ -659,9 +658,7 @@ class ExportElpApogeeCommand extends Command
                 }
                 if($nbDoublons === 0){
                     $io->success("Aucun doublon détecté !");
-                    return Command::SUCCESS;
-                }
-                else {
+                } else {
                     if($withJsonExport){
                         $date = new DateTimeImmutable();
                         $now = $date->format("d-m-Y_H-i-s");
@@ -674,8 +671,8 @@ class ExportElpApogeeCommand extends Command
                     if($withJsonExport){
                         $io->writeln("Le rapport contenant les doublons a été généré.");
                     }
-                    return Command::SUCCESS;
                 }
+                return Command::SUCCESS;
             }
             // Vérifie qu'il n'y a pas trop d'enfants imbriqués dans les parcours disponibles
             if($checkNestedChildren){
@@ -810,7 +807,7 @@ class ExportElpApogeeCommand extends Command
                             dump($result);
                             $io->writeln('Insertion réussie !');
                             return Command::SUCCESS;
-                        }catch(\Exception $e){
+                        } catch (Exception $e) {
                             $io->writeln("Une erreur est survenue durant l'insertion. (ELP)");
                             $io->writeln("Message : " . $e->getMessage());
                             return Command::FAILURE;
@@ -850,7 +847,7 @@ class ExportElpApogeeCommand extends Command
                             dump($result);
                             $io->writeln('Insertion réussie !');
                             return Command::SUCCESS;
-                        }catch(\Exception $e){
+                        } catch (Exception $e) {
                             $io->writeln("Une erreur est survenue durant l'insertion. (LSE)");
                             $io->writeln("Message : " . $e->getMessage());
                             return Command::FAILURE;
@@ -879,7 +876,7 @@ class ExportElpApogeeCommand extends Command
                     return [
                         'slugFormation' => $matches[1],
                         'idFormation' => (int)$matches[2],
-                        'libelleParcours' => isset($matches[4]) ? $matches[4] : null,
+                        'libelleParcours' => $matches[4] ?? null,
                         'idParcours' => isset($matches[5]) ? (int)$matches[5] : null
                     ];
                 }, $textData);
@@ -956,7 +953,7 @@ class ExportElpApogeeCommand extends Command
                             $io->writeln("\nInsertion réussie !");
                             $io->writeln("{$nbElpInsere} ELP insérés.");
                             return Command::SUCCESS;
-                        }catch(\Exception $e){
+                        } catch (Exception $e) {
                             $io->writeln("\nUne erreur est survenue durant l'insertion.");
                             $io->writeln("Message : " . $e->getMessage());
                             return Command::FAILURE;
@@ -1000,12 +997,10 @@ class ExportElpApogeeCommand extends Command
                         }
                         $io->writeln("\nInsertion réussie !");
                         $io->writeln("{$nbLseInsere} LSE insérés.");
-                        return Command::SUCCESS;
-                    }
-                    else {
+                    } else {
                         $io->warning("La commande d'insertion a été annulée.");
-                        return Command::SUCCESS;
                     }
+                    return Command::SUCCESS;
                 }
                 else {
                     $io->warning("La commande d'insertion a été annulée.");
@@ -1231,7 +1226,7 @@ class ExportElpApogeeCommand extends Command
      */
     private function createSoapClient() : void {
         $wsdl = $this->parameterBag->get('WSDL_APOTEST');
-        $this->soapClient = new \SoapClient($wsdl, [
+        $this->soapClient = new SoapClient($wsdl, [
             "trace" => true
         ]);
     }
@@ -1241,7 +1236,7 @@ class ExportElpApogeeCommand extends Command
      */
     private function createSoapClientProduction() : void {
         $wsdl = $this->parameterBag->get('WSDL_APOGEE_PRODUCTION');
-        $this->soapClient = new \SoapClient($wsdl, [
+        $this->soapClient = new SoapClient($wsdl, [
             "trace" => true
         ]);
     }
@@ -1257,7 +1252,7 @@ class ExportElpApogeeCommand extends Command
             return $this->soapClient->__soapCall("creerModifierELP", [$param]);
         }
         else {
-            throw new \Exception("Soap Client is not initialized.");
+            throw new Exception("Soap Client is not initialized.");
         }
     }
 
@@ -1272,7 +1267,7 @@ class ExportElpApogeeCommand extends Command
             return $this->soapClient->__soapCall("creerLSE", [$param]);
         }
         else {
-            throw new \Exception("Soap Client is not initialized.");
+            throw new Exception("Soap Client is not initialized.");
         }
     }
 
@@ -1288,7 +1283,7 @@ class ExportElpApogeeCommand extends Command
                 $this->soapClient->__soapCall("creerModifierELP", [$elpWS]);
             }
         }else {
-            throw new \Exception('Soap Client is not initialized.');
+            throw new Exception('Soap Client is not initialized.');
         }
     }
 
@@ -1305,7 +1300,7 @@ class ExportElpApogeeCommand extends Command
             }
         }
         else {
-            throw new \Exception('Soap Client is not initialized.');
+            throw new Exception('Soap Client is not initialized.');
         }
     }
 

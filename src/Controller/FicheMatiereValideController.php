@@ -31,14 +31,13 @@ class FicheMatiereValideController extends BaseController
 
     #[Route('/fiche-matiere/valide/formation/{formation}', name: 'fiche_matiere_valide_formation')]
     public function valideFormation(
-        CalculStructureParcours $calculStructureParcours,
         Formation $formation
     ): Response {
         $stats = [];
         $parcourss = $formation->getParcours();
-
+        $typeD = $this->typeDiplomeResolver->get($formation->getTypeDiplome());
         foreach ($parcourss as $parcours) {
-            $stats[$parcours->getId()] = $calculStructureParcours->calcul($parcours, false);
+            $stats[$parcours->getId()] = $typeD->calculStructureParcours($parcours, false);
             //update des stats sur parcours
             $parcours->setEtatsFichesMatieres($stats[$parcours->getId()]->statsFichesMatieresParcours);
         }
@@ -54,11 +53,10 @@ class FicheMatiereValideController extends BaseController
 
     #[Route('/fiche-matiere/valide/parcours/{parcours}', name: 'fiche_matiere_valide_parcours')]
     public function valideParcours(
-        CalculStructureParcours $calculStructureParcours,
         Parcours                     $parcours
     ): Response {
-
-        $stats = $calculStructureParcours->calcul($parcours, false, false);
+        $typeD = $this->typeDiplomeResolver->get($parcours->getFormation()?->getTypeDiplome());
+        $stats = $typeD->calculStructureParcours($parcours, false, false);
         $parcours->setEtatsFichesMatieres($stats->statsFichesMatieresParcours);
         $this->entityManager->flush();
 
@@ -73,7 +71,6 @@ class FicheMatiereValideController extends BaseController
     public function valideParcoursValide(
         FormationRepository $formationRepository,
         ParcoursRepository   $parcoursRepository,
-        CalculStructureParcours $calculStructureParcours,
         ValidationProcessFicheMatiere        $validationProcessFicheMatiere,
         FicheMatiereProcess    $ficheMatiereProcess,
         FicheMatiereRepository $ficheMatiereRepository,
@@ -97,17 +94,25 @@ class FicheMatiereValideController extends BaseController
 
         if ('formation' === $type) {
             $formation = $formationRepository->find($request->query->get('id'));
+            if ($formation === null) {
+                return JsonReponse::error('Formation non trouvée');
+            }
+            $typeD = $this->typeDiplomeResolver->get($formation->getTypeDiplome());
             if ($formation !== null) {
                 $parcourss = $formation->getParcours();
                 foreach ($parcourss as $parcours) {
-                    $stats = $calculStructureParcours->calcul($parcours, false);
+                    $stats = $typeD->calculStructureParcours($parcours, false);
                     $parcours->setEtatsFichesMatieres($stats->statsFichesMatieresParcours);
                 }
             }
         } else {
             $parcours = $parcoursRepository->find($request->query->get('id'));
+            if ($parcours === null) {
+                return JsonReponse::error('Parcours non trouvé');
+            }
+            $typeD = $this->typeDiplomeResolver->get($parcours->getFormation()?->getTypeDiplome());
             if ($parcours !== null) {
-                $stats = $calculStructureParcours->calcul($parcours, false, false);
+                $stats = $typeD->calculStructureParcours($parcours, false, false);
                 $parcours->setEtatsFichesMatieres($stats->statsFichesMatieresParcours);
             }
         }
@@ -121,7 +126,6 @@ class FicheMatiereValideController extends BaseController
     public function valideParcoursValideUpdate(
         FormationRepository $formationRepository,
         ParcoursRepository   $parcoursRepository,
-        CalculStructureParcours $calculStructureParcours,
         Request                $request,
     ): Response {
         $type = $request->query->get('type');
@@ -130,24 +134,27 @@ class FicheMatiereValideController extends BaseController
         }
 
         if ('formation' === $type) {
+
             $formation = $formationRepository->find($request->query->get('id'));
             if ($formation !== null) {
+                $typeD = $this->typeDiplomeResolver->get($formation->getTypeDiplome());
                 $parcourss = $formation->getParcours();
                 foreach ($parcourss as $parcours) {
-                    $stats = $calculStructureParcours->calcul($parcours, false);
+                    $stats = $typeD->calculStructureParcours($parcours, false);
                     $parcours->setEtatsFichesMatieres($stats->statsFichesMatieresParcours);
                 }
             }
         } else {
             $parcours = $parcoursRepository->find($request->query->get('id'));
             if ($parcours !== null) {
-                $stats = $calculStructureParcours->calcul($parcours, false, false);
+                $typeD = $this->typeDiplomeResolver->get($parcours->getFormation()?->getTypeDiplome());
+                $stats = $typeD->calculStructureParcours($parcours, false, false);
                 $parcours->setEtatsFichesMatieres($stats->statsFichesMatieresParcours);
             }
         }
 
         $this->entityManager->flush();
-$this->addFlashBag('success', '% mis à jour');
+        $this->addFlashBag('success', '% mis à jour');
 
 //redirection sur page courage
         $referer = $request->headers->get('referer');

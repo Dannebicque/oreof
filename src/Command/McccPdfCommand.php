@@ -11,6 +11,7 @@ use App\TypeDiplome\But\Services\ButMccc;
 use App\TypeDiplome\Licence\Services\LicenceMccc;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -220,17 +221,17 @@ class McccPdfCommand extends Command
                 if($typeDiplome !== "BUT"){
                     $pdfFull = $this->licenceMccc->exportPdfLicenceMccc(
                         anneeUniversitaire: $anneeDpe,
-                        parcours : $parcours,
-                        versionFull: true,
+                        parcours: $parcours,
+                        dateCfvu: $dateCfvu,
                         dateConseil: $dateConseil,
-                        dateCfvu: $dateCfvu
+                        versionFull: true
                     );
                     $pdfSimplifie = $this->licenceMccc->exportPdfLicenceMccc(
                         anneeUniversitaire: $anneeDpe,
                         parcours: $parcours,
-                        versionFull: false,
+                        dateCfvu: $dateCfvu,
                         dateConseil: $dateConseil,
-                        dateCfvu: $dateCfvu
+                        versionFull: false
                     );
                     $this->fs->appendToFile(
                         $directoryPath . "/" . $fileNamePdf,
@@ -245,16 +246,16 @@ class McccPdfCommand extends Command
                     $pdfFull = $this->butMccc->exportPdfbutMccc(
                         anneeUniversitaire: $anneeDpe,
                         parcours: $parcours,
-                        versionFull: true,
+                        dateCfvu: $dateCfvu,
                         dateConseil: $dateConseil,
-                        dateCfvu: $dateCfvu
+                        versionFull: true
                     );
                     $pdfSimplifie = $this->butMccc->exportPdfbutMccc(
                         anneeUniversitaire: $anneeDpe,
                         parcours: $parcours,
-                        versionFull: false,
+                        dateCfvu: $dateCfvu,
                         dateConseil: $dateConseil,
-                        dateCfvu: $dateCfvu
+                        versionFull: false
                     );
                     $this->fs->appendToFile(
                         $directoryPath . "/" . $fileNamePdf,
@@ -329,16 +330,16 @@ class McccPdfCommand extends Command
                         $pdfFull = $this->butMccc->exportPdfbutMccc(
                             anneeUniversitaire: $dpe,
                             parcours: $p,
-                            versionFull: true,
+                            dateCfvu: $dateCfvu,
                             dateConseil: $dateConseil,
-                            dateCfvu: $dateCfvu
+                            versionFull: true
                         );
                         $pdfSimplifie = $this->butMccc->exportPdfbutMccc(
                             anneeUniversitaire: $dpe,
                             parcours: $p,
-                            versionFull: false,
+                            dateCfvu: $dateCfvu,
                             dateConseil: $dateConseil,
-                            dateCfvu: $dateCfvu
+                            versionFull: false
                         );
                         $this->fs->appendToFile($directoryPath . "/" . $fileNamePdf, $pdfFull);
                         $this->fs->appendToFile($directoryPath . "/" . $fileNameSimplifiePdf, $pdfSimplifie);
@@ -347,16 +348,16 @@ class McccPdfCommand extends Command
                         $pdfFull = $this->licenceMccc->exportPdfLicenceMccc(
                             anneeUniversitaire: $dpe,
                             parcours: $p,
-                            versionFull: true,
+                            dateCfvu: $dateCfvu,
                             dateConseil: $dateConseil,
-                            dateCfvu: $dateCfvu
+                            versionFull: true
                         );
                         $pdfSimplifie = $this->licenceMccc->exportPdfLicenceMccc(
                             anneeUniversitaire: $dpe,
                             parcours: $p,
-                            versionFull: false,
+                            dateCfvu: $dateCfvu,
                             dateConseil: $dateConseil,
-                            dateCfvu: $dateCfvu
+                            versionFull: false
                         );
                         $this->fs->appendToFile($directoryPath . "/" . $fileNamePdf, $pdfFull);
                         $this->fs->appendToFile($directoryPath . "/" . $fileNameSimplifiePdf, $pdfSimplifie);
@@ -373,7 +374,7 @@ class McccPdfCommand extends Command
 
                 return Command::SUCCESS;
 
-            }catch(\Exception $e){
+            } catch (Exception $e) {
                 $io->error("Une erreur est survenue : \n{$e->getMessage()}");
 
                 $now = (new DateTime())->format('d-m-Y_H-i-s');

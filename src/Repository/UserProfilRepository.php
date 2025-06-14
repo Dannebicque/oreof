@@ -64,4 +64,21 @@ class UserProfilRepository extends ServiceEntityRepository
         $this->getEntityManager()->createQuery('DELETE FROM App\Entity\UserProfil')->execute();
         $this->getEntityManager()->getConnection()->executeStatement('SET FOREIGN_KEY_CHECKS = 1');
     }
+
+    public function findByComposanteEnableBySearch(CampagneCollecte $getCampagneCollecte, $composante, float|bool|int|string|null $q, float|bool|int|string|null $sort, float|bool|int|string|null $direction)
+    {//todo: comment filtrer par composante
+        return $this->createQueryBuilder('up')
+            ->join('up.profil', 'p')
+            ->join('up.user', 'u')
+            ->where('u.isEnable = :isEnable')
+            ->andWhere('u.isDeleted = false')
+            ->andWhere('up.campagneCollecte = :campagne OR up.campagneCollecte IS NULL')
+            ->setParameter('campagne', $getCampagneCollecte)
+            ->setParameter('isEnable', true)
+            // ->setParameter('composante', $composante)
+            //   ->setParameter('q', '%' . $q . '%')
+            ->addOrderBy('u.' . $sort, $direction)
+            ->getQuery()
+            ->getResult();
+    }
 }

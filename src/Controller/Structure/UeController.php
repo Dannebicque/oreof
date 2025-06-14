@@ -29,9 +29,12 @@ use App\Repository\SemestreRepository;
 use App\Repository\TypeUeRepository;
 use App\Repository\UeMutualisableRepository;
 use App\Repository\UeRepository;
+use App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException;
 use App\Utils\JsonRequest;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
+use JsonException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -65,7 +68,7 @@ class UeController extends BaseController
     }
 
     /**
-     * @throws \App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException
+     * @throws TypeDiplomeNotFoundException
      */
     #[Route('/add-ue/semestre/{semestre}/{parcours}', name: 'add_ue_semestre')]
     public function addUe(
@@ -89,7 +92,7 @@ class UeController extends BaseController
         $typeDiplome = $parcours->getFormation()?->getTypeDiplome();
 
         if ($typeDiplome === null) {
-            throw new \Exception('Type de diplôme non trouvé');
+            throw new Exception('Type de diplôme non trouvé');
         }
         $form = $this->createForm(UeType::class, $ue, [
             'action' => $this->generateUrl('structure_ue_add_ue_semestre', [
@@ -107,15 +110,9 @@ class UeController extends BaseController
         if ($form->isSubmitted() && $form->isValid()) {
             if ($ueOrigine !== null && $ueOrigine->getUeParent() !== null) {
                 $ue->setUeParent($ueOrigine->getUeParent());
-                if ($sens === 'after') {
-                    $ordreInit = $ueOrigine->getOrdre();
-                    $ueOrdre->decaleSousOrdre($ueOrigine->getUeParent(), $ueOrigine->getOrdre(), $ue);
-                    $ue->setOrdre($ordreInit);
-                } else {
-                    $ordreInit = $ueOrigine->getOrdre();
-                    $ueOrdre->decaleSousOrdre($ueOrigine->getUeParent(), $ueOrigine->getOrdre(), $ue);
-                    $ue->setOrdre($ordreInit);
-                }
+                $ordreInit = $ueOrigine->getOrdre();
+                $ueOrdre->decaleSousOrdre($ueOrigine->getUeParent(), $ueOrigine->getOrdre(), $ue);
+                $ue->setOrdre($ordreInit);
             } else {
                 $ordre = $ueRepository->getMaxOrdre($semestre);
                 $ue->setOrdre($ordre + 1);
@@ -164,7 +161,7 @@ class UeController extends BaseController
     }
 
     /**
-     * @throws \JsonException
+     * @throws JsonException
      */
     #[Route('/ue/update/typeUe/{ue}', name: 'change_type_ue', methods: ['POST'])]
     public function updateTypeUe(
@@ -188,7 +185,7 @@ class UeController extends BaseController
     }
 
     /**
-     * @throws \JsonException
+     * @throws JsonException
      */
     #[Route('/ue/update/nature/{ue}', name: 'change_nature_ue', methods: ['POST'])]
     public function updateNatureUe(
@@ -252,7 +249,7 @@ class UeController extends BaseController
     ): Response {
         $typeDiplome = $parcours->getFormation()?->getTypeDiplome();
         if ($typeDiplome === null) {
-            throw new \Exception('Type de diplôme non trouvé');
+            throw new Exception('Type de diplôme non trouvé');
         }
         $isAdmin = $this->isGranted('ROLE_ADMIN');
         $form = $this->createForm(UeType::class, $ue, [
@@ -309,7 +306,7 @@ class UeController extends BaseController
     }
 
     /**
-     * @throws \JsonException
+     * @throws JsonException
      */
     #[Route('/{id}', name: 'delete', methods: ['DELETE'])]
     public function delete(

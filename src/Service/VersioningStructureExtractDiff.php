@@ -18,6 +18,7 @@ use App\DTO\StructureSemestre;
 use App\DTO\StructureUe;
 use App\Entity\Mccc;
 use App\Utils\Tools;
+use DateTime;
 use DateTimeInterface;
 
 class VersioningStructureExtractDiff
@@ -119,16 +120,12 @@ class VersioningStructureExtractDiff
                 if (!array_key_exists($ordreEc, $ueNouvelle->elementConstitutifs)) {
                     //donc n'existe plus ?
                     $diffEc = $this->compareElementConstitutif($ec, null);
-                    if ($diffEc !== false) {
-                        $ueDiff = true;
-                        $diff['elementConstitutifs'][$ordreEc] = $diffEc;
-                    }
                 } else {
                     $diffEc = $this->compareElementConstitutif($ec, $ueNouvelle->elementConstitutifs[$ordreEc]);
-                    if ($diffEc !== false) {
-                        $ueDiff = true;
-                        $diff['elementConstitutifs'][$ordreEc] = $diffEc;
-                    }
+                }
+                if ($diffEc !== false) {
+                    $ueDiff = true;
+                    $diff['elementConstitutifs'][$ordreEc] = $diffEc;
                 }
             }
 
@@ -333,7 +330,7 @@ class VersioningStructureExtractDiff
         $mccc->setId($mcccOriginal['id']);
         if (array_key_exists('duree', $mcccOriginal)) {
             // création d'un objet DateTime à partir d'une chaine de caractères
-            $mccc->setDuree(new \DateTime($mcccOriginal['duree']));
+            $mccc->setDuree(new DateTime($mcccOriginal['duree']));
         }
         $mccc->setLibelle($mcccOriginal['libelle']);
         $mccc->setNumeroSession($mcccOriginal['numeroSession']);
@@ -406,11 +403,10 @@ class VersioningStructureExtractDiff
                             if ($mccc->getNbEpreuves() === 1) {
                                 //si une seule épreuve de CC, pas de prise en compte du %de TP en seconde session
                                 $pourcentageTp += $mccc->getPourcentage();
-                                $texteAvecTp .= 'TPr' . $nb2 . ' (' . $mccc->getPourcentage() . '%); ';
                             } else {
                                 $pourcentageTp += $mccc->pourcentageTp();
-                                $texteAvecTp .= 'TPr' . $nb2 . ' (' . $mccc->getPourcentage() . '%); ';
                             }
+                            $texteAvecTp .= 'TPr' . $nb2 . ' (' . $mccc->getPourcentage() . '%); ';
 
 
                             $nb2++;
@@ -685,11 +681,10 @@ class VersioningStructureExtractDiff
                                 //si une seule épreuve de CC, pas de prise en compte du %de TP en seconde session
                                 //todo: interdire la saisie d'un pourcentage de TP si une seule épreuve de CC
                                 $pourcentageTp += $mccc->getPourcentage();
-                                $texteAvecTp .= 'TPr' . $nb2 . ' (' . $mccc->getPourcentage() . '%); ';
                             } else {
                                 $pourcentageTp += $mccc->pourcentageTp();
-                                $texteAvecTp .= 'TPr' . $nb2 . ' (' . $mccc->getPourcentage() . '%); ';
                             }
+                            $texteAvecTp .= 'TPr' . $nb2 . ' (' . $mccc->getPourcentage() . '%); ';
 
 
                             $nb2++;

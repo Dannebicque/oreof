@@ -9,7 +9,6 @@
 
 namespace App\Controller;
 
-use App\Classes\JsonReponse;
 use App\Entity\Profil;
 use App\Entity\User;
 use App\Enums\CentreGestionEnum;
@@ -76,32 +75,27 @@ final class UserProfilsController extends BaseController
         $profil = $profilRepository->find($profilId);
 
         if ($profil !== null) {
-            switch ($profil->getCentre()) {
-                case CentreGestionEnum::CENTRE_GESTION_ETABLISSEMENT:
-                    return $this->render('user_profils/_config_profil_etablissement.html.twig', [
-                        'user' => $user,
-                        'profil' => $profil,
-                        'etablissements' => $etablissementRepository->findAll()
-                    ]);
-                case CentreGestionEnum::CENTRE_GESTION_COMPOSANTE:
-                    return $this->render('user_profils/_config_profil_composante.html.twig', [
-                        'user' => $user,
-                        'profil' => $profil,
-                        'composantes' => $composanteRepository->findAll()
-                    ]);
-                case CentreGestionEnum::CENTRE_GESTION_FORMATION:
-                    return $this->render('user_profils/_config_profil_formation.html.twig', [
-                        'user' => $user,
-                        'profil' => $profil,
-                        'formations' => $formationRepository->findByCampagneCollecte($this->getCampagneCollecte())
-                    ]);
-                case CentreGestionEnum::CENTRE_GESTION_PARCOURS:
-                    return $this->render('user_profils/_config_profil_parcours.html.twig', []);
-                default:
-                    return $this->render('communs/_erreur.html.twig', [
-                        'message' => 'Le centre de gestion n\'est pas reconnu'
-                    ]);
-            }
+            return match ($profil->getCentre()) {
+                CentreGestionEnum::CENTRE_GESTION_ETABLISSEMENT => $this->render('user_profils/_config_profil_etablissement.html.twig', [
+                    'user' => $user,
+                    'profil' => $profil,
+                    'etablissements' => $etablissementRepository->findAll()
+                ]),
+                CentreGestionEnum::CENTRE_GESTION_COMPOSANTE => $this->render('user_profils/_config_profil_composante.html.twig', [
+                    'user' => $user,
+                    'profil' => $profil,
+                    'composantes' => $composanteRepository->findAll()
+                ]),
+                CentreGestionEnum::CENTRE_GESTION_FORMATION => $this->render('user_profils/_config_profil_formation.html.twig', [
+                    'user' => $user,
+                    'profil' => $profil,
+                    'formations' => $formationRepository->findByCampagneCollecte($this->getCampagneCollecte())
+                ]),
+                CentreGestionEnum::CENTRE_GESTION_PARCOURS => $this->render('user_profils/_config_profil_parcours.html.twig', []),
+                default => $this->render('communs/_erreur.html.twig', [
+                    'message' => 'Le centre de gestion n\'est pas reconnu'
+                ]),
+            };
 
 
         }

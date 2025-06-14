@@ -333,7 +333,6 @@ class ProcessValidationController extends BaseController
                     $this->eventDispatcher->dispatch($histoEvent, HistoriqueParcoursEvent::ADD_HISTORIQUE_PARCOURS);
                     $this->entityManager->flush();
                     return JsonReponse::success('Validation modifiée');
-                    break;
             }
 
             return JsonReponse::error('Erreur lors de la modification de l\'état de validation');

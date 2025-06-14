@@ -15,6 +15,8 @@ enum RessourceEnum: string
     case app_formation = 'app_formation';
     case app_composante = 'app_composante';
     case app_etablissement = 'app_etablissement';
+    case app_fiche_matiere = 'app_fiche_matiere';
+    case app_ec = 'app_ec';
 
     public static function getRessources(): array
     {

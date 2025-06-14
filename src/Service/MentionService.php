@@ -17,6 +17,7 @@ use App\Repository\DomaineRepository;
 use App\Repository\MentionRepository;
 use App\Repository\TypeDiplomeRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -146,7 +147,7 @@ class MentionService
         try {
             $this->mentionRepository->remove($mention, true);
             return true;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return false;
         }
     }

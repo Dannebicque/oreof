@@ -19,9 +19,10 @@ use App\Entity\TypeDiplome;
 use App\Repository\ElementConstitutifRepository;
 use App\Repository\TypeDiplomeRepository;
 use App\Repository\TypeEpreuveRepository;
-use App\TypeDiplome\Source\LicenceTypeDiplome;
+use App\Service\TypeDiplomeResolver;
 use App\TypeDiplome\TypeDiplomeHandlerInterface;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -32,14 +33,16 @@ class LicenceController extends BaseController
     private TypeDiplomeHandlerInterface $typeDiplomeHandler;
     private TypeDiplome $typeDiplome;
 
-    public function __construct(TypeDiplomeRepository $typeDiplomeRepository)
+    public function __construct(
+        TypeDiplomeResolver   $typeDiplomeResolver,
+        TypeDiplomeRepository $typeDiplomeRepository)
     {
-        $this->typeDiplome = $typeDiplomeRepository->findOneBy(['libelleCourt' => 'L']);
+        $this->typeDiplome = $typeDiplomeRepository->findOneBy(['libelle_court' => 'L']);
         if ($this->typeDiplome === null) {
-            throw new \Exception('Type de diplome Licence non trouvé');
+            throw new Exception('Type de diplome Licence non trouvé');
         }
 
-        $this->typeDiplomeHandler = $this->typeDiplomeResolver->get($this->typeDiplome);
+        $this->typeDiplomeHandler = $typeDiplomeResolver->get($this->typeDiplome);
     }
 
 

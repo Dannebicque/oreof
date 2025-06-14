@@ -1,0 +1,40 @@
+<twig:alerte type="warning">
+    {{ 'admin.edit.modal.help'|trans }}
+</twig:alerte>
+<div>
+    <h3 class="modal-section-title">
+        {{ 'modifier.la.validation.title'|trans({}, 'process') }}
+    </h3>
+
+    <form action="{{ path('app_validation_edit', {type:type, id:id}) }}" method="post">
+        <label for="etat_dpe"> {{ 'process.modification'|trans({}, 'process') }}</label>
+        <select class="form-select" id="etat_dpe">
+            {% for key, etat in etats %}
+                <option value="{{ key }}">
+                    {{ ('workflow.'~etat.label)|trans({}, 'process') }}
+                </option>
+            {% endfor %}
+        </select>
+        <div class="mt-2">
+            <button type="submit" class="btn btn-success"
+                    {{ stimulus_action('base','sauvegardeFormModal', 'click') }}
+                    data-action="live#emit"
+                    data-event="edit"
+            >
+                <i class="fal fa-floppy-disk"></i>
+                Enregistrer
+            </button>
+        </div>
+    </form>
+</div>
+<form method="post" action="" class="form-horizontal">
+    <textarea></textarea>
+
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-primary">{{ 'admin.edit.modal.save'|trans }}</button>
+
+        </div>
+    </div>
+</form>
+

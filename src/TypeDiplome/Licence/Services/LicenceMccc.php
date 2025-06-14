@@ -597,11 +597,10 @@ class LicenceMccc extends AbstractLicenceMccc
                                     //si une seule épreuve de CC, pas de prise en compte du %de TP en seconde session
                                     //todo: interdire la saisie d'un pourcentage de TP si une seule épreuve de CC
                                     $pourcentageTp += $mccc->getPourcentage();
-                                    $texteAvecTp .= 'TPr' . $nb2 . ' (' . $mccc->getPourcentage() . '%); ';
                                 } else {
                                     $pourcentageTp += $mccc->pourcentageTp();
-                                    $texteAvecTp .= 'TPr' . $nb2 . ' (' . $mccc->getPourcentage() . '%); ';
                                 }
+                                $texteAvecTp .= 'TPr' . $nb2 . ' (' . $mccc->getPourcentage() . '%); ';
 
 
                                 $nb2++;
@@ -654,7 +653,6 @@ class LicenceMccc extends AbstractLicenceMccc
                     $texteCc = '';
                     $pourcentageTp = 0;
                     $pourcentageCc = 0;
-                    $nb = 1;
                     $hasTp = false;
                     if (array_key_exists(1, $mcccs) && array_key_exists('cc', $mcccs[1])) {
                         foreach ($mcccs[1]['cc'] as $mccc) {

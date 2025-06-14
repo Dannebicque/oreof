@@ -12,7 +12,6 @@ namespace App\Controller;
 use App\Classes\Ldap;
 use App\Entity\User;
 use App\Entity\UserCentre;
-use App\Entity\UserProfil;
 use App\Enums\CentreGestionEnum;
 use App\Events\AddCentreFormationEvent;
 use App\Events\AddCentreParcoursEvent;
@@ -26,14 +25,13 @@ use App\Repository\EtablissementRepository;
 use App\Repository\FicheMatiereRepository;
 use App\Repository\FormationRepository;
 use App\Repository\ParcoursRepository;
-use App\Repository\ProfilRepository;
 use App\Repository\RoleRepository;
 use App\Repository\UserCentreRepository;
-use App\Repository\UserProfilRepository;
 use App\Repository\UserRepository;
 use App\Utils\JsonRequest;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use JsonException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -311,7 +309,7 @@ class UserGestionController extends BaseController
     }
 
     /**
-     * @throws \JsonException
+     * @throws JsonException
      * @deprecated
      */
     #[Route('/add/centre/{user}', name: 'app_user_gestion_add_centre')]
@@ -443,7 +441,7 @@ class UserGestionController extends BaseController
     }
 
     /**
-     * @throws \JsonException
+     * @throws JsonException
      */
     #[Route('/{id}', name: 'app_user_gestion_delete_centre', methods: ['DELETE'])]
     public function delete(

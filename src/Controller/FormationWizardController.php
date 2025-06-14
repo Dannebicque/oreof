@@ -14,6 +14,7 @@ use App\Entity\Parcours;
 use App\Form\FormationStep1Type;
 use App\Form\FormationStep2Type;
 use App\Form\Type\TextareaAutoSaveType;
+use App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException;
 use App\Utils\Access;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -54,7 +55,7 @@ class FormationWizardController extends AbstractController
     }
 
     /**
-     * @throws \App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException
+     * @throws TypeDiplomeNotFoundException
      */
     #[Route('/{formation}/3', name: 'app_formation_wizard_step_3', methods: ['GET'])]
     public function step3(
@@ -82,7 +83,7 @@ class FormationWizardController extends AbstractController
     }
 
     /**
-     * @throws \App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException
+     * @throws TypeDiplomeNotFoundException
      */
     #[Route('/{formation}/{parcours}/4', name: 'app_formation_wizard_step_4', methods: ['GET'])]
     public function step4(

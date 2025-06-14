@@ -17,6 +17,7 @@ use App\Repository\ComposanteRepository;
 use App\Repository\FormationRepository;
 use App\Repository\UserRepository;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 class UserAccesSubscriber implements EventSubscriberInterface
 {
@@ -29,7 +30,7 @@ class UserAccesSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
+     * @throws TransportExceptionInterface
      */
     public function onUserDemandeAcces(UserRegisterEvent $event): void
     {
@@ -121,7 +122,7 @@ class UserAccesSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
+     * @throws TransportExceptionInterface
      */
     public function onUserValideAdmin(UserEvent $event): void
     {
@@ -136,7 +137,7 @@ class UserAccesSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
+     * @throws TransportExceptionInterface
      */
     public function onUserValideDpe(UserEvent $event): void
     {
@@ -167,7 +168,7 @@ class UserAccesSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
+     * @throws TransportExceptionInterface
      */
     public function onUserAjoute(UserEvent $event): void
     {

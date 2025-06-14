@@ -8,7 +8,6 @@ use App\Entity\Composante;
 use App\Message\Export;
 use App\Repository\ComposanteRepository;
 use App\Repository\DpeDemandeRepository;
-use App\Repository\DpeParcoursRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Attribute\Route;
@@ -56,7 +55,9 @@ class SyntheseModificationController extends BaseController
 
                 if ($dpe->getParcours() !== null) {
                     $dpeParcours = GetDpeParcours::getFromParcours($dpe->getParcours());
-                    if ($dpeParcours !== null && array_key_exists('soumis_cfvu', $dpeParcours->getEtatValidation())) {
+                    if ($dpeParcours !== null &&
+                        (array_key_exists('soumis_cfvu', $dpeParcours->getEtatValidation())
+                            || array_key_exists('non_ouverture_cfvu', $dpeParcours->getEtatValidation()))) {
                         $formations[$formation?->getId()]['parcours'][] = $dpe->getParcours();
                         $formations[$formation?->getId()]['hasModif'] = true;
                     }
@@ -107,7 +108,8 @@ class SyntheseModificationController extends BaseController
                 //dpe si c'est un parcours
                 $parcours = $dpe->getParcours();
                 $dpeParcours = GetDpeParcours::getFromParcours($parcours);
-                if ($dpeParcours !== null && array_key_exists('soumis_cfvu', $dpeParcours->getEtatValidation())) {
+                if ($dpeParcours !== null &&
+                    (array_key_exists('soumis_cfvu', $dpeParcours->getEtatValidation()) || array_key_exists('non_ouverture_cfvu', $dpeParcours->getEtatValidation()))) {
                     $formations[$formation?->getId()]['hasModif'] = true;
                     $formations[$formation?->getId()]['parcours'][$parcours->getId()]['parcours'] = $parcours;
                     $formations[$formation?->getId()]['parcours'][$parcours->getId()]['dpeDemande'] = $dpe;

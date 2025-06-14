@@ -9,6 +9,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Profil;
 use App\Entity\ProfilDroits;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -23,7 +24,7 @@ class ProfilDroitsRepository extends ServiceEntityRepository
         parent::__construct($registry, ProfilDroits::class);
     }
 
-    public function hasDroit(?\App\Entity\Profil $profile, string $attribute, mixed $route)
+    public function hasDroit(?Profil $profile, string $attribute, mixed $route): bool
     {
         if ($profile === null) {
             return false;

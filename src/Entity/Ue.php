@@ -36,11 +36,11 @@ class Ue
     #[ORM\ManyToOne(inversedBy: 'ues')]
     private ?Semestre $semestre = null;
 
-    #[ORM\ManyToOne(fetch: 'EAGER', cascade: ['persist'])]
+    #[ORM\ManyToOne(cascade: ['persist'], fetch: 'EAGER')]
     private ?TypeUe $typeUe = null;
 
     #[Groups(['DTO_json_versioning'])]
-    #[ORM\ManyToOne(fetch: 'EAGER', cascade: ['persist'])]
+    #[ORM\ManyToOne(cascade: ['persist'], fetch: 'EAGER')]
     private ?NatureUeEc $natureUeEc = null;
 
     #[ORM\OneToMany(mappedBy: 'ue', targetEntity: ElementConstitutif::class, cascade: [
@@ -57,7 +57,7 @@ class Ue
     #[ORM\OneToMany(mappedBy: 'ue', targetEntity: UeMutualisable::class, cascade: ['remove'])]
     private Collection $ueMutualisables;
 
-    #[ORM\ManyToOne(inversedBy: 'ues', fetch: 'EAGER')]
+    #[ORM\ManyToOne(fetch: 'EAGER', inversedBy: 'ues')]
     private ?UeMutualisable $ueRaccrochee = null;
 
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'ueEnfants')]

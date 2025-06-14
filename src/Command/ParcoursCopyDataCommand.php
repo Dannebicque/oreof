@@ -8,6 +8,7 @@ use App\Service\ParcoursCopyData;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
+use Exception;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -47,8 +48,8 @@ class ParcoursCopyDataCommand extends Command
     {
         $this
         ->addOption(
-            name: 'dto-pdf-export', 
-            mode: InputOption::VALUE_REQUIRED, 
+            name: 'dto-pdf-export',
+            mode: InputOption::VALUE_REQUIRED,
             description: 'Commande pour exporter un DTO de parcours au format PDF'
         )->addOption(
             name: 'compare-two-dto',
@@ -135,11 +136,10 @@ class ParcoursCopyDataCommand extends Command
                     $io->warning("Aucun parcours trouvé pour cet identifiant. ({$dtoPdfExport})");
                     return Command::FAILURE;
                 }
-                }
-                catch(\Exception $e){
+                } catch (Exception $e) {
                     $io->writeln("Une erreur est survenue.");
                     $io->writeln("Message d'erreur : {$e->getMessage()}");
-        
+
                     return Command::FAILURE;
             }
         }
@@ -165,11 +165,11 @@ class ParcoursCopyDataCommand extends Command
                     // Une fois que la copie a été faite
                     $dtoAfter = $this->parcoursCopyData->getDTOForParcours($parcours, true, false, true);
                     $isEqual = $this->parcoursCopyData->compareTwoDtoForMCCC($dtoBefore, $dtoAfter);
-                } 
+                }
                 elseif($focusOnEcts){
                     $dtoAfter = $this->parcoursCopyData->getDTOForParcours($parcours, true, false, true);
                     $isEqual = $this->parcoursCopyData->compareTwoDTO($dtoBefore, $dtoAfter, 'ects');
-                }else {    
+                } else {
                     $isEqual = $this->parcoursCopyData->compareTwoDTO($dtoBefore, $dtoAfter);
                 }
 
@@ -216,7 +216,7 @@ class ParcoursCopyDataCommand extends Command
             $formations = $this->entityManager->getRepository(Formation::class)->findAll();
             $errorArray = [];
             $nbParcours = array_sum(
-                array_map(fn($f) => count($f->getParcours()), 
+                array_map(fn($f) => count($f->getParcours()),
                     array_filter($formations, fn($f) => $f->getTypeDiplome()->getLibelleCourt() !== "BUT")
                 )
             );
@@ -241,12 +241,12 @@ class ParcoursCopyDataCommand extends Command
                             if($this->parcoursCopyData->compareTwoDTO($dtoBefore, $dtoAfter, typeVerif: 'ects') === false){
                                 $errorArray[] = "ID : {$parcours->getId()} - {$parcours->getFormation()->getDisplayLong()}";
                             }
-                        }   
+                        }
                         $io->progressAdvance(1);
                     }
                 }
             }
-            $io->progressFinish();          
+            $io->progressFinish();
 
             if($compareTwoDatabases === 'hours'){
                 $nbErreur = count($errorArray);

@@ -21,6 +21,8 @@ use App\Repository\RoleRepository;
 use App\Repository\UserCentreRepository;
 use App\Repository\UserRepository;
 use App\Utils\JsonRequest;
+use DateTime;
+use JsonException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -28,15 +30,9 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/administration/utilisateurs')]
+/** @deprecated */
 class UserController extends BaseController
 {
-    #[Route('/', name: 'app_user_index', methods: ['GET'])]
-    /** @deprecated("User profil") */
-    public function index(): Response
-    {
-        return $this->render('config/user/index.html.twig');
-    }
-
     #[Route('/repertoire', name: 'app_user_repertoire', methods: ['GET'])]
     public function repertoire(): Response
     {
@@ -59,7 +55,9 @@ class UserController extends BaseController
             } else {
                 $users = $userRepository->findEnable($this->getCampagneCollecte(), $sort, $direction);
             }
-        } elseif ($this->isGranted('CAN_COMPOSANTE_MANAGE_MY', $this->getUser())) {
+        } elseif (
+            $this->isGranted('MANAGE', ['route' => 'app_composante', 'subject' => 'composante'])
+        ) {
             foreach ($this->getUser()?->getUserCentres() as $centre) {
                 if ($centre->getComposante() !== null) {
                     $composante = $centre->getComposante(); //au moins une composante, todo: si plusieurs ?
@@ -77,72 +75,6 @@ class UserController extends BaseController
         }
 
         return $this->render('config/user/_repertoireListe.html.twig', [
-            'users' => $users,
-            'sort' => $sort,
-            'direction' => $direction,
-            'campagneCollecte' => $this->getCampagneCollecte()
-        ]);
-    }
-
-    #[Route('/attente-validation', name: 'app_user_attente', methods: ['GET'])]
-    public function attente(UserRepository $userRepository): Response
-    {
-        //todo: gérer par le responsable de DPE ?? pour affecter les droits et "pré-valider" les utilisateurs
-        if ($this->isGranted('ROLE_ADMIN')) {
-            $users = $userRepository->findNotEnableAvecDemande();
-            $dpe = false;
-        } elseif ($this->isGranted('CAN_COMPOSANTE_MANAGE_MY', $this->getUser())) {
-            $composante = null;
-            $dpe = true;
-            $users = [];
-            foreach ($this->getUser()?->getUserCentres() as $centre) {
-                if ($centre->getComposante() !== null) {
-                    $users[] = $userRepository->findByComposanteNotEnableAvecDemande($centre->getComposante());
-                }
-            }
-            $users = array_merge(...$users);
-        }
-
-        return $this->render('config/user/attente.html.twig', [
-            'users' => $users,
-            'dpe' => $dpe
-        ]);
-    }
-
-    #[Route('/liste', name: 'app_user_liste', methods: ['GET'])]
-    /** @deprecated("User profil") */
-    public function liste(
-        Request        $request,
-        UserRepository $userRepository
-    ): Response {
-        $sort = $request->query->get('sort') ?? 'nom';
-        $direction = $request->query->get('direction') ?? 'asc';
-        $q = $request->query->get('q') ?? null;
-
-        if ($this->isGranted('ROLE_ADMIN')) {
-            if ($q) {
-                $users = $userRepository->findEnableBySearch($this->getCampagneCollecte(), $q, $sort, $direction);
-            } else {
-                $users = $userRepository->findEnable($this->getCampagneCollecte(), $sort, $direction);
-            }
-        } elseif ($this->isGranted('CAN_COMPOSANTE_MANAGE_MY', $this->getUser())) {
-            foreach ($this->getUser()?->getUserCentres() as $centre) {
-                if ($centre->getComposante() !== null) {
-                    $composante = $centre->getComposante(); //au moins une composante, todo: si plusieurs ?
-                }
-            }
-            if ($composante !== null) {
-                if ($q) {
-                    $users = $userRepository->findByComposanteEnableBySearch($this->getCampagneCollecte(), $composante, $q, $sort, $direction);
-                } else {
-                    $users = $userRepository->findByComposanteEnable($this->getCampagneCollecte(), $composante, $sort, $direction);
-                }
-            } else {
-                $users = [];
-            }
-        }
-
-        return $this->render('config/user/_liste.html.twig', [
             'users' => $users,
             'sort' => $sort,
             'direction' => $direction,
@@ -221,7 +153,7 @@ class UserController extends BaseController
         $user->setIsEnable(true);
         if ($dpe === false) {
             $user->setIsValideAdministration(true);
-            $user->setDateValideAdministration(new \DateTime());
+            $user->setDateValideAdministration(new DateTime());
             $this->addFlash('success', 'L\'utilisateur a été ajouté avec succès');
 
             $myMailer->initEmail();
@@ -229,14 +161,13 @@ class UserController extends BaseController
                 'mails/user/acces_ajoute.txt.twig',
                 ['user' => $user]
             );
-            $myMailer->sendMessage([$user->getEmail()], '[ORéOF] Accès ORéOF');
         } else {
             $admins = $userRepository->findByRole('ROLE_ADMIN');
 
             $user->setIsValidDpe(true);
             $user->setComposanteDemande($this->getUser()?->getComposanteResponsableDpe()->first());
-            $user->setDateDemande(new \DateTime());
-            $user->setDateValideDpe(new \DateTime());
+            $user->setDateDemande(new DateTime());
+            $user->setDateValideDpe(new DateTime());
             $this->addFlash('success', 'L\'utilisateur a été ajouté avec succès, il est en attente de validation par le SES');
             // mail pour l'administrateur
             foreach ($admins as $admin) {
@@ -254,8 +185,8 @@ class UserController extends BaseController
                 'mails/user/ajout_oreof.txt.twig',
                 ['user' => $user, 'dpe' => $this->getUser()]
             );
-            $myMailer->sendMessage([$user->getEmail()], '[ORéOF] Accès ORéOF');
         }
+        $myMailer->sendMessage([$user->getEmail()], '[ORéOF] Accès ORéOF');
         $userRepository->save($user, true);
 
         // mail pour le nouvel utilisateur
@@ -286,7 +217,6 @@ class UserController extends BaseController
         if ($user !== null) {
             $user->setIsDeleted(false);
             $passwordEncode = $passwordEncoder->hashPassword($user, $password);
-            $user->setPassword($passwordEncode);
         } else {
             $user = new User();
             $passwordEncode = $passwordEncoder->hashPassword($user, $password);
@@ -294,12 +224,12 @@ class UserController extends BaseController
             $user->setUsername($email);
             $user->setNom($nom);
             $user->setPrenom($prenom);
-            $user->setPassword($passwordEncode);
         }
+        $user->setPassword($passwordEncode);
 
         $user->setIsEnable(true);
         $user->setIsValideAdministration(true);
-        $user->setDateValideAdministration(new \DateTime());
+        $user->setDateValideAdministration(new DateTime());
         $this->addFlash('success', 'L\'utilisateur a été ajouté avec succès, un email lui a été envoyé.');
 
         $myMailer->initEmail();
@@ -352,7 +282,7 @@ class UserController extends BaseController
     }
 
     /**
-     * @throws \JsonException
+     * @throws JsonException
      */
     #[Route('/change-role/{id}', name: 'app_user_roles', methods: ['POST'])]
     public function changeRole(
@@ -401,7 +331,7 @@ class UserController extends BaseController
     }
 
     /**
-     * @throws \JsonException
+     * @throws JsonException
      */
     #[Route('/{id}', name: 'app_user_delete', methods: ['DELETE'])]
     #[IsGranted('ROLE_ADMIN')]

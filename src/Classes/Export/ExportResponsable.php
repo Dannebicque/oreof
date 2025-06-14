@@ -10,9 +10,6 @@
 namespace App\Classes\Export;
 
 use App\Classes\Excel\ExcelWriter;
-use App\Classes\GetHistorique;
-use App\Entity\CampagneCollecte;
-use App\Entity\Composante;
 use App\Repository\DpeParcoursRepository;
 use App\Repository\FormationRepository;
 use App\Utils\Tools;

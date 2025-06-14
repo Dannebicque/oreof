@@ -2,8 +2,10 @@
 
 namespace App\Repository;
 
+use App\Entity\ChangeRf;
 use App\Entity\Formation;
 use App\Entity\HistoriqueFormation;
+use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -54,7 +56,7 @@ class HistoriqueFormationRepository extends ServiceEntityRepository
         return count($data) > 0 ? $data[0] : null;
     }
 
-    public function findBeforDate(\DateTime $param) : array
+    public function findBeforDate(DateTime $param): array
     {
         return $this->createQueryBuilder('h')
             ->innerJoin('h.formation', 'f')
@@ -65,7 +67,7 @@ class HistoriqueFormationRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findByChangeRfLastStep(?\App\Entity\ChangeRf $changeRf, string $step): ?HistoriqueFormation
+    public function findByChangeRfLastStep(?ChangeRf $changeRf, string $step): ?HistoriqueFormation
     {
         $data = $this->createQueryBuilder('h')
             ->where('h.changeRf = :changeRf')

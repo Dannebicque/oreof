@@ -6,6 +6,7 @@ use App\DTO\DiffObject;
 use App\Utils\Tools;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Reader\Exception;
 use PhpOffice\PhpSpreadsheet\RichText\RichText;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
@@ -328,10 +329,13 @@ class ExcelWriter
         $inputFileName = $this->dir . $fichier;
 
         /**  Create a new Reader of the type defined in $inputFileType  **/
-        $reader = IOFactory::createReader($inputFileType);
-
-        /**  Load $inputFileName to a Spreadsheet Object  **/
-        $this->spreadsheet = $reader->load($inputFileName);
+        try {
+            $reader = IOFactory::createReader($inputFileType);
+            /**  Load $inputFileName to a Spreadsheet Object  **/
+            $this->spreadsheet = $reader->load($inputFileName);
+        } catch (Exception $e) {
+            throw new \Exception('Le modèle n\'existe pas');
+        }
     }
 
     public function orientationCellXY(int $col, int $ligne, string $orientation): void
@@ -396,7 +400,7 @@ class ExcelWriter
             $sh->getPageMargins()->setBottom(1);
         }
 
-        $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($this->spreadsheet, 'Mpdf');
+        $writer = IOFactory::createWriter($this->spreadsheet, 'Mpdf');
         $writer->setOrientation(PageSetup::ORIENTATION_LANDSCAPE);
         $writer->setPaperSize(PageSetup::PAPERSIZE_A3);
         $writer->writeAllSheets();

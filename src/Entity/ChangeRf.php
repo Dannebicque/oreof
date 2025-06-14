@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Enums\TypeRfEnum;
 use App\Repository\ChangeRfRepository;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -33,10 +34,10 @@ class ChangeRf
     private ?User $ancienResponsable = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $dateDemande = null;
+    private ?DateTimeInterface $dateDemande = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $dateValidationCfvu = null;
+    private ?DateTimeInterface $dateValidationCfvu = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $commentaire = null;
@@ -127,24 +128,24 @@ class ChangeRf
         return $this;
     }
 
-    public function getDateDemande(): ?\DateTimeInterface
+    public function getDateDemande(): ?DateTimeInterface
     {
         return $this->dateDemande;
     }
 
-    public function setDateDemande(\DateTimeInterface $dateDemande): static
+    public function setDateDemande(DateTimeInterface $dateDemande): static
     {
         $this->dateDemande = $dateDemande;
 
         return $this;
     }
 
-    public function getDateValidationCfvu(): ?\DateTimeInterface
+    public function getDateValidationCfvu(): ?DateTimeInterface
     {
         return $this->dateValidationCfvu;
     }
 
-    public function setDateValidationCfvu(?\DateTimeInterface $dateValidationCfvu): static
+    public function setDateValidationCfvu(?DateTimeInterface $dateValidationCfvu): static
     {
         $this->dateValidationCfvu = $dateValidationCfvu;
 

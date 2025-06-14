@@ -66,7 +66,7 @@ class MyDomPdf
 
     private function valideName(string $name): string
     {
-        if (false === strpos($name, '.pdf')) {
+        if (!str_contains($name, '.pdf')) {
             $name .= '.pdf';
         }
 

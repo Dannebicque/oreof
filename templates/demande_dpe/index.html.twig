@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block header %}DPE ouverts{% endblock %}
+{% block header %}DPE ouverts {% if type == 'composante' %} : {{ composante.libelle }}{% endif %}{% endblock %}
 
 {% block content %}
     <div class="card"

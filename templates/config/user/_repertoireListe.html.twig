@@ -75,14 +75,14 @@
                 <button
                         {{ stimulus_controller('modal', {
                             size: 'lg',
-                            modalTitle: 'Gestion des centres de <strong>'~ user.display ~'</strong>',
-                            modalUrl: path('app_user_gestion_centre',{'user': user.id}) }) }}
+                            modalTitle: 'Gestion des profils de <strong>'~ user.display ~'</strong>',
+                            modalUrl: path('app_user_profils_gestion',{'user': user.id}) }) }}
                         data-action="click->modal#openModal"
                         class="btn btn-sm text-warning"
                         data-size="lg"
                         data-bs-toggle="tooltip"
                         data-bs-placement="bottom"
-                        title="Gestion des centres de <strong>{{ user.display }}</strong>"
+                        title="Gestion des profils de <strong>{{ user.display }}</strong>"
                 >
                     <i class="{{ iconEdit }}"></i>
                     <span> Gestion des accès</span>

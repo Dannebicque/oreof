@@ -17,6 +17,7 @@ use App\Repository\ParcoursRepository;
 use App\Repository\TypeDiplomeRepository;
 use App\Repository\VilleRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -40,7 +41,7 @@ class CodificationController extends BaseController
         $typeDiplome = $typeDiplomeRepository->find($request->query->get('step'));
 
         if ($typeDiplome === null) {
-            throw new \Exception('Type de diplôme non trouvé');
+            throw new Exception('Type de diplôme non trouvé');
         }
 
         return $this->render('codification/_liste-inter.html.twig', [
@@ -60,7 +61,7 @@ class CodificationController extends BaseController
         TypeDiplome           $typeDiplome
     ): Response {
         if ($typeDiplome === null) {
-            throw new \Exception('Type de diplôme non trouvé');
+            throw new Exception('Type de diplôme non trouvé');
         }
 
         $filtres = $request->query->all();
@@ -278,14 +279,14 @@ class CodificationController extends BaseController
         $parcours = $parcoursRepository->find($idParcours);
 
         if ($parcours === null) {
-            throw new \Exception('Parcours non trouvé');
+            throw new Exception('Parcours non trouvé');
         }
 
 
         $typeDiplome = $formation->getTypeDiplome();
 
         if ($typeDiplome === null) {
-            throw new \Exception('Type de diplôme non trouvé');
+            throw new Exception('Type de diplôme non trouvé');
         }
 
         $typeD = $this->typeDiplomeResolver->get($typeDiplome);

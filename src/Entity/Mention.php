@@ -39,7 +39,7 @@ class Mention
     #[ORM\ManyToOne(inversedBy: 'mentions')]
     private ?Domaine $domaine = null;
 
-    #[ORM\ManyToOne(inversedBy: 'mentions', cascade: ['persist'])]
+    #[ORM\ManyToOne(cascade: ['persist'], inversedBy: 'mentions')]
     private ?TypeDiplome $typeDiplome = null;
 
     #[ORM\OneToMany(mappedBy: 'mention', targetEntity: Formation::class)]

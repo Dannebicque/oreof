@@ -14,6 +14,9 @@ use App\Entity\Composante;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 class ComposanteExportController extends AbstractController
 {
@@ -22,9 +25,9 @@ class ComposanteExportController extends AbstractController
     }
 
     /**
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
-     * @throws \Twig\Error\LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws LoaderError
      */
     #[Route('/composante/export/{composante}', name: 'app_composante_export')]
     public function export(Composante $composante): Response

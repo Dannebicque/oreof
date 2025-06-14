@@ -14,6 +14,7 @@ use App\Repository\ComposanteRepository;
 use App\Repository\FormationRepository;
 use App\Repository\UserRepository;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Workflow\Event\Event;
 
 class WorkflowParcoursMailSubscriber extends AbstractDpeMailSubscriber implements EventSubscriberInterface
@@ -37,7 +38,7 @@ class WorkflowParcoursMailSubscriber extends AbstractDpeMailSubscriber implement
     }
 
     /**
-     * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
+     * @throws TransportExceptionInterface
      */
     public function onValideParcours(Event $event): void
     {

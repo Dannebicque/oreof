@@ -15,6 +15,7 @@ use App\Entity\Competence;
 use App\Form\CompetenceType;
 use App\Repository\CompetenceRepository;
 use App\Utils\JsonRequest;
+use JsonException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -119,7 +120,7 @@ class CompetenceController extends AbstractController
     }
 
     /**
-     * @throws \JsonException
+     * @throws JsonException
      */
     #[Route('/{id}', name: 'app_competence_delete', methods: ['DELETE'])]
     public function delete(

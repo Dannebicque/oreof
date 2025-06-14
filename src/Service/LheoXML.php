@@ -7,6 +7,7 @@ use App\Entity\Parcours;
 use App\Enums\TypeParcoursEnum;
 use App\Repository\ElementConstitutifRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use DOMDocument;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
 
@@ -90,10 +91,12 @@ class LheoXML
             ];
             // Adresse de l'accueil
             $adresseComp = $composante->getAdresse();
-            $adresse['denomination'] = $composante->getLibelle();
-            $adresse['ligne'] = $adresseComp->getAdresse1() . " " . ($adresseComp->getAdresse2() ?? '');
-            $adresse['codepostal'] = $adresseComp->getCodePostal();
-            $adresse['ville'] = $adresseComp->getVille();
+            if ($adresseComp !== null) {
+                $adresse['denomination'] = $composante->getLibelle();
+                $adresse['ligne'] = $adresseComp->getAdresse1() . " " . ($adresseComp->getAdresse2() ?? '');
+                $adresse['codepostal'] = $adresseComp->getCodePostal();
+                $adresse['ville'] = $adresseComp->getVille();
+            }
             // Téléphone
             $telephone = ['numtel' => $composante->getTelStandard() ?? $composante->getTelComplementaire() ?? 'Non renseigné'];
             // Résultat
@@ -122,10 +125,14 @@ class LheoXML
                 ];
                 // Adresse de l'accueil
                 $adresseComp = $contacts->getAdresse();
+
+            if ($adresseComp !== null) {
                 $adresse['denomination'] = $contacts->getDenomination();
                 $adresse['ligne'] = $adresseComp->getAdresse1() . " " . ($adresseComp->getAdresse2() ?? '');
                 $adresse['codepostal'] = $adresseComp->getCodePostal();
                 $adresse['ville'] = $adresseComp->getVille();
+            }
+
                 // Téléphone
                 $telephone = ['numtel' => $contacts->getTelephone() ?? $contacts->getTelephone() ?? 'Non renseigné'];
                 // Résultat
@@ -280,7 +287,7 @@ HTML;
         );
 
         $organisationPedagogique = '';
-        if($parcours->getRythmeFormationTexte() !== null && !empty($parcours->getRythmeFormationTexte())){
+        if (!empty($parcours->getRythmeFormationTexte())) {
             $organisationPedagogique .= $parcours->getRythmeFormationTexte();
         }
 
@@ -380,9 +387,9 @@ HTML;
         // ---> XML 'objectif-formation'
         $modalitesAlternance = "La formation n'est pas dispensée en alternance";
 
+        $referentsPedagogiques = [];
         if ($parcours->isParcoursDefaut()) { // si par défaut ou parcours uniquement alors RF et CO-RF
             // Contact de la formation
-            $referentsPedagogiques = [];
             if ($parcours->getFormation()?->getResponsableMention()) {
                 $resp = $parcours->getFormation()?->getResponsableMention();
                 $referentPedagogique = [
@@ -417,14 +424,11 @@ HTML;
                 $rythmeFormation = $parcours->getFormation()?->getRythmeFormation()->getLibelle();
             }
             $localisation = $parcours->getFormation()?->getLocalisationMention()->first();
-            if ($parcours->getFormation()?->getModalitesAlternance()) {
-                if (!empty($parcours->getFormation()?->getModalitesAlternance())) {
-                    $modalitesAlternance = $this->cleanString($parcours->getFormation()?->getModalitesAlternance());
-                }
+            if (!empty($parcours->getFormation()?->getModalitesAlternance())) {
+                $modalitesAlternance = $this->cleanString($parcours->getFormation()?->getModalitesAlternance());
             }
         } else {
             // Contact de la formation
-            $referentsPedagogiques = [];
             if ($parcours->getFormation()?->getParcours()->count() === 1) {
                 // Un seul parcours, on reprend les infos de la formation
                 if ($parcours->getFormation()?->getResponsableMention()) {
@@ -490,10 +494,8 @@ HTML;
             }
             // Modalités de l'alternance
 
-            if ($parcours->getModalitesAlternance()) {
-                if (!empty($parcours->getModalitesAlternance())) {
-                    $modalitesAlternance = $this->cleanString($parcours->getModalitesAlternance());
-                }
+            if (!empty($parcours->getModalitesAlternance())) {
+                $modalitesAlternance = $this->cleanString($parcours->getModalitesAlternance());
             }
         }
 
@@ -607,7 +609,7 @@ HTML;
     public function validateLheoSchema(string $xml): bool
     {
         libxml_use_internal_errors(true);
-        $xmlValidator = new \DOMDocument('1.0', 'UTF-8');
+        $xmlValidator = new DOMDocument('1.0', 'UTF-8');
         $xmlValidator->loadXML($xml);
         $isValid = $xmlValidator->schemaValidate(__DIR__ . '/../../lheo.xsd');
 

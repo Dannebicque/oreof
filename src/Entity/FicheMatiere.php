@@ -23,8 +23,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 #[ORM\Entity(repositoryClass: FicheMatiereRepository::class)]
-#[ORM\Index(name: 'sigle_fiche', columns: ['sigle'], flags: ['fulltext'])]
-#[ORM\Index(name: 'slug_fiche', columns: ['slug'], flags: ['fulltext'])]
+#[ORM\Index(columns: ['sigle'], name: 'sigle_fiche', flags: ['fulltext'])]
+#[ORM\Index(columns: ['slug'], name: 'slug_fiche', flags: ['fulltext'])]
 #[ORM\HasLifecycleCallbacks]
 class FicheMatiere
 {
@@ -112,7 +112,7 @@ class FicheMatiere
     private Collection $elementConstitutifs;
 
     #[Groups(['fiche_matiere_versioning', 'DTO_json_versioning'])]
-    #[ORM\ManyToOne(inversedBy: 'ficheMatieres', cascade: ['persist'], fetch: 'EAGER')]
+    #[ORM\ManyToOne(cascade: ['persist'], fetch: 'EAGER', inversedBy: 'ficheMatieres')]
     private ?Parcours $parcours = null;
 
     #[Groups(['DTO_json_versioning', 'fiche_matiere_versioning'])]

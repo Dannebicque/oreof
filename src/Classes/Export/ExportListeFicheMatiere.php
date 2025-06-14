@@ -13,7 +13,6 @@ use App\Classes\Excel\ExcelWriter;
 use App\Classes\GetHistorique;
 use App\Entity\CampagneCollecte;
 use App\Entity\ElementConstitutif;
-use App\Repository\ElementConstitutifRepository;
 use App\Repository\FicheMatiereRepository;
 use App\Utils\Tools;
 use DateTime;

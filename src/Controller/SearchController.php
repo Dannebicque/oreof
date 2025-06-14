@@ -40,7 +40,7 @@ class SearchController extends AbstractController
             $typeRechercheValide = 'parcours';
         }
 
-        if(!isset($keyword_1) || empty($keyword_1)|| mb_strlen($keyword_1) <= 2){
+        if (empty($keyword_1) || mb_strlen($keyword_1) <= 2) {
             $this->addFlash('toast', [
                 'type' => 'error',
                 'text' => 'Le mot-clé fourni doit faire au moins 3 caractères.'

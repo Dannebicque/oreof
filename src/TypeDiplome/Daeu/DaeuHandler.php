@@ -10,7 +10,6 @@
 namespace App\TypeDiplome\Daeu;
 
 use App\Entity\Parcours;
-use App\TypeDiplome\TypeDiplomeHandlerInterface;
 
 final class DaeuHandler //implements TypeDiplomeHandlerInterface
 {

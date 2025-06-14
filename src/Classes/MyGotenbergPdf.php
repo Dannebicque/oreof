@@ -122,7 +122,7 @@ class MyGotenbergPdf
 
     private function valideName(string $name): string
     {
-        if (false === strpos($name, '.pdf')) {
+        if (!str_contains($name, '.pdf')) {
             $name .= '.pdf';
         }
 
@@ -137,11 +137,10 @@ class MyGotenbergPdf
             } else {
                 $imageData = file_get_contents($this->options['baseUrl'] . '/images/header.jpg');
             }
-            $base64Image = base64_encode($imageData);
         } else {
             $imageData = file_get_contents($this->options['baseUrl'] . '/images/logo_urca.png');
-            $base64Image = base64_encode($imageData);
         }
+        $base64Image = base64_encode($imageData);
 
         return $this->twig->render('pdf/header.html.twig', [
             'baseUrl' => $this->options['baseUrl'],

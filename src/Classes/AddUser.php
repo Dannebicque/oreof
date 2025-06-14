@@ -16,12 +16,12 @@ use App\Repository\UserCentreRepository;
 use App\Repository\UserRepository;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class AddUser
+readonly class AddUser
 {
     public function __construct(
-        private readonly UserCentreRepository $userCentreRepository,
-        private readonly UserRepository $userRepository,
-        private readonly Ldap $ldap
+        private UserCentreRepository $userCentreRepository,
+        private UserRepository       $userRepository,
+        private Ldap                 $ldap
     ) {
     }
 

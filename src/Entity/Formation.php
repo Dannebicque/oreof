@@ -25,8 +25,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 #[ORM\Entity(repositoryClass: FormationRepository::class)]
-#[ORM\Index(name: 'sigle_formation', columns: ['sigle'], flags: ['fulltext'])]
-#[ORM\Index(name: 'slug_formation', columns: ['slug'], flags: ['fulltext'])]
+#[ORM\Index(columns: ['sigle'], name: 'sigle_formation', flags: ['fulltext'])]
+#[ORM\Index(columns: ['slug'], name: 'slug_formation', flags: ['fulltext'])]
 #[ORM\HasLifecycleCallbacks]
 class Formation
 {
@@ -51,7 +51,7 @@ class Formation
     private ?CampagneCollecte $dpe;
 
     #[Groups(['parcours_json_versioning', 'fiche_matiere_versioning', 'formation_json_versioning'])]
-    #[ORM\ManyToOne(targetEntity: Mention::class, inversedBy: 'formations', fetch: 'EAGER', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: Mention::class, cascade: ['persist'], fetch: 'EAGER', inversedBy: 'formations')]
     private ?Mention $mention = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -143,23 +143,11 @@ class Formation
     #[ORM\OneToMany(mappedBy: 'formation', targetEntity: UserCentre::class, cascade: ['persist', 'remove'])]
     private Collection $userCentres;
 
-    #[ORM\Column(length: 10)]
-    /** @deprecated("sur le DPE") */
-    private ?string $version = '0.1';
-
-    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'formationsAnterieures')]
-    /** @deprecated("A gérer") */
-    private ?self $versionParent = null;
-
-    #[ORM\OneToMany(mappedBy: 'versionParent', targetEntity: self::class)]
-    /** @deprecated("A gérer") */
-    private Collection $formationsAnterieures;
-
     #[ORM\Column]
     private ?array $etatSteps = [];
 
     #[Groups(['parcours_json_versioning', 'fiche_matiere_versioning', 'formation_json_versioning'])]
-    #[ORM\ManyToOne(inversedBy: 'formations', fetch: 'EAGER')]
+    #[ORM\ManyToOne(fetch: 'EAGER', inversedBy: 'formations')]
     private ?TypeDiplome $typeDiplome = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -205,7 +193,7 @@ class Formation
     #[ORM\OneToMany(mappedBy: 'formation', targetEntity: ChangeRf::class)]
     private Collection $changeRves;
 
-    #[ORM\Column(length: 255, enumType: TypeModificationDpeEnum::class, nullable: true)]
+    #[ORM\Column(length: 255, nullable: true, enumType: TypeModificationDpeEnum::class)]
     private ?TypeModificationDpeEnum $etatReconduction = null;
 
     /** @var Formation $formationOrigineCopie Référence la formation d'origine, depuis la copie */
@@ -230,7 +218,6 @@ class Formation
         $this->composantesInscription = new ArrayCollection();
         $this->blocCompetences = new ArrayCollection();
         $this->userCentres = new ArrayCollection();
-        $this->formationsAnterieures = new ArrayCollection();
 
         for ($i = 1; $i <= 3; $i++) {
             $this->etatSteps[$i] = false;
@@ -624,8 +611,8 @@ class Formation
 
     public function remplissageBrut(): Remplissage
     {
+        $valide = new FormationValide($this);
         if ($this->hasParcours === true) {
-            $valide = new FormationValide($this);
             $valide->valideOnlyFormation();
             $remplissage = $valide->calcul();
             if ($this->getParcours()->count() > 0) {
@@ -637,7 +624,6 @@ class Formation
                 $remplissage->total += 30;
             }
         } else {
-            $valide = new FormationValide($this);
             $valide->valideFormation();
             $remplissage = $valide->calcul();
         }
@@ -699,58 +685,6 @@ class Formation
         return $this;
     }
 
-    public function getVersion(): ?string
-    {
-        return $this->version;
-    }
-
-    public function setVersion(string $version): self
-    {
-        $this->version = $version;
-
-        return $this;
-    }
-
-    public function getVersionParent(): ?self
-    {
-        return $this->versionParent;
-    }
-
-    public function setVersionParent(?self $versionParent): self
-    {
-        $this->versionParent = $versionParent;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, self>
-     */
-    public function getFormationsAnterieures(): Collection
-    {
-        return $this->formationsAnterieures;
-    }
-
-    public function addFormationsAnterieure(self $formationsAnterieure): self
-    {
-        if (!$this->formationsAnterieures->contains($formationsAnterieure)) {
-            $this->formationsAnterieures->add($formationsAnterieure);
-            $formationsAnterieure->setVersionParent($this);
-        }
-
-        return $this;
-    }
-
-    public function removeFormationsAnterieure(self $formationsAnterieure): self
-    {
-        // set the owning side to null (unless already changed)
-        if ($this->formationsAnterieures->removeElement($formationsAnterieure) && $formationsAnterieure->getVersionParent() === $this) {
-            $formationsAnterieure->setVersionParent(null);
-        }
-
-        return $this;
-    }
-
     public function getEtatSteps(): array
     {
         return $this->etatSteps ?? [];
@@ -762,18 +696,6 @@ class Formation
 
         return $this;
     }
-
-    //    public function valideStep(mixed $value)
-    //    {
-    //        switch ((int) $value) {
-    //            case 0:
-    //                return true;
-    //            case 1:
-    //                return false;
-    //            case 2:
-    //                return false;
-    //        }
-    //    }
 
     public function getObjectifsFormation(): ?string
     {

@@ -84,7 +84,7 @@ class ExportFiabilisation
 
                     //récuération de la structure et des EC
                     $dto = $typeD->calculStructureParcours($parcours);
-                    foreach ($dto->semestres as $ordre => $sem) {
+                    foreach ($dto->semestres as $sem) {
                         foreach ($sem->ues as $ue) {
                             if ($ue->ue->getNatureUeEc()?->isChoix()) {
                                 foreach ($ue->uesEnfants() as $ueEnfant) {

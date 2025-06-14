@@ -133,7 +133,6 @@ final class LicenceHandler implements TypeDiplomeHandlerInterface
     {
         $mcccs = $this->getMcccs($elementConstitutif);
         $typeD = 'L';
-        $etatMccc = '';
         switch ($request->get('choix_type_mccc')) {
             case 'cc':
                 if ($request->get('type_cc') === 'cc') {
@@ -170,13 +169,12 @@ final class LicenceHandler implements TypeDiplomeHandlerInterface
                         ];
                     }
                     $mcccs[1]['cc'][1]->setOptions($tab);
-                    $mcccs = $this->sauvegardeCts($elementConstitutif, $mcccs, $request->all(), 2, 's2_ct');
                 } else {
                     $typeD = 'NOT-L';
                     // CC des autres diplômes //todo: a déplacer dans les autres types...
                     $mcccs = $this->sauvegardeCc($elementConstitutif, $mcccs, $request->all(), 1, 's1_cc', 'NOT-L');
-                    $mcccs = $this->sauvegardeCts($elementConstitutif, $mcccs, $request->all(), 2, 's2_ct');
                 }
+                $mcccs = $this->sauvegardeCts($elementConstitutif, $mcccs, $request->all(), 2, 's2_ct');
                 $etatMccc = $this->verificationMccc($elementConstitutif, $mcccs, $typeD);
 
                 break;
@@ -328,7 +326,7 @@ final class LicenceHandler implements TypeDiplomeHandlerInterface
                 }
             }
 
-            if (isset($mcccs[$session]) && isset($mcccs[$session]['et']) && isset($mcccs[$session]['et'][$numEp])) {
+            if (isset($mcccs[$session]['et'][$numEp])) {
                 if (array_key_exists('typeEpreuve_' . $cle . $numEp, $data) && $data['typeEpreuve_' . $cle . $numEp] === "") {
                     $mcccs[$session]['et'][$numEp]->setTypeEpreuve(null);
                 } else {
@@ -401,7 +399,7 @@ final class LicenceHandler implements TypeDiplomeHandlerInterface
         }
 
         foreach ($typeEpreuve_s1_cc as $numEp) {
-            if (isset($mcccs[$session]) && isset($mcccs[$session]['cc']) && isset($mcccs[$session]['cc'][$numEp])) {
+            if (isset($mcccs[$session]['cc'][$numEp])) {
                 if ($typeD === 'L') {
                     $mcccs[$session]['cc'][$numEp]->setNbEpreuves(2);
                 } else {

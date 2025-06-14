@@ -20,6 +20,7 @@ use App\Events\HistoriqueParcoursEditEvent;
 use App\Events\HistoriqueParcoursEvent;
 use App\Repository\DpeDemandeRepository;
 use App\Utils\Tools;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -112,7 +113,7 @@ class ParcoursProcess extends AbstractProcess
             $etatValidation = array_keys($this->dpeParcoursWorkflow->getMarking($dpeParcours)->getPlaces())[0];
             $dpeDemande->setEtatDemande(EtatDpeEnum::tryFrom($etatValidation));
             if ($place === 'soumis_central') {
-                $dpeDemande->setDateCloture(new \DateTime());
+                $dpeDemande->setDateCloture(new DateTime());
             }
         }
 

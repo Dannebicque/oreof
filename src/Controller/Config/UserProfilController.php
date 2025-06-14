@@ -9,33 +9,26 @@
 
 namespace App\Controller\Config;
 
-use App\Classes\Ldap;
-use App\Classes\Mailer;
 use App\Controller\BaseController;
 use App\Entity\User;
 use App\Entity\UserProfil;
 use App\Enums\CentreGestionEnum;
 use App\Events\NotifUpdateUserProfilEvent;
-use App\Form\UserHorsUrcaType;
-use App\Form\UserLdapType;
-use App\Form\UserType;
 use App\Repository\ComposanteRepository;
 use App\Repository\EtablissementRepository;
 use App\Repository\FormationRepository;
 use App\Repository\ParcoursRepository;
 use App\Repository\ProfilRepository;
 use App\Repository\RoleRepository;
-use App\Repository\UserCentreRepository;
 use App\Repository\UserProfilRepository;
 use App\Repository\UserRepository;
 use App\Utils\JsonRequest;
 use Doctrine\ORM\EntityManagerInterface;
+use JsonException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/utilisateurs/profils', name: 'app_user_profil_')]
 class UserProfilController extends BaseController
@@ -52,19 +45,25 @@ class UserProfilController extends BaseController
 
     #[Route('/attente-validation', name: 'attente', methods: ['GET'])]
     public function attente(
+        UserRepository $userRepository,
         UserProfilRepository $userProfilRepository): Response
     {
         //todo: gérer par le responsable de DPE ?? pour affecter les droits et "pré-valider" les utilisateurs
         if ($this->isGranted('ROLE_ADMIN')) {
             $users = $userProfilRepository->findNotEnableAvecDemande();
             $dpe = false;
-        } elseif ($this->isGranted('CAN_COMPOSANTE_MANAGE_MY', $this->getUser())) {
-            $composante = null;
+        } elseif (
+            $this->isGranted('MANAGE', [
+                'route' => 'app_composante',
+                'subject' => $this->getUser()?->getComposanteResponsableDpe()->first()
+            ])
+        ) {
             $dpe = true;
             $users = [];
-            foreach ($this->getUser()?->getUserCentres() as $centre) {
-                if ($centre->getComposante() !== null) {
-                    $users[] = $userProfilRepository->findByComposanteNotEnableAvecDemande($centre->getComposante());
+            /** @var UserProfil $userProfil */
+            foreach ($this->getUser()?->getUserProfils() as $userProfil) {
+                if ($userProfil->getComposante() !== null) {
+                    $users[] = $userRepository->findByComposanteNotEnableAvecDemande($userProfil->getComposante());
                 }
             }
             $users = array_merge(...$users);
@@ -235,8 +234,11 @@ class UserProfilController extends BaseController
             } else {
                 $users = $userProfilRepository->findEnable($this->getCampagneCollecte(), $sort, $direction);
             }
-        } elseif ($this->isGranted('CAN_COMPOSANTE_MANAGE_MY', $this->getUser())) {
-            foreach ($this->getUser()?->getUserCentres() as $centre) {
+        } elseif ($this->isGranted('MANAGE', [
+            'route' => 'app_composante',
+            'subject' => $this->getUser()?->getComposanteResponsableDpe()->first()
+        ])) {
+            foreach ($this->getUser()?->getUserProfils() as $centre) {
                 if ($centre->getComposante() !== null) {
                     $composante = $centre->getComposante(); //au moins une composante, todo: si plusieurs ?
                 }
@@ -295,7 +297,7 @@ class UserProfilController extends BaseController
     }
 
     /**
-     * @throws \JsonException
+     * @throws JsonException
      */
     #[Route('/change-role/{id}', name: 'roles', methods: ['POST'])]
     public function changeRole(

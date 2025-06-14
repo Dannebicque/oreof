@@ -15,6 +15,7 @@ use App\Repository\FormationRepository;
 use App\Service\TypeDiplomeResolver;
 use App\Utils\Tools;
 use DateTimeInterface;
+use ZipArchive;
 
 class ExportMccc
 {
@@ -34,10 +35,10 @@ class ExportMccc
 
     public function exportZip(): string
     {
-        $zip = new \ZipArchive();
+        $zip = new ZipArchive();
         $fileName = 'export_mccc_' . date('YmdHis') . '.zip';
         $zipName = $this->dir . '/zip/' . $fileName;
-        $zip->open($zipName, \ZipArchive::CREATE);
+        $zip->open($zipName, ZipArchive::CREATE);
 
         $tabFiles = [];
 
@@ -94,10 +95,10 @@ class ExportMccc
 
     public function exportVersionZip(): string
     {
-        $zip = new \ZipArchive();
+        $zip = new ZipArchive();
         $fileName = 'export_mccc_versionnees_' . date('YmdHis') . '.zip';
         $zipName = $this->dir . '/zip/' . $fileName;
-        $zip->open($zipName, \ZipArchive::CREATE);
+        $zip->open($zipName, ZipArchive::CREATE);
 
         $tabFiles = [];
         $dir = $this->dir . '/mccc/';

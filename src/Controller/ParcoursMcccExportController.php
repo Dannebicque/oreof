@@ -14,6 +14,7 @@ use App\Classes\GetHistorique;
 use App\Entity\CampagneCollecte;
 use App\Entity\Parcours;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -35,7 +36,7 @@ class ParcoursMcccExportController extends BaseController
         $formation = $parcours->getFormation();
 
         if (null === $formation) {
-            throw new \Exception('Pas de formation.');
+            throw new Exception('Pas de formation.');
         }
 
         $typeDiplome = $this->typeDiplomeResolver->get($formation->getTypeDiplome());
@@ -60,7 +61,7 @@ class ParcoursMcccExportController extends BaseController
                 $cfvu?->getDate() ?? null,
                 $conseil?->getDate() ?? null
             ),
-            default => throw new \Exception('Format non géré'),
+            default => throw new Exception('Format non géré'),
         };
     }
 
@@ -73,7 +74,7 @@ class ParcoursMcccExportController extends BaseController
         $formation = $parcours->getFormation();
 
         if (null === $formation) {
-            throw new \Exception('Pas de formation.');
+            throw new Exception('Pas de formation.');
         }
 
         $typeDiplome = $this->typeDiplomeResolver->get($formation->getTypeDiplome());
@@ -98,7 +99,7 @@ class ParcoursMcccExportController extends BaseController
                 $dateCfvu?->getDate() ?? null,
                 $dateConseil?->getDate() ?? null
             ),
-            default => throw new \Exception('Format non géré'),
+            default => throw new Exception('Format non géré'),
         };
     }
 
@@ -111,7 +112,7 @@ class ParcoursMcccExportController extends BaseController
         $formation = $parcours->getFormation();
 
         if (null === $formation) {
-            throw new \Exception('Pas de formation.');
+            throw new Exception('Pas de formation.');
         }
 
         $typeDiplome = $this->typeDiplomeResolver->get($formation->getTypeDiplome());
@@ -138,7 +139,7 @@ class ParcoursMcccExportController extends BaseController
                 $conseil?->getDate() ?? null,
                 false
             ),
-            default => throw new \Exception('Format non géré'),
+            default => throw new Exception('Format non géré'),
         };
     }
 
@@ -162,7 +163,7 @@ class ParcoursMcccExportController extends BaseController
 
         try {
             $pdf = file_get_contents(__DIR__ . "/../../public/mccc-export/{$fileName}");
-        }catch(\Exception $e){
+        } catch (Exception $e) {
             throw $this->createNotFoundException("Le fichier demandé n'a pas été trouvé");
         }
 

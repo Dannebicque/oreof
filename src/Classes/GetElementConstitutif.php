@@ -12,7 +12,6 @@ namespace App\Classes;
 use App\Entity\ElementConstitutif;
 use App\Entity\FicheMatiere;
 use App\Entity\Parcours;
-use App\TypeDiplome\Source\TypeDiplomeInterface;
 use App\TypeDiplome\TypeDiplomeHandlerInterface;
 use Doctrine\Common\Collections\Collection;
 
@@ -49,42 +48,6 @@ class GetElementConstitutif
         }
         $this->ecSource = $this->elementConstitutif;
         return $this->ecSource;
-    }
-
-    /**
-     * @deprecated("Ne plus utiliser une fois la recopie des ECTS sur fiche matière validé")
-     */
-    public function getMcccs(TypeDiplomeInterface $typeD): array
-    {
-        if ($this->elementConstitutif->getFicheMatiere()?->isMcccImpose()) {
-            return $typeD->getMcccs($this->elementConstitutif->getFicheMatiere());
-        }
-
-        if ($this->elementConstitutif->isSynchroMccc() === true && $this->isRaccroche() === true) {
-            return $typeD->getMcccs($this->getElementConstitutif());
-        }
-
-        return $typeD->getMcccs($this->elementConstitutif);
-    }
-
-    /**
-     * @deprecated("Ne plus utiliser une fois la recopie des ECTS sur fiche matière validé")
-     */
-    public function getMcccsCollection(): ?Collection
-    {
-        if ($this->elementConstitutif->getFicheMatiere()?->isMcccImpose()) {
-            return $this->elementConstitutif->getFicheMatiere()?->getMcccs();
-        }
-
-        if ($this->elementConstitutif->getEcParent() !== null && $this->elementConstitutif->getEcParent()->isMcccEnfantsIdentique()) {
-            return $this->elementConstitutif->getEcParent()?->getMcccs();
-        }
-
-        if ($this->elementConstitutif->isSynchroMccc() === true && $this->isRaccroche() === true) {
-            return $this->getElementConstitutif()->getMcccs();
-        }
-
-        return $this->elementConstitutif->getMcccs();
     }
 
     public function getMcccsFromFicheMatiere(TypeDiplomeHandlerInterface $typeD): array
@@ -143,29 +106,9 @@ class GetElementConstitutif
 
         if($this->elementConstitutif->getFicheMatiere()) {
             return $this->elementConstitutif->getFicheMatiere()->getTypeMccc();
-        } else {
-            return $this->elementConstitutif->getTypeMccc();
-        }
-    }
-
-    /**
-     * @deprecated("Ne plus utiliser une fois la recopie des ECTS sur fiche matière validé")
-     */
-    public function getEcts(): ?float
-    {
-        if ($this->elementConstitutif->getFicheMatiere()?->isEctsImpose()) {
-            return $this->elementConstitutif->getFicheMatiere()?->getEcts();
         }
 
-        if ($this->isRaccroche() === true && $this->elementConstitutif->isSynchroEcts() === true) {
-            return $this->getElementConstitutif()?->getEcts();
-        }
-
-        if ($this->elementConstitutif->getEcParent() !== null) {
-            return $this->elementConstitutif->getEcParent()->getEcts();
-        }
-
-        return $this->elementConstitutif->getEcts();
+        return $this->elementConstitutif->getTypeMccc();
     }
 
     public function getFicheMatiereEcts() : float
@@ -187,25 +130,6 @@ class GetElementConstitutif
         return $this->elementConstitutif->getEcts();
     }
 
-    /**
-     * @deprecated("Ne plus utiliser une fois la recopie des ECTS sur fiche matière validé")
-     */
-    public function getElementConstitutifHeures(): ElementConstitutif|FicheMatiere
-    {
-        if ($this->elementConstitutif->getFicheMatiere()?->isVolumesHorairesImpose()) {
-            return $this->elementConstitutif->getFicheMatiere();
-        }
-
-        if ($this->elementConstitutif->getEcParent() !== null && $this->elementConstitutif->getEcParent()->isHeuresEnfantsIdentiques() === true) {
-            return $this->elementConstitutif->getEcParent();
-        }
-
-        if ($this->isRaccroche() === true && $this->elementConstitutif->isSynchroHeures() === true) {
-            return $this->getElementConstitutif();
-        }
-        return $this->elementConstitutif;
-    }
-
     public function getFicheMatiereHeures() : FicheMatiere|ElementConstitutif
     {
         $ficheMatiere = $this->elementConstitutif->getFicheMatiere() ?? $this->elementConstitutif;
@@ -223,7 +147,7 @@ class GetElementConstitutif
         return $ficheMatiere;
     }
 
-    /* @deprecated */
+    /* @deprecated("encore utile pour BCC...") */
     public function isRaccroche():bool
     {
         if ($this->isRaccroche !== null) {
@@ -311,26 +235,6 @@ class GetElementConstitutif
 
         return $this->elementConstitutif->getCompetences()->count() > 0 ? 'Complet' : 'A saisir';
 
-    }
-
-    /**
-     * @deprecated("Ne plus utiliser une fois la recopie des ECTS sur fiche matière validé")
-     */
-    public function getTypeMccc(): ?string
-    {
-        if ($this->elementConstitutif->getEcParent() !== null && $this->elementConstitutif->getEcParent()->isMcccEnfantsIdentique() === true) {
-            return $this->elementConstitutif->getEcParent()->getTypeMccc();
-        }
-
-        if ($this->elementConstitutif->getFicheMatiere()?->isMcccImpose()) {
-            return $this->elementConstitutif->getFicheMatiere()?->getTypeMccc();
-        }
-
-        if ($this->isRaccroche() === true && $this->elementConstitutif->isSynchroMccc() === true) {
-            return $this->getElementConstitutif()->getTypeMccc();
-        }
-
-        return $this->elementConstitutif->getTypeMccc();
     }
 
     public function getBccs(): ?Collection

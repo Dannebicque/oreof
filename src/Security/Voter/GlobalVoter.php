@@ -17,11 +17,12 @@ use App\Enums\TypeModificationDpeEnum;
 use App\Repository\RoleRepository;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Workflow\WorkflowInterface;
 
-class GlobalVoter extends Voter
+
+/** @deprecated */
+class GlobalVoter //extends Voter
 {
     private string $roleNiveau;
     private string $permission;
@@ -182,7 +183,7 @@ class GlobalVoter extends Voter
         if ($subject->isHasParcours() === false) {
             // parcours par défaut
             $parcours = $subject->getParcours()->first();
-            if ($parcours !== null && $parcours instanceof Parcours) {
+            if ($parcours instanceof Parcours) {
                 $dpeParcours = GetDpeParcours::getFromParcours($parcours);
                 if ($dpeParcours !== null) {
                     $canEdit = $canEdit || $this->canAccessDpeParcours($dpeParcours, $centre);

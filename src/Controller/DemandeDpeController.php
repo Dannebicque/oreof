@@ -3,20 +3,14 @@
 namespace App\Controller;
 
 use App\Classes\Excel\ExcelWriter;
-use App\Classes\JsonReponse;
 use App\Classes\ValidationProcess;
-use App\Entity\Actualite;
 use App\Entity\Composante;
 use App\Entity\DpeDemande;
-use App\Form\ActualiteType;
 use App\Form\DpeDemandeTexteType;
-use App\Repository\ActualiteRepository;
 use App\Repository\ComposanteRepository;
 use App\Repository\DpeDemandeRepository;
 use App\Repository\MentionRepository;
-use App\Utils\JsonRequest;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -46,7 +40,10 @@ class DemandeDpeController extends BaseController
     {
         if ($type === 'composante') {
             $composante = $composanteRepository->find($request->query->get('composante'));
-            $this->denyAccessUnlessGranted('CAN_COMPOSANTE_SHOW_MY', $composante);
+            $this->denyAccessUnlessGranted('SHOW', [
+                'route' => 'app_composante',
+                'subject' => $composante
+            ]);
 
             if ($composante === null) {
                 throw $this->createNotFoundException('Composante non trouvée');
@@ -55,6 +52,9 @@ class DemandeDpeController extends BaseController
             return $this->render('demande_dpe/_liste.html.twig', [
                 'is_admin' => false,
                 'params' => $request->query->all(),
+                'mentions' => [],
+                'listeNiveauModification' => DpeDemande::getListeNiveauModification(),
+                'listeEtatValidation' => $validationProcess->getProcessAll(),
                 'demandes' => $dpeDemandeRepository->findByComposanteAndSearch(
                     $composante,
                     $this->getCampagneCollecte(),
@@ -87,7 +87,10 @@ class DemandeDpeController extends BaseController
         Composante $composante,
     ): Response
     {
-        $this->denyAccessUnlessGranted('CAN_COMPOSANTE_SHOW_MY', $composante);
+        $this->denyAccessUnlessGranted('SHOW', [
+            'route' => 'app_composante',
+            'subject' => $composante
+        ]);
 
         return $this->render('demande_dpe/index.html.twig', [
             'type' => 'composante',
@@ -138,7 +141,10 @@ class DemandeDpeController extends BaseController
                 throw $this->createNotFoundException('Composante non trouvée');
             }
 
-            $this->denyAccessUnlessGranted('CAN_COMPOSANTE_SHOW_MY', $composante);
+            $this->denyAccessUnlessGranted('MANAGE', [
+                'route' => 'app_composante',
+                'subject' => $composante
+            ]);
 
             $demandes = $dpeDemandeRepository->findByComposante($composante);
         } else {
@@ -169,12 +175,11 @@ class DemandeDpeController extends BaseController
         foreach ($demandes as $demande) {
             if ($demande->getNiveauDemande() === 'F') {
                 $formation = $demande->getFormation();
-                $composante = $formation?->getComposantePorteuse();
             } else {
                 $parcours = $demande->getParcours();
                 $formation = $parcours?->getFormation();
-                $composante = $formation?->getComposantePorteuse();
             }
+            $composante = $formation?->getComposantePorteuse();
 
             $excelWriter->writeCellName('A' . $ligne, $composante->getLibelle());
             $excelWriter->writeCellName('B' . $ligne, $formation?->getDisplay());

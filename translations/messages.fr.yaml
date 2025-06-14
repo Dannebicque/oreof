@@ -80,6 +80,8 @@ Email: Email
 'Code étape': 'Code étape'
 'Version étape': 'Version étape'
 'Lettre Mention': 'Lettre Mention'
+gestion.admin.title: 'Gestion des administrateurs'
+admin.edit.modal.help: 'Ces actions doivent être réalisées avec précaution. Elles permettent de court-circuiter ou modifier le processus de validation intialement établi ou d''agir directement sur certaines informations.'
 'Directeur de composante': 'Directeur de composante'
 'Choisir dans la liste ou choisir "+" pour ajouter un utilisateur': 'Choisir dans la liste ou choisir "+" pour ajouter un utilisateur'
 Commentaire: Commentaire

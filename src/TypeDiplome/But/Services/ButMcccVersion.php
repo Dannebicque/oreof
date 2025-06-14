@@ -135,10 +135,6 @@ class ButMcccVersion
         // Prépare le modèle avant de dupliquer
         $modele = $this->excelWriter->getSheetByName(self::PAGE_MODELE);
 
-        if ($modele === null) {
-            throw new \Exception('Le modèle n\'existe pas');
-        }
-
         //récupération des données
         // récupération des semestres du parcours puis classement par année et par ordre
         $tabSemestres = [];
@@ -348,11 +344,8 @@ class ButMcccVersion
                 $this->excelWriter->colorCells('L' . $debutSae . ':W' . ($ligne - 1), 'FFCCCCCC');
                 $this->excelWriter->colorCells('X23:AK' . $finRessource, 'FFCCCCCC');
                 $this->excelWriter->colorCells('H23:H' . $finRessource, 'FFCCCCCC');
-                $a = $ligne + 4;
-                $b = $ligne + 3;
                 foreach ($tabColUes as $keyUe => $colUe) {
                     $diffUe = $diffSemestre['ues'][$keyUe];
-                    $lettreCol = Coordinate::stringFromColumnIndex($colUe);
                     //pour chaque colonne d'uE on met à jour la somme des ECTS dans la formule
                     $sommeEctsAvant = $totalCoeffAvant[$keyUe]['Ressource'] + $totalCoeffAvant[$keyUe]['Sae'];
                     $sommeEctsApres = $totalCoeffApres[$keyUe]['Ressource'] + $totalCoeffApres[$keyUe]['Sae'];

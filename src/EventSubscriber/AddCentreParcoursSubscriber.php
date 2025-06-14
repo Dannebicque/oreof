@@ -15,6 +15,7 @@ use App\Events\AddCentreParcoursEvent;
 use App\Repository\ParcoursRepository;
 use App\Repository\UserCentreRepository;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 class AddCentreParcoursSubscriber implements EventSubscriberInterface
 {
@@ -34,7 +35,7 @@ class AddCentreParcoursSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
+     * @throws TransportExceptionInterface
      */
     public function onAddCentreParcours(AddCentreParcoursEvent $event): void
     {
@@ -75,7 +76,7 @@ class AddCentreParcoursSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
+     * @throws TransportExceptionInterface
      */
     public function onRemoveCentreParcours(AddCentreParcoursEvent $event): void
     {

@@ -16,7 +16,6 @@ use App\Events\HistoriqueFormationEvent;
 use App\Events\HistoriqueParcoursEvent;
 use App\Repository\DpeDemandeRepository;
 use App\Repository\DpeParcoursRepository;
-use App\Repository\FicheMatiereRepository;
 use App\Service\VersioningFormation;
 use App\Service\VersioningParcours;
 use DateTimeImmutable;
@@ -236,7 +235,7 @@ class ProcessReouvertureController extends BaseController
             }
 
             //todo: vérifier si l'évent est OK ?
-            $versioningFormation->saveVersionOfFormation($formation, new \DateTimeImmutable('now'), true, false);
+            $versioningFormation->saveVersionOfFormation($formation, new DateTimeImmutable('now'), true, false);
             $histoEvent = new HistoriqueFormationEvent($formation, $this->getUser(), 'en_cours_redaction', 'valide', $request);
             $this->eventDispatcher->dispatch($histoEvent, HistoriqueFormationEvent::ADD_HISTORIQUE_FORMATION);
             $this->entityManager->flush();

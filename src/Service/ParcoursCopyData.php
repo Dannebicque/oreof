@@ -24,6 +24,7 @@ use App\Repository\ParcoursCopyRepository;
 use App\Repository\UeCopyRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
+use Exception;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 
@@ -567,7 +568,7 @@ class ParcoursCopyData {
         string $typeVerif = 'hours'
     ){
         if(in_array($typeVerif, ['hours', 'ects']) === false){
-            throw new \Exception("Le type de vérification doit être parmi ['hours', 'ects'].");
+            throw new Exception("Le type de vérification doit être parmi ['hours', 'ects'].");
         }
 
         $result = true;
@@ -916,7 +917,7 @@ class ParcoursCopyData {
     ) : bool {
 
         if(in_array($typeVerif, ['hours', 'ects']) === false){
-            throw new \Exception("Le type de vérification doit être parmi ['hours', 'ects'].");
+            throw new Exception("Le type de vérification doit être parmi ['hours', 'ects'].");
         }
 
         $result = true;

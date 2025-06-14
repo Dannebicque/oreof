@@ -13,6 +13,7 @@ use App\Entity\TypeEpreuve;
 use App\Form\TypeEpreuveType;
 use App\Repository\TypeEpreuveRepository;
 use App\Utils\JsonRequest;
+use JsonException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -111,7 +112,7 @@ class TypeEpreuveController extends AbstractController
     }
 
     /**
-     * @throws \JsonException
+     * @throws JsonException
      */
     #[Route('/{id}', name: 'app_type_epreuve_delete', methods: ['DELETE'])]
     public function delete(

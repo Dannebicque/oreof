@@ -37,14 +37,14 @@ class ApiJsonExport {
         SymfonyStyle $io = null
     ){
         $dataJSON = [];
-        $formationArray = $this->entityManager->getRepository(Formation::class)->findAll();       
+        $formationArray = $this->entityManager->getRepository(Formation::class)->findAll();
         $urlPrefix = "https://" . $hostname;
-        
+
         /**
          * Filtrage sur la campagne de collecte en cours
          */
         $formationArray = array_filter($formationArray, function($f){
-            $parcoursCampagneActuelle = array_filter($f->getParcours()->toArray(), 
+            $parcoursCampagneActuelle = array_filter($f->getParcours()->toArray(),
                 function($p) {
                     $dpeParcours = $p->getDpeParcours()?->last();
                     if($dpeParcours instanceof DpeParcours){
@@ -59,9 +59,7 @@ class ApiJsonExport {
         $countParcours = 0;
         $countProgress = count($formationArray);
 
-        if($io){
-            $io->progressStart($countProgress);
-        }
+        $io?->progressStart($countProgress);
 
         foreach($formationArray as $formation){
             $dateValidationFormation = [];
@@ -75,8 +73,8 @@ class ApiJsonExport {
                         'id' => $parcours->getId(),
                         'libelle' => $lastVersionData['parcours']->getDisplay(),
                         'url' => $urlPrefix . $this->router->generate(
-                            'app_parcours_export_json_urca_cfvu_valid', 
-                            ['parcours' => $lastVersion[0]->getParcours()->getId()], 
+                                'app_parcours_export_json_urca_cfvu_valid',
+                                ['parcours' => $lastVersion[0]->getParcours()->getId()],
                             UrlGeneratorInterface::ABSOLUTE_PATH
                         )
                     ];
@@ -95,7 +93,7 @@ class ApiJsonExport {
                         $dateValidationFormation[] = $dateValideAPublier;
                     }
                     ++$countParcours;
-                    
+
                 }
             }
             // Date de validation : la plus récente des dates de publication de parcours
@@ -115,16 +113,12 @@ class ApiJsonExport {
                 ];
             }
 
-            if($io){
-                $io->progressAdvance();
-            }
+            $io?->progressAdvance();
         }
 
-        if($io){
-            $io->progressFinish();
-        }
+        $io?->progressFinish();
 
-        $io->writeln("{$countParcours} Parcours ont été ajoutés à l'API");
+        $io?->writeln($countParcours . ' Parcours ont été ajoutés à l\'API');
 
         return $dataJSON;
     }

@@ -19,6 +19,7 @@ use App\Service\VersioningParcours;
 use App\Service\VersioningStructureExtractDiff;
 use App\Utils\Tools;
 use Symfony\Component\HttpKernel\KernelInterface;
+use ZipArchive;
 
 class ExportSyntheseModification
 {
@@ -89,10 +90,10 @@ class ExportSyntheseModification
             }
         }
 
-        $zip = new \ZipArchive();
+        $zip = new ZipArchive();
         $fileName = 'synthese_modification_cfvu_' . date('YmdHis') . '.zip';
         $zipName = $this->dir . 'temp/zip/' . $fileName;
-        $zip->open($zipName, \ZipArchive::CREATE);
+        $zip->open($zipName, ZipArchive::CREATE);
 
         foreach ($fichiers as $fichier) {
             $zip->addFile(

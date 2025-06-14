@@ -45,7 +45,7 @@ class Parcours
     private ?string $libelle = null;
 
     #[Groups(['parcours_json_versioning', 'fiche_matiere_versioning'])]
-    #[ORM\ManyToOne(targetEntity: Formation::class, inversedBy: 'parcours', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: Formation::class, cascade: ['persist'], inversedBy: 'parcours')]
     private ?Formation $formation;
 
     #[Groups('parcours_json_versioning')]

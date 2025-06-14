@@ -8,6 +8,8 @@ use App\Enums\BadgeEnumInterface;
 use App\Enums\EtatDpeEnum;
 use App\Enums\TypeModificationDpeEnum;
 use App\Repository\DpeDemandeRepository;
+use DateTime;
+use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -23,7 +25,7 @@ class DpeDemande
     private ?int $id = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $dateDemande;
+    private ?DateTimeInterface $dateDemande;
 
     #[ORM\ManyToOne]
     private ?Parcours $parcours = null;
@@ -44,7 +46,7 @@ class DpeDemande
     private ?string $argumentaireDemande = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $dateCloture = null;
+    private ?DateTimeInterface $dateCloture = null;
 
     #[ORM\ManyToOne(inversedBy: 'dpeDemandes')]
     private ?User $auteur = null;
@@ -55,7 +57,7 @@ class DpeDemande
     //constructeur pour initialiser la date de demande
     public function __construct()
     {
-        $this->dateDemande = new \DateTime();
+        $this->dateDemande = new DateTime();
     }
 
     public static function getListeNiveauDemande(): array
@@ -86,12 +88,12 @@ class DpeDemande
         return $this->id;
     }
 
-    public function getDateDemande(): ?\DateTimeInterface
+    public function getDateDemande(): ?DateTimeInterface
     {
         return $this->dateDemande;
     }
 
-    public function setDateDemande(\DateTimeInterface $dateDemande): static
+    public function setDateDemande(DateTimeInterface $dateDemande): static
     {
         $this->dateDemande = $dateDemande;
 
@@ -170,12 +172,12 @@ class DpeDemande
         return $this;
     }
 
-    public function getDateCloture(): ?\DateTimeInterface
+    public function getDateCloture(): ?DateTimeInterface
     {
         return $this->dateCloture;
     }
 
-    public function setDateCloture(?\DateTimeInterface $dateCloture): static
+    public function setDateCloture(?DateTimeInterface $dateCloture): static
     {
         $this->dateCloture = $dateCloture;
 

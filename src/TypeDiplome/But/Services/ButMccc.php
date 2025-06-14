@@ -118,10 +118,6 @@ class ButMccc
         // Prépare le modèle avant de dupliquer
         $modele = $this->excelWriter->getSheetByName(self::PAGE_MODELE);
 
-        if ($modele === null) {
-            throw new \Exception('Le modèle n\'existe pas');
-        }
-
         //récupération des données
         // récupération des semestres du parcours puis classement par année et par ordre
         $tabSemestres = [];

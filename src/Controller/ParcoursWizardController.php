@@ -21,9 +21,11 @@ use App\Form\ParcoursStep7Type;
 use App\Repository\ComposanteRepository;
 use App\Repository\FormationRepository;
 use App\Repository\ParcoursRepository;
+use App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException;
 use App\Utils\Access;
 use App\Utils\JsonRequest;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -51,7 +53,7 @@ class ParcoursWizardController extends BaseController
     }
 
     /**
-     * @throws \App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException
+     * @throws TypeDiplomeNotFoundException
      */
     #[Route('/{dpeParcours}/2', name: 'app_parcours_wizard_step_2', methods: ['GET'])]
     public function step2(
@@ -83,11 +85,11 @@ class ParcoursWizardController extends BaseController
         $parcours = $dpeParcours->getParcours();
 
         if ($parcours === null) {
-            throw new \Exception('Le parcours n\'existe pas.');
+            throw new Exception('Le parcours n\'existe pas.');
         }
 
         if ($parcours->getFormation() === null) {
-            throw new \Exception('Le parcours n\'est pas lié à une formation.');
+            throw new Exception('Le parcours n\'est pas lié à une formation.');
         }
 
         $typeDiplome = $this->typeDiplomeResolver->get($parcours->getFormation()->getTypeDiplome());

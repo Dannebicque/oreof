@@ -43,14 +43,10 @@ class BadgeDpeExtension extends AbstractExtension
             return 'disabled';
         }
 
-        switch ($type) {
-            case 'formation':
-            case 'parcours':
-            case 'dpe':
-                return in_array('en_cours_redaction', $fiche->getEtatFiche()) || count($fiche->getEtatFiche()) === 0 ? '' : 'disabled';
-            default:
-                return 'disabled';
-        }
+        return match ($type) {
+            'formation', 'parcours', 'dpe' => in_array('en_cours_redaction', $fiche->getEtatFiche()) || count($fiche->getEtatFiche()) === 0 ? '' : 'disabled',
+            default => 'disabled',
+        };
     }
 
     public function displayErreurs(?array $erreurs = []): string

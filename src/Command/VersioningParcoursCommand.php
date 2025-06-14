@@ -7,6 +7,7 @@ use App\Entity\CampagneCollecte;
 use App\Entity\DpeParcours;
 use App\Entity\Parcours;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -111,7 +112,7 @@ class VersioningParcoursCommand extends Command
                 $this->filesystem->appendToFile(__DIR__ . "/../../versioning_json/success_log/global_save_parcours_success.log", $logTxt);
                 $io->success('Sauvegarde en JSON des parcours de la base de données réussie.');
                 return Command::SUCCESS;
-            }catch(\Exception $e){
+            } catch (Exception $e) {
                 // Affichage de l'erreur sur le terminal
                 $io->error("Une erreur est survenue : " . $e->getMessage());
                 $now = new DateTimeImmutable('now');
@@ -178,7 +179,7 @@ class VersioningParcoursCommand extends Command
                     $io->success('Sauvegarde des parcours validés en CFVU reussie !');
 
                     return Command::SUCCESS;
-            }catch(\Exception $e){
+            } catch (Exception $e) {
                 $io->error("Une erreur est survenue : " . $e->getMessage());
                 $now = new DateTimeImmutable('now');
                 $dateHeure = $now->format('d-m-Y_H-i-s');

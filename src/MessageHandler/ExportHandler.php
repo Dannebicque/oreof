@@ -10,7 +10,6 @@
 namespace App\MessageHandler;
 
 use App\Classes\Export\Export;
-use App\Repository\CampagneCollecteRepository;
 use App\Repository\ComposanteRepository;
 use App\Repository\UserRepository;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;

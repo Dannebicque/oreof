@@ -71,7 +71,7 @@ class AddCentreFormationSubscriber implements EventSubscriberInterface
         $this->mailer->sendMessage([$user->getEmail()], '[ORéOF] Accès à l\'application');
     }
 
-    public function onRemoveCentreFormation(AddCentreFormationEvent $event)
+    public function onRemoveCentreFormation(AddCentreFormationEvent $event): void
     {
         $user = $event->user;
         $formation = $event->formation;

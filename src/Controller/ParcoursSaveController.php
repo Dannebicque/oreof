@@ -24,7 +24,7 @@ use App\Repository\UserRepository;
 use App\Repository\VilleRepository;
 use App\Utils\JsonRequest;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use JsonException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -39,7 +39,7 @@ class ParcoursSaveController extends BaseController
 
 
     /**
-     * @throws \JsonException
+     * @throws JsonException
      */
     #[Route('/parcours/save/{parcours}', name: 'app_parcours_save')]
     public function save(
@@ -60,8 +60,10 @@ class ParcoursSaveController extends BaseController
         if (null === $dpeParcours) {
             return $this->json(['error' => 'DPE non trouvé']);
         }
-        $this->denyAccessUnlessGranted('CAN_PARCOURS_EDIT_MY', $dpeParcours);
-//todo: passer par le Dpe ?
+        $this->denyAccessUnlessGranted('EDIT', [
+            'route' => 'app_parcours',
+            'subject' => $dpeParcours
+        ]);
         $dpeParcours = GetDpeParcours::getFromParcours($parcours);
         //        if (!($this->parcoursWorkflow->can($parcours, 'valider_parcours') || $this->parcoursWorkflow->can(
         //            $parcours, 'autoriser')) && !$this->isGranted('ROLE_SES')) {

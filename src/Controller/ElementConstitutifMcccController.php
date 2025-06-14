@@ -23,16 +23,15 @@ use App\Events\McccUpdateEvent;
 use App\Repository\TypeEpreuveRepository;
 use App\Service\TypeDiplomeResolver;
 use App\Service\VersioningParcours;
+use App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException;
 use App\Utils\Access;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManagerInterface;
-use Exception;
 use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/element/constitutif')]
@@ -45,7 +44,7 @@ class ElementConstitutifMcccController extends AbstractController
 
 
     /**
-     * @throws \App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException
+     * @throws TypeDiplomeNotFoundException
      */
     #[Route('/{id}/mccc-ec/{parcours}', name: 'app_element_constitutif_mccc', methods: ['GET', 'POST'])]
     public function mcccEc(
@@ -113,7 +112,11 @@ class ElementConstitutifMcccController extends AbstractController
             }
         }
 
-        if ($this->isGranted('CAN_PARCOURS_EDIT_MY', $dpeParcours) && Access::isAccessible($dpeParcours, 'cfvu')) {
+        if ($this->isGranted('EDIT',
+                [
+                    'route' => 'app_parcours',
+                    'subject' => $dpeParcours,
+                ]) && Access::isAccessible($dpeParcours, 'cfvu')) {
             if ($request->isMethod('POST')) {
                 $newMcccToText = '';
                 $newEcts = '';
@@ -282,7 +285,7 @@ class ElementConstitutifMcccController extends AbstractController
         $ects = $getElement->getFicheMatiereEcts();
 
         $lastVersion = $entityManager->getRepository(ParcoursVersioning::class)->findLastCfvuVersion($parcours);
-        $lastVersion = isset($lastVersion[0]) ? $lastVersion[0] : null;
+        $lastVersion = $lastVersion[0] ?? null;
 
         $typeMcccLibelle = [
             'ct' => 'Contrôle Terminal',
@@ -452,8 +455,16 @@ class ElementConstitutifMcccController extends AbstractController
         }
         $typeD = $this->typeDiplomeResolver->get($typeDiplome);
 
-        if ($this->isGranted('CAN_FORMATION_EDIT_MY', $formation) ||
-            $this->isGranted('CAN_PARCOURS_EDIT_MY', $ficheMatiere->getParcours())) { //todo: ajouter le workflow...
+        if ($this->isGranted('EDIT',
+                [
+                    'route' => 'app_formation',
+                    'subject' => $formation,
+                ]) ||
+            $this->isGranted('EDIT',
+                [
+                    'route' => 'app_parcours',
+                    'subject' => $ficheMatiere->getParcours(),
+                ])) {
             if ($request->isMethod('POST')) {
                 $typeD->saveMcccs($ficheMatiere, $request->request);
                 return JsonReponse::success('MCCCs enregistrés');

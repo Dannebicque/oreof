@@ -94,14 +94,14 @@ class ElementConstitutif
     private ?int $ordre = null;
 
     #[Groups(['DTO_json_versioning'])]
-    #[ORM\ManyToOne(fetch: 'EAGER', inversedBy: 'elementConstitutifs', cascade: ['persist'])]
+    #[ORM\ManyToOne(cascade: ['persist'], fetch: 'EAGER', inversedBy: 'elementConstitutifs')]
     private ?FicheMatiere $ficheMatiere = null;
 
     #[Groups(['fiche_matiere_versioning_ec_parcours', 'DTO_json_versioning'])]
     #[ORM\ManyToOne(inversedBy: 'elementConstitutifs')]
     private ?Parcours $parcours = null;
 
-    #[ORM\ManyToOne(inversedBy: 'elementConstitutifs', fetch: 'EAGER', cascade: ['persist'])]
+    #[ORM\ManyToOne(cascade: ['persist'], fetch: 'EAGER', inversedBy: 'elementConstitutifs')]
     private ?Ue $ue = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -111,7 +111,7 @@ class ElementConstitutif
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $libelle = null;
 
-    #[ORM\ManyToOne(inversedBy: 'elementConstitutifs', fetch: 'EAGER', cascade: ['persist'])]
+    #[ORM\ManyToOne(cascade: ['persist'], fetch: 'EAGER', inversedBy: 'elementConstitutifs')]
     private ?TypeEc $typeEc = null;
 
     #[MaxDepth(1)]
@@ -144,10 +144,6 @@ class ElementConstitutif
     #[Groups('DTO_json_versioning')]
     #[ORM\ManyToMany(targetEntity: Competence::class, inversedBy: 'elementConstitutifs')]
     private Collection $competences;
-
-    #[ORM\ManyToMany(targetEntity: ButApprentissageCritique::class, inversedBy: 'elementConstitutifs')]
-    /** @deprecated("A supprimer une fois le transfert des données EC => Fiche") */
-    private Collection $apprentissagesCritiques;
 
     #[ORM\Column(nullable: true)]
     /** @deprecated("A supprimer une fois le transfert des données EC => Fiche") */
@@ -199,7 +195,6 @@ class ElementConstitutif
         $this->mcccs = new ArrayCollection();
         $this->ecEnfants = new ArrayCollection();
         $this->competences = new ArrayCollection();
-        $this->apprentissagesCritiques = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -931,7 +926,6 @@ class ElementConstitutif
      */
     public function prepareCloneForNewAnnee() : void {
         $this->competences = new ArrayCollection();
-        $this->apprentissagesCritiques = new ArrayCollection();
     }
 
 

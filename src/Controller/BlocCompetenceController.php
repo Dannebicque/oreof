@@ -16,6 +16,9 @@ use App\Form\BlocCompetenceType;
 use App\Repository\BlocCompetenceRepository;
 use App\Repository\CompetenceRepository;
 use App\Utils\JsonRequest;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
+use JsonException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -71,16 +74,16 @@ class BlocCompetenceController extends BaseController
     ): Response
     {
         return $this->render('typeDiplome/but/_refCompetences.versioning.html.twig', [
-            'competences' => $parcours->getFormation()->getButCompetences(),
+            'competences' => $parcours->getFormation()?->getButCompetences(),
             'parcours' => $parcours,
-            'indexParcours' => $indexParcours ?? ''
+            'indexParcours' => $indexParcours
         ]);
     }
 
 
     /**
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     * @throws \Doctrine\ORM\NoResultException
+     * @throws NonUniqueResultException
+     * @throws NoResultException
      */
     #[Route('/liste/transverse/{parcours}', name: 'app_bloc_competence_liste_transverse', methods: ['GET', 'POST'])]
     public function listeTransverse(
@@ -151,8 +154,8 @@ class BlocCompetenceController extends BaseController
     }
 
     /**
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     * @throws \Doctrine\ORM\NoResultException
+     * @throws NonUniqueResultException
+     * @throws NoResultException
      */
     #[Route('/new/parcours/{parcours}', name: 'app_bloc_competence_new_parcours', methods: ['GET', 'POST'])]
     public function newParcours(
@@ -241,8 +244,8 @@ class BlocCompetenceController extends BaseController
     }
 
     /**
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     * @throws \Doctrine\ORM\NoResultException
+     * @throws NonUniqueResultException
+     * @throws NoResultException
      */
     #[Route('/{id}/duplicate', name: 'app_bloc_competence_duplicate', methods: ['GET'])]
     public function duplicate(
@@ -279,7 +282,7 @@ class BlocCompetenceController extends BaseController
     }
 
     /**
-     * @throws \JsonException
+     * @throws JsonException
      */
     #[Route('/{id}', name: 'app_bloc_competence_delete', methods: ['DELETE'])]
     public function delete(
