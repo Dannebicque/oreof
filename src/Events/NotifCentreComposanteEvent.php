@@ -14,9 +14,9 @@ use App\Entity\User;
 
 class NotifCentreComposanteEvent
 {
-    public const NOTIF_ADD_CENTRE_COMPOSANTE = 'notif.add.centre.composante';
+    public const string NOTIF_ADD_CENTRE_COMPOSANTE = 'notif.add.centre.composante';
 
-    public const NOTIF_REMOVE_CENTRE_COMPOSANTE = 'notif.remove.centre.composante';
+    public const string NOTIF_REMOVE_CENTRE_COMPOSANTE = 'notif.remove.centre.composante';
 
     public function __construct(
         public Composante $composante,

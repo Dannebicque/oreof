@@ -17,8 +17,8 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 class UsersFixtures extends Fixture
 {
     //constructeur avec password
-    public const RESPONSABLE_DPE_COMPOSANTE = 'resp_dpe';
-    public const RESPONSABLE_FORMATION = 'resp_formation';
+    public const string RESPONSABLE_DPE_COMPOSANTE = 'resp_dpe';
+    public const string RESPONSABLE_FORMATION = 'resp_formation';
 
     public function __construct(private readonly UserPasswordHasherInterface $encoder)
     {

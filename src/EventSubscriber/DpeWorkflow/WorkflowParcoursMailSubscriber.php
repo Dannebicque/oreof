@@ -59,7 +59,7 @@ class WorkflowParcoursMailSubscriber extends AbstractDpeMailSubscriber implement
         );
     }
 
-    public function onValideRf(Event $event)
+    public function onValideRf(Event $event): void
     {
         $data = $this->getDataFromEvent($event);
         if ($data === null) {
@@ -78,7 +78,7 @@ class WorkflowParcoursMailSubscriber extends AbstractDpeMailSubscriber implement
         );
     }
 
-    public function onReserveRf(Event $event)
+    public function onReserveRf(Event $event): void
     {
         $data = $this->getDataFromEvent($event);
         if ($data === null) {

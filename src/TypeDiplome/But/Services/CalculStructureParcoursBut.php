@@ -17,7 +17,7 @@ use App\Entity\Parcours;
 
 class CalculStructureParcoursBut
 {
-    public function calcul(Parcours $parcours): StructureParcours
+    public function calcul(Parcours $parcours, bool $withEcts = true, bool $withBcc = true, bool $dataFromFicheMatiere = false): StructureParcours
     {
         $dtoStructure = new StructureParcours();
         $dtoStructure->setParcours($parcours);

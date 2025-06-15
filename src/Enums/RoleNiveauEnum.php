@@ -20,7 +20,7 @@ enum RoleNiveauEnum: string
 //    case SCOLARITE = 'SCOLARITE';
 
 
-    public static function getAvailableTypes()
+    public static function getAvailableTypes(): array
     {
         return [
             self::ETABLISSEMENT->value,

@@ -29,7 +29,7 @@ class MyDomPdf
         $this->basePath = $kernel->getProjectDir().'/public';
     }
 
-    public function render(string $template, array $context = [], string $name = 'fichier', array $options = [])
+    public function render(string $template, array $context = [], string $name = 'fichier', array $options = []): null
     {
         $resolver = new OptionsResolver();
         $this->configureOptions($resolver);
@@ -46,7 +46,7 @@ class MyDomPdf
         return $dompdf->stream($this->valideName($name), ["Attachment" => $this->options['attachment']]);
     }
 
-    private function generateHtml(string $template, array $context = [])
+    private function generateHtml(string $template, array $context = []): string
     {
         $context = array_merge($context, ['baseUrl' => $this->options['baseUrl']]);
 

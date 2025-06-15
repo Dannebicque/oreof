@@ -34,7 +34,7 @@ class ExportCarif implements ExportInterface
     private function prepareExport(
         CampagneCollecte $anneeUniversitaire,
     ): void {
-        $formations = $this->formationRepository->findBySearch('', $anneeUniversitaire, []);
+        $formations = $this->formationRepository->findBySearch('', $anneeUniversitaire);
         $this->excelWriter->createFromTemplate('export_carif.xlsx');
         $this->excelWriter->setActiveSheetIndex(0);
         $ligne = 2;
@@ -68,7 +68,7 @@ class ExportCarif implements ExportInterface
 //                    $this->excelWriter->writeCellXY('N', $ligne, $dureeEntreprise);
 //                    $this->excelWriter->writeCellXY('O', $ligne, $dureeFormation);
                     $this->excelWriter->writeCellXY('R', $ligne, $parcours->getLocalisation()?->getLibelle());
-                   ;
+
 //                    $this->excelWriter->getColumnsAutoSize('A', 'R');
                     $ligne++;
                 }

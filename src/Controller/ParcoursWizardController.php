@@ -78,7 +78,7 @@ class ParcoursWizardController extends BaseController
         ParcoursRepository $parcoursRepository,
         DpeParcours $dpeParcours
     ): Response {
-        if (!Access::isAccessible($dpeParcours, 'cfvu')) {
+        if (!Access::isAccessible($dpeParcours)) {
             return $this->render('parcours_wizard/_access_denied.html.twig');
         }
 
@@ -107,7 +107,7 @@ class ParcoursWizardController extends BaseController
         Request $request,
         ParcoursRepository $parcoursRepository, DpeParcours $dpeParcours): Response
     {
-        if (!Access::isAccessible($dpeParcours, 'cfvu')) {
+        if (!Access::isAccessible($dpeParcours)) {
             return $this->render('parcours_wizard/_access_denied.html.twig');
         }
 

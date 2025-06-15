@@ -67,16 +67,14 @@ class DpeSauvegardeSubscriber implements EventSubscriberInterface
         }
 
 
-        $fichier = Tools::FileName('MCCC - ' . $dpe->getAnneeUniversitaire()?->getLibelle() . ' - ' . $parcours->getId().'-v'.$dpeParcours->getVersion(), 50);
+        $fichier = Tools::FileName('MCCC - ' . $dpe->getAnneeUniversitaire()?->getLibelle() . ' - ' . $parcours->getId() . '-v' . $dpeParcours->getVersion());
 
 
         $export = $typeDiplome->exportExcelAndSaveVersionMccc(
             $dpe,
             $parcours,
             $this->dir,
-            $fichier,
-            null,
-            null
+            $fichier
         );
 
         if ($export !== false) {

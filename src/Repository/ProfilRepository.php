@@ -16,7 +16,7 @@ class ProfilRepository extends ServiceEntityRepository
         parent::__construct($registry, Profil::class);
     }
 
-    public function deleteAll()
+    public function deleteAll(): void
     {
         $this->getEntityManager()->getConnection()->executeStatement('SET FOREIGN_KEY_CHECKS = 0');
         $this->getEntityManager()->createQuery('DELETE FROM App\Entity\Profil')->execute();

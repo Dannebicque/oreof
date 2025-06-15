@@ -17,8 +17,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity(repositoryClass: NatureUeEcRepository::class)]
 class NatureUeEc
 {
-    public const Nature_EC = 'ec';
-    public const Nature_UE = 'ue';
+    public const string Nature_EC = 'ec';
+    public const string Nature_UE = 'ue';
 
     #[ORM\Id]
     #[ORM\GeneratedValue]

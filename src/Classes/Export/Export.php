@@ -24,7 +24,6 @@ class Export
     private ?CampagneCollecte $campagneCollecte;
     private ?DateTimeInterface $date;
     private string $dir;
-    private mixed $export;
 
     private ?Composante $composante = null;
 
@@ -55,7 +54,7 @@ class Export
         $this->date = $date;
     }
 
-    public function setTypeDocument(string $typeDocument)
+    public function setTypeDocument(string $typeDocument): void
     {
         $t = explode('-', $typeDocument);
         $this->format = $t[0];
@@ -84,9 +83,8 @@ class Export
                 return $this->exportMcccVersion();
             case 'carif':
                 return $this->exportCarif();
-            case 'regime':
-                return $this->exportRegime();
             case 'responsable':
+            case 'regime':
                 return $this->exportRegime();
             case 'responsable_compo':
                 return $this->exportResponsableComposante();
@@ -109,18 +107,20 @@ class Export
             case 'synthese_modification':
                 return $this->exportSyntheseModifications();
         }
+
+        throw new \InvalidArgumentException('Type de document non géré : ' . $this->typeDocument);
     }
 
     private function exportConseil() : string
     {
-        $this->export = new ExportConseil(
+        $export = new ExportConseil(
             $this->dir,
             $this->myPDF,
             $this->formations,
             $this->campagneCollecte,
             $this->date
         );
-        return $this->export->exportZip();
+        return $export->exportZip();
     }
 
     private function exportMccc(bool $isLight = false) : string
@@ -167,7 +167,7 @@ class Export
         return $this->exportRegime->exportLink($this->campagneCollecte);
     }
 
-    public function setComposante(?Composante $composante)
+    public function setComposante(?Composante $composante): void
     {
         $this->composante = $composante;
     }
@@ -207,7 +207,7 @@ class Export
         return $this->exportSyntheseModification->exportLink($this->formations, $this->campagneCollecte);
     }
 
-    private function exportMcccVersion()
+    private function exportMcccVersion(): string
     {
         $this->exportMccc->exportVersion(
             $this->dir,

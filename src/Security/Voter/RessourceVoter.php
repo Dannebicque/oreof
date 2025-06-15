@@ -85,18 +85,6 @@ class RessourceVoter extends Voter
             }
         }
 
-//        foreach ($userProfils as $userProfil) {
-//            $profile = $userProfil->getProfil();
-//            dump($attribute);
-//            // Vérifie si ce profil a explicitement le droit demandé sur la route précise
-//            if ($this->profilDroitsRepository->hasDroit($profile, $attribute, $route)) {
-//                // Vérifie la portée
-//                if ($this->checkScope($userProfil, $object, $attribute)) {
-//                    return true;
-//                }
-//            }
-//        }
-
         return false;
     }
 
@@ -120,14 +108,20 @@ class RessourceVoter extends Voter
             return $userProfil->getEtablissement() === $object;
         }
 
+        $this->checkScope($userProfil, $object, $attribute);
+
+
+
         return false;
     }
 
     private function checkComposante(UserProfil $userProfil, mixed $object, string $attribute): bool
     {
+        //todo: attribute est utile car si EDIT ou MANAGE alors vérifier que c'est le DPE ou le RF/RP, sinon juste SHOW et juste le centre dans ce cas là
+        // reflechir au cas d'un DPE qui est sur composante et peut éditer et un directeur qui ne peux pas éditer mais juste voir ? ou une scolarité qui peut voir mais pas éditer ?
+
         if ($object instanceof Composante) {
-            return $userProfil->getComposante() === $object &&
-                ($object->getResponsableDpe()?->getId() === $userProfil->getUser()?->getId());
+            return $userProfil->getComposante() === $object;
         }
 
         if ($object instanceof Formation) {
@@ -175,6 +169,9 @@ class RessourceVoter extends Voter
 
     private function checkParcours(UserProfil $userProfil, mixed $object, string $attribute): bool
     {
+        $parcours = null;
+        $dpeParcours = null;
+
         if ($object instanceof Parcours) {
             $parcours = $object;
             $dpeParcours = GetDpeParcours::getFromParcours($parcours);
@@ -197,7 +194,6 @@ class RessourceVoter extends Voter
             ($userProfil->getComposante() === $parcours->getFormation()?->getComposantePorteuse() &&
                 $parcours->getFormation()?->getComposantePorteuse()?->getResponsableDpe()?->getId() === $userProfil->getUser()?->getId())
         );
-
 
         if ($parcours->getCoResponsable()?->getId() === $userProfil->getUser()?->getId() || $parcours->getRespParcours()?->getId() === $userProfil->getUser()?->getId()) {
             $canAccess = $this->dpeParcoursWorkflow->can($dpeParcours, 'autoriser') || $this->dpeParcoursWorkflow->can($dpeParcours, 'valider_parcours');

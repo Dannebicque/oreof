@@ -46,7 +46,7 @@ class UpdateEntity
             }
             $this->entityManager->flush();
 
-            return JsonResponse::fromJsonString($this->serialize($formation), 200);
+            return JsonResponse::fromJsonString($this->serialize($formation));
         }
 
         return new JsonResponse(false, 500);
@@ -62,7 +62,7 @@ class UpdateEntity
             $formation->$method((bool)$value);
             $this->entityManager->flush();
 
-            return JsonResponse::fromJsonString($this->serialize($formation), 200);
+            return JsonResponse::fromJsonString($this->serialize($formation));
         }
 
         return new JsonResponse(false, 500);
@@ -77,7 +77,7 @@ class UpdateEntity
         if (method_exists($formation, $method)) {
             $formation->$method($value);
             $this->entityManager->flush();
-            return JsonResponse::fromJsonString($this->serialize($formation), 200);
+            return JsonResponse::fromJsonString($this->serialize($formation));
         }
 
         return new JsonResponse(false, 500);
@@ -94,7 +94,7 @@ class UpdateEntity
                 $formation->$setMethod($t);
                 $this->entityManager->flush();
 
-                return JsonResponse::fromJsonString($this->serialize($formation), 200);
+                return JsonResponse::fromJsonString($this->serialize($formation));
             }
 
             if ($t === null) {
@@ -103,7 +103,7 @@ class UpdateEntity
                 $formation->$setMethod($t);
                 $this->entityManager->flush();
 
-                return JsonResponse::fromJsonString($this->serialize($formation), 200);
+                return JsonResponse::fromJsonString($this->serialize($formation));
             }
         }
 
@@ -130,7 +130,7 @@ class UpdateEntity
                 $formation->$setMethod($t);
                 $this->entityManager->flush();
 
-                return JsonResponse::fromJsonString($this->serialize($formation), 200);
+                return JsonResponse::fromJsonString($this->serialize($formation));
             }
         }
 

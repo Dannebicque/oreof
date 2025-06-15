@@ -15,6 +15,7 @@ use App\TypeDiplome\TypeDiplomeHandlerInterface;
 use App\Utils\Tools;
 use DateTimeInterface;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -22,9 +23,9 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 final class ButHandler implements TypeDiplomeHandlerInterface
 {
 
-    public const TEMPLATE_FOLDER = 'but';
-    public const SOURCE = 'but';
-    public const TEMPLATE_FORM_MCCC = 'but.html.twig';
+    public const string TEMPLATE_FOLDER = 'but';
+    public const string SOURCE = 'but';
+    public const string TEMPLATE_FORM_MCCC = 'but.html.twig';
 
     private array $typeEpreuves = [
         'sae' => [
@@ -38,6 +39,7 @@ final class ButHandler implements TypeDiplomeHandlerInterface
     ];
 
     public function __construct(
+        protected EntityManagerInterface $entityManager,
         protected ButMccc                 $butMccc,
         protected ButMcccVersion        $butMcccVersion,
         private ButCompetenceRepository $butCompetenceRepository,
@@ -129,16 +131,16 @@ final class ButHandler implements TypeDiplomeHandlerInterface
         // TODO: Implement exportAndSavePdfMccc() method.
     }
 
-    public function saveMcccs(FicheMatiere|ElementConstitutif $ficheMatiere, InputBag $request): void
+    public function saveMcccs(FicheMatiere|ElementConstitutif $elementConstitutif, InputBag $request): void
     {
         if ($request->has('sansNote') && $request->get('sansNote') === 'on') {
-            $ficheMatiere->setSansNote(true);
-            $ficheMatiere->setEtatMccc('Complet');
+            $elementConstitutif->setSansNote(true);
+            $elementConstitutif->setEtatMccc('Complet');
         } else {
-            $ficheMatiere->setSansNote(false);
-            $type = $ficheMatiere->getTypeMatiere();
+            $elementConstitutif->setSansNote(false);
+            $type = $elementConstitutif->getTypeMatiere();
             $total = 0.0;
-            $mcccs = $this->getMcccs($ficheMatiere);
+            $mcccs = $this->getMcccs($elementConstitutif);
             foreach ($this->typeEpreuves[$type] as $ep) {
                 if ($request->has('pourcentage_' . $ep) && $request->has('nombre_' . $ep)) {
                     $pourcentage = $request->get('pourcentage_' . $ep);
@@ -161,12 +163,12 @@ final class ButHandler implements TypeDiplomeHandlerInterface
                         $mccc->setNumeroSession(1);
                         $mccc->setExamenTerminal(false);
                         $this->entityManager->persist($mccc);
-                        $ficheMatiere->addMccc($mccc);
+                        $elementConstitutif->addMccc($mccc);
                         $total += $mccc->getPourcentage() * $mccc->getNbEpreuves();
                     }
                 }
             }
-            $ficheMatiere->setEtatMccc($total >= 99.0 ? 'Complet' : 'Incomplet');
+            $elementConstitutif->setEtatMccc($total >= 99.0 ? 'Complet' : 'Incomplet');
         }
 
         $this->entityManager->flush();

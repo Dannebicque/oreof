@@ -290,7 +290,8 @@ class ProcessValidationController extends BaseController
         Request               $request,
         string                $type,
         int                   $id
-    ) {
+    ): Response
+    {
         if ($request->isMethod('POST')) {
             $data = $request->request->all();
             $place = $data['etat'];

@@ -68,7 +68,7 @@ class ValidationController extends BaseController
         }
 
 
-        $fileName = Tools::FileName('Verif-fiche-'. (new DateTime())->format('d-m-Y-H-i'), 50);
+        $fileName = Tools::FileName('Verif-fiche-' . (new DateTime())->format('d-m-Y-H-i'));
         return $excelWriter->genereFichier($fileName, true);
     }
 
@@ -82,8 +82,8 @@ class ValidationController extends BaseController
     ): Response {
         //todo:  Affichage des bons boutons selon le process et le status choisi sur la liste en bas et haut de page.
         //todo: filtrer si DPE composante ou pas
-        $idComposante = $request->query->get('composante', null);
-        $typeValidation = $request->query->get('typeValidation', null);
+        $idComposante = $request->query->get('composante');
+        $typeValidation = $request->query->get('typeValidation');
         $step = $request->query->get('step', 'formation');
         $composante = null;
         $isSes = $this->isGranted('ROLE_ADMIN');

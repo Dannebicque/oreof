@@ -16,6 +16,7 @@ use App\Entity\Parcours;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Routing\Attribute\Route;
 
 class ParcoursMcccExportController extends BaseController
@@ -25,9 +26,10 @@ class ParcoursMcccExportController extends BaseController
     public function exportMcccXlsx(
         GetHistorique $getHistorique,
         Parcours $parcours,
-        string $_format = 'xlsx',
-        EntityManagerInterface $entityManager
-    ) {
+        EntityManagerInterface $entityManager,
+        string                 $_format = 'xlsx'
+    ): StreamedResponse|Response
+    {
 
         if($_format === "pdf"){
             return $this->getCfvuMcccExportFromFile('simplifie', $parcours, $entityManager);
@@ -70,7 +72,8 @@ class ParcoursMcccExportController extends BaseController
         GetHistorique $getHistorique,
         Parcours $parcours,
         string $_format = 'xlsx'
-    ) {
+    ): StreamedResponse|Response
+    {
         $formation = $parcours->getFormation();
 
         if (null === $formation) {
@@ -108,7 +111,8 @@ class ParcoursMcccExportController extends BaseController
         GetHistorique $getHistorique,
         Parcours $parcours,
         string $_format = 'xlsx'
-    ) {
+    ): StreamedResponse|Response
+    {
         $formation = $parcours->getFormation();
 
         if (null === $formation) {
@@ -148,7 +152,8 @@ class ParcoursMcccExportController extends BaseController
         EntityManagerInterface $entityManager,
         Parcours $parcours,
         string                 $format = 'complet'
-    ) {
+    ): Response
+    {
         if(in_array($format, ['complet', 'simplifie']) === false){
             throw $this->createNotFoundException('File Type is invalid');
         }

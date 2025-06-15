@@ -42,6 +42,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Workflow\WorkflowInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -561,10 +562,10 @@ class ParcoursController extends BaseController
                 'public-concerne' => $parcours->getRegimeInscription() ?? [], //Certains sont des tableaux, d'autres en JSON
                 'niveau-francais' => $parcours->getNiveauFrancais()?->libelle() ?? '-',
             ],
-            'xml-lheo' => $this->generateUrl('app_parcours_export_xml_lheo', ['parcours' => $parcours->getId()], UrlGenerator::ABSOLUTE_URL),
-            'fiche-pdf' => $this->generateUrl('app_parcours_export', ['parcours' => $parcours->getId()], UrlGenerator::ABSOLUTE_URL),
+            'xml-lheo' => $this->generateUrl('app_parcours_export_xml_lheo', ['parcours' => $parcours->getId()], UrlGeneratorInterface::ABSOLUTE_URL),
+            'fiche-pdf' => $this->generateUrl('app_parcours_export', ['parcours' => $parcours->getId()], UrlGeneratorInterface::ABSOLUTE_URL),
             'maquette-pdf' => $this->generateUrl('app_parcours_mccc_export', ['parcours' => $parcours->getId(), '_format' => 'pdf'], UrlGenerator::ABSOLUTE_URL),
-            'maquette-json' => $this->generateUrl('app_parcours_export_maquette_json', ['parcours' => $parcours->getId()], UrlGenerator::ABSOLUTE_URL),
+            'maquette-json' => $this->generateUrl('app_parcours_export_maquette_json', ['parcours' => $parcours->getId()], UrlGeneratorInterface::ABSOLUTE_URL),
         ];
 
         return new JsonResponse($data);
@@ -609,7 +610,8 @@ class ParcoursController extends BaseController
         Parcours               $parcours,
         Filesystem             $fileSystem,
         VersioningParcours $versioningParcours
-    ) {
+    ): \Symfony\Component\HttpFoundation\RedirectResponse
+    {
         try {
             $now = new DateTimeImmutable('now');
             $dateHeure = $now->format('d-m-Y_H-i-s');

@@ -31,7 +31,7 @@ class SelectCentre extends BaseController
     #[LiveProp(writable: true)]
     public array $cibles = [];
     #[LiveProp(writable: true)]
-    public $centres = [];
+    public array $centres = [];
     #[LiveProp(writable: true)]
     public array $profils = [];
 

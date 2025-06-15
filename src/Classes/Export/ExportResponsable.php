@@ -28,7 +28,7 @@ class ExportResponsable
         $this->dir = $kernel->getProjectDir() . '/public/temp/';
     }
 
-    public function prepareExport(array $formations)
+    public function prepareExport(array $formations): void
     {
         $this->excelWriter->nouveauFichier('Export CAP');
         $this->excelWriter->setActiveSheetIndex(0);

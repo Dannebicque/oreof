@@ -22,7 +22,7 @@ use Doctrine\ORM\EntityManagerInterface;
 class CodificationFormation
 {
     // définir un tableau de constante avec les chiffres puis les 26 lettres de l'alphabet
-    public const TAB_CODE_PARCOURS = [
+    public const array TAB_CODE_PARCOURS = [
         '1',
         '2',
         '3',
@@ -307,7 +307,7 @@ class CodificationFormation
         }
     }
 
-    private function setCodificationFicheMatiere(StructureEc $ec, StructureUe $ue, bool $isUeEnfant, bool $isEcEnfant, bool $isLas)
+    private function setCodificationFicheMatiere(StructureEc $ec, StructureUe $ue, bool $isUeEnfant, bool $isEcEnfant, bool $isLas): void
     {
         if ($ec->elementConstitutif->getFicheMatiere() !== null) {
             if ($ec->elementConstitutif->getFicheMatiere()->getParcours() === $this->parcours) {
@@ -361,7 +361,7 @@ class CodificationFormation
         }
     }
 
-    public function setCodificationHaute(Formation $formation)
+    public function setCodificationHaute(Formation $formation): void
     {
         $this->setCodificationParcours($formation);
         foreach ($formation->getParcours() as $parcours) {

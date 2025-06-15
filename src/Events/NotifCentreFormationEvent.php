@@ -14,9 +14,9 @@ use App\Entity\User;
 
 class NotifCentreFormationEvent
 {
-    public const NOTIF_ADD_CENTRE_FORMATION = 'notif.add.centre.formation';
+    public const string NOTIF_ADD_CENTRE_FORMATION = 'notif.add.centre.formation';
 
-    public const NOTIF_REMOVE_CENTRE_FORMATION = 'notif.remove.centre.formation';
+    public const string NOTIF_REMOVE_CENTRE_FORMATION = 'notif.remove.centre.formation';
 
     public function __construct(
         public Formation $formation,

@@ -262,7 +262,7 @@ class Mccc
         $this->id = $id;
     }
 
-    public function getMcccTexte()
+    public function getMcccTexte(): string
     {
         //fusion des champs textes pour affichage
         $texte = $this->libelle;

@@ -38,7 +38,7 @@ class ExportSynthese
     private function prepareExport(
         CampagneCollecte $anneeUniversitaire,
     ): void {
-        $formations = $this->formationRepository->findBySearch('', $anneeUniversitaire, []);
+        $formations = $this->formationRepository->findBySearch('', $anneeUniversitaire);
         $this->excelWriter->createFromTemplate('export_offre_formation.xlsx');
         $this->excelWriter->setActiveSheetIndex(0);
         $ligne = 2;
@@ -52,7 +52,7 @@ class ExportSynthese
             } else {
                 $this->excelWriter->writeCellXY(4, $ligne, 'Pas de parcours');
             }
-            $this->excelWriter->writeCellXY(4, $ligne, '');
+            $this->excelWriter->writeCellXY(4, $ligne);
             $this->excelWriter->writeCellXY(5, $ligne, array_key_first($formation->getEtatDpe()));
             $this->excelWriter->writeCellXY(6, $ligne, number_format($formation->getRemplissage()->calcul() / 100, 2), [
                 'pourcentage' => 'pourcentage',
@@ -148,7 +148,7 @@ class ExportSynthese
             $this->excelWriter->writeCellXY(2, $ligne, $formation->getTypeDiplome()?->getLibelle());
             $this->excelWriter->writeCellXY(3, $ligne, $formation->getDisplay());
             if ($parcours->isParcoursDefaut()) {
-                $this->excelWriter->writeCellXY(4, $ligne, '');
+                $this->excelWriter->writeCellXY(4, $ligne);
             } else {
                 $this->excelWriter->writeCellXY(4, $ligne, $parcours->getLibelle());
             }

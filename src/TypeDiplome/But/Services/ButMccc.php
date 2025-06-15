@@ -27,41 +27,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpKernel\KernelInterface;
 
-class ButMccc
+class ButMccc extends AbstractButMccc
 {
     //todo: ajouter un watermark sur le doc ou une mention que la mention est définitive ou pas.
     //todo: gérer la date de vote
 
-    // Pages
-    public const PAGE_MODELE = 'modele';
-    // Cellules
-    public const CEL_DOMAINE = 'K1';
-    public const CEL_INTITULE_FORMATION = 'K4';
-    public const CEL_INTITULE_PARCOURS = 'K5';
-    public const CEL_SEMESTRE_ETUDE = 'K7';
-    public const CEL_COMPOSANTE = 'K2';
-    public const CEL_SITE_FORMATION = 'K3';
-    public const CEL_ANNEE_UNIVERSITAIRE = 'K6';
-    public const CEL_REGIME_FI = 'E9';
-    public const CEL_REGIME_FC = 'E11';
-    public const CEL_REGIME_FI_APPRENTISSAGE = 'E13';
-    public const CEL_REGIME_FC_CONTRAT_PRO = 'E15';
-    public const CEL_PARCOURS_ECTS = 'AF26';
-    public const CEL_PARCOURS = 'A26';
 
-    //Colonnes sur Modèles
-
-    public const COL_CODE_ELEMENT = 1;
-    public const COL_CODE_EC = 2;
-    public const COL_INTITULE = 3;
-    public const COL_VOL_ETUDIANT = 4;
-    public const COL_CM = 5;
-    public const COL_TD = 6;
-    public const COL_TP = 7;
-    public const COL_HEURE_AUTONOMIE = 8;
-    public const COL_FIRST_UE = 39;
-    public const CEL_DATE_CONSEIL = 'N32';
-    public const CEL_DATE_CFVU = 'N34';
     private string $fileName;
     private Parcours $parcours;
 
@@ -197,10 +168,10 @@ class ButMccc
 
                 $colUe = self::COL_FIRST_UE;
 
-                if ($tabSemestres[$i]->getSemestre()->getSemestreRaccroche() !== null) {
-                    $semestre = $tabSemestres[$i]->getSemestre()->getSemestreRaccroche()->getSemestre();
+                if ($semestres->getSemestre()->getSemestreRaccroche() !== null) {
+                    $semestre = $semestres->getSemestre()->getSemestreRaccroche()->getSemestre();
                 } else {
-                    $semestre = $tabSemestres[$i]->getSemestre();
+                    $semestre = $semestres->getSemestre();
                 }
                 $tabFichesRessources = [];
                 $tabFichesSaes = [];
@@ -388,7 +359,7 @@ class ButMccc
         }
     }
 
-    private function writeAcUe(FicheMatiere $fiche, int $ligne, array $tabColUes, array $tabFichesUes)
+    private function writeAcUe(FicheMatiere $fiche, int $ligne, array $tabColUes, array $tabFichesUes): void
     {
         if (array_key_exists($fiche->getSigle(), $tabFichesUes)) {
             foreach ($tabFichesUes[$fiche->getSigle()] as $ueId => $ects) {

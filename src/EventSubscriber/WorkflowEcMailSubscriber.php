@@ -34,7 +34,7 @@ class WorkflowEcMailSubscriber implements EventSubscriberInterface
         ];
     }
 
-    public function onReserveFiche(Event $event)
+    public function onReserveFiche(Event $event): void
     {
         $fiche = $event->getSubject();
         $parcours = $fiche->getParcours();

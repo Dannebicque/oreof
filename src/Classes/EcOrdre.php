@@ -153,7 +153,7 @@ readonly class EcOrdre
         return $this->elementConstitutifRepository->findLastEcEnfant($elementConstitutif) + 1;
     }
 
-    public function removeElementConstitutifEnfant(ElementConstitutif $elementConstitutif)
+    public function removeElementConstitutifEnfant(ElementConstitutif $elementConstitutif): void
     {
         $ecParent = $elementConstitutif->getEcParent();
         $ecs = $ecParent->getEcEnfants();

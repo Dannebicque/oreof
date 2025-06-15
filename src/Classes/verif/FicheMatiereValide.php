@@ -31,7 +31,7 @@ class FicheMatiereValide extends AbstractValide
         $this->etat['libelle'] = $this->nonVide($this->ficheMatiere->getLibelle());
         $this->etat['libelleAnglais'] = $this->nonVide($this->ficheMatiere->getLibelleAnglais());
         $this->etat['mutualise'] = $this->ficheMatiere->isEnseignementMutualise() !== null ? self::COMPLET : self::VIDE;
-        $this->etat['description'] = $this->nonVideEtTailleMinimale($this->ficheMatiere->getDescription(), 12);
+        $this->etat['description'] = $this->nonVideEtTailleMinimale($this->ficheMatiere->getDescription());
         if (!$this->tailleMinimum($this->ficheMatiere->getDescription(), 12) ||  $this->etat['description'] === self::VIDE) {
             $this->erreurs['description'][] = 'La description de la matière doit faire au moins 12 caractères';
         }
@@ -100,12 +100,12 @@ class FicheMatiereValide extends AbstractValide
         return strlen($getDescription) > $int;
     }
 
-    private function nonVideEtTailleMinimale(?string $getObjectifs): string
+    private function nonVideEtTailleMinimale(?string $getObjectifs, int $tailleMinimale = 12): string
     {
         if (null === $getObjectifs || '' === $getObjectifs) {
             return self::VIDE;
         }
 
-        return $this->tailleMinimum($getObjectifs, 12) ? self::COMPLET : self::INCOMPLET;
+        return $this->tailleMinimum($getObjectifs, $tailleMinimale) ? self::COMPLET : self::INCOMPLET;
     }
 }

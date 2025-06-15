@@ -312,7 +312,7 @@ class GlobalVoter //extends Voter
         return $canEdit;
     }
 
-    private function canManageDpeParcours(DpeParcours $subject, mixed $centre)
+    private function canManageDpeParcours(DpeParcours $subject, mixed $centre): bool
     {
         $parcours = $subject->getParcours();
         if ($parcours === null) {

@@ -24,7 +24,8 @@ class ParametrageAnnuelCeDTO2
         $this->temCalculCharge = $temCalculCharge;
     }
 
-    public function printInformation(){
+    public function printInformation(): string
+    {
         return $this->listTypHeur->printInformation();
     }
 }

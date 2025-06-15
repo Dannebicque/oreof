@@ -618,7 +618,7 @@ class VersioningStructureExtractDiff
         return $duree->format('H\hi');
     }
 
-    private function getMcccFromDiff(array $original, ?array $mcccsNouveau, string $typeMccc)
+    private function getMcccFromDiff(array $original, ?array $mcccsNouveau, string $typeMccc): string
     {
         $texte ='';
         $diffMccc = [];

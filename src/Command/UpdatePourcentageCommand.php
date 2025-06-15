@@ -16,7 +16,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 )]
 class UpdatePourcentageCommand extends Command
 {
-    private const BATCH_SIZE = 100;
+    private const int BATCH_SIZE = 100;
 
 
     public function __construct(
@@ -35,7 +35,7 @@ class UpdatePourcentageCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
-        $totalFiches = $this->ficheMatiereRepository->count([]);
+        $totalFiches = $this->ficheMatiereRepository->count();
         $io->progressStart($totalFiches);
 
         for ($i = 0; $i < $totalFiches; $i += self::BATCH_SIZE) {

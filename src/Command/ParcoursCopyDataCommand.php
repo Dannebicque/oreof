@@ -242,7 +242,7 @@ class ParcoursCopyDataCommand extends Command
                                 $errorArray[] = "ID : {$parcours->getId()} - {$parcours->getFormation()->getDisplayLong()}";
                             }
                         }
-                        $io->progressAdvance(1);
+                        $io->progressAdvance();
                     }
                 }
             }

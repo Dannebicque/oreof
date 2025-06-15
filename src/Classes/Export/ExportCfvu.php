@@ -39,7 +39,7 @@ class ExportCfvu implements ExportInterface
         /*
          * Nous aurions besoin d'une extraction des formations (mention et parcours) qui passent en CFVU on peut repartir sur la base : compo / type de formation / mention / parcours / lieu de formation / responsable mention / responsable parcours et peut être ajouter une colonne date validation Conseil compo et date de transmission PV conseil (ou si PV déposé ou non)
          */
-        $formations = $this->formationRepository->findBySearch('', $anneeUniversitaire, []);
+        $formations = $this->formationRepository->findBySearch('', $anneeUniversitaire);
         $this->excelWriter->nouveauFichier('Export CFVU');
         $this->excelWriter->setActiveSheetIndex(0);
 

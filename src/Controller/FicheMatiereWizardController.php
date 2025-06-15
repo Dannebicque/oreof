@@ -9,7 +9,6 @@
 
 namespace App\Controller;
 
-use App\Classes\GetDpeParcours;
 use App\Entity\FicheMatiere;
 use App\Entity\FicheMatiereMutualisable;
 use App\Form\FicheMatiereStep1Type;
@@ -303,6 +302,8 @@ class FicheMatiereWizardController extends BaseController
                 'templateForm' => $typeD !== null ? $typeD::TEMPLATE_FORM_MCCC : '',
             ]);
         }
+
+        throw new \InvalidArgumentException('Type de fiche matière non géré : ' . $type);
     }
 
     private function updateFicheMatiereMutualisable(

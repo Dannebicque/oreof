@@ -35,7 +35,8 @@ class ApiJsonExport {
     public function generateApiVersioning(
         string $hostname,
         SymfonyStyle $io = null
-    ){
+    ): array
+    {
         $dataJSON = [];
         $formationArray = $this->entityManager->getRepository(Formation::class)->findAll();
         $urlPrefix = "https://" . $hostname;
@@ -74,8 +75,7 @@ class ApiJsonExport {
                         'libelle' => $lastVersionData['parcours']->getDisplay(),
                         'url' => $urlPrefix . $this->router->generate(
                                 'app_parcours_export_json_urca_cfvu_valid',
-                                ['parcours' => $lastVersion[0]->getParcours()->getId()],
-                            UrlGeneratorInterface::ABSOLUTE_PATH
+                                ['parcours' => $lastVersion[0]->getParcours()->getId()]
                         )
                     ];
                     $dateValideCfvu = $this->getHistorique

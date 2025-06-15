@@ -44,21 +44,19 @@ export default class extends Controller {
     })
   }
 
-  async refreshModalWithUrl(event){
-    let errorText = '<div class="text-center">Une erreur est survenue lors du chargement.</div>';
-    let url = event.params.url;
+  async refreshModalWithUrl(event) {
+    const errorText = '<div class="text-center">Une erreur est survenue lors du chargement.</div>'
+    const { url } = event.params
     this.zoneToRefreshTarget.innerHTML = '<div class="text-center">... Chargement en cours ...</div>';
     await fetch(url)
       .then(async (response) => {
-        if(response.status === 500){
+        if (response.status === 500) {
           this.zoneToRefreshTarget.innerHTML = errorText;
-          return;
-        }
-        else if (response.status === 200){
+        } else if (response.status === 200) {
           await response.text()
-            .then(responseText => this.zoneToRefreshTarget.innerHTML = responseText) ;
+            .then((responseText) => this.zoneToRefreshTarget.innerHTML = responseText);
         }
       })
-      .catch(error => this.zoneToRefreshTarget.innerHTML = errorText);
+      .catch(this.zoneToRefreshTarget.innerHTML = errorText);
   }
 }

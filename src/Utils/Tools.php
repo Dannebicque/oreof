@@ -79,7 +79,7 @@ abstract class Tools
         return DateTime::createFromFormat('H:i', $time) ?? null;
     }
 
-    public static function FileName(string $string, int $size = 50)
+    public static function FileName(string $string, int $size = 50): \Symfony\Component\String\AbstractString|\Symfony\Component\String\UnicodeString
     {
         $slugger = new AsciiSlugger();
         $slug = $slugger->slug($string);
@@ -96,7 +96,7 @@ abstract class Tools
         return $dir;
     }
 
-    public static function filtreHeures(?float $heures)
+    public static function filtreHeures(?float $heures): float|string
     {
         if ($heures === null) {
             return '-';

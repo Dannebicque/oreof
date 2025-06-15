@@ -51,7 +51,7 @@ class ProfilsController extends BaseController
             $permissions = $profil->getProfilDroits();
             $ressourcesProfil = [];
             foreach ($permissions as $permission) {
-                $ressourcesProfil[$permission->getRessource()->name] = $permission->getPermission()->value;;
+                $ressourcesProfil[$permission->getRessource()->name] = $permission->getPermission()->value;
             }
             ksort($ressourcesProfil);
         } else {

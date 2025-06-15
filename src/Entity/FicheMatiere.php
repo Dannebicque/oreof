@@ -31,11 +31,11 @@ class FicheMatiere
     use LifeCycleTrait;
     use HasBeenEditedTrait;
 
-    public const TYPE_MATIERE_COURS = 'matiere';
-    public const TYPE_MATIERE_SAE = 'sae';
-    public const TYPE_MATIERE_RESSOURCE = 'ressource';
-    const MATI = 'MATI';
-    const MATM = 'MATM';
+    public const string TYPE_MATIERE_COURS = 'matiere';
+    public const string TYPE_MATIERE_SAE = 'sae';
+    public const string TYPE_MATIERE_RESSOURCE = 'ressource';
+    const string MATI = 'MATI';
+    const string MATM = 'MATM';
 
     #[ORM\Id]
     #[ORM\GeneratedValue]

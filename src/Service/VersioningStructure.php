@@ -480,7 +480,7 @@ class VersioningStructure
         return $diff;
     }
 
-    public function mapStructureForComparison(StructureParcours $dto)
+    public function mapStructureForComparison(StructureParcours $dto): array
     {
         $structure = ['semestres' => []];
         // Semestres
@@ -511,7 +511,7 @@ class VersioningStructure
         return $structure;
     }
 
-    public function mapUeArrayForComparison(array $ueArray)
+    public function mapUeArrayForComparison(array $ueArray): array
     {
         return array_values(
             array_map(
@@ -521,7 +521,7 @@ class VersioningStructure
         );
     }
 
-    public function mapEcArrayForComparison(array $ecArray)
+    public function mapEcArrayForComparison(array $ecArray): array
     {
         return array_values(
             array_map(

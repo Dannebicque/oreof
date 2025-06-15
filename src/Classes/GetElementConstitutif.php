@@ -92,7 +92,7 @@ class GetElementConstitutif
         return $this->elementConstitutif->getMcccs();
     }
 
-    public function getTypeMcccFromFicheMatiere()
+    public function getTypeMcccFromFicheMatiere(): ?string
     {
         $isMcccImpose = $this->elementConstitutif->getFicheMatiere()?->isMcccImpose();
 

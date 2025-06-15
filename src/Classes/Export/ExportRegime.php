@@ -36,7 +36,7 @@ class ExportRegime implements ExportInterface
     private function prepareExport(
         CampagneCollecte $anneeUniversitaire,
     ): void {
-        $formations = $this->formationRepository->findBySearch('', $anneeUniversitaire, []);
+        $formations = $this->formationRepository->findBySearch('', $anneeUniversitaire);
         $this->excelWriter->nouveauFichier('Export Régimes');
         $this->excelWriter->setActiveSheetIndex(0);
 

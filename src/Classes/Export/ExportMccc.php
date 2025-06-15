@@ -126,14 +126,12 @@ class ExportMccc
                             $texte = $formation->gettypeDiplome()?->getLibelleCourt() . ' ' . $formation->getSigle();
                         }
 
-                        $fichierXlsx = Tools::FileName('MCCC - ' . $this->annee->getLibelle() . ' - ' . $texte, 50);
+                    $fichierXlsx = Tools::FileName('MCCC - ' . $this->annee->getLibelle() . ' - ' . $texte);
                         $fichier = $typeDiplome->exportExcelAndSaveVersionMccc(
                             $this->annee,
                             $parcours,
                             $dir,
-                            $fichierXlsx,
-                            null,
-                            null
+                            $fichierXlsx
                         );
 
                         $tabFiles[] = $fichier;
@@ -175,7 +173,7 @@ class ExportMccc
         $this->isLight = $isLight;
     }
 
-    public function exportVersion(string $dir, TypeDiplomeResolver $typeDiplomeResolver, array $formations, ?CampagneCollecte $campagneCollecte)
+    public function exportVersion(string $dir, TypeDiplomeResolver $typeDiplomeResolver, array $formations, ?CampagneCollecte $campagneCollecte): void
     {
         $this->dir = $dir;
         $this->typeDiplomeResolver = $typeDiplomeResolver;

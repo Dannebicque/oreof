@@ -253,5 +253,7 @@ class ElementConstitutifBccController extends BaseController
                 'ecComps' => array_flip($ecComps),
             ]);
         }
+
+        throw new RuntimeException('Type de diplôme non géré : ' . $typeDiplome->getLibelleCourt());
     }
 }

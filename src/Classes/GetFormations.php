@@ -11,6 +11,7 @@ namespace App\Classes;
 
 use App\Entity\CampagneCollecte;
 use App\Entity\User;
+use App\Entity\UserProfil;
 use App\Repository\FormationRepository;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -35,35 +36,27 @@ class GetFormations
         $q = $options['q'] ?? null;
 
         if ($this->authorizationChecker->isGranted('ROLE_ADMIN') ||
-            $this->authorizationChecker->isGranted('CAN_COMPOSANTE_SHOW_ALL', $user) ||
-            $this->authorizationChecker->isGranted('CAN_ETABLISSEMENT_SHOW_ALL', $user) ||
-            $this->authorizationChecker->isGranted('CAN_FORMATION_SHOW_ALL', $user)) {
+            $this->authorizationChecker->isGranted('SHOW', ['route' => 'app_etablissement', 'subject' => 'etablissement'])) {
             $formations = $this->formationRepository->findBySearch($q, $campagneCollecte, $options);
         } else {
             $formations = [];
             //gérer le cas ou l'utilisateur dispose des droits pour lire la composante
-            $centres = $user?->getUserCentres();
+            $centres = $user?->getUserProfils();
+            /** @var UserProfil $centre */
             foreach ($centres as $centre) {
-                //todo: gérer avec un voter
-                if ($centre->getComposante() !== null && (
-                    in_array('Gestionnaire', $centre->getDroits()) ||
-                        in_array('Invité', $centre->getDroits()) ||
-                        in_array('ROLE_SCOL', $centre->getDroits()) ||
-                        in_array('ROLE_COMM', $centre->getDroits()) ||
-                        in_array('Directeur', $centre->getDroits())
-                )) {
-                    //todo: il faudrait pouvoir filtrer par ce que contient le rôle et pas juste le nom
+                if (
+                    $centre->getComposante() !== null &&
+                    $this->authorizationChecker->isGranted('SHOW', ['route' => 'app_composante', 'subject' => $centre->getComposante()])) {
                     $formations[] = $this->formationRepository->findByComposante(
                         $centre->getComposante(),
                         $campagneCollecte,
-                        [$sort => $direction],
-                        $q
+                        [$sort => $direction]
                     );
                 }
 
-                if ($centre->getFormation() !== null && (
-                    in_array('ROLE_FORMATION_LECTEUR', $centre->getDroits()) || in_array('ROLE_GEST_FORM', $centre->getDroits() )
-                )) {
+                if ($centre->getFormation() !== null &&
+                    $this->authorizationChecker->isGranted('SHOW', ['route' => 'app_formation', 'subject' => $centre->getFormation()])
+                ) {
                     $formations[] = [$centre->getFormation()];
                 }
             }

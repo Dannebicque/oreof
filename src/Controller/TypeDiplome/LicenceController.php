@@ -53,7 +53,8 @@ class LicenceController extends BaseController
         EntityManagerInterface $entityManager,
         TypeEpreuveRepository $typeEpreuveRepository,
         FicheMatiere $ficheMatiere,
-    ) {
+    ): Response
+    {
         $typeEpreuves = $typeEpreuveRepository->findByTypeDiplome($this->typeDiplome);
 
         if ($request->query->get('type') !== $ficheMatiere->getTypeMccc()) {
@@ -99,8 +100,7 @@ class LicenceController extends BaseController
                 ]);
         }
 
-        return $this->render('typeDiplome/mccc/licence/_vide.html.twig', [
-        ]);
+        return $this->render('typeDiplome/mccc/licence/_vide.html.twig');
     }
 
     #[Route('/type_diplome/change/licence/{elementConstitutif}/{parcours}', name: 'type_diplome_licence_change')]
@@ -111,7 +111,8 @@ class LicenceController extends BaseController
         ElementConstitutifRepository $elementConstitutifRepository,
         ElementConstitutif $elementConstitutif,
         Parcours $parcours
-    ) {
+    ): Response
+    {
         $typeEpreuves = $typeEpreuveRepository->findByTypeDiplome($this->typeDiplome);
         $raccroche = $elementConstitutif->getFicheMatiere()?->getParcours()?->getId() !== $parcours->getId();
         $getElement = new GetElementConstitutif($elementConstitutif, $parcours);
@@ -169,8 +170,7 @@ class LicenceController extends BaseController
                 ]);
         }
 
-        return $this->render('typeDiplome/mccc/licence/_vide.html.twig', [
-        ]);
+        return $this->render('typeDiplome/mccc/licence/_vide.html.twig');
     }
 
 

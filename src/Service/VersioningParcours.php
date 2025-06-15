@@ -17,6 +17,7 @@ use Symfony\Component\PropertyInfo\PropertyInfoExtractor;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
 use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
 use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
 use Symfony\Component\Serializer\Normalizer\BackedEnumNormalizer;
@@ -57,7 +58,7 @@ class VersioningParcours
         );
     }
 
-    public function saveVersionOfParcours(Parcours $parcours, DateTimeImmutable $now, bool $withFlush = false, bool $isCfvu = false)
+    public function saveVersionOfParcours(Parcours $parcours, DateTimeImmutable $now, bool $withFlush = false, bool $isCfvu = false): void
     {
         $dateHeure = $now->format('d-m-Y_H-i-s');
         // Objet BD Parcours Versioning
@@ -75,7 +76,7 @@ class VersioningParcours
         // Création du fichier JSON
         // Parcours
         $parcoursJson = $this->serializer->serialize($parcours, 'json', [
-            AbstractObjectNormalizer::GROUPS => ['parcours_json_versioning'],
+            AbstractNormalizer::GROUPS => ['parcours_json_versioning'],
             'circular_reference_limit' => 2,
             AbstractObjectNormalizer::SKIP_NULL_VALUES => true,
             AbstractObjectNormalizer::ENABLE_MAX_DEPTH => true,
@@ -85,7 +86,7 @@ class VersioningParcours
         $typeD = $this->typeD->get($parcours->getFormation()?->getTypeDiplome());
         $dto = $typeD->calculStructureParcours($parcours);
         $dtoJson = $this->serializer->serialize($dto, 'json', [
-            AbstractObjectNormalizer::GROUPS => ['DTO_json_versioning'],
+            AbstractNormalizer::GROUPS => ['DTO_json_versioning'],
             'circular_reference_limit' => 2,
             AbstractObjectNormalizer::SKIP_NULL_VALUES => true,
             AbstractObjectNormalizer::ENABLE_MAX_DEPTH => true,
@@ -101,7 +102,7 @@ class VersioningParcours
         }
     }
 
-    public function loadParcoursFromVersion(ParcoursVersioning $parcours_versioning)
+    public function loadParcoursFromVersion(ParcoursVersioning $parcours_versioning): array
     {
         $fileParcours = file_get_contents(
             __DIR__ . "/../../versioning_json/parcours/"
@@ -415,7 +416,7 @@ class VersioningParcours
         $typeD = $this->typeD->get($parcours->getFormation()?->getTypeDiplome());
         $dto = $typeD->calculStructureParcours($parcours);
         $dtoJson = $this->serializer->serialize($dto, 'json', [
-            AbstractObjectNormalizer::GROUPS => ['DTO_json_versioning'],
+            AbstractNormalizer::GROUPS => ['DTO_json_versioning'],
             'circular_reference_limit' => 2,
             AbstractObjectNormalizer::SKIP_NULL_VALUES => true,
             AbstractObjectNormalizer::ENABLE_MAX_DEPTH => true,
@@ -426,7 +427,7 @@ class VersioningParcours
 
     }
 
-    public function rollbackToLastVersion(?Parcours $parcours)
+    public function rollbackToLastVersion(?Parcours $parcours): void
     {
         // si parcours et différences alors remettre dans parcours les données venant de this->textDifferences
 

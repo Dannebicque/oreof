@@ -35,7 +35,7 @@ class ExportSeip implements ExportInterface
     private function prepareExport(
         CampagneCollecte $anneeUniversitaire,
     ): void {
-        $formations = $this->formationRepository->findBySearch('', $anneeUniversitaire, []);
+        $formations = $this->formationRepository->findBySearch('', $anneeUniversitaire);
         $this->excelWriter->nouveauFichier('Export SEIP');
         $this->excelWriter->setActiveSheetIndex(0);
 

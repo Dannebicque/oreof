@@ -49,7 +49,7 @@ class NotifCentreComposanteSubscriber implements EventSubscriberInterface
         $this->mailer->sendMessage([$user->getEmail()], '[ORéOF] Accès à l\'application');
     }
 
-    public function onRemoveCentreComposante(NotifCentreComposanteEvent $event)
+    public function onRemoveCentreComposante(NotifCentreComposanteEvent $event): void
     {
         $user = $event->user;
         $composante = $event->composante;

@@ -169,7 +169,7 @@ class ParcoursProcess extends AbstractProcess
         return JsonReponse::success($this->translator->trans('parcours.'.$etat.'.' . $place . '.flash.success', [], 'process'));
     }
 
-    public function editParcours(HistoriqueParcours $historique, UserInterface $user, string $transition, Request $request)
+    public function editParcours(HistoriqueParcours $historique, UserInterface $user, string $transition, Request $request): Response
     {
         $reponse = $this->dispatchEventEditParcours($historique, $user, $transition, $request, 'valide');
         return $reponse;

@@ -31,8 +31,8 @@ export default class extends Controller {
         element.classList.add('error')
       }
       // tester si un élément a une longueur minimale : data-minlength
-      if(element.required && element.dataset.minlength !== undefined){
-        if(element.dataset.minlength > element.value.length){
+      if (element.required && element.dataset.minlength !== undefined) {
+        if (element.dataset.minlength > element.value.length) {
           valid = false;
         }
       }
@@ -116,7 +116,7 @@ export default class extends Controller {
     }
     this.modal = new Modal(this.modalTarget)
     this.modal.show()
-    let response = null
+    let response
     if (event.detail.params.length > 0) {
       const params = new URLSearchParams(event.detail.params)
       response = await fetch(`${event.detail.url}?${params.toString()}`)

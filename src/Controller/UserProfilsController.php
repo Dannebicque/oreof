@@ -91,7 +91,7 @@ final class UserProfilsController extends BaseController
                     'profil' => $profil,
                     'formations' => $formationRepository->findByCampagneCollecte($this->getCampagneCollecte())
                 ]),
-                CentreGestionEnum::CENTRE_GESTION_PARCOURS => $this->render('user_profils/_config_profil_parcours.html.twig', []),
+                CentreGestionEnum::CENTRE_GESTION_PARCOURS => $this->render('user_profils/_config_profil_parcours.html.twig'),
                 default => $this->render('communs/_erreur.html.twig', [
                     'message' => 'Le centre de gestion n\'est pas reconnu'
                 ]),

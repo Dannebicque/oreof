@@ -14,9 +14,9 @@ use App\Entity\User;
 
 class NotifCentreEtablissementEvent
 {
-    public const NOTIF_ADD_CENTRE_ETABLISSEMENT = 'notif.add.centre.etablissement';
+    public const string NOTIF_ADD_CENTRE_ETABLISSEMENT = 'notif.add.centre.etablissement';
 
-    public const NOTIF_REMOVE_CENTRE_ETABLISSEMENT = 'notif.remove.centre.etablissement';
+    public const string NOTIF_REMOVE_CENTRE_ETABLISSEMENT = 'notif.remove.centre.etablissement';
 
     public function __construct(
         public Etablissement $etablissement,

@@ -17,7 +17,7 @@ enum PermissionEnum: string
     case CONSEILLER = 'conseiller';
     case SCOLARITE = 'scolarite';
 
-    public static function getAvailableTypes()
+    public static function getAvailableTypes(): array
     {
         return [
             strtoupper(self::EDIT->value),
@@ -35,6 +35,7 @@ enum PermissionEnum: string
             self::SHOW => 'Consultation',
             self::MANAGE => 'Gérer les validations',
             self::SCOLARITE => 'Scolarité',
+            self::CONSEILLER => throw new \Exception('To be implemented'),
         };
     }
 }

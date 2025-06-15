@@ -116,7 +116,7 @@ class ElementConstitutifMcccController extends AbstractController
                 [
                     'route' => 'app_parcours',
                     'subject' => $dpeParcours,
-                ]) && Access::isAccessible($dpeParcours, 'cfvu')) {
+                ]) && Access::isAccessible($dpeParcours)) {
             if ($request->isMethod('POST')) {
                 $newMcccToText = '';
                 $newEcts = '';
@@ -318,7 +318,8 @@ class ElementConstitutifMcccController extends AbstractController
         ParcoursVersioning $parcoursVersioning,
         VersioningParcours $versioningParcours,
         EntityManagerInterface $entityManager
-    ) {
+    ): Response
+    {
         if($elementConstitutif === null) {
             return $this->render("element_constitutif/_versioning_ecNotFound.html.twig", [
                 'ecNotFound' => true
@@ -480,6 +481,8 @@ class ElementConstitutifMcccController extends AbstractController
             ]);
         }
         //todo: else ?
+
+
     }
 
     private function mcccToTexte(Collection $getMcccs): string

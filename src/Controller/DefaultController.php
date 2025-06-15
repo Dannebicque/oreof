@@ -38,13 +38,6 @@ class DefaultController extends BaseController
         $step = $request->query->get('step', 'formation');
 
         switch ($step) {
-            case 'formation':
-                return $this->render(
-                    'default/_formation.html.twig',
-                    [
-                        'step' => $step,
-                    ]
-                );
             case 'fiche':
                 if ($this->isGranted('ROLE_ADMIN')) {
                     return $this->render(
@@ -68,6 +61,7 @@ class DefaultController extends BaseController
                         'step' => $step,
                     ]
                 );
+            case 'formation':
             default:
                 return $this->render(
                     'default/_formation.html.twig',

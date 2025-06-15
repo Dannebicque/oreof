@@ -208,6 +208,8 @@ class DpeDemande
         if ($this->niveauDemande === 'F') {
             return $this->getEtatDemande();
         }
+
+        return null;
     }
 
     public function getCampagneCollecte(): ?CampagneCollecte

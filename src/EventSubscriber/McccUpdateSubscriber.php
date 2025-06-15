@@ -28,7 +28,7 @@ class McccUpdateSubscriber implements EventSubscriberInterface
         ];
     }
 
-    public function onMcccUpdate(McccUpdateEvent $event)
+    public function onMcccUpdate(McccUpdateEvent $event): void
     {
         if ($event->hasDiff()) {
             // mail au responsable de la formation/RP si réouverture

@@ -662,7 +662,7 @@ HTML;
      * @param string $message Message d'erreur XML
      * @return string Message transformé
      */
-    public function decodeErrorMessages(string $message)
+    public function decodeErrorMessages(string $message): string
     {
         $decodedMessage = $message;
         // Problème de Code ROME

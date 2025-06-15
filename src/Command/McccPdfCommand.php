@@ -107,8 +107,7 @@ class McccPdfCommand extends Command
                         anneeUniversitaire: $anneeDpe,
                         parcours : $parcours,
                         dateCfvu: $dateCfvu,
-                        dateConseil: $dateConseil,
-                        versionFull: true
+                        dateConseil: $dateConseil
                     );
                     $pdfSimplifie = $this->licenceMccc->exportPdfLicenceMccc(
                         anneeUniversitaire: $anneeDpe,
@@ -123,8 +122,7 @@ class McccPdfCommand extends Command
                         anneeUniversitaire: $anneeDpe,
                         parcours: $parcours,
                         dateCfvu: $dateCfvu,
-                        dateConseil: $dateConseil,
-                        versionFull: true
+                        dateConseil: $dateConseil
                     );
                     $pdfSimplifie = $this->butMccc->exportPdfbutMccc(
                         anneeUniversitaire: $anneeDpe,
@@ -223,8 +221,7 @@ class McccPdfCommand extends Command
                         anneeUniversitaire: $anneeDpe,
                         parcours: $parcours,
                         dateCfvu: $dateCfvu,
-                        dateConseil: $dateConseil,
-                        versionFull: true
+                        dateConseil: $dateConseil
                     );
                     $pdfSimplifie = $this->licenceMccc->exportPdfLicenceMccc(
                         anneeUniversitaire: $anneeDpe,
@@ -247,8 +244,7 @@ class McccPdfCommand extends Command
                         anneeUniversitaire: $anneeDpe,
                         parcours: $parcours,
                         dateCfvu: $dateCfvu,
-                        dateConseil: $dateConseil,
-                        versionFull: true
+                        dateConseil: $dateConseil
                     );
                     $pdfSimplifie = $this->butMccc->exportPdfbutMccc(
                         anneeUniversitaire: $anneeDpe,
@@ -266,7 +262,7 @@ class McccPdfCommand extends Command
                         $pdfSimplifie
                     );
                 }
-                $io->progressAdvance(1);
+                $io->progressAdvance();
             }
             $io->progressFinish();
 
@@ -331,8 +327,7 @@ class McccPdfCommand extends Command
                             anneeUniversitaire: $dpe,
                             parcours: $p,
                             dateCfvu: $dateCfvu,
-                            dateConseil: $dateConseil,
-                            versionFull: true
+                            dateConseil: $dateConseil
                         );
                         $pdfSimplifie = $this->butMccc->exportPdfbutMccc(
                             anneeUniversitaire: $dpe,
@@ -349,8 +344,7 @@ class McccPdfCommand extends Command
                             anneeUniversitaire: $dpe,
                             parcours: $p,
                             dateCfvu: $dateCfvu,
-                            dateConseil: $dateConseil,
-                            versionFull: true
+                            dateConseil: $dateConseil
                         );
                         $pdfSimplifie = $this->licenceMccc->exportPdfLicenceMccc(
                             anneeUniversitaire: $dpe,

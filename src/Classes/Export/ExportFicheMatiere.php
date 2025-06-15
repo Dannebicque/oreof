@@ -28,7 +28,7 @@ class ExportFicheMatiere
         $this->dir = $kernel->getProjectDir().'/public/';
     }
 
-    public function exportLink(array $idParcours)
+    public function exportLink(array $idParcours): string
     {
         $parcours = $this->parcoursRepository->find($idParcours[0]);
         if ($parcours === null) {

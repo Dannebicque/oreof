@@ -82,7 +82,7 @@ class UeController extends BaseController
     ): Response {
         $isAdmin = $this->isGranted('ROLE_ADMIN');
         $ue = new Ue();
-        $ueOrigine = $request->query->get('ue', null);
+        $ueOrigine = $request->query->get('ue');
         if ($ueOrigine !== null) {
             $ueOrigine = $ueRepository->find($ueOrigine);
         }

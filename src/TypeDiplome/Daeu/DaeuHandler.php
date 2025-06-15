@@ -14,7 +14,7 @@ use App\Entity\Parcours;
 final class DaeuHandler //implements TypeDiplomeHandlerInterface
 {
 
-    public const TEMPLATE_FOLDER = 'daeu';
+    public const string TEMPLATE_FOLDER = 'daeu';
 
     public function supports(string $type): bool
     {

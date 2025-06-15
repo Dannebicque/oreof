@@ -22,7 +22,7 @@ class ListeElementPedagogiDTO3 {
     ){
         $this->codListeElp = $codListeElp;
         $this->typListeElp = $typListeElp;
-        $this->libCourtListeElp = $this->prepareLibelle($libCourt, 25);
+        $this->libCourtListeElp = $this->prepareLibelle($libCourt);
         $this->libListeElp = $this->prepareLibelle($libelleLong, 60);
         $this->listElementPedagogi = new TableauElementPedagogiDTO3($tableauCodeELP);
     }

@@ -16,15 +16,13 @@ class MutualiseController extends AbstractController
     #[Route('/', name: 'index')]
     public function index(): Response
     {
-        return $this->render('mutualise/index.html.twig', [
-        ]);
+        return $this->render('mutualise/index.html.twig');
     }
 
     #[Route('/1', name: 'step1')]
     public function step1(): Response
     {
-        return $this->render('mutualise_wizard/_step1.html.twig', [
-        ]);
+        return $this->render('mutualise_wizard/_step1.html.twig');
     }
 
     #[Route('/1/liste', name: 'fiche_matiere_liste')]
@@ -56,8 +54,7 @@ class MutualiseController extends AbstractController
     #[Route('/2', name: 'step2')]
     public function step2(): Response
     {
-        return $this->render('mutualise_wizard/_step2.html.twig', [
-        ]);
+        return $this->render('mutualise_wizard/_step2.html.twig');
     }
 
     #[Route('/2/liste', name: 'ue_liste')]
@@ -87,9 +84,7 @@ class MutualiseController extends AbstractController
     #[Route('/3', name: 'step3')]
     public function step3(): Response
     {
-        return $this->render('mutualise_wizard/_step3.html.twig', [
-
-        ]);
+        return $this->render('mutualise_wizard/_step3.html.twig');
     }
 
     #[Route('/3/liste', name: 'semestre_liste')]
@@ -103,10 +98,10 @@ class MutualiseController extends AbstractController
 
         if ($this->isGranted('ROLE_ADMIN')) {
             //pas de filtre, toutes les UE
-            $semestres = $semestreRepository->findAllBy([$sort => $direction], $q);
+            $semestres = $semestreRepository->findAllBy([$sort => $direction]);
         } else {
             //filtre selon mes parcours
-            $semestres = $semestreRepository->findByParcours($this->getUser(), [$sort => $direction]);
+            $semestres = $semestreRepository->findByParcours([$sort => $direction]);
 
         }
 
@@ -121,7 +116,6 @@ class MutualiseController extends AbstractController
     public function step4(): Response
     {
 
-        return $this->render('mutualise_wizard/_step4.html.twig', [
-        ]);
+        return $this->render('mutualise_wizard/_step4.html.twig');
     }
 }

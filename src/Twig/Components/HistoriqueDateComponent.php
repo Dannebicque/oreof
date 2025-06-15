@@ -24,7 +24,7 @@ final class HistoriqueDateComponent
     }
 
     #[PostMount]
-    public function postMount()
+    public function postMount(): void
     {
         if ($this->type === 'parcours') {
             if ($this->parcours === null) {

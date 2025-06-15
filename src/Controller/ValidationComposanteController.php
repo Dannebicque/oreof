@@ -70,7 +70,7 @@ class ValidationComposanteController extends BaseController
         }
 
 
-        $fileName = Tools::FileName('Verif-fiche-' . (new DateTime())->format('d-m-Y-H-i'), 50);
+        $fileName = Tools::FileName('Verif-fiche-' . (new DateTime())->format('d-m-Y-H-i'));
         return $excelWriter->genereFichier($fileName, true);
     }
 

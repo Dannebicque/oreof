@@ -195,7 +195,8 @@ class ComposanteController extends BaseController
     #[Route("/composante/cfvu/list", "app_composante_list_for_cfvu")]
     public function listComposanteToDownloadCfvuChanges(
         ComposanteRepository $composanteRepository
-    ){
+    ): Response
+    {
 
         $composantes = $composanteRepository->findAll();
 

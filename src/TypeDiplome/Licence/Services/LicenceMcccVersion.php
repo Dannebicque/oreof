@@ -466,7 +466,7 @@ class LicenceMcccVersion extends AbstractLicenceMccc
             $texte = $formation->gettypeDiplome()?->getLibelleCourt() . ' ' . $formation->getSigle();
         }
 
-        $this->fileName = Tools::FileName('MCCC-version-' . $anneeUniversitaire->getLibelle() . ' - ' . $texte, 50);
+        $this->fileName = Tools::FileName('MCCC-version-' . $anneeUniversitaire->getLibelle() . ' - ' . $texte);
         return true;
     }
 
@@ -977,7 +977,7 @@ class LicenceMcccVersion extends AbstractLicenceMccc
 
         $this->excelWriter->getColumnsAutoSizeInt(4, 4);
         $this->excelWriter->setPrintArea('A1:D' . $ligne);
-        $this->excelWriter->setOrientationPage(PageSetup::ORIENTATION_LANDSCAPE);
+        $this->excelWriter->setOrientationPage();
         $this->excelWriter->configSheet(
             ['zoom' => 60, 'topLeftCell' => 'A1']
         );

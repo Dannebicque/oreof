@@ -80,7 +80,7 @@ class UserAccesSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onUserRefuserAdmin(UserEvent $event)
+    public function onUserRefuserAdmin(UserEvent $event): void
     {
         $admins = $this->userRepository->findByRole('ROLE_ADMIN');
 

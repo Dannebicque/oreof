@@ -17,7 +17,8 @@ class TableauComposanteDTO2
         }
     }
 
-    private function add(string $codComposante){
+    private function add(string $codComposante): void
+    {
         if(strlen($codComposante) !== 3){
             throw new InvalidArgumentException(
                 "Le code de composante associée est invalide. Il doit avoir une longueur de 3 (actuel : "

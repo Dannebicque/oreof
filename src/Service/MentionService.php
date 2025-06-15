@@ -29,7 +29,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class MentionService
 {
     // Tableau des codes possibles pour les parcours
-    private const TAB_CODE_PARCOURS = [
+    private const array TAB_CODE_PARCOURS = [
         'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
         'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'Y', 'Z',
         '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
@@ -210,7 +210,7 @@ class MentionService
      * @param mixed $checkTypeDiplome Valeur du paramètre typediplome
      * @return array Liste des types de diplômes
      */
-    private function getTypeDiplomesFromRequest($checkTypeDiplome): array
+    private function getTypeDiplomesFromRequest(mixed $checkTypeDiplome): array
     {
         if ($checkTypeDiplome === 'all') {
             return $this->typeDiplomeRepository->findBy([], ['libelle' => 'ASC']);
@@ -225,7 +225,7 @@ class MentionService
      * @param mixed $checkTypeDomaine Valeur du paramètre domaine
      * @return array Liste des domaines
      */
-    private function getDomainesFromRequest($checkTypeDomaine): array
+    private function getDomainesFromRequest(mixed $checkTypeDomaine): array
     {
         if ($checkTypeDomaine === 'all') {
             return $this->domaineRepository->findBy([], ['libelle' => 'ASC']);

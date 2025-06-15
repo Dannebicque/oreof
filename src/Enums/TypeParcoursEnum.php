@@ -28,23 +28,19 @@ enum TypeParcoursEnum: string
         };
     }
 
-    public function getColor()
+    public function getColor(): string
     {
         return match ($this) {
-            self::TYPE_PARCOURS_CLASSIQUE => 'primary',
-            self::TYPE_PARCOURS_LAS1 => 'primary',
-            self::TYPE_PARCOURS_LAS23 => 'info',
-            self::TYPE_PARCOURS_CPI => 'info',
-            self::TYPE_PARCOURS_ALTERNANCE => 'info',
+            self::TYPE_PARCOURS_CLASSIQUE, self::TYPE_PARCOURS_LAS1 => 'primary',
+            self::TYPE_PARCOURS_LAS23, self::TYPE_PARCOURS_CPI, self::TYPE_PARCOURS_ALTERNANCE => 'info',
         };
     }
 
-    public function getLabel()
+    public function getLabel(): string
     {
         return match ($this) {
             self::TYPE_PARCOURS_CLASSIQUE => 'Classique',
-            self::TYPE_PARCOURS_LAS1 => 'Accès santé',
-            self::TYPE_PARCOURS_LAS23 => 'Accès santé',
+            self::TYPE_PARCOURS_LAS1, self::TYPE_PARCOURS_LAS23 => 'Accès santé',
             self::TYPE_PARCOURS_CPI => 'CPI',
             self::TYPE_PARCOURS_ALTERNANCE => 'En alternance',
         };

@@ -66,7 +66,8 @@ class FormationController extends BaseController
     #[Route('/liste-cfvu', name: 'app_formation_liste_cfvu', methods: ['GET'])]
     public function listeCfvu(
         DpeParcoursRepository $dpeParcoursRepository,
-    ) {
+    ): Response
+    {
         $allparcours = [];
         if ($this->isGranted('SHOW', ['route' => 'app_etablissement', 'subject' => 'etablissement'])) {
             $allparcours = $dpeParcoursRepository->findByCampagneAndTypeValidation($this->getCampagneCollecte(), 'soumis_cfvu');
@@ -540,7 +541,8 @@ class FormationController extends BaseController
         Formation $formation,
         VersioningFormation $versioningFormationService,
         Filesystem $filesystem
-    ) {
+    ): \Symfony\Component\HttpFoundation\RedirectResponse
+    {
         try {
             /** @var User $utilisateur */
             $utilisateur = $this->getUser();
@@ -573,7 +575,8 @@ class FormationController extends BaseController
         VersioningParcours $versionParcoursService,
         Filesystem $filesystem,
         EntityManagerInterface $entityManager
-    ) {
+    ): \Symfony\Component\HttpFoundation\RedirectResponse|Response
+    {
         try {
             $formation = $versionFormationService->loadFormationFromVersion($versionFormation);
             $typeD = $this->typeDiplomeResolver->get($versionFormation->getFormation()?->getTypeDiplome());

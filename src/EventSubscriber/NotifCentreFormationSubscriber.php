@@ -49,7 +49,7 @@ class NotifCentreFormationSubscriber implements EventSubscriberInterface
         $this->mailer->sendMessage([$user->getEmail()], '[ORéOF] Accès à l\'application');
     }
 
-    public function onRemoveCentreFormation(NotifCentreFormationEvent $event)
+    public function onRemoveCentreFormation(NotifCentreFormationEvent $event): void
     {
         $user = $event->user;
         $formation = $event->formation;

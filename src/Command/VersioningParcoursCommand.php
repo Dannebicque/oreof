@@ -163,7 +163,7 @@ class VersioningParcoursCommand extends Command
                                 now: new DateTimeImmutable(),
                                 isCfvu: true
                             );
-                            $io->progressAdvance(1);
+                            $io->progressAdvance();
                         }
                         $io->progressFinish();
                     }

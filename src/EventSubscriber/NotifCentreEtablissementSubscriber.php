@@ -49,7 +49,7 @@ class NotifCentreEtablissementSubscriber implements EventSubscriberInterface
         $this->mailer->sendMessage([$user->getEmail()], '[ORéOF] Accès à l\'application');
     }
 
-    public function onRemoveCentreEtablissement(NotifCentreEtablissementEvent $event)
+    public function onRemoveCentreEtablissement(NotifCentreEtablissementEvent $event): void
     {
         $user = $event->user;
         $etablissement = $event->etablissement;

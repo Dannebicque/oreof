@@ -223,7 +223,7 @@ class ExcelWriter
         $this->sheet->mergeCells($cells, $behaviour);
     }
 
-    public function borderBottomCellsRange(int $col1, int $lig1, int $col2, int $lig2, array $array)
+    public function borderBottomCellsRange(int $col1, int $lig1, int $col2, int $lig2, array $array): void
     {
         $color = $array['color'];
         if (0 === mb_strpos($color, '#')) {
@@ -334,7 +334,7 @@ class ExcelWriter
             /**  Load $inputFileName to a Spreadsheet Object  **/
             $this->spreadsheet = $reader->load($inputFileName);
         } catch (Exception $e) {
-            throw new \Exception('Le modèle n\'existe pas');
+            throw new \RuntimeException('Le modèle n\'existe pas');
         }
     }
 
@@ -421,9 +421,9 @@ class ExcelWriter
         $this->sheet->getPageSetup()->setOrientation($orientation);
     }
 
-    public function setPrintArea(string $string)
+    public function setPrintArea(string $string): void
     {
-        $this->sheet->getPageSetup()->setPrintArea($string, 0, PageSetup::SETPRINTRANGE_OVERWRITE);
+        $this->sheet->getPageSetup()->setPrintArea($string);
     }
 
     public function unMergeCells(string $string): void
@@ -431,13 +431,13 @@ class ExcelWriter
         $this->sheet->unmergeCells($string);
     }
 
-    public function setActiveSheetIndex(int $int)
+    public function setActiveSheetIndex(int $int): void
     {
         $this->spreadsheet->setActiveSheetIndex($int);
         $this->sheet = $this->spreadsheet->getActiveSheet();
     }
 
-    public function setSelectedCells(string $string)
+    public function setSelectedCells(string $string): void
     {
         $this->sheet->setSelectedCells($string);
     }
@@ -447,12 +447,12 @@ class ExcelWriter
         return $this->spreadsheet->getSheetByName($page_modele);
     }
 
-    public function addSheet(Worksheet $clonedWorksheet, int $index)
+    public function addSheet(Worksheet $clonedWorksheet, int $index): void
     {
         $this->spreadsheet->addSheet($clonedWorksheet, $index);
     }
 
-    public function removeSheetByIndex(int $int)
+    public function removeSheetByIndex(int $int): void
     {
         $this->spreadsheet->removeSheetByIndex($int);
     }
@@ -467,7 +467,7 @@ class ExcelWriter
         return $this->sheet;
     }
 
-    public function configSheet(array $array)
+    public function configSheet(array $array): void
     {
         $sv = new SheetView();
         if (array_key_exists('zoom', $array)) {
@@ -484,12 +484,12 @@ class ExcelWriter
         }
     }
 
-    public function setRangeStyle(string $string, array $array)
+    public function setRangeStyle(string $string, array $array): void
     {
         $this->sheet->getStyle($string)->applyFromArray($array);
     }
 
-    public function cellStyle(string $string, array $array)
+    public function cellStyle(string $string, array $array): void
     {
         $this->sheet->getStyle($string)->applyFromArray($array);
     }
@@ -503,7 +503,7 @@ class ExcelWriter
         $this->sheet->insertNewColumnBefore($colUe);
     }
 
-    public function setRepeatRows(int $debut, int $fin)
+    public function setRepeatRows(int $debut, int $fin): void
     {
         $this->sheet->getPageSetup()->setRowsToRepeatAtTopByStartAndEnd($debut, $fin);
     }

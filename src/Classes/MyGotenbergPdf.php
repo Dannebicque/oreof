@@ -38,7 +38,7 @@ class MyGotenbergPdf
         $this->basePath = $kernel->getProjectDir() . '/public';
     }
 
-    public function render(string $template, array $context = [], string $name = 'fichier', array $options = [])
+    public function render(string $template, array $context = [], string $name = 'fichier', array $options = []): Response
     {
         $request = $this->calculPdf($template, $context, $name, $options);
         $reponse = $this->client->sendRequest($request);
@@ -49,7 +49,7 @@ class MyGotenbergPdf
         ]);
     }
 
-    private function calculPdf(string $template, array $context = [], string $name = 'fichier', array $options = [])
+    private function calculPdf(string $template, array $context = [], string $name = 'fichier', array $options = []): \Psr\Http\Message\RequestInterface
     {
         $resolver = new OptionsResolver();
         $this->configureOptions($resolver);
@@ -101,7 +101,7 @@ class MyGotenbergPdf
         return $filename;
     }
 
-    private function generateHtml(string $template, array $context = [])
+    private function generateHtml(string $template, array $context = []): string
     {
         $context = array_merge($context, $this->options);
         return $this->twig->render($template, $context);

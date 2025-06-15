@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class ExportController extends BaseController
 {
-    public const TYPES_DOCUMENT = [
+    public const array TYPES_DOCUMENT = [
         "xlsx-mccc" => 'MCCC format Excel (xslx)',
         "xlsx-cap" => 'Export CAP format excel (xslx)',
         "xlsx-fiabilisation" => 'Export Fiabilisation format excel (xslx)',
@@ -27,7 +27,7 @@ class ExportController extends BaseController
         "pdf-fiches" => 'Fiches descriptions format PDF'
     ];
 
-    public const TYPES_DOCUMENT_GLOBAL = [
+    public const array TYPES_DOCUMENT_GLOBAL = [
         "xlsx-carif" => 'Tableau CARIF (xslx)',
         "xlsx-semestres_ouverts" => 'Tableau Semestre/parcours (non)ouvert (xslx)',
         "xlsx-ec" => 'Fiches EC/Type (xslx)',
@@ -108,7 +108,7 @@ class ExportController extends BaseController
         ComposanteRepository $composanteRepository,
         Request              $request
     ): Response {
-        $composante = $composanteRepository->find($request->query->get('composante', null));
+        $composante = $composanteRepository->find($request->query->get('composante'));
 
         if (!$composante) {
             throw $this->createNotFoundException('La composante n\'existe pas');
@@ -140,8 +140,8 @@ class ExportController extends BaseController
             $request->request->get('type_document'),
             $request->request->all()['liste'] ?? [],
             $this->getCampagneCollecte(),
-            Tools::convertDate($request->request->get('date', null)),
-            $request->request->get('composante', null),
+            Tools::convertDate($request->request->get('date')),
+            $request->request->get('composante'),
         ));
 
         return JsonReponse::success('Les documents sont en cours de génération, vous recevrez un mail lorsque les documents seront prêts');

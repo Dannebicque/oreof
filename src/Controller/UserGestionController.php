@@ -204,8 +204,7 @@ class UserGestionController extends BaseController
         Route('/ajout/utilisateur/verification', name: 'app_user_missing_ldap')]
     public function ajoutLdap(): Response
     {
-        return $this->render('user/add.html.twig', [
-        ]);
+        return $this->render('user/add.html.twig');
     }
 
     #[Route('/valid/admin/{user}', name: 'app_user_gestion_valid_admin')]

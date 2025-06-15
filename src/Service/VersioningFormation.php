@@ -13,6 +13,7 @@ use Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
 use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
 use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
 use Symfony\Component\Serializer\Normalizer\BackedEnumNormalizer;
@@ -49,7 +50,7 @@ class VersioningFormation
         );
     }
 
-    public function saveVersionOfFormation(Formation $formation, DateTimeImmutable $now, bool $withFlush = false, bool $isCfvu = false)
+    public function saveVersionOfFormation(Formation $formation, DateTimeImmutable $now, bool $withFlush = false, bool $isCfvu = false): void
     {
         $dateHeure = $now->format('d-m-Y_H-i-s');
         // Nom du fichier
@@ -65,7 +66,7 @@ class VersioningFormation
         }
         // Serialization
         $formationJSON = $this->serializer->serialize($formation, 'json', [
-            AbstractObjectNormalizer::GROUPS => ['formation_json_versioning'],
+            AbstractNormalizer::GROUPS => ['formation_json_versioning'],
             'circular_reference_limit' => 2,
             AbstractObjectNormalizer::SKIP_NULL_VALUES => true,
             AbstractObjectNormalizer::ENABLE_MAX_DEPTH => true,
@@ -92,7 +93,7 @@ class VersioningFormation
         return $this->serializer->deserialize($version, Formation::class, 'json');
     }
 
-    public function getDifferencesBetweenFormationAndLastVersion(Formation $formation)
+    public function getDifferencesBetweenFormationAndLastVersion(Formation $formation): array
     {
         $this->formationTextDifferences = [];
         $lastVersion = $this->entityManager->getRepository(FormationVersioning::class)->findBy(
@@ -270,7 +271,7 @@ class VersioningFormation
         return $this->formationTextDifferences;
     }
 
-    public function hasLastVersion(Formation $formation)
+    public function hasLastVersion(Formation $formation): bool
     {
         return $this->getLastVersion($formation) !== null;
     }
@@ -281,7 +282,7 @@ class VersioningFormation
         return count($lastVersion) > 0 ? $lastVersion[0] : null;
     }
 
-    public function rollbackToLastVersion(Formation $formation)
+    public function rollbackToLastVersion(Formation $formation): void
     {
         if ($formation and count($this->formationTextDifferences) > 0) {
             //todo: a finir

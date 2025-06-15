@@ -144,7 +144,7 @@ class CodificationController extends BaseController
             $this->isGranted('CAN_ETABLISSEMENT_SHOW_ALL', $this->getUser()) ||
             $this->isGranted('CAN_ETABLISSEMENT_SCOLARITE_ALL', $this->getUser()) ||
             $this->isGranted('CAN_FORMATION_SHOW_ALL', $this->getUser())) {
-            $formations = $formationRepository->findBySearch('', $this->getCampagneCollecte(), []);
+            $formations = $formationRepository->findBySearch('', $this->getCampagneCollecte());
 
             return $export->exportFormations($formations);
         }
@@ -200,7 +200,7 @@ class CodificationController extends BaseController
         Request $request
     ): Response {
 
-        $selectedParcours = $request->query->get('parcours', null);
+        $selectedParcours = $request->query->get('parcours');
 
         return $this->render('codification/index.html.twig', [
             'formation' => $formation,

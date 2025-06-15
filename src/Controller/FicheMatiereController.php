@@ -340,13 +340,14 @@ class FicheMatiereController extends BaseController
         EntityManagerInterface $entityManager,
         Filesystem $fileSystem,
         VersioningFicheMatiere $ficheMatiereVersioningService
-    ) {
+    ): \Symfony\Component\HttpFoundation\RedirectResponse
+    {
         try {
             // Date / Heure
             $now = new DateTimeImmutable('now');
             $dateHeure = $now->format('d-m-Y_H-i-s');
             // Sauvegarde
-            $ficheMatiereVersioningService->saveFicheMatiereVersion($ficheMatiere, $now, false);
+            $ficheMatiereVersioningService->saveFicheMatiereVersion($ficheMatiere, $now);
             $entityManager->flush();
             // Ajout dans les logs
             /**
@@ -387,7 +388,8 @@ class FicheMatiereController extends BaseController
         LicenceTypeDiplome $licenceTypeD,
         ButTypeDiplome $butTypeD,
         MeefTypeDiplome $meefTypeD
-    ) {
+    ): \Symfony\Component\HttpFoundation\RedirectResponse|Response
+    {
         try {
             $version = $ficheMatiereVersioningService->loadFicheMatiereVersion($ficheMatiereVersioning);
             $ficheMatiere = $version['ficheMatiere'];
@@ -453,7 +455,8 @@ class FicheMatiereController extends BaseController
         EntityManagerInterface $entityManager,
         Parcours $parcours,
         string $keyword = ""
-    ) {
+    ): JsonResponse
+    {
         $associatedFicheMatiere = $entityManager
             ->getRepository(FicheMatiere::class)
             ->findForParcoursWithKeyword($parcours, $keyword);

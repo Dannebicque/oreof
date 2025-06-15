@@ -29,10 +29,10 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 final class LicenceHandler implements TypeDiplomeHandlerInterface
 {
 
-    public const TEMPLATE_FOLDER = 'licence';
-    public const SOURCE = 'licence';
-    public const TEMPLATE_FORM_MCCC = 'licence.html.twig';
-    public const NB_ANNEE = 3;
+    public const string TEMPLATE_FOLDER = 'licence';
+    public const string SOURCE = 'licence';
+    public const string TEMPLATE_FORM_MCCC = 'licence.html.twig';
+    public const int NB_ANNEE = 3;
 
     public function __construct(
         protected LicenceMccc  $licenceMccc,
@@ -94,7 +94,7 @@ final class LicenceHandler implements TypeDiplomeHandlerInterface
         ?DateTimeInterface $dateCfvu = null,
         ?DateTimeInterface $dateConseil = null
     ): string {
-        return $this->licenceMcccVersion->exportAndSaveExcelLicenceMccc($anneeUniversitaire, $parcours, $dir, $fichier, $dateCfvu, $dateConseil, true);
+        return $this->licenceMcccVersion->exportAndSaveExcelLicenceMccc($anneeUniversitaire, $parcours, $dir, $fichier, $dateCfvu, $dateConseil);
     }
 
     public function exportPdfMccc(

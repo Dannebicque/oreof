@@ -15,7 +15,7 @@ enum PorteeEnum: string
     case ALL = 'ALL';
     case MY = 'MY';
 
-    public static function getAvailableTypes()
+    public static function getAvailableTypes(): array
     {
         return [
             self::ALL->value,

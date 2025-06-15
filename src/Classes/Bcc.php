@@ -159,7 +159,7 @@ readonly class Bcc
         $this->entityManager->flush();
     }
 
-    public function renumeroteBlocCompetence(?Parcours $parc)
+    public function renumeroteBlocCompetence(?Parcours $parc): void
     {
         if ($parc === null) {
             return;
