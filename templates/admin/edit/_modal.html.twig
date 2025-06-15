@@ -27,14 +27,20 @@
         </div>
     </form>
 </div>
-<form method="post" action="" class="form-horizontal">
-    <textarea></textarea>
+<div>
+    <h3 class="modal-section-title">
+        {{ 'modifier.la.validation.title'|trans({}, 'process') }}
+    </h3>
+    {% if type == 'parcours' %}
+        <twig:CommentaireAdmin
+                :parcours="object"
+        />
+    {% else %}
+        <twig:CommentaireAdmin
+                :formation="object"
+        />
+    {% endif %}
 
-    <div class="form-group">
-        <div class="col-sm-offset-2 col-sm-10">
-            <button type="submit" class="btn btn-primary">{{ 'admin.edit.modal.save'|trans }}</button>
+</div>
 
-        </div>
-    </div>
-</form>
 

@@ -280,6 +280,9 @@ class Parcours
     #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: UserProfil::class)]
     private Collection $userProfils;
 
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $commentaire = null;
+
     public function __construct(?Formation $formation)
     {
         $this->formation = $formation;
@@ -1610,6 +1613,18 @@ class Parcours
                 $userProfil->setParcours(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCommentaire(): ?string
+    {
+        return $this->commentaire;
+    }
+
+    public function setCommentaire(?string $commentaire): static
+    {
+        $this->commentaire = $commentaire;
 
         return $this;
     }

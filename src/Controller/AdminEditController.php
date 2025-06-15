@@ -10,6 +10,8 @@
 namespace App\Controller;
 
 use App\Classes\ValidationProcess;
+use App\Repository\FormationRepository;
+use App\Repository\ParcoursRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -27,13 +29,34 @@ class AdminEditController extends BaseController
 
     #[Route('/{id}/{type}', name: '_modal')]
     public function afficheModal(
+        ParcoursRepository  $parcoursRepository,
+        FormationRepository $formationRepository,
         int    $id,
         string $type,
     ): Response
     {
+        switch ($type) {
+            case 'parcours':
+                $object = $parcoursRepository->find($id);
+                if (!$object) {
+                    throw $this->createNotFoundException('Parcours not found');
+                }
+                break;
+            case 'formation':
+                $object = $formationRepository->find($id);
+                if (!$object) {
+                    throw $this->createNotFoundException('Formation not found');
+                }
+                break;
+            default:
+                throw $this->createNotFoundException('Invalid type');
+        }
+
+
         return $this->render('admin/edit/_modal.html.twig', [
             'id' => $id,
             'type' => $type,
+            'object' => $object,
             'etats' => $this->validationProcess->getProcess(),
         ]);
     }
