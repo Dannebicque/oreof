@@ -35,6 +35,7 @@ class AppExtension extends AbstractExtension
     {
         return [
             new TwigFilter('url', [$this, 'url']),
+            new TwigFilter('basename', [$this, 'basename']),
             new TwigFilter('tel_format', [$this, 'telFormat']),
             new TwigFilter('mailto', [$this, 'mailto'], ['is_safe' => ['html']]),
             new TwigFilter('open_url', [$this, 'openUrl'], ['is_safe' => ['html']]),
@@ -56,6 +57,10 @@ class AppExtension extends AbstractExtension
         ];
     }
 
+    public function basename(string $path): string
+    {
+        return basename($path);
+    }
     public function isUeUtilisee(UeMutualisable $ue): bool
     {
         foreach ($ue->getUes() as $u) {
