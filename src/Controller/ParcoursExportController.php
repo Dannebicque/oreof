@@ -884,6 +884,22 @@ class ParcoursExportController extends AbstractController
                     'value' => $parcours?->getContenuFormation()
                 ];
                 break;
+            case 'admissionParcours':
+                return [
+                    'type' => 'full_block',
+                    'libelle' => 'Admission',
+                    'value' => [
+                        [
+                            'libelle' => 'Niveau de français requis',
+                            'content' => $parcours?->getNiveauFrancais()?->libelle()
+                        ],
+                        [
+                            'libelle' => 'Prérequis recommandés',
+                            'content' => $parcours?->getPrerequis()
+                        ]
+                    ]
+                ];
+                break;
         }
     }
 
@@ -899,8 +915,10 @@ class ParcoursExportController extends AbstractController
             'rythmeFormation' => 8,
             'localisationParcours' => 9,
             'competencesAcquises' => 10,
-            'poursuiteEtudes' => 11,
-            'debouchesParcours' => 12,
+            'admissionParcours' => 11,
+            'inscriptionParcours' => 12,
+            'poursuiteEtudes' => 13,
+            'debouchesParcours' => 14,
         ];
     }
 }
