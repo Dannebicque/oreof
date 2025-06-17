@@ -859,7 +859,9 @@ class ParcoursExportController extends AbstractController
                         ],
                         [
                             'libelle' => "Adresse",
-                            'content' => $parcours?->getComposanteInscription()?->getAdresse()?->display()
+                            'content' => $exportType === 'pdf' 
+                                ? $parcours?->getComposanteInscription()?->getAdresse()?->display()
+                                : preg_replace('/<br>/', ' ', $parcours?->getComposanteInscription()?->getAdresse()?->display())
                         ],
                         [
                             'libelle' => "Téléphone",
@@ -1006,14 +1008,16 @@ class ParcoursExportController extends AbstractController
                             'content' => array_map(function($composante) use ($exportType) {
                                 return [
                                     $composante->getLibelle(),
-                                    $composante->getAdresse()?->display(),
+                                    $exportType === 'pdf' 
+                                        ? $composante->getAdresse()?->display()
+                                        : preg_replace('/<br>/', ' ', $composante->getAdresse()?->display()),
                                     $composante->getTelStandard(),
                                     $exportType === 'pdf' 
-                                    ? "<a href=\"mailto:{$composante->getMailContact()}\">" . $composante->getMailContact() . "</a>"
-                                    : $composante->getMailContact(),
+                                        ? "<a href=\"mailto:{$composante->getMailContact()}\">" . $composante->getMailContact() . "</a>"
+                                        : $composante->getMailContact(),
                                     $exportType === 'pdf' 
-                                    ? "<a href=\"{$composante->getUrlSite()}\">" . $composante->getUrlSite() . "</a>"
-                                    : $composante->getUrlSite()
+                                        ? "<a href=\"{$composante->getUrlSite()}\">" . $composante->getUrlSite() . "</a>"
+                                        : $composante->getUrlSite()
                                 ];
                             }
                             , $parcours?->getFormation()->getComposantesInscription()?->toArray() ?? []),
