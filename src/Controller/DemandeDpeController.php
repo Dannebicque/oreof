@@ -159,17 +159,18 @@ class DemandeDpeController extends BaseController
         $excelWriter->nouveauFichier('Export Demande DPE');
         $excelWriter->setActiveSheetIndex(0);
         $excelWriter->writeCellName('A1', 'Composante');
-        $excelWriter->writeCellName('B1', 'Mention');
-        $excelWriter->writeCellName('C1', 'Parcours');
-        $excelWriter->writeCellName('D1', 'Demande de ?');
-        $excelWriter->writeCellName('E1', 'Date demande');
-        $excelWriter->writeCellName('F1', 'Date clôture');
-        $excelWriter->writeCellName('G1', 'Niveau demande');
-        $excelWriter->writeCellName('H1', 'Etat');
-        $excelWriter->writeCellName('I1', 'Commentaire');
+        $excelWriter->writeCellName('B1', 'Type Diplôme');
+        $excelWriter->writeCellName('C1', 'Mention');
+        $excelWriter->writeCellName('D1', 'Parcours');
+        $excelWriter->writeCellName('E1', 'Demande de ?');
+        $excelWriter->writeCellName('F1', 'Date demande');
+        $excelWriter->writeCellName('G1', 'Date clôture');
+        $excelWriter->writeCellName('H1', 'Niveau demande');
+        $excelWriter->writeCellName('I1', 'Etat');
+        $excelWriter->writeCellName('J1', 'Commentaire');
         if ($isAdmin) {
-            $excelWriter->writeCellName('J1', 'Id Parcours');
-            $excelWriter->writeCellName('K1', 'Id Mention');
+            $excelWriter->writeCellName('K1', 'Id Parcours');
+            $excelWriter->writeCellName('L1', 'Id Mention');
         }
         $ligne = 2;
         foreach ($demandes as $demande) {
@@ -182,28 +183,29 @@ class DemandeDpeController extends BaseController
             $composante = $formation?->getComposantePorteuse();
 
             $excelWriter->writeCellName('A' . $ligne, $composante->getLibelle());
-            $excelWriter->writeCellName('B' . $ligne, $formation?->getDisplay());
+            $excelWriter->writeCellName('B' . $ligne, $formation?->getTypeDiplome()?->getLibelle() ?? 'Inconnu');
+            $excelWriter->writeCellName('C' . $ligne, $formation?->getDisplay());
 
-            if ($demande->getNiveauDemande() === 'F') {
-                $excelWriter->writeCellName('C' . $ligne, 'Niveau Mention');
+            if ($demande->getNiveauDemande() === 'G') {
+                $excelWriter->writeCellName('D' . $ligne, 'Niveau Mention');
             } else {
-                $excelWriter->writeCellName('C' . $ligne, $parcours?->getDisplay());
+                $excelWriter->writeCellName('D' . $ligne, $parcours?->getDisplay());
             }
 
-            $excelWriter->writeCellName('D' . $ligne, $demande->getAuteur() ? $demande->getAuteur()->getDisplay() : '');
-            $excelWriter->writeCellName('E' . $ligne, $demande->getDateDemande()?->format('d/m/Y'));
-            $excelWriter->writeCellName('F' . $ligne, $demande->getDateCloture() ? $demande->getDateCloture()->format('d/m/Y') : '');
-            $excelWriter->writeCellName('G' . $ligne, $demande->getNiveauModification() ? $demande->getNiveauModification()->getLibelle() : '');
-            $excelWriter->writeCellName('H' . $ligne, $demande->getEtatDemande()?->getLibelle());
-            $excelWriter->writeCellName('I' . $ligne, $demande->getArgumentaireDemande());
+            $excelWriter->writeCellName('E' . $ligne, $demande->getAuteur() ? $demande->getAuteur()->getDisplay() : '');
+            $excelWriter->writeCellName('F' . $ligne, $demande->getDateDemande()?->format('d/m/Y'));
+            $excelWriter->writeCellName('G' . $ligne, $demande->getDateCloture() ? $demande->getDateCloture()->format('d/m/Y') : '');
+            $excelWriter->writeCellName('H' . $ligne, $demande->getNiveauModification() ? $demande->getNiveauModification()->getLibelle() : '');
+            $excelWriter->writeCellName('I' . $ligne, $demande->getEtatDemande()?->getLibelle());
+            $excelWriter->writeCellName('J' . $ligne, $demande->getArgumentaireDemande());
             if ($isAdmin) {
-                $excelWriter->writeCellName('J' . $ligne, $demande->getParcours()?->getId());
-                $excelWriter->writeCellName('K' . $ligne, $demande->getFormation()?->getId());
+                $excelWriter->writeCellName('K' . $ligne, $demande->getParcours()?->getId());
+                $excelWriter->writeCellName('L' . $ligne, $demande->getFormation()?->getId());
             }
             $ligne++;
         }
 
-        $excelWriter->getColumnsAutoSize('A', 'I');
+        $excelWriter->getColumnsAutoSize('A', 'L');
 
         return $excelWriter->genereFichier($filename);
     }
