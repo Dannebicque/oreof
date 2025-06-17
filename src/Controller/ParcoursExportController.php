@@ -717,7 +717,9 @@ class ParcoursExportController extends AbstractController
             'O', 'P', 'Q', 'R', 'S', 'T', 'U',
             'V', 'W', 'X', 'Y', 'Z', 'AA', 'AB',
             'AC', 'AD', 'AE', 'AF', 'AG', 'AH', 'AI',
-            'AJ', 'AK', 'AL', 'AM', 'AN', 'AO', 'AP'
+            'AJ', 'AK', 'AL', 'AM', 'AN', 'AO', 'AP',
+            'AQ', 'AR', 'AS', 'AT', 'AU', 'AV', 'AW',
+            'AX', 'AY', 'AZ'
         ];
 
         $spreadSheet = new Spreadsheet();
@@ -1001,13 +1003,17 @@ class ParcoursExportController extends AbstractController
                                 "Email",
                                 "Site Web"
                             ],
-                            'content' => array_map(function($composante) {
+                            'content' => array_map(function($composante) use ($exportType) {
                                 return [
                                     $composante->getLibelle(),
                                     $composante->getAdresse()?->display(),
                                     $composante->getTelStandard(),
-                                    $composante->getMailContact(),
-                                    $composante->getUrlSite()
+                                    $exportType === 'pdf' 
+                                    ? "<a href=\"mailto:{$composante->getMailContact()}\">" . $composante->getMailContact() . "</a>"
+                                    : $composante->getMailContact(),
+                                    $exportType === 'pdf' 
+                                    ? "<a href=\"{$composante->getUrlSite()}\">" . $composante->getUrlSite() . "</a>"
+                                    : $composante->getUrlSite()
                                 ];
                             }
                             , $parcours?->getFormation()->getComposantesInscription()?->toArray() ?? []),
