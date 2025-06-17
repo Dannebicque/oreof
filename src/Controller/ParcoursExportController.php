@@ -607,6 +607,9 @@ class ParcoursExportController extends AbstractController
                         , $this->mapParcoursExportWithValues($field, null)['value']
                     );
                 }
+                elseif($this->mapParcoursExportWithValues($field, null)['type'] === 'array_list'){
+                    return [$this->mapParcoursExportWithValues($field, null)['libelle']];
+                }
             }
             , $fieldValueArray
         );
@@ -653,6 +656,9 @@ class ParcoursExportController extends AbstractController
                                     , $this->mapParcoursExportWithValues($field, $parcours, 'xlsx')['value']
                                 ));
                             }
+                            elseif($this->mapParcoursExportWithValues($field, $parcours)['type'] === 'array_list'){
+                                return [implode(' - ', $this->mapParcoursExportWithValues($field, $parcours)['value'])];
+                            }
 
                         }
                         , $fieldValueArray
@@ -670,7 +676,8 @@ class ParcoursExportController extends AbstractController
             'H', 'I', 'J', 'K', 'L', 'M', 'N',
             'O', 'P', 'Q', 'R', 'S', 'T', 'U',
             'V', 'W', 'X', 'Y', 'Z', 'AA', 'AB',
-            'AC', 'AD', 'AE', 'AF', 'AG', 'AH', 'AI'
+            'AC', 'AD', 'AE', 'AF', 'AG', 'AH', 'AI',
+            'AJ', 'AK', 'AL', 'AM', 'AN', 'AO', 'AP'
         ];
 
         $spreadSheet = new Spreadsheet();
