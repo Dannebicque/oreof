@@ -21,7 +21,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Workflow\WorkflowInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ChangeRfProcess extends AbstractProcess
@@ -114,11 +114,22 @@ class ChangeRfProcess extends AbstractProcess
             $formation->setCoResponsable(null);
         }
 
+        // on retire le responsable actuel
+        if ($demande->getAncienResponsable() !== null) {
+            $event = new AddCentreFormationEvent(
+                $formation,
+                $demande->getAncienResponsable(),
+                $droits, $demande->getCampagneCollecte()
+            );
+            $this->eventDispatcher->dispatch($event, AddCentreFormationEvent::REMOVE_CENTRE_FORMATION);
+        }
+
+        // on ajoute le nouveau responsable
         if ($demande->getNouveauResponsable() !== null) {
             $event = new AddCentreFormationEvent(
                 $formation,
                 $demande->getNouveauResponsable(),
-                ['ROLE_RESP_FORMATION'], $demande->getCampagneCollecte()
+                $droits, $demande->getCampagneCollecte()
             );
             $this->eventDispatcher->dispatch($event, AddCentreFormationEvent::ADD_CENTRE_FORMATION);
             if ($demande->getTypeRf() === TypeRfEnum::RF) {
@@ -126,15 +137,6 @@ class ChangeRfProcess extends AbstractProcess
             } else {
                 $formation->setCoResponsable($demande->getNouveauResponsable());
             }
-        }
-
-        if ($demande->getAncienResponsable() !== null) {
-            $event = new AddCentreFormationEvent(
-                $formation,
-                $demande->getAncienResponsable(),
-                ['ROLE_RESP_FORMATION'], $demande->getCampagneCollecte()
-            );
-            $this->eventDispatcher->dispatch($event, AddCentreFormationEvent::REMOVE_CENTRE_FORMATION);
         }
     }
 }

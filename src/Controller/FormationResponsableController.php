@@ -154,8 +154,7 @@ class FormationResponsableController extends BaseController
         ], 'synthese_changement_rf_'.(new DateTime())->format('d-m-Y_H-i-s'));
     }
 
-    #[Route(
-        '/formation/change-responsable/validation-demande/{transition}/{etape}/{demande}',
+    #[Route('/formation/change-responsable/validation-demande/{transition}/{etape}/{demande}',
         name: 'app_validation_change_rf_valider'
     )]
     public function validationChangeRf(
