@@ -33,6 +33,15 @@
                         {% endif %}
                     {% endfor %}
                 </ul>
+            {% elseif v.type == 'array_list' %}
+                <dt>{{ v.libelle }}</dt>
+                <dd>
+                    <ul>
+                        {% for listItem in v.value %}
+                            <li>{{ listItem }}</li>
+                        {% endfor %}
+                    </ul>
+                </dd>
             {% elseif v.type == 'nested_list' %}
                 <dt>{{ v.libelle }}</dt>
                 <dd>

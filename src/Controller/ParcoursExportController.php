@@ -499,6 +499,24 @@ class ParcoursExportController extends AbstractController
                         'content' => "Présentation du parcours {$parcours->getLibelle()}",
                     ];
                 }
+                elseif(in_array($f, [
+                    'competencesAcquises'
+                ]) && isset($headersSectionPdf[$f]) === false){
+                    $headersSectionPdf[$f] = [
+                        'libelle' => 'compentencesAcquisesHeader',
+                        'content' => "Compétences Acquises"
+                    ];
+                }
+                elseif(in_array($f, [
+                    'poursuiteEtudes',
+                    'debouchesParcours',
+                    'codesRome'
+                ]) && isset($headersSectionPdf[$f]) === false) {
+                    $headersSectionPdf[$f] = [
+                        'libelle' => 'etApresHeader',
+                        'content' => "Et après..."
+                    ];
+                }
             }
 
             $dataStructure[] = [
@@ -741,7 +759,7 @@ class ParcoursExportController extends AbstractController
             case 'competencesAcquises': 
                 return [
                     'type' => 'nested_list',
-                    'libelle' => 'Compétences Acquises',
+                    'libelle' => '',
                     'value' => array_map(
                         fn($bloc) => [
                             'nested_libelle' => $bloc->display(),
@@ -900,6 +918,13 @@ class ParcoursExportController extends AbstractController
                     ]
                 ];
                 break;
+            case 'codesRome':
+                return [
+                    'type' => 'array_list',
+                    'libelle' => 'Code ROME',
+                    'value' => array_map(fn($c) => $c['code'], $parcours?->getCodesRome() ?? [])
+                ];
+                break;
         }
     }
 
@@ -919,6 +944,7 @@ class ParcoursExportController extends AbstractController
             'inscriptionParcours' => 12,
             'poursuiteEtudes' => 13,
             'debouchesParcours' => 14,
+            'codesRome' => 15,
         ];
     }
 }
