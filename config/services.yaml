@@ -53,3 +53,12 @@ services:
     App\Service\TypeDiplomeResolver:
         arguments:
             $handlers: !tagged app.type_diplome_handler
+
+    App\Service\TranslationFileManager:
+        arguments:
+            $projectDir: '%kernel.project_dir%'
+            $cacheDir: '%kernel.cache_dir%'
+
+    App\Service\ProjectDirProvider:
+        arguments:
+            $projectDir: '%kernel.project_dir%'

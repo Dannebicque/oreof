@@ -2,7 +2,6 @@
 // src/Service/TranslationFileManager.php
 namespace App\Service;
 
-use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\Finder\Finder;
 
@@ -11,10 +10,11 @@ final class TranslationFileManager
     private string $path;
 
     public function __construct(
-        KernelInterface $kernel,
+        protected string $projectDir,
+        protected string $cacheDir
     )
     {
-        $this->path = $kernel->getProjectDir() . '/translations';
+        $this->path = $projectDir . '/translations';
     }
 
     /** @return string[] */
@@ -55,7 +55,21 @@ final class TranslationFileManager
     {
         $full = $this->path . '/' . $filename;
         copy($full, $full . '.bak_' . date('Ymd_His'));
-
+        ksort($translations);
         file_put_contents($full, Yaml::dump($translations, 2, 4));
+        $this->invalidateTranslationCache();
     }
+
+    private function invalidateTranslationCache(): void
+    {
+        $cacheDir = $this->cacheDir;
+        $translationCache = $cacheDir . '/translations';
+        if (is_dir($translationCache)) {
+            $files = glob($translationCache . '/*');
+            foreach ($files as $file) {
+                @unlink($file);
+            }
+        }
+    }
+
 }
