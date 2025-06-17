@@ -589,9 +589,17 @@ class ParcoursExportController extends AbstractController
             <=> $this->getFieldOrderForExportGenerique()[$f2]
         );
 
+        /**
+         * Variables pour les header
+         */
+        $nbMaxComposanteInscription = max(array_map(
+            fn($p) => $p?->getFormation()?->getComposantesInscription()?->count() ?? 0, 
+            $parcoursData
+        ));
+
         $headerDeBase = ["Type de diplôme", "Intitulé de la formation", "Intitulé du parcours"];
         $headersExcel = array_map(
-            function($field){
+            function($field) use ($nbMaxComposanteInscription){
                 if($this->mapParcoursExportWithValues($field, null)['type'] === 'longtext'){
                     return [$this->mapParcoursExportWithValues($field, null)['libelle']];
                 }
@@ -602,10 +610,24 @@ class ParcoursExportController extends AbstractController
                     return [$this->mapParcoursExportWithValues($field, null)['libelle']];
                 }
                 elseif($this->mapParcoursExportWithValues($field, null)['type'] === 'full_block'){
-                    return array_map(
-                        fn($fieldBlock) => $fieldBlock['libelle']
+                    return array_merge(...array_map(
+                        function($fieldBlock) use ($nbMaxComposanteInscription) {
+                            $type = $fieldBlock['type'] ?? "none";
+                            if($type === 'nested_content_array'){
+                                if(($fieldBlock['type_value'] ?? "none") === "multipleComposanteInscription"){
+                                    $return = [];
+                                    for($i = 0; $i < $nbMaxComposanteInscription; $i++){
+                                        $return[] = $fieldBlock['header_content'];
+                                    }
+                                    return array_merge(...$return);
+                                }
+                            }
+                            else {
+                                return [$fieldBlock['libelle']];
+                            }
+                        }
                         , $this->mapParcoursExportWithValues($field, null)['value']
-                    );
+                    ));
                 }
                 elseif($this->mapParcoursExportWithValues($field, null)['type'] === 'array_list'){
                     return [$this->mapParcoursExportWithValues($field, null)['libelle']];
@@ -643,11 +665,15 @@ class ParcoursExportController extends AbstractController
                             elseif ($this->mapParcoursExportWithValues($field, $parcours)['type'] === 'full_block') {
                                 return array_merge(...array_map(
                                     function ($fieldBlock) {
-                                        if($fieldBlock['type'] ?? 'none' === 'list_enum'){
+                                        $fieldBlockType = $fieldBlock['type'] ?? 'none';
+                                        if($fieldBlockType === 'list_enum'){
                                             return [implode(" - ", array_map(fn($value) => $value->value ?? $value, $fieldBlock['content']))];
                                         }
-                                        elseif ($fieldBlock['type'] ?? 'none' === 'list') {
+                                        elseif ($fieldBlockType === 'list') {
                                             return [implode(" | ", $fieldBlock['content'])];
+                                        }
+                                        elseif ($fieldBlockType === 'nested_content_array') {
+                                            return $fieldBlock['content'];
                                         }
                                         else {
                                             return [$fieldBlock['content']];
@@ -667,8 +693,22 @@ class ParcoursExportController extends AbstractController
             )
             , $parcoursData
         );
-        foreach($dataExcel as $index => $dataParcours){
-            $dataExcel[$index] = array_merge($dataParcours);
+
+        /**
+         * Mise à plat du résultat
+         */
+        $finalData = [];
+        foreach($dataExcel as $p){
+            $return = [];
+            foreach($p as $d){
+                if(is_array($d)){
+                    $return = array_merge($return, $d);
+                }
+                else {
+                    $return[] = $d;
+                }
+            }
+            $finalData[] = $return;
         }
 
         $columnsIndex = [
@@ -687,7 +727,7 @@ class ParcoursExportController extends AbstractController
             $activeWS->getColumnDimension($colI)->setAutoSize(true);
         }
         $activeWS->fromArray($headersExcel);
-        $activeWS->fromArray($dataExcel, startCell: 'A2');
+        $activeWS->fromArray($finalData, startCell: 'A2');
 
 
         $writer = new Xlsx($spreadSheet);
@@ -858,8 +898,8 @@ class ParcoursExportController extends AbstractController
                         [
                             'libelle' => 'Parcours',
                             'content' => array_map(
-                                fn($p) => $p->getLibelle()
-                                , $parcours?->getFormation()?->getParcours()->toArray() ?? []
+                                fn($p) => $p?->getLibelle() ?? ""
+                                , $parcours?->getFormation()?->getParcours()?->toArray() ?? []
                             ),
                             'type' => 'list'
                         ],
@@ -932,6 +972,49 @@ class ParcoursExportController extends AbstractController
                     'value' => array_map(fn($c) => $c['code'], $parcours?->getCodesRome() ?? [])
                 ];
                 break;
+            case 'informationsInscription':
+                return [
+                    'type' => 'full_block',
+                    'libelle' => 'Inscription',
+                    'value' => [
+                        [
+                            'libelle' => "Localisation(s) de la mention/spécialité",
+                            'content' => implode(', ', array_map(fn($v) => $v->getLibelle()
+                            , $parcours?->getFormation()?->getLocalisationMention()?->toArray() ?? []))
+                        ],
+                        [
+                            'libelle' => "Régime(s) d'inscription",
+                            'content' => $parcours?->displayRegimeInscription()
+                        ],
+                        [
+                            'libelle' => "Modalités de l'alternance",
+                            'content' => $parcours?->getModalitesAlternance()
+                        ],
+                        [
+                            'libelle' => "",
+                            'type' => 'nested_content_array',
+                            'type_value' => 'multipleComposanteInscription',
+                            'header_content' => [
+                                "Composante d'inscription",
+                                "Adresse",
+                                "Téléphone",
+                                "Email",
+                                "Site Web"
+                            ],
+                            'content' => array_map(function($composante) {
+                                return [
+                                    $composante->getLibelle(),
+                                    $composante->getAdresse()?->display(),
+                                    $composante->getTelStandard(),
+                                    $composante->getMailContact(),
+                                    $composante->getUrlSite()
+                                ];
+                            }
+                            , $parcours?->getFormation()->getComposantesInscription()?->toArray() ?? []),
+                        ]
+                    ]
+                ];
+                break;
         }
     }
 
@@ -948,7 +1031,7 @@ class ParcoursExportController extends AbstractController
             'localisationParcours' => 9,
             'competencesAcquises' => 10,
             'admissionParcours' => 11,
-            'inscriptionParcours' => 12,
+            'informationsInscription' => 12,
             'poursuiteEtudes' => 13,
             'debouchesParcours' => 14,
             'codesRome' => 15,
