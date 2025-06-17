@@ -12,6 +12,7 @@ namespace App\Classes\Export;
 use App\Classes\MyPDF;
 use App\Entity\CampagneCollecte;
 use App\Entity\Composante;
+use App\Service\ProjectDirProvider;
 use App\Service\TypeDiplomeResolver;
 use DateTimeInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -42,11 +43,11 @@ class Export
         protected ExportEc                          $exportEc,
         protected ExportListeFicheMatiere           $exportListeFicheMatiere,
         protected ExportMccc                        $exportMccc,
-        KernelInterface                             $kernel,
+        ProjectDirProvider $projectDirProvider,
         private MyPDF                               $myPDF,
         private readonly ExportSyntheseModification $exportSyntheseModification,
     ) {
-        $this->dir = $kernel->getProjectDir().'/public/temp';
+        $this->dir = $projectDirProvider->getProjectDir() . '/public/temp/';
     }
 
     public function setDate(?DateTimeInterface $date):void
@@ -123,6 +124,11 @@ class Export
         return $export->exportZip();
     }
 
+    private function exportListeFicheMatiere(): string
+    {
+        return $this->exportListeFicheMatiere->exportLink($this->campagneCollecte);
+    }
+
     private function exportMccc(bool $isLight = false) : string
     {
         $this->exportMccc->export(
@@ -137,39 +143,25 @@ class Export
         return $this->exportMccc->exportZip();
     }
 
+    private function exportMcccVersion(): string
+    {
+        $this->exportMccc->exportVersion(
+            $this->dir,
+            $this->typeDiplomeResolver,
+            $this->formations,
+            $this->campagneCollecte,
+        );
+        return $this->exportMccc->exportVersionZip();
+    }
+
     private function exportCarif() : string
     {
         return $this->exportCarif->exportLink($this->campagneCollecte);
     }
 
-    private function exportSeip() : string
-    {
-        return $this->exportSeip->exportLink($this->campagneCollecte);
-    }
-
-    private function exportEc() : string
-    {
-        return $this->exportEc->exportLink($this->campagneCollecte);
-    }
-
-    private function exportListeFicheMatiere() : string
-    {
-        return $this->exportListeFicheMatiere->exportLink($this->campagneCollecte);
-    }
-
-    private function exportSynthese(): string
-    {
-        return $this->exportSynthese->exportLink($this->campagneCollecte);
-    }
-
     private function exportRegime() : string
     {
         return $this->exportRegime->exportLink($this->campagneCollecte);
-    }
-
-    public function setComposante(?Composante $composante): void
-    {
-        $this->composante = $composante;
     }
 
     private function exportResponsableComposante() : string
@@ -182,16 +174,6 @@ class Export
         return $this->exportCfvu->exportLink($this->campagneCollecte);
     }
 
-    private function exportSemestresOuverts(): string
-    {
-        return $this->exportSemestresOuverts->exportLink($this->campagneCollecte);
-    }
-
-    private function exportFicheMatiere() : string
-    {
-        return $this->exportFicheMatiere->exportLink($this->formations);
-    }
-
     private function exportCap() : string
     {
         return $this->exportCap->exportLink($this->formations);
@@ -202,19 +184,38 @@ class Export
         return $this->exportFiabilisation->exportLink($this->formations);
     }
 
+    private function exportFicheMatiere(): string
+    {
+        return $this->exportFicheMatiere->exportLink($this->formations);
+    }
+
+    private function exportSeip(): string
+    {
+        return $this->exportSeip->exportLink($this->campagneCollecte);
+    }
+
+    private function exportEc(): string
+    {
+        return $this->exportEc->exportLink($this->campagneCollecte);
+    }
+
+    private function exportSynthese(): string
+    {
+        return $this->exportSynthese->exportLink($this->campagneCollecte);
+    }
+
+    private function exportSemestresOuverts(): string
+    {
+        return $this->exportSemestresOuverts->exportLink($this->campagneCollecte);
+    }
+
     private function exportSyntheseModifications(): string
     {
         return $this->exportSyntheseModification->exportLink($this->formations, $this->campagneCollecte);
     }
 
-    private function exportMcccVersion(): string
+    public function setComposante(?Composante $composante): void
     {
-        $this->exportMccc->exportVersion(
-            $this->dir,
-            $this->TypeDiplomeResolver,
-            $this->formations,
-            $this->campagneCollecte,
-        );
-        return $this->exportMccc->exportVersionZip();
+        $this->composante = $composante;
     }
 }

@@ -14,6 +14,7 @@ use App\Classes\GetHistorique;
 use App\Entity\CampagneCollecte;
 use App\Entity\ElementConstitutif;
 use App\Repository\FicheMatiereRepository;
+use App\Service\ProjectDirProvider;
 use App\Utils\Tools;
 use DateTime;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -27,10 +28,10 @@ class ExportListeFicheMatiere implements ExportInterface
     public function __construct(
         protected GetHistorique        $getHistorique,
         protected ExcelWriter         $excelWriter,
-        KernelInterface               $kernel,
+        ProjectDirProvider $projectDirProvider,
         protected FicheMatiereRepository $ficheMatiereRepository,
     ) {
-        $this->dir = $kernel->getProjectDir() . '/public/temp/';
+        $this->dir = $projectDirProvider->getProjectDir() . '/public/temp/';
     }
 
     private function prepareExport(

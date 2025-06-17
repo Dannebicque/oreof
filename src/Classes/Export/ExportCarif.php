@@ -12,11 +12,11 @@ namespace App\Classes\Export;
 use App\Classes\Excel\ExcelWriter;
 use App\Entity\CampagneCollecte;
 use App\Repository\FormationRepository;
+use App\Service\ProjectDirProvider;
 use App\Utils\CleanTexte;
 use App\Utils\Tools;
 use DateTime;
 use Symfony\Component\HttpFoundation\StreamedResponse;
-use Symfony\Component\HttpKernel\KernelInterface;
 
 class ExportCarif implements ExportInterface
 {
@@ -25,10 +25,10 @@ class ExportCarif implements ExportInterface
 
     public function __construct(
         protected ExcelWriter         $excelWriter,
-        KernelInterface               $kernel,
+        ProjectDirProvider $projectDirProvider,
         protected FormationRepository $formationRepository,
     ) {
-        $this->dir = $kernel->getProjectDir() . '/public/temp/';
+        $this->dir = $projectDirProvider->getProjectDir() . '/public/temp/';
     }
 
     private function prepareExport(

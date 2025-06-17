@@ -61,6 +61,7 @@ class ExportMccc
                                 $this->annee,
                                 $parcours,
                                 $this->date,
+                                null,
                                 $this->isLight
                             );
                         } elseif ($this->format === 'pdf') {
@@ -69,6 +70,7 @@ class ExportMccc
                                 $this->annee,
                                 $parcours,
                                 $this->date,
+                                null,
                                 $this->isLight
                             );
                         }

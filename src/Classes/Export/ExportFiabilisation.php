@@ -15,6 +15,7 @@ use App\DTO\StructureUe;
 use App\Entity\SemestreParcours;
 use App\Repository\DpeParcoursRepository;
 use App\Repository\FormationRepository;
+use App\Service\ProjectDirProvider;
 use App\Service\TypeDiplomeResolver;
 use App\Utils\Tools;
 use DateTime;
@@ -31,11 +32,11 @@ class ExportFiabilisation
     public function __construct(
         protected TypeDiplomeResolver $typeDiplomeResolver,
         protected ExcelWriter             $excelWriter,
-        KernelInterface                   $kernel,
+        ProjectDirProvider $projectDirProvider,
         protected FormationRepository     $formationRepository,
         protected DpeParcoursRepository   $dpeParcoursRepository,
     ) {
-        $this->dir = $kernel->getProjectDir() . '/public/temp/';
+        $this->dir = $projectDirProvider->getProjectDir() . '/public/temp/';
     }
 
     private function prepareExport(

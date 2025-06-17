@@ -13,6 +13,7 @@ use App\Classes\Excel\ExcelWriter;
 use App\Entity\CampagneCollecte;
 use App\Entity\Parcours;
 use App\Repository\FormationRepository;
+use App\Service\ProjectDirProvider;
 use App\Utils\CleanTexte;
 use App\Utils\Tools;
 use DateTime;
@@ -26,10 +27,10 @@ class ExportSeip implements ExportInterface
 
     public function __construct(
         protected ExcelWriter         $excelWriter,
-        KernelInterface               $kernel,
+        ProjectDirProvider $projectDirProvider,
         protected FormationRepository $formationRepository,
     ) {
-        $this->dir = $kernel->getProjectDir() . '/public/temp/';
+        $this->dir = $projectDirProvider->getProjectDir() . '/public/temp/';
     }
 
     private function prepareExport(

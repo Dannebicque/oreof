@@ -14,6 +14,7 @@ use App\Entity\CampagneCollecte;
 use App\Repository\FormationRepository;
 use App\Repository\ParcoursRepository;
 use App\Repository\TypeEpreuveRepository;
+use App\Service\ProjectDirProvider;
 use App\Service\TypeDiplomeResolver;
 use App\Service\VersioningParcours;
 use App\Service\VersioningStructureExtractDiff;
@@ -31,10 +32,10 @@ class ExportSyntheseModification
         protected TypeDiplomeResolver $typeDiplomeResolver,
         protected VersioningParcours $versioningParcours,
         protected MyGotenbergPdf      $myGotenbergPdf,
-        KernelInterface               $kernel,
+        ProjectDirProvider $projectDirProvider,
         protected FormationRepository $formationRepository,
     ) {
-        $this->dir = $kernel->getProjectDir() . '/public/';
+        $this->dir = $projectDirProvider->getProjectDir() . '/public/';
     }
 
     public function exportLink(array $formations, CampagneCollecte $campagneCollecte): string

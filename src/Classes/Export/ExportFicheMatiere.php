@@ -11,6 +11,7 @@ namespace App\Classes\Export;
 
 use App\Classes\MyGotenbergPdf;
 use App\Repository\ParcoursRepository;
+use App\Service\ProjectDirProvider;
 use App\Utils\Tools;
 use Exception;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -20,12 +21,12 @@ class ExportFicheMatiere
 {
     private string $dir;
     public function __construct(
-        KernelInterface $kernel,
+        ProjectDirProvider $projectDirProvider,
         protected MyGotenbergPdf     $myPdf,
         protected ParcoursRepository $parcoursRepository
     )
     {
-        $this->dir = $kernel->getProjectDir().'/public/';
+        $this->dir = $projectDirProvider->getProjectDir() . '/public/';
     }
 
     public function exportLink(array $idParcours): string

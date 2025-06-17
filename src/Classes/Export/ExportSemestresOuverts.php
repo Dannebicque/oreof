@@ -15,6 +15,7 @@ use App\Entity\CampagneCollecte;
 use App\Entity\Parcours;
 use App\Entity\SemestreParcours;
 use App\Repository\FormationRepository;
+use App\Service\ProjectDirProvider;
 use App\Utils\Tools;
 use DateTime;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -27,11 +28,11 @@ class ExportSemestresOuverts implements ExportInterface
 
     public function __construct(
         protected ExcelWriter         $excelWriter,
-        KernelInterface               $kernel,
+        ProjectDirProvider $projectDirProvider,
         protected FormationRepository $formationRepository,
     )
     {
-        $this->dir = $kernel->getProjectDir() . '/public/temp/';
+        $this->dir = $projectDirProvider->getProjectDir() . '/public/temp/';
     }
 
     public function export(CampagneCollecte $anneeUniversitaire): StreamedResponse

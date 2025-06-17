@@ -15,6 +15,7 @@ use App\Entity\CampagneCollecte;
 use App\Enums\RegimeInscriptionEnum;
 use App\Repository\DpeParcoursRepository;
 use App\Repository\FormationRepository;
+use App\Service\ProjectDirProvider;
 use App\Utils\Tools;
 use DateTime;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -27,12 +28,12 @@ class ExportSynthese
 
     public function __construct(
         protected ExcelWriter         $excelWriter,
-        KernelInterface               $kernel,
+        ProjectDirProvider $projectDirProvider,
         protected DpeParcoursRepository $dpeParcoursRepository,
         protected GetHistorique         $getHistorique,
         protected FormationRepository $formationRepository,
     ) {
-        $this->dir = $kernel->getProjectDir() . '/public/temp/';
+        $this->dir = $projectDirProvider->getProjectDir() . '/public/temp/';
     }
 
     private function prepareExport(
