@@ -766,7 +766,7 @@ class ParcoursExportController extends AbstractController
             case 'competencesAcquises': 
                 return [
                     'type' => 'nested_list',
-                    'libelle' => '',
+                    'libelle' => 'Compétences Acquises',
                     'value' => array_map(
                         fn($bloc) => [
                             'nested_libelle' => $bloc->display(),
