@@ -3,6 +3,8 @@ import { Controller } from "@hotwired/stimulus";
 export default class extends Controller {
     
     static targets = [
+        'displayDataParcours',
+        'displayDataFicheMatiere',
         'selectedParcours',
         'searchForm',
         'searchInput',
@@ -16,8 +18,8 @@ export default class extends Controller {
 
     static values = {
         searchUrl: String,
-        downloadPdfUrl: String,
-        downloadXlsxUrl: String,
+        downloadParcoursPdfUrl: String,
+        downloadParcoursXlsxUrl: String,
         campagneCollecte: Number
     };
 
@@ -27,14 +29,22 @@ export default class extends Controller {
 
     _selectedFields = {};
 
+    _typeExport = "";
+
     connect(){
         this.searchFormTarget.addEventListener('submit', async (event)=> {
             event.preventDefault();
             await this.loadResultList();
         })
 
+        // Création des 'click' pour les données des parcours
         document.querySelectorAll('.textDivFieldChoice')
-            .forEach(choice => this.createListenerForFieldChoice(choice));
+            .forEach(choice => this.createListenerForParcoursFieldChoice(choice));
+
+
+        // Création des 'click' pour les données des fiches matières
+        document.querySelectorAll('.fmTextDivFieldChoice')
+            .forEach(choiceFm => this.createListenerForFicheMatiereFieldChoice(choiceFm));
     }
 
     async fetchResults(searchText){
@@ -78,14 +88,22 @@ export default class extends Controller {
             let url = "#";
             let targetNewTab;
 
+            let typeExportPdfUrl = this._typeExport === 'parcours'
+                ? this.downloadParcoursPdfUrlValue  
+                : "#";
+
+            let typeExportXlsxUrl = this._typeExport === 'parcours'
+                ? this.downloadParcoursXlsxUrlValue
+                : "#";
+
             if(type === 'pdf'){
-                url = this.downloadPdfUrlValue + '?'
+                url = typeExportPdfUrl + '?'
                     + postParcours + '&' + postFields
                     + '&campagneCollecte=' + this.campagneCollecteValue;
                 targetNewTab = '_blank';
             }
             else if (type === 'xlsx'){
-                url = this.downloadXlsxUrlValue + '?'
+                url = typeExportXlsxUrl + '?'
                     + postParcours + '&' + postFields
                     + '&campagneCollecte=' + this.campagneCollecteValue;
                 targetNewTab = '_self';
@@ -197,12 +215,7 @@ export default class extends Controller {
                 );
                 this.selectedParcoursTarget.querySelector('.allParcoursDiv')?.remove();
             }
-            // Affiche un message si aucun parcours sélectionné
-            if(Object.keys(this._selectedParcours).length > 0){
-                this.needParcoursSelectTarget.classList.add('d-none');
-            }else {
-                this.needParcoursSelectTarget.classList.remove('d-none');
-            }
+            this.displayNeedParcoursSelected();
         })
 
     }
@@ -219,12 +232,7 @@ export default class extends Controller {
         crossIcon.classList.add('fa-regular', 'fa-xmark', 'text-white', 'ms-3');
         crossIcon.addEventListener('click', e => {
             this.removeSelectedItemBadge(id)
-            // Affiche un message si aucun parcours sélectionné
-            if(Object.keys(this._selectedParcours).length > 0){
-                this.needParcoursSelectTarget.classList.add('d-none');
-            }else {
-                this.needParcoursSelectTarget.classList.remove('d-none');
-            }   
+            this.displayNeedParcoursSelected();  
         });
         textDiv.appendChild(crossIcon);
         badgeDiv.appendChild(textDiv);
@@ -245,9 +253,15 @@ export default class extends Controller {
 
     }
 
-    createListenerForFieldChoice(node){
+    createListenerForParcoursFieldChoice(node){
         node.addEventListener('click', (event) => {
             let badgeClassList = ['bg-info', 'text-white'];
+            // Données du parcours
+            if(this._typeExport === 'fiche_matiere'){
+                this._selectedFields = {};
+                this.deselectAllFicheMatiereButton();
+            }
+            this._typeExport = 'parcours';
             // Sélection
             if(this._selectedFields[event.target.dataset.exportField] === undefined){
                 node.classList.add(...badgeClassList);
@@ -256,14 +270,38 @@ export default class extends Controller {
             // Déselection
             else if (this._selectedFields[event.target.dataset.exportField] !== undefined){
                 node.classList.remove(...badgeClassList);
-                delete this._selectedFields[event.target.dataset.exportField]
+                delete this._selectedFields[event.target.dataset.exportField];
             }
-            // Affiche un message si aucune donnée sélectionnée
-            if(Object.keys(this._selectedFields).length > 0){
-                this.needDataSelectTarget.classList.add('d-none');
-            } else {
-                this.needDataSelectTarget.classList.remove('d-none');
+
+            console.log(this._selectedFields);
+
+            this.displayNeedDataSelected();
+        });
+    }
+
+    createListenerForFicheMatiereFieldChoice(node){
+        node.addEventListener('click', (event) => {
+            let badgeClassList = ['bg-primary', 'text-white'];
+            // Données des fiches matières
+            if(this._typeExport === 'parcours'){
+                this._selectedFields = {};
+                this.deselectAllParcoursButton();
             }
+            this._typeExport = 'fiche_matiere';
+            // Sélection
+            if(this._selectedFields[event.target.dataset.exportFmField] === undefined){
+                node.classList.add(...badgeClassList);
+                this._selectedFields[event.target.dataset.exportFmField] = true;
+            }
+            // Désélection
+            else if (this._selectedFields[event.target.dataset.exportFmField] !== undefined) {
+                node.classList.remove(...badgeClassList);
+                delete this._selectedFields[event.target.dataset.exportFmField];
+            }
+
+            console.log(this._selectedFields);
+
+            this.displayNeedDataSelected();
         });
     }
 
@@ -281,5 +319,51 @@ export default class extends Controller {
         else {
             return libelleType[type];
         }
+    }
+
+    displayNeedDataSelected() {
+        // Affiche un message si aucune donnée sélectionnée
+        if(Object.keys(this._selectedFields).length > 0){
+            this.needDataSelectTarget.classList.add('d-none');
+        } else {
+            this.needDataSelectTarget.classList.remove('d-none');
+        }
+    }
+
+    displayNeedParcoursSelected() {
+        // Affiche un message si aucun parcours sélectionné
+        if(Object.keys(this._selectedParcours).length > 0){
+            this.needParcoursSelectTarget.classList.add('d-none');
+        }else {
+            this.needParcoursSelectTarget.classList.remove('d-none');
+        } 
+    }
+
+    deselectAllParcoursButton() {
+        document.querySelectorAll('.textDivFieldChoice')
+            .forEach(e => e.classList.remove(...['bg-info', 'text-white']));
+    }
+
+    deselectAllFicheMatiereButton() {
+        document.querySelectorAll('.fmTextDivFieldChoice')
+            .forEach(e => e.classList.remove(...['bg-primary', 'text-white']));
+    }
+
+    displayFicheMatiereChoices() {
+        document.querySelector('#parcoursSelectData').classList.add('d-none');
+        document.querySelector('#ficheMatiereSelectData').classList.remove('d-none');
+        this.displayDataFicheMatiereTarget.classList.remove('btn-primary');
+        this.displayDataFicheMatiereTarget.classList.add('btn-success');
+        this.displayDataParcoursTarget.classList.remove('btn-success');
+        this.displayDataParcoursTarget.classList.add('btn-primary');
+    }
+
+    displayParcoursChoices() {
+        document.querySelector('#parcoursSelectData').classList.remove('d-none');
+        document.querySelector('#ficheMatiereSelectData').classList.add('d-none');
+        this.displayDataParcoursTarget.classList.remove('btn-primary');
+        this.displayDataParcoursTarget.classList.add('btn-success');
+        this.displayDataFicheMatiereTarget.classList.remove('btn-success');
+        this.displayDataFicheMatiereTarget.classList.add('btn-primary');
     }
 }

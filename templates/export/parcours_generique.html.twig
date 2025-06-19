@@ -14,8 +14,8 @@
         {{ stimulus_controller('export-generique--parcours-search', {
                 'searchUrl': path('app_parcours_export_generique_search_by_name'),
                 'campagneCollecte': campagneCollecte,
-                'downloadPdfUrl': path('app_parcours_export_generique_download_pdf'),
-                'downloadXlsxUrl': path('app_parcours_export_generique_xlsx')
+                'downloadParcoursPdfUrl': path('app_parcours_export_generique_download_pdf'),
+                'downloadParcoursXlsxUrl': path('app_parcours_export_generique_xlsx')
             }) 
         }}
         class="row justify-content-center"
@@ -99,129 +99,192 @@
                 >
 
                 </div>
-                <div class="d-flex col-12 justify-content-center">
-                    <div class="col-sm-12 col-md-8 col-lg-6">
-                        <div class="row justify-content-center mt-4">
-                            <div class="col-auto mt-2 divFieldChoice">
-                                <span 
-                                    data-export-field="respParcours"
-                                    class="textDivFieldChoice"
-                                >
-                                    Responsable(s) du parcours
-                                </span>
+
+                <div class="row justify-content-center">
+                    <div class="col-8 text-center">
+                        <h4 class="text-primary mb-2">
+                            Données à exporter
+                        </h4>
+                        <button 
+                            {{ stimulus_target('export-generique--parcours-search', 'displayDataParcours') }}
+                            {{ stimulus_action('export-generique--parcours-search', 'displayParcoursChoices', 'click') }}
+                            class="btn btn-sm btn-primary mt-3 mt-sm-0"
+                        >
+                            Parcours
+                        </button>
+                        <button 
+                            {{ stimulus_target('export-generique--parcours-search', 'displayDataFicheMatiere') }}
+                            {{ stimulus_action('export-generique--parcours-search', 'displayFicheMatiereChoices', 'click') }}
+                            class="btn btn-sm btn-primary mt-3 mt-sm-0 ms-sm-3"
+                        >
+                            Fiches matières
+                        </button>
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <div class="row justify-content-center">
+                        <div class="col-sm-12 col-md-8 col-lg-6 d-none" id="parcoursSelectData">
+                            <div class="row justify-content-center mt-4">
+                                <div class="col-auto mt-2 divFieldChoice">
+                                    <span 
+                                        data-export-field="respParcours"
+                                        class="textDivFieldChoice"
+                                    >
+                                        Responsable(s) du parcours
+                                    </span>
+                                </div>
+                                <div class="col-auto mt-2 divFieldChoice">
+                                    <span 
+                                        data-export-field="respFormation"
+                                        class="textDivFieldChoice"
+                                    >
+                                        Responsable(s) de la formation
+                                    </span>
+                                </div>
+                                <div class="col-auto mt-2 divFieldChoice">
+                                    <span 
+                                        data-export-field="resultatsAttendusParcours"
+                                        class="textDivFieldChoice"
+                                    >
+                                        Résultats attendus du parcours
+                                    </span>
+                                </div>
+                                <div class="col-auto mt-2 divFieldChoice">
+                                    <span 
+                                        data-export-field="objectifsParcours"
+                                        class="textDivFieldChoice"
+                                    >
+                                        Objectifs du parcours
+                                    </span>
+                                </div>
+                                <div class="col-auto mt-2 divFieldChoice">
+                                    <span 
+                                        data-export-field="objectifsFormation"
+                                        class="textDivFieldChoice"
+                                    >
+                                        Objectifs de la formation
+                                    </span>
+                                </div>
+                                <div class="col-auto mt-2 divFieldChoice">
+                                    <span
+                                        data-export-field="competencesAcquises"
+                                        class="textDivFieldChoice"
+                                    >
+                                        Compétences Acquises
+                                    </span>
+                                </div>
+                                <div class="col-auto mt-2 divFieldChoice">
+                                    <span
+                                        data-export-field="poursuiteEtudes"
+                                        class="textDivFieldChoice"
+                                    >
+                                        Poursuites d'études
+                                    </span>
+                                </div>
+                                <div class="col-auto mt-2 divFieldChoice">
+                                    <span
+                                        data-export-field="organisationParcours"
+                                        class="textDivFieldChoice"
+                                    >
+                                        Contenu de la formation
+                                    </span>
+                                </div>
+                                <div class="col-auto mt-2 divFieldChoice">
+                                    <span
+                                        data-export-field="debouchesParcours"
+                                        class="textDivFieldChoice"
+                                    >   
+                                        Débouchés
+                                    </span>
+                                </div>
+                                <div class="col-auto mt-2 divFieldChoice">
+                                    <span
+                                        data-export-field="localisationParcours"
+                                        class="textDivFieldChoice"
+                                    >
+                                        Localisation du parcours
+                                    </span>
+                                </div>
+                                <div class="col-auto mt-2 divFieldChoice">
+                                    <span
+                                        data-export-field="identiteFormation"
+                                        class="textDivFieldChoice"
+                                    >
+                                        Identité de la formation
+                                    </span>
+                                </div>
+                                <div class="col-auto mt-2 divFieldChoice">
+                                    <span
+                                        data-export-field="rythmeFormation"
+                                        class="textDivFieldChoice"
+                                    >
+                                        Rythme de formation
+                                    </span>
+                                </div>
+                                <div class="col-auto mt-2 divFieldChoice">
+                                    <span
+                                        data-export-field="informationsInscription"
+                                        class="textDivFieldChoice"
+                                    >
+                                        Inscription
+                                    </span>
+                                
+                                </div>
+                                <div class="col-auto mt-2 divFieldChoice">
+                                    <span
+                                        data-export-field="admissionParcours"
+                                        class="textDivFieldChoice"
+                                    >
+                                        Admission
+                                    </span>
+                                </div>
+                                <div class="col-auto mt-2 divFieldChoice">
+                                    <span
+                                        data-export-field="codesRome"
+                                        class="textDivFieldChoice"
+                                    >
+                                        Codes ROME
+                                    </span>
+                                </div>
                             </div>
-                            <div class="col-auto mt-2 divFieldChoice">
-                                <span 
-                                    data-export-field="respFormation"
-                                    class="textDivFieldChoice"
-                                >
-                                    Responsable(s) de la formation
-                                </span>
-                            </div>
-                            <div class="col-auto mt-2 divFieldChoice">
-                                <span 
-                                    data-export-field="resultatsAttendusParcours"
-                                    class="textDivFieldChoice"
-                                >
-                                    Résultats attendus du parcours
-                                </span>
-                            </div>
-                            <div class="col-auto mt-2 divFieldChoice">
-                                <span 
-                                    data-export-field="objectifsParcours"
-                                    class="textDivFieldChoice"
-                                >
-                                    Objectifs du parcours
-                                </span>
-                            </div>
-                            <div class="col-auto mt-2 divFieldChoice">
-                                <span 
-                                    data-export-field="objectifsFormation"
-                                    class="textDivFieldChoice"
-                                >
-                                    Objectifs de la formation
-                                </span>
-                            </div>
-                            <div class="col-auto mt-2 divFieldChoice">
-                                <span
-                                    data-export-field="competencesAcquises"
-                                    class="textDivFieldChoice"
-                                >
-                                    Compétences Acquises
-                                </span>
-                            </div>
-                            <div class="col-auto mt-2 divFieldChoice">
-                                <span
-                                    data-export-field="poursuiteEtudes"
-                                    class="textDivFieldChoice"
-                                >
-                                    Poursuites d'études
-                                </span>
-                            </div>
-                            <div class="col-auto mt-2 divFieldChoice">
-                                <span
-                                    data-export-field="organisationParcours"
-                                    class="textDivFieldChoice"
-                                >
-                                    Contenu de la formation
-                                </span>
-                            </div>
-                            <div class="col-auto mt-2 divFieldChoice">
-                                <span
-                                    data-export-field="debouchesParcours"
-                                    class="textDivFieldChoice"
-                                >   
-                                    Débouchés
-                                </span>
-                            </div>
-                            <div class="col-auto mt-2 divFieldChoice">
-                                <span
-                                    data-export-field="localisationParcours"
-                                    class="textDivFieldChoice"
-                                >
-                                    Localisation du parcours
-                                </span>
-                            </div>
-                            <div class="col-auto mt-2 divFieldChoice">
-                                <span
-                                    data-export-field="identiteFormation"
-                                    class="textDivFieldChoice"
-                                >
-                                    Identité de la formation
-                                </span>
-                            </div>
-                            <div class="col-auto mt-2 divFieldChoice">
-                                <span
-                                    data-export-field="rythmeFormation"
-                                    class="textDivFieldChoice"
-                                >
-                                    Rythme de formation
-                                </span>
-                            </div>
-                            <div class="col-auto mt-2 divFieldChoice">
-                                <span
-                                    data-export-field="informationsInscription"
-                                    class="textDivFieldChoice"
-                                >
-                                    Inscription
-                                </span>
-                            
-                            </div>
-                            <div class="col-auto mt-2 divFieldChoice">
-                                <span
-                                    data-export-field="admissionParcours"
-                                    class="textDivFieldChoice"
-                                >
-                                    Admission
-                                </span>
-                            </div>
-                            <div class="col-auto mt-2 divFieldChoice">
-                                <span
-                                    data-export-field="codesRome"
-                                    class="textDivFieldChoice"
-                                >
-                                    Codes ROME
-                                </span>
+                        </div>
+                    </div>
+                    <div class="row justify-content-center">
+                        <div class="col-sm-12 col-md-8 col-lg-6 d-none" id="ficheMatiereSelectData">
+                            <div class="row justify-content-center mt-4">
+                                <div class="col-auto mt-2 fmDivFieldChoice">
+                                    <span
+                                        data-export-fm-field="fmParcoursPorteur"
+                                        class="fmTextDivFieldChoice"
+                                    >
+                                        Parcours porteur
+                                    </span>
+                                </div>
+                                <div class="col-auto mt-2 fmDivFieldChoice">
+                                    <span
+                                        data-export-fm-field="fmFormation"
+                                        class="fmTextDivFieldChoice"
+                                    >
+                                        Formation
+                                    </span>
+                                </div>
+                                <div class="col-auto mt-2 fmDivFieldChoice">
+                                    <span
+                                        data-export-fm-field="fmNbUtilisee"
+                                        class="fmTextDivFieldChoice"
+                                    >
+                                        Nb. utilisations
+                                    </span>
+                                </div>
+                                <div class="col-auto mt-2 fmDivFieldChoice">
+                                    <span
+                                        data-export-fm-field="fmIsComplet"
+                                        class="fmTextDivFieldChoice"
+                                    >
+                                        Complet
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -29,11 +29,11 @@
     cursor: pointer;
 } 
 
-.divFieldChoice {
+.divFieldChoice, .fmDivFieldChoice {
     min-height: 3.5em;
 }
 
-.textDivFieldChoice {
+.textDivFieldChoice, .fmTextDivFieldChoice {
     padding: .75em;
     border-radius: 0.5em;
     border-color: black;
@@ -57,7 +57,7 @@
 }
 
 @media screen and (max-width: 768px){
-    .textDivFieldChoice {
+    .textDivFieldChoice, .fmTextDivFieldChoice {
         padding: .45em;
     }
 }
