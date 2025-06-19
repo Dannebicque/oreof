@@ -5,8 +5,10 @@ namespace App\Controller;
 use App\Classes\JsonReponse;
 use App\Entity\Composante;
 use App\Message\Export;
+use App\Message\RequestGenerationJobMessage;
 use App\Repository\ComposanteRepository;
 use App\Repository\DpeParcoursRepository;
+use App\Repository\GenerationJobRepository;
 use App\Utils\Tools;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -43,7 +45,15 @@ class ExportController extends BaseController
     public function index(
         ComposanteRepository       $composanteRepository,
     ): Response {
-        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
+        if (!$this->isGranted('ROLE_ADMIN') &&
+            !$this->isGranted('SHOW', [
+                'route' => 'app_etablissement',
+                'subject' => 'etablissement'
+            ])) {
+            throw $this->createAccessDeniedException();
+        }
+
 
         return $this->render('export/index.html.twig', [
             'composantes' => $composanteRepository->findAll(),
@@ -115,7 +125,10 @@ class ExportController extends BaseController
         }
 
         if ($this->isGranted('ROLE_ADMIN') ||
-            $this->isGranted('CAN_ETABLISSEMENT_SHOW_ALL', $this->getUser())) {
+            $this->isGranted('SHOW', [
+                'route' => 'app_etablissement',
+                'subject' => 'etablissement'
+            ])) {
             $dpes = $dpeParcoursRepository->findParcoursByComposante($this->getCampagneCollecte(), $composante);
         } elseif ($this->isGranted('CAN_ETABLISSEMENT_CONSEILLER_ALL', $this->getUser())) {
             $dpes = $dpeParcoursRepository->findParcoursByComposanteCfvu($this->getCampagneCollecte(), $composante);
@@ -145,5 +158,37 @@ class ExportController extends BaseController
         ));
 
         return JsonReponse::success('Les documents sont en cours de génération, vous recevrez un mail lorsque les documents seront prêts');
+    }
+
+    #[Route('/export/my-exports', name: 'app_export_my_exports')]
+    public function exports(GenerationJobRepository $repo): Response
+    {
+        $user = $this->getUser();
+        $jobs = $repo->findForUser($this->getUser()?->getId());
+
+        return $this->render('export/my_exports.html.twig', [
+            'jobs' => $jobs
+        ]);
+    }
+
+    #[Route('/export/test-exports', name: 'app_export_test_exports')]
+    public function tests(MessageBusInterface $messageBus): Response
+    {
+        $user = $this->getUser();
+
+        $parameters = [
+            // paramètres optionnels de l’export
+        ];
+
+        // Dispatch la demande de génération
+        $messageBus->dispatch(new RequestGenerationJobMessage(
+            $this->getUser()?->getId(),
+            'formation_export',
+            $parameters
+        ));
+
+        $this->addFlash('success', 'Votre export a été demandé. Vous recevrez un fichier une fois prêt.');
+
+        return $this->redirectToRoute('app_export_index');
     }
 }

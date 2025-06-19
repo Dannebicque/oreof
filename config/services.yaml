@@ -62,3 +62,7 @@ services:
     App\Service\ProjectDirProvider:
         arguments:
             $projectDir: '%kernel.project_dir%'
+
+    App\Service\PythonJobLauncher:
+        arguments:
+            $projectDir: '%kernel.project_dir%'

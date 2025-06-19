@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% block bouton_header %}
+
+{% endblock %}
+
+{% block header %}
+    Liste des exports demandés
+{% endblock %}
+
+{% block breadcrumb %}
+    {{ include('communs/_breadcrumb.html.twig', {liens:[
+        {
+            'href': path('app_export_my_exports'),
+            'title': 'Mes exports'
+        },
+        {
+            'href': path('app_export_index'),
+            'title': 'Gestion des exports'
+        }]}) }}
+{% endblock %}
+
+{% block content %}
+    <h2>Mes exports</h2>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Type</th>
+            <th>Paramètres</th>
+            <th>Statut</th>
+            <th>Début</th>
+            <th>Fin</th>
+            <th>Durée (s)</th>
+            <th>Fichier</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for job in jobs %}
+            <tr>
+                <td>{{ job.type }}</td>
+                <td>{{ job.parameters|json_encode }}</td>
+                <td>{{ job.status|badgeStatus }}</td>
+                <td>{{ job.startedAt ? job.startedAt|date('Y-m-d H:i:s') : '-' }}</td>
+                <td>{{ job.finishedAt ? job.finishedAt|date('Y-m-d H:i:s') : '-' }}</td>
+                <td>{{ job.durationSec }}</td>
+                <td>
+                    {% if job.resultPath %}
+                        <a href="{{ asset(job.resultPath) }}" download>Télécharger</a>
+                        ({{ job.resultFormat }}, {{ (job.resultSize / 1024)|round }} Ko)
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}
+
