@@ -121,11 +121,10 @@ class FicheMatiereExportController extends AbstractController
             <=> $this->getFieldOrderForExportGenerique()[$f2]
         );
 
-        $fmArray = [];
-        foreach($parcoursData as $p){
-            $fichesFromParcours = $em->getRepository(FicheMatiere::class)->findByParcours($p, $campagneCollecte);
-            $fmArray = array_merge($fmArray, $fichesFromParcours);
-        }
+        $parcoursData = array_map(fn($p) => $p->getId(), $parcoursData);
+
+        $finalData = $em->getRepository(FicheMatiere::class)
+            ->findByParcoursRangeForExport($parcoursData, $campagneCollecte);
 
         $finalData = array_map(
             function($fiche) use ($fieldValueArray){
@@ -133,7 +132,7 @@ class FicheMatiereExportController extends AbstractController
                     fn($field) => [$this->mapFicheMatiereExportWithValues($field, $fiche, 'xlsx')['value']]
                     , $fieldValueArray
                 ));
-            }, $fmArray
+            }, $finalData
         );
 
         $headersExcel = array_map(function ($field){
@@ -169,7 +168,7 @@ class FicheMatiereExportController extends AbstractController
             200,
             [
                 'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                'Content-Disposition' => 'attachment;filename=' . $filename . 'xlsx'
+                'Content-Disposition' => 'attachment;filename="' . $filename . '.xlsx"',
             ]
         );
     }
