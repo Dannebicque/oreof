@@ -351,7 +351,7 @@ export default class extends Controller {
 
     displayFicheMatiereChoices() {
         document.querySelector('#parcoursSelectData').classList.add('d-none');
-        document.querySelector('#ficheMatiereSelectData').classList.remove('d-none');
+        document.querySelector('#ficheMatiereSelectData').classList.toggle('d-none');
         this.displayDataFicheMatiereTarget.classList.remove('btn-primary');
         this.displayDataFicheMatiereTarget.classList.add('btn-success');
         this.displayDataParcoursTarget.classList.remove('btn-success');
@@ -359,7 +359,7 @@ export default class extends Controller {
     }
 
     displayParcoursChoices() {
-        document.querySelector('#parcoursSelectData').classList.remove('d-none');
+        document.querySelector('#parcoursSelectData').classList.toggle('d-none');
         document.querySelector('#ficheMatiereSelectData').classList.add('d-none');
         this.displayDataParcoursTarget.classList.remove('btn-primary');
         this.displayDataParcoursTarget.classList.add('btn-success');
