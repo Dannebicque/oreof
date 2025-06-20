@@ -11,12 +11,19 @@ namespace App\Controller;
 
 use App\Classes\JsonReponse;
 use App\Classes\MyGotenbergPdf;
+use App\Entity\CampagneCollecte;
 use App\Entity\FicheMatiere;
 use App\Entity\Parcours;
 use App\Message\Export;
+use DateTime;
+use Doctrine\ORM\EntityManagerInterface;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -98,5 +105,183 @@ class FicheMatiereExportController extends AbstractController
         ));
 
         return JsonReponse::success('Les documents sont en cours de génération, vous recevrez un mail lorsque les documents seront prêts');
+    }
+
+    #[Route('/fiche-matiere/export/generique/xlsx', name: 'fiche_matiere_export_generique_xlsx')]
+    public function getExportGeneriqueXlsx(
+        EntityManagerInterface $em,
+        Request $request
+    ){
+        [$fieldValueArray, $parcoursData, $campagneCollecte] = $this->checkExportGeneriqueData($em, $request);
+        $this->checkFieldsAreSupported($fieldValueArray);
+
+        // On trie les colonnes dans un certain ordre
+        usort($fieldValueArray, 
+            fn($f1, $f2) => $this->getFieldOrderForExportGenerique()[$f1] 
+            <=> $this->getFieldOrderForExportGenerique()[$f2]
+        );
+
+        $fmArray = [];
+        foreach($parcoursData as $p){
+            $fichesFromParcours = $em->getRepository(FicheMatiere::class)->findByParcours($p, $campagneCollecte);
+            $fmArray = array_merge($fmArray, $fichesFromParcours);
+        }
+
+        $finalData = array_map(
+            function($fiche) use ($fieldValueArray){
+                return array_merge(...array_map(
+                    fn($field) => [$this->mapFicheMatiereExportWithValues($field, $fiche, 'xlsx')['value']]
+                    , $fieldValueArray
+                ));
+            }, $fmArray
+        );
+
+        $headersExcel = array_map(function ($field){
+            return [
+                $this->mapFicheMatiereExportWithValues($field, null, 'xlsx')['libelle']
+            ];
+        }, $fieldValueArray);
+
+        $headersExcel = array_merge(...$headersExcel);
+
+        $columns = [
+            'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',
+            'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P'
+        ];
+
+        $spreadSheet = new Spreadsheet();
+        $activeWS = $spreadSheet->getActiveSheet();
+        $activeWS->fromArray($headersExcel);
+        $activeWS->fromArray($finalData, startCell: 'A2');
+
+        foreach($columns as $col){
+            $activeWS->getColumnDimension($col)->setAutoSize(true);
+        }
+
+        $writer = new Xlsx($spreadSheet);
+        $now = (new DateTime())->format('d-m-Y_H-i');
+        $filename = "export_generique_excel_fiche_matiere_{$now}";
+
+        return new StreamedResponse(
+            function() use ($writer){
+                $writer->save('php://output');
+            },
+            200,
+            [
+                'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                'Content-Disposition' => 'attachment;filename=' . $filename . 'xlsx'
+            ]
+        );
+    }
+
+    private function checkExportGeneriqueData(
+        EntityManagerInterface $em,
+        Request $request,
+    ){
+        $campagneCollecte = $request->query->get('campagneCollecte', 2);
+        $campagneCollecte = $em->getRepository(CampagneCollecte::class)
+            ->findOneById($campagneCollecte)
+            ?? $em->getRepository(CampagneCollecte::class)->findOneBy(['defaut' => true]);
+
+        $parcoursData = [];
+        $parcoursIdArray = $request->query->all()['parcoursIdArray'] ?? [];
+        if(isset($parcoursIdArray[0]) && $parcoursIdArray[0] === 'all'){
+            $parcoursData = $em->getRepository(Parcours::class)->findByCampagneCollecte($campagneCollecte);
+        }
+        else {
+            $parcoursIdArray = array_map(fn($id) => (int)$id, $parcoursIdArray);
+            $parcoursData = $em->getRepository(Parcours::class)->findById($parcoursIdArray);
+        }
+
+        if(count($parcoursData) < 1){
+            throw $this->createNotFoundException('Aucun parcours sélectionné.');
+        }
+
+        $fieldValueArray = $request->query->all()['fieldValueArray'] ?? [];
+        // Vérification sur les champs demandés (non vide)
+        if(count($fieldValueArray) === 0){
+            throw $this->createNotFoundException('Aucun champ précisé.');
+        }
+
+        return [$fieldValueArray, $parcoursData, $campagneCollecte];
+    }
+
+    private function mapFicheMatiereExportWithValues(
+        string $fieldValue,
+        ?FicheMatiere $ficheMatiere,
+        string $exportType = 'pdf'
+    ){  
+        switch($fieldValue){
+            case 'fmId':
+                return [
+                    'libelle' => "Id",
+                    'value' => $ficheMatiere?->getId() ?? ""
+                ];
+                break;
+            case 'fmLibelle':
+                return [
+                    'libelle' => "Fiche EC/matière",
+                    'value' => $ficheMatiere?->getLibelle() ?? ""
+                ];
+                break;
+            case 'fmReferent':
+                return [
+                    'libelle' => "Référent",
+                    'value' => $ficheMatiere?->getResponsableFicheMatiere()?->getDisplay() ?? ""
+                ];
+                break;
+            case 'fmIsComplet':
+                return [
+                    'libelle' => "Complet ?",
+                    'value' => $ficheMatiere?->remplissageBrut()?->isFull() ? 'Complet' : 'Incomplet'
+                ];
+                break;
+            case 'fmNbUtilisee':
+                return [
+                    'libelle' => "Utilisée ?",
+                    'value' => $ficheMatiere?->getElementConstitutifs()?->count() ?? ""
+                ];
+                break;
+            case 'fmParcoursPorteur':
+                return [
+                    'libelle' => "Parcours porteur",
+                    'value' => $ficheMatiere?->isHorsDiplome() 
+                        ? 'Hors diplôme'
+                        : $ficheMatiere?->getParcours()?->getLibelle() ?? ""
+                ];
+                break;
+            case 'fmFormation':
+                return [
+                    'libelle' => "Formation",
+                    'value' => $ficheMatiere?->isHorsDiplome()
+                        ? 'Hors diplôme'
+                        : $ficheMatiere?->getParcours()?->getFormation()?->getDisplayLong() ?? ""
+                ];
+                break;
+        }
+    }
+
+    private function getFieldOrderForExportGenerique(){
+        return [
+            'fmId' => 1,
+            'fmLibelle' => 2,
+            'fmReferent' => 3,
+            'fmIsComplet' => 4,
+            'fmNbUtilisee' => 5,
+            'fmParcoursPorteur' => 6,
+            'fmFormation' => 7,
+        ];
+    }
+
+    private function checkFieldsAreSupported(array $fieldValueArray){
+        // Vérifications sur les champs demandés (les champs sont corrects)
+        $fieldsAreCompatible = array_reduce(
+            $fieldValueArray,
+            fn($previous, $f) => $previous && array_key_exists($f, $this->getFieldOrderForExportGenerique()),
+            true
+        );
+        if(!$fieldsAreCompatible){
+            throw $this->createNotFoundException("Un des champs demandés n'est pas pris en charge.");
+        }
     }
 }

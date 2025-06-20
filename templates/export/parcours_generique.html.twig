@@ -15,7 +15,8 @@
                 'searchUrl': path('app_parcours_export_generique_search_by_name'),
                 'campagneCollecte': campagneCollecte,
                 'downloadParcoursPdfUrl': path('app_parcours_export_generique_download_pdf'),
-                'downloadParcoursXlsxUrl': path('app_parcours_export_generique_xlsx')
+                'downloadParcoursXlsxUrl': path('app_parcours_export_generique_xlsx'),
+                'downloadFicheMatiereXslxUrl': path('fiche_matiere_export_generique_xlsx')
             }) 
         }}
         class="row justify-content-center"
@@ -253,6 +254,30 @@
                     <div class="row justify-content-center">
                         <div class="col-sm-12 col-md-8 col-lg-6 d-none" id="ficheMatiereSelectData">
                             <div class="row justify-content-center mt-4">
+                                <div class="col-auto mt-2 fmDivFieldChoice">
+                                    <span
+                                        data-export-fm-field="fmId"
+                                        class="fmTextDivFieldChoice"
+                                    >
+                                        Identifiant
+                                    </span>
+                                </div>
+                                <div class="col-auto mt-2 fmDivFieldChoice">
+                                    <span
+                                        data-export-fm-field="fmLibelle"
+                                        class="fmTextDivFieldChoice"
+                                    >
+                                        Libellé
+                                    </span>
+                                </div>
+                                <div class="col-auto mt-2 fmDivFieldChoice">
+                                    <span
+                                        data-export-fm-field="fmReferent"
+                                        class="fmTextDivFieldChoice"
+                                    >
+                                        Référent
+                                    </span>
+                                </div>
                                 <div class="col-auto mt-2 fmDivFieldChoice">
                                     <span
                                         data-export-fm-field="fmParcoursPorteur"

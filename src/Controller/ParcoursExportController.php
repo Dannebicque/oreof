@@ -675,7 +675,7 @@ class ParcoursExportController extends AbstractController
         $dateNow = new DateTime();
         $dateFormat = $dateNow->format("d-m-Y_H-i");
 
-        $filename = "export_generique_excel_{$dateFormat}";
+        $filename = "export_generique_excel_parcours_{$dateFormat}";
 
         return new StreamedResponse(
             function () use ($writer) {

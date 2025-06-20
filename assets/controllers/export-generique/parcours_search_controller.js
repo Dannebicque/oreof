@@ -20,6 +20,7 @@ export default class extends Controller {
         searchUrl: String,
         downloadParcoursPdfUrl: String,
         downloadParcoursXlsxUrl: String,
+        downloadFicheMatiereXslxUrl: String,
         campagneCollecte: Number
     };
 
@@ -94,7 +95,7 @@ export default class extends Controller {
 
             let typeExportXlsxUrl = this._typeExport === 'parcours'
                 ? this.downloadParcoursXlsxUrlValue
-                : "#";
+                : this.downloadFicheMatiereXslxUrlValue;
 
             if(type === 'pdf'){
                 url = typeExportPdfUrl + '?'
