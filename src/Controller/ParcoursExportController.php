@@ -437,39 +437,8 @@ class ParcoursExportController extends AbstractController
     ) : Response {
         $request = Request::createFromGlobals();
 
-        $campagneCollecte = $request->query->get('campagneCollecte', 2);
-        $campagneCollecte = $em->getRepository(CampagneCollecte::class)
-            ->findOneById($campagneCollecte)
-            ?? $em->getRepository(CampagneCollecte::class)->findOneBy(['defaut' => true]);
-
-        $parcoursData = [];
-        $parcoursIdArray = $request->query->all()['parcoursIdArray'] ?? [];
-        if(isset($parcoursIdArray[0]) && $parcoursIdArray[0] === 'all'){
-            $parcoursData = $em->getRepository(Parcours::class)->findByCampagneCollecte($campagneCollecte);
-        }
-        else {
-            $parcoursIdArray = array_map(fn($id) => (int)$id, $parcoursIdArray);
-            $parcoursData = $em->getRepository(Parcours::class)->findById($parcoursIdArray);
-        }
-
-        if(count($parcoursData) < 1){
-            throw $this->createNotFoundException('Aucun parcours sélectionné.');
-        }
-
-        $fieldValueArray = $request->query->all()['fieldValueArray'] ?? [];
-        // Vérification sur les champs demandés (non vide)
-        if(count($fieldValueArray) === 0){
-            throw $this->createNotFoundException('Aucun champ précisé.');
-        }
-        // Vérifications sur les champs demandés (les champs sont corrects)
-        $fieldsAreCompatible = array_reduce(
-            $fieldValueArray,
-            fn($previous, $f) => $previous && array_key_exists($f, $this->getFieldOrderForExportGenerique()),
-            true
-        );
-        if(!$fieldsAreCompatible){
-            throw $this->createNotFoundException("Un des champs demandés n'est pas pris en charge.");
-        }
+        [$fieldValueArray, $parcoursData, $campagneCollecte] = $this->checkExportGeneriqueData($em, $request);
+        $this->checkFieldsAreSupported($fieldValueArray);
 
         // On trie les colonnes dans un certain ordre
         usort($fieldValueArray, 
@@ -548,40 +517,8 @@ class ParcoursExportController extends AbstractController
         EntityManagerInterface $em,
         Request $request
     ){
-        $campagneCollecte = $request->query->get('campagneCollecte', 2);
-        $campagneCollecte = $em->getRepository(CampagneCollecte::class)
-            ->findOneById($campagneCollecte)
-            ?? $em->getRepository(CampagneCollecte::class)->findOneBy(['defaut' => true]);
-
-        $parcoursData = [];
-        $parcoursIdArray = $request->query->all()['parcoursIdArray'] ?? [];
-        if(isset($parcoursIdArray[0]) && $parcoursIdArray[0] === 'all'){
-            $parcoursData = $em->getRepository(Parcours::class)->findByCampagneCollecte($campagneCollecte);
-        }
-        else {
-            $parcoursIdArray = array_map(fn($id) => (int)$id, $parcoursIdArray);
-            $parcoursData = $em->getRepository(Parcours::class)->findById($parcoursIdArray);
-        }
-
-        if(count($parcoursData) < 1){
-            throw $this->createNotFoundException('Aucun parcours sélectionné.');
-        }
-
-        $fieldValueArray = $request->query->all()['fieldValueArray'] ?? [];
-        // Vérification sur les champs demandés (non vide)
-        if(count($fieldValueArray) === 0){
-            throw $this->createNotFoundException('Aucun champ précisé.');
-        }
-        
-        // Vérifications sur les champs demandés (les champs sont corrects)
-        $fieldsAreCompatible = array_reduce(
-            $fieldValueArray,
-            fn($previous, $f) => $previous && array_key_exists($f, $this->getFieldOrderForExportGenerique()),
-            true
-        );
-        if(!$fieldsAreCompatible){
-            throw $this->createNotFoundException("Un des champs demandés n'est pas pris en charge.");
-        }
+        [$fieldValueArray, $parcoursData, $campagneCollecte] = $this->checkExportGeneriqueData($em, $request);
+        $this->checkFieldsAreSupported($fieldValueArray);
 
         // On trie les colonnes dans un certain ordre
         usort($fieldValueArray, 
@@ -1046,5 +983,49 @@ class ParcoursExportController extends AbstractController
             'debouchesParcours' => 14,
             'codesRome' => 15,
         ];
+    }
+
+    private function checkExportGeneriqueData(
+        EntityManagerInterface $em,
+        Request $request,
+    ){
+        $campagneCollecte = $request->query->get('campagneCollecte', 2);
+        $campagneCollecte = $em->getRepository(CampagneCollecte::class)
+            ->findOneById($campagneCollecte)
+            ?? $em->getRepository(CampagneCollecte::class)->findOneBy(['defaut' => true]);
+
+        $parcoursData = [];
+        $parcoursIdArray = $request->query->all()['parcoursIdArray'] ?? [];
+        if(isset($parcoursIdArray[0]) && $parcoursIdArray[0] === 'all'){
+            $parcoursData = $em->getRepository(Parcours::class)->findByCampagneCollecte($campagneCollecte);
+        }
+        else {
+            $parcoursIdArray = array_map(fn($id) => (int)$id, $parcoursIdArray);
+            $parcoursData = $em->getRepository(Parcours::class)->findById($parcoursIdArray);
+        }
+
+        if(count($parcoursData) < 1){
+            throw $this->createNotFoundException('Aucun parcours sélectionné.');
+        }
+
+        $fieldValueArray = $request->query->all()['fieldValueArray'] ?? [];
+        // Vérification sur les champs demandés (non vide)
+        if(count($fieldValueArray) === 0){
+            throw $this->createNotFoundException('Aucun champ précisé.');
+        }
+
+        return [$fieldValueArray, $parcoursData, $campagneCollecte];
+    }
+
+    private function checkFieldsAreSupported(array $fieldValueArray){
+        // Vérifications sur les champs demandés (les champs sont corrects)
+        $fieldsAreCompatible = array_reduce(
+            $fieldValueArray,
+            fn($previous, $f) => $previous && array_key_exists($f, $this->getFieldOrderForExportGenerique()),
+            true
+        );
+        if(!$fieldsAreCompatible){
+            throw $this->createNotFoundException("Un des champs demandés n'est pas pris en charge.");
+        }
     }
 }
