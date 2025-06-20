@@ -273,8 +273,6 @@ export default class extends Controller {
                 delete this._selectedFields[event.target.dataset.exportField];
             }
 
-            console.log(this._selectedFields);
-
             this.displayNeedDataSelected();
         });
     }
@@ -298,8 +296,6 @@ export default class extends Controller {
                 node.classList.remove(...badgeClassList);
                 delete this._selectedFields[event.target.dataset.exportFmField];
             }
-
-            console.log(this._selectedFields);
 
             this.displayNeedDataSelected();
         });
