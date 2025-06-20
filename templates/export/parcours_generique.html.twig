@@ -105,20 +105,20 @@
                         <h4 class="text-primary mb-2">
                             Données à exporter
                         </h4>
-                        <button 
+                        <span 
                             {{ stimulus_target('export-generique--parcours-search', 'displayDataParcours') }}
                             {{ stimulus_action('export-generique--parcours-search', 'displayParcoursChoices', 'click') }}
                             class="btn btn-sm btn-primary mt-3 mt-sm-0"
                         >
                             Parcours
-                        </button>
-                        <button 
+                        </span>
+                        <span 
                             {{ stimulus_target('export-generique--parcours-search', 'displayDataFicheMatiere') }}
                             {{ stimulus_action('export-generique--parcours-search', 'displayFicheMatiereChoices', 'click') }}
                             class="btn btn-sm btn-primary mt-3 mt-sm-0 ms-sm-3"
                         >
                             Fiches matières
-                        </button>
+                        </span>
                     </div>
                 </div>
 
