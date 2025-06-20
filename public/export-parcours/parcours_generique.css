@@ -33,6 +33,11 @@
     min-height: 3.5em;
 }
 
+.result-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(54, 48, 48) lightgrey;
+}
+
 .textDivFieldChoice, .fmTextDivFieldChoice {
     padding: .75em;
     border-radius: 0.5em;
