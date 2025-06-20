@@ -1,7 +1,7 @@
 <div {{ stimulus_controller('profil--user', {
     urlConfigProfil: path('app_user_profils_config', {user:user.id}),
     urlListe: path('app_user_profils_liste', {user:user.id}),
-    urlAdd: path('app_user_profils_add', {user:user.id}),
+    urlAdd: path('app_user_profils_add_valide', {user:user.id}),
 }) }}>
     <div class="alert alert-info mb-2">
         Nom : {{ user.nom }} <br>

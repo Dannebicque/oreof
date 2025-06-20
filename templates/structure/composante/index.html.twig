@@ -3,7 +3,8 @@
 {% block content %}
     <div
             {{ stimulus_controller('crud', {
-                url: path('structure_composante_liste')
+                url: path('structure_composante_liste'),
+                storageKey: 'structure_composante_liste',
             }) }}
             {{ stimulus_target('crud', 'liste') }}>
 
