@@ -170,7 +170,7 @@ class FicheMatiereExportController extends AbstractController
             200,
             [
                 'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                'Content-Disposition' => 'attachment;filename="' . $filename . '.xlsx"',
+                'Content-Disposition' => "attachment;filename=\"{$filename}\"",
             ]
         );
     }
