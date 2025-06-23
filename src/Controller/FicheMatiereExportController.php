@@ -112,6 +112,8 @@ class FicheMatiereExportController extends AbstractController
         EntityManagerInterface $em,
         Request $request
     ){
+        ini_set('memory_limit', '2048M');
+
         [$fieldValueArray, $parcoursData, $campagneCollecte] = $this->checkExportGeneriqueData($em, $request);
         $this->checkFieldsAreSupported($fieldValueArray);
 
