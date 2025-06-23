@@ -32,6 +32,8 @@ export default class extends Controller {
 
     _typeExport = "";
 
+    _isRequestPending = false;
+
     connect(){
         this.searchFormTarget.addEventListener('submit', async (event)=> {
             event.preventDefault();
@@ -107,13 +109,17 @@ export default class extends Controller {
                 url = typeExportXlsxUrl + '?'
                     + postParcours + '&' + postFields
                     + '&campagneCollecte=' + this.campagneCollecteValue;
-                targetNewTab = '_self';
+                targetNewTab = '_blank';
             }
 
             this.needDataSelectTarget.classList.add('d-none');
             this.needParcoursSelectTarget.classList.add('d-none');
 
-            window.open(url, targetNewTab);
+            if(this._isRequestPending === false){
+                this._isRequestPending = true;
+                let resultWindow = window.open(url, targetNewTab);
+                resultWindow.onload = (event) => this._isRequestPending = false;
+            }
         }
         else {
             if(!isParcoursSelected){
