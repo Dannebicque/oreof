@@ -158,8 +158,10 @@ class FicheMatiereExportController extends AbstractController
         }
 
         $writer = new Xlsx($spreadSheet);
-        $now = (new DateTime())->format('d-m-Y_H-i');
-        $filename = "export_generique_excel_fiche_matiere_{$now}";
+        $now = new DateTime();
+        $dateFormat = $now->format('d-m-Y_H-i');
+
+        $filename = "export_generique_excel_fiche_matiere_{$dateFormat}";
 
         return new StreamedResponse(
             function() use ($writer){
