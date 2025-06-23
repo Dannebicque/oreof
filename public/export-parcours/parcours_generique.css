@@ -38,7 +38,7 @@
     scrollbar-color: rgb(54, 48, 48) lightgrey;
 }
 
-.textDivFieldChoice, .fmTextDivFieldChoice {
+.textDivFieldChoice, .fmTextDivFieldChoice, .textDivExportTemplateData {
     padding: .75em;
     border-radius: 0.5em;
     border-color: black;

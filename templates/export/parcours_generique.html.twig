@@ -120,6 +120,13 @@
                         >
                             Fiches matières
                         </span>
+                        <span
+                            {{ stimulus_target('export-generique--parcours-search', 'displayDataExportTemplate') }}
+                            {{ stimulus_action('export-generique--parcours-search', 'displayExportTemplateChoices', 'click') }}
+                            class="btn btn-sm btn-primary mt-3 mt-sm-0 ms-sm-3"
+                        >
+                            Format d'export prédéfini
+                        </span>
                     </div>
                 </div>
 
@@ -308,6 +315,20 @@
                                         class="fmTextDivFieldChoice"
                                     >
                                         Complet
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row justify-content-center">
+                        <div class="col-sm-12 col-md-8 col-lg-6 d-none" id="exportTemplateData">
+                            <div class="row justify-content-center mt-4">
+                                <div class="col-auto mt-2 exportTemplateChoice">
+                                    <span
+                                        data-export-template="templateSEIP"
+                                        class="textDivExportTemplateData"
+                                    >
+                                        SEIP
                                     </span>
                                 </div>
                             </div>

@@ -5,6 +5,7 @@ export default class extends Controller {
     static targets = [
         'displayDataParcours',
         'displayDataFicheMatiere',
+        'displayDataExportTemplate',
         'selectedParcours',
         'searchForm',
         'searchInput',
@@ -48,6 +49,10 @@ export default class extends Controller {
         // Création des 'click' pour les données des fiches matières
         document.querySelectorAll('.fmTextDivFieldChoice')
             .forEach(choiceFm => this.createListenerForFicheMatiereFieldChoice(choiceFm));
+
+        // Création des 'click' sur le choix de template
+        document.querySelectorAll('.textDivExportTemplateData')
+            .forEach(choiceTemplate => this.createListenerForExportTemplateFieldChoice(choiceTemplate));
     }
 
     async fetchResults(searchText){
@@ -268,6 +273,10 @@ export default class extends Controller {
                 this._selectedFields = {};
                 this.deselectAllFicheMatiereButton();
             }
+            else if (this._typeExport === 'template'){
+                this._selectedFields = {};
+                this.deselectAllTemplateExportButton();
+            }
             this._typeExport = 'parcours';
             // Sélection
             if(this._selectedFields[event.target.dataset.exportField] === undefined){
@@ -286,11 +295,15 @@ export default class extends Controller {
 
     createListenerForFicheMatiereFieldChoice(node){
         node.addEventListener('click', (event) => {
-            let badgeClassList = ['bg-primary', 'text-white'];
+            let badgeClassList = ['bg-info', 'text-white'];
             // Données des fiches matières
             if(this._typeExport === 'parcours'){
                 this._selectedFields = {};
                 this.deselectAllParcoursButton();
+            }
+            else if (this._typeExport === 'template'){
+                this._selectedFields = {};
+                this.deselectAllTemplateExportButton();
             }
             this._typeExport = 'fiche_matiere';
             // Sélection
@@ -302,6 +315,34 @@ export default class extends Controller {
             else if (this._selectedFields[event.target.dataset.exportFmField] !== undefined) {
                 node.classList.remove(...badgeClassList);
                 delete this._selectedFields[event.target.dataset.exportFmField];
+            }
+
+            this.displayNeedDataSelected();
+        });
+    }
+
+    createListenerForExportTemplateFieldChoice(node){
+        node.addEventListener('click', event => {
+            let badgeClassList = ['bg-info', 'text-white'];
+            // Données des parcours
+            if(this._typeExport === 'parcours'){
+                this._selectedFields = {};
+                this.deselectAllParcoursButton();
+            }
+            else if (this._typeExport === 'fiche_matiere'){
+                this._selectedFields = {};
+                this.deselectAllFicheMatiereButton()
+            }
+            this._typeExport = 'template';
+            // Sélection
+            if(this._selectedFields[event.target.dataset.exportTemplate] === undefined){
+                node.classList.add(...badgeClassList);
+                this._selectedFields[event.target.dataset.exportTemplate] = true;
+            }
+            // Déselection
+            else if (this._selectedFields[event.target.dataset.exportTemplate] !== undefined){
+                node.classList.remove(...badgeClassList);
+                delete this._selectedFields[event.target.dataset.exportTemplate];
             }
 
             this.displayNeedDataSelected();
@@ -349,24 +390,48 @@ export default class extends Controller {
 
     deselectAllFicheMatiereButton() {
         document.querySelectorAll('.fmTextDivFieldChoice')
-            .forEach(e => e.classList.remove(...['bg-primary', 'text-white']));
+            .forEach(e => e.classList.remove(...['bg-info', 'text-white']));
+    }
+
+    deselectAllTemplateExportButton(){
+        document.querySelectorAll('.textDivExportTemplateData')
+            .forEach(e => e.classList.remove(...['bg-info', 'text-white']));
     }
 
     displayFicheMatiereChoices() {
-        document.querySelector('#parcoursSelectData').classList.add('d-none');
-        document.querySelector('#ficheMatiereSelectData').classList.toggle('d-none');
-        this.displayDataFicheMatiereTarget.classList.remove('btn-primary');
-        this.displayDataFicheMatiereTarget.classList.add('btn-success');
-        this.displayDataParcoursTarget.classList.remove('btn-success');
-        this.displayDataParcoursTarget.classList.add('btn-primary');
+        this.hideAllFieldChoices('#ficheMatiereSelectData');
+        this.deselectAllFieldButton();
     }
 
     displayParcoursChoices() {
-        document.querySelector('#parcoursSelectData').classList.toggle('d-none');
-        document.querySelector('#ficheMatiereSelectData').classList.add('d-none');
-        this.displayDataParcoursTarget.classList.remove('btn-primary');
-        this.displayDataParcoursTarget.classList.add('btn-success');
-        this.displayDataFicheMatiereTarget.classList.remove('btn-success');
-        this.displayDataFicheMatiereTarget.classList.add('btn-primary');
+        this.hideAllFieldChoices('#parcoursSelectData');
+        this.deselectAllFieldButton();
+    }
+
+    displayExportTemplateChoices(){
+        this.hideAllFieldChoices('#exportTemplateData');
+        this.deselectAllFieldButton();
+    }
+
+    hideAllFieldChoices(selectedChoice){
+        ['#parcoursSelectData', '#ficheMatiereSelectData', '#exportTemplateData']
+            .forEach(selector => {
+                if(selector === selectedChoice){
+                    document.querySelector(selector).classList.toggle('d-none');
+                }
+                else {
+                    document.querySelector(selector).classList.add('d-none');
+                }
+            });
+    }
+
+    deselectAllFieldButton(){
+        [
+            this.displayDataParcoursTarget, 
+            this.displayDataFicheMatiereTarget, 
+            this.displayDataExportTemplateTarget
+        ].forEach(button => {
+            button.classList.remove('btn-success');
+        })
     }
 }
