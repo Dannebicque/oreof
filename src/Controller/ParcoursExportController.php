@@ -962,26 +962,112 @@ class ParcoursExportController extends AbstractController
                     ]
                 ];
                 break;
+            case 'stageInfos':
+                return [
+                    'type' => 'full_block',
+                    'libelle' => '',
+                    'value' => [
+                        [
+                            'libelle' => 'Stage',
+                            'content' => $parcours?->isHasStage() ? 'Oui' : 'Non'
+                        ],
+                        [
+                            'libelle' => 'Heures Stage',
+                            'content' => $parcours?->getNbHeuresStages()
+                        ],
+                        [
+                            'libelle' => 'Modalités Stage',
+                            'content' => $parcours?->getStageText()
+                        ]
+                    ]
+                ];
+                break;
+            case 'projetInfos': 
+                return [
+                    'type' => 'full_block',
+                    'libelle' => '',
+                    'value' => [
+                        [
+                            'libelle' => 'Projet',
+                            'content' => $parcours?->isHasProjet() ? 'Oui' : 'Non'
+                        ],
+                        [
+                            'libelle' => 'Heures Projet',
+                            'content' => $parcours?->getNbHeuresProjet()
+                        ],
+                        [
+                            'libelle' => 'Modalités Projet',
+                            'content' => $parcours?->getProjetText()
+                        ]
+                    ]
+                ];
+                break;
+
+            case 'memoireInfos':
+                return [
+                    'type' => 'full_block',
+                    'libelle' => '',
+                    'value' => [
+                        [
+                            'libelle' => 'TER/mémoire',
+                            'content' => $parcours?->isHasMemoire() ? 'Oui' : 'Non'
+                        ],
+                        [
+                            'libelle' => 'Modalités TER',
+                            'content' => $parcours?->getMemoireText()
+                        ],
+                    ]
+                ];
+                break;
+            case 'composantePorteuse':
+                return [
+                    'type' => 'full_block',
+                    'libelle' => '',
+                    'value' => [
+                        [
+                            'libelle' => 'Composante',
+                            'content' => $parcours?->getFormation()?->getComposantePorteuse()->getLibelle()
+                        ]
+                    ]
+                ];
+                break;
+            case 'typeDiplome';
+                return [
+                    'type' => 'full_block',
+                    'libelle' => '',
+                    'value' => [
+                        [
+                            'libelle' => 'Type Diplôme',
+                            'content' => $parcours?->getFormation()?->getTypeDiplome()?->getLibelle()
+                        ]
+                    ]
+                ];
+                break;
         }
     }
 
     private function getFieldOrderForExportGenerique(){
         return [
-            'identiteFormation' => 1,
-            'respFormation' => 2,
-            'respParcours' => 3,
-            'objectifsFormation' => 4,
-            'organisationParcours' => 5,
-            'objectifsParcours' => 6,
-            'resultatsAttendusParcours' => 7,
-            'rythmeFormation' => 8,
-            'localisationParcours' => 9,
-            'competencesAcquises' => 10,
-            'admissionParcours' => 11,
-            'informationsInscription' => 12,
-            'poursuiteEtudes' => 13,
-            'debouchesParcours' => 14,
-            'codesRome' => 15,
+            'composantePorteuse' => 1,
+            'typeDiplome' => 2,
+            'identiteFormation' => 3,
+            'respFormation' => 4,
+            'respParcours' => 5,
+            'objectifsFormation' => 6,
+            'organisationParcours' => 7,
+            'objectifsParcours' => 8,
+            'resultatsAttendusParcours' => 9,
+            'rythmeFormation' => 10,
+            'localisationParcours' => 11,
+            'competencesAcquises' => 12,
+            'admissionParcours' => 13,
+            'informationsInscription' => 14,
+            'poursuiteEtudes' => 15,
+            'debouchesParcours' => 16,
+            'codesRome' => 17,
+            'projetInfos' => 18,
+            'stageInfos' => 19,
+            'memoireInfos' => 20,
         ];
     }
 
