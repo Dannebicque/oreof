@@ -437,14 +437,16 @@ class ParcoursExportController extends AbstractController
     ) : Response {
         $request = Request::createFromGlobals();
 
-        [$fieldValueArray, $parcoursData, $campagneCollecte] = $this->checkExportGeneriqueData($em, $request);
+        [$fieldValueArray, $parcoursData, $campagneCollecte, $withFieldSorting] = $this->checkExportGeneriqueData($em, $request);
         $this->checkFieldsAreSupported($fieldValueArray);
 
         // On trie les colonnes dans un certain ordre
-        usort($fieldValueArray, 
-            fn($f1, $f2) => $this->getFieldOrderForExportGenerique()[$f1] 
-            <=> $this->getFieldOrderForExportGenerique()[$f2]
-        );
+        if($withFieldSorting){
+            usort($fieldValueArray, 
+                fn($f1, $f2) => $this->getFieldOrderForExportGenerique()[$f1] 
+                <=> $this->getFieldOrderForExportGenerique()[$f2]
+            );
+        }
 
         $dataStructure = [];
         foreach($parcoursData as $parcours){
@@ -517,14 +519,16 @@ class ParcoursExportController extends AbstractController
         EntityManagerInterface $em,
         Request $request
     ){
-        [$fieldValueArray, $parcoursData, $campagneCollecte] = $this->checkExportGeneriqueData($em, $request);
+        [$fieldValueArray, $parcoursData, $campagneCollecte, $withFieldSorting] = $this->checkExportGeneriqueData($em, $request);
         $this->checkFieldsAreSupported($fieldValueArray);
 
         // On trie les colonnes dans un certain ordre
-        usort($fieldValueArray, 
-            fn($f1, $f2) => $this->getFieldOrderForExportGenerique()[$f1] 
-            <=> $this->getFieldOrderForExportGenerique()[$f2]
-        );
+        if($withFieldSorting){
+            usort($fieldValueArray, 
+                fn($f1, $f2) => $this->getFieldOrderForExportGenerique()[$f1] 
+                <=> $this->getFieldOrderForExportGenerique()[$f2]
+            );
+        }
 
         /**
          * Variables pour les header
@@ -1043,6 +1047,18 @@ class ParcoursExportController extends AbstractController
                     ]
                 ];
                 break;
+            case 'modalitesEnseignement': 
+                return [
+                    'type' => 'full_block',
+                    'libelle' => '',
+                    'value' => [
+                        [
+                            'libelle' => "Modalités d'enseignement",
+                            'content' => $parcours?->getModalitesEnseignement()?->libelle()
+                        ]
+                    ]
+                ];
+                break;
         }
     }
 
@@ -1065,9 +1081,10 @@ class ParcoursExportController extends AbstractController
             'poursuiteEtudes' => 15,
             'debouchesParcours' => 16,
             'codesRome' => 17,
-            'projetInfos' => 18,
+            'modalitesEnseignement' => 18,
             'stageInfos' => 19,
-            'memoireInfos' => 20,
+            'projetInfos' => 20,
+            'memoireInfos' => 21,
         ];
     }
 
@@ -1075,6 +1092,9 @@ class ParcoursExportController extends AbstractController
         EntityManagerInterface $em,
         Request $request,
     ){
+        $withFieldSorting = $request->query->get('withFieldSorting', "true");
+        $withFieldSorting = $withFieldSorting === 'false' ? false : true;
+
         $campagneCollecte = $request->query->get('campagneCollecte', 2);
         $campagneCollecte = $em->getRepository(CampagneCollecte::class)
             ->findOneById($campagneCollecte)
@@ -1100,7 +1120,12 @@ class ParcoursExportController extends AbstractController
             throw $this->createNotFoundException('Aucun champ précisé.');
         }
 
-        return [$fieldValueArray, $parcoursData, $campagneCollecte];
+        return [
+            $fieldValueArray,
+            $parcoursData,
+            $campagneCollecte,
+            $withFieldSorting
+        ];
     }
 
     private function checkFieldsAreSupported(array $fieldValueArray){

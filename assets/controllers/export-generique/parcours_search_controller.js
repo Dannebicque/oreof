@@ -34,6 +34,10 @@ export default class extends Controller {
 
     _typeExport = "";
 
+    _templateTypeExport = {};
+
+    _withFieldSorting = true;
+
     _isRequestPending = false;
 
     connect(){
@@ -98,10 +102,12 @@ export default class extends Controller {
             let targetNewTab;
 
             let typeExportPdfUrl = this._typeExport === 'parcours'
+                || (this._typeExport === 'template' && this._templateTypeExport.type === 'parcours')
                 ? this.downloadParcoursPdfUrlValue  
                 : this.downloadFicheMatierePdfUrlValue;
 
-            let typeExportXlsxUrl = this._typeExport === 'parcours'
+            let typeExportXlsxUrl = this._typeExport === 'parcours' 
+                || (this._typeExport === 'template' && this._templateTypeExport.type === 'parcours')
                 ? this.downloadParcoursXlsxUrlValue
                 : this.downloadFicheMatiereXslxUrlValue;
 
@@ -117,6 +123,8 @@ export default class extends Controller {
                     + '&campagneCollecte=' + this.campagneCollecteValue;
                 targetNewTab = '_blank';
             }
+
+            url += `&withFieldSorting=${this._withFieldSorting ? 'true' : 'false'}`;
 
             this.needDataSelectTarget.classList.add('d-none');
             this.needParcoursSelectTarget.classList.add('d-none');
@@ -276,6 +284,8 @@ export default class extends Controller {
             }
             else if (this._typeExport === 'template'){
                 this._selectedFields = {};
+                this._templateTypeExport = {};
+                this._withFieldSorting = true;
                 this.deselectAllTemplateExportButton();
             }
             this._typeExport = 'parcours';
@@ -304,6 +314,8 @@ export default class extends Controller {
             }
             else if (this._typeExport === 'template'){
                 this._selectedFields = {};
+                this._templateTypeExport = {};
+                this._withFieldSorting = true;
                 this.deselectAllTemplateExportButton();
             }
             this._typeExport = 'fiche_matiere';
@@ -336,14 +348,17 @@ export default class extends Controller {
             }
             this._typeExport = 'template';
             // Sélection
-            if(this._selectedFields[event.target.dataset.exportTemplate] === undefined){
+            if(this._templateTypeExport.name !== event.target.dataset.exportTemplate){
+                this.deselectAllTemplateExportButton();
                 node.classList.add(...badgeClassList);
-                this._selectedFields[event.target.dataset.exportTemplate] = true;
+                this.setPredefinedTemplate(event.target.dataset.exportTemplate);
             }
             // Déselection
-            else if (this._selectedFields[event.target.dataset.exportTemplate] !== undefined){
+            else if (this._templateTypeExport.name === event.target.dataset.exportTemplate){
                 node.classList.remove(...badgeClassList);
-                delete this._selectedFields[event.target.dataset.exportTemplate];
+                this._selectedFields = {};
+                this._templateTypeExport = {};
+                this._withFieldSorting = true;
             }
 
             this.displayNeedDataSelected();
@@ -434,5 +449,45 @@ export default class extends Controller {
         ].forEach(button => {
             button.classList.remove('btn-success');
         })
+    }
+
+    setPredefinedTemplate(templateName){
+        switch (templateName){
+            case 'templateSEIP':
+                this._typeExport = 'template';
+                this._templateTypeExport.type = 'parcours';
+                this._templateTypeExport.name = 'templateSEIP';
+                this._withFieldSorting = false;
+                this._selectedFields = {
+                    modalitesEnseignement: true,
+                    stageInfos: true,
+                    projetInfos: true,
+                    memoireInfos: true,
+                };
+                break;
+            case 'templateFicheParcours':
+                this._typeExport = 'template';
+                this._templateTypeExport.type = 'parcours';
+                this._templateTypeExport.name = 'templateFicheParcours';
+                this._withFieldSorting = false;
+                this._selectedFields = {
+                    identiteFormation: true,
+                    respFormation: true,
+                    objectifsFormation: true,
+                    organisationParcours: true,
+                    objectifsParcours: true,
+                    resultatsAttendusParcours: true,
+                    rythmeFormation: true,
+                    modalitesEnseignement: true,
+                    localisationParcours: true,
+                    competencesAcquises: true,
+                    admissionParcours: true,
+                    informationsInscription: true,
+                    poursuiteEtudes: true,
+                    debouchesParcours: true,
+                    codesRome: true
+                };
+                break;
+        }
     }
 }

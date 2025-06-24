@@ -116,14 +116,16 @@ class FicheMatiereExportController extends AbstractController
     ){
         ini_set('memory_limit', '2048M');
 
-        [$fieldValueArray, $parcoursData, $campagneCollecte] = $this->checkExportGeneriqueData($em, $request);
+        [$fieldValueArray, $parcoursData, $campagneCollecte, $withFieldSorting] = $this->checkExportGeneriqueData($em, $request);
         $this->checkFieldsAreSupported($fieldValueArray);
 
         // On trie les colonnes dans un certain ordre
-        usort($fieldValueArray, 
-            fn($f1, $f2) => $this->getFieldOrderForExportGenerique()[$f1] 
-            <=> $this->getFieldOrderForExportGenerique()[$f2]
-        );
+        if($withFieldSorting){
+            usort($fieldValueArray, 
+                fn($f1, $f2) => $this->getFieldOrderForExportGenerique()[$f1] 
+                <=> $this->getFieldOrderForExportGenerique()[$f2]
+            );
+        }
 
         $parcoursData = array_map(fn($p) => $p->getId(), $parcoursData);
 
@@ -199,14 +201,16 @@ class FicheMatiereExportController extends AbstractController
         EntityManagerInterface $em,
         Request $request
     ){
-        [$fieldValueArray, $parcoursData, $campagneCollecte] = $this->checkExportGeneriqueData($em, $request);
+        [$fieldValueArray, $parcoursData, $campagneCollecte, $withFieldSorting] = $this->checkExportGeneriqueData($em, $request);
         $this->checkFieldsAreSupported($fieldValueArray);  
 
         // On trie les colonnes dans un certain ordre
-        usort($fieldValueArray, 
-            fn($f1, $f2) => $this->getFieldOrderForExportGenerique()[$f1] 
-            <=> $this->getFieldOrderForExportGenerique()[$f2]
-        );
+        if($withFieldSorting){
+            usort($fieldValueArray, 
+                fn($f1, $f2) => $this->getFieldOrderForExportGenerique()[$f1] 
+                <=> $this->getFieldOrderForExportGenerique()[$f2]
+            );
+        }
 
         $parcoursData = array_map(fn($p) => $p->getId(), $parcoursData);
 
@@ -244,6 +248,9 @@ class FicheMatiereExportController extends AbstractController
         EntityManagerInterface $em,
         Request $request,
     ){
+        $withFieldSorting = $request->query->get('withFieldSorting', "true");
+        $withFieldSorting = $withFieldSorting === 'false' ? false : true;
+
         $campagneCollecte = $request->query->get('campagneCollecte', 2);
         $campagneCollecte = $em->getRepository(CampagneCollecte::class)
             ->findOneById($campagneCollecte)
@@ -269,7 +276,7 @@ class FicheMatiereExportController extends AbstractController
             throw $this->createNotFoundException('Aucun champ précisé.');
         }
 
-        return [$fieldValueArray, $parcoursData, $campagneCollecte];
+        return [$fieldValueArray, $parcoursData, $campagneCollecte, $withFieldSorting];
     }
 
     private function mapFicheMatiereExportWithValues(
