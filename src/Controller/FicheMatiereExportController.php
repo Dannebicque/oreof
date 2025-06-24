@@ -26,6 +26,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class FicheMatiereExportController extends AbstractController
 {
@@ -107,6 +108,7 @@ class FicheMatiereExportController extends AbstractController
         return JsonReponse::success('Les documents sont en cours de génération, vous recevrez un mail lorsque les documents seront prêts');
     }
 
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/fiche-matiere/export/generique/xlsx', name: 'fiche_matiere_export_generique_xlsx')]
     public function getExportGeneriqueXlsx(
         EntityManagerInterface $em,
@@ -131,7 +133,21 @@ class FicheMatiereExportController extends AbstractController
         $finalData = array_map(
             function($fiche) use ($fieldValueArray){
                 return array_merge(...array_map(
-                    fn($field) => [$this->mapFicheMatiereExportWithValues($field, $fiche, 'xlsx')['value']]
+                    function($field) use ($fiche) {
+                        if($this->mapFicheMatiereExportWithValues($field, $fiche)['type'] === 'full_block'){
+                            return array_merge(...array_map(
+                                function($fieldValue){
+                                    if($fieldValue['type'] ?? 'none' === 'none'){
+                                        return [$fieldValue['content']];
+                                    }
+                                }  
+                                , $this->mapFicheMatiereExportWithValues($field, $fiche)['value']
+                            ));
+                        }
+                        else {
+                            return [$this->mapFicheMatiereExportWithValues($field, $fiche)['value']];
+                        }
+                    } 
                     , $fieldValueArray
                 ));
             }, $finalData
@@ -177,6 +193,53 @@ class FicheMatiereExportController extends AbstractController
         );
     }
 
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route('/fiche-matiere/export/generique/pdf', name: 'fiche_matiere_export_generique_pdf')]
+    public function getExportGeneriquePdf(
+        EntityManagerInterface $em,
+        Request $request
+    ){
+        [$fieldValueArray, $parcoursData, $campagneCollecte] = $this->checkExportGeneriqueData($em, $request);
+        $this->checkFieldsAreSupported($fieldValueArray);  
+
+        // On trie les colonnes dans un certain ordre
+        usort($fieldValueArray, 
+            fn($f1, $f2) => $this->getFieldOrderForExportGenerique()[$f1] 
+            <=> $this->getFieldOrderForExportGenerique()[$f2]
+        );
+
+        $parcoursData = array_map(fn($p) => $p->getId(), $parcoursData);
+
+        $finalData = $em->getRepository(FicheMatiere::class)
+            ->findByParcoursRangeForExport($parcoursData, $campagneCollecte);
+
+        $dataStructure = [];
+        foreach($finalData as $fiche){
+            $dataStructure[] = [
+                'libelleLong' => $fiche?->getLibelle(),
+                'valueExport' => [
+                        ...array_map(
+                            fn($field) => [
+                                ...$this->mapFicheMatiereExportWithValues($field, $fiche, 'pdf'), 
+                                'fieldName' => $field
+                            ]
+                            , $fieldValueArray
+                        )
+                    ],
+                'headersSectionPdf' => []
+            ];
+        }
+
+        $dateNow = new DateTime();
+        $dateFormat = $dateNow->format("d-m-Y_H-i");
+        $filename = "export_generique_pdf_fiche_matiere_{$dateFormat}";
+
+        return $this->myPdf->render('export/export_parcours_generique.html.twig', [
+            'parcoursData' => $dataStructure,
+            'titre' => 'Export des données des fiches matières'
+        ], $filename);
+    }
+
     private function checkExportGeneriqueData(
         EntityManagerInterface $em,
         Request $request,
@@ -217,48 +280,90 @@ class FicheMatiereExportController extends AbstractController
         switch($fieldValue){
             case 'fmId':
                 return [
-                    'libelle' => "Id",
-                    'value' => $ficheMatiere?->getId() ?? ""
+                    'type' => 'full_block',
+                    'libelle' => $exportType === 'xlsx' ? "Id": "",
+                    'value' => [
+                        [
+                            'libelle' => "Id",  
+                            'content' => $ficheMatiere?->getId() ?? ""
+                        ]
+                    ]
                 ];
                 break;
             case 'fmLibelle':
                 return [
-                    'libelle' => "Fiche EC/matière",
-                    'value' => $ficheMatiere?->getLibelle() ?? ""
+                    'type' => 'full_block',
+                    'libelle' => $exportType === 'xlsx' ? "Fiche EC/matière" : "",
+                    'value' => [
+                        [
+                            'libelle' => "Fiche EC/matière",
+                            'content' => $ficheMatiere?->getLibelle() ?? ""
+                        ]
+                    ]
                 ];
                 break;
             case 'fmReferent':
                 return [
-                    'libelle' => "Référent",
-                    'value' => $ficheMatiere?->getResponsableFicheMatiere()?->getDisplay() ?? ""
+                    'type' => 'full_block',
+                    'libelle' => $exportType === 'xlsx' ? "Référent" : "",
+                    'value' => [
+                        [
+                            'libelle' => "Référent",
+                            'content' => $ficheMatiere?->getResponsableFicheMatiere()?->getDisplay() ?? ""
+                        ]
+                    ]
                 ];
                 break;
             case 'fmIsComplet':
                 return [
-                    'libelle' => "Complet ?",
-                    'value' => $ficheMatiere?->remplissageBrut()?->isFull() ? 'Complet' : 'Incomplet'
+                    'type' => 'full_block',
+                    'libelle' => $exportType === 'xlsx' ? "Complet ?" : "",
+                    'value' => [
+                        [
+                            'libelle' => 'Complet ?',
+                            'content' => $ficheMatiere?->remplissageBrut()?->isFull() ? 'Complet' : 'Incomplet'
+                        ]
+                    ]
                 ];
                 break;
             case 'fmNbUtilisee':
                 return [
-                    'libelle' => "Utilisée ?",
-                    'value' => $ficheMatiere?->getElementConstitutifs()?->count() ?? ""
+                    'type' => 'full_block',
+                    'libelle' => $exportType === 'xlsx' ? "Utilisée ?" : "",
+                    'value' => [
+                        [
+                            'libelle' => "Utilisée ?",
+                            'content' => $ficheMatiere?->getElementConstitutifs()?->count() ?? ""
+                        ]
+                    ]
                 ];
                 break;
             case 'fmParcoursPorteur':
                 return [
-                    'libelle' => "Parcours porteur",
-                    'value' => $ficheMatiere?->isHorsDiplome() 
-                        ? 'Hors diplôme'
-                        : $ficheMatiere?->getParcours()?->getLibelle() ?? ""
+                    'type' => 'full_block',
+                    'libelle' => $exportType === 'xlsx' ? "Parcours porteur" : "",
+                    'value' => [
+                        [
+                            'libelle' => "Parcours porteur",
+                            'content' => $ficheMatiere?->isHorsDiplome() 
+                            ? 'Hors diplôme'
+                            : $ficheMatiere?->getParcours()?->getLibelle() ?? ""
+                        ]
+                    ]
                 ];
                 break;
             case 'fmFormation':
                 return [
-                    'libelle' => "Formation",
-                    'value' => $ficheMatiere?->isHorsDiplome()
-                        ? 'Hors diplôme'
-                        : $ficheMatiere?->getParcours()?->getFormation()?->getDisplayLong() ?? ""
+                    'type' => 'full_block',
+                    'libelle' => $exportType === 'xlsx' ? "Formation" : "",
+                    'value' => [
+                        [
+                            'libelle' => 'Formation',
+                            'content' => $ficheMatiere?->isHorsDiplome()
+                            ? 'Hors diplôme'
+                            : $ficheMatiere?->getParcours()?->getFormation()?->getDisplayLong() ?? ""
+                        ]
+                    ]
                 ];
                 break;
         }

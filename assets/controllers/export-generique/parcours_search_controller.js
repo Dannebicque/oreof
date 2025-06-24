@@ -22,6 +22,7 @@ export default class extends Controller {
         downloadParcoursPdfUrl: String,
         downloadParcoursXlsxUrl: String,
         downloadFicheMatiereXslxUrl: String,
+        downloadFicheMatierePdfUrl: String,
         campagneCollecte: Number
     };
 
@@ -98,7 +99,7 @@ export default class extends Controller {
 
             let typeExportPdfUrl = this._typeExport === 'parcours'
                 ? this.downloadParcoursPdfUrlValue  
-                : "#";
+                : this.downloadFicheMatierePdfUrlValue;
 
             let typeExportXlsxUrl = this._typeExport === 'parcours'
                 ? this.downloadParcoursXlsxUrlValue
