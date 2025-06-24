@@ -393,23 +393,34 @@
                                 Vous devez choisir un type de donnée à exporter
                             </span>
                         </div>
+                    </div>                    
+                    <div class="row justify-content-center">
+                        <div class="col-xs-9 col-sm-6 col-md-5 col-lg-4 col-xl-3 text-center">
+                            <span 
+                                {{ stimulus_action('export-generique--parcours-search', 'sendExportRequest', 'click', {'type': 'pdf'}) }}
+                                class="btn btn-success" 
+                                id="downloadExport"
+                            >
+                                Télécharger l'export (PDF)
+                            </span>
+                        </div>
+                        <div class="col-xs-9 col-sm-6 col-md-5 col-lg-4 col-xl-3 text-center mt-3 mt-sm-0">
+                            <span 
+                                {{ stimulus_action('export-generique--parcours-search', 'sendExportRequest', 'click', {'type': 'xlsx'}) }}
+                                class="btn btn-success ms-0 ms-lg-3" 
+                            >
+                                Télécharger l'export (Xlsx)
+                            </span>
+                        </div>
                     </div>
-                    <div class="col-xs-9 col-sm-6 col-md-5 col-lg-4 col-xl-3 text-center">
-                        <span 
-                            {{ stimulus_action('export-generique--parcours-search', 'sendExportRequest', 'click', {'type': 'pdf'}) }}
-                            class="btn btn-success" 
-                            id="downloadExport"
-                        >
-                            Télécharger l'export (PDF)
-                        </span>
-                    </div>
-                    <div class="col-xs-9 col-sm-6 col-md-5 col-lg-4 col-xl-3 text-center mt-3 mt-sm-0">
-                        <span 
-                            {{ stimulus_action('export-generique--parcours-search', 'sendExportRequest', 'click', {'type': 'xlsx'}) }}
-                            class="btn btn-success ms-0 ms-lg-3" 
-                        >
-                            Télécharger l'export (Xlsx)
-                        </span>
+                    <div class="row justify-content-center my-2">
+                        <div class="col-4 col-sm-3 col-md-2 col-lg-1 text-center">
+                            <i 
+                                {{ stimulus_controller('tooltip', { placement: 'bottom' }) }}
+                                title="S'il y a plus de 50 parcours sélectionnés, l'export vous sera envoyé par e-mail"
+                                class="fa-solid fa-circle-info bg-info text-white rounded fs-3"
+                            ></i>
+                        </div>
                     </div>
                 </div>
             </form>
