@@ -17,6 +17,7 @@ use App\DTO\StructureUe;
 use App\Entity\CampagneCollecte;
 use App\Entity\Parcours;
 use App\Entity\ParcoursVersioning;
+use App\Message\ExportGenerique;
 use App\Repository\ParcoursRepository;
 use App\Service\ExportGeneriqueParcours;
 use App\Service\ParcoursExport;
@@ -34,6 +35,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -450,11 +452,27 @@ class ParcoursExportController extends AbstractController
     #[Route('/parcours/export/generique/xlsx', name: 'app_parcours_export_generique_xlsx')]
     public function getExportGeneriqueXlsx(
         ExportGeneriqueParcours $exportParcoursGenerique,
-        Request $request
+        Request $request,
+        MessageBusInterface $bus
     ){
         $parcoursIdArray = $request->query->all()['parcoursIdArray'] ?? [];
+
+        // S'il y a plus de 50 parcours, on envoie par email
         if(count($parcoursIdArray) > 50 || (($parcoursIdArray[0] ?? 'none') === 'all')){
-            throw new NotFoundHttpException('Trop de parcours.');
+            /** @var \App\Entity\User $user */
+            $user = $this->getUser();
+            $bus->dispatch(
+                new ExportGenerique(
+                    ['type' => 'parcours', 'format' => 'xlsx'],
+                    $request->query->all()['parcoursIdArray'] ?? [],
+                    $request->query->all()['fieldValueArray'] ?? [],
+                    $request->query->get('campagneCollecte', 2),
+                    $request->query->get('withFieldSorting', "true"),
+                    $user->getEmail()
+                )
+            );
+
+            return new JsonResponse(['message' => "L'export est envoyé par email (Parcours)."]);
         }
 
         [$file, $filename] = $exportParcoursGenerique->generateXlsxSpreadsheet($request);
