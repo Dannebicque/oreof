@@ -129,6 +129,10 @@ export default class extends Controller {
             this.needDataSelectTarget.classList.add('d-none');
             this.needParcoursSelectTarget.classList.add('d-none');
 
+            if(parcoursIdArray[0] === 'all' || parcoursIdArray.length > 50){
+                targetNewTab = "_self";
+            }
+
             if(this._isRequestPending === false){
                 this._isRequestPending = true;
                 let resultWindow = window.open(url, targetNewTab);

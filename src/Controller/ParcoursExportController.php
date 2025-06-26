@@ -31,6 +31,7 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -472,7 +473,12 @@ class ParcoursExportController extends AbstractController
                 )
             );
 
-            return new JsonResponse(['message' => "L'export est envoyé par email (Parcours)."]);
+            $this->addFlash('toast', [
+                'type' => 'success',
+                'text' => 'Votre demande a bien été prise en compte. Le fichier vous sera envoyé par email.',
+                'title' => 'Succès'
+            ]);
+            return $this->redirectToRoute('app_homepage');
         }
 
         [$file, $filename] = $exportParcoursGenerique->generateXlsxSpreadsheet($request);

@@ -133,7 +133,12 @@ class FicheMatiereExportController extends AbstractController
                 $user->getEmail()
             ));
 
-            return new JsonResponse(['message' => "L'export est envoyé par email (Fiche matière)."]);
+            $this->addFlash('toast', [
+                'type' => 'success',
+                'text' => 'Votre demande a bien été prise en compte. Le fichier vous sera envoyé par email.',
+                'title' => 'Succès'
+            ]);
+            return $this->redirectToRoute('app_homepage');
         }
 
         [$file, $filename] = $exportFMGenerique->generateXlsxSpreadsheet($request);
