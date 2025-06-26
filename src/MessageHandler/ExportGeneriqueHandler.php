@@ -96,9 +96,9 @@ class ExportGeneriqueHandler {
 
     private function getEmailBody() : string {
         return <<<HTML
-        <h1>
+        <p>
             Vous avez demandé un export depuis ORéOF, et il a été généré avec succès.
-        </h1>
+        </p>
         <p>
             Le fichier demandé est attaché en pièce jointe de ce mail.
         </p>
