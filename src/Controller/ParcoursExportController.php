@@ -439,14 +439,40 @@ class ParcoursExportController extends AbstractController
     #[Route('/parcours/export/generique/pdf', name: 'app_parcours_export_generique_download_pdf')]
     public function getExportGeneriquePdf(
         ExportGeneriqueParcours $exportParcoursGenerique,
-        Request $request
+        Request $request,
+        MessageBusInterface $bus
     ) : Response {
         $parcoursIdArray = $request->query->all()['parcoursIdArray'] ?? [];
         if(count($parcoursIdArray) > 50 || (($parcoursIdArray[0] ?? 'none') === 'all')){
-            throw new NotFoundHttpException('Trop de parcours.');
+            /** @var \App\Entity\User $user */
+            $user = $this->getUser();
+            $bus->dispatch(new ExportGenerique(
+                ['type' => 'parcours', 'format' => 'pdf'],
+                $request->query->all()['parcoursIdArray'] ?? [],
+                $request->query->all()['fieldValueArray'] ?? [],
+                $request->query->get('campagneCollecte', 2),
+                $request->query->get('withFieldSorting', "true"),
+                $user->getEmail()
+            ));
+
+            $this->addFlash('toast', [
+                'type' => 'success',
+                'text' => 'Votre demande a bien été prise en compte. Le fichier vous sera envoyé par email.',
+                'title' => 'Succès'
+            ]);
+            return $this->redirectToRoute('app_homepage');
         }
 
-        return $exportParcoursGenerique->generatePdf($request);
+        [$response, $name] = $exportParcoursGenerique->generatePdf($request);
+
+        return new Response(
+            $response,
+            200,
+            [
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'attachment;filename="' . $name . '.pdf"',
+            ]
+        );
     }
 
     #[IsGranted('ROLE_ADMIN')]

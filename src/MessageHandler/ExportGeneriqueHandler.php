@@ -43,7 +43,13 @@ class ExportGeneriqueHandler {
         if($typeExport['type'] === 'parcours'){
             $emailAttachmentName = "Export-Generique-Parcours-{$dateNowFormat}";
             if($typeExport['format'] === 'pdf'){
-
+                $emailAttachmentName .= '.pdf';
+                [$contentParcoursPdf] = $this->exportGeneriqueParcours->generatePdf($request);
+                $this->sendEmailWithFile(
+                    $contentParcoursPdf,
+                    $exportGenerique->getEmailDestinataire(),
+                    $emailAttachmentName
+                );
             }
             else if ($typeExport['format'] === 'xlsx') {
                 $emailAttachmentName .= '.xlsx';
@@ -58,7 +64,13 @@ class ExportGeneriqueHandler {
         else if ($typeExport['type'] === 'fiche_matiere') {
             $emailAttachmentName = "Export-Generique-Fiche-Matiere-{$dateNowFormat}";
             if($typeExport['format'] === 'pdf'){
-
+                $emailAttachmentName .= ".pdf";
+                [$contentFmPdf] = $this->exportGeneriqueFicheMatiere->generatePdf($request);
+                $this->sendEmailWithFile(
+                    $contentFmPdf,
+                    $exportGenerique->getEmailDestinataire(),
+                    $emailAttachmentName
+                );
             }
             else if ($typeExport['format'] === 'xlsx') {
                 $emailAttachmentName .= ".xlsx";

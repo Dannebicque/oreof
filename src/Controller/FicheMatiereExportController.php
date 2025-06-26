@@ -157,13 +157,39 @@ class FicheMatiereExportController extends AbstractController
     #[Route('/fiche-matiere/export/generique/pdf', name: 'fiche_matiere_export_generique_pdf')]
     public function getExportGeneriquePdf(
         ExportGeneriqueFicheMatiere $exportFMGenerique,
-        Request $request
+        Request $request,
+        MessageBusInterface $bus
     ){
         $parcoursIdArray = $request->query->all()['parcoursIdArray'] ?? [];
         if(count($parcoursIdArray) > 50 || (($parcoursIdArray[0] ?? 'none') === 'all')){
-            throw new NotFoundHttpException('Trop de parcours.');
+            /** @var \App\Entity\User $user */
+            $user = $this->getUser();
+            $bus->dispatch(new ExportGenerique(
+                ['type' => 'fiche_matiere', 'format' => 'pdf'],
+                $request->query->all()['parcoursIdArray'] ?? [],
+                $request->query->all()['fieldValueArray'] ?? [],
+                $request->query->get('campagneCollecte', 2),
+                $request->query->get('withFieldSorting', "true"),
+                $user->getEmail()
+            ));
+
+            $this->addFlash('toast', [
+                'type' => 'success',
+                'text' => 'Votre demande a bien été prise en compte. Le fichier vous sera envoyé par email.',
+                'title' => 'Succès'
+            ]);
+            return $this->redirectToRoute('app_homepage');
         }
 
-        return $exportFMGenerique->generatePdf($request);
+        [$response, $name] = $exportFMGenerique->generatePdf($request);
+
+        return new Response(
+            $response,
+            200,
+            [
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'attachment;filename="' . $name . '.pdf"'
+            ]
+        );
     }
 }
