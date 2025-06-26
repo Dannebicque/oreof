@@ -94,11 +94,18 @@ class ExportGeneriqueParcours {
         $dateFormat = $dateNow->format("d-m-Y_H-i");
 
         $fileName = "export_pdf_generique_{$dateFormat}";
-
-        return $this->myPdf->render('export/export_parcours_generique.html.twig', [
+        
+        $tmpFile = $this->fs->tempnam(__DIR__ . '/../../public/temp/', 'export_generique');
+        $pdfContent = $this->myPdf->render('export/export_parcours_generique.html.twig', [
             'parcoursData' => $dataStructure,
             'titre' => 'Export des données de parcours'
         ], $fileName);
+
+        $this->fs->appendToFile($tmpFile, $pdfContent);
+        $exportContent = file_get_contents($tmpFile);
+        $this->fs->remove($tmpFile);
+
+        return [$exportContent, $fileName];
     }
 
     public function generateXlsxSpreadsheet(

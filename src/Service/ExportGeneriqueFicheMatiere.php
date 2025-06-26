@@ -62,10 +62,17 @@ class ExportGeneriqueFicheMatiere {
         $dateFormat = $dateNow->format("d-m-Y_H-i");
         $filename = "export_generique_pdf_fiche_matiere_{$dateFormat}";
 
-        return $this->myPdf->render('export/export_parcours_generique.html.twig', [
+        $pdfContent = $this->myPdf->render('export/export_parcours_generique.html.twig', [
             'parcoursData' => $dataStructure,
             'titre' => 'Export des données des fiches matières'
         ], $filename);
+
+        $tmpFile = $this->fs->tempnam(__DIR__ . "/../../public/temp/", 'export_generique');
+        $this->fs->appendToFile($tmpFile, $pdfContent);
+        $exportContent = file_get_contents($tmpFile);
+        $this->fs->remove($tmpFile);
+
+        return [$exportContent, $filename];
     }
 
     public function generateXlsxSpreadsheet(
