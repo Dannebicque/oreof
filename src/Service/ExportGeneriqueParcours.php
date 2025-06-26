@@ -93,7 +93,7 @@ class ExportGeneriqueParcours {
         $dateNow = new DateTime();
         $dateFormat = $dateNow->format("d-m-Y_H-i");
 
-        $fileName = "export_pdf_generique_{$dateFormat}";
+        $fileName = "Export-Generique-Parcours-{$dateFormat}";
         
         $tmpFile = $this->fs->tempnam(__DIR__ . '/../../public/temp/', 'export_generique');
         $pdfContent = $this->myPdf->render('export/export_parcours_generique.html.twig', [
@@ -272,7 +272,7 @@ class ExportGeneriqueParcours {
         $dateNow = new DateTime();
         $dateFormat = $dateNow->format("d-m-Y_H-i");
 
-        $filename = "export_generique_excel_parcours_{$dateFormat}";
+        $filename = "Export-Generique-Parcours-{$dateFormat}";
 
         $tmpFile = $this->fs->tempnam(__DIR__ . "/../../public/temp/", 'export_generique');
         $writer->save($tmpFile);
