@@ -28,7 +28,11 @@ class ExportGeneriqueHandler {
     ) {}
 
     public function __invoke(ExportGenerique $exportGenerique){
+        // RAM disponible pour générer les fichiers
         ini_set('memory_limit', '2500M');
+        // Utile lorsque le PDF prend longtemps à se charger 
+        // Requête / Réponse HTTP (60s par défaut => 3 minutes)
+        ini_set('default_socket_timeout', 180);
 
         $request = Request::create('', parameters: [
                     'parcoursIdArray' => $exportGenerique->getParcoursIdArray(),
