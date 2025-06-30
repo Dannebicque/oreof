@@ -4,7 +4,9 @@ namespace App\Service;
 
 use App\Classes\MyGotenbergPdf;
 use App\Entity\CampagneCollecte;
+use App\Entity\Contact;
 use App\Entity\Parcours;
+use App\Utils\Tools;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -686,6 +688,87 @@ class ExportGeneriqueParcours {
                     ]
                 ];
                 break;
+            case 'contactsPedagogiques': 
+                return [
+                    'type' => 'full_block',
+                    'libelle' => 'Contacts pédagogiques',
+                    'header_content' => [
+                        'Responsable du parcours',
+                        'Email',
+                        'Co-responsable du parcours',
+                        'Email',
+                        'Coordonnées secrétariat',
+                        'Contact'
+                    ],
+                    'value' => [
+                        ...array_merge(
+                        [
+                            [
+                                'libelle' => 'Responsable du parcours',
+                                'content' => $parcours?->getRespParcours()?->getDisplay()
+                            ],
+                            [
+                                'libelle' => 'Email',
+                                'content' => $parcours?->getRespParcours()?->getEmail()
+                            ]
+                        ],
+                        $parcours?->getCoResponsable() ?
+                        [
+                            [
+                                'libelle' => 'Co-responsable du parcours',
+                                'content' => $parcours?->getCoResponsable()?->getDisplay()
+                            ],
+                            [
+                                'libelle' => 'Email',
+                                'content' => $parcours?->getCoResponsable()?->getEmail()
+                            ]
+                        ]
+                        : ($exportType === 'xlsx' 
+                            ? [
+                                ['libelle' => '', 'content' => ''], // Colonnes vides pour Excel
+                                ['libelle' => '', 'content' => '']
+                              ]
+                            : []
+                        ),
+                        [
+                            [
+                                'libelle' => 'Coordonnées secrétariat',
+                                'content' => $parcours?->getCoordSecretariat()
+                            ]
+                        ],
+                        [
+                            [
+                                'libelle' => $exportType === 'pdf'
+                                    ? (
+                                        $parcours?->getContacts()?->first() instanceof Contact
+                                        ? $parcours?->getContacts()?->first()?->getDenomination() 
+                                        : ""
+                                    )
+                                    : 'Contact',
+                                'content' => $exportType === 'pdf'
+                                    ? 
+                                    (
+                                        $parcours?->getContacts()?->first() instanceof Contact        
+                                        ? "<br>" . Tools::telFormat($parcours?->getContacts()?->first()?->getTelephone() ?? "")
+                                            . "<br><br>" . "<a href=\"mailto:{$parcours?->getContacts()->first()?->getEmail()}\">"
+                                            . $parcours?->getContacts()?->first()?->getEmail() . "</a>"
+                                            . "<br><br>" . $parcours?->getContacts()?->first()?->getAdresse()?->display()
+                                        : ""
+                                      )
+                                    : (
+                                        $parcours?->getContacts()?->first() instanceof Contact 
+                                        ? $parcours?->getContacts()?->first()->getDenomination()
+                                            . " " . Tools::telFormat($parcours?->getContacts()?->first()?->getTelephone())
+                                            . " " . $parcours?->getContacts()?->first()?->getEmail()
+                                            . " " . preg_replace('/<br>/', ' ', $parcours?->getContacts()?->first()?->getAdresse()?->display())
+                                        : "" 
+                                      )
+                            ]
+                        ]
+                        )
+                    ]
+                ];
+                break;
         }
     }
 
@@ -712,6 +795,7 @@ class ExportGeneriqueParcours {
             'stageInfos' => 19,
             'projetInfos' => 20,
             'memoireInfos' => 21,
+            'contactsPedagogiques' => 22
         ];
     }
 

@@ -489,7 +489,8 @@ export default class extends Controller {
                     informationsInscription: true,
                     poursuiteEtudes: true,
                     debouchesParcours: true,
-                    codesRome: true
+                    codesRome: true,
+                    contactsPedagogiques: true
                 };
                 break;
         }
