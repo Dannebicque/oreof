@@ -35,10 +35,10 @@ class ExportGeneriqueHandler {
         ini_set('default_socket_timeout', 180);
 
         $request = Request::create('', parameters: [
-                    'parcoursIdArray' => $exportGenerique->getParcoursIdArray(),
-                    'fieldValueArray' => $exportGenerique->getFieldValueArray(),
+                    'id' => $exportGenerique->getParcoursIdArray(),
+                    'val' => $exportGenerique->getFieldValueArray(),
                     'withFieldSorting' => $exportGenerique->getWithFieldSorting(),
-                    'campagneCollecte' => $exportGenerique->getCampagneCollecte(),
+                    'campagne' => $exportGenerique->getCampagneCollecte(),
                 ]);
         $typeExport = $exportGenerique->getTypeExport();
 
