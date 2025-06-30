@@ -75,6 +75,13 @@ class ExportGeneriqueParcours {
                         'libelle' => 'etApresHeader',
                         'content' => "Et après..."
                     ];
+                }else if(in_array($f, [
+                    'modalitesEnseignement'
+                ]) && isset($headersSectionPdf[$f]) === false){
+                    $headersSectionPdf[$f] = [
+                        'libelle' => 'descriptifParcoursHeader',
+                        'content' => 'Descriptif du parcours'
+                    ];
                 }
             }
 
@@ -142,6 +149,9 @@ class ExportGeneriqueParcours {
                 }
                 elseif($this->mapParcoursExportWithValues($field, null)['type'] === 'nested_list'){
                     return [$this->mapParcoursExportWithValues($field, null)['libelle']];
+                }
+                elseif (isset($this->mapParcoursExportWithValues($field, null)['header_content'])) {
+                    return [...$this->mapParcoursExportWithValues($field, null)['header_content']];
                 }
                 elseif($this->mapParcoursExportWithValues($field, null)['type'] === 'full_block'){
                     return array_merge(...array_map(
@@ -305,16 +315,40 @@ class ExportGeneriqueParcours {
                 break;
             case 'respFormation':
                 return [
-                    'type' => 'list',
-                    'value' => [
+                    'type' => 'full_block',
+                    'libelle' => '',
+                    'header_content' => [
+                        'Responsable de la formation',
+                        'Email',
+                        'Co-responsable de la formation',
+                        'Email'
+                    ],
+                    'value' => 
+                    [
+                        ...array_merge(
                         [
-                            'libelle' => 'Responsable de la formation',
-                            'content' =>  $parcours?->getFormation()->getResponsableMention()?->getDisplay()
-                        ],
-                        [
-                            'libelle' => 'Co-responsable de la formation',
-                            'content' =>  $parcours?->getFormation()->getCoResponsable()?->getDisplay()
+                            [
+                                'libelle' => 'Responsable de la formation',
+                                'content' =>  $parcours?->getFormation()->getResponsableMention()?->getDisplay()
+                            ],
+                            [
+                                'libelle' => 'Email',
+                                'content' => $parcours?->getFormation()->getResponsableMention()?->getEmail()
+                            ]
+                        ], 
+                        $parcours?->getFormation()?->getCoResponsable() 
+                        ? [
+                            [
+                                'libelle' => 'Co-responsable de la formation',
+                                'content' =>  $parcours?->getFormation()->getCoResponsable()?->getDisplay()
+                            ],
+                            [
+                                'libelle' => 'Email',
+                                'content' => $parcours?->getFormation()->getCoResponsable()?->getEmail()
+                            ]
                         ]
+                        : []
+                        )
                     ]
                 ];
                 break;
