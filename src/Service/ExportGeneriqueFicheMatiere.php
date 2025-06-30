@@ -159,13 +159,13 @@ class ExportGeneriqueFicheMatiere {
         $withFieldSorting = $request->query->get('withFieldSorting', "true");
         $withFieldSorting = $withFieldSorting === 'false' ? false : true;
 
-        $campagneCollecte = $request->query->get('campagneCollecte', 2);
+        $campagneCollecte = $request->query->get('campagne', 2);
         $campagneCollecte = $this->em->getRepository(CampagneCollecte::class)
             ->findOneById($campagneCollecte)
             ?? $this->em->getRepository(CampagneCollecte::class)->findOneBy(['defaut' => true]);
 
         $parcoursData = [];
-        $parcoursIdArray = $request->query->all()['parcoursIdArray'] ?? [];
+        $parcoursIdArray = $request->query->all()['id'] ?? [];
         if(isset($parcoursIdArray[0]) && $parcoursIdArray[0] === 'all'){
             $parcoursData = $this->em->getRepository(Parcours::class)->findByCampagneCollecte($campagneCollecte);
         }
@@ -178,7 +178,7 @@ class ExportGeneriqueFicheMatiere {
             throw new NotFoundHttpException('Aucun parcours sélectionné.');
         }
 
-        $fieldValueArray = $request->query->all()['fieldValueArray'] ?? [];
+        $fieldValueArray = $request->query->all()['val'] ?? [];
         // Vérification sur les champs demandés (non vide)
         if(count($fieldValueArray) === 0){
             throw new NotFoundHttpException('Aucun champ précisé.');

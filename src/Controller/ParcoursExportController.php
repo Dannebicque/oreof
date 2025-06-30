@@ -442,15 +442,15 @@ class ParcoursExportController extends AbstractController
         Request $request,
         MessageBusInterface $bus
     ) : Response {
-        $parcoursIdArray = $request->query->all()['parcoursIdArray'] ?? [];
+        $parcoursIdArray = $request->query->all()['id'] ?? [];
         if(count($parcoursIdArray) > 50 || (($parcoursIdArray[0] ?? 'none') === 'all')){
             /** @var \App\Entity\User $user */
             $user = $this->getUser();
             $bus->dispatch(new ExportGenerique(
                 ['type' => 'parcours', 'format' => 'pdf'],
-                $request->query->all()['parcoursIdArray'] ?? [],
-                $request->query->all()['fieldValueArray'] ?? [],
-                $request->query->get('campagneCollecte', 2),
+                $request->query->all()['id'] ?? [],
+                $request->query->all()['val'] ?? [],
+                $request->query->get('campagne', 2),
                 $request->query->get('withFieldSorting', "true"),
                 $user->getEmail()
             ));
@@ -482,7 +482,7 @@ class ParcoursExportController extends AbstractController
         Request $request,
         MessageBusInterface $bus
     ){
-        $parcoursIdArray = $request->query->all()['parcoursIdArray'] ?? [];
+        $parcoursIdArray = $request->query->all()['id'] ?? [];
 
         // S'il y a plus de 50 parcours, on envoie par email
         if(count($parcoursIdArray) > 50 || (($parcoursIdArray[0] ?? 'none') === 'all')){
@@ -491,9 +491,9 @@ class ParcoursExportController extends AbstractController
             $bus->dispatch(
                 new ExportGenerique(
                     ['type' => 'parcours', 'format' => 'xlsx'],
-                    $request->query->all()['parcoursIdArray'] ?? [],
-                    $request->query->all()['fieldValueArray'] ?? [],
-                    $request->query->get('campagneCollecte', 2),
+                    $request->query->all()['id'] ?? [],
+                    $request->query->all()['val'] ?? [],
+                    $request->query->get('campagne', 2),
                     $request->query->get('withFieldSorting', "true"),
                     $user->getEmail()
                 )

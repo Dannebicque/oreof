@@ -74,8 +74,8 @@ export default class extends Controller {
 
         if(isParcoursSelected && isDataSelected){
             // Champs souhaités
-            let parcoursIdPostName = 'parcoursIdArray[]=';
-            let fieldPostName = 'fieldValueArray[]=';
+            let parcoursIdPostName = 'id[]=';
+            let fieldPostName = 'val[]=';
 
             let parcoursIdArray = [];
             // Construction des parcours voulus
@@ -114,13 +114,13 @@ export default class extends Controller {
             if(type === 'pdf'){
                 url = typeExportPdfUrl + '?'
                     + postParcours + '&' + postFields
-                    + '&campagneCollecte=' + this.campagneCollecteValue;
+                    + '&campagne=' + this.campagneCollecteValue;
                 targetNewTab = '_blank';
             }
             else if (type === 'xlsx'){
                 url = typeExportXlsxUrl + '?'
                     + postParcours + '&' + postFields
-                    + '&campagneCollecte=' + this.campagneCollecteValue;
+                    + '&campagne=' + this.campagneCollecteValue;
                 targetNewTab = '_blank';
             }
 
