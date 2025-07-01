@@ -452,7 +452,8 @@ class ParcoursExportController extends AbstractController
                 $request->query->all()['val'] ?? [],
                 $request->query->get('campagne', 2),
                 $request->query->get('withFieldSorting', "true"),
-                $user->getEmail()
+                $user->getEmail(),
+                $request->query->get('withHeader', 'true')
             ));
 
             $this->addFlash('toast', [
@@ -495,7 +496,8 @@ class ParcoursExportController extends AbstractController
                     $request->query->all()['val'] ?? [],
                     $request->query->get('campagne', 2),
                     $request->query->get('withFieldSorting', "true"),
-                    $user->getEmail()
+                    $user->getEmail(),
+                    $request->query->get('withHeader', 'true')
                 )
             );
 

@@ -192,9 +192,11 @@ class ExportGeneriqueParcours {
         );
 
         if($withDefaultHeader){
-            $headersExcel = array_merge($headerDeBase, $headersExcel);
+            $headersExcel = array_merge($headerDeBase, ...$headersExcel);
         }
-        $headersExcel = array_merge(...$headersExcel);
+        else {
+            $headersExcel = array_merge(...$headersExcel);
+        }
 
         $dataExcel = array_map(
             fn($parcours) => array_merge(
@@ -688,7 +690,7 @@ class ExportGeneriqueParcours {
                     'value' => [
                         [
                             'libelle' => 'Composante',
-                            'content' => $parcours?->getFormation()?->getComposantePorteuse()->getLibelle()
+                            'content' => $parcours?->getFormation()?->getComposantePorteuse()?->getLibelle()
                         ]
                     ]
                 ];
@@ -836,7 +838,7 @@ class ExportGeneriqueParcours {
                 return [
                     'type' => 'longtext',
                     'libelle' => "Mention",
-                    'value' => $parcours?->getFormation()->getDisplay()
+                    'value' => $parcours?->getFormation()?->getDisplay()
                 ];
                 break;
             case 'etatDpeParcours':

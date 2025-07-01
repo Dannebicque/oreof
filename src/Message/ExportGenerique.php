@@ -23,6 +23,8 @@ class ExportGenerique {
 
     private string $emailDestinataire;
 
+    private string $withDefaultHeader;
+
     public function __construct(
         array $typeExport,
         array $parcoursIdArray,
@@ -30,6 +32,7 @@ class ExportGenerique {
         int $campagneCollecte,
         string $withFieldSorting,
         string $emailDestinataire,
+        string $withDefaultHeader
     ) {
         $this->typeExport = $typeExport;
         $this->parcoursIdArray = $parcoursIdArray;
@@ -37,6 +40,7 @@ class ExportGenerique {
         $this->campagneCollecte = $campagneCollecte;
         $this->withFieldSorting = $withFieldSorting;
         $this->emailDestinataire = $emailDestinataire;
+        $this->withDefaultHeader = $withDefaultHeader;
     }
 
     public function getTypeExport() {
@@ -61,5 +65,9 @@ class ExportGenerique {
 
     public function getEmailDestinataire() {
         return $this->emailDestinataire;
+    }
+
+    public function hasDefaultHeader(){
+        return $this->withDefaultHeader;
     }
 }
