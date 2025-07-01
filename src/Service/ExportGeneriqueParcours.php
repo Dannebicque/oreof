@@ -439,7 +439,7 @@ class ExportGeneriqueParcours {
                         ],
                         [
                             'libelle' => "Téléphone",
-                            'content' => $parcours?->getComposanteInscription()?->getTelStandard()
+                            'content' => Tools::telFormat($parcours?->getComposanteInscription()?->getTelStandard())
                         ],
                         [
                             'libelle' => "Email",
@@ -585,7 +585,7 @@ class ExportGeneriqueParcours {
                                     $exportType === 'pdf' 
                                         ? $composante->getAdresse()?->display()
                                         : preg_replace('/<br>/', ' ', $composante->getAdresse()?->display()),
-                                    $composante->getTelStandard(),
+                                    Tools::telFormat($composante->getTelStandard()),
                                     $exportType === 'pdf' 
                                         ? "<a href=\"mailto:{$composante->getMailContact()}\">" . $composante->getMailContact() . "</a>"
                                         : $composante->getMailContact(),
