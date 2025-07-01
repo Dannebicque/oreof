@@ -6,6 +6,7 @@ use App\Classes\MyGotenbergPdf;
 use App\Entity\CampagneCollecte;
 use App\Entity\Contact;
 use App\Entity\Parcours;
+use App\Entity\SemestreParcours;
 use App\Utils\Tools;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
@@ -790,6 +791,33 @@ class ExportGeneriqueParcours {
                     ]
                 ];
                 break;
+            case 'semestresOuverts':
+                return [
+                    'type' => 'full_block',
+                    'libelle' => 'Semestres ouverts',
+                    'value' => (function() use ($parcours) {
+                        $semestreTab = [
+                            ['libelle' => 'Semestre 1', 'content' => ''],
+                            ['libelle' => 'Semestre 2', 'content' => ''],
+                            ['libelle' => 'Semestre 3', 'content' => ''],
+                            ['libelle' => 'Semestre 4', 'content' => ''],
+                            ['libelle' => 'Semestre 5', 'content' => ''],
+                            ['libelle' => 'Semestre 6', 'content' => ''],
+                        ];
+
+                        if($parcours !== null){
+                            $semestreParcours = $this->em->getRepository(SemestreParcours::class)
+                                ->findByParcours($parcours);
+
+                            foreach($semestreParcours as $sp){
+                                $semestreTab[$sp->getSemestre()->getOrdre() - 1]['content'] = 
+                                    $sp->getSemestre()->isNonDispense() || !$sp->isOuvert() ? 'Fermé' : 'Ouvert';
+                            }
+                        }
+                        return $semestreTab;
+                    })()
+                ];
+                break;
         }
     }
 
@@ -816,7 +844,8 @@ class ExportGeneriqueParcours {
             'stageInfos' => 19,
             'projetInfos' => 20,
             'memoireInfos' => 21,
-            'contactsPedagogiques' => 22
+            'contactsPedagogiques' => 22,
+            'semestresOuverts' => 23
         ];
     }
 
