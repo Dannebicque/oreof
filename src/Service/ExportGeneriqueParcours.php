@@ -353,7 +353,10 @@ class ExportGeneriqueParcours {
                                 'content' => $parcours?->getFormation()->getCoResponsable()?->getEmail()
                             ]
                         ]
-                        : []
+                        :   [
+                                ['libelle' => '', 'content' => ''],
+                                ['libelle' => '', 'content' => ''], // Colonnes vide Excel
+                            ]
                         )
                     ]
                 ];
