@@ -193,7 +193,7 @@ class ExportGeneriqueParcours {
                 ]
                , array_merge(
                     ...array_map(
-                        function($field) use ($parcours) {
+                        function($field) use ($parcours, $nbMaxComposanteInscription) {
                             if($this->mapParcoursExportWithValues($field, $parcours)['type'] === 'list'){
                                 return array_map(fn($value) => $value['content'], $this->mapParcoursExportWithValues($field, $parcours)['value']);
                             }
@@ -225,7 +225,9 @@ class ExportGeneriqueParcours {
                                             return [$fieldBlock['content']];
                                         }
                                     }
-                                    , $this->mapParcoursExportWithValues($field, $parcours, 'xlsx')['value']
+                                    , $this->mapParcoursExportWithValues($field, $parcours, 'xlsx', [
+                                        'nbMaxComposantesInscription' => $nbMaxComposanteInscription
+                                    ])['value']
                                 ));
                             }
                             elseif($this->mapParcoursExportWithValues($field, $parcours)['type'] === 'array_list'){
@@ -302,6 +304,7 @@ class ExportGeneriqueParcours {
         string $fieldValue,
         ?Parcours $parcours,
         string $exportType = 'pdf',
+        array $context = []
     ) {
         switch($fieldValue){
             case 'respParcours':
@@ -582,22 +585,33 @@ class ExportGeneriqueParcours {
                                 "Email",
                                 "Site Web"
                             ],
-                            'content' => array_map(function($composante) use ($exportType) {
-                                return [
-                                    $composante->getLibelle(),
-                                    $exportType === 'pdf' 
-                                        ? $composante->getAdresse()?->display()
-                                        : preg_replace('/<br>/', ' ', $composante->getAdresse()?->display()),
-                                    Tools::telFormat($composante->getTelStandard()),
-                                    $exportType === 'pdf' 
-                                        ? "<a href=\"mailto:{$composante->getMailContact()}\">" . $composante->getMailContact() . "</a>"
-                                        : $composante->getMailContact(),
-                                    $exportType === 'pdf' 
-                                        ? "<a href=\"{$composante->getUrlSite()}\">" . $composante->getUrlSite() . "</a>"
-                                        : $composante->getUrlSite()
-                                ];
-                            }
-                            , $parcours?->getFormation()->getComposantesInscription()?->toArray() ?? []),
+                            'content' => (function() use($parcours, $exportType, $context){
+                                $result = array_map(function($composante) use ($exportType) {
+                                    return [
+                                        $composante->getLibelle(),
+                                        $exportType === 'pdf' 
+                                            ? $composante->getAdresse()?->display()
+                                            : preg_replace('/<br>/', ' ', $composante->getAdresse()?->display()),
+                                        Tools::telFormat($composante->getTelStandard()),
+                                        $exportType === 'pdf' 
+                                            ? "<a href=\"mailto:{$composante->getMailContact()}\">" . $composante->getMailContact() . "</a>"
+                                            : $composante->getMailContact(),
+                                        $exportType === 'pdf' 
+                                            ? "<a href=\"{$composante->getUrlSite()}\">" . $composante->getUrlSite() . "</a>"
+                                            : $composante->getUrlSite()
+                                    ];
+                                }
+                                , $parcours?->getFormation()->getComposantesInscription()?->toArray() ?? []);
+
+                                if($exportType === 'xlsx'){
+                                    $emptyCells = ["", "", "", "", ""]; // Cellules vides Excel
+                                    for($i = count($result) * 5; $i < $context['nbMaxComposantesInscription'] * 5; $i += 5){
+                                        $result = array_merge($result, $emptyCells);
+                                    }
+                                }
+
+                                return $result;
+                            })()
                         ]
                     ]
                 ];
