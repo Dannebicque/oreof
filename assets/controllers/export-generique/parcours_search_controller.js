@@ -40,6 +40,8 @@ export default class extends Controller {
 
     _isRequestPending = false;
 
+    _withDefaultHeader = true;
+
     connect(){
         this.searchFormTarget.addEventListener('submit', async (event)=> {
             event.preventDefault();
@@ -125,7 +127,7 @@ export default class extends Controller {
             }
 
             url += `&withFieldSorting=${this._withFieldSorting ? 'true' : 'false'}`;
-
+            url += `&withHeader=${this._withDefaultHeader ? 'true' : 'false'}`
             this.needDataSelectTarget.classList.add('d-none');
             this.needParcoursSelectTarget.classList.add('d-none');
 
@@ -493,6 +495,24 @@ export default class extends Controller {
                     contactsPedagogiques: true
                 };
                 break;
+            case 'templateSemestresOuverts':
+                this._typeExport = 'template';
+                this._templateTypeExport.type = 'parcours';
+                this._templateTypeExport.name = 'templateSemestresOuverts';
+                this._withFieldSorting = false;
+                this._withDefaultHeader = false;
+                this._selectedFields = {
+                    composantePorteuse: true,
+                    typeDiplome: true,
+                    nomFormation: true,
+                    nomParcours: true,
+                    respFormation: true,
+                    respParcours: true,
+                    etatDpeParcours: true,
+                    semestresOuverts: true,
+                    idFormation: true,
+                    idParcours: true
+                };
         }
     }
 }

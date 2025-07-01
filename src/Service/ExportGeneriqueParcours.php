@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Classes\GetDpeParcours;
 use App\Classes\MyGotenbergPdf;
 use App\Entity\CampagneCollecte;
 use App\Entity\Contact;
@@ -122,7 +123,14 @@ class ExportGeneriqueParcours {
         Request $request
     ) {
 
-        [$fieldValueArray, $parcoursData, $campagneCollecte, $withFieldSorting] = $this->checkExportGeneriqueData($request);
+        [
+            $fieldValueArray, 
+            $parcoursData, 
+            $campagneCollecte, 
+            $withFieldSorting,
+            $withDefaultHeader
+        ] = $this->checkExportGeneriqueData($request);
+
         $this->checkFieldsAreSupported($fieldValueArray);
 
         // On trie les colonnes dans un certain ordre
@@ -183,15 +191,14 @@ class ExportGeneriqueParcours {
             , $fieldValueArray
         );
 
-        $headersExcel = array_merge($headerDeBase, ...$headersExcel);
+        if($withDefaultHeader){
+            $headersExcel = array_merge($headerDeBase, $headersExcel);
+        }
+        $headersExcel = array_merge(...$headersExcel);
 
         $dataExcel = array_map(
             fn($parcours) => array_merge(
-                [
-                    $parcours->getFormation()?->getTypeDiplome()->getLibelle(),
-                    $parcours->getFormation()?->getDisplay(),
-                    $parcours->getDisplay()
-                ]
+                $this->getDefaultHeaderValue($parcours, $withDefaultHeader)
                , array_merge(
                     ...array_map(
                         function($field) use ($parcours, $nbMaxComposanteInscription) {
@@ -818,6 +825,43 @@ class ExportGeneriqueParcours {
                     })()
                 ];
                 break;
+            case 'nomParcours':
+                return [
+                    'type' => 'longtext',
+                    'libelle' => "Parcours",
+                    'value' => $parcours?->getDisplay()
+                ];
+                break;
+            case 'nomFormation':
+                return [
+                    'type' => 'longtext',
+                    'libelle' => "Mention",
+                    'value' => $parcours?->getFormation()->getDisplay()
+                ];
+                break;
+            case 'etatDpeParcours':
+                return [
+                    'type' => 'longtext',
+                    'libelle' => 'Etat Parcours/Mention',
+                    'value' => $parcours 
+                        ? GetDpeParcours::getFromParcours($parcours)->getEtatReconduction()?->getLibelle() 
+                        : ""
+                ];
+                break;
+            case 'idParcours':
+                return [
+                    'type' => 'longtext',
+                    'libelle' => '# Parcours',
+                    'value' => $parcours ? $parcours->getId() : ""
+                ];
+                break;
+            case 'idFormation':
+                return [
+                    'type' => 'longtext',
+                    'libelle' => '# Mention',
+                    'value' => $parcours ? $parcours->getFormation()?->getId() : ""
+                ];
+                break;
         }
     }
 
@@ -845,7 +889,12 @@ class ExportGeneriqueParcours {
             'projetInfos' => 20,
             'memoireInfos' => 21,
             'contactsPedagogiques' => 22,
-            'semestresOuverts' => 23
+            'semestresOuverts' => 23,
+            'nomParcours' => 24,
+            'nomFormation' => 25,
+            'etatDpeParcours' => 26,
+            'idParcours' => 27,
+            'idFormation' => 28
         ];
     }
 
@@ -854,6 +903,9 @@ class ExportGeneriqueParcours {
     ){
         $withFieldSorting = $request->query->get('withFieldSorting', "true");
         $withFieldSorting = $withFieldSorting === 'false' ? false : true;
+
+        $withDefaultHeader = $request->query->get('withHeader', 'true');
+        $withDefaultHeader = $withDefaultHeader === 'false' ? false : true;
 
         $campagneCollecte = $request->query->get('campagne', 2);
         $campagneCollecte = $this->em->getRepository(CampagneCollecte::class)
@@ -884,7 +936,8 @@ class ExportGeneriqueParcours {
             $fieldValueArray,
             $parcoursData,
             $campagneCollecte,
-            $withFieldSorting
+            $withFieldSorting,
+            $withDefaultHeader
         ];
     }
 
@@ -898,5 +951,17 @@ class ExportGeneriqueParcours {
         if(!$fieldsAreCompatible){
             throw new NotFoundHttpException("Un des champs demandés n'est pas pris en charge.");
         }
+    }
+
+    private function getDefaultHeaderValue(?Parcours $parcours, bool $withHeader = true){
+        if($parcours !== null && $withHeader){
+            return [
+                $parcours->getFormation()?->getTypeDiplome()->getLibelle(),
+                $parcours->getFormation()?->getDisplay(),
+                $parcours->getDisplay()
+            ];
+        }
+
+        return [];
     }
 }
