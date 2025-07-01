@@ -441,7 +441,7 @@ class ExportGeneriqueParcours {
                             'libelle' => "Adresse",
                             'content' => $exportType === 'pdf' 
                                 ? $parcours?->getComposanteInscription()?->getAdresse()?->display()
-                                : preg_replace('/<br>/', ' ', $parcours?->getComposanteInscription()?->getAdresse()?->display())
+                                : preg_replace('/<br>/', ' ', ($parcours?->getComposanteInscription()?->getAdresse()?->display() ?? ""))
                         ],
                         [
                             'libelle' => "Téléphone",
@@ -591,7 +591,7 @@ class ExportGeneriqueParcours {
                                         $composante->getLibelle(),
                                         $exportType === 'pdf' 
                                             ? $composante->getAdresse()?->display()
-                                            : preg_replace('/<br>/', ' ', $composante->getAdresse()?->display()),
+                                            : preg_replace('/<br>/', ' ', ($composante->getAdresse()?->display() ?? "")),
                                         Tools::telFormat($composante->getTelStandard()),
                                         $exportType === 'pdf' 
                                             ? "<a href=\"mailto:{$composante->getMailContact()}\">" . $composante->getMailContact() . "</a>"
@@ -781,7 +781,7 @@ class ExportGeneriqueParcours {
                                         ? $parcours?->getContacts()?->first()->getDenomination()
                                             . " " . Tools::telFormat($parcours?->getContacts()?->first()?->getTelephone())
                                             . " " . $parcours?->getContacts()?->first()?->getEmail()
-                                            . " " . preg_replace('/<br>/', ' ', $parcours?->getContacts()?->first()?->getAdresse()?->display())
+                                            . " " . preg_replace('/<br>/', ' ', ($parcours?->getContacts()?->first()?->getAdresse()?->display() ?? ""))
                                         : "" 
                                       )
                             ]
