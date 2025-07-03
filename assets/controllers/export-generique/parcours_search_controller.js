@@ -513,6 +513,25 @@ export default class extends Controller {
                     idFormation: true,
                     idParcours: true
                 };
+                break;
+            case 'templateExportRegime':
+                this._typeExport = 'template';
+                this._templateTypeExport.type = 'parcours';
+                this._templateTypeExport.name = 'templateExportRegime';
+                this._withFieldSorting = false;
+                this._withDefaultHeader = false;
+                this._selectedFields = {
+                    composantePorteuse: true,
+                    typeDiplome: true,
+                    nomFormation: true,
+                    nomParcours: true,
+                    villeParcours: true,
+                    respFormation: true,
+                    respParcours: true,
+                    codeRNCP: true,
+                    dateValidationCFVU: true
+                }
+                break;
         }
     }
 }

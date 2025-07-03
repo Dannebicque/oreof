@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Classes\GetDpeParcours;
+use App\Classes\GetHistorique;
 use App\Classes\MyGotenbergPdf;
 use App\Entity\CampagneCollecte;
 use App\Entity\Contact;
@@ -23,6 +24,7 @@ class ExportGeneriqueParcours {
         private EntityManagerInterface $em,
         private MyGotenbergPdf $myPdf,
         private Filesystem $fs,
+        private GetHistorique $getHistorique,
     ){
         
     }
@@ -319,16 +321,43 @@ class ExportGeneriqueParcours {
         switch($fieldValue){
             case 'respParcours':
                 return [
-                    'type' => 'list',
+                    'type' => 'full_block',
+                    'libelle' => '',
+                    'header_content' => [
+                        'Responsable du parcours',
+                        'Email',
+                        'Co-responsable du parcours',
+                        'Email'
+                    ],
                     'value' => [
+                        ...array_merge(
                         [
-                            'libelle' => 'Responsable du parcours',
-                            'content' =>  $parcours?->getRespParcours()?->getDisplay(),
+                            [
+                                'libelle' => 'Responsable du parcours',
+                                'content' =>  $parcours?->getRespParcours()?->getDisplay(),
+                            ],
+                            [
+                                'libelle' => 'Email',
+                                'content' => $parcours?->getRespParcours()?->getEmail()
+                            ],
                         ],
-                        [
-                            'libelle' => 'Co-responsable du parcours',
-                            'content' =>  $parcours?->getCoResponsable()?->getDisplay()
-                        ]
+                        $parcours?->getCoResponsable() ?
+                            [
+                                [
+                                    'libelle' => 'Co-responsable du parcours',
+                                    'content' =>  $parcours?->getCoResponsable()?->getDisplay()
+                                ],
+                                [
+                                    'libelle' => 'Email',
+                                    'content' => $parcours?->getCoResponsable()?->getEmail()
+                                ]
+                            ]
+                            : 
+                            [
+                                ['libelle' => '', 'content' => ''],
+                                ['libelle' => '', 'content' => ''] // Colonnes vides Excel
+                            ]
+                        )
                     ]
                 ];
                 break;
@@ -864,6 +893,31 @@ class ExportGeneriqueParcours {
                     'value' => $parcours ? $parcours->getFormation()?->getId() : ""
                 ];
                 break;
+            case 'villeParcours':
+                return [
+                    'type' => 'longtext',
+                    'libelle' => 'Lieu de formation',
+                    'value' => $parcours?->getLocalisation()?->getLibelle() ?? ""
+                ];
+                break;
+            case 'codeRNCP':
+                return [
+                    'type' => 'longtext',
+                    'libelle' => 'RNCP',
+                    'value' => $parcours?->getFormation()?->getCodeRNCP() ?? ""
+                ];
+                break;
+            case 'dateValidationCFVU':
+                return [
+                    'type' => 'longtext',
+                    'libelle' => 'Validation CFVU',
+                    'value' => $parcours 
+                        ? $this->getHistorique->getHistoriqueParcoursLastStep(
+                            GetDpeParcours::getFromParcours($parcours), 'cfvu'
+                        )?->getDate()?->format('d/m/Y') ?? 'Non validé'
+                        : ""
+                ];
+                break;
         }
     }
 
@@ -896,7 +950,10 @@ class ExportGeneriqueParcours {
             'nomFormation' => 25,
             'etatDpeParcours' => 26,
             'idParcours' => 27,
-            'idFormation' => 28
+            'idFormation' => 28,
+            'villeParcours' => 29,
+            'codeRNCP' => 30,
+            'dateValidationCFVU' => 31
         ];
     }
 
