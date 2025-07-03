@@ -572,6 +572,13 @@ class ExportGeneriqueParcours {
                     'value' => $parcours?->getContenuFormation()
                 ];
                 break;
+            case 'contenuFormation':
+                return [
+                    'type' => 'longtext',
+                    'libelle' => 'Contenu de la formation',
+                    'value' => $parcours?->getFormation()?->getContenuFormation()
+                ];
+                break;
             case 'admissionParcours':
                 return [
                     'type' => 'full_block',
@@ -929,31 +936,32 @@ class ExportGeneriqueParcours {
             'respFormation' => 4,
             'respParcours' => 5,
             'objectifsFormation' => 6,
-            'organisationParcours' => 7,
-            'objectifsParcours' => 8,
-            'resultatsAttendusParcours' => 9,
-            'rythmeFormation' => 10,
-            'localisationParcours' => 11,
-            'competencesAcquises' => 12,
-            'admissionParcours' => 13,
-            'informationsInscription' => 14,
-            'poursuiteEtudes' => 15,
-            'debouchesParcours' => 16,
-            'codesRome' => 17,
-            'modalitesEnseignement' => 18,
-            'stageInfos' => 19,
-            'projetInfos' => 20,
-            'memoireInfos' => 21,
-            'contactsPedagogiques' => 22,
-            'semestresOuverts' => 23,
-            'nomParcours' => 24,
-            'nomFormation' => 25,
-            'etatDpeParcours' => 26,
-            'idParcours' => 27,
-            'idFormation' => 28,
-            'villeParcours' => 29,
-            'codeRNCP' => 30,
-            'dateValidationCFVU' => 31
+            'contenuFormation' => 7,
+            'organisationParcours' => 8,
+            'objectifsParcours' => 9,
+            'resultatsAttendusParcours' => 10,
+            'rythmeFormation' => 11,
+            'localisationParcours' => 12,
+            'competencesAcquises' => 13,
+            'admissionParcours' => 14,
+            'informationsInscription' => 15,
+            'poursuiteEtudes' => 16,
+            'debouchesParcours' => 17,
+            'codesRome' => 18,
+            'modalitesEnseignement' => 19,
+            'stageInfos' => 20,
+            'projetInfos' => 21,
+            'memoireInfos' => 22,
+            'contactsPedagogiques' => 23,
+            'semestresOuverts' => 24,
+            'nomParcours' => 25,
+            'nomFormation' => 26,
+            'etatDpeParcours' => 27,
+            'idParcours' => 28,
+            'idFormation' => 29,
+            'villeParcours' => 30,
+            'codeRNCP' => 31,
+            'dateValidationCFVU' => 32
         ];
     }
 
