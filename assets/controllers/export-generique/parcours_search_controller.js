@@ -532,6 +532,20 @@ export default class extends Controller {
                     dateValidationCFVU: true
                 }
                 break;
+            case 'templateResponsables':
+                this._typeExport = 'template';
+                this._templateTypeExport.type = 'parcours';
+                this._templateTypeExport.name = 'templateResponsables';
+                this._withFieldSorting = false;
+                this._withDefaultHeader = false;
+                this._selectedFields = {
+                    composantePorteuse: true,
+                    typeDiplome: true,
+                    nomFormation: true,
+                    nomParcours: true,
+                    respFormation: true,
+                    respParcours: true
+                };
         }
     }
 }
