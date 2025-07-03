@@ -335,8 +335,8 @@ class ParcoursRepository extends ServiceEntityRepository
         );
 
         $result = $result
-            ->select('p.id AS parcours_id, p.typeParcours AS typeParcours')
-            ->addSelect($patternLibelle . ' AS parcours_libelle')
+            ->select('p.id AS id, p.typeParcours AS typeParcours')
+            ->addSelect($patternLibelle . ' AS libelle')
             ->join('p.formation', 'f')
             ->join('f.typeDiplome', 'td')
             ->join('f.mention', 'm')
@@ -345,7 +345,7 @@ class ParcoursRepository extends ServiceEntityRepository
             ->andWhere('dpe.campagneCollecte = :campagneCollecte')
             ->setParameter(':displayName', '%' . $displayName . '%')
             ->setParameter(':campagneCollecte', $campagneCollecteId)
-            ->orderBy('parcours_libelle', 'ASC');
+            ->orderBy('libelle', 'ASC');
         
         
         return $result->getQuery()->getResult();

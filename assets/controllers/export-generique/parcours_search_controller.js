@@ -172,9 +172,9 @@ export default class extends Controller {
     }
 
     createResultList(resultArray){
-        resultArray.forEach(parcours => {
+        resultArray.forEach(result => {
             this.searchResultTarget.appendChild(
-                this.createSearchResultNode(parcours.parcours_libelle, parcours.parcours_id, parcours.typeParcours)
+                this.createSearchResultNode(result.libelle, result.id, result.typeParcours)
             );
         });
     }

@@ -15,6 +15,7 @@ use App\Classes\MyGotenbergPdf;
 use App\DTO\StructureEc;
 use App\DTO\StructureUe;
 use App\Entity\CampagneCollecte;
+use App\Entity\Composante;
 use App\Entity\Parcours;
 use App\Entity\ParcoursVersioning;
 use App\Message\ExportGenerique;
@@ -427,7 +428,9 @@ class ParcoursExportController extends AbstractController
         // Minimum de caractères pour la recherche
         if(mb_strlen($inputText) >= 4){
             $searchResults = $em->getRepository(Parcours::class)->findAllByDisplayName($inputText, $campagne);
-            return new JsonResponse($searchResults);
+            $composanteResult = $em->getRepository(Composante::class)->findParcoursByComposanteName($inputText, $campagne);
+
+            return new JsonResponse(array_merge($composanteResult, $searchResults));
         }
 
         else {
