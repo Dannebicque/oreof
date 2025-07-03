@@ -174,12 +174,12 @@ export default class extends Controller {
     createResultList(resultArray){
         resultArray.forEach(result => {
             this.searchResultTarget.appendChild(
-                this.createSearchResultNode(result.libelle, result.id, result.typeParcours)
+                this.createSearchResultNode(result.libelle, result.id, result.typeParcours, result.valueType ?? 'none')
             );
         });
     }
 
-    createSearchResultNode(resultName, resultId, typeParcours){
+    createSearchResultNode(resultName, resultId, typeParcours, valueType){
         let row = document.createElement('div');
         row.classList.add('row', 'my-1');
         let textDiv = document.createElement('div');
@@ -191,6 +191,7 @@ export default class extends Controller {
         }
         textDiv.dataset.parcoursLibelle = resultName + infoLibelle;
         textDiv.textContent = resultName + infoLibelle;
+        textDiv.dataset.valueType = valueType;
         this.createClickListenerForListParcoursItem(textDiv);
         row.appendChild(textDiv);
 
@@ -229,22 +230,29 @@ export default class extends Controller {
 
     createClickListenerForListParcoursItem(htmlNode){
         htmlNode.addEventListener('click', (event) => {
-            if(this._selectedParcours[`${event.target.dataset.parcoursId}`] === undefined){
-                if(this._selectedParcours['all'] !== undefined){
-                    delete this._selectedParcours['all'];
-                }
-                this._selectedParcours[`${event.target.dataset.parcoursId}`] = event.target.dataset.parcoursLibelle;
-                this.selectedParcoursTarget.appendChild(
-                    this.createSelectedItemBadge(
-                        event.target.dataset.parcoursLibelle,
-                        event.target.dataset.parcoursId
-                    )
-                );
-                this.selectedParcoursTarget.querySelector('.allParcoursDiv')?.remove();
+            let parcoursToAdd = [event.target.dataset.parcoursId];
+            if(event.target.dataset.valueType === 'array'){
+                parcoursToAdd = [...event.target.dataset.parcoursId.split(',')];
             }
+            parcoursToAdd.forEach(id => {
+                if(this._selectedParcours[`${id}`] === undefined){
+                    if(this._selectedParcours['all'] !== undefined){
+                        delete this._selectedParcours['all'];
+                    }
+                }
+                this._selectedParcours[`${id}`] = event.target.dataset.parcoursLibelle;
+            });
+
+            this.selectedParcoursTarget.appendChild(
+                this.createSelectedItemBadge(
+                    event.target.dataset.parcoursLibelle,
+                    parcoursToAdd
+                )
+            );
+
+            this.selectedParcoursTarget.querySelector('.allParcoursDiv')?.remove();
             this.displayNeedParcoursSelected();
         })
-
     }
 
     createSelectedItemBadge(name, id){
@@ -268,7 +276,16 @@ export default class extends Controller {
     }
 
     removeSelectedItemBadge(id){
-        if(this._selectedParcours[`${id}`] !== undefined){
+        if(id.length >= 2){
+            document.querySelectorAll('.badgeSelectedDiv')
+                .forEach(badge => {
+                    if(badge.querySelector('.badge.rounded-pill').dataset.parcoursId === `${id.join(',')}`){
+                        badge.remove();
+                        id.forEach(id => delete this._selectedParcours[`${id}`]);
+                    }
+                });
+        }
+        else if(this._selectedParcours[`${id}`] !== undefined) {
             document.querySelectorAll('.badgeSelectedDiv')
                 .forEach(badgeDiv => {
                     if(badgeDiv.querySelector('.badge.rounded-pill').dataset.parcoursId === `${id}`){

@@ -99,7 +99,12 @@ class ComposanteRepository extends ServiceEntityRepository
             $result[$row['comp_libelle']][] = $row['parcours_id'];
         }
 
-        $mapFunction = fn($key, $val) : array => ['libelle' => $key, 'id' => $val, 'typeParcours' => null];
+        $mapFunction = fn($key, $val) : array => [
+            'libelle' => $key, 
+            'id' => $val, 
+            'typeParcours' => null,
+            'valueType' => 'array'
+        ];
 
         return array_map($mapFunction, array_keys($result), array_values($result));
     }
