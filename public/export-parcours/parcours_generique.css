@@ -62,7 +62,7 @@
 }
 
 @media screen and (max-width: 768px){
-    .textDivFieldChoice, .fmTextDivFieldChoice {
+    .textDivFieldChoice, .fmTextDivFieldChoice, .textDivExportTemplateData {
         padding: .45em;
     }
 }
