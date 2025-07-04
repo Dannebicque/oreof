@@ -481,6 +481,7 @@ export default class extends Controller {
                 this._templateTypeExport.type = 'parcours';
                 this._templateTypeExport.name = 'templateSEIP';
                 this._withFieldSorting = false;
+                this._withDefaultHeader = true;
                 this._selectedFields = {
                     modalitesEnseignement: true,
                     stageInfos: true,
@@ -493,6 +494,7 @@ export default class extends Controller {
                 this._templateTypeExport.type = 'parcours';
                 this._templateTypeExport.name = 'templateFicheParcours';
                 this._withFieldSorting = false;
+                this._withDefaultHeader = true;
                 this._selectedFields = {
                     identiteFormation: true,
                     respFormation: true,
