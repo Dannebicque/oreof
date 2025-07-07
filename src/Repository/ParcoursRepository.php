@@ -351,4 +351,55 @@ class ParcoursRepository extends ServiceEntityRepository
         return $result->getQuery()->getResult();
 
     }
+
+    public function findByIdAndCampagneCollecte(array|string $idArray, int $idCampagne){
+        $qb = $this->createQueryBuilder('p');
+
+        $qb = $qb->select('p.id AS parcours_id')
+            ->join('p.dpeParcours', 'dpe')
+            ->join('dpe.campagneCollecte', 'campagne')
+            ->where('campagne.id = :idCampagne')
+            ->setParameter(':idCampagne', $idCampagne);
+
+        if($idArray === 'all'){
+            $qb = $qb->andWhere(
+                $qb->expr()->like('p.id', ':wildcardAll')
+            )->setParameter(':wildcardAll', '%');
+        }
+        elseif (is_array($idArray)){
+            $qb = $qb->andWhere(
+                $qb->expr()->in('p.id', ':idArray')
+            )->setParameter(':idArray', $idArray);
+        }
+
+        return $qb->getQuery()->getResult();
+    }
+
+    public function findMaxNumberOfComposanteForRange(array|string $idArray, int $idCampagne){
+        $qb = $this->createQueryBuilder('p')
+            ->select('COUNT(DISTINCT comp.id)')
+            ->join('p.formation', 'f')
+            ->join('f.composantesInscription', 'comp')
+            ->join('p.dpeParcours', 'dpe')
+            ->join('dpe.campagneCollecte', 'campagne')
+            ->where('campagne.id = :idCampagne')
+            ->groupBy('p.id')
+            ->setParameter(':idCampagne', $idCampagne);
+
+        if($idArray === 'all'){
+            $qb = $qb->andWhere(
+                $qb->expr()->like('p.id', ':wildcardAll')
+            )->setParameter(':wildcardAll', '%');
+        }
+        elseif (is_array($idArray)){
+            $qb = $qb->andWhere(
+                $qb->expr()->in('p.id', ':idArray')
+            )->setParameter(':idArray', $idArray);
+        }
+
+        return max(
+            array_merge(...$qb->getQuery()->getResult())
+        );
+
+    }
 }
