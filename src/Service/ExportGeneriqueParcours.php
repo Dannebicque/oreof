@@ -42,6 +42,8 @@ class ExportGeneriqueParcours {
             );
         }
 
+        $parcoursData = array_map(fn($p) => $p['parcours_id'], $parcoursData);
+
         $dataStructure = [];
         foreach($parcoursData as $parcoursId){
             $parcours = $this->em->getRepository(Parcours::class)->findOneById($parcoursId);
@@ -144,6 +146,8 @@ class ExportGeneriqueParcours {
                 <=> $this->getFieldOrderForExportGenerique()[$f2]
             );
         }
+
+        $parcoursData = array_map(fn($p) => $p['parcours_id'], $parcoursData);
 
         /**
          * Variables pour les header
