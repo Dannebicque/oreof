@@ -476,7 +476,7 @@ class FicheMatiereRepository extends ServiceEntityRepository
             ->leftJoin('ficheMutu.parcours', 'ficheMutuParcours')
             ->where('f.campagneCollecte = :campagneCollecte')
             ->andWhere(
-                $qb->expr()->in('p', $parcoursIdArray)
+                $qb->expr()->in('p.id', $parcoursIdArray)
             )
             ->orWhere(
                 $qb->expr()->in('ficheMutuParcours.id', $parcoursIdArray)
