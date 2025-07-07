@@ -36,7 +36,7 @@ class ExportGeneriqueFicheMatiere {
             );
         }
 
-        $parcoursData = array_map(fn($p) => $p->getId(), $parcoursData);
+        $parcoursData = array_map(fn($id) => $id['parcours_id'], $parcoursData);
 
         $finalData = $this->em->getRepository(FicheMatiere::class)
             ->findByParcoursRangeForExport($parcoursData, $campagneCollecte);
@@ -89,7 +89,7 @@ class ExportGeneriqueFicheMatiere {
             );
         }
 
-        $parcoursData = array_map(fn($p) => $p->getId(), $parcoursData);
+        $parcoursData = array_map(fn($id) => $id['parcours_id'], $parcoursData);
 
         $finalData = $this->em->getRepository(FicheMatiere::class)
             ->findByParcoursRangeForExport($parcoursData, $campagneCollecte);
@@ -164,15 +164,18 @@ class ExportGeneriqueFicheMatiere {
             ->findOneById($campagneCollecte)
             ?? $this->em->getRepository(CampagneCollecte::class)->findOneBy(['defaut' => true]);
 
-        $parcoursData = [];
+        
         $parcoursIdArray = $request->query->all()['id'] ?? [];
+        $searchParam = [];
         if(isset($parcoursIdArray[0]) && $parcoursIdArray[0] === 'all'){
-            $parcoursData = $this->em->getRepository(Parcours::class)->findByCampagneCollecte($campagneCollecte);
+            $searchParam = 'all';
         }
         else {
-            $parcoursIdArray = array_map(fn($id) => (int)$id, $parcoursIdArray);
-            $parcoursData = $this->em->getRepository(Parcours::class)->findById($parcoursIdArray);
+            $searchParam = array_map(fn($id) => (int)$id, $parcoursIdArray);
         }
+
+        $parcoursData = $this->em->getRepository(Parcours::class)
+            ->findByIdAndCampagneCollecte($searchParam, $campagneCollecte->getId());
 
         if(count($parcoursData) < 1){
             throw new NotFoundHttpException('Aucun parcours sélectionné.');

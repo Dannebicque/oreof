@@ -43,7 +43,9 @@ class ExportGeneriqueParcours {
         }
 
         $dataStructure = [];
-        foreach($parcoursData as $parcours){
+        foreach($parcoursData as $parcoursId){
+            $parcours = $this->em->getRepository(Parcours::class)->findOneById($parcoursId);
+
             $headersSectionPdf = [];
             foreach($fieldValueArray as $f){
                 if(in_array($f, ['objectifsFormation']) && isset($headersSectionPdf[$f]) === false){
@@ -146,10 +148,8 @@ class ExportGeneriqueParcours {
         /**
          * Variables pour les header
          */
-        $nbMaxComposanteInscription = max(array_map(
-            fn($p) => $p?->getFormation()?->getComposantesInscription()?->count() ?? 0, 
-            $parcoursData
-        ));
+        $nbMaxComposanteInscription = $this->em->getRepository(Parcours::class)
+            ->findMaxNumberOfComposanteForRange($parcoursData, $campagneCollecte->getId()) ?? 1;
 
         $headerDeBase = ["Type de diplôme", "Intitulé de la formation", "Intitulé du parcours"];
         $headersExcel = array_map(
@@ -201,9 +201,12 @@ class ExportGeneriqueParcours {
         }
 
         $dataExcel = array_map(
-            fn($parcours) => array_merge(
+        function($parcoursId) use ($fieldValueArray, $withDefaultHeader, $nbMaxComposanteInscription) { 
+            $parcours = $this->em->getRepository(Parcours::class)->findOneById($parcoursId);
+
+            return array_merge(
                 $this->getDefaultHeaderValue($parcours, $withDefaultHeader)
-               , array_merge(
+            , array_merge(
                     ...array_map(
                         function($field) use ($parcours, $nbMaxComposanteInscription) {
                             if($this->mapParcoursExportWithValues($field, $parcours)['type'] === 'list'){
@@ -250,7 +253,8 @@ class ExportGeneriqueParcours {
                         , $fieldValueArray
                         )
                     )   
-            )
+                );
+            }
             , $parcoursData
         );
 
@@ -979,15 +983,17 @@ class ExportGeneriqueParcours {
             ->findOneById($campagneCollecte)
             ?? $this->em->getRepository(CampagneCollecte::class)->findOneBy(['defaut' => true]);
 
-        $parcoursData = [];
         $parcoursIdArray = $request->query->all()['id'] ?? [];
+        $searchParam = [];
         if(isset($parcoursIdArray[0]) && $parcoursIdArray[0] === 'all'){
-            $parcoursData = $this->em->getRepository(Parcours::class)->findByCampagneCollecte($campagneCollecte);
+            $searchParam = 'all';
         }
         else {
-            $parcoursIdArray = array_map(fn($id) => (int)$id, $parcoursIdArray);
-            $parcoursData = $this->em->getRepository(Parcours::class)->findById($parcoursIdArray);
+            $searchParam = array_map(fn($id) => (int)$id, $parcoursIdArray);
         }
+
+        $parcoursData = $this->em->getRepository(Parcours::class)
+            ->findByIdAndCampagneCollecte($searchParam, $campagneCollecte->getId());
 
         if(count($parcoursData) < 1){
             throw new NotFoundHttpException('Aucun parcours sélectionné.');
