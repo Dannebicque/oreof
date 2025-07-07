@@ -234,6 +234,15 @@ export default class extends Controller {
             if(event.target.dataset.valueType === 'array'){
                 parcoursToAdd = [...event.target.dataset.parcoursId.split(',')];
             }
+
+            // Vérification que le badge n'existe pas déjà
+            let alreadyExists = false;
+            for(const key in this._selectedParcours){
+                if(this._selectedParcours[key] === event.target.dataset.parcoursLibelle){
+                    alreadyExists = true;
+                }
+            }
+
             parcoursToAdd.forEach(id => {
                 if(this._selectedParcours[`${id}`] === undefined){
                     if(this._selectedParcours['all'] !== undefined){
@@ -243,12 +252,14 @@ export default class extends Controller {
                 this._selectedParcours[`${id}`] = event.target.dataset.parcoursLibelle;
             });
 
-            this.selectedParcoursTarget.appendChild(
-                this.createSelectedItemBadge(
-                    event.target.dataset.parcoursLibelle,
-                    parcoursToAdd
-                )
-            );
+            if(alreadyExists === false){
+                this.selectedParcoursTarget.appendChild(
+                    this.createSelectedItemBadge(
+                        event.target.dataset.parcoursLibelle,
+                        parcoursToAdd
+                    )
+                );
+            }
 
             this.selectedParcoursTarget.querySelector('.allParcoursDiv')?.remove();
             this.displayNeedParcoursSelected();
