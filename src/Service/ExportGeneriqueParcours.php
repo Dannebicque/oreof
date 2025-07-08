@@ -2,9 +2,13 @@
 
 namespace App\Service;
 
+use App\Classes\CalculButStructureParcours;
+use App\Classes\CalculStructureParcours;
 use App\Classes\GetDpeParcours;
 use App\Classes\GetHistorique;
 use App\Classes\MyGotenbergPdf;
+use App\DTO\StructureEc;
+use App\DTO\StructureUe;
 use App\Entity\CampagneCollecte;
 use App\Entity\Contact;
 use App\Entity\Parcours;
@@ -25,6 +29,8 @@ class ExportGeneriqueParcours {
         private MyGotenbergPdf $myPdf,
         private Filesystem $fs,
         private GetHistorique $getHistorique,
+        private CalculStructureParcours $calculStruct,
+        private CalculButStructureParcours $calculButStruct
     ){
         
     }
@@ -1082,7 +1088,66 @@ class ExportGeneriqueParcours {
 
     private function getExportCapApogee(string $typeExport, array $parcoursIdArray){
         if($typeExport === 'xlsx'){
+            $excelData = [];
+            foreach($parcoursIdArray as $id){
+                $dto = $this->em->getRepository(Parcours::class)->findOneById($id);
+                if($dto->getFormation()?->getTypeDiplome()?->getLibelleCourt() === 'BUT'){
+                    $dto = $this->calculButStruct->calcul($dto);
+                }
+                else {
+                    $dto = $this->calculStruct->calcul($dto, dataFromFicheMatiere: true);
+                }
+                foreach($dto->semestres as $semestre){
+                    $ordreSemestre = $semestre->semestre->getOrdre();
+                    foreach($semestre->ues as $ue){
+                        if($ue->ue->getNatureUeEc()?->isChoix()){
+                            foreach($ue->uesEnfants() as $ueEnfant){
+                                if($ueEnfant->ue->getNatureUeEc()?->isChoix()){
+                                    foreach($ueEnfant->uesEnfants() as $ueEnfantDeuxieme){
+                                        if($ueEnfantDeuxieme->ue->getNatureUeEc()?->isLibre() === false){
+                                            $excelData[] = $this->getEcFromUeCapApogee(
+                                                $ueEnfantDeuxieme, 
+                                                $semestre->semestreParcours, 
+                                                true,
+                                                $ordreSemestre
+                                            );
+                                        }
+                                    }
+                                }
+                                else {
+                                    $excelData[] = $this->getEcFromUeCapApogee($ueEnfant, $semestre->semestreParcours, false, $ordreSemestre);
+                                }
+                            }
+                        }
+                        else {
+                            $excelData[] = $this->getEcFromUeCapApogee($ue, $semestre->semestreParcours, false, $ordreSemestre);
+                        }
+                    }
+                }
+            }
 
+            $headersExcel = [
+                'Composante',
+                'Type Diplôme',
+                'Mention',
+                'Parcours',
+                'Code Dip.' ,
+                'VDI',
+                'Code étape',
+                'VET',
+                'Fiche EC/matière',
+                'Code élément',
+                'CM',
+                'TD',
+                'TP',
+                'MATI/MATM',
+                'Option',
+                'Semestre'
+            ];
+
+            $excelData = array_merge(...$excelData);
+
+            return $this->getXlsxContent($headersExcel, $excelData);
         }
     }
 
@@ -1102,5 +1167,48 @@ class ExportGeneriqueParcours {
         $this->fs->remove($tmpFile);
 
         return [$fileContent, $filename];
+    }
+
+    private function getEcCapApogeeData(
+        StructureEc $ec,
+        ?SemestreParcours $semP,
+        bool $isOption,
+        int $ordreSemestre
+    ){
+        return [
+            $semP?->getCodeApogeeDiplome() ?? "",
+            $semP?->getCodeApogeeVersionDiplome() ?? "",
+            $semP?->getCodeApogeeEtapeAnnee() ?? "",
+            $semP?->getCodeApogeeEtapeVersion() ?? "",
+            $ec->elementConstitutif->getFicheMatiere()?->getLibelle() ?? '-',
+            $ec->elementConstitutif->displayCodeApogee(),
+            $ec->heuresEctsEc->cmPres,
+            $ec->heuresEctsEc->tdPres,
+            $ec->heuresEctsEc->tpPres,
+            $ec->elementConstitutif->getFicheMatiere()?->getTypeApogee() ?? "-",
+            $isOption ? 'Choix/option' : 'Obligatoire',
+            "S{$ordreSemestre}"
+        ];
+    }
+
+    private function getEcFromUeCapApogee(
+        StructureUe $ue, 
+        ?SemestreParcours $semP, 
+        bool $isOption,
+        int $ordreSemestre
+    ){
+        $return = [];
+        foreach($ue->elementConstitutifs as $ec){
+            if($ec->elementConstitutif->getNatureUeEc()?->isChoix()){
+                foreach($ec->elementsConstitutifsEnfants as $ecEnfant){
+                    $return[] = $this->getEcCapApogeeData($ecEnfant, $semP, true, $ordreSemestre);
+                }
+            }
+            else {
+                $return[] = $this->getEcCapApogeeData($ec, $semP, $isOption, $ordreSemestre);
+            }
+        }
+
+        return $return;
     }
 }

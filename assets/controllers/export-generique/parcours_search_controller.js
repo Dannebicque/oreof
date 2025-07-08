@@ -129,7 +129,8 @@ export default class extends Controller {
             }
 
             if(this._predefinedTemplate){
-                url = typeExportPdfUrl + '?' + postParcours
+                url = type === 'xlsx' ? typeExportXlsxUrl : typeExportPdfUrl;
+                url += '?' + postParcours
                     + '&campagne=' + this.campagneCollecteValue
                     + `&predefinedTemplate=${this._predefinedTemplate}`
                     + '&templateName=' + this._templateTypeExport.name;
@@ -598,7 +599,9 @@ export default class extends Controller {
                 this._predefinedTemplate = true;
                 this._withFieldSorting = false;
                 this._withDefaultHeader = false;
-                this._selectedFields = {};
+                this._selectedFields = {
+                    none: true
+                };
                 break;
         }
     }
