@@ -42,6 +42,8 @@ export default class extends Controller {
 
     _withDefaultHeader = true;
 
+    _predefinedTemplate = false;
+
     connect(){
         this.searchFormTarget.addEventListener('submit', async (event)=> {
             event.preventDefault();
@@ -124,6 +126,13 @@ export default class extends Controller {
                     + postParcours + '&' + postFields
                     + '&campagne=' + this.campagneCollecteValue;
                 targetNewTab = '_blank';
+            }
+
+            if(this._predefinedTemplate){
+                url = typeExportPdfUrl + '?' + postParcours
+                    + '&campagne=' + this.campagneCollecteValue
+                    + `&predefinedTemplate=${this._predefinedTemplate}`
+                    + '&templateName=' + this._templateTypeExport.name;
             }
 
             url += `&withFieldSorting=${this._withFieldSorting ? 'true' : 'false'}`;
@@ -491,6 +500,7 @@ export default class extends Controller {
                 this._typeExport = 'template';
                 this._templateTypeExport.type = 'parcours';
                 this._templateTypeExport.name = 'templateSEIP';
+                this._predefinedTemplate = false;
                 this._withFieldSorting = false;
                 this._withDefaultHeader = true;
                 this._selectedFields = {
@@ -504,6 +514,7 @@ export default class extends Controller {
                 this._typeExport = 'template';
                 this._templateTypeExport.type = 'parcours';
                 this._templateTypeExport.name = 'templateFicheParcours';
+                this._predefinedTemplate = false;
                 this._withFieldSorting = false;
                 this._withDefaultHeader = true;
                 this._selectedFields = {
@@ -529,6 +540,7 @@ export default class extends Controller {
                 this._typeExport = 'template';
                 this._templateTypeExport.type = 'parcours';
                 this._templateTypeExport.name = 'templateSemestresOuverts';
+                this._predefinedTemplate = false;
                 this._withFieldSorting = false;
                 this._withDefaultHeader = false;
                 this._selectedFields = {
@@ -548,6 +560,7 @@ export default class extends Controller {
                 this._typeExport = 'template';
                 this._templateTypeExport.type = 'parcours';
                 this._templateTypeExport.name = 'templateExportRegime';
+                this._predefinedTemplate = false;
                 this._withFieldSorting = false;
                 this._withDefaultHeader = false;
                 this._selectedFields = {
@@ -566,6 +579,7 @@ export default class extends Controller {
                 this._typeExport = 'template';
                 this._templateTypeExport.type = 'parcours';
                 this._templateTypeExport.name = 'templateResponsables';
+                this._predefinedTemplate = false;
                 this._withFieldSorting = false;
                 this._withDefaultHeader = false;
                 this._selectedFields = {
@@ -576,6 +590,16 @@ export default class extends Controller {
                     respFormation: true,
                     respParcours: true
                 };
+                break;
+            case 'templateExportCapApogee':
+                this._typeExport = 'template';
+                this._templateTypeExport.type = 'parcours';
+                this._templateTypeExport.name = 'templateExportCapApogee';
+                this._predefinedTemplate = true;
+                this._withFieldSorting = false;
+                this._withDefaultHeader = false;
+                this._selectedFields = {};
+                break;
         }
     }
 }

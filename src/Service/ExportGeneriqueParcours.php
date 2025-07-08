@@ -134,8 +134,16 @@ class ExportGeneriqueParcours {
             $parcoursData, 
             $campagneCollecte, 
             $withFieldSorting,
-            $withDefaultHeader
+            $withDefaultHeader,
+            $isPredefinedTemplate,
+            $predefinedTemplateName
         ] = $this->checkExportGeneriqueData($request);
+
+        if($isPredefinedTemplate){
+            $this->checkPredefinedTemplateExists($predefinedTemplateName);
+            return $this->getPredefinedTemplate($predefinedTemplateName, 'xlsx', $parcoursData);
+        }
+
 
         $this->checkFieldsAreSupported($fieldValueArray);
 
@@ -976,6 +984,13 @@ class ExportGeneriqueParcours {
     private function checkExportGeneriqueData(
         Request $request
     ){
+        $isPredefinedTemplate = $request->query->get('predefinedTemplate', 'false');
+        $isPredefinedTemplate = $isPredefinedTemplate === 'true' ? true : false;
+        $predefinedTemplateName = null;
+        if($isPredefinedTemplate){
+            $predefinedTemplateName = $request->query->get('templateName', null);
+        }
+
         $withFieldSorting = $request->query->get('withFieldSorting', "true");
         $withFieldSorting = $withFieldSorting === 'false' ? false : true;
 
@@ -1005,8 +1020,12 @@ class ExportGeneriqueParcours {
 
         $fieldValueArray = $request->query->all()['val'] ?? [];
         // Vérification sur les champs demandés (non vide)
-        if(count($fieldValueArray) === 0){
+        if(count($fieldValueArray) === 0 && $isPredefinedTemplate === false){
             throw new NotFoundHttpException('Aucun champ précisé.');
+        }
+
+        if($isPredefinedTemplate && $predefinedTemplateName === null){
+            throw new NotFoundHttpException("Aucun nom précisé pour le template prédéfini.");
         }
 
         return [
@@ -1014,7 +1033,9 @@ class ExportGeneriqueParcours {
             $parcoursData,
             $campagneCollecte,
             $withFieldSorting,
-            $withDefaultHeader
+            $withDefaultHeader,
+            $isPredefinedTemplate,
+            $predefinedTemplateName
         ];
     }
 
@@ -1030,6 +1051,15 @@ class ExportGeneriqueParcours {
         }
     }
 
+    private function checkPredefinedTemplateExists(string $templateName){
+        $isExisting = in_array($templateName, [
+            'templateExportCapApogee'
+        ]);
+        if(!$isExisting){
+            throw new NotFoundHttpException("Le template précisé n'a pas été trouvé.");
+        }
+    }
+
     private function getDefaultHeaderValue(?Parcours $parcours, bool $withHeader = true){
         if($parcours !== null && $withHeader){
             return [
@@ -1040,5 +1070,19 @@ class ExportGeneriqueParcours {
         }
 
         return [];
+    }
+
+    private function getPredefinedTemplate(string $templateName, string $typeExport = 'xlsx', array $parcoursIdArray){
+        switch($templateName){
+            case 'templateExportCapApogee':
+                return $this->getExportCapApogee($typeExport, $parcoursIdArray);
+                break;
+        }
+    }   
+
+    private function getExportCapApogee(string $typeExport, array $parcoursIdArray){
+        if($typeExport === 'xlsx'){
+
+        }
     }
 }
