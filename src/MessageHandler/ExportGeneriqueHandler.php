@@ -39,7 +39,9 @@ class ExportGeneriqueHandler {
                     'val' => $exportGenerique->getFieldValueArray(),
                     'withFieldSorting' => $exportGenerique->getWithFieldSorting(),
                     'campagne' => $exportGenerique->getCampagneCollecte(),
-                    'withHeader' => $exportGenerique->hasDefaultHeader()
+                    'withHeader' => $exportGenerique->hasDefaultHeader(),
+                    'predefinedTemplate' => $exportGenerique->isPredefinedTemplate(),
+                    'templateName' => $exportGenerique->getPredefinedTemplateName()
                 ]);
         $typeExport = $exportGenerique->getTypeExport();
 

@@ -131,7 +131,9 @@ class FicheMatiereExportController extends AbstractController
                 $request->query->get('campagne', 2),
                 $request->query->get('withFieldSorting', "true"),
                 $user->getEmail(),
-                $request->query->get('withHeader', 'true')
+                $request->query->get('withHeader', 'true'),
+                $request->query->get('predefinedTemplate', 'false'),
+                $request->query->get('templateName', null)
             ));
 
             $this->addFlash('toast', [
@@ -172,7 +174,9 @@ class FicheMatiereExportController extends AbstractController
                 $request->query->get('campagne', 2),
                 $request->query->get('withFieldSorting', "true"),
                 $user->getEmail(),
-                $request->query->get('withHeader', 'true')
+                $request->query->get('withHeader', 'true'),
+                $request->query->get('predefinedTemplate', 'false'),
+                $request->query->get('templateName', null)
             ));
 
             $this->addFlash('toast', [
