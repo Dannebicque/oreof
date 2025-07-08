@@ -1085,4 +1085,22 @@ class ExportGeneriqueParcours {
 
         }
     }
+
+    private function getXlsxContent(array $headers, array $data){
+        $spreadSheet = new Spreadsheet();
+        $activeWS = $spreadSheet->getActiveSheet();
+        $activeWS->fromArray($headers);
+        $activeWS->fromArray($data, startCell: 'A2');
+
+        $writer = new Xlsx($spreadSheet);
+        $dateNow = (new DateTime())->format('d-m-Y_H-i');
+        $filename = "Export-Generique-Parcours-{$dateNow}";
+
+        $tmpFile = $this->fs->tempnam(__DIR__ . "/../../public/temp/", 'export_generique');
+        $writer->save($tmpFile);
+        $fileContent = file_get_contents($tmpFile);
+        $this->fs->remove($tmpFile);
+
+        return [$fileContent, $filename];
+    }
 }
