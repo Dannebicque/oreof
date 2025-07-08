@@ -1166,13 +1166,18 @@ class ExportGeneriqueParcours {
                 'Semestre'
             ];
 
+            $colIndex = [
+                'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',
+                'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P'
+            ];
+
             $excelData = array_merge(...$excelData);
 
-            return $this->getXlsxContent($headersExcel, $excelData);
+            return $this->getXlsxContent($headersExcel, $excelData, $colIndex);
         }
     }
 
-    private function getXlsxContent(array $headers, array $data){
+    private function getXlsxContent(array $headers, array $data, array $autosizeColIndex = []){
         $spreadSheet = new Spreadsheet();
         $activeWS = $spreadSheet->getActiveSheet();
         $activeWS->fromArray($headers);
@@ -1181,6 +1186,10 @@ class ExportGeneriqueParcours {
         $writer = new Xlsx($spreadSheet);
         $dateNow = (new DateTime())->format('d-m-Y_H-i');
         $filename = "Export-Generique-Parcours-{$dateNow}";
+
+        foreach($autosizeColIndex as $col){
+            $activeWS->getColumnDimension($col)->setAutoSize(true);
+        }
 
         $tmpFile = $this->fs->tempnam(__DIR__ . "/../../public/temp/", 'export_generique');
         $writer->save($tmpFile);
