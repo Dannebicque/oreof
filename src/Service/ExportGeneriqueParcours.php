@@ -147,7 +147,7 @@ class ExportGeneriqueParcours {
 
         if($isPredefinedTemplate){
             $this->checkPredefinedTemplateExists($predefinedTemplateName);
-            return $this->getPredefinedTemplate($predefinedTemplateName, 'xlsx', $parcoursData);
+            return $this->getPredefinedTemplate($predefinedTemplateName, $parcoursData, 'xlsx');
         }
 
 
@@ -1078,7 +1078,7 @@ class ExportGeneriqueParcours {
         return [];
     }
 
-    private function getPredefinedTemplate(string $templateName, string $typeExport = 'xlsx', array $parcoursIdArray){
+    private function getPredefinedTemplate(string $templateName, array $parcoursIdArray, string $typeExport = 'xlsx'){
         switch($templateName){
             case 'templateExportCapApogee':
                 return $this->getExportCapApogee($typeExport, $parcoursIdArray);
@@ -1090,7 +1090,15 @@ class ExportGeneriqueParcours {
         if($typeExport === 'xlsx'){
             $excelData = [];
             foreach($parcoursIdArray as $id){
+                // Parcours
                 $dto = $this->em->getRepository(Parcours::class)->findOneById($id);
+                $headersParcours = [
+                    $dto->getFormation()?->getComposantePorteuse()?->getLibelle() ?? "",
+                    $dto->getFormation()?->getTypeDiplome()?->getLibelle() ?? "",
+                    $dto->getFormation()?->getDisplay(),
+                    $dto->getLibelle()
+                ];
+                // Transformé ensuite en maquette
                 if($dto->getFormation()?->getTypeDiplome()?->getLibelleCourt() === 'BUT'){
                     $dto = $this->calculButStruct->calcul($dto);
                 }
@@ -1109,18 +1117,31 @@ class ExportGeneriqueParcours {
                                                 $ueEnfantDeuxieme, 
                                                 $semestre->semestreParcours, 
                                                 true,
-                                                $ordreSemestre
+                                                $ordreSemestre,
+                                                $headersParcours
                                             );
                                         }
                                     }
                                 }
                                 else {
-                                    $excelData[] = $this->getEcFromUeCapApogee($ueEnfant, $semestre->semestreParcours, false, $ordreSemestre);
+                                    $excelData[] = $this->getEcFromUeCapApogee(
+                                        $ueEnfant, 
+                                        $semestre->semestreParcours, 
+                                        false, 
+                                        $ordreSemestre,
+                                        $headersParcours
+                                    );
                                 }
                             }
                         }
                         else {
-                            $excelData[] = $this->getEcFromUeCapApogee($ue, $semestre->semestreParcours, false, $ordreSemestre);
+                            $excelData[] = $this->getEcFromUeCapApogee(
+                                $ue, 
+                                $semestre->semestreParcours, 
+                                false, 
+                                $ordreSemestre,
+                                $headersParcours
+                            );
                         }
                     }
                 }
@@ -1173,9 +1194,11 @@ class ExportGeneriqueParcours {
         StructureEc $ec,
         ?SemestreParcours $semP,
         bool $isOption,
-        int $ordreSemestre
+        int $ordreSemestre,
+        array $prefixData = []
     ){
         return [
+            ...$prefixData,
             $semP?->getCodeApogeeDiplome() ?? "",
             $semP?->getCodeApogeeVersionDiplome() ?? "",
             $semP?->getCodeApogeeEtapeAnnee() ?? "",
@@ -1195,17 +1218,18 @@ class ExportGeneriqueParcours {
         StructureUe $ue, 
         ?SemestreParcours $semP, 
         bool $isOption,
-        int $ordreSemestre
+        int $ordreSemestre,
+        array $prefixData = []
     ){
         $return = [];
         foreach($ue->elementConstitutifs as $ec){
             if($ec->elementConstitutif->getNatureUeEc()?->isChoix()){
                 foreach($ec->elementsConstitutifsEnfants as $ecEnfant){
-                    $return[] = $this->getEcCapApogeeData($ecEnfant, $semP, true, $ordreSemestre);
+                    $return[] = $this->getEcCapApogeeData($ecEnfant, $semP, true, $ordreSemestre, $prefixData);
                 }
             }
             else {
-                $return[] = $this->getEcCapApogeeData($ec, $semP, $isOption, $ordreSemestre);
+                $return[] = $this->getEcCapApogeeData($ec, $semP, $isOption, $ordreSemestre, $prefixData);
             }
         }
 
