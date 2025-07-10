@@ -308,13 +308,13 @@ class ParcoursRepository extends ServiceEntityRepository
             'm.libelle',
             $result->expr()->literal(' '),
             $result->expr()->literal('('),
-            'f.sigle',
+            "COALESCE(f.sigle, '')",
             $result->expr()->literal(')'),
             $result->expr()->literal(' - '),
             'p.libelle', 
             $result->expr()->literal(' '),
             $result->expr()->literal('('),
-            'p.sigle', 
+            "COALESCE(p.sigle, '')", 
             $result->expr()->literal(')'),
         );
 
@@ -324,13 +324,13 @@ class ParcoursRepository extends ServiceEntityRepository
             'UPPER(m.libelle)',
             $result->expr()->literal(' '),
             $result->expr()->literal('('),
-            'UPPER(f.sigle)',
+            "UPPER(COALESCE(f.sigle, ''))",
             $result->expr()->literal(')'),
             $result->expr()->literal(' - '),
             'UPPER(p.libelle)', 
             $result->expr()->literal(' '),
             $result->expr()->literal('('),
-            'UPPER(p.sigle)', 
+            "UPPER(COALESCE(p.sigle, ''))", 
             $result->expr()->literal(')'),
         );
 
