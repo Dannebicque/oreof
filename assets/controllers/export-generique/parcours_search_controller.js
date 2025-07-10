@@ -105,6 +105,8 @@ export default class extends Controller {
             let url = "#";
             let targetNewTab;
 
+            let availableFormatForExport = this.checkCanExportData();
+
             let typeExportPdfUrl = this._typeExport === 'parcours'
                 || (this._typeExport === 'template' && this._templateTypeExport.type === 'parcours')
                 ? this.downloadParcoursPdfUrlValue  
@@ -145,10 +147,12 @@ export default class extends Controller {
                 targetNewTab = "_self";
             }
 
-            if(this._isRequestPending === false){
-                this._isRequestPending = true;
-                let resultWindow = window.open(url, targetNewTab);
-                resultWindow.onload = (event) => this._isRequestPending = false;
+            if(availableFormatForExport[type] === true){
+                if(this._isRequestPending === false){
+                    this._isRequestPending = true;
+                    let resultWindow = window.open(url, targetNewTab);
+                    resultWindow.onload = (event) => this._isRequestPending = false;
+                }
             }
         }
         else {
@@ -604,5 +608,13 @@ export default class extends Controller {
                 };
                 break;
         }
+    }
+
+    checkCanExportData() {
+        if(this._templateTypeExport.name === 'templateExportCapApogee'){
+            return {pdf: false, xlsx: true}
+        }
+
+        return {pdf: true, xlsx: true};
     }
 }
