@@ -42,6 +42,7 @@ class ExportGeneriqueParcours {
             $parcoursData, 
             $campagneCollecte, 
             $withFieldSorting,
+            $withDefaultHeader,
             $isPredefinedTemplate,
             $predefinedTemplateName
         ] = $this->checkExportGeneriqueData($request);
@@ -1267,6 +1268,6 @@ class ExportGeneriqueParcours {
             'templateExportCapApogee' => ['pdf' => false, 'xlsx' => true]
         ];
 
-        return $availableData[$exportType];
+        return $availableData[$dataExportName][$exportType];
     }
 }

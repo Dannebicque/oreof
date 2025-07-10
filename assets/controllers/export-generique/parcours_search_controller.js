@@ -337,6 +337,7 @@ export default class extends Controller {
                 this.deselectAllTemplateExportButton();
             }
             this._typeExport = 'parcours';
+            this._predefinedTemplate = false;
             // Sélection
             if(this._selectedFields[event.target.dataset.exportField] === undefined){
                 node.classList.add(...badgeClassList);
@@ -367,6 +368,7 @@ export default class extends Controller {
                 this.deselectAllTemplateExportButton();
             }
             this._typeExport = 'fiche_matiere';
+            this._predefinedTemplate = false;
             // Sélection
             if(this._selectedFields[event.target.dataset.exportFmField] === undefined){
                 node.classList.add(...badgeClassList);
