@@ -335,7 +335,7 @@ class ParcoursRepository extends ServiceEntityRepository
         );
 
         $result = $result
-            ->select('p.id AS id, p.typeParcours AS typeParcours')
+            ->select('DISTINCT p.id AS id, p.typeParcours AS typeParcours')
             ->addSelect($patternLibelle . ' AS libelle')
             ->join('p.formation', 'f')
             ->join('f.typeDiplome', 'td')
