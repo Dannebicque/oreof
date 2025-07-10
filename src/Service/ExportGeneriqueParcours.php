@@ -37,8 +37,23 @@ class ExportGeneriqueParcours {
 
     public function generatePdf(Request $request) {
 
-        [$fieldValueArray, $parcoursData, $campagneCollecte, $withFieldSorting] = $this->checkExportGeneriqueData($request);
+        [
+            $fieldValueArray, 
+            $parcoursData, 
+            $campagneCollecte, 
+            $withFieldSorting,
+            $isPredefinedTemplate,
+            $predefinedTemplateName
+        ] = $this->checkExportGeneriqueData($request);
         $this->checkFieldsAreSupported($fieldValueArray);
+
+        if($isPredefinedTemplate){
+            $this->checkPredefinedTemplateExists($predefinedTemplateName);
+            if($this->checkCanExportData($predefinedTemplateName, 'pdf') === false){
+                throw new NotFoundHttpException("Ce type d'export n'est pas disponible");
+            }
+            return $this->getPredefinedTemplate($predefinedTemplateName, $parcoursData, 'pdf');
+        }
 
         // On trie les colonnes dans un certain ordre
         if($withFieldSorting){
@@ -147,9 +162,11 @@ class ExportGeneriqueParcours {
 
         if($isPredefinedTemplate){
             $this->checkPredefinedTemplateExists($predefinedTemplateName);
+            if($this->checkCanExportData($predefinedTemplateName, 'xlsx') === false){
+                throw new NotFoundHttpException("Ce type d'export n'est pas disponible");
+            }
             return $this->getPredefinedTemplate($predefinedTemplateName, $parcoursData, 'xlsx');
         }
-
 
         $this->checkFieldsAreSupported($fieldValueArray);
 
@@ -1243,5 +1260,13 @@ class ExportGeneriqueParcours {
         }
 
         return $return;
+    }
+
+    private function checkCanExportData(string $dataExportName, string $exportType){
+        $availableData = [
+            'templateExportCapApogee' => ['pdf' => false, 'xlsx' => true]
+        ];
+
+        return $availableData[$exportType];
     }
 }
