@@ -156,8 +156,18 @@ class ExportGeneriqueFicheMatiere {
     private function checkExportGeneriqueData(
         Request $request
     ){
+        $isPredefinedTemplate = $request->query->get('predefinedTemplate', 'false');
+        $isPredefinedTemplate = $isPredefinedTemplate === 'true' ? true : false;
+        $predefinedTemplateName = null;
+        if($isPredefinedTemplate){
+            $predefinedTemplateName = $request->query->get('templateName', null);
+        }
+
         $withFieldSorting = $request->query->get('withFieldSorting', "true");
         $withFieldSorting = $withFieldSorting === 'false' ? false : true;
+
+        $withDefaultHeader = $request->query->get('withHeader', 'true');
+        $withDefaultHeader = $withDefaultHeader === 'false' ? false : true;
 
         $campagneCollecte = $request->query->get('campagne', 2);
         $campagneCollecte = $this->em->getRepository(CampagneCollecte::class)
@@ -183,15 +193,22 @@ class ExportGeneriqueFicheMatiere {
 
         $fieldValueArray = $request->query->all()['val'] ?? [];
         // Vérification sur les champs demandés (non vide)
-        if(count($fieldValueArray) === 0){
+        if(count($fieldValueArray) === 0 && $isPredefinedTemplate === false){
             throw new NotFoundHttpException('Aucun champ précisé.');
+        }
+
+        if($isPredefinedTemplate && $predefinedTemplateName === null){
+            throw new NotFoundHttpException("Aucun nom précisé pour le template prédéfini.");
         }
 
         return [
             $fieldValueArray,
             $parcoursData,
             $campagneCollecte,
-            $withFieldSorting
+            $withFieldSorting,
+            $withDefaultHeader,
+            $isPredefinedTemplate,
+            $predefinedTemplateName
         ];
     }
 
