@@ -10,10 +10,10 @@
     <twig:alerte type="danger" message="Le type de MCCC est inconnu"/>
 {% endif %}
 
-{% if ec.quitus %}
+{% if ec.quitus ?? false %}
     {% set quitusText = ec.quitusText %}
 {% endif %}
-{% if ec.ficheMatiere.quitus and ec.isMcccSpecifiques() ?? false != true %}
+{% if (ec.ficheMatiere.quitus ?? false) and ec.isMcccSpecifiques() ?? false != true %}
     {% set quitusText = ec.ficheMatiere.quitusText %}
 {% endif %}
 
