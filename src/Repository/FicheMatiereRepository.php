@@ -476,10 +476,10 @@ class FicheMatiereRepository extends ServiceEntityRepository
             ->leftJoin('ficheMutu.parcours', 'ficheMutuParcours')
             ->where('f.campagneCollecte = :campagneCollecte')
             ->andWhere(
-                $qb->expr()->in('p.id', $parcoursIdArray)
-            )
-            ->orWhere(
-                $qb->expr()->in('ficheMutuParcours.id', $parcoursIdArray)
+                $qb->expr()->orX(
+                    $qb->expr()->in('p.id', $parcoursIdArray),
+                    $qb->expr()->in('ficheMutuParcours.id', $parcoursIdArray)
+                )
             )
             ->setParameter('campagneCollecte', $campagneCollecte)
             ->orderBy('f.libelle', 'ASC');
