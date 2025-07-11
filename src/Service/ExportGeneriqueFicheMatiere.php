@@ -25,7 +25,16 @@ class ExportGeneriqueFicheMatiere {
     }
 
     public function generatePdf(Request $request) {
-        [$fieldValueArray, $parcoursData, $campagneCollecte, $withFieldSorting] = $this->checkExportGeneriqueData($request);
+        [
+            $fieldValueArray, 
+            $parcoursData, 
+            $campagneCollecte, 
+            $withFieldSorting,
+            $withDefaultHeader,
+            $isPredefinedTemplate,
+            $predefinedTemplateName
+        ] = $this->checkExportGeneriqueData($request);
+
         $this->checkFieldsAreSupported($fieldValueArray);  
 
         // On trie les colonnes dans un certain ordre
@@ -78,7 +87,15 @@ class ExportGeneriqueFicheMatiere {
     public function generateXlsxSpreadsheet(
         Request $request
     ){
-        [$fieldValueArray, $parcoursData, $campagneCollecte, $withFieldSorting] = $this->checkExportGeneriqueData($request);
+        [
+            $fieldValueArray, 
+            $parcoursData, 
+            $campagneCollecte, 
+            $withFieldSorting,
+            $withDefaultHeader,
+            $isPredefinedTemplate,
+            $predefinedTemplateName
+        ] = $this->checkExportGeneriqueData($request);
         $this->checkFieldsAreSupported($fieldValueArray);
 
         // On trie les colonnes dans un certain ordre

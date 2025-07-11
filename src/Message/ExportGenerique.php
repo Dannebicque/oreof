@@ -25,9 +25,9 @@ class ExportGenerique {
 
     private string $withDefaultHeader;
 
-    private string $isPredefinedTemplate;
+    private ?string $isPredefinedTemplate;
 
-    private string $predefinedTemplateName;
+    private ?string $predefinedTemplateName;
 
     public function __construct(
         array $typeExport,
@@ -37,8 +37,8 @@ class ExportGenerique {
         string $withFieldSorting,
         string $emailDestinataire,
         string $withDefaultHeader,
-        string $isPredefinedTemplate,
-        string $predefinedTemplateName
+        ?string $isPredefinedTemplate,
+        ?string $predefinedTemplateName
     ) {
         $this->typeExport = $typeExport;
         $this->parcoursIdArray = $parcoursIdArray;
@@ -75,7 +75,7 @@ class ExportGenerique {
         return $this->emailDestinataire;
     }
 
-    public function hasDefaultHeader(){
+    public function hasDefaultHeader() {
         return $this->withDefaultHeader;
     }
 
