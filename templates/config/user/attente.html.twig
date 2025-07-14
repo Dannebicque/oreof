@@ -10,6 +10,7 @@
                     <th>Prénom</th>
                     <th>Email</th>
                     <th>Login URCA</th>
+                    <th>Service/fonctions</th>
                     <th>Centre(s) / Droits</th>
                     <th>Date demande</th>
                     <th>Validé DPE ?</th>
@@ -23,6 +24,7 @@
                         <td>{{ user.prenom }}</td>
                         <td>{{ user.email }}</td>
                         <td>{{ user.username }}</td>
+                        <td>{{ user.serviceDemande }}</td>
                         <td>
                             {% for centre in user.userCentres %}
                                 {{ centre|badgeCentre }}
@@ -62,7 +64,7 @@
                     </tr>
                 {% else %}
                     <tr>
-                        <td colspan="9" class="bg-success">Aucune demande en attente</td>
+                        <td colspan="10" class="bg-success">Aucune demande en attente</td>
                     </tr>
                 {% endfor %}
                 </tbody>

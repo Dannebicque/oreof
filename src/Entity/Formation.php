@@ -214,6 +214,9 @@ class Formation
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $commentaire = null;
 
+    #[ORM\OneToMany(mappedBy: 'formation', targetEntity: DpeDemande::class, cascade: ['persist'])]
+    private Collection $dpeDemandes;
+
     public function __construct(?CampagneCollecte $anneeUniversitaire)
     {
         $this->dpe = $anneeUniversitaire;
@@ -222,6 +225,7 @@ class Formation
         $this->composantesInscription = new ArrayCollection();
         $this->blocCompetences = new ArrayCollection();
         $this->userCentres = new ArrayCollection();
+        $this->dpeDemandes = new ArrayCollection();
 
         for ($i = 1; $i <= 3; $i++) {
             $this->etatSteps[$i] = false;
@@ -1143,4 +1147,33 @@ class Formation
         return $this;
     }
 
+    /**
+     * @return Collection<int, DpeDemande>
+     */
+    public function getDpeDemandes(): Collection
+    {
+        return $this->dpeDemandes;
+    }
+
+    public function addDpeDemande(DpeDemande $dpeDemande): static
+    {
+        if (!$this->dpeDemandes->contains($dpeDemande)) {
+            $this->dpeDemandes->add($dpeDemande);
+            $dpeDemande->setFormation($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDpeDemande(DpeDemande $dpeDemande): static
+    {
+        if ($this->dpeDemandes->removeElement($dpeDemande)) {
+            // set the owning side to null (unless already changed)
+            if ($dpeDemande->getFormation() === $this) {
+                $dpeDemande->setFormation(null);
+            }
+        }
+
+        return $this;
+    }
 }

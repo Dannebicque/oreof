@@ -165,4 +165,28 @@ class DpeParcours
             $this->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_MCCC_TEXTE ||
             $this->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_MCCC;
     }
+
+    public function etatDemande(): ?DpeDemande
+    {
+        // récupère la dernière demande (selon le champs updated) associée à ce parcours ou à la formation si pas de parcours ?
+        $demandes = $this->getParcours()?->getDpeDemandes()->toArray();
+        if (empty($demandes)) {
+            $demandes = $this->getFormation()?->getDpeDemandes()->toArray();
+        }
+
+        if (empty($demandes)) {
+            return null;
+        }
+
+        usort($demandes, function (DpeDemande $a, DpeDemande $b) {
+            return $b->getUpdated()?->getTimestamp() <=> $a->getUpdated()?->getTimestamp();
+        });
+
+        // tester si la demande est cloturée
+        if ($demandes[0]->getDateCloture() !== null) {
+            return null; // la dernière demande est cloturée
+        }
+
+        return $demandes[0];
+    }
 }

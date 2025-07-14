@@ -132,6 +132,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: UserProfil::class)]
     private Collection $userProfils;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $serviceDemande = null;
+
     public function __construct()
     {
         $this->composantes = new ArrayCollection();
@@ -732,6 +735,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $userProfil->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getServiceDemande(): ?string
+    {
+        return $this->serviceDemande;
+    }
+
+    public function setServiceDemande(?string $serviceDemande): static
+    {
+        $this->serviceDemande = $serviceDemande;
 
         return $this;
     }

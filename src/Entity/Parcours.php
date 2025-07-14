@@ -283,11 +283,15 @@ class Parcours
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $commentaire = null;
 
+    #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: DpeDemande::class, cascade: ['persist'])]
+    private Collection $dpeDemandes;
+
     public function __construct(?Formation $formation)
     {
         $this->formation = $formation;
         $this->blocCompetences = new ArrayCollection();
         $this->semestreParcours = new ArrayCollection();
+        $this->dpeDemandes = new ArrayCollection();
 
         for ($i = 1; $i <= 6; $i++) {
             $this->etatSteps[$i] = false;
@@ -1629,4 +1633,53 @@ class Parcours
         return $this;
     }
 
+    public function hasStage(): ?bool
+    {
+        return $this->hasStage;
+    }
+
+    public function hasProjet(): ?bool
+    {
+        return $this->hasProjet;
+    }
+
+    public function hasMemoire(): ?bool
+    {
+        return $this->hasMemoire;
+    }
+
+    public function hasSituationPro(): ?bool
+    {
+        return $this->hasSituationPro;
+    }
+
+    /**
+     * @return Collection<int, DpeDemande>
+     */
+    public function getDpeDemandes(): Collection
+    {
+        return $this->dpeDemandes;
+    }
+
+    public function addDpeDemande(DpeDemande $dpeDemande): static
+    {
+        if (!$this->dpeDemandes->contains($dpeDemande)) {
+            $this->dpeDemandes->add($dpeDemande);
+            $dpeDemande->setParcours($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDpeDemande(DpeDemande $dpeDemande): static
+    {
+        if ($this->dpeDemandes->removeElement($dpeDemande)) {
+            // set the owning side to null (unless already changed)
+            if ($dpeDemande->getParcours() === $this) {
+                $dpeDemande->setParcours(null);
+            }
+        }
+
+        return $this;
+    }
 }

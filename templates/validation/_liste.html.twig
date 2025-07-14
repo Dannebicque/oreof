@@ -23,7 +23,8 @@
             <th>
                 Parcours
             </th>
-            <th>Etat</th>
+            <th>Etat demande</th>
+            <th>Etat DPE</th>
             <th>BCC</th>
             <th>Maquette</th>
             {% if etape == 'cfvu' or etape == 'publication' or etape == 'valide_cfvu' or etape == 'soumis_cfvu' %}
@@ -78,6 +79,9 @@
                     {% else %}
                         Sans parcours
                     {% endif %}
+                </td>
+                <td>
+                    {{ dpeParcours.etatDemande != null ? dpeParcours.etatDemande.niveauModification|badgeTypeModification : null|badgeTypeModification }}
                 </td>
                 <td>
                     {{ dpeParcours.etatValidation|badgeDpe }}

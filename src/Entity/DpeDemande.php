@@ -27,10 +27,10 @@ class DpeDemande
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?DateTimeInterface $dateDemande;
 
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(cascade: ['persist'], inversedBy: 'dpeDemandes')]
     private ?Parcours $parcours = null;
 
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(cascade: ['persist'], inversedBy: 'dpeDemandes')]
     private ?Formation $formation = null;
 
     #[ORM\Column(length: 50, enumType: TypeModificationDpeEnum::class)]
