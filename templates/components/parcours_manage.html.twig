@@ -36,7 +36,7 @@
                                     {% if process.isTimeline %}
                                         <div class="col-auto text-center">
                                             <span class="text-primary text-medium">
-                                                {{ (process.label~'.timeline')|trans({}, 'process') }}
+                                                {{ (process.label~'.timeline')|trans_debug({}, 'process') }}
                                             </span><br>
                                             <span class="align-middle text-medium">
                                                 {{ this.dateHistorique(key) }}
@@ -95,13 +95,13 @@
                             {% if (isRefuse('parcours',this.parcours)) %}
                                 <div class="col-6 d-grid">
                                     <button class="btn btn-sm btn-danger">
-                                        {{ ('validation.etat.refuser.'~this.place)|trans({}, 'process') }}
+                                        {{ ('validation.etat.refuser.'~this.place)|trans_debug({}, 'process') }}
                                     </button>
                                 </div>
                             {% elseif (isPublie(this.parcours, 'parcours')) %}
                                 <div class="col-6 d-grid">
                                     <button class="btn btn-sm btn-success">
-                                        {{ ('validation.etat.publie')|trans({}, 'process') }}
+                                        {{ ('validation.etat.publie')|trans_debug({}, 'process') }}
                                     </button>
                                 </div>
                             {% else %}
@@ -111,7 +111,7 @@
                                             {# todo: vérifier si le RP peut valider niveau RF? #}
                                             {% if
                                                 is_granted('MANAGE', {route: 'app_formation', subject: this.formation})  or
-                                                is_granted('MANAGE', {route: 'app_parcours', subject: this.dpeParcours}) %}
+                                                is_granted('MANAGE', {route: 'app_parcours', subject: this.dpeParcours}) or is_granted('ROLE_ADMIN') %}
                                                 {% for key, state in hasTransitions(this.dpeParcours) %}
                                                     {% for keyTrans, transition in state %}
                                                         <div class="col-4 d-grid">
@@ -124,7 +124,7 @@
                                                                             event: 'mention_manage:'~key,
                                                                             event_type: key
                                                                         },
-                                                                        modalTitle: ('validation.valider.'~prefix~'.'~keyTrans~'.title')|trans({}, 'process'),
+                                                                        modalTitle: ('validation.valider.'~prefix~'.'~keyTrans~'.title')|trans_debug({}, 'process'),
                                                                         modalUrl: path('app_validation_'~key, {
                                                                             etape:this.place,
                                                                             transition:keyTrans,
@@ -137,7 +137,7 @@
                                                                     aria-label="{{ ('title.validation.'~prefix~'.'~keyTrans)|trans({}, 'process') }}"
                                                                     data-bs-original-title="{{ ('title.validation.'~prefix~'.'~keyTrans)|trans({}, 'process') }}"
                                                             >
-                                                                <i class="fal {{ transition.meta.icon }}"></i> {{ ('btn.validation.'~prefix~'.'~keyTrans)|trans({}, 'process') }}
+                                                                <i class="fal {{ transition.meta.icon }}"></i> {{ ('btn.validation.'~prefix~'.'~keyTrans)|trans_debug({}, 'process') }}
                                                             </button>
                                                         </div>
                                                     {% else %}
@@ -147,14 +147,14 @@
                                                 {% else %}
                                                     <div class="col-6 d-grid">
                                                         <button class="btn btn-sm btn-muted d-block">
-                                                            {{ 'validation.formation.indisponible'|trans({}, 'process') }}
+                                                            {{ 'validation.formation.indisponible'|trans_debug({}, 'process') }}
                                                         </button>
                                                     </div>
                                                 {% endfor %}
                                             {% else %}
                                                 <div class="col-2 d-grid">
                                                     <button class="btn btn-sm btn-muted d-block">
-                                                        {{ 'validation.indisponible'|trans({}, 'process') }}
+                                                        {{ 'validation.indisponible'|trans_debug({}, 'process') }}
                                                     </button>
                                                 </div>
                                                 <div class="col-4 d-grid">
@@ -182,7 +182,7 @@
                                 <button
                                         {{ stimulus_controller('modal', {
                                             size: 'lg',
-                                            modalTitle: 'verifier.la.saisie.parcours.title'|trans({}, 'process'),
+                                            modalTitle: 'verifier.la.saisie.parcours.title'|trans_debug({}, 'process'),
                                             modalUrl: path('app_parcours_state', {parcours:parcours.id}) }) }}
                                         data-action="click->modal#openModal"
                                         class="btn btn-outline-success btn-sm ms-1"
@@ -200,7 +200,7 @@
                                 <button class="btn btn-sm btn-icon btn-icon-only btn-outline-info ms-1" type="button"
                                         {{ stimulus_controller('modal', {
                                             size: 'large',
-                                            modalTitle: 'historique.de.validation.parcours.title'|trans({}, 'process'),
+                                            modalTitle: 'historique.de.validation.parcours.title'|trans_debug({}, 'process'),
                                             right: true,
                                             modalUrl: path('app_historique_parcours', {parcours:this.parcours.id}) }) }}
                                         data-action="click->modal#openModal"
@@ -225,7 +225,7 @@
                                 <button
                                         {{ stimulus_controller('modal', {
                                             size: 'lg',
-                                            modalTitle: 'verifier.la.saisie.formation.title'|trans({}, 'process'),
+                                            modalTitle: 'verifier.la.saisie.formation.title'|trans_debug({}, 'process'),
                                             modalUrl: path('app_formation_state', {formation:formation.id}) }) }}
                                         data-action="click->modal#openModal"
                                         class="btn btn-outline-success btn-sm ms-1"
@@ -243,7 +243,7 @@
                                 <button class="btn btn-sm btn-icon btn-icon-only btn-outline-info ms-1" type="button"
                                         {{ stimulus_controller('modal', {
                                             size: 'large',
-                                            modalTitle: 'historique.de.validation.formation.title'|trans({}, 'process'),
+                                            modalTitle: 'historique.de.validation.formation.title'|trans_debug({}, 'process'),
                                             right: true,
                                             modalUrl: path('app_historique_formation', {formation:this.formation.id}) }) }}
                                         data-action="click->modal#openModal"
@@ -262,11 +262,9 @@
                                    data-bs-toggle="tooltip"
                                    data-bs-placement="bottom"
                                    title="{{ 'modifier.la.validation.infobulle'|trans({}, 'process') }}"
-                                        {#                                            modalUrl: pat('app_validation_edit', {id: this.parcours.id, type:'parcours'}) }) #}
-
                                         {{ stimulus_controller('modal', {
                                             size: 'large',
-                                            modalTitle: 'gestion.admin.title'|trans({},),
+                                            modalTitle: 'gestion.admin.title'|trans_debug({},),
                                             right: true,
                                             updateComponent: {
                                                 id: 'mention_manage',
@@ -310,7 +308,7 @@
                                                 {{ stimulus_controller('modal', {
                                                     size: 'lg',
                                                     nomEvenement: 'redirectEdit',
-                                                    modalTitle: ('demande.reouverture.title')|trans({}, 'process'),
+                                                    modalTitle: ('demande.reouverture.title')|trans_debug({}, 'process'),
                                                     modalUrl: path('app_validation_demande_reouverture', {
                                                         parcours: id
                                                     }) }) }}
@@ -320,7 +318,7 @@
                                                 aria-label="{{ ('demande.reouverture')|trans({}, 'process') }}"
                                                 data-bs-original-title="{{ ('demande.reouverture')|trans({}, 'process') }}"
                                         >
-                                            <i class="fal fa-question"></i> {{ ('demande.reouverture')|trans({}, 'process') }}
+                                            <i class="fal fa-question"></i> {{ ('demande.reouverture')|trans_debug({}, 'process') }}
                                         </button>
                                         {# todo: fermeture que si pas de MCCC/Maquette pour revenir en SES sans CFVU avant publication #}
                                     {% elseif this.hasDemande %}
@@ -330,7 +328,7 @@
                                                     size: 'lg',
                                                     nomEvenement: 'refreshPage',
 
-                                                    modalTitle: ('demande.reouverture.annuler.title')|trans({}, 'process'),
+                                                    modalTitle: ('demande.reouverture.annuler.title')|trans_debug({}, 'process'),
                                                     modalUrl: path('app_validation_demande_reouverture_cloture', {
                                                         parcours:id
                                                     }) }) }}
@@ -340,7 +338,7 @@
                                                 aria-label="{{ ('demande.reouverture.annuler')|trans({}, 'process') }}"
                                                 data-bs-original-title="{{ ('demande.reouverture.annuler')|trans({}, 'process') }}"
                                         >
-                                            <i class="fal fa-times"></i> {{ ('demande.reouverture.annuler')|trans({}, 'process') }}
+                                            <i class="fal fa-times"></i> {{ ('demande.reouverture.annuler')|trans_debug({}, 'process') }}
                                         </button>
 
                                         {% if this.dpeParcours.etatReconduction.value == 'MODIFICATION_TEXTE' %}
@@ -349,17 +347,17 @@
                                                     {{ stimulus_controller('modal', {
                                                         size: 'lg',
                                                         nomEvenement: 'refreshPage',
-                                                        modalTitle: ('demande.reouverture.basculer.cfvu.title')|trans({}, 'process'),
+                                                        modalTitle: ('demande.reouverture.basculer.cfvu.title')|trans_debug({}, 'process'),
                                                         modalUrl: path('app_validation_demande_switch', {
                                                             parcours:id
                                                         }) }) }}
                                                     data-action="click->modal#openModal"
                                                     data-controller="tooltip"
                                                     data-tooltip-placement-value="bottom"
-                                                    aria-label="{{ ('demande.reouverture.basculer.cfvu')|trans({}, 'process') }}"
+                                                    aria-label="{{ ('demande.reouverture.basculer.cfvu')|trans_debug({}, 'process') }}"
                                                     data-bs-original-title="{{ ('demande.reouverture.basculer.cfvu')|trans({}, 'process') }}"
                                             >
-                                                <i class="fal fa-random"></i> {{ ('demande.reouverture.basculer.cfvu')|trans({}, 'process') }}
+                                                <i class="fal fa-random"></i> {{ ('demande.reouverture.basculer.cfvu')|trans_debug({}, 'process') }}
                                             </button>
                                         {% endif %}
                                     {% endif %}
@@ -374,7 +372,7 @@
                                                 href="#"
                                                 {{ stimulus_controller('modal', {
                                                     size: 'lg',
-                                                    modalTitle: 'formation.change_rf.title'|trans({}, 'form'),
+                                                    modalTitle: 'formation.change_rf.title'|trans_debug({}, 'form'),
                                                     nomEvenement: 'refreshStep',
                                                     modalUrl: path('app_formation_change_rf', {formation: parcours.formation.id}) }) }}
                                                 data-action="click->modal#openModal"
@@ -385,7 +383,7 @@
                                                 title="{{ 'formation.change_rf.title'|trans({}, 'form') }}"
                                         >
                                             <i class="fal fa-repeat"></i>
-                                            <span> {{ 'formation.change_rf.label'|trans({}, 'form') }}</span>
+                                            <span> {{ 'formation.change_rf.label'|trans_debug({}, 'form') }}</span>
                                         </button>
                                     {% endif %}
                                 {% endif %}

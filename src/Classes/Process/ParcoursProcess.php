@@ -156,8 +156,17 @@ class ParcoursProcess extends AbstractProcess
 
     public function reserveParcours(DpeParcours $dpeParcours, UserInterface $user, string|array $transition, $request): Response
     {
+        $motifs = [];
+        if ($request->request->has('argumentaire')) {
+            $motifs['motif'] = $request->request->get('argumentaire');
+        }
+
+        if ($request->request->has('date')) {
+            $motifs['date'] = Tools::convertDate($request->request->get('date'));
+        }
+
         $place = array_keys($this->dpeParcoursWorkflow->getMarking($dpeParcours)->getPlaces())[0];
-        $this->dpeParcoursWorkflow->apply($dpeParcours, $transition, ['motif' => $request->request->get('argumentaire')]);
+        $this->dpeParcoursWorkflow->apply($dpeParcours, $transition, $motifs);
         $this->entityManager->flush();
         return $this->dispatchEventParcours($dpeParcours, $user, $place, $request, 'reserve');
     }
