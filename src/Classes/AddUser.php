@@ -11,17 +11,18 @@ namespace App\Classes;
 
 use App\Entity\Composante;
 use App\Entity\User;
-use App\Entity\UserCentre;
-use App\Repository\UserCentreRepository;
+use App\Entity\UserProfil;
+use App\Repository\ProfilRepository;
 use App\Repository\UserRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 readonly class AddUser
 {
     public function __construct(
-        private UserCentreRepository $userCentreRepository,
+        private ProfilRepository $profilRepository,
         private UserRepository       $userRepository,
-        private Ldap                 $ldap
+        private Ldap             $ldap, private EntityManagerInterface $entityManager
     ) {
     }
 
@@ -54,14 +55,19 @@ readonly class AddUser
         $user->setRoles([$role]);
     }
 
-    public function setCentreComposante(UserInterface $usr, Composante $composante, ?string $role = null): void
+    public function setCentreComposante(UserInterface|User $usr, Composante $composante, ?string $role = null): void
     {
-        $centre = new UserCentre();
+        $profil = $this->profilRepository->findOneBy(['code' => $role]);
+
+        if ($profil === null) {
+            throw new \InvalidArgumentException(sprintf('Role "%s" does not exist.', $role));
+        }
+
+        $centre = new UserProfil();
         $centre->setUser($usr);
         $centre->setComposante($composante);
-        if ($role !== null) {
-            $centre->addRoleCode($role);
-        }
-        $this->userCentreRepository->save($centre, true);
+        $centre->setProfil($profil);
+        $this->entityManager->persist($centre);
+        $this->entityManager->flush();
     }
 }

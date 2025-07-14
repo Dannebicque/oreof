@@ -35,6 +35,7 @@ class Mention
 //    #[ORM\Column(length: 255)]
 //    private ?string $typeDiplome = null;
 
+    /** @deprecated */
     #[Groups('parcours_json_versioning')]
     #[ORM\ManyToOne(inversedBy: 'mentions')]
     private ?Domaine $domaine = null;
@@ -48,9 +49,16 @@ class Mention
     #[ORM\Column(length: 1, nullable: true)]
     private ?string $codeApogee = null;
 
+    /**
+     * @var Collection<int, Domaine>
+     */
+    #[ORM\ManyToMany(targetEntity: Domaine::class, inversedBy: 'mentions')]
+    private Collection $domaines;
+
     public function __construct()
     {
         $this->formations = new ArrayCollection();
+        $this->domaines = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -82,11 +90,13 @@ class Mention
         return $this;
     }
 
+    /** @deprecated */
     public function getDomaine(): ?Domaine
     {
         return $this->domaine;
     }
 
+    /** @deprecated */
     public function setDomaine(?Domaine $domaine): self
     {
         $this->domaine = $domaine;
@@ -149,6 +159,30 @@ class Mention
     public function setCodeApogee(?string $codeApogee): static
     {
         $this->codeApogee = $codeApogee;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Domaine>
+     */
+    public function getDomaines(): Collection
+    {
+        return $this->domaines;
+    }
+
+    public function addDomaine(Domaine $domaine): static
+    {
+        if (!$this->domaines->contains($domaine)) {
+            $this->domaines->add($domaine);
+        }
+
+        return $this;
+    }
+
+    public function removeDomaine(Domaine $domaine): static
+    {
+        $this->domaines->removeElement($domaine);
 
         return $this;
     }

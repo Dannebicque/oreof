@@ -18,7 +18,10 @@ use App\Enums\EtatRemplissageEnum;
 use App\Enums\ModaliteEnseignementEnum;
 use App\Enums\NiveauLangueEnum;
 use App\Events\AddCentreParcoursEvent;
+use App\Events\NotifCentreFormationEvent;
+use App\Events\NotifCentreParcoursEvent;
 use App\Repository\ComposanteRepository;
+use App\Repository\ProfilRepository;
 use App\Repository\RythmeFormationRepository;
 use App\Repository\UserRepository;
 use App\Repository\VilleRepository;
@@ -43,6 +46,7 @@ class ParcoursSaveController extends BaseController
      */
     #[Route('/parcours/save/{parcours}', name: 'app_parcours_save')]
     public function save(
+        ProfilRepository $profilRepository,
         Bcc $bcc,
         EntityManagerInterface $em,
         EventDispatcherInterface $eventDispatcher,
@@ -128,11 +132,18 @@ class ParcoursSaveController extends BaseController
 
                 return $this->json($rep);
             case 'respParcours':
-                $event = new AddCentreParcoursEvent($parcours, ['ROLE_RESP_PARCOURS'], $parcours->getRespParcours(), $this->getCampagneCollecte());
+                $profil = $profilRepository->findOneBy(['code' => 'ROLE_RESP_PARCOURS']);
+
+                if (null === $profil) {
+                    throw new \InvalidArgumentException('Profil ROLE_RESP_PARCOURS not found');
+                }
+
+                $event = new AddCentreParcoursEvent($parcours, $parcours->getRespParcours(), $profil, $this->getCampagneCollecte());
                 $eventDispatcher->dispatch($event, AddCentreParcoursEvent::REMOVE_CENTRE_PARCOURS);
+
                 $user = $userRepository->find($data['value']);
                 $rep = $updateEntity->saveField($parcours, 'respParcours', $user);
-                $event = new AddCentreParcoursEvent($parcours, ['ROLE_RESP_PARCOURS'], $user, $this->getCampagneCollecte());
+                $event = new AddCentreParcoursEvent($parcours, $user, $profil, $this->getCampagneCollecte());
                 $eventDispatcher->dispatch($event, AddCentreParcoursEvent::ADD_CENTRE_PARCOURS);
                 return $this->json($rep);
             case 'coRespParcours':

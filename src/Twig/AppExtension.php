@@ -52,6 +52,7 @@ class AppExtension extends AbstractExtension
             new TwigFilter('printTexte', [$this, 'printTexte'], ['is_safe' => ['html']]),
             new TwigFilter('filtreHeures', [$this, 'filtreHeures'], ['is_safe' => ['html']]),
             new TwigFilter('badgeEnum', [$this, 'badgeEnum'], ['is_safe' => ['html']]),
+            new TwigFilter('badgeStatus', [$this, 'badgeStatus'], ['is_safe' => ['html']]),
             new TwigFilter('startWith', [$this, 'startWith'], ['is_safe' => ['html']]),
             new TwigFilter('isUeUtilisee', [$this, 'isUeUtilisee'], ['is_safe' => ['html']]),
         ];
@@ -77,6 +78,17 @@ class AppExtension extends AbstractExtension
     public function badgeEnum(?BadgeEnumInterface $value): string
     {
         return ($value !== null) ? '<span class="badge '.$value->getBadge().'">' . $value->getLibelle() . '</span>' : '<span class="badge bg-danger">Non renseigné</span>';
+    }
+
+    public function badgeStatus(?string $value): string
+    {
+        //si finished => vert, si in_progress => orange, si error => rouge, sinon gris
+        return match ($value) {
+            'finished' => '<span class="badge bg-success">Terminé</span>',
+            'running' => '<span class="badge bg-warning">En cours</span>',
+            'error' => '<span class="badge bg-danger">Erreur</span>',
+            default => '<span class="badge bg-secondary">Inconnu</span>',
+        };
     }
 
     public function displayOrBadge(?string $value): string

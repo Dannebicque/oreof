@@ -86,19 +86,13 @@ class ButMcccVersion extends AbstractButMccc
         }
 
         $dto = $this->calculStructureParcours->calcul($parcours);//todo: devrait passer par le typeDiplome?
-//        dump($dto->semestres[4]->ues[3]);
-//dump($parcours->getParcoursOrigineCopie()->getId());
-        // version
-        if ($parcours->getParcoursOrigineCopie() !== null) {
-            $structureDifferencesParcours = $this->versioningParcours->getStructureDifferencesBetweenParcoursAndLastVersion($parcours->getParcoursOrigineCopie());//todo: a traiter selon BUT ou pas ?
-            if ($structureDifferencesParcours !== null) {
-                $diffStructure = (new VersioningStructure($structureDifferencesParcours, $dto))->calculDiff(true);
-            } else {
-                return false;
-            }
-        }
 
-//        dump($diffStructure['semestres'][4]['ues'][3]);
+        $structureDifferencesParcours = $this->versioningParcours->getStructureDifferencesBetweenParcoursAndLastCfvu($parcours);
+        if ($structureDifferencesParcours !== null) {
+            $diffStructure = (new VersioningStructure($structureDifferencesParcours, $dto))->calculDiff();
+        } else {
+            return false;
+        }
 
         $this->excelWriter->createFromTemplate('Annexe_MCCC_BUT.xlsx');
 
@@ -217,16 +211,16 @@ class ButMcccVersion extends AbstractButMccc
                                 $tabFichesRessources[$fiche->getSigle()]['ec'] = $ec;
                                 $tabFichesRessources[$fiche->getSigle()]['diff'] = $diffFiche;
                                 $tabFichesUes[$fiche->getSigle()][$ue->getOrdre()] = $diffFiche['heuresEctsEc']['ects'];
-                                $totalCoeffAvant[$ue->getOrdre()]['Ressource'] += $diffFiche['heuresEctsEc']['ects']->getOriginalFloat();
-                                $totalCoeffApres[$ue->getOrdre()]['Ressource'] += $diffFiche['heuresEctsEc']['ects']->getNewFloat();
+                                $totalCoeffAvant[$ue->getOrdre()]['Ressource'] += $diffFiche['heuresEctsEc']['ects']?->getOriginalFloat() ?? 0;
+                                $totalCoeffApres[$ue->getOrdre()]['Ressource'] += $diffFiche['heuresEctsEc']['ects']?->getNewFloat() ?? 0;
                             }
 
                             if ($fiche->getTypeMatiere() === FicheMatiere::TYPE_MATIERE_SAE) {
                                 $tabFichesSaes[$fiche->getSigle()]['ec'] = $ec;
                                 $tabFichesSaes[$fiche->getSigle()]['diff'] = $diffFiche;
                                 $tabFichesUes[$fiche->getSigle()][$ue->getOrdre()] = $diffFiche['heuresEctsEc']['ects'];
-                                $totalCoeffAvant[$ue->getOrdre()]['Sae'] += $diffFiche['heuresEctsEc']['ects']->getOriginalFloat();
-                                $totalCoeffApres[$ue->getOrdre()]['Sae'] += $diffFiche['heuresEctsEc']['ects']->getNewFloat();
+                                $totalCoeffAvant[$ue->getOrdre()]['Sae'] += $diffFiche['heuresEctsEc']['ects']?->getOriginalFloat() ?? 0;
+                                $totalCoeffApres[$ue->getOrdre()]['Sae'] += $diffFiche['heuresEctsEc']['ects']?->getNewFloat() ?? 0;
                             }
                         }
                     }
@@ -264,13 +258,13 @@ class ButMcccVersion extends AbstractButMccc
                     $this->writeMccc($ec, $tabColonnes, $ligne);
                     $this->writeAcUe($fiche, $ligne, $tabColUes, $tabFichesUes);
 
-                    $totalHeuresAvant['CM'] += $ec['diff']['heuresEctsEc']['cmPres']->getOriginalFloat();
-                    $totalHeuresAvant['TD'] += $ec['diff']['heuresEctsEc']['tdPres']->getOriginalFloat();
-                    $totalHeuresAvant['TP'] += $ec['diff']['heuresEctsEc']['tpPres']->getOriginalFloat();
+                    $totalHeuresAvant['CM'] += $ec['diff']['heuresEctsEc']['cmPres']?->getOriginalFloat() ?? 0;
+                    $totalHeuresAvant['TD'] += $ec['diff']['heuresEctsEc']['tdPres']?->getOriginalFloat() ?? 0;
+                    $totalHeuresAvant['TP'] += $ec['diff']['heuresEctsEc']['tpPres']?->getOriginalFloat() ?? 0;
 
-                    $totalHeuresApres['CM'] += $ec['diff']['heuresEctsEc']['cmPres']->getNewFloat();
-                    $totalHeuresApres['TD'] += $ec['diff']['heuresEctsEc']['tdPres']->getNewFloat();
-                    $totalHeuresApres['TP'] += $ec['diff']['heuresEctsEc']['tpPres']->getNewFloat();
+                    $totalHeuresApres['CM'] += $ec['diff']['heuresEctsEc']['cmPres']?->getNewFloat() ?? 0;
+                    $totalHeuresApres['TD'] += $ec['diff']['heuresEctsEc']['tdPres']?->getNewFloat() ?? 0;
+                    $totalHeuresApres['TP'] += $ec['diff']['heuresEctsEc']['tpPres']?->getNewFloat() ?? 0;
 
 
                     $ligne++;
@@ -298,15 +292,15 @@ class ButMcccVersion extends AbstractButMccc
                     $this->writeMccc($ec, $tabColonnes, $ligne);
                     $this->writeAcUe($fiche, $ligne, $tabColUes, $tabFichesUes);
 
-                    $totalHeuresAvant['CM'] += $ec['diff']['heuresEctsEc']['cmPres']->getOriginalFloat();
-                    $totalHeuresAvant['TD'] += $ec['diff']['heuresEctsEc']['tdPres']->getOriginalFloat();
-                    $totalHeuresAvant['TP'] += $ec['diff']['heuresEctsEc']['tpPres']->getOriginalFloat();
-                    $totalHeuresAvant['TE'] += $ec['diff']['heuresEctsEc']['tePres']->getOriginalFloat();
+                    $totalHeuresAvant['CM'] += $ec['diff']['heuresEctsEc']['cmPres']?->getOriginalFloat() ?? 0;
+                    $totalHeuresAvant['TD'] += $ec['diff']['heuresEctsEc']['tdPres']?->getOriginalFloat() ?? 0;
+                    $totalHeuresAvant['TP'] += $ec['diff']['heuresEctsEc']['tpPres']?->getOriginalFloat() ?? 0;
+                    $totalHeuresAvant['TE'] += $ec['diff']['heuresEctsEc']['tePres']?->getOriginalFloat() ?? 0;
 
-                    $totalHeuresApres['CM'] += $ec['diff']['heuresEctsEc']['cmPres']->getNewFloat();
-                    $totalHeuresApres['TD'] += $ec['diff']['heuresEctsEc']['tdPres']->getNewFloat();
-                    $totalHeuresApres['TP'] += $ec['diff']['heuresEctsEc']['tpPres']->getNewFloat();
-                    $totalHeuresApres['TE'] += $ec['diff']['heuresEctsEc']['tePres']->getNewFloat();
+                    $totalHeuresApres['CM'] += $ec['diff']['heuresEctsEc']['cmPres']?->getNewFloat() ?? 0;
+                    $totalHeuresApres['TD'] += $ec['diff']['heuresEctsEc']['tdPres']?->getNewFloat() ?? 0;
+                    $totalHeuresApres['TP'] += $ec['diff']['heuresEctsEc']['tpPres']?->getNewFloat() ?? 0;
+                    $totalHeuresApres['TE'] += $ec['diff']['heuresEctsEc']['tePres']?->getNewFloat() ?? 0;
 
                     $ligne++;
                 }

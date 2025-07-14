@@ -81,4 +81,32 @@ class UserProfilRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function findByComposanteEnable(CampagneCollecte $campagneCollecte, $composante, float|bool|int|string|null $sort, float|bool|int|string|null $direction): array
+    {
+
+        //je veux une requete qui va récupérer les utilsateurs qui sont dans la bonne composante. Cela va dépendre du centre, si composante alors c'est une égalité, si c'est formation alors c'est la composante porteuse de la formation, si c'est le parcours alors c'est la composante porteuse de la formation du parcours, si c'est établissement pas concerné
+
+        $qb = $this->createQueryBuilder('up')
+            ->join('up.profil', 'p')
+            ->join('up.user', 'u')
+            ->leftJoin('up.formation', 'f')
+            ->leftJoin('up.parcours', 'pa')
+            ->leftJoin('pa.formation', 'pf')
+            ->where('u.isEnable = :isEnable')
+            ->andWhere('u.isDeleted = false')
+            ->andWhere('up.campagneCollecte = :campagne OR up.campagneCollecte IS NULL')
+            ->andWhere('
+            up.composante = :composante
+            OR f.composantePorteuse = :composante
+            OR pf.composantePorteuse = :composante
+        ')
+            ->setParameter('campagne', $campagneCollecte)
+            ->setParameter('isEnable', true)
+            ->setParameter('composante', $composante)
+            ->addOrderBy('u.' . $sort, $direction);
+
+        return $qb->getQuery()->getResult();
+
+    }
 }

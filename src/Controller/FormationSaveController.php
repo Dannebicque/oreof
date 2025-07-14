@@ -17,6 +17,7 @@ use App\Enums\EtatRemplissageEnum;
 use App\Enums\ModaliteEnseignementEnum;
 use App\Events\AddCentreFormationEvent;
 use App\Repository\ComposanteRepository;
+use App\Repository\ProfilRepository;
 use App\Repository\RythmeFormationRepository;
 use App\Repository\UserRepository;
 use App\Repository\VilleRepository;
@@ -40,6 +41,7 @@ class FormationSaveController extends BaseController
      */
     #[Route('/formation/save/{formation}', name: 'app_formation_save')]
     public function save(
+        ProfilRepository $profilRepository,
         FormationStructure $formationStructure,
         EventDispatcherInterface $eventDispatcher,
         RythmeFormationRepository $rythmeFormationRepository,
@@ -136,11 +138,16 @@ class FormationSaveController extends BaseController
 
                 return $this->json(true);
             case 'coRespFormation':
-                $event = new AddCentreFormationEvent($formation, $formation->getCoResponsable(), ['ROLE_CO_RESP_FORMATION'], $this->getCampagneCollecte());
+                $profil = $profilRepository->findOneBy(['code' => 'ROLE_CO_RESP_FORMATION']);
+                if (empty($profil)) {
+                    return $this->json(['error' => 'Profil ROLE_CO_RESP_FORMATION non trouvé']);
+                }
+                $event = new AddCentreFormationEvent($formation, $formation->getCoResponsable(), $profil, $this->getCampagneCollecte());
                 $eventDispatcher->dispatch($event, AddCentreFormationEvent::REMOVE_CENTRE_FORMATION);
                 $user = $userRepository->find($data['value']);
                 $rep = $updateEntity->saveField($formation, 'coResponsable', $user);
-                $event = new AddCentreFormationEvent($formation, $user, ['ROLE_CO_RESP_FORMATION'], $this->getCampagneCollecte());
+
+                $event = new AddCentreFormationEvent($formation, $user, $profil, $this->getCampagneCollecte());
                 $eventDispatcher->dispatch($event, AddCentreFormationEvent::ADD_CENTRE_FORMATION);
                 return $this->json($rep);
             case 'etatStep':

@@ -163,6 +163,10 @@ class MentionController extends AbstractController
     {
         try {
             $mention = $this->mentionService->getMentionById($id);
+            if (!$mention) {
+                throw new NotFoundHttpException(sprintf('Mention avec ID %d non trouvée', $id));
+            }
+
             $mentionDto = MentionDto::createFromEntity($mention);
 
             $form = $this->createForm(MentionDtoType::class, $mentionDto, [

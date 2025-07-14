@@ -45,12 +45,12 @@ class UserProfilController extends BaseController
 
     #[Route('/attente-validation', name: 'attente', methods: ['GET'])]
     public function attente(
-        UserRepository $userRepository,
-        UserProfilRepository $userProfilRepository): Response
+        UserRepository $userRepository
+    ): Response
     {
         //todo: gérer par le responsable de DPE ?? pour affecter les droits et "pré-valider" les utilisateurs
         if ($this->isGranted('ROLE_ADMIN')) {
-            $users = $userProfilRepository->findNotEnableAvecDemande();
+            $users = $userRepository->findNotEnableAvecDemande();
             $dpe = false;
         } elseif (
             $this->isGranted('MANAGE', [
@@ -320,16 +320,17 @@ class UserProfilController extends BaseController
         return $this->json(true);
     }
 
-    #[Route('/gestion/{user}', name: 'gestion')]
-    public function gestionCentre(
-        ProfilRepository $profilRepository,
-        User             $user
-    ): Response
-    {
-        return $this->render('config/user_profil/_gestion_centre.html.twig', [
-            'user' => $user,
-            'centres' => CentreGestionEnum::cases(),
-            'roles' => $profilRepository->findAll()
-        ]);
-    }
+//    #[Route('/gestion/{user}', name: 'gestion')]
+//    /** @deprecated */
+//    public function gestionCentre(
+//        ProfilRepository $profilRepository,
+//        User             $user
+//    ): Response
+//    {
+//        return $this->render('config/user_profil/_gestion_centre.html.twig', [
+//            'user' => $user,
+//            'centres' => CentreGestionEnum::cases(),
+//            'roles' => $profilRepository->findAll()
+//        ]);
+//    }
 }

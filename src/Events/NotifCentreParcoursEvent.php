@@ -9,21 +9,23 @@
 
 namespace App\Events;
 
-use App\Entity\CampagneCollecte;
 use App\Entity\Parcours;
 use App\Entity\Profil;
 use App\Entity\User;
 
-class AddCentreParcoursEvent
+class NotifCentreParcoursEvent
 {
-    public const string ADD_CENTRE_PARCOURS = 'add.centre.parcours';
-    public const string REMOVE_CENTRE_PARCOURS = 'remove.centre.parcours';
+    public const string NOTIF_ADD_CENTRE = 'notif.add.centre.parcours';
+
+    public const string NOTIF_REMOVE_CENTRE = 'notif.remove.centre.parcours';
+    public const string NOTIF_UPDATE_CENTRE = 'notif.update.centre.parcours';
+
 
     public function __construct(
         public Parcours $parcours,
-        public User   $user,
-        public Profil $droits,
-        public ?CampagneCollecte $campagneCollecte = null
-    ) {
+        public ?User    $user,
+        public Profil   $profil,
+    )
+    {
     }
 }

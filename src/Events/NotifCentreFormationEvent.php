@@ -10,18 +10,20 @@
 namespace App\Events;
 
 use App\Entity\Formation;
+use App\Entity\Profil;
 use App\Entity\User;
 
 class NotifCentreFormationEvent
 {
-    public const string NOTIF_ADD_CENTRE_FORMATION = 'notif.add.centre.formation';
+    public const string NOTIF_ADD_CENTRE = 'notif.add.centre.formation';
 
-    public const string NOTIF_REMOVE_CENTRE_FORMATION = 'notif.remove.centre.formation';
+    public const string NOTIF_REMOVE_CENTRE = 'notif.remove.centre.formation';
+    public const string NOTIF_UPDATE_CENTRE = 'notif.update.centre.formation';
 
     public function __construct(
         public Formation $formation,
         public ?User $user,
-        public array $droits = []
+        public Profil $profil,
     ) {
     }
 }

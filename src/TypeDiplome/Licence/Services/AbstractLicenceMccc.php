@@ -181,4 +181,13 @@ class AbstractLicenceMccc
         return $duree->format('H\hi');
     }
 
+    protected function addQuitus(string $texteEpreuve, ?bool $hasQuitus): string
+    {
+        if (!str_starts_with('QUITUS', $texteEpreuve) && $hasQuitus) {
+            $texteEpreuve = 'QUITUS ' . $texteEpreuve;
+        }
+
+        return $texteEpreuve;
+    }
+
 }

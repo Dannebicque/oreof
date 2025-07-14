@@ -52,7 +52,7 @@ class DemandeDpeController extends BaseController
             return $this->render('demande_dpe/_liste.html.twig', [
                 'is_admin' => false,
                 'params' => $request->query->all(),
-                'mentions' => [],
+                'mentions' => $mentionRepository->findByComposante($composante),
                 'listeNiveauModification' => DpeDemande::getListeNiveauModification(),
                 'listeEtatValidation' => $validationProcess->getProcessAll(),
                 'demandes' => $dpeDemandeRepository->findByComposanteAndSearch(

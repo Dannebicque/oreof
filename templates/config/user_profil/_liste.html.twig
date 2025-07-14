@@ -57,8 +57,6 @@
                 {{ user|centre }}
             </td>
             <td class="text-end">
-                //supprimer (si compo ou admin)
-                // modifier quoi?
                 <button
                         {{ stimulus_controller('modal', {
                             size: 'lg',
@@ -78,7 +76,7 @@
                         {{ stimulus_controller('modal', {
                             size: 'lg',
                             modalTitle: 'Gestion des centres de <strong>'~ user.user.display ~'</strong>',
-                            modalUrl: path('app_user_profil_gestion',{'user': user.user.id}) }) }}
+                            modalUrl: path('app_user_profils_gestion',{'user': user.user.id}) }) }}
                         data-action="click->modal#openModal"
                         class="btn btn-sm text-warning"
                         data-size="lg"

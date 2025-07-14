@@ -17,6 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
+/** @deprecated */
 class ValidationController extends BaseController
 {
     #[Route('/validation', name: 'app_validation_index')]
@@ -73,6 +74,7 @@ class ValidationController extends BaseController
     }
 
     #[Route('/validation/wizard', name: 'app_validation_wizard')]
+    /** @deprecated */
     public function wizard(
         Request $request,
         ValidationProcessFicheMatiere    $validationProcessFicheMatiere,

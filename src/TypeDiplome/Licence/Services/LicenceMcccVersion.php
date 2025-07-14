@@ -90,19 +90,13 @@ class LicenceMcccVersion extends AbstractLicenceMccc
         }
 
         $dto = $this->calculStructureParcours->calcul($parcours, dataFromFicheMatiere: true);
-        //dump($dto->semestres[1]->ues[1]);
-        // version
-        if ($parcours->getParcoursOrigineCopie() !== null) {
-            //Todo: cette année on repart de la version validée en N-1
-            $structureDifferencesParcours = $this->versioningParcours->getStructureDifferencesBetweenParcoursAndLastVersion($parcours->getParcoursOrigineCopie());
-            // dump($structureDifferencesParcours->semestres[1]->ues[1]);
-            if ($structureDifferencesParcours !== null) {
-                $diffStructure = (new VersioningStructure($structureDifferencesParcours, $dto))->calculDiff();
-            } else {
-                return false;
-            }
+
+        $structureDifferencesParcours = $this->versioningParcours->getStructureDifferencesBetweenParcoursAndLastCfvu($parcours);
+        if ($structureDifferencesParcours !== null) {
+            $diffStructure = (new VersioningStructure($structureDifferencesParcours, $dto))->calculDiff();
+        } else {
+            return false;
         }
-        //dump($diffStructure['semestres'][1]['ues'][1]);
 
         $this->excelWriter->createFromTemplate('Annexe_MCCC.xlsx');
 
@@ -209,7 +203,7 @@ class LicenceMcccVersion extends AbstractLicenceMccc
                                     $diffEc = $diffUe['elementConstitutifs'][$ordEc];
                                     $ligne = $this->afficheEc($ligne, $ec, $diffEc);
                                     foreach ($ec->elementsConstitutifsEnfants as $ordEce => $ece) {
-                                        if (array_key_exists('ecEnfants', $diffEc) && array_key_exists($ordEce, $diffEc['ecEnfants'])) {
+                                        if ($diffEc !== null && array_key_exists('ecEnfants', $diffEc) && array_key_exists($ordEce, $diffEc['ecEnfants'])) {
                                             $ligne = $this->afficheEc($ligne, $ece, $diffEc['ecEnfants'][$ordEce]);
                                         }
                                     }
@@ -269,7 +263,7 @@ class LicenceMcccVersion extends AbstractLicenceMccc
                         //Affichage des UE enfants
                         foreach ($ue->uesEnfants() as $ordUee => $uee) {
 
-                            if (array_key_exists('uesEnfants', $diffUe) && array_key_exists($ordUee, $diffUe['uesEnfants'])) {
+                            if ($diffUe !== null && array_key_exists('uesEnfants', $diffUe) && array_key_exists($ordUee, $diffUe['uesEnfants'])) {
                                 $diffUee = $diffUe['uesEnfants'][$ordUee];
                                 $debut = $ligne;
                                 if ($uee->ue->getNatureUeEc() !== null && $uee->ue->getNatureUeEc()->isLibre()) {
@@ -483,7 +477,7 @@ class LicenceMcccVersion extends AbstractLicenceMccc
     private function afficheEc(int $ligne, StructureEc $structureEc, ?array $diffEc): int
     {
         if ($diffEc === null || $diffEc === []) {
-            $diffEc['libelle'] = '';
+            $diffEc['libelle'] = new DiffObject('', '');
             $diffEc['typeMccc'] = new DiffObject('', '');
             $diffEc['mcccs'] = [];
 
@@ -669,16 +663,12 @@ class LicenceMcccVersion extends AbstractLicenceMccc
                             }
                             $texteAvecTp .= 'TPr' . $nb2 . ' (' . $mccc->getPourcentage() . '%); ';
 
-
                             $nb2++;
                         }
                     }
 
                     $texte = substr($texte, 0, -2);
-                    if (!str_starts_with('QUITUS', $texte) && $isQuitus) {
-                        $texte = 'QUITUS ' . $texte;
-                    }
-                    $tDisplay[self::COL_MCCC_CC] = $texte;
+                    $tDisplay[self::COL_MCCC_CC] = $this->addQuitus($texte, $isQuitus);
                 }
 
                 if (array_key_exists(2, $mcccs) && array_key_exists('et', $mcccs[2]) && is_array($mcccs[2]['et'])) {
@@ -694,15 +684,9 @@ class LicenceMcccVersion extends AbstractLicenceMccc
 
                 if ($hasTp) {
                     $texteAvecTp = substr($texteAvecTp, 0, -2);
-                    if (!str_starts_with('QUITUS', $texteAvecTp) && $isQuitus) {
-                        $texteAvecTp = 'QUITUS ' . $texteAvecTp;
-                    }
-                    $tDisplay[self::COL_MCCC_SECONDE_CHANCE_CC_AVEC_TP] = str_replace(';', '+', $texteAvecTp);
+                    $tDisplay[self::COL_MCCC_SECONDE_CHANCE_CC_AVEC_TP] = $this->addQuitus(str_replace(';', '+', $texteAvecTp), $isQuitus);
                 } else {
-                    if (!str_starts_with('QUITUS', $texte) && $isQuitus) {
-                        $texte = 'QUITUS ' . $texte;
-                    }
-                    $tDisplay[self::COL_MCCC_SECONDE_CHANCE_CC_SANS_TP] = $texte;
+                    $tDisplay[self::COL_MCCC_SECONDE_CHANCE_CC_SANS_TP] = $this->addQuitus($texte, $isQuitus);
                 }
 
                 break;
@@ -713,11 +697,7 @@ class LicenceMcccVersion extends AbstractLicenceMccc
                     $texte .= 'CC' . $mccc->getNumeroSession() . ' (' . $mccc->getPourcentage() . '%); ';
                 }
                 $texte = substr($texte, 0, -2);
-                if (!str_starts_with('QUITUS', $texte) && $isQuitus) {
-                    $texte = 'QUITUS ' . $texte;
-                }
-                $tDisplay[self::COL_MCCC_CCI] = $texte;
-
+                $tDisplay[self::COL_MCCC_CCI] = $this->addQuitus($texte, $isQuitus);
                 break;
             case 'cc_ct':
                 if (array_key_exists(1, $mcccs) && array_key_exists('cc', $mcccs[1]) && $mcccs[1]['cc'] !== null) {
@@ -727,10 +707,7 @@ class LicenceMcccVersion extends AbstractLicenceMccc
                         $texte .= 'CC ' . $mccc->getNbEpreuves() . ' épreuve(s) (' . $mccc->getPourcentage() . '%); ';
                     }
                     $texte = substr($texte, 0, -2);
-                    if (!str_starts_with('QUITUS', $texte) && $isQuitus) {
-                        $texte = 'QUITUS ' . $texte;
-                    }
-                    $tDisplay[self::COL_MCCC_CC] = $texte;
+                    $tDisplay[self::COL_MCCC_CC] = $this->addQuitus($texte, $isQuitus);
                 }
 
                 $texteAvecTp = '';
@@ -764,10 +741,7 @@ class LicenceMcccVersion extends AbstractLicenceMccc
                         }
 
                         $texteEpreuve = substr($texteEpreuve, 0, -2);
-                        if (!str_starts_with('QUITUS', $texteEpreuve) && $isQuitus) {
-                            $texteEpreuve = 'QUITUS ' . $texteEpreuve;
-                        }
-                        $tDisplay[self::COL_MCCC_CT] = $texteEpreuve;
+                        $tDisplay[self::COL_MCCC_CT] = $this->addQuitus($texteEpreuve, $isQuitus);
                     }
                 }
 
@@ -787,21 +761,12 @@ class LicenceMcccVersion extends AbstractLicenceMccc
                     $texteAvecTp = substr($texteAvecTp, 0, -2);
 
                     if ($hasTp) {
-                        if (!str_starts_with('QUITUS', $texteAvecTp) && $isQuitus) {
-                            $texteAvecTp = 'QUITUS ' . $texteAvecTp;
-                        }
-                        $tDisplay[self::COL_MCCC_SECONDE_CHANCE_CC_AVEC_TP] = str_replace(';', '+', $texteAvecTp);
+                        $tDisplay[self::COL_MCCC_SECONDE_CHANCE_CC_AVEC_TP] = $this->addQuitus(str_replace(';', '+', $texteAvecTp), $isQuitus);
                     } else {
-                        if (!str_starts_with('QUITUS', $texteEpreuve) && $isQuitus) {
-                            $texteEpreuve = 'QUITUS ' . $texteEpreuve;
-                        }
                         //si TP cette celulle est vide...
-                        $tDisplay[self::COL_MCCC_SECONDE_CHANCE_CC_SANS_TP] = $texteEpreuve;
+                        $tDisplay[self::COL_MCCC_SECONDE_CHANCE_CC_SANS_TP] = $this->addQuitus($texteEpreuve, $isQuitus);
                     }
-                    if (!str_starts_with('QUITUS', $texteCc) && $isQuitus) {
-                        $texteCc = 'QUITUS ' . $texteCc;
-                    }
-                    $tDisplay[self::COL_MCCC_SECONDE_CHANCE_CC_SUP_10] = str_replace(';', '+', $texteCc);
+                    $tDisplay[self::COL_MCCC_SECONDE_CHANCE_CC_SUP_10] = $this->addQuitus(str_replace(';', '+', $texteCc), $isQuitus);
                 }
 
                 //on garde CC et on complète avec le reste de pourcentage de l'ET
@@ -811,29 +776,21 @@ class LicenceMcccVersion extends AbstractLicenceMccc
                 if (array_key_exists(1, $mcccs) && array_key_exists('et', $mcccs[1]) && $mcccs[1]['et'] !== null) {
                     $texteEpreuve = '';
                     foreach ($mcccs[1]['et'] as $mccc) {
-                        $texteEpreuve .= $this->displayTypeEpreuveWithDureePourcentage($mccc, $isQuitus);
+                        $texteEpreuve .= $this->displayTypeEpreuveWithDureePourcentage($mccc);
                     }
 
                     $texteEpreuve = substr($texteEpreuve, 0, -2);
-
-                    if (!str_starts_with('QUITUS', $texteEpreuve) && $isQuitus) {
-                        $texteEpreuve = 'QUITUS ' . $texteEpreuve;
-                    }
-
-                    $tDisplay[self::COL_MCCC_CT] = $texteEpreuve;
+                    $tDisplay[self::COL_MCCC_CT] = $this->addQuitus($texteEpreuve, $isQuitus);
                 }
 
                 if (array_key_exists(2, $mcccs) && array_key_exists('et', $mcccs[2]) && $mcccs[2]['et'] !== null) {
                     $texteEpreuve = '';
                     foreach ($mcccs[2]['et'] as $mccc) {
-                        $texteEpreuve .= $this->displayTypeEpreuveWithDureePourcentage($mccc, $isQuitus);
+                        $texteEpreuve .= $this->displayTypeEpreuveWithDureePourcentage($mccc);
                     }
 
                     $texteEpreuve = substr($texteEpreuve, 0, -2);
-                    if (!str_starts_with('QUITUS', $texteEpreuve) && $isQuitus) {
-                        $texteEpreuve = 'QUITUS ' . $texteEpreuve;
-                    }
-                    $tDisplay[self::COL_MCCC_SECONDE_CHANCE_CT] = $texteEpreuve;
+                    $tDisplay[self::COL_MCCC_SECONDE_CHANCE_CT] = $this->addQuitus($texteEpreuve, $isQuitus);
                 }
                 break;
         }
@@ -841,21 +798,17 @@ class LicenceMcccVersion extends AbstractLicenceMccc
         return $tDisplay;
     }
 
-    private function displayTypeEpreuveWithDureePourcentage(Mccc $mccc, ?bool $quitus = false): string
+    private function displayTypeEpreuveWithDureePourcentage(Mccc $mccc): string
     {
         $texte = '';
         foreach ($mccc->getTypeEpreuve() as $type) {
             if ($type !== "" && $this->typeEpreuves[$type] !== null) {
-                if ($quitus === true) {
-                    $texte .= 'QUITUS ' . $this->typeEpreuves[$type]->getSigle();
-                } else {
                     $duree = '';
                     if ($this->typeEpreuves[$type]->isHasDuree() === true) {
                         $duree = ' ' . $this->displayDuree($mccc->getDuree());
                     }
 
                     $texte .= $this->typeEpreuves[$type]->getSigle() . $duree . ' (' . $mccc->getPourcentage() . '%); ';
-                }
             } else {
                 $texte .= 'erreur épreuve; ';
             }

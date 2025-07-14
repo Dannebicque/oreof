@@ -132,7 +132,7 @@ class ProcessReouvertureController extends BaseController
                 $dpe->setEtatValidation(['en_cours_redaction' => 1]);
                 $dpe->setEtatReconduction($etatTypeModification);
                 $now = new DateTimeImmutable('now');
-                $versioningParcours->saveVersionOfParcours($parcours, $now, true, true);
+                $versioningParcours->saveVersionOfParcours($parcours, $now, true);
                 $histoEvent = new HistoriqueParcoursEvent($parcours, $this->getUser(), 'en_cours_redaction', 'valide', $request);
                 $this->eventDispatcher->dispatch($histoEvent, HistoriqueParcoursEvent::ADD_HISTORIQUE_PARCOURS);
                 $this->entityManager->flush();

@@ -27,6 +27,7 @@ class UpdateEntity
     {
     }
 
+
     public function saveCheckbox(
         object $formation,
         string $champ,

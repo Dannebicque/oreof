@@ -65,9 +65,8 @@ class VersioningParcours
         $parcoursVersioning = new ParcoursVersioning();
         $parcoursVersioning->setParcours($parcours);
         $parcoursVersioning->setVersionTimestamp($now);
-        if($isCfvu) {
-            $parcoursVersioning->setCvfuFlag(true);
-        }
+        $parcoursVersioning->setCvfuFlag($isCfvu);
+
         // Nom du fichier
         $parcoursFileName = "parcours-{$parcours->getId()}-{$dateHeure}";
         $dtoFileName = "dto-{$parcours->getId()}-{$dateHeure}";
@@ -366,7 +365,7 @@ class VersioningParcours
         );
     }
 
-    public function getStructureDifferencesBetweenParcoursAndLastVersion(Parcours $parcours)
+    public function getStructureDifferencesBetweenParcoursAndLastVersion(Parcours $parcours): ?StructureParcours
     {
         $lastVersion = $this->entityManager->getRepository(ParcoursVersioning::class)->findLastVersion($parcours);
         $lastVersion = count($lastVersion) > 0 ? $lastVersion[0] : null;
@@ -384,6 +383,30 @@ class VersioningParcours
             //            }
 
             return $dto;
+        }
+
+        return null;
+    }
+
+    public function getStructureDifferencesBetweenParcoursAndLastCfvu(Parcours $parcours): ?StructureParcours
+    {
+        // regarder si une CFVU existe sur le parcours actuel. Si non, regarder si une CFVU existe sur la version du parcours d'origine du copie
+        $lastVersion = $this->entityManager->getRepository(ParcoursVersioning::class)->findLastCfvuVersion($parcours);
+        $lastVersion = count($lastVersion) > 0 ? $lastVersion[0] : null;
+
+        if ($lastVersion === null && $parcours->getParcoursOrigineCopie() !== null) {
+            $lastVersion = $this->entityManager->getRepository(ParcoursVersioning::class)->findLastVersion($parcours->getParcoursOrigineCopie());
+            $lastVersion = count($lastVersion) > 0 ? $lastVersion[0] : null;
+        }
+
+        if ($lastVersion) {
+            $fileDTO = file_get_contents(
+                __DIR__ . "/../../versioning_json/parcours/"
+                . "{$lastVersion->getParcours()->getId()}/"
+                . "{$lastVersion->getDtoFileName()}.json"
+            );
+
+            return $this->serializer->deserialize($fileDTO, StructureParcours::class, 'json');
         }
 
         return null;

@@ -11,6 +11,7 @@ namespace App\Events;
 
 use App\Entity\CampagneCollecte;
 use App\Entity\Formation;
+use App\Entity\Profil;
 use App\Entity\User;
 
 class AddCentreFormationEvent
@@ -21,8 +22,8 @@ class AddCentreFormationEvent
 
     public function __construct(
         public Formation $formation,
-        public ?User $user,
-        public array $droits = [],
+        public User   $user,
+        public Profil $droits,
         public ?CampagneCollecte $campagneCollecte = null
     ) {
     }

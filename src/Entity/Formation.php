@@ -39,6 +39,7 @@ class Formation
 
     #[Groups(['parcours_json_versioning', 'formation_json_versioning'])]
     #[ORM\ManyToOne]
+    /** @deprecated */
     private ?Domaine $domaine = null;
 
     #[Groups(['parcours_json_versioning', 'fiche_matiere_versioning', 'formation_json_versioning'])]
@@ -258,11 +259,19 @@ class Formation
         return $this->id;
     }
 
+    /** @deprecated */
     public function getDomaine(): ?Domaine
     {
         return $this->domaine;
     }
 
+    public function getDomaines(): ?Collection
+    {
+        return $this->mention?->getDomaines();
+    }
+
+
+    /** @deprecated */
     public function setDomaine(?Domaine $domaine): self
     {
         $this->domaine = $domaine;

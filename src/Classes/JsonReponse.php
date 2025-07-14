@@ -14,9 +14,9 @@ use Symfony\Component\HttpFoundation\Response;
 class JsonReponse
 {
     public function __construct(
-        private int    $state,
-        private string $message,
-        private array  $array = []
+        private readonly int    $state,
+        private readonly string $message,
+        private readonly array  $array = []
     )
     {
     }

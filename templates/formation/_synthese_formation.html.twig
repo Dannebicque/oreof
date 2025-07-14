@@ -12,7 +12,7 @@
             <div class="{{ col }}">
                 <dl>
                     <dt>Domaine</dt>
-                    <dd>{{ formation.domaine ? formation.domaine.libelle : 'Non défini' }}</dd>
+                    <dd>{% for domaine in formation.domaines %}{{ domaine.libelle }}{% if not loop.last %}, {% endif %}{% else %}Non défini{% endfor %}</dd>
                     <dt>Type de formation</dt>
                     <dd>{{ typeDiplome|typeDiplome }}</dd>
                 </dl>

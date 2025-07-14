@@ -38,7 +38,7 @@ final class CalculStructureParcoursLicence
     {
     }
 
-    public function calcul(Parcours $parcours, bool $withEcts = true, bool $withBcc = true, bool $dataFromFicheMatiere = false): StructureParcours
+    public function calcul(Parcours $parcours, bool $withEcts = true, bool $withBcc = true, bool $dataFromFicheMatiere = true): StructureParcours
     {
         if ($this->parcoursRepository !== null) {
             $parcours = $this->parcoursRepository->find($parcours->getId());

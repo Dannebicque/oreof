@@ -9,7 +9,7 @@
 
 namespace App\Controller\API;
 
-use App\Repository\UserCentreRepository;
+use App\Repository\UserProfilRepository;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -36,7 +36,7 @@ class UserController extends AbstractController
 
     #[Route('/api/users/composante', name: 'api_user_get_all_user_composante', methods: ['GET'])]
     public function usersComposante(
-        UserCentreRepository $userCenterRepository,
+        UserProfilRepository $userCenterRepository,
         Request $request
     ): Response {
         $users = $userCenterRepository->findByComposante((int)$request->query->get('composante'));

@@ -10,23 +10,22 @@
 namespace App\EventSubscriber;
 
 use App\Classes\Mailer;
-use App\Entity\UserCentre;
 use App\Entity\UserProfil;
 use App\Events\AddCentreFormationEvent;
+use App\Events\NotifCentreFormationEvent;
 use App\Repository\FormationRepository;
-use App\Repository\ProfilRepository;
-use App\Repository\UserCentreRepository;
 use App\Repository\UserProfilRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class AddCentreFormationSubscriber implements EventSubscriberInterface
 {
     public function __construct(
+        protected EventDispatcherInterface $eventDispatcher,
         protected Mailer               $mailer,
         protected FormationRepository  $formationRepository,
         protected UserProfilRepository          $userProfilRepository,
-        private readonly ProfilRepository       $profilRepository,
         private readonly EntityManagerInterface $entityManager,
     ) {
     }
@@ -44,38 +43,35 @@ class AddCentreFormationSubscriber implements EventSubscriberInterface
         $user = $event->user;
         $formation = $event->formation;
         $campagneCollecte = $event->campagneCollecte;
+        $profil = $event->droits;
 
         // on vérifie s'il est déjà dans un centre
-        /** @var UserProfil $existe */
         $existe = $this->userProfilRepository->findOneBy(['user' => $user, 'formation' => $formation]);
         // si oui, on vérifie s'il est déjà dans la formation
 
         if ($existe !== null) {
             //S'il existe on met à jour les droits
-            if (!$event->droits[0] === $existe->getProfil()?->getCode()) {
+            if (!$event->droits === $existe->getProfil()?->getCode()) {
                 // on récupère le profil correspondant
-                $profil = $this->profilRepository->findOneBy(['code' => $event->droits[0]]);
                 $existe->setProfil($profil);
-                $this->entityManager->flush();
+
+                $eventNotif = new NotifCentreFormationEvent($formation, $user, $profil);
+                $this->eventDispatcher->dispatch($eventNotif, NotifCentreFormationEvent::NOTIF_UPDATE_CENTRE);
             }
         } else {
             // on ajoute le centre à la formation
-            $profil = $this->profilRepository->findOneBy(['code' => $event->droits[0]]);
             $centre = new UserProfil();
             $centre->setUser($user);
             $centre->setFormation($formation);
             $centre->setCampagneCollecte($campagneCollecte);
             $centre->setProfil($profil);
             $this->entityManager->persist($centre);
-            $this->entityManager->flush();
+
+            $eventNotif = new NotifCentreFormationEvent($formation, $user, $profil);
+            $this->eventDispatcher->dispatch($eventNotif, NotifCentreFormationEvent::NOTIF_ADD_CENTRE);
         }
 
-        $this->mailer->initEmail();
-        $this->mailer->setTemplate(
-            'mails/formation/add_centre_formation.txt.twig',
-            ['user' => $user, 'formation' => $formation]
-        );
-        $this->mailer->sendMessage([$user->getEmail()], '[ORéOF] Accès à l\'application');
+        $this->entityManager->flush();
     }
 
     public function onRemoveCentreFormation(AddCentreFormationEvent $event): void
@@ -88,15 +84,13 @@ class AddCentreFormationSubscriber implements EventSubscriberInterface
 
         //si oui, on supprime le centre
         if ($existe !== null) {
+            $profil = $existe->getProfil();
+
             $this->entityManager->remove($existe);
             $this->entityManager->flush();
 
-            $this->mailer->initEmail();
-            $this->mailer->setTemplate(
-                'mails/formation/remove_centre_formation.txt.twig',
-                ['user' => $user, 'formation' => $formation]
-            );
-            $this->mailer->sendMessage([$user->getEmail()], '[ORéOF] Accès à l\'application');
+            $eventNotif = new NotifCentreFormationEvent($formation, $user, $profil);
+            $this->eventDispatcher->dispatch($eventNotif, NotifCentreFormationEvent::NOTIF_REMOVE_CENTRE);
         }
     }
 }

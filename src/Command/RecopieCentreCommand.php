@@ -16,6 +16,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
     name: 'app:recopie-centre',
     description: 'Add a short description for your command',
 )]
+/** @deprecated("si géré dans la recopie d'une année, on peut supprimer la commande") */
 class RecopieCentreCommand extends Command
 {
     public function __construct(

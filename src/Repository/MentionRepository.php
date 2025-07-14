@@ -9,6 +9,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Composante;
 use App\Entity\Domaine;
 use App\Entity\Mention;
 use App\Entity\TypeDiplome;
@@ -129,5 +130,16 @@ class MentionRepository extends ServiceEntityRepository
         }
 
         return (int)$query->getQuery()->getSingleScalarResult();
+    }
+
+    public function findByComposante(Composante $composante): array
+    {
+        return $this->createQueryBuilder('m')
+            ->innerJoin('m.formations', 'f')
+            ->where('f.composantePorteuse = :composante')
+            ->setParameter('composante', $composante)
+            ->orderBy('m.libelle', 'ASC')
+            ->getQuery()
+            ->getResult();
     }
 }

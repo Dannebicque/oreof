@@ -13,16 +13,14 @@ use App\Classes\Ldap;
 use App\Classes\Mailer;
 use App\Controller\BaseController;
 use App\Entity\User;
+use App\Entity\UserProfil;
 use App\Enums\CentreGestionEnum;
 use App\Form\UserHorsUrcaType;
 use App\Form\UserLdapType;
 use App\Form\UserType;
 use App\Repository\RoleRepository;
-use App\Repository\UserCentreRepository;
 use App\Repository\UserRepository;
-use App\Utils\JsonRequest;
 use DateTime;
-use JsonException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -30,7 +28,6 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/administration/utilisateurs')]
-/** @deprecated */
 class UserController extends BaseController
 {
     #[Route('/repertoire', name: 'app_user_repertoire', methods: ['GET'])]
@@ -58,7 +55,8 @@ class UserController extends BaseController
         } elseif (
             $this->isGranted('MANAGE', ['route' => 'app_composante', 'subject' => 'composante'])
         ) {
-            foreach ($this->getUser()?->getUserCentres() as $centre) {
+            /** @var UserProfil $centre */
+            foreach ($this->getUser()?->getUserProfils() as $centre) {
                 if ($centre->getComposante() !== null) {
                     $composante = $centre->getComposante(); //au moins une composante, todo: si plusieurs ?
                 }
@@ -194,7 +192,6 @@ class UserController extends BaseController
         return $this->json([
             'success' => true,
             'url' => $this->generateUrl('app_user_profils_gestion', ['user' => $user->getId()])
-            // 'url' => $this->generateUrl('app_user_gestion_centre', ['user' => $user->getId()])
         ]);
     }
 
@@ -244,7 +241,7 @@ class UserController extends BaseController
 
         return $this->json([
             'success' => true,
-            'url' => $this->generateUrl('app_user_gestion_centre', ['user' => $user->getId()])
+            'url' => $this->generateUrl('app_user_profils_gestion', ['user' => $user->getId()])
         ]);
     }
 
@@ -280,30 +277,30 @@ class UserController extends BaseController
             'dpe' => $dpe
         ]);
     }
-
-    /**
-     * @throws JsonException
-     */
-    #[Route('/change-role/{id}', name: 'app_user_roles', methods: ['POST'])]
-    public function changeRole(
-        Request        $request,
-        UserRepository $userRepository,
-        User           $user
-    ): Response {
-        $data = JsonRequest::getFromRequest($request);
-        $roles = $user->getRoles();
-
-        if ($data['checked']) {
-            $roles[] = $data['role'];
-        } else {
-            $roles = array_diff($roles, [$data['role']]);
-        }
-        $user->setRoles($roles);
-        $userRepository->save($user, true);
-
-        return $this->json(true);
-    }
-
+//
+//    /**
+//     * @throws JsonException
+//     */
+//    #[Route('/change-role/{id}', name: 'app_user_roles', methods: ['POST'])]
+//    public function changeRole(
+//        Request        $request,
+//        UserRepository $userRepository,
+//        User           $user
+//    ): Response {
+//        $data = JsonRequest::getFromRequest($request);
+//        $roles = $user->getRoles();
+//
+//        if ($data['checked']) {
+//            $roles[] = $data['role'];
+//        } else {
+//            $roles = array_diff($roles, [$data['role']]);
+//        }
+//        $user->setRoles($roles);
+//        $userRepository->save($user, true);
+//
+//        return $this->json(true);
+//    }
+//
     #[Route('/{id}/edit', name: 'app_user_edit', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_ADMIN')]
     public function edit(Request $request, User $user, UserRepository $userRepository): Response

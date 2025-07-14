@@ -22,6 +22,7 @@ use App\Entity\FormationVersioning;
 use App\Entity\Parcours;
 use App\Entity\ParcoursVersioning;
 use App\Entity\UserCentre;
+use App\Entity\UserProfil;
 use App\Enums\TypeModificationDpeEnum;
 use App\Events\AddCentreFormationEvent;
 use App\Form\FormationSesType;
@@ -30,9 +31,8 @@ use App\Repository\DomaineRepository;
 use App\Repository\DpeParcoursRepository;
 use App\Repository\FormationRepository;
 use App\Repository\MentionRepository;
-use App\Repository\RoleRepository;
+use App\Repository\ProfilRepository;
 use App\Repository\TypeDiplomeRepository;
-use App\Repository\UserCentreRepository;
 use App\Service\VersioningFormation;
 use App\Service\VersioningParcours;
 use App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException;
@@ -210,9 +210,8 @@ class FormationController extends BaseController
     #[Route('/new', name: 'app_formation_new', methods: ['GET', 'POST'])]
     public function new(
         WorkflowInterface $dpeParcoursWorkflow,
-        RoleRepository       $roleRepository,
+        ProfilRepository $profilRepository,
         MentionRepository    $mentionRepository,
-        UserCentreRepository $userCentreRepository,
         Request              $request,
         FormationRepository  $formationRepository
     ): Response {
@@ -259,23 +258,15 @@ class FormationController extends BaseController
             $dpeParcoursWorkflow->apply($dpeParcours, 'autoriser');
             $parcours->addDpeParcour($dpeParcours);
             $this->entityManager->persist($dpeParcours);
+
+            $profil = $profilRepository->findOneBy(['code_role' => 'ROLE_RESP_FORMATION']);
+            $uc = new UserProfil();
+            $uc->setUser($formation->getResponsableMention());
+            $uc->setCampagneCollecte($this->getCampagneCollecte());
+            $uc->setFormation($formation);
+            $uc->setProfil($profil);
+            $this->entityManager->persist($uc);
             $this->entityManager->flush();
-
-
-            //on vérifie si le responsable de formation à le centre
-            $hasCentre = $userCentreRepository->findOneBy([
-                'user' => $formation->getResponsableMention(),
-                'formation' => $formation->getId()
-            ]);
-            if ($hasCentre === null) {
-                $role = $roleRepository->findOneBy(['code_role' => 'ROLE_RESP_FORMATION']);
-                $uc = new UserCentre();
-                $uc->setUser($formation->getResponsableMention());
-                $uc->setCampagneCollecte($this->getCampagneCollecte());
-                $uc->setFormation($formation);
-                $uc->addRole($role);
-                $userCentreRepository->save($uc, true);
-            }
 
             return $this->redirectToRoute('app_formation_index');
         }
@@ -288,6 +279,7 @@ class FormationController extends BaseController
 
     #[Route('/edit/formation/{slug}', name: 'app_formation_edit_modal', methods: ['GET', 'POST'])]
     public function editModal(
+        ProfilRepository $profilRepository,
         EventDispatcherInterface $eventDispatcher,
         EntityManagerInterface   $entityManager,
         MentionRepository        $mentionRepository,
@@ -315,11 +307,16 @@ class FormationController extends BaseController
             $changeSet = $uow->getEntityChangeSet($formation);
 
             if (isset($changeSet['responsableMention'])) {
+                $profil = $profilRepository->findOneBy(['code' => 'ROLE_RESP_FORMATION']);
+                if ($profil === null) {
+                    throw new Exception('Profil ROLE_RESP_FORMATION non trouvé');
+                }
                 // retirer l'ancien resp des centres et droits et envoyer mail
-                $event = new AddCentreFormationEvent($formation, $changeSet['responsableMention'][0], ['ROLE_RESP_FORMATION'], $this->getCampagneCollecte());
+                $event = new AddCentreFormationEvent($formation, $changeSet['responsableMention'][0], $profil, $this->getCampagneCollecte());
                 $eventDispatcher->dispatch($event, AddCentreFormationEvent::REMOVE_CENTRE_FORMATION);
+
                 // ajouter le nouveau resp, ajouter centre et droits et envoyer mail
-                $event = new AddCentreFormationEvent($formation, $changeSet['responsableMention'][1], ['ROLE_RESP_FORMATION'], $this->getCampagneCollecte());
+                $event = new AddCentreFormationEvent($formation, $changeSet['responsableMention'][1], $profil, $this->getCampagneCollecte());
                 $eventDispatcher->dispatch($event, AddCentreFormationEvent::ADD_CENTRE_FORMATION);
             }
 

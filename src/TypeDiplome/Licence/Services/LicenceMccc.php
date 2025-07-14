@@ -574,6 +574,7 @@ class LicenceMccc extends AbstractLicenceMccc
         }
 
         // MCCC
+        $hasQuitus = $ec->isQuitus();
         if ($structureEc->elementConstitutif->isControleAssiduite() === false) {
             $mcccs = $this->getMcccs($structureEc);
             switch ($structureEc->typeMccc) {
@@ -608,7 +609,7 @@ class LicenceMccc extends AbstractLicenceMccc
                         }
 
                         $texte = substr($texte, 0, -2);
-                        $this->excelWriter->writeCellXY(self::COL_MCCC_CC, $ligne, $texte);
+                        $this->excelWriter->writeCellXY(self::COL_MCCC_CC, $ligne, $this->addQuitus($texte, $hasQuitus));
                     }
 
                     if (array_key_exists(2, $mcccs) && array_key_exists('et', $mcccs[2]) && is_array($mcccs[2]['et'])) {
@@ -624,9 +625,9 @@ class LicenceMccc extends AbstractLicenceMccc
 
                     if ($hasTp) {
                         $texteAvecTp = substr($texteAvecTp, 0, -2);
-                        $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE_CC_AVEC_TP, $ligne, str_replace(';', '+', $texteAvecTp));
+                        $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE_CC_AVEC_TP, $ligne, $this->addQuitus(str_replace(';', '+', $texteAvecTp), $hasQuitus));
                     } else {
-                        $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE_CC_SANS_TP, $ligne, $texte);
+                        $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE_CC_SANS_TP, $ligne, $this->addQuitus($texte, $hasQuitus));
                     }
 
                     break;
@@ -636,7 +637,7 @@ class LicenceMccc extends AbstractLicenceMccc
                         $texte .= 'CC' . $mccc->getNumeroSession() . ' (' . $mccc->getPourcentage() . '%); ';
                     }
                     $texte = substr($texte, 0, -2);
-                    $this->excelWriter->writeCellXY(self::COL_MCCC_CCI, $ligne, $texte);
+                    $this->excelWriter->writeCellXY(self::COL_MCCC_CCI, $ligne, $this->addQuitus($texte, $hasQuitus));
 
                     break;
                 case 'cc_ct':
@@ -646,7 +647,7 @@ class LicenceMccc extends AbstractLicenceMccc
                             $texte .= 'CC ' . $mccc->getNbEpreuves() . ' épreuve(s) (' . $mccc->getPourcentage() . '%); ';
                         }
                         $texte = substr($texte, 0, -2);
-                        $this->excelWriter->writeCellXY(self::COL_MCCC_CC, $ligne, $texte);
+                        $this->excelWriter->writeCellXY(self::COL_MCCC_CC, $ligne, $this->addQuitus($texte, $hasQuitus));
                     }
 
                     $texteAvecTp = '';
@@ -680,7 +681,7 @@ class LicenceMccc extends AbstractLicenceMccc
                             }
 
                             $texteEpreuve = substr($texteEpreuve, 0, -2);
-                            $this->excelWriter->writeCellXY(self::COL_MCCC_CT, $ligne, $texteEpreuve);
+                            $this->excelWriter->writeCellXY(self::COL_MCCC_CT, $ligne, $this->addQuitus($texteEpreuve, $hasQuitus));
                         }
                     }
 
@@ -701,12 +702,12 @@ class LicenceMccc extends AbstractLicenceMccc
 
 
                         if ($hasTp) {
-                            $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE_CC_AVEC_TP, $ligne, str_replace(';', '+', $texteAvecTp));
+                            $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE_CC_AVEC_TP, $ligne, $this->addQuitus(str_replace(';', '+', $texteAvecTp), $hasQuitus));
                         } else {
                             //si TP cette celulle est vide...
-                            $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE_CC_SANS_TP, $ligne, $texteEpreuve);
+                            $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE_CC_SANS_TP, $ligne, $this->addQuitus($texteEpreuve, $hasQuitus));
                         }
-                        $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE_CC_SUP_10, $ligne, str_replace(';', '+', $texteCc));
+                        $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE_CC_SUP_10, $ligne, $this->addQuitus(str_replace(';', '+', $texteCc), $hasQuitus));
                     }
 
                     //on garde CC et on complète avec le reste de pourcentage de l'ET
@@ -714,26 +715,25 @@ class LicenceMccc extends AbstractLicenceMccc
 
                     break;
                 case 'ct':
-                    $quitus = $ec->isQuitus();
                     if (array_key_exists(1, $mcccs) && array_key_exists('et', $mcccs[1]) && $mcccs[1]['et'] !== null) {
                         $texteEpreuve = '';
                         foreach ($mcccs[1]['et'] as $mccc) {
-                            $texteEpreuve .= $this->displayTypeEpreuveWithDureePourcentage($mccc, $quitus);
+                            $texteEpreuve .= $this->displayTypeEpreuveWithDureePourcentage($mccc);
                         }
 
                         $texteEpreuve = substr($texteEpreuve, 0, -2);
 
-                        $this->excelWriter->writeCellXY(self::COL_MCCC_CT, $ligne, $texteEpreuve);
+                        $this->excelWriter->writeCellXY(self::COL_MCCC_CT, $ligne, $this->addQuitus($texteEpreuve, $hasQuitus));
                     }
 
                     if (array_key_exists(2, $mcccs) && array_key_exists('et', $mcccs[2]) && $mcccs[2]['et'] !== null) {
                         $texteEpreuve = '';
                         foreach ($mcccs[2]['et'] as $mccc) {
-                            $texteEpreuve .= $this->displayTypeEpreuveWithDureePourcentage($mccc, $quitus);
+                            $texteEpreuve .= $this->displayTypeEpreuveWithDureePourcentage($mccc);
                         }
 
                         $texteEpreuve = substr($texteEpreuve, 0, -2);
-                        $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE_CT, $ligne, $texteEpreuve);
+                        $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE_CT, $ligne, $this->addQuitus($texteEpreuve, $hasQuitus));
                     }
                     break;
             }
@@ -778,16 +778,14 @@ class LicenceMccc extends AbstractLicenceMccc
         $texte = '';
         foreach ($mccc->getTypeEpreuve() as $type) {
             if ($type !== "" && $this->typeEpreuves[$type] !== null) {
-                if ($quitus === true) {
-                    $texte .= 'QUITUS ' . $this->typeEpreuves[$type]->getSigle().'; ';
-                } else {
+
                     $duree = '';
                     if ($this->typeEpreuves[$type]->isHasDuree() === true) {
                         $duree = ' ' . $this->displayDuree($mccc->getDuree());
                     }
 
                     $texte .= $this->typeEpreuves[$type]->getSigle() . $duree . ' (' . $mccc->getPourcentage() . '%); ';
-                }
+
             } else {
                 $texte .= 'erreur épreuve; ';
             }
@@ -845,4 +843,6 @@ class LicenceMccc extends AbstractLicenceMccc
         $ligne++;
         return $ligne;
     }
+
+
 }

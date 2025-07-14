@@ -10,47 +10,48 @@
 namespace App\EventSubscriber;
 
 use App\Events\NotifCentreFormationEvent;
+use App\Events\NotifCentreParcoursEvent;
 
-class NotifCentreFormationSubscriber extends AbstractNotifCentreSubscriber
+class NotifCentreParcoursSubscriber extends AbstractNotifCentreSubscriber
 {
     public static function getSubscribedEvents(): array
     {
         return [
-            NotifCentreFormationEvent::NOTIF_ADD_CENTRE => 'onAddCentreFormation',
-            NotifCentreFormationEvent::NOTIF_REMOVE_CENTRE => 'onRemoveCentreFormation',
-            NotifCentreFormationEvent::NOTIF_UPDATE_CENTRE => 'onUpdateCentreFormation',
+            NotifCentreParcoursEvent::NOTIF_ADD_CENTRE => 'onAddCentreParcours',
+            NotifCentreParcoursEvent::NOTIF_REMOVE_CENTRE => 'onRemoveCentreParcours',
+            NotifCentreParcoursEvent::NOTIF_UPDATE_CENTRE => 'onUpdateCentreParcours',
         ];
     }
 
-    public function onAddCentreFormation(NotifCentreFormationEvent $event): void
+    public function onAddCentreParcours(NotifCentreParcoursEvent $event): void
     {
         $this->sendNotification(
             $event->user,
-            $event->formation,
+            $event->parcours,
             $event->profil,
-            'mails/formation/add_centre_formation.html.twig',
+            'mails/parcours/add_centre_parcours.html.twig',
             '[ORéOF] Accès à l\'application'
         );
     }
 
-    public function onUpdateCentreFormation(NotifCentreFormationEvent $event): void
+    public function onUpdateCentreFormation(NotifCentreParcoursEvent $event): void
     {
         $this->sendNotification(
             $event->user,
-            $event->formation,
+            $event->parcours,
             $event->profil,
-            'mails/formation/update_centre_formation.html.twig',
+            'mails/parcours/update_centre_parcours.html.twig',
             '[ORéOF] Modification de vos accès à l\'application'
         );
     }
 
-    public function onRemoveCentreFormation(NotifCentreFormationEvent $event): void
+    public function onRemoveCentreParcours(NotifCentreParcoursEvent $event): void
     {
         $this->sendNotification(
             $event->user,
-            $event->formation,
+            $event->parcours,
             $event->profil,
-            'mails/formation/remove_centre_formation.html.twig',
+            'mails/parcours/remove_centre_parcours.html.twig',
             '[ORéOF] Accès à l\'application'
         );
     }

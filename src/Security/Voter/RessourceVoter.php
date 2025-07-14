@@ -91,12 +91,12 @@ class RessourceVoter extends Voter
     private function checkScope(UserProfil $userProfil, mixed $object, string $attribute): bool
     {
         $centre = $userProfil->getProfil()?->getCentre();
-
         return match ($centre) {
             CentreGestionEnum::CENTRE_GESTION_ETABLISSEMENT => $this->checkEtablissement($userProfil, $object, $attribute) || $object === 'etablissement',
             CentreGestionEnum::CENTRE_GESTION_COMPOSANTE => $this->checkComposante($userProfil, $object, $attribute) || $object === 'composante',
             CentreGestionEnum::CENTRE_GESTION_FORMATION => $this->checkFormation($userProfil, $object, $attribute) || $object === 'formation',
             CentreGestionEnum::CENTRE_GESTION_PARCOURS => $this->checkParcours($userProfil, $object, $attribute) || $object === 'parcours',
+            //todo: gérer le cas des fiches matières HD
             default => false,
         };
 
@@ -107,10 +107,6 @@ class RessourceVoter extends Voter
         if ($object instanceof Etablissement) {
             return $userProfil->getEtablissement() === $object;
         }
-
-        $this->checkScope($userProfil, $object, $attribute);
-
-
 
         return false;
     }
@@ -207,8 +203,7 @@ class RessourceVoter extends Voter
                 $this->dpeParcoursWorkflow->can($dpeParcours, 'valider_rf');
         }
 
-        if (
-            $userProfil->getComposante() === $parcours->getFormation()?->getComposantePorteuse() &&
+        if ($userProfil->getComposante() === $parcours->getFormation()?->getComposantePorteuse() &&
             $userProfil->getComposante()?->getResponsableDpe() === $userProfil->getUser()) {
             //todo: filtre pas si les bons droits... Edit ou lecture ?
             $canAccess = $this->dpeParcoursWorkflow->can($dpeParcours, 'autoriser') ||
@@ -219,6 +214,7 @@ class RessourceVoter extends Voter
         }
 
         if ($this->security->isGranted('ROLE_ADMIN')) {
+            $isProprietaire = true;
             $canAccess =
                 $this->dpeParcoursWorkflow->can($dpeParcours, 'autoriser') ||
                 $this->dpeParcoursWorkflow->can($dpeParcours, 'valider_ouverture_sans_cfvu') ||

@@ -160,17 +160,17 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{{ path('app_validation_index') }}">
+                                    <a href="{{ path('app_validation_dpe_index') }}">
                                         <span class="label">Validation DPE</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{{ path('app_validation_index') }}">
+                                    <a href="{{ path('app_validation_fiche_index') }}">
                                         <span class="label">Validation Fiches EC/matières</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{{ path('app_validation_index') }}">
+                                    <a href="{{ path('app_validation_change_rf_index') }}">
                                         <span class="label">Validation RF/co-RF</span>
                                     </a>
                                 </li>
@@ -241,7 +241,7 @@
                             </li>
                         {% endif %}
                     {% endif %}
-                    ----
+
                     {% if is_granted('EDIT', {route: 'app_etablissement', subject: 'etablissement'}) or is_granted('ROLE_ADMIN') %}
                         <li>
                             <a href="#conseils" data-href="conseils">

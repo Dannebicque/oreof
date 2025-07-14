@@ -45,6 +45,7 @@
                 {{ displaySort('type_diplome', sort, direction) }}
             </a>
         </th>
+        <th>Domaine(s)</th>
         <th>Utilisé ?</th>
         <th></th>
     </tr>
@@ -56,6 +57,7 @@
             <td>{{ mention.sigle }}</td>
             <td>{{ mention.codeApogee|displayOrBadge }}</td>
             <td>{{ mention.typeDiplome|typeDiplome }}</td>
+            <td>{% for domaine in mention.domaines %}{{ domaine.libelle }}{% if not loop.last %}, {% endif %}{% endfor %}</td>
             <td>
                 {% if mention.formations|length > 0 %}
                     <span class="badge bg-success">Utilisée ({{ mention.formations|length }})</span>

@@ -63,7 +63,9 @@ class ExportFiabilisation
         $this->excelWriter->writeCellXY('M', 1, 'Id Fiche EC/matière');
         $this->excelWriter->writeCellXY('N', 1, 'Fiche EC/matière');
         $this->excelWriter->writeCellXY('O', 1, 'Code élément');
-        $this->excelWriter->writeCellXY('P', 1, 'MATI/MATM');
+        $this->excelWriter->writeCellXY('P', 1, 'Type EC');
+        $this->excelWriter->writeCellXY('Q', 1, 'MATI/MATM');
+        $this->excelWriter->writeCellXY('R', 1, 'ECTS');
 
         $this->ligne = 2;
         foreach ($formations as $idFormation) {
@@ -99,7 +101,7 @@ class ExportFiabilisation
                             }
                         }
 
-                        $this->excelWriter->getColumnsAutoSize('A', 'P');
+                        $this->excelWriter->getColumnsAutoSize('A', 'Q');
                     }
                     //}
                 }
@@ -114,7 +116,7 @@ class ExportFiabilisation
 
         foreach ($ue->elementConstitutifs as $ec) {
             if ($ec->elementConstitutif->getNatureUeEc()?->isChoix()) {
-
+                $this->getEc($ue, $ec, $codeApogeeParcours, 'EC Parent');
                 foreach ($ec->elementsConstitutifsEnfants as $ecEnfant) {
                     $this->getEc($ue, $ecEnfant, $codeApogeeParcours);
                 }
@@ -124,7 +126,7 @@ class ExportFiabilisation
         }
     }
 
-    private function getEc(StructureUe $ue, StructureEc $ec, ?SemestreParcours $semestreParcours): void
+    private function getEc(StructureUe $ue, StructureEc $ec, ?SemestreParcours $semestreParcours, string $typeEc = ''): void
     {
 
         if ($ec->elementConstitutif->getNatureUeEc()?->isLibre() === false) {
@@ -140,7 +142,14 @@ class ExportFiabilisation
             $this->excelWriter->writeCellXY(13, $this->ligne, $ec->elementConstitutif->displayId());
             $this->excelWriter->writeCellXY(14, $this->ligne, $ec->elementConstitutif->getFicheMatiere()?->getLibelle() ?? '-');
             $this->excelWriter->writeCellXY(15, $this->ligne, $ec->elementConstitutif->displayCodeApogee());
-            $this->excelWriter->writeCellXY(16, $this->ligne, $ec->elementConstitutif->getFicheMatiere()?->getTypeApogee() ?? '-');
+            if ($typeEc !== '') {
+                $this->excelWriter->writeCellXY(16, $this->ligne, $typeEc);
+            } else {
+                $this->excelWriter->writeCellXY(16, $this->ligne, $ec->elementConstitutif->getNatureUeEc()?->getLibelle() ?? 'erreur type');
+            }
+
+            $this->excelWriter->writeCellXY(17, $this->ligne, $ec->elementConstitutif->getFicheMatiere()?->getTypeApogee() ?? '-');
+            $this->excelWriter->writeCellXY(18, $this->ligne, $ec->heuresEctsEc->ects);
             $this->ligne++;
         }
     }

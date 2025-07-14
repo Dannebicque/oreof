@@ -370,8 +370,7 @@ class ProcessValidationController extends BaseController
             $sParcours = $request->query->get('parcours');
         }
         $allParcours = explode(',', $sParcours);
-
-        $process = $this->validationProcess->getEtape($etape);
+        $process = $this->validationProcess->getEtapeFromAll($etape);
         $meta = $this->validationProcess->getMetaFromTransition($transition);
         $laisserPasser = false;
         $tParcours = [];
@@ -408,7 +407,6 @@ class ProcessValidationController extends BaseController
             $this->toast('success', 'Parcours validés');
             return $this->redirectToRoute('app_validation_index');
         }
-
 
         return $this->render('process_validation/_valide_lot.html.twig', [
             'formations' => $tParcours,

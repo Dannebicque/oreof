@@ -191,16 +191,12 @@ class MentionService
         $mention->setLibelle($mentionDto->libelle);
         $mention->setSigle($mentionDto->sigle);
         $mention->setCodeApogee($mentionDto->codeApogee);
-
-        // Récupérer les entités liées
-        if ($mentionDto->typeDiplomeId) {
-            $typeDiplome = $this->typeDiplomeRepository->find($mentionDto->typeDiplomeId);
-            $mention->setTypeDiplome($typeDiplome);
-        }
-
-        if ($mentionDto->domaineId) {
-            $domaine = $this->domaineRepository->find($mentionDto->domaineId);
-            $mention->setDomaine($domaine);
+        $mention->setTypeDiplome($mentionDto->typeDiplomeId);
+        foreach ($mentionDto->domaines as $idDomaine) {
+            $domaine = $this->domaineRepository->find($idDomaine);
+            if ($domaine && !$mention->getDomaines()->contains($domaine)) {
+                $mention->addDomaine($domaine);
+            }
         }
     }
 

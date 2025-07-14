@@ -33,6 +33,15 @@ abstract class AbstractValidationProcess
          return '';
     }
 
+    public function getEtapeFromAll(string $etape): array
+    {
+        if (array_key_exists($etape, $this->processAll)) {
+            return $this->processAll[$etape];
+        }
+
+        return [];
+    }
+
     public function getEtape(string $etape): array
     {
         if (array_key_exists($etape, $this->process)) {

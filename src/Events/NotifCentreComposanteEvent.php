@@ -10,18 +10,19 @@
 namespace App\Events;
 
 use App\Entity\Composante;
+use App\Entity\Profil;
 use App\Entity\User;
 
 class NotifCentreComposanteEvent
 {
-    public const string NOTIF_ADD_CENTRE_COMPOSANTE = 'notif.add.centre.composante';
+    public const string NOTIF_ADD_CENTRE = 'notif.add.centre.composante';
 
-    public const string NOTIF_REMOVE_CENTRE_COMPOSANTE = 'notif.remove.centre.composante';
+    public const string NOTIF_REMOVE_CENTRE = 'notif.remove.centre.composante';
 
     public function __construct(
         public Composante $composante,
         public ?User $user,
-        public array $droits = []
+        public Profil $profil,
     ) {
     }
 }
