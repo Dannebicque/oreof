@@ -39,7 +39,8 @@ public/temp/*
 publication-cron/
 
 ### Dossier d'export
-export/
+export/*
+versioning_json/*
 
 ### API JSON Versioning ###
 public/api_json/
@@ -47,8 +48,6 @@ public/api_json/
 ###> phpunit/phpunit ###
 /phpunit.xml
 .phpunit.result.cache
-
-.env.test
 ###< phpunit/phpunit ###
 
 ###> symfony/phpunit-bridge ###
