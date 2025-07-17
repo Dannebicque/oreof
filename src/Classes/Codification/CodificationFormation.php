@@ -22,7 +22,7 @@ use Doctrine\ORM\EntityManagerInterface;
 class CodificationFormation
 {
     // définir un tableau de constante avec les chiffres puis les 26 lettres de l'alphabet
-    public const array TAB_CODE_PARCOURS = [
+    public const TAB_CODE_PARCOURS = [
         '1',
         '2',
         '3',
