@@ -16,6 +16,7 @@ use App\DTO\StructureUe;
 use App\Entity\Parcours;
 use App\Entity\ParcoursVersioning;
 use App\Service\ParcoursExport;
+use App\Service\TypeDiplomeResolver;
 use App\Service\VersioningParcours;
 use App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException;
 use App\Utils\CleanTexte;
@@ -46,8 +47,8 @@ class ParcoursExportController extends AbstractController
      */
     #[Route('/parcours/{parcours}/export-pdf', name: 'app_parcours_export')]
     public function export(
+        TypeDiplomeResolver $typeDiplomeResolver,
         Parcours                $parcours,
-        CalculStructureParcours $calculStructureParcours
     ): Response {
         $typeDiplome = $parcours->getFormation()?->getTypeDiplome();
 
@@ -55,13 +56,16 @@ class ParcoursExportController extends AbstractController
             throw new Exception('Type de diplôme non trouvé');
         }
 
+        $typeD = $typeDiplomeResolver->get($typeDiplome);
+
+
         return $this->myPdf->render('pdf/parcours.html.twig', [
             'formation' => $parcours->getFormation(),
             'typeDiplome' => $typeDiplome,
             'parcours' => $parcours,
             'hasParcours' => $parcours->getFormation()?->isHasParcours(),
             'titre' => 'Détails du parcours ' . $parcours->getDisplay(),
-            'dto' => $calculStructureParcours->calcul($parcours)
+            'dto' => $typeD->calculStructureParcours($parcours),
         ], 'Parcours_' . $parcours->getDisplay());
     }
 
@@ -124,7 +128,7 @@ class ParcoursExportController extends AbstractController
     #[Route('/parcours/{parcours}/maquette/export-json', name: 'app_parcours_export_maquette_json')]
     public function exportMaquetteJson(
         Parcours                $parcours,
-        CalculStructureParcours $calculStructureParcours
+        TypeDiplomeResolver $typeDiplomeResolver,
     ): Response {
         $typeDiplome = $parcours->getFormation()?->getTypeDiplome();
 
@@ -132,7 +136,8 @@ class ParcoursExportController extends AbstractController
             throw new Exception('Type de diplôme non trouvé');
         }
 
-        $dto = $calculStructureParcours->calcul($parcours);
+        $typeD = $typeDiplomeResolver->get($typeDiplome);
+        $dto = $typeD->calculStructureParcours($parcours);
 
         $data = [
             'path' => $this->generateUrl('app_parcours_export_maquette_json', ['parcours' => $parcours->getId()], UrlGeneratorInterface::ABSOLUTE_URL),
