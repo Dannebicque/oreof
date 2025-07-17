@@ -91,7 +91,15 @@ export default class extends Controller {
         composante,
       })
       this.listeTarget.innerHTML = ''
-      const response = await fetch(`${this.urlValue}?${body.toString()}`)
+
+      if (this.urlValue.includes('?')) {
+        this.urlValue += `&${body.toString()}`
+      } else {
+        this.urlValue += `?${body.toString()}`
+      }
+
+      const response = await fetch(`${this.urlValue}`)
+
       this.listeTarget.innerHTML = await response.text()
     }
   }

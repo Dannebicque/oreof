@@ -19,6 +19,7 @@ use App\DTO\StructureSemestre;
 use App\DTO\StructureUe;
 use App\Entity\Mccc;
 use App\Utils\Tools;
+use DateTime;
 use Doctrine\Common\Collections\Collection;
 
 class VersioningStructure
@@ -479,7 +480,7 @@ class VersioningStructure
         return $diff;
     }
 
-    public function mapStructureForComparison(StructureParcours $dto)
+    public function mapStructureForComparison(StructureParcours $dto): array
     {
         $structure = ['semestres' => []];
         // Semestres
@@ -510,7 +511,7 @@ class VersioningStructure
         return $structure;
     }
 
-    public function mapUeArrayForComparison(array $ueArray)
+    public function mapUeArrayForComparison(array $ueArray): array
     {
         return array_values(
             array_map(
@@ -520,7 +521,7 @@ class VersioningStructure
         );
     }
 
-    public function mapEcArrayForComparison(array $ecArray)
+    public function mapEcArrayForComparison(array $ecArray): array
     {
         return array_values(
             array_map(
@@ -608,7 +609,7 @@ class VersioningStructure
         $mccc->setId($mcccOriginal['id']);
         if (array_key_exists('duree', $mcccOriginal)) {
             // création d'un objet DateTime à partir d'une chaine de caractères
-            $mccc->setDuree(new \DateTime($mcccOriginal['duree']));
+            $mccc->setDuree(new DateTime($mcccOriginal['duree']));
         }
         $mccc->setLibelle($mcccOriginal['libelle']);
         $mccc->setNumeroSession($mcccOriginal['numeroSession']);

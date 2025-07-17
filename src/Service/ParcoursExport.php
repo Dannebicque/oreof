@@ -42,13 +42,15 @@ class ParcoursExport {
         Parcours $parcours,
         int $parcours_id = null,
         int $formation_id = null
-    ){
+    ): array
+    {
         $typeDiplome = $parcours->getFormation()?->getTypeDiplome();
 
         return $this->getMaquetteJson($dto, $parcours, $typeDiplome, true, $parcours_id, $formation_id);
     }
 
-    public function exportMaquetteJson(Parcours $parcours) {
+    public function exportMaquetteJson(Parcours $parcours): array
+    {
 
         $typeDiplome = $parcours->getFormation()?->getTypeDiplome();
 
@@ -68,7 +70,8 @@ class ParcoursExport {
         bool $isVersioning = false,
         int $parcours_id = null,
         int $formation_id = null
-    ){
+    ): array
+    {
         $data = [
             'id' => $parcours->getId(),
             'formationId' => $parcours->getFormation()?->getId(),
@@ -165,7 +168,7 @@ class ParcoursExport {
                             ],
                             'autonomie' => $ue->heuresEctsUe->sommeUeTePres
                         ],
-                        'ects' => $ue->heuresEctsUe->sommeUeEcts,
+                        'ects' => $ue->heuresEctsUe->sommeUeEcts
                     ];
 
                     if ($ue->ue->getNatureUeEc()?->isLibre()) {

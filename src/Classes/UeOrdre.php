@@ -14,11 +14,11 @@ use App\Entity\Ue;
 use App\Repository\UeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
-class UeOrdre
+readonly class UeOrdre
 {
     public function __construct(
-        private readonly EntityManagerInterface $entityManager,
-        private readonly UeRepository           $ueRepository
+        private EntityManagerInterface $entityManager,
+        private UeRepository           $ueRepository
     ) {
     }
 
@@ -112,9 +112,7 @@ class UeOrdre
         $ues = $this->ueRepository->findByUeSubOrdre($ordreDestination, $ue->getUeParent());
         $ue->setOrdre($ordreDestination);
 
-        if ($ues !== null) {
-            $ues->setOrdre($ordreInitial);
-        }
+        $ues?->setOrdre($ordreInitial);
 
         $this->entityManager->flush();
 

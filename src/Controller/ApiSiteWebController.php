@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGenerator;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class ApiSiteWebController extends AbstractController
 {
@@ -25,7 +26,7 @@ class ApiSiteWebController extends AbstractController
         // DATE DE PUBLICATION : 30-09-2024
         $datePublication = new DateTime();
         $datePublication->setDate(2024, 9, 30);
-        $datePublication->setTime(0, 0, 0, 0);
+        $datePublication->setTime(0, 0);
 
         $data = [];
         $formations = $formatinRepository->findAll();
@@ -57,7 +58,7 @@ class ApiSiteWebController extends AbstractController
                     $tParcours[] = [
                         'id' => $parcours->getId(),
                         'libelle' => $parcours->getDisplay(),
-                        'url' => $this->generateUrl('app_parcours_export_json_urca', ['parcours' => $parcours->getId()], UrlGenerator::ABSOLUTE_URL)
+                        'url' => $this->generateUrl('app_parcours_export_json_urca', ['parcours' => $parcours->getId()], UrlGeneratorInterface::ABSOLUTE_URL)
                     ];
                 }
             }

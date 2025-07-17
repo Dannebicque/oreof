@@ -13,6 +13,7 @@ use App\Entity\Ville;
 use App\Form\VilleType;
 use App\Repository\VilleRepository;
 use App\Utils\JsonRequest;
+use JsonException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -94,7 +95,7 @@ class VilleController extends AbstractController
     }
 
     /**
-     * @throws \JsonException
+     * @throws JsonException
      */
     #[Route('/{id}', name: 'app_ville_delete', methods: ['DELETE'])]
     public function delete(

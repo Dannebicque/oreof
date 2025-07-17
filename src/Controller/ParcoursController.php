@@ -30,16 +30,19 @@ use App\Repository\ParcoursRepository;
 use App\Service\LheoXML;
 use App\Service\VersioningFormation;
 use App\Service\VersioningParcours;
-use App\TypeDiplome\TypeDiplomeRegistry;
+use App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException;
 use App\Utils\JsonRequest;
 use DateTimeImmutable;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Jfcherng\Diff\DiffHelper;
+use JsonException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Workflow\WorkflowInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -91,15 +94,12 @@ class ParcoursController extends BaseController
         $tParcours = [];
 
         if ($this->isGranted('ROLE_ADMIN') ||
-            $this->isGranted('ROLE_SES') ||
-            $this->isGranted('CAN_PARCOURS_SHOW_ALL')) {
+            $this->isGranted('SHOW', ['route' => 'app_parcours', 'subject' => 'parcours'])) {
             $tParcours = $parcours;
         } else {
             foreach ($parcours as $p) {
-                if ($this->isGranted('CAN_FORMATION_EDIT_MY', $p->getFormation()) ||
-                    $this->isGranted('CAN_FORMATION_SHOW_MY', $p->getFormation()) ||
-                    ($this->isGranted('CAN_PARCOURS_EDIT_MY', $p) && ($p->getRespParcours() === $this->getUser() || $p->getCoResponsable() === $this->getUser()))
-                ) {
+                if ($this->isGranted('EDIT', ['route' => 'app_parcours', 'subject' => $p])
+                    && ($p->getRespParcours() === $this->getUser() || $p->getCoResponsable() === $this->getUser())) {
                     $tParcours[] = $p;
                 }
             }
@@ -240,7 +240,6 @@ class ParcoursController extends BaseController
 
     #[Route('/{id}', name: 'app_parcours_show', methods: ['GET'])]
     public function show(
-        TypeDiplomeRegistry $typeDiplomeRegistry,
         Parcours            $parcours,
         LheoXML             $lheoXML,
         VersioningParcours $versioningParcours,
@@ -255,7 +254,7 @@ class ParcoursController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());
+        $typeD = $this->typeDiplomeResolver->get($typeDiplome);
 
         $textDifferencesParcours = $versioningParcours->getDifferencesBetweenParcoursAndLastVersion($parcours);
         $textDifferencesFormation = $versioningFormation->getDifferencesBetweenFormationAndLastVersion($formation);
@@ -280,11 +279,10 @@ class ParcoursController extends BaseController
     }
 
     /**
-     * @throws \App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException
+     * @throws TypeDiplomeNotFoundException
      */
     #[Route('/{id}/edit', name: 'app_parcours_edit', methods: ['GET', 'POST'])]
     public function edit(
-        TypeDiplomeRegistry $typeDiplomeRegistry,
         Request             $request,
         ParcoursState       $parcoursState,
         Parcours            $parcour,
@@ -300,7 +298,7 @@ class ParcoursController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        if (!$this->isGranted('CAN_PARCOURS_EDIT_MY', $dpeParcours)) {
+        if (!$this->isGranted('EDIT', ['route' => 'app_parcours', 'subject' => $dpeParcours->getParcours()])) {
             return $this->redirectToRoute('app_parcours_show', ['id' => $parcour->getId()]);
         }
 
@@ -308,7 +306,12 @@ class ParcoursController extends BaseController
 
         $parcoursState->setParcours($parcour);
         $typeDiplome = $parcour->getFormation()?->getTypeDiplome();
-        $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());
+
+        if ($typeDiplome === null) {
+            throw $this->createNotFoundException('Type de diplôme non trouvé pour le parcours.');
+        }
+
+        $typeD = $this->typeDiplomeResolver->get($typeDiplome);
         return $this->render('parcours/edit.html.twig', [
             'dpeParcours' => $dpeParcours,
             'parcours' => $parcour,
@@ -352,7 +355,7 @@ class ParcoursController extends BaseController
     }
 
     /**
-     * @throws \JsonException
+     * @throws JsonException
      */
     #[Route('/{id}', name: 'app_parcours_delete', methods: ['DELETE'])]
     public function delete(
@@ -486,10 +489,14 @@ class ParcoursController extends BaseController
     #[Route('/{parcours}/export-json-urca', name: 'app_parcours_export_json_urca')]
     public function getJsonExportUrca(
         Parcours            $parcours,
-        TypeDiplomeRegistry $typeDiplomeRegistry,
     ): Response {
         $typeDiplome = $parcours->getFormation()?->getTypeDiplome();
-        $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());
+
+        if ($typeDiplome === null) {
+            throw $this->createNotFoundException('Type de diplôme non trouvé pour le parcours.');
+        }
+
+        $typeD = $this->typeDiplomeResolver->get($typeDiplome);
 
         $ects = $typeD->calculStructureParcours($parcours)->heuresEctsFormation->sommeFormationEcts;
 
@@ -555,10 +562,10 @@ class ParcoursController extends BaseController
                 'public-concerne' => $parcours->getRegimeInscription() ?? [], //Certains sont des tableaux, d'autres en JSON
                 'niveau-francais' => $parcours->getNiveauFrancais()?->libelle() ?? '-',
             ],
-            'xml-lheo' => $this->generateUrl('app_parcours_export_xml_lheo', ['parcours' => $parcours->getId()], UrlGenerator::ABSOLUTE_URL),
-            'fiche-pdf' => $this->generateUrl('app_parcours_export', ['parcours' => $parcours->getId()], UrlGenerator::ABSOLUTE_URL),
+            'xml-lheo' => $this->generateUrl('app_parcours_export_xml_lheo', ['parcours' => $parcours->getId()], UrlGeneratorInterface::ABSOLUTE_URL),
+            'fiche-pdf' => $this->generateUrl('app_parcours_export', ['parcours' => $parcours->getId()], UrlGeneratorInterface::ABSOLUTE_URL),
             'maquette-pdf' => $this->generateUrl('app_parcours_mccc_export', ['parcours' => $parcours->getId(), '_format' => 'pdf'], UrlGenerator::ABSOLUTE_URL),
-            'maquette-json' => $this->generateUrl('app_parcours_export_maquette_json', ['parcours' => $parcours->getId()], UrlGenerator::ABSOLUTE_URL),
+            'maquette-json' => $this->generateUrl('app_parcours_export_maquette_json', ['parcours' => $parcours->getId()], UrlGeneratorInterface::ABSOLUTE_URL),
         ];
 
         return new JsonResponse($data);
@@ -588,7 +595,7 @@ class ParcoursController extends BaseController
                 DateTimeNormalizer::FORMAT_KEY => 'Y-m-d H:i:s',
             ]);
             return new Response($json, 200, ['Content-Type' => 'application/json']);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             // Si erreur lors de la serialization
             return new Response(json_encode([
                 'error' => 'Une erreur interne est survenue.',
@@ -603,7 +610,8 @@ class ParcoursController extends BaseController
         Parcours               $parcours,
         Filesystem             $fileSystem,
         VersioningParcours $versioningParcours
-    ) {
+    ): \Symfony\Component\HttpFoundation\RedirectResponse
+    {
         try {
             $now = new DateTimeImmutable('now');
             $dateHeure = $now->format('d-m-Y_H-i-s');
@@ -623,7 +631,7 @@ class ParcoursController extends BaseController
             } else {
                 return $this->redirectToRoute('app_formation_show', ['slug' => $parcours->getFormation()->getSlug()]);
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             // Log error
             $logTxt = "[{$dateHeure}] Le versioning du parcours : {$parcours->getId()} a rencontré une erreur.\n{$e->getMessage()}\n";
             $fileSystem->appendToFile(__DIR__ . "/../../versioning_json/error_log/save_parcours_error.log", $logTxt);
@@ -639,7 +647,6 @@ class ParcoursController extends BaseController
         ParcoursVersioning $parcours_versioning,
         Filesystem $fileSystem,
         VersioningParcours $versioningParcours,
-        TypeDiplomeRegistry $typeDiplomeRegistry
     ): Response {
         try {
             $loadedVersion = $versioningParcours->loadParcoursFromVersion($parcours_versioning);
@@ -648,7 +655,7 @@ class ParcoursController extends BaseController
                 'parcours' => $loadedVersion['parcours'],
                 'formation' => $loadedVersion['parcours']->getFormation(),
                 'typeDiplome' => $loadedVersion['parcours']->getTypeDiplome(),
-                'typeD' => $typeDiplomeRegistry->getTypeDiplome($loadedVersion['parcours']->getTypeDiplome()->getModeleMcc()),
+                'typeD' => $this->typeDiplomeResolver->get($loadedVersion['parcours']->getTypeDiplome()),
                 'dto' => $loadedVersion['dto'],
                 'hasParcours' => $loadedVersion['parcours']->getFormation()->isHasParcours(),
                 // 'isBut' => $loadedVersion['parcours']->getTypeDiplome()->getLibelleCourt() === 'BUT',
@@ -656,7 +663,7 @@ class ParcoursController extends BaseController
                 'isVersioning' => true,
                 'parcoursVersioning' => $parcours_versioning,
             ]);
-        } catch(\Exception $e) {
+        } catch (Exception $e) {
             $now = new DateTimeImmutable('now');
             $dateHeure = $now->format('d-m-Y_H-i-s');
             // Log error
@@ -730,7 +737,7 @@ class ParcoursController extends BaseController
                     ]
                 );
             }
-        } catch(\Exception $error) {
+        } catch (Exception $error) {
             return new Response(
                 json_encode(
                     ['error' => "Le parcours n'a pas été trouvé"]

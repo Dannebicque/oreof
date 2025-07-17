@@ -12,6 +12,7 @@ namespace App\Twig;
 use App\Entity\FicheMatiere;
 use App\Enums\EtatChangeRfEnum;
 use App\Enums\EtatDpeEnum;
+use App\Enums\TypeModificationDpeEnum;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 
@@ -24,6 +25,7 @@ class BadgeDpeExtension extends AbstractExtension
     {
         return [
             new TwigFilter('badgeDpe', [$this, 'badgeDpe'], ['is_safe' => ['html']]),
+            new TwigFilter('badgeTypeModification', [$this, 'badgeTypeModification'], ['is_safe' => ['html']]),
             new TwigFilter('badgeStep', [$this, 'badgeStep'], ['is_safe' => ['html']]),
             new TwigFilter('badgeEtatComposante', [$this, 'badgeEtatComposante'], ['is_safe' => ['html']]),
             new TwigFilter('badgeFormation', [$this, 'badgeFormation'], ['is_safe' => ['html']]),
@@ -43,14 +45,10 @@ class BadgeDpeExtension extends AbstractExtension
             return 'disabled';
         }
 
-        switch ($type) {
-            case 'formation':
-            case 'parcours':
-            case 'dpe':
-                return in_array('en_cours_redaction', $fiche->getEtatFiche()) || count($fiche->getEtatFiche()) === 0 ? '' : 'disabled';
-            default:
-                return 'disabled';
-        }
+        return match ($type) {
+            'formation', 'parcours', 'dpe' => in_array('en_cours_redaction', $fiche->getEtatFiche()) || count($fiche->getEtatFiche()) === 0 ? '' : 'disabled',
+            default => 'disabled',
+        };
     }
 
     public function displayErreurs(?array $erreurs = []): string
@@ -115,6 +113,15 @@ class BadgeDpeExtension extends AbstractExtension
     public function badgeDpe(array $etatsDpe): string
     {
         return $this->displayDpeBadge($etatsDpe);
+    }
+
+    public function badgeTypeModification(?TypeModificationDpeEnum $typeModificationDpe): string
+    {
+        if ($typeModificationDpe === null) {
+            return '<span class="badge bg-success me-1">Pas de demande</span>';
+        }
+
+        return '<span class="badge ' . $typeModificationDpe->getBadge() . ' me-1">' . $typeModificationDpe->getLibelle() . '</span>';
     }
 
     public function badgeStep(?bool $etatsDpe): string

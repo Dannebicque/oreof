@@ -10,6 +10,7 @@
 namespace App\Form;
 
 use App\Entity\Parcours;
+use App\Entity\TypeDiplome;
 use App\Enums\ModaliteEnseignementEnum;
 use App\Form\Type\TextareaAutoSaveType;
 use App\Form\Type\YesNoType;
@@ -23,7 +24,7 @@ class ParcoursStep2Type extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        /** @var \App\Entity\TypeDiplome $typeDiplome */
+        /** @var TypeDiplome $typeDiplome */
         $typeDiplome = $options['typeDiplome'];
 
         $builder

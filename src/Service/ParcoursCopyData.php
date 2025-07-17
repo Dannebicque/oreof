@@ -24,6 +24,7 @@ use App\Repository\ParcoursCopyRepository;
 use App\Repository\UeCopyRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
+use Exception;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 
@@ -44,7 +45,7 @@ class ParcoursCopyData {
 
     public static array $errorMessageArray = [];
 
-    public static $errorMcccMessageArray = [];
+    public static array $errorMcccMessageArray = [];
 
     private array $ficheMatiereCopyDataArray = [];
 
@@ -66,7 +67,8 @@ class ParcoursCopyData {
         $this->myPdf = $myPdf;
     }
 
-    public function copyDataForAllParcoursInDatabase(SymfonyStyle $io){
+    public function copyDataForAllParcoursInDatabase(SymfonyStyle $io): void
+    {
         $io->writeln("Commande pour copier les heures des matières sur la nouvelle base de données.");
 
         $formationArray = $this->entityManager->getRepository(Formation::class)->findAll();
@@ -82,7 +84,7 @@ class ParcoursCopyData {
             if($formation->getTypeDiplome()->getLibelleCourt() !== "BUT"){
                 foreach($formation->getParcours() as $parcours){
                     $this->copyDataForParcoursFromDTO($parcours);
-                    $io->progressAdvance(1);
+                    $io->progressAdvance();
                 }
             }
         }
@@ -94,7 +96,7 @@ class ParcoursCopyData {
             if($f->getTypeDiplome()->getLibelleCourt() !== "BUT"){
                 foreach($f->getParcours() as $p){
                     $this->copyDataForParcoursFromDTO($p, onlyHeuresSpecifiques: true);
-                    $io->progressAdvance(1);
+                    $io->progressAdvance();
                 }
             }
         }
@@ -106,19 +108,19 @@ class ParcoursCopyData {
             if($f->getTypeDiplome()->getLibelleCourt() !== "BUT"){
                 foreach($f->getParcours() as $p){
                     $this->copyDataForParcoursFromDTO($p, onlyEctsSpecifiques: true);
-                    $io->progressAdvance(1);
+                    $io->progressAdvance();
                 }
             }
         }
         $io->progressFinish();
 
-        $io->writeln("Traitement de la copie des MCCC...");;
+        $io->writeln("Traitement de la copie des MCCC...");
         $io->progressStart($nombreParcours);
         foreach($formationArray as $f){
             if($f->getTypeDiplome()->getLibelleCourt() !== "BUT"){
                 foreach($f->getParcours() as $parcours){
                     $this->copyDataForParcoursFromDTO($parcours, onlyMccc: true);
-                    $io->progressAdvance(1);
+                    $io->progressAdvance();
                 }
             }
         }
@@ -133,7 +135,7 @@ class ParcoursCopyData {
             if($f->getTypeDiplome()->getLibelleCourt() !== "BUT"){
                 foreach($f->getParcours() as $parcours){
                     $this->copyDataForParcoursFromDTO($parcours, onlyEcMcccSpecifiques: true);
-                    $io->progressAdvance(1);
+                    $io->progressAdvance();
                 }
             }
         }
@@ -144,7 +146,8 @@ class ParcoursCopyData {
         $io->success("La copie s'est exécutée avec succès !");
     }
 
-    public function copyDataForParcours(Parcours $parcours){
+    public function copyDataForParcours(Parcours $parcours): void
+    {
         foreach($parcours->getSemestreParcours() as $semestreParcours){
             $semestre = $this->getSemestre($semestreParcours->getSemestre());
             if($semestre){
@@ -171,7 +174,8 @@ class ParcoursCopyData {
         bool $onlyMccc = false,
         bool $onlyEcMcccSpecifiques = false,
         bool $onlyEctsSpecifiques = false,
-    ){
+    ): void
+    {
         $dto = $this->getDTOForParcours($parcours);
         foreach($dto->semestres as $semestre){
             foreach($semestre->ues as $ue){
@@ -186,7 +190,8 @@ class ParcoursCopyData {
         }
     }
 
-    private function copyDataForUe(Ue $ue, int $parcoursId){
+    private function copyDataForUe(Ue $ue, int $parcoursId): void
+    {
         $elementConstitutifArray = $this->entityManager->getRepository(ElementConstitutif::class)
             ->getByUe($ue);
         foreach($elementConstitutifArray as $ec){
@@ -204,7 +209,8 @@ class ParcoursCopyData {
         bool $onlyMccc,
         bool $onlyEcMcccSpecifiques,
         bool $onlyEctsSpecifiques,
-    ){
+    ): void
+    {
         foreach($structUE->elementConstitutifs as $ec){
             if($onlyHeuresSpecifiques){
                 $this->placeHeuresSpecifiquesFlag($ec);
@@ -251,7 +257,8 @@ class ParcoursCopyData {
         ?FicheMatiere $ficheMatiereSource,
         int $parcoursId,
         bool $isHeuresEnfantIdentiques = false
-    ){
+    ): void
+    {
 //todo: gérer l'info "EC sans heure" dans la fiche ? Cas des EC extra académique ?
         if($ficheMatiereSource){
             $isVolumeHoraireFMImpose = $ficheMatiereSource->isVolumesHorairesImpose();
@@ -275,7 +282,7 @@ class ParcoursCopyData {
             if($ficheMatiereFromParcours && $ecFromParcours){
                 $ec = $ecSource;
                 $isEcPorteur = true;
-                $ecEcts = $ecSource->getEcParent() ? $ecSource->getEcParent() : $ecSource;
+                $ecEcts = $ecSource->getEcParent() ?: $ecSource;
             }
             // Si la fiche n'a pas d'EC porteur, on prend le premier
             if($hasFicheMatiereEcPorteur === false || $countEcForFiche === 1){
@@ -353,7 +360,8 @@ class ParcoursCopyData {
         }
     }
 
-    public function placeHeuresSpecifiquesFlag(StructureEc $ec, bool $isHeuresIdentiques = false){
+    public function placeHeuresSpecifiquesFlag(StructureEc $ec, bool $isHeuresIdentiques = false): void
+    {
         if($ec->elementConstitutif->getFicheMatiere()){
             $isDifferent = $this->hasHeuresFicheMatiereCopy($ec->elementConstitutif->getFicheMatiere())
                 && $this->hasEcSameHeuresAsFicheMatiereCopy($ec->heuresEctsEc, $ec->elementConstitutif->getFicheMatiere()) === false;
@@ -371,7 +379,8 @@ class ParcoursCopyData {
         }
     }
 
-    public function placeEctsSpecifiquesFlag(StructureEc $ec){
+    public function placeEctsSpecifiquesFlag(StructureEc $ec): void
+    {
         if($ec->elementConstitutif->getFicheMatiere()){
             $isDifferent = $this->hasFicheMatiereEcts($ec->elementConstitutif->getFicheMatiere())
             && $this->hasEctsDifferent($ec);
@@ -390,7 +399,8 @@ class ParcoursCopyData {
     public function moveMcccToFicheMatiere(
         StructureEc $structEc,
         int $parcoursId
-    ){
+    ): void
+    {
         $ficheMatierePorteuse = null;
         $ficheMatiereSource = $structEc->elementConstitutif->getFicheMatiere();
         $ficheMatiereFromParcours = $ficheMatiereSource?->getParcours()?->getId() === $parcoursId;
@@ -464,7 +474,8 @@ class ParcoursCopyData {
      * Les données sont récupérées depuis la copie
      * Il n'y a plus besoin de sélectionner l'élément en BD
      */
-    public function placeMcccSpecifiquesFlag(StructureEc $structEc){
+    public function placeMcccSpecifiquesFlag(StructureEc $structEc): void
+    {
         $mcccResult = null;
         $typeMcccAreEqual = null;
         if(!$structEc->elementConstitutif->getEcParent()?->isMcccEnfantsIdentique()){
@@ -529,13 +540,15 @@ class ParcoursCopyData {
         }
     }
 
-    private function getUe(Ue $ue){
+    private function getUe(Ue $ue): ?Ue
+    {
         return $ue->getUeRaccrochee() !== null
             ? $ue->getUeRaccrochee()->getUe()
             : $ue;
     }
 
-    private function getSemestre(?Semestre $semestre){
+    private function getSemestre(?Semestre $semestre): ?Semestre
+    {
         if($semestre){
             return $semestre->getSemestreRaccroche() !== null
                 ? $semestre->getSemestreRaccroche()->getSemestre()
@@ -549,7 +562,8 @@ class ParcoursCopyData {
         bool $heuresSurFicheMatiere,
         bool $withCopy = false,
         bool $fromCopy = false,
-    ){
+    ): \Symfony\Component\HttpFoundation\Response
+    {
         return $this->myPdf->render(
             'typeDiplome/formation/_structure.html.twig',
             [
@@ -565,9 +579,10 @@ class ParcoursCopyData {
         StructureParcours $dto1,
         StructureParcours $dto2,
         string $typeVerif = 'hours'
-    ){
+    ): bool
+    {
         if(in_array($typeVerif, ['hours', 'ects']) === false){
-            throw new \Exception("Le type de vérification doit être parmi ['hours', 'ects'].");
+            throw new Exception("Le type de vérification doit être parmi ['hours', 'ects'].");
         }
 
         $result = true;
@@ -690,7 +705,8 @@ class ParcoursCopyData {
         return $result;
     }
 
-    public function compareTwoDtoForMCCC(StructureParcours $dto1, StructureParcours $dto2){
+    public function compareTwoDtoForMCCC(StructureParcours $dto1, StructureParcours $dto2): bool
+    {
         $result = true;
         foreach($dto1->semestres as $indexSemestre => $semestre){
             foreach($semestre->ues as $indexUe => $ue){
@@ -722,7 +738,8 @@ class ParcoursCopyData {
         return $result;
     }
 
-    public function compareTwoUeDtoForMccc(StructureUe $ue1, StructureUe $ue2, int $parcoursId){
+    public function compareTwoUeDtoForMccc(StructureUe $ue1, StructureUe $ue2, int $parcoursId): bool
+    {
         $result = true;
         if(count($ue1->elementConstitutifs) !== count($ue2->elementConstitutifs)){
             $result = false;
@@ -916,7 +933,7 @@ class ParcoursCopyData {
     ) : bool {
 
         if(in_array($typeVerif, ['hours', 'ects']) === false){
-            throw new \Exception("Le type de vérification doit être parmi ['hours', 'ects'].");
+            throw new Exception("Le type de vérification doit être parmi ['hours', 'ects'].");
         }
 
         $result = true;
@@ -1000,7 +1017,8 @@ class ParcoursCopyData {
     public function hasEcSameHeuresAsFicheMatiereCopy(
         HeuresEctsEc $heures,
         FicheMatiere $ficheMatiere
-    ){
+    ): ?bool
+    {
         if(array_key_exists($ficheMatiere->getId(), $this->ficheMatiereCopyDataArray)){
             $ficheMatiereCopy = $this->ficheMatiereCopyDataArray[$ficheMatiere->getId()];
 
@@ -1047,7 +1065,8 @@ class ParcoursCopyData {
         return false;
     }
 
-    public function hasEcHeures(ElementConstitutif $ec){
+    public function hasEcHeures(ElementConstitutif $ec): bool
+    {
         if($ec->isSansHeure()){
             return false;
         }
@@ -1217,7 +1236,8 @@ class ParcoursCopyData {
         return $result;
     }
 
-    private function twoArrayAreIdentical(array $array1, array $array2){
+    private function twoArrayAreIdentical(array $array1, array $array2): bool
+    {
         $retour = true;
         if(count($array1) !== count($array2)){
             $retour = false;
@@ -1235,7 +1255,8 @@ class ParcoursCopyData {
         return $retour;
     }
 
-    private function placeErrorMessage(int $parcoursId, string $message){
+    private function placeErrorMessage(int $parcoursId, string $message): void
+    {
         if(array_key_exists($parcoursId, self::$errorMessageArray) === false){
             self::$errorMessageArray[$parcoursId] = [];
         }
@@ -1246,7 +1267,8 @@ class ParcoursCopyData {
         return $ec->heuresEctsEc->ects !== $this->ficheMatiereEctsCopyArray[$ec->elementConstitutif->getFicheMatiere()->getId()];
     }
 
-    private function hasFicheMatiereEcts(FicheMatiere $fm){
+    private function hasFicheMatiereEcts(FicheMatiere $fm): bool
+    {
         return array_key_exists($fm->getId(), $this->ficheMatiereEctsCopyArray);
     }
 }

@@ -17,6 +17,10 @@
         <td>{{ user.email }}</td>
     </tr>
     <tr>
+        <th>Service/fonctions</th>
+        <td>{{ user.serviceDemande }}</td>
+    </tr>
+    <tr>
         <th>Centre de gestion</th>
         <td>
             {% if user.composanteDemande != null %}
@@ -96,7 +100,7 @@
             Validé par DPE le {{ user.dateValideDpe|dateTimeFr }}
             </span>
                 {% endif %}
-                {% if not is_granted('ROLE_SES') %}
+                {% if not is_granted('ROLE_ADMIN') %}
                     <a href="{{ path('app_user_gestion_valid_dpe', {user:user.id}) }}" class="btn btn-outline-success">
                         Valider l'accès
                     </a>
@@ -116,7 +120,7 @@
                     </div>
                 {% endif %}
             {% endif %}
-            {% if is_granted('ROLE_SES') %}
+            {% if is_granted('ROLE_ADMIN') %}
                 {% if user.isValideAdministration == false %}
                     <a href="{{ path('app_user_gestion_valid_admin', {user:user.id}) }}"
                        class="btn btn-outline-success">

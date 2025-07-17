@@ -12,7 +12,8 @@ namespace App\Classes\Export;
 use App\Classes\MyPDF;
 use App\Entity\CampagneCollecte;
 use App\Entity\Composante;
-use App\TypeDiplome\TypeDiplomeRegistry;
+use App\Service\ProjectDirProvider;
+use App\Service\TypeDiplomeResolver;
 use DateTimeInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 
@@ -24,11 +25,11 @@ class Export
     private ?CampagneCollecte $campagneCollecte;
     private ?DateTimeInterface $date;
     private string $dir;
-    private mixed $export;
 
     private ?Composante $composante = null;
 
     public function __construct(
+        protected TypeDiplomeResolver $typeDiplomeResolver,
         protected ExportFicheMatiere $exportFicheMatiere,
         protected ExportRegime      $exportRegime,
         protected ExportResponsable      $exportResponsable,
@@ -42,11 +43,11 @@ class Export
         protected ExportEc                          $exportEc,
         protected ExportListeFicheMatiere           $exportListeFicheMatiere,
         protected ExportMccc                        $exportMccc,
-        KernelInterface                             $kernel,
+        ProjectDirProvider $projectDirProvider,
         private MyPDF                               $myPDF,
         private readonly ExportSyntheseModification $exportSyntheseModification,
     ) {
-        $this->dir = $kernel->getProjectDir().'/public/temp';
+        $this->dir = $projectDirProvider->getProjectDir() . '/public/temp/';
     }
 
     public function setDate(?DateTimeInterface $date):void
@@ -54,7 +55,7 @@ class Export
         $this->date = $date;
     }
 
-    public function setTypeDocument(string $typeDocument)
+    public function setTypeDocument(string $typeDocument): void
     {
         $t = explode('-', $typeDocument);
         $this->format = $t[0];
@@ -83,9 +84,8 @@ class Export
                 return $this->exportMcccVersion();
             case 'carif':
                 return $this->exportCarif();
-            case 'regime':
-                return $this->exportRegime();
             case 'responsable':
+            case 'regime':
                 return $this->exportRegime();
             case 'responsable_compo':
                 return $this->exportResponsableComposante();
@@ -108,18 +108,25 @@ class Export
             case 'synthese_modification':
                 return $this->exportSyntheseModifications();
         }
+
+        throw new \InvalidArgumentException('Type de document non géré : ' . $this->typeDocument);
     }
 
     private function exportConseil() : string
     {
-        $this->export = new ExportConseil(
+        $export = new ExportConseil(
             $this->dir,
             $this->myPDF,
             $this->formations,
             $this->campagneCollecte,
             $this->date
         );
-        return $this->export->exportZip();
+        return $export->exportZip();
+    }
+
+    private function exportListeFicheMatiere(): string
+    {
+        return $this->exportListeFicheMatiere->exportLink($this->campagneCollecte);
     }
 
     private function exportMccc(bool $isLight = false) : string
@@ -136,39 +143,25 @@ class Export
         return $this->exportMccc->exportZip();
     }
 
+    private function exportMcccVersion(): string
+    {
+        $this->exportMccc->exportVersion(
+            $this->dir,
+            $this->typeDiplomeResolver,
+            $this->formations,
+            $this->campagneCollecte,
+        );
+        return $this->exportMccc->exportVersionZip();
+    }
+
     private function exportCarif() : string
     {
         return $this->exportCarif->exportLink($this->campagneCollecte);
     }
 
-    private function exportSeip() : string
-    {
-        return $this->exportSeip->exportLink($this->campagneCollecte);
-    }
-
-    private function exportEc() : string
-    {
-        return $this->exportEc->exportLink($this->campagneCollecte);
-    }
-
-    private function exportListeFicheMatiere() : string
-    {
-        return $this->exportListeFicheMatiere->exportLink($this->campagneCollecte);
-    }
-
-    private function exportSynthese(): string
-    {
-        return $this->exportSynthese->exportLink($this->campagneCollecte);
-    }
-
     private function exportRegime() : string
     {
         return $this->exportRegime->exportLink($this->campagneCollecte);
-    }
-
-    public function setComposante(?Composante $composante)
-    {
-        $this->composante = $composante;
     }
 
     private function exportResponsableComposante() : string
@@ -181,16 +174,6 @@ class Export
         return $this->exportCfvu->exportLink($this->campagneCollecte);
     }
 
-    private function exportSemestresOuverts(): string
-    {
-        return $this->exportSemestresOuverts->exportLink($this->campagneCollecte);
-    }
-
-    private function exportFicheMatiere() : string
-    {
-        return $this->exportFicheMatiere->exportLink($this->formations);
-    }
-
     private function exportCap() : string
     {
         return $this->exportCap->exportLink($this->formations);
@@ -201,19 +184,38 @@ class Export
         return $this->exportFiabilisation->exportLink($this->formations);
     }
 
+    private function exportFicheMatiere(): string
+    {
+        return $this->exportFicheMatiere->exportLink($this->formations);
+    }
+
+    private function exportSeip(): string
+    {
+        return $this->exportSeip->exportLink($this->campagneCollecte);
+    }
+
+    private function exportEc(): string
+    {
+        return $this->exportEc->exportLink($this->campagneCollecte);
+    }
+
+    private function exportSynthese(): string
+    {
+        return $this->exportSynthese->exportLink($this->campagneCollecte);
+    }
+
+    private function exportSemestresOuverts(): string
+    {
+        return $this->exportSemestresOuverts->exportLink($this->campagneCollecte);
+    }
+
     private function exportSyntheseModifications(): string
     {
         return $this->exportSyntheseModification->exportLink($this->formations, $this->campagneCollecte);
     }
 
-    private function exportMcccVersion()
+    public function setComposante(?Composante $composante): void
     {
-        $this->exportMccc->exportVersion(
-            $this->dir,
-            $this->typeDiplomeRegistry,
-            $this->formations,
-            $this->campagneCollecte,
-        );
-        return $this->exportMccc->exportVersionZip();
+        $this->composante = $composante;
     }
 }

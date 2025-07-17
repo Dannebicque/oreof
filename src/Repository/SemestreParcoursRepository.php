@@ -13,6 +13,7 @@ use App\Entity\Formation;
 use App\Entity\Parcours;
 use App\Entity\SemestreParcours;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -59,7 +60,7 @@ class SemestreParcoursRepository extends ServiceEntityRepository
     }
 
     /**
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws NonUniqueResultException
      */
     public function findByParcoursOrdre(?int $ordreDestination, Parcours $parcours): ?SemestreParcours
     {

@@ -24,7 +24,7 @@ enum TypeUeEcEnum: string
         };
     }
 
-    public function getColor()
+    public function getColor(): string
     {
         return match ($this) {
             self::STAGE => 'primary',
@@ -33,7 +33,7 @@ enum TypeUeEcEnum: string
         };
     }
 
-    public function getLabel()
+    public function getLabel(): string
     {
         return match ($this) {
             self::STAGE => 'Stage',

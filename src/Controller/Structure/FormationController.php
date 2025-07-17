@@ -29,7 +29,10 @@ class FormationController extends BaseController
     public function liste(
         FormationRepository $formationRepository
     ): Response {
-        if ($this->isGranted('ROLE_ADMIN') || $this->isGranted('CAN_COMPOSANTE_SHOW_ALL', $this->getUser()) || $this->isGranted('CAN_FORMATION_SHOW_ALL', $this->getUser())) {
+        if ($this->isGranted('ROLE_ADMIN') ||
+            $this->isGranted('SHOW', ['route' => 'app_composante', 'subject' => 'composante']) ||
+            $this->isGranted('SHOW', ['route' => 'app_formation', 'subject' => 'formation'])
+        ) {
             $formations = $formationRepository->findBy(['anneeUniversitaire' => $this->getCampagneCollecte()]);
         } else {
             $formations = [];

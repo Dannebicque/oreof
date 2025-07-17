@@ -13,6 +13,7 @@ use App\Entity\CampagneCollecte;
 use App\Form\CampagneCollecteType;
 use App\Repository\CampagneCollecteRepository;
 use App\Utils\JsonRequest;
+use JsonException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -107,7 +108,7 @@ class AnneeUniversitaireController extends AbstractController
     }
 
     /**
-     * @throws \JsonException
+     * @throws JsonException
      */
     #[Route('/{id}', name: 'app_annee_universitaire_delete', methods: ['DELETE'])]
     public function delete(

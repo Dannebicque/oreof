@@ -13,6 +13,7 @@ use App\Entity\TypeUe;
 use App\Form\TypeUeType;
 use App\Repository\TypeUeRepository;
 use App\Utils\JsonRequest;
+use JsonException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -103,7 +104,7 @@ class TypeUeController extends AbstractController
     }
 
     /**
-     * @throws \JsonException
+     * @throws JsonException
      */
     #[Route('/{id}', name: 'app_type_ue_delete', methods: ['DELETE'])]
     public function delete(

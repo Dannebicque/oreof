@@ -32,12 +32,15 @@ class Domaine
     #[ORM\Column(length: 20)]
     private ?string $sigle = null;
 
-    #[Groups('formation_json_versioning')]
-    #[ORM\OneToMany(mappedBy: 'domaine', targetEntity: Mention::class)]
-    private Collection $mentions;
-
     #[ORM\Column(length: 1)]
     private ?string $codeApogee = null;
+
+    /**
+     * @var Collection<int, Mention>
+     */
+    #[Groups('formation_json_versioning')]
+    #[ORM\ManyToMany(targetEntity: Mention::class, mappedBy: 'domaines')]
+    private Collection $mentions;
 
     public function __construct()
     {
@@ -73,34 +76,6 @@ class Domaine
         return $this;
     }
 
-    /**
-     * @return Collection<int, Mention>
-     */
-    public function getMentions(): Collection
-    {
-        return $this->mentions;
-    }
-
-    public function addMention(Mention $mention): self
-    {
-        if (!$this->mentions->contains($mention)) {
-            $this->mentions->add($mention);
-            $mention->setDomaine($this);
-        }
-
-        return $this;
-    }
-
-    public function removeMention(Mention $mention): self
-    {
-        // set the owning side to null (unless already changed)
-        if ($this->mentions->removeElement($mention) && $mention->getDomaine() === $this) {
-            $mention->setDomaine(null);
-        }
-
-        return $this;
-    }
-
     public function getCodeApogee(): ?string
     {
         return $this->codeApogee;
@@ -109,6 +84,33 @@ class Domaine
     public function setCodeApogee(string $codeApogee): static
     {
         $this->codeApogee = $codeApogee;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Mention>
+     */
+    public function getMentions(): Collection
+    {
+        return $this->mentions;
+    }
+
+    public function addMentions(Mention $mentions): static
+    {
+        if (!$this->mentions->contains($mentions)) {
+            $this->mentions->add($mentions);
+            $mentions->addDomaine($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMentions(Mention $mentions): static
+    {
+        if ($this->mentions->removeElement($mentions)) {
+            $mentions->removeDomaine($this);
+        }
 
         return $this;
     }

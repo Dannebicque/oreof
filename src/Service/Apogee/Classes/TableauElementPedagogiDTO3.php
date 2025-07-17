@@ -16,7 +16,8 @@ class TableauElementPedagogiDTO3 {
         }
     }
 
-    private function add(?string $codElp){
+    private function add(?string $codElp): void
+    {
         // if(mb_strlen($codElp) > 8){
         //     throw new \Exception("La longueur du code ELP est trop longue (supérieure à 8).");
         // }

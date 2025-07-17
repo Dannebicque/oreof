@@ -10,7 +10,9 @@
                                     {{ stimulus_action('check_all', 'check') }}
                                     type="checkbox"
                                     class="check-all check-all{{ parcours.id }}"
-                                    {% if is_granted('CAN_PARCOURS_VALIDATE_MY', ec.elementConstitutif.ficheMatiere) %}
+                                    {% if
+
+                                        is_granted('CAN_PARCOURS_VALIDATE_MY', ec.elementConstitutif.ficheMatiere) %}
                                         {{ ec.elementConstitutif.ficheMatiere|isFicheValidable('parcours') }}
                                     {% elseif is_granted('CAN_FORMATION_VALIDATE_MY', ec.elementConstitutif.ficheMatiere) %}
                                         {{ ec.elementConstitutif.ficheMatiere|isFicheValidable('formation') }}

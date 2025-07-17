@@ -9,13 +9,14 @@
 
 namespace App\Classes\Export;
 
-use App\Classes\CalculStructureParcours;
 use App\Classes\Excel\ExcelWriter;
 use App\DTO\StructureEc;
 use App\DTO\StructureUe;
 use App\Entity\SemestreParcours;
 use App\Repository\DpeParcoursRepository;
 use App\Repository\FormationRepository;
+use App\Service\ProjectDirProvider;
+use App\Service\TypeDiplomeResolver;
 use App\Utils\Tools;
 use DateTime;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -29,13 +30,13 @@ class ExportFiabilisation
     private array $data;
 
     public function __construct(
-        protected CalculStructureParcours $calculStructureParcours,
+        protected TypeDiplomeResolver $typeDiplomeResolver,
         protected ExcelWriter             $excelWriter,
-        KernelInterface                   $kernel,
+        ProjectDirProvider $projectDirProvider,
         protected FormationRepository     $formationRepository,
         protected DpeParcoursRepository   $dpeParcoursRepository,
     ) {
-        $this->dir = $kernel->getProjectDir() . '/public/temp/';
+        $this->dir = $projectDirProvider->getProjectDir() . '/public/temp/';
     }
 
     private function prepareExport(
@@ -62,7 +63,9 @@ class ExportFiabilisation
         $this->excelWriter->writeCellXY('M', 1, 'Id Fiche EC/matière');
         $this->excelWriter->writeCellXY('N', 1, 'Fiche EC/matière');
         $this->excelWriter->writeCellXY('O', 1, 'Code élément');
-        $this->excelWriter->writeCellXY('P', 1, 'MATI/MATM');
+        $this->excelWriter->writeCellXY('P', 1, 'Type EC');
+        $this->excelWriter->writeCellXY('Q', 1, 'MATI/MATM');
+        $this->excelWriter->writeCellXY('R', 1, 'ECTS');
 
         $this->ligne = 2;
         foreach ($formations as $idFormation) {
@@ -71,6 +74,7 @@ class ExportFiabilisation
                 $parcours = $dpeParcours->getParcours();
                 $formation = $dpeParcours->getParcours()?->getFormation();
                 if ($formation !== null && $parcours !== null) {
+                    $typeD = $this->typeDiplomeResolver->get($formation->getTypeDiplome());
                     //                    foreach ($formation->getParcours() as $parcours) {
                     $this->data[1] = $formation->getComposantePorteuse()?->getLibelle();
                     $this->data[2] = $formation->getTypeDiplome()?->getLibelle();
@@ -82,8 +86,8 @@ class ExportFiabilisation
                     }
 
                     //récuération de la structure et des EC
-                    $dto = $this->calculStructureParcours->calcul($parcours);
-                    foreach ($dto->semestres as $ordre => $sem) {
+                    $dto = $typeD->calculStructureParcours($parcours);
+                    foreach ($dto->semestres as $sem) {
                         foreach ($sem->ues as $ue) {
                             if ($ue->ue->getNatureUeEc()?->isChoix()) {
                                 foreach ($ue->uesEnfants() as $ueEnfant) {
@@ -97,7 +101,7 @@ class ExportFiabilisation
                             }
                         }
 
-                        $this->excelWriter->getColumnsAutoSize('A', 'P');
+                        $this->excelWriter->getColumnsAutoSize('A', 'Q');
                     }
                     //}
                 }
@@ -112,7 +116,7 @@ class ExportFiabilisation
 
         foreach ($ue->elementConstitutifs as $ec) {
             if ($ec->elementConstitutif->getNatureUeEc()?->isChoix()) {
-
+                $this->getEc($ue, $ec, $codeApogeeParcours, 'EC Parent');
                 foreach ($ec->elementsConstitutifsEnfants as $ecEnfant) {
                     $this->getEc($ue, $ecEnfant, $codeApogeeParcours);
                 }
@@ -122,7 +126,7 @@ class ExportFiabilisation
         }
     }
 
-    private function getEc(StructureUe $ue, StructureEc $ec, ?SemestreParcours $semestreParcours): void
+    private function getEc(StructureUe $ue, StructureEc $ec, ?SemestreParcours $semestreParcours, string $typeEc = ''): void
     {
 
         if ($ec->elementConstitutif->getNatureUeEc()?->isLibre() === false) {
@@ -138,7 +142,14 @@ class ExportFiabilisation
             $this->excelWriter->writeCellXY(13, $this->ligne, $ec->elementConstitutif->displayId());
             $this->excelWriter->writeCellXY(14, $this->ligne, $ec->elementConstitutif->getFicheMatiere()?->getLibelle() ?? '-');
             $this->excelWriter->writeCellXY(15, $this->ligne, $ec->elementConstitutif->displayCodeApogee());
-            $this->excelWriter->writeCellXY(16, $this->ligne, $ec->elementConstitutif->getFicheMatiere()?->getTypeApogee() ?? '-');
+            if ($typeEc !== '') {
+                $this->excelWriter->writeCellXY(16, $this->ligne, $typeEc);
+            } else {
+                $this->excelWriter->writeCellXY(16, $this->ligne, $ec->elementConstitutif->getNatureUeEc()?->getLibelle() ?? 'erreur type');
+            }
+
+            $this->excelWriter->writeCellXY(17, $this->ligne, $ec->elementConstitutif->getFicheMatiere()?->getTypeApogee() ?? '-');
+            $this->excelWriter->writeCellXY(18, $this->ligne, $ec->heuresEctsEc->ects);
             $this->ligne++;
         }
     }

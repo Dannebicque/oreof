@@ -65,5 +65,7 @@ class ButCompetenceRepository extends ServiceEntityRepository
                 return $butCompetence;
             }
         }
+
+        return null;
     }
 }

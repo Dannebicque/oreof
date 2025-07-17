@@ -16,11 +16,13 @@ class TableauTypeHeureDTO
         }
     }
 
-    private function add(TypeHeureDTO $typHeureDTO){
+    private function add(TypeHeureDTO $typHeureDTO): void
+    {
         $this->typeHeure[] = $typHeureDTO;
     }
 
-    public function printInformation(){
+    public function printInformation(): string
+    {
         $result = "";
         foreach($this->typeHeure as $th){
             $result .= "{$th->codTypHeure} {$th->nbrHeureElp}  ";

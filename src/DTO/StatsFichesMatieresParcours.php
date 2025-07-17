@@ -40,7 +40,7 @@ class StatsFichesMatieresParcours
         }
     }
 
-    private function addStasEc(FicheMatiere $ficheMatiere)
+    private function addStasEc(FicheMatiere $ficheMatiere): void
     {
         $this->nbFiches++;
         if ($ficheMatiere->getRemplissage()->isFull()) {

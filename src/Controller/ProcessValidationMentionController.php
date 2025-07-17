@@ -10,9 +10,9 @@ use App\Classes\ValidationProcess;
 use App\Classes\ValidationProcessFicheMatiere;
 use App\Classes\verif\FormationValide;
 use App\Entity\Formation;
-use App\Entity\Historique;
 use App\Entity\HistoriqueFormation;
 use App\Enums\TypeModificationDpeEnum;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -50,7 +50,7 @@ class ProcessValidationMentionController extends BaseController
             //creation de l'historique
             $histo = new HistoriqueFormation();
             $histo->setFormation($formation);
-            $histo->setDate(new \DateTime());
+            $histo->setDate(new DateTime());
             $histo->setEtape($etape);
             $histo->setEtat('valide');
             $histo->setUser($this->getUser());

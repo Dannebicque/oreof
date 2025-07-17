@@ -10,11 +10,9 @@
 namespace App\Classes\Export;
 
 use App\Classes\Excel\ExcelWriter;
-use App\Classes\GetHistorique;
-use App\Entity\CampagneCollecte;
-use App\Entity\Composante;
 use App\Repository\DpeParcoursRepository;
 use App\Repository\FormationRepository;
+use App\Service\ProjectDirProvider;
 use App\Utils\Tools;
 use DateTime;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -22,16 +20,19 @@ use Symfony\Component\HttpKernel\KernelInterface;
 class ExportResponsable
 {
 
+    private string $dir;
+    private string $filename;
+
     public function __construct(
         protected FormationRepository $formationRepository,
         protected DpeParcoursRepository $dpeParcoursRepository,
         protected ExcelWriter         $excelWriter,
-        KernelInterface               $kernel,
+        ProjectDirProvider $projectDirProvider,
     ) {
-        $this->dir = $kernel->getProjectDir() . '/public/temp/';
+        $this->dir = $projectDirProvider->getProjectDir() . '/public/temp/';
     }
 
-    public function prepareExport(array $formations)
+    public function prepareExport(array $formations): void
     {
         $this->excelWriter->nouveauFichier('Export CAP');
         $this->excelWriter->setActiveSheetIndex(0);

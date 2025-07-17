@@ -61,8 +61,8 @@ class NewAnneeUniversitaireCommand extends Command
     protected function configure(): void
     {
         $this->addOption(
-            name: 'generate-full-database', 
-            mode: InputOption::VALUE_NONE, 
+            name: 'generate-full-database',
+            mode: InputOption::VALUE_NONE,
             description: 'Copie tous les parcours disponibles'
         );
     }
@@ -72,7 +72,7 @@ class NewAnneeUniversitaireCommand extends Command
         ini_set('memory_limit', '12500M');
 
         $io = new SymfonyStyle($input, $output);
-        
+
         $generateFullDatabase = $input->getOption('generate-full-database');
 
         if($generateFullDatabase){
@@ -85,9 +85,9 @@ class NewAnneeUniversitaireCommand extends Command
             $io->writeln("La commande va copier l'année actuelle pour créer l'année 2025-2026\n");
             if($io->ask("Souhaitez-vous poursuivre ? [Y/n]", 'n') === "Y"){
                 /**
-                 * 
+                 *
                  * FORMATION
-                 * 
+                 *
                  */
                 $formationArray = $this->entityManager->getRepository(Formation::class)->findBy([], ['id' => 'ASC']);
                 $nbFormation = count($formationArray);
@@ -100,16 +100,16 @@ class NewAnneeUniversitaireCommand extends Command
                     $formationClone->setCreated($nowDate);
                     $formationClone->setUpdated($nowDate);
                     $this->entityManager->persist($formationClone);
-                    $io->progressAdvance(1);
+                    $io->progressAdvance();
                 }
                 $io->progressFinish();
                 $io->writeln("Application des changements...");
                 $this->entityManager->flush();
                 $formationArray = null;
                 /**
-                 * 
+                 *
                  * PARCOURS
-                 * 
+                 *
                  */
                 $io->writeln("Copie des parcours...");
                 $parcoursArray = $parcoursRepository->findBy([], ['id' => 'ASC']);
@@ -124,16 +124,16 @@ class NewAnneeUniversitaireCommand extends Command
                     $parcoursClone->setCreated($nowDate);
                     $parcoursClone->setUpdated($nowDate);
                     $this->entityManager->persist($parcoursClone);
-                    $io->progressAdvance(1);
+                    $io->progressAdvance();
                 }
                 $io->progressFinish();
                 $io->writeln("Application des changements...");
                 $this->entityManager->flush();
                 $parcoursArray = null;
                 /**
-                 * 
+                 *
                  * DPE PARCOURS
-                 * 
+                 *
                  */
                 $io->writeln("Copie du DPE Parcours...");
                 $dpeArray = $this->entityManager->getRepository(DpeParcours::class)->findBy([], ['id' => 'ASC']);
@@ -158,7 +158,7 @@ class NewAnneeUniversitaireCommand extends Command
                     $dpeParcoursClone->setEtatValidation(['soumis_central' => 1]);
                     $dpeParcoursClone->setCreated(new DateTime('now'));
                     $this->entityManager->persist($dpeParcoursClone);
-                    $io->progressAdvance(1);                    
+                    $io->progressAdvance();
                 }
                 $io->progressFinish();
                 $io->writeln("Application des changements...");
@@ -166,9 +166,9 @@ class NewAnneeUniversitaireCommand extends Command
                 $dpeArray = null;
 
                 /**
-                 * 
+                 *
                  * BLOCS DE COMPÉTENCES
-                 * 
+                 *
                  */
                 $blocCompArray = $this->entityManager->getRepository(BlocCompetence::class)->findBy([], ['id' => 'ASC']);
                 $nbBlocC = count($blocCompArray);
@@ -180,7 +180,7 @@ class NewAnneeUniversitaireCommand extends Command
                         $newLinkParcours = $this->entityManager->getRepository(Parcours::class)
                             ->findOneBy(['parcoursOrigineCopie' => $bc->getParcours()]);
                         $blocCompClone->setParcours($newLinkParcours);
-                    }   
+                    }
                     if($bc->getFormation() !== null){
                         $newLinkFormation = $this->entityManager->getRepository(Formation::class)
                             ->findOneBy(['formationOrigineCopie' => $bc->getFormation()]);
@@ -196,9 +196,9 @@ class NewAnneeUniversitaireCommand extends Command
                 $blocCompArray = null;
 
                 /**
-                 * 
+                 *
                  * COMPÉTENCES
-                 * 
+                 *
                  */
                 $competencesArray = $this->entityManager->getRepository(Competence::class)->findBy([], ['id' => 'ASC']);
                 $nbCompetence = count($competencesArray);
@@ -221,9 +221,9 @@ class NewAnneeUniversitaireCommand extends Command
                 $competencesArray = null;
 
                 /**
-                 * 
+                 *
                  * BUT COMPÉTENCES
-                 * 
+                 *
                  */
                 $butCompetencesArray = $this->entityManager->getRepository(ButCompetence::class)->findBy([], ['id' => 'ASC']);
                 $nbButComp = count($butCompetencesArray);
@@ -245,9 +245,9 @@ class NewAnneeUniversitaireCommand extends Command
                 $butCompetencesArray = null;
 
                 /**
-                 * 
+                 *
                  * BUT NIVEAU
-                 * 
+                 *
                  */
                 $butNiveauArray = $this->entityManager->getRepository(ButNiveau::class)->findBy([], ['id' => 'ASC']);
                 $nbButNiveau = count($butNiveauArray);
@@ -269,9 +269,9 @@ class NewAnneeUniversitaireCommand extends Command
                 $butNiveauArray = null;
 
                 /**
-                 * 
+                 *
                  * BUT APPRENTISSAGE CRITIQUE
-                 * 
+                 *
                  */
                 $butApprentissageCritArray = $this->entityManager->getRepository(ButApprentissageCritique::class)
                     ->findBy([], ['id' => 'ASC']);
@@ -294,9 +294,9 @@ class NewAnneeUniversitaireCommand extends Command
                 $butApprentissageCritArray = null;
 
                 /**
-                 * 
+                 *
                  * FICHES MATIERES
-                 * 
+                 *
                  */
                 $nbFicheMatiere = count($this->entityManager->getRepository(FicheMatiere::class)->findBy([]));
                 $processedFicheMatiere = 0;
@@ -308,7 +308,7 @@ class NewAnneeUniversitaireCommand extends Command
                         $this->entityManager->getRepository(FicheMatiere::class)
                             ->findBy([], ['id' => 'ASC']),
                         ($i * $this->stepFicheMatiereFlush),
-                        $this->stepFicheMatiereFlush    
+                        $this->stepFicheMatiereFlush
                     );
                     foreach($ficheMatiereArray as $ficheMatiere){
                         $ficheMatiereClone = clone $ficheMatiere;
@@ -322,9 +322,9 @@ class NewAnneeUniversitaireCommand extends Command
                             );
                         }
                         /**
-                         * 
+                         *
                          * Gestion des fiche_matiere_competence
-                         * 
+                         *
                          */
                         foreach($ficheMatiere->getCompetences() as $compFM){
                             $newLinkCompFM = $this->entityManager->getRepository(Competence::class)
@@ -333,7 +333,7 @@ class NewAnneeUniversitaireCommand extends Command
                         }
                         /**
                          * Gestion des fiche_matiere_but_apprentissage_critique
-                         * 
+                         *
                          */
                         foreach($ficheMatiere->getApprentissagesCritiques() as $appCrit){
                             $newLinkAppCrit = $this->entityManager->getRepository(ButApprentissageCritique::class)
@@ -346,7 +346,7 @@ class NewAnneeUniversitaireCommand extends Command
                         // Sauvegarde en BD
                         $this->entityManager->persist($ficheMatiereClone);
                         ++$processedFicheMatiere;
-                        $io->progressAdvance(1);
+                        $io->progressAdvance();
                     }
                 }
                 // Libération de la mémoire
@@ -355,9 +355,9 @@ class NewAnneeUniversitaireCommand extends Command
                 $io->writeln("Application des changements...");
                 $this->entityManager->flush();
                 /**
-                 * 
+                 *
                  * FICHES MATIERES MUTUALISABLES
-                 * 
+                 *
                  */
                 $nbMutualisations = count($this->entityManager->getRepository(FicheMatiereMutualisable::class)->findBy([]));
                 $processedMutualisations = 0;
@@ -384,7 +384,7 @@ class NewAnneeUniversitaireCommand extends Command
                         }
                         $this->entityManager->persist($mutualisationFMClone);
                         ++$processedMutualisations;
-                        $io->progressAdvance(1);
+                        $io->progressAdvance();
                     }
                 }
                 $io->progressFinish();
@@ -392,9 +392,9 @@ class NewAnneeUniversitaireCommand extends Command
                 $this->entityManager->flush();
 
                 /**
-                 * 
+                 *
                  * SEMESTRES
-                 * 
+                 *
                  */
                 $nbSemestres = count($this->entityManager->getRepository(Semestre::class)->findBy([]));
                 $semestreArray = $this->entityManager->getRepository(Semestre::class)->findBy([], ['id' => 'ASC']);
@@ -405,16 +405,16 @@ class NewAnneeUniversitaireCommand extends Command
                     $cloneSemestre->setSemestreRaccroche(null);
                     $cloneSemestre->setSemestreOrigineCopie($semestre);
                     $this->entityManager->persist($cloneSemestre);
-                    $io->progressAdvance(1);
+                    $io->progressAdvance();
                 }
                 $io->progressFinish();
                 $io->writeln("Application des changements...");
                 $this->entityManager->flush();
                 $semestreArray = null;
                 /**
-                 * 
+                 *
                  * SEMESTRES PARCOURS
-                 * 
+                 *
                  */
                 $nbSemestreParcours = count($this->entityManager->getRepository(SemestreParcours::class)->findBy([]));
                 $semestreParcoursArray = $this->entityManager->getRepository(SemestreParcours::class)->findBy([], ['id' => 'ASC']);
@@ -435,9 +435,9 @@ class NewAnneeUniversitaireCommand extends Command
                 $this->entityManager->flush();
                 $semestreParcoursArray = null;
                 /**
-                 * 
+                 *
                  * SEMESTRES MUTUALISABLES et Semestre Raccroché
-                 * 
+                 *
                  */
                 $nbSemestreMutualisable = count($this->entityManager->getRepository(SemestreMutualisable::class)->findBy([]));
                 $semestreMutualisableArray = $this->entityManager->getRepository(SemestreMutualisable::class)
@@ -458,7 +458,7 @@ class NewAnneeUniversitaireCommand extends Command
                     foreach($semestreARaccrocherArray as $semestreARaccrocher){
                         $raccrochageSemestre = $this->entityManager->getRepository(Semestre::class)
                             ->findOneBy(['semestreOrigineCopie' => $semestreARaccrocher]);
-                            
+
                         $raccrochageSemestre->setSemestreRaccroche($newCloneSemestreMutualise);
                         $this->entityManager->persist($raccrochageSemestre);
                     }
@@ -472,9 +472,9 @@ class NewAnneeUniversitaireCommand extends Command
                 $semestreMutualisableArray = null;
 
                 /**
-                 * 
+                 *
                  * UE
-                 * 
+                 *
                  */
                 $nbUe = count($this->entityManager->getRepository(Ue::class)->findBy([]));
                 $ueArray = $this->entityManager->getRepository(Ue::class)->findBy([], ['id' => 'ASC']);
@@ -498,9 +498,9 @@ class NewAnneeUniversitaireCommand extends Command
                 $this->entityManager->flush();
                 $ueArray = null;
                 /**
-                 * 
-                 * UE PARENT 
-                 * 
+                 *
+                 * UE PARENT
+                 *
                  */
                 $io->writeln("Copie des UE parents...");
                 $ueDataArray = $this->entityManager->getRepository(Ue::class)->findBy([], ['id' => 'ASC']);
@@ -522,9 +522,9 @@ class NewAnneeUniversitaireCommand extends Command
                 $this->entityManager->flush();
                 $ueDataArray = null;
                 /**
-                 * 
+                 *
                  * UE MUTUALISEES et Ue Raccrochées
-                 * 
+                 *
                  */
                 $io->writeln("Copie des UE mutualisées...");
                 $ueMutualiseesArray = $this->entityManager->getRepository(UeMutualisable::class)->findBy([], ['id' => 'ASC']);
@@ -554,9 +554,9 @@ class NewAnneeUniversitaireCommand extends Command
                 $ueMutualiseesArray = null;
 
                 /**
-                 * 
+                 *
                  * ELEMENT CONSTITUTIF
-                 * 
+                 *
                  */
                 $elementConstitutifArray = $this->entityManager->getRepository(ElementConstitutif::class)->findBy([], ['id' => 'ASC']);
                 $nbEc = count($elementConstitutifArray);
@@ -606,9 +606,9 @@ class NewAnneeUniversitaireCommand extends Command
                 $elementConstitutifArray = null;
 
                 /**
-                 * 
+                 *
                  * EC PARENT
-                 * 
+                 *
                  */
                 $ecArray = $this->entityManager->getRepository(ElementConstitutif::class)->findBy([], ['id' => 'ASC']);
                 $nbEcForParent = count($ecArray);
@@ -631,12 +631,12 @@ class NewAnneeUniversitaireCommand extends Command
                 $ecArray = null;
 
                 /**
-                 * 
+                 *
                  * ADRESSES
-                 * 
+                 *
                  * Doivent être dupliquées car il y a une contrainte 'UNIQUE'
-                 * sur la table contact 
-                 * 
+                 * sur la table contact
+                 *
                  */
                 $adresseArray = $this->entityManager->getRepository(Adresse::class)->findBy([], ['id' => 'ASC']);
                 $nbAdresse = count($adresseArray);
@@ -653,9 +653,9 @@ class NewAnneeUniversitaireCommand extends Command
                 $this->entityManager->flush();
                 $adresseArray = null;
                 /**
-                 * 
+                 *
                  * CONTACTS DU PARCOURS
-                 * 
+                 *
                  */
                 $contactsArray = $this->entityManager->getRepository(Contact::class)->findBy([], ['id' => 'ASC']);
                 $nbContact = count($contactsArray);
@@ -677,9 +677,9 @@ class NewAnneeUniversitaireCommand extends Command
                 $contactsArray = null;
 
                 /**
-                 * 
+                 *
                  * MCCC
-                 * 
+                 *
                  */
                 $mcccArray = $this->entityManager->getRepository(Mccc::class)->findBy([], ['id' => 'ASC']);
                 $nbMccc = count($mcccArray);
@@ -712,7 +712,7 @@ class NewAnneeUniversitaireCommand extends Command
                 $io->success("Copie réussie !");
                 return Command::SUCCESS;
             }
-            
+
             $io->writeln("Commande annulée");
             return Command::SUCCESS;
         }

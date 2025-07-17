@@ -9,60 +9,37 @@
 
 namespace App\EventSubscriber;
 
-use App\Classes\Mailer;
 use App\Events\NotifCentreEtablissementEvent;
-use App\Repository\EtablissementRepository;
-use App\Repository\UserCentreRepository;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class NotifCentreEtablissementSubscriber implements EventSubscriberInterface
+class NotifCentreEtablissementSubscriber extends AbstractNotifCentreSubscriber
 {
-    public function __construct(
-        protected Mailer $mailer,
-        protected EtablissementRepository $etablissementRepository,
-        protected UserCentreRepository $userCentreRepository,
-    ) {
-    }
-
     public static function getSubscribedEvents(): array
     {
         return [
-            NotifCentreEtablissementEvent::NOTIF_ADD_CENTRE_ETABLISSEMENT => 'onAddCentreEtablissement',
-            NotifCentreEtablissementEvent::NOTIF_REMOVE_CENTRE_ETABLISSEMENT => 'onRemoveCentreEtablissement',
+            NotifCentreEtablissementEvent::NOTIF_ADD_CENTRE => 'onAddCentreEtablissement',
+            NotifCentreEtablissementEvent::NOTIF_REMOVE_CENTRE => 'onRemoveCentreEtablissement',
         ];
     }
 
     public function onAddCentreEtablissement(NotifCentreEtablissementEvent $event): void
     {
-        $user = $event->user;
-        $etablissement = $event->etablissement;
-
-        if ($user === null || $etablissement === null) {
-            return;
-        }
-
-        $this->mailer->initEmail();
-        $this->mailer->setTemplate(
-            'mails/etablissement/add_centre_etablissement.txt.twig',
-            ['user' => $user, 'etablissement' => $etablissement]
+        $this->sendNotification(
+            $event->user,
+            $event->etablissement,
+            $event->profil,
+            'mails/formation/add_centre_etablissement.html.twig',
+            '[ORéOF] Accès à l\'application'
         );
-        $this->mailer->sendMessage([$user->getEmail()], '[ORéOF] Accès à l\'application');
     }
 
-    public function onRemoveCentreEtablissement(NotifCentreEtablissementEvent $event)
+    public function onRemoveCentreEtablissement(NotifCentreEtablissementEvent $event): void
     {
-        $user = $event->user;
-        $etablissement = $event->etablissement;
-
-        if ($user === null || $etablissement === null) {
-            return;
-        }
-
-        $this->mailer->initEmail();
-        $this->mailer->setTemplate(
-            'mails/etablissement/remove_centre_etablissement.txt.twig',
-            ['user' => $user, 'etablissement' => $etablissement]
+        $this->sendNotification(
+            $event->user,
+            $event->etablissement,
+            $event->profil,
+            'mails/formation/remove_centre_etablissement.html.twig',
+            '[ORéOF] Accès à l\'application'
         );
-        $this->mailer->sendMessage([$user->getEmail()], '[ORéOF] Accès à l\'application');
     }
 }

@@ -1,0 +1,28 @@
+{% extends 'mails/base_mail.html.twig' %}
+
+{% block content %}
+    <p>Bonjour {{ formation.responsableMention.display }}
+        , {% if formation.coResponsable != null %}{{ formation.coResponsable.display }}, {% endif %}</p>
+
+    <p>Une ou des réserve(s) ont été émises sur {% if hasParcours == true %}
+        le parcours <strong>{{ parcours.libelle }}</strong> de la formation <strong>{{ formation.displayLong }}</strong>
+    {% else %}
+        la formation <strong>{{ formation.displayLong }}</strong>
+        {% endif %}, par la CFVU du {{ context.date|date('d/m/Y') }}.</p>
+
+    <p>Le motif est :</p>
+
+    <p>{{ context.motif|nl2br|raw }}</p>
+
+    {% if hasParcours == true %}
+        <p>Vous pouvez modifier votre parcours en cliquant sur le lien suivant :</p>
+        <p>
+            <a href="{{ url('app_parcours_edit', {'id': parcours.id}) }}">{{ url('app_parcours_edit', {'id': parcours.id}) }}</a>
+        </p>
+    {% else %}
+        <p>Vous pouvez modifier votre formation en cliquant sur le lien suivant :</p>
+        <p>
+            <a href="{{ url('app_formation_edit', {'slug': formation.slug}) }}">{{ url('app_formation_edit', {'slug': formation.slug}) }}</a>
+        </p>
+    {% endif %}
+{% endblock %}

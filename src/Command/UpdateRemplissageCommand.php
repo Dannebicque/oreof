@@ -139,7 +139,7 @@ class UpdateRemplissageCommand extends Command
         $batchSize = 40;
         $i = 0;
         foreach ($formations as $formation) {
-            $formation->setRemplissage(null);
+            $formation->setRemplissage();
             $io->progressAdvance();
             $i++;
             if (($i % $batchSize) === 0) {
@@ -161,7 +161,7 @@ class UpdateRemplissageCommand extends Command
         $i = 0;
 
         foreach ($parcours as $parcour) {
-            $parcour->setRemplissage(null);
+            $parcour->setRemplissage();
             $io->progressAdvance();
             $i++;
             if (($i % $batchSize) === 0) {

@@ -71,19 +71,12 @@ class StructureSemestre
         //si ordre = 3 ou 4 alors année = 2
         //si ordre = 5 ou 6 alors année = 3
 
-        switch ($this->ordre) {
-            case 1:
-            case 2:
-                return 1;
-            case 3:
-            case 4:
-                return 2;
-            case 5:
-            case 6:
-                return 3;
-            default:
-                return 0;
-        }
+        return match ($this->ordre) {
+            1, 2 => 1,
+            3, 4 => 2,
+            5, 6 => 3,
+            default => 0,
+        };
     }
 
     // public function ues(): array

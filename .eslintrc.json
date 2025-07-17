@@ -1,7 +1,8 @@
 {
     "env": {
         "browser": true,
-        "es2021": true
+      "es2021": true,
+      "cypress/globals": true
     },
     "extends": "airbnb-base",
     "overrides": [
@@ -19,5 +20,11 @@
         "no-plusplus": "off",
         "no-alert": "off"
     },
-    "ignorePatterns": ["assets/js/vendor/", "assets/js/base/"]
+  "ignorePatterns": [
+    "assets/js/vendor/",
+    "assets/js/base/"
+  ],
+  "plugins": [
+    "cypress"
+  ]
 }

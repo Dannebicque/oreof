@@ -14,11 +14,13 @@ use App\Entity\CampagneCollecte;
 use App\Repository\FormationRepository;
 use App\Repository\ParcoursRepository;
 use App\Repository\TypeEpreuveRepository;
+use App\Service\ProjectDirProvider;
+use App\Service\TypeDiplomeResolver;
 use App\Service\VersioningParcours;
 use App\Service\VersioningStructureExtractDiff;
-use App\TypeDiplome\TypeDiplomeRegistry;
 use App\Utils\Tools;
 use Symfony\Component\HttpKernel\KernelInterface;
+use ZipArchive;
 
 class ExportSyntheseModification
 {
@@ -27,13 +29,13 @@ class ExportSyntheseModification
     public function __construct(
         protected ParcoursRepository $parcoursRepository,
         protected TypeEpreuveRepository $typeEpreuveRepository,
-        protected TypeDiplomeRegistry $typeDiplomeRegistry,
+        protected TypeDiplomeResolver $typeDiplomeResolver,
         protected VersioningParcours $versioningParcours,
         protected MyGotenbergPdf      $myGotenbergPdf,
-        KernelInterface               $kernel,
+        ProjectDirProvider $projectDirProvider,
         protected FormationRepository $formationRepository,
     ) {
-        $this->dir = $kernel->getProjectDir() . '/public/';
+        $this->dir = $projectDirProvider->getProjectDir() . '/public/';
     }
 
     public function exportLink(array $formations, CampagneCollecte $campagneCollecte): string
@@ -53,7 +55,7 @@ class ExportSyntheseModification
                     if ($parc['parcours']->getParcoursOrigineCopie() === null) {
                         $dto = null;
                     } else {
-                        $typeD = $this->typeDiplomeRegistry->getTypeDiplome($form?->getTypeDiplome()?->getModeleMcc());
+                        $typeD = $this->typeDiplomeResolver->get($form?->getTypeDiplome());
                         $parco = $this->parcoursRepository->find($parc['parcours']->getId());
                         $dto = $typeD->calculStructureParcours($parco, true, false);
                         $structureDifferencesParcours = $this->versioningParcours->getStructureDifferencesBetweenParcoursAndLastVersion($parco->getParcoursOrigineCopie());
@@ -89,10 +91,10 @@ class ExportSyntheseModification
             }
         }
 
-        $zip = new \ZipArchive();
+        $zip = new ZipArchive();
         $fileName = 'synthese_modification_cfvu_' . date('YmdHis') . '.zip';
         $zipName = $this->dir . 'temp/zip/' . $fileName;
-        $zip->open($zipName, \ZipArchive::CREATE);
+        $zip->open($zipName, ZipArchive::CREATE);
 
         foreach ($fichiers as $fichier) {
             $zip->addFile(

@@ -14,6 +14,7 @@ use App\Entity\Parcours;
 use App\Entity\TypeDiplome;
 use App\Enums\EtatRemplissageEnum;
 use App\Enums\RegimeInscriptionEnum;
+use Exception;
 
 class ParcoursState
 {
@@ -30,13 +31,13 @@ class ParcoursState
         $this->parcours = $parcours;
         $this->formation = $parcours->getFormation();
         if ($this->formation === null) {
-            throw new \Exception('Formation non définie');
+            throw new Exception('Formation non définie');
         }
 
         $this->typeDiplome = $this->formation->getTypeDiplome();
 
         if ($this->typeDiplome === null) {
-            throw new \Exception('Type de diplôme non défini');
+            throw new Exception('Type de diplôme non défini');
         }
     }
 
@@ -214,11 +215,10 @@ class ParcoursState
 
         if ($isBut) {
             ValideStructure::valideStructureBut($this->parcours);
-            $tab['error'] = array_merge($tab['error'], ValideStructure::getErrors());
         } else {
             ValideStructure::valideStructure($this->parcours);
-            $tab['error'] = array_merge($tab['error'], ValideStructure::getErrors());
         }
+        $tab['error'] = array_merge($tab['error'], ValideStructure::getErrors());
 
         return count($tab['error']) > 0 ? $tab : true;
     }

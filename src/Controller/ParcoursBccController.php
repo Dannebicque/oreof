@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Classes\CalculStructureParcours;
 use App\Classes\JsonReponse;
 use App\Entity\Parcours;
 use App\Repository\ButApprentissageCritiqueRepository;
@@ -10,19 +9,18 @@ use App\Repository\CompetenceRepository;
 use App\Repository\ElementConstitutifRepository;
 use App\Repository\FicheMatiereRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-class ParcoursBccController extends AbstractController
+class ParcoursBccController extends BaseController
 {
     #[Route('/parcours/bcc/{parcours}', name: 'app_parcours_bcc')]
     public function index(
-        CalculStructureParcours $calculStructureParcours,
         Parcours $parcours): Response
     {
-        $dto = $calculStructureParcours->calcul($parcours, false, true);
+        $typeD = $this->typeDiplomeResolver->get($parcours->getFormation()?->getTypeDiplome());
+        $dto = $typeD->calculStructureParcours($parcours, false);
         return $this->render('parcours_bcc/index.html.twig', [
             'parcours' => $parcours,
             'dto' => $dto,
@@ -35,7 +33,7 @@ class ParcoursBccController extends AbstractController
         Parcours $parcours
     ): Response
     {
-        $competences = $parcours->getFormation()->getButCompetences();
+        $competences = $parcours->getFormation()?->getButCompetences();
         $niveaux = [];
 
         foreach ($competences as $competence) {
@@ -70,7 +68,7 @@ class ParcoursBccController extends AbstractController
         $tabUeEc = [];
 
         foreach ($parcours->getSemestreParcours() as $semParc) {
-            foreach ($semParc->getSemestre()->getUes() as $ue) {
+            foreach ($semParc->getSemestre()?->getUes() as $ue) {
                 foreach ($ue->getElementConstitutifs() as $ec) {
                     if ($ec->getFicheMatiere() !== null) {
                         $tabUeEc[$semParc->getOrdre()][$ue->getOrdre()][$ec->getFicheMatiere()->getId()] = 'x';
@@ -108,20 +106,17 @@ class ParcoursBccController extends AbstractController
             return JsonReponse::error('EC ou compétence introuvable');
         }
 
+        if ($ec->getFicheMatiere() === null) {
+            return JsonReponse::error('EC sans fiche matière');
+        }
         if ($request->request->get('checked') === 'true') {
             // on ajoute
-            if ($ec->getFicheMatiere() === null) {
-                return JsonReponse::error('EC sans fiche matière');
-            }
             if ($ec->getFicheMatiere()->getParcours() === $parcours) {
                 $ec->getFicheMatiere()->addCompetence($competence);
             } else {
                 $ec->addCompetence($competence);
             }
         } else {
-            if ($ec->getFicheMatiere() === null) {
-                return JsonReponse::error('EC sans fiche matière');
-            }
 
             if ($ec->getFicheMatiere()->getParcours() === $parcours) {
                 $ec->getFicheMatiere()->removeCompetence($competence);
@@ -140,7 +135,6 @@ class ParcoursBccController extends AbstractController
         FicheMatiereRepository             $ficheMatiereRepository,
         ButApprentissageCritiqueRepository $butApprentissageCritiqueRepository,
         Request                            $request,
-        Parcours                           $parcours
     ): Response {
         $fiche = $ficheMatiereRepository->find($request->request->get('ec'));
         $ac = $butApprentissageCritiqueRepository->find($request->request->get('competence'));

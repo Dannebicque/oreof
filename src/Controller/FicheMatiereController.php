@@ -12,7 +12,6 @@ namespace App\Controller;
 use App\Classes\GetDpeParcours;
 use App\Classes\JsonReponse;
 use App\Classes\verif\FicheMatiereState;
-use App\DTO\Remplissage;
 use App\DTO\StructureEc;
 use App\Entity\ElementConstitutif;
 use App\Entity\FicheMatiere;
@@ -28,15 +27,15 @@ use App\Repository\TypeDiplomeRepository;
 use App\Repository\TypeEpreuveRepository;
 use App\Repository\UeRepository;
 use App\Service\VersioningFicheMatiere;
+use App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException;
 use App\TypeDiplome\Source\ButTypeDiplome;
 use App\TypeDiplome\Source\LicenceTypeDiplome;
 use App\TypeDiplome\Source\MeefTypeDiplome;
-use App\TypeDiplome\TypeDiplomeRegistry;
 use App\Utils\JsonRequest;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Jfcherng\Diff\DiffHelper;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -93,14 +92,13 @@ class FicheMatiereController extends BaseController
     }
 
     /**
-     * @throws \App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException
+     * @throws TypeDiplomeNotFoundException
      */
     #[Route('/{slug}', name: 'app_fiche_matiere_show', methods: ['GET'])]
     public function show(
         ElementConstitutifRepository $elementConstitutifRepository,
         FicheMatiereMutualisableRepository $ficheMatiereMutualisableRepository,
         TypeDiplomeRepository $typeDiplomeRepository,
-        TypeDiplomeRegistry          $typeDiplomeRegistry,
         TypeEpreuveRepository        $typeEpreuveRepository,
         FicheMatiere                 $ficheMatiere,
         VersioningFicheMatiere       $ficheMatiereVersioningService
@@ -118,11 +116,16 @@ class FicheMatiereController extends BaseController
 
         if ($formation !== null) {
             $typeDiplome = $formation->getTypeDiplome();
-            $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());
         } else {
-            $typeD = $typeDiplomeRegistry->getTypeDiplome(LicenceTypeDiplome::class); //par défaut Licence
-            $typeDiplome = $typeDiplomeRepository->find(1);
+            $typeDiplome = $typeDiplomeRepository->findOneBy(['libelle_court' => 'L']);
         }
+
+        if ($typeDiplome === null) {
+            throw new TypeDiplomeNotFoundException();
+        }
+
+        $typeD = $this->typeDiplomeResolver->get($typeDiplome);
+
         $cssDiff = DiffHelper::getStyleSheet();
         $textDifferences = $ficheMatiereVersioningService
             ->getStringDifferencesWithBetweenFicheMatiereAndLastVersion($ficheMatiere);
@@ -180,7 +183,11 @@ class FicheMatiereController extends BaseController
         FicheMatiere $ficheMatiere,
         FicheMatiereState $ficheMatiereState,
     ): Response {
-        if (!$this->isGranted('CAN_EC_EDIT_MY', $ficheMatiere)) {
+        if (!$this->isGranted('EDIT',
+            [
+                'route' => 'app_fiche_matiere',
+                'subject' => $ficheMatiere,
+            ])) {
             return $this->redirectToRoute('app_fiche_matiere_show', ['slug' => $ficheMatiere->getSlug()]);
         }
 
@@ -333,13 +340,14 @@ class FicheMatiereController extends BaseController
         EntityManagerInterface $entityManager,
         Filesystem $fileSystem,
         VersioningFicheMatiere $ficheMatiereVersioningService
-    ) {
+    ): \Symfony\Component\HttpFoundation\RedirectResponse
+    {
         try {
             // Date / Heure
             $now = new DateTimeImmutable('now');
             $dateHeure = $now->format('d-m-Y_H-i-s');
             // Sauvegarde
-            $ficheMatiereVersioningService->saveFicheMatiereVersion($ficheMatiere, $now, false);
+            $ficheMatiereVersioningService->saveFicheMatiereVersion($ficheMatiere, $now);
             $entityManager->flush();
             // Ajout dans les logs
             /**
@@ -355,7 +363,7 @@ class FicheMatiereController extends BaseController
                 'text' => 'La fiche matière a bien été sauvegardée.',
             ]);
             return $this->redirectToRoute('app_fiche_matiere_show', ['slug' => $ficheMatiere->getSlug()]);
-        } catch(\Exception $e) {
+        } catch (Exception $e) {
             // Log error
             $logTxt = "[{$dateHeure}] Le versioning de la fiche matière : "
                 . "{$ficheMatiere->getSlug()} - ID : {$ficheMatiere->getId()}"
@@ -380,7 +388,8 @@ class FicheMatiereController extends BaseController
         LicenceTypeDiplome $licenceTypeD,
         ButTypeDiplome $butTypeD,
         MeefTypeDiplome $meefTypeD
-    ) {
+    ): \Symfony\Component\HttpFoundation\RedirectResponse|Response
+    {
         try {
             $version = $ficheMatiereVersioningService->loadFicheMatiereVersion($ficheMatiereVersioning);
             $ficheMatiere = $version['ficheMatiere'];
@@ -425,7 +434,7 @@ class FicheMatiereController extends BaseController
                 'mcccs' => $mcccTypeDiplome->getMcccs($ficheMatiere),
                 'typeEpreuves' => $typeEpreuves
             ]);
-        } catch(\Exception $e) {
+        } catch (Exception $e) {
             // Log error
             $now = new DateTimeImmutable();
             $dateHeure = $now->format('d-m-Y_H-i-s');
@@ -446,7 +455,8 @@ class FicheMatiereController extends BaseController
         EntityManagerInterface $entityManager,
         Parcours $parcours,
         string $keyword = ""
-    ) {
+    ): JsonResponse
+    {
         $associatedFicheMatiere = $entityManager
             ->getRepository(FicheMatiere::class)
             ->findForParcoursWithKeyword($parcours, $keyword);

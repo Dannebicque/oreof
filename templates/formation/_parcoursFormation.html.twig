@@ -68,7 +68,8 @@
                                 <span> vérifier</span>
                             </a><br>
 
-                            {% if is_granted('CAN_PARCOURS_EDIT_MY', dpesParcours[parcours.id]) %}
+                            {% if
+                                is_granted('EDIT', {route: 'app_parcours', subject:  dpesParcours[parcours.id]}) %}
                                 <a href="{{ path('app_parcours_edit',{'id': parcours.id}) }}"
                                    class="btn btn-sm text-warning"
                                    data-bs-toggle="tooltip"
@@ -145,7 +146,7 @@
                                 <span> vérifier</span>
                             </a><br>
 
-                            {% if is_granted('CAN_FORMATION_EDIT_MY', formation) or is_granted('CAN_PARCOURS_EDIT_MY', formation.parcours[0]) %}
+                            {% if is_granted('EDIT', {route: 'app_formation', subject: formation}) or is_granted('EDIT', {route: 'app_parcours', subject: formation.parcours[0]}) %}
                                 <a href="{{ path('app_formation_edit',{'slug':  formation.slug}) }}"
                                    class="btn btn-sm text-warning"
                                    data-bs-toggle="tooltip"

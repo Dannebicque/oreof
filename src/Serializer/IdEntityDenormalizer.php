@@ -11,7 +11,7 @@ class IdEntityDenormalizer implements DenormalizerAwareInterface, DenormalizerIn
     use DenormalizerAwareTrait;
 
     // Le denormalizer ne doit être appelé qu'une seule fois par objet
-    private const ALREADY_CALLED = 'ID_ENTITY_DENORMALIZER_ALREADY_CALLED';
+    private const string ALREADY_CALLED = 'ID_ENTITY_DENORMALIZER_ALREADY_CALLED';
 
     // Si le résultat peut être mis en cache
     private array $supportedEntities = [
@@ -19,9 +19,9 @@ class IdEntityDenormalizer implements DenormalizerAwareInterface, DenormalizerIn
     ];
 
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []) : mixed
-    {    
+    {
         // Si l'on dénormalise l'objet, on le marque dans le contexte, pour éviter un deuxième passage
-        $context[self::ALREADY_CALLED] = true; 
+        $context[self::ALREADY_CALLED] = true;
         $object = $this->denormalizer->denormalize($data, $type, $format, $context);
         $object->setDeserializedId($data['id']);
 
@@ -29,9 +29,9 @@ class IdEntityDenormalizer implements DenormalizerAwareInterface, DenormalizerIn
     }
 
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []) : bool
-    {   
-        return array_key_exists($type, $this->supportedEntities) 
-            && isset($context[self::ALREADY_CALLED]) === false 
+    {
+        return array_key_exists($type, $this->supportedEntities)
+            && isset($context[self::ALREADY_CALLED]) === false
             && $format === 'json';
     }
 

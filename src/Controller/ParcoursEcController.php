@@ -128,7 +128,8 @@ class ParcoursEcController extends AbstractController
     #[Route('/parcours/ressources-sae/{parcours}/coeff', name: 'app_parcours_ressources_sae_but_coeff')]
     public function ressourcesSaeCoeff(
         Parcours $parcours
-    ) {
+    ): Response
+    {
         $tabEcs = [];
         $tabEcUes = [];
         $tabUes = [];

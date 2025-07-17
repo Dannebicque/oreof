@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\FormationVersioningRepository;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: FormationVersioningRepository::class)]
@@ -18,7 +19,7 @@ class FormationVersioning
     private ?Formation $formation = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $version_timestamp = null;
+    private ?DateTimeImmutable $version_timestamp = null;
 
     #[ORM\Column(length: 1000)]
     private ?string $filename = null;
@@ -46,12 +47,12 @@ class FormationVersioning
         return $this;
     }
 
-    public function getVersionTimestamp(): ?\DateTimeImmutable
+    public function getVersionTimestamp(): ?DateTimeImmutable
     {
         return $this->version_timestamp;
     }
 
-    public function setVersionTimestamp(\DateTimeImmutable $version_timestamp): static
+    public function setVersionTimestamp(DateTimeImmutable $version_timestamp): static
     {
         $this->version_timestamp = $version_timestamp;
 

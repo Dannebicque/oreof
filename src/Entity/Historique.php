@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use DateTime;
+use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\MappedSuperclass;
@@ -19,7 +21,7 @@ abstract class Historique
     private ?int $id = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $created;
+    private ?DateTimeInterface $created;
 
     #[ORM\Column(length: 255)]
     private ?string $etat = null;
@@ -34,14 +36,14 @@ abstract class Historique
     private ?string $etape = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $date = null;
+    private ?DateTimeInterface $date = null;
 
     #[ORM\Column(nullable: true)]
     private ?array $complements = null;
 
     public function __construct()
     {
-        $this->created = new \DateTime();
+        $this->created = new DateTime();
     }
 
     public function getId(): ?int
@@ -50,12 +52,12 @@ abstract class Historique
     }
 
 
-    public function getCreated(): ?\DateTimeInterface
+    public function getCreated(): ?DateTimeInterface
     {
         return $this->created;
     }
 
-    public function setCreated(\DateTimeInterface $created): static
+    public function setCreated(DateTimeInterface $created): static
     {
         $this->created = $created;
 
@@ -110,12 +112,12 @@ abstract class Historique
         return $this;
     }
 
-    public function getDate(): ?\DateTimeInterface
+    public function getDate(): ?DateTimeInterface
     {
         return $this->date;
     }
 
-    public function setDate(?\DateTimeInterface $date): static
+    public function setDate(?DateTimeInterface $date): static
     {
         $this->date = $date;
 

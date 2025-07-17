@@ -25,17 +25,14 @@
 {% endblock %}
 
 {% block bouton_header %}
-<a href="{{ path('app_type_diplome_index') }}">
-    <button
-            class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2 text-dark"
-            data-size="lg"
-            data-bs-toggle="tooltip"
-            data-bs-placement="bottom"
-            title="Retour à la liste"
+    <a href="{{ path('app_type_diplome_index') }}"
+       class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2 text-dark"
+       data-bs-toggle="tooltip"
+       data-bs-placement="bottom"
+       title="Retour à la liste"
     >
-
         <i class="{{ iconBack }}"></i>
         <span> Retour à la liste</span>
-    </button>
-    {% endblock %}
+    </a>
+{% endblock %}
 

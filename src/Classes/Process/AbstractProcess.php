@@ -10,8 +10,8 @@
 namespace App\Classes\Process;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class AbstractProcess
 {

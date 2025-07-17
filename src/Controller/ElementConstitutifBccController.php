@@ -21,7 +21,6 @@ use App\Repository\CompetenceRepository;
 use App\Utils\JsonRequest;
 use Doctrine\ORM\EntityManagerInterface;
 use RuntimeException;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -143,7 +142,11 @@ class ElementConstitutifBccController extends BaseController
                 $apprentissageCritiques = [];
             }
 
-            if ($this->isGranted('CAN_PARCOURS_EDIT_MY', $dpeParcours)) {
+            if ($this->isGranted('EDIT',
+                [
+                    'route' => 'app_ec',
+                    'subject' => $elementConstitutif,
+                ])) {
                 return $this->render('element_constitutif/_bccEcButModal.html.twig', [
                     'competence' => $competence,
                     'ec' => $elementConstitutif,
@@ -167,7 +170,6 @@ class ElementConstitutifBccController extends BaseController
                         } elseif (!$existe && (bool)$data['checked'] === true) {
                             $ficheMatiere->addCompetence($competence);
                         }
-                        $entityManager->flush();
                     } else {
                         $existe = $elementConstitutif->getCompetences()->contains($competence);
                         if ($existe && (bool)$data['checked'] === false) {
@@ -175,8 +177,8 @@ class ElementConstitutifBccController extends BaseController
                         } elseif (!$existe && (bool)$data['checked'] === true) {
                             $elementConstitutif->addCompetence($competence);
                         }
-                        $entityManager->flush();
                     }
+                    $entityManager->flush();
                     return JsonReponse::success('Compétence ajoutée');
                 }
                 return JsonReponse::error('Action interdite');
@@ -225,7 +227,11 @@ class ElementConstitutifBccController extends BaseController
 
 
             if (
-                $this->isGranted('CAN_PARCOURS_EDIT_MY', $dpeParcours)) { //todo: + accessible CFVU?
+                $this->isGranted('EDIT',
+                    [
+                        'route' => 'app_parcours',
+                        'subject' => $dpeParcours,
+                    ])) { //todo: + accessible CFVU?
                 return $this->render('element_constitutif/_bccEcModal.html.twig', [
                     'ec' => $elementConstitutif,
                     'bccs' => $bccs,
@@ -247,5 +253,7 @@ class ElementConstitutifBccController extends BaseController
                 'ecComps' => array_flip($ecComps),
             ]);
         }
+
+        throw new RuntimeException('Type de diplôme non géré : ' . $typeDiplome->getLibelleCourt());
     }
 }

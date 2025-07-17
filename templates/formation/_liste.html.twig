@@ -1,11 +1,9 @@
-{# todo: reprendre cette page comme le bilan des formations pour le SES, DPE ou Admin avec état, remplissage et
-bouton pour valider/invalide les étapes successives #}
 <div {{ stimulus_controller('structure--formation', {
     url: path('app_parcours_formation_detail'),
 }) }}>
     {% set sort = params.sort is defined ? params.sort : 'typeDiplome' %}
     {% set direction = params.direction is defined ? params.direction : 'asc' %}
-    {% set isGranted = is_granted('ROLE_ADMIN') or is_granted('CAN_ETABLISSEMENT_SHOW_ALL', app.user) or isCfvu %}
+    {% set isGranted = is_granted('ROLE_ADMIN') or is_granted('SHOW', {route: 'app_etablissement', subject: 'etablissement'}) or isCfvu %}
     <table class="table">
         <thead>
         <tr>
@@ -107,56 +105,6 @@ bouton pour valider/invalide les étapes successives #}
                 <th></th>
                 <th></th>
                 <th>
-{#                    {% if not isCfvu %}#}
-{#                        <label for="filter-etat" class="sr-only">etat</label>#}
-{#                        <select#}
-{#                                {{ stimulus_action('crud', 'filter', 'change', {#}
-{#                                    'field': 'etatDpe'#}
-{#                                }) }}#}
-{#                                id="filter-etat" class="form-select">#}
-{#                            <option value=""></option>#}
-{#                            <option value="autorisation_saisie"#}
-{#                                    {% if params['etatDpe'] is defined and params['etatDpe'] == 'autorisation_saisie' %}selected{% endif %}>#}
-{#                                Saisie autorisée#}
-{#                            </option>#}
-{#                            <option value="en_cours_redaction"#}
-{#                                    {% if params['etatDpe'] is defined and params['etatDpe'] == 'en_cours_redaction' %}selected{% endif %}>#}
-{#                                En cours de rédaction#}
-{#                            </option>#}
-{#                            <option value="soumis_rf"#}
-{#                                    {% if params['etatDpe'] is defined and params['etatDpe'] == 'soumis_rf' %}selected{% endif %}>#}
-{#                                Soumis parcours#}
-{#                            </option>#}
-{#                            <option value="soumis_dpe_composante"#}
-{#                                    {% if params['etatDpe'] is defined and params['etatDpe'] == 'soumis_dpe_composante' %}selected{% endif %}>#}
-{#                                Soumis DPE composante#}
-{#                            </option>#}
-{#                            <option value="soumis_conseil"#}
-{#                                    {% if params['etatDpe'] is defined and params['etatDpe'] == 'soumis_conseil' %}selected{% endif %}>#}
-{#                                Soumis conseil composante#}
-{#                            </option>#}
-{#                            <option value="soumis_central"#}
-{#                                    {% if params['etatDpe'] is defined and params['etatDpe'] == 'soumis_central' %}selected{% endif %}>#}
-{#                                Soumis central#}
-{#                            </option>#}
-{#                            <option value="soumis_cfvu"#}
-{#                                    {% if params['etatDpe'] is defined and params['etatDpe'] == 'soumis_cfvu' %}selected{% endif %}>#}
-{#                                Soumis CFVU#}
-{#                            </option>#}
-{#                            <option value="valide_a_publier"#}
-{#                                    {% if params['etatDpe'] is defined and params['etatDpe'] == 'valide_pour_publication' %}selected{% endif %}>#}
-{#                                Validé CFVU#}
-{#                            </option>#}
-{#                            <option value="valide_a_publier"#}
-{#                                    {% if params['etatDpe'] is defined and params['etatDpe'] == 'valide_a_publier' %}selected{% endif %}>#}
-{#                                Validé pour publication#}
-{#                            </option>#}
-{#                            <option value="publie"#}
-{#                                    {% if params['etatDpe'] is defined and params['etatDpe'] == 'publie' %}selected{% endif %}>#}
-{#                                Publié#}
-{#                            </option>#}
-{#                        </select>#}
-{#                    {% endif %}#}
                 </th>
 
                 <th>
@@ -275,7 +223,7 @@ bouton pour valider/invalide les étapes successives #}
                             <span> vérifier</span>
                         </a>
 
-                        {% if is_granted('CAN_FORMATION_EDIT_MY', formation) %}
+                        {% if is_granted('EDIT', {route: 'app_formation', subject: formation}) %}
                             <a href="{{ path('app_formation_edit',{'slug': formation.slug}) }}"
                                class="btn btn-sm text-warning"
                                data-bs-toggle="tooltip"

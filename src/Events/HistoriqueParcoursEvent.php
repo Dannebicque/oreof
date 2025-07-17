@@ -16,7 +16,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class HistoriqueParcoursEvent extends AbstractHistoriqueEvent
 {
 
-    public const ADD_HISTORIQUE_PARCOURS = 'add.historique.parcours';
+    public const string ADD_HISTORIQUE_PARCOURS = 'add.historique.parcours';
 
     private Parcours $parcours;
     private ?string $fileName;

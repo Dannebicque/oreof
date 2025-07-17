@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\FicheMatiereVersioningRepository;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: FicheMatiereVersioningRepository::class)]
@@ -18,7 +19,7 @@ class FicheMatiereVersioning
     private ?FicheMatiere $ficheMatiere = null;
 
     #[ORM\Column(nullable: true)]
-    private ?\DateTimeImmutable $version_timestamp = null;
+    private ?DateTimeImmutable $version_timestamp = null;
 
     #[ORM\Column(length: 255)]
     private ?string $filename = null;
@@ -46,12 +47,12 @@ class FicheMatiereVersioning
         return $this;
     }
 
-    public function getVersionTimestamp(): ?\DateTimeImmutable
+    public function getVersionTimestamp(): ?DateTimeImmutable
     {
         return $this->version_timestamp;
     }
 
-    public function setVersionTimestamp(?\DateTimeImmutable $version_timestamp): static
+    public function setVersionTimestamp(?DateTimeImmutable $version_timestamp): static
     {
         $this->version_timestamp = $version_timestamp;
 

@@ -104,7 +104,7 @@ export default class extends Controller {
   }
 
   async _updateListeMention(typeDiplome, domaine) {
-    let url = ''
+    let url
     if (this.urlValue.includes('?')) {
       url = `${this.urlValue}&typeDiplome=${typeDiplome}&domaine=${domaine}`
     } else {

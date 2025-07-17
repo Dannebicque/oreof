@@ -5,9 +5,10 @@ namespace App\Controller;
 use App\Classes\JsonReponse;
 use App\Entity\Composante;
 use App\Message\Export;
-use App\Repository\CampagneCollecteRepository;
+use App\Message\RequestGenerationJobMessage;
 use App\Repository\ComposanteRepository;
 use App\Repository\DpeParcoursRepository;
+use App\Repository\GenerationJobRepository;
 use App\Utils\Tools;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,7 +17,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class ExportController extends BaseController
 {
-    public const TYPES_DOCUMENT = [
+    public const array TYPES_DOCUMENT = [
         "xlsx-mccc" => 'MCCC format Excel (xslx)',
         "xlsx-cap" => 'Export CAP format excel (xslx)',
         "xlsx-fiabilisation" => 'Export Fiabilisation format excel (xslx)',
@@ -28,7 +29,7 @@ class ExportController extends BaseController
         "pdf-fiches" => 'Fiches descriptions format PDF'
     ];
 
-    public const TYPES_DOCUMENT_GLOBAL = [
+    public const array TYPES_DOCUMENT_GLOBAL = [
         "xlsx-carif" => 'Tableau CARIF (xslx)',
         "xlsx-semestres_ouverts" => 'Tableau Semestre/parcours (non)ouvert (xslx)',
         "xlsx-ec" => 'Fiches EC/Type (xslx)',
@@ -44,7 +45,15 @@ class ExportController extends BaseController
     public function index(
         ComposanteRepository       $composanteRepository,
     ): Response {
-        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
+        if (!$this->isGranted('ROLE_ADMIN') &&
+            !$this->isGranted('SHOW', [
+                'route' => 'app_etablissement',
+                'subject' => 'etablissement'
+            ])) {
+            throw $this->createAccessDeniedException();
+        }
+
 
         return $this->render('export/index.html.twig', [
             'composantes' => $composanteRepository->findAll(),
@@ -77,7 +86,10 @@ class ExportController extends BaseController
     public function exportShow(
         ComposanteRepository       $composanteRepository,
     ): Response {
-        $this->denyAccessUnlessGranted('CAN_ETABLISSEMENT_SHOW_ALL', $this->getUser());
+        $this->denyAccessUnlessGranted('SHOW', [
+            'route' => 'app_etablissement',
+            'subject' => 'etablissement'
+        ]);
 
         return $this->render('export/index.html.twig', [
             'composantes' => $composanteRepository->findAll(),
@@ -106,14 +118,17 @@ class ExportController extends BaseController
         ComposanteRepository $composanteRepository,
         Request              $request
     ): Response {
-        $composante = $composanteRepository->find($request->query->get('composante', null));
+        $composante = $composanteRepository->find($request->query->get('composante'));
 
         if (!$composante) {
             throw $this->createNotFoundException('La composante n\'existe pas');
         }
 
         if ($this->isGranted('ROLE_ADMIN') ||
-            $this->isGranted('CAN_ETABLISSEMENT_SHOW_ALL', $this->getUser())) {
+            $this->isGranted('SHOW', [
+                'route' => 'app_etablissement',
+                'subject' => 'etablissement'
+            ])) {
             $dpes = $dpeParcoursRepository->findParcoursByComposante($this->getCampagneCollecte(), $composante);
         } elseif ($this->isGranted('CAN_ETABLISSEMENT_CONSEILLER_ALL', $this->getUser())) {
             $dpes = $dpeParcoursRepository->findParcoursByComposanteCfvu($this->getCampagneCollecte(), $composante);
@@ -138,10 +153,42 @@ class ExportController extends BaseController
             $request->request->get('type_document'),
             $request->request->all()['liste'] ?? [],
             $this->getCampagneCollecte(),
-            Tools::convertDate($request->request->get('date', null)),
-            $request->request->get('composante', null),
+            Tools::convertDate($request->request->get('date')),
+            $request->request->get('composante'),
         ));
 
         return JsonReponse::success('Les documents sont en cours de génération, vous recevrez un mail lorsque les documents seront prêts');
+    }
+
+    #[Route('/export/my-exports', name: 'app_export_my_exports')]
+    public function exports(GenerationJobRepository $repo): Response
+    {
+        $user = $this->getUser();
+        $jobs = $repo->findForUser($this->getUser()?->getId());
+
+        return $this->render('export/my_exports.html.twig', [
+            'jobs' => $jobs
+        ]);
+    }
+
+    #[Route('/export/test-exports', name: 'app_export_test_exports')]
+    public function tests(MessageBusInterface $messageBus): Response
+    {
+        $user = $this->getUser();
+
+        $parameters = [
+            // paramètres optionnels de l’export
+        ];
+
+        // Dispatch la demande de génération
+        $messageBus->dispatch(new RequestGenerationJobMessage(
+            $this->getUser()?->getId(),
+            'formation_export',
+            $parameters
+        ));
+
+        $this->addFlash('success', 'Votre export a été demandé. Vous recevrez un fichier une fois prêt.');
+
+        return $this->redirectToRoute('app_export_index');
     }
 }

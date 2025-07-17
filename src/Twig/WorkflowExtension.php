@@ -65,8 +65,7 @@ class WorkflowExtension extends AbstractExtension
         if (array_key_exists($key, $historique)) {
             return match ($historique[$key]->getEtat()) {
                 'valide' => 'btn-success',
-                'reserve' => 'btn-warning',
-                'laisserPasser' => 'btn-warning',
+                'reserve', 'laisserPasser' => 'btn-warning',
                 'refuse' => 'btn-danger',
                 default => 'btn-muted',
             };
@@ -181,8 +180,7 @@ class WorkflowExtension extends AbstractExtension
     private function getWorkflow(string $workflow): WorkflowInterface
     {
         return match ($workflow) {
-            'dpe' => $this->dpeParcoursWorkflow,
-            'parcours' => $this->dpeParcoursWorkflow,
+            'dpe', 'parcours' => $this->dpeParcoursWorkflow,
             'fiche' => $this->ficheWorkflow,
             'changeRf' => $this->changeRfWorkflow,
         };

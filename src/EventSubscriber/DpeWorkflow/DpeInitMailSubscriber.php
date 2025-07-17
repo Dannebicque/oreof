@@ -16,6 +16,7 @@ use App\Repository\ComposanteRepository;
 use App\Repository\FormationRepository;
 use App\Repository\UserRepository;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Workflow\Event\Event;
 
 class DpeInitMailSubscriber implements EventSubscriberInterface
@@ -37,7 +38,7 @@ class DpeInitMailSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
+     * @throws TransportExceptionInterface
      */
     public function onInitialise(Event $event): void
     {

@@ -1,0 +1,75 @@
+<div {{ attributes }}>
+    <div>
+        <div>
+            <label class="form-label required" for="typeCentre">Type de centre</label>
+            <select id="typeCentre" class="form-select"
+                    data-model="selectedCentre"
+                    {{ live_action('updateCibles') }}
+                    required
+                    {{ stimulus_controller('symfony/ux-autocomplete/autocomplete') }}
+            >
+                <option value="">Choisir un centre</option>
+                {% for key, value in this.centres %}
+                    <option value="{{ key }}">{{ value }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div>
+            <label for="selectListe" class="form-label">Selon le centre, précisez</label>
+            <select class="form-select" name="selectListe" id="selectListe"
+                    data-model="selectedCibleId"
+                    {{ stimulus_controller('symfony/ux-autocomplete/autocomplete') }}
+            >
+                {% for key, value in this.cibles %}
+                    {% if loop.first %}
+                        <option value="">Choisissez {{ this.labelCible }}</option>
+                    {% endif %}
+                    <option value="{{ key }}">{{ value }}</option>
+                {% else %}
+                    <option value="">Choisissez un centre</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div>
+            <label for="droitss" class="form-label required">Droits sur ce centre ?</label>
+            <select class="form-select" name="droits" id="droitss" required
+                    data-model="selectedProfilId"
+                    {{ stimulus_controller('symfony/ux-autocomplete/autocomplete') }}
+            >
+                {% for key, value  in this.profils %}
+                    {% if loop.first %}
+                        <option value="">Choisissez un profil</option>
+                    {% endif %}
+                    <option value="{{ key }}">{{ value }}</option>
+                {% else %}
+                    <option value="">Choisissez un centre</option>
+                {% endfor %}
+            </select>
+        </div>
+
+
+        {#        <label for="centre">Centre</label> #}
+        {#        <select id="centre" name="centre" data-model="selectedCentre" data-live-action="updateCibles"> #}
+        {#            <option value="">Choisir un centre</option> #}
+        {#            {% for centre in this.centres %} #}
+        {#                <option value="{{ centre.value }}">{{ centre.libelle }}</option> #}
+        {#            {% endfor %} #}
+        {#        </select> #}
+
+        {#        <label for="cible">Cible</label> #}
+        {#        <select id="cible" name="cible" data-model="selectedCibleId" data-live-action="updateProfils"> #}
+        {#            <option value="">Choisir une cible</option> #}
+        {#            {% for key, value in this.cibles %} #}
+        {#                <option value="{{ key }}">{{ value }}</option> #}
+        {#            {% endfor %} #}
+        {#        </select> #}
+
+        {#        <label for="profil">Profil</label> #}
+        {#        <select id="profil" name="profil" data-model="selectedProfilId"> #}
+        {#            <option value="">Choisir un profil</option> #}
+        {#            {% for key, value in this.profils %} #}
+        {#                <option value="{{ key }}">{{ value }}</option> #}
+        {#            {% endfor %} #}
+        {#        </select> #}
+    </div>
+</div>

@@ -16,7 +16,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class HistoriqueFicheMatiereEvent extends AbstractHistoriqueEvent
 {
 
-    public const ADD_HISTORIQUE_FICHE_MATIERE = 'add.historique.fiche_matiere';
+    public const string ADD_HISTORIQUE_FICHE_MATIERE = 'add.historique.fiche_matiere';
 
     private FicheMatiere $ficheMatiere;
 

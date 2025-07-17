@@ -9,7 +9,6 @@
 
 namespace App\Classes\Export;
 
-use App\Classes\CalculStructureParcours;
 use App\Classes\Excel\ExcelWriter;
 use App\DTO\StructureSemestre;
 use App\DTO\StructureUe;
@@ -21,8 +20,8 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ExportCodification
 {
-    const BLUE = '#4472C4';
-    const GREEN = '#00B050';
+    const string BLUE = '#4472C4';
+    const string GREEN = '#00B050';
 
     public function __construct(
         protected CalculStructureParcours $calculStructureParcours,
@@ -96,18 +95,18 @@ class ExportCodification
         return $this->excelWriter->genereFichier($fileName, true);
     }
 
-    public function exportParcours(Parcours $parcours)
+    public function exportParcours(Parcours $parcours): StreamedResponse
     {
         $this->excelWriter->nouveauFichier('Export Codification');
         $this->excelWriter->setActiveSheetIndex(0);
 
         $this->writeParcours($parcours);
 
-        $fileName = Tools::FileName('Codification-Parcours-'.$parcours->getLibelle() .'-'. (new DateTime())->format('d-m-Y-H-i'), 50);
+        $fileName = Tools::FileName('Codification-Parcours-' . $parcours->getLibelle() . '-' . (new DateTime())->format('d-m-Y-H-i'));
         return $this->excelWriter->genereFichier($fileName, true);
     }
 
-    private function writeParcours(Parcours $parcours)
+    private function writeParcours(Parcours $parcours): void
     {
         $dto = $this->calculStructureParcours->calcul($parcours, true, false);
 
@@ -220,7 +219,7 @@ class ExportCodification
         return $ligne;
     }
 
-    public function exportFormation(Formation $formation)
+    public function exportFormation(Formation $formation): StreamedResponse
     {
         $this->excelWriter->nouveauFichier();
         $i = 0;
@@ -232,7 +231,7 @@ class ExportCodification
         }
 
 
-        $fileName = Tools::FileName('Codification-Formation-'.$formation->getDisplay() .'-'. (new DateTime())->format('d-m-Y-H-i'), 50);
+        $fileName = Tools::FileName('Codification-Formation-' . $formation->getDisplay() . '-' . (new DateTime())->format('d-m-Y-H-i'));
         return $this->excelWriter->genereFichier($fileName, true);
     }
 }

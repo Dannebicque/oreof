@@ -31,8 +31,7 @@ class UeType extends AbstractType
         $isAdmin = $options['isAdmin'];
 
         if (true === $isAdmin) {
-            $builder->add('ordre', IntegerType::class, [
-            ]);
+            $builder->add('ordre', IntegerType::class);
         }
 
 

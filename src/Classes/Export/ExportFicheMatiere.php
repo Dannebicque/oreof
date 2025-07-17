@@ -11,31 +11,34 @@ namespace App\Classes\Export;
 
 use App\Classes\MyGotenbergPdf;
 use App\Repository\ParcoursRepository;
+use App\Service\ProjectDirProvider;
 use App\Utils\Tools;
+use Exception;
 use Symfony\Component\HttpKernel\KernelInterface;
+use ZipArchive;
 
 class ExportFicheMatiere
 {
     private string $dir;
     public function __construct(
-        KernelInterface $kernel,
+        ProjectDirProvider $projectDirProvider,
         protected MyGotenbergPdf     $myPdf,
         protected ParcoursRepository $parcoursRepository
     )
     {
-        $this->dir = $kernel->getProjectDir().'/public/';
+        $this->dir = $projectDirProvider->getProjectDir() . '/public/';
     }
 
-    public function exportLink(array $idParcours)
+    public function exportLink(array $idParcours): string
     {
         $parcours = $this->parcoursRepository->find($idParcours[0]);
         if ($parcours === null) {
-            throw new \Exception('Parcours non trouvé');
+            throw new Exception('Parcours non trouvé');
         }
         $ecs = $parcours->getElementConstitutifs();
         $formation = $parcours->getFormation();
         if ($formation === null) {
-            throw new \Exception('Formation non trouvée');
+            throw new Exception('Formation non trouvée');
         }
         $typeDiplome = $formation?->getTypeDiplome();
         $fichiers = [];
@@ -58,10 +61,10 @@ class ExportFicheMatiere
             }
         }
 
-        $zip = new \ZipArchive();
+        $zip = new ZipArchive();
         $fileName = 'export_fiches_matieres_' . date('YmdHis') . '.zip';
         $zipName = $this->dir . 'temp/zip/' . $fileName;
-        $zip->open($zipName, \ZipArchive::CREATE);
+        $zip->open($zipName, ZipArchive::CREATE);
 
         foreach ($fichiers as $fichier) {
             $zip->addFile(

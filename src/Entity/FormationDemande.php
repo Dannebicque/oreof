@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\FormationDemandeRepository;
+use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -18,13 +19,13 @@ class FormationDemande
     private ?User $demandeur = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $dateDemande = null;
+    private ?DateTimeInterface $dateDemande = null;
 
     #[ORM\Column]
     private ?bool $validationDpe = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $dateValidationDpe = null;
+    private ?DateTimeInterface $dateValidationDpe = null;
 
     #[ORM\ManyToOne]
     private ?Mention $mention = null;
@@ -52,12 +53,12 @@ class FormationDemande
         return $this;
     }
 
-    public function getDateDemande(): ?\DateTimeInterface
+    public function getDateDemande(): ?DateTimeInterface
     {
         return $this->dateDemande;
     }
 
-    public function setDateDemande(\DateTimeInterface $dateDemande): self
+    public function setDateDemande(DateTimeInterface $dateDemande): self
     {
         $this->dateDemande = $dateDemande;
 
@@ -76,12 +77,12 @@ class FormationDemande
         return $this;
     }
 
-    public function getDateValidationDpe(): ?\DateTimeInterface
+    public function getDateValidationDpe(): ?DateTimeInterface
     {
         return $this->dateValidationDpe;
     }
 
-    public function setDateValidationDpe(?\DateTimeInterface $dateValidationDpe): self
+    public function setDateValidationDpe(?DateTimeInterface $dateValidationDpe): self
     {
         $this->dateValidationDpe = $dateValidationDpe;
 

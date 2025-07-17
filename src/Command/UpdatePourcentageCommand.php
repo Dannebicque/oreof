@@ -6,9 +6,7 @@ use App\Repository\FicheMatiereRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
@@ -18,7 +16,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 )]
 class UpdatePourcentageCommand extends Command
 {
-    private const BATCH_SIZE = 100;
+    private const int BATCH_SIZE = 100;
 
 
     public function __construct(
@@ -37,7 +35,7 @@ class UpdatePourcentageCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
-        $totalFiches = $this->ficheMatiereRepository->count([]);
+        $totalFiches = $this->ficheMatiereRepository->count();
         $io->progressStart($totalFiches);
 
         for ($i = 0; $i < $totalFiches; $i += self::BATCH_SIZE) {

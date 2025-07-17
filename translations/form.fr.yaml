@@ -508,3 +508,4 @@ ec_step4.labels.controleAssiduite: 'L''EC est validé par un contrôle d''assidu
 profil.labels.libelle: 'Libellé du profil'
 profil.labels.code: 'Code du profil'
 profil.labels.centre.label: 'Centre(s) pour ce profil'
+register.labels.serviceDemande: 'Votre service ou fonctions'

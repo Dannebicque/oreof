@@ -1,0 +1,49 @@
+<div class="card mt-2">
+    <div class="card-body">
+        //Selon le profil, afficher toutes les "routes" + pour chaque les 3 possibilités d'accès ? Type Psup
+        <div class="row">
+            <div class="col-8">
+                //afficher les informations du profil
+            </div>
+            <div class="col-4 d-grid">
+                <button class="btn btn-warning d-block">Modifier</button>
+                <button class="btn btn-outline-danger d-block mt-2">Supprimer</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card mt-2">
+    <div class="card-body">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Ressource</th>
+                <th>Droits</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for key,ress in ressources %}
+                <tr>
+                    <td>{{ ress|trans([], 'profil') }}</td>
+                    <td>
+                        {% for droit in droits %}
+                            <input type="radio"
+                                    {{ stimulus_action('profil--index', 'changeDroit', 'change', {
+                                        ressource: ress,
+                                        droit: droit.value,
+                                        profilId: profil.id
+                                    }) }}
+                                   name="droit_{{ ress }}"
+                                   id="droit_{{ ress }}_{{ droit.value }}"
+                                   value="{{ droit.value }}"
+                                    {% if ressourcesProfil[ress] is defined and ressourcesProfil[ress] == droit.value %}checked{% endif %}>
+                            <label for="droit_{{ ress }}_{{ droit.value }}">{{ droit.value|trans([], 'profil') }}</label>
+                        {% endfor %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>

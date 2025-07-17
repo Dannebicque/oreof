@@ -153,12 +153,11 @@ class ParcoursValide extends AbstractValide
 
             // onglet 4
             ValideStructure::valideStructure($this->parcours);
-            $this->etat['structure'] = ValideStructure::getStructure();
         } else {
             $this->etat['competences'] = $this->parcours->getFormation()?->getButCompetences()->count() > 0 ? self::COMPLET : self::VIDE;
             ValideStructure::valideStructureBut($this->parcours);
-            $this->etat['structure'] = ValideStructure::getStructure();
         }
+        $this->etat['structure'] = ValideStructure::getStructure();
 
         // onglet 5
         $this->etat['preRequis'] = $this->nonVide($this->parcours->getPrerequis());

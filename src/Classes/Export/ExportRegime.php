@@ -10,10 +10,12 @@
 namespace App\Classes\Export;
 
 use App\Classes\Excel\ExcelWriter;
+use App\Classes\GetDpeParcours;
 use App\Classes\GetHistorique;
 use App\Entity\CampagneCollecte;
 use App\Enums\RegimeInscriptionEnum;
 use App\Repository\FormationRepository;
+use App\Service\ProjectDirProvider;
 use App\Utils\Tools;
 use DateTime;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -25,18 +27,18 @@ class ExportRegime implements ExportInterface
     private string $dir;
 
     public function __construct(
-        protected GetHistorique        $getHistorique,
+        protected GetHistorique       $getHistorique,
         protected ExcelWriter         $excelWriter,
-        KernelInterface               $kernel,
+        ProjectDirProvider            $projectDirProvider,
         protected FormationRepository $formationRepository,
     ) {
-        $this->dir = $kernel->getProjectDir() . '/public/temp/';
+        $this->dir = $projectDirProvider->getProjectDir() . '/public/temp/';
     }
 
     private function prepareExport(
         CampagneCollecte $anneeUniversitaire,
     ): void {
-        $formations = $this->formationRepository->findBySearch('', $anneeUniversitaire, []);
+        $formations = $this->formationRepository->findBySearch('', $anneeUniversitaire);
         $this->excelWriter->nouveauFichier('Export Régimes');
         $this->excelWriter->setActiveSheetIndex(0);
 
@@ -74,12 +76,13 @@ class ExportRegime implements ExportInterface
                     }
                     $this->excelWriter->writeCellXY(5, $ligne, substr($texte, 0, -2));
                 }
+                $dpeParcours = GetDpeParcours::getFromParcours($parcours);
                 $this->excelWriter->writeCellXY(6, $ligne, $formation->getResponsableMention()?->getDisplay());
                 $this->excelWriter->writeCellXY(7, $ligne, $formation->getCoResponsable()?->getDisplay());
                 $this->excelWriter->writeCellXY(8, $ligne, $parcours->getRespParcours()?->getDisplay());
                 $this->excelWriter->writeCellXY(9, $ligne, $parcours->getCoResponsable()?->getDisplay());
                 $this->excelWriter->writeCellXY(10, $ligne, $formation->getCodeRNCP());
-                $this->excelWriter->writeCellXY(11, $ligne, $this->getHistorique->getHistoriqueParcoursLastStep($parcours, 'cfvu')?->getDate()?->format('d/m/Y') ?? 'Non validé');
+                $this->excelWriter->writeCellXY(11, $ligne, $this->getHistorique->getHistoriqueParcoursLastStep($dpeParcours, 'cfvu')?->getDate()?->format('d/m/Y') ?? 'Non validé');
                 $i = 0;
                 foreach (RegimeInscriptionEnum::cases() as $regime) {
                     if (in_array($regime, $parcours->getRegimeInscription())) {

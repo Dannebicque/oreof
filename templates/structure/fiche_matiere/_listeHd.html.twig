@@ -138,6 +138,10 @@
                         <i class="{{ iconShow }}"></i>
                         <span> voir</span>
                     </a>
+                    {% if is_granted('EDIT', {
+                        route: 'app_fiche_matiere_hd',
+                        subject: ficheMatiere
+                    }) %}
                     <a
                             href="{{ path('app_fiche_matiere_edit',{slug: ficheMatiere.slug}) }}"
                             class="btn btn-sm text-warning"
@@ -162,6 +166,7 @@
                     }) }} class="btn btn-sm text-danger">
                         <i class="{{ iconDelete }}"></i> Supprimer
                     </button>
+                    {% endif %}
                 </td>
             </tr>
         {% else %}

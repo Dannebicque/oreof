@@ -9,7 +9,6 @@
 
 namespace App\Controller;
 
-use App\Classes\CalculStructureParcours;
 use App\Classes\GetDpeParcours;
 use App\Classes\GetFormations;
 use App\Classes\MentionProcess;
@@ -19,30 +18,29 @@ use App\DTO\StatsFichesMatieres;
 use App\Entity\Composante;
 use App\Entity\DpeParcours;
 use App\Entity\Formation;
-use App\Entity\FormationDemande;
 use App\Entity\FormationVersioning;
 use App\Entity\Parcours;
 use App\Entity\ParcoursVersioning;
 use App\Entity\UserCentre;
+use App\Entity\UserProfil;
 use App\Enums\TypeModificationDpeEnum;
 use App\Events\AddCentreFormationEvent;
-use App\Form\FormationDemandeType;
 use App\Form\FormationSesType;
 use App\Repository\ComposanteRepository;
 use App\Repository\DomaineRepository;
 use App\Repository\DpeParcoursRepository;
 use App\Repository\FormationRepository;
 use App\Repository\MentionRepository;
-use App\Repository\RoleRepository;
+use App\Repository\ProfilRepository;
 use App\Repository\TypeDiplomeRepository;
-use App\Repository\UserCentreRepository;
 use App\Service\VersioningFormation;
 use App\Service\VersioningParcours;
-use App\TypeDiplome\TypeDiplomeRegistry;
+use App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException;
 use App\Utils\JsonRequest;
 use DateTime;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Jfcherng\Diff\DiffHelper;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Filesystem\Filesystem;
@@ -68,13 +66,15 @@ class FormationController extends BaseController
     #[Route('/liste-cfvu', name: 'app_formation_liste_cfvu', methods: ['GET'])]
     public function listeCfvu(
         DpeParcoursRepository $dpeParcoursRepository,
-    ) {
-        if ($this->isGranted('CAN_ETABLISSEMENT_CONSEILLER_ALL')) {
+    ): Response
+    {
+        $allparcours = [];
+        if ($this->isGranted('SHOW', ['route' => 'app_etablissement', 'subject' => 'etablissement'])) {
             $allparcours = $dpeParcoursRepository->findByCampagneAndTypeValidation($this->getCampagneCollecte(), 'soumis_cfvu');
         }
 
         return $this->render('validation/_liste.html.twig', [
-            'allparcours' => $allparcours,
+            'allparcours' => $allparcours ?? [],
             'etape' => 'cfvu',
             'isCfvu' => true,
         ]);
@@ -115,10 +115,10 @@ class FormationController extends BaseController
         if ($request->query->has('formation')) {
             $formation = $formationRepository->find($request->query->get('formation'));
             if ($formation === null) {
-                throw new \Exception('Formation non trouvée');
+                throw new Exception('Formation non trouvée');
             }
         } else {
-            throw new \Exception('Formation non trouvée');
+            throw new Exception('Formation non trouvée');
         }
 
         $parcourss = $formation->getParcours();
@@ -138,7 +138,6 @@ class FormationController extends BaseController
 
     #[Route('/fiches/liste', name: 'app_fiches_formation_liste', methods: ['GET'])]
     public function fichesFormation(
-        CalculStructureParcours $calculStructureParcours,
         GetFormations         $getFormations,
         MentionRepository     $mentionRepository,
         ComposanteRepository  $composanteRepository,
@@ -157,9 +156,10 @@ class FormationController extends BaseController
 
             $parcourss = $formation->getParcours();
             $stats[$formation->getId()]['stats'] = new StatsFichesMatieres();
-
+            $typeD = $this->typeDiplomeResolver->get($formation->getTypeDiplome());
             foreach ($parcourss as $parcours) {
-                $stats[$formation->getId()][$parcours->getId()] = $calculStructureParcours->calcul($parcours, false, false);
+
+                $stats[$formation->getId()][$parcours->getId()] = $typeD->calculStructureParcours($parcours, false, false);
                 $stats[$formation->getId()]['stats']->addStatsParcours(
                     $stats[$formation->getId()][$parcours->getId()]->statsFichesMatieresParcours
                 );
@@ -210,13 +210,15 @@ class FormationController extends BaseController
     #[Route('/new', name: 'app_formation_new', methods: ['GET', 'POST'])]
     public function new(
         WorkflowInterface $dpeParcoursWorkflow,
-        RoleRepository       $roleRepository,
+        ProfilRepository $profilRepository,
         MentionRepository    $mentionRepository,
-        UserCentreRepository $userCentreRepository,
         Request              $request,
         FormationRepository  $formationRepository
     ): Response {
-        $this->denyAccessUnlessGranted('CAN_FORMATION_CREATE_ALL', $this->getUser());
+        $this->denyAccessUnlessGranted('MANAGE', [
+            'route' => 'app_formation',
+            'subject' => 'formation'
+        ]);
 
         $formation = new Formation($this->getCampagneCollecte());
         $form = $this->createForm(FormationSesType::class, $formation, [
@@ -256,23 +258,15 @@ class FormationController extends BaseController
             $dpeParcoursWorkflow->apply($dpeParcours, 'autoriser');
             $parcours->addDpeParcour($dpeParcours);
             $this->entityManager->persist($dpeParcours);
+
+            $profil = $profilRepository->findOneBy(['code_role' => 'ROLE_RESP_FORMATION']);
+            $uc = new UserProfil();
+            $uc->setUser($formation->getResponsableMention());
+            $uc->setCampagneCollecte($this->getCampagneCollecte());
+            $uc->setFormation($formation);
+            $uc->setProfil($profil);
+            $this->entityManager->persist($uc);
             $this->entityManager->flush();
-
-
-            //on vérifie si le responsable de formation à le centre
-            $hasCentre = $userCentreRepository->findOneBy([
-                'user' => $formation->getResponsableMention(),
-                'formation' => $formation->getId()
-            ]);
-            if ($hasCentre === null) {
-                $role = $roleRepository->findOneBy(['code_role' => 'ROLE_RESP_FORMATION']);
-                $uc = new UserCentre();
-                $uc->setUser($formation->getResponsableMention());
-                $uc->setCampagneCollecte($this->getCampagneCollecte());
-                $uc->setFormation($formation);
-                $uc->addRole($role);
-                $userCentreRepository->save($uc, true);
-            }
 
             return $this->redirectToRoute('app_formation_index');
         }
@@ -285,6 +279,7 @@ class FormationController extends BaseController
 
     #[Route('/edit/formation/{slug}', name: 'app_formation_edit_modal', methods: ['GET', 'POST'])]
     public function editModal(
+        ProfilRepository $profilRepository,
         EventDispatcherInterface $eventDispatcher,
         EntityManagerInterface   $entityManager,
         MentionRepository        $mentionRepository,
@@ -312,11 +307,16 @@ class FormationController extends BaseController
             $changeSet = $uow->getEntityChangeSet($formation);
 
             if (isset($changeSet['responsableMention'])) {
+                $profil = $profilRepository->findOneBy(['code' => 'ROLE_RESP_FORMATION']);
+                if ($profil === null) {
+                    throw new Exception('Profil ROLE_RESP_FORMATION non trouvé');
+                }
                 // retirer l'ancien resp des centres et droits et envoyer mail
-                $event = new AddCentreFormationEvent($formation, $changeSet['responsableMention'][0], ['ROLE_RESP_FORMATION'], $this->getCampagneCollecte());
+                $event = new AddCentreFormationEvent($formation, $changeSet['responsableMention'][0], $profil, $this->getCampagneCollecte());
                 $eventDispatcher->dispatch($event, AddCentreFormationEvent::REMOVE_CENTRE_FORMATION);
+
                 // ajouter le nouveau resp, ajouter centre et droits et envoyer mail
-                $event = new AddCentreFormationEvent($formation, $changeSet['responsableMention'][1], ['ROLE_RESP_FORMATION'], $this->getCampagneCollecte());
+                $event = new AddCentreFormationEvent($formation, $changeSet['responsableMention'][1], $profil, $this->getCampagneCollecte());
                 $eventDispatcher->dispatch($event, AddCentreFormationEvent::ADD_CENTRE_FORMATION);
             }
 
@@ -332,7 +332,7 @@ class FormationController extends BaseController
     }
 
     /**
-     * @throws \App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException
+     * @throws TypeDiplomeNotFoundException
      */
     #[Route('/api', name: 'app_formation_api', methods: ['GET'])]
     public function api(
@@ -358,11 +358,10 @@ class FormationController extends BaseController
     }
 
     /**
-     * @throws \App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException
+     * @throws TypeDiplomeNotFoundException
      */
     #[Route('/{slug}', name: 'app_formation_show', methods: ['GET'])]
     public function show(
-        TypeDiplomeRegistry     $typeDiplomeRegistry,
         Formation               $formation,
         VersioningParcours $versioningParcours,
         VersioningFormation $versioningFormation
@@ -370,10 +369,10 @@ class FormationController extends BaseController
         $typeDiplome = $formation->getTypeDiplome();
 
         if ($typeDiplome === null) {
-            throw new \Exception('Type de diplôme non trouvé');
+            throw new Exception('Type de diplôme non trouvé');
         }
 
-        $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());
+        $typeD = $this->typeDiplomeResolver->get($typeDiplome);
         $hasLastVersion = false;
         /**
          * VERSIONING PARCOURS PAR DÉFAUT
@@ -402,7 +401,7 @@ class FormationController extends BaseController
     }
 
     /**
-     * @throws \App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException
+     * @throws TypeDiplomeNotFoundException
      */
     #[Route('/{slug}/edit', name: 'app_formation_edit', methods: ['GET', 'POST'])]
     public function edit(
@@ -411,12 +410,19 @@ class FormationController extends BaseController
         FormationState      $formationState,
         Request             $request,
         Formation           $formation,
-        TypeDiplomeRegistry $typeDiplomeRegistry
     ): Response {
 
-        if (!$this->isGranted('CAN_FORMATION_EDIT_MY', $formation)) {
+        if (!$this->isGranted('EDIT',
+            [
+                'route' => 'app_formation',
+                'subject' => $formation,
+            ])) {
             if($formation->isHasParcours() === false && count($formation->getParcours()) === 1) {
-                if (!$this->isGranted('CAN_PARCOURS_EDIT_MY', $formation->getParcours()->first())) {
+                if (!$this->isGranted('EDIT',
+                    [
+                        'route' => 'app_parcours',
+                        'subject' => $formation->getParcours()->first(),
+                    ])) {
                     return $this->redirectToRoute('app_formation_show', ['slug' => $formation->getSlug()]);
                 }
             } else {
@@ -425,7 +431,7 @@ class FormationController extends BaseController
         }
 
         $formationState->setFormation($formation);
-        $typeD = $typeDiplomeRegistry->getTypeDiplome($formation->getTypeDiplome()->getModeleMcc());
+        $typeD = $this->typeDiplomeResolver->get($formation->getTypeDiplome());
         if ($formation->getParcours()?->first() !== false) {
             $parcoursState->setParcours($formation->getParcours()?->first());
         }
@@ -532,7 +538,8 @@ class FormationController extends BaseController
         Formation $formation,
         VersioningFormation $versioningFormationService,
         Filesystem $filesystem
-    ) {
+    ): \Symfony\Component\HttpFoundation\RedirectResponse
+    {
         try {
             /** @var User $utilisateur */
             $utilisateur = $this->getUser();
@@ -546,7 +553,7 @@ class FormationController extends BaseController
 
             $this->addFlashBag('success', 'La formation a bien été sauvegardée.');
             return $this->redirectToRoute('app_formation_show', ['slug' => $formation->getSlug()]);
-        } catch(\Exception $e) {
+        } catch (Exception $e) {
             $errorMessage = "[{$dateHeure}] Le versioning de la formation a rencontré une erreur."
                 . "\nUtilisateur : {$utilisateur->getPrenom()} {$utilisateur->getNom()} - ID : {$utilisateur->getUsername()}"
                 ."\nMessage : {$e->getMessage()}\n";
@@ -564,12 +571,12 @@ class FormationController extends BaseController
         VersioningFormation $versionFormationService,
         VersioningParcours $versionParcoursService,
         Filesystem $filesystem,
-        TypeDiplomeRegistry $typeDiplomeRegistry,
         EntityManagerInterface $entityManager
-    ) {
+    ): \Symfony\Component\HttpFoundation\RedirectResponse|Response
+    {
         try {
             $formation = $versionFormationService->loadFormationFromVersion($versionFormation);
-            $typeD = $typeDiplomeRegistry->getTypeDiplome($versionFormation->getFormation()->getTypeDiplome()->getModeleMcc());
+            $typeD = $this->typeDiplomeResolver->get($versionFormation->getFormation()?->getTypeDiplome());
             $dateHeureVersion = $versionFormation->getVersionTimestamp()->format('d/m/Y à H:i');
 
             $parcoursVersionArray = [];
@@ -595,7 +602,7 @@ class FormationController extends BaseController
                 // 'isBut' => $versionFormation->getFormation()->getTypeDiplome()->getLibelleCourt() === "BUT"
             ]);
 
-        } catch(\Exception $e) {
+        } catch (Exception $e) {
             $now = new DateTime();
             $dateHeure = $now->format('d-m-Y_H-i-s');
             $errorMessage = "[{$dateHeure}] La visualisation de version de la formation a rencontré une erreur."
