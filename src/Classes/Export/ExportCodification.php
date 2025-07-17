@@ -20,8 +20,8 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ExportCodification
 {
-    const string BLUE = '#4472C4';
-    const string GREEN = '#00B050';
+    const BLUE = '#4472C4';
+    const GREEN = '#00B050';
 
     public function __construct(
         protected CalculStructureParcours $calculStructureParcours,
