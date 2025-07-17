@@ -56,17 +56,17 @@
         </div>
     </section>
 
-        <section class="scroll-section" id="structure_{{ parcours.id }}">
-            <h3 class="small-title">Structure du parcours</h3>
-            <div class="card mb-5">
-                <div class="card-body">
-                    {{ render(controller('App\\Controller\\StructureShowController::parcoursShow', {
-                        parcours: parcours.id,
-                        hasLastVersion: hasLastVersion ?? false,
-                    })) }}
-                </div>
+    <section class="scroll-section" id="structure_{{ parcours.id }}">
+        <h3 class="small-title">Structure du parcours</h3>
+        <div class="card mb-5">
+            <div class="card-body">
+                {{ render(controller('App\\Controller\\StructureShowController::parcoursShow', {
+                    parcours: parcours.id,
+                    hasLastVersion: hasLastVersion ?? false,
+                })) }}
             </div>
-        </section>
+        </div>
+    </section>
 
     <section class="scroll-section" id="admission_{{ parcours.id }}">
         <h3 class="small-title">Admission</h3>

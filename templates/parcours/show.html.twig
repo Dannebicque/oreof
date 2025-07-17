@@ -1,5 +1,5 @@
 {% extends 'base.html.twig' %}
-
+{# todo: à déplacer dans typeDiplome... #}
 {% block title %}Parcours{% endblock %}
 
 {% block stylesheets %}
@@ -129,7 +129,7 @@
     {% endif %}
 
     <div class="row mt-2">
-        {{ include('typeDiplome/parcours/common/_'~constant('SOURCE', typeD)~'.html.twig') }}
+        {{ include('typeDiplome/'~constant('TEMPLATE_FOLDER', typeD)~'/show.html.twig') }}
         <!-- Scrollspy Start -->
         <div class="col-md-auto d-none d-lg-block" id="scrollSpyMenu">
             <ul class="nav flex-column">

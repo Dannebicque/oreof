@@ -50,12 +50,12 @@
         <h3 class="small-title">Compétences Acquises</h3>
         <div class="card mb-5">
             <div class="card-body">
-                {{ include('typeDiplome/formation/_competences_but.html.twig', {parcours:parcours}) }}
-
+                {{ include('typeDiplome/formation/_competences.html.twig', {parcours:parcours}) }}
             </div>
         </div>
     </section>
 
+    {% if isVersioning is not defined or isVersioning == false %}
         <section class="scroll-section" id="structure_{{ parcours.id }}">
             <h3 class="small-title">Structure du parcours</h3>
             <div class="card mb-5">
@@ -67,7 +67,18 @@
                 </div>
             </div>
         </section>
-
+    {% else %}
+        <section class="scroll-section" id="structure_{{ parcours.id }}">
+            <h3 class="small-title">Structure du parcours</h3>
+            <div class="card mb-5">
+                <div class="card-body">
+                    {{ include('typeDiplome/formation/_structure.html.twig', {
+                        parcours: parcours
+                    }) }}
+                </div>
+            </div>
+        </section>
+    {% endif %}
     <section class="scroll-section" id="admission_{{ parcours.id }}">
         <h3 class="small-title">Admission</h3>
         <div class="card mb-5">
