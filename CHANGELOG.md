@@ -2,6 +2,34 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.43.0](https://github.com/Dannebicque/oreof/compare/v1.42.0...v1.43.0) (2025-07-17)
+
+
+### Features
+
+* add commentaire field to Formation and Parcours entities, implement CommentaireAdmin component for editing ([046d1d1](https://github.com/Dannebicque/oreof/commit/046d1d1d92cd54ab8395f8edc3e458b8cec773c6))
+* implement TranslationController and TranslationFileManager for managing translation files ([44c61a0](https://github.com/Dannebicque/oreof/commit/44c61a08b108d726bc446babce1ac9eb513edaad))
+* **Licence:** update CalculStructureParcours dependency and modify calculDisplayMccc method signature ([7f8c733](https://github.com/Dannebicque/oreof/commit/7f8c7337d3b2b39e02ce84c6db087839c353028d))
+* **TypeDiplome:** add Cypress support files for login and dashboard tests ([b9b4e63](https://github.com/Dannebicque/oreof/commit/b9b4e63b73312a3d1cbf84e73c154f6fa24a4212))
+* **TypeDiplome:** add Cypress support files for login and dashboard tests ([62b8ca2](https://github.com/Dannebicque/oreof/commit/62b8ca213b33792b1497bff11fc2d3caf8ba89a8))
+* **TypeDiplome:** add Cypress support files for login and dashboard tests ([13a34b4](https://github.com/Dannebicque/oreof/commit/13a34b4a4367cb3e5c11afcbe652160b395fcf28))
+* **TypeDiplome:** add Cypress support files for login and dashboard tests ([b5e6846](https://github.com/Dannebicque/oreof/commit/b5e68463442f1084ce464e78a9056882fa7f0a9e))
+* **TypeDiplome:** add Cypress support files for login and dashboard tests ([9496954](https://github.com/Dannebicque/oreof/commit/949695476f330b051a30357e7cc2ffd9646ccdbf))
+* **TypeDiplome:** add Cypress support files for login and dashboard tests ([92b144f](https://github.com/Dannebicque/oreof/commit/92b144fb69c3f401bcb720a202c465bef753e89b))
+* **TypeDiplome:** add Cypress support files for login and dashboard tests ([107b1fa](https://github.com/Dannebicque/oreof/commit/107b1fac7ab0c586e14591d8a91a71a1693dc57f))
+* **TypeDiplome:** add Cypress support files for login and dashboard tests ([fa1b761](https://github.com/Dannebicque/oreof/commit/fa1b7612b182b581389db75ed9c14ea382cc216b))
+* **TypeDiplome:** add serviceDemande field to User and enhance DpeDemande relationships ([9e48f8d](https://github.com/Dannebicque/oreof/commit/9e48f8dc09d13948b70f23365bca1722367e7f16))
+* **TypeDiplome:** add storageKey to stimulus controllers for improved state management ([0278427](https://github.com/Dannebicque/oreof/commit/0278427fb7df4cfcb621b62990f4bfaa7eecda4a))
+* **TypeDiplome:** add user profile management features and update role checks ([26067ad](https://github.com/Dannebicque/oreof/commit/26067ada3154114a5797fc62a3e3bd27dbccd75b))
+* **TypeDiplome:** deprecate old domain handling and improve mention management ([cce86c1](https://github.com/Dannebicque/oreof/commit/cce86c1556dd337da6f4c8c233ea489d0fe50856))
+* **TypeDiplome:** enhance TranslationFileManager with project and cache directory management ([0275d69](https://github.com/Dannebicque/oreof/commit/0275d69aadaeaa9b43aceb24673aa110f06ef4c4))
+* **TypeDiplome:** enhance workflow with date metadata and add reserve notification email ([e11e56a](https://github.com/Dannebicque/oreof/commit/e11e56a0058466cbfebc08d71614c947bd9f04f2))
+* **TypeDiplome:** implement database connection and job tracking for export processes ([b75be42](https://github.com/Dannebicque/oreof/commit/b75be42bd89f867ad7e01cff07c0cdbf17b55512))
+* **TypeDiplome:** improve URL handling in export controller for dynamic query parameters ([27daec3](https://github.com/Dannebicque/oreof/commit/27daec3cdff41801ba129b6a05f2bb71cc154086))
+* **TypeDiplome:** refactor export classes to use ProjectDirProvider for directory management ([386f920](https://github.com/Dannebicque/oreof/commit/386f9204ecc8c9f6999f5acb3e78e31eb6dee9e5))
+* **TypeDiplome:** update event handling and user profile management in formation processes ([f646830](https://github.com/Dannebicque/oreof/commit/f646830d6dd1645a27ea03e0e8815af066325099))
+* **TypeDiplome:** update export functionality in DemandeDpeController to include Type Diplôme and adjust column indices ([4b10081](https://github.com/Dannebicque/oreof/commit/4b10081245af92c4438f57de8e33cacc89e5ee5b))
+
 ## [1.42.0](https://github.com/Dannebicque/oreof/compare/v1.41.0...v1.42.0) (2025-06-05)
 
 
