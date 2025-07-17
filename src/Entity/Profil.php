@@ -84,7 +84,7 @@ class Profil
         return $this->centre;
     }
 
-    public function setCentre(CentreGestionEnum $centre): static
+    public function setCentre(?CentreGestionEnum $centre): static
     {
         $this->centre = $centre;
 
