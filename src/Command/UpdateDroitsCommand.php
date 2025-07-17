@@ -64,7 +64,9 @@ class UpdateDroitsCommand extends Command
             if ($role->getCodeRole() === 'ROLE_CO_RESP_PARCOURS' || $role->getCodeRole() === 'ROLE_RESP_PARCOURS') {
                 $profil->setCentre(CentreGestionEnum::CENTRE_GESTION_PARCOURS);
             } else {
-                $profil->setCentre($role->getCentre());
+                if ($role->getCentre() !== null) {
+                    $profil->setCentre($role->getCentre());
+                }
             }
 
 
