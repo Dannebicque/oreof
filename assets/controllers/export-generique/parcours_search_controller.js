@@ -611,6 +611,23 @@ export default class extends Controller {
                     none: true
                 };
                 break;
+            case 'templateExportListeFicheMatiere':
+                this._typeExport = 'template';
+                this._templateTypeExport.type = 'fiche_matiere';
+                this._templateTypeExport.name = 'templateExportListeFicheMatiere';
+                this._predefinedTemplate = false;
+                this._withFieldSorting = false;
+                this._withDefaultHeader = false;
+                this._selectedFields = {
+                    fmId: true,
+                    fmLibelle: true,
+                    fmReferent: true,
+                    fmIsComplet: true,
+                    fmNbUtilisee: true,
+                    fmParcoursPorteur: true,
+                    fmFormation: true
+                };
+                break;
         }
     }
 
