@@ -69,11 +69,9 @@ class UpdateDroitsCommand extends Command
                 }
             }
 
-
             $profil->setOnlyAdmin($role->isOnlyAdmin());
             $tabProfils[$role->getCodeRole()] = $profil;
             $this->entityManager->persist($profil);
-
         }
         $this->entityManager->flush();
 
@@ -160,13 +158,10 @@ class UpdateDroitsCommand extends Command
                 $up->setProfil($tabProfils['ROLE_CO_RESP_PARCOURS']);
                 $up->setParcours($parc);
                 $this->entityManager->persist($up);
-
             }
         }
 
-
         $this->entityManager->flush();
-
 
         $io->success('You have a new command! Now make it your own! Pass --help to see your options.');
 
