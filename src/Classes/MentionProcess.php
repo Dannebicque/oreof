@@ -14,7 +14,7 @@ use Symfony\Component\Yaml\Yaml;
 
 class MentionProcess extends AbstractValidationProcess
 {
-    public function __construct(KernelInterface $kernel,)
+    public function __construct(KernelInterface $kernel)
     {
         $file = $kernel->getContainer()->getParameter('kernel.project_dir') . '/config/processMention.yaml';
 

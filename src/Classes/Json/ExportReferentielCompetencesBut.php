@@ -24,7 +24,7 @@ class ExportReferentielCompetencesBut
                 'id' => $idCompetence,
                 'libelle' => $competence->getLibelle(),
                 'composantes_essentielles' => $competence->getComposantes(),
-                'nonCourt' => $competence->getNomCourt(),
+                'nomCourt' => $competence->getNomCourt(),
                 'numero' => $competence->getNumero(),
                 'situations_professionnelles' => $competence->getSituations(),
                 'niveaux' => []

@@ -13,6 +13,7 @@ use App\Entity\Langue;
 use App\Form\LangueType;
 use App\Repository\LangueRepository;
 use App\Utils\JsonRequest;
+use JsonException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -96,7 +97,7 @@ class LangueController extends AbstractController
     }
 
     /**
-     * @throws \JsonException
+     * @throws JsonException
      */
     #[Route('/{id}', name: 'app_langue_delete', methods: ['DELETE'])]
     public function delete(

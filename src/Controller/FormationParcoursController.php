@@ -11,20 +11,17 @@ namespace App\Controller;
 
 use App\Entity\Formation;
 use App\Repository\ParcoursRepository;
-use App\TypeDiplome\TypeDiplomeRegistry;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-class FormationParcoursController extends AbstractController
+class FormationParcoursController extends BaseController
 {
     #[Route('/formation/parcours/liste/{formation}', name: 'app_formation_liste_parcours')]
     public function liste(
-        TypeDiplomeRegistry $typeDiplomeRegistry,
         ParcoursRepository  $parcoursRepository,
         Formation $formation
     ): Response {
-        $typeDiplome = $typeDiplomeRegistry->getTypeDiplome($formation->getTypeDiplome()?->getModeleMcc());
+        $typeDiplome = $this->typeDiplomeResolver->get($formation->getTypeDiplome());
         $parcours = $parcoursRepository->findByFormation($formation);
         return $this->render('formation_parcours/_liste.html.twig', [
             'parcours' => $parcours,

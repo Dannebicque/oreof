@@ -182,7 +182,7 @@ class DpeDemandeRepository extends ServiceEntityRepository
             $etatValidation = EtatDpeEnum::tryFrom($params['etatValidation']);
             if ($etatValidation !== null) {
                 return array_filter($data, function (DpeDemande $demande) use ($etatValidation) {
-                    return $demande->getEtatDemande() === $etatValidation;
+                    return $demande->etatValidation() === $etatValidation;
                 });
             }
 

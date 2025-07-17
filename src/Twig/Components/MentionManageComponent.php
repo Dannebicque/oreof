@@ -19,7 +19,7 @@ use Symfony\UX\TwigComponent\Attribute\PostMount;
 #[AsLiveComponent('mention_manage')]
 final class MentionManageComponent extends AbstractController
 {
-    public const TAB = [
+    public const array TAB = [
         'initialisation_dpe' => 'formation',
         'autorisation_saisie' => null,
         'en_cours_redaction' => null,
@@ -46,7 +46,7 @@ final class MentionManageComponent extends AbstractController
         'soumis_conseil_reserve' => 'cfvu',
     ];
 
-    public const TAB_PROCESS = [
+    public const array TAB_PROCESS = [
         'ouverture_ses_ss_cfvu' => 0,
         'cloture_ses_ss_cfvu' => 0,
         'parcours' => 0,

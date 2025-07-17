@@ -5,7 +5,8 @@ namespace App\Form;
 use App\Entity\TypeDiplome;
 use App\Form\Type\TextareaAutoSaveType;
 use App\Form\Type\YesNoType;
-use App\TypeDiplome\TypeDiplomeRegistry;
+use App\TypeDiplome\TypeDiplomeHandlerInterface;
+use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -14,13 +15,24 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class TypeDiplomeType extends AbstractType
 {
+    private iterable $typeDiplomeHandlers;
+
     public function __construct(
-        private TypeDiplomeRegistry $typeDiplomeRegistry
+        #[TaggedIterator('app.type_diplome_handler')] iterable $typeDiplomeHandlers
     )
     {
+        $this->typeDiplomeHandlers = $typeDiplomeHandlers;
     }
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $choices = [];
+        foreach ($this->typeDiplomeHandlers as $handler) {
+            if ($handler instanceof TypeDiplomeHandlerInterface) {
+                $choices[get_class($handler)] = get_class($handler);
+            }
+        }
+
         $builder
             ->add('libelle')
             ->add('libelle_court')
@@ -72,7 +84,7 @@ class TypeDiplomeType extends AbstractType
             ->add('nbEctsMaxUe')
             ->add('nbEcParUe')
             ->add('ModeleMcc', ChoiceType::class, [
-                'choices' => $this->typeDiplomeRegistry->getChoices(),
+                'choices' => $choices,
             ])
             ->add('debutSemestreFlexible')
             ->add('hasMemoire', YesNoType::class)

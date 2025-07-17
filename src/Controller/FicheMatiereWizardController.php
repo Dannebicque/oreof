@@ -9,7 +9,6 @@
 
 namespace App\Controller;
 
-use App\Classes\GetDpeParcours;
 use App\Entity\FicheMatiere;
 use App\Entity\FicheMatiereMutualisable;
 use App\Form\FicheMatiereStep1Type;
@@ -24,11 +23,9 @@ use App\Repository\FicheMatiereMutualisableRepository;
 use App\Repository\FormationRepository;
 use App\Repository\ParcoursRepository;
 use App\Repository\TypeEpreuveRepository;
-use App\TypeDiplome\TypeDiplomeRegistry;
-use App\Utils\Access;
+use App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException;
 use App\Utils\JsonRequest;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -43,7 +40,7 @@ class FicheMatiereWizardController extends BaseController
     }
 
     /**
-     * @throws \App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException
+     * @throws TypeDiplomeNotFoundException
      */
     #[Route('/{id}/synthese', name: 'app_fiche_matiere_wizard_synthese', methods: ['GET'])]
     public function synthese(
@@ -249,16 +246,11 @@ class FicheMatiereWizardController extends BaseController
 
     #[Route('/{ficheMatiere}/4/{type}', name: 'app_fiche_matiere_wizard_step_4', methods: ['GET'])]
     public function step4(
-        TypeDiplomeRegistry $typeDiplomeRegistry,
         TypeEpreuveRepository        $typeEpreuveRepository,
 
         FicheMatiere        $ficheMatiere,
         string              $type,
     ): Response {
-        if ($ficheMatiere->getParcours() !== null) {
-            $dpeParcours = GetDpeParcours::getFromParcours($ficheMatiere->getParcours());
-        }
-
         $parcours = [];
         $ecProprietaire = null;
         foreach ($ficheMatiere->getElementConstitutifs() as $ec) {
@@ -273,13 +265,13 @@ class FicheMatiereWizardController extends BaseController
 
         $typeDiplome = $ficheMatiere->getParcours()?->getFormation()?->getTypeDiplome();
 
+        if ($typeDiplome === null) {
+            throw new TypeDiplomeNotFoundException('Type de diplôme non trouvé pour la fiche matière.');
+        }
+
         if ($type === 'but') {
-//            dump($dpeParcours);
-//            if ($dpeParcours !==null && !Access::isAccessible($dpeParcours, 'cfvu')) {
-//                return $this->render('fiche_matiere_wizard/_access_denied.html.twig');
-//            }
             $form = $this->createForm(FicheMatiereStep4Type::class, $ficheMatiere);
-            $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());
+            $typeD = $this->typeDiplomeResolver->get($typeDiplome);
 
             return $this->render('fiche_matiere_wizard/_step4But.html.twig', [
                 'mcccs' => $typeD->getMcccs($ficheMatiere),
@@ -298,8 +290,7 @@ class FicheMatiereWizardController extends BaseController
         }
 
         if ($type === 'other') {
-            $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());
-            // $form = $this->createForm(FicheMatiereStep4HdType::class, $ficheMatiere);
+            $typeD = $this->typeDiplomeResolver->get($typeDiplome);
             return $this->render('fiche_matiere_wizard/_step4Other.html.twig', [
                 'ficheMatiere' => $ficheMatiere,
                'parcours' => $parcours,
@@ -309,9 +300,10 @@ class FicheMatiereWizardController extends BaseController
                 'ecProprietaire' => $ecProprietaire,
                 'typeMccc' => $ficheMatiere->getTypeMccc(),
                 'templateForm' => $typeD !== null ? $typeD::TEMPLATE_FORM_MCCC : '',
-               // 'form' => $form->createView(),
             ]);
         }
+
+        throw new \InvalidArgumentException('Type de fiche matière non géré : ' . $type);
     }
 
     private function updateFicheMatiereMutualisable(

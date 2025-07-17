@@ -60,11 +60,11 @@ class Etablissement
     #[ORM\Column(length: 255)]
     private ?string $emailCentral = null;
 
-//    /**
-//     * @var Collection<int, UserProfil>
-//     */
-//    #[ORM\OneToMany(mappedBy: 'etablissement', targetEntity: UserProfil::class)]
-//    private Collection $userProfils;
+    /**
+     * @var Collection<int, UserProfil>
+     */
+    #[ORM\OneToMany(mappedBy: 'etablissement', targetEntity: UserProfil::class)]
+    private Collection $userProfils;
 
     public function __construct()
     {
@@ -301,33 +301,33 @@ class Etablissement
         return $this;
     }
 
-//    /**
-//     * @return Collection<int, UserProfil>
-//     */
-//    public function getUserProfils(): Collection
-//    {
-//        return $this->userProfils;
-//    }
-//
-//    public function addUserProfil(UserProfil $userProfil): static
-//    {
-//        if (!$this->userProfils->contains($userProfil)) {
-//            $this->userProfils->add($userProfil);
-//            $userProfil->setEtablissement($this);
-//        }
-//
-//        return $this;
-//    }
-//
-//    public function removeUserProfil(UserProfil $userProfil): static
-//    {
-//        if ($this->userProfils->removeElement($userProfil)) {
-//            // set the owning side to null (unless already changed)
-//            if ($userProfil->getEtablissement() === $this) {
-//                $userProfil->setEtablissement(null);
-//            }
-//        }
-//
-//        return $this;
-//    }
+    /**
+     * @return Collection<int, UserProfil>
+     */
+    public function getUserProfils(): Collection
+    {
+        return $this->userProfils;
+    }
+
+    public function addUserProfil(UserProfil $userProfil): static
+    {
+        if (!$this->userProfils->contains($userProfil)) {
+            $this->userProfils->add($userProfil);
+            $userProfil->setEtablissement($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserProfil(UserProfil $userProfil): static
+    {
+        if ($this->userProfils->removeElement($userProfil)) {
+            // set the owning side to null (unless already changed)
+            if ($userProfil->getEtablissement() === $this) {
+                $userProfil->setEtablissement(null);
+            }
+        }
+
+        return $this;
+    }
 }

@@ -9,6 +9,7 @@
 
 namespace App\Enums;
 
+/** @deprecated("Profil et centre ?") */
 enum RoleNiveauEnum: string
 {
     case ETABLISSEMENT = 'ETABLISSEMENT';
@@ -19,7 +20,7 @@ enum RoleNiveauEnum: string
 //    case SCOLARITE = 'SCOLARITE';
 
 
-    public static function getAvailableTypes()
+    public static function getAvailableTypes(): array
     {
         return [
             self::ETABLISSEMENT->value,

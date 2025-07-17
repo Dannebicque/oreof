@@ -10,9 +10,10 @@
 namespace App\EventSubscriber\DpeWorkflow;
 
 use App\Entity\DpeParcours;
-use App\TypeDiplome\TypeDiplomeRegistry;
+use App\Service\TypeDiplomeResolver;
 use App\Utils\Tools;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Workflow\Event\Event;
@@ -21,7 +22,7 @@ class DpeSauvegardeSubscriber implements EventSubscriberInterface
 {
     private string $dir;
     public function __construct(
-        private TypeDiplomeRegistry $typeDiplomeRegistry,
+        private TypeDiplomeResolver $typeDiplomeResolver,
         KernelInterface             $kernel,
         private readonly EntityManagerInterface $entityManager
     ) {
@@ -45,36 +46,34 @@ class DpeSauvegardeSubscriber implements EventSubscriberInterface
             $parcours = $dpeParcours->getParcours();
             $dpe = $dpeParcours->getCampagneCollecte();
             if (null === $parcours) {
-                throw new \Exception('Parcours non trouvé');
+                throw new Exception('Parcours non trouvé');
             }
             $formation = $parcours->getFormation();
 
             if (null === $formation) {
-                throw new \Exception('Pas de formation.');
+                throw new Exception('Pas de formation.');
             }
         } else {
             return ;
         }
-        $typeDiplome = $this->typeDiplomeRegistry->getTypeDiplome($formation->getTypeDiplome()?->getModeleMcc());
+        $typeDiplome = $this->typeDiplomeResolver->get($formation->getTypeDiplome());
 
         if (null === $typeDiplome) {
-            throw new \Exception('Aucun modèle MCC n\'est défini pour ce diplôme');
+            throw new Exception('Aucun modèle MCC n\'est défini pour ce diplôme');
         }
 
         if (null === $dpe) {
-            throw new \Exception('Aucune campagne de collecte n\'est définie pour ce diplôme');
+            throw new Exception('Aucune campagne de collecte n\'est définie pour ce diplôme');
         }
 
 
-        $fichier = Tools::FileName('MCCC - ' . $dpe->getAnneeUniversitaire()?->getLibelle() . ' - ' . $parcours->getId().'-v'.$dpeParcours->getVersion(), 50);
+        $fichier = Tools::FileName('MCCC - ' . $dpe->getAnneeUniversitaire()?->getLibelle() . ' - ' . $parcours->getId() . '-v' . $dpeParcours->getVersion());
 
 
         $export = $typeDiplome->exportExcelAndSaveVersionMccc(
             $dpe,
             $parcours,
             $this->dir,
-            null,
-            null,
             $fichier
         );
 

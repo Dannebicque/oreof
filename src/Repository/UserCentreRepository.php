@@ -17,6 +17,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
+ * @deprecated
  * @extends ServiceEntityRepository<UserCentre>
  *
  * @method UserCentre|null find($id, $lockMode = null, $lockVersion = null)

@@ -11,6 +11,7 @@ use App\Entity\Parcours;
 use App\Entity\User;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -54,8 +55,8 @@ class PublishValidParcoursCommand extends Command
     protected function configure(): void
     {
         $this->addOption(
-            name: 'date-is-today', 
-            mode: InputOption::VALUE_NONE, 
+            name: 'date-is-today',
+            mode: InputOption::VALUE_NONE,
             description: "Met à jour le workflow et l'historique pour les parcours à publier aujourd'hui"
         )->addOption(
             name: 'export-missing',
@@ -69,7 +70,7 @@ class PublishValidParcoursCommand extends Command
         ini_set('memory_limit', '2048M');
 
         $io = new SymfonyStyle($input, $output);
-        
+
         $dateIsToday = $input->getOption('date-is-today');
 
         $exportMissing = $input->getOption('export-missing');
@@ -77,13 +78,11 @@ class PublishValidParcoursCommand extends Command
         if ($dateIsToday) {
             $io->writeln("Récupération des parcours à publier aujourd'hui...");
 
-            $today = new DateTime('now');
-
             $dpe = $this->entityManager->getRepository(CampagneCollecte::class)->findOneBy(['defaut' => true]);
 
             $parcoursArray = $this->entityManager->getRepository(Parcours::class)
                 ->findAllParcoursForDpe($dpe);
-            
+
             $parcoursArray = array_filter(
                 $parcoursArray,
                 fn($p) => $p->getDpeParcours()->last() instanceof DpeParcours
@@ -93,7 +92,8 @@ class PublishValidParcoursCommand extends Command
             // Récupération des parcours à publier aujourd'hui
             $parcoursArray = array_filter(
                 $parcoursArray,
-                function($p) use ($today) {
+                function ($p) {
+                    $today = new DateTime('now');
                     $dateHistoriqueValide = $this->getHistorique
                         ->getHistoriqueParcoursLastStep(
                             $p->getDpeParcours()->last(), 'valide_cfvu'
@@ -102,14 +102,14 @@ class PublishValidParcoursCommand extends Command
                     $dateFormat = "d-m-Y";
 
                     return $dateHistoriqueValide?->format($dateFormat) === $today->format($dateFormat);
-                }  
+                }
             );
-            
+
             $nombreParcours = count($parcoursArray);
             $io->writeln("Il y a {$nombreParcours} parcours à traiter.");
 
             try {
-                if($nombreParcours > 0){                
+                if ($nombreParcours > 0) {
                     // Récupérer l'utilisateur admin
                     $adminUser = $this->entityManager->getRepository(User::class)->findOneBy(['username' => 'admin']);
 
@@ -138,14 +138,14 @@ class PublishValidParcoursCommand extends Command
 
                 return Command::SUCCESS;
 
-            }catch(\Exception $e){
+            } catch (Exception $e) {
                 $now = (new DateTime())->format('d-m-Y_H-i-s');
                 $logTxt = "[{$now}] La publication des parcours a rencontré une erreur.\nMessage : {$e->getMessage()}\n";
                 $this->filesystem->appendToFile(__DIR__ . "/../../publication-cron/publication-cron.error.log", $logTxt);
                 $io->writeln("Le script a rencontré une erreur. Le fichier de log a été généré.");
 
                 return Command::FAILURE;
-            }       
+            }
         }
         if($exportMissing){
             if(in_array($exportMissing, ['not-valid', 'no-cfvu-date', 'no-conseil-date']) === false){
@@ -155,7 +155,7 @@ class PublishValidParcoursCommand extends Command
             $dpe = $this->entityManager
                 ->getRepository(CampagneCollecte::class)
                 ->findOneBy(['defaut' => true]);
-            
+
             $parcoursArray = $this->entityManager
                 ->getRepository(Parcours::class)
                 ->findAllParcoursForDpe($dpe);
@@ -163,7 +163,7 @@ class PublishValidParcoursCommand extends Command
             if($exportMissing === "not-valid"){
                 // On garde ceux qui ne sont pas à l'état "valide_a_publier"
                 $parcoursArray = array_filter(
-                    $parcoursArray, 
+                    $parcoursArray,
                     function($p) {
                         $lastDpe = $p->getDpeParcours()->last();
                         return $lastDpe instanceof DpeParcours
@@ -198,15 +198,15 @@ class PublishValidParcoursCommand extends Command
                         ->getHistoriqueParcoursLastStep($dpeParcours, 'soumis_conseil')
                         ?->getDate() === null;
                         $isValideAPublier = $p
-                            ->getDpeParcours()->last() instanceof DpeParcours 
-                            && ($p->getDpeParcours()->last()->getEtatValidation() === ["valide_a_publier" => 1] 
-                            || $p->getDpeParcours()->last()->getEtatValidation() === ["publie" => 1] 
+                                ->getDpeParcours()->last() instanceof DpeParcours
+                            && ($p->getDpeParcours()->last()->getEtatValidation() === ["valide_a_publier" => 1]
+                                || $p->getDpeParcours()->last()->getEtatValidation() === ["publie" => 1]
                             );
                         return $historiqueConseil && $isValideAPublier;
                     }
                 );
                 $exportName = "valides-aucune-date-de-conseil";
-            }   
+            }
 
             $nombreParcours = count($parcoursArray);
             $io->writeln("Il y a {$nombreParcours} parcours qui ne sont pas encore validés");
@@ -216,7 +216,7 @@ class PublishValidParcoursCommand extends Command
                     $parcours->getFormation()->getDisplayLong() . " " . $parcours->getDisplay(),
                     $parcours->getSigle() ?? '---',
                     $parcours->getId(),
-                    $parcours->getDpeParcours()->last()->getEtatValidation() 
+                    $parcours->getDpeParcours()->last()->getEtatValidation()
                     ? array_keys($parcours->getDpeParcours()->last()->getEtatValidation())[0]
                     : "---"
                 ];

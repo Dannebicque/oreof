@@ -8,14 +8,14 @@
     </tr>
     </thead>
     <tbody>
-    {% for centre in centresUser %}
+    {% for userProfil in userProfils %}
         <tr>
-            <td>{{ centre.typeCentre != null ? centre.typeCentre.libelle : 'Non précisé' }}</td>
-            <td>{{ centre.displaySimple != null ? centre.displaySimple : 'Non précisé' }}</td>
-            <td>{{ centre.droits|badgeDroits }}</td>
+            <td>{{ userProfil|badgeTypeCentre }}</td>
+            <td>{{ userProfil|centre }}</td>
+            <td>{{ userProfil.profil.libelle }}</td>
             <td><button {{ stimulus_action('centre', 'delete', 'click', {
-                    url:path('app_user_gestion_delete_centre',{'id': centre.id}),
-                    csrf: csrf_token('delete' ~ centre.id)
+                    url:path('app_user_gestion_delete_centre',{'id': userProfil.id}),
+                    csrf: csrf_token('delete' ~ userProfil.id)
                 }) }} class="btn btn-sm text-danger">
                     <i class="{{ iconDelete }}"></i> Supprimer
                 </button></td>

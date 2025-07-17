@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Enums\TypeModificationDpeEnum;
 use App\Repository\DpeParcoursRepository;
+use DateTime;
+use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -18,7 +20,7 @@ class DpeParcours
     #[ORM\ManyToOne(inversedBy: 'dpeParcours')]
     private ?CampagneCollecte $campagneCollecte = null;
 
-    #[ORM\ManyToOne(inversedBy: 'dpeParcours', cascade: ['persist'])]
+    #[ORM\ManyToOne(cascade: ['persist'], inversedBy: 'dpeParcours')]
     private ?Parcours $parcours = null;
 
     #[ORM\Column]
@@ -27,11 +29,11 @@ class DpeParcours
     #[ORM\Column(length: 10)]
     private ?string $version = null;
 
-    #[ORM\Column(length: 255, enumType: TypeModificationDpeEnum::class, nullable: true)]
+    #[ORM\Column(length: 255, nullable: true, enumType: TypeModificationDpeEnum::class)]
     private ?TypeModificationDpeEnum $etatReconduction;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $created;
+    private ?DateTimeInterface $created;
 
     #[ORM\ManyToOne(inversedBy: 'dpeParcours')]
     private ?Formation $formation = null;
@@ -39,7 +41,7 @@ class DpeParcours
 
     public function __construct()
     {
-        $this->created = new \DateTime();
+        $this->created = new DateTime();
         $this->etatReconduction = TypeModificationDpeEnum::CREATION;
     }
 
@@ -108,12 +110,12 @@ class DpeParcours
         return $this;
     }
 
-    public function getCreated(): ?\DateTimeInterface
+    public function getCreated(): ?DateTimeInterface
     {
         return $this->created;
     }
 
-    public function setCreated(\DateTimeInterface $created): static
+    public function setCreated(DateTimeInterface $created): static
     {
         $this->created = $created;
 
@@ -162,5 +164,29 @@ class DpeParcours
         return $this->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_TEXTE ||
             $this->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_MCCC_TEXTE ||
             $this->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_MCCC;
+    }
+
+    public function etatDemande(): ?DpeDemande
+    {
+        // récupère la dernière demande (selon le champs updated) associée à ce parcours ou à la formation si pas de parcours ?
+        $demandes = $this->getParcours()?->getDpeDemandes()->toArray();
+        if (empty($demandes)) {
+            $demandes = $this->getFormation()?->getDpeDemandes()->toArray();
+        }
+
+        if (empty($demandes)) {
+            return null;
+        }
+
+        usort($demandes, function (DpeDemande $a, DpeDemande $b) {
+            return $b->getUpdated()?->getTimestamp() <=> $a->getUpdated()?->getTimestamp();
+        });
+
+        // tester si la demande est cloturée
+        if ($demandes[0]->getDateCloture() !== null) {
+            return null; // la dernière demande est cloturée
+        }
+
+        return $demandes[0];
     }
 }

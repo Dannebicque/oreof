@@ -18,7 +18,7 @@ use Symfony\UX\TwigComponent\Attribute\PostMount;
 final class FicheMatiereManageComponent extends AbstractController
 {
 
-    const TAB = [
+    const array TAB = [
         'en_cours_redaction' => 'fiche_matiere',
         'soumis_central' => 'soumis_central',
         'valide_pour_publication' => 'valide_pour_publication',
@@ -90,7 +90,7 @@ final class FicheMatiereManageComponent extends AbstractController
     }
 
 
-    private function getPlace()
+    private function getPlace(): int|string
     {
         if (null === $this->ficheMatiere) {
             return 'initialisation_dpe';

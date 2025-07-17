@@ -11,12 +11,12 @@ namespace App\Classes\verif;
 
 abstract class AbstractValide
 {
-    public const COMPLET = 'complet';
-    public const INCOMPLET = 'incomplet';
-    public const INCOMPLET_ECTS = 'incomplet_ects';
-    public const VIDE = 'vide';
-    public const ERREUR = 'erreur';
-    public const NON_CONCERNE = 'non_concerne';
+    public const string COMPLET = 'complet';
+    public const string INCOMPLET = 'incomplet';
+    public const string INCOMPLET_ECTS = 'incomplet_ects';
+    public const string VIDE = 'vide';
+    public const string ERREUR = 'erreur';
+    public const string NON_CONCERNE = 'non_concerne';
 
     protected function nonVide(?string $field): string
     {

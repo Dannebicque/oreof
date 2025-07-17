@@ -290,7 +290,8 @@ class ProcessValidationController extends BaseController
         Request               $request,
         string                $type,
         int                   $id
-    ) {
+    ): Response
+    {
         if ($request->isMethod('POST')) {
             $data = $request->request->all();
             $place = $data['etat'];
@@ -333,7 +334,6 @@ class ProcessValidationController extends BaseController
                     $this->eventDispatcher->dispatch($histoEvent, HistoriqueParcoursEvent::ADD_HISTORIQUE_PARCOURS);
                     $this->entityManager->flush();
                     return JsonReponse::success('Validation modifiée');
-                    break;
             }
 
             return JsonReponse::error('Erreur lors de la modification de l\'état de validation');
@@ -370,8 +370,7 @@ class ProcessValidationController extends BaseController
             $sParcours = $request->query->get('parcours');
         }
         $allParcours = explode(',', $sParcours);
-
-        $process = $this->validationProcess->getEtape($etape);
+        $process = $this->validationProcess->getEtapeFromAll($etape);
         $meta = $this->validationProcess->getMetaFromTransition($transition);
         $laisserPasser = false;
         $tParcours = [];
@@ -408,7 +407,6 @@ class ProcessValidationController extends BaseController
             $this->toast('success', 'Parcours validés');
             return $this->redirectToRoute('app_validation_index');
         }
-
 
         return $this->render('process_validation/_valide_lot.html.twig', [
             'formations' => $tParcours,

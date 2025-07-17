@@ -16,11 +16,12 @@ use App\Enums\EtatRemplissageEnum;
 use App\Enums\ModaliteEnseignementEnum;
 use App\Repository\ButApprentissageCritiqueRepository;
 use App\Repository\CompetenceRepository;
-use App\Repository\FicheMatiereRepository;
 use App\Repository\LangueRepository;
 use App\Repository\UserRepository;
+use App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException;
 use App\Utils\JsonRequest;
 use Doctrine\ORM\EntityManagerInterface;
+use JsonException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -28,8 +29,8 @@ use Symfony\Component\Routing\Attribute\Route;
 class FicheMatiereSaveController extends BaseController
 {
     /**
-     * @throws \App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException
-     * @throws \JsonException
+     * @throws TypeDiplomeNotFoundException
+     * @throws JsonException
      */
     #[Route('/fiche_matiere/save/{ficheMatiere}', name: 'app_fiche_matiere_save')]
     public function save(

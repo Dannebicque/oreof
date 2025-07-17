@@ -13,6 +13,7 @@ use App\Classes\GetDpeParcours;
 use App\Entity\Formation;
 use App\Enums\EtatProcessMentionEnum;
 use App\Enums\TypeModificationDpeEnum;
+use Exception;
 use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\Workflow\WorkflowInterface;
 use Symfony\UX\TwigComponent\Attribute\AsTwigComponent;
@@ -56,20 +57,14 @@ class FormationStateComponent
             orange - réserve (est-ce utile ?)
             vert - tous les DPE parcours sont à l'état publication + formation OK
          */
-        switch ($etat) {
-            case 'fiche_matiere':
-                return $this->getEtatFichesMatieres();
-            case 'parcours':
-                return $this->getEtatParcours();
-            case 'formation':
-                return $this->getEtatFormation();
-            case 'change_rf':
-                return $this->getEtatChangeRf();
-            case 'publication':
-                return $this->getEtatPublication();
-            default:
-                return EtatProcessMentionEnum::WIP;
-        }
+        return match ($etat) {
+            'fiche_matiere' => $this->getEtatFichesMatieres(),
+            'parcours' => $this->getEtatParcours(),
+            'formation' => $this->getEtatFormation(),
+            'change_rf' => $this->getEtatChangeRf(),
+            'publication' => $this->getEtatPublication(),
+            default => EtatProcessMentionEnum::WIP,
+        };
     }
 
     private function getEtatParcours(): EtatProcessMentionEnum
@@ -215,7 +210,7 @@ class FormationStateComponent
             if (null !== $objet) {
                 try {
                     $etat = array_keys($this->dpeParcoursWorkflow->getMarking($objet)->getPlaces())[0];
-                } catch (\Exception $e) {
+                } catch (Exception $e) {
                     $etat = 'autorisation_saisie';
                 }
 

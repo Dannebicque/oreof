@@ -34,7 +34,7 @@ class DpeCfvuMailSubscriber extends AbstractDpeMailSubscriber implements EventSu
     {
         return [
             'workflow.dpeParcours.transition.refuser_definitif_cfvu' => 'onRefuseCfvu',
-            'workflow.dpeParcours.transition.refuser_revoir_cfvu' => 'onRefuseCfvu',
+            'workflow.dpeParcours.transition.refuser_revoir_cfvu' => 'onReserveCfvu',
             'workflow.dpeParcours.transition.valider_reserve_cfvu' => 'onValideCfvu',
             'workflow.dpeParcours.transition.valider_reserve_conseil_cfvu' => 'onValideCfvu',
             'workflow.dpeParcours.transition.valider_reserve_central_cfvu' => 'onValideCfvu',
@@ -42,27 +42,48 @@ class DpeCfvuMailSubscriber extends AbstractDpeMailSubscriber implements EventSu
         ];
     }
 
+    public function onReserveCfvu(Event $event): void
+    {
+        $data = $this->getDataFromEvent($event);
+        if ($data === null) {
+            return;
+        }
+        $context = $event->getContext();
+
+        //todo: check si le responsable de formation accepte le mail
+        $this->myMailer->initEmail();
+        $this->myMailer->setTemplate(
+            'mails/workflow/formation/reserve_cfvu.html.twig',
+            array_merge($this->getData(), ['context' => $event->getContext()])
+        );
+
+        $titre = $this->hasParcours ?
+            'Votre parcours ' . $this->parcours->getLibelle() . ' de la formation ' . $this->formation->getDisplay() . ' a reçu des réserves de la CFVU' :
+            'Votre formation ' . $this->formation->getDisplay() . ' a reçu des réserves de la CFVU';
+
+        $this->myMailer->sendMessage(
+            $this->getDestinataires(true),
+            '[ORéOF] ' . $titre
+        );
+    }
+
+
     public function onRefuseCfvu(Event $event): void
     {
-        //mail au RF
-        /** @var Formation $formation */
-        $formation = $event->getSubject();
-        $dpe = $formation->getComposantePorteuse()?->getResponsableDpe();
+        $data = $this->getDataFromEvent($event);
+        if ($data === null) {
+            return;
+        }
+        $context = $event->getContext();
+
         //todo: check si le responsable de formation accepte le mail
         $this->myMailer->initEmail();
         $this->myMailer->setTemplate(
             'mails/workflow/formation/refuse_cfvu.html.twig',
-            [
-                'dpe' => $dpe,
-                'formation' => $formation,
-                'context' => $event->getContext(),
-            ]
+            array_merge($this->getData(), ['context' => $event->getContext()])
         );
         $this->myMailer->sendMessage(
-            [
-                $dpe?->getEmail(),
-                $formation->getResponsableMention()?->getEmail(),
-                $formation->getCoResponsable()?->getEmail()],
+            $this->getDestinataires(true),
             '[ORéOF]  Votre formation a été refusée par la CFVU'
         );
     }

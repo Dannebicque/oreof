@@ -13,6 +13,7 @@ use App\Entity\Actualite;
 use App\Form\ActualiteType;
 use App\Repository\ActualiteRepository;
 use App\Utils\JsonRequest;
+use JsonException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -96,7 +97,7 @@ class ActualiteController extends AbstractController
     }
 
     /**
-     * @throws \JsonException
+     * @throws JsonException
      */
     #[Route('/{id}', name: 'app_actualite_delete', methods: ['DELETE'])]
     public function delete(

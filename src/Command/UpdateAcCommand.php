@@ -40,9 +40,7 @@ class UpdateAcCommand extends Command
             //pour chaque apprentissageCritique
             foreach ($ec->getApprentissagesCritiques() as $ac) {
                 $fiche = $ec->getFicheMatiere();
-                if ($fiche !== null) {
-                    $fiche->addApprentissagesCritique($ac);
-                }
+                $fiche?->addApprentissagesCritique($ac);
             }
         }
 

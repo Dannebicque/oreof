@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\ParcoursVersioningRepository;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ParcoursVersioningRepository::class)]
@@ -18,7 +19,7 @@ class ParcoursVersioning
     private ?Parcours $parcours = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $version_timestamp = null;
+    private ?DateTimeImmutable $version_timestamp = null;
 
     #[ORM\Column(length: 255)]
     private ?string $parcoursFileName = null;
@@ -46,12 +47,12 @@ class ParcoursVersioning
         return $this;
     }
 
-    public function getVersionTimestamp(): ?\DateTimeImmutable
+    public function getVersionTimestamp(): ?DateTimeImmutable
     {
         return $this->version_timestamp;
     }
 
-    public function setVersionTimestamp(\DateTimeImmutable $version_timestamp): static
+    public function setVersionTimestamp(DateTimeImmutable $version_timestamp): static
     {
         $this->version_timestamp = $version_timestamp;
 

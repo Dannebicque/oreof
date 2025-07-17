@@ -14,11 +14,15 @@ use App\Classes\MyGotenbergPdf;
 use App\Entity\FicheMatiere;
 use App\Entity\Parcours;
 use App\Message\Export;
+use App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException;
 use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 class FicheMatiereExportController extends AbstractController
 {
@@ -28,10 +32,10 @@ class FicheMatiereExportController extends AbstractController
     }
 
     /**
-     * @throws \Twig\Error\SyntaxError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\LoaderError
-     * @throws \App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     * @throws TypeDiplomeNotFoundException
      */
     #[Route('/fiche-matiere/export/{id}', name: 'app_fiche_matiere_export')]
     public function export(FicheMatiere $ficheMatiere): Response

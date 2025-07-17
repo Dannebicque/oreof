@@ -22,7 +22,6 @@ abstract class CleanTexte
         if ($striptag) {
             $texte = strip_tags($texte);
         }
-        $texte = str_replace(['&nbsp;'], ' ', $texte);
-        return $texte;
+        return str_replace(['&nbsp;'], ' ', $texte);
     }
 }

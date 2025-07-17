@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Classes\CalculStructureParcours;
 use App\Classes\Export\ExportBcc;
 use App\Classes\MyGotenbergPdf;
 use App\Entity\Parcours;

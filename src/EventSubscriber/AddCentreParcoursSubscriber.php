@@ -10,18 +10,25 @@
 namespace App\EventSubscriber;
 
 use App\Classes\Mailer;
-use App\Entity\UserCentre;
+use App\Entity\UserProfil;
 use App\Events\AddCentreParcoursEvent;
+use App\Events\NotifCentreFormationEvent;
+use App\Events\NotifCentreParcoursEvent;
 use App\Repository\ParcoursRepository;
-use App\Repository\UserCentreRepository;
+use App\Repository\UserProfilRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class AddCentreParcoursSubscriber implements EventSubscriberInterface
 {
     public function __construct(
-        protected Mailer $mailer,
+        protected EventDispatcherInterface    $eventDispatcher,
+        protected Mailer                      $mailer,
         protected ParcoursRepository $parcoursRepository,
-        protected UserCentreRepository $userCentreRepository,
+        protected EntityManagerInterface      $entityManager,
+        private readonly UserProfilRepository $userProfilRepository,
     ) {
     }
 
@@ -34,85 +41,64 @@ class AddCentreParcoursSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
+     * @throws TransportExceptionInterface
      */
     public function onAddCentreParcours(AddCentreParcoursEvent $event): void
     {
+        //todo: réécrire pour refactoriser avec la création de centre
         $user = $event->user ?? $event->parcours->getRespParcours();
         $parcours = $event->parcours;
         $campagneCollecte = $event->campagneCollecte;
-
-        if ($user === null || $parcours === null) {
-            return;
-        }
+        $profil = $event->droits;
 
         // on vérifie s'il est déjà dans un centre
-        $existe = $this->userCentreRepository->findOneBy(['user' => $user, 'formation' => $parcours->getFormation()]);
+        $existe = $this->userProfilRepository->findOneBy(['user' => $user, 'parcours' => $parcours]);
         // si oui, on vérifie s'il est déjà dans la formation
+
         if ($existe !== null) {
-            //on vérifie s'il a les droits suffisants
-            if (!in_array($event->droits[0], $existe->getDroits(), true)) {
-                // on ne fait rien
-                $existe->addRoleCode($event->droits[0]);
-                $this->userCentreRepository->save($existe, true);
+            //S'il existe on met à jour les droits
+            if (!$event->droits === $existe->getProfil()?->getCode()) {
+                // on récupère le profil correspondant
+                $existe->setProfil($profil);
+
+                $eventNotif = new NotifCentreParcoursEvent($parcours, $user, $profil);
+                $this->eventDispatcher->dispatch($eventNotif, NotifCentreParcoursEvent::NOTIF_UPDATE_CENTRE);
             }
         } else {
             // on ajoute le centre à la formation
-            $centre = new UserCentre();
+            $centre = new UserProfil();
             $centre->setUser($user);
-            $centre->setFormation($parcours->getFormation());
+            $centre->setParcours($parcours);
             $centre->setCampagneCollecte($campagneCollecte);
-            $centre->setDroits($event->droits);
-            $this->userCentreRepository->save($centre, true);
-        }
+            $centre->setProfil($profil);
+            $this->entityManager->persist($centre);
 
-        $this->mailer->initEmail();
-        $this->mailer->setTemplate(
-            'mails/parcours/add_centre_parcours.txt.twig',
-            ['user' => $user, 'parcours' => $parcours]
-        );
-        $this->mailer->sendMessage([$user->getEmail()], '[ORéOF] Accès à l\'application');
+            $eventNotif = new NotifCentreParcoursEvent($parcours, $user, $profil);
+            $this->eventDispatcher->dispatch($eventNotif, NotifCentreParcoursEvent::NOTIF_ADD_CENTRE);
+        }
     }
 
     /**
-     * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
+     * @throws TransportExceptionInterface
      */
-    public function onRemoveCentreParcours(AddCentreParcoursEvent $event): void
+    public function onRemoveCentreParcours(
+        AddCentreParcoursEvent $event): void
     {
-        $user = $event->user ?? $event->parcours->getRespParcours();
+        $user = $event->user;
         $parcours = $event->parcours;
 
-        if (($user === null) || ($parcours === null)) {
-            return;
-        }
-
         //on vérifie s'il est déjà dans le centre
-        $existe = $this->userCentreRepository->findOneBy(['user' => $user, 'formation' => $parcours->getFormation()]);
+        $existe = $this->userProfilRepository->findOneBy(['user' => $user, 'parcours' => $parcours]);
 
-        //Si oui, on vérifie s'il n'est pas responsable sur un autre parcours de la formation. Sinon, on supprime le centre
+        //si oui, on supprime le centre
         if ($existe !== null) {
-            $parcour = $this->parcoursRepository->findRespOtherParcoursInFormation($parcours, $user);
-            if (count($parcour) === 0) {
-                $droits = $existe->getDroits();
-                $key = array_search($event->droits[0], $droits, true);
-                if (false !== $key) {
-                    unset($droits[$key]);
-                }
+            $profil = $existe->getProfil();
 
-                if (count($droits) > 0) {
-                    $existe->setDroits($droits);
-                    $this->userCentreRepository->save($existe, true);
-                } else {
-                    $this->userCentreRepository->remove($existe, true);
-                }
-            }
+            $this->entityManager->remove($existe);
+            $this->entityManager->flush();
+
+            $eventNotif = new NotifCentreParcoursEvent($parcours, $user, $profil);
+            $this->eventDispatcher->dispatch($eventNotif, NotifCentreParcoursEvent::NOTIF_REMOVE_CENTRE);
         }
-
-        $this->mailer->initEmail();
-        $this->mailer->setTemplate(
-            'mails/parcours/remove_centre_parcours.txt.twig',
-            ['user' => $user, 'parcours' => $parcours]
-        );
-        $this->mailer->sendMessage([$user->getEmail()], '[ORéOF] Accès à l\'application');
     }
 }

@@ -12,11 +12,11 @@ namespace App\Classes\Export;
 use App\Classes\Excel\ExcelWriter;
 use App\Entity\CampagneCollecte;
 use App\Repository\FormationRepository;
+use App\Service\ProjectDirProvider;
 use App\Utils\CleanTexte;
 use App\Utils\Tools;
 use DateTime;
 use Symfony\Component\HttpFoundation\StreamedResponse;
-use Symfony\Component\HttpKernel\KernelInterface;
 
 class ExportCarif implements ExportInterface
 {
@@ -25,16 +25,16 @@ class ExportCarif implements ExportInterface
 
     public function __construct(
         protected ExcelWriter         $excelWriter,
-        KernelInterface               $kernel,
+        ProjectDirProvider $projectDirProvider,
         protected FormationRepository $formationRepository,
     ) {
-        $this->dir = $kernel->getProjectDir() . '/public/temp/';
+        $this->dir = $projectDirProvider->getProjectDir() . '/public/temp/';
     }
 
     private function prepareExport(
         CampagneCollecte $anneeUniversitaire,
     ): void {
-        $formations = $this->formationRepository->findBySearch('', $anneeUniversitaire, []);
+        $formations = $this->formationRepository->findBySearch('', $anneeUniversitaire);
         $this->excelWriter->createFromTemplate('export_carif.xlsx');
         $this->excelWriter->setActiveSheetIndex(0);
         $ligne = 2;
@@ -68,7 +68,7 @@ class ExportCarif implements ExportInterface
 //                    $this->excelWriter->writeCellXY('N', $ligne, $dureeEntreprise);
 //                    $this->excelWriter->writeCellXY('O', $ligne, $dureeFormation);
                     $this->excelWriter->writeCellXY('R', $ligne, $parcours->getLocalisation()?->getLibelle());
-                   ;
+
 //                    $this->excelWriter->getColumnsAutoSize('A', 'R');
                     $ligne++;
                 }

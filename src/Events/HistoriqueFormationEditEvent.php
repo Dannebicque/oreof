@@ -15,7 +15,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class HistoriqueFormationEditEvent extends AbstractHistoriqueEvent
 {
-    public const EDIT_HISTORIQUE_FORMATION = 'edit.historique.formation';
+    public const string EDIT_HISTORIQUE_FORMATION = 'edit.historique.formation';
 
     private HistoriqueFormation $historiqueFormation;
 

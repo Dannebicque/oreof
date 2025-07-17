@@ -9,10 +9,10 @@
 
 namespace App\Classes\Export;
 
-use App\Classes\CalculStructureParcours;
 use App\Classes\MyPDF;
 use App\Entity\CampagneCollecte;
 use DateTimeInterface;
+use ZipArchive;
 
 class ExportConseil
 {
@@ -27,10 +27,10 @@ class ExportConseil
 
     public function exportZip(): string
     {
-        $zip = new \ZipArchive();
+        $zip = new ZipArchive();
         $fileName = 'export_conseil_' . date('YmdHis') . '.zip';
         $zipName = $this->dir. '/zip/' . $fileName;
-        $zip->open($zipName, \ZipArchive::CREATE);
+        $zip->open($zipName, ZipArchive::CREATE);
 
         $tabFiles = [];
         $dir = $this->dir.'/pdf/';

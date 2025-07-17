@@ -10,6 +10,7 @@ use App\Entity\SemestreMutualisable;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @extends ServiceEntityRepository<SemestreMutualisable>
@@ -94,7 +95,7 @@ class SemestreMutualisableRepository extends ServiceEntityRepository
     }
 
 
-    public function findByParcours(User $user, array $options): array
+    public function findByParcours(array $options): array
     {
         $qb = $this->createQueryBuilder('s')
             ->join('s.semestre', 'sem');

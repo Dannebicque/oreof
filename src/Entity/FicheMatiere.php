@@ -23,19 +23,19 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 #[ORM\Entity(repositoryClass: FicheMatiereRepository::class)]
-#[ORM\Index(name: 'sigle_fiche', columns: ['sigle'], flags: ['fulltext'])]
-#[ORM\Index(name: 'slug_fiche', columns: ['slug'], flags: ['fulltext'])]
+#[ORM\Index(columns: ['sigle'], name: 'sigle_fiche', flags: ['fulltext'])]
+#[ORM\Index(columns: ['slug'], name: 'slug_fiche', flags: ['fulltext'])]
 #[ORM\HasLifecycleCallbacks]
 class FicheMatiere
 {
     use LifeCycleTrait;
     use HasBeenEditedTrait;
 
-    public const TYPE_MATIERE_COURS = 'matiere';
-    public const TYPE_MATIERE_SAE = 'sae';
-    public const TYPE_MATIERE_RESSOURCE = 'ressource';
-    const MATI = 'MATI';
-    const MATM = 'MATM';
+    public const string TYPE_MATIERE_COURS = 'matiere';
+    public const string TYPE_MATIERE_SAE = 'sae';
+    public const string TYPE_MATIERE_RESSOURCE = 'ressource';
+    const string MATI = 'MATI';
+    const string MATM = 'MATM';
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -112,7 +112,7 @@ class FicheMatiere
     private Collection $elementConstitutifs;
 
     #[Groups(['fiche_matiere_versioning', 'DTO_json_versioning'])]
-    #[ORM\ManyToOne(inversedBy: 'ficheMatieres', cascade: ['persist'], fetch: 'EAGER')]
+    #[ORM\ManyToOne(cascade: ['persist'], fetch: 'EAGER', inversedBy: 'ficheMatieres')]
     private ?Parcours $parcours = null;
 
     #[Groups(['DTO_json_versioning', 'fiche_matiere_versioning'])]
@@ -202,6 +202,7 @@ class FicheMatiere
     #[ORM\Column(nullable: true)]
     private ?float $ects = null;
 
+    #[Groups('DTO_json_versioning')]
     #[ORM\Column(nullable: true)]
     private ?bool $quitus = false;
 
@@ -237,6 +238,7 @@ class FicheMatiere
     #[ORM\ManyToOne]
     private ?CampagneCollecte $campagneCollecte = null;
 
+    #[Groups('DTO_json_versioning')]
     #[ORM\Column(length: 1000, nullable: true)]
     private ?string $quitusText = null;
 

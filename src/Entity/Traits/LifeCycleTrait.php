@@ -35,7 +35,7 @@ trait LifeCycleTrait
         $this->created = $created;
     }
 
-    
+
     public function getUpdated(): ?DateTimeInterface
     {
         return $this->updated;
@@ -65,18 +65,21 @@ trait LifeCycleTrait
     }
 
     // Fix pour la serialization
-    
-    public function getUpdatedValue(){
+
+    public function getUpdatedValue(): ?DateTimeInterface
+    {
         return $this->updated;
     }
     // Fix pour la serialization
-    
-    public function getUpdatedEntity(){
+
+    public function getUpdatedEntity(): DateTimeImmutable
+    {
         return new DateTimeImmutable('now');
     }
     // Fix pour la serialization
-    
-    public function getCreatedValue(){
+
+    public function getCreatedValue(): ?DateTimeInterface
+    {
         return $this->created;
     }
 

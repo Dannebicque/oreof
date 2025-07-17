@@ -241,6 +241,7 @@ framework:
           from: 'soumis_cfvu'
           to: 'refuse_definitif_cfvu'
           metadata:
+            hasDate: true
             type: refuser
             btn: danger
             icon: fa-ban
@@ -248,6 +249,7 @@ framework:
           from: 'soumis_cfvu'
           to: 'en_cours_redaction'
           metadata:
+            hasDate: true
             type: reserver
             btn: warning
             icon: fa-circle-exclamation-check

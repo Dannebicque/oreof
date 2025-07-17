@@ -13,16 +13,16 @@ use App\Entity\CampagneCollecte;
 use App\Entity\Composante;
 use App\Entity\Parcours;
 use App\Repository\ParcoursRepository;
+use App\Service\TypeDiplomeResolver;
 use App\Service\VersioningParcours;
 use App\Service\VersioningStructure;
-use App\TypeDiplome\TypeDiplomeRegistry;
 
 class GenereSynthese
 {
 
     public function __construct(
+        protected TypeDiplomeResolver $typeDiplomeResolver,
         protected ParcoursRepository $parcoursRepository,
-        protected TypeDiplomeRegistry $typeDiplomeRegistry,
         protected VersioningParcours $versioningParcours,
         protected VersioningStructure $versioningStructure
     ) {
@@ -37,7 +37,7 @@ class GenereSynthese
         $parcours = $this->parcoursRepository->findByTypeValidationAttenteCfvuAndComposante($dpe, 'soumis_central', $composante); //soumis_cfvu
 
         foreach ($parcours as $parc) {
-            $typeD = $this->typeDiplomeRegistry->getTypeDiplome($parc->getFormation()?->getTypeDiplome()?->getModeleMcc());
+            $typeD = $this->typeDiplomeResolver->get($parc->getFormation()?->getTypeDiplome());
             // récupérer les demandes de changement et de modification
             $dto = $typeD->calculStructureParcours($parc, true, false);
             $structureDifferencesParcours = $this->versioningParcours->getStructureDifferencesBetweenParcoursAndLastVersion($parc);
@@ -54,7 +54,7 @@ class GenereSynthese
 
     public function getSyntheseByParcours(Parcours $parcours, Composante $composante, CampagneCollecte $dpe): array
     {
-        $typeD = $this->typeDiplomeRegistry->getTypeDiplome($parcours->getFormation()?->getTypeDiplome()?->getModeleMcc());
+        $typeD = $this->typeDiplomeResolver->get($parcours->getFormation()?->getTypeDiplome());
         // récupérer les demandes de changement et de modification
         $dto = $typeD->calculStructureParcours($parcours, true, false);
         $structureDifferencesParcours = $this->versioningParcours->getStructureDifferencesBetweenParcoursAndLastVersion($parcours);

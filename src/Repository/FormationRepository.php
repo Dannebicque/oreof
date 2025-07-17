@@ -461,4 +461,25 @@ class FormationRepository extends ServiceEntityRepository
         return $query->getQuery()
             ->getResult();
     }
+
+    public function findByCampagneCollecte(CampagneCollecte $campagneCollecte): array
+    {
+        return $this->createQueryBuilder('f')
+            ->leftJoin('f.dpeParcours', 'dp')
+            ->leftJoin('f.typeDiplome', 't')
+            ->addSelect('dp')
+            ->andWhere('dp.campagneCollecte = :campagneCollecte')
+            ->setParameter('campagneCollecte', $campagneCollecte)
+            ->leftJoin(Mention::class, 'm', 'WITH', 'f.mention = m.id')
+            ->addOrderBy('t.libelle_court', 'ASC')
+            ->addOrderBy(
+                'CASE
+                            WHEN f.mention IS NOT NULL THEN m.libelle
+                            WHEN f.mentionTexte IS NOT NULL THEN f.mentionTexte
+                            ELSE f.mentionTexte
+                            END',
+                'ASC'
+            )->getQuery()
+            ->getResult();
+    }
 }

@@ -10,18 +10,23 @@
 namespace App\EventSubscriber;
 
 use App\Classes\Mailer;
-use App\Entity\UserCentre;
+use App\Entity\UserProfil;
 use App\Events\AddCentreFormationEvent;
+use App\Events\NotifCentreFormationEvent;
 use App\Repository\FormationRepository;
-use App\Repository\UserCentreRepository;
+use App\Repository\UserProfilRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class AddCentreFormationSubscriber implements EventSubscriberInterface
 {
     public function __construct(
+        protected EventDispatcherInterface $eventDispatcher,
         protected Mailer               $mailer,
         protected FormationRepository  $formationRepository,
-        protected UserCentreRepository $userCentreRepository,
+        protected UserProfilRepository          $userProfilRepository,
+        private readonly EntityManagerInterface $entityManager,
     ) {
     }
 
@@ -38,77 +43,54 @@ class AddCentreFormationSubscriber implements EventSubscriberInterface
         $user = $event->user;
         $formation = $event->formation;
         $campagneCollecte = $event->campagneCollecte;
-
-        if (($user === null) || ($formation === null)) {
-            return;
-        }
+        $profil = $event->droits;
 
         // on vérifie s'il est déjà dans un centre
-        $existe = $this->userCentreRepository->findOneBy(['user' => $user, 'formation' => $formation]);
+        $existe = $this->userProfilRepository->findOneBy(['user' => $user, 'formation' => $formation]);
         // si oui, on vérifie s'il est déjà dans la formation
+
         if ($existe !== null) {
-            //on vérifie s'il a les droits suffisants
-            if (!in_array($event->droits[0], $existe->getDroits(), true)) {
-                // on ne fait rien
-                $existe->addRoleCode($event->droits[0]);
-                $this->userCentreRepository->save($existe, true);
+            //S'il existe on met à jour les droits
+            if (!$event->droits === $existe->getProfil()?->getCode()) {
+                // on récupère le profil correspondant
+                $existe->setProfil($profil);
+
+                $eventNotif = new NotifCentreFormationEvent($formation, $user, $profil);
+                $this->eventDispatcher->dispatch($eventNotif, NotifCentreFormationEvent::NOTIF_UPDATE_CENTRE);
             }
         } else {
             // on ajoute le centre à la formation
-            $centre = new UserCentre();
+            $centre = new UserProfil();
             $centre->setUser($user);
             $centre->setFormation($formation);
             $centre->setCampagneCollecte($campagneCollecte);
-            $centre->setDroits($event->droits);
-            $this->userCentreRepository->save($centre, true);
+            $centre->setProfil($profil);
+            $this->entityManager->persist($centre);
+
+            $eventNotif = new NotifCentreFormationEvent($formation, $user, $profil);
+            $this->eventDispatcher->dispatch($eventNotif, NotifCentreFormationEvent::NOTIF_ADD_CENTRE);
         }
 
-        $this->mailer->initEmail();
-        $this->mailer->setTemplate(
-            'mails/formation/add_centre_formation.txt.twig',
-            ['user' => $user, 'formation' => $formation]
-        );
-        $this->mailer->sendMessage([$user->getEmail()], '[ORéOF] Accès à l\'application');
+        $this->entityManager->flush();
     }
 
-    public function onRemoveCentreFormation(AddCentreFormationEvent $event)
+    public function onRemoveCentreFormation(AddCentreFormationEvent $event): void
     {
         $user = $event->user;
         $formation = $event->formation;
 
-        if (($user === null) || ($formation === null)) {
-            return;
-        }
-
         //on vérifie s'il est déjà dans le centre
-        $existe = $this->userCentreRepository->findOneBy(['user' => $user, 'formation' => $formation]);
+        $existe = $this->userProfilRepository->findOneBy(['user' => $user, 'formation' => $formation]);
 
-        //si oui, on vérifie s'il n'est pas responsable sur un autre parcours de la formation. Si non on supprime le centre
+        //si oui, on supprime le centre
         if ($existe !== null) {
-//            $parcour = $this->formationRepository->findRespOtherParcoursInFormation($formation, $user);
-//            if (count($formation) === 0) {/
-            $droits = $existe->getDroits();
-            $key = array_search($event->droits[0], $droits, true);
-            if (false !== $key) {
-                unset($droits[$key]);
-            }
+            $profil = $existe->getProfil();
 
-            if (count($droits) > 0) {
-                $existe->setDroits($droits);
-                $this->userCentreRepository->save($existe, true);
-            } else {
-                $this->userCentreRepository->remove($existe, true);
-            }
+            $this->entityManager->remove($existe);
+            $this->entityManager->flush();
 
-
-//            }
+            $eventNotif = new NotifCentreFormationEvent($formation, $user, $profil);
+            $this->eventDispatcher->dispatch($eventNotif, NotifCentreFormationEvent::NOTIF_REMOVE_CENTRE);
         }
-
-        $this->mailer->initEmail();
-        $this->mailer->setTemplate(
-            'mails/formation/remove_centre_formation.txt.twig',
-            ['user' => $user, 'formation' => $formation]
-        );
-        $this->mailer->sendMessage([$user->getEmail()], '[ORéOF] Accès à l\'application');
     }
 }

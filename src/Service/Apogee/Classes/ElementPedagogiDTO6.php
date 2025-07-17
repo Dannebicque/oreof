@@ -70,9 +70,9 @@ class ElementPedagogiDTO6
                 $dto->parcours->getId()
             );
             // Libellé court
-            $this->libCourtElp = $this->checkLibelleEC($elementPedagogique, 25, $withChecks, $dto->parcours->getId());
+            $this->libCourtElp = $this->checkLibelleEC($elementPedagogique, 25, $dto->parcours->getId(), $withChecks);
             // Libellé long
-            $this->libElp = $this->checkLibelleEC($elementPedagogique, 60, $withChecks, $dto->parcours->getId());
+            $this->libElp = $this->checkLibelleEC($elementPedagogique, 60, $dto->parcours->getId(), $withChecks);
             // Nature
             $this->codNatureElp = $this->checkNatureElp(
                 $nature,
@@ -184,7 +184,7 @@ class ElementPedagogiDTO6
         elseif ($elementPedagogique instanceof StructureSemestre){
             $this->codElp = $elementPedagogique->semestre->getCodeApogee() ?? "ERROR";
             // Libellés
-            $this->libCourtElp = $this->prepareLibelle($this->checkLibelleSemestre($elementPedagogique, $dto, $withChecks, "libelleCourt"), 25);
+            $this->libCourtElp = $this->prepareLibelle($this->checkLibelleSemestre($elementPedagogique, $dto, $withChecks, "libelleCourt"));
             $this->libElp = $this->prepareLibelle($this->checkLibelleSemestre($elementPedagogique, $dto, $withChecks, "libelleLong"), 60);
             $this->codNatureElp = $this->checkNatureElp($nature, "Type Semestre - ID : {$elementPedagogique->semestre->getId()}", $withChecks, $dto->parcours->getId());
             $this->codComposante = $this->checkCodeComposante($dto, "Type Semestre - ID : {$elementPedagogique->semestre->getId()}", $withChecks);
@@ -265,8 +265,8 @@ class ElementPedagogiDTO6
     private function checkLibelleEC(
         StructureEc $elementPedagogique,
         int $length,
-        bool $withChecks = false,
-        int $parcoursID
+        int  $parcoursID,
+        bool $withChecks = false
     ) : string {
         $libelle = $elementPedagogique->elementConstitutif->getFicheMatiere()?->getLibelle()
         ?? $elementPedagogique->elementConstitutif->getLibelle() ?? $elementPedagogique->elementConstitutif->getCode();
@@ -323,7 +323,8 @@ class ElementPedagogiDTO6
         StructureParcours $dto,
         int $length,
         bool $withChecks,
-    ){
+    ): string
+    {
         $retour = // "UE " . $elementPedagogique->ue->getSemestre()->getOrdre() . "." . $elementPedagogique->ue->getOrdre()
             $elementPedagogique->display
         . " " . $dto->parcours->getFormation()->getTypeDiplome()->getLibelleCourt() . " ";

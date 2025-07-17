@@ -2,12 +2,9 @@
 
 namespace App\Controller;
 
-use App\Classes\JsonReponse;
 use App\Classes\verif\ParcoursValide;
 use App\Entity\Parcours;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;

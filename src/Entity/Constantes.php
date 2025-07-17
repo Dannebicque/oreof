@@ -11,8 +11,8 @@ namespace App\Entity;
 
 class Constantes
 {
-    public const FLASHBAG_INFO = 'info';
-    public const FLASHBAG_SUCCESS = 'success';
-    public const FLASHBAG_NOTICE = 'notice';
-    public const FLASHBAG_ERROR = 'error';
+    public const string FLASHBAG_INFO = 'info';
+    public const string FLASHBAG_SUCCESS = 'success';
+    public const string FLASHBAG_NOTICE = 'notice';
+    public const string FLASHBAG_ERROR = 'error';
 }

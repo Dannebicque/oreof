@@ -11,6 +11,7 @@ namespace App\Twig;
 
 use App\Entity\UeMutualisable;
 use App\Entity\UserCentre;
+use App\Entity\UserProfil;
 use App\Enums\BadgeEnumInterface;
 use App\Enums\CentreGestionEnum;
 use App\Utils\Tools;
@@ -34,6 +35,7 @@ class AppExtension extends AbstractExtension
     {
         return [
             new TwigFilter('url', [$this, 'url']),
+            new TwigFilter('basename', [$this, 'basename']),
             new TwigFilter('tel_format', [$this, 'telFormat']),
             new TwigFilter('mailto', [$this, 'mailto'], ['is_safe' => ['html']]),
             new TwigFilter('open_url', [$this, 'openUrl'], ['is_safe' => ['html']]),
@@ -43,16 +45,23 @@ class AppExtension extends AbstractExtension
             new TwigFilter('badgeBoolean', [$this, 'badgeBoolean'], ['is_safe' => ['html']]),
             new TwigFilter('badgeDroits', [$this, 'badgeDroits'], ['is_safe' => ['html']]),
             new TwigFilter('badgeCentre', [$this, 'badgeCentre'], ['is_safe' => ['html']]),
+            new TwigFilter('badgeTypeCentre', [$this, 'badgeTypeCentre'], ['is_safe' => ['html']]),
+            new TwigFilter('centre', [$this, 'centre'], ['is_safe' => ['html']]),
             new TwigFilter('displayOrBadge', [$this, 'displayOrBadge'], ['is_safe' => ['html']]),
             new TwigFilter('etatRemplissage', [$this, 'etatRemplissage'], ['is_safe' => ['html']]),
             new TwigFilter('printTexte', [$this, 'printTexte'], ['is_safe' => ['html']]),
             new TwigFilter('filtreHeures', [$this, 'filtreHeures'], ['is_safe' => ['html']]),
             new TwigFilter('badgeEnum', [$this, 'badgeEnum'], ['is_safe' => ['html']]),
+            new TwigFilter('badgeStatus', [$this, 'badgeStatus'], ['is_safe' => ['html']]),
             new TwigFilter('startWith', [$this, 'startWith'], ['is_safe' => ['html']]),
             new TwigFilter('isUeUtilisee', [$this, 'isUeUtilisee'], ['is_safe' => ['html']]),
         ];
     }
 
+    public function basename(string $path): string
+    {
+        return basename($path);
+    }
     public function isUeUtilisee(UeMutualisable $ue): bool
     {
         foreach ($ue->getUes() as $u) {
@@ -66,9 +75,20 @@ class AppExtension extends AbstractExtension
         return false;
     }
 
-    public function badgeEnum(BadgeEnumInterface $value): string
+    public function badgeEnum(?BadgeEnumInterface $value): string
     {
         return ($value !== null) ? '<span class="badge '.$value->getBadge().'">' . $value->getLibelle() . '</span>' : '<span class="badge bg-danger">Non renseigné</span>';
+    }
+
+    public function badgeStatus(?string $value): string
+    {
+        //si finished => vert, si in_progress => orange, si error => rouge, sinon gris
+        return match ($value) {
+            'finished' => '<span class="badge bg-success">Terminé</span>',
+            'running' => '<span class="badge bg-warning">En cours</span>',
+            'error' => '<span class="badge bg-danger">Erreur</span>',
+            default => '<span class="badge bg-secondary">Inconnu</span>',
+        };
     }
 
     public function displayOrBadge(?string $value): string
@@ -177,6 +197,28 @@ class AppExtension extends AbstractExtension
             CentreGestionEnum::CENTRE_GESTION_COMPOSANTE => '<span class="badge bg-success me-1 mb-1 text-wrap">' . $userCentre->displaySimple() . ' (' . $droit . ')</span>',
             CentreGestionEnum::CENTRE_GESTION_ETABLISSEMENT => '<span class="badge bg-warning me-1 mb-1 text-wrap">' . $userCentre->displaySimple() . ' (' . $droit . ')</span>',
             CentreGestionEnum::CENTRE_GESTION_FORMATION => '<span class="badge bg-info me-1 mb-1 text-wrap">' . $userCentre->displaySimple() . ' (' . $droit . ')</span>',
+            default => '<span class="badge bg-danger me-1 text-wrap">Inconnu</span>',
+        };
+    }
+
+    public function badgeTypeCentre(UserProfil $userProfil): string
+    {
+        return match ($userProfil->getProfil()?->getCentre()) {
+            CentreGestionEnum::CENTRE_GESTION_COMPOSANTE => '<span class="badge bg-quaternary me-1 text-wrap">Composante</span>',
+            CentreGestionEnum::CENTRE_GESTION_ETABLISSEMENT => '<span class="badge bg-info me-1 text-wrap">Etablissement</span>',
+            CentreGestionEnum::CENTRE_GESTION_FORMATION => '<span class="badge bg-success me-1 text-wrap">Formation</span>',
+            CentreGestionEnum::CENTRE_GESTION_PARCOURS => '<span class="badge bg-secondary me-1 text-wrap">Parcours</span>',
+            default => '<span class="badge bg-danger me-1 text-wrap">Inconnu</span>',
+        };
+    }
+
+    public function centre(UserProfil $userProfil): ?string
+    {
+        return match ($userProfil->getProfil()?->getCentre()) {
+            CentreGestionEnum::CENTRE_GESTION_COMPOSANTE => $userProfil->getComposante()?->getLibelle(),
+            CentreGestionEnum::CENTRE_GESTION_ETABLISSEMENT => $userProfil->getEtablissement()?->getLibelle(),
+            CentreGestionEnum::CENTRE_GESTION_FORMATION => $userProfil->getFormation()?->getDisplayLong(),
+            CentreGestionEnum::CENTRE_GESTION_PARCOURS => $userProfil->getParcours()->getFormation()?->getDisplayLong() . '. Parcours : ' . $userProfil->getParcours()?->getDisplay(),
             default => '<span class="badge bg-danger me-1 text-wrap">Inconnu</span>',
         };
     }

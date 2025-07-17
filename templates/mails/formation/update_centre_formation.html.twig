@@ -1,0 +1,14 @@
+{% extends 'mails/base_mail.html.twig' %}
+
+{% block content %}
+    Bonjour {{ user.display }},<br>
+
+    <p>Vos droits sur la formation : <strong>{{ entity.displayLong }}</strong> ont été modifiés. Vous disposez des
+        droits <strong>{{ profil.libelle }}</strong>.</p>
+
+    <p>Vous pouvez maintenant y accéder pour gérer cette formation en cliquant sur le lien ci-dessous.</p>
+
+    <p><a href="{{ product_url }}" target="_blank">{{ product_url }}</a></p>
+
+    Puis choisir "Connexion URCA" avec vos identifiants habituels.
+{% endblock %}

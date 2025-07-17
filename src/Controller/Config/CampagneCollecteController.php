@@ -15,6 +15,7 @@ use App\Repository\CampagneCollecteRepository;
 use App\Repository\DpeParcoursRepository;
 use App\Utils\JsonRequest;
 use Doctrine\ORM\EntityManagerInterface;
+use JsonException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -133,7 +134,7 @@ class CampagneCollecteController extends AbstractController
     }
 
     /**
-     * @throws \JsonException
+     * @throws JsonException
      */
     #[Route('/{id}', name: 'app_campagne_collecte_delete', methods: ['DELETE'])]
     public function delete(

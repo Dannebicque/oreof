@@ -16,8 +16,8 @@ use App\Repository\MentionRepository;
 use App\Repository\ParcoursRepository;
 use App\Repository\TypeDiplomeRepository;
 use App\Repository\VilleRepository;
-use App\TypeDiplome\TypeDiplomeRegistry;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -41,7 +41,7 @@ class CodificationController extends BaseController
         $typeDiplome = $typeDiplomeRepository->find($request->query->get('step'));
 
         if ($typeDiplome === null) {
-            throw new \Exception('Type de diplôme non trouvé');
+            throw new Exception('Type de diplôme non trouvé');
         }
 
         return $this->render('codification/_liste-inter.html.twig', [
@@ -61,7 +61,7 @@ class CodificationController extends BaseController
         TypeDiplome           $typeDiplome
     ): Response {
         if ($typeDiplome === null) {
-            throw new \Exception('Type de diplôme non trouvé');
+            throw new Exception('Type de diplôme non trouvé');
         }
 
         $filtres = $request->query->all();
@@ -144,7 +144,7 @@ class CodificationController extends BaseController
             $this->isGranted('CAN_ETABLISSEMENT_SHOW_ALL', $this->getUser()) ||
             $this->isGranted('CAN_ETABLISSEMENT_SCOLARITE_ALL', $this->getUser()) ||
             $this->isGranted('CAN_FORMATION_SHOW_ALL', $this->getUser())) {
-            $formations = $formationRepository->findBySearch('', $this->getCampagneCollecte(), []);
+            $formations = $formationRepository->findBySearch('', $this->getCampagneCollecte());
 
             return $export->exportFormations($formations);
         }
@@ -200,7 +200,7 @@ class CodificationController extends BaseController
         Request $request
     ): Response {
 
-        $selectedParcours = $request->query->get('parcours', null);
+        $selectedParcours = $request->query->get('parcours');
 
         return $this->render('codification/index.html.twig', [
             'formation' => $formation,
@@ -273,24 +273,23 @@ class CodificationController extends BaseController
     public function parcoursWizard(
         Request             $request,
         ParcoursRepository  $parcoursRepository,
-        TypeDiplomeRegistry $typeDiplomeRegistry,
         Formation           $formation
     ): Response {
         $idParcours = $request->query->get('step');
         $parcours = $parcoursRepository->find($idParcours);
 
         if ($parcours === null) {
-            throw new \Exception('Parcours non trouvé');
+            throw new Exception('Parcours non trouvé');
         }
 
 
         $typeDiplome = $formation->getTypeDiplome();
 
         if ($typeDiplome === null) {
-            throw new \Exception('Type de diplôme non trouvé');
+            throw new Exception('Type de diplôme non trouvé');
         }
 
-        $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());
+        $typeD = $this->typeDiplomeResolver->get($typeDiplome);
         $tParcours = $typeD->calculStructureParcours($parcours);
 
         return $this->render('codification/_parcours.html.twig', [

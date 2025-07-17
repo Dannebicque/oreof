@@ -12,9 +12,13 @@ namespace App\Controller;
 use App\Classes\CalculStructureParcours;
 use App\Classes\MyGotenbergPdf;
 use App\Entity\Formation;
+use App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 class FormationExportController extends AbstractController
 {
@@ -25,10 +29,10 @@ class FormationExportController extends AbstractController
     }
 
     /**
-     * @throws \Twig\Error\SyntaxError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\LoaderError
-     * @throws \App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     * @throws TypeDiplomeNotFoundException
      */
     #[Route('/formation/export/{slug}', name: 'app_formation_export')]
     public function export(

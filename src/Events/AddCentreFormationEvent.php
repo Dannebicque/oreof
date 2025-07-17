@@ -11,18 +11,19 @@ namespace App\Events;
 
 use App\Entity\CampagneCollecte;
 use App\Entity\Formation;
+use App\Entity\Profil;
 use App\Entity\User;
 
 class AddCentreFormationEvent
 {
-    public const ADD_CENTRE_FORMATION = 'add.centre.formation';
+    public const string ADD_CENTRE_FORMATION = 'add.centre.formation';
 
-    public const REMOVE_CENTRE_FORMATION = 'remove.centre.formation';
+    public const string REMOVE_CENTRE_FORMATION = 'remove.centre.formation';
 
     public function __construct(
         public Formation $formation,
-        public ?User $user,
-        public array $droits = [],
+        public User   $user,
+        public Profil $droits,
         public ?CampagneCollecte $campagneCollecte = null
     ) {
     }

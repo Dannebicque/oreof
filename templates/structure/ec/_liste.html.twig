@@ -81,8 +81,7 @@
 
                                         <div class="col-md-{% if isBut %}3{% else %}1{% endif %} d-flex flex-column justify-content-center">
                                             <div class="text-muted text-small d-md-none">Remplissage</div>
-                                            {% if (is_granted('CAN_FORMATION_EDIT_MY', parcours.formation) or is_granted
-                                                ('CAN_PARCOURS_EDIT_MY', dpeParcours)) %}
+                                            {% if (is_granted('EDIT', {route: 'app_formation', subject: parcours.formation})) or is_granted('EDIT', {route: 'app_parcours', subject: dpeParcours})) %}
                                                 {% if ec.ficheMatiere != null %}
                                                     {% if isBut %}
                                                         <a
@@ -174,9 +173,7 @@
                                                     </div>
                                                 {% else %}
                                                     <div class="col-6">
-                                                        {% if (is_granted('CAN_FORMATION_EDIT_MY', parcours.formation) or is_granted
-                                                            ('CAN_PARCOURS_EDIT_MY', dpeParcours) or (is_granted
-                                                            ('CAN_EC_EDIT_MY', ec))) %}
+                                                        {% if (is_granted('EDIT', {route: 'app_formation', subject: parcours.formation})) or is_granted('EDIT', {route: 'app_parcours', subject: dpeParcours}) or (is_granted('EDIT', {route: 'app_ec', subject: ec}))) %}
                                                             <button
                                                                     {% if deplacer is defined and deplacer == true and
                                                                         editable == true %}
@@ -204,8 +201,8 @@
                                                             </button>
 
                                                         {% endif %}
-                                                        {% if isUeRaccrochee == false and (is_granted('CAN_FORMATION_EDIT_MY', parcours.formation)
-                                                            or is_granted('CAN_PARCOURS_EDIT_MY', dpeParcours))
+                                                        {% if isUeRaccrochee == false and (is_granted('EDIT', {route: 'app_formation', subject: parcours.formation})
+                                                            or is_granted('EDIT', {route: 'app_parcours', subject: dpeParcours}))
                                                             and editable == true %}
                                                             <button {{ stimulus_action('ec--liste', 'delete', 'click', {
                                                                 url:path('app_element_constitutif_delete',{'id': ec.id}),
@@ -218,9 +215,9 @@
                                                         {% endif %}
                                                     </div>
                                                     <div class="col-6 text-end mt-3">
-                                                        {% if isUeRaccrochee == false and (is_granted('CAN_FORMATION_EDIT_MY', parcours.formation)
-                                                            or is_granted('CAN_PARCOURS_EDIT_MY', dpeParcours)
-                                                            or is_granted('CAN_EC_EDIT_MY', ec)) and editable == true %}
+                                                        {% if isUeRaccrochee == false and (is_granted('EDIT', {route: 'app_formation', subject: parcours.formation})
+                                                            or is_granted('EDIT', {route: 'app_parcours', subject: dpeParcours})
+                                                            or is_granted('EDIT', {route: 'app_ec', subject: ec})) and editable == true %}
                                                             {% if not loop.first %}
                                                                 <button class="btn btn-sm btn-outline-info" {{ stimulus_action('ec--liste', 'deplacerEc',
                                                                     'click', {url: path('app_element_constitutif_deplacer',{sens: 'up', id:
@@ -330,9 +327,9 @@
                                                     </div>
                                                     <div class="col-4">
 
-                                                        {% if (is_granted('CAN_FORMATION_EDIT_MY', parcours.formation)
-                                                            or is_granted('CAN_PARCOURS_EDIT_MY', dpeParcours)
-                                                            or is_granted('CAN_EC_EDIT_MY', ec) ) and editable == true %}
+                                                        {% if (is_granted('EDIT', {route: 'app_formation', subject: parcours.formation})
+                                                            or is_granted('EDIT', {route: 'app_parcours', subject: dpeParcours})
+                                                            or is_granted('EDIT', {route: 'app_ec', subject: ec}) ) and editable == true %}
                                                             <button
                                                                     {% if deplacer is defined and deplacer == true %}
                                                                         {{ stimulus_controller('modal', {
@@ -359,8 +356,8 @@
                                                             </button>
 
                                                         {% endif %}
-                                                        {% if (is_granted('CAN_FORMATION_EDIT_MY', parcours.formation)
-                                                            or is_granted('CAN_PARCOURS_EDIT_MY', dpeParcours))
+                                                        {% if (is_granted('EDIT', {route: 'app_formation', subject: parcours.formation})
+                                                            or is_granted('EDIT', {route: 'app_parcours', subject: dpeParcours}))
                                                             and editable == true %}
                                                             <button {{ stimulus_action('ec--liste', 'delete', 'click', {
                                                                 url:path('app_element_constitutif_delete',{'id': ec.id}),
@@ -374,9 +371,9 @@
 
                                                     </div>
                                                     <div class="col-4 text-end mt-2">
-                                                        {% if (is_granted('CAN_FORMATION_EDIT_MY', parcours.formation)
-                                                            or is_granted('CAN_PARCOURS_EDIT_MY', dpeParcours)
-                                                            or is_granted('CAN_EC_EDIT_MY', ec)) %}
+                                                        {% if (is_granted('EDIT', {route: 'app_formation', subject: parcours.formation})
+                                                            or is_granted('EDIT', {route: 'app_parcours', subject: dpeParcours})
+                                                            or is_granted('EDIT', {route: 'app_ec', subject: ec})) %}
                                                             {% if not loop.first %}
                                                                 <button class="btn btn-sm btn-outline-info" {{ stimulus_action('ec--liste', 'deplacerEc',
                                                                     'click', {url: path('app_element_constitutif_deplacer',{sens: 'up', id:
@@ -458,9 +455,9 @@
                                                 </div>
                                                 <div class="col-md-1 d-flex flex-column justify-content-center">
                                                     <div class="text-muted text-small d-md-none">Remplissage</div>
-                                                    {% if (is_granted('CAN_FORMATION_EDIT_MY', parcours.formation)
-                                                        or is_granted('CAN_PARCOURS_EDIT_MY', dpeParcours)
-                                                        or is_granted('CAN_EC_EDIT_MY', ece)) %}
+                                                    {% if (is_granted('EDIT', {route: 'app_formation', subject: parcours.formation})
+                                                        or is_granted('EDIT', {route: 'app_parcours', subject: dpeParcours})
+                                                        or is_granted('EDIT', {route: 'app_ec', subject: ece})) %}
                                                         {% if ece.ficheMatiere != null %}
                                                             {% if editable == true and isUeRaccrochee == false %}
                                                                 <a
@@ -546,9 +543,9 @@
                                                         {% else %}
                                                             <div class="col-6">
 
-                                                                {% if (is_granted('CAN_FORMATION_EDIT_MY', parcours.formation)
-                                                                    or is_granted('CAN_PARCOURS_EDIT_MY', dpeParcours)
-                                                                    or is_granted('CAN_EC_EDIT_MY', ec)) and editable == true %}
+                                                                {% if (is_granted('EDIT', {route: 'app_formation', subject: parcours.formation})
+                                                                    or is_granted('EDIT', {route: 'app_parcours', subject: dpeParcours})
+                                                                    or is_granted('EDIT', {route: 'app_ec', subject: ec})) and editable == true %}
                                                                     <button
                                                                             {% if deplacer is defined and deplacer == true %}
 
@@ -580,8 +577,8 @@
                                                                     </button>
 
                                                                 {% endif %}
-                                                                {% if (is_granted('CAN_FORMATION_EDIT_MY', parcours.formation)
-                                                                    or is_granted('CAN_PARCOURS_EDIT_MY', dpeParcours))
+                                                                {% if (is_granted('EDIT', {route: 'app_formation', subject: parcours.formation})
+                                                                    or is_granted('EDIT', {route: 'app_parcours', subject: dpeParcours}))
                                                                     and editable == true %}
                                                                     <button {{ stimulus_action('ec--liste', 'delete', 'click', {
                                                                         url:path('app_element_constitutif_delete',{'id':
@@ -595,9 +592,9 @@
                                                                 {% endif %}
                                                             </div>
                                                             <div class="col-6 text-end mt-2">
-                                                                {% if (is_granted('CAN_FORMATION_EDIT_MY', parcours.formation)
-                                                                    or is_granted('CAN_PARCOURS_EDIT_MY', dpeParcours)
-                                                                    or is_granted('CAN_EC_EDIT_MY', ec)) and editable == true %}
+                                                                {% if (is_granted('EDIT', {route: 'app_formation', subject: parcours.formation})
+                                                                    or is_granted('EDIT', {route: 'app_parcours', subject: dpeParcours})
+                                                                    or is_granted('EDIT', {route: 'app_ec', subject: ec})) and editable == true %}
                                                                     {% if not loop.first %}
                                                                         <button class="btn btn-sm btn-outline-info" {{ stimulus_action('ec--liste', 'deplacerEc',
                                                                             'click', {url: path('app_element_constitutif_deplacer',{sens: 'up', id:

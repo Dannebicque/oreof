@@ -5,7 +5,7 @@
 }) }}
         data-action="register:refreshModale@window->base#refreshModale"
 >
-    {% if not is_granted('ROLE_SES') and not is_granted('ROLE_ADMIN') %}
+    {% if not is_granted('ROLE_ADMIN') %}
         <div class="alert alert-info mt-2 mb-2">
             La demande sera validée par l'administration du site. L'utilisateur recevra un mail de confirmation dès l'activation complète de son accès.
         </div>

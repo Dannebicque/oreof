@@ -24,7 +24,7 @@ use Symfony\UX\TwigComponent\Attribute\PostMount;
 #[AsLiveComponent('parcours_manage')]
 final class ParcoursManageComponent extends AbstractController
 {
-    public const TAB = [
+    public const array TAB = [
         'initialisation_dpe' => 'formation',
         'autorisation_saisie' => null,
         'en_cours_redaction' => 'parcours',
@@ -47,6 +47,7 @@ final class ParcoursManageComponent extends AbstractController
         'soumis_vp' => 'vp',
         'valide_cfvu' => 'valide_cfvu',
         'cfvu' => 'cfvu',
+        'cloture' => 'cloture',
         'publication' => 'publication',
         'soumis_cfvu' => 'cfvu',
         'refuse_definitif_cfvu' => 'cfvu',
@@ -59,7 +60,7 @@ final class ParcoursManageComponent extends AbstractController
         'non_ouverture' => 'publication',
     ];
 
-    public const TAB_PROCESS = [
+    public const array TAB_PROCESS = [
         'ouverture_ses_ss_cfvu' => 0,
         'cloture_ses_ss_cfvu' => 0,
         'soumis_parcours' => 0,
@@ -85,6 +86,7 @@ final class ParcoursManageComponent extends AbstractController
         'non_ouverture_ses' => 5,
         'non_ouverture_cfvu' => 7,
         'non_ouverture' => 8,
+        'cloture' => 8,
     ];
 
     use DefaultActionTrait;
@@ -178,7 +180,8 @@ final class ParcoursManageComponent extends AbstractController
         }
     }
 
-    private function init() {
+    private function init(): void
+    {
         $this->dpeParcours = GetDpeParcours::getFromParcours($this->parcours);
 
         $this->typeDiplome = $this->parcours?->getFormation()?->getTypeDiplome();

@@ -1,0 +1,30 @@
+<div{{ attributes }}>
+    <!-- component HTML -->
+    {% if this.isEditable %}
+        <label for="commentaire">{{ 'admin.edit.modal.commentaire'|trans }}</label>
+        <textarea
+                class="form-control"
+                id="commentaire"
+                data-model="commentaire"
+                rows="10">{{ this.commentaire|raw }}</textarea>
+
+        <div class="col-sm-offset-2 col-sm-10">
+            <button class="btn btn-success"
+                    data-action="live#action"
+                    data-live-action-param="sauvegarde"
+            >
+                <i class="fal fa-floppy-disk"></i>
+                Enregistrer
+            </button>
+        </div>
+    {% else %}
+        {{ this.commentaire|raw }}
+        <button
+                class="btn btn-warning"
+                data-action="live#action"
+                data-live-action-param="edit"
+        >
+            Modifier
+        </button>
+    {% endif %}
+</div>

@@ -29,10 +29,6 @@ class ButApprentissageCritique
     #[ORM\ManyToOne(inversedBy: 'butApprentissageCritiques')]
     private ?ButNiveau $niveau = null;
 
-    #[ORM\ManyToMany(targetEntity: ElementConstitutif::class, mappedBy: 'apprentissagesCritiques')]
-    /** @deprecated  */
-    private Collection $elementConstitutifs;
- 
     #[ORM\ManyToMany(targetEntity: FicheMatiere::class, mappedBy: 'apprentissagesCritiques')]
     private Collection $ficheMatieres;
 
@@ -41,7 +37,6 @@ class ButApprentissageCritique
 
     public function __construct()
     {
-        $this->elementConstitutifs = new ArrayCollection();
         $this->ficheMatieres = new ArrayCollection();
     }
 
@@ -86,32 +81,6 @@ class ButApprentissageCritique
         return $this;
     }
 
-    /**
-     * @return Collection<int, ElementConstitutif>
-     */
-    public function getElementConstitutifs(): Collection
-    {
-        return $this->elementConstitutifs;
-    }
-
-    public function addElementConstitutif(ElementConstitutif $elementConstitutif): static
-    {
-        if (!$this->elementConstitutifs->contains($elementConstitutif)) {
-            $this->elementConstitutifs->add($elementConstitutif);
-            $elementConstitutif->addApprentissagesCritique($this);
-        }
-
-        return $this;
-    }
-
-    public function removeElementConstitutif(ElementConstitutif $elementConstitutif): static
-    {
-        if ($this->elementConstitutifs->removeElement($elementConstitutif)) {
-            $elementConstitutif->removeApprentissagesCritique($this);
-        }
-
-        return $this;
-    }
 
     /**
      * @return Collection<int, FicheMatiere>

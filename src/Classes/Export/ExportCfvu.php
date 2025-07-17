@@ -14,10 +14,10 @@ use App\Classes\GetDpeParcours;
 use App\Classes\GetHistorique;
 use App\Entity\CampagneCollecte;
 use App\Repository\FormationRepository;
+use App\Service\ProjectDirProvider;
 use App\Utils\Tools;
 use DateTime;
 use Symfony\Component\HttpFoundation\StreamedResponse;
-use Symfony\Component\HttpKernel\KernelInterface;
 
 class ExportCfvu implements ExportInterface
 {
@@ -27,10 +27,10 @@ class ExportCfvu implements ExportInterface
     public function __construct(
         protected GetHistorique        $getHistorique,
         protected ExcelWriter         $excelWriter,
-        KernelInterface               $kernel,
+        ProjectDirProvider $projectDirProvider,
         protected FormationRepository $formationRepository,
     ) {
-        $this->dir = $kernel->getProjectDir() . '/public/temp/';
+        $this->dir = $projectDirProvider->getProjectDir() . '/public/temp/';
     }
 
     private function prepareExport(
@@ -39,7 +39,7 @@ class ExportCfvu implements ExportInterface
         /*
          * Nous aurions besoin d'une extraction des formations (mention et parcours) qui passent en CFVU on peut repartir sur la base : compo / type de formation / mention / parcours / lieu de formation / responsable mention / responsable parcours et peut être ajouter une colonne date validation Conseil compo et date de transmission PV conseil (ou si PV déposé ou non)
          */
-        $formations = $this->formationRepository->findBySearch('', $anneeUniversitaire, []);
+        $formations = $this->formationRepository->findBySearch('', $anneeUniversitaire);
         $this->excelWriter->nouveauFichier('Export CFVU');
         $this->excelWriter->setActiveSheetIndex(0);
 

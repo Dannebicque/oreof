@@ -2,6 +2,8 @@
 
 namespace App\Service\Apogee\Classes;
 
+use InvalidArgumentException;
+
 class TableauCentreInsPedagogiDTO
 {
     /**
@@ -16,9 +18,10 @@ class TableauCentreInsPedagogiDTO
         }
     }
 
-    private function add(string $codeCIP){
+    private function add(string $codeCIP): void
+    {
         if(strlen($codeCIP) !== 2){
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 "Le code de centre d'inscription pédagogique (CIP) est invalide. Il doit avoir une longueur de 2 (actuel : " . strlen($codeCIP) . ")"
             );
         }

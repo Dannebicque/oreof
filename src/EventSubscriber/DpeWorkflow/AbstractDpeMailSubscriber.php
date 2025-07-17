@@ -17,8 +17,8 @@ use App\Entity\User;
 
 class AbstractDpeMailSubscriber
 {
-    public const EMAIL_CENTRAL = 'cfvu-secretariat@univ-reims.fr'; //todo: a mettre sur établissement ?
-    public const EMAIL_OREOF = 'oreof@univ-reims.fr'; //todo: a mettre sur établissement ?
+    public const string EMAIL_CENTRAL = 'cfvu-secretariat@univ-reims.fr'; //todo: a mettre sur établissement ?
+    public const string EMAIL_OREOF = 'oreof@univ-reims.fr'; //todo: a mettre sur établissement ?
 
     protected ?DpeParcours $dpeParcours;
     protected ?Parcours $parcours;
@@ -57,7 +57,7 @@ class AbstractDpeMailSubscriber
         return true;
     }
 
-    protected function getDataFromChangeRfEvent($event)
+    protected function getDataFromChangeRfEvent($event): ?true
     {
         $this->demande = $event->getSubject();
 

@@ -10,7 +10,6 @@
 namespace App\Form;
 
 use App\Entity\FicheMatiere;
-use App\Form\Type\TextareaAutoSaveType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;

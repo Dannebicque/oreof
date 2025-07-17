@@ -15,7 +15,7 @@ class Remplissage
     public int $total = 0;
     public float $pourcentage = 0.0;
 
-    public function add(int $param = 1)
+    public function add(int $param = 1): void
     {
         $this->score += $param;
         $this->total++;
@@ -35,7 +35,7 @@ class Remplissage
         $this->score = $score;
     }
 
-    public function setTotal(mixed $total)
+    public function setTotal(mixed $total): void
     {
         $this->total = $total;
     }

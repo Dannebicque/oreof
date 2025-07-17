@@ -8,6 +8,7 @@ use App\Repository\CampagneCollecteRepository;
 use App\Repository\ComposanteRepository;
 use App\Repository\ParcoursRepository;
 use DateTime;
+use RuntimeException;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -56,7 +57,7 @@ class GenereSyntheseCommand extends Command
                 if (count($tDemandes) > 0) {
                     if (!is_dir($this->publicDir.'uploads/syntheses/'.$composante->getSigle())) {
                         if (!mkdir($concurrentDirectory = $this->publicDir . 'uploads/syntheses/' . $composante->getSigle()) && !is_dir($concurrentDirectory)) {
-                            throw new \RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
+                            throw new RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
                         }
                     }
 

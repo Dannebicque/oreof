@@ -12,6 +12,8 @@ namespace App\Repository;
 use App\Entity\BlocCompetence;
 use App\Entity\Competence;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -48,8 +50,8 @@ class CompetenceRepository extends ServiceEntityRepository
     }
 
     /**
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     * @throws \Doctrine\ORM\NoResultException
+     * @throws NonUniqueResultException
+     * @throws NoResultException
      */
     public function getMaxOrdreBlocCompetence(BlocCompetence $bcc): ?int
     {

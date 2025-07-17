@@ -13,8 +13,8 @@ use App\Entity\Formation;
 
 class FormationEvent
 {
-    public const FORMATION_CREATED = 'formation.created';
-    public const FORMATION_UPDATED = 'formation.updated';
+    public const string FORMATION_CREATED = 'formation.created';
+    public const string FORMATION_UPDATED = 'formation.updated';
 
     protected Formation $formation;
 

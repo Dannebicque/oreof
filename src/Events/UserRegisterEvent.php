@@ -23,7 +23,7 @@ class UserRegisterEvent
     protected ?Composante $composante = null;
     protected ?Etablissement $etablissement = null;
 
-    public const USER_DEMANDE_ACCES = 'user.demande_acces';
+    public const string USER_DEMANDE_ACCES = 'user.demande_acces';
 
 
     public function __construct(User $user, ?CentreGestionEnum $centre = null)

@@ -33,7 +33,7 @@ final class SwitchDpeComponent extends AbstractController
     }
 
     #[LiveAction]
-    public function changeDpe(#[LiveArg] int $id)
+    public function changeDpe(#[LiveArg] int $id): \Symfony\Component\HttpFoundation\RedirectResponse
     {
         $this->requestStack->getSession()->set('campagneCollecte', $id);
 

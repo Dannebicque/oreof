@@ -26,7 +26,7 @@
                     {{ stimulus_controller('modal', {
                         size: 'lg',
                         nomEvenement: 'refreshListeEc',
-                        details: {ue: this.ue.id, parcours: this.parcours.id},
+                        details: {ue: this.ue != null ? this.ue.id : '', parcours: this.parcours.id},
                         modalTitle: 'Modalités de Contrôle des Connaissances et des Compétences',
                         modalUrl: modalUrl,
                         }

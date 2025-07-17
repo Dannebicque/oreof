@@ -12,15 +12,15 @@ namespace App\Message;
 use App\Entity\CampagneCollecte;
 use DateTimeInterface;
 
-class Export
+readonly class Export
 {
     public function __construct(
-        private readonly int $userId,
-        private readonly string $typeDocument,
-        private readonly array $formations,
-        private readonly ?CampagneCollecte $campagneCollecte = null,
-        private readonly ?DateTimeInterface $date = null,
-        private readonly ?string $composante = null,
+        private int                $userId,
+        private string             $typeDocument,
+        private array              $formations,
+        private ?CampagneCollecte  $campagneCollecte = null,
+        private ?DateTimeInterface $date = null,
+        private ?string            $composante = null,
     )
     {
     }

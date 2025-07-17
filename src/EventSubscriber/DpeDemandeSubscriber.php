@@ -11,16 +11,12 @@ namespace App\EventSubscriber;
 
 use App\Classes\Mailer;
 use App\Events\DpeDemandeEvent;
-use App\Repository\FormationRepository;
-use App\Repository\UserCentreRepository;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class DpeDemandeSubscriber implements EventSubscriberInterface
 {
     public function __construct(
-        protected Mailer               $mailer,
-        protected FormationRepository  $formationRepository,
-        protected UserCentreRepository $userCentreRepository,
+        protected Mailer $mailer
     ) {
     }
 
@@ -28,8 +24,7 @@ class DpeDemandeSubscriber implements EventSubscriberInterface
     {
         return [
             DpeDemandeEvent::DPE_DEMANDE_OPENED => 'onDpeDemandeOpened',
-            DpeDemandeEvent::DPE_DEMANDE_UPDATED => 'onDpeDemandeUpdated',
-            DpeDemandeEvent::DPE_DEMANDE_CLOSED => 'onDpeDemandeClosed',
+            DpeDemandeEvent::DPE_DEMANDE_UPDATED => 'onDpeDemandeUpdated'
         ];
     }
 

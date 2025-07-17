@@ -3,6 +3,8 @@
 namespace App\Command;
 
 use App\Service\ApiJsonExport;
+use DateTime;
+use Exception;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -40,8 +42,8 @@ class ApiJsonVersioningCommand extends Command
     {
         $this
             ->addOption(
-                name: 'generate-index-api', 
-                mode: InputOption::VALUE_NONE, 
+                name: 'generate-index-api',
+                mode: InputOption::VALUE_NONE,
                 description: "Génère le fichier d'index pour l'API JSON du versioning"
             );
     }
@@ -61,7 +63,7 @@ class ApiJsonVersioningCommand extends Command
 
             try {
                 $hostname = $this->parameterBag->get('APP_HOSTNAME');
-            }catch(\Exception $e){
+            } catch (Exception $e) {
                 $io->warning("Définissez la variable APP_HOSTNAME pour continuer (.env)");
                 return Command::INVALID;
             }
@@ -69,7 +71,7 @@ class ApiJsonVersioningCommand extends Command
             $io->writeln("Génération de l'index de l'API JSON en cours...");
 
             if($this->fs->exists($path . $filename)){
-                $now = (new \DateTime())->format('d-m-Y_H-i');
+                $now = (new DateTime())->format('d-m-Y_H-i');
                 $this->fs->rename($path . $filename, $path . $now . "-" .  $filename);
             }
             $apiJson = $this->apiJsonExport->generateApiVersioning($hostname, $io);
