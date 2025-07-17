@@ -1174,6 +1174,11 @@ class ExportGeneriqueParcours {
                 'VDI',
                 'Code étape',
                 'VET',
+                'Semestre',
+                'Code Semestre',
+                'UE', 
+                'Code UE',
+                'ID Fiche EC/matière',
                 'Fiche EC/matière',
                 'Code élément',
                 'CM',
@@ -1181,12 +1186,12 @@ class ExportGeneriqueParcours {
                 'TP',
                 'MATI/MATM',
                 'Option',
-                'Semestre'
             ];
 
             $colIndex = [
                 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',
-                'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P'
+                'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P',
+                'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X'
             ];
 
             $excelData = array_merge(...$excelData);
@@ -1219,6 +1224,7 @@ class ExportGeneriqueParcours {
 
     private function getEcCapApogeeData(
         StructureEc $ec,
+        StructureUe $ue,
         ?SemestreParcours $semP,
         bool $isOption,
         int $ordreSemestre,
@@ -1230,6 +1236,11 @@ class ExportGeneriqueParcours {
             $semP?->getCodeApogeeVersionDiplome() ?? "",
             $semP?->getCodeApogeeEtapeAnnee() ?? "",
             $semP?->getCodeApogeeEtapeVersion() ?? "",
+            "S{$ordreSemestre}",
+            $semP?->getSemestre()?->getCodeApogee(),
+            $ue->ue->display(),
+            $ue->ue->getCodeApogee(),
+            $ec->elementConstitutif->displayId(),
             $ec->elementConstitutif->getFicheMatiere()?->getLibelle() ?? '-',
             $ec->elementConstitutif->displayCodeApogee(),
             $ec->heuresEctsEc->cmPres,
@@ -1237,7 +1248,6 @@ class ExportGeneriqueParcours {
             $ec->heuresEctsEc->tpPres,
             $ec->elementConstitutif->getFicheMatiere()?->getTypeApogee() ?? "-",
             $isOption ? 'Choix/option' : 'Obligatoire',
-            "S{$ordreSemestre}"
         ];
     }
 
@@ -1252,11 +1262,11 @@ class ExportGeneriqueParcours {
         foreach($ue->elementConstitutifs as $ec){
             if($ec->elementConstitutif->getNatureUeEc()?->isChoix()){
                 foreach($ec->elementsConstitutifsEnfants as $ecEnfant){
-                    $return[] = $this->getEcCapApogeeData($ecEnfant, $semP, true, $ordreSemestre, $prefixData);
+                    $return[] = $this->getEcCapApogeeData($ecEnfant, $ue, $semP, true, $ordreSemestre, $prefixData);
                 }
             }
             else {
-                $return[] = $this->getEcCapApogeeData($ec, $semP, $isOption, $ordreSemestre, $prefixData);
+                $return[] = $this->getEcCapApogeeData($ec, $ue, $semP, $isOption, $ordreSemestre, $prefixData);
             }
         }
 
