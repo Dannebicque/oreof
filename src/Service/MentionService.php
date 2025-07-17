@@ -29,7 +29,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class MentionService
 {
     // Tableau des codes possibles pour les parcours
-    private const array TAB_CODE_PARCOURS = [
+    private const TAB_CODE_PARCOURS = [
         'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
         'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'Y', 'Z',
         '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',

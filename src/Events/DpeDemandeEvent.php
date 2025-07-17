@@ -15,9 +15,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class DpeDemandeEvent
 {
-    public const string DPE_DEMANDE_CLOSED = 'demande_dpe.closed';
-    public const string DPE_DEMANDE_OPENED = 'demande_dpe.opened';
-    public const string DPE_DEMANDE_UPDATED = 'demande_dpe.updated';
+    public const DPE_DEMANDE_CLOSED = 'demande_dpe.closed';
+    public const DPE_DEMANDE_OPENED = 'demande_dpe.opened';
+    public const DPE_DEMANDE_UPDATED = 'demande_dpe.updated';
 
     protected DpeDemande $dpeDemande;
     protected UserInterface $user;

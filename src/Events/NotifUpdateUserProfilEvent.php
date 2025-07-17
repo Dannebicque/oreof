@@ -14,9 +14,9 @@ use App\Entity\UserProfil;
 class NotifUpdateUserProfilEvent
 {
 
-    public const string ADD_USER_PROFIL = 'notif.add_user_profil';
-    public const string UPDATE_USER_PROFIL = 'notif.update_user_profil';
-    public const string DELETE_USER_PROFIL = 'notif.delete_user_profil';
+    public const ADD_USER_PROFIL = 'notif.add_user_profil';
+    public const UPDATE_USER_PROFIL = 'notif.update_user_profil';
+    public const DELETE_USER_PROFIL = 'notif.delete_user_profil';
 
 
     public function __construct(public UserProfil $userProfil)

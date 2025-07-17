@@ -17,7 +17,7 @@ use Symfony\Component\Mime\Address;
 class Mailer
 {
     protected TemplatedEmail $mail;
-    public const string MAIL_GENERIC = 'oreof@univ-reims.fr';
+    public const MAIL_GENERIC = 'oreof@univ-reims.fr';
 
     protected Address $from;
 

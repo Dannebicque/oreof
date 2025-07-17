@@ -22,7 +22,7 @@ final class ChangeRfState
     public string $place = '';
     public array $historiques = [];
 
-    public const array TAB_PROCESS = [
+    public const TAB_PROCESS = [
         'changeRf.soumis_conseil' => 0,
         'changeRf.soumis_ses' => 1,
         'changeRf.soumis_cfvu' => 2,

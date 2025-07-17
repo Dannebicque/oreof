@@ -16,8 +16,8 @@ use App\Entity\User;
 
 class AddCentreParcoursEvent
 {
-    public const string ADD_CENTRE_PARCOURS = 'add.centre.parcours';
-    public const string REMOVE_CENTRE_PARCOURS = 'remove.centre.parcours';
+    public const ADD_CENTRE_PARCOURS = 'add.centre.parcours';
+    public const REMOVE_CENTRE_PARCOURS = 'remove.centre.parcours';
 
     public function __construct(
         public Parcours $parcours,

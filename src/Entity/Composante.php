@@ -21,7 +21,7 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
 #[ORM\Entity(repositoryClass: ComposanteRepository::class)]
 class Composante
 {
-    public const array RUBRIQUES = [
+    public const RUBRIQUES = [
         'identiteFormation' => 1,
         'localisationFormation' => 2,
         'presentationFormation' => 3,

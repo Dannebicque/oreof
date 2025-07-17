@@ -16,9 +16,9 @@ use App\Entity\User;
 
 class AddCentreFormationEvent
 {
-    public const string ADD_CENTRE_FORMATION = 'add.centre.formation';
+    public const ADD_CENTRE_FORMATION = 'add.centre.formation';
 
-    public const string REMOVE_CENTRE_FORMATION = 'remove.centre.formation';
+    public const REMOVE_CENTRE_FORMATION = 'remove.centre.formation';
 
     public function __construct(
         public Formation $formation,

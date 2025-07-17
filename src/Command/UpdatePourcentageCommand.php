@@ -16,7 +16,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 )]
 class UpdatePourcentageCommand extends Command
 {
-    private const int BATCH_SIZE = 100;
+    private const BATCH_SIZE = 100;
 
 
     public function __construct(

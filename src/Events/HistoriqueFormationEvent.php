@@ -15,8 +15,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class HistoriqueFormationEvent extends AbstractHistoriqueEvent
 {
-    public const string ADD_HISTORIQUE_FORMATION = 'add.historique.formation';
-    public const string ADD_HISTORIQUE_FORMATION_CHANGE_RF = 'add.historique.formation.change_rf';
+    public const ADD_HISTORIQUE_FORMATION = 'add.historique.formation';
+    public const ADD_HISTORIQUE_FORMATION_CHANGE_RF = 'add.historique.formation.change_rf';
 
     private Formation $formation;
     private ?string $fileName;

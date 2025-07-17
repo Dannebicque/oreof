@@ -15,7 +15,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class HistoriqueParcoursEditEvent extends AbstractHistoriqueEvent
 {
-    public const string EDIT_HISTORIQUE_PARCOURS = 'edit.historique.parcours';
+    public const EDIT_HISTORIQUE_PARCOURS = 'edit.historique.parcours';
 
     private HistoriqueParcours $historiqueParcours;
 

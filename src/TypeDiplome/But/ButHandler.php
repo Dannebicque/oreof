@@ -23,9 +23,9 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 final class ButHandler implements TypeDiplomeHandlerInterface
 {
 
-    public const string TEMPLATE_FOLDER = 'but';
-    public const string SOURCE = 'but';
-    public const string TEMPLATE_FORM_MCCC = 'but.html.twig';
+    public const TEMPLATE_FOLDER = 'but';
+    public const SOURCE = 'but';
+    public const TEMPLATE_FORM_MCCC = 'but.html.twig';
 
     private array $typeEpreuves = [
         'sae' => [

@@ -18,7 +18,7 @@ use Symfony\UX\TwigComponent\Attribute\PostMount;
 final class FicheMatiereManageComponent extends AbstractController
 {
 
-    const array TAB = [
+    const TAB = [
         'en_cours_redaction' => 'fiche_matiere',
         'soumis_central' => 'soumis_central',
         'valide_pour_publication' => 'valide_pour_publication',

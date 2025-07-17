@@ -16,61 +16,61 @@ use PhpOffice\PhpSpreadsheet\Style\Alignment;
 class AbstractLicenceMccc
 {
     // Pages
-    public const string PAGE_MODELE = 'modele';
-    public const string PAGE_REF_COMPETENCES = 'ref. compétences';
+    public const PAGE_MODELE = 'modele';
+    public const PAGE_REF_COMPETENCES = 'ref. compétences';
     // Cellules
-    public const string CEL_TYPE_FORMATION = 'J5';
-    public const string CEL_INTITULE_FORMATION = 'J6';
-    public const string CEL_INTITULE_PARCOURS = 'J7';
-    public const string CEL_ANNEE_ETUDE = 'J9';
-    public const string CEL_COMPOSANTE = 'J11';
-    public const string CEL_SITE_FORMATION = 'J13';
-    public const string CEL_ANNEE_UNIVERSITAIRE = 'A3';
-    public const string CEL_RESPONSABLE_MENTION = 'E24';
-    public const string CEL_RESPONSABLE_PARCOURS = 'E25';
-    public const string CEL_REGIME_FI = 'D7';
-    public const string CEL_REGIME_FC = 'D9';
-    public const string CEL_REGIME_FI_APPRENTISSAGE = 'D11';
-    public const string CEL_REGIME_FC_CONTRAT_PRO = 'D13';
+    public const CEL_TYPE_FORMATION = 'J5';
+    public const CEL_INTITULE_FORMATION = 'J6';
+    public const CEL_INTITULE_PARCOURS = 'J7';
+    public const CEL_ANNEE_ETUDE = 'J9';
+    public const CEL_COMPOSANTE = 'J11';
+    public const CEL_SITE_FORMATION = 'J13';
+    public const CEL_ANNEE_UNIVERSITAIRE = 'A3';
+    public const CEL_RESPONSABLE_MENTION = 'E24';
+    public const CEL_RESPONSABLE_PARCOURS = 'E25';
+    public const CEL_REGIME_FI = 'D7';
+    public const CEL_REGIME_FC = 'D9';
+    public const CEL_REGIME_FI_APPRENTISSAGE = 'D11';
+    public const CEL_REGIME_FC_CONTRAT_PRO = 'D13';
 
-    public const string CEL_DATE_CFVU = 'AB25';
-    public const string CEL_DATE_CONSEIL = 'AB24';
+    public const CEL_DATE_CFVU = 'AB25';
+    public const CEL_DATE_CONSEIL = 'AB24';
 
     //Colonnes sur Modèles
 
-    public const int COL_SEMESTRE = 1;
-    public const int COL_UE = 2;
-    public const int COL_INTITULE_UE = 3;
-    public const int COL_NUM_EC = 4;
-    public const int COL_INTITULE_EC = 5;
-    public const int COL_INTITULE_EC_EN = 6;
-    public const int COL_RESP_EC = 7;
-    public const int COL_LANGUE_EC = 8;
-    public const int COL_SUPPORT_ANGLAIS = 9;
-    public const int COL_TYPE_EC = 11;
-    public const int COL_COURS_MUTUALISE = 10;
-    public const int COL_COMPETENCES = 12;
-    public const int COL_ECTS = 13;
-    public const int COL_HEURES_PRES_CM = 14;
-    public const int COL_HEURES_PRES_TD = 15;
-    public const int COL_HEURES_PRES_TP = 16;
-    public const int COL_HEURES_PRES_TOTAL = 17;
+    public const COL_SEMESTRE = 1;
+    public const COL_UE = 2;
+    public const COL_INTITULE_UE = 3;
+    public const COL_NUM_EC = 4;
+    public const COL_INTITULE_EC = 5;
+    public const COL_INTITULE_EC_EN = 6;
+    public const COL_RESP_EC = 7;
+    public const COL_LANGUE_EC = 8;
+    public const COL_SUPPORT_ANGLAIS = 9;
+    public const COL_TYPE_EC = 11;
+    public const COL_COURS_MUTUALISE = 10;
+    public const COL_COMPETENCES = 12;
+    public const COL_ECTS = 13;
+    public const COL_HEURES_PRES_CM = 14;
+    public const COL_HEURES_PRES_TD = 15;
+    public const COL_HEURES_PRES_TP = 16;
+    public const COL_HEURES_PRES_TOTAL = 17;
 
-    public const int COL_HEURES_DIST_CM = 18;
-    public const int COL_HEURES_DIST_TD = 19;
-    public const int COL_HEURES_DIST_TP = 20;
-    public const int COL_HEURES_DIST_TOTAL = 21;
-    public const int COL_HEURES_AUTONOMIE = 23;
-    public const int COL_HEURES_TOTAL = 22;
-    public const int COL_MCCC_CCI = 24;
-    public const int COL_MCCC_CC = 25;
-    public const int COL_MCCC_CT = 26;
-    public const int COL_MCCC_SECONDE_CHANCE_CC_SANS_TP = 27;
-    public const int COL_MCCC_SECONDE_CHANCE_CC_AVEC_TP = 28;
-    public const int COL_MCCC_SECONDE_CHANCE_CC_SUP_10 = 29;
-    public const int COL_MCCC_SECONDE_CHANCE_CT = 30;
+    public const COL_HEURES_DIST_CM = 18;
+    public const COL_HEURES_DIST_TD = 19;
+    public const COL_HEURES_DIST_TP = 20;
+    public const COL_HEURES_DIST_TOTAL = 21;
+    public const COL_HEURES_AUTONOMIE = 23;
+    public const COL_HEURES_TOTAL = 22;
+    public const COL_MCCC_CCI = 24;
+    public const COL_MCCC_CC = 25;
+    public const COL_MCCC_CT = 26;
+    public const COL_MCCC_SECONDE_CHANCE_CC_SANS_TP = 27;
+    public const COL_MCCC_SECONDE_CHANCE_CC_AVEC_TP = 28;
+    public const COL_MCCC_SECONDE_CHANCE_CC_SUP_10 = 29;
+    public const COL_MCCC_SECONDE_CHANCE_CT = 30;
 
-    public const string COL_DETAIL_TYPE_EPREUVES = "A27";
+    public const COL_DETAIL_TYPE_EPREUVES = "A27";
 
     protected array $typeEpreuves = [];
     protected bool $versionFull = true;

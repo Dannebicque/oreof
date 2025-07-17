@@ -19,11 +19,11 @@ class UserEvent
     protected string $idCentre;
 
 
-    public const string USER_AJOUTE = 'user.ajoute';
-    public const string USER_VALIDE_DPE = 'user.valide_dpe';
-    public const string USER_VALIDE_ADMIN = 'user.valide_admin';
-    public const string USER_REVOQUE_ADMIN = 'user.revoque';
-    public const string USER_REFUSER_ADMIN = 'user.refuser';
+    public const USER_AJOUTE = 'user.ajoute';
+    public const USER_VALIDE_DPE = 'user.valide_dpe';
+    public const USER_VALIDE_ADMIN = 'user.valide_admin';
+    public const USER_REVOQUE_ADMIN = 'user.revoque';
+    public const USER_REFUSER_ADMIN = 'user.refuser';
 
     public function __construct(User $user, string $centre = '', string $idCentre = '')
     {

@@ -17,7 +17,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class ExportController extends BaseController
 {
-    public const array TYPES_DOCUMENT = [
+    public const TYPES_DOCUMENT = [
         "xlsx-mccc" => 'MCCC format Excel (xslx)',
         "xlsx-cap" => 'Export CAP format excel (xslx)',
         "xlsx-fiabilisation" => 'Export Fiabilisation format excel (xslx)',
@@ -29,7 +29,7 @@ class ExportController extends BaseController
         "pdf-fiches" => 'Fiches descriptions format PDF'
     ];
 
-    public const array TYPES_DOCUMENT_GLOBAL = [
+    public const TYPES_DOCUMENT_GLOBAL = [
         "xlsx-carif" => 'Tableau CARIF (xslx)',
         "xlsx-semestres_ouverts" => 'Tableau Semestre/parcours (non)ouvert (xslx)',
         "xlsx-ec" => 'Fiches EC/Type (xslx)',

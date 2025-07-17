@@ -15,7 +15,7 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 class McccUpdateEvent extends Event
 {
-    public const string UPDATE_MCCC = 'mccc.update';
+    public const UPDATE_MCCC = 'mccc.update';
 
     public ElementConstitutif $elementConstitutif;
     public Parcours $parcours;

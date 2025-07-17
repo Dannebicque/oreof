@@ -11,7 +11,7 @@ class IdEntityDenormalizer implements DenormalizerAwareInterface, DenormalizerIn
     use DenormalizerAwareTrait;
 
     // Le denormalizer ne doit être appelé qu'une seule fois par objet
-    private const string ALREADY_CALLED = 'ID_ENTITY_DENORMALIZER_ALREADY_CALLED';
+    private const ALREADY_CALLED = 'ID_ENTITY_DENORMALIZER_ALREADY_CALLED';
 
     // Si le résultat peut être mis en cache
     private array $supportedEntities = [

@@ -15,7 +15,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class HistoriqueChangeRfEvent extends AbstractHistoriqueEvent
 {
-    public const string ADD_HISTORIQUE_CHANGE_RF = 'add.historique.formation.change_rf';
+    public const ADD_HISTORIQUE_CHANGE_RF = 'add.historique.formation.change_rf';
 
     private ChangeRf $changeRf;
     private ?string $fileName;

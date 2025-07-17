@@ -24,7 +24,7 @@ use Symfony\UX\TwigComponent\Attribute\PostMount;
 #[AsLiveComponent('parcours_manage')]
 final class ParcoursManageComponent extends AbstractController
 {
-    public const array TAB = [
+    public const TAB = [
         'initialisation_dpe' => 'formation',
         'autorisation_saisie' => null,
         'en_cours_redaction' => 'parcours',
@@ -60,7 +60,7 @@ final class ParcoursManageComponent extends AbstractController
         'non_ouverture' => 'publication',
     ];
 
-    public const array TAB_PROCESS = [
+    public const TAB_PROCESS = [
         'ouverture_ses_ss_cfvu' => 0,
         'cloture_ses_ss_cfvu' => 0,
         'soumis_parcours' => 0,
