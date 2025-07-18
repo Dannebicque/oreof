@@ -210,7 +210,7 @@ class RessourceVoter extends Voter
                 $this->dpeParcoursWorkflow->can($dpeParcours, 'valider_parcours') ||
                 $this->dpeParcoursWorkflow->can($dpeParcours, 'valider_dpe_composante') ||
                 $this->dpeParcoursWorkflow->can($dpeParcours, 'valider_conseil') ||
-                $this->dpeParcoursWorkflow->can($dpeParcours, 'valide_cfvu') ||
+                $this->dpeParcoursWorkflow->can($dpeParcours, 'valider_publication') ||
                 $this->dpeParcoursWorkflow->can($dpeParcours, 'valider_rf');
         }
 
@@ -223,7 +223,7 @@ class RessourceVoter extends Voter
                 $this->dpeParcoursWorkflow->can($dpeParcours, 'valider_rf') ||
                 $this->dpeParcoursWorkflow->can($dpeParcours, 'valider_dpe_composante') ||
                 $this->dpeParcoursWorkflow->can($dpeParcours, 'valider_conseil') ||
-                $this->dpeParcoursWorkflow->can($dpeParcours, 'valide_cfvu') ||
+                $this->dpeParcoursWorkflow->can($dpeParcours, 'valider_publication') ||
                 $this->dpeParcoursWorkflow->can($dpeParcours, 'valider_central');
         }
 
