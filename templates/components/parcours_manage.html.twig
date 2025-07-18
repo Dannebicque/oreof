@@ -300,7 +300,7 @@
                 <div class="col-12">
                     <div class="row mt-2">
                         <div class="col-3 d-grid">
-                            {% if is_granted('MANAGE', {route: 'app_parcours', subject: this.dpeParcours}) %}
+                            {% if is_granted('MANAGE', {route: 'app_parcours', subject: this.dpeParcours}) or is_granted('ROLE_ADMIN') %}
                                 {% if this.dpeParcours.etatReconduction.value != 'NON_OUVERTURE' %}
                                     {% if not this.hasDemande and isOuvrable(this.parcours) %}
                                         <button class="btn btn-sm d-block btn-outline-warning"
