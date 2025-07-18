@@ -1,15 +1,30 @@
 <div class="card mt-2">
     <div class="card-body">
-        //Selon le profil, afficher toutes les "routes" + pour chaque les 3 possibilités d'accès ? Type Psup
+
+        {% form_theme form 'communs/form_theme.html.twig' %}
+        {{ form_start(form) }}
         <div class="row">
-            <div class="col-8">
-                //afficher les informations du profil
+            <div class="col-sm-10">
+                <div class="row">
+                    <div class="col-sm-6">
+                        {{ form_row(form.libelle) }}
+                        {{ form_row(form.code) }}
+                        {{ form_row(form.onlyAdmin) }}
+
+                    </div>
+                    <div class="col-sm-6">
+                        {{ form_row(form.centre) }}
+                        {{ form_row(form.isExclusif) }}
+                    </div>
+                </div>
             </div>
-            <div class="col-4 d-grid">
+            <div class="col-sm-2 d-grid">
                 <button class="btn btn-warning d-block">Modifier</button>
                 <button class="btn btn-outline-danger d-block mt-2">Supprimer</button>
             </div>
         </div>
+        {{ form_end(form) }}
+
     </div>
 </div>
 

@@ -48,6 +48,9 @@ class ProfilsController extends BaseController
     {
         $profil = $profilRepository->find($request->query->get('profil'));
         if ($profil) {
+            $form = $this->createForm(ProfilType::class, $profil, [
+            ]);
+            $form->handleRequest($request);
             $permissions = $profil->getProfilDroits();
             $ressourcesProfil = [];
             foreach ($permissions as $permission) {
@@ -63,7 +66,7 @@ class ProfilsController extends BaseController
             'ressources' => RessourceEnum::getRessources(),
             'droits' => PermissionEnum::cases(),
             'ressourcesProfil' => $ressourcesProfil,
-
+            'form' => isset($form) ? $form->createView() : null,
         ]);
     }
 
