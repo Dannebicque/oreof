@@ -115,30 +115,59 @@
                                                 {% for key, state in hasTransitions(this.dpeParcours) %}
                                                     {% for keyTrans, transition in state %}
                                                         <div class="col-4 d-grid">
-                                                            <button class="btn d-block text-wrap btn-outline-{{ transition.meta.btn }}"
-                                                                    type="button"
-                                                                    {{ stimulus_controller('modal', {
-                                                                        size: 'lg',
-                                                                        updateComponent: {
-                                                                            id: 'parcours_manage',
-                                                                            event: 'mention_manage:'~key,
-                                                                            event_type: key
-                                                                        },
-                                                                        modalTitle: ('validation.valider.'~prefix~'.'~keyTrans~'.title')|trans_debug({}, 'process'),
-                                                                        modalUrl: path('app_validation_'~key, {
-                                                                            etape:this.place,
-                                                                            transition:keyTrans,
-                                                                            id:id,
-                                                                            type:'parcours'
-                                                                        }) }) }}
-                                                                    data-action="click->modal#openModal"
-                                                                    data-controller="tooltip"
-                                                                    data-tooltip-placement-value="bottom"
-                                                                    aria-label="{{ ('title.validation.'~prefix~'.'~keyTrans)|trans({}, 'process') }}"
-                                                                    data-bs-original-title="{{ ('title.validation.'~prefix~'.'~keyTrans)|trans({}, 'process') }}"
-                                                            >
-                                                                <i class="fal {{ transition.meta.icon }}"></i> {{ ('btn.validation.'~prefix~'.'~keyTrans)|trans_debug({}, 'process') }}
-                                                            </button>
+                                                            {% if transition == 'valider_publication' %}
+                                                                {% if is_granted('MANAGE', {route: 'app_etablissement', subject: 'etablissement'}) %}
+                                                                    <button class="btn d-block text-wrap btn-outline-{{ transition.meta.btn }}"
+                                                                            type="button"
+                                                                            {{ stimulus_controller('modal', {
+                                                                                size: 'lg',
+                                                                                updateComponent: {
+                                                                                    id: 'parcours_manage',
+                                                                                    event: 'mention_manage:'~key,
+                                                                                    event_type: key
+                                                                                },
+                                                                                modalTitle: ('validation.valider.'~prefix~'.'~keyTrans~'.title')|trans_debug({}, 'process'),
+                                                                                modalUrl: path('app_validation_'~key, {
+                                                                                    etape:this.place,
+                                                                                    transition:keyTrans,
+                                                                                    id:id,
+                                                                                    type:'parcours'
+                                                                                }) }) }}
+                                                                            data-action="click->modal#openModal"
+                                                                            data-controller="tooltip"
+                                                                            data-tooltip-placement-value="bottom"
+                                                                            aria-label="{{ ('title.validation.'~prefix~'.'~keyTrans)|trans({}, 'process') }}"
+                                                                            data-bs-original-title="{{ ('title.validation.'~prefix~'.'~keyTrans)|trans({}, 'process') }}"
+                                                                    >
+                                                                        <i class="fal {{ transition.meta.icon }}"></i> {{ ('btn.validation.'~prefix~'.'~keyTrans)|trans_debug({}, 'process') }}
+                                                                    </button>
+                                                                {% endif %}
+                                                            {% else %}
+                                                                <button class="btn d-block text-wrap btn-outline-{{ transition.meta.btn }}"
+                                                                        type="button"
+                                                                        {{ stimulus_controller('modal', {
+                                                                            size: 'lg',
+                                                                            updateComponent: {
+                                                                                id: 'parcours_manage',
+                                                                                event: 'mention_manage:'~key,
+                                                                                event_type: key
+                                                                            },
+                                                                            modalTitle: ('validation.valider.'~prefix~'.'~keyTrans~'.title')|trans_debug({}, 'process'),
+                                                                            modalUrl: path('app_validation_'~key, {
+                                                                                etape:this.place,
+                                                                                transition:keyTrans,
+                                                                                id:id,
+                                                                                type:'parcours'
+                                                                            }) }) }}
+                                                                        data-action="click->modal#openModal"
+                                                                        data-controller="tooltip"
+                                                                        data-tooltip-placement-value="bottom"
+                                                                        aria-label="{{ ('title.validation.'~prefix~'.'~keyTrans)|trans({}, 'process') }}"
+                                                                        data-bs-original-title="{{ ('title.validation.'~prefix~'.'~keyTrans)|trans({}, 'process') }}"
+                                                                >
+                                                                    <i class="fal {{ transition.meta.icon }}"></i> {{ ('btn.validation.'~prefix~'.'~keyTrans)|trans_debug({}, 'process') }}
+                                                                </button>
+                                                            {% endif %}
                                                         </div>
                                                     {% else %}
                                                         <div class="col-4 d-grid">
