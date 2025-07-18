@@ -115,9 +115,8 @@
                                                 {% for key, state in hasTransitions(this.dpeParcours) %}
                                                     {% for keyTrans, transition in state %}
                                                         <div class="col-4 d-grid">
-                                                            {{ keyTrans }}
                                                             {% if keyTrans == 'valider_publication' %}
-                                                                {% if is_granted('MANAGE', {route: 'app_etablissement', subject: 'etablissement'}) %}
+                                                                {% if is_granted('MANAGE', {route: 'app_etablissement', subject: 'etablissement'}) or is_granted('ROLE_ADMIN') %}
                                                                     <button class="btn d-block text-wrap btn-outline-{{ transition.meta.btn }}"
                                                                             type="button"
                                                                             {{ stimulus_controller('modal', {
