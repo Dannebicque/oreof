@@ -10,6 +10,7 @@
 namespace App\Controller\Config;
 
 use App\Controller\BaseController;
+use App\Entity\Profil;
 use App\Entity\User;
 use App\Entity\UserProfil;
 use App\Enums\CentreGestionEnum;
@@ -276,21 +277,21 @@ class UserProfilController extends BaseController
     #[Route('/show-attente/{id}', name: 'show_attente', methods: ['GET'])]
     public function showAttente(
         Request        $request,
-        RoleRepository $roleRepository,
+        ProfilRepository $profilRepository,
         User           $user
     ): Response
     {
         $dpe = (bool)$request->query->get('dpe', false);
         if ($dpe) {
-            $roles = $roleRepository->findByDpe();
+            $roles = $profilRepository->findByDpe();
         } else {
-            $roles = $roleRepository->findAll();
+            $roles = $profilRepository->findAll();
         }
 
         return $this->render('config/user/_show_attente.html.twig', [
             'user' => $user,
             'typeCentres' => CentreGestionEnum::cases(),
-            'centresUser' => $user->getUserCentres(),
+            'centresUser' => $user->getUserProfils(),
             'roles' => $roles,
             'dpe' => $dpe
         ]);

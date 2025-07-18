@@ -139,7 +139,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         string|null                $direction
     ): array {
         return $this->createQueryBuilder('u')
-            ->innerJoin('u.userCentres', 'uc')
+            ->innerJoin('u.userProfils', 'uc')
             ->leftJoin('uc.formation', 'cf')
             ->where('u.isEnable = :isEnable')
             ->andWhere('u.isDeleted = false')
@@ -177,7 +177,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         string|null                $direction
     ): array {
         return $this->createQueryBuilder('u')
-            ->innerJoin('u.userCentres', 'uc')
+            ->innerJoin('u.userProfils', 'uc')
             ->leftJoin('uc.formation', 'cf')
             ->where('u.isEnable = :isEnable')
             ->andWhere('u.isDeleted = false')

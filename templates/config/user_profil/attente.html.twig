@@ -12,6 +12,7 @@
                     <th>Login URCA</th>
                     <th>Centre(s) / Droits</th>
                     <th>Date demande</th>
+                    <th>Service/fonction</th>
                     <th>Validé DPE ?</th>
                     <th></th>
                 </tr>
@@ -24,11 +25,12 @@
                         <td>{{ user.email }}</td>
                         <td>{{ user.username }}</td>
                         <td>
-                            {% for centre in user.userCentres %}
-                                {{ centre|badgeCentre }}
+                            {% for centre in user.userProfils %}
+                                {{ centre|badgeTypeCentre }}
                             {% endfor %}
                         </td>
                         <td>{{ user.dateDemande|dateTimeFr }}</td>
+                        <td>{{ user.serviceDemande }}</td>
                         <td>
                             {% if user.composanteDemande != null %}
                                 {% if user.isValidDpe %}

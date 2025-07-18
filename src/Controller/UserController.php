@@ -20,7 +20,7 @@ class UserController extends AbstractController
     public function mesInformations(): Response
     {
         return $this->render('user/mes-informations.html.twig', [
-            'centres' => $this->getUser()->getUserCentres(),
+            'profils' => $this->getUser()->getUserProfils(),
 
         ]);
     }

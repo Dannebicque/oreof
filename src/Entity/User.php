@@ -62,7 +62,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     #[Groups(['fiche_matiere:read', 'parcours_json_versioning', 'fiche_matiere_versioning', 'formation_json_versioning'])]
     private ?string $email = null;
- 
+
     #[ORM\Column]
     private ?bool $isEnable = false;
 
@@ -98,9 +98,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\OneToMany(mappedBy: 'destinataire', targetEntity: Notification::class)]
     private Collection $notifications;
-
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: UserCentre::class)]
-    private Collection $userCentres;
 
     #[ORM\OneToMany(mappedBy: 'coResponsable', targetEntity: Parcours::class)]
     private Collection $coParcours;
@@ -139,7 +136,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->composantes = new ArrayCollection();
         $this->notifications = new ArrayCollection();
-        $this->userCentres = new ArrayCollection();
         $this->composanteResponsableDpe = new ArrayCollection();
         $this->formationsResponsableMention = new ArrayCollection();
         $this->coParcours = new ArrayCollection();
@@ -446,34 +442,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // set the owning side to null (unless already changed)
         if ($this->notifications->removeElement($notification) && $notification->getDestinataire() === $this) {
             $notification->setDestinataire(null);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, UserCentre>
-     */
-    public function getUserCentres(): Collection
-    {
-        return $this->userCentres;
-    }
-
-    public function addUserCentre(UserCentre $userCentre): self
-    {
-        if (!$this->userCentres->contains($userCentre)) {
-            $this->userCentres->add($userCentre);
-            $userCentre->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeUserCentre(UserCentre $userCentre): self
-    {
-        // set the owning side to null (unless already changed)
-        if ($this->userCentres->removeElement($userCentre) && $userCentre->getUser() === $this) {
-            $userCentre->setUser(null);
         }
 
         return $this;

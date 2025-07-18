@@ -21,7 +21,6 @@ use App\Entity\Formation;
 use App\Entity\FormationVersioning;
 use App\Entity\Parcours;
 use App\Entity\ParcoursVersioning;
-use App\Entity\UserCentre;
 use App\Entity\UserProfil;
 use App\Enums\TypeModificationDpeEnum;
 use App\Events\AddCentreFormationEvent;

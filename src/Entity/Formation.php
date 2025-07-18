@@ -141,9 +141,6 @@ class Formation
     /** @deprecated("sur le DPE") */
     private ?array $etatDpe = [];
 
-    #[ORM\OneToMany(mappedBy: 'formation', targetEntity: UserCentre::class, cascade: ['persist', 'remove'])]
-    private Collection $userCentres;
-
     #[ORM\Column]
     private ?array $etatSteps = [];
 
@@ -224,7 +221,6 @@ class Formation
         $this->parcours = new ArrayCollection();
         $this->composantesInscription = new ArrayCollection();
         $this->blocCompetences = new ArrayCollection();
-        $this->userCentres = new ArrayCollection();
         $this->dpeDemandes = new ArrayCollection();
 
         for ($i = 1; $i <= 3; $i++) {
@@ -669,34 +665,6 @@ class Formation
     public function setEtatDpe(?array $etatDpe): self
     {
         $this->etatDpe = $etatDpe;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, UserCentre>
-     */
-    public function getUserCentres(): Collection
-    {
-        return $this->userCentres;
-    }
-
-    public function addUserCentre(UserCentre $userCentre): self
-    {
-        if (!$this->userCentres->contains($userCentre)) {
-            $this->userCentres->add($userCentre);
-            $userCentre->setFormation($this);
-        }
-
-        return $this;
-    }
-
-    public function removeUserCentre(UserCentre $userCentre): self
-    {
-        // set the owning side to null (unless already changed)
-        if ($this->userCentres->removeElement($userCentre) && $userCentre->getFormation() === $this) {
-            $userCentre->setFormation(null);
-        }
 
         return $this;
     }

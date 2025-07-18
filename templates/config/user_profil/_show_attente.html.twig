@@ -31,118 +31,69 @@
     </tbody>
 </table>
 
-<div {{ stimulus_controller('register', {
-    urlComposante: path('api_composante', {dpe:dpe}),
-    urlFormation: path('api_formation', {dpe:dpe}),
-    urlDroits: path('api_droits', {dpe:dpe}),
-})|stimulus_controller('centre', {
-    urlListe: path('app_user_gestion_liste', {user:user.id}),
-    urlAdd: path('app_user_gestion_add_centre', {user:user.id})
-}) }}
-        data-action="register:modalHide@window->base#modalHide"
->
-    <div {{ stimulus_target('centre', 'liste') }}>
+{{ include('user_profils/_gestion_profils.html.twig') }}
 
-    </div>
-    <div>
-        <h3>Ajouter un centre</h3>
-        <div>
-            <label class="form-label required" for="typeCentre">Type de centre</label>
-            <select id="typeCentre" class="form-select" {{ stimulus_action('register', 'changeCentre') }}
-                    required
-                    {{ stimulus_controller('symfony/ux-autocomplete/autocomplete') }}
-            >
-                <option value="">Choisir un centre</option>
-                {% for centre in typeCentres|filter(centre => (dpe == true and centre.value != 'cg_etablissement') or dpe == false) %}
-                    <option value="{{ centre.value }}">{{ centre.libelle }}</option>
-                {% endfor %}
-            </select>
-        </div>
-        <div>
-            <label for="selectListe" class="form-label">Selon le centre, précisez</label>
-            <select class="form-select" name="selectListe" id="selectListe"
-                    {{ stimulus_controller('symfony/ux-autocomplete/autocomplete') }}
-            >
-                <option value="">Choisissez un centre</option>
-            </select>
-        </div>
-        <div>
-            <label for="droits" class="form-label required">Droits sur ce centre ?</label>
-            <select class="form-select" name="droits" id="droits" required
-                    {{ stimulus_controller('symfony/ux-autocomplete/autocomplete') }}
-            >
-                <option value="">Choisissez un centre</option>
-                {% for role in roles %}
-                    <option value="{{ role.id }}">{{ role.libelle }}</option>
-                {% endfor %}
-            </select>
-        </div>
-        <button class="btn btn-success mt-1" {{ stimulus_action('centre', 'addCentre') }}>Ajouter le centre</button>
-    </div>
-
-    <div class="mt-2">
-        {% if user.isEnable %}
-            <a href="{{ path('app_user_gestion_revoque_admin', {user:user.id}) }}" class="btn btn-outline-danger">
-                Désactiver l'accès
-            </a>
-        {% else %}
-            {% if (user.isValidDpe == false and (user.userCentres|length >0 and (user.userCentres[0].typeCentre == 'cg_composante' or user.userCentres[0].typeCentre ==
-                'cg_formation'))
-                ) or user.isValideAdministration == false %}
-                {% if user.isValidDpe == false %}
-                    <span class="badge bg-warning">Non validé par DPE</span>
-                {% else %}
-                    <span class="badge bg-success">
+<div class="mt-2">
+    {% if user.isEnable %}
+        <a href="{{ path('app_user_gestion_revoque_admin', {user:user.id}) }}" class="btn btn-outline-danger">
+            Désactiver l'accès
+        </a>
+    {% else %}
+        {% if (user.isValidDpe == false and (user.userProfils|length >0 and (user.userProfils[0].profil.centre == 'cg_composante' or user.userProfils[0].profil.centre == 'cg_formation'))
+            ) or user.isValideAdministration == false %}
+            {% if user.isValidDpe == false %}
+                <span class="badge bg-warning">Non validé par DPE</span>
+            {% else %}
+                <span class="badge bg-success">
             Validé par DPE le {{ user.dateValideDpe|dateTimeFr }}
             </span>
-                {% endif %}
-                {% if not is_granted('ROLE_ADMIN') %}
-                    <a href="{{ path('app_user_gestion_valid_dpe', {user:user.id}) }}" class="btn btn-outline-success">
-                        Valider l'accès
-                    </a>
-                    <button
-                            {{ stimulus_action('register', 'refuserAcces') }}
-                            class="btn text-danger">
-                        Refuser l'accès
-                    </button>
-                    <div id="motifRefus" class="d-none">
-                        <label class="form-label" for="texteMotifRefus"></label>
-                        <textarea class="form-control" id="texteMotifRefus"></textarea>
-                        <button data-href="{{ path('app_user_gestion_refuser_admin', {user:user.id}) }}"
-                                {{ stimulus_action('register', 'confirmeRefusAcces') }}
-                                class="btn btn-outline-danger">
-                            Confirmer le refus d'accès
-                        </button>
-                    </div>
-                {% endif %}
             {% endif %}
-            {% if is_granted('ROLE_ADMIN') %}
-                {% if user.isValideAdministration == false %}
-                    <a href="{{ path('app_user_gestion_valid_admin', {user:user.id}) }}"
-                       class="btn btn-outline-success">
-                        Valider l'accès
-                    </a>
-                    <button
-                            {{ stimulus_action('register', 'refuserAcces') }}
-                            class="btn text-danger">
-                        Refuser l'accès
+            {% if not is_granted('ROLE_ADMIN') %}
+                <a href="{{ path('app_user_gestion_valid_dpe', {user:user.id}) }}" class="btn btn-outline-success">
+                    Valider l'accès
+                </a>
+                <button
+                        {{ stimulus_action('register', 'refuserAcces') }}
+                        class="btn text-danger">
+                    Refuser l'accès
+                </button>
+                <div id="motifRefus" class="d-none">
+                    <label class="form-label" for="texteMotifRefus"></label>
+                    <textarea class="form-control" id="texteMotifRefus"></textarea>
+                    <button data-href="{{ path('app_user_gestion_refuser_admin', {user:user.id}) }}"
+                            {{ stimulus_action('register', 'confirmeRefusAcces') }}
+                            class="btn btn-outline-danger">
+                        Confirmer le refus d'accès
                     </button>
-                    <div id="motifRefus" class="d-none">
-                        <label class="form-label" for="texteMotifRefus"></label>
-                        <textarea class="form-control" id="texteMotifRefus"></textarea>
-                        <button data-href="{{ path('app_user_gestion_refuser_admin', {user:user.id}) }}"
-                                {{ stimulus_action('register', 'confirmeRefusAcces') }}
-                                class="btn btn-outline-danger">
-                            Confirmer le refus d'accès
-                        </button>
-                    </div>
-                {% else %}
-                    <a href="{{ path('app_user_gestion_revoque_admin', {user:user.id}) }}"
-                       class="btn btn-outline-danger">
-                        Révoquer l'accès
-                    </a>
-                {% endif %}
+                </div>
             {% endif %}
         {% endif %}
-    </div>
+        {% if is_granted('ROLE_ADMIN') %}
+            {% if user.isValideAdministration == false %}
+                <a href="{{ path('app_user_gestion_valid_admin', {user:user.id}) }}"
+                   class="btn btn-outline-success">
+                    Valider l'accès
+                </a>
+                <button
+                        {{ stimulus_action('register', 'refuserAcces') }}
+                        class="btn text-danger">
+                    Refuser l'accès
+                </button>
+                <div id="motifRefus" class="d-none">
+                    <label class="form-label" for="texteMotifRefus"></label>
+                    <textarea class="form-control" id="texteMotifRefus"></textarea>
+                    <button data-href="{{ path('app_user_gestion_refuser_admin', {user:user.id}) }}"
+                            {{ stimulus_action('register', 'confirmeRefusAcces') }}
+                            class="btn btn-outline-danger">
+                        Confirmer le refus d'accès
+                    </button>
+                </div>
+            {% else %}
+                <a href="{{ path('app_user_gestion_revoque_admin', {user:user.id}) }}"
+                   class="btn btn-outline-danger">
+                    Révoquer l'accès
+                </a>
+            {% endif %}
+        {% endif %}
+    {% endif %}
 </div>

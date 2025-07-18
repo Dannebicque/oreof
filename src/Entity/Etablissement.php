@@ -39,9 +39,6 @@ class Etablissement
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     private ?Adresse $adresse = null;
 
-    #[ORM\OneToMany(mappedBy: 'etablissement', targetEntity: UserCentre::class)]
-    private Collection $userCentres;
-
     #[ORM\Column]
     private ?array $options = [];
 
@@ -70,7 +67,6 @@ class Etablissement
     {
         $this->users = new ArrayCollection();
         $this->villes = new ArrayCollection();
-        $this->userCentres = new ArrayCollection();
 
         $resolver = new OptionsResolver();
         $this->configureOptions($resolver);
@@ -167,34 +163,6 @@ class Etablissement
     public function setAdresse(?Adresse $adresse): self
     {
         $this->adresse = $adresse;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, UserCentre>
-     */
-    public function getUserCentres(): Collection
-    {
-        return $this->userCentres;
-    }
-
-    public function addUserCentre(UserCentre $userCentre): self
-    {
-        if (!$this->userCentres->contains($userCentre)) {
-            $this->userCentres->add($userCentre);
-            $userCentre->setEtablissement($this);
-        }
-
-        return $this;
-    }
-
-    public function removeUserCentre(UserCentre $userCentre): self
-    {
-        // set the owning side to null (unless already changed)
-        if ($this->userCentres->removeElement($userCentre) && $userCentre->getEtablissement() === $this) {
-            $userCentre->setEtablissement(null);
-        }
 
         return $this;
     }

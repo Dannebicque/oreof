@@ -1,7 +1,6 @@
 <table class="table">
     <thead>
     <tr>
-
         <th>
             <a href="#"
                     {{ stimulus_action('crud', 'sort', 'click', {
@@ -50,7 +49,7 @@
     </tr>
     </thead>
     <tbody>
-    {% for user in users|filter(user => user.userCentres|length == 0) %}
+    {% for user in users|filter(user => user.userProfils|length == 0) %}
         <tr>
             <td>{{ user.nom }}</td>
             <td>{{ user.prenom }}</td>
@@ -116,7 +115,7 @@
         </tr>
     {% else %}
         <tr>
-            <td colspan="7">no records found</td>
+            <td colspan="7">Aucun utilisateur trouvé</td>
         </tr>
     {% endfor %}
     </tbody>

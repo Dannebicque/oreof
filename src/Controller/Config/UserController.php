@@ -18,8 +18,11 @@ use App\Enums\CentreGestionEnum;
 use App\Form\UserHorsUrcaType;
 use App\Form\UserLdapType;
 use App\Form\UserType;
+use App\Repository\ProfilRepository;
 use App\Repository\RoleRepository;
+use App\Repository\UserProfilRepository;
 use App\Repository\UserRepository;
+use App\Utils\JsonRequest;
 use DateTime;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -259,21 +262,21 @@ class UserController extends BaseController
     #[Route('/show-attente/{id}', name: 'app_user_show_attente', methods: ['GET'])]
     public function showAttente(
         Request        $request,
-        RoleRepository $roleRepository,
+        ProfilRepository $profilRepository,
         User           $user
     ): Response {
         $dpe = (bool)$request->query->get('dpe', false);
         if ($dpe) {
-            $roles = $roleRepository->findByDpe();
+            $profils = $profilRepository->findByDpe();
         } else {
-            $roles = $roleRepository->findAll();
+            $profils = $profilRepository->findAll();
         }
 
-        return $this->render('config/user/_show_attente.html.twig', [
+        return $this->render('config/user_profil/_show_attente.html.twig', [
             'user' => $user,
             'typeCentres' => CentreGestionEnum::cases(),
-            'centresUser' => $user->getUserCentres(),
-            'roles' => $roles,
+            'centresUser' => $user->getUserProfils(),
+            'profils' => $profils,
             'dpe' => $dpe
         ]);
     }
@@ -335,15 +338,15 @@ class UserController extends BaseController
     public function delete(
         Request              $request,
         User                 $user,
-        UserCentreRepository $userCentreRepository,
-        UserRepository       $userRepository
+        UserRepository       $userRepository,
+        UserProfilRepository $userProfilRepository
     ): Response {
         if ($this->isCsrfTokenValid(
             'delete' . $user->getId(),
             JsonRequest::getValueFromRequest($request, 'csrf')
         )) {
-            foreach ($user->getUserCentres() as $centre) {
-                $userCentreRepository->remove($centre, true);
+            foreach ($user->getUserProfils() as $centre) {
+                $userProfilRepository->remove($centre, true);
             }
 
             $user->setIsDeleted(true);//on met le flag supprimé à true.

@@ -79,9 +79,6 @@ class Composante
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $urlSite = null;
 
-    #[ORM\OneToMany(mappedBy: 'composante', targetEntity: UserCentre::class)]
-    private Collection $userCentres;
-
     #[ORM\Column(nullable: true)]
     private ?array $etatComposante = [];
 
@@ -129,7 +126,6 @@ class Composante
     public function __construct()
     {
         $this->formations = new ArrayCollection();
-        $this->userCentres = new ArrayCollection();
         $this->formationsPortees = new ArrayCollection();
         $this->ficheMatieres = new ArrayCollection();
         $this->composantes = new ArrayCollection();
@@ -282,34 +278,6 @@ class Composante
     public function setUrlSite(?string $urlSite): self
     {
         $this->urlSite = $urlSite;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, UserCentre>
-     */
-    public function getUserCentres(): Collection
-    {
-        return $this->userCentres;
-    }
-
-    public function addUserCentre(UserCentre $userCentre): self
-    {
-        if (!$this->userCentres->contains($userCentre)) {
-            $this->userCentres->add($userCentre);
-            $userCentre->setComposante($this);
-        }
-
-        return $this;
-    }
-
-    public function removeUserCentre(UserCentre $userCentre): self
-    {
-        // set the owning side to null (unless already changed)
-        if ($this->userCentres->removeElement($userCentre) && $userCentre->getComposante() === $this) {
-            $userCentre->setComposante(null);
-        }
 
         return $this;
     }

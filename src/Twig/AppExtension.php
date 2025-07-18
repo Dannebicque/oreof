@@ -10,7 +10,6 @@
 namespace App\Twig;
 
 use App\Entity\UeMutualisable;
-use App\Entity\UserCentre;
 use App\Entity\UserProfil;
 use App\Enums\BadgeEnumInterface;
 use App\Enums\CentreGestionEnum;
@@ -44,7 +43,6 @@ class AppExtension extends AbstractExtension
             new TwigFilter('rncp_link', [$this, 'rncpLink'], ['is_safe' => ['html']]),
             new TwigFilter('badgeBoolean', [$this, 'badgeBoolean'], ['is_safe' => ['html']]),
             new TwigFilter('badgeDroits', [$this, 'badgeDroits'], ['is_safe' => ['html']]),
-            new TwigFilter('badgeCentre', [$this, 'badgeCentre'], ['is_safe' => ['html']]),
             new TwigFilter('badgeTypeCentre', [$this, 'badgeTypeCentre'], ['is_safe' => ['html']]),
             new TwigFilter('centre', [$this, 'centre'], ['is_safe' => ['html']]),
             new TwigFilter('displayOrBadge', [$this, 'displayOrBadge'], ['is_safe' => ['html']]),
@@ -188,17 +186,6 @@ class AppExtension extends AbstractExtension
         }
 
         return $html;
-    }
-
-    public function badgeCentre(UserCentre $userCentre): string
-    {
-        $droit = count($userCentre->getDroits()) > 0 ? $userCentre->getDroits()[array_key_first($userCentre->getDroits())] : 'Erreur';
-        return match ($userCentre->typeCentre()) {
-            CentreGestionEnum::CENTRE_GESTION_COMPOSANTE => '<span class="badge bg-success me-1 mb-1 text-wrap">' . $userCentre->displaySimple() . ' (' . $droit . ')</span>',
-            CentreGestionEnum::CENTRE_GESTION_ETABLISSEMENT => '<span class="badge bg-warning me-1 mb-1 text-wrap">' . $userCentre->displaySimple() . ' (' . $droit . ')</span>',
-            CentreGestionEnum::CENTRE_GESTION_FORMATION => '<span class="badge bg-info me-1 mb-1 text-wrap">' . $userCentre->displaySimple() . ' (' . $droit . ')</span>',
-            default => '<span class="badge bg-danger me-1 text-wrap">Inconnu</span>',
-        };
     }
 
     public function badgeTypeCentre(UserProfil $userProfil): string
