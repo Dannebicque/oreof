@@ -115,6 +115,7 @@
                                                 {% for key, state in hasTransitions(this.dpeParcours) %}
                                                     {% for keyTrans, transition in state %}
                                                         <div class="col-4 d-grid">
+                                                            {{ transition }}
                                                             {% if transition == 'valider_publication' %}
                                                                 {% if is_granted('MANAGE', {route: 'app_etablissement', subject: 'etablissement'}) %}
                                                                     <button class="btn d-block text-wrap btn-outline-{{ transition.meta.btn }}"
