@@ -171,7 +171,12 @@ class WorkflowExtension extends AbstractExtension
 
         $places = $this->getWorkflow('dpe')->getMarking($dpeParcours)->getPlaces();
         if (count($places) > 0) {
-            return str_starts_with(array_keys($places)[0], 'publie') || str_starts_with(array_keys($places)[0], 'soumis_central');//todo: soumis_central que si pas SES ou Admin. SES peut encore gérer sur cette étable
+            return str_starts_with(array_keys($places)[0], 'publie') ||
+                str_starts_with(array_keys($places)[0], 'soumis_parcours') ||
+                str_starts_with(array_keys($places)[0], 'soumis_dpe_composante') ||
+                str_starts_with(array_keys($places)[0], 'soumis_central') ||
+                str_starts_with(array_keys($places)[0], 'soumis_conseil') ||
+                str_starts_with(array_keys($places)[0], 'valide_cfvu');//todo: soumis_central que si pas SES ou Admin. SES peut encore gérer sur cette étable
         }
 
         return false;
