@@ -653,6 +653,25 @@ export default class extends Controller {
                     villeParcours: true
                 };
                 break;
+            case 'templateExportCFVU':
+                this._typeExport = 'template';
+                this._templateTypeExport.type = 'parcours';
+                this._templateTypeExport.name = 'templateExportCFVU';
+                this._predefinedTemplate = false;
+                this._withFieldSorting = false;
+                this._withDefaultHeader = false;
+                this._selectedFields = {
+                    composantePorteuse: true,
+                    typeDiplome: true,
+                    nomFormation: true,
+                    nomParcours: true,
+                    villeParcours: true,
+                    respFormation: true,
+                    respParcours: true,
+                    dateConseil: true,
+                    formationHasPV: true
+                };
+                break;
         }
     }
 
