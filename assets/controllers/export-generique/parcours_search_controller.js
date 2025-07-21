@@ -530,7 +530,7 @@ export default class extends Controller {
                     identiteFormation: true,
                     respFormation: true,
                     objectifsFormation: true,
-                    organisationParcours: true,
+                    contenuParcours: true,
                     objectifsParcours: true,
                     resultatsAttendusParcours: true,
                     rythmeFormation: true,

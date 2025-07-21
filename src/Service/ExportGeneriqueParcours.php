@@ -605,7 +605,7 @@ class ExportGeneriqueParcours {
                     ]
                 ];
                 break;
-            case 'organisationParcours':
+            case 'contenuParcours':
                 return [
                     'type' => 'longtext',
                     'libelle' => 'Organisation de la formation',
@@ -977,7 +977,7 @@ class ExportGeneriqueParcours {
             'respParcours' => 5,
             'objectifsFormation' => 6,
             'contenuFormation' => 7,
-            'organisationParcours' => 8,
+            'contenuParcours' => 8,
             'objectifsParcours' => 9,
             'resultatsAttendusParcours' => 10,
             'rythmeFormation' => 11,
