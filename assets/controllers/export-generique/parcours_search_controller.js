@@ -628,6 +628,31 @@ export default class extends Controller {
                     fmFormation: true
                 };
                 break;
+            case 'templateExportCARIF':
+                this._typeExport = 'template';
+                this._templateTypeExport.type = 'parcours';
+                this._templateTypeExport.name = 'templateExportCARIF';
+                this._predefinedTemplate = false;
+                this._withFieldSorting = false;
+                this._withDefaultHeader = false;
+                this._selectedFields = {
+                    composantePorteuse: true,
+                    typeDiplome: true,
+                    nomFormation: true,
+                    nomParcours: true,
+                    objectifsFormation: true,
+                    contenuFormation: true,
+                    respFormation: true,
+                    objectifsParcours: true,
+                    contenuParcours: true,
+                    respParcours: true,
+                    modalitesEnseignement: true,
+                    niveauEntree: true,
+                    niveauSortie: true,
+                    prerequisRecommandes: true,
+                    villeParcours: true
+                };
+                break;
         }
     }
 

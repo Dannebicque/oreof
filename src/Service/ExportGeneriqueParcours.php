@@ -965,6 +965,27 @@ class ExportGeneriqueParcours {
                         : ""
                 ];
                 break;
+            case 'prerequisRecommandes':
+                return [
+                    'type' => 'longtext',
+                    'libelle' => "Prérequis recommandés",
+                    'value' => $parcours?->getPrerequis() ?? ""
+                ];
+                break;
+            case 'niveauEntree':
+                return [
+                    'type' => 'longtext',
+                    'libelle' => "Niveau d'entrée",
+                    'value' => $parcours?->getFormation()?->getNiveauEntree()?->libelle() ?? ""
+                ];
+                break;
+            case 'niveauSortie':
+                return [
+                    'type' => 'longtext',
+                    'libelle' => 'Niveau de sortie',
+                    'value' => $parcours?->getFormation()?->getNiveauSortie()?->libelle() ?? ""
+                ];
+                break;
         }
     }
 
@@ -1001,7 +1022,10 @@ class ExportGeneriqueParcours {
             'idFormation' => 29,
             'villeParcours' => 30,
             'codeRNCP' => 31,
-            'dateValidationCFVU' => 32
+            'dateValidationCFVU' => 32,
+            'prerequisRecommandes' => 33,
+            'niveauEntree' => 34,
+            'niveauSortie' => 35
         ];
     }
 
