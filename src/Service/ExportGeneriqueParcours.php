@@ -1003,8 +1003,16 @@ class ExportGeneriqueParcours {
                     'libelle' => 'Présence du PV',
                     'value' => $parcours 
                     ? ($this->getHistorique->getHistoriqueFormationHasPv($parcours->getFormation()) === true ? 'Oui' : 'Non')
-                    : 'Non'
-                    
+                    : 'Non' 
+                ];
+                break;
+            case 'villesFormation': 
+                return [
+                    'type' => 'longtext',
+                    'libelle' => 'Lieux de formation',
+                    'value' => implode(', ', array_map(
+                        fn($v) => $v->getLibelle()
+                        , $parcours?->getFormation()?->getLocalisationMention()?->toArray() ?? []))
                 ];
                 break;
         }
@@ -1048,7 +1056,7 @@ class ExportGeneriqueParcours {
             'niveauEntree' => 34,
             'niveauSortie' => 35,
             'dateConseil' => 36,
-            'formationHasPV'
+            'formationHasPV' => 37
         ];
     }
 
