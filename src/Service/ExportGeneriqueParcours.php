@@ -986,6 +986,27 @@ class ExportGeneriqueParcours {
                     'value' => $parcours?->getFormation()?->getNiveauSortie()?->libelle() ?? ""
                 ];
                 break;
+            case 'dateConseil':
+                return [
+                    'type' => 'longtext',
+                    'libelle' => 'Validation Composante',
+                    'value' => $parcours 
+                        ? $this->getHistorique->getHistoriqueParcoursLastStep(
+                            GetDpeParcours::getFromParcours($parcours),
+                            'conseil'
+                        )?->getDate()?->format('d/m/Y') ?? 'Non validé' : ""
+                ];
+                break;
+            case 'formationHasPV':
+                return [
+                    'type' => 'longtext',
+                    'libelle' => 'Présence du PV',
+                    'value' => $parcours 
+                    ? ($this->getHistorique->getHistoriqueFormationHasPv($parcours->getFormation()) === true ? 'Oui' : 'Non')
+                    : 'Non'
+                    
+                ];
+                break;
         }
     }
 
@@ -1025,7 +1046,9 @@ class ExportGeneriqueParcours {
             'dateValidationCFVU' => 32,
             'prerequisRecommandes' => 33,
             'niveauEntree' => 34,
-            'niveauSortie' => 35
+            'niveauSortie' => 35,
+            'dateConseil' => 36,
+            'formationHasPV'
         ];
     }
 
