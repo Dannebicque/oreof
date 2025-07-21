@@ -13,6 +13,8 @@ use App\Entity\CampagneCollecte;
 use App\Entity\Contact;
 use App\Entity\Parcours;
 use App\Entity\SemestreParcours;
+use App\TypeDiplome\But\Services\CalculStructureParcoursBut;
+use App\TypeDiplome\Licence\Services\CalculStructureParcoursLicence;
 use App\Utils\Tools;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
@@ -29,8 +31,8 @@ class ExportGeneriqueParcours {
         private MyGotenbergPdf $myPdf,
         private Filesystem $fs,
         private GetHistorique $getHistorique,
-        private CalculStructureParcours $calculStruct,
-        private CalculButStructureParcours $calculButStruct
+        private CalculStructureParcoursLicence $calculStruct,
+        private CalculStructureParcoursBut $calculButStruct
     ){
         
     }
