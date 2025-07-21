@@ -57,7 +57,7 @@ class AbstractDpeMailSubscriber
         return true;
     }
 
-    protected function getDataFromChangeRfEvent($event)
+    protected function getDataFromChangeRfEvent($event): ?true
     {
         $this->demande = $event->getSubject();
 

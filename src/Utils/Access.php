@@ -27,7 +27,10 @@ abstract class Access {
     public static function isAccessibleMention(Formation $formation, string $state): bool
     {
         if ($state === 'cfvu') {
-            return $formation->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION || $formation->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_PARCOURS;
+            return $formation->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION ||
+                $formation->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_MCCC_TEXTE ||
+                $formation->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_MCCC ||
+                $formation->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_PARCOURS;
         }
 
         return $formation->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_TEXTE;

@@ -9,13 +9,17 @@
 
 namespace App\Classes\Export;
 
-use App\Classes\CalculStructureParcours;
 use App\Classes\Excel\ExcelWriter;
+use App\Classes\GetHistorique;
 use App\DTO\StructureEc;
 use App\DTO\StructureUe;
+use App\Entity\DpeParcours;
+use App\Entity\Historique;
 use App\Entity\SemestreParcours;
 use App\Repository\DpeParcoursRepository;
 use App\Repository\FormationRepository;
+use App\Service\ProjectDirProvider;
+use App\Service\TypeDiplomeResolver;
 use App\Utils\Tools;
 use DateTime;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -27,15 +31,18 @@ class ExportCap
     private string $dir;
     private int $ligne = 2;
     private array $data;
+    private DpeParcours $dpeParcours;
+    private ?Historique $historique = null;
 
     public function __construct(
-        protected CalculStructureParcours $calculStructureParcours,
+        protected GetHistorique $getHistorique,
+        protected TypeDiplomeResolver $typeDiplomeResolver,
         protected ExcelWriter             $excelWriter,
-        KernelInterface                   $kernel,
+        ProjectDirProvider $projectDirProvider,
         protected FormationRepository     $formationRepository,
         protected DpeParcoursRepository   $dpeParcoursRepository,
     ) {
-        $this->dir = $kernel->getProjectDir() . '/public/temp/';
+        $this->dir = $projectDirProvider->getProjectDir() . '/public/temp/';
     }
 
     private function prepareExport(
@@ -61,13 +68,17 @@ class ExportCap
         $this->excelWriter->writeCellXY(14, 1, 'MATI/MATM');
         $this->excelWriter->writeCellXY(15, 1, 'Option');
         $this->excelWriter->writeCellXY(16, 1, 'Semestre');
+        $this->excelWriter->writeCellXY(17, 1, 'Etat DPE');
+        $this->excelWriter->writeCellXY(18, 1, 'Date CFVU');
 
         $this->ligne = 2;
         foreach ($formations as $idFormation) {
-            $dpeParcours = $this->dpeParcoursRepository->find($idFormation);
-            if ($dpeParcours !== null) {
-                $parcours = $dpeParcours->getParcours();
-                $formation = $dpeParcours->getParcours()?->getFormation();
+            $this->dpeParcours = $this->dpeParcoursRepository->find($idFormation);
+            $this->historique = $this->getHistorique->getHistoriqueParcoursLastStep($this->dpeParcours, 'soumis_cfvu');
+            if ($this->dpeParcours !== null) {
+                $parcours = $this->dpeParcours->getParcours();
+                $formation = $this->dpeParcours->getParcours()?->getFormation();
+                $typeDiplome = $this->typeDiplomeResolver->get($formation?->getTypeDiplome());
                 if ($formation !== null && $parcours !== null) {
 //                foreach ($formation->getParcours() as $parcours) {
                     $this->data[1] = $formation->getComposantePorteuse()?->getLibelle();
@@ -80,7 +91,7 @@ class ExportCap
                     }
 
                     //récuération de la structure et des EC
-                    $dto = $this->calculStructureParcours->calcul($parcours);
+                    $dto = $typeDiplome->calculStructureParcours($parcours);
                     foreach ($dto->semestres as $ordre => $sem) {
                         $this->data[5] = 'S'.$ordre;
                         foreach ($sem->ues as $ue) {
@@ -136,6 +147,8 @@ class ExportCap
             $this->excelWriter->writeCellXY(14, $this->ligne, $ec->elementConstitutif->getFicheMatiere()?->getTypeApogee() ?? '-');
             $this->excelWriter->writeCellXY(15, $this->ligne, $option ? 'Choix/option' : 'Obligatoire');
             $this->excelWriter->writeCellXY(16, $this->ligne, $this->data[5]);
+            $this->excelWriter->writeCellXY(17, $this->ligne, $this->dpeParcours->getEtatValidation()[0]);
+            $this->excelWriter->writeCellXY(18, $this->ligne, $this->historique?->getDate()?->format('d/m/Y') ?? '-');
             $this->ligne++;
         }
     }

@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use DateTime;
+use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\MappedSuperclass;
@@ -26,7 +28,7 @@ abstract class Commentaire
     private ?User $user;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $created;
+    private ?DateTimeInterface $created;
 
     #[ORM\Column]
     private ?bool $public = false;
@@ -36,7 +38,7 @@ abstract class Commentaire
 
     public function __construct(UserInterface|User|null $user, ?string $message, string $zone)
     {
-        $this->created = new \DateTime();
+        $this->created = new DateTime();
         $this->user = $user;
         $this->texte = $message;
         $this->zone = $zone;
@@ -71,12 +73,12 @@ abstract class Commentaire
         return $this;
     }
 
-    public function getCreated(): ?\DateTimeInterface
+    public function getCreated(): ?DateTimeInterface
     {
         return $this->created;
     }
 
-    public function setCreated(\DateTimeInterface $created): static
+    public function setCreated(DateTimeInterface $created): static
     {
         $this->created = $created;
 

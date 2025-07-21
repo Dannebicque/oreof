@@ -1,0 +1,4 @@
+python-dotenv
+pymysql
+pandas
+openpyxl

@@ -1,0 +1,99 @@
+<table class="table">
+    <tbody>
+    <tr>
+        <th>Login URCA</th>
+        <td>{{ user.username }}</td>
+    </tr>
+    <tr>
+        <th>Nom</th>
+        <td>{{ user.nom }}</td>
+    </tr>
+    <tr>
+        <th>Prénom</th>
+        <td>{{ user.prenom }}</td>
+    </tr>
+    <tr>
+        <th>Email</th>
+        <td>{{ user.email }}</td>
+    </tr>
+    <tr>
+        <th>Centre de gestion</th>
+        <td>
+            {% if user.composanteDemande != null %}
+                Composante demandée : {{ user.composanteDemande.libelle }}
+            {% elseif user.etablissementDemande != null %}
+                Etablissement demandé : {{ user.etablissementDemande.libelle }}
+            {% else %}
+                <span class="badge bg-danger">Erreur de demande</span>
+            {% endif %}
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+{{ include('user_profils/_gestion_profils.html.twig') }}
+
+<div class="mt-2">
+    {% if user.isEnable %}
+        <a href="{{ path('app_user_gestion_revoque_admin', {user:user.id}) }}" class="btn btn-outline-danger">
+            Désactiver l'accès
+        </a>
+    {% else %}
+        {% if (user.isValidDpe == false and (user.userProfils|length >0 and (user.userProfils[0].profil.centre == 'cg_composante' or user.userProfils[0].profil.centre == 'cg_formation'))
+            ) or user.isValideAdministration == false %}
+            {% if user.isValidDpe == false %}
+                <span class="badge bg-warning">Non validé par DPE</span>
+            {% else %}
+                <span class="badge bg-success">
+            Validé par DPE le {{ user.dateValideDpe|dateTimeFr }}
+            </span>
+            {% endif %}
+            {% if not is_granted('ROLE_ADMIN') %}
+                <a href="{{ path('app_user_gestion_valid_dpe', {user:user.id}) }}" class="btn btn-outline-success">
+                    Valider l'accès
+                </a>
+                <button
+                        {{ stimulus_action('register', 'refuserAcces') }}
+                        class="btn text-danger">
+                    Refuser l'accès
+                </button>
+                <div id="motifRefus" class="d-none">
+                    <label class="form-label" for="texteMotifRefus"></label>
+                    <textarea class="form-control" id="texteMotifRefus"></textarea>
+                    <button data-href="{{ path('app_user_gestion_refuser_admin', {user:user.id}) }}"
+                            {{ stimulus_action('register', 'confirmeRefusAcces') }}
+                            class="btn btn-outline-danger">
+                        Confirmer le refus d'accès
+                    </button>
+                </div>
+            {% endif %}
+        {% endif %}
+        {% if is_granted('ROLE_ADMIN') %}
+            {% if user.isValideAdministration == false %}
+                <a href="{{ path('app_user_gestion_valid_admin', {user:user.id}) }}"
+                   class="btn btn-outline-success">
+                    Valider l'accès
+                </a>
+                <button
+                        {{ stimulus_action('register', 'refuserAcces') }}
+                        class="btn text-danger">
+                    Refuser l'accès
+                </button>
+                <div id="motifRefus" class="d-none">
+                    <label class="form-label" for="texteMotifRefus"></label>
+                    <textarea class="form-control" id="texteMotifRefus"></textarea>
+                    <button data-href="{{ path('app_user_gestion_refuser_admin', {user:user.id}) }}"
+                            {{ stimulus_action('register', 'confirmeRefusAcces') }}
+                            class="btn btn-outline-danger">
+                        Confirmer le refus d'accès
+                    </button>
+                </div>
+            {% else %}
+                <a href="{{ path('app_user_gestion_revoque_admin', {user:user.id}) }}"
+                   class="btn btn-outline-danger">
+                    Révoquer l'accès
+                </a>
+            {% endif %}
+        {% endif %}
+    {% endif %}
+</div>

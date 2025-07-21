@@ -10,7 +10,7 @@
 namespace App\Repository;
 
 use App\Entity\Composante;
-use App\Entity\UserCentre;
+use App\Entity\UserProfil;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -55,7 +55,7 @@ class ComposanteRepository extends ServiceEntityRepository
     public function findByCentreGestion(UserInterface $user): array
     {
         $qb = $this->createQueryBuilder('c');
-        $qb->innerJoin(UserCentre::class, 'cg', 'WITH', 'c.id = cg.composante');
+        $qb->innerJoin(UserProfil::class, 'cg', 'WITH', 'c.id = cg.composante');
         $qb->where('cg.user = :user');
         $qb->setParameter('user', $user->getId());
 

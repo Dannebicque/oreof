@@ -12,14 +12,15 @@ namespace App\Classes\Export;
 use App\Entity\CampagneCollecte;
 use App\Repository\DpeParcoursRepository;
 use App\Repository\FormationRepository;
-use App\TypeDiplome\TypeDiplomeRegistry;
+use App\Service\TypeDiplomeResolver;
 use App\Utils\Tools;
 use DateTimeInterface;
+use ZipArchive;
 
 class ExportMccc
 {
     private string $dir;
-    private TypeDiplomeRegistry $typeDiplomeRegistry;
+    private TypeDiplomeResolver $typeDiplomeResolver;
     private array $formations;
     private CampagneCollecte $annee;
     private ?DateTimeInterface $date = null;
@@ -34,10 +35,10 @@ class ExportMccc
 
     public function exportZip(): string
     {
-        $zip = new \ZipArchive();
+        $zip = new ZipArchive();
         $fileName = 'export_mccc_' . date('YmdHis') . '.zip';
         $zipName = $this->dir . '/zip/' . $fileName;
-        $zip->open($zipName, \ZipArchive::CREATE);
+        $zip->open($zipName, ZipArchive::CREATE);
 
         $tabFiles = [];
 
@@ -51,7 +52,7 @@ class ExportMccc
         foreach ($this->formations as $formationId) {
             $formation = $this->formationRepository->findOneBy(['id' => $formationId, 'anneeUniversitaire' => $this->annee->getId()]);
             if ($formation !== null && $formation->getTypeDiplome()?->getModeleMcc() !== null) {
-                $typeDiplome = $this->typeDiplomeRegistry->getTypeDiplome($formation->getTypeDiplome()?->getModeleMcc());
+                $typeDiplome = $this->typeDiplomeResolver->get($formation->getTypeDiplome());
                 if (null !== $typeDiplome) {
                     foreach ($formation->getParcours() as $parcours) {
                         if ($this->format === 'xlsx') {
@@ -60,6 +61,7 @@ class ExportMccc
                                 $this->annee,
                                 $parcours,
                                 $this->date,
+                                null,
                                 $this->isLight
                             );
                         } elseif ($this->format === 'pdf') {
@@ -68,6 +70,7 @@ class ExportMccc
                                 $this->annee,
                                 $parcours,
                                 $this->date,
+                                null,
                                 $this->isLight
                             );
                         }
@@ -94,10 +97,10 @@ class ExportMccc
 
     public function exportVersionZip(): string
     {
-        $zip = new \ZipArchive();
+        $zip = new ZipArchive();
         $fileName = 'export_mccc_versionnees_' . date('YmdHis') . '.zip';
         $zipName = $this->dir . '/zip/' . $fileName;
-        $zip->open($zipName, \ZipArchive::CREATE);
+        $zip->open($zipName, ZipArchive::CREATE);
 
         $tabFiles = [];
         $dir = $this->dir . '/mccc/';
@@ -116,7 +119,7 @@ class ExportMccc
             $formation = $parcours->getFormation();
 
             if ($formation !== null && $formation->getTypeDiplome()?->getModeleMcc() !== null) {
-                $typeDiplome = $this->typeDiplomeRegistry->getTypeDiplome($formation->getTypeDiplome()?->getModeleMcc());
+                $typeDiplome = $this->typeDiplomeResolver->get($formation->getTypeDiplome());
                 if (null !== $typeDiplome) {
 
                         if ($formation->isHasParcours() === true) {
@@ -125,14 +128,12 @@ class ExportMccc
                             $texte = $formation->gettypeDiplome()?->getLibelleCourt() . ' ' . $formation->getSigle();
                         }
 
-                        $fichierXlsx = Tools::FileName('MCCC - ' . $this->annee->getLibelle() . ' - ' . $texte, 50);
+                    $fichierXlsx = Tools::FileName('MCCC - ' . $this->annee->getLibelle() . ' - ' . $texte);
                         $fichier = $typeDiplome->exportExcelAndSaveVersionMccc(
                             $this->annee,
                             $parcours,
                             $dir,
-                            $fichierXlsx,
-                            null,
-                            null
+                            $fichierXlsx
                         );
 
                         $tabFiles[] = $fichier;
@@ -158,7 +159,7 @@ class ExportMccc
 
     public function export(
         string              $dir,
-        TypeDiplomeRegistry $typeDiplomeRegistry,
+        TypeDiplomeResolver $typeDiplomeResolver,
         array               $formations,
         CampagneCollecte    $annee,
         DateTimeInterface   $date,
@@ -166,7 +167,7 @@ class ExportMccc
         bool                $isLight = false
     ): void {
         $this->dir = $dir;
-        $this->typeDiplomeRegistry = $typeDiplomeRegistry;
+        $this->typeDiplomeResolver = $typeDiplomeResolver;
         $this->formations = $formations;
         $this->annee = $annee;
         $this->date = $date;
@@ -174,10 +175,10 @@ class ExportMccc
         $this->isLight = $isLight;
     }
 
-    public function exportVersion(string $dir, TypeDiplomeRegistry $typeDiplomeRegistry, array $formations, ?CampagneCollecte $campagneCollecte)
+    public function exportVersion(string $dir, TypeDiplomeResolver $typeDiplomeResolver, array $formations, ?CampagneCollecte $campagneCollecte): void
     {
         $this->dir = $dir;
-        $this->typeDiplomeRegistry = $typeDiplomeRegistry;
+        $this->typeDiplomeResolver = $typeDiplomeResolver;
         $this->formations = $formations;
         $this->annee = $campagneCollecte;
         $this->format = 'xlsx';

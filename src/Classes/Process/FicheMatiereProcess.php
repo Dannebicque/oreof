@@ -82,7 +82,7 @@ class FicheMatiereProcess extends AbstractProcess
         return JsonReponse::success($this->translator->trans('ficheMatiere.'.$etat.'.' . $etape . '.flash.success', [], 'process'));
     }
 
-    public function ouvertureFicheMatiere(FicheMatiere $ficheMatiere, UserInterface $user, Request $request)
+    public function ouvertureFicheMatiere(FicheMatiere $ficheMatiere, UserInterface $user, Request $request): Response
     {
         if ($this->ficheMatiereWorkflow->can($ficheMatiere, 'rouvrir_fiche_matiere')) {
             $this->ficheMatiereWorkflow->apply($ficheMatiere, 'rouvrir_fiche_matiere');

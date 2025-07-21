@@ -26,7 +26,7 @@ export default class extends Controller {
     }
   }
 
-  updateForm(event) {
+  updateForm() {
     if (this.typeMcccValue !== null && this.afficheMcccValue === true) {
       this._loadTypeMccc(this.typeMcccValue)
     }
@@ -234,12 +234,12 @@ export default class extends Controller {
       this._renameEpreuveTitle(element, /Session N°[0-9]/, `Session N°${index}`);
 
       // On remet à zéro la nouvelle épreuve (dernière de la liste)
-      if(indexLoop === nbEpreuves){
-        element.querySelector('input[id^="pourcentage"]').value = "";
+      if (indexLoop === nbEpreuves) {
+        element.querySelector('input[id^="pourcentage"]').value = ''
         element.querySelector('select[id^="typeEpreuve"]').selectedIndex = 0;
-        element.querySelector('input[id^="duree"]').value = "";
+        element.querySelector('input[id^="duree"]').value = ''
         element.querySelector('textarea[id^="justification"]').required = false;
-        element.querySelector('textarea[id^="justification"]').value = "";
+        element.querySelector('textarea[id^="justification"]').value = ''
       }
 
       if (numEp > 1) {
@@ -276,12 +276,12 @@ export default class extends Controller {
     this._renumberMcccFormFields(html, /_ct1/, `_ct${numEp}`, true);
 
     // Initialisation de la nouvelle épreuve
-    // À ce moment là, l'index 'idx' a la bonne valeur 
+    // À ce moment là, l'index 'idx' a la bonne valeur
     // car incrémenté en fin de boucle précédente
-    let newEpreuve = [];
-    newEpreuve[`pourcentage_s1_ct${idx}`] = "";
-    newEpreuve[`typeEpreuve_s1_ct${idx}`] = "";
-    newEpreuve[`duree_s1_ct${idx}`] = "";
+    const newEpreuve = []
+    newEpreuve[`pourcentage_s1_ct${idx}`] = ''
+    newEpreuve[`typeEpreuve_s1_ct${idx}`] = ''
+    newEpreuve[`duree_s1_ct${idx}`] = ''
     tab[idx] = newEpreuve;
 
     // ajouter le numéro de l'epreuve dans le texte
@@ -378,7 +378,7 @@ export default class extends Controller {
       // html = html.replace(/Contrôle terminal N°[0-9]/g, `Contrôle terminal N°${numEp}`)
       // html = html.replace(/ct[0-9]/g, `ct${numEp}`)
       // element.innerHTML = html
-      
+
       this._renameEpreuveTitle(element, /Contrôle terminal N°[0-9]/, `Contrôle terminal N°${numEp}`);
       this._renumberMcccFormFields(element, /_ct[0-9]/, `_ct${numEp}`);
       numEp++
@@ -446,35 +446,34 @@ export default class extends Controller {
    * en modifiant leurs attributs HTML
    * id, name, for
    */
-  _renumberMcccFormFields(epreuveElement, selector, newValue, withReset = false){
+  _renumberMcccFormFields(epreuveElement, selector, newValue, withReset = false) {
     // Pourcentage
-    let labelPourcentage = epreuveElement.querySelector('label[for^="pourcentage"]');
-    let pourcentage = epreuveElement.querySelector('input[id^="pourcentage"]');
+    const labelPourcentage = epreuveElement.querySelector('label[for^="pourcentage"]')
+    const pourcentage = epreuveElement.querySelector('input[id^="pourcentage"]')
     // Type d'épreuve
-    let labelTypeEpreuve = epreuveElement.querySelector('label[for^="typeEpreuve"]');
-    let typeEpreuve = epreuveElement.querySelector('select[id^="typeEpreuve"]');
+    const labelTypeEpreuve = epreuveElement.querySelector('label[for^="typeEpreuve"]')
+    const typeEpreuve = epreuveElement.querySelector('select[id^="typeEpreuve"]')
     // Durée
-    let labelDuree = epreuveElement.querySelector('label[for^="duree"]');
-    let duree = epreuveElement.querySelector('input[id^="duree"]');
+    const labelDuree = epreuveElement.querySelector('label[for^="duree"]')
+    const duree = epreuveElement.querySelector('input[id^="duree"]')
     // Justification
-    let textJustification = epreuveElement.querySelector('textarea[id^="justification"]');
+    const textJustification = epreuveElement.querySelector('textarea[id^="justification"]')
     // Contrôleur Stimulus
-    let justificationController = epreuveElement.querySelector('div[data-controller="mccc-with-justification"]');
-    let nameJustifController = "mcccWithJustificationTextAreaFormNameValue";
-    let hasJustificationController = "mcccWithJustificationHasJustificationValue";
-    let justificationTextController = "mcccWithJustificationJustificationTextValue";
-
+    const justificationController = epreuveElement.querySelector('div[data-controller="mccc-with-justification"]')
+    const nameJustifController = 'mcccWithJustificationTextAreaFormNameValue'
+    const hasJustificationController = 'mcccWithJustificationHasJustificationValue'
+    const justificationTextController = 'mcccWithJustificationJustificationTextValue'
 
     // Modification du contrôleur Stimulus
     justificationController.dataset[nameJustifController] = this._replaceHTMLAttributeValue(
-      justificationController.dataset[nameJustifController], 
-      selector, 
-      newValue
+      justificationController.dataset[nameJustifController],
+      selector,
+      newValue,
     );
 
-    if(withReset){
-      justificationController.dataset[hasJustificationController] = "false";
-      justificationController.dataset[justificationTextController] = "";
+    if (withReset) {
+      justificationController.dataset[hasJustificationController] = 'false'
+      justificationController.dataset[justificationTextController] = ''
       epreuveElement.querySelector('div[data-mccc-with-justification-target="displayDiv"]').classList.add('d-none');
     }
 
@@ -486,21 +485,21 @@ export default class extends Controller {
       labelDuree,
       duree,
       textJustification,
-    ].forEach(attr => {
-        ['htmlFor', 'id', 'name'].forEach(property => {
-          if(attr[property] !== undefined){
-            attr[property] = this._replaceHTMLAttributeValue(attr[property], selector, newValue);
-          }
-        })
+    ].forEach((attr) => {
+      ['htmlFor', 'id', 'name'].forEach((property) => {
+        if (attr[property] !== undefined) {
+          attr[property] = this._replaceHTMLAttributeValue(attr[property], selector, newValue)
+        }
+      })
     });
   }
 
-  _renameEpreuveTitle(epreuveElement, selector, newValue){
+  _renameEpreuveTitle(epreuveElement, selector, newValue) {
     epreuveElement.querySelector(':first-child strong').innerHTML = epreuveElement.querySelector(':first-child strong')
       .innerHTML.replace(selector, newValue);
   }
 
-  _replaceHTMLAttributeValue(attribute, selector, newValue){
+  _replaceHTMLAttributeValue(attribute, selector, newValue) {
     return attribute.replace(selector, newValue);
   }
 }

@@ -39,9 +39,6 @@ class Etablissement
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     private ?Adresse $adresse = null;
 
-    #[ORM\OneToMany(mappedBy: 'etablissement', targetEntity: UserCentre::class)]
-    private Collection $userCentres;
-
     #[ORM\Column]
     private ?array $options = [];
 
@@ -60,17 +57,16 @@ class Etablissement
     #[ORM\Column(length: 255)]
     private ?string $emailCentral = null;
 
-//    /**
-//     * @var Collection<int, UserProfil>
-//     */
-//    #[ORM\OneToMany(mappedBy: 'etablissement', targetEntity: UserProfil::class)]
-//    private Collection $userProfils;
+    /**
+     * @var Collection<int, UserProfil>
+     */
+    #[ORM\OneToMany(mappedBy: 'etablissement', targetEntity: UserProfil::class)]
+    private Collection $userProfils;
 
     public function __construct()
     {
         $this->users = new ArrayCollection();
         $this->villes = new ArrayCollection();
-        $this->userCentres = new ArrayCollection();
 
         $resolver = new OptionsResolver();
         $this->configureOptions($resolver);
@@ -167,34 +163,6 @@ class Etablissement
     public function setAdresse(?Adresse $adresse): self
     {
         $this->adresse = $adresse;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, UserCentre>
-     */
-    public function getUserCentres(): Collection
-    {
-        return $this->userCentres;
-    }
-
-    public function addUserCentre(UserCentre $userCentre): self
-    {
-        if (!$this->userCentres->contains($userCentre)) {
-            $this->userCentres->add($userCentre);
-            $userCentre->setEtablissement($this);
-        }
-
-        return $this;
-    }
-
-    public function removeUserCentre(UserCentre $userCentre): self
-    {
-        // set the owning side to null (unless already changed)
-        if ($this->userCentres->removeElement($userCentre) && $userCentre->getEtablissement() === $this) {
-            $userCentre->setEtablissement(null);
-        }
 
         return $this;
     }
@@ -301,33 +269,33 @@ class Etablissement
         return $this;
     }
 
-//    /**
-//     * @return Collection<int, UserProfil>
-//     */
-//    public function getUserProfils(): Collection
-//    {
-//        return $this->userProfils;
-//    }
-//
-//    public function addUserProfil(UserProfil $userProfil): static
-//    {
-//        if (!$this->userProfils->contains($userProfil)) {
-//            $this->userProfils->add($userProfil);
-//            $userProfil->setEtablissement($this);
-//        }
-//
-//        return $this;
-//    }
-//
-//    public function removeUserProfil(UserProfil $userProfil): static
-//    {
-//        if ($this->userProfils->removeElement($userProfil)) {
-//            // set the owning side to null (unless already changed)
-//            if ($userProfil->getEtablissement() === $this) {
-//                $userProfil->setEtablissement(null);
-//            }
-//        }
-//
-//        return $this;
-//    }
+    /**
+     * @return Collection<int, UserProfil>
+     */
+    public function getUserProfils(): Collection
+    {
+        return $this->userProfils;
+    }
+
+    public function addUserProfil(UserProfil $userProfil): static
+    {
+        if (!$this->userProfils->contains($userProfil)) {
+            $this->userProfils->add($userProfil);
+            $userProfil->setEtablissement($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserProfil(UserProfil $userProfil): static
+    {
+        if ($this->userProfils->removeElement($userProfil)) {
+            // set the owning side to null (unless already changed)
+            if ($userProfil->getEtablissement() === $this) {
+                $userProfil->setEtablissement(null);
+            }
+        }
+
+        return $this;
+    }
 }

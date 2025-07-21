@@ -2,7 +2,6 @@
 
 namespace App\Twig\Components;
 
-use App\Controller\ElementConstitutifController;
 use App\Entity\DpeParcours;
 use App\Entity\ElementConstitutif;
 use App\Entity\Parcours;
@@ -33,7 +32,7 @@ final class BadgeHeuresComponent
         if ($this->elementConstitutif->isHeuresSpecifiques() === true) {
             $this->etatHeuresComplet = $this->elementConstitutif->etatStructure() === 'Complet';
         } elseif ($this->elementConstitutif->getFicheMatiere() !== null &&
-            ($this->elementConstitutif->getFicheMatiere()->isVolumesHorairesImpose() === true || $this->elementConstitutif->isHeuresSpecifiques() !== true)) {
+            ($this->elementConstitutif->getFicheMatiere()->isVolumesHorairesImpose() === true)) {
             $this->etatHeuresComplet = $this->elementConstitutif->getFicheMatiere()->etatStructure() === 'Complet';
         } else {
             $this->etatHeuresComplet = $this->elementConstitutif->etatStructure() === 'Complet';
@@ -41,12 +40,12 @@ final class BadgeHeuresComponent
 
         if ($this->elementConstitutif->getEcParent() !== null && $this->elementConstitutif->getEcParent()->isHeuresEnfantsIdentiques() === true) {
             $this->editable = false;
-            $this->etatHeuresComplet = 'Complet';
+            $this->etatHeuresComplet = $this->elementConstitutif->etatStructure() === 'Complet';
         }
 
         if ($this->elementConstitutif->getNatureUeEc()?->isChoix() && $this->elementConstitutif->isHeuresEnfantsIdentiques() === false) {
 
-            $this->etatHeuresComplet = 'Complet';
+            $this->etatHeuresComplet = $this->elementConstitutif->etatStructure() === 'Complet';
         }
     }
 }

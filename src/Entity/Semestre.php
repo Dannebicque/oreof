@@ -34,7 +34,7 @@ class Semestre
     #[ORM\Column]
     private ?int $ordre = null;
 
-    #[ORM\OneToMany(mappedBy: 'semestre', targetEntity: Ue::class, fetch: 'EAGER', cascade: ['persist'])]
+    #[ORM\OneToMany(mappedBy: 'semestre', targetEntity: Ue::class, cascade: ['persist'], fetch: 'EAGER')]
     #[ORM\OrderBy(['ordre' => 'ASC'])]
     private Collection $ues;
 
@@ -52,7 +52,7 @@ class Semestre
 
     #[MaxDepth(1)]
     #[Groups('DTO_json_versioning')]
-    #[ORM\ManyToOne(inversedBy: 'semestres', fetch: 'EAGER')]
+    #[ORM\ManyToOne(fetch: 'EAGER', inversedBy: 'semestres')]
     private ?SemestreMutualisable $semestreRaccroche = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]

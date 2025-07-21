@@ -3,7 +3,8 @@
 {% block content %}
     <div class="card"
             {{ stimulus_controller('crud', {
-                url: path('app_type_epreuve_liste')
+                url: path('app_type_epreuve_liste'),
+                storageKey: 'type_epreuve_liste',
             }) }}
          data-action="base:refreshListe@window->crud#refreshListe"
     >

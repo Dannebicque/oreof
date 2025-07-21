@@ -33,7 +33,7 @@ export default class extends Controller {
     if (document.getElementById('element_constitutif_natureUeEc')) {
       const natureEc = document.getElementById('element_constitutif_natureUeEc').value
       if (natureEc !== '') {
-        let url = ''
+        let url
         if (this.urlValue.includes('?')) {
           url = `${this.urlValue}&choix=${natureEc}`
         } else {
@@ -68,7 +68,7 @@ export default class extends Controller {
       }
     }
 
-    let url = ''
+    let url
     if (this.urlValue.includes('?')) {
       url = `${this.urlValue}&choix=${event.target.value}`
     } else {

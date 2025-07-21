@@ -1,0 +1,22 @@
+Bonjour {{ user.user.display }},
+
+Le profil {{ user.profil.libelle }},
+
+{% if user.profil.centre == 'cg_etablissement'%}
+pour l'établissement {{ user.profil.etablissement.libelle }}
+{% elseif user.profil.centre == 'cg_formation'%}
+pour la formation {{ user.profil.formation.displayLong }},
+{% elseif user.profil.centre == 'cg_parcours'%}
+pour le parcours {{ user.profil.parcours.libelle }} ({{ user.profil.parcours.formation.displayLong }})
+{% elseif user.profil.centre == 'cg_composante'%}
+pour la composante {{ user.profil.composante.libelle }}
+ {% endif %}, vous a été retiré. Vous conservez (sauf mail contraire), vos autres droits.
+
+Vous pouvez maintenant y accéder en cliquant sur le lien ci-dessous.
+
+{{ product_url }}
+
+Puis choisir "Connexion URCA" avec vos identifiants habituels.
+
+Cordialement,
+Le Service des Enseignements et de la Scolarité

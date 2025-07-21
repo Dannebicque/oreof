@@ -15,10 +15,10 @@ use App\Entity\Parcours;
 use App\Form\BlocCompetenceType;
 use App\Repository\BlocCompetenceRepository;
 use App\Repository\CompetenceRepository;
-use App\TypeDiplome\Source\ButTypeDiplome;
-use App\TypeDiplome\TypeDiplomeRegistry;
 use App\Utils\JsonRequest;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
+use JsonException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -28,7 +28,6 @@ class BlocCompetenceController extends BaseController
 {
     #[Route('/liste/parcours/{parcours}', name: 'app_bloc_competence_liste_parcours', methods: ['GET'])]
     public function listeParcours(
-        TypeDiplomeRegistry      $typeDiplomeRegistry,
         BlocCompetenceRepository $blocCompetenceRepository,
         ?Parcours                $parcours = null
     ): Response {
@@ -37,50 +36,54 @@ class BlocCompetenceController extends BaseController
                 'bloc_competences' => $blocCompetenceRepository->findBy(['parcours' => null], ['ordre' => 'ASC']),
             ]);
         }
-        $typeDiplome = $typeDiplomeRegistry->getTypeDiplome($parcours->getFormation()->getTypeDiplome()->getModeleMcc());
 
-        if ($typeDiplome::SOURCE === ButTypeDiplome::SOURCE) {
-            return $this->render('typeDiplome/but/_refCompetences.html.twig', [
-                'competences' => $typeDiplome->getRefCompetences($parcours),
+        $competences = $this->typeDiplomeResolver
+            ->get($parcours->getFormation()?->getTypeDiplome())
+            ->getStructureCompetences($parcours);
+
+        return $this->render(
+            'typeDiplome/' . $this->typeDiplomeResolver->getTemplateFolder() . '/_refCompetences.html.twig',
+            [
+                'competences' => $competences,
                 'parcours' => $parcours,
-            ]);
-        }
-
-        return $this->render('bloc_competence/_liste.html.twig', [
-            'bloc_competences' => $blocCompetenceRepository->findByParcours($parcours),
-            'parcours' => $parcours,
-        ]);
+                'formation' => $parcours->getFormation(),
+            ]
+        );
     }
 
     public function afficheBUTReferentiel(
-        TypeDiplomeRegistry $typeDiplomeRegistry,
         Parcours            $parcours
     ): Response {
-        $typeDiplome = $typeDiplomeRegistry->getTypeDiplome($parcours->getFormation()->getTypeDiplome()->getModeleMcc());
+        $competences = $this->typeDiplomeResolver
+            ->get($parcours->getFormation()?->getTypeDiplome())
+            ->getStructureCompetences($parcours);
 
-        return $this->render('typeDiplome/but/_refCompetences.html.twig', [
-            'competences' => $typeDiplome->getRefCompetences($parcours),
-            'parcours' => $parcours,
-        ]);
+        return $this->render(
+            'typeDiplome/' . $this->typeDiplomeResolver->getTemplateFolder() . '/_refCompetences.html.twig',
+            [
+                'competences' => $competences,
+                'parcours' => $parcours,
+                'formation' => $parcours->getFormation(),
+            ]
+        );
     }
 
     public function afficheBUTReferentielVersioning(
-        TypeDiplomeRegistry $typeDiplomeRegistry,
         Parcours            $parcours,
         int $indexParcours
     ): Response
     {
         return $this->render('typeDiplome/but/_refCompetences.versioning.html.twig', [
-            'competences' => $parcours->getFormation()->getButCompetences(),
+            'competences' => $parcours->getFormation()?->getButCompetences(),
             'parcours' => $parcours,
-            'indexParcours' => $indexParcours ?? ""
+            'indexParcours' => $indexParcours
         ]);
     }
 
 
     /**
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     * @throws \Doctrine\ORM\NoResultException
+     * @throws NonUniqueResultException
+     * @throws NoResultException
      */
     #[Route('/liste/transverse/{parcours}', name: 'app_bloc_competence_liste_transverse', methods: ['GET', 'POST'])]
     public function listeTransverse(
@@ -151,11 +154,10 @@ class BlocCompetenceController extends BaseController
     }
 
     /**
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     * @throws \Doctrine\ORM\NoResultException
+     * @throws NonUniqueResultException
+     * @throws NoResultException
      */
-    #[
-        Route('/new/parcours/{parcours}', name: 'app_bloc_competence_new_parcours', methods: ['GET', 'POST'])]
+    #[Route('/new/parcours/{parcours}', name: 'app_bloc_competence_new_parcours', methods: ['GET', 'POST'])]
     public function newParcours(
         Request                  $request,
         BlocCompetenceRepository $blocCompetenceRepository,
@@ -242,8 +244,8 @@ class BlocCompetenceController extends BaseController
     }
 
     /**
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     * @throws \Doctrine\ORM\NoResultException
+     * @throws NonUniqueResultException
+     * @throws NoResultException
      */
     #[Route('/{id}/duplicate', name: 'app_bloc_competence_duplicate', methods: ['GET'])]
     public function duplicate(
@@ -280,7 +282,7 @@ class BlocCompetenceController extends BaseController
     }
 
     /**
-     * @throws \JsonException
+     * @throws JsonException
      */
     #[Route('/{id}', name: 'app_bloc_competence_delete', methods: ['DELETE'])]
     public function delete(

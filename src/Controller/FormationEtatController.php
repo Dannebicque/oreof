@@ -9,9 +9,6 @@
 
 namespace App\Controller;
 
-use App\Repository\DpeParcoursRepository;
-use App\Repository\FormationRepository;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/central/formation/etat')]

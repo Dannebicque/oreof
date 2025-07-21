@@ -9,7 +9,6 @@
 
 namespace App\Classes\Codification;
 
-use App\Classes\CalculStructureParcours;
 use App\DTO\StructureEc;
 use App\DTO\StructureSemestre;
 use App\DTO\StructureUe;
@@ -17,6 +16,7 @@ use App\Entity\FicheMatiere;
 use App\Entity\Formation;
 use App\Entity\Parcours;
 use App\Enums\TypeParcoursEnum;
+use App\TypeDiplome\TypeDiplomeHandlerInterface;
 use Doctrine\ORM\EntityManagerInterface;
 
 class CodificationFormation
@@ -62,7 +62,7 @@ class CodificationFormation
 
     public function __construct(
         protected EntityManagerInterface $entityManager,
-        protected CalculStructureParcours $calculStructreParcours
+        protected TypeDiplomeHandlerInterface $typeDiplomeResolver
     ) {
     }
 
@@ -200,7 +200,7 @@ class CodificationFormation
     public function setCodificationSemestre(Parcours $parcours): void
     {
         // structure semestre
-        $structureParcours = $this->calculStructreParcours->calcul($parcours, false, false);
+        $structureParcours = $this->typeDiplomeResolver->calculStructureParcours($parcours);
 
 
         $semestres = $structureParcours->semestres;
@@ -261,12 +261,11 @@ class CodificationFormation
                     foreach ($ue->uesEnfants() as $ueEnfant) {
                         if ($ueEnfant->ue->getNatureUeEc()?->isLibre() === true) {
                             $ueEnfant->ueOrigine->setCodeApogee($codeUe. chr(64+$ordreUe).'X');
-                            $ordreUe++;
                         } else {
                             $ueEnfant->ueOrigine->setCodeApogee($codeUe. chr(64+$ordreUe));
                             $this->setCodificationEc($ueEnfant, true, $isLasEc);
-                            $ordreUe++;
                         }
+                        $ordreUe++;
                     }
                 } else {
                     $ue->ueOrigine->setCodeApogee($codeUe);
@@ -308,7 +307,7 @@ class CodificationFormation
         }
     }
 
-    private function setCodificationFicheMatiere(StructureEc $ec, StructureUe $ue, bool $isUeEnfant, bool $isEcEnfant, bool $isLas)
+    private function setCodificationFicheMatiere(StructureEc $ec, StructureUe $ue, bool $isUeEnfant, bool $isEcEnfant, bool $isLas): void
     {
         if ($ec->elementConstitutif->getFicheMatiere() !== null) {
             if ($ec->elementConstitutif->getFicheMatiere()->getParcours() === $this->parcours) {
@@ -362,7 +361,7 @@ class CodificationFormation
         }
     }
 
-    public function setCodificationHaute(Formation $formation)
+    public function setCodificationHaute(Formation $formation): void
     {
         $this->setCodificationParcours($formation);
         foreach ($formation->getParcours() as $parcours) {

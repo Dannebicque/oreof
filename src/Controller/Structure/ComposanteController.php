@@ -14,9 +14,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[
-    Route('/structure/composante', name: 'structure_composante_')
-]
+#[Route('/structure/composante', name: 'structure_composante_')]
 class ComposanteController extends AbstractController
 {
     #[
@@ -33,7 +31,7 @@ class ComposanteController extends AbstractController
     public function liste(
         ComposanteRepository $composanteRepository
     ): Response {
-        if ($this->isGranted('ROLE_ADMIN') || $this->isGranted('CAN_COMPOSANTE_SHOW_ALL', $this->getUser())) {
+        if ($this->isGranted('ROLE_ADMIN') || $this->isGranted('SHOW', ['route' => 'app_composante', 'subject' => 'composante'])) {
             $composantes = $composanteRepository->findAll();
         } else {
             $composantes = $composanteRepository->findByCentreGestion($this->getUser());

@@ -79,7 +79,7 @@ export default class extends Controller {
     await fetch(this.urlUpdateValue, {
       method: 'POST',
       body,
-    }).then((response) => {
+    }).then(() => {
       const quitus = document.getElementById('ec_step4_quitus')
       const choixMccc = document.getElementById('choix_type_mccc')
       this.dispatch('update-form', { detail: { state: event.target.checked } })

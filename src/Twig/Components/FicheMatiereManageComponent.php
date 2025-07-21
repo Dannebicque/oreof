@@ -90,7 +90,7 @@ final class FicheMatiereManageComponent extends AbstractController
     }
 
 
-    private function getPlace()
+    private function getPlace(): int|string
     {
         if (null === $this->ficheMatiere) {
             return 'initialisation_dpe';

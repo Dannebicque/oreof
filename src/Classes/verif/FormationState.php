@@ -112,7 +112,7 @@ class FormationState
 
     private function etatOnglet3(): bool|array
     {
-        if ($this->formation->getTypeDiplome()->isDebutSemestreFlexible() == true && $this->formation->getSemestreDebut() === 0) {
+        if ($this->formation->getTypeDiplome()?->isDebutSemestreFlexible() && $this->formation->getSemestreDebut() === 0) {
             return ['error' => 'Vous devez indiquer le semestre de début de la formation.'];
         }
 

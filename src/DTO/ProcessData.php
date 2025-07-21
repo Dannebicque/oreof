@@ -9,6 +9,7 @@
 
 namespace App\DTO;
 
+use Symfony\Component\Workflow\Definition;
 use Symfony\Component\Workflow\Marking;
 
 class ProcessData
@@ -18,7 +19,7 @@ class ProcessData
     public ?Marking $place = null;
     public array $transitions = [];
     public ?bool $valid = null;
-    public \Symfony\Component\Workflow\Definition $definition;
+    public Definition $definition;
 
     public function placeTexte(): string
     {

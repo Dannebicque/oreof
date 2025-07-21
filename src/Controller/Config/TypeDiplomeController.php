@@ -13,6 +13,7 @@ use App\Entity\TypeDiplome;
 use App\Form\TypeDiplomeType;
 use App\Repository\TypeDiplomeRepository;
 use App\Utils\JsonRequest;
+use JsonException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -118,7 +119,7 @@ class TypeDiplomeController extends AbstractController
     }
 
     /**
-     * @throws \JsonException
+     * @throws JsonException
      */
     #[Route('/{id}', name: 'app_type_diplome_delete', methods: ['DELETE'])]
     public function delete(

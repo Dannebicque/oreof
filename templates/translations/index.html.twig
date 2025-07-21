@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <h1>Fichiers de traduction</h1>
+
+    <ul>
+        {% for file in files %}
+            <li><a href="{{ path('translations_edit', {filename: file|basename}) }}">{{ file|basename }}</a></li>
+        {% else %}
+            <li>Aucun fichier trouvé dans /translations</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

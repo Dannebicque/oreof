@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Formation;
 use App\Repository\FicheMatiereRepository;
-use App\TypeDiplome\TypeDiplomeRegistry;
+use App\Service\TypeDiplomeResolver;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -103,12 +103,12 @@ class FormationSynchronisationController extends AbstractController
 
     #[Route('/formation/synchronisation/{formation}', name: 'app_formation_synchronisation')]
     public function index(
-        TypeDiplomeRegistry $typeDiplomeRegistry,
+        TypeDiplomeResolver $typeDiplomeResolver,
         Formation $formation
     ): Response {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
 
-        $typeDiplome = $typeDiplomeRegistry->getTypeDiplome($formation->getTypeDiplome()->getModeleMcc());
+        $typeDiplome = $typeDiplomeResolver->get($formation->getTypeDiplome());
         $state = $typeDiplome->synchroniser($formation);
 
         if ($state) {
@@ -124,12 +124,12 @@ class FormationSynchronisationController extends AbstractController
 
     #[Route('/formation/synchronisation-mccc/{formation}', name: 'app_formation_synchronisation_mccc')]
     public function synchronisationMccc(
-        TypeDiplomeRegistry $typeDiplomeRegistry,
+        TypeDiplomeResolver $typeDiplomeResolver,
         Formation $formation
     ): Response {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
 
-        $typeDiplome = $typeDiplomeRegistry->getTypeDiplome($formation->getTypeDiplome()->getModeleMcc());
+        $typeDiplome = $typeDiplomeResolver->get($formation->getTypeDiplome());
         $state = $typeDiplome->synchroniserMccc($formation);
 
         if ($state) {

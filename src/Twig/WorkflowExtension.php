@@ -65,8 +65,7 @@ class WorkflowExtension extends AbstractExtension
         if (array_key_exists($key, $historique)) {
             return match ($historique[$key]->getEtat()) {
                 'valide' => 'btn-success',
-                'reserve' => 'btn-warning',
-                'laisserPasser' => 'btn-warning',
+                'reserve', 'laisserPasser' => 'btn-warning',
                 'refuse' => 'btn-danger',
                 default => 'btn-muted',
             };
@@ -172,7 +171,12 @@ class WorkflowExtension extends AbstractExtension
 
         $places = $this->getWorkflow('dpe')->getMarking($dpeParcours)->getPlaces();
         if (count($places) > 0) {
-            return str_starts_with(array_keys($places)[0], 'publie') || str_starts_with(array_keys($places)[0], 'soumis_central');//todo: soumis_central que si pas SES ou Admin. SES peut encore gérer sur cette étable
+            return str_starts_with(array_keys($places)[0], 'publie') ||
+                str_starts_with(array_keys($places)[0], 'soumis_parcours') ||
+                str_starts_with(array_keys($places)[0], 'soumis_dpe_composante') ||
+                str_starts_with(array_keys($places)[0], 'soumis_central') ||
+                str_starts_with(array_keys($places)[0], 'soumis_conseil') ||
+                str_starts_with(array_keys($places)[0], 'valide_cfvu');//todo: soumis_central que si pas SES ou Admin. SES peut encore gérer sur cette étable
         }
 
         return false;
@@ -181,8 +185,7 @@ class WorkflowExtension extends AbstractExtension
     private function getWorkflow(string $workflow): WorkflowInterface
     {
         return match ($workflow) {
-            'dpe' => $this->dpeParcoursWorkflow,
-            'parcours' => $this->dpeParcoursWorkflow,
+            'dpe', 'parcours' => $this->dpeParcoursWorkflow,
             'fiche' => $this->ficheWorkflow,
             'changeRf' => $this->changeRfWorkflow,
         };

@@ -16,7 +16,6 @@ use App\Repository\FicheMatiereRepository;
 use App\Repository\MentionRepository;
 use App\Repository\ParcoursRepository;
 use App\Repository\UserRepository;
-use Doctrine\Common\Collections\Collection;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;

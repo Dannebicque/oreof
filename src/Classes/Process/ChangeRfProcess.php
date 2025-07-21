@@ -15,18 +15,21 @@ use App\Entity\ChangeRf;
 use App\Enums\TypeRfEnum;
 use App\Events\AddCentreFormationEvent;
 use App\Events\HistoriqueChangeRfEvent;
+use App\Events\NotifCentreFormationEvent;
+use App\Repository\ProfilRepository;
 use App\Utils\Tools;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Workflow\WorkflowInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ChangeRfProcess extends AbstractProcess
 {
     public function __construct(
+        protected ProfilRepository $profilRepository,
         EntityManagerInterface $entityManager,
         EventDispatcherInterface $eventDispatcher,
         TranslatorInterface $translator,
@@ -101,40 +104,33 @@ class ChangeRfProcess extends AbstractProcess
     private function updateChangeRf(ChangeRf $demande): void
     {
         $formation = $demande->getFormation();
-
-        if ($formation === null) {
+        if (null === $formation) {
             return;
         }
 
-        if ($demande->getTypeRf() === TypeRfEnum::RF) {
-            $droits = ['ROLE_RESP_FORMATION'];
-            $formation->setResponsableMention(null);
-        } else {
-            $droits = ['ROLE_CO_RESP_FORMATION'];
-            $formation->setCoResponsable(null);
+        $isRf = $demande->getTypeRf() === TypeRfEnum::RF;
+        $role = $isRf ? 'ROLE_RESP_FORMATION' : 'ROLE_CO_RESP_FORMATION';
+        $setter = $isRf ? 'setResponsableMention' : 'setCoResponsable';
+
+        // On retire le responsable actuel
+        $profil = $this->profilRepository->findOneBy(['code' => $role]);
+        if (null === $profil) {
+            return;
         }
 
-        if ($demande->getNouveauResponsable() !== null) {
-            $event = new AddCentreFormationEvent(
-                $formation,
-                $demande->getNouveauResponsable(),
-                ['ROLE_RESP_FORMATION'], $demande->getCampagneCollecte()
-            );
-            $this->eventDispatcher->dispatch($event, AddCentreFormationEvent::ADD_CENTRE_FORMATION);
-            if ($demande->getTypeRf() === TypeRfEnum::RF) {
-                $formation->setResponsableMention($demande->getNouveauResponsable());
-            } else {
-                $formation->setCoResponsable($demande->getNouveauResponsable());
-            }
-        }
+        $formation->$setter(null);
 
-        if ($demande->getAncienResponsable() !== null) {
-            $event = new AddCentreFormationEvent(
-                $formation,
-                $demande->getAncienResponsable(),
-                ['ROLE_RESP_FORMATION'], $demande->getCampagneCollecte()
-            );
+        if ($ancien = $demande->getAncienResponsable()) {
+            $event = new AddCentreFormationEvent($formation, $ancien, $profil, $demande->getCampagneCollecte());
             $this->eventDispatcher->dispatch($event, AddCentreFormationEvent::REMOVE_CENTRE_FORMATION);
+        }
+
+        // On ajoute le nouveau responsable
+        if ($nouveau = $demande->getNouveauResponsable()) {
+            $event = new AddCentreFormationEvent($formation, $nouveau, $profil, $demande->getCampagneCollecte());
+            $this->eventDispatcher->dispatch($event, AddCentreFormationEvent::ADD_CENTRE_FORMATION);
+
+            $formation->$setter($nouveau);
         }
     }
 }

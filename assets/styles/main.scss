@@ -431,3 +431,10 @@ thead th {
 input[type="radio"].error {
   border: 2px solid var(--danger);
 }
+
+h3.modal-section-title {
+  margin-top: 20px;
+  border-bottom: 2px solid var(--primary);
+  font-size: 1.1em;
+  color: var(--primary);
+}

@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+
+
+    <form method="post">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Clé</th>
+                <th>Texte</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody data-controller="translations">
+            {% for key, value in translations %}
+                <tr>
+                    <td><input name="translations[{{ key }}]" value="{{ key }}" hidden/>{{ key }}</td>
+                    <td><input class="form-control" name="translations[{{ key }}]" value="{{ value|e('html_attr') }}"/>
+                    </td>
+                    <td></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <button data-action="translations#addRow" type="button" class="btn btn-secondary">+ Ajouter une ligne</button>
+        <button type="submit" class="btn btn-primary">Enregistrer</button>
+    </form>
+{% endblock %}
+
+{% block header %}
+    <h1>Fichier : {{ filename }}</h1>
+{% endblock %}
+
+{% block bouton_header %}
+    <a href="{{ path('translations_index') }}"
+       class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+       data-bs-toggle="tooltip"
+       data-bs-placement="bottom"
+       title="Retour aux fichiers de traduction"
+    >
+        <i class="{{ iconBack }}"></i>
+        <span> Retour aux fichiers de traduction</span>
+    </a>
+{% endblock %}
+

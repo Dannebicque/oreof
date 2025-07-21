@@ -13,6 +13,7 @@ use App\Entity\NatureUeEc;
 use App\Form\NatureUeEcType;
 use App\Repository\NatureUeEcRepository;
 use App\Utils\JsonRequest;
+use JsonException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -98,7 +99,7 @@ class NatureUeEcController extends AbstractController
     }
 
     /**
-     * @throws \JsonException
+     * @throws JsonException
      */
     #[Route('/{id}', name: 'app_nature_ue_ec_delete', methods: ['DELETE'])]
     public function delete(

@@ -284,7 +284,7 @@
                                                     </div>
                                                 {% endif %}
                                                 <div class="col-4 text-end">
-                                                    {% if (is_granted('CAN_PARCOURS_EDIT_MY', parcours)) and isSemestreRaccroche == false %} {#  and
+                                                    {% if (is_granted('EDIT', {route: 'app_parcours', subject: parcours})) and isSemestreRaccroche == false %} {#  and
                                             (workflow_can(ec,
                                                 'valider_parcours') or workflow_can(ec,
                                                 'initialiser'))) or (is_granted
@@ -566,7 +566,7 @@
                                                             </div>
                                                         </div>
                                                         <div class="col-4 text-end">
-                                                            {% if (is_granted('CAN_FORMATION_EDIT_MY', parcours.formation)) %} {#  and
+                                                            {% if (is_granted('EDIT', {route: 'app_formation', subject: parcours.formation})) %} {#  and
                                             (workflow_can(ec,
                                                 'valider_parcours') or workflow_can(ec,
                                                 'initialiser'))) or (is_granted
@@ -827,7 +827,7 @@
                                                                 </div>
                                                             </div>
                                                             <div class="col-4 text-end">
-                                                                {% if (is_granted('CAN_FORMATION_EDIT_MY', parcours.formation)) %} {#  and
+                                                                {% if (is_granted('EDIT', {route: 'app_formation', subject: parcours.formation})) %} {#  and
                                             (workflow_can(ec,
                                                 'valider_parcours') or workflow_can(ec,
                                                 'initialiser'))) or (is_granted

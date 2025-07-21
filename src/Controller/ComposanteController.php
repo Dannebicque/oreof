@@ -5,9 +5,7 @@ namespace App\Controller;
 use App\Classes\Json\ExtractTextFromJsonPatch;
 use App\Classes\MyGotenbergPdf;
 use App\Entity\Composante;
-use App\Enums\TypeModificationDpeEnum;
 use App\Repository\ComposanteRepository;
-use App\Repository\DpeParcoursRepository;
 use App\Repository\ParcoursRepository;
 use App\Repository\ParcoursVersioningRepository;
 use App\Service\VersioningParcours;
@@ -24,6 +22,7 @@ class ComposanteController extends BaseController
     #[Route('/composante/{composante<\d+>}', name: 'app_composante')]
     public function index(Composante $composante): Response
     {
+        //deprecated
         return $this->render('composante/index.html.twig', [
             'composante' => $composante,
         ]);
@@ -196,7 +195,8 @@ class ComposanteController extends BaseController
     #[Route("/composante/cfvu/list", "app_composante_list_for_cfvu")]
     public function listComposanteToDownloadCfvuChanges(
         ComposanteRepository $composanteRepository
-    ){
+    ): Response
+    {
 
         $composantes = $composanteRepository->findAll();
 

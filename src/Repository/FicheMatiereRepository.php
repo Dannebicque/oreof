@@ -72,18 +72,6 @@ class FicheMatiereRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    //    /** @deprecated('pas de sens?') */
-    //    public function findByComposante(Composante $composante): array
-    //    {
-    //        return $this->createQueryBuilder('f')
-    //            ->join('f.composante', 'c')
-    //            ->where('c = :composante')
-    //            ->setParameter('composante', $composante)
-    //            ->orderBy('f.libelle', 'ASC')
-    //            ->getQuery()
-    //            ->getResult();
-    //    }
-
     public function findByAdmin(
         CampagneCollecte $campagneCollecte,
         array            $options = []
@@ -91,7 +79,6 @@ class FicheMatiereRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('f')
             ->leftJoin(Parcours::class, 'p', 'WITH', 'f.parcours = p.id')
             ->join(Formation::class, 'fo', 'WITH', 'p.formation = fo.id')
-            ->leftJoin(User::class, 'u', 'WITH', 'f.responsableFicheMatiere = u.id')
             ->andWhere('f.campagneCollecte = :campagneCollecte')
             ->andWhere('f.horsDiplome = 0 or f.horsDiplome IS NULL')
             ->setParameter('campagneCollecte', $campagneCollecte);
@@ -114,7 +101,6 @@ class FicheMatiereRepository extends ServiceEntityRepository
         $query =  $qb->getQuery();
 
         $paginator = new Paginator($query, false);
-
         return [
             'data' => iterator_to_array($paginator),
             'total' => count($paginator),
@@ -127,7 +113,7 @@ class FicheMatiereRepository extends ServiceEntityRepository
     {
         $sort = $options['sort'] ?? 'mention';
         $direction = $options['direction'] ?? 'ASC';
-        $start = $options['page'] ?? 1;
+        $start = max(1, (int)($options['page'] ?? 1));
 
         if (array_key_exists('parcours', $options) && null !== $options['parcours']) {
             $qb->andWhere('p.id = :parcours')
@@ -169,6 +155,7 @@ class FicheMatiereRepository extends ServiceEntityRepository
         }
 
         if ($sort === 'responsableFicheMatiere') {
+            $qb->join('f.responsableFicheMatiere', 'u');
             $qb->addOrderBy('u.nom', $direction);
             $qb->addOrderBy('u.prenom', $direction);
         } elseif ($sort === 'mention') {
@@ -193,7 +180,7 @@ class FicheMatiereRepository extends ServiceEntityRepository
 
     public function findByHd(CampagneCollecte $campagneCollecte, array $options): array
     {
-        $start = $options['page'] ?? 1;
+        $start = max(1, (int)($options['page'] ?? 1));
         $query = $this->createQueryBuilder('f')
             ->where('f.horsDiplome = 1')
             ->andWhere('f.campagneCollecte = :campagneCollecte')

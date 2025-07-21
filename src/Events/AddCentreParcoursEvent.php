@@ -11,6 +11,7 @@ namespace App\Events;
 
 use App\Entity\CampagneCollecte;
 use App\Entity\Parcours;
+use App\Entity\Profil;
 use App\Entity\User;
 
 class AddCentreParcoursEvent
@@ -20,8 +21,8 @@ class AddCentreParcoursEvent
 
     public function __construct(
         public Parcours $parcours,
-        public array $droits = [],
-        public ?User $user = null,
+        public User   $user,
+        public Profil $droits,
         public ?CampagneCollecte $campagneCollecte = null
     ) {
     }

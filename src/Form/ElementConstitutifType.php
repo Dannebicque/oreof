@@ -31,7 +31,7 @@ class ElementConstitutifType extends AbstractType
 
         if ($isAdmin) {
             $builder
-                ->add('ordre', IntegerType::class, [])
+                ->add('ordre', IntegerType::class)
                 ->add('code', TextType::class, [
                 'required' => false]);
         }

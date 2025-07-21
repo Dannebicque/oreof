@@ -16,7 +16,6 @@ use App\Events\HistoriqueFormationEvent;
 use App\Events\HistoriqueParcoursEvent;
 use App\Repository\DpeDemandeRepository;
 use App\Repository\DpeParcoursRepository;
-use App\Repository\FicheMatiereRepository;
 use App\Service\VersioningFormation;
 use App\Service\VersioningParcours;
 use DateTimeImmutable;
@@ -124,7 +123,7 @@ class ProcessReouvertureController extends BaseController
                 $dpe->setEtatValidation(['en_cours_redaction_ss_cfvu' => 1]); //un état de processus différent pour connaitre le branchement ensuite
                 $dpe->setEtatReconduction($etatTypeModification);
                 $now = new DateTimeImmutable('now');
-                $versioningParcours->saveVersionOfParcours($parcours, $now, true, false);
+                $versioningParcours->saveVersionOfParcours($parcours, $now, true);
                 $histoEvent = new HistoriqueParcoursEvent($parcours, $this->getUser(), 'en_cours_redaction_ss_cfvu', 'valide', $request);
                 $this->eventDispatcher->dispatch($histoEvent, HistoriqueParcoursEvent::ADD_HISTORIQUE_PARCOURS);
                 $this->entityManager->flush();
@@ -133,7 +132,7 @@ class ProcessReouvertureController extends BaseController
                 $dpe->setEtatValidation(['en_cours_redaction' => 1]);
                 $dpe->setEtatReconduction($etatTypeModification);
                 $now = new DateTimeImmutable('now');
-                $versioningParcours->saveVersionOfParcours($parcours, $now, true, true);
+                $versioningParcours->saveVersionOfParcours($parcours, $now, true);
                 $histoEvent = new HistoriqueParcoursEvent($parcours, $this->getUser(), 'en_cours_redaction', 'valide', $request);
                 $this->eventDispatcher->dispatch($histoEvent, HistoriqueParcoursEvent::ADD_HISTORIQUE_PARCOURS);
                 $this->entityManager->flush();
@@ -236,7 +235,7 @@ class ProcessReouvertureController extends BaseController
             }
 
             //todo: vérifier si l'évent est OK ?
-            $versioningFormation->saveVersionOfFormation($formation, new \DateTimeImmutable('now'), true, false);
+            $versioningFormation->saveVersionOfFormation($formation, new DateTimeImmutable('now'), true);
             $histoEvent = new HistoriqueFormationEvent($formation, $this->getUser(), 'en_cours_redaction', 'valide', $request);
             $this->eventDispatcher->dispatch($histoEvent, HistoriqueFormationEvent::ADD_HISTORIQUE_FORMATION);
             $this->entityManager->flush();

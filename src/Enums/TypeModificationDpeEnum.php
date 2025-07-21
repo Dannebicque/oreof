@@ -65,20 +65,8 @@ enum TypeModificationDpeEnum: string implements BadgeEnumInterface
         return match ($this) {
             self::OUVERT => 'bg-success',
             self::ATTENTE => 'bg-primary',
-            self::CREATION => 'bg-info',
-            self::NON_OUVERTURE => 'bg-danger',
-            self::NON_OUVERTURE_SES => 'bg-danger',
-            self::NON_OUVERTURE_CFVU => 'bg-danger',
-            self::OUVERTURE_SES => 'bg-danger',
-            self::OUVERTURE_CFVU => 'bg-danger',
-            self::MODIFICATION => 'bg-warning',
-            self::MODIFICATION_PARCOURS => 'bg-warning',
-            self::MODIFICATION_INTITULE => 'bg-warning',
-            self::MODIFICATION_MCCC => 'bg-warning',
-            self::MODIFICATION_TEXTE => 'bg-warning',
-            self::MODIFICATION_MCCC_TEXTE => 'bg-warning',
-            self::ANNULATION_REOUVERTURE => 'bg-info',
-            self::FORMATION_SOUMIS_SES => 'bg-danger',
+            self::CREATION, self::ANNULATION_REOUVERTURE => 'bg-info',
+            self::MODIFICATION, self::MODIFICATION_PARCOURS, self::MODIFICATION_INTITULE, self::MODIFICATION_MCCC, self::MODIFICATION_TEXTE, self::MODIFICATION_MCCC_TEXTE => 'bg-warning',
             default => 'bg-danger',
         };
     }

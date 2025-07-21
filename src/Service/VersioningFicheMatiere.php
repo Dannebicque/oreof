@@ -17,6 +17,7 @@ use Symfony\Component\PropertyInfo\PropertyInfoExtractor;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
 use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
 use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
 use Symfony\Component\Serializer\Normalizer\BackedEnumNormalizer;
@@ -56,7 +57,8 @@ class VersioningFicheMatiere {
         DateTimeImmutable $now,
         bool $withFlush = false,
         bool              $isVersionValide = false,
-    ){
+    ): void
+    {
         $dateHeure = $now->format('d-m-Y_H-i-s');
         // Objet BD fiche matiere versioning
         $ficheMatiereVersioning = new FicheMatiereVersioning();
@@ -72,10 +74,11 @@ class VersioningFicheMatiere {
         }
 
         $modaliteEnseignement = $ficheMatiere->getModaliteEnseignement();
+        $modaliteEnseignementLibelle = $modaliteEnseignement?->libelle();
 
         // Serialization
         $ficheMatiereJson = $this->serializer->serialize($ficheMatiere, 'json', [
-            AbstractObjectNormalizer::GROUPS => ['fiche_matiere_versioning', 'fiche_matiere_versioning_ec_parcours'],
+            AbstractNormalizer::GROUPS => ['fiche_matiere_versioning', 'fiche_matiere_versioning_ec_parcours'],
             'circular_reference_limit' => 2,
             AbstractObjectNormalizer::SKIP_NULL_VALUES => true,
             AbstractObjectNormalizer::ENABLE_MAX_DEPTH => true,
@@ -94,7 +97,8 @@ class VersioningFicheMatiere {
         }
     }
 
-    public function loadFicheMatiereVersion(FicheMatiereVersioning $ficheMatiereVersioning){
+    public function loadFicheMatiereVersion(FicheMatiereVersioning $ficheMatiereVersioning): array
+    {
         $ficheMatiereJson = file_get_contents(
             __DIR__ . "/../../versioning_json/fiche-matiere/"
             . "{$ficheMatiereVersioning->getSlug()}/"
@@ -254,7 +258,8 @@ class VersioningFicheMatiere {
         return $textDifferences;
     }
 
-    private function getArrayDisplayAsList(array|Collection $array, string $keyIndex){
+    private function getArrayDisplayAsList(array|Collection $array, string $keyIndex): string
+    {
         $list = "<ul>";
         foreach($array as $value){
             $list .= "<li>" . $array[$keyIndex] . "</li>";

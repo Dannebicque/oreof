@@ -34,7 +34,7 @@
                     Vos fiches EC/matières
                 </a>
             </li>
-            {% if is_granted('CAN_ETABLISSEMENT_CONSEILLER_ALL') %}
+            {% if is_granted('SHOW', {route: 'app_etablissement', subject: 'etablissement'}) %}
                 <li class="nav-item" role="presentation">
                     <a class="nav-link {% if step == 'fiche' %}active{% endif %}" data-bs-toggle="tab" href="#" role="tab"
                        aria-selected="false"

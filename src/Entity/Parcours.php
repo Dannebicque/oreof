@@ -45,7 +45,7 @@ class Parcours
     private ?string $libelle = null;
 
     #[Groups(['parcours_json_versioning', 'fiche_matiere_versioning'])]
-    #[ORM\ManyToOne(targetEntity: Formation::class, inversedBy: 'parcours', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: Formation::class, cascade: ['persist'], inversedBy: 'parcours')]
     private ?Formation $formation;
 
     #[Groups('parcours_json_versioning')]
@@ -274,11 +274,24 @@ class Parcours
     #[ORM\OneToOne(mappedBy: 'parcoursOrigineCopie', targetEntity: self::class, cascade: ['persist', 'remove'])]
     private ?self $parcoursCopieAnneeUniversitaire = null;
 
+    /**
+     * @var Collection<int, UserProfil>
+     */
+    #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: UserProfil::class)]
+    private Collection $userProfils;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $commentaire = null;
+
+    #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: DpeDemande::class, cascade: ['persist'])]
+    private Collection $dpeDemandes;
+
     public function __construct(?Formation $formation)
     {
         $this->formation = $formation;
         $this->blocCompetences = new ArrayCollection();
         $this->semestreParcours = new ArrayCollection();
+        $this->dpeDemandes = new ArrayCollection();
 
         for ($i = 1; $i <= 6; $i++) {
             $this->etatSteps[$i] = false;
@@ -296,6 +309,7 @@ class Parcours
         $this->contacts = new ArrayCollection();
         $this->dpeParcours = new ArrayCollection();
         $this->niveauFrancais = NiveauLangueEnum::B2;
+        $this->userProfils = new ArrayCollection();
     }
 
 
@@ -644,6 +658,10 @@ class Parcours
             if (count($this->getFormation()?->getRegimeInscription()) !== 0) {
                 return $this->getFormation()?->getRegimeInscription();
             }
+        }
+
+        if ($this->regimeInscription === null) {
+            return [];
         }
 
         $t = [];
@@ -1239,7 +1257,7 @@ class Parcours
         return $this;
     }
 
-    public function getCodeRegimeInscription()
+    public function getCodeRegimeInscription(): int
     {
         $t = [];
         foreach ($this->getRegimeInscription() as $regime) {
@@ -1573,4 +1591,95 @@ class Parcours
         return $this;
     }
 
+    /**
+     * @return Collection<int, UserProfil>
+     */
+    public function getUserProfils(): Collection
+    {
+        return $this->userProfils;
+    }
+
+    public function addUserProfil(UserProfil $userProfil): static
+    {
+        if (!$this->userProfils->contains($userProfil)) {
+            $this->userProfils->add($userProfil);
+            $userProfil->setParcours($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserProfil(UserProfil $userProfil): static
+    {
+        if ($this->userProfils->removeElement($userProfil)) {
+            // set the owning side to null (unless already changed)
+            if ($userProfil->getParcours() === $this) {
+                $userProfil->setParcours(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getCommentaire(): ?string
+    {
+        return $this->commentaire;
+    }
+
+    public function setCommentaire(?string $commentaire): static
+    {
+        $this->commentaire = $commentaire;
+
+        return $this;
+    }
+
+    public function hasStage(): ?bool
+    {
+        return $this->hasStage;
+    }
+
+    public function hasProjet(): ?bool
+    {
+        return $this->hasProjet;
+    }
+
+    public function hasMemoire(): ?bool
+    {
+        return $this->hasMemoire;
+    }
+
+    public function hasSituationPro(): ?bool
+    {
+        return $this->hasSituationPro;
+    }
+
+    /**
+     * @return Collection<int, DpeDemande>
+     */
+    public function getDpeDemandes(): Collection
+    {
+        return $this->dpeDemandes;
+    }
+
+    public function addDpeDemande(DpeDemande $dpeDemande): static
+    {
+        if (!$this->dpeDemandes->contains($dpeDemande)) {
+            $this->dpeDemandes->add($dpeDemande);
+            $dpeDemande->setParcours($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDpeDemande(DpeDemande $dpeDemande): static
+    {
+        if ($this->dpeDemandes->removeElement($dpeDemande)) {
+            // set the owning side to null (unless already changed)
+            if ($dpeDemande->getParcours() === $this) {
+                $dpeDemande->setParcours(null);
+            }
+        }
+
+        return $this;
+    }
 }

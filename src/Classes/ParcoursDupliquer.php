@@ -27,7 +27,7 @@ class ParcoursDupliquer
     ) {
     }
 
-    public function recopie(Parcours $parcours, CampagneCollecte $campagneCollecte)
+    public function recopie(Parcours $parcours, CampagneCollecte $campagneCollecte): \Symfony\Component\HttpFoundation\Response
     {
         $formation = $parcours->getFormation();
 
@@ -141,7 +141,7 @@ class ParcoursDupliquer
         return JsonReponse::success('Le parcours a été dupliqué');
     }
 
-    private function recopieContenuUe(Ue $ue, Ue $newUe, Parcours $newParcours, array $tabCompetences)
+    private function recopieContenuUe(Ue $ue, Ue $newUe, Parcours $newParcours, array $tabCompetences): void
     {
         //dupliquer les EC des ue
         foreach ($ue->getElementConstitutifs() as $ec) {

@@ -1,0 +1,83 @@
+{% extends 'base.html.twig' %}
+
+{% block header %}
+    Gestion des validations change RF
+{% endblock %}
+
+{% block breadcrumb %}
+    {{ include('communs/_breadcrumb.html.twig', {liens:[
+    ]}) }}
+{% endblock %}
+
+{% block bouton_header %}
+
+{% endblock %}
+
+{% block content %}
+    <div
+            {{ stimulus_controller('validation--index',
+                {
+                    urlListe: path('app_validation_change_rf_liste'),
+                }) }}
+    >
+        <div class="card mt-2">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-6">
+                        <label for="composante" class="required">Composante</label>
+                        <select name="composante" id="composante" class="form-select"
+                                {{ stimulus_action('validation--index', 'changeListe') }}
+                                {{ stimulus_controller('symfony/ux-autocomplete/autocomplete') }}
+                        >
+                            <option value="">Choisir une composante</option>
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <option value="all">Toutes les composantes de l'établissement</option>
+                            {% endif %}
+                            {% for composante in composantes %}
+                                <option value="{{ composante.id }}">{{ composante.libelle }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-6">
+                        <div>
+                            <label for="type_validation" class="required">Etat actuel des changements de RF</label>
+                            <select name="type_validation" id="type_validation" class="form-select"
+                                    {{ stimulus_action('validation--index', 'changeListe') }}
+                            >
+                                <option value="">Choisir l'état</option>
+                                <option value="all">Tous les états</option>
+                                {% for value, type in types_validation %}
+                                    <option value="{{ value }}" {% if typeValidation == value %}selected{% endif %}>
+                                        {{ type.label|trans({}, 'process') }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <a href="{{ path('app_formation_responsable_liste_export') }}"
+                           class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2 mt-2"
+                           data-bs-toggle="tooltip"
+                           data-bs-placement="bottom"
+                           title="Exporter les données en PDF"
+                        >
+                            <i class="{{ iconDownload }}"></i>
+                            <span> Exporter les données en PDF</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mt-2" {{ stimulus_target('validation--index', 'liste') }}>
+            <div class="card-body">
+                {{ component('alerte', {
+                    type:'info',
+                    message:'Veuillez sélectionner une composante et un état de validation pour afficher les formations concernées.'
+                }) }}
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

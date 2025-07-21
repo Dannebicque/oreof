@@ -36,9 +36,9 @@ export default class extends Controller {
 
     const centreType = document.getElementById('typeCentre').value
     const centreId = document.getElementById('selectListe').value
-    const role = document.getElementById('droits').value
+    const role = document.getElementById('droitss').value
 
-    if (role === '' || (centreType !== 'cg_etablissement' && centreId === '')) {
+    if (role === '' || centreId === '') {
       callOut('Veuillez sélectionner un centre et un rôle', 'error')
     } else {
       this._updateCentre(centreType, centreId, role, false)

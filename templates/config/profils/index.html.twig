@@ -1,0 +1,68 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <div {{ stimulus_controller('profil--index', {
+        urlListe: path('app_administration_profils_liste'),
+        urlChangeDroit: path('app_administration_profils_change_droit'),
+    }) }}>
+        <div class="card mt-2">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-6">
+                        <label for="profil" class="required">Profil</label>
+                        <select name="profil" id="profil" class="form-select"
+                                {{ stimulus_action('profil--index', 'changeProfil') }}
+                                {{ stimulus_controller('symfony/ux-autocomplete/autocomplete') }}
+                        >
+                            <option value="">Choisir un profil</option>
+                            {% for profil in profils %}
+                                <option value="{{ profil.id }}">{{ profil.libelle }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="col-6">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div {{ stimulus_target('profil--index', 'liste') }}></div>
+    </div>
+{% endblock %}
+
+{% block header %}
+    Gestion des profils
+{% endblock %}
+
+{% block breadcrumb %}
+    {{ include('communs/_breadcrumb.html.twig', {liens:[
+        {
+            href:'',
+            title: 'Administration',
+        },
+        {
+            href:'',
+            title: 'Profils',
+        }
+    ]}) }}
+{% endblock %}
+
+{% block bouton_header %}
+    <button
+            {{ stimulus_controller('modal', {
+                size: 'lg',
+                modalTitle: 'Ajouter un profil',
+                modalUrl: path('app_administration_profils_creer') }) }}
+            data-action="click->modal#openModal"
+            class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+            data-size="lg"
+            data-bs-toggle="tooltip"
+            data-bs-placement="bottom"
+            title="Ajouter un rôle"
+    >
+        <i class="{{ iconAdd }}"></i>
+        <span> Créer un profil</span>
+    </button>
+{% endblock %}

@@ -21,31 +21,35 @@ use App\Entity\TypeDiplome;
 use App\Entity\TypeEpreuve;
 use App\Events\McccUpdateEvent;
 use App\Repository\TypeEpreuveRepository;
+use App\Service\TypeDiplomeResolver;
 use App\Service\VersioningParcours;
-use App\TypeDiplome\TypeDiplomeRegistry;
+use App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException;
 use App\Utils\Access;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManagerInterface;
-use Exception;
 use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/element/constitutif')]
 class ElementConstitutifMcccController extends AbstractController
 {
+    //todo: à revoir, des cas ne sont pas bien gérés avec le passage des datas sur les fiches. Exemple un EC à choix restreint devoir toujours avec les MCCC sur l'EC, mais formulaire innaccessible parfois;
+    public function __construct(private readonly TypeDiplomeResolver $typeDiplomeResolver)
+    {
+    }
+
+
     /**
-     * @throws \App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException
+     * @throws TypeDiplomeNotFoundException
      */
     #[Route('/{id}/mccc-ec/{parcours}', name: 'app_element_constitutif_mccc', methods: ['GET', 'POST'])]
     public function mcccEc(
         EventDispatcherInterface $eventDispatcher,
         EntityManagerInterface       $entityManager,
-        TypeDiplomeRegistry          $typeDiplomeRegistry,
         TypeEpreuveRepository        $typeEpreuveRepository,
         Request                      $request,
         ElementConstitutif           $elementConstitutif,
@@ -68,7 +72,7 @@ class ElementConstitutifMcccController extends AbstractController
             throw new RuntimeException('Type de diplome non trouvé');
         }
 
-        $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());
+        $typeD = $this->typeDiplomeResolver->get($typeDiplome);
 
         $raccroche = $elementConstitutif->getFicheMatiere()?->getParcours()?->getId() !== $parcours->getId();
         $getElement = new GetElementConstitutif($elementConstitutif, $parcours);
@@ -82,7 +86,7 @@ class ElementConstitutifMcccController extends AbstractController
             if(mb_strlen($argumentQuitus) < 15){
                 return $this->json(
                     ['message' => "L'argumentaire du quitus doit faire au moins 15 caractères."],
-                    500, 
+                    500,
                     ['Content-Type' => 'application/json']
                 );
             }
@@ -108,7 +112,11 @@ class ElementConstitutifMcccController extends AbstractController
             }
         }
 
-        if ($this->isGranted('CAN_PARCOURS_EDIT_MY', $dpeParcours) && Access::isAccessible($dpeParcours, 'cfvu')) {
+        if ($this->isGranted('EDIT',
+                [
+                    'route' => 'app_parcours',
+                    'subject' => $dpeParcours,
+                ]) && Access::isAccessible($dpeParcours)) {
             if ($request->isMethod('POST')) {
                 $newMcccToText = '';
                 $newEcts = '';
@@ -151,7 +159,7 @@ class ElementConstitutifMcccController extends AbstractController
                             $fm->setQuitusText($request->request->all()['ec_step4']['quitus_argument']);
                         }
                         // Si la checkbox est décochée, 'quitus' ne fait pas partie de la requête POST
-                        elseif ($request->request->has('ec_step4') 
+                        elseif ($request->request->has('ec_step4')
                             && array_key_exists('quitus', $request->request->all()['ec_step4']) === false
                             && $fm->isQuitus() !== false
                         ) {
@@ -175,9 +183,9 @@ class ElementConstitutifMcccController extends AbstractController
                             $elementConstitutif->setQuitus((bool)$request->request->all()['ec_step4']['quitus']);
                             $elementConstitutif->setQuitusText($request->request->all()['ec_step4']['quitus_argument']);
                         }
-                        
+
                         // Si la checkbox est décochée, 'quitus' ne fait pas partie de la requête POST
-                        elseif ($request->request->has('ec_step4') 
+                        elseif ($request->request->has('ec_step4')
                             && array_key_exists('quitus', $request->request->all()['ec_step4']) === false
                             && $elementConstitutif->isQuitus() !== false
                         ) {
@@ -250,7 +258,6 @@ class ElementConstitutifMcccController extends AbstractController
 
     #[Route('/{id}/mccc-ec/{parcours}/non-editable', name: 'app_element_constitutif_mccc_non_editable', methods: ['GET', 'POST'])]
     public function mcccEcNonEditable(
-        TypeDiplomeRegistry          $typeDiplomeRegistry,
         TypeEpreuveRepository        $typeEpreuveRepository,
         ElementConstitutif           $elementConstitutif,
         Parcours                     $parcours,
@@ -271,14 +278,14 @@ class ElementConstitutifMcccController extends AbstractController
         if ($typeDiplome === null) {
             throw new RuntimeException('Type de diplome non trouvé');
         }
-        $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());
+        $typeD = $this->typeDiplomeResolver->get($typeDiplome);
 
         $getElement = new GetElementConstitutif($elementConstitutif, $parcours);
         $typeEpreuve = $getElement->getTypeMcccFromFicheMatiere();
         $ects = $getElement->getFicheMatiereEcts();
 
         $lastVersion = $entityManager->getRepository(ParcoursVersioning::class)->findLastCfvuVersion($parcours);
-        $lastVersion = isset($lastVersion[0]) ? $lastVersion[0] : null;
+        $lastVersion = $lastVersion[0] ?? null;
 
         $typeMcccLibelle = [
             'ct' => 'Contrôle Terminal',
@@ -309,10 +316,10 @@ class ElementConstitutifMcccController extends AbstractController
         string $isFromVersioning,
         ?ElementConstitutif $elementConstitutif,
         ParcoursVersioning $parcoursVersioning,
-        TypeDiplomeRegistry $typeDiplomeReg,
         VersioningParcours $versioningParcours,
         EntityManagerInterface $entityManager
-    ) {
+    ): Response
+    {
         if($elementConstitutif === null) {
             return $this->render("element_constitutif/_versioning_ecNotFound.html.twig", [
                 'ecNotFound' => true
@@ -322,9 +329,14 @@ class ElementConstitutifMcccController extends AbstractController
         $versionData = $versioningParcours->loadParcoursFromVersion($parcoursVersioning);
         $libelleTypeDiplome = $versionData['parcours']->getFormation()->getTypeDiplome()->getLibelle();
         $typeDiplome = $entityManager->getRepository(TypeDiplome::class)->findOneBy(['libelle' => $libelleTypeDiplome]);
-        $templateForm = $typeDiplomeReg->getTypeDiplome($typeDiplome->getModeleMcc())::TEMPLATE_FORM_MCCC;
+
+        if ($typeDiplome === null) {
+            throw new RuntimeException('Type de diplome non trouvé');
+        }
+
+        $templateForm = $this->typeDiplomeResolver->get($typeDiplome)::TEMPLATE_FORM_MCCC;
         $typeEpreuveDiplome = $entityManager->getRepository(TypeEpreuve::class)->findByTypeDiplome($typeDiplome);
-        
+
         $getElement = new GetElementConstitutif($elementConstitutif, $parcoursVersioning->getParcours());
         $typeMccc = $getElement->getTypeMcccFromFicheMatiere();
         $ectsActuel = $getElement->getFicheMatiereEcts();
@@ -430,7 +442,6 @@ class ElementConstitutifMcccController extends AbstractController
 
     #[Route('/{id}/mccc-ec-but', name: 'app_element_constitutif_mccc_but', methods: ['GET', 'POST'])]
     public function mcccEcBut(
-        TypeDiplomeRegistry   $typeDiplomeRegistry,
         TypeEpreuveRepository $typeEpreuveRepository,
         Request               $request,
         FicheMatiere          $ficheMatiere
@@ -443,10 +454,18 @@ class ElementConstitutifMcccController extends AbstractController
         if ($typeDiplome === null) {
             throw new RuntimeException('Type de diplome non trouvé');
         }
-        $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());
+        $typeD = $this->typeDiplomeResolver->get($typeDiplome);
 
-        if ($this->isGranted('CAN_FORMATION_EDIT_MY', $formation) ||
-            $this->isGranted('CAN_PARCOURS_EDIT_MY', $ficheMatiere->getParcours())) { //todo: ajouter le workflow...
+        if ($this->isGranted('EDIT',
+                [
+                    'route' => 'app_formation',
+                    'subject' => $formation,
+                ]) ||
+            $this->isGranted('EDIT',
+                [
+                    'route' => 'app_parcours',
+                    'subject' => $ficheMatiere->getParcours(),
+                ])) {
             if ($request->isMethod('POST')) {
                 $typeD->saveMcccs($ficheMatiere, $request->request);
                 return JsonReponse::success('MCCCs enregistrés');
@@ -462,6 +481,8 @@ class ElementConstitutifMcccController extends AbstractController
             ]);
         }
         //todo: else ?
+
+
     }
 
     private function mcccToTexte(Collection $getMcccs): string

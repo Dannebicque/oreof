@@ -5,6 +5,7 @@ namespace App\Command;
 use App\Entity\DpeParcours;
 use App\Enums\TypeModificationDpeEnum;
 use App\Repository\FormationRepository;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -34,7 +35,7 @@ class UpdateDpeCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-        $date = new \DateTime('2023-09-01');
+        $date = new DateTime('2023-09-01');
 
         $formations = $this->formationRepository->findAll();
 

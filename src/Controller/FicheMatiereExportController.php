@@ -15,6 +15,7 @@ use App\Entity\CampagneCollecte;
 use App\Entity\FicheMatiere;
 use App\Entity\Parcours;
 use App\Message\Export;
+use App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException;
 use App\Message\ExportGenerique;
 use App\Service\ExportGeneriqueFicheMatiere;
 use DateTime;
@@ -30,6 +31,9 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class FicheMatiereExportController extends AbstractController
@@ -40,10 +44,10 @@ class FicheMatiereExportController extends AbstractController
     }
 
     /**
-     * @throws \Twig\Error\SyntaxError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\LoaderError
-     * @throws \App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     * @throws TypeDiplomeNotFoundException
      */
     #[Route('/fiche-matiere/export/{id}', name: 'app_fiche_matiere_export')]
     public function export(FicheMatiere $ficheMatiere): Response

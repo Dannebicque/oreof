@@ -13,18 +13,27 @@ use App\Classes\DataUserSession;
 use App\Entity\CampagneCollecte;
 use App\Entity\Constantes;
 use App\Entity\Etablissement;
+use App\Service\TypeDiplomeResolver;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Contracts\Service\Attribute\Required;
 
 class BaseController extends AbstractController
 {
     protected DataUserSession $dataUserSession;
+    protected ?TypeDiplomeResolver $typeDiplomeResolver = null;
 
     #[Required]
     public function setDataUserSession(DataUserSession $dataUserSession): void
     {
         $this->dataUserSession = $dataUserSession;
     }
+
+    #[Required]
+    public function getTypeDiplomeResolver(TypeDiplomeResolver $typeDiplomeResolver): void
+    {
+        $this->typeDiplomeResolver = $typeDiplomeResolver;
+    }
+
     public function addFlashBag(string $niveau, string $message): void
     {
         switch ($niveau) {

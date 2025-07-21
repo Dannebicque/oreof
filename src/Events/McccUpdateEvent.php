@@ -37,7 +37,8 @@ class McccUpdateEvent extends Event
     public function setNewMccc(
         string $oldMcccToText,
         string $newMcccToText
-    ) {
+    ): void
+    {
         $this->oldMcccToText = $oldMcccToText;
         $this->newMcccToText = $newMcccToText;
     }
@@ -45,7 +46,8 @@ class McccUpdateEvent extends Event
     public function setNewEcts(
         string $oldEctsToText,
         string $newEctsToText
-    ) {
+    ): void
+    {
         $this->oldEctsToText = $oldEctsToText;
         $this->newEctsToText = $newEctsToText;
     }
@@ -53,7 +55,8 @@ class McccUpdateEvent extends Event
     public function setNewStructure(
         string $oldStructureToText,
         string $newStructureToText
-    ) {
+    ): void
+    {
         $this->oldStructureToText = $oldStructureToText;
         $this->newStructureToText = $newStructureToText;
     }
@@ -68,12 +71,12 @@ class McccUpdateEvent extends Event
         return $this->parcours;
     }
 
-    public function getNewMcccToText()
+    public function getNewMcccToText(): string
     {
         return $this->newMcccToText;
     }
 
-    public function getOldMcccToText()
+    public function getOldMcccToText(): string
     {
         return $this->oldMcccToText;
     }

@@ -30,7 +30,8 @@ class SearchController extends AbstractController
     #[Route('/recherche/mot_cle', name: 'app_search_action')]
     public function searchWithKeyword(
         EntityManagerInterface $entityManager,
-    ){
+    ): \Symfony\Component\HttpFoundation\RedirectResponse|Response
+    {
         $request = Request::createFromGlobals();
         $keyword_1 = $request->query->get('keyword_1');
         $typeRecherche = $request->query->get('searchType');
@@ -40,7 +41,7 @@ class SearchController extends AbstractController
             $typeRechercheValide = 'parcours';
         }
 
-        if(!isset($keyword_1) || empty($keyword_1)|| mb_strlen($keyword_1) <= 2){
+        if (empty($keyword_1) || mb_strlen($keyword_1) <= 2) {
             $this->addFlash('toast', [
                 'type' => 'error',
                 'text' => 'Le mot-clé fourni doit faire au moins 3 caractères.'
@@ -177,7 +178,8 @@ class SearchController extends AbstractController
         int $page,
         string $mot_cle,
         EntityManagerInterface $entityManager
-    ){
+    ): \Symfony\Component\HttpFoundation\JsonResponse
+    {
         $data = $entityManager->getRepository(FicheMatiere::class)
                 ->findFicheMatiereWithKeywordAndPagination($mot_cle, $page);
 

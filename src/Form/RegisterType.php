@@ -33,6 +33,10 @@ class RegisterType extends AbstractType
                 'required' => true,
                 'help' => '-'
             ])
+            ->add('serviceDemande', TextType::class, [
+                'required' => true,
+                'help' => '-'
+            ])
             ->add('centreDemande', ChoiceType::class, [
                 'choices' => [
                     'Composante' => CentreGestionEnum::CENTRE_GESTION_COMPOSANTE,

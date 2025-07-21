@@ -16,7 +16,6 @@ use App\Events\UserRegisterEvent;
 use App\Form\RegisterType;
 use App\Repository\ComposanteRepository;
 use App\Repository\EtablissementRepository;
-use App\Repository\UserCentreRepository;
 use App\Repository\UserRepository;
 use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -30,7 +29,6 @@ class RegisterController extends AbstractController
     #[Route('/demande-acces', name: 'app_register')]
     public function index(
         EtablissementRepository  $etablissementRepository,
-        UserCentreRepository     $userCentreRepository,
         ComposanteRepository     $composanteRepository,
         Ldap                     $ldap,
         EventDispatcherInterface $eventDispatcher,

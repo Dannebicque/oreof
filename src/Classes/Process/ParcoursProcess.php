@@ -20,6 +20,7 @@ use App\Events\HistoriqueParcoursEditEvent;
 use App\Events\HistoriqueParcoursEvent;
 use App\Repository\DpeDemandeRepository;
 use App\Utils\Tools;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -112,7 +113,7 @@ class ParcoursProcess extends AbstractProcess
             $etatValidation = array_keys($this->dpeParcoursWorkflow->getMarking($dpeParcours)->getPlaces())[0];
             $dpeDemande->setEtatDemande(EtatDpeEnum::tryFrom($etatValidation));
             if ($place === 'soumis_central') {
-                $dpeDemande->setDateCloture(new \DateTime());
+                $dpeDemande->setDateCloture(new DateTime());
             }
         }
 
@@ -155,8 +156,17 @@ class ParcoursProcess extends AbstractProcess
 
     public function reserveParcours(DpeParcours $dpeParcours, UserInterface $user, string|array $transition, $request): Response
     {
+        $motifs = [];
+        if ($request->request->has('argumentaire')) {
+            $motifs['motif'] = $request->request->get('argumentaire');
+        }
+
+        if ($request->request->has('date')) {
+            $motifs['date'] = Tools::convertDate($request->request->get('date'));
+        }
+
         $place = array_keys($this->dpeParcoursWorkflow->getMarking($dpeParcours)->getPlaces())[0];
-        $this->dpeParcoursWorkflow->apply($dpeParcours, $transition, ['motif' => $request->request->get('argumentaire')]);
+        $this->dpeParcoursWorkflow->apply($dpeParcours, $transition, $motifs);
         $this->entityManager->flush();
         return $this->dispatchEventParcours($dpeParcours, $user, $place, $request, 'reserve');
     }
@@ -168,7 +178,7 @@ class ParcoursProcess extends AbstractProcess
         return JsonReponse::success($this->translator->trans('parcours.'.$etat.'.' . $place . '.flash.success', [], 'process'));
     }
 
-    public function editParcours(HistoriqueParcours $historique, UserInterface $user, string $transition, Request $request)
+    public function editParcours(HistoriqueParcours $historique, UserInterface $user, string $transition, Request $request): Response
     {
         $reponse = $this->dispatchEventEditParcours($historique, $user, $transition, $request, 'valide');
         return $reponse;

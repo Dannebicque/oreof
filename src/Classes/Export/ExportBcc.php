@@ -14,10 +14,10 @@ use App\Classes\GetElementConstitutif;
 use App\Entity\CampagneCollecte;
 use App\Entity\Parcours;
 use App\Repository\FormationRepository;
+use App\Service\ProjectDirProvider;
 use App\Utils\Tools;
 use DateTime;
 use Symfony\Component\HttpFoundation\StreamedResponse;
-use Symfony\Component\HttpKernel\KernelInterface;
 
 class ExportBcc implements ExportInterface
 {
@@ -26,10 +26,10 @@ class ExportBcc implements ExportInterface
 
     public function __construct(
         protected ExcelWriter         $excelWriter,
-        KernelInterface               $kernel,
+        ProjectDirProvider $projectDirProvider,
         protected FormationRepository $formationRepository,
     ) {
-        $this->dir = $kernel->getProjectDir() . '/public/temp/';
+        $this->dir = $projectDirProvider->getProjectDir() . '/public/temp/';
     }
 
     private function prepareExport(
@@ -66,7 +66,7 @@ class ExportBcc implements ExportInterface
         foreach ($parcours->getSemestreParcours() as $semParc) {
             $ligne = 7;
             $debutCol = $col;
-            if ($semParc->getSemestre() !== null && $semParc->getSemestre()->isNonDispense() == false) {
+            if ($semParc->getSemestre() !== null && !$semParc->getSemestre()->isNonDispense()) {
                 if ($semParc->getSemestre()->getSemestreRaccroche() !== null) {
                     $semestre = $semParc->getSemestre()->getSemestreRaccroche();
                 } else {
@@ -198,7 +198,7 @@ class ExportBcc implements ExportInterface
         return $this->excelWriter->genereFichier($this->fileName);
     }
 
-    public function exportLink(CampagneCollecte $anneeUniversitaire): string
+    public function exportLink(CampagneCollecte $campagneCollecte): string
     {
         // TODO: Implement exportLink() method.
     }

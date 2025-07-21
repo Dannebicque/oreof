@@ -17,13 +17,13 @@ use App\Repository\CompetenceRepository;
 use App\Repository\ParcoursRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
-class Bcc
+readonly class Bcc
 {
     public function __construct(
-        private readonly BlocCompetenceRepository $blocCompetenceRepository,
-        private readonly CompetenceRepository $competenceRepository,
-        private readonly ParcoursRepository $parcoursRepository,
-        private readonly EntityManagerInterface $entityManager,
+        private BlocCompetenceRepository $blocCompetenceRepository,
+        private CompetenceRepository     $competenceRepository,
+        private ParcoursRepository       $parcoursRepository,
+        private EntityManagerInterface   $entityManager,
     ) {
     }
 
@@ -159,7 +159,7 @@ class Bcc
         $this->entityManager->flush();
     }
 
-    public function renumeroteBlocCompetence(?Parcours $parc)
+    public function renumeroteBlocCompetence(?Parcours $parc): void
     {
         if ($parc === null) {
             return;

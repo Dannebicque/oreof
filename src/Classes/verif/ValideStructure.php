@@ -13,6 +13,7 @@ use App\Classes\GetElementConstitutif;
 use App\Classes\GetUeEcts;
 use App\Entity\ElementConstitutif;
 use App\Entity\Parcours;
+use App\Entity\Semestre;
 use App\Entity\TypeDiplome;
 use App\Entity\Ue;
 
@@ -102,14 +103,10 @@ abstract class ValideStructure extends AbstractValide
                     self::$structure['semestres'][$ordreSemestre]['ues'][$ue->getId()]['enfants'] = [];
                     self::$structure['semestres'][$ordreSemestre]['ues'][$ue->getId()]['global'] = self::COMPLET;
                     foreach ($ue->getUeEnfants() as $uee) {
-                        if ($uee->getNatureUeEc()?->isLibre()) {
-                            self::$structure['semestres'][$ordreSemestre]['ues'][$ue->getId()]['enfants'][$uee->getId()]['ue'] = $uee;
-                            self::$structure['semestres'][$ordreSemestre]['ues'][$ue->getId()]['enfants'][$uee->getId()]['global'] = self::COMPLET;
-                            self::$structure['semestres'][$ordreSemestre]['ues'][$ue->getId()]['enfants'][$uee->getId()]['ecs'] = [];
-                        } else {
-                            self::$structure['semestres'][$ordreSemestre]['ues'][$ue->getId()]['enfants'][$uee->getId()]['ue'] = $uee;
-                            self::$structure['semestres'][$ordreSemestre]['ues'][$ue->getId()]['enfants'][$uee->getId()]['global'] = self::COMPLET;
-                            self::$structure['semestres'][$ordreSemestre]['ues'][$ue->getId()]['enfants'][$uee->getId()]['ecs'] = [];
+                        self::$structure['semestres'][$ordreSemestre]['ues'][$ue->getId()]['enfants'][$uee->getId()]['ue'] = $uee;
+                        self::$structure['semestres'][$ordreSemestre]['ues'][$ue->getId()]['enfants'][$uee->getId()]['global'] = self::COMPLET;
+                        self::$structure['semestres'][$ordreSemestre]['ues'][$ue->getId()]['enfants'][$uee->getId()]['ecs'] = [];
+                        if (!$uee->getNatureUeEc()?->isLibre()) {
                             foreach ($uee->getElementConstitutifs() as $ec) {
                                 if ($ec->getEcParent() === null) {
                                     self::$structure['semestres'][$ordreSemestre]['ues'][$ue->getId()]['enfants'][$uee->getId()]['ecs'][$ec->getId()] = self::valideEc($ec, $ordreSemestre, $uee);
@@ -378,7 +375,7 @@ abstract class ValideStructure extends AbstractValide
         return $structure;
     }
 
-    private static function totalEctsSemestre(\App\Entity\Semestre $semestre): float
+    private static function totalEctsSemestre(Semestre $semestre): float
     {
         $ects = 0.0;
         $typeDiplome = self::$parcours->getTypeDiplome();

@@ -3,10 +3,6 @@
 namespace App\Form;
 
 use App\Entity\DpeDemande;
-use App\Entity\Formation;
-use App\Entity\Parcours;
-use App\Entity\User;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;

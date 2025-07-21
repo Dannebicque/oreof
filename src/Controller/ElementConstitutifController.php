@@ -25,11 +25,9 @@ use App\Repository\ElementConstitutifRepository;
 use App\Repository\FicheMatiereRepository;
 use App\Repository\NatureUeEcRepository;
 use App\Repository\TypeEcRepository;
-use App\TypeDiplome\TypeDiplomeRegistry;
 use App\Utils\JsonRequest;
 use Doctrine\ORM\EntityManagerInterface;
 use RuntimeException;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -286,15 +284,11 @@ class ElementConstitutifController extends BaseController
             //si up => $ecParent->getOrdre() + 1; si down => $ecParent->getOrdre()
             if ($request->query->get('sens', 'after') === 'avant') {
                 $ordre = $ecParent->getOrdre();
-                $ecOrdre->decalerEnfant($ecParent->getEcParent(), $ordre);
-                $elementConstitutif->setOrdre($ordre);
             } else {
                 $ordre = $ecParent->getOrdre() + 1;
-                $ecOrdre->decalerEnfant($ecParent->getEcParent(), $ordre);
-                $elementConstitutif->setOrdre($ordre);
             }
-
-
+            $ecOrdre->decalerEnfant($ecParent->getEcParent(), $ordre);
+            $elementConstitutif->setOrdre($ordre);
             $elementConstitutif->genereCode();
 
             $elementConstitutifRepository->save($elementConstitutif, true);
@@ -554,7 +548,6 @@ class ElementConstitutifController extends BaseController
 
         $form->handleRequest($request);
         if ($form->isSubmitted()) {
-            $newHeuresToText = '';
             $originalHeuresToText = $this->heuresToTexte($getElement->getFicheMatiereHeures());
             if (array_key_exists('heuresEnfantsIdentiques', $request->request->all()['ec_step4'])) {
                 if ($elementConstitutif->getEcParent() !== null) {

@@ -3,20 +3,14 @@
 namespace App\Controller;
 
 use App\Classes\Excel\ExcelWriter;
-use App\Classes\JsonReponse;
 use App\Classes\ValidationProcess;
-use App\Entity\Actualite;
 use App\Entity\Composante;
 use App\Entity\DpeDemande;
-use App\Form\ActualiteType;
 use App\Form\DpeDemandeTexteType;
-use App\Repository\ActualiteRepository;
 use App\Repository\ComposanteRepository;
 use App\Repository\DpeDemandeRepository;
 use App\Repository\MentionRepository;
-use App\Utils\JsonRequest;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -46,7 +40,10 @@ class DemandeDpeController extends BaseController
     {
         if ($type === 'composante') {
             $composante = $composanteRepository->find($request->query->get('composante'));
-            $this->denyAccessUnlessGranted('CAN_COMPOSANTE_SHOW_MY', $composante);
+            $this->denyAccessUnlessGranted('SHOW', [
+                'route' => 'app_composante',
+                'subject' => $composante
+            ]);
 
             if ($composante === null) {
                 throw $this->createNotFoundException('Composante non trouvée');
@@ -55,6 +52,9 @@ class DemandeDpeController extends BaseController
             return $this->render('demande_dpe/_liste.html.twig', [
                 'is_admin' => false,
                 'params' => $request->query->all(),
+                'mentions' => $mentionRepository->findByComposante($composante),
+                'listeNiveauModification' => DpeDemande::getListeNiveauModification(),
+                'listeEtatValidation' => $validationProcess->getProcessAll(),
                 'demandes' => $dpeDemandeRepository->findByComposanteAndSearch(
                     $composante,
                     $this->getCampagneCollecte(),
@@ -87,7 +87,10 @@ class DemandeDpeController extends BaseController
         Composante $composante,
     ): Response
     {
-        $this->denyAccessUnlessGranted('CAN_COMPOSANTE_SHOW_MY', $composante);
+        $this->denyAccessUnlessGranted('SHOW', [
+            'route' => 'app_composante',
+            'subject' => $composante
+        ]);
 
         return $this->render('demande_dpe/index.html.twig', [
             'type' => 'composante',
@@ -138,7 +141,10 @@ class DemandeDpeController extends BaseController
                 throw $this->createNotFoundException('Composante non trouvée');
             }
 
-            $this->denyAccessUnlessGranted('CAN_COMPOSANTE_SHOW_MY', $composante);
+            $this->denyAccessUnlessGranted('MANAGE', [
+                'route' => 'app_composante',
+                'subject' => $composante
+            ]);
 
             $demandes = $dpeDemandeRepository->findByComposante($composante);
         } else {
@@ -153,52 +159,53 @@ class DemandeDpeController extends BaseController
         $excelWriter->nouveauFichier('Export Demande DPE');
         $excelWriter->setActiveSheetIndex(0);
         $excelWriter->writeCellName('A1', 'Composante');
-        $excelWriter->writeCellName('B1', 'Mention');
-        $excelWriter->writeCellName('C1', 'Parcours');
-        $excelWriter->writeCellName('D1', 'Demande de ?');
-        $excelWriter->writeCellName('E1', 'Date demande');
-        $excelWriter->writeCellName('F1', 'Date clôture');
-        $excelWriter->writeCellName('G1', 'Niveau demande');
-        $excelWriter->writeCellName('H1', 'Etat');
-        $excelWriter->writeCellName('I1', 'Commentaire');
+        $excelWriter->writeCellName('B1', 'Type Diplôme');
+        $excelWriter->writeCellName('C1', 'Mention');
+        $excelWriter->writeCellName('D1', 'Parcours');
+        $excelWriter->writeCellName('E1', 'Demande de ?');
+        $excelWriter->writeCellName('F1', 'Date demande');
+        $excelWriter->writeCellName('G1', 'Date clôture');
+        $excelWriter->writeCellName('H1', 'Niveau demande');
+        $excelWriter->writeCellName('I1', 'Etat');
+        $excelWriter->writeCellName('J1', 'Commentaire');
         if ($isAdmin) {
-            $excelWriter->writeCellName('J1', 'Id Parcours');
-            $excelWriter->writeCellName('K1', 'Id Mention');
+            $excelWriter->writeCellName('K1', 'Id Parcours');
+            $excelWriter->writeCellName('L1', 'Id Mention');
         }
         $ligne = 2;
         foreach ($demandes as $demande) {
             if ($demande->getNiveauDemande() === 'F') {
                 $formation = $demande->getFormation();
-                $composante = $formation?->getComposantePorteuse();
             } else {
                 $parcours = $demande->getParcours();
                 $formation = $parcours?->getFormation();
-                $composante = $formation?->getComposantePorteuse();
             }
+            $composante = $formation?->getComposantePorteuse();
 
             $excelWriter->writeCellName('A' . $ligne, $composante->getLibelle());
-            $excelWriter->writeCellName('B' . $ligne, $formation?->getDisplay());
+            $excelWriter->writeCellName('B' . $ligne, $formation?->getTypeDiplome()?->getLibelle() ?? 'Inconnu');
+            $excelWriter->writeCellName('C' . $ligne, $formation?->getDisplay());
 
-            if ($demande->getNiveauDemande() === 'F') {
-                $excelWriter->writeCellName('C' . $ligne, 'Niveau Mention');
+            if ($demande->getNiveauDemande() === 'G') {
+                $excelWriter->writeCellName('D' . $ligne, 'Niveau Mention');
             } else {
-                $excelWriter->writeCellName('C' . $ligne, $parcours?->getDisplay());
+                $excelWriter->writeCellName('D' . $ligne, $parcours?->getDisplay());
             }
 
-            $excelWriter->writeCellName('D' . $ligne, $demande->getAuteur() ? $demande->getAuteur()->getDisplay() : '');
-            $excelWriter->writeCellName('E' . $ligne, $demande->getDateDemande()?->format('d/m/Y'));
-            $excelWriter->writeCellName('F' . $ligne, $demande->getDateCloture() ? $demande->getDateCloture()->format('d/m/Y') : '');
-            $excelWriter->writeCellName('G' . $ligne, $demande->getNiveauModification() ? $demande->getNiveauModification()->getLibelle() : '');
-            $excelWriter->writeCellName('H' . $ligne, $demande->getEtatDemande()?->getLibelle());
-            $excelWriter->writeCellName('I' . $ligne, $demande->getArgumentaireDemande());
+            $excelWriter->writeCellName('E' . $ligne, $demande->getAuteur() ? $demande->getAuteur()->getDisplay() : '');
+            $excelWriter->writeCellName('F' . $ligne, $demande->getDateDemande()?->format('d/m/Y'));
+            $excelWriter->writeCellName('G' . $ligne, $demande->getDateCloture() ? $demande->getDateCloture()->format('d/m/Y') : '');
+            $excelWriter->writeCellName('H' . $ligne, $demande->getNiveauModification() ? $demande->getNiveauModification()->getLibelle() : '');
+            $excelWriter->writeCellName('I' . $ligne, $demande->getEtatDemande()?->getLibelle());
+            $excelWriter->writeCellName('J' . $ligne, $demande->getArgumentaireDemande());
             if ($isAdmin) {
-                $excelWriter->writeCellName('J' . $ligne, $demande->getParcours()?->getId());
-                $excelWriter->writeCellName('K' . $ligne, $demande->getFormation()?->getId());
+                $excelWriter->writeCellName('K' . $ligne, $demande->getParcours()?->getId());
+                $excelWriter->writeCellName('L' . $ligne, $demande->getFormation()?->getId());
             }
             $ligne++;
         }
 
-        $excelWriter->getColumnsAutoSize('A', 'I');
+        $excelWriter->getColumnsAutoSize('A', 'L');
 
         return $excelWriter->genereFichier($filename);
     }

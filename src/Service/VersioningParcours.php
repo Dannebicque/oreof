@@ -6,7 +6,6 @@ use App\DTO\StructureParcours;
 use App\Entity\Parcours;
 use App\Entity\ParcoursVersioning;
 use App\Serializer\IdEntityDenormalizer;
-use App\TypeDiplome\TypeDiplomeRegistry;
 use DateTimeImmutable;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\ORM\EntityManagerInterface;
@@ -18,6 +17,7 @@ use Symfony\Component\PropertyInfo\PropertyInfoExtractor;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
 use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
 use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
 use Symfony\Component\Serializer\Normalizer\BackedEnumNormalizer;
@@ -33,12 +33,12 @@ class VersioningParcours
 
     private array $textDifferences = [];
     private Filesystem $fileSystem;
-    private TypeDiplomeRegistry $typeD;
+    private TypeDiplomeResolver $typeD;
 
     public function __construct(
         EntityManagerInterface $entityManager,
         Filesystem $fileSystem,
-        TypeDiplomeRegistry $typeD
+        TypeDiplomeResolver $typeD
     ) {
         $this->entityManager = $entityManager;
         $this->typeD = $typeD;
@@ -58,16 +58,15 @@ class VersioningParcours
         );
     }
 
-    public function saveVersionOfParcours(Parcours $parcours, DateTimeImmutable $now, bool $withFlush = false, bool $isCfvu = false)
+    public function saveVersionOfParcours(Parcours $parcours, DateTimeImmutable $now, bool $withFlush = false, bool $isCfvu = false): void
     {
         $dateHeure = $now->format('d-m-Y_H-i-s');
         // Objet BD Parcours Versioning
         $parcoursVersioning = new ParcoursVersioning();
         $parcoursVersioning->setParcours($parcours);
         $parcoursVersioning->setVersionTimestamp($now);
-        if($isCfvu) {
-            $parcoursVersioning->setCvfuFlag(true);
-        }
+        $parcoursVersioning->setCvfuFlag($isCfvu);
+
         // Nom du fichier
         $parcoursFileName = "parcours-{$parcours->getId()}-{$dateHeure}";
         $dtoFileName = "dto-{$parcours->getId()}-{$dateHeure}";
@@ -76,17 +75,17 @@ class VersioningParcours
         // Création du fichier JSON
         // Parcours
         $parcoursJson = $this->serializer->serialize($parcours, 'json', [
-            AbstractObjectNormalizer::GROUPS => ['parcours_json_versioning'],
+            AbstractNormalizer::GROUPS => ['parcours_json_versioning'],
             'circular_reference_limit' => 2,
             AbstractObjectNormalizer::SKIP_NULL_VALUES => true,
             AbstractObjectNormalizer::ENABLE_MAX_DEPTH => true,
             DateTimeNormalizer::FORMAT_KEY => 'Y-m-d H:i:s',
         ]);
         // DTO
-        $typeD = $this->typeD->getTypeDiplome($parcours->getFormation()?->getTypeDiplome()?->getModeleMcc());
+        $typeD = $this->typeD->get($parcours->getFormation()?->getTypeDiplome());
         $dto = $typeD->calculStructureParcours($parcours);
         $dtoJson = $this->serializer->serialize($dto, 'json', [
-            AbstractObjectNormalizer::GROUPS => ['DTO_json_versioning'],
+            AbstractNormalizer::GROUPS => ['DTO_json_versioning'],
             'circular_reference_limit' => 2,
             AbstractObjectNormalizer::SKIP_NULL_VALUES => true,
             AbstractObjectNormalizer::ENABLE_MAX_DEPTH => true,
@@ -102,7 +101,7 @@ class VersioningParcours
         }
     }
 
-    public function loadParcoursFromVersion(ParcoursVersioning $parcours_versioning)
+    public function loadParcoursFromVersion(ParcoursVersioning $parcours_versioning): array
     {
         $fileParcours = file_get_contents(
             __DIR__ . "/../../versioning_json/parcours/"
@@ -366,7 +365,7 @@ class VersioningParcours
         );
     }
 
-    public function getStructureDifferencesBetweenParcoursAndLastVersion(Parcours $parcours)
+    public function getStructureDifferencesBetweenParcoursAndLastVersion(Parcours $parcours): ?StructureParcours
     {
         $lastVersion = $this->entityManager->getRepository(ParcoursVersioning::class)->findLastVersion($parcours);
         $lastVersion = count($lastVersion) > 0 ? $lastVersion[0] : null;
@@ -384,6 +383,30 @@ class VersioningParcours
             //            }
 
             return $dto;
+        }
+
+        return null;
+    }
+
+    public function getStructureDifferencesBetweenParcoursAndLastCfvu(Parcours $parcours): ?StructureParcours
+    {
+        // regarder si une CFVU existe sur le parcours actuel. Si non, regarder si une CFVU existe sur la version du parcours d'origine du copie
+        $lastVersion = $this->entityManager->getRepository(ParcoursVersioning::class)->findLastCfvuVersion($parcours);
+        $lastVersion = count($lastVersion) > 0 ? $lastVersion[0] : null;
+
+        if ($lastVersion === null && $parcours->getParcoursOrigineCopie() !== null) {
+            $lastVersion = $this->entityManager->getRepository(ParcoursVersioning::class)->findLastVersion($parcours->getParcoursOrigineCopie());
+            $lastVersion = count($lastVersion) > 0 ? $lastVersion[0] : null;
+        }
+
+        if ($lastVersion) {
+            $fileDTO = file_get_contents(
+                __DIR__ . "/../../versioning_json/parcours/"
+                . "{$lastVersion->getParcours()->getId()}/"
+                . "{$lastVersion->getDtoFileName()}.json"
+            );
+
+            return $this->serializer->deserialize($fileDTO, StructureParcours::class, 'json');
         }
 
         return null;
@@ -413,10 +436,10 @@ class VersioningParcours
     {
 
         // DTO
-        $typeD = $this->typeD->getTypeDiplome($parcours->getFormation()?->getTypeDiplome()?->getModeleMcc());
+        $typeD = $this->typeD->get($parcours->getFormation()?->getTypeDiplome());
         $dto = $typeD->calculStructureParcours($parcours);
         $dtoJson = $this->serializer->serialize($dto, 'json', [
-            AbstractObjectNormalizer::GROUPS => ['DTO_json_versioning'],
+            AbstractNormalizer::GROUPS => ['DTO_json_versioning'],
             'circular_reference_limit' => 2,
             AbstractObjectNormalizer::SKIP_NULL_VALUES => true,
             AbstractObjectNormalizer::ENABLE_MAX_DEPTH => true,
@@ -427,7 +450,7 @@ class VersioningParcours
 
     }
 
-    public function rollbackToLastVersion(?Parcours $parcours)
+    public function rollbackToLastVersion(?Parcours $parcours): void
     {
         // si parcours et différences alors remettre dans parcours les données venant de this->textDifferences
 

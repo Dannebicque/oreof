@@ -47,6 +47,7 @@ final class ParcoursManageComponent extends AbstractController
         'soumis_vp' => 'vp',
         'valide_cfvu' => 'valide_cfvu',
         'cfvu' => 'cfvu',
+        'cloture' => 'cloture',
         'publication' => 'publication',
         'soumis_cfvu' => 'cfvu',
         'refuse_definitif_cfvu' => 'cfvu',
@@ -85,6 +86,7 @@ final class ParcoursManageComponent extends AbstractController
         'non_ouverture_ses' => 5,
         'non_ouverture_cfvu' => 7,
         'non_ouverture' => 8,
+        'cloture' => 8,
     ];
 
     use DefaultActionTrait;
@@ -178,7 +180,8 @@ final class ParcoursManageComponent extends AbstractController
         }
     }
 
-    private function init() {
+    private function init(): void
+    {
         $this->dpeParcours = GetDpeParcours::getFromParcours($this->parcours);
 
         $this->typeDiplome = $this->parcours?->getFormation()?->getTypeDiplome();

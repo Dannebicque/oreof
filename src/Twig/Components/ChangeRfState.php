@@ -50,7 +50,6 @@ final class ChangeRfState
     public function getPlace(ChangeRf $changeRf): string
     {
         return array_keys($this->changeRfWorkflow->getMarking($changeRf)->getPlaces())[0];
-        ;
     }
 
     public function getHistoriques(ChangeRf $changeRf): array

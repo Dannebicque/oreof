@@ -9,12 +9,13 @@
 
 namespace App\Utils;
 
+use JsonException;
 use Symfony\Component\HttpFoundation\Request;
 
 abstract class JsonRequest
 {
     /**
-     * @throws \JsonException
+     * @throws JsonException
      */
     public static function getFromRequest(Request $request): array
     {
@@ -27,7 +28,7 @@ abstract class JsonRequest
     }
 
     /**
-     * @throws \JsonException
+     * @throws JsonException
      */
     public static function getValueFromRequest(Request $request, string $value): mixed
     {

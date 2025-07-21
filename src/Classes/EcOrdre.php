@@ -15,11 +15,11 @@ use App\Repository\ElementConstitutifRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
-class EcOrdre
+readonly class EcOrdre
 {
     public function __construct(
-        private readonly EntityManagerInterface       $entityManager,
-        private readonly ElementConstitutifRepository $elementConstitutifRepository
+        private EntityManagerInterface       $entityManager,
+        private ElementConstitutifRepository $elementConstitutifRepository
     ) {
     }
 
@@ -153,7 +153,7 @@ class EcOrdre
         return $this->elementConstitutifRepository->findLastEcEnfant($elementConstitutif) + 1;
     }
 
-    public function removeElementConstitutifEnfant(ElementConstitutif $elementConstitutif)
+    public function removeElementConstitutifEnfant(ElementConstitutif $elementConstitutif): void
     {
         $ecParent = $elementConstitutif->getEcParent();
         $ecs = $ecParent->getEcEnfants();

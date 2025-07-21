@@ -37,13 +37,13 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-5">
-                        <h5 class="titre-section">Type de diplôme</h2>
+                        <h5 class="titre-section">Type de diplôme</h5>
                         <p class="card-text">
                             {{ typeDiplome ? typeDiplome|typeDiplome : 'Non renseigné' }}
                         </p>
                     </div>
                     <div class="col-5">
-                        <h5 class="titre-section">Mention / Spécialité</h2>
+                        <h5 class="titre-section">Mention / Spécialité</h5>
                         <p class="card-text">
                             {{ formation.display() ?? 'Non renseigné' }}
                         </p>
@@ -51,27 +51,27 @@
                 </div>
                 <div class="row">
                     <div class="col-5">
-                        <h5 class="titre-section">Parcours porteur</h2>
+                        <h5 class="titre-section">Parcours porteur</h5>
                             {{ fiche_matiere.parcours.libelle ?? '' }}
                         <p class="card-text">
                         </p>
                     </div>
                     <div class="col-5">
-                        <h5 class="titre-section">Composante porteuse</h2>
+                        <h5 class="titre-section">Composante porteuse</h5>
                         <p class="card-text">
-                            {{ formation.composantePorteuse.libelle ?? 'Non renseigné' }}    
+                            {{ formation.composantePorteuse.libelle ?? 'Non renseigné' }}
                         </p>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-5">
-                        <h5 class="titre-section">Intitulé de la matière</h2>
+                        <h5 class="titre-section">Intitulé de la matière</h5>
                         <p class="card-text">
                             {{ fiche_matiere.libelle }}
                         </p>
                     </div>
                     <div class="col-5">
-                        <h5 class="titre-section">Intitulé de la matière en anglais</h2>
+                        <h5 class="titre-section">Intitulé de la matière en anglais</h5>
                         <p class="card-text">
                             {{ fiche_matiere.libelleAnglais ?? 'Non renseigné' }}
                         </p>
@@ -124,7 +124,7 @@
                 </div>
                 <div class="row">
                     <div class="col-10">
-                        <h5 class="titre-section text-center">Description de l'enseignement</h2>
+                        <h5 class="titre-section text-center">Description de l'enseignement</h5>
                         <p class="card-text text-center">
                             {{ fiche_matiere.description ? fiche_matiere.description|raw : 'Non renseigné'  }}
                         </p>
@@ -135,7 +135,7 @@
                         <h5 class="titre-section">Enseignement dispensé en</h5>
                         {% if fiche_matiere.langueDispense|length > 0 %}
                             <ul>
-                                {% for langue in fiche_matiere.langueDispense %} 
+                                {% for langue in fiche_matiere.langueDispense %}
                                     <li>{{ langue.libelle }}</li>
                                 {% endfor %}
                             </ul>
@@ -149,7 +149,7 @@
                         <h5 class="titre-section">Support de cours en</h5>
                         {% if fiche_matiere.langueSupport|length > 0 %}
                             <ul>
-                                {% for langue in fiche_matiere.langueSupport %} 
+                                {% for langue in fiche_matiere.langueSupport %}
                                     <li>{{ langue.libelle }}</li>
                                 {% endfor %}
                             </ul>
@@ -162,7 +162,7 @@
                 </div>
                 <div class="row">
                     <div class="col-10">
-                        <h5 class="titre-section text-center">Objectifs de l'enseignement</h2>
+                        <h5 class="titre-section text-center">Objectifs de l'enseignement</h5>
                         <p class="card-text text-center">
                             {{ fiche_matiere.objectifs ? fiche_matiere.objectifs|raw : 'Non renseigné' }}
                         </p>
@@ -170,6 +170,6 @@
                 </div>
             </div>
         </div>
-    </div>    
+    </div>
 </body>
 </html>

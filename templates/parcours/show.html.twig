@@ -1,5 +1,5 @@
 {% extends 'base.html.twig' %}
-
+{# todo: à déplacer dans typeDiplome... #}
 {% block title %}Parcours{% endblock %}
 
 {% block stylesheets %}
@@ -129,7 +129,7 @@
     {% endif %}
 
     <div class="row mt-2">
-        {{ include('typeDiplome/parcours/common/_'~constant('SOURCE', typeD)~'.html.twig') }}
+        {{ include('typeDiplome/'~constant('TEMPLATE_FOLDER', typeD)~'/show.html.twig') }}
         <!-- Scrollspy Start -->
         <div class="col-md-auto d-none d-lg-block" id="scrollSpyMenu">
             <ul class="nav flex-column">
@@ -215,8 +215,8 @@
 
 {% block bouton_header %}
     {% if is_granted('ROLE_ADMIN')
-        and hasLastVersion is defined 
-        and hasLastVersion == true 
+        and hasLastVersion is defined
+        and hasLastVersion == true
     %}
         <a class ="btn btn-sm btn-outline-info d-block mx-2 mb-1"
             data-bs-toggle="collapse" data-bs-target="#diffGlobalParcours"
@@ -260,7 +260,7 @@
         <span> Fiche descriptive (PDF)</span>
     </a>
 
-    {% if is_granted('CAN_PARCOURS_EDIT_MY', dpeParcours) %}
+    {% if is_granted('EDIT', {route: 'app_parcours', subject: dpeParcours}) %}
         <a href="{{ path('app_parcours_edit', {id:parcours.id}) }}"
            class="btn btn-sm btn-outline-warning btn-icon btn-icon-end w-100 w-sm-auto mx-2"
            data-bs-toggle="tooltip"

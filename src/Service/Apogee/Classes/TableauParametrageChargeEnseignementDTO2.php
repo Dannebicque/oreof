@@ -16,11 +16,13 @@ class TableauParametrageChargeEnseignementDTO2
         }
     }
 
-    private function add(ParametrageAnnuelCeDTO2 $paramCE){
+    private function add(ParametrageAnnuelCeDTO2 $paramCE): void
+    {
         $this->paramAnnuelCE[] = $paramCE;
     }
 
-    public function printInformation(){
+    public function printInformation(): string
+    {
         $result = "";
         foreach($this->paramAnnuelCE as $param){
             $result .= $param->printInformation();

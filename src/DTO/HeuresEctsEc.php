@@ -63,16 +63,27 @@ class HeuresEctsEc
 
     public function addEc(ElementConstitutif|FicheMatiere $elementConstitutif, bool $isBut = false): void
     {
+        //ne devrait pas être un test sur but ici, sinon non générique
         if ($isBut) {
-            $ficheMatiere = $elementConstitutif->getFicheMatiere();
-            if ($ficheMatiere !== null) {
-                $this->cmPres = $ficheMatiere->getVolumeCmPresentiel() ?? 0.0;
-                $this->tdPres = $ficheMatiere->getVolumeTdPresentiel() ?? 0.0;
-                $this->tpPres = $ficheMatiere->getVolumeTpPresentiel() ?? 0.0;
-                $this->tePres = $ficheMatiere->getVolumeTe() ?? 0.0;
-                $this->cmDist = $ficheMatiere->getVolumeCmDistanciel() ?? 0.0;
-                $this->tdDist = $ficheMatiere->getVolumeTdDistanciel() ?? 0.0;
-                $this->tpDist = $ficheMatiere->getVolumeTpDistanciel() ?? 0.0;
+            if ($elementConstitutif instanceof FicheMatiere) {
+                $this->cmPres = $elementConstitutif->getVolumeCmPresentiel() ?? 0.0;
+                $this->tdPres = $elementConstitutif->getVolumeTdPresentiel() ?? 0.0;
+                $this->tpPres = $elementConstitutif->getVolumeTpPresentiel() ?? 0.0;
+                $this->tePres = $elementConstitutif->getVolumeTe() ?? 0.0;
+                $this->cmDist = $elementConstitutif->getVolumeCmDistanciel() ?? 0.0;
+                $this->tdDist = $elementConstitutif->getVolumeTdDistanciel() ?? 0.0;
+                $this->tpDist = $elementConstitutif->getVolumeTpDistanciel() ?? 0.0;
+            } else {
+                $ficheMatiere = $elementConstitutif->getFicheMatiere();
+                if ($ficheMatiere !== null) {
+                    $this->cmPres = $ficheMatiere->getVolumeCmPresentiel() ?? 0.0;
+                    $this->tdPres = $ficheMatiere->getVolumeTdPresentiel() ?? 0.0;
+                    $this->tpPres = $ficheMatiere->getVolumeTpPresentiel() ?? 0.0;
+                    $this->tePres = $ficheMatiere->getVolumeTe() ?? 0.0;
+                    $this->cmDist = $ficheMatiere->getVolumeCmDistanciel() ?? 0.0;
+                    $this->tdDist = $ficheMatiere->getVolumeTdDistanciel() ?? 0.0;
+                    $this->tpDist = $ficheMatiere->getVolumeTpDistanciel() ?? 0.0;
+                }
             }
         } else {
             $this->cmPres = $elementConstitutif->getVolumeCmPresentiel() ?? 0.0;

@@ -13,6 +13,7 @@ use App\Entity\Domaine;
 use App\Form\DomaineType;
 use App\Repository\DomaineRepository;
 use App\Utils\JsonRequest;
+use JsonException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -94,7 +95,7 @@ class DomaineController extends AbstractController
     }
 
     /**
-     * @throws \JsonException
+     * @throws JsonException
      */
     #[Route('/{id}', name: 'app_domaine_delete', methods: ['DELETE'])]
     public function delete(

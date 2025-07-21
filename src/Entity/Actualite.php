@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\ActualiteRepository;
 use DateTime;
+use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -16,7 +17,7 @@ class Actualite
     private ?int $id = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $datePublication;
+    private ?DateTimeInterface $datePublication;
 
     #[ORM\Column(length: 255)]
     private ?string $titre = null;
@@ -37,12 +38,12 @@ class Actualite
     }
 
 
-    public function getDatePublication(): ?\DateTimeInterface
+    public function getDatePublication(): ?DateTimeInterface
     {
         return $this->datePublication;
     }
 
-    public function setDatePublication(\DateTimeInterface $datePublication): self
+    public function setDatePublication(DateTimeInterface $datePublication): self
     {
         $this->datePublication = $datePublication;
 

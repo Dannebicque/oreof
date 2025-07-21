@@ -166,7 +166,7 @@
                 <div class="col-12">
                     <div class="row mt-2">
                         <div class="col-3 d-grid">
-                            {% if is_granted('CAN_FORMATION_MANAGE_MY', this.formation) %}
+                            {% if is_granted('MANAGE', {route: 'app_formation', subject: this.formation}) or is_granted('ROLE_ADMIN') %}
                                 {% if not this.hasDemande %}
 
                                     <button class="btn btn-sm d-block btn-outline-warning"
@@ -215,7 +215,7 @@
                             {% endif %}
                         </div>
                         <div class="col-3 d-grid">
-                            {% if is_granted('CAN_FORMATION_MANAGE_MY', this.formation) %}
+                            {% if is_granted('MANAGE', {route: 'app_formation', subject: this.formation}) or is_granted('ROLE_ADMIN') %}
                             <button
                                     href="#"
                                     {{ stimulus_controller('modal', {

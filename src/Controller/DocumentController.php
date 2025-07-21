@@ -11,8 +11,6 @@ class DocumentController extends AbstractController
     #[Route('/documents', name: 'app_document')]
     public function index(): Response
     {
-        return $this->render('document/index.html.twig', [
-
-        ]);
+        return $this->render('document/index.html.twig');
     }
 }

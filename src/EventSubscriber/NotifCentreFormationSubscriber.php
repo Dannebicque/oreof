@@ -9,60 +9,49 @@
 
 namespace App\EventSubscriber;
 
-use App\Classes\Mailer;
 use App\Events\NotifCentreFormationEvent;
-use App\Repository\FormationRepository;
-use App\Repository\UserCentreRepository;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class NotifCentreFormationSubscriber implements EventSubscriberInterface
+class NotifCentreFormationSubscriber extends AbstractNotifCentreSubscriber
 {
-    public function __construct(
-        protected Mailer $mailer,
-        protected FormationRepository $formationRepository,
-        protected UserCentreRepository $userCentreRepository,
-    ) {
-    }
-
     public static function getSubscribedEvents(): array
     {
         return [
-            NotifCentreFormationEvent::NOTIF_ADD_CENTRE_FORMATION => 'onAddCentreFormation',
-            NotifCentreFormationEvent::NOTIF_REMOVE_CENTRE_FORMATION => 'onRemoveCentreFormation',
+            NotifCentreFormationEvent::NOTIF_ADD_CENTRE => 'onAddCentreFormation',
+            NotifCentreFormationEvent::NOTIF_REMOVE_CENTRE => 'onRemoveCentreFormation',
+            NotifCentreFormationEvent::NOTIF_UPDATE_CENTRE => 'onUpdateCentreFormation',
         ];
     }
 
     public function onAddCentreFormation(NotifCentreFormationEvent $event): void
     {
-        $user = $event->user;
-        $formation = $event->formation;
-
-        if (($user === null) || ($formation === null)) {
-            return;
-        }
-
-        $this->mailer->initEmail();
-        $this->mailer->setTemplate(
-            'mails/formation/add_centre_formation.txt.twig',
-            ['user' => $user, 'formation' => $formation]
+        $this->sendNotification(
+            $event->user,
+            $event->formation,
+            $event->profil,
+            'mails/formation/add_centre_formation.html.twig',
+            '[ORéOF] Accès à l\'application'
         );
-        $this->mailer->sendMessage([$user->getEmail()], '[ORéOF] Accès à l\'application');
     }
 
-    public function onRemoveCentreFormation(NotifCentreFormationEvent $event)
+    public function onUpdateCentreFormation(NotifCentreFormationEvent $event): void
     {
-        $user = $event->user;
-        $formation = $event->formation;
-
-        if (($user === null) || ($formation === null)) {
-            return;
-        }
-
-        $this->mailer->initEmail();
-        $this->mailer->setTemplate(
-            'mails/formation/remove_centre_formation.txt.twig',
-            ['user' => $user, 'formation' => $formation]
+        $this->sendNotification(
+            $event->user,
+            $event->formation,
+            $event->profil,
+            'mails/formation/update_centre_formation.html.twig',
+            '[ORéOF] Modification de vos accès à l\'application'
         );
-        $this->mailer->sendMessage([$user->getEmail()], '[ORéOF] Accès à l\'application');
+    }
+
+    public function onRemoveCentreFormation(NotifCentreFormationEvent $event): void
+    {
+        $this->sendNotification(
+            $event->user,
+            $event->formation,
+            $event->profil,
+            'mails/formation/remove_centre_formation.html.twig',
+            '[ORéOF] Accès à l\'application'
+        );
     }
 }

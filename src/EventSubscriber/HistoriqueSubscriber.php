@@ -24,6 +24,7 @@ use App\Repository\UserRepository;
 use App\Utils\Tools;
 use DateTimeInterface;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -67,7 +68,7 @@ class HistoriqueSubscriber implements EventSubscriberInterface
         $request = $event->getRequest();
 
         if ($request === null) {
-            throw new \Exception('Pas de requete');
+            throw new Exception('Pas de requete');
         }
 
         $histo = $event->getHistoriqueFormation();
@@ -109,7 +110,7 @@ class HistoriqueSubscriber implements EventSubscriberInterface
         $request = $event->getRequest();
 
         if ($request === null) {
-            throw new \Exception('Pas de requete');
+            throw new Exception('Pas de requete');
         }
 
         $histo = $event->getHistoriqueParcours();
@@ -151,7 +152,7 @@ class HistoriqueSubscriber implements EventSubscriberInterface
         $request = $event->getRequest();
 
         if ($request === null) {
-            throw new \Exception('Pas de requete');
+            throw new Exception('Pas de requete');
         }
 
         $histo = new HistoriqueFormation();
@@ -199,7 +200,7 @@ class HistoriqueSubscriber implements EventSubscriberInterface
         $formation = $demande->getFormation();
 
         if ($request === null) {
-            throw new \Exception('Pas de requete');
+            throw new Exception('Pas de requete');
         }
 
         $histo = new HistoriqueFormation();
@@ -241,7 +242,7 @@ class HistoriqueSubscriber implements EventSubscriberInterface
         $fileName = $event->getFileName();
 
         if ($request === null) {
-            throw new \Exception('Pas de requete');
+            throw new Exception('Pas de requete');
         }
 
         $histo = new HistoriqueParcours();
@@ -280,7 +281,7 @@ class HistoriqueSubscriber implements EventSubscriberInterface
         $request = $event->getRequest();
 
         if ($request === null) {
-            throw new \Exception('Pas de requete');
+            throw new Exception('Pas de requete');
         }
 
         $histo = new HistoriqueFicheMatiere();

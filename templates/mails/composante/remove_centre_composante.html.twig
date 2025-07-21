@@ -1,0 +1,11 @@
+{% extends 'mails/base_mail.html.twig' %}
+
+{% block content %}
+    Bonjour {{ user.display }},<br>
+
+    <p>Vos accès sur la composante : <strong>{{ entity.libelle }}</strong>, avec le profil
+        <strong>{{ profil.libelle }}</strong> viennent d'être retirés. Par conséquent, vous n'avez plus accès à ce
+        parcours avec ce profil.</p>
+
+    <p>Si vous aviez d'autres droits, sauf mail contraire, vous les conservés.</p>
+{% endblock %}

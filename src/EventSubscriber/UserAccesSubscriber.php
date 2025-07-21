@@ -15,12 +15,15 @@ use App\Events\UserEvent;
 use App\Events\UserRegisterEvent;
 use App\Repository\ComposanteRepository;
 use App\Repository\FormationRepository;
+use App\Repository\UserProfilRepository;
 use App\Repository\UserRepository;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 class UserAccesSubscriber implements EventSubscriberInterface
 {
     public function __construct(
+        protected UserProfilRepository $userProfilRepository,
         protected UserRepository       $userRepository,
         protected ComposanteRepository $composanteRepository,
         protected FormationRepository  $formationRepository,
@@ -29,7 +32,7 @@ class UserAccesSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
+     * @throws TransportExceptionInterface
      */
     public function onUserDemandeAcces(UserRegisterEvent $event): void
     {
@@ -79,7 +82,7 @@ class UserAccesSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onUserRefuserAdmin(UserEvent $event)
+    public function onUserRefuserAdmin(UserEvent $event): void
     {
         $admins = $this->userRepository->findByRole('ROLE_ADMIN');
 
@@ -118,10 +121,22 @@ class UserAccesSubscriber implements EventSubscriberInterface
 
     public function onUserRevoqueAdmin(UserEvent $event): void
     {
+        $profils = $this->userProfilRepository->findBy(['user' => $event->getUser()]);
+        $user = $event->getUser();
+
+        foreach ($profils as $profil) {
+            $this->userProfilRepository->remove($profil, true);
+        }
+
+        $this->myMailer->initEmail();
+        $this->myMailer->setTemplate(
+            'mails/user/acces_revoque_admin.html.twig',
+            ['user' => $user]
+        );
     }
 
     /**
-     * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
+     * @throws TransportExceptionInterface
      */
     public function onUserValideAdmin(UserEvent $event): void
     {
@@ -136,7 +151,7 @@ class UserAccesSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
+     * @throws TransportExceptionInterface
      */
     public function onUserValideDpe(UserEvent $event): void
     {
@@ -167,7 +182,7 @@ class UserAccesSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
+     * @throws TransportExceptionInterface
      */
     public function onUserAjoute(UserEvent $event): void
     {

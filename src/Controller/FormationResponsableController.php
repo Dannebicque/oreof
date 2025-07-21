@@ -63,7 +63,7 @@ class FormationResponsableController extends BaseController
             $newRf->setNouveauResponsable($user);
             $newRf->setTypeRf($datas->getTypeRf());
             $newRf->setCommentaire($commentaire);
-            $newRf->setDateDemande(new \DateTime());
+            $newRf->setDateDemande(new DateTime());
             //initialiser le marking du workflow
             $this->changeRfWorkflow->apply($newRf, 'effectuer_demande');
 
@@ -154,8 +154,7 @@ class FormationResponsableController extends BaseController
         ], 'synthese_changement_rf_'.(new DateTime())->format('d-m-Y_H-i-s'));
     }
 
-    #[Route(
-        '/formation/change-responsable/validation-demande/{transition}/{etape}/{demande}',
+    #[Route('/formation/change-responsable/validation-demande/{transition}/{etape}/{demande}',
         name: 'app_validation_change_rf_valider'
     )]
     public function validationChangeRf(

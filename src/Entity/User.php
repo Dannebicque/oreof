@@ -62,7 +62,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     #[Groups(['fiche_matiere:read', 'parcours_json_versioning', 'fiche_matiere_versioning', 'formation_json_versioning'])]
     private ?string $email = null;
- 
+
     #[ORM\Column]
     private ?bool $isEnable = false;
 
@@ -99,9 +99,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'destinataire', targetEntity: Notification::class)]
     private Collection $notifications;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: UserCentre::class)]
-    private Collection $userCentres;
-
     #[ORM\OneToMany(mappedBy: 'coResponsable', targetEntity: Parcours::class)]
     private Collection $coParcours;
 
@@ -126,11 +123,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'auteur', targetEntity: DpeDemande::class)]
     private Collection $dpeDemandes;
 
+    /**
+     * @var Collection<int, UserProfil>
+     */
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: UserProfil::class)]
+    private Collection $userProfils;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $serviceDemande = null;
+
     public function __construct()
     {
         $this->composantes = new ArrayCollection();
         $this->notifications = new ArrayCollection();
-        $this->userCentres = new ArrayCollection();
         $this->composanteResponsableDpe = new ArrayCollection();
         $this->formationsResponsableMention = new ArrayCollection();
         $this->coParcours = new ArrayCollection();
@@ -138,6 +143,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->historiques = new ArrayCollection();
         $this->commentaires = new ArrayCollection();
         $this->dpeDemandes = new ArrayCollection();
+        $this->userProfils = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -442,34 +448,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection<int, UserCentre>
-     */
-    public function getUserCentres(): Collection
-    {
-        return $this->userCentres;
-    }
-
-    public function addUserCentre(UserCentre $userCentre): self
-    {
-        if (!$this->userCentres->contains($userCentre)) {
-            $this->userCentres->add($userCentre);
-            $userCentre->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeUserCentre(UserCentre $userCentre): self
-    {
-        // set the owning side to null (unless already changed)
-        if ($this->userCentres->removeElement($userCentre) && $userCentre->getUser() === $this) {
-            $userCentre->setUser(null);
-        }
-
-        return $this;
-    }
-
-    /**
      * @return Collection<int, Composante>
      */
     public function getComposanteResponsableDpe(): Collection
@@ -695,6 +673,48 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $dpeDemande->setAuteur(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, UserProfil>
+     */
+    public function getUserProfils(): Collection
+    {
+        return $this->userProfils;
+    }
+
+    public function addUserProfil(UserProfil $userProfil): static
+    {
+        if (!$this->userProfils->contains($userProfil)) {
+            $this->userProfils->add($userProfil);
+            $userProfil->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserProfil(UserProfil $userProfil): static
+    {
+        if ($this->userProfils->removeElement($userProfil)) {
+            // set the owning side to null (unless already changed)
+            if ($userProfil->getUser() === $this) {
+                $userProfil->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getServiceDemande(): ?string
+    {
+        return $this->serviceDemande;
+    }
+
+    public function setServiceDemande(?string $serviceDemande): static
+    {
+        $this->serviceDemande = $serviceDemande;
 
         return $this;
     }

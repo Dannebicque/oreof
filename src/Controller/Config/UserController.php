@@ -13,14 +13,17 @@ use App\Classes\Ldap;
 use App\Classes\Mailer;
 use App\Controller\BaseController;
 use App\Entity\User;
+use App\Entity\UserProfil;
 use App\Enums\CentreGestionEnum;
 use App\Form\UserHorsUrcaType;
 use App\Form\UserLdapType;
 use App\Form\UserType;
+use App\Repository\ProfilRepository;
 use App\Repository\RoleRepository;
-use App\Repository\UserCentreRepository;
+use App\Repository\UserProfilRepository;
 use App\Repository\UserRepository;
 use App\Utils\JsonRequest;
+use DateTime;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -30,55 +33,33 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[Route('/administration/utilisateurs')]
 class UserController extends BaseController
 {
-    #[Route('/', name: 'app_user_index', methods: ['GET'])]
-    public function index(): Response
+    #[Route('/repertoire', name: 'app_user_repertoire', methods: ['GET'])]
+    public function repertoire(): Response
     {
-        return $this->render('config/user/index.html.twig');
+        return $this->render('config/user/repertoire.html.twig');
     }
 
-    #[Route('/attente-validation', name: 'app_user_attente', methods: ['GET'])]
-    public function attente(UserRepository $userRepository): Response
-    {
-        //todo: gérer par le responsable de DPE ?? pour affecter les droits et "pré-valider" les utilisateurs
-        if ($this->isGranted('ROLE_ADMIN') || $this->isGranted('ROLE_SES')) {
-            $users = $userRepository->findNotEnableAvecDemande();
-            $dpe = false;
-        } elseif ($this->isGranted('CAN_COMPOSANTE_MANAGE_MY', $this->getUser())) {
-            $composante = null;
-            $dpe = true;
-            $users = [];
-            foreach ($this->getUser()?->getUserCentres() as $centre) {
-                if ($centre->getComposante() !== null) {
-                    $users[] = $userRepository->findByComposanteNotEnableAvecDemande($centre->getComposante());
-                }
-            }
-            $users = array_merge(...$users);
-        }
-
-        return $this->render('config/user/attente.html.twig', [
-            'users' => $users,
-            'dpe' => $dpe
-        ]);
-    }
-
-    #[
-        Route('/liste', name: 'app_user_liste', methods: ['GET'])]
-    public function liste(
+    #[Route('/repertoire/liste', name: 'app_user_repertoire_liste', methods: ['GET'])]
+    public function repertoireListe(
         Request        $request,
         UserRepository $userRepository
-    ): Response {
+    ): Response
+    {
         $sort = $request->query->get('sort') ?? 'nom';
         $direction = $request->query->get('direction') ?? 'asc';
         $q = $request->query->get('q') ?? null;
 
-        if ($this->isGranted('ROLE_ADMIN') || $this->isGranted('ROLE_SES')) {
+        if ($this->isGranted('ROLE_ADMIN')) {
             if ($q) {
                 $users = $userRepository->findEnableBySearch($this->getCampagneCollecte(), $q, $sort, $direction);
             } else {
                 $users = $userRepository->findEnable($this->getCampagneCollecte(), $sort, $direction);
             }
-        } elseif ($this->isGranted('CAN_COMPOSANTE_MANAGE_MY', $this->getUser())) {
-            foreach ($this->getUser()?->getUserCentres() as $centre) {
+        } elseif (
+            $this->isGranted('MANAGE', ['route' => 'app_composante', 'subject' => 'composante'])
+        ) {
+            /** @var UserProfil $centre */
+            foreach ($this->getUser()?->getUserProfils() as $centre) {
                 if ($centre->getComposante() !== null) {
                     $composante = $centre->getComposante(); //au moins une composante, todo: si plusieurs ?
                 }
@@ -94,7 +75,7 @@ class UserController extends BaseController
             }
         }
 
-        return $this->render('config/user/_liste.html.twig', [
+        return $this->render('config/user/_repertoireListe.html.twig', [
             'users' => $users,
             'sort' => $sort,
             'direction' => $direction,
@@ -164,11 +145,6 @@ class UserController extends BaseController
                 $this->addFlash('danger', 'L\'utilisateur n\'a pas été trouvé dans l\'annuaire LDAP');
                 return $this->json(false, 500);
             }
-//            $dataUsers = [
-//                'username' => $email,
-//                'nom' => 'nom',
-//                'prenom' => 'prenom'
-//            ];
 
             $user->setUsername($dataUsers['username']);
             $user->setNom($dataUsers['nom']);
@@ -178,7 +154,7 @@ class UserController extends BaseController
         $user->setIsEnable(true);
         if ($dpe === false) {
             $user->setIsValideAdministration(true);
-            $user->setDateValideAdministration(new \DateTime());
+            $user->setDateValideAdministration(new DateTime());
             $this->addFlash('success', 'L\'utilisateur a été ajouté avec succès');
 
             $myMailer->initEmail();
@@ -186,14 +162,13 @@ class UserController extends BaseController
                 'mails/user/acces_ajoute.txt.twig',
                 ['user' => $user]
             );
-            $myMailer->sendMessage([$user->getEmail()], '[ORéOF] Accès ORéOF');
         } else {
             $admins = $userRepository->findByRole('ROLE_ADMIN');
 
             $user->setIsValidDpe(true);
             $user->setComposanteDemande($this->getUser()?->getComposanteResponsableDpe()->first());
-            $user->setDateDemande(new \DateTime());
-            $user->setDateValideDpe(new \DateTime());
+            $user->setDateDemande(new DateTime());
+            $user->setDateValideDpe(new DateTime());
             $this->addFlash('success', 'L\'utilisateur a été ajouté avec succès, il est en attente de validation par le SES');
             // mail pour l'administrateur
             foreach ($admins as $admin) {
@@ -211,15 +186,15 @@ class UserController extends BaseController
                 'mails/user/ajout_oreof.txt.twig',
                 ['user' => $user, 'dpe' => $this->getUser()]
             );
-            $myMailer->sendMessage([$user->getEmail()], '[ORéOF] Accès ORéOF');
         }
+        $myMailer->sendMessage([$user->getEmail()], '[ORéOF] Accès ORéOF');
         $userRepository->save($user, true);
 
         // mail pour le nouvel utilisateur
 
         return $this->json([
             'success' => true,
-            'url' => $this->generateUrl('app_user_gestion_centre', ['user' => $user->getId()])
+            'url' => $this->generateUrl('app_user_profils_gestion', ['user' => $user->getId()])
         ]);
     }
 
@@ -242,7 +217,6 @@ class UserController extends BaseController
         if ($user !== null) {
             $user->setIsDeleted(false);
             $passwordEncode = $passwordEncoder->hashPassword($user, $password);
-            $user->setPassword($passwordEncode);
         } else {
             $user = new User();
             $passwordEncode = $passwordEncoder->hashPassword($user, $password);
@@ -250,12 +224,12 @@ class UserController extends BaseController
             $user->setUsername($email);
             $user->setNom($nom);
             $user->setPrenom($prenom);
-            $user->setPassword($passwordEncode);
         }
+        $user->setPassword($passwordEncode);
 
         $user->setIsEnable(true);
         $user->setIsValideAdministration(true);
-        $user->setDateValideAdministration(new \DateTime());
+        $user->setDateValideAdministration(new DateTime());
         $this->addFlash('success', 'L\'utilisateur a été ajouté avec succès, un email lui a été envoyé.');
 
         $myMailer->initEmail();
@@ -270,7 +244,7 @@ class UserController extends BaseController
 
         return $this->json([
             'success' => true,
-            'url' => $this->generateUrl('app_user_gestion_centre', ['user' => $user->getId()])
+            'url' => $this->generateUrl('app_user_profils_gestion', ['user' => $user->getId()])
         ]);
     }
 
@@ -288,50 +262,50 @@ class UserController extends BaseController
     #[Route('/show-attente/{id}', name: 'app_user_show_attente', methods: ['GET'])]
     public function showAttente(
         Request        $request,
-        RoleRepository $roleRepository,
+        ProfilRepository $profilRepository,
         User           $user
     ): Response {
         $dpe = (bool)$request->query->get('dpe', false);
         if ($dpe) {
-            $roles = $roleRepository->findByDpe();
+            $profils = $profilRepository->findByDpe();
         } else {
-            $roles = $roleRepository->findAll();
+            $profils = $profilRepository->findAll();
         }
 
-        return $this->render('config/user/_show_attente.html.twig', [
+        return $this->render('config/user_profil/_show_attente.html.twig', [
             'user' => $user,
             'typeCentres' => CentreGestionEnum::cases(),
-            'centresUser' => $user->getUserCentres(),
-            'roles' => $roles,
+            'centresUser' => $user->getUserProfils(),
+            'profils' => $profils,
             'dpe' => $dpe
         ]);
     }
-
-    /**
-     * @throws \JsonException
-     */
-    #[Route('/change-role/{id}', name: 'app_user_roles', methods: ['POST'])]
-    public function changeRole(
-        Request        $request,
-        UserRepository $userRepository,
-        User           $user
-    ): Response {
-        $data = JsonRequest::getFromRequest($request);
-        $roles = $user->getRoles();
-
-        if ($data['checked']) {
-            $roles[] = $data['role'];
-        } else {
-            $roles = array_diff($roles, [$data['role']]);
-        }
-        $user->setRoles($roles);
-        $userRepository->save($user, true);
-
-        return $this->json(true);
-    }
-
+//
+//    /**
+//     * @throws JsonException
+//     */
+//    #[Route('/change-role/{id}', name: 'app_user_roles', methods: ['POST'])]
+//    public function changeRole(
+//        Request        $request,
+//        UserRepository $userRepository,
+//        User           $user
+//    ): Response {
+//        $data = JsonRequest::getFromRequest($request);
+//        $roles = $user->getRoles();
+//
+//        if ($data['checked']) {
+//            $roles[] = $data['role'];
+//        } else {
+//            $roles = array_diff($roles, [$data['role']]);
+//        }
+//        $user->setRoles($roles);
+//        $userRepository->save($user, true);
+//
+//        return $this->json(true);
+//    }
+//
     #[Route('/{id}/edit', name: 'app_user_edit', methods: ['GET', 'POST'])]
-    #[IsGranted('ROLE_SES')]
+    #[IsGranted('ROLE_ADMIN')]
     public function edit(Request $request, User $user, UserRepository $userRepository): Response
     {
         $form = $this->createForm(
@@ -357,22 +331,22 @@ class UserController extends BaseController
     }
 
     /**
-     * @throws \JsonException
+     * @throws JsonException
      */
     #[Route('/{id}', name: 'app_user_delete', methods: ['DELETE'])]
     #[IsGranted('ROLE_ADMIN')]
     public function delete(
         Request              $request,
         User                 $user,
-        UserCentreRepository $userCentreRepository,
-        UserRepository       $userRepository
+        UserRepository       $userRepository,
+        UserProfilRepository $userProfilRepository
     ): Response {
         if ($this->isCsrfTokenValid(
             'delete' . $user->getId(),
             JsonRequest::getValueFromRequest($request, 'csrf')
         )) {
-            foreach ($user->getUserCentres() as $centre) {
-                $userCentreRepository->remove($centre, true);
+            foreach ($user->getUserProfils() as $centre) {
+                $userProfilRepository->remove($centre, true);
             }
 
             $user->setIsDeleted(true);//on met le flag supprimé à true.
