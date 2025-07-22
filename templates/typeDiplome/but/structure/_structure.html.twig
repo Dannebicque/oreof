@@ -54,7 +54,12 @@
                         <td class="bg_c{{ ue.ue.ordre }}">{{ ue.ue.libelle }}</td>
                     {% endfor %}
                 </tr>
-                {% for ec in getElementsConstitutifs(semestre) %}
+                {% if isVersioning is not defined or isVersioning == false %}
+                    {% set ecArray = getElementsConstitutifs(semestre) %}
+                {% else %}
+                    {% set ecArray = getElementsConstitutifsVersioning(semestre) %}
+                {% endif %}
+                {% for ec in ecArray %}
                     <tr class="border-left-semestre-{{ ordre }}">
                         <th>{{ ec.ec.elementConstitutif.code }} - {{ ec.ec.elementConstitutif.display }}</th>
                         <td>{{ component('badge_mccc', {
@@ -73,7 +78,11 @@
                         <td class="text-center">{{ ec.ec.heuresEctsEc.tpPres|filtreHeures }}</td>
                         <td class="text-center">{{ ec.ec.heuresEctsEc.tePres|filtreHeures }}</td>
                         {% for ue in semestre.ues %}
-                            <td class="text-center">{{ ec['ues'][ue.ue.id] is defined ? ec['ues'][ue.ue.id]|badgeEcts : '-' }}</td>
+                            {% if isVersioning is not defined or isVersioning == false %}
+                                <td class="text-center">{{ ec['ues'][ue.ue.id] is defined ? ec['ues'][ue.ue.id]|badgeEcts : '-' }}</td>
+                            {% else %}
+                                <td class="text-center">{{ ec['ues'][ue.ue.getDeserializedId()] is defined ? ec['ues'][ue.ue.getDeserializedId()]|badgeEcts : '-' }}</td>
+                            {% endif %}
                         {% endfor %}
                     </tr>
                 {% endfor %}
@@ -86,7 +95,11 @@
                     <th class="text-center">{{ semestre.heuresEctsSemestre.sommeSemestreTpPres|filtreHeures }}</th>
                     <th class="text-center">{{ semestre.heuresEctsSemestre.sommeSemestreTePres|filtreHeures }}</th>
                     {% for ue in semestre.ues %}
-                        <td class="text-center">{{ ue.ue.ects|badgeEcts }}</td>
+                        {% if isVersioning is not defined or isVersioning == false %}
+                            <td class="text-center">{{ ue.ue.ects|badgeEcts }}</td>
+                        {% else %}
+                            <td class="text-center">{{ ue.heuresEctsUe.sommeUeEcts|badgeEcts }}</td>
+                        {% endif %}
                     {% endfor %}
                 </tr>
             </table>
