@@ -62,7 +62,9 @@
                                 parcours: parcours,
                                 deplacer: false,
                                 editable: false,
-                                indexEc: ec.ec.elementConstitutif.ordre
+                                indexEc: ec.ec.elementConstitutif.ordre,
+                                isVersioning: isVersioning ?? false,
+                                parcoursVersioning: parcoursVersioning ?? null
                             }) }}
                         </td>
                         <td class="text-center">{{ ec.ec.heuresEctsEc.sommeEcTotalPres|filtreHeures }}</td>
