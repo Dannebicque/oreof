@@ -72,9 +72,15 @@
             <h3 class="small-title">Structure du parcours</h3>
             <div class="card mb-5">
                 <div class="card-body">
-                    {{ include('typeDiplome/formation/_structure.html.twig', {
-                        parcours: parcours
-                    }) }}
+                    {{ include('typeDiplome/' ~ constant('TEMPLATE_FOLDER', typeD) ~ '/structure/_structure.html.twig', 
+                            {
+                                parcours: parcours,
+                                dto: dto,
+                                hasLastVersion: false,
+                                diffStructure: null
+                            } 
+                        )
+                    }}
                 </div>
             </div>
         </section>

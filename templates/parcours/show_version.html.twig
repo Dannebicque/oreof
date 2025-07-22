@@ -4,7 +4,7 @@
 
 {% block content %}
     <div class="row">
-        {{ include('typeDiplome/parcours/common/_'~constant('SOURCE', typeD)~'.html.twig') }}
+        {{ include('typeDiplome/'~constant('TEMPLATE_FOLDER', typeD)~'/show.html.twig') }}
         <!-- Scrollspy Start -->
         <div class="col-md-auto d-none d-lg-block" id="scrollSpyMenu">
             <ul class="nav flex-column">
