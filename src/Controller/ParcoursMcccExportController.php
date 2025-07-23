@@ -32,7 +32,7 @@ class ParcoursMcccExportController extends BaseController
     {
 
         if($_format === "pdf"){
-            return $this->getCfvuMcccExportFromFile('simplifie', $parcours, $entityManager);
+            return $this->getCfvuMcccExportFromFile($entityManager, $parcours, 'simplifie');
         }
 
         $formation = $parcours->getFormation();
