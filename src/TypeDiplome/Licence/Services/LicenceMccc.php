@@ -43,7 +43,7 @@ class LicenceMccc extends AbstractLicenceMccc
     public function __construct(
         KernelInterface                   $kernel,
         protected ClientInterface         $client,
-        protected TypeDiplomeResolver $calculStructureParcours,
+        protected CalculStructureParcoursLicence $calculStructureParcours,
         protected ExcelWriter             $excelWriter,
         protected TypeEpreuveRepository             $typeEpreuveRepository
     ) {

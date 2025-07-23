@@ -120,7 +120,6 @@ class ParcoursMcccExportController extends BaseController
         }
 
         $typeDiplome = $this->typeDiplomeResolver->get($formation->getTypeDiplome());
-
         $dpe = GetDpeParcours::getFromParcours($parcours);
 
         if ($dpe !== null) {
