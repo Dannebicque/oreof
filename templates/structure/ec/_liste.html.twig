@@ -81,7 +81,7 @@
 
                                         <div class="col-md-{% if isBut %}3{% else %}1{% endif %} d-flex flex-column justify-content-center">
                                             <div class="text-muted text-small d-md-none">Remplissage</div>
-                                            {% if (is_granted('EDIT', {route: 'app_formation', subject: parcours.formation})) or is_granted('EDIT', {route: 'app_parcours', subject: dpeParcours})) %}
+                                            {% if (is_granted('EDIT', {route: 'app_formation', subject: parcours.formation}) or is_granted('EDIT', {route: 'app_parcours', subject: dpeParcours})) %}
                                                 {% if ec.ficheMatiere != null %}
                                                     {% if isBut %}
                                                         <a
@@ -173,7 +173,7 @@
                                                     </div>
                                                 {% else %}
                                                     <div class="col-6">
-                                                        {% if (is_granted('EDIT', {route: 'app_formation', subject: parcours.formation})) or is_granted('EDIT', {route: 'app_parcours', subject: dpeParcours}) or (is_granted('EDIT', {route: 'app_ec', subject: ec}))) %}
+                                                        {% if (is_granted('EDIT', {route: 'app_formation', subject: parcours.formation}) or is_granted('EDIT', {route: 'app_parcours', subject: dpeParcours}) or is_granted('EDIT', {route: 'app_ec', subject: ec})) %}
                                                             <button
                                                                     {% if deplacer is defined and deplacer == true and
                                                                         editable == true %}
