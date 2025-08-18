@@ -138,8 +138,11 @@ class ParcoursSaveController extends BaseController
                     throw new \InvalidArgumentException('Profil ROLE_RESP_PARCOURS not found');
                 }
 
-                $event = new AddCentreParcoursEvent($parcours, $parcours->getRespParcours(), $profil, $this->getCampagneCollecte());
-                $eventDispatcher->dispatch($event, AddCentreParcoursEvent::REMOVE_CENTRE_PARCOURS);
+                if ($parcours->getRespParcours() !== null) {
+                    $event = new AddCentreParcoursEvent($parcours, $parcours->getRespParcours(), $profil, $this->getCampagneCollecte());
+                    $eventDispatcher->dispatch($event, AddCentreParcoursEvent::REMOVE_CENTRE_PARCOURS);
+                }
+
                 if ($data['value'] !== null || $data['value'] !== '') {
                     $user = $userRepository->find($data['value']);
                     $rep = $updateEntity->saveField($parcours, 'respParcours', $user);
@@ -158,9 +161,10 @@ class ParcoursSaveController extends BaseController
                     throw new \InvalidArgumentException('Profil ROLE_CO_RESP_PARCOURS not found');
                 }
 
-
-                $event = new AddCentreParcoursEvent($parcours, $parcours->getCoResponsable(), $profil, $this->getCampagneCollecte());
-                $eventDispatcher->dispatch($event, AddCentreParcoursEvent::REMOVE_CENTRE_PARCOURS);
+                if ($parcours->getCoResponsable() !== null) {
+                    $event = new AddCentreParcoursEvent($parcours, $parcours->getCoResponsable(), $profil, $this->getCampagneCollecte());
+                    $eventDispatcher->dispatch($event, AddCentreParcoursEvent::REMOVE_CENTRE_PARCOURS);
+                }
                 if ($data['value'] !== null || $data['value'] !== '') {
                 $user = $userRepository->find($data['value']);
                 $rep = $updateEntity->saveField($parcours, 'coResponsable', $user);
