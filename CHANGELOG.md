@@ -2,6 +2,32 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.43.1](https://github.com/Dannebicque/oreof/compare/v1.43.0...v1.43.1) (2025-08-18)
+
+
+### Features
+
+* **Profils:** add form handling and update template for profil management ([8e0beba](https://github.com/Dannebicque/oreof/commit/8e0bebab2dcf9fb471253931ab4167f33a420f92))
+* **TypeDiplome:** refactor addEc method and update show templates for better structure ([659553b](https://github.com/Dannebicque/oreof/commit/659553bc089224691f9dbb2ee1a34d36591b16fb))
+* **TypeDiplome:** refactor addEc method and update show templates for better structure ([75d6ed8](https://github.com/Dannebicque/oreof/commit/75d6ed8cda8c8581dd64478b7f4838809fb0aed6))
+* **User:** refactor user management to replace UserCentre with UserProfil and update related templates ([b01eb55](https://github.com/Dannebicque/oreof/commit/b01eb55c710b43a1e8491bd24d03cf649d997368))
+* **Workflow:** enhance place validation logic in WorkflowExtension ([63f5bce](https://github.com/Dannebicque/oreof/commit/63f5bce3c0566844ebbc7ab9a8556d98e7e1fa70))
+* **Workflow:** enhance place validation logic in WorkflowExtension ([8c0317e](https://github.com/Dannebicque/oreof/commit/8c0317ece09b734a76805f23068f03cabc46d61c))
+* **Workflow:** enhance place validation logic in WorkflowExtension ([68c5699](https://github.com/Dannebicque/oreof/commit/68c5699cb1d59b36f78e2391cbce8222ad928f54))
+
+
+### Bug Fixes
+
+* **ParcoursMcccExport:** correct parameter order in getCfvuMcccExportFromFile call ([f5eb144](https://github.com/Dannebicque/oreof/commit/f5eb1443956d8fc4e9a5ef015914f82713a39466))
+* **ParcoursMcccExport:** correct parameter order in getCfvuMcccExportFromFile call ([ac5e699](https://github.com/Dannebicque/oreof/commit/ac5e699c2a84a0bee377f02a9209b09bc7b1466f))
+* **template:** correct logical operators in permission checks ([7d7320b](https://github.com/Dannebicque/oreof/commit/7d7320b9dade861e6a46363489c9a69ceb750f08))
+* **Workflow:** enhance place validation logic in WorkflowExtension ([cfe2bd8](https://github.com/Dannebicque/oreof/commit/cfe2bd8b962f5a2ccfa56e0d60bff9c949fffaff))
+* **Workflow:** enhance place validation logic in WorkflowExtension ([0c0afe3](https://github.com/Dannebicque/oreof/commit/0c0afe317af7cb4d2468345671e020317bb8efbc))
+* **Workflow:** enhance place validation logic in WorkflowExtension ([65339e6](https://github.com/Dannebicque/oreof/commit/65339e6e594e778cc1ce41b46cc9dd0cb156f3c0))
+* **Workflow:** enhance place validation logic in WorkflowExtension ([5e15837](https://github.com/Dannebicque/oreof/commit/5e15837920f40b87c64508f3bdc43adf4ad0bd9d))
+* **Workflow:** enhance place validation logic in WorkflowExtension ([68180c6](https://github.com/Dannebicque/oreof/commit/68180c6f4fe1794474506f5273814c894aa82490))
+* **Workflow:** enhance place validation logic in WorkflowExtension ([1211b65](https://github.com/Dannebicque/oreof/commit/1211b65c2b7fb7a7cb7e2685c13758801aa9b09c))
+
 ## [1.43.0](https://github.com/Dannebicque/oreof/compare/v1.42.0...v1.43.0) (2025-07-17)
 
 
