@@ -91,6 +91,7 @@ class RessourceVoter extends Voter
     private function checkScope(UserProfil $userProfil, mixed $object, string $attribute): bool
     {
         $centre = $userProfil->getProfil()?->getCentre();
+
         return match ($centre) {
             CentreGestionEnum::CENTRE_GESTION_ETABLISSEMENT => $this->checkEtablissement($userProfil, $object, $attribute) || $object === 'etablissement',
             CentreGestionEnum::CENTRE_GESTION_COMPOSANTE => $this->checkComposante($userProfil, $object, $attribute) || $object === 'composante',
@@ -106,6 +107,20 @@ class RessourceVoter extends Voter
     {
         if ($object instanceof Etablissement) {
             return $userProfil->getEtablissement() === $object;
+        }
+
+        if ($object instanceof Composante) {
+            return $userProfil->getComposante() === $object;
+        }
+
+        if ($object instanceof Formation) {
+            // Si l'objet est une formation, on vérifie si la composante porteuse de la formation correspond à la composante de l'utilisateur
+            return $this->checkFormation($userProfil, $object, $attribute) || $object === 'formation';
+        }
+
+        if ($object instanceof DpeParcours || $object instanceof Parcours) {
+            // Si l'objet est un DPE Parcours, on vérifie si la composante porteuse de la formation correspond à la composante de l'utilisateur
+            return $this->checkParcours($userProfil, $object, $attribute) || $object === 'parcours';
         }
 
         return false;
@@ -188,7 +203,9 @@ class RessourceVoter extends Voter
             ($userProfil->getParcours() === $parcours && ($parcours->getCoResponsable()?->getId() === $userProfil->getUser()?->getId() || $parcours->getRespParcours()?->getId() === $userProfil->getUser()?->getId())) ||
             ($userProfil->getFormation() === $parcours->getFormation() && ($parcours->getFormation()?->getCoResponsable()?->getId() === $userProfil->getUser()?->getId() || $parcours->getFormation()?->getResponsableMention()?->getId() === $userProfil->getUser()?->getId())) ||
             ($userProfil->getComposante() === $parcours->getFormation()?->getComposantePorteuse() &&
-                $parcours->getFormation()?->getComposantePorteuse()?->getResponsableDpe()?->getId() === $userProfil->getUser()?->getId())
+                $parcours->getFormation()?->getComposantePorteuse()?->getResponsableDpe()?->getId() === $userProfil->getUser()?->getId()) ||
+            //c'est le niveau établissement
+            ($userProfil->getProfil()?->getCentre() === CentreGestionEnum::CENTRE_GESTION_ETABLISSEMENT)
         );
 
         if ($parcours->getCoResponsable()?->getId() === $userProfil->getUser()?->getId() || $parcours->getRespParcours()?->getId() === $userProfil->getUser()?->getId()) {
@@ -196,7 +213,6 @@ class RessourceVoter extends Voter
         }
 
         if ($parcours->getFormation()?->getCoResponsable()?->getId() === $userProfil->getUser()?->getId() || $parcours->getFormation()?->getResponsableMention()?->getId() === $userProfil->getUser()?->getId()) {
-
             $canAccess = $this->dpeParcoursWorkflow->can($dpeParcours, 'autoriser') ||
                 $this->dpeParcoursWorkflow->can($dpeParcours, 'valider_parcours') ||
                 //  $this->dpeParcoursWorkflow->can(subject, 'valider_ouverture_sans_cfvu') || todo: a mettre dès l'ouverture
