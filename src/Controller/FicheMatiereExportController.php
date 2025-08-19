@@ -14,6 +14,7 @@ use App\Classes\MyGotenbergPdf;
 use App\Entity\FicheMatiere;
 use App\Entity\Parcours;
 use App\Message\Export;
+use App\Service\TypeDiplomeResolver;
 use App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException;
 use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -38,7 +39,9 @@ class FicheMatiereExportController extends AbstractController
      * @throws TypeDiplomeNotFoundException
      */
     #[Route('/fiche-matiere/export/{id}', name: 'app_fiche_matiere_export')]
-    public function export(FicheMatiere $ficheMatiere): Response
+    public function export(
+        TypeDiplomeResolver $typeDiplomeResolver,
+        FicheMatiere        $ficheMatiere): Response
     {
         if ($ficheMatiere->isHorsDiplome() === false) {
             $formation = $ficheMatiere->getParcours()?->getFormation();
@@ -50,6 +53,8 @@ class FicheMatiereExportController extends AbstractController
             $typeDiplome = null;
             $formation = null;
         }
+
+        $typeD = $typeDiplomeResolver->get($typeDiplome);
 
         $bccs = [];
         foreach ($ficheMatiere->getCompetences() as $competence) {
@@ -67,6 +72,7 @@ class FicheMatiereExportController extends AbstractController
                 'ficheMatiere' => $ficheMatiere,
                 'formation' => $formation,
                 'typeDiplome' => $typeDiplome,
+                'templateForm' => $typeD !== null ? $typeD::TEMPLATE_FORM_MCCC : 'licence.html.twig',
                 'bccs' => $bccs,
                 'titre' => 'Fiche EC/matière ' . $ficheMatiere->getLibelle(),
             ],
