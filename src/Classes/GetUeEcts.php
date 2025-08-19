@@ -60,6 +60,15 @@ abstract class GetUeEcts
             }
         }
 
-        return self::totalEcts($ue, $parcours);
+        if ($ue->getUeEnfants()->count() === 0) {
+            return self::totalEcts($ue, $parcours);
+        }
+
+        // pour traiter le cas d'ue enfant d'une UE enfant
+        $tEcts = [];
+        foreach ($ue->getUeEnfants() as $ueEnfant) {
+            $tEcts[] = self::totalEctsUe($ueEnfant, $parcours);
+        }
+        return min($tEcts) ?? 0.0;
     }
 }
