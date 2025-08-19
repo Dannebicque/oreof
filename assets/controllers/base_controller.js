@@ -33,11 +33,12 @@ export default class extends Controller {
       // tester si un élément a une longueur minimale : data-minlength
       if (element.required && element.dataset.minlength !== undefined) {
         if (element.dataset.minlength > element.value.length) {
+          console.log('minlength')
           valid = false;
         }
       }
 
-      if (element.dataset.minlength && element.value.trim().length < element.dataset.minlength) {
+      if (element.required && element.dataset.minlength && element.value.trim().length < element.dataset.minlength) {
         valid = false
         element.classList.add('error')
       }

@@ -13,6 +13,7 @@ namespace App\Security\Voter;
 use App\Classes\GetDpeParcours;
 use App\Entity\Composante;
 use App\Entity\DpeParcours;
+use App\Entity\FicheMatiere;
 use App\Entity\Formation;
 use App\Entity\Parcours;
 use App\Entity\Etablissement;
@@ -91,7 +92,6 @@ class RessourceVoter extends Voter
     private function checkScope(UserProfil $userProfil, mixed $object, string $attribute): bool
     {
         $centre = $userProfil->getProfil()?->getCentre();
-
         return match ($centre) {
             CentreGestionEnum::CENTRE_GESTION_ETABLISSEMENT => $this->checkEtablissement($userProfil, $object, $attribute) || $object === 'etablissement',
             CentreGestionEnum::CENTRE_GESTION_COMPOSANTE => $this->checkComposante($userProfil, $object, $attribute) || $object === 'composante',
@@ -144,7 +144,32 @@ class RessourceVoter extends Voter
             return $this->checkParcours($userProfil, $object, $attribute) || $object === 'parcours';
         }
 
+        if ($object instanceof FicheMatiere) {
+            if ($object->isHorsDiplome() === true) {
+                return true;
+            }
+            return $this->checkFicheMatiere($userProfil, $object, $attribute) || $object === 'ficheMatiere';
+        }
+
         return false;
+    }
+
+    public function checkFicheMatiere(UserProfil $userProfil, mixed $object, string $attribute): bool
+    {
+        $isProprietaire = false;
+        $canAccess = false;
+        //une fiche peut être éditée par le RP, RF ou le DPE
+        if ($object instanceof FicheMatiere) {
+            $isProprietaire = (
+                ($userProfil->getParcours() === $object->getParcours() && ($object->getParcours()?->getCoResponsable()?->getId() === $userProfil->getUser()?->getId() || $object->getParcours()?->getRespParcours()?->getId() === $userProfil->getUser()?->getId())) ||
+                ($userProfil->getFormation() === $object->getParcours()?->getFormation() && ($object->getParcours()?->getFormation()?->getCoResponsable()?->getId() === $userProfil->getUser()?->getId() || $object->getParcours()?->getFormation()?->getResponsableMention()?->getId() === $userProfil->getUser()?->getId())) ||
+                ($userProfil->getComposante() === $object->getParcours()?->getFormation()?->getComposantePorteuse() && $object->getParcours()?->getFormation()?->getComposantePorteuse()?->getResponsableDpe()?->getId() === $userProfil->getUser()?->getId()));
+        }
+
+        $canAccess = $this->ficheWorkflow->can($object, 'autoriser') || $this->ficheWorkflow->can($object, 'valider_fiche_compo');
+
+
+        return $isProprietaire && $canAccess;
     }
 
     private function checkFormation(UserProfil $userProfil, mixed $object, string $attribute): bool
