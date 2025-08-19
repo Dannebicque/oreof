@@ -153,7 +153,9 @@
 
 {% block bouton_header %}
     {% if
-        is_granted('EDIT', {route: 'app_fiche_matiere', subject: ficheMatiere}) %}
+        is_granted('EDIT', {route: 'app_fiche_matiere', subject: ficheMatiere})
+        or is_granted('EDIT', {route: 'app_fiche_matiere_hd', subject: 'etablissement'})
+        or is_granted('ROLE_ADMIN') %}
         <a
                 href="{{ path('app_fiche_matiere_edit',{slug: ficheMatiere.slug}) }}"
                 class="btn btn-sm btn-outline-warning"

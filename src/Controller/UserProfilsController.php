@@ -86,7 +86,7 @@ final class UserProfilsController extends BaseController
     {
         $data = JsonRequest::getFromRequest($request);
 
-        $profil = $profilRepository->find($data['role']);
+        $profil = $profilRepository->find($data['centreType']);
         if (!$profil) {
             return $this->json(['error' => 'Ce rôle n\'existe pas'], 400);
         }
@@ -97,7 +97,7 @@ final class UserProfilsController extends BaseController
             ->setProfil($profil);
         $entityManager->persist($nCentre);
 
-        $centreType = CentreGestionEnum::from($data['centreType']);
+        $centreType = $profil->getCentre();
         $centreId = $data['centreId'];
         $force = (bool)$data['force'];
 

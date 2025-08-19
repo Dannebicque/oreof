@@ -97,7 +97,6 @@ class RessourceVoter extends Voter
             CentreGestionEnum::CENTRE_GESTION_COMPOSANTE => $this->checkComposante($userProfil, $object, $attribute) || $object === 'composante',
             CentreGestionEnum::CENTRE_GESTION_FORMATION => $this->checkFormation($userProfil, $object, $attribute) || $object === 'formation',
             CentreGestionEnum::CENTRE_GESTION_PARCOURS => $this->checkParcours($userProfil, $object, $attribute) || $object === 'parcours',
-            //todo: gérer le cas des fiches matières HD
             default => false,
         };
 
