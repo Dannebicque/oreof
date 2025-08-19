@@ -14,6 +14,7 @@ use App\Classes\MyGotenbergPdf;
 use App\Entity\FicheMatiere;
 use App\Entity\Parcours;
 use App\Message\Export;
+use App\Repository\TypeDiplomeRepository;
 use App\Service\TypeDiplomeResolver;
 use App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException;
 use RuntimeException;
@@ -40,6 +41,7 @@ class FicheMatiereExportController extends AbstractController
      */
     #[Route('/fiche-matiere/export/{id}', name: 'app_fiche_matiere_export')]
     public function export(
+        TypeDiplomeRepository $typeDiplomeRepository,
         TypeDiplomeResolver $typeDiplomeResolver,
         FicheMatiere        $ficheMatiere): Response
     {
@@ -54,13 +56,13 @@ class FicheMatiereExportController extends AbstractController
                 throw new TypeDiplomeNotFoundException();
             }
 
-            $typeD = $typeDiplomeResolver->get($typeDiplome);
+
         } else {
-            $typeDiplome = null;
             $formation = null;
-            $typeD = null;
+            $typeDiplome = $typeDiplomeRepository->findOneBy(['libelle_court' => 'L']);
         }
 
+        $typeD = $typeDiplomeResolver->get($typeDiplome);
 
         $bccs = [];
         foreach ($ficheMatiere->getCompetences() as $competence) {
@@ -81,6 +83,8 @@ class FicheMatiereExportController extends AbstractController
                 'templateForm' => $typeD !== null ? $typeD::TEMPLATE_FORM_MCCC : 'licence.html.twig',
                 'bccs' => $bccs,
                 'titre' => 'Fiche EC/matière ' . $ficheMatiere->getLibelle(),
+                'mcccs' => $typeD !== null ? $typeD->getMcccs($ficheMatiere) : [],
+                'typeMccc' => $ficheMatiere->getTypeMccc(),
             ],
             'dpe_fiche_matiere_' . $ficheMatiere->getLibelle()
         );
