@@ -106,7 +106,7 @@ framework:
             label: 'validation.soumis_conseil_reserve'
         en_cours_redaction_ss_cfvu:
           metadata:
-            process: false
+            process: true
             icon: 'fa-paper-plane'
             isTimeline: false
             label: 'validation.en_cours_redaction_ss_cfvu'
@@ -310,17 +310,12 @@ framework:
         reouvrir_mccc:
           from: 'publie'
           to: 'en_cours_redaction'
-          metadata:
-            type: reserver
-            btn: warning
-            icon: fa-circle-exclamation-check
+        reouvrir_avant_publie:
+          from: 'valide_a_publier'
+          to: 'en_cours_redaction'
         reouvrir_sans_cfvu:
           from: 'publie'
           to: 'en_cours_redaction_ss_cfvu'
-          metadata:
-            type: reserver
-            btn: warning
-            icon: fa-circle-exclamation-check
         valider_ouverture_sans_cfvu:
           from: 'en_cours_redaction_ss_cfvu'
           to: 'soumis_central_sans_cfvu'

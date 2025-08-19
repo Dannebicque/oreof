@@ -119,7 +119,6 @@ final class ParcoursManageComponent extends AbstractController
         $this->process = $this->validationProcess->getProcess();
     }
 
-
     public function redirige(): Response
     {
         if ($this->parcours->isParcoursDefaut() === false) {
@@ -183,7 +182,6 @@ final class ParcoursManageComponent extends AbstractController
     private function init(): void
     {
         $this->dpeParcours = GetDpeParcours::getFromParcours($this->parcours);
-
         $this->typeDiplome = $this->parcours?->getFormation()?->getTypeDiplome();
         $this->formation = $this->parcours?->getFormation();
         $this->place = $this->getPlace();
@@ -194,8 +192,6 @@ final class ParcoursManageComponent extends AbstractController
     public function postMount(): void
     {
        $this->init();
-        //                GetDpeParcours::getFromParcours($this->parcours)?->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_TEXTE || GetDpeParcours::getFromParcours($this->parcours)?->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_MCCC_TEXTE || GetDpeParcours::getFromParcours($this->parcours)?->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_MCCC; //todo selon l'état du process???
-
         $this->getHistorique();
     }
 

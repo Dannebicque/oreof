@@ -173,6 +173,9 @@ class RessourceVoter extends Voter
 
             return $canAccess && $isProprietaire;
         }
+        if ($object instanceof DpeParcours) {
+            return $this->checkParcours($userProfil, $object, $attribute);
+        }
 
         return false;
     }
@@ -197,7 +200,6 @@ class RessourceVoter extends Voter
         }
 
         $canAccess = false;
-
         $isProprietaire = (
             ($userProfil->getParcours() === $parcours && ($parcours->getCoResponsable()?->getId() === $userProfil->getUser()?->getId() || $parcours->getRespParcours()?->getId() === $userProfil->getUser()?->getId())) ||
             ($userProfil->getFormation() === $parcours->getFormation() && ($parcours->getFormation()?->getCoResponsable()?->getId() === $userProfil->getUser()?->getId() || $parcours->getFormation()?->getResponsableMention()?->getId() === $userProfil->getUser()?->getId())) ||
@@ -214,6 +216,7 @@ class RessourceVoter extends Voter
         if ($parcours->getFormation()?->getCoResponsable()?->getId() === $userProfil->getUser()?->getId() || $parcours->getFormation()?->getResponsableMention()?->getId() === $userProfil->getUser()?->getId()) {
             $canAccess = $this->dpeParcoursWorkflow->can($dpeParcours, 'autoriser') ||
                 $this->dpeParcoursWorkflow->can($dpeParcours, 'valider_parcours') ||
+                $this->dpeParcoursWorkflow->can($dpeParcours, 'valider_ouverture_sans_cfvu') ||
                 //  $this->dpeParcoursWorkflow->can(subject, 'valider_ouverture_sans_cfvu') || todo: a mettre dès l'ouverture
                 $this->dpeParcoursWorkflow->can($dpeParcours, 'valider_rf');
         }
@@ -223,10 +226,16 @@ class RessourceVoter extends Voter
             //todo: filtre pas si les bons droits... Edit ou lecture ?
             $canAccess = $this->dpeParcoursWorkflow->can($dpeParcours, 'autoriser') ||
                 $this->dpeParcoursWorkflow->can($dpeParcours, 'valider_parcours') ||
+                $this->dpeParcoursWorkflow->can($dpeParcours, 'valider_ouverture_sans_cfvu') ||
                 $this->dpeParcoursWorkflow->can($dpeParcours, 'valider_dpe_composante') ||
                 $this->dpeParcoursWorkflow->can($dpeParcours, 'valider_conseil') ||
                 $this->dpeParcoursWorkflow->can($dpeParcours, 'valider_publication') ||
+
                 $this->dpeParcoursWorkflow->can($dpeParcours, 'valider_rf');
+
+            if ($attribute === 'manage') {
+                $canAccess = $canAccess || $this->dpeParcoursWorkflow->can($dpeParcours, 'reouvrir_mccc') || $this->dpeParcoursWorkflow->can($dpeParcours, 'reouvrir_avant_publie');
+            }
         }
 
         if ($this->security->isGranted('ROLE_ADMIN')) {
