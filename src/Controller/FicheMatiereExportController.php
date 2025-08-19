@@ -48,13 +48,19 @@ class FicheMatiereExportController extends AbstractController
             if ($formation === null) {
                 throw new RuntimeException('Formation non trouvée');
             }
+
             $typeDiplome = $formation->getTypeDiplome();
+            if ($typeDiplome === null) {
+                throw new TypeDiplomeNotFoundException();
+            }
+
+            $typeD = $typeDiplomeResolver->get($typeDiplome);
         } else {
             $typeDiplome = null;
             $formation = null;
+            $typeD = null;
         }
 
-        $typeD = $typeDiplomeResolver->get($typeDiplome);
 
         $bccs = [];
         foreach ($ficheMatiere->getCompetences() as $competence) {
