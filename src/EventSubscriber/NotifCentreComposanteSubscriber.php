@@ -27,7 +27,7 @@ class NotifCentreComposanteSubscriber extends AbstractNotifCentreSubscriber
             $event->user,
             $event->composante,
             $event->profil,
-            'mails/formation/add_centre_composante.html.twig',
+            'mails/composante/add_centre_composante.html.twig',
             '[ORéOF] Accès à l\'application'
         );
     }
@@ -38,7 +38,7 @@ class NotifCentreComposanteSubscriber extends AbstractNotifCentreSubscriber
             $event->user,
             $event->composante,
             $event->profil,
-            'mails/formation/remove_centre_composante.html.twig',
+            'mails/composante/remove_centre_composante.html.twig',
             '[ORéOF] Accès à l\'application'
         );
     }

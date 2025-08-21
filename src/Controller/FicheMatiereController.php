@@ -183,11 +183,15 @@ class FicheMatiereController extends BaseController
         FicheMatiere $ficheMatiere,
         FicheMatiereState $ficheMatiereState,
     ): Response {
-        if (!$this->isGranted('EDIT',
+        if (!($this->isGranted('EDIT',
             [
                 'route' => 'app_fiche_matiere',
                 'subject' => $ficheMatiere,
-            ])) {
+            ]) || $this->isGranted('EDIT',
+                [
+                    'route' => 'app_fiche_matiere_hd',
+                    'subject' => 'etablissement',
+                ]) || $this->isGranted('ROLE_ADMIN'))) {
             return $this->redirectToRoute('app_fiche_matiere_show', ['slug' => $ficheMatiere->getSlug()]);
         }
 

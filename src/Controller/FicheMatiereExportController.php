@@ -15,6 +15,8 @@ use App\Entity\CampagneCollecte;
 use App\Entity\FicheMatiere;
 use App\Entity\Parcours;
 use App\Message\Export;
+use App\Repository\TypeDiplomeRepository;
+use App\Service\TypeDiplomeResolver;
 use App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException;
 use App\Message\ExportGenerique;
 use App\Service\ExportGeneriqueFicheMatiere;
@@ -50,18 +52,29 @@ class FicheMatiereExportController extends AbstractController
      * @throws TypeDiplomeNotFoundException
      */
     #[Route('/fiche-matiere/export/{id}', name: 'app_fiche_matiere_export')]
-    public function export(FicheMatiere $ficheMatiere): Response
+    public function export(
+        TypeDiplomeRepository $typeDiplomeRepository,
+        TypeDiplomeResolver $typeDiplomeResolver,
+        FicheMatiere        $ficheMatiere): Response
     {
         if ($ficheMatiere->isHorsDiplome() === false) {
             $formation = $ficheMatiere->getParcours()?->getFormation();
             if ($formation === null) {
                 throw new RuntimeException('Formation non trouvée');
             }
+
             $typeDiplome = $formation->getTypeDiplome();
+            if ($typeDiplome === null) {
+                throw new TypeDiplomeNotFoundException();
+            }
+
+
         } else {
-            $typeDiplome = null;
             $formation = null;
+            $typeDiplome = $typeDiplomeRepository->findOneBy(['libelle_court' => 'L']);
         }
+
+        $typeD = $typeDiplomeResolver->get($typeDiplome);
 
         $bccs = [];
         foreach ($ficheMatiere->getCompetences() as $competence) {
@@ -79,8 +92,11 @@ class FicheMatiereExportController extends AbstractController
                 'ficheMatiere' => $ficheMatiere,
                 'formation' => $formation,
                 'typeDiplome' => $typeDiplome,
+                'templateForm' => $typeD !== null ? $typeD::TEMPLATE_FORM_MCCC : 'licence.html.twig',
                 'bccs' => $bccs,
                 'titre' => 'Fiche EC/matière ' . $ficheMatiere->getLibelle(),
+                'mcccs' => $typeD !== null ? $typeD->getMcccs($ficheMatiere) : [],
+                'typeMccc' => $ficheMatiere->getTypeMccc(),
             ],
             'dpe_fiche_matiere_' . $ficheMatiere->getLibelle()
         );

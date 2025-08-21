@@ -2,13 +2,13 @@
 
 namespace App\Service;
 
-use App\Classes\CalculStructureParcours;
 use App\DTO\StructureEc;
 use App\DTO\StructureParcours;
 use App\DTO\StructureUe;
 use App\Entity\FicheMatiere;
 use App\Entity\Parcours;
 use App\Entity\TypeDiplome;
+use App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -19,20 +19,17 @@ class ParcoursExport {
 
     private EntityManagerInterface $entityManager;
 
-    private CalculStructureParcours $calculStructureParcours;
-
     private UrlGeneratorInterface $router;
 
     private WorkflowInterface $ficheWorkflow;
 
     public function __construct(
         EntityManagerInterface $entityManager,
-        CalculStructureParcours $calculStructureParcours,
+        protected TypeDiplomeResolver $typeDiplomeResolver,
         UrlGeneratorInterface $router,
         WorkflowInterface $ficheWorkflow
     ){
         $this->entityManager = $entityManager;
-        $this->calculStructureParcours = $calculStructureParcours;
         $this->router = $router;
         $this->ficheWorkflow = $ficheWorkflow;
     }
@@ -45,6 +42,9 @@ class ParcoursExport {
     ): array
     {
         $typeDiplome = $parcours->getFormation()?->getTypeDiplome();
+        if (null === $typeDiplome) {
+            throw new TypeDiplomeNotFoundException();
+        }
 
         return $this->getMaquetteJson($dto, $parcours, $typeDiplome, true, $parcours_id, $formation_id);
     }
@@ -58,7 +58,8 @@ class ParcoursExport {
             throw new Exception('Type de diplôme non trouvé');
         }
 
-        $dto = $this->calculStructureParcours->calcul($parcours);
+        $typeD = $this->typeDiplomeResolver->get($typeDiplome);
+        $dto = $typeD->calculStructureParcours($parcours);
 
         return $this->getMaquetteJson($dto, $parcours, $typeDiplome)        ;
     }

@@ -138,21 +138,41 @@ class ParcoursSaveController extends BaseController
                     throw new \InvalidArgumentException('Profil ROLE_RESP_PARCOURS not found');
                 }
 
-                $event = new AddCentreParcoursEvent($parcours, $parcours->getRespParcours(), $profil, $this->getCampagneCollecte());
-                $eventDispatcher->dispatch($event, AddCentreParcoursEvent::REMOVE_CENTRE_PARCOURS);
+                if ($parcours->getRespParcours() !== null) {
+                    $event = new AddCentreParcoursEvent($parcours, $parcours->getRespParcours(), $profil, $this->getCampagneCollecte());
+                    $eventDispatcher->dispatch($event, AddCentreParcoursEvent::REMOVE_CENTRE_PARCOURS);
+                }
 
-                $user = $userRepository->find($data['value']);
-                $rep = $updateEntity->saveField($parcours, 'respParcours', $user);
-                $event = new AddCentreParcoursEvent($parcours, $user, $profil, $this->getCampagneCollecte());
-                $eventDispatcher->dispatch($event, AddCentreParcoursEvent::ADD_CENTRE_PARCOURS);
+                if ($data['value'] !== null || $data['value'] !== '') {
+                    $user = $userRepository->find($data['value']);
+                    $rep = $updateEntity->saveField($parcours, 'respParcours', $user);
+                    $event = new AddCentreParcoursEvent($parcours, $user, $profil, $this->getCampagneCollecte());
+                    $eventDispatcher->dispatch($event, AddCentreParcoursEvent::ADD_CENTRE_PARCOURS);
+
+                } else {
+                    $rep = $updateEntity->saveField($parcours, 'respParcours', null);
+                }
+
                 return $this->json($rep);
             case 'coRespParcours':
-                $event = new AddCentreParcoursEvent($parcours, ['ROLE_CO_RESP_PARCOURS'], $parcours->getCoResponsable(), $this->getCampagneCollecte());
-                $eventDispatcher->dispatch($event, AddCentreParcoursEvent::REMOVE_CENTRE_PARCOURS);
+                $profil = $profilRepository->findOneBy(['code' => 'ROLE_CO_RESP_PARCOURS']);
+
+                if (null === $profil) {
+                    throw new \InvalidArgumentException('Profil ROLE_CO_RESP_PARCOURS not found');
+                }
+
+                if ($parcours->getCoResponsable() !== null) {
+                    $event = new AddCentreParcoursEvent($parcours, $parcours->getCoResponsable(), $profil, $this->getCampagneCollecte());
+                    $eventDispatcher->dispatch($event, AddCentreParcoursEvent::REMOVE_CENTRE_PARCOURS);
+                }
+                if ($data['value'] !== null || $data['value'] !== '') {
                 $user = $userRepository->find($data['value']);
                 $rep = $updateEntity->saveField($parcours, 'coResponsable', $user);
-                $event = new AddCentreParcoursEvent($parcours, ['ROLE_CO_RESP_PARCOURS'], $user, $this->getCampagneCollecte());
+                    $event = new AddCentreParcoursEvent($parcours, $user, $profil, $this->getCampagneCollecte());
                 $eventDispatcher->dispatch($event, AddCentreParcoursEvent::ADD_CENTRE_PARCOURS);
+                } else {
+                    $rep = $updateEntity->saveField($parcours, 'respParcours', null);
+                }
                 return $this->json($rep);
             case 'localisation':
                 $ville = $villeRepository->find($data['value']);

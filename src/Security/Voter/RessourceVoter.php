@@ -13,6 +13,7 @@ namespace App\Security\Voter;
 use App\Classes\GetDpeParcours;
 use App\Entity\Composante;
 use App\Entity\DpeParcours;
+use App\Entity\FicheMatiere;
 use App\Entity\Formation;
 use App\Entity\Parcours;
 use App\Entity\Etablissement;
@@ -96,7 +97,6 @@ class RessourceVoter extends Voter
             CentreGestionEnum::CENTRE_GESTION_COMPOSANTE => $this->checkComposante($userProfil, $object, $attribute) || $object === 'composante',
             CentreGestionEnum::CENTRE_GESTION_FORMATION => $this->checkFormation($userProfil, $object, $attribute) || $object === 'formation',
             CentreGestionEnum::CENTRE_GESTION_PARCOURS => $this->checkParcours($userProfil, $object, $attribute) || $object === 'parcours',
-            //todo: gérer le cas des fiches matières HD
             default => false,
         };
 
@@ -106,6 +106,20 @@ class RessourceVoter extends Voter
     {
         if ($object instanceof Etablissement) {
             return $userProfil->getEtablissement() === $object;
+        }
+
+        if ($object instanceof Composante) {
+            return $userProfil->getComposante() === $object;
+        }
+
+        if ($object instanceof Formation) {
+            // Si l'objet est une formation, on vérifie si la composante porteuse de la formation correspond à la composante de l'utilisateur
+            return $this->checkFormation($userProfil, $object, $attribute) || $object === 'formation';
+        }
+
+        if ($object instanceof DpeParcours || $object instanceof Parcours) {
+            // Si l'objet est un DPE Parcours, on vérifie si la composante porteuse de la formation correspond à la composante de l'utilisateur
+            return $this->checkParcours($userProfil, $object, $attribute) || $object === 'parcours';
         }
 
         return false;
@@ -130,7 +144,32 @@ class RessourceVoter extends Voter
             return $this->checkParcours($userProfil, $object, $attribute) || $object === 'parcours';
         }
 
+        if ($object instanceof FicheMatiere) {
+            if ($object->isHorsDiplome() === true) {
+                return true;
+            }
+            return $this->checkFicheMatiere($userProfil, $object, $attribute) || $object === 'ficheMatiere';
+        }
+
         return false;
+    }
+
+    public function checkFicheMatiere(UserProfil $userProfil, mixed $object, string $attribute): bool
+    {
+        $isProprietaire = false;
+        $canAccess = false;
+        //une fiche peut être éditée par le RP, RF ou le DPE
+        if ($object instanceof FicheMatiere) {
+            $isProprietaire = (
+                ($userProfil->getParcours() === $object->getParcours() && ($object->getParcours()?->getCoResponsable()?->getId() === $userProfil->getUser()?->getId() || $object->getParcours()?->getRespParcours()?->getId() === $userProfil->getUser()?->getId())) ||
+                ($userProfil->getFormation() === $object->getParcours()?->getFormation() && ($object->getParcours()?->getFormation()?->getCoResponsable()?->getId() === $userProfil->getUser()?->getId() || $object->getParcours()?->getFormation()?->getResponsableMention()?->getId() === $userProfil->getUser()?->getId())) ||
+                ($userProfil->getComposante() === $object->getParcours()?->getFormation()?->getComposantePorteuse() && $object->getParcours()?->getFormation()?->getComposantePorteuse()?->getResponsableDpe()?->getId() === $userProfil->getUser()?->getId()));
+        }
+
+        $canAccess = $this->ficheWorkflow->can($object, 'autoriser') || $this->ficheWorkflow->can($object, 'valider_fiche_compo');
+
+
+        return $isProprietaire && $canAccess;
     }
 
     private function checkFormation(UserProfil $userProfil, mixed $object, string $attribute): bool
@@ -159,6 +198,9 @@ class RessourceVoter extends Voter
 
             return $canAccess && $isProprietaire;
         }
+        if ($object instanceof DpeParcours) {
+            return $this->checkParcours($userProfil, $object, $attribute);
+        }
 
         return false;
     }
@@ -183,12 +225,13 @@ class RessourceVoter extends Voter
         }
 
         $canAccess = false;
-
         $isProprietaire = (
             ($userProfil->getParcours() === $parcours && ($parcours->getCoResponsable()?->getId() === $userProfil->getUser()?->getId() || $parcours->getRespParcours()?->getId() === $userProfil->getUser()?->getId())) ||
             ($userProfil->getFormation() === $parcours->getFormation() && ($parcours->getFormation()?->getCoResponsable()?->getId() === $userProfil->getUser()?->getId() || $parcours->getFormation()?->getResponsableMention()?->getId() === $userProfil->getUser()?->getId())) ||
             ($userProfil->getComposante() === $parcours->getFormation()?->getComposantePorteuse() &&
-                $parcours->getFormation()?->getComposantePorteuse()?->getResponsableDpe()?->getId() === $userProfil->getUser()?->getId())
+                $parcours->getFormation()?->getComposantePorteuse()?->getResponsableDpe()?->getId() === $userProfil->getUser()?->getId()) ||
+            //c'est le niveau établissement
+            ($userProfil->getProfil()?->getCentre() === CentreGestionEnum::CENTRE_GESTION_ETABLISSEMENT)
         );
 
         if ($parcours->getCoResponsable()?->getId() === $userProfil->getUser()?->getId() || $parcours->getRespParcours()?->getId() === $userProfil->getUser()?->getId()) {
@@ -196,9 +239,9 @@ class RessourceVoter extends Voter
         }
 
         if ($parcours->getFormation()?->getCoResponsable()?->getId() === $userProfil->getUser()?->getId() || $parcours->getFormation()?->getResponsableMention()?->getId() === $userProfil->getUser()?->getId()) {
-
             $canAccess = $this->dpeParcoursWorkflow->can($dpeParcours, 'autoriser') ||
                 $this->dpeParcoursWorkflow->can($dpeParcours, 'valider_parcours') ||
+                $this->dpeParcoursWorkflow->can($dpeParcours, 'valider_ouverture_sans_cfvu') ||
                 //  $this->dpeParcoursWorkflow->can(subject, 'valider_ouverture_sans_cfvu') || todo: a mettre dès l'ouverture
                 $this->dpeParcoursWorkflow->can($dpeParcours, 'valider_rf');
         }
@@ -208,10 +251,16 @@ class RessourceVoter extends Voter
             //todo: filtre pas si les bons droits... Edit ou lecture ?
             $canAccess = $this->dpeParcoursWorkflow->can($dpeParcours, 'autoriser') ||
                 $this->dpeParcoursWorkflow->can($dpeParcours, 'valider_parcours') ||
+                $this->dpeParcoursWorkflow->can($dpeParcours, 'valider_ouverture_sans_cfvu') ||
                 $this->dpeParcoursWorkflow->can($dpeParcours, 'valider_dpe_composante') ||
                 $this->dpeParcoursWorkflow->can($dpeParcours, 'valider_conseil') ||
                 $this->dpeParcoursWorkflow->can($dpeParcours, 'valider_publication') ||
+
                 $this->dpeParcoursWorkflow->can($dpeParcours, 'valider_rf');
+
+            if ($attribute === 'manage') {
+                $canAccess = $canAccess || $this->dpeParcoursWorkflow->can($dpeParcours, 'reouvrir_mccc') || $this->dpeParcoursWorkflow->can($dpeParcours, 'reouvrir_avant_publie');
+            }
         }
 
         if ($this->security->isGranted('ROLE_ADMIN')) {

@@ -161,9 +161,9 @@ class DpeParcours
 
     public function isReouvert(): bool
     {
-        return $this->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_TEXTE ||
+        return ($this->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_TEXTE ||
             $this->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_MCCC_TEXTE ||
-            $this->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_MCCC;
+            $this->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_MCCC);
     }
 
     public function etatDemande(): ?DpeDemande
