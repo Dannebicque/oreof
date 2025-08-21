@@ -263,6 +263,15 @@ class FicheMatiereWizardController extends BaseController
             }
         }
 
+        if ($type === 'hd') {
+            $form = $this->createForm(FicheMatiereStep4HdType::class, $ficheMatiere);
+
+            return $this->render('fiche_matiere_wizard/_step4Hd.html.twig', [
+                'ficheMatiere' => $ficheMatiere,
+                'form' => $form->createView(),
+            ]);
+        }
+
         $typeDiplome = $ficheMatiere->getParcours()?->getFormation()?->getTypeDiplome();
 
         if ($typeDiplome === null) {
@@ -280,14 +289,7 @@ class FicheMatiereWizardController extends BaseController
             ]);
         }
 
-        if ($type === 'hd') {
-            $form = $this->createForm(FicheMatiereStep4HdType::class, $ficheMatiere);
 
-            return $this->render('fiche_matiere_wizard/_step4Hd.html.twig', [
-                'ficheMatiere' => $ficheMatiere,
-                'form' => $form->createView(),
-            ]);
-        }
 
         if ($type === 'other') {
             $typeD = $this->typeDiplomeResolver->get($typeDiplome);
