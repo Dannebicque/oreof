@@ -165,11 +165,12 @@ class ParcoursSaveController extends BaseController
                     $event = new AddCentreParcoursEvent($parcours, $parcours->getCoResponsable(), $profil, $this->getCampagneCollecte());
                     $eventDispatcher->dispatch($event, AddCentreParcoursEvent::REMOVE_CENTRE_PARCOURS);
                 }
+
                 if ($data['value'] !== null || $data['value'] !== '') {
-                $user = $userRepository->find($data['value']);
-                $rep = $updateEntity->saveField($parcours, 'coResponsable', $user);
+                    $user = $userRepository->find($data['value']);
+                    $rep = $updateEntity->saveField($parcours, 'coResponsable', $user);
                     $event = new AddCentreParcoursEvent($parcours, $user, $profil, $this->getCampagneCollecte());
-                $eventDispatcher->dispatch($event, AddCentreParcoursEvent::ADD_CENTRE_PARCOURS);
+                    $eventDispatcher->dispatch($event, AddCentreParcoursEvent::ADD_CENTRE_PARCOURS);
                 } else {
                     $rep = $updateEntity->saveField($parcours, 'respParcours', null);
                 }
