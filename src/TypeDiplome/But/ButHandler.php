@@ -54,7 +54,26 @@ final class ButHandler implements TypeDiplomeHandlerInterface
 
     public function calculStructureParcours(Parcours $parcours, bool $withEcts = true, bool $withBcc = true): StructureParcours
     {
-        return $this->structureParcoursBut->calcul($parcours);
+        $dto = $this->structureParcoursBut->calcul($parcours);
+
+        //dans le DTO je veux récupérer les EC (après les UE) et les trier par ordre
+        foreach ($dto->semestres as $semestre) {
+            foreach ($semestre->ues as $ue) {
+                //les EC de l'UE
+                usort($ue->elementConstitutifs, function ($a, $b) {
+                    return $a->elementConstitutif->getOrdre() <=> $b->elementConstitutif->getOrdre();
+                });
+                //les EC enfants
+                foreach ($ue->elementConstitutifs as $ec) {
+                    if (count($ec->elementsConstitutifsEnfants) > 0) {
+                        usort($ec->elementsConstitutifsEnfants, function ($a, $b) {
+                            return $a->elementConstitutif->getOrdre() <=> $b->elementConstitutif->getOrdre();
+                        });
+                    }
+                }
+            }
+        }
+        return $dto;
     }
 
     public function showStructure(Parcours $parcours): array
