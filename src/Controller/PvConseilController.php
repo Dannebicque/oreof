@@ -149,7 +149,7 @@ class PvConseilController extends BaseController
                 );
                 $myMailer->sendMessage(
                     [$this->getEtablissement()?->getEmailCentral()],
-                    '[ORéOF]  Le PV de conseil a été déposé pour le change de RF : ' . $changeRf->getFormation()?->getDisplay()
+                    '[ORéOF]  Le PV de conseil a été déposé pour le changement de RF : ' . $changeRf->getFormation()?->getDisplay()
                 );
 
                 return JsonReponse::success($translator->trans('deposer.pv.flash.success', [], 'process'));
