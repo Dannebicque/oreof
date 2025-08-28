@@ -243,6 +243,7 @@ class RessourceVoter extends Voter
                 $this->dpeParcoursWorkflow->can($dpeParcours, 'valider_parcours') ||
                 $this->dpeParcoursWorkflow->can($dpeParcours, 'valider_ouverture_sans_cfvu') ||
                 //  $this->dpeParcoursWorkflow->can(subject, 'valider_ouverture_sans_cfvu') || todo: a mettre dès l'ouverture
+                $this->dpeParcoursWorkflow->can($dpeParcours, 'valider_publication') ||
                 $this->dpeParcoursWorkflow->can($dpeParcours, 'valider_rf');
         }
 
