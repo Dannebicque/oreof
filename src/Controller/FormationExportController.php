@@ -9,9 +9,9 @@
 
 namespace App\Controller;
 
-use App\Classes\CalculStructureParcours;
 use App\Classes\MyGotenbergPdf;
 use App\Entity\Formation;
+use App\Service\TypeDiplomeResolver;
 use App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -37,13 +37,20 @@ class FormationExportController extends AbstractController
     #[Route('/formation/export/{slug}', name: 'app_formation_export')]
     public function export(
         Formation $formation,
-        CalculStructureParcours $calculStructureParcours
+        TypeDiplomeResolver $typeDiplomeResolver,
     ): Response
     {
         $typeDiplome = $formation->getTypeDiplome();
+
+        if ($typeDiplome === null) {
+            throw new TypeDiplomeNotFoundException();
+        }
+
+        $typeD = $typeDiplomeResolver->get($typeDiplome);
+
         $tParcours = [];
         foreach ($formation->getParcours() as $parcours) {
-            $tParcours[$parcours->getId()] =  $calculStructureParcours->calcul($parcours);
+            $tParcours[$parcours->getId()] = $typeD->calculStructureParcours($parcours);
         }
 
         return $this->myPdf->render('pdf/formation.html.twig', [

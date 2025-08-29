@@ -21,7 +21,7 @@ final class StructureParcoursBut implements StructureInterface
     {
     }
 
-    public function calcul(Parcours $parcours, bool $withEcts = true, bool $withBcc = true, bool $dataFromFicheMatiere = false): StructureParcours
+    public function calcul(Parcours $parcours, bool $withEcts = true, bool $withBcc = true, bool $dataFromFicheMatiere = true): StructureParcours
     {
         return $this->calculStructureParcoursBut->calcul($parcours, $withEcts, $withBcc, $dataFromFicheMatiere);
     }

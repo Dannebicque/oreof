@@ -15,31 +15,47 @@ use App\Entity\ElementConstitutif;
 use App\Entity\FicheMatiere;
 use App\Entity\Mccc;
 use App\Entity\Parcours;
+use App\Entity\TypeEpreuve;
 use App\Repository\BlocCompetenceRepository;
+use App\Repository\TypeDiplomeRepository;
+use App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException;
 use App\TypeDiplome\Licence\Services\LicenceMccc;
 use App\TypeDiplome\Licence\Services\LicenceMcccVersion;
 use App\TypeDiplome\TypeDiplomeHandlerInterface;
 use App\Utils\Tools;
 use DateTimeInterface;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 final class LicenceHandler implements TypeDiplomeHandlerInterface
 {
-
     public const TEMPLATE_FOLDER = 'licence';
     public const SOURCE = 'licence';
     public const TEMPLATE_FORM_MCCC = 'licence.html.twig';
     public const NB_ANNEE = 3;
+    /**
+     * @var TypeEpreuve[]|array|object[]
+     */
+    private array $typeEpreuves;
 
     public function __construct(
+        TypeDiplomeRepository            $typeDiplomeRepository,
+        protected EntityManagerInterface $entityManager,
         protected LicenceMccc  $licenceMccc,
         protected LicenceMcccVersion  $licenceMcccVersion,
         private BlocCompetenceRepository $blocCompetenceRepository,
         private StructureParcoursLicence $structureParcoursLicence)
     {
+        $typeD = $typeDiplomeRepository->findOneBy(['libelle_court' => 'L']);
+
+        if ($typeD === null) {
+            throw new TypeDiplomeNotFoundException();
+        }
+
+        $this->typeEpreuves = $this->entityManager->getRepository(TypeEpreuve::class)->findByTypeDiplome($typeD);
     }
 
     public function supports(string $type): bool

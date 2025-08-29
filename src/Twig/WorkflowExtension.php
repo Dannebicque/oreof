@@ -176,6 +176,7 @@ class WorkflowExtension extends AbstractExtension
                 str_starts_with(array_keys($places)[0], 'soumis_dpe_composante') ||
                 str_starts_with(array_keys($places)[0], 'soumis_central') ||
                 str_starts_with(array_keys($places)[0], 'soumis_conseil') ||
+                str_starts_with(array_keys($places)[0], 'valide_a_publier') ||
                 str_starts_with(array_keys($places)[0], 'valide_cfvu');//todo: soumis_central que si pas SES ou Admin. SES peut encore gérer sur cette étable
         }
 

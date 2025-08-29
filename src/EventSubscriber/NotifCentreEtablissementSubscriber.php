@@ -27,7 +27,7 @@ class NotifCentreEtablissementSubscriber extends AbstractNotifCentreSubscriber
             $event->user,
             $event->etablissement,
             $event->profil,
-            'mails/formation/add_centre_etablissement.html.twig',
+            'mails/etablissement/add_centre_etablissement.html.twig',
             '[ORéOF] Accès à l\'application'
         );
     }
@@ -38,7 +38,7 @@ class NotifCentreEtablissementSubscriber extends AbstractNotifCentreSubscriber
             $event->user,
             $event->etablissement,
             $event->profil,
-            'mails/formation/remove_centre_etablissement.html.twig',
+            'mails/etablissement/remove_centre_etablissement.html.twig',
             '[ORéOF] Accès à l\'application'
         );
     }

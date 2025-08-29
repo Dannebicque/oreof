@@ -42,7 +42,7 @@ class ButTwigExtension extends AbstractExtension
         }
 
         // trier les EC par clé (code de l'EC)
-        ksort($elementsConstitutifs);
+        ksort($elementsConstitutifs, SORT_NATURAL);
 
 
         return $elementsConstitutifs;

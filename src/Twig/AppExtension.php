@@ -101,6 +101,10 @@ class AppExtension extends AbstractExtension
 
     public function printTexte(?string $texte): string
     {
+        if (null === $texte) {
+            return '';
+        }
+
         $texte = nl2br(trim($texte));
 
         //retirer <div> de début et de fin

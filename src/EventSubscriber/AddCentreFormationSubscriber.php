@@ -54,7 +54,7 @@ class AddCentreFormationSubscriber implements EventSubscriberInterface
             if (!$event->droits === $existe->getProfil()?->getCode()) {
                 // on récupère le profil correspondant
                 $existe->setProfil($profil);
-
+                $this->entityManager->flush();
                 $eventNotif = new NotifCentreFormationEvent($formation, $user, $profil);
                 $this->eventDispatcher->dispatch($eventNotif, NotifCentreFormationEvent::NOTIF_UPDATE_CENTRE);
             }
@@ -66,7 +66,7 @@ class AddCentreFormationSubscriber implements EventSubscriberInterface
             $centre->setCampagneCollecte($campagneCollecte);
             $centre->setProfil($profil);
             $this->entityManager->persist($centre);
-
+            $this->entityManager->flush();
             $eventNotif = new NotifCentreFormationEvent($formation, $user, $profil);
             $this->eventDispatcher->dispatch($eventNotif, NotifCentreFormationEvent::NOTIF_ADD_CENTRE);
         }
