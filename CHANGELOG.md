@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.44.1](https://github.com/Dannebicque/oreof/compare/v1.44.0...v1.44.1) (2025-08-29)
+
+
+### Bug Fixes
+
+* **BadgeHeuresComponent:** simplify logic for determining 'etatHeuresComplet' ([e20ba60](https://github.com/Dannebicque/oreof/commit/e20ba604b96a907862eb2edb756c6452ffe70f74))
+* **ButHandler, ButTwigExtension:** simplify EC sorting logic and enhance natural sorting for elements ([a60067b](https://github.com/Dannebicque/oreof/commit/a60067b46503af2d445eb102a0e0f6a12ece0f90))
+* **ButHandler, StructureParcoursBut:** enhance EC sorting in parcours structure calculation ([274eb4c](https://github.com/Dannebicque/oreof/commit/274eb4ca8c9c461ae4666132413eb1e9cabc996b))
+* **Contact, AppExtension:** handle null values in display and text printing methods ([22f5a52](https://github.com/Dannebicque/oreof/commit/22f5a52d2d64940e292af1acc4799cc7b35d666a))
+* **FicheMatiereController, ParcoursController, RessourceVoter, show.html.twig:** enhance EDIT permission checks for various subjects ([b1164e3](https://github.com/Dannebicque/oreof/commit/b1164e3f7d6a3efa0c17ea53b8fb71d19b6f8961))
+* **FicheMatiereExportController, fiche_matiere_manage.html.twig:** add TypeEpreuveRepository for enhanced type handling and update access checks ([29faf60](https://github.com/Dannebicque/oreof/commit/29faf607efaddc0fcc6506af94df6159b022d0d8))
+* **PvConseilController:** correct typo in email subject for RF change notification ([2f8ca07](https://github.com/Dannebicque/oreof/commit/2f8ca079887bb69afd3da2a25206cec9c8f2059e))
+* **RessourceVoter:** add validation check for 'valider_publication' in workflow ([8b52808](https://github.com/Dannebicque/oreof/commit/8b528084b8c0846b57149899e2c4b5cd289d5c32))
+
 ## [1.44.0](https://github.com/Dannebicque/oreof/compare/v1.43.0...v1.44.0) (2025-08-22)
 
 
