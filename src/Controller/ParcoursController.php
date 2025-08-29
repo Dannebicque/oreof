@@ -298,7 +298,10 @@ class ParcoursController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        if (!$this->isGranted('EDIT', ['route' => 'app_parcours', 'subject' => $dpeParcours->getParcours()])) {
+        if (!(
+            $this->isGranted('EDIT', ['route' => 'app_parcours', 'subject' => $dpeParcours->getParcours()]) ||
+            $this->isGranted('EDIT', ['route' => 'app_formation', 'subject' => $dpeParcours])
+        )) {
             return $this->redirectToRoute('app_parcours_show', ['id' => $parcour->getId()]);
         }
 

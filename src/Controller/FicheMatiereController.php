@@ -183,11 +183,20 @@ class FicheMatiereController extends BaseController
         FicheMatiere $ficheMatiere,
         FicheMatiereState $ficheMatiereState,
     ): Response {
+        //todo: a revoir...
         if (!($this->isGranted('EDIT',
             [
                 'route' => 'app_fiche_matiere',
                 'subject' => $ficheMatiere,
             ]) || $this->isGranted('EDIT',
+                [
+                    'route' => 'app_fiche_matiere',
+                    'subject' => 'formation',
+                ]) || $this->isGranted('EDIT',
+                [
+                    'route' => 'app_fiche_matiere',
+                    'subject' => 'parcours',
+                ]) || $this->isGranted('EDIT',
                 [
                     'route' => 'app_fiche_matiere_hd',
                     'subject' => 'etablissement',
