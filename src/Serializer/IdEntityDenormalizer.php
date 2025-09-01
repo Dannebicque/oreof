@@ -15,7 +15,8 @@ class IdEntityDenormalizer implements DenormalizerAwareInterface, DenormalizerIn
 
     // Si le résultat peut être mis en cache
     private array $supportedEntities = [
-        'App\Entity\ElementConstitutif' => false
+        'App\Entity\ElementConstitutif' => false,
+        'App\Entity\Ue' => false,
     ];
 
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []) : mixed
