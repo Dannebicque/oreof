@@ -85,7 +85,6 @@ class ParcoursMcccExportController extends BaseController
         //date conseil
         $dpe = GetDpeParcours::getFromParcours($parcours);
         if ($dpe !== null) {
-            $dateCfvu = $getHistorique->getHistoriqueParcoursLastStep($dpe, 'soumis_cfvu');
             $dateConseil = $getHistorique->getHistoriqueParcoursLastStep($dpe, 'soumis_conseil');
         }
 
@@ -93,13 +92,13 @@ class ParcoursMcccExportController extends BaseController
             'xlsx' => $typeDiplome->exportExcelVersionMccc(
                 $this->getCampagneCollecte(),
                 $parcours,
-                $dateCfvu?->getDate() ?? null,
+                null,
                 $dateConseil?->getDate() ?? null
             ),
             'pdf' => $typeDiplome->exportPdfMccc(
                 $this->getCampagneCollecte(),
                 $parcours,
-                $dateCfvu?->getDate() ?? null,
+                null,
                 $dateConseil?->getDate() ?? null
             ),
             default => throw new Exception('Format non géré'),
@@ -153,14 +152,14 @@ class ParcoursMcccExportController extends BaseController
         string                 $format = 'complet'
     ): Response
     {
-        
+
         $dpeArray = $entityManager->getRepository(CampagneCollecte::class)->findBy([], ["id" => "ASC"]);
         $dpeArray = array_map(fn($dpe) => $dpe->getAnnee(), $dpeArray);
 
         function getFileName($parcours, $campagneId, $format, $dpeArray){
             $fileYear = $dpeArray[$campagneId - 1];
 
-            $fileName = $format === 'simplifie' 
+            $fileName = $format === 'simplifie'
             ? "MCCC-Parcours-{$parcours->getId()}-{$fileYear}-simplifie.pdf"
             : "MCCC-Parcours-{$parcours->getId()}-{$fileYear}.pdf";
 
