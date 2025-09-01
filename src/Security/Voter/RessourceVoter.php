@@ -176,6 +176,7 @@ class RessourceVoter extends Voter
     {
         if ($object instanceof Formation) {
             $isProprietaire = (($userProfil->getFormation() === $object && ($object->getCoResponsable()?->getId() === $userProfil->getUser()?->getId() || $object->getResponsableMention()?->getId() === $userProfil->getUser()?->getId())) || ($userProfil->getComposante() === $object->getComposantePorteuse() && $object->getComposantePorteuse()?->getResponsableDpe()?->getId() === $userProfil->getUser()?->getId()));
+
 //todo: gérer le workflow?
             $canAccess =
                 $object->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_TEXTE ||
@@ -194,6 +195,10 @@ class RessourceVoter extends Voter
                         $canAccess = $canAccess || $this->checkParcours($userProfil, $dpeParcours, $attribute);
                     }
                 }
+            }
+
+            if ($attribute === 'manage') {
+                $canAccess = $canAccess || $object->getEtatReconduction() === TypeModificationDpeEnum::OUVERT;
             }
 
             return $canAccess && $isProprietaire;
