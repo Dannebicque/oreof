@@ -19,6 +19,7 @@ class ButTwigExtension extends AbstractExtension
     {
         return [
             new TwigFunction('getElementsConstitutifs', [$this, 'getElementsConstitutifs'], ['is_safe' => ['html']]),
+            new TwigFunction('getElementsConstitutifsVersioning', [$this, 'getElementsConstitutifsVersioning'], ['is_safe' => ['html']])
         ];
     }
 
@@ -44,6 +45,26 @@ class ButTwigExtension extends AbstractExtension
         ksort($elementsConstitutifs, SORT_NATURAL);
 
 
+        return $elementsConstitutifs;
+    }
+
+    public function getElementsConstitutifsVersioning(StructureSemestre $semestre) : array {
+        $elementsConstitutifs = [];
+        foreach ($semestre->ues as $ue) {
+            foreach ($ue->elementConstitutifs as $ec){
+                if(!isset($elementsConstitutifs[$ec->elementConstitutif->getCode()])){
+                    $elementsConstitutifs[$ec->elementConstitutif->getCode()] = [
+                        'ec' => $ec,
+                        'ues' => [],
+                        'coefficients' => []
+                    ];
+                }
+                $elementsConstitutifs[$ec->elementConstitutif->getCode()]['ues'][$ue->ue->getDeserializedId()] = $ec->heuresEctsEc->ects;
+                $elementsConstitutifs[$ec->elementConstitutif->getCode()]['coefficients'][$ue->ue->getDeserializedId()] = $ue->heuresEctsUe->sommeUeEcts;
+            }
+        }
+
+        ksort($elementsConstitutifs);
         return $elementsConstitutifs;
     }
 }

@@ -83,6 +83,8 @@ class Ue
     #[ORM\OneToOne(targetEntity: self::class)]
     private ?self $ueOrigineCopie = null;
 
+    private ?int $deserializedId = null;
+
     public function __construct()
     {
         $this->elementConstitutifs = new ArrayCollection();
@@ -400,6 +402,16 @@ class Ue
     public function setUeOrigineCopie(?self $ueOrigineCopie): static
     {
         $this->ueOrigineCopie = $ueOrigineCopie;
+
+        return $this;
+    }
+
+    public function getDeserializedId() : ?int {
+        return $this->deserializedId;
+    }
+
+    public function setDeserializedId(?int $id) : static {
+        $this->deserializedId = $id;
 
         return $this;
     }
