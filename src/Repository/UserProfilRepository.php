@@ -3,6 +3,11 @@
 namespace App\Repository;
 
 use App\Entity\CampagneCollecte;
+use App\Entity\Composante;
+use App\Entity\Etablissement;
+use App\Entity\Formation;
+use App\Entity\Parcours;
+use App\Entity\Profil;
 use App\Entity\UserProfil;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -108,5 +113,32 @@ class UserProfilRepository extends ServiceEntityRepository
 
         return $qb->getQuery()->getResult();
 
+    }
+
+    public function findFormationWithSameRole(Formation $centre, Profil $profil, CampagneCollecte $campagneCollecte)
+    {
+        return $this->createQueryBuilder('p')
+            ->where('p.formation = :formation')
+            ->andWhere('p.profil = :profil')
+            ->andWhere('p.campagneCollecte = :campagneCollecte')
+            ->setParameter('formation', $centre)
+            ->setParameter('profil', $profil)
+            ->setParameter('campagneCollecte', $campagneCollecte)
+            ->getQuery()
+            ->getResult();
+
+    }
+
+    public function findParcoursWithSameRole(Parcours $centre, Profil $profil, CampagneCollecte $campagneCollecte): array
+    {
+        return $this->createQueryBuilder('p')
+            ->where('p.parcours = :parcours')
+            ->andWhere('p.profil = :profil')
+            ->andWhere('p.campagneCollecte = :campagneCollecte')
+            ->setParameter('parcours', $centre)
+            ->setParameter('profil', $profil)
+            ->setParameter('campagneCollecte', $campagneCollecte)
+            ->getQuery()
+            ->getResult();
     }
 }

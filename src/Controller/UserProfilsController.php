@@ -115,8 +115,8 @@ final class UserProfilsController extends BaseController
         $existingCentre = match ($centreType) {
             CentreGestionEnum::CENTRE_GESTION_COMPOSANTE => $userProfilRepository->findOneBy(['user' => $user, 'composante' => $centre]),
             CentreGestionEnum::CENTRE_GESTION_ETABLISSEMENT => $userProfilRepository->findOneBy(['user' => $user, 'etablissement' => $centre]),
-            CentreGestionEnum::CENTRE_GESTION_FORMATION => $userProfilRepository->findFormationWithSameRole($centre, $profil),
-            CentreGestionEnum::CENTRE_GESTION_PARCOURS => $userProfilRepository->findParcoursWithSameRole($centre, $profil),
+            CentreGestionEnum::CENTRE_GESTION_FORMATION => $userProfilRepository->findFormationWithSameRole($centre, $profil, $this->getCampagneCollecte()),
+            CentreGestionEnum::CENTRE_GESTION_PARCOURS => $userProfilRepository->findParcoursWithSameRole($centre, $profil, $this->getCampagneCollecte()),
         };
 
         if ($existingCentre && $profil->isExclusif()) {
@@ -185,6 +185,7 @@ final class UserProfilsController extends BaseController
         FormationRepository     $formationRepository,
         ComposanteRepository    $composanteRepository,
         EtablissementRepository $etablissementRepository,
+        ParcoursRepository $parcoursRepository,
         User                    $user,
         Request                 $request,
         ProfilRepository        $profilRepository,
@@ -210,7 +211,11 @@ final class UserProfilsController extends BaseController
                     'profil' => $profil,
                     'formations' => $formationRepository->findByCampagneCollecte($this->getCampagneCollecte())
                 ]),
-                CentreGestionEnum::CENTRE_GESTION_PARCOURS => $this->render('user_profils/_config_profil_parcours.html.twig'),
+                CentreGestionEnum::CENTRE_GESTION_PARCOURS => $this->render('user_profils/_config_profil_parcours.html.twig', [
+                    'user' => $user,
+                    'profil' => $profil,
+                    'parcours' => $parcoursRepository->findByCampagneCollecte($this->getCampagneCollecte())
+                ]),
                 default => $this->render('communs/_erreur.html.twig', [
                     'message' => 'Le centre de gestion n\'est pas reconnu'
                 ]),
