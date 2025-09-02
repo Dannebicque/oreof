@@ -49,7 +49,7 @@ class ApiJsonExport {
                 function($p) {
                     $dpeParcours = $p->getDpeParcours()?->last();
                     if($dpeParcours instanceof DpeParcours){
-                        return $dpeParcours->getCampagneCollecte()?->getId() === 1;
+                        return $dpeParcours->getCampagneCollecte()?->getId() === 2;
                     }
                     return false;
                 }
