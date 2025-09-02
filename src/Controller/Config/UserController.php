@@ -19,7 +19,6 @@ use App\Form\UserHorsUrcaType;
 use App\Form\UserLdapType;
 use App\Form\UserType;
 use App\Repository\ProfilRepository;
-use App\Repository\RoleRepository;
 use App\Repository\UserProfilRepository;
 use App\Repository\UserRepository;
 use App\Utils\JsonRequest;
@@ -250,12 +249,10 @@ class UserController extends BaseController
 
     #[Route('/{id}', name: 'app_user_show', methods: ['GET'])]
     public function show(
-        RoleRepository $roleRepository,
         User           $user
     ): Response {
         return $this->render('config/user/show.html.twig', [
-            'user' => $user,
-            'roles' => $roleRepository->findByAll()
+            'user' => $user
         ]);
     }
 

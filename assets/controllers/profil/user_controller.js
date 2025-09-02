@@ -8,6 +8,7 @@
 
 import { Controller } from '@hotwired/stimulus'
 import callOut from '../../js/callOut'
+import { Modal } from 'bootstrap'
 
 export default class extends Controller {
   static targets = ['configProfil', 'liste']
@@ -29,6 +30,28 @@ export default class extends Controller {
       .then((html) => {
         this.listeTarget.innerHTML = html
       })
+  }
+
+  delete (event) {
+    console.log('coucou delete')
+    event.preventDefault()
+    const { url } = event.params
+    const { csrf } = event.params
+    let modal = new Modal(document.getElementById('modal-delete'))
+    modal.show()
+    document.getElementById('btn-confirm-supprimer').addEventListener('click', async () => {
+      const body = {
+        method: 'DELETE',
+        body: JSON.stringify({
+          csrf,
+        }),
+      }
+      modal = null
+      await fetch(url, body).then(() => {
+        callOut('Suppression effectuée', 'success')
+        this._updateListe()
+      })
+    })
   }
 
   addProfil(event) {

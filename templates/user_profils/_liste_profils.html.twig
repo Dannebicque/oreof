@@ -10,15 +10,15 @@
     </tr>
     </thead>
     <tbody>
-    {% for profil in userProfils %}
+    {% for userProfil in userProfils %}
         <tr>
-            <td>{{ profil.profil != null ? profil.profil.libelle : 'Non précisé' }}</td>
-            <td>{{ profil.profil != null ? profil.profil.centre|badgeEnum : 'Non précisé' }}</td>
-            <td>{{ profil.displayCentre }}</td>
+            <td>{{ userProfil.profil != null ? userProfil.profil.libelle : 'Non précisé' }}</td>
+            <td>{{ userProfil.profil != null ? userProfil.profil.centre|badgeEnum : 'Non précisé' }}</td>
+            <td>{{ userProfil.displayCentre }}</td>
             <td>
-                <button {{ stimulus_action('centre', 'delete', 'click', {
-                    url:path('app_user_profils_delete',{'profil': profil.id}),
-                    csrf: csrf_token('delete' ~ profil.id)
+                <button {{ stimulus_action('profil--user', 'delete', 'click', {
+                    url:path('app_user_profils_delete',{'userProfil': userProfil.id}),
+                    csrf: csrf_token('delete' ~ userProfil.id)
                 }) }} class="btn btn-sm text-danger">
                     <i class="{{ iconDelete }}"></i> Supprimer
                 </button>

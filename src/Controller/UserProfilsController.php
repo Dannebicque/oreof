@@ -47,7 +47,6 @@ final class UserProfilsController extends BaseController
 
     #[Route('/{user}/liste', name: 'liste')]
     public function listeUserProfils(
-        ProfilRepository $profilRepository,
         User             $user
     ): Response
     {
@@ -120,8 +119,8 @@ final class UserProfilsController extends BaseController
             CentreGestionEnum::CENTRE_GESTION_PARCOURS => $userProfilRepository->findParcoursWithSameRole($centre, $profil),
         };
 
-        if ($existingCentre) {
-            if ($profil->isExclusif() && !$force) {
+        if ($existingCentre && $profil->isExclusif()) {
+            if (!$force) {
                 return $this->json(['error' => 'already_exist'], 400);
             }
 
@@ -226,13 +225,74 @@ final class UserProfilsController extends BaseController
     }
 
     //app_user_profils_delete
-    #[Route('/{profil}/delete', name: 'delete', methods: ['POST', 'DELETE'])]
+    #[Route('/{userProfil}/delete', name: 'delete', methods: ['POST', 'DELETE'])]
     public function deleteUserProfils(
+        EntityManagerInterface   $entityManager,
+        EventDispatcherInterface $eventDispatcher,
         Request $request,
-        Profil  $profil
+        UserProfil               $userProfil
     ): Response
     {
+        // vérifier le CSRF
+        if ($this->isCsrfTokenValid(
+            'delete' . $userProfil->getId(),
+            JsonRequest::getValueFromRequest($request, 'csrf')
+        )) {
 
+
+            $profil = $userProfil->getProfil();
+            if ($profil === null) {
+                return $this->json(['error' => 'Ce profil n\'existe pas'], 400);
+            }
+
+            $centreType = $profil->getCentre();
+            $user = $userProfil->getUser();
+
+            $centre = match ($centreType) {
+                CentreGestionEnum::CENTRE_GESTION_COMPOSANTE => $userProfil->getComposante(),
+                CentreGestionEnum::CENTRE_GESTION_FORMATION => $userProfil->getFormation(),
+                CentreGestionEnum::CENTRE_GESTION_PARCOURS => $userProfil->getParcours(),
+                default => null,
+            };
+
+            $event = match ($centreType) {
+                CentreGestionEnum::CENTRE_GESTION_COMPOSANTE => new NotifCentreComposanteEvent($centre, $user, $profil),
+                CentreGestionEnum::CENTRE_GESTION_FORMATION => new NotifCentreFormationEvent($centre, $user, $profil),
+                CentreGestionEnum::CENTRE_GESTION_PARCOURS => new NotifCentreParcoursEvent($centre, $user, $profil),
+                default => null,
+            };
+
+            if ($profil->isExclusif()) {
+                if ($centreType === CentreGestionEnum::CENTRE_GESTION_COMPOSANTE) {
+                    if ($profil->getCode() === 'ROLE_DPE') {
+                        $centre->setResponsableDpe(null);
+                    } elseif ($profil->getCode() === 'ROLE_DIRECTEUR') {
+                        $centre->setDirecteur(null);
+                    }
+                } elseif ($centreType === CentreGestionEnum::CENTRE_GESTION_FORMATION) {
+                    if ($profil->getCode() === 'ROLE_RESP_FORMATION') {
+                        $centre->setResponsableMention(null);
+                    } elseif ($profil->getCode() === 'ROLE_CO_RESP_FORMATION') {
+                        $centre->setCoResponsable(null);
+                    }
+                } elseif ($centreType === CentreGestionEnum::CENTRE_GESTION_PARCOURS) {
+                    if ($profil->getCode() === 'ROLE_RESP_PARCOURS') {
+                        $centre->setRespParcours(null);
+                    } elseif ($profil->getCode() === 'ROLE_CO_RESP_PARCOURS') {
+                        $centre->setCoResponsable(null);
+                    }
+                }
+            }
+
+            if ($event) {
+                $eventDispatcher->dispatch($event, $event::NOTIF_REMOVE_CENTRE);
+            }
+
+            $entityManager->remove($userProfil);
+            $entityManager->flush();
+
+            return $this->json(['success' => 'Profil supprimé avec succès']);
+        }
+        return $this->json(['error' => 'Le token CSRF est invalide'], 400);
     }
-
 }
