@@ -89,7 +89,7 @@ class ButMcccVersion extends AbstractButMccc
 
         $structureDifferencesParcours = $this->versioningParcours->getStructureDifferencesBetweenParcoursAndLastCfvu($parcours);
         if ($structureDifferencesParcours !== null) {
-            $diffStructure = (new VersioningStructure($structureDifferencesParcours, $dto))->calculDiff();
+            $diffStructure = (new VersioningStructure($structureDifferencesParcours, $dto))->calculDiff(true);
         } else {
             return false;
         }
@@ -210,17 +210,16 @@ class ButMcccVersion extends AbstractButMccc
                             if ($fiche->getTypeMatiere() === FicheMatiere::TYPE_MATIERE_RESSOURCE) {
                                 $tabFichesRessources[$fiche->getSigle()]['ec'] = $ec;
                                 $tabFichesRessources[$fiche->getSigle()]['diff'] = $diffFiche;
-                                $tabFichesUes[$fiche->getSigle()][$ue->getOrdre()] = $diffFiche['heuresEctsEc']['ects'];
-                                $totalCoeffAvant[$ue->getOrdre()]['Ressource'] += $diffFiche['heuresEctsEc']['ects']?->getOriginalFloat() ?? 0;
-                                $totalCoeffApres[$ue->getOrdre()]['Ressource'] += $diffFiche['heuresEctsEc']['ects']?->getNewFloat() ?? 0;
+                                $tabFichesUes[$fiche->getSigle()][$ue->getOrdre()] = new DiffObject($diffFiche['heuresEctsEc']['ects']?->getOriginalFloat() ?? 0, $ec->getEcts() ?? 0);
+                                $totalCoeffApres[$ue->getOrdre()]['Ressource'] += $ec->getEcts() ?? 0;
                             }
 
                             if ($fiche->getTypeMatiere() === FicheMatiere::TYPE_MATIERE_SAE) {
                                 $tabFichesSaes[$fiche->getSigle()]['ec'] = $ec;
                                 $tabFichesSaes[$fiche->getSigle()]['diff'] = $diffFiche;
-                                $tabFichesUes[$fiche->getSigle()][$ue->getOrdre()] = $diffFiche['heuresEctsEc']['ects'];
+                                $tabFichesUes[$fiche->getSigle()][$ue->getOrdre()] = new DiffObject($diffFiche['heuresEctsEc']['ects']?->getOriginalFloat() ?? 0, $ec->getEcts() ?? 0);
                                 $totalCoeffAvant[$ue->getOrdre()]['Sae'] += $diffFiche['heuresEctsEc']['ects']?->getOriginalFloat() ?? 0;
-                                $totalCoeffApres[$ue->getOrdre()]['Sae'] += $diffFiche['heuresEctsEc']['ects']?->getNewFloat() ?? 0;
+                                $totalCoeffApres[$ue->getOrdre()]['Sae'] += $ec->getEcts() ?? 0;
                             }
                         }
                     }
@@ -310,10 +309,10 @@ class ButMcccVersion extends AbstractButMccc
                 $this->excelWriter->colorCells('H23:H' . $finRessource, 'FFCCCCCC');
                 foreach ($tabColUes as $keyUe => $colUe) {
                     $diffUe = $diffSemestre['ues'][$keyUe];
+
                     //pour chaque colonne d'uE on met à jour la somme des ECTS dans la formule
                     $sommeEctsAvant = $totalCoeffAvant[$keyUe]['Ressource'] + $totalCoeffAvant[$keyUe]['Sae'];
                     $sommeEctsApres = $totalCoeffApres[$keyUe]['Ressource'] + $totalCoeffApres[$keyUe]['Sae'];
-
 
                     $this->excelWriter->writeCellXYDiff($colUe, $ligne + 2, $diffUe['heuresEctsUe']['sommeUeEcts'], ['style' => 'HORIZONTAL_CENTER']);
                     //somme des coeffs

@@ -88,6 +88,8 @@ class StructureUe
     public function addEc(StructureEc|StructureEcVersioning $structureEc): void
     {
         $this->elementConstitutifs[] = $structureEc;
+
+        // todo: cette partie est à déporter dans le calcul des structures
         if ($this->withEcts) {
             $this->heuresEctsUe->addEc($structureEc->getHeuresEctsEc());
         }
