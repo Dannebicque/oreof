@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.44.1](https://github.com/Dannebicque/oreof/compare/v1.44.0...v1.44.1) (2025-09-02)
+
+
+### Bug Fixes
+
+* **ApiJsonExport:** update campaign collection ID check from 1 to 2 ([4a4fade](https://github.com/Dannebicque/oreof/commit/4a4fade7aad63bf3176f4540e3674d8649769f63))
+* **BadgeHeuresComponent:** simplify logic for determining 'etatHeuresComplet' ([e20ba60](https://github.com/Dannebicque/oreof/commit/e20ba604b96a907862eb2edb756c6452ffe70f74))
+* **ButHandler, ButTwigExtension:** simplify EC sorting logic and enhance natural sorting for elements ([a60067b](https://github.com/Dannebicque/oreof/commit/a60067b46503af2d445eb102a0e0f6a12ece0f90))
+* **ButHandler, StructureParcoursBut:** enhance EC sorting in parcours structure calculation ([274eb4c](https://github.com/Dannebicque/oreof/commit/274eb4ca8c9c461ae4666132413eb1e9cabc996b))
+* **CalculStructureParcoursBut:** enhance ECTS calculations and refactor structure handling ([3f1ca2e](https://github.com/Dannebicque/oreof/commit/3f1ca2e7c5753df6e6ee51d590b5162b42695813))
+* **Contact, AppExtension:** handle null values in display and text printing methods ([22f5a52](https://github.com/Dannebicque/oreof/commit/22f5a52d2d64940e292af1acc4799cc7b35d666a))
+* **ExportSyntheseModification:** update structure differences retrieval for parcours ([6ad33d6](https://github.com/Dannebicque/oreof/commit/6ad33d68ec514fed3d4247b5bf60e42a115af701))
+* **FicheMatiereController, ParcoursController, RessourceVoter, show.html.twig:** enhance EDIT permission checks for various subjects ([b1164e3](https://github.com/Dannebicque/oreof/commit/b1164e3f7d6a3efa0c17ea53b8fb71d19b6f8961))
+* **FicheMatiereExportController, fiche_matiere_manage.html.twig:** add TypeEpreuveRepository for enhanced type handling and update access checks ([29faf60](https://github.com/Dannebicque/oreof/commit/29faf607efaddc0fcc6506af94df6159b022d0d8))
+* **ParcoursMcccExportController:** remove unused dateCfvu variable and simplify export method parameters ([126b1b1](https://github.com/Dannebicque/oreof/commit/126b1b182ae4b0acd1dbd715042dfde02ced6c61))
+* Plusieurs années pour les PDF (MCCC) ([5bd0a47](https://github.com/Dannebicque/oreof/commit/5bd0a471f52aa852b27d6176ebdd6a5d389983ad))
+* **PvConseilController:** correct typo in email subject for RF change notification ([2f8ca07](https://github.com/Dannebicque/oreof/commit/2f8ca079887bb69afd3da2a25206cec9c8f2059e))
+* **RessourceVoter, show.html.twig:** enhance access control for 'manage' attribute and update edit permission checks ([27bbe15](https://github.com/Dannebicque/oreof/commit/27bbe1577cbca6cdca1c59dc7702a2f4b9be9781))
+* **RessourceVoter:** add validation check for 'valider_publication' in workflow ([8b52808](https://github.com/Dannebicque/oreof/commit/8b528084b8c0846b57149899e2c4b5cd289d5c32))
+* **SyntheseModificationController:** enhance validation checks for parcours states ([00b396d](https://github.com/Dannebicque/oreof/commit/00b396d0403c7a4d9b339f1a229b010530682dfa))
+* **UserController:** remove unused RoleRepository dependency and simplify user show method ([c3c701e](https://github.com/Dannebicque/oreof/commit/c3c701ea927f36fede1ead433b29e1df5ffff874))
+
 ## [1.44.0](https://github.com/Dannebicque/oreof/compare/v1.43.0...v1.44.0) (2025-08-22)
 
 
