@@ -125,10 +125,17 @@
                         </div>
                     {% endif %}
                     {% if histo.complements.fichier is defined %}
+                        {% histo.etape == 'change_rf' or histo.etape == 'change_co_rf' %}
+                        <div class="col-auto">
+                            <p><a href="{{ asset('uploads/change_rf/pv/'~histo.complements.fichier) }}" target="_blank">Voir
+                                    le PV du conseil</a></p>
+                        </div>
+                    {% else %}
                         <div class="col-auto">
                             <p><a href="{{ asset('uploads/conseils/'~histo.complements.fichier) }}" target="_blank">Voir
                                     le PV du conseil</a></p>
                         </div>
+                    {% endif %}
                     {% endif %}
                 </div>
             {% endif %}
