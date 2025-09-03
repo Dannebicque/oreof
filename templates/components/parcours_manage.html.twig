@@ -404,7 +404,8 @@
                             {% endif %}
                         </div>
                         <div class="col-3 d-grid">
-                            {% if is_granted('MANAGE', {route: 'app_formation', subject: this.formation}) %}
+                            {% if is_granted('MANAGE', {route: 'app_formation', subject: this.formation}) or
+                                is_granted('MANAGE', {route: 'app_composante', subject: this.formation}) or is_granted('ROLE_ADMIN') %}
                                 {% if this.dpeParcours.etatReconduction.value != 'NON_OUVERTURE' and this.dpeParcours.etatReconduction.value != 'NON_OUVERTURE_SES' %}
                                     {% if this.parcours.isParcoursDefaut == true %}
                                         <button
