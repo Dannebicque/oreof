@@ -15,6 +15,7 @@ use App\Entity\DpeParcours;
 use App\Entity\FicheMatiere;
 use App\Entity\Formation;
 use App\Entity\Parcours;
+use App\Enums\TypeModificationDpeEnum;
 use App\Utils\Access;
 use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\Workflow\WorkflowInterface;
@@ -41,6 +42,7 @@ class WorkflowExtension extends AbstractExtension
             new TwigFunction('isRefuse', [$this, 'isRefuse']),
             new TwigFunction('isPublie', [$this, 'isPublie']),
             new TwigFunction('isOuvrable', [$this, 'isOuvrable']),
+            new TwigFunction('isOuvert', [$this, 'isOuvert']),
             new TwigFunction('isPlace', [$this, 'isPlace']),
             new TwigFunction('isAccessible', [$this, 'isAccessible']),
             new TwigFunction('hasHistorique', [$this, 'hasHistorique']),
@@ -178,6 +180,47 @@ class WorkflowExtension extends AbstractExtension
                 str_starts_with(array_keys($places)[0], 'soumis_conseil') ||
                 str_starts_with(array_keys($places)[0], 'valide_a_publier') ||
                 str_starts_with(array_keys($places)[0], 'valide_cfvu');//todo: soumis_central que si pas SES ou Admin. SES peut encore gérer sur cette étable
+        }
+
+        return false;
+    }
+
+    public function isOuvert(Parcours|Formation|DpeParcours $entity): bool
+    {
+        if ($entity instanceof DpeParcours) {
+            return in_array($entity->getEtatReconduction()->value, [
+                TypeModificationDpeEnum::MODIFICATION->value,
+                TypeModificationDpeEnum::MODIFICATION_TEXTE->value,
+                TypeModificationDpeEnum::MODIFICATION_INTITULE->value,
+                TypeModificationDpeEnum::MODIFICATION_PARCOURS->value,
+                TypeModificationDpeEnum::MODIFICATION_MCCC->value,
+                TypeModificationDpeEnum::MODIFICATION_MCCC_TEXTE->value,
+            ]);
+        }
+
+        if ($entity instanceof Parcours) {
+            $dpeParcours = GetDpeParcours::getFromParcours($entity);
+            if ($dpeParcours !== null) {
+                return in_array($dpeParcours->getEtatReconduction()->value, [
+                    TypeModificationDpeEnum::MODIFICATION->value,
+                    TypeModificationDpeEnum::MODIFICATION_TEXTE->value,
+                    TypeModificationDpeEnum::MODIFICATION_INTITULE->value,
+                    TypeModificationDpeEnum::MODIFICATION_PARCOURS->value,
+                    TypeModificationDpeEnum::MODIFICATION_MCCC->value,
+                    TypeModificationDpeEnum::MODIFICATION_MCCC_TEXTE->value,
+                ]);
+            }
+        }
+
+        if ($entity instanceof Formation) {
+            return in_array($entity->getEtatReconduction()->value, [
+                TypeModificationDpeEnum::MODIFICATION->value,
+                TypeModificationDpeEnum::MODIFICATION_TEXTE->value,
+                TypeModificationDpeEnum::MODIFICATION_INTITULE->value,
+                TypeModificationDpeEnum::MODIFICATION_PARCOURS->value,
+                TypeModificationDpeEnum::MODIFICATION_MCCC->value,
+                TypeModificationDpeEnum::MODIFICATION_MCCC_TEXTE->value,
+            ]);
         }
 
         return false;
