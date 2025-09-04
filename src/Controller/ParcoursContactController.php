@@ -120,6 +120,7 @@ class ParcoursContactController extends BaseController
             'delete' . $contact->getId(),
             JsonRequest::getValueFromRequest($request, 'csrf')
         )) {
+            $entityManager->remove($contact->getAdresse());
             $entityManager->remove($contact);
             $entityManager->flush();
 
