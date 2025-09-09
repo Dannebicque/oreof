@@ -277,12 +277,21 @@ class ParcoursExport {
     {
         $tEcs = [];
         foreach ($ue->elementConstitutifs as $ec) {
+
+            $ficheMatiereVersioning = null;
+            // On récupère la fiche matière, depuis l'ID déserialisé
+            if($isVersioning){
+                $ficheMatiereVersioning = $this->entityManager->getRepository(FicheMatiere::class)
+                    ->findOneById($ec->elementConstitutif?->getFicheMatiere()?->getDeserializedId());
+            }
+
             if ($ec->elementConstitutif->getNatureUeEc()?->isLibre()) {
                 $tEcs['description_libre_choix'] =  $ec->elementConstitutif->getTexteEcLibre();
             } elseif ($ec->elementConstitutif->getNatureUeEc()?->isChoix() || count($ec->elementsConstitutifsEnfants) > 0) {
                 $tEc['ordre'] = $ec->elementConstitutif->getOrdre();
                 $tEc['numero'] = $ec->elementConstitutif->getCode();
-                $tEc['libelle'] = $ec->elementConstitutif?->getFicheMatiere()?->getLibelle() ?? '-';
+                $tEc['libelle'] = $isVersioning ? $ficheMatiereVersioning?->getLibelle() ?? '-'
+                                  : $ec->elementConstitutif?->getFicheMatiere()?->getLibelle() ?? '-';
                 $tEc['ecsEnfants'] =  [];
                 $tEc['description_libre_choix'] =  $ec->elementConstitutif->getTexteEcLibre();
                 $nb = 0;
@@ -308,19 +317,22 @@ class ParcoursExport {
         $isEcFromBD = false;
 
         if($isVersioning){
-            $ficheMatiere = $this->entityManager
-                ->getRepository(FicheMatiere::class)
-                ->findOneBy([
-                    'slug' => $ec->elementConstitutif->getFicheMatiere()?->getSlug()
-                ]);
+            $ficheMatiere = $this->entityManager->getRepository(FicheMatiere::class)
+                ->findOneById($ec->elementConstitutif->getFicheMatiere()?->getDeserializedId());
+
             if($ficheMatiere){
-                $etatWorkflow = $this->ficheWorkflow
-                    ->getMarking($ficheMatiere)
-                    ->getPlaces();
-                $ficheMatiere = $etatWorkflow === ["publie" => 1]
-                || $etatWorkflow === ['valide_pour_publication' => 1]
-                ? $ficheMatiere
-                :null;
+
+                // ##########
+
+                // $etatWorkflow = $this->ficheWorkflow
+                //     ->getMarking($ficheMatiere)
+                //     ->getPlaces();
+                // $ficheMatiere = $etatWorkflow === ["publie" => 1]
+                // || $etatWorkflow === ['valide_pour_publication' => 1]
+                // ? $ficheMatiere
+                // :null;
+
+                // ##########
 
                 if($ficheMatiere){
                     foreach($ficheMatiere->getElementConstitutifs() as $ecFM){

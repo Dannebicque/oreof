@@ -6,6 +6,7 @@ use App\DTO\StructureParcours;
 use App\Entity\Parcours;
 use App\Entity\ParcoursVersioning;
 use App\Serializer\IdEntityDenormalizer;
+use App\Serializer\NestedIdEntityDenormalizer;
 use DateTimeImmutable;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\ORM\EntityManagerInterface;
@@ -48,6 +49,7 @@ class VersioningParcours
         $extractors = new PropertyInfoExtractor([], [new PhpDocExtractor(), new ReflectionExtractor()]);
         $this->serializer = new Serializer(
         [
+            new NestedIdEntityDenormalizer(),
             new IdEntityDenormalizer(),
             new DateTimeNormalizer(),
             new BackedEnumNormalizer(),
