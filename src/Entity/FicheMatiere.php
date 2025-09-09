@@ -242,6 +242,8 @@ class FicheMatiere
     #[ORM\Column(length: 1000, nullable: true)]
     private ?string $quitusText = null;
 
+    private ?int $deserializedId = null;
+
     public function __construct()
     {
         $this->mcccs = new ArrayCollection();
@@ -1283,6 +1285,16 @@ class FicheMatiere
     public function setQuitusText(?string $quitusText): static
     {
         $this->quitusText = $quitusText;
+
+        return $this;
+    }
+
+    public function getDeserializedId() : ?int {
+        return $this->deserializedId;
+    }
+
+    public function setDeserializedId(?int $id) : static {
+        $this->deserializedId = $id;
 
         return $this;
     }
