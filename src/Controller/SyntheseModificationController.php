@@ -109,7 +109,7 @@ class SyntheseModificationController extends BaseController
                 $parcours = $dpe->getParcours();
                 $dpeParcours = GetDpeParcours::getFromParcours($parcours);
                 if ($dpeParcours !== null &&
-                    (array_key_exists('soumis_cfvu', $dpeParcours->getEtatValidation()) || array_key_exists('non_ouverture_cfvu', $dpeParcours->getEtatValidation()))) {
+                    (array_key_exists('soumis_central', $dpeParcours->getEtatValidation()) || array_key_exists('soumis_cfvu', $dpeParcours->getEtatValidation()) || array_key_exists('non_ouverture_cfvu', $dpeParcours->getEtatValidation()))) {
                     $formations[$formation?->getId()]['hasModif'] = true;
                     $formations[$formation?->getId()]['parcours'][$parcours->getId()]['parcours'] = $parcours;
                     $formations[$formation?->getId()]['parcours'][$parcours->getId()]['dpeDemande'] = $dpe;

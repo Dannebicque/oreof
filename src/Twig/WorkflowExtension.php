@@ -15,6 +15,7 @@ use App\Entity\DpeParcours;
 use App\Entity\FicheMatiere;
 use App\Entity\Formation;
 use App\Entity\Parcours;
+use App\Enums\TypeModificationDpeEnum;
 use App\Utils\Access;
 use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\Workflow\WorkflowInterface;
@@ -41,6 +42,7 @@ class WorkflowExtension extends AbstractExtension
             new TwigFunction('isRefuse', [$this, 'isRefuse']),
             new TwigFunction('isPublie', [$this, 'isPublie']),
             new TwigFunction('isOuvrable', [$this, 'isOuvrable']),
+            new TwigFunction('isOuvert', [$this, 'isOuvert']),
             new TwigFunction('isPlace', [$this, 'isPlace']),
             new TwigFunction('isAccessible', [$this, 'isAccessible']),
             new TwigFunction('hasHistorique', [$this, 'hasHistorique']),
@@ -181,6 +183,11 @@ class WorkflowExtension extends AbstractExtension
         }
 
         return false;
+    }
+
+    public function isOuvert(Parcours|Formation|DpeParcours $entity): bool
+    {
+        return Access::isOuvert($entity);
     }
 
     private function getWorkflow(string $workflow): WorkflowInterface

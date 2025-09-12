@@ -9,8 +9,10 @@
 
 namespace App\Utils;
 
+use App\Classes\GetDpeParcours;
 use App\Entity\DpeParcours;
 use App\Entity\Formation;
+use App\Entity\Parcours;
 use App\Enums\TypeModificationDpeEnum;
 
 abstract class Access {
@@ -34,5 +36,46 @@ abstract class Access {
         }
 
         return $formation->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_TEXTE;
+    }
+
+    public static function isOuvert(Parcours|Formation|DpeParcours $entity)
+    {
+        if ($entity instanceof DpeParcours) {
+            return in_array($entity->getEtatReconduction()->value, [
+                TypeModificationDpeEnum::MODIFICATION->value,
+                TypeModificationDpeEnum::MODIFICATION_TEXTE->value,
+                TypeModificationDpeEnum::MODIFICATION_INTITULE->value,
+                TypeModificationDpeEnum::MODIFICATION_PARCOURS->value,
+                TypeModificationDpeEnum::MODIFICATION_MCCC->value,
+                TypeModificationDpeEnum::MODIFICATION_MCCC_TEXTE->value,
+            ]);
+        }
+
+        if ($entity instanceof Parcours) {
+            $dpeParcours = GetDpeParcours::getFromParcours($entity);
+            if ($dpeParcours !== null) {
+                return in_array($dpeParcours->getEtatReconduction()->value, [
+                    TypeModificationDpeEnum::MODIFICATION->value,
+                    TypeModificationDpeEnum::MODIFICATION_TEXTE->value,
+                    TypeModificationDpeEnum::MODIFICATION_INTITULE->value,
+                    TypeModificationDpeEnum::MODIFICATION_PARCOURS->value,
+                    TypeModificationDpeEnum::MODIFICATION_MCCC->value,
+                    TypeModificationDpeEnum::MODIFICATION_MCCC_TEXTE->value,
+                ]);
+            }
+        }
+
+        if ($entity instanceof Formation) {
+            return in_array($entity->getEtatReconduction()->value, [
+                TypeModificationDpeEnum::MODIFICATION->value,
+                TypeModificationDpeEnum::MODIFICATION_TEXTE->value,
+                TypeModificationDpeEnum::MODIFICATION_INTITULE->value,
+                TypeModificationDpeEnum::MODIFICATION_PARCOURS->value,
+                TypeModificationDpeEnum::MODIFICATION_MCCC->value,
+                TypeModificationDpeEnum::MODIFICATION_MCCC_TEXTE->value,
+            ]);
+        }
+
+        return false;
     }
 }

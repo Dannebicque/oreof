@@ -133,6 +133,8 @@ class Contact
 
     public function getDisplay(): string
     {
-        return mb_strtoupper($this->getNom()).' '. ucwords(mb_strtolower($this->getPrenom()));
+        $nom = $this->getNom() ?? '';
+        $prenom = $this->getPrenom() ?? '';
+        return mb_strtoupper($nom) . ' ' . ucwords(mb_strtolower($prenom));
     }
 }

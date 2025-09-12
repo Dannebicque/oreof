@@ -2,6 +2,68 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.44.1](https://github.com/Dannebicque/oreof/compare/v1.44.0...v1.44.1) (2025-09-02)
+
+
+### Bug Fixes
+
+* **ApiJsonExport:** update campaign collection ID check from 1 to 2 ([4a4fade](https://github.com/Dannebicque/oreof/commit/4a4fade7aad63bf3176f4540e3674d8649769f63))
+* **BadgeHeuresComponent:** simplify logic for determining 'etatHeuresComplet' ([e20ba60](https://github.com/Dannebicque/oreof/commit/e20ba604b96a907862eb2edb756c6452ffe70f74))
+* **ButHandler, ButTwigExtension:** simplify EC sorting logic and enhance natural sorting for elements ([a60067b](https://github.com/Dannebicque/oreof/commit/a60067b46503af2d445eb102a0e0f6a12ece0f90))
+* **ButHandler, StructureParcoursBut:** enhance EC sorting in parcours structure calculation ([274eb4c](https://github.com/Dannebicque/oreof/commit/274eb4ca8c9c461ae4666132413eb1e9cabc996b))
+* **CalculStructureParcoursBut:** enhance ECTS calculations and refactor structure handling ([3f1ca2e](https://github.com/Dannebicque/oreof/commit/3f1ca2e7c5753df6e6ee51d590b5162b42695813))
+* **Contact, AppExtension:** handle null values in display and text printing methods ([22f5a52](https://github.com/Dannebicque/oreof/commit/22f5a52d2d64940e292af1acc4799cc7b35d666a))
+* **ExportSyntheseModification:** update structure differences retrieval for parcours ([6ad33d6](https://github.com/Dannebicque/oreof/commit/6ad33d68ec514fed3d4247b5bf60e42a115af701))
+* **FicheMatiereController, ParcoursController, RessourceVoter, show.html.twig:** enhance EDIT permission checks for various subjects ([b1164e3](https://github.com/Dannebicque/oreof/commit/b1164e3f7d6a3efa0c17ea53b8fb71d19b6f8961))
+* **FicheMatiereExportController, fiche_matiere_manage.html.twig:** add TypeEpreuveRepository for enhanced type handling and update access checks ([29faf60](https://github.com/Dannebicque/oreof/commit/29faf607efaddc0fcc6506af94df6159b022d0d8))
+* **ParcoursMcccExportController:** remove unused dateCfvu variable and simplify export method parameters ([126b1b1](https://github.com/Dannebicque/oreof/commit/126b1b182ae4b0acd1dbd715042dfde02ced6c61))
+* Plusieurs années pour les PDF (MCCC) ([5bd0a47](https://github.com/Dannebicque/oreof/commit/5bd0a471f52aa852b27d6176ebdd6a5d389983ad))
+* **PvConseilController:** correct typo in email subject for RF change notification ([2f8ca07](https://github.com/Dannebicque/oreof/commit/2f8ca079887bb69afd3da2a25206cec9c8f2059e))
+* **RessourceVoter, show.html.twig:** enhance access control for 'manage' attribute and update edit permission checks ([27bbe15](https://github.com/Dannebicque/oreof/commit/27bbe1577cbca6cdca1c59dc7702a2f4b9be9781))
+* **RessourceVoter:** add validation check for 'valider_publication' in workflow ([8b52808](https://github.com/Dannebicque/oreof/commit/8b528084b8c0846b57149899e2c4b5cd289d5c32))
+* **SyntheseModificationController:** enhance validation checks for parcours states ([00b396d](https://github.com/Dannebicque/oreof/commit/00b396d0403c7a4d9b339f1a229b010530682dfa))
+* **UserController:** remove unused RoleRepository dependency and simplify user show method ([c3c701e](https://github.com/Dannebicque/oreof/commit/c3c701ea927f36fede1ead433b29e1df5ffff874))
+
+## [1.44.0](https://github.com/Dannebicque/oreof/compare/v1.43.0...v1.44.0) (2025-08-22)
+
+
+### Features
+
+* **Profils:** add form handling and update template for profil management ([8e0beba](https://github.com/Dannebicque/oreof/commit/8e0bebab2dcf9fb471253931ab4167f33a420f92))
+* **TypeDiplome:** refactor addEc method and update show templates for better structure ([659553b](https://github.com/Dannebicque/oreof/commit/659553bc089224691f9dbb2ee1a34d36591b16fb))
+* **TypeDiplome:** refactor addEc method and update show templates for better structure ([75d6ed8](https://github.com/Dannebicque/oreof/commit/75d6ed8cda8c8581dd64478b7f4838809fb0aed6))
+* **User:** refactor user management to replace UserCentre with UserProfil and update related templates ([b01eb55](https://github.com/Dannebicque/oreof/commit/b01eb55c710b43a1e8491bd24d03cf649d997368))
+* **Workflow:** enhance place validation logic in WorkflowExtension ([63f5bce](https://github.com/Dannebicque/oreof/commit/63f5bce3c0566844ebbc7ab9a8556d98e7e1fa70))
+* **Workflow:** enhance place validation logic in WorkflowExtension ([8c0317e](https://github.com/Dannebicque/oreof/commit/8c0317ece09b734a76805f23068f03cabc46d61c))
+* **Workflow:** enhance place validation logic in WorkflowExtension ([68c5699](https://github.com/Dannebicque/oreof/commit/68c5699cb1d59b36f78e2391cbce8222ad928f54))
+
+
+### Bug Fixes
+
+* **FicheMatiereExportController:** integrate TypeDiplomeResolver and update template logic ([0205aec](https://github.com/Dannebicque/oreof/commit/0205aec25fa70edcb2d53f92ce7dbbaa1c8e4ca9))
+* **FicheMatiereExportController:** integrate TypeDiplomeResolver and update template logic ([fff61c7](https://github.com/Dannebicque/oreof/commit/fff61c7e5fa5202ab70d32381c3fda80cb384d27))
+* **FicheMatiereExportController:** integrate TypeDiplomeResolver and update template logic ([a70945f](https://github.com/Dannebicque/oreof/commit/a70945f082cfd01f32f2ace891a4fb953bf98f11))
+* **FicheMatiereWizardController:** streamline handling of 'hd' type in form rendering ([aa75759](https://github.com/Dannebicque/oreof/commit/aa757590d8c08889878f7dd5f96cc3183edea680))
+* **formation:** refactor export logic to use TypeDiplomeResolver and handle missing TypeDiplome ([48006f0](https://github.com/Dannebicque/oreof/commit/48006f0fb161aa2949464b92003434a14a497f1f))
+* **formation:** refactor export logic to use TypeDiplomeResolver and handle missing TypeDiplome ([4d52b51](https://github.com/Dannebicque/oreof/commit/4d52b512071cd29b05cc1825222c58473672ceec))
+* **GetUeEcts:** handle child UE cases in totalEcts calculation ([bb6d769](https://github.com/Dannebicque/oreof/commit/bb6d76986b55ffa5dcff0cdc6b9df5c94bbab82c))
+* **LicenceController:** refactor mcccs retrieval and improve twig template logic ([cd4caa1](https://github.com/Dannebicque/oreof/commit/cd4caa19af2a7e0ede3fe0d671a4b3a8bd45560e))
+* **ParcoursMcccExport:** correct parameter order in getCfvuMcccExportFromFile call ([f5eb144](https://github.com/Dannebicque/oreof/commit/f5eb1443956d8fc4e9a5ef015914f82713a39466))
+* **ParcoursMcccExport:** correct parameter order in getCfvuMcccExportFromFile call ([ac5e699](https://github.com/Dannebicque/oreof/commit/ac5e699c2a84a0bee377f02a9209b09bc7b1466f))
+* **ParcoursSaveController, AddCentreFormationSubscriber, AddCentreParcoursSubscriber:** optimize event handling and ensure entity flushing ([60d1f9b](https://github.com/Dannebicque/oreof/commit/60d1f9b327b82e85062a49280231ee9daa414921))
+* **RessourceVoter:** enhance access checks for Composante and Formation objects ([3d429ad](https://github.com/Dannebicque/oreof/commit/3d429adccd28a94a119e95301bbdbdddd6aba34e))
+* **RessourceVoter:** enhance access checks for Composante and Formation objects ([2509475](https://github.com/Dannebicque/oreof/commit/2509475372d7dbade0ceae94873041ac08085a30))
+* **RessourceVoter:** enhance access checks for FicheMatiere and add new validation logic ([b58db42](https://github.com/Dannebicque/oreof/commit/b58db42927343a87dfb94b79c4322a560a829319))
+* **RessourceVoter:** update access checks for DpeParcours and enhance workflow transitions ([6b4a65b](https://github.com/Dannebicque/oreof/commit/6b4a65bc5cb6b74c2c173116f308749102d87af2))
+* **template:** correct logical operators in permission checks ([7d7320b](https://github.com/Dannebicque/oreof/commit/7d7320b9dade861e6a46363489c9a69ceb750f08))
+* **Workflow:** enhance place validation logic in WorkflowExtension ([cfe2bd8](https://github.com/Dannebicque/oreof/commit/cfe2bd8b962f5a2ccfa56e0d60bff9c949fffaff))
+* **Workflow:** enhance place validation logic in WorkflowExtension ([0c0afe3](https://github.com/Dannebicque/oreof/commit/0c0afe317af7cb4d2468345671e020317bb8efbc))
+* **Workflow:** enhance place validation logic in WorkflowExtension ([65339e6](https://github.com/Dannebicque/oreof/commit/65339e6e594e778cc1ce41b46cc9dd0cb156f3c0))
+* **Workflow:** enhance place validation logic in WorkflowExtension ([5e15837](https://github.com/Dannebicque/oreof/commit/5e15837920f40b87c64508f3bdc43adf4ad0bd9d))
+* **Workflow:** enhance place validation logic in WorkflowExtension ([68180c6](https://github.com/Dannebicque/oreof/commit/68180c6f4fe1794474506f5273814c894aa82490))
+* **Workflow:** enhance place validation logic in WorkflowExtension ([1211b65](https://github.com/Dannebicque/oreof/commit/1211b65c2b7fb7a7cb7e2685c13758801aa9b09c))
+* **WorkflowExtension:** add condition for 'valide_a_publier' in place checks ([51755d6](https://github.com/Dannebicque/oreof/commit/51755d6b7f3baf0736e3188e5317af0d6ea7185b))
+
 ### [1.43.1](https://github.com/Dannebicque/oreof/compare/v1.43.0...v1.43.1) (2025-08-18)
 
 

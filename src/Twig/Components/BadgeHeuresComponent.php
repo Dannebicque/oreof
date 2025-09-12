@@ -31,8 +31,7 @@ final class BadgeHeuresComponent
         $this->isHeuresSpecifiques = $this->elementConstitutif->isHeuresSpecifiques();
         if ($this->elementConstitutif->isHeuresSpecifiques() === true) {
             $this->etatHeuresComplet = $this->elementConstitutif->etatStructure() === 'Complet';
-        } elseif ($this->elementConstitutif->getFicheMatiere() !== null &&
-            ($this->elementConstitutif->getFicheMatiere()->isVolumesHorairesImpose() === true)) {
+        } elseif ($this->elementConstitutif->getFicheMatiere() !== null) {
             $this->etatHeuresComplet = $this->elementConstitutif->getFicheMatiere()->etatStructure() === 'Complet';
         } else {
             $this->etatHeuresComplet = $this->elementConstitutif->etatStructure() === 'Complet';

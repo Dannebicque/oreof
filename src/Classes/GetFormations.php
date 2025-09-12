@@ -54,11 +54,12 @@ class GetFormations
                     );
                 }
 
-                if ($centre->getFormation() !== null &&
-                    $this->authorizationChecker->isGranted('SHOW', ['route' => 'app_formation', 'subject' => $centre->getFormation()])
-                ) {
-                    $formations[] = [$centre->getFormation()];
-                }
+//                if ($centre->getFormation() !== null &&
+//                    $this->authorizationChecker->isGranted('SHOW', ['route' => 'app_formation', 'subject' => $centre->getFormation()])
+//                ) {
+//                    //dump('ok');
+//                    //$formations[] = [$centre->getFormation()];
+//                }
             }
 
             $formations[] = $this->formationRepository->findByComposanteDpe(

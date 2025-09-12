@@ -35,6 +35,7 @@ use App\Repository\TypeDiplomeRepository;
 use App\Service\VersioningFormation;
 use App\Service\VersioningParcours;
 use App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException;
+use App\Utils\Access;
 use App\Utils\JsonRequest;
 use DateTime;
 use DateTimeImmutable;
@@ -377,7 +378,7 @@ class FormationController extends BaseController
          * VERSIONING PARCOURS PAR DÉFAUT
          */
         $cssDiff = DiffHelper::getStyleSheet();
-        if($formation->isHasParcours() === false && count($formation->getParcours()) === 1) {
+        if ($formation->isHasParcours() === false && count($formation->getParcours()) === 1) {
             $textDifferencesParcours = $versioningParcours->getDifferencesBetweenParcoursAndLastVersion($formation->getParcours()[0]);
             $hasLastVersion = $versioningParcours->hasLastVersion($formation->getParcours()[0]);
         }
@@ -411,17 +412,23 @@ class FormationController extends BaseController
         Formation           $formation,
     ): Response {
 
-        if (!$this->isGranted('EDIT',
-            [
-                'route' => 'app_formation',
-                'subject' => $formation,
-            ])) {
-            if($formation->isHasParcours() === false && count($formation->getParcours()) === 1) {
-                if (!$this->isGranted('EDIT',
+        if (
+            !(
+                $this->isGranted('EDIT', ['route' => 'app_formation', 'subject' => $formation]) ||
+                $this->isGranted('EDIT', ['route' => 'app_composante', 'subject' => $formation]) ||
+                $this->isGranted('EDIT', ['route' => 'app_etablissement', 'subject' => $formation]) ||
+                $this->isGranted('ROLE_ADMIN')
+            )
+            || !Access::isOuvert($formation)
+        ) {
+            if ($formation->isHasParcours() === false && count($formation->getParcours()) === 1) {
+                if (!$this->isGranted(
+                    'EDIT',
                     [
                         'route' => 'app_parcours',
                         'subject' => $formation->getParcours()->first(),
-                    ])) {
+                    ]
+                )) {
                     return $this->redirectToRoute('app_formation_show', ['slug' => $formation->getSlug()]);
                 }
             } else {
@@ -435,7 +442,7 @@ class FormationController extends BaseController
             $parcoursState->setParcours($formation->getParcours()?->first());
         }
 
-        if($formation->isHasParcours() === false && count($formation->getParcours()) === 1) {
+        if ($formation->isHasParcours() === false && count($formation->getParcours()) === 1) {
             $hasLastVersion = $versioningParcours->hasLastVersion($formation->getParcours()[0]);
             $dpeParcours = GetDpeParcours::getFromParcours($formation->getParcours()[0]);
         }
@@ -509,7 +516,7 @@ class FormationController extends BaseController
     {
         $listeParcours = [];
 
-        foreach($formation->getParcours() as $parcours) {
+        foreach ($formation->getParcours() as $parcours) {
             $listeParcours[] = $calcul->calcul($parcours);
         }
 
@@ -579,9 +586,9 @@ class FormationController extends BaseController
             $dateHeureVersion = $versionFormation->getVersionTimestamp()->format('d/m/Y à H:i');
 
             $parcoursVersionArray = [];
-            foreach($versionFormation->getFormation()->getParcours() as $p) {
+            foreach ($versionFormation->getFormation()->getParcours() as $p) {
                 $lastVersion = $entityManager->getRepository(ParcoursVersioning::class)->findLastVersion($p);
-                if(count($lastVersion) > 0) {
+                if (count($lastVersion) > 0) {
                     $parcoursVersionArray[] = $lastVersion[0];
                 }
             }

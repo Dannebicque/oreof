@@ -5,7 +5,7 @@
  * @project oreof
  * @lastUpdate 16/02/2023 08:50
  */
-
+//todo: deprecated ??
 import { Controller } from '@hotwired/stimulus'
 import { Modal } from 'bootstrap'
 import callOut from '../js/callOut'

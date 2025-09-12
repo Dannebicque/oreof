@@ -16,6 +16,7 @@ use App\Entity\FicheMatiere;
 use App\Entity\Parcours;
 use App\Message\Export;
 use App\Repository\TypeDiplomeRepository;
+use App\Repository\TypeEpreuveRepository;
 use App\Service\TypeDiplomeResolver;
 use App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException;
 use App\Message\ExportGenerique;
@@ -53,6 +54,7 @@ class FicheMatiereExportController extends AbstractController
      */
     #[Route('/fiche-matiere/export/{id}', name: 'app_fiche_matiere_export')]
     public function export(
+        TypeEpreuveRepository $typeEpreuveRepository,
         TypeDiplomeRepository $typeDiplomeRepository,
         TypeDiplomeResolver $typeDiplomeResolver,
         FicheMatiere        $ficheMatiere): Response
@@ -92,6 +94,7 @@ class FicheMatiereExportController extends AbstractController
                 'ficheMatiere' => $ficheMatiere,
                 'formation' => $formation,
                 'typeDiplome' => $typeDiplome,
+                'typeEpreuves' => $typeDiplome !== null ? $typeEpreuveRepository->findByTypeDiplome($typeDiplome) : $typeEpreuveRepository->findAll(),
                 'templateForm' => $typeD !== null ? $typeD::TEMPLATE_FORM_MCCC : 'licence.html.twig',
                 'bccs' => $bccs,
                 'titre' => 'Fiche EC/matière ' . $ficheMatiere->getLibelle(),

@@ -9,6 +9,7 @@
 
 namespace App\TypeDiplome\But\Services;
 
+use App\DTO\HeuresEctsSemestre;
 use App\DTO\StructureEc;
 use App\DTO\StructureParcours;
 use App\DTO\StructureSemestre;
@@ -17,6 +18,8 @@ use App\Entity\Parcours;
 
 class CalculStructureParcoursBut
 {
+    protected array $tabSemestreEc = [];
+
     public function calcul(Parcours $parcours, bool $withEcts = true, bool $withBcc = true, bool $dataFromFicheMatiere = false): StructureParcours
     {
         $dtoStructure = new StructureParcours();
@@ -32,7 +35,9 @@ class CalculStructureParcoursBut
             }
 
             if ($semestre !== null && $semestre->isNonDispense() === false) {
-                $dtoSemestre = new StructureSemestre($semestre, $semestreParcours->getOrdre(), $raccrocheSemestre, $semestreParcours);
+                $dtoSemestre = new StructureSemestre($semestre, $semestreParcours->getOrdre(), $raccrocheSemestre, $semestreParcours, false);
+                $dtoSemestre->heuresEctsSemestre = new HeuresEctsSemestre();
+                $this->tabSemestreEc[$semestreParcours->getOrdre()] = [];
 
                 foreach ($semestre->getUes() as $ue) {
                     if ($ue !== null && $ue->getUeParent() === null) {
@@ -55,10 +60,12 @@ class CalculStructureParcoursBut
                                     $dtoEc->addEcEnfant($elementConstitutifEnfant->getId(), $dtoEcEnfant);
                                 }
                                 $dtoUe->addEc($dtoEc);
+                                $this->addEcSemestre($dtoEc, $dtoSemestre);
                             }
 
                         }
                         $dtoUe->heuresEctsUe->sommeUeEcts = $ue->getEcts();
+                        $dtoSemestre->heuresEctsSemestre->sommeSemestreEcts += $ue->getEcts();
                         $dtoSemestre->addUe($ue->getOrdre(), $dtoUe);//todo: utilisation de l'ordre de l'ue plutôt que l'id pour la comparaison
                     }
                 }
@@ -67,5 +74,23 @@ class CalculStructureParcoursBut
         }
 
         return $dtoStructure;
+    }
+
+    private function addEcSemestre(StructureEc $dtoEc, StructureSemestre $dtoSemestre)
+    {
+        //vérifier si le code de l'EC n'est pas déjà ajouté au semestre et ajouter les heures
+        if (
+            array_key_exists($dtoSemestre->semestre->getOrdre(), $this->tabSemestreEc) &&
+            !array_key_exists($dtoEc->elementConstitutif->getCode(), $this->tabSemestreEc[$dtoSemestre->semestre->getOrdre()])) {
+            //on ajoute les heures de l'EC au semestre
+            $this->tabSemestreEc[$dtoSemestre->semestre->getOrdre()][$dtoEc->elementConstitutif->getCode()] = $dtoEc->elementConstitutif->getCode();
+            $dtoSemestre->heuresEctsSemestre->sommeSemestreCmDist += $dtoEc->heuresEctsEc->cmDist;
+            $dtoSemestre->heuresEctsSemestre->sommeSemestreTdDist += $dtoEc->heuresEctsEc->tdDist;
+            $dtoSemestre->heuresEctsSemestre->sommeSemestreTpDist += $dtoEc->heuresEctsEc->tpDist;
+            $dtoSemestre->heuresEctsSemestre->sommeSemestreCmPres += $dtoEc->heuresEctsEc->cmPres;
+            $dtoSemestre->heuresEctsSemestre->sommeSemestreTdPres += $dtoEc->heuresEctsEc->tdPres;
+            $dtoSemestre->heuresEctsSemestre->sommeSemestreTpPres += $dtoEc->heuresEctsEc->tpPres;
+            $dtoSemestre->heuresEctsSemestre->sommeSemestreTePres += $dtoEc->heuresEctsEc->tePres;
+        }
     }
 }

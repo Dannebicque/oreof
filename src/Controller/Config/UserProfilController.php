@@ -263,15 +263,15 @@ class UserProfilController extends BaseController
         ]);
     }
 
-    #[Route('/liste/profil/{user}', name: 'app_user_gestion_liste_modal')]
-    public function listeProfil(User $user): Response
-    {
-        return $this->render('user_profils/_liste_centre.html.twig', [
-            'user' => $user,
-            'centres' => CentreGestionEnum::cases(),
-            'userProfils' => $user->getUserProfils()
-        ]);
-    }
+//    #[Route('/liste/profil/{user}', name: 'app_user_gestion_liste_modal')]
+//    public function listeProfil(User $user): Response
+//    {
+//        return $this->render('user_profils/_liste_centre.html.twig', [
+//            'user' => $user,
+//            'centres' => CentreGestionEnum::cases(),
+//            'userProfils' => $user->getUserProfils()
+//        ]);
+//    }
 
 
     #[Route('/show-attente/{id}', name: 'show_attente', methods: ['GET'])]

@@ -60,6 +60,7 @@ class StructureSemestre
 
         ksort($this->ues, SORT_NUMERIC);
 
+        // todo: cette partie est à déporter dans le calcul des structures
         if ($this->withEcts) {
             $this->heuresEctsSemestre->addUe($structureUe->getHeuresEctsUe());
         }

@@ -305,7 +305,6 @@ class Parcours
         $this->elementConstitutifs = new ArrayCollection();
         $this->commentaires = new ArrayCollection();
         $this->parcoursVersionings = new ArrayCollection();
-        $this->adresses = new ArrayCollection();
         $this->contacts = new ArrayCollection();
         $this->dpeParcours = new ArrayCollection();
         $this->niveauFrancais = NiveauLangueEnum::B2;

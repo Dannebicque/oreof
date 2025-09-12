@@ -85,7 +85,6 @@ class ParcoursMcccExportController extends BaseController
         //date conseil
         $dpe = GetDpeParcours::getFromParcours($parcours);
         if ($dpe !== null) {
-            $dateCfvu = $getHistorique->getHistoriqueParcoursLastStep($dpe, 'soumis_cfvu');
             $dateConseil = $getHistorique->getHistoriqueParcoursLastStep($dpe, 'soumis_conseil');
         }
 
@@ -93,13 +92,13 @@ class ParcoursMcccExportController extends BaseController
             'xlsx' => $typeDiplome->exportExcelVersionMccc(
                 $this->getCampagneCollecte(),
                 $parcours,
-                $dateCfvu?->getDate() ?? null,
+                null,
                 $dateConseil?->getDate() ?? null
             ),
             'pdf' => $typeDiplome->exportPdfMccc(
                 $this->getCampagneCollecte(),
                 $parcours,
-                $dateCfvu?->getDate() ?? null,
+                null,
                 $dateConseil?->getDate() ?? null
             ),
             default => throw new Exception('Format non géré'),
@@ -153,22 +152,42 @@ class ParcoursMcccExportController extends BaseController
         string                 $format = 'complet'
     ): Response
     {
+
+        $dpeArray = $entityManager->getRepository(CampagneCollecte::class)->findBy([], ["id" => "ASC"]);
+        $dpeArray = array_map(fn($dpe) => $dpe->getAnnee(), $dpeArray);
+
+        function getFileName($parcours, $campagneId, $format, $dpeArray){
+            $fileYear = $dpeArray[$campagneId - 1];
+
+            $fileName = $format === 'simplifie'
+            ? "MCCC-Parcours-{$parcours->getId()}-{$fileYear}-simplifie.pdf"
+            : "MCCC-Parcours-{$parcours->getId()}-{$fileYear}.pdf";
+
+            $fileName = __DIR__ . "/../../public/mccc-export/{$fileName}";
+
+            return $fileName;
+        };
+
         if(in_array($format, ['complet', 'simplifie']) === false){
             throw $this->createNotFoundException('File Type is invalid');
         }
 
-        $dpe = $entityManager->getRepository(CampagneCollecte::class)->findOneBy(['id' => 1]);
-
-        $fileName = "MCCC-Parcours-{$parcours->getId()}-{$dpe->getAnnee()}";
-        if($format === "simplifie"){
-            $fileName .= "-simplifie";
-        }
-        $fileName .= ".pdf";
-
+        // On essaie la première année
         try {
-            $pdf = file_get_contents(__DIR__ . "/../../public/mccc-export/{$fileName}");
+            $pdf = file_get_contents(
+                getFileName($parcours, 1, $format, $dpeArray)
+            );
         } catch (Exception $e) {
-            throw $this->createNotFoundException("Le fichier demandé n'a pas été trouvé");
+            // Sinon, on essaie avec la deuxième
+            try{
+                $pdf = file_get_contents(
+                    getFileName($parcours, 2, $format, $dpeArray)
+                );
+            }
+            // S'il n'y a pas de correspondance, on émet un message d'erreur
+            catch(Exception $error){
+                throw $this->createNotFoundException("Le fichier demandé n'a pas été trouvé");
+            }
         }
 
         return new Response($pdf, 200, [

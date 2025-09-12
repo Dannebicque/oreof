@@ -113,7 +113,10 @@
                                 </div>
                         {% else %}
                             {% if
-                                ((is_granted('MANAGE', {route: 'app_fiche_matiere', subject: this.ficheMatiere}) or is_granted('MANAGE', {route: 'app_parcours', subject: this.ficheMatiere.parcours}))  and  (this.process[this.place].transition == 'en_cours_redaction' or is_granted('ROLE_ADMIN'))) %}
+                                ((is_granted('MANAGE', {route: 'app_fiche_matiere', subject: this.ficheMatiere}) or
+                                is_granted('MANAGE', {route: 'app_fiche_matiere_hd', subject: 'etablissement'}) or
+                                is_granted('MANAGE', {route: 'app_parcours', subject: this.ficheMatiere.parcours}))  and
+                                (this.process[this.place].transition == 'en_cours_redaction' )) or is_granted('ROLE_ADMIN') %}
                                 <div class="col-6">
                                     <div class="row">
                                         {% for key, state in hasTransitions(this.ficheMatiere, 'fiche') %}
