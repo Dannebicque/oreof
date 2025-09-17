@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2025. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Controller/ProcessValidationController.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 17/09/2025 20:58
+ */
 
 namespace App\Controller;
 
@@ -405,7 +412,7 @@ class ProcessValidationController extends BaseController
 
         if ($request->isMethod('POST')) {
             $this->toast('success', 'Parcours validés');
-            return $this->redirectToRoute('app_validation_index');
+            return $this->redirectToRoute('app_validation_dpe_index');
         }
 
         return $this->render('process_validation/_valide_lot.html.twig', [
@@ -454,7 +461,7 @@ class ProcessValidationController extends BaseController
 
         if ($request->isMethod('POST')) {
             $this->toast('success', 'Parcours refusés');
-            return $this->redirectToRoute('app_validation_index');
+            return $this->redirectToRoute('app_validation_dpe_index');
         }
 
         return $this->render('process_validation/_refuse_lot.html.twig', [
@@ -503,7 +510,7 @@ class ProcessValidationController extends BaseController
 
         if ($request->isMethod('POST')) {
             $this->toast('success', 'Formations marquées avec des réserves');
-            return $this->redirectToRoute('app_validation_index');
+            return $this->redirectToRoute('app_validation_dpe_index');
         }
 
         return $this->render('process_validation/_reserve_lot.html.twig', [
