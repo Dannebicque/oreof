@@ -34,7 +34,7 @@ class CalculStructureParcoursBut
                 $raccrocheSemestre = false;
             }
 
-            if ($semestre !== null && $semestre->isNonDispense() === false) {
+            if ($semestre !== null && $semestre->isNonDispense() === false && $semestreParcours->isOuvert() === true) {
                 $dtoSemestre = new StructureSemestre($semestre, $semestreParcours->getOrdre(), $raccrocheSemestre, $semestreParcours, false);
                 $dtoSemestre->heuresEctsSemestre = new HeuresEctsSemestre();
                 $this->tabSemestreEc[$semestreParcours->getOrdre()] = [];
