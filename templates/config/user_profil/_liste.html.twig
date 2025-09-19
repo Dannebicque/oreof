@@ -92,7 +92,7 @@
                             {{ stimulus_controller('modal', {
                                 size: 'lg',
                                 modalTitle: 'Modifier un utilisateur',
-                                modalUrl: path('app_user_edit',{'id': user.id}) }) }}
+                                modalUrl: path('app_user_edit',{'id': user.user.id}) }) }}
                             data-action="click->modal#openModal"
                             class="btn btn-sm text-warning"
                             data-size="lg"
