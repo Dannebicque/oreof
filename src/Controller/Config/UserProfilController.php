@@ -20,7 +20,6 @@ use App\Repository\EtablissementRepository;
 use App\Repository\FormationRepository;
 use App\Repository\ParcoursRepository;
 use App\Repository\ProfilRepository;
-use App\Repository\RoleRepository;
 use App\Repository\UserProfilRepository;
 use App\Repository\UserRepository;
 use App\Utils\JsonRequest;
@@ -320,18 +319,4 @@ class UserProfilController extends BaseController
 
         return $this->json(true);
     }
-
-//    #[Route('/gestion/{user}', name: 'gestion')]
-//    /** @deprecated */
-//    public function gestionCentre(
-//        ProfilRepository $profilRepository,
-//        User             $user
-//    ): Response
-//    {
-//        return $this->render('config/user_profil/_gestion_centre.html.twig', [
-//            'user' => $user,
-//            'centres' => CentreGestionEnum::cases(),
-//            'roles' => $profilRepository->findAll()
-//        ]);
-//    }
 }

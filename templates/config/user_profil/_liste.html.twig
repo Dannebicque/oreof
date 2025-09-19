@@ -87,22 +87,22 @@
                     <i class="{{ iconEdit }}"></i>
                     <span> Gestion des profils</span>
                 </button>
-                {#                {% if is_granted('ROLE_ADMIN') %} #}
-                {#                    <button #}
-                {#                            {{ stimulus_controller('modal', { #}
-                {#                                size: 'lg', #}
-                {#                                modalTitle: 'Modifier un utilisateur', #}
-                {#                                modalUrl: path('app_user_edit',{'id': user.id}) }) }} #}
-                {#                            data-action="click->modal#openModal" #}
-                {#                            class="btn btn-sm text-warning" #}
-                {#                            data-size="lg" #}
-                {#                            data-bs-toggle="tooltip" #}
-                {#                            data-bs-placement="bottom" #}
-                {#                            title="Modifier un utilisateur" #}
-                {#                    > #}
-                {#                        <i class="{{ iconEdit }}"></i> #}
-                {#                        <span> Modifier l'utilisateur</span> #}
-                {#                    </button> #}
+                {% if is_granted('ROLE_ADMIN') %}
+                    <button
+                            {{ stimulus_controller('modal', {
+                                size: 'lg',
+                                modalTitle: 'Modifier un utilisateur',
+                                modalUrl: path('app_user_edit',{'id': user.id}) }) }}
+                            data-action="click->modal#openModal"
+                            class="btn btn-sm text-warning"
+                            data-size="lg"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="bottom"
+                            title="Modifier un utilisateur"
+                    >
+                        <i class="{{ iconEdit }}"></i>
+                        <span> Modifier l'utilisateur</span>
+                    </button>
 
                 {#                    <button {{ stimulus_action('crud', 'delete', 'click', { #}
                 {#                        url:path('app_user_delete',{'id': user.id}), #}
@@ -110,7 +110,7 @@
                 {#                    }) }} class="btn btn-sm text-danger"> #}
                 {#                        <i class="{{ iconDelete }}"></i> Supprimer #}
                 {#                    </button> #}
-                {#                {% endif %} #}
+                {% endif %}
             </td>
 
         </tr>
