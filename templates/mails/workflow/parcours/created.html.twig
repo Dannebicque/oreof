@@ -1,0 +1,15 @@
+{% extends 'mails/base_mail.html.twig' %}
+
+{% block content %}
+    <p>Bonjour {{ parcours.getRespParcours.display }}
+        , {% if parcours.getCoResponsable != null %}{{ parcours.getCoResponsable.display }},{% endif %} {% if formation.getResponsableMention != null %}{{ formation.getResponsableMention.display }},{% endif %} {% if formation.getCoResponsable != null %}{{ formation.getCoResponsable.display }},{% endif %}</p>
+
+    <p>Le parcours <strong>{{ parcours.libelle }}</strong> de la formation <strong>{{ formation.displayLong }}</strong>,
+        vient d'être créé.</p>
+
+    <p>Vous devez compléter les éléments pour la soumettre à la CFVU.</p>
+
+    <p>Vous pouvez accéder au parcours via le lien suivant : <a
+                href="{{ url('app_parcours_edit', {'id': parcours.id}) }}">Voir et compléter le parcours</a></p>
+
+{% endblock %}
