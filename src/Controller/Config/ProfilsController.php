@@ -32,11 +32,13 @@ class ProfilsController extends BaseController
 {
     #[Route('/', name: 'index', methods: ['GET'])]
     public function index(
+        Request $request,
         ProfilRepository $profilRepository,
     ): Response
     {
         return $this->render('config/profils/index.html.twig', [
             'profils' => $profilRepository->findAll(),
+            'profilId' => $request->query->get('profil') ?? 0,
         ]);
     }
 
@@ -49,6 +51,7 @@ class ProfilsController extends BaseController
         $profil = $profilRepository->find($request->query->get('profil'));
         if ($profil) {
             $form = $this->createForm(ProfilType::class, $profil, [
+                'action' => $this->generateUrl('app_administration_profils_editer', ['profil' => $profil->getId()]),
             ]);
             $form->handleRequest($request);
             $permissions = $profil->getProfilDroits();
@@ -91,6 +94,27 @@ class ProfilsController extends BaseController
         return $this->render('config/profils/new.html.twig', [
             'form' => $form->createView(),
         ]);
+    }
+
+
+    #[Route('/modifier/{profil}', name: 'editer')]
+    public function editer(
+        Request                $request,
+        EntityManagerInterface $entityManager,
+        Profil                 $profil,
+    ): Response
+    {
+        $form = $this->createForm(ProfilType::class, $profil, [
+            'action' => $this->generateUrl('app_administration_profils_editer', ['profil' => $profil->getId()]),
+        ]);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($profil);
+            $entityManager->flush();
+        }
+
+        return $this->redirect($this->generateUrl('app_administration_profils_index', ['profil' => $profil->getId()]));
     }
 
     #[Route('/change-droit', name: 'change_droit')]

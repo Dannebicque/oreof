@@ -2,6 +2,7 @@
 
 {% block content %}
     <div {{ stimulus_controller('profil--index', {
+        profil: profilId,
         urlListe: path('app_administration_profils_liste'),
         urlChangeDroit: path('app_administration_profils_change_droit'),
     }) }}>
@@ -16,7 +17,9 @@
                         >
                             <option value="">Choisir un profil</option>
                             {% for profil in profils %}
-                                <option value="{{ profil.id }}">{{ profil.libelle }}</option>
+                                <option value="{{ profil.id }}"
+                                        {% if profil.id == profilId %}selected{% endif %}
+                                >{{ profil.libelle }}</option>
                             {% endfor %}
                         </select>
                     </div>
