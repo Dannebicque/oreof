@@ -6,6 +6,7 @@ use App\Classes\GetHistorique;
 use App\Entity\DpeParcours;
 use App\Entity\Formation;
 use App\Entity\ParcoursVersioning;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -37,6 +38,10 @@ class ApiJsonExport {
         SymfonyStyle $io = null
     ): array
     {
+
+        $dateValidation = new DateTime('2025-09-21 00:00:00');
+        $dateValidation = $dateValidation->format('Y-m-d H:i:s');
+
         $dataJSON = [];
         $formationArray = $this->entityManager->getRepository(Formation::class)->findAll();
         $urlPrefix = "https://" . $hostname;
@@ -109,7 +114,10 @@ class ApiJsonExport {
                     'id' => $formation->getId(),
                     'libelle' => $formation->getDisplayLong(),
                     'parcours' => $tParcours,
-                    'dateValidation' => $dateValidationFormation?->format('Y-m-d H:i:s') ?? null
+                    'dateValidation' => $dateValidation
+                    
+                    // Date de validation calculée
+                    // $dateValidationFormation?->format('Y-m-d H:i:s') ?? null
                 ];
             }
 
