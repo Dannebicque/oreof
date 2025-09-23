@@ -135,7 +135,18 @@ class UserController extends BaseController
         $user = $userRepository->findOneBy(['email' => $email]);
 
         if ($user !== null) {
+            // utilisateur déjà en BDD, on le réactive et on met à jour ses infos depuis le LDAP
+
+            $dataUsers = $ldap->getDatas($email);
+            if ($dataUsers === null) {
+                $this->addFlash('danger', 'L\'utilisateur n\'a pas été trouvé dans l\'annuaire LDAP');
+                return $this->json(false, 500);
+            }
             $user->setIsDeleted(false);
+            $user->setUsername($dataUsers['username']);
+            $user->setNom($dataUsers['nom']);
+            $user->setPrenom($dataUsers['prenom']);
+            $this->addFlash('info', 'L\'utilisateur existant a été mis à jour avec les informations LDAP.');
         } else {
             $user = new User();
             $user->setEmail($email);
@@ -144,7 +155,6 @@ class UserController extends BaseController
                 $this->addFlash('danger', 'L\'utilisateur n\'a pas été trouvé dans l\'annuaire LDAP');
                 return $this->json(false, 500);
             }
-
             $user->setUsername($dataUsers['username']);
             $user->setNom($dataUsers['nom']);
             $user->setPrenom($dataUsers['prenom']);

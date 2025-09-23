@@ -68,7 +68,11 @@ class DpeParcoursRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findByCampagneAndTypeValidation(CampagneCollecte $campagneCollecte, string $typeValidation): array
+    public function findByCampagneAndTypeValidation(
+        CampagneCollecte $campagneCollecte,
+        string           $typeValidation,
+        ?Composante      $composante = null,
+    ): array
     {
         $query = $this->createQueryBuilder('d')
             ->innerJoin('d.formation', 'f')
@@ -82,6 +86,11 @@ class DpeParcoursRepository extends ServiceEntityRepository
             ->addOrderBy('m.libelle', 'ASC')
             ->addOrderBy('f.mentionTexte', 'ASC')
         ;
+
+        if ($composante !== null) {
+            $query->andWhere('f.composantePorteuse = :composante')
+                ->setParameter('composante', $composante);
+        }
 
         return $query->getQuery()
             ->getResult();

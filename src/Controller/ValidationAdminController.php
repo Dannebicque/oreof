@@ -1,10 +1,10 @@
 <?php
 /*
  * Copyright (c) 2025. | David Annebicque | ORéOF  - All Rights Reserved
- * @file /Users/davidannebicque/Sites/oreof/src/Controller/ValidationComposanteController.php
+ * @file /Users/davidannebicque/Sites/oreof/src/Controller/ValidationAdminController.php
  * @author davidannebicque
  * @project oreof
- * @lastUpdate 26/05/2025 16:32
+ * @lastUpdate 17/09/2025 20:58
  */
 
 namespace App\Controller;
@@ -26,8 +26,7 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/validation/administration/', name: 'app_validation_')]
 class ValidationAdminController extends BaseController
 {
-
-    #[Route('/validation/fiche/export', name: 'app_validation_verification_fiche_export')]
+    #[Route('/validation/fiche/export', name: 'verification_fiche_export')]
     //todo: gérer la composante
     public function ficheExportVerification(
         ExcelWriter            $excelWriter,
@@ -124,15 +123,23 @@ class ValidationAdminController extends BaseController
 
     #[Route('dpe/liste', name: 'dpe_liste')]
     public function dpeListe(
+        ComposanteRepository $composanteRepository,
         ValidationProcess     $validationProcess,
         DpeParcoursRepository $dpeParcoursRepository,
         Request               $request
     ): Response
     {
         $typeValidation = $request->query->get('typeValidation');
+        $idComposante = $request->query->get('composante', null);
         $process = $validationProcess->getEtape($typeValidation);
 
-        $allparcours = $dpeParcoursRepository->findByCampagneAndTypeValidation($this->getCampagneCollecte(), $typeValidation);
+        if ($idComposante) {
+            $composante = $composanteRepository->find($idComposante);
+        } else {
+            $composante = null;
+        }
+
+        $allparcours = $dpeParcoursRepository->findByCampagneAndTypeValidation($this->getCampagneCollecte(), $typeValidation, $composante);
 
 
         return $this->render('validation/_liste.html.twig', [

@@ -94,7 +94,7 @@ class ButMccc extends AbstractButMccc
         $tabSemestres = [];
         $semestres = $parcours->getSemestreParcours();
         foreach ($semestres as $semParc) {
-            if ($semParc->getSemestre()?->isNonDispense() === false) {
+            if ($semParc->getSemestre()?->isNonDispense() === false && $semParc->isOuvert() === true) {
                 if ($semParc->getSemestre()?->getSemestreRaccroche() !== null) {
                     $tabSemestres[$semParc->getOrdre()] = $semParc->getSemestre()?->getSemestreRaccroche();
                 } else {
