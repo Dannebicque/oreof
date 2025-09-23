@@ -635,7 +635,6 @@ class LicenceMcccVersion extends AbstractLicenceMccc
     private function calculDisplayMccc(array $mcccs, string $typeMccc, bool $isQuitus = false): array
     {
         $tDisplay = [];
-        dump('-------');
 
         switch ($typeMccc) {
             case 'cc':
