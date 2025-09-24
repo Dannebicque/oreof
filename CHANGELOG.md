@@ -2,6 +2,38 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.45.0](https://github.com/Dannebicque/oreof/compare/v1.44.1...v1.45.0) (2025-09-24)
+
+
+### Features
+
+* **Parcours:** implement event-driven notifications for newly created parcours ([c02765e](https://github.com/Dannebicque/oreof/commit/c02765eff53b3c9bd45d332aa909c78a7d685f03))
+
+
+### Bug Fixes
+
+* **_formation.html.twig:** add conditional link for PV based on etape type ([c0ccde2](https://github.com/Dannebicque/oreof/commit/c0ccde250603f05b5532f86877900ff9f3f47f6b))
+* **_formation.html.twig:** add conditional link for PV based on etape type ([8025870](https://github.com/Dannebicque/oreof/commit/80258705a14a25dd382851e3df27d7ea9f28f9ca))
+* **_liste.html.twig:** remove commented-out delete button code for user management ([9a633ee](https://github.com/Dannebicque/oreof/commit/9a633eead7dea048d5a89934efc28703880e2ee2))
+* **_liste.html.twig:** remove commented-out delete button code for user management ([256dbd6](https://github.com/Dannebicque/oreof/commit/256dbd64e410c2916cffef5476b0cee418859305))
+* **ButMccc.php, ButMcccVersion.php, CalculStructureParcoursBut.php:** enhance semester filtering logic to include only open semesters ([4f68485](https://github.com/Dannebicque/oreof/commit/4f6848585fb9f848207aa1fac3738a0edced66be))
+* **DpeParcours.php:** update logic to retrieve demandes for default parcours ([60346ee](https://github.com/Dannebicque/oreof/commit/60346ee57be6fda63464d791568bc31ce2c42a18))
+* **FormationController.php, WorkflowExtension.php, Access.php:** refactor access checks using isOuvert function for improved clarity and maintainability ([d911332](https://github.com/Dannebicque/oreof/commit/d91133297e6730c2dfb38c91bb720f483856e0e0))
+* **GetFormations.php:** comment out authorization check for formation visibility ([3c430e3](https://github.com/Dannebicque/oreof/commit/3c430e3728029202b71fcdd4302c0bbbd805c2b1))
+* **LicenceMcccVersion.php:** adjust percentage calculations in display functions to account for varying factors ([7d90dc1](https://github.com/Dannebicque/oreof/commit/7d90dc1e78dda28a507b3732f08bd101cbd12ce5))
+* **LicenceMcccVersion.php:** adjust percentage calculations in display functions to account for varying factors ([11cf8c5](https://github.com/Dannebicque/oreof/commit/11cf8c5cdbe68b06c59524b0c0033b9b4707e459))
+* **parcours_manage.html.twig:** enhance permission checks for formation and composante management ([ddafa9d](https://github.com/Dannebicque/oreof/commit/ddafa9d3220b317c6485fa6f5cc40324cb4f1ca1))
+* **ParcoursContactController.php:** remove associated adresse entity when deleting contact ([6bb83da](https://github.com/Dannebicque/oreof/commit/6bb83da6465841efe5e7cfd3854c2f482f7cc6af))
+* **ParcoursContactController.php:** remove associated adresse entity when deleting contact ([a0bfb23](https://github.com/Dannebicque/oreof/commit/a0bfb2335c44eaa68b91786e0ead2306c6d77e26))
+* **ProcessValidationController.php, ValidationAdminController.php, DpeParcoursRepository.php:** update redirect routes and enhance query filtering for validation processes ([ceb2c68](https://github.com/Dannebicque/oreof/commit/ceb2c68cd13d3fc7070ada0de2d355b8ac48df8d))
+* **Profils:** enhance profil management with dynamic updates and improved form handling ([90cfa27](https://github.com/Dannebicque/oreof/commit/90cfa27e3b29753bf3dc9e1fbf21ec22030d7c14))
+* **show.html.twig:** refine permission checks for parcours editing based on status ([7ded66d](https://github.com/Dannebicque/oreof/commit/7ded66d977dcd7ebf41b9ea2d0285cd661201d9a))
+* **show.html.twig:** replace direct state checks with isOuvert function for better clarity ([1724421](https://github.com/Dannebicque/oreof/commit/17244215cf704235ef9ab3c81bf85139a3ccc0d9))
+* **step1.html.twig:** enhance permission checks for parcours editing ([315c9fe](https://github.com/Dannebicque/oreof/commit/315c9fe86a55b787740edb11cef75986e8005aeb))
+* **UserController.php, UserGestionController.php:** update user data from LDAP when reactivating existing users ([bacedde](https://github.com/Dannebicque/oreof/commit/baceddeaff9aaf26198492723dae2c0f1f6674f6))
+* **UserProfilsController, UserProfilRepository:** add campagneCollecte parameter to role checks and enhance parcours selection in profile configuration ([e9e4ade](https://github.com/Dannebicque/oreof/commit/e9e4aded666136bbc983dacda832b9e93f4d45fb))
+* **WorkflowExtension.php:** add isOuvert function to enhance entity state checks ([fbd4652](https://github.com/Dannebicque/oreof/commit/fbd4652e2d680a8ddd9f1e34e0e48502b797a827))
+
 ## [1.44.1](https://github.com/Dannebicque/oreof/compare/v1.44.0...v1.44.1) (2025-09-02)
 
 
