@@ -51,8 +51,8 @@ class ExportMccc
 
         foreach ($this->formations as $formationId) {
             $formation = $this->formationRepository->findOneBy(['id' => $formationId, 'anneeUniversitaire' => $this->annee->getId()]);
-            if ($formation !== null && $formation->getTypeDiplome()?->getModeleMcc() !== null) {
-                $typeDiplome = $this->typeDiplomeResolver->get($formation->getTypeDiplome());
+            if ($formation !== null) {
+                $typeDiplome = $this->typeDiplomeResolver->getFromFormation($formation);
                 if (null !== $typeDiplome) {
                     foreach ($formation->getParcours() as $parcours) {
                         if ($this->format === 'xlsx') {
@@ -118,10 +118,9 @@ class ExportMccc
             }
             $formation = $parcours->getFormation();
 
-            if ($formation !== null && $formation->getTypeDiplome()?->getModeleMcc() !== null) {
-                $typeDiplome = $this->typeDiplomeResolver->get($formation->getTypeDiplome());
+            if ($formation !== null) {
+                $typeDiplome = $this->typeDiplomeResolver->getFromFormation($formation);
                 if (null !== $typeDiplome) {
-
                         if ($formation->isHasParcours() === true) {
                             $texte = $formation->gettypeDiplome()?->getLibelleCourt(). ' ' . $formation->getSigle() . ' ' . $parcours->getSigle();
                         } else {

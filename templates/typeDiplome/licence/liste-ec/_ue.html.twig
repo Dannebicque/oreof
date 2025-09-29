@@ -1,5 +1,4 @@
-{% if ue.ueRaccrochee == true %}
-    {% set ue = ue.ueRaccrochee.ue %}
+{% if ue.ue.ueRaccrochee == true %}
     {% set raccrocheUe = true or isSemestreRaccroche %}
 {% else %}
     {% set raccrocheUe = false or isSemestreRaccroche %}
@@ -8,7 +7,7 @@
 {% set editableCfvu = isAccessible(dpeParcours, 'cfvu') %}
 
 <tr>
-    <th colspan="7" class="font-weight-bold">{{ ue.display(parcours) }} {% if raccrocheUe == true %}<i
+    <th colspan="7" class="font-weight-bold">{{ ue.ue.display(parcours) }} {% if raccrocheUe == true %}<i
                 class="fa fa-link"></i>{% endif %}</th>
 </tr>
 <tr>
@@ -19,13 +18,10 @@
     <th class="font-weight-bold">BCC</th>
     <th class="font-weight-bold">Vol. Horaire</th>
     <th class="font-weight-bold">MCCC</th>
-
-
 </tr>
-{# todo: améliorer l'affichage et reprendre les éléments comme CalculStructure... #}
-{% for ec in tabEcs[semParc.ordre][ue.id] %}
-    {{ include('parcours_ec/_ec.html.twig', {ec:ec, enfant:false}) }}
-    {% for ece in ec.ecEnfants %}
-        {{ include('parcours_ec/_ec.html.twig', {ec:ece, enfant:true}) }}
+{% for ec in ue.elementConstitutifs %}
+    {{ include('typeDiplome/licence/liste-ec/_ec.html.twig', {ec:ec, enfant:false}) }}
+    {% for ece in ec.elementsConstitutifsEnfants %}
+        {{ include('typeDiplome/licence/liste-ec/_ec.html.twig', {ec:ece, enfant:true}) }}
     {% endfor %}
 {% endfor %}

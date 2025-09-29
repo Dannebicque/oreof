@@ -9,6 +9,7 @@ use App\Repository\ElementConstitutifRepository;
 use App\Repository\FicheMatiereRepository;
 use App\Repository\TypeEcRepository;
 use App\Repository\UeRepository;
+use App\Service\TypeDiplomeResolver;
 use App\Utils\Tools;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,56 +20,19 @@ class ParcoursEcController extends AbstractController
 {
     #[Route('/parcours/ec/liste/{parcours}', name: 'app_parcours_ec')]
     public function index(
+        TypeDiplomeResolver $typeDiplomeResolver,
         TypeEcRepository             $typeEcRepository,
-        ElementConstitutifRepository $ecRepository,
         Parcours                     $parcours
     ): Response {
-        $ecs = $ecRepository->findByParcours($parcours);
-        $tabEcs = [];
-
-        foreach ($parcours->getSemestreParcours() as $semestreParcour) {
-            $tabEcs[$semestreParcour->getOrdre()] = [];
-
-            if ($semestreParcour->getSemestre()->getSemestreRaccroche() !== null) {
-                $semestre = $semestreParcour->getSemestre()->getSemestreRaccroche();
-            } else {
-                $semestre = $semestreParcour;
-            }
-
-            foreach ($semestre->getSemestre()->getUes() as $ue) {
-                if ($ue->getUeParent() === null) {
-                    if ($ue->getUeRaccrochee() !== null) {
-                        $ue = $ue->getUeRaccrochee()->getUe();
-                    }
-
-                    $tabEcs[$semestreParcour->getOrdre()][$ue->getId()] = [];
-                    foreach ($ue->getElementConstitutifs() as $ec) {
-                        if ($ec->getEcParent() === null) {
-                            $tabEcs[$semestreParcour->getOrdre()][$ue->getId()][] = $ec;
-                        }
-                    }
-                }
-                foreach ($ue->getUeEnfants() as $uee) {
-                    if ($uee->getUeRaccrochee() !== null) {
-                        $uee = $uee->getUeRaccrochee()->getUe();
-                    }
-
-                    $tabEcs[$semestreParcour->getOrdre()][$uee->getId()] = [];
-                    foreach ($uee->getElementConstitutifs() as $ec) {
-                        if ($ec->getEcParent() === null) {
-                            $tabEcs[$semestreParcour->getOrdre()][$uee->getId()][] = $ec;
-                        }
-                    }
-                }
-            }
-        }
-
+        $typeD = $typeDiplomeResolver->getFromParcours($parcours);
+        $dto = $typeD->calculStructureParcours($parcours);
 
         return $this->render('parcours_ec/index.html.twig', [
+            'typeD' => $typeD,
+            'dto' => $dto,
             'parcours' => $parcours,
             'dpeParcours' => GetDpeParcours::getFromParcours($parcours),
-            'tabEcs' => $tabEcs,
-            'typesEc' => $typeEcRepository->findByTypeDiplome($parcours->getFormation()->getTypeDiplome())
+            'typesEc' => $typeEcRepository->findByTypeDiplome($parcours->getFormation()?->getTypeDiplome())
         ]);
     }
 

@@ -95,7 +95,7 @@ class McccPdfCommand extends Command
                 $io->writeln("Récupération du Parcours : [O.K]");
                 $io->writeln("\n" . $parcours->getFormation()->getDisplayLong());
 
-                $anneeDpe = $this->entityManager->getRepository(CampagneCollecte::class)->findOneBy(['defaut' => 1]);
+                $anneeDpe = $this->entityManager->getRepository(CampagneCollecte::class)->findOneBy(['defaut' => 2]);
                 $typeDiplomeParcours = $parcours->getFormation()->getTypeDiplome()->getLibelleCourt();
 
                 $dpeParcours = GetDpeParcours::getFromParcours($parcours);
@@ -271,7 +271,7 @@ class McccPdfCommand extends Command
             return Command::SUCCESS;
         } elseif($generateTodayCfvuValid){
             // Récupération des parcours
-            $dpe = $this->entityManager->getRepository(CampagneCollecte::class)->findOneBy(['defaut' => 1]);
+            $dpe = $this->entityManager->getRepository(CampagneCollecte::class)->findOneBy(['defaut' => 2]);
             $parcoursArray = $this->entityManager->getRepository(Parcours::class)->findAllParcoursForDpe($dpe);
             // Filtrage pour ne garder que ceux qui ont été validés aujourd'hui
             $parcoursArray = array_filter(
@@ -280,7 +280,7 @@ class McccPdfCommand extends Command
                     $lastDpe = $parcours->getDpeParcours()->last();
 
                     $dateHistoriquePublication = $this->getHistorique
-                        ->getHistoriqueParcoursLastStep($lastDpe, 'valide_a_publier')
+                        ->getHistoriqueParcoursLastStep($lastDpe, 'valide_cfvu')
                         ?->getDate();
 
                     $dateFormat = 'd-m-Y';

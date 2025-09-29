@@ -9,6 +9,8 @@
 
 namespace App\Service;
 
+use App\Entity\Formation;
+use App\Entity\Parcours;
 use App\Entity\TypeDiplome;
 use App\TypeDiplome\TypeDiplomeHandlerInterface;
 use LogicException;
@@ -23,10 +25,40 @@ final class TypeDiplomeResolver
     {
     }
 
+    public function getFromFormation(?Formation $formation): TypeDiplomeHandlerInterface
+    {
+        if (null === $formation) {
+            throw new LogicException('No formation');
+        }
+
+        if (null === $formation->getTypeDiplome()) {
+            throw new LogicException('No type diplome');
+        }
+
+        return $this->get($formation->getTypeDiplome());
+    }
+
+    public function getFromParcours(?Parcours $parcours): TypeDiplomeHandlerInterface
+    {
+        if (null === $parcours) {
+            throw new LogicException('No parcours');
+        }
+
+        if (null === $parcours->getFormation()) {
+            throw new LogicException('No formation');
+        }
+
+        if (null === $parcours->getFormation()->getTypeDiplome()) {
+            throw new LogicException('No type diplome');
+        }
+
+        return $this->get($parcours->getFormation()->getTypeDiplome());
+    }
+
     public function get(TypeDiplome $type): TypeDiplomeHandlerInterface
     {
         foreach ($this->handlers as $h) {
-            if ($h->supports($type->getModeleMcc())) {
+            if ($h->supports($type->getLibelleCourt())) {
                 $this->handler = $h;
                 return $h;
             }

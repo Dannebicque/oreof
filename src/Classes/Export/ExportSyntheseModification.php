@@ -55,8 +55,11 @@ class ExportSyntheseModification
                     if ($parc['parcours']->getParcoursOrigineCopie() === null) {
                         $dto = null;
                     } else {
-                        $typeD = $this->typeDiplomeResolver->get($form?->getTypeDiplome());
+                        $typeD = $this->typeDiplomeResolver->getFromFormation($form);
                         $parco = $this->parcoursRepository->find($parc['parcours']->getId());
+                        if ($parco === null) {
+                            continue;
+                        }
                         $dto = $typeD->calculStructureParcours($parco, true, false);
                         $structureDifferencesParcours = $this->versioningParcours->getStructureDifferencesBetweenParcoursAndLastVersion($parco);
                         if ($structureDifferencesParcours !== null) {

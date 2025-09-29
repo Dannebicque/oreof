@@ -78,7 +78,7 @@ class ExportCap
             if ($this->dpeParcours !== null) {
                 $parcours = $this->dpeParcours->getParcours();
                 $formation = $this->dpeParcours->getParcours()?->getFormation();
-                $typeDiplome = $this->typeDiplomeResolver->get($formation?->getTypeDiplome());
+                $typeDiplome = $this->typeDiplomeResolver->getFromFormation($formation);
                 if ($formation !== null && $parcours !== null) {
 //                foreach ($formation->getParcours() as $parcours) {
                     $this->data[1] = $formation->getComposantePorteuse()?->getLibelle();

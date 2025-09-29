@@ -37,7 +37,7 @@ class GenereSynthese
         $parcours = $this->parcoursRepository->findByTypeValidationAttenteCfvuAndComposante($dpe, 'soumis_central', $composante); //soumis_cfvu
 
         foreach ($parcours as $parc) {
-            $typeD = $this->typeDiplomeResolver->get($parc->getFormation()?->getTypeDiplome());
+            $typeD = $this->typeDiplomeResolver->getFromParcours($parc);
             // récupérer les demandes de changement et de modification
             $dto = $typeD->calculStructureParcours($parc, true, false);
             $structureDifferencesParcours = $this->versioningParcours->getStructureDifferencesBetweenParcoursAndLastVersion($parc);
@@ -54,7 +54,7 @@ class GenereSynthese
 
     public function getSyntheseByParcours(Parcours $parcours, Composante $composante, CampagneCollecte $dpe): array
     {
-        $typeD = $this->typeDiplomeResolver->get($parcours->getFormation()?->getTypeDiplome());
+        $typeD = $this->typeDiplomeResolver->getFromParcours($parcours);
         // récupérer les demandes de changement et de modification
         $dto = $typeD->calculStructureParcours($parcours, true, false);
         $structureDifferencesParcours = $this->versioningParcours->getStructureDifferencesBetweenParcoursAndLastVersion($parcours);

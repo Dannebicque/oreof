@@ -72,7 +72,7 @@ class ElementConstitutifMcccController extends AbstractController
             throw new RuntimeException('Type de diplome non trouvé');
         }
 
-        $typeD = $this->typeDiplomeResolver->get($typeDiplome);
+        $typeD = $this->typeDiplomeResolver->getFromParcours($parcours);
 
         $raccroche = $elementConstitutif->getFicheMatiere()?->getParcours()?->getId() !== $parcours->getId();
         $getElement = new GetElementConstitutif($elementConstitutif, $parcours);
@@ -230,13 +230,13 @@ class ElementConstitutifMcccController extends AbstractController
                 'isMcccImpose' => $elementConstitutif->getFicheMatiere()?->isMcccImpose(),
                 'isEctsImpose' => $elementConstitutif->getFicheMatiere()?->isEctsImpose(),
                 'typeMccc' => $typeEpreuve,
-                'typeEpreuves' => $typeEpreuveRepository->findByTypeDiplome($typeDiplome),
+                'typeEpreuves' => $typeEpreuveRepository->findByTypeDiplome($typeDiplome),//todo: possible de passert par typeD?
                 'ec' => $elementConstitutif,
                 'ects' => $getElement->getFicheMatiereEcts(),
                 'templateForm' => $typeD::TEMPLATE_FORM_MCCC,
                 'mcccs' => $getElement->getMcccsFromFicheMatiereCollection(),
                 'wizard' => false,
-                'typeDiplome' => $typeDiplome,
+                'typeDiplome' => $typeDiplome,//todo: utile ?
                 'parcours' => $parcours,
                 'isParcoursProprietaire' => $isParcoursProprietaire,
                 'raccroche' => $raccroche
@@ -298,7 +298,7 @@ class ElementConstitutifMcccController extends AbstractController
             'isMcccImpose' => $elementConstitutif->getFicheMatiere()?->isMcccImpose(),
             'isEctsImpose' => $elementConstitutif->getFicheMatiere()?->isEctsImpose(),
             'typeMccc' => $typeEpreuve,
-            'typeEpreuves' => $typeEpreuveRepository->findByTypeDiplome($typeDiplome),
+            'typeEpreuves' => $typeEpreuveRepository->findByTypeDiplome($typeDiplome), //todo: possible de passer par typeD?
             'typeMcccLibelle' => $typeMcccLibelle,
             'ec' => $elementConstitutif,
             'ects' => $ects,
@@ -411,9 +411,7 @@ class ElementConstitutifMcccController extends AbstractController
         }
 
         $getElement = new GetElementConstitutif($elementConstitutif, $parcoursVersioning->getParcours());
-        $tabMcccActuels = $getElement->getMcccsFromFicheMatiere(
-            $typeDiplomeReg->getTypeDiplome($typeDiplome->getModeleMcc())
-        );
+        $tabMcccActuels = $getElement->getMcccsFromFicheMatiere($typeDiplome);
 
         $mcccsToDisplay = $tabMcccActuels;
         if($isFromVersioning === 'true' || ($structureEc->typeMccc !== $typeMccc)){
@@ -434,7 +432,7 @@ class ElementConstitutifMcccController extends AbstractController
             'mcccVersioning' => $tabMcccVersioning,
             'mcccs' => $mcccsToDisplay,
             'isMcccFromVersion' => true,
-            'parcoursId' => $parcoursVersioning->getParcours()->getId(),
+            'parcoursId' => $parcoursVersioning->getParcours()?->getId(),
             'isFromVersioning' => $isFromVersioning,
             'libelleQuelleVersion' => 'Comparaison des versions'
         ]);
@@ -477,7 +475,7 @@ class ElementConstitutifMcccController extends AbstractController
                 'templateForm' => $typeD::TEMPLATE_FORM_MCCC,
                 'mcccs' => $typeD->getMcccs($ficheMatiere),
                 'wizard' => false,
-                'typeDiplome' => $typeDiplome,
+                'typeDiplome' => $typeDiplome,//todo: utile ?
             ]);
         }
         //todo: else ?

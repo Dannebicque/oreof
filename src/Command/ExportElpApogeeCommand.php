@@ -1157,10 +1157,7 @@ class ExportElpApogeeCommand extends Command
      */
     private function getDTOForParcours(Parcours $parcours): StructureParcours
     {
-
-        $typeD = $this->typeDiplomeResolver->get($parcours->getTypeDiplome());
-
-        return $typeD->calculStructureParcours($parcours);
+        return $this->typeDiplomeResolver->getFromParcours($parcours)->calculStructureParcours($parcours);
     }
 
     /**

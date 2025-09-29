@@ -38,7 +38,7 @@ class BlocCompetenceController extends BaseController
         }
 
         $competences = $this->typeDiplomeResolver
-            ->get($parcours->getFormation()?->getTypeDiplome())
+            ->getFromParcours($parcours)
             ->getStructureCompetences($parcours);
 
         return $this->render(
@@ -55,7 +55,7 @@ class BlocCompetenceController extends BaseController
         Parcours            $parcours
     ): Response {
         $competences = $this->typeDiplomeResolver
-            ->get($parcours->getFormation()?->getTypeDiplome())
+            ->getFromParcours($parcours)
             ->getStructureCompetences($parcours);
 
         return $this->render(
