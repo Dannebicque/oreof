@@ -92,7 +92,7 @@ class ElementConstitutifMcccController extends AbstractController
             }
         }
         // Contrôle de la justification de MCCC
-        $typeEpreuvesArray = $typeEpreuveRepository->findByTypeDiplome($typeDiplome);
+        $typeEpreuvesArray = $typeD->getTypeEpreuves();
         $minLengthJustification = 15;
 
         foreach($request->request->all() as $fieldName => $fieldValue){
@@ -230,7 +230,7 @@ class ElementConstitutifMcccController extends AbstractController
                 'isMcccImpose' => $elementConstitutif->getFicheMatiere()?->isMcccImpose(),
                 'isEctsImpose' => $elementConstitutif->getFicheMatiere()?->isEctsImpose(),
                 'typeMccc' => $typeEpreuve,
-                'typeEpreuves' => $typeEpreuveRepository->findByTypeDiplome($typeDiplome),//todo: possible de passert par typeD?
+                'typeEpreuves' => $typeD->getTypeEpreuves(),
                 'ec' => $elementConstitutif,
                 'ects' => $getElement->getFicheMatiereEcts(),
                 'templateForm' => $typeD::TEMPLATE_FORM_MCCC,
@@ -249,7 +249,7 @@ class ElementConstitutifMcccController extends AbstractController
         return $this->render('element_constitutif/_mcccEcNonEditable.html.twig', ['isMcccImpose' => $elementConstitutif->getFicheMatiere()?->isMcccImpose(),
         'isEctsImpose' => $elementConstitutif->getFicheMatiere()?->isEctsImpose(),
         'typeMccc' => $typeEpreuve,
-        'typeEpreuves' => $typeEpreuveRepository->findByTypeDiplome($typeDiplome),
+            'typeEpreuves' => $typeD->getTypeEpreuves(),
         'ec' => $elementConstitutif,
         'ects' => $ects,
         'templateForm' => $typeD::TEMPLATE_FORM_MCCC,
@@ -298,7 +298,7 @@ class ElementConstitutifMcccController extends AbstractController
             'isMcccImpose' => $elementConstitutif->getFicheMatiere()?->isMcccImpose(),
             'isEctsImpose' => $elementConstitutif->getFicheMatiere()?->isEctsImpose(),
             'typeMccc' => $typeEpreuve,
-            'typeEpreuves' => $typeEpreuveRepository->findByTypeDiplome($typeDiplome), //todo: possible de passer par typeD?
+            'typeEpreuves' => $typeD->getTypeEpreuves(),
             'typeMcccLibelle' => $typeMcccLibelle,
             'ec' => $elementConstitutif,
             'ects' => $ects,
@@ -470,7 +470,7 @@ class ElementConstitutifMcccController extends AbstractController
             }
 
             return $this->render('element_constitutif/_mcccEcModalBut.html.twig', [
-                'typeEpreuves' => $typeEpreuveRepository->findByTypeDiplome($typeDiplome),
+                'typeEpreuves' => $typeD->getTypeEpreuves(),
                 'ficheMatiere' => $ficheMatiere,
                 'templateForm' => $typeD::TEMPLATE_FORM_MCCC,
                 'mcccs' => $typeD->getMcccs($ficheMatiere),

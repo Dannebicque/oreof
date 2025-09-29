@@ -189,4 +189,9 @@ final class ButHandler implements TypeDiplomeHandlerInterface
     {
         // TODO: Implement clearMcccs() method.
     }
+
+    public function getTypeEpreuves(): array
+    {
+        return $this->typeEpreuves;
+    }
 }
