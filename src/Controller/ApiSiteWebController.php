@@ -48,7 +48,7 @@ class ApiSiteWebController extends AbstractController
                 if($parcours->getDpeParcours()?->last() instanceof DpeParcours){
                     $etatValidation = $parcours->getDpeParcours()?->last()->getEtatValidation();
                     $campagneCollecte = $parcours->getDpeParcours()?->last()->getCampagneCollecte()?->getId();
-                    if(($etatValidation === ['valide_a_publier' => 1] || $etatValidation === ['publie' => 1]) && $campagneCollecte === 1){
+                    if (($etatValidation === ['valide_a_publier' => 1] || $etatValidation === ['publie' => 1]) && $campagneCollecte === 2) {
                         $isPubliable = true;
                         ++$countParcours;
                     }
