@@ -18,7 +18,6 @@ class ApiSiteWebController extends AbstractController
 {
     #[Route('/api/site/web', name: 'app_api_site_web')]
     public function index(
-        GetHistorique $getHistorique,
         FormationRepository $formatinRepository,
     ): JsonResponse
     {
