@@ -21,10 +21,9 @@ class ApiSiteWebController extends AbstractController
         FormationRepository $formatinRepository,
     ): JsonResponse
     {
-
         // DATE DE PUBLICATION : 30-09-2024
         $datePublication = new DateTime();
-        $datePublication->setDate(2024, 9, 30);
+        $datePublication->setDate(2025, 9, 30);
         $datePublication->setTime(0, 0);
 
         $data = [];
