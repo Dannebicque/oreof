@@ -51,8 +51,8 @@ services:
     _instanceof:
       App\TypeDiplome\TypeDiplomeHandlerInterface:
         tags: [ 'app.type_diplome_handler' ]
-      App\Workflow\StepCheckInterface:
-        tags: [ 'app.workflow.step_check' ]
+  #      App\Workflow\StepCheckInterface:
+  #        tags: [ 'app.workflow.step_check' ]
 
     App\Service\TypeDiplomeResolver:
         arguments:
