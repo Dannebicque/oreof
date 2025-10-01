@@ -49,7 +49,7 @@ final class ButHandler implements TypeDiplomeHandlerInterface
 
     public function supports(string $type): bool
     {
-        return $type === 'App\TypeDiplome\Source\ButTypeDiplome'; // TODO: Replace with a more robust check for the BUT type
+        return $type === $this->getLibelleCourt(); // TODO: Replace with a more robust check for the BUT type
     }
 
     public function calculStructureParcours(Parcours $parcours, bool $withEcts = true, bool $withBcc = true): StructureParcours
@@ -193,5 +193,10 @@ final class ButHandler implements TypeDiplomeHandlerInterface
     public function getTypeEpreuves(): array
     {
         return $this->typeEpreuves;
+    }
+
+    protected function getLibelleCourt(): string
+    {
+        return 'BUT';
     }
 }
