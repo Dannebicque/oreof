@@ -18,6 +18,7 @@ parameters:
     WSDL_APOTEST: '%env(resolve:WSDL_APOTEST)%'
     WSDL_APOGEE_PRODUCTION: '%env(resolve:WSDL_APOGEE_PRODUCTION)%'
     APP_HOSTNAME: '%env(APP_HOSTNAME)%'
+    export_api_key: '%env(resolve:EXPORT_API_KEY)%'
 
 services:
     # default configuration for services in *this* file
@@ -41,14 +42,17 @@ services:
     App\Serializer\ModaliteEnseignementEnumNormalizer:
         tags: [ 'serializer.normalizer' ]
 
-    App\TypeDiplome\Daeu\DaeuHandler:
-        tags: [ 'app.type_diplome_handler' ]
+    App\TypeDiplome\:
+      resource: '../src/TypeDiplome/'
+      exclude: '../src/TypeDiplome/DependencyInjection/'
+      autoconfigure: true
+      # L’autoconfiguration ajoutera le tag si défini dans la config de l’interface
 
-    App\TypeDiplome\Licence\LicenceHandler:
+    _instanceof:
+      App\TypeDiplome\TypeDiplomeHandlerInterface:
         tags: [ 'app.type_diplome_handler' ]
-
-    App\TypeDiplome\But\ButHandler:
-        tags: [ 'app.type_diplome_handler' ]
+      App\Workflow\StepCheckInterface:
+        tags: [ 'app.workflow.step_check' ]
 
     App\Service\TypeDiplomeResolver:
         arguments:
@@ -66,3 +70,7 @@ services:
     App\Service\PythonJobLauncher:
         arguments:
             $projectDir: '%kernel.project_dir%'
+
+    App\Workflow\Registry\StepCheckRegistry:
+      arguments:
+        $checks: !tagged_iterator app.workflow.step_check
