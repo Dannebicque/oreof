@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block header %}
-    EC pour le parcours {{ parcours.libelle }}
+    EC pour le parcours : {{ parcours.libelle }} {{ parcours.typeParcours|badgeTypeParcours }}
 {% endblock %}
 
 {% block breadcrumb %}

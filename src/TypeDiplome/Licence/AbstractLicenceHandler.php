@@ -58,11 +58,6 @@ abstract class AbstractLicenceHandler implements TypeDiplomeHandlerInterface
         $this->typeEpreuves = $this->entityManager->getRepository(TypeEpreuve::class)->findByTypeDiplome($typeD);
     }
 
-    protected function getLibelleCourt(): string
-    {
-        return 'L';
-    }
-
     public function getTypeEpreuves(): array
     {
         return $this->typeEpreuves;
