@@ -67,10 +67,10 @@ services:
         arguments:
             $projectDir: '%kernel.project_dir%'
 
-    App\Service\PythonJobLauncher:
-        arguments:
-            $projectDir: '%kernel.project_dir%'
-
-    App\Workflow\Registry\StepCheckRegistry:
-      arguments:
-        $checks: !tagged_iterator app.workflow.step_check
+#    App\Service\PythonJobLauncher:
+#        arguments:
+#            $projectDir: '%kernel.project_dir%'
+#
+#    App\Workflow\Registry\StepCheckRegistry:
+#      arguments:
+#        $checks: !tagged_iterator app.workflow.step_check
