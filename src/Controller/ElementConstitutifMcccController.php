@@ -253,7 +253,7 @@ class ElementConstitutifMcccController extends AbstractController
         'ec' => $elementConstitutif,
         'ects' => $ects,
         'templateForm' => $typeD::TEMPLATE_FORM_MCCC,
-        'mcccs' => $getElement->getMcccsFromFicheMatiereCollection(),]);
+            'mcccs' => $getElement->getMcccsFromFicheMatiere($typeD),]);
     }
 
     #[Route('/{id}/mccc-ec/{parcours}/non-editable', name: 'app_element_constitutif_mccc_non_editable', methods: ['GET', 'POST'])]
