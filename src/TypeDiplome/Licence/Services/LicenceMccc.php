@@ -688,11 +688,17 @@ class LicenceMccc extends AbstractLicenceMccc
                     if (array_key_exists(2, $mcccs) && array_key_exists('et', $mcccs[2]) && $mcccs[2]['et'] !== null) {
                         $texteEpreuve = '';
                         $pourcentageTpEt = $pourcentageTp / count($mcccs[2]['et']);
+                        if (count($mcccs[2]['et']) > 1) {
+                            $facteur = (100 - $pourcentageCc) / 100;
+                        } else {
+                            $facteur = 1;
+                        }
                         $pourcentageCcEt = $pourcentageCc / count($mcccs[2]['et']);
+
                         foreach ($mcccs[2]['et'] as $mccc) {
                             $texteEpreuve .= $this->displayTypeEpreuveWithDureePourcentage($mccc);
                             $texteAvecTp .= $this->displayTypeEpreuveWithDureePourcentageTp($mccc, $pourcentageTpEt);
-                            $texteCc .= $this->displayTypeEpreuveWithDureePourcentageTp($mccc, $pourcentageCcEt);
+                            $texteCc .= $this->displayTypeEpreuveWithDureePourcentageTp($mccc, $pourcentageCcEt, $facteur);
                         }
 
                         $texteEpreuve = substr($texteEpreuve, 0, -2);
@@ -786,26 +792,6 @@ class LicenceMccc extends AbstractLicenceMccc
 
                     $texte .= $this->typeEpreuves[$type]->getSigle() . $duree . ' (' . $mccc->getPourcentage() . '%); ';
 
-            } else {
-                $texte .= 'erreur épreuve; ';
-            }
-        }
-
-        return $texte;
-    }
-
-    private function displayTypeEpreuveWithDureePourcentageTp(Mccc $mccc, float $pourcentage): string
-    {
-        $texte = '';
-        foreach ($mccc->getTypeEpreuve() as $type) {
-            if ($type !== "" && $this->typeEpreuves[$type] !== null) {
-                $duree = '';
-                if ($this->typeEpreuves[$type]->isHasDuree() === true) {
-                    $duree = ' ' . $this->displayDuree($mccc->getDuree());
-                }
-                if (($mccc->getPourcentage() - $pourcentage) > 0.0) {
-                    $texte .= $this->typeEpreuves[$type]->getSigle() . $duree . ' (' . ($mccc->getPourcentage() - $pourcentage) . '%); ';
-                }
             } else {
                 $texte .= 'erreur épreuve; ';
             }

@@ -823,32 +823,6 @@ class LicenceMcccVersion extends AbstractLicenceMccc
         return $texte;
     }
 
-    private function displayTypeEpreuveWithDureePourcentageTp(Mccc $mccc, float $pourcentage, float $facteur = 1): string
-    {
-        $texte = '';
-        foreach ($mccc->getTypeEpreuve() as $type) {
-            if ($type !== "" && $this->typeEpreuves[$type] !== null) {
-                $duree = '';
-                if ($this->typeEpreuves[$type]->isHasDuree() === true) {
-                    $duree = ' ' . $this->displayDuree($mccc->getDuree());
-                }
-
-                if ($facteur === 1) {
-                    if (($mccc->getPourcentage() - $pourcentage) > 0.0) {
-                        $texte .= $this->typeEpreuves[$type]->getSigle() . $duree . ' (' . ($mccc->getPourcentage() - $pourcentage) . '%); ';
-                    }
-                } else {
-                    if (($facteur * $mccc->getPourcentage()) > 0.0) {
-                        $texte .= $this->typeEpreuves[$type]->getSigle() . $duree . ' (' . ($facteur * $mccc->getPourcentage()) . '%); ';
-                    }
-                }
-            } else {
-                $texte .= 'erreur épreuve; ';
-            }
-        }
-
-        return $texte;
-    }
 
     private function afficheEcSupprime(int $ligne, array $diffEc): int
     {
