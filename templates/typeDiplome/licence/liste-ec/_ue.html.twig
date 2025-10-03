@@ -8,7 +8,17 @@
 
 <tr>
     <th colspan="7" class="font-weight-bold">{{ ue.ue.display(parcours) }} {% if raccrocheUe == true %}<i
-                class="fa fa-link"></i>{% endif %}</th>
+                class="fa fa-link"></i>{% endif %}
+
+        {% if ue.ue.natureUeEc is defined and ue.ue.natureUeEc != null and ue.ue.natureUeEc.libre == true %}
+            <span class="badge bg-secondary">
+            UE à choix libre</span>
+        {% endif %}
+        {% if ue.ue.natureUeEc is defined and ue.ue.natureUeEc != null and ue.ue.natureUeEc.choix == true %}<span
+                class="badge bg-primary">
+            UE à choix restreint : {{ ue.uesEnfants|length }} choix possibles</span>
+        {% endif %}
+    </th>
 </tr>
 <tr>
     <th class="font-weight-bold">EC</th>
