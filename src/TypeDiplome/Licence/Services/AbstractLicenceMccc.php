@@ -201,7 +201,7 @@ class AbstractLicenceMccc
                     $duree = ' ' . $this->displayDuree($mccc->getDuree());
                 }
 
-                if ($facteur === 1) {
+                if ($facteur === 1.0) {
                     if (($mccc->getPourcentage() - $pourcentage) > 0.0) {
                         $texte .= $this->typeEpreuves[$type]->getSigle() . $duree . ' (' . (100 - $mccc->getPourcentage()) . '%); ';
                     }
