@@ -3,6 +3,8 @@
 // src/Workflow/RecipientResolver.php
 namespace App\Workflow;
 
+use App\DTO\WorkFlowData;
+use App\Entity\DpeParcours;
 use App\Entity\Formation;
 use App\Entity\Parcours;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
@@ -11,11 +13,7 @@ use App\Entity\User;
 
 class RecipientResolver
 {
-    private const MAIL_SES = 'oreof@univ-reims.fr';
-    private const MAIL_CFVU = 'secretariat-cfvu@univ-reims.fr';
-
     public function __construct(
-        private AuthorizationCheckerInterface $security,
         private EntityManagerInterface        $em,
     )
     {
@@ -24,56 +22,58 @@ class RecipientResolver
     /**
      * @param object $subject (ex: DpeParcours)
      * @param array<string,mixed> $metadata Place/Transition metadata
-     * @return User[]
      */
-    public function resolveRecipients(object $subject, array $metadata): array
+    public function resolveRecipients(array $metadata, WorkFlowData $workFlowData): array
     {
         $recipients = [];
         $copies = [];
 
-        if ($subject instanceof Formation) {
-            $formation = $subject;
-            $parcours = null;
-            $composante = $subject->getComposantePorteuse();
-        } elseif ($subject instanceof Parcours) {
-            $formation = $subject->getFormation();
-            $parcours = $subject;
-            $composante = $subject->getFormation()?->getComposantePorteuse();
-        } else {
-            return [];
-        }
-
-        foreach ($meta['recipients'] ?? [] as $role) {
+        foreach ($metadata['recipients'] ?? [] as $role) {
             switch ($role) {
                 case 'RF':
-                    $recipients[] = $formation?->getResponsableMention();
+                    if (($resp = $workFlowData->formation?->getResponsableMention()) !== null) {
+                        $this->em->initializeObject($resp);
+                        $recipients[] = $resp;
+                    }
                     break;
                 case 'CoRF':
-                    $recipients[] = $formation?->getCoResponsable();
+                    if (($resp = $workFlowData->formation?->getCoResponsable()) !== null) {
+                        $this->em->initializeObject($resp);
+                        $recipients[] = $resp;
+                    }
                     break;
                 case 'RP':
-                    $recipients[] = $parcours?->getRespParcours();
+                    if (($resp = $workFlowData->parcours?->getRespParcours()) !== null) {
+                        $this->em->initializeObject($resp);
+                        $recipients[] = $resp;
+                    }
                     break;
                 case 'CoRP':
-                    $recipients[] = $parcours?->getCoResponsable();
+                    if (($resp = $workFlowData->parcours?->getCoResponsable()) !== null) {
+                        $this->em->initializeObject($resp);
+                        $recipients[] = $resp;
+                    }
                     break;
                 case 'DPE':
-                    $recipients[] = $composante?->getResponsableDpe();
+                    if (($resp = $workFlowData->composante?->getResponsableDpe()) !== null) {
+                        $this->em->initializeObject($resp);
+                        $recipients[] = $resp;
+                    }
                     break;
             }
         }
 
-        foreach ($meta['recipientsCopy'] ?? [] as $copy) {
+        foreach ($metadata['recipientsCopy'] ?? [] as $copy) {
             if ($copy === 'SES') {
-                $copies[] = self::MAIL_SES;
+                $copies[] = WorkFlowData::EMAIL_OREOF;
             }
             if ($copy === 'CFVU') {
-                $copies[] = self::MAIL_CFVU;
+                $copies[] = WorkFlowData::EMAIL_CFVU;
             }
         }
 
-        $copies = array_values(array_unique($copies, SORT_REGULAR));
         $recipients = array_values(array_unique($recipients, SORT_REGULAR));
+        $copies = array_values(array_unique($copies, SORT_REGULAR));
 
         return ['recipients' => $recipients, 'copies' => $copies];
     }

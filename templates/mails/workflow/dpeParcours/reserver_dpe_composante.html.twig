@@ -1,8 +1,7 @@
 {% extends 'mails/base_mail.html.twig' %}
 
 {% block content %}
-    <p>Bonjour {{ formation.responsableMention.display }}
-        , {% if formation.coResponsable != null %}{{ formation.coResponsable.display }}, {% endif %}</p>
+    <p>Bonjour {{ user.display }},</p>
 
     <p>Le DPE de votre composante a émis une ou des réserve(s) ont été émises sur
         {% if hasParcours == true %}

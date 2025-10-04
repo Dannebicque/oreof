@@ -9,7 +9,7 @@
 
 
 
-    <p>Bonjour,</p>
+    <p>Bonjour {{ user.display }},</p>
 
     {% if context.acceptationDirecte is defined and context.acceptationDirecte  == true %}
         <p>La CFVU du {{ context.date|date('d/m/Y')}} a validé {{ texteFormation|raw }}.</p>

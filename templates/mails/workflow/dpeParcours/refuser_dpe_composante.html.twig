@@ -1,0 +1,16 @@
+{% extends 'mails/base_mail.html.twig' %}
+
+{% block content %}
+    <p>Bonjour {{ user.display }},</p>
+    <p>
+        La fiche a été refusée par le DPE de votre composante pour
+        {% if hasParcours %}
+        le parcours <strong>{{ parcours.libelle }}</strong> de la formation <strong>{{ formation.displayLong }}</strong>
+    {% else %}
+        la formation <strong>{{ formation.displayLong }}</strong>
+        {% endif %}.
+    </p>
+    {% if motif is defined and motif %}
+        <p><strong>Motif :</strong><br>{{ motif|nl2br }}</p>
+    {% endif %}
+{% endblock %}

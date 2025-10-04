@@ -1,7 +1,7 @@
 {% extends 'mails/base_mail.html.twig' %}
 
 {% block content %}
-    <p>Bonjour,</p>
+    <p>Bonjour {{ user.display }},</p>
 
     <p>Votre formation : <strong>{{ formation.displayLong }}</strong> vient d’être validée par le central. Elle sera soumise à CFVU prochainement.</p>
 {% endblock %}

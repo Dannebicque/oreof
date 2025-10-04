@@ -9,6 +9,7 @@
 
 namespace App\EventSubscriber;
 
+use App\DTO\WorkFlowData;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Workflow\Event\Event;
 use App\Notification\WorkflowNotifier;
@@ -34,6 +35,7 @@ class DpeWorkflowSubscriber implements EventSubscriberInterface
     public function onTransition(Event $event): void
     {
         $subject = $event->getSubject();
+        $data = new WorkflowData($subject);
         $wf = $event->getWorkflow();
         $transition = $event->getTransition();
         if (null === $subject || null === $wf || null === $transition) {
@@ -41,15 +43,14 @@ class DpeWorkflowSubscriber implements EventSubscriberInterface
         }
         $meta = $wf->getMetadataStore()->getTransitionMetadata($transition) ?? [];
 
-        // Notifications "assignation"
         $eventKey = sprintf('workflow.dpeParcours.transition.%s', $transition->getName());
         $context = [
-            'title' => $meta['label'] ?? $transition,
-            'message' => $meta['message'] ?? 'Une nouvelle transition est assignée.',
-            'subject' => $subject,
+            'subject' => '[ORéOF] ' . $data->getTitre($meta),
+            'data' => $data,
+            'context' => $event->getContext() ?? [],
         ];
-        $recipients = $this->recipients->resolveRecipients($subject, $meta);
-        $this->notifier->notify($recipients, $eventKey, $wf->getName(), $context);
+        $recipients = $this->recipients->resolveRecipients($meta, $data);
+        $this->notifier->notify($recipients['recipients'], $eventKey, $wf->getName(), $context);
     }
 
 //    public function onGuard(GuardEvent $event): void

@@ -19,6 +19,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Workflow\Event\Event;
 
+/** @deprecated */
 class DpeInitMailSubscriber implements EventSubscriberInterface
 {
     public function __construct(
@@ -33,7 +34,7 @@ class DpeInitMailSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            'workflow.dpe.transition.initialiser' => 'onInitialise',
+            //'workflow.dpe.transition.initialiser' => 'onInitialise',
         ];
     }
 

@@ -1,7 +1,7 @@
 {% extends 'mails/base_mail.html.twig' %}
 
 {% block content %}
-    <p>Bonjour {{ formation.getResponsableMention.display }}, {% if formation.getCoResponsable != null %}{{ formation.getCoResponsable.display }},{% endif %}</p>
+    <p>Bonjour {{ user.display }},</p>
 
     <p>Le parcours <strong>{{ parcours.libelle }}</strong>  de la formation <strong>{{ formation.displayLong }}</strong>, vient d'être soumis par le responsable du parcours.</p>
 

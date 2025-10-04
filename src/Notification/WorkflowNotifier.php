@@ -10,21 +10,28 @@
 // src/Notification/WorkflowNotifier.php
 namespace App\Notification;
 
+use App\Classes\Mailer;
 use App\Entity\User;
 use App\Entity\Notification;
+use App\EventSubscriber\DpeWorkflow\AbstractDpeMailSubscriber;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Workflow\WorkflowInterface;
 
 class WorkflowNotifier
 {
+    private string $baseDir = '';
+
     public function __construct(
-        private MailerInterface                $mailer,
+        KernelInterface $kernel,
+        private Mailer  $myMailer,
         private EntityManagerInterface         $em,
         private NotificationPreferenceResolver $preferenceResolver,
     )
     {
+        $this->baseDir = $kernel->getProjectDir();
     }
 
     /**
@@ -33,37 +40,55 @@ class WorkflowNotifier
      */
     public function notify(array $recipients, string $eventKey, string $wf, array $context): void
     {
+
         foreach ($recipients as $user) {
             if (!$user instanceof User) {
                 continue;
             }
+
             $pref = $this->preferenceResolver->resolveFor($user, $wf, $eventKey);
 
             // EMAIL
             if ($pref?->channelAllowed('email')) {
-                //todo: fait un abstract pour récupérer toutes les datas pour le mail, reprendre existant du workflow
-                $email = (new TemplatedEmail())
-                    ->to($user->getEmail())
-                    ->subject($context['subjectLine'] ?? ('Mise à jour — ' . $eventKey))
-                    ->htmlTemplate(
-                        file_exists(sprintf('%s/templates/mails/workflow/%s/%s.html.twig', $_SERVER['DOCUMENT_ROOT'] ?? dirname(__DIR__, 2), $wf, $eventKey))
-                            ? 'mails/workflow/' . $wf . '/' . $eventKey . '.html.twig'
-                            : 'mails/workflow/default.html.twig'
+                $this->myMailer->initEmail();
+                $this->myMailer->setTemplate(
+                    file_exists(sprintf('%s/templates/mails/workflow/%s/%s.html.twig', $this->baseDir, $wf, $this->extractTransition($eventKey)))
+                        ? 'mails/workflow/' . $wf . '/' . $this->extractTransition($eventKey) . '.html.twig'
+                        : 'mails/workflow/default.html.twig',
+                    array_merge(
+                        [
+                            'user' => $user,
+                            'wf' => $wf,
+                            'eventKey' => $this->extractTransition($eventKey),
+                            'path' => sprintf('%s/templates/mails/workflow/%s/%s.html.twig', $this->baseDir, $wf, $this->extractTransition($eventKey))
+                        ],
+                        $context['data']->toArray(),
+                        $context['context']
                     )
-                    ->context($context);
-                $this->mailer->send($email);
+                );
+
+                $this->myMailer->sendMessage(
+                    [$user->getEmail()],
+                    $context['subject'] ?? '[ORéOF] - ' . $this->extractTransition($eventKey)
+                );
             }
 
             // IN-APP
-            if ($pref?->channelAllowed($eventKey, 'inapp')) {
+            if ($pref?->channelAllowed('inapp')) {
                 $n = new Notification();
                 $n->setDestinataire($user);
-                $n->setTitle($context['title'] ?? $eventKey);
-                $n->setBody($context['message'] ?? null);
-                $n->setPayload($context);
+                $n->setTitle('notif.' . $wf . '.' . $this->extractTransition($eventKey));
+                $n->setBody('notif.' . $wf . '.' . $this->extractTransition($eventKey));
+                $n->setPayload([]); //todo: a faire
                 $this->em->persist($n);
             }
         }
         $this->em->flush();
+    }
+
+    private function extractTransition(string $eventKey): string
+    {
+        $parts = explode('.', $eventKey);
+        return $parts[count($parts) - 1] ?? 'default';
     }
 }

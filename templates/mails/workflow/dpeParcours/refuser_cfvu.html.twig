@@ -1,7 +1,7 @@
 {% extends 'mails/base_mail.html.twig' %}
 
 {% block content %}
-    <p>Bonjour,</p>
+    <p>Bonjour {{ user.display }},</p>
 
     <p>La CFVU du {{ context.date|date('d/m/Y') }} a refusée la formation <strong>{{ formation.displayLong }}</strong>
         avec les réserves ci-dessous :

@@ -1,7 +1,7 @@
 {% extends 'mails/base_mail.html.twig' %}
 
 {% block content %}
-    <p>Bonjour,</p>
+    <p>Bonjour {{ user.display }},</p>
 
     <p>Le conseil de la composante <strong>{{ composante.libelle }}</strong> vient de valider
     {% if hasParcours == true %}

@@ -34,6 +34,8 @@ final class NotificationPreferenceResolver
 
         $this->chanels = $effective;
         $this->source = $source;
+
+        return $this;
     }
 
     public function channelAllowed(string $channel): bool

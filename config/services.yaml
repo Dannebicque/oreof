@@ -70,6 +70,10 @@ services:
     App\Service\PythonJobLauncher:
       arguments:
         $projectDir: '%kernel.project_dir%'
+
+    App\Notification\NotificationPreferenceResolver:
+      arguments:
+        $em: '@doctrine.orm.entity_manager'
 #
 #    App\Workflow\Registry\StepCheckRegistry:
 #      arguments:
