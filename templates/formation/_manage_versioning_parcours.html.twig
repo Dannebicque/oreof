@@ -2,6 +2,7 @@
     <h3 class="small-title">Versions de ce parcours</h3>
     <div class="col-lg-3 col-sm-6">
         {% if parcours.parcoursVersionings|length > 0 %}
+            <label for="selectVersion" class="sr-only">Version actuelle</label>
             <select class="form-select" id="selectVersion">
                 <option value="#" selected="selected">Choisir...</option>
                 {% for p in parcours.parcoursVersionings %}

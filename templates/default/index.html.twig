@@ -5,6 +5,14 @@
 {% block content %}
     {{ include('default/_timeLine.html.twig') }}
 
+    {#    {% if is_granted('ROLE_ADMIN') %} #}
+    {#        {{ component('stats_block', { #}
+    {#            charts: [chart1, chart2, chart3], #}
+    {#            titles: ['Formations', 'Statuts', 'Inscriptions'], #}
+    {#            collapsible: true #}
+    {#        }) }} #}
+    {#    {% endif %} #}
+
     {{ component('actualites') }}
 
     <div class="mt-3"
