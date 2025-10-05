@@ -81,7 +81,7 @@ export default class extends Controller {
   }
 
   async changeListe() {
-    this._updateListe()
+    await this._updateListe()
   }
 
   async _updateListe() {
