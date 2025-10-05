@@ -32,6 +32,7 @@ use App\Repository\FormationRepository;
 use App\Repository\MentionRepository;
 use App\Repository\ProfilRepository;
 use App\Repository\TypeDiplomeRepository;
+use App\Repository\UserRepository;
 use App\Service\VersioningFormation;
 use App\Service\VersioningParcours;
 use App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException;
@@ -82,6 +83,7 @@ class FormationController extends BaseController
 
     #[Route('/liste', name: 'app_formation_liste', methods: ['GET'])]
     public function liste(
+        UserRepository $userRepository,
         GetFormations         $getFormations,
         MentionRepository     $mentionRepository,
         ComposanteRepository  $composanteRepository,
@@ -90,13 +92,25 @@ class FormationController extends BaseController
         Request               $request,
     ): Response {
 
+        $responsables = $userRepository->findUserWithResponsabilites();
+
         $tFormations = $getFormations->getFormations(
             $this->getUser(),
             $this->getCampagneCollecte(),
             $request->query->all()
         );
 
+        $nbFormations = count($tFormations);
+        //comtper le nombre de parcours par formation
+        $nbParcours = 0;
+        foreach ($tFormations as $formation) {
+            $nbParcours += count($formation->getParcours());
+        }
+
         return $this->render('formation/_liste.html.twig', [
+            'nbFormations' => $nbFormations,
+            'nbParcours' => $nbParcours,
+            'responsables' => $responsables,
             'formations' => $tFormations,
             'mentions' => $mentionRepository->findBy([], ['libelle' => 'ASC']),
             'composantes' => $composanteRepository->findPorteuse(),
