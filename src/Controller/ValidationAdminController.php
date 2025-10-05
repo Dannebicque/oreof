@@ -17,8 +17,10 @@ use App\Repository\ChangeRfRepository;
 use App\Repository\ComposanteRepository;
 use App\Repository\DpeParcoursRepository;
 use App\Repository\FicheMatiereRepository;
+use App\Table\DpeParcoursValidationDataTableType;
 use App\Utils\Tools;
 use DateTime;
+use Kreyu\Bundle\DataTableBundle\DataTableFactoryAwareTrait;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -26,6 +28,8 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/validation/administration/', name: 'app_validation_')]
 class ValidationAdminController extends BaseController
 {
+    use DataTableFactoryAwareTrait;
+
     #[Route('/validation/fiche/export', name: 'verification_fiche_export')]
     //todo: gérer la composante
     public function ficheExportVerification(
@@ -70,6 +74,35 @@ class ValidationAdminController extends BaseController
 
         $fileName = Tools::FileName('Verif-fiche-' . (new DateTime())->format('d-m-Y-H-i'));
         return $excelWriter->genereFichier($fileName, true);
+    }
+
+    #[Route('dpe-test', name: 'dpe_test_index')]
+    public function dpeTest(
+        ComposanteRepository  $composanteRepository,
+        Request               $request,
+        DpeParcoursRepository $repository,
+    ): Response
+    {
+
+        $queryBuilder = $repository->createQueryBuilder('d')
+            ->join('d.parcours', 'parcours')
+            ->join('parcours.formation', 'formation')
+            ->join('formation.composantePorteuse', 'composantePorteuse')
+            ->addSelect('parcours')
+            ->addSelect('formation')
+            ->addSelect('composantePorteuse');
+
+        $dataTable = $this->createDataTable(DpeParcoursValidationDataTableType::class, $queryBuilder);
+        $dataTable->handleRequest($request);
+
+        if ($dataTable->isExporting()) {
+            return $this->file($dataTable->export());
+        }
+
+        return $this->render('validation/dpe_test.html.twig', [
+            'dpe_valide' => $dataTable->createView(),
+            'composantes' => $composanteRepository->findPorteuse(),
+        ]);
     }
 
     #[Route('dpe', name: 'dpe_index')]
@@ -141,8 +174,19 @@ class ValidationAdminController extends BaseController
 
         $allparcours = $dpeParcoursRepository->findByCampagneAndTypeValidation($this->getCampagneCollecte(), $typeValidation, $composante);
 
+        $nbParcours = count($allparcours);
+
+        $tFormations = [];
+        foreach ($allparcours as $parcours) {
+            $tFormations[] = $parcours->getParcours()?->getFormation()?->getId();
+        }
+
+        // valeurs uniques dans tFormations
+        $nbFormations = count(array_unique($tFormations));
 
         return $this->render('validation/_liste.html.twig', [
+            'nbFormations' => $nbFormations,
+            'nbParcours' => $nbParcours,
             'process' => $process,
             'allparcours' => $allparcours,
             'etape' => $typeValidation ?? null,

@@ -1,4 +1,9 @@
 <div class="card-body">
+    <div class="alert alert-info">
+        {% set nbDemandes = demandes|length %}
+        <strong>{{ nbDemandes }}</strong> demande{{ nbDemandes > 1 ? 's' : '' }} de changement de RF/CoRf
+        trouvée{{ nbDemandes > 1 ? 's' : '' }}.
+    </div>
     <table class="table" {{ stimulus_controller('check_all') }}>
         <thead>
         <tr>
