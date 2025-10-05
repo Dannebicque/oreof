@@ -18,11 +18,11 @@ class StructureExtension extends AbstractExtension
     public function getFilters(): array
     {
         return [
-            new TwigFilter('badgeEctsSemestre', [$this, 'badgeEctsSemestre'], ['is_safe' => ['html']]),
-            new TwigFilter('badgeEctsUe', [$this, 'badgeEctsUe'], ['is_safe' => ['html']]),
-            new TwigFilter('badgeEcts', [$this, 'badgeEcts'], ['is_safe' => ['html']]),
-            new TwigFilter('badgeNb', [$this, 'badgeNb'], ['is_safe' => ['html']]),
-            new TwigFilter('badgeTypeParcours', [$this, 'badgeTypeParcours'], ['is_safe' => ['html']])
+            new TwigFilter('badgeEctsSemestre', $this->badgeEctsSemestre(...), ['is_safe' => ['html']]),
+            new TwigFilter('badgeEctsUe', $this->badgeEctsUe(...), ['is_safe' => ['html']]),
+            new TwigFilter('badgeEcts', $this->badgeEcts(...), ['is_safe' => ['html']]),
+            new TwigFilter('badgeNb', $this->badgeNb(...), ['is_safe' => ['html']]),
+            new TwigFilter('badgeTypeParcours', $this->badgeTypeParcours(...), ['is_safe' => ['html']])
         ];
     }
 

@@ -22,7 +22,7 @@ class FicheMatiereExtension extends AbstractExtension
     public function getFilters(): array
     {
         return [
-            new TwigFilter('hasParcours', [$this, 'hasParcours']),
+            new TwigFilter('hasParcours', $this->hasParcours(...)),
         ];
     }
 

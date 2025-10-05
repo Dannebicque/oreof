@@ -18,7 +18,7 @@ class TypeDiplomeExtension extends AbstractExtension
     public function getFilters(): array
     {
         return [
-            new TwigFilter('typeDiplome', [$this, 'typeDiplome'], ['is_safe' => ['html']])
+            new TwigFilter('typeDiplome', $this->typeDiplome(...), ['is_safe' => ['html']])
         ];
     }
 

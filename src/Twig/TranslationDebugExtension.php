@@ -21,7 +21,7 @@ class TranslationDebugExtension extends AbstractExtension
     public function getFilters()
     {
         return [
-            new TwigFilter('trans_debug', [$this, 'transDebug'], ['is_safe' => ['html']]),
+            new TwigFilter('trans_debug', $this->transDebug(...), ['is_safe' => ['html']]),
         ];
     }
 

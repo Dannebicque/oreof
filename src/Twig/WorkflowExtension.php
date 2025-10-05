@@ -38,15 +38,15 @@ class WorkflowExtension extends AbstractExtension
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('isPass', [$this, 'isPass']),
-            new TwigFunction('isRefuse', [$this, 'isRefuse']),
-            new TwigFunction('isPublie', [$this, 'isPublie']),
-            new TwigFunction('isOuvrable', [$this, 'isOuvrable']),
-            new TwigFunction('isOuvert', [$this, 'isOuvert']),
-            new TwigFunction('isPlace', [$this, 'isPlace']),
-            new TwigFunction('isAccessible', [$this, 'isAccessible']),
-            new TwigFunction('hasHistorique', [$this, 'hasHistorique']),
-            new TwigFunction('hasTransitions', [$this, 'hasTransitions']),
+            new TwigFunction('isPass', $this->isPass(...)),
+            new TwigFunction('isRefuse', $this->isRefuse(...)),
+            new TwigFunction('isPublie', $this->isPublie(...)),
+            new TwigFunction('isOuvrable', $this->isOuvrable(...)),
+            new TwigFunction('isOuvert', $this->isOuvert(...)),
+            new TwigFunction('isPlace', $this->isPlace(...)),
+            new TwigFunction('isAccessible', $this->isAccessible(...)),
+            new TwigFunction('hasHistorique', $this->hasHistorique(...)),
+            new TwigFunction('hasTransitions', $this->hasTransitions(...)),
         ];
     }
 
