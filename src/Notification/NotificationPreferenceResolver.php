@@ -8,7 +8,7 @@ use Doctrine\ORM\EntityManagerInterface;
 
 final class NotificationPreferenceResolver
 {
-    private array $chanels = [];
+    private array $channels = [];
     private string $source = '';
 
     public function __construct(private EntityManagerInterface $em)
@@ -32,7 +32,7 @@ final class NotificationPreferenceResolver
             $source = 'transition';
         }
 
-        $this->chanels = $effective;
+        $this->channels = $effective;
         $this->source = $source;
 
         return $this;
@@ -40,7 +40,17 @@ final class NotificationPreferenceResolver
 
     public function channelAllowed(string $channel): bool
     {
-        return $this->chanels[$channel] ?? false;
+        return $this->channels[$channel] ?? false;
+    }
+
+    public function getSource(): string
+    {
+        return $this->source;
+    }
+
+    public function getChannels(): array
+    {
+        return $this->channels;
     }
 }
 

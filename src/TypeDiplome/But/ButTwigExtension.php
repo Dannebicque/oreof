@@ -18,8 +18,8 @@ class ButTwigExtension extends AbstractExtension
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('getElementsConstitutifs', [$this, 'getElementsConstitutifs'], ['is_safe' => ['html']]),
-            new TwigFunction('getElementsConstitutifsVersioning', [$this, 'getElementsConstitutifsVersioning'], ['is_safe' => ['html']])
+            new TwigFunction('getElementsConstitutifs', $this->getElementsConstitutifs(...), ['is_safe' => ['html']]),
+            new TwigFunction('getElementsConstitutifsVersioning', $this->getElementsConstitutifsVersioning(...), ['is_safe' => ['html']])
         ];
     }
 

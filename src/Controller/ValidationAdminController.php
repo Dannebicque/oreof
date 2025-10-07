@@ -202,12 +202,10 @@ class ValidationAdminController extends BaseController
     {
         $typeValidation = $request->query->get('typeValidation');
 
-
         $demandes = $changeRfRepository->findByTypeValidation(
             $typeValidation,
             $this->getCampagneCollecte()
         );
-
 
         return $this->render('validation/_listeChangeRf.html.twig', [
             'demandes' => $demandes,

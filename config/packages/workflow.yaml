@@ -597,7 +597,8 @@ framework:
       places:
         demande_initialisee:
           metadata:
-            process: false
+            process: true
+            label: 'validation.demande_initialisee'
         soumis_conseil:
           metadata:
             process: true
@@ -616,12 +617,15 @@ framework:
         attente_pv:
           metadata:
             process: false
+            label: 'validation.attente_pv'
         effectuee:
           metadata:
             process: false
+            label: 'validation.effectuee'
         verification_pv:
           metadata:
             process: false
+            label: 'validation.verification_pv'
       transitions:
         effectuer_demande:
           from: 'demande_initialisee'

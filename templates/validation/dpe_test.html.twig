@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block bouton_header %}
+
+{% endblock %}
+
+{% block content %}
+    <div class="card">
+        {{ data_table(dpe_valide, { title: 'Validation DPE' }) }}
+    </div>
+{% endblock %}
+
