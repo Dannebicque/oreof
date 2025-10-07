@@ -732,7 +732,7 @@ class ParcoursController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        $dpe = $entityManager->getRepository(CampagneCollecte::class)->findOneBy(['defaut' => 2]);
+        $dpe = $entityManager->getRepository(CampagneCollecte::class)->findOneBy(['defaut' => 1]);
         $annee = $dpe->getAnnee();
 
         try {
