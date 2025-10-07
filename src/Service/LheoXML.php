@@ -309,7 +309,7 @@ HTML;
             . $calendrierUniversitaire;
 
         $dpeParcours = GetDpeParcours::getFromParcours($parcours);
-        if ($dpeParcours !== null && $dpeParcours?->getEtatReconduction() !== TypeModificationDpeEnum::NON_OUVERTURE) {
+        if ($dpeParcours !== null && ($dpeParcours?->getEtatReconduction() !== TypeModificationDpeEnum::NON_OUVERTURE || $dpeParcours?->getEtatReconduction() !== TypeModificationDpeEnum::NON_OUVERTURE_SES || $dpeParcours?->getEtatReconduction() !== TypeModificationDpeEnum::NON_OUVERTURE_CFVU)) {
             $organisationPedagogique .= "<h3>Maquette de la formation</h3>"
             . "<a href=\"$maquettePdf\" target=\"_blank\">Maquette et modalités de contrôle de la formation au format PDF</a>";
         }
