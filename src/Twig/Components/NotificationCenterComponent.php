@@ -11,6 +11,7 @@ namespace App\Twig\Components;
 
 use App\Controller\NotificationSettingController;
 use Symfony\Component\Workflow\Registry;
+use Symfony\UX\LiveComponent\Attribute\LiveArg;
 use Symfony\UX\LiveComponent\DefaultActionTrait;
 use Symfony\UX\LiveComponent\Attribute\AsLiveComponent;
 use Symfony\UX\LiveComponent\Attribute\LiveAction;
@@ -78,7 +79,7 @@ class NotificationCenterComponent extends AbstractController
     }
 
     // Helpers pour la vue (récupère statut effectif + source)
-    public function resolve(string $workflow, ?string $place = null, ?string $transition = null): array
+    public function resolve(string $workflow, ?string $place = null, ?string $transition = null): NotificationPreferenceResolver
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -94,10 +95,16 @@ class NotificationCenterComponent extends AbstractController
     }
 
     #[LiveAction]
-    public function save(string $workflow, ?string $place, ?string $transition, bool $email, bool $inapp): void
+    public function save(
+        #[LiveArg] string  $workflow,
+        #[LiveArg] ?string $place,
+        #[LiveArg] ?string $transition,
+        #[LiveArg] bool    $email,
+        #[LiveArg] bool    $inapp): void
     {
+        dump('ok');
         $this->forward(NotificationSettingController::class . '::setSettings', ['workflow' => $workflow, 'step' => $place, 'transition' => $transition], ['email' => $email, 'inapp' => $inapp]);
-        $this->emit('notif:saved');
+        // $this->emit('notif:saved');
     }
 
     #[LiveAction]
