@@ -2,8 +2,10 @@
 
 namespace App\Service;
 
+use App\Classes\GetDpeParcours;
 use App\Entity\Etablissement;
 use App\Entity\Parcours;
+use App\Enums\TypeModificationDpeEnum;
 use App\Enums\TypeParcoursEnum;
 use App\Repository\ElementConstitutifRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -304,9 +306,14 @@ HTML;
             . $terMemoire
             . "<br><br>"
             . "<h3>Calendrier universitaire</h3>"
-            . $calendrierUniversitaire
-            . "<h3>Maquette de la formation</h3>"
+            . $calendrierUniversitaire;
+
+        $dpeParcours = GetDpeParcours::getFromParcours($parcours);
+        if ($dpeParcours !== null && $dpeParcours?->getEtatReconduction() !== TypeModificationDpeEnum::NON_OUVERTURE) {
+            $organisationPedagogique .= "<h3>Maquette de la formation</h3>"
             . "<a href=\"$maquettePdf\" target=\"_blank\">Maquette et modalités de contrôle de la formation au format PDF</a>";
+        }
+
 
         // Informations pratiques
         $informationsPratiques = "";
