@@ -286,6 +286,9 @@ class Parcours
     #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: DpeDemande::class, cascade: ['persist'])]
     private Collection $dpeDemandes;
 
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $motsCles = null;
+
     public function __construct(?Formation $formation)
     {
         $this->formation = $formation;
@@ -1678,6 +1681,18 @@ class Parcours
                 $dpeDemande->setParcours(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getMotsCles(): ?string
+    {
+        return $this->motsCles;
+    }
+
+    public function setMotsCles(?string $motsCles): static
+    {
+        $this->motsCles = $motsCles;
 
         return $this;
     }
