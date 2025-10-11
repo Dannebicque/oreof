@@ -1,8 +1,8 @@
 {% extends 'base.html.twig' %}
 
 {% block content %}
-    <h1>Fichiers de traduction</h1>
-
+    <div class="card">
+        <div class="card-body">
     <ul>
         {% for file in files %}
             <li><a href="{{ path('translations_edit', {filename: file|basename}) }}">{{ file|basename }}</a></li>
@@ -10,4 +10,23 @@
             <li>Aucun fichier trouvé dans /translations</li>
         {% endfor %}
     </ul>
+        </div>
+    </div>
+{% endblock %}
+
+{% block header %}
+    Gestion des Traductions
+{% endblock %}
+
+{% block breadcrumb %}
+    {{ include('communs/_breadcrumb.html.twig', {liens:[
+        {
+            href:'',
+            title: 'Administration',
+        },
+        {
+            href:'',
+            title: 'Traductions',
+        }
+    ]}) }}
 {% endblock %}
