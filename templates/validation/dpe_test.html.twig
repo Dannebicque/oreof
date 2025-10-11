@@ -1,12 +1,65 @@
 {% extends 'base.html.twig' %}
 
-{% block bouton_header %}
+{% block header %}
+    Gestion des validations DPE
+{% endblock %}
 
+{% block breadcrumb %}
+    {{ include('communs/_breadcrumb.html.twig', {liens:[
+    ]}) }}
 {% endblock %}
 
 {% block content %}
-    <div class="card">
-        {{ data_table(dpe_valide, { title: 'Validation DPE' }) }}
+    <div class="row gy-2">
+        <div class="col-12 p-0">
+            <div class="card">
+                <div class="card-body">
+                    <div>
+                        {% for value, step in steps %}
+                            <div {{ stimulus_controller('load_content', {url: path('app_validation_dpe_liste', {
+                                typeValidation: value,
+                                composante: 'all'
+                            })}) }}>
+                                <div class="card mb-2 sh-19 sh-md-8 ">
+                                    <div class="card-body pt-0 pb-0 h-100 border-process-{{ step.color }}"
+                                    >
+                                        <div class="row g-0 h-100 align-content-center">
+                                            <div class="col-12 col-md-4 d-flex flex-column justify-content-center mb-1 mb-md-0">
+                                                <div class="text-muted d-md-none">Composante</div>
+                                                {{ step.label|trans({}, 'process') }}
+                                            </div>
+                                            <div class="col-6 col-md-1 d-flex flex-column justify-content-center mb-1 mb-md-0">
+                                                <div class="text-muted d-md-none">Nb parcours / formations</div>
+                                                {% if statistiques[value] is defined %}
+                                                    {{ statistiques[value].nbParcours }} /
+                                                    {{ statistiques[value].formations|length }}
+                                                {% else %}
+                                                    <span class="badge bg-success">Aucun</span>
+                                                {% endif %}
+                                            </div>
+                                            <div class="col-6 col-md-1 d-flex flex-column justify-content-center
+                                            mb-1 mb-md-0">
+                                                <div class="text-muted d-md-none">Détails</div>
+
+                                                <button class="ms-2 btn btn-sm btn-outline-primary"
+                                                        {{ stimulus_action('load_content', 'change', 'click',
+                                                            {value:step}
+                                                        ) }}
+                                                >
+                                                    <i class="fal fa-caret-right"></i> Détails
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div {{ stimulus_target('load_content', 'content') }}></div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+
 {% endblock %}
 

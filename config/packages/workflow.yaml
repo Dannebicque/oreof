@@ -14,10 +14,12 @@ framework:
           metadata:
             process: false
             label: 'validation.initialisation'
+            color: 'info'
         autorisation_saisie:
           metadata:
             process: false
             label: 'validation.autorisation_saisie'
+            color: 'success'
         en_cours_redaction:
           metadata:
             process: true
@@ -27,6 +29,7 @@ framework:
             isTimeline: false
             check: true
             templateCheck: '_checkParcours.html.twig'
+            color: 'info'
         tacite_reconduction:
           metadata:
             process: false
@@ -35,6 +38,7 @@ framework:
             hasUpload: false
             isTimeline: false
             check: false
+            color: 'success'
         soumis_parcours:
           metadata:
             process: true
@@ -43,20 +47,24 @@ framework:
             isTimeline: false
             check: true
             templateCheck: '_checkParcours.html.twig'
+            color: 'success'
         soumis_dpe_composante:
           metadata:
             process: true
             icon: 'fa-check-to-slot'
             label: 'validation.dpe'
             isTimeline: true
+            color: 'success'
         refuse_rf:
           metadata:
             process: false
             label: 'validation.refuse_rf'
+            color: 'danger'
         refuse_dpe_composante:
           metadata:
             process: false
             label: 'validation.refuse_dpe_composante'
+            color: 'danger'
         soumis_conseil:
           metadata:
             process: true
@@ -65,20 +73,24 @@ framework:
             isTimeline: true
             hasDate: true
             hasUpload: true
+            color: 'success'
         refuse_conseil:
           metadata:
             process: false
             label: 'validation.refuse_conseil'
+            color: 'danger'
         refuse_central:
           metadata:
             process: false
             label: 'validation.refuse_central'
+            color: 'danger'
         soumis_central:
           metadata:
             process: true
             icon: 'fa-school-circle-check'
             label: 'validation.ses'
             isTimeline: false
+            color: 'success'
         soumis_cfvu:
           metadata:
             process: true
@@ -86,64 +98,72 @@ framework:
             label: 'soumis.cfvu'
             hasDate: true
             isTimeline: true
+            color: 'success'
         refuse_definitif_cfvu:
           metadata:
             process: false
             label: 'validation.refuse_definitif_cfvu'
+            color: 'danger'
         valide_cfvu:
           metadata:
             process: true
             icon: 'fa-stamp'
             label: 'relecture.avant_publication'
             isTimeline: true
+            color: 'success'
         valide_a_publier: # Etape de saisie de la date pour publication post CFVU
           metadata:
             process: true
             icon: 'fa-bullhorn'
             label: 'validation.publication'
             isTimeline: false
+            color: 'success'
         publie:
           metadata:
             process: false
             icon: 'fa-bullhorn'
             label: 'publie'
             isTimeline: false
+            color: 'success'
         soumis_conseil_reserve:
           metadata:
             process: false
             label: 'validation.soumis_conseil_reserve'
+            color: 'warning'
         en_cours_redaction_ss_cfvu:
           metadata:
             process: true
             icon: 'fa-paper-plane'
             isTimeline: false
             label: 'validation.en_cours_redaction_ss_cfvu'
+            color: 'info'
         soumis_central_sans_cfvu:
           metadata:
             process: false
             icon: 'fa-school-circle-check'
             isTimeline: false
             label: 'validation.soumis_central_sans_cfvu'
+            color: 'success'
         soumis_central_reserve_cfvu:
           metadata:
             process: false
             label: 'validation.soumis_central_reserve_cfvu'
+            color: 'warning'
         soumis_dpe_composante_reserve_cfvu:
           metadata:
             process: false
             label: 'validation.soumis_dpe_composante_reserve_cfvu'
+            color: 'warning'
         non_ouverture_ses:
           metadata:
             process: false
             label: 'validation.non_ouverture_ses'
-        non_ouverture_cfvu:
-          metadata:
-            process: false
-            label: 'validation.non_ouverture_cfvu'
+            color: 'danger'
         non_ouverture:
           metadata:
             process: false
             label: 'validation.non_ouverture'
+            color: 'danger'
       transitions:
         initialiser:
           from: 'initialisation_dpe'
@@ -445,13 +465,6 @@ framework:
             icon: fa-circle-exclamation-check
         valider_non_ouverture_ses:
           from: 'non_ouverture_ses'
-          to: 'non_ouverture_cfvu'
-          metadata:
-            type: valider
-            btn: success
-            icon: fa-check
-        valider_non_ouverture_cfvu:
-          from: 'non_ouverture_cfvu'
           to: 'non_ouverture'
           metadata:
             type: valider

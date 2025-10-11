@@ -17,7 +17,6 @@ use App\Repository\ChangeRfRepository;
 use App\Repository\ComposanteRepository;
 use App\Repository\DpeParcoursRepository;
 use App\Repository\FicheMatiereRepository;
-use App\Table\DpeParcoursValidationDataTableType;
 use App\Utils\Tools;
 use DateTime;
 use Kreyu\Bundle\DataTableBundle\DataTableFactoryAwareTrait;
@@ -28,8 +27,6 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/validation/administration/', name: 'app_validation_')]
 class ValidationAdminController extends BaseController
 {
-    use DataTableFactoryAwareTrait;
-
     #[Route('/validation/fiche/export', name: 'verification_fiche_export')]
     //todo: gérer la composante
     public function ficheExportVerification(
@@ -78,30 +75,34 @@ class ValidationAdminController extends BaseController
 
     #[Route('dpe-test', name: 'dpe_test_index')]
     public function dpeTest(
+        DpeParcoursRepository $dpeParcoursRepository,
         ComposanteRepository  $composanteRepository,
-        Request               $request,
-        DpeParcoursRepository $repository,
+        ValidationProcess     $validationProcess,
     ): Response
     {
+        $steps = $validationProcess->getProcessAll();
 
-        $queryBuilder = $repository->createQueryBuilder('d')
-            ->join('d.parcours', 'parcours')
-            ->join('parcours.formation', 'formation')
-            ->join('formation.composantePorteuse', 'composantePorteuse')
-            ->addSelect('parcours')
-            ->addSelect('formation')
-            ->addSelect('composantePorteuse');
-
-        $dataTable = $this->createDataTable(DpeParcoursValidationDataTableType::class, $queryBuilder);
-        $dataTable->handleRequest($request);
-
-        if ($dataTable->isExporting()) {
-            return $this->file($dataTable->export());
+        //statstics
+        // parcourir tous les parcours et compter les états
+        $statistiques = [];
+        $allParcours = $dpeParcoursRepository->findByCampagneCollecte($this->getCampagneCollecte());
+        foreach ($allParcours as $parcours) {
+            $etat = array_keys($parcours->getEtatValidation())[0];
+            if (!isset($statistiques[$etat])) {
+                $statistiques[$etat]['nbParcours'] = 0;
+                $statistiques[$etat]['formations'] = [];
+            }
+            $statistiques[$etat]['nbParcours']++;
+            if (!in_array($parcours->getParcours()?->getFormation()?->getId(), $statistiques[$etat]['formations'], true)) {
+                $statistiques[$etat]['formations'][] = $parcours->getParcours()?->getFormation()?->getId();
+            }
         }
 
+
         return $this->render('validation/dpe_test.html.twig', [
-            'dpe_valide' => $dataTable->createView(),
             'composantes' => $composanteRepository->findPorteuse(),
+            'steps' => $steps,
+            'statistiques' => $statistiques,
         ]);
     }
 
