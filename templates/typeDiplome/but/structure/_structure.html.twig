@@ -79,9 +79,9 @@
                         <td class="text-center">{{ ec.ec.heuresEctsEc.tePres|filtreHeures }}</td>
                         {% for ue in semestre.ues %}
                             {% if isVersioning is not defined or isVersioning == false %}
-                                <td class="text-center">{{ ec['ues'][ue.ue.id] is defined ? ec['ues'][ue.ue.id]|badgeEcts : '-' }}</td>
+                                <td class="text-center">{{ ec['ues'][ue.ue.id] is defined ? ec['ues'][ue.ue.id]|badgeCoeff : '-' }}</td>
                             {% else %}
-                                <td class="text-center">{{ ec['ues'][ue.ue.getDeserializedId()] is defined ? ec['ues'][ue.ue.getDeserializedId()]|badgeEcts : '-' }}</td>
+                                <td class="text-center">{{ ec['ues'][ue.ue.getDeserializedId()] is defined ? ec['ues'][ue.ue.getDeserializedId()]|badgeCoeff : '-' }}</td>
                             {% endif %}
                         {% endfor %}
                     </tr>
