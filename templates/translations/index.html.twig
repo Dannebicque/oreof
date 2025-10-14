@@ -1,15 +1,34 @@
 {% extends 'base.html.twig' %}
 
 {% block content %}
-    <div class="card">
+    <div class="card" {{ stimulus_controller('translation--recherche', {
+        url: path('translations_search')
+    }) }}>
         <div class="card-body">
-    <ul>
-        {% for file in files %}
-            <li><a href="{{ path('translations_edit', {filename: file|basename}) }}">{{ file|basename }}</a></li>
-        {% else %}
-            <li>Aucun fichier trouvé dans /translations</li>
-        {% endfor %}
-    </ul>
+            //formulaure pour rechercher
+            <div class="form-group">
+                <label for="search" class="form-label">Rechercher une clé ou un texte</label>
+                <input type="text" id="search" name="search"
+                       data-translation--recherche-target="search"
+                       class="form-control"/>
+                <button type="button"
+                        class="btn btn-primary mt-2" {{ stimulus_action('translation--recherche', 'recherche') }}>
+                    Rechercher
+                </button>
+            </div>
+            <div {{ stimulus_target('translation--recherche', 'resultats') }}></div>
+        </div>
+    </div>
+    <div class="card mt-3">
+        <div class="card-body">
+            <ul>
+                {% for file in files %}
+                    <li><a href="{{ path('translations_edit', {filename: file|basename}) }}">{{ file|basename }}</a>
+                    </li>
+                {% else %}
+                    <li>Aucun fichier trouvé dans /translations</li>
+                {% endfor %}
+            </ul>
         </div>
     </div>
 {% endblock %}

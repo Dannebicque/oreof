@@ -1,0 +1,8 @@
+<label class="sr-only" for="{{ id }}"></label>
+<select
+        id="{{ id }}"
+        class="form-select">
+    <option value="OUVERTURE" {% if valeur == 'OUVERTURE' %}selected{% endif %}>Ouvert / reconduit</option>
+    <option value="NON_OUVERTURE" {% if valeur == 'NON_OUVERTURE' %}selected{% endif %}>Fermeture</option>
+
+</select>

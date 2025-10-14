@@ -18,7 +18,7 @@
     <div class="mt-3"
             {{ stimulus_controller('wizard', {
                 url:  path('app_homepage_wizard'),
-                step: 'formation'
+                step: step
             }) }}
     >
 
@@ -42,7 +42,7 @@
                     Vos fiches EC/matières
                 </a>
             </li>
-            {% if is_granted('SHOW', {route: 'app_etablissement', subject: 'etablissement'}) %}
+            {% if is_granted('MANAGE', {route: 'app_etablissement', subject: 'etablissement'}) %}
                 <li class="nav-item" role="presentation">
                     <a class="nav-link {% if step == 'fiche' %}active{% endif %}" data-bs-toggle="tab" href="#" role="tab"
                        aria-selected="false"

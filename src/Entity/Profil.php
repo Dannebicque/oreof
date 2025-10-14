@@ -44,6 +44,9 @@ class Profil
     #[ORM\Column]
     private ?bool $isExclusif = false;
 
+    #[ORM\Column]
+    private ?bool $isMailing = false;
+
     public function __construct()
     {
         $this->profilDroits = new ArrayCollection();
@@ -171,6 +174,18 @@ class Profil
     public function setIsExclusif(bool $isExclusif): static
     {
         $this->isExclusif = $isExclusif;
+
+        return $this;
+    }
+
+    public function isMailing(): ?bool
+    {
+        return $this->isMailing ?? false;
+    }
+
+    public function setIsMailing(bool $isMailing): static
+    {
+        $this->isMailing = $isMailing;
 
         return $this;
     }

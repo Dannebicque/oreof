@@ -1,0 +1,64 @@
+<div class="row" data-controller="email-template">
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-body">
+                {% form_theme form 'communs/form_theme.html.twig' %}
+                {{ form_start(form) }}
+
+                <div class="mb-2">{{ form_row(form.workflow, {attr: {'data-email-template-target':'workflow'}}) }}</div>
+                <div class="mb-2">{{ form_row(form.subject) }}</div>
+
+                <div class="mb-2">
+                    <label class="form-label">Variables disponibles</label>
+                    <div class="border rounded p-2 small" style="max-height: 220px; overflow:auto">
+                        {% for k, desc in variables %}
+                            <button
+                                    type="button"
+                                    class="btn btn-sm btn-outline-secondary me-1 mb-1"
+                                    data-action="email-template#insertToken"
+                                    data-token-value="{{ '{{ ' ~ k ~ ' }}' }}"
+                                    title="{{ desc }}"
+                            >{{ k }}</button>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="mb-2">{{ form_row(form.bodyHtml) }}</div>
+                <div class="mb-2">{{ form_row(form.bodyText) }}</div>
+
+                <button class="btn btn-primary">Enregistrer</button>
+                <a class="btn btn-link" href="{{ path('app_config_email') }}">Retour</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="d-flex align-items-center mb-2">
+            <h5 class="mb-0">Preview</h5>
+            <span class="ms-2 text-muted small">(exemples par défaut si données manquantes)</span>
+        </div>
+
+        <div class="card mb-2">
+            <div class="card-body">
+                <div class="text-muted small">Subject rendu</div>
+                <div id="preview-subject" data-email-template-target="previewSubject" class="fw-bold"></div>
+            </div>
+        </div>
+
+        <div class="card mb-2">
+            <div class="card-body">
+                <div class="text-muted small">HTML rendu</div>
+                <iframe id="preview-iframe" data-email-template-target="previewIframe"
+                        style="width:100%; height:340px; border:1px solid #ddd; border-radius:6px;"></iframe>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <div class="text-muted small">Texte brut rendu</div>
+                <pre id="preview-text" data-email-template-target="previewText" class="mb-0"
+                     style="white-space:pre-wrap"></pre>
+            </div>
+        </div>
+    </div>
+</div>
+{{ form_end(form) }}

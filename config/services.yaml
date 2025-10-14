@@ -53,6 +53,8 @@ services:
         tags: [ 'app.type_diplome_handler' ]
   #      App\Workflow\StepCheckInterface:
   #        tags: [ 'app.workflow.step_check' ]
+      App\Email\Vars\VariableProviderInterface:
+        tags: [ 'app.variable_provider' ]
 
     App\Service\TypeDiplomeResolver:
         arguments:
@@ -78,3 +80,24 @@ services:
 #    App\Workflow\Registry\StepCheckRegistry:
 #      arguments:
 #        $checks: !tagged_iterator app.workflow.step_check
+
+  # Sandbox Twig très restrictive
+    Twig\Sandbox\SecurityPolicy:
+      arguments:
+        $allowedTags: [ ]            # pas de structures de contrôle pour rester "logicless"
+        $allowedFilters: [ 'escape','upper','lower','title','date','number_format','nl2br' ]
+        $allowedMethods: [ ]
+        $allowedProperties: [ ]
+        $allowedFunctions: [ ]
+
+    twig.sandbox_extension:
+      class: Twig\Extension\SandboxExtension
+      arguments:
+        - '@Twig\Sandbox\SecurityPolicy'
+        - false # sandbox OFF par défaut ; le renderer l'activera ponctuellement
+
+  # Registry : récupère tous les services taggés
+    App\Service\VariableRegistry:
+      arguments:
+        $providers: !tagged_iterator app.variable_provider
+

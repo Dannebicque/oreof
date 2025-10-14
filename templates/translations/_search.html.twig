@@ -1,0 +1,29 @@
+<table class="table">
+    <thead>
+    <tr>
+        <th>Clé</th>
+        <th>Valeur</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for key, translation in translations %}
+        <tr>
+            <td colspan="2">
+                <h4>{{ key }}</h4>
+            </td>
+        </tr>
+        {% for k, v in translation %}
+            <tr>
+                <td><input name="translations[{{ k }}]" value="{{ k }}" hidden/>{{ k }}</td>
+                <td><input class="form-control" name="translations[{{ k }}]"
+                           value="{{ v|e('html_attr') }}"/>
+                </td>
+            </tr>
+        {% endfor %}
+    {% else %}
+        <tr>
+            <td colspan="2">Aucune traduction trouvée.</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

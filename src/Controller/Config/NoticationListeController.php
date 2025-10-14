@@ -9,7 +9,9 @@
 
 namespace App\Controller\Config;
 
+use App\Controller\GetAvailableWorkflows;
 use App\Repository\NotificationListeRepository;
+use App\Repository\ProfilRepository;
 use App\Utils\JsonRequest;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,10 +22,14 @@ class NoticationListeController extends AbstractController
 {
     #[Route('/notication/liste', name: 'app_notication_liste')]
     public function index(
+        ProfilRepository      $profilRepository,
+        GetAvailableWorkflows $getAvailableWorkflows,
         NotificationListeRepository $notificationListeRepository
     ): Response {
         return $this->render('notication_liste/index.html.twig', [
             'notifications' => $notificationListeRepository->findAll(),
+            'workflows' => $getAvailableWorkflows->availableWorkflows(),
+            'profils' => $profilRepository->findBy(['isMailing' => true], ['libelle' => 'ASC']),
         ]);
     }
 
