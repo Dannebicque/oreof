@@ -47,6 +47,7 @@ class DuplicateForNewAnneeCommand extends Command
 
         $anneeSource = $input->getOption('annee-source');
 
+        // Sélection de l'année à dupliquer
         if(isset($anneeSource) === false) {
             $io->error("Il faut définir l'année à copier (PK : Campagne Collecte) !");
             return Command::INVALID;
@@ -56,6 +57,8 @@ class DuplicateForNewAnneeCommand extends Command
             ->getRepository(CampagneCollecte::class)
             ->findOneById($anneeSource);
 
+        // Vérification si la campagne de collecte sélectionnée
+        // existe en base de données
         if(!$campagneCollecteSource) {
             $io->error("Aucune campagne de collecte n'a été trouvée pour cet identifiant ({$anneeSource}).");
             return Command::INVALID;
@@ -78,6 +81,8 @@ class DuplicateForNewAnneeCommand extends Command
         $dateCfvuNewCampagne = $io->ask($promptLibelle['dateCfvuNewCampagne']['askPrompt']);
         $datePublicationNewCampagne = $io->ask($promptLibelle['datePublicationNewCampagne']['askPrompt']);
 
+        // Liens entre les données saisies dans la commande,
+        // les libellés, messages d'erreurs, et les futurs objets
         $testInitialisationStructure = [
             [
                 'type' => 'doubleYear',
@@ -128,6 +133,7 @@ class DuplicateForNewAnneeCommand extends Command
 
         $this->testInitialisationInput($testInitialisationStructure);
 
+        // Vérification des formats des données, pour alimenter les objets ORM.
         if(count($this->initialisationErrorValue) > 0){
             foreach($this->initialisationErrorValue as $errorToDisplay) {
                 $errorTxt = $promptLibelle[$errorToDisplay['name']]['errorMessage'] . " ({$errorToDisplay['value']}) ";
@@ -137,6 +143,9 @@ class DuplicateForNewAnneeCommand extends Command
             $io->warning("Certaines données rentrées sont invalides !");
             return Command::INVALID;
         }
+
+        // S'il n'y a pas d'erreur, on poursuit en alimentant les objets
+        // créés, et on les enregistre en base de données.
 
         $io->success("La commande s'est exécutée correctement !");
 
