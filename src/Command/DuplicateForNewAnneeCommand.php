@@ -19,6 +19,8 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 )]
 class DuplicateForNewAnneeCommand extends Command
 {
+    private const CODE_APOGEE_CAMPAGNE_COLLECTE = '6';
+
     private EntityManagerInterface $entityManager;
 
     private array $initialisationErrorValue = [];
@@ -147,6 +149,33 @@ class DuplicateForNewAnneeCommand extends Command
         // S'il n'y a pas d'erreur, on poursuit en alimentant les objets
         // créés, et on les enregistre en base de données.
 
+        // Nouvelle Année Universitaire
+        $newAnneeUniversitaire->setLibelle($libelleNewAnnee);
+        $newAnneeUniversitaire->setAnnee($anneeNewAnnee);
+
+        // Préparation de l'enregistrement en base de données
+        $this->entityManager->persist($newAnneeUniversitaire);
+
+        // Nouvelle Campagne de Collecte
+        $newCampagneCollecte->setLibelle($libelleNewCampagne);
+        $newCampagneCollecte->setAnnee($anneeNewCampagne);
+        $newCampagneCollecte->setDefaut(false);
+        $newCampagneCollecte->setDateOuvertureDpe(new DateTime($dateOuvertureNewCampagne));
+        $newCampagneCollecte->setDateClotureDpe(new DateTime($dateClotureNewCampagne));
+        $newCampagneCollecte->setDateTransmissionSes(new DateTime($dateTransmissionSesNewCampagne));
+        $newCampagneCollecte->setDateCfvu(new DateTime($dateCfvuNewCampagne));
+        $newCampagneCollecte->setDatePublication(new DateTime($datePublicationNewCampagne));
+        $newCampagneCollecte->setAnneeUniversitaire($newAnneeUniversitaire);
+        // Code APOGEE
+        $newCampagneCollecte->setCodeApogee(self::CODE_APOGEE_CAMPAGNE_COLLECTE);
+
+        // Préparation de l'enregistrement en base de données
+        $this->entityManager->persist($newCampagneCollecte);
+
+        // Exécution des requêtes pour enregistrer en base de données
+        $this->entityManager->flush();
+
+        // Fin de la commande (succès)
         $io->success("La commande s'est exécutée correctement !");
 
         return Command::SUCCESS;
