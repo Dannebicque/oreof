@@ -23,6 +23,7 @@ final class BadgeHeuresComponent
     public ?bool $isParcoursProprietaire = false;
 
     public ?bool $texte = false;
+    public bool $ecDesEnfants = false;
 
     #[PostMount]
     public function mounted(): void
@@ -39,12 +40,16 @@ final class BadgeHeuresComponent
 
         if ($this->elementConstitutif->getEcParent() !== null && $this->elementConstitutif->getEcParent()->isHeuresEnfantsIdentiques() === true) {
             $this->editable = false;
-            $this->etatHeuresComplet = $this->elementConstitutif->etatStructure() === 'Complet';
+            if ($this->elementConstitutif->getEcParent()->getFicheMatiere() !== null) {
+                $this->etatHeuresComplet = $this->elementConstitutif->getEcParent()->getFicheMatiere()->etatStructure() === 'Complet';
+            } else {
+                $this->etatHeuresComplet = $this->elementConstitutif->getEcParent()->etatStructure() === 'Complet';
+            }
         }
 
-        if ($this->elementConstitutif->getNatureUeEc()?->isChoix() && $this->elementConstitutif->isHeuresEnfantsIdentiques() === false) {
-
-            $this->etatHeuresComplet = $this->elementConstitutif->etatStructure() === 'Complet';
+        if ($this->elementConstitutif->getEcParent() === null && $this->elementConstitutif->getNatureUeEc()?->isChoix() && $this->elementConstitutif->isHeuresEnfantsIdentiques() === false) {
+            $this->etatHeuresComplet = true;
+            $this->ecDesEnfants = true;
         }
     }
 }

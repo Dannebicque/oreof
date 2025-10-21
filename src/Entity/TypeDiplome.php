@@ -43,6 +43,7 @@ class TypeDiplome
 
     #[Groups('parcours_json_versioning')]
     #[ORM\Column(length: 255)]
+    /** @deprecated */
     private ?string $ModeleMcc = null;
 
     #[ORM\OneToMany(mappedBy: 'typeDiplome', targetEntity: Formation::class)]
@@ -214,11 +215,13 @@ class TypeDiplome
         return $this;
     }
 
+    /** @deprecated */
     public function getModeleMcc(): ?string
     {
         return $this->ModeleMcc;
     }
 
+    /** @deprecated */
     public function setModeleMcc(string $ModeleMcc): self
     {
         $this->ModeleMcc = $ModeleMcc;

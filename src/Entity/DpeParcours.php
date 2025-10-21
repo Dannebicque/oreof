@@ -170,7 +170,7 @@ class DpeParcours
     {
         // récupère la dernière demande (selon le champs updated) associée à ce parcours ou à la formation si pas de parcours ?
         $demandes = $this->getParcours()?->getDpeDemandes()->toArray();
-        if (empty($demandes)) {
+        if (count($demandes) === 0 && $this->getParcours()?->isParcoursDefaut()) {
             $demandes = $this->getFormation()?->getDpeDemandes()->toArray();
         }
 

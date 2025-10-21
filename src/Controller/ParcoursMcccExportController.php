@@ -164,7 +164,6 @@ class ParcoursMcccExportController extends BaseController
             : "MCCC-Parcours-{$parcours->getId()}-{$fileYear}.pdf";
 
             $fileName = __DIR__ . "/../../public/mccc-export/{$fileName}";
-
             return $fileName;
         };
 
@@ -175,7 +174,7 @@ class ParcoursMcccExportController extends BaseController
         // On essaie la première année
         try {
             $pdf = file_get_contents(
-                getFileName($parcours, 1, $format, $dpeArray)
+                getFileName($parcours, 2, $format, $dpeArray)
             );
         } catch (Exception $e) {
             // Sinon, on essaie avec la deuxième

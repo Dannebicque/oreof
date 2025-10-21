@@ -94,7 +94,7 @@ class FicheMatiereExportController extends AbstractController
                 'ficheMatiere' => $ficheMatiere,
                 'formation' => $formation,
                 'typeDiplome' => $typeDiplome,
-                'typeEpreuves' => $typeDiplome !== null ? $typeEpreuveRepository->findByTypeDiplome($typeDiplome) : $typeEpreuveRepository->findAll(),
+                'typeEpreuves' => $typeD !== null ? $typeD->getTypeEpreuves() : $typeEpreuveRepository->findAll(),
                 'templateForm' => $typeD !== null ? $typeD::TEMPLATE_FORM_MCCC : 'licence.html.twig',
                 'bccs' => $bccs,
                 'titre' => 'Fiche EC/matière ' . $ficheMatiere->getLibelle(),

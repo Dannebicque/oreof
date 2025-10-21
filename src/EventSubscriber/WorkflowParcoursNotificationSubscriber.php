@@ -11,6 +11,7 @@ namespace App\EventSubscriber;
 
 use App\Entity\Formation;
 use App\Entity\Notification;
+use App\Events\ParcoursEvent;
 use App\Repository\NotificationRepository;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Workflow\Event\Event;
@@ -26,7 +27,6 @@ class WorkflowParcoursNotificationSubscriber implements EventSubscriberInterface
     {
         return [
             'workflow.dpe.transition.initialiser' => 'onInitialise',
-
         ];
     }
 

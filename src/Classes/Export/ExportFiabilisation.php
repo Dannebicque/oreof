@@ -74,7 +74,7 @@ class ExportFiabilisation
                 $parcours = $dpeParcours->getParcours();
                 $formation = $dpeParcours->getParcours()?->getFormation();
                 if ($formation !== null && $parcours !== null) {
-                    $typeD = $this->typeDiplomeResolver->get($formation->getTypeDiplome());
+                    $typeD = $this->typeDiplomeResolver->getFromFormation($formation);
                     //                    foreach ($formation->getParcours() as $parcours) {
                     $this->data[1] = $formation->getComposantePorteuse()?->getLibelle();
                     $this->data[2] = $formation->getTypeDiplome()?->getLibelle();

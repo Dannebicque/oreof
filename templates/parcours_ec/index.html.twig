@@ -2,46 +2,12 @@
 
 {% block content %}
     {{ component('alerte', {type:'warning', message: 'Actuellement les indicateurs ne sont pas mis à jour en temps réel. Merci d\'actualiser cette page si nécessaire.'}) }}
-    <div class="card"
-            {{ stimulus_controller('parcours--ec', {
-                urlUpdate: path('app_parcours_ec_update',{parcours: parcours.id}),
-            }) }}
-    >
-        <div class="card-body">
-            <table class="table table-bordered table-hover">
-                <tbody>
-                {% for semParc in parcours.semestreParcours|filter(semestre => semestre.semestre.nonDispense == false and semestre.isOuvert == true) %}
 
-                    {% if semParc.semestre.semestreRaccroche != null %}
-                        {% set semestre = semParc.semestre.semestreRaccroche %}
-                        {% set isSemestreRaccroche = true %}
-                    {% else %}
-                        {% set semestre = semParc %}
-                        {% set isSemestreRaccroche = false %}
-                    {% endif %}
-                    <tr>
-                        <th colspan="7" class="text-center font-weight-bold">
-                            {{ semParc.display }} {% if isSemestreRaccroche == true %}<i class="fa fa-link"></i>{% endif %}</th>
-                    </tr>
-
-
-                    {% for ue in semestre.semestre.ues|filter(ue => ue.ueParent == null) %}
-                        {{ include('parcours_ec/_ue.html.twig', {isSemestreRaccroche: isSemestreRaccroche}) }}
-                        {% for uee in ue.ueEnfants %}
-                            {{ include('parcours_ec/_ue.html.twig', {ue:uee, isSemestreRaccroche: isSemestreRaccroche}) }}
-                        {% endfor %}
-                    {% endfor %}
-
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </div>
-
+    {{ include('typeDiplome/'~constant('TEMPLATE_FOLDER', typeD)~'/liste-ec.html.twig') }}
 {% endblock %}
 
 {% block header %}
-    EC pour le parcours {{ parcours.libelle }}
+    EC pour le parcours : {{ parcours.libelle }} {{ parcours.typeParcours|badgeTypeParcours }}
 {% endblock %}
 
 {% block breadcrumb %}

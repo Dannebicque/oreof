@@ -5,6 +5,7 @@ namespace App\Service;
 use App\Classes\GetHistorique;
 use App\Entity\DpeParcours;
 use App\Entity\Formation;
+use App\Entity\Parcours;
 use App\Entity\ParcoursVersioning;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -65,13 +66,15 @@ class ApiJsonExport {
         foreach($formationArray as $formation){
             $dateValidationFormation = [];
             $tParcours = [];
+            /** @var Parcours $parcours */
             foreach($formation->getParcours() as $parcours){
                 $lastVersion = $this->entityManager->getRepository(ParcoursVersioning::class)
                     ->findLastCfvuVersion($parcours);
                 if(count($lastVersion) > 0){
                     $lastVersionData = $this->versioningParcours->loadParcoursFromVersion($lastVersion[0]);
                     $tParcours[] = [
-                        'id' => $parcours->getId(),
+                        'id' => $parcours->getParcoursOrigineCopie()?->getId(),
+                        'id_new' => $parcours->getId(),
                         'libelle' => $lastVersionData['parcours']->getDisplay(),
                         'url' => $urlPrefix . $this->router->generate(
                                 'app_parcours_export_json_urca_cfvu_valid',
@@ -106,7 +109,8 @@ class ApiJsonExport {
 
             if(count($tParcours) > 0){
                 $dataJSON[] = [
-                    'id' => $formation->getId(),
+                    'id' => $formation->getFormationOrigineCopie()?->getId(),
+                    'id_new' => $formation->getId(),
                     'libelle' => $formation->getDisplayLong(),
                     'parcours' => $tParcours,
                     'dateValidation' => $dateValidationFormation?->format('Y-m-d H:i:s') ?? null
