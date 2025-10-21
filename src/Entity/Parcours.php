@@ -289,6 +289,12 @@ class Parcours
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $motsCles = null;
 
+    /**
+     * @var Collection<int, Annee>
+     */
+    #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: Annee::class)]
+    private Collection $annees;
+
     public function __construct(?Formation $formation)
     {
         $this->formation = $formation;
@@ -312,6 +318,7 @@ class Parcours
         $this->dpeParcours = new ArrayCollection();
         $this->niveauFrancais = NiveauLangueEnum::B2;
         $this->userProfils = new ArrayCollection();
+        $this->annees = new ArrayCollection();
     }
 
 
@@ -1403,24 +1410,24 @@ class Parcours
         return $this;
     }
 
-    public function getAnnees(): array
-    {
-        $annees = [];
-        foreach ($this->getSemestreParcours() as $semestreParcours) {
-
-            if ($semestreParcours->getSemestre()?->isNonDispense() === false) {
-
-                if ($semestreParcours->getOrdre() % 2 === 0) {
-
-                    $annees[] = $semestreParcours->getOrdre() / 2;
-                } else {
-                    $annees[] = ($semestreParcours->getOrdre() + 1) / 2;
-                }
-            }
-        }
-
-        return array_unique($annees);
-    }
+//    public function getAnnees(): array
+//    {
+//        $annees = [];
+//        foreach ($this->getSemestreParcours() as $semestreParcours) {
+//
+//            if ($semestreParcours->getSemestre()?->isNonDispense() === false) {
+//
+//                if ($semestreParcours->getOrdre() % 2 === 0) {
+//
+//                    $annees[] = $semestreParcours->getOrdre() / 2;
+//                } else {
+//                    $annees[] = ($semestreParcours->getOrdre() + 1) / 2;
+//                }
+//            }
+//        }
+//
+//        return array_unique($annees);
+//    }
 
     public function getCodeDiplome(?int $annee): ?string
     {
@@ -1693,6 +1700,33 @@ class Parcours
     public function setMotsCles(?string $motsCles): static
     {
         $this->motsCles = $motsCles;
+
+        return $this;
+    }
+
+    public function getAnnees(): Collection
+    {
+        return $this->annees;
+    }
+
+    public function addAnnee(Annee $annee): static
+    {
+        if (!$this->annees->contains($annee)) {
+            $this->annees->add($annee);
+            $annee->setParcours($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAnnee(Annee $annee): static
+    {
+        if ($this->annees->removeElement($annee)) {
+            // set the owning side to null (unless already changed)
+            if ($annee->getParcours() === $this) {
+                $annee->setParcours(null);
+            }
+        }
 
         return $this;
     }
