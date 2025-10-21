@@ -4,6 +4,7 @@ namespace App\Command;
 
 use App\Entity\AnneeUniversitaire;
 use App\Entity\CampagneCollecte;
+use App\Entity\Formation;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -19,11 +20,22 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 )]
 class DuplicateForNewAnneeCommand extends Command
 {
+    /**
+     * CONFIGURATION
+     */
+    private const EXECUTION_MEMORY_LIMIT = '2500M';
+
     private const CODE_APOGEE_CAMPAGNE_COLLECTE = '6';
+
+    private const SLUG_YEAR_SUFFIX = '-2026';
+
+    /* ********** */
 
     private EntityManagerInterface $entityManager;
 
     private array $initialisationErrorValue = [];
+
+    private array $entitiesArray = [];
 
     public function __construct(
         EntityManagerInterface $entityManager
@@ -45,6 +57,8 @@ class DuplicateForNewAnneeCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output) : int
     {
+        ini_set('memory_limit', self::EXECUTION_MEMORY_LIMIT);
+
         $io = new SymfonyStyle($input, $output);
 
         $anneeSource = $input->getOption('annee-source');
@@ -172,6 +186,30 @@ class DuplicateForNewAnneeCommand extends Command
         // Préparation de l'enregistrement en base de données
         $this->entityManager->persist($newCampagneCollecte);
 
+        /**
+         * FORMATION
+         */
+        $this->entitiesArray = $this->entityManager->getRepository(Formation::class)
+            ->findFromAnneeUniversitaire($anneeSource);
+        $io->writeln('Copie des formations...');
+        $io->progressStart(count($this->entitiesArray));
+        foreach($this->entitiesArray as $formation){
+            $nowDate = new DateTime('now');
+            $initialFormation = $this->entityManager->getRepository(Formation::class)
+                ->findOneById($formation);
+            $cloneFormation = clone $initialFormation;
+            $cloneFormation->setSlug($initialFormation->getSlug() . self::SLUG_YEAR_SUFFIX);
+            $cloneFormation->setFormationOrigineCopie($initialFormation);
+            $cloneFormation->setCreated($nowDate);
+            $cloneFormation->setUpdated($nowDate);
+
+            $this->entityManager->persist($cloneFormation);
+            $io->progressAdvance(1);
+        }
+
+        $io->progressFinish();
+        $this->emptyEntitiesArray();
+
         // Exécution des requêtes pour enregistrer en base de données
         $this->entityManager->flush();
 
@@ -267,4 +305,8 @@ class DuplicateForNewAnneeCommand extends Command
             }
         }
     }
+
+    private function emptyEntitiesArray() : void {
+        $this->entitiesArray = [];
+    } 
 }
