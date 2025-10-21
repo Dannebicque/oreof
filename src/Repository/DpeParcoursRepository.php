@@ -247,4 +247,14 @@ class DpeParcoursRepository extends ServiceEntityRepository
         return $query->getQuery()
             ->getResult();
     }
+
+    public function findFromAnneeUniversitaire(int $idCampagneCollecte) : array {
+        return $this->createQueryBuilder('dpeParcours')
+            ->select('dpeParcours.id')
+            ->join('dpeParcours.campagneCollecte', 'campC')
+            ->andWhere('campC.id = :idCampagne')
+            ->setParameter(':idCampagne', $idCampagneCollecte)
+            ->getQuery()
+            ->getResult();
+    }
 }
