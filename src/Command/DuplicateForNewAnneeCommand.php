@@ -5,6 +5,7 @@ namespace App\Command;
 use App\Entity\AnneeUniversitaire;
 use App\Entity\CampagneCollecte;
 use App\Entity\Formation;
+use App\Entity\Parcours;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -187,7 +188,9 @@ class DuplicateForNewAnneeCommand extends Command
         $this->entityManager->persist($newCampagneCollecte);
 
         /**
+         * 
          * FORMATION
+         * 
          */
         $this->entitiesArray = $this->entityManager->getRepository(Formation::class)
             ->findFromAnneeUniversitaire($anneeSource);
@@ -209,8 +212,37 @@ class DuplicateForNewAnneeCommand extends Command
 
         $io->progressFinish();
         $this->emptyEntitiesArray();
+        $io->writeln("Enregistrement en base de données...");
+        $this->entityManager->flush();
+        
+        /**
+         * 
+         * PARCOURS
+         * 
+         */
+        $this->entitiesArray = $this->entityManager->getRepository(Parcours::class)
+            ->findFromAnneeUniversitaire($anneeSource);
+        $io->writeln('Copie des parcours...');
+        $io->progressStart(count($this->entitiesArray));
+        foreach($this->entitiesArray as $parcours){
+            $nowDate = new DateTime('now');
+            $initialParcours = $this->entityManager->getRepository(Parcours::class)
+                ->findOneById($parcours);
+            $linkFormationParcours = $this->entityManager->getRepository(Formation::class)
+                ->findOneBy(['formationOrigineCopie' => $initialParcours->getFormation()]);
+            $cloneParcours = clone $initialParcours;
+            $cloneParcours->setParcoursOrigineCopie($initialParcours);
+            $cloneParcours->setFormation($linkFormationParcours);
+            $cloneParcours->setCreated($nowDate);
+            $cloneParcours->setUpdated($nowDate);
 
-        // Exécution des requêtes pour enregistrer en base de données
+            $this->entityManager->persist($cloneParcours);
+            $io->progressAdvance();
+        }
+
+        $io->progressFinish();
+        $this->emptyEntitiesArray();
+        $io->writeln("Enregistrement en base de données...");
         $this->entityManager->flush();
 
         // Fin de la commande (succès)
