@@ -4,8 +4,10 @@ namespace App\Command;
 
 use App\Entity\AnneeUniversitaire;
 use App\Entity\CampagneCollecte;
+use App\Entity\DpeParcours;
 use App\Entity\Formation;
 use App\Entity\Parcours;
+use App\Enums\TypeModificationDpeEnum;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -211,9 +213,7 @@ class DuplicateForNewAnneeCommand extends Command
         }
 
         $io->progressFinish();
-        $this->emptyEntitiesArray();
-        $io->writeln("Enregistrement en base de données...");
-        $this->entityManager->flush();
+        $this->saveAndCleanUp($io);
         
         /**
          * 
@@ -237,13 +237,45 @@ class DuplicateForNewAnneeCommand extends Command
             $cloneParcours->setUpdated($nowDate);
 
             $this->entityManager->persist($cloneParcours);
-            $io->progressAdvance();
+            $io->progressAdvance(1);
         }
 
         $io->progressFinish();
-        $this->emptyEntitiesArray();
-        $io->writeln("Enregistrement en base de données...");
-        $this->entityManager->flush();
+        $this->saveAndCleanUp($io);
+
+        /**
+         * 
+         * DPE PARCOURS 
+         * 
+         */
+        $this->entitiesArray = $this->entityManager->getRepository(DpeParcours::class)
+            ->findFromAnneeUniversitaire($anneeSource);
+        $io->writeln("Copie des 'DPE Parcours'");
+        $io->progressStart(count($this->entitiesArray));
+        foreach($this->entitiesArray as $dpeParcours){
+            $nowDate = new DateTime('now');
+            $initialDpeParcours = $this->entityManager->getRepository(DpeParcours::class)
+                ->findOneById($dpeParcours);
+            $linkFormationDpe = $this->entityManager->getRepository(Formation::class)
+                ->findOneBy(['formationOrigineCopie' => $initialDpeParcours->getFormation()]);
+            $linkParcoursDpe = $this->entityManager->getRepository(Parcours::class)
+                ->findOneBy(['parcoursOrigineCopie' => $initialDpeParcours->getParcours()]);
+            $cloneDpeParcours = clone $initialDpeParcours;
+            if($cloneDpeParcours->getEtatReconduction() !== TypeModificationDpeEnum::NON_OUVERTURE){
+                $cloneDpeParcours->setEtatReconduction(TypeModificationDpeEnum::OUVERT);
+            }
+            $cloneDpeParcours->setParcours($linkParcoursDpe);
+            $cloneDpeParcours->setFormation($linkFormationDpe);
+            $cloneDpeParcours->setCampagneCollecte($newCampagneCollecte);
+            $cloneDpeParcours->setEtatValidation(['soumis_central' => 1]);
+            $cloneDpeParcours->setCreated($nowDate);
+
+            $this->entityManager->persist($cloneDpeParcours);
+            $io->progressAdvance(1);
+        }
+
+        $io->progressFinish();
+        $this->saveAndCleanUp($io);
 
         // Fin de la commande (succès)
         $io->success("La commande s'est exécutée correctement !");
@@ -341,4 +373,10 @@ class DuplicateForNewAnneeCommand extends Command
     private function emptyEntitiesArray() : void {
         $this->entitiesArray = [];
     } 
+
+    private function saveAndCleanUp(SymfonyStyle $io) : void {
+        $this->emptyEntitiesArray();
+        $io->writeln("Enregistrement en base de données...");
+        $this->entityManager->flush();
+    }
 }
