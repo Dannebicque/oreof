@@ -205,6 +205,7 @@ class DuplicateForNewAnneeCommand extends Command
             $cloneFormation = clone $initialFormation;
             $cloneFormation->setSlug($initialFormation->getSlug() . self::SLUG_YEAR_SUFFIX);
             $cloneFormation->setFormationOrigineCopie($initialFormation);
+            $cloneFormation->setDpe($newCampagneCollecte);
             $cloneFormation->setCreated($nowDate);
             $cloneFormation->setUpdated($nowDate);
 
