@@ -3,6 +3,7 @@
 namespace App\Command;
 
 use App\Entity\AnneeUniversitaire;
+use App\Entity\BlocCompetence;
 use App\Entity\CampagneCollecte;
 use App\Entity\DpeParcours;
 use App\Entity\Formation;
@@ -196,7 +197,7 @@ class DuplicateForNewAnneeCommand extends Command
          */
         $this->entitiesArray = $this->entityManager->getRepository(Formation::class)
             ->findFromAnneeUniversitaire($anneeSource);
-        $io->writeln('Copie des formations...');
+        $io->writeln("Copie des 'Formations'...");
         $io->progressStart(count($this->entitiesArray));
         foreach($this->entitiesArray as $formation){
             $nowDate = new DateTime('now');
@@ -223,7 +224,7 @@ class DuplicateForNewAnneeCommand extends Command
          */
         $this->entitiesArray = $this->entityManager->getRepository(Parcours::class)
             ->findFromAnneeUniversitaire($anneeSource);
-        $io->writeln('Copie des parcours...');
+        $io->writeln("Copie des 'Parcours'...");
         $io->progressStart(count($this->entitiesArray));
         foreach($this->entitiesArray as $parcours){
             $nowDate = new DateTime('now');
@@ -251,7 +252,7 @@ class DuplicateForNewAnneeCommand extends Command
          */
         $this->entitiesArray = $this->entityManager->getRepository(DpeParcours::class)
             ->findFromAnneeUniversitaire($anneeSource);
-        $io->writeln("Copie des 'DPE Parcours'");
+        $io->writeln("Copie des 'DPE Parcours'...");
         $io->progressStart(count($this->entitiesArray));
         foreach($this->entitiesArray as $dpeParcours){
             $nowDate = new DateTime('now');
@@ -272,6 +273,38 @@ class DuplicateForNewAnneeCommand extends Command
             $cloneDpeParcours->setCreated($nowDate);
 
             $this->entityManager->persist($cloneDpeParcours);
+            $io->progressAdvance(1);
+        }
+
+        $io->progressFinish();
+        $this->saveAndCleanUp($io);
+
+        /**
+         * 
+         * BLOCS DE COMPÉTENCES
+         * 
+         */
+        $this->entitiesArray = $this->entityManager->getRepository(BlocCompetence::class)
+            ->findFromAnneeUniversitaire($anneeSource);
+        $io->writeln("Copie des 'Blocs de Compétences'...");
+        $io->progressStart(count($this->entitiesArray));
+        foreach($this->entitiesArray as $blocCompetence){
+            $initialBlocCompetence = $this->entityManager->getRepository(BlocCompetence::class)
+                ->findOneById($blocCompetence);
+            $cloneBlocCompetence = clone $initialBlocCompetence;
+            if($initialBlocCompetence->getParcours() !== null){
+                $linkBlocCompetenceParcours = $this->entityManager->getRepository(Parcours::class)
+                    ->findOneBy(['parcoursOrigineCopie' => $initialBlocCompetence->getParcours()]);
+                $cloneBlocCompetence->setParcours($linkBlocCompetenceParcours);
+            }
+            if($initialBlocCompetence->getFormation() !== null){
+                $linkBlocCompetenceFormation = $this->entityManager->getRepository(Formation::class)
+                    ->findOneBy(['formationOrigineCopie' => $initialBlocCompetence->getFormation()]);
+                $cloneBlocCompetence->setFormation($linkBlocCompetenceFormation);
+            }
+            $cloneBlocCompetence->setBlocCompetenceOrigineCopie($initialBlocCompetence);
+
+            $this->entityManager->persist($cloneBlocCompetence);
             $io->progressAdvance(1);
         }
 
