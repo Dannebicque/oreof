@@ -124,4 +124,16 @@ class BlocCompetenceRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function findFromAnneeUniversitaire(int $idCampagneCollecte) : array {
+        return $this->createQueryBuilder('blocComp')
+            ->select('blocComp.id')
+            ->join('blocComp.parcours', 'parcours')
+            ->join('parcours.dpeParcours', 'dpeParcours')
+            ->join('dpeParcours.campagneCollecte', 'campC')
+            ->andWhere('campC.id = :idCampagne')
+            ->setParameter(':idCampagne', $idCampagneCollecte)
+            ->getQuery()
+            ->getResult();
+    }
 }
