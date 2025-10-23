@@ -4,6 +4,7 @@ namespace App\Command;
 
 use App\Entity\AnneeUniversitaire;
 use App\Entity\BlocCompetence;
+use App\Entity\ButCompetence;
 use App\Entity\CampagneCollecte;
 use App\Entity\Competence;
 use App\Entity\DpeParcours;
@@ -155,7 +156,7 @@ class DuplicateForNewAnneeCommand extends Command
         $this->testInitialisationInput($testInitialisationStructure);
 
         // Vérification des formats des données, pour alimenter les objets ORM.
-        if(count($this->initialisationErrorValue) > 0){
+        if(count($this->initialisationErrorValue) > 0) {
             foreach($this->initialisationErrorValue as $errorToDisplay) {
                 $errorTxt = $promptLibelle[$errorToDisplay['name']]['errorMessage'] . " ({$errorToDisplay['value']}) ";
                 $io->writeln($errorTxt);
@@ -200,7 +201,7 @@ class DuplicateForNewAnneeCommand extends Command
             ->findFromAnneeUniversitaire($anneeSource);
         $io->writeln("Copie des 'Formations'...");
         $io->progressStart(count($this->entitiesArray));
-        foreach($this->entitiesArray as $formation){
+        foreach($this->entitiesArray as $formation) {
             $nowDate = new DateTime('now');
             $initialFormation = $this->entityManager->getRepository(Formation::class)
                 ->findOneById($formation);
@@ -227,7 +228,7 @@ class DuplicateForNewAnneeCommand extends Command
             ->findFromAnneeUniversitaire($anneeSource);
         $io->writeln("Copie des 'Parcours'...");
         $io->progressStart(count($this->entitiesArray));
-        foreach($this->entitiesArray as $parcours){
+        foreach($this->entitiesArray as $parcours) {
             $nowDate = new DateTime('now');
             $initialParcours = $this->entityManager->getRepository(Parcours::class)
                 ->findOneById($parcours);
@@ -255,7 +256,7 @@ class DuplicateForNewAnneeCommand extends Command
             ->findFromAnneeUniversitaire($anneeSource);
         $io->writeln("Copie des 'DPE Parcours'...");
         $io->progressStart(count($this->entitiesArray));
-        foreach($this->entitiesArray as $dpeParcours){
+        foreach($this->entitiesArray as $dpeParcours) {
             $nowDate = new DateTime('now');
             $initialDpeParcours = $this->entityManager->getRepository(DpeParcours::class)
                 ->findOneById($dpeParcours);
@@ -289,7 +290,7 @@ class DuplicateForNewAnneeCommand extends Command
             ->findFromAnneeUniversitaire($anneeSource);
         $io->writeln("Copie des 'Blocs de Compétences'...");
         $io->progressStart(count($this->entitiesArray));
-        foreach($this->entitiesArray as $blocCompetence){
+        foreach($this->entitiesArray as $blocCompetence) {
             $initialBlocCompetence = $this->entityManager->getRepository(BlocCompetence::class)
                 ->findOneById($blocCompetence);
             $cloneBlocCompetence = clone $initialBlocCompetence;
@@ -321,7 +322,7 @@ class DuplicateForNewAnneeCommand extends Command
             ->findFromAnneeUniversitaire($anneeSource);
         $io->writeln("Copie des 'Compétences'...");
         $io->progressStart(count($this->entitiesArray));
-        foreach($this->entitiesArray as $competence){
+        foreach($this->entitiesArray as $competence) {
             $initialCompetence = $this->entityManager->getRepository(Competence::class)
                 ->findOneById($competence);
             $cloneCompetence = clone $initialCompetence;
@@ -333,6 +334,34 @@ class DuplicateForNewAnneeCommand extends Command
             $cloneCompetence->setCompetenceOrigineCopie($initialCompetence);
 
             $this->entityManager->persist($cloneCompetence);
+            $io->progressAdvance(1);
+        }
+
+        $io->progressFinish();
+        $this->saveAndCleanUp($io);
+
+        /**
+         * 
+         * BUT COMPÉTENCES
+         * 
+         */
+        $this->entitiesArray = $this->entityManager->getRepository(ButCompetence::class)
+            ->findFromAnneeUniversitaire($anneeSource);
+        $io->writeln("Copie des 'BUT Compétences'...");
+        $io->progressStart(count($this->entitiesArray));
+        foreach($this->entitiesArray as $butCompetence) {
+            $initialButCompetence = $this->entityManager->getRepository(ButCompetence::class)
+                ->findOneById($butCompetence);
+            $cloneButCompetence = clone $initialButCompetence;
+            if($initialButCompetence->getFormation() !== null) {
+                $linkButCompetenceFormation = $this->entityManager->getRepository(Formation::class)
+                    ->findOneBy(['formationOrigineCopie' => $initialButCompetence->getFormation()]);
+                $cloneButCompetence->setFormation($linkButCompetenceFormation);
+            }
+            $cloneButCompetence->setButCompetenceOrigineCopie($initialButCompetence);
+            $cloneButCompetence->setCampagneCollecte($newCampagneCollecte);
+
+            $this->entityManager->persist($cloneButCompetence);
             $io->progressAdvance(1);
         }
 
