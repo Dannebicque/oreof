@@ -392,15 +392,15 @@ class DuplicateForNewAnneeCommand extends Command
     private function getInitialisationLibelleArray() {
         return [
             'libelleNewAnnee' => [
-                    'askPrompt' => "Libellé de la nouvelle année universitaire [YYYY-YYYY] : ",
+                    'askPrompt' => "Libellé de la nouvelle année universitaire [YYYY-YYYY]",
                     'errorMessage' => "Libellé de la nouvelle année universitaire invalide."
                 ], 
             'anneeNewAnnee' => [
-                    'askPrompt' => "Année de la nouvelle année universitaire [YYYY] : ",
+                    'askPrompt' => "Année de la nouvelle année universitaire [YYYY]",
                     'errorMessage' => "Année de la nouvelle année universitaire invalide."
                 ], 
             'libelleNewCampagne' => [
-                    'askPrompt' => "Libellé de la nouvelle Campagne de Collecte [YYYY-YYYY] : ",
+                    'askPrompt' => "Libellé de la nouvelle Campagne de Collecte [YYYY-YYYY]",
                     'errorMessage' => "Libellé de la nouvelle Campagne de Collecte invalide."
                 ],
             'anneeNewCampagne' => [
@@ -408,23 +408,23 @@ class DuplicateForNewAnneeCommand extends Command
                     'errorMessage' => "Année de la nouvelle Campagne de Collecte invalide."
                 ], 
             'dateOuvertureNewCampagne' => [
-                    'askPrompt' => "Date d'ouverture du DPE pour la nouvelle Campagne de Collecte [YYYY-MM-DD] : ",
+                    'askPrompt' => "Date d'ouverture du DPE pour la nouvelle Campagne de Collecte [YYYY-MM-DD]",
                     'errorMessage' => "Date d'ouverture du DPE invalide."
                 ], 
             'dateClotureNewCampagne' => [
-                    'askPrompt' => "Date de clôture du DPE pour la nouvelle Campagne de Collecte [YYYY-MM-DD] : ",
+                    'askPrompt' => "Date de clôture du DPE pour la nouvelle Campagne de Collecte [YYYY-MM-DD]",
                     'errorMessage' => "Date de clôture du DPE invalide."
                 ],
             'dateTransmissionSesNewCampagne' => [
-                    'askPrompt' => "Date de transmission aux SES pour la nouvelle Campagne de Collecte [YYYY-MM-DD] : ",
+                    'askPrompt' => "Date de transmission aux SES pour la nouvelle Campagne de Collecte [YYYY-MM-DD]",
                     'errorMessage' => "Date de transmission aux SES invalide."
                 ],
             'dateCfvuNewCampagne' => [
-                    'askPrompt' => "Date de la CFVU pour la nouvelle Campagne de Collecte [YYYY-MM-DD] : ",
+                    'askPrompt' => "Date de la CFVU pour la nouvelle Campagne de Collecte [YYYY-MM-DD]",
                     'errorMessage' => "Date de la CFVU invalide."
                 ],
             'datePublicationNewCampagne' => [
-                    'askPrompt' => "Date de publication pour la nouvelle Campagne de Collecte [YYYY-MM-DD] : ",
+                    'askPrompt' => "Date de publication pour la nouvelle Campagne de Collecte [YYYY-MM-DD]",
                     'errorMessage' => "Date de publication invalide."
                 ],
         ];
