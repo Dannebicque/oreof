@@ -5,6 +5,7 @@ namespace App\Command;
 use App\Entity\AnneeUniversitaire;
 use App\Entity\BlocCompetence;
 use App\Entity\ButCompetence;
+use App\Entity\ButNiveau;
 use App\Entity\CampagneCollecte;
 use App\Entity\Competence;
 use App\Entity\DpeParcours;
@@ -362,6 +363,31 @@ class DuplicateForNewAnneeCommand extends Command
             $cloneButCompetence->setCampagneCollecte($newCampagneCollecte);
 
             $this->entityManager->persist($cloneButCompetence);
+            $io->progressAdvance(1);
+        }
+
+        $io->progressFinish();
+        $this->saveAndCleanUp($io);
+
+        /**
+         * 
+         * BUT NIVEAU
+         * 
+         */
+        $this->entitiesArray = $this->entityManager->getRepository(ButNiveau::class)
+            ->findFromAnneeUniversitaire($anneeSource);
+        $io->writeln("Copie des 'BUT Niveaux'...");
+        $io->progressStart(count($this->entitiesArray));
+        foreach($this->entitiesArray as $butNiveau) {
+            $initialButNiveau = $this->entityManager->getRepository(ButNiveau::class)
+                ->findOneById($butNiveau);
+            $cloneButNiveau = clone $initialButNiveau;
+            $linkButNiveauButCompetence = $this->entityManager->getRepository(ButCompetence::class)
+                ->findOneBy(['butCompetenceOrigineCopie' => $initialButNiveau->getCompetence()]);
+            $cloneButNiveau->setCompetence($linkButNiveauButCompetence);
+            $cloneButNiveau->setButNiveauOrigineCopie($initialButNiveau);
+
+            $this->entityManager->persist($cloneButNiveau);
             $io->progressAdvance(1);
         }
 
