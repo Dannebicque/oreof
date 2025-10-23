@@ -5,6 +5,7 @@ namespace App\Command;
 use App\Entity\AnneeUniversitaire;
 use App\Entity\BlocCompetence;
 use App\Entity\CampagneCollecte;
+use App\Entity\Competence;
 use App\Entity\DpeParcours;
 use App\Entity\Formation;
 use App\Entity\Parcours;
@@ -305,6 +306,33 @@ class DuplicateForNewAnneeCommand extends Command
             $cloneBlocCompetence->setBlocCompetenceOrigineCopie($initialBlocCompetence);
 
             $this->entityManager->persist($cloneBlocCompetence);
+            $io->progressAdvance(1);
+        }
+
+        $io->progressFinish();
+        $this->saveAndCleanUp($io);
+
+        /**
+         * 
+         * COMPÉTENCES
+         * 
+         */
+        $this->entitiesArray = $this->entityManager->getRepository(Competence::class)
+            ->findFromAnneeUniversitaire($anneeSource);
+        $io->writeln("Copie des 'Compétences'...");
+        $io->progressStart(count($this->entitiesArray));
+        foreach($this->entitiesArray as $competence){
+            $initialCompetence = $this->entityManager->getRepository(Competence::class)
+                ->findOneById($competence);
+            $cloneCompetence = clone $initialCompetence;
+            if($initialCompetence->getBlocCompetence() !== null){
+                $linkCompetenceBlocCompetence = $this->entityManager->getRepository(BlocCompetence::class)
+                    ->findOneBy(['blocCompetenceOrigineCopie' => $initialCompetence->getBlocCompetence()]);
+                $cloneCompetence->setBlocCompetence($linkCompetenceBlocCompetence);
+            }
+            $cloneCompetence->setCompetenceOrigineCopie($initialCompetence);
+
+            $this->entityManager->persist($cloneCompetence);
             $io->progressAdvance(1);
         }
 
