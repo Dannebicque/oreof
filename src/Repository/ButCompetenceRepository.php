@@ -68,4 +68,27 @@ class ButCompetenceRepository extends ServiceEntityRepository
 
         return null;
     }
+
+    public function findFromAnneeUniversitaire(int $idCampagneCollecte) : array {
+        $qb = $this->createQueryBuilder('butComp');
+
+        $subqueryCheck = $this->createQueryBuilder('butCompetence')
+            ->select('butCompetence.id')
+            ->join('butCompetence.formation', 'f')
+            ->join('f.parcours', 'p')
+            ->join('p.dpeParcours', 'dpe')
+            ->join('dpe.campagneCollecte', 'campagneC')
+            ->andWhere('campagneC.id = :idCampagne');
+
+        return $qb
+            ->select('DISTINCT butComp.id')
+            ->andWhere(
+                $qb->expr()->in(
+                    'butComp.id', $subqueryCheck->getDQL()
+                )
+            )
+            ->setParameter(':idCampagne', $idCampagneCollecte)
+            ->getQuery()
+            ->getResult();
+    }
 }
