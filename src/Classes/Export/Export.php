@@ -9,13 +9,11 @@
 
 namespace App\Classes\Export;
 
-use App\Classes\MyPDF;
 use App\Entity\CampagneCollecte;
 use App\Entity\Composante;
 use App\Service\ProjectDirProvider;
 use App\Service\TypeDiplomeResolver;
 use DateTimeInterface;
-use Symfony\Component\HttpKernel\KernelInterface;
 
 class Export
 {
@@ -44,7 +42,6 @@ class Export
         protected ExportListeFicheMatiere           $exportListeFicheMatiere,
         protected ExportMccc                        $exportMccc,
         ProjectDirProvider $projectDirProvider,
-        private MyPDF                               $myPDF,
         private readonly ExportSyntheseModification $exportSyntheseModification,
     ) {
         $this->dir = $projectDirProvider->getProjectDir() . '/public/temp/';

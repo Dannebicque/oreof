@@ -134,7 +134,7 @@ readonly class Bcc
         //on supprime les BCC et les compétences du parcours et des fiches matières
         foreach ($parcours->getBlocCompetences() as $bcc) {
             foreach ($bcc->getCompetences() as $comp) {
-                foreach ($comp->getFicheMatieress() as $fm) {
+                foreach ($comp->getFicheMatieres() as $fm) {
                     $fm->removeCompetence($comp);
                 }
                 $this->entityManager->remove($comp);
