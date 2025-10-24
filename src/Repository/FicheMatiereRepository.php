@@ -453,4 +453,47 @@ class FicheMatiereRepository extends ServiceEntityRepository
 
         return $query->getQuery()->getResult();
     }
+
+    public function findFromAnneeUniversitaire(int $idCampagneCollecte) : array {
+        $qb = $this->createQueryBuilder('ficheMatiere');
+
+        $subQueryParcoursAnnee = $this->createQueryBuilder('ficheMatiereAnnee')
+            ->select('ficheMatiereAnnee.id')
+            ->join('ficheMatiereAnnee.parcours', 'parcoursAnnee')
+            ->join('parcoursAnnee.dpeParcours', 'dpeAnnee')
+            ->join('dpeAnnee.campagneCollecte', 'campagneAnnee')
+            ->andWhere('campagneAnnee.id = :idCampagne');
+
+        $subQueryFicheHorsDiplomeAnnee = $this->createQueryBuilder('ficheHDAnnee')
+            ->select('ficheHDAnnee.id')
+            ->join('ficheHDAnnee.ficheMatiereParcours', 'ficheHDMutu')
+            ->join('ficheHDMutu.parcours', 'parcoursMutu')
+            ->join('parcoursMutu.dpeParcours', 'dpeMutu')
+            ->join('dpeMutu.campagneCollecte', 'campagneMutu')
+            ->andWhere('ficheHDAnnee.horsDiplome = 1')
+            ->andWhere('campagneMutu.id = :idCampagne');
+
+        $subQueryFicheNotAlreadyCopied = $this->createQueryBuilder('f')
+            ->select('fCopy.id')
+            ->join('f.ficheMatiereOrigineCopie', 'fCopy');
+
+        return $qb
+            ->select('DISTINCT ficheMatiere.id')
+            ->andWhere(
+                $qb->expr()->orX(
+                    $qb->expr()->in(
+                        'ficheMatiere.id', $subQueryParcoursAnnee->getDQL()
+                    ),
+                    $qb->expr()->in(
+                        'ficheMatiere.id', $subQueryFicheHorsDiplomeAnnee->getDQL()
+                    )
+                )
+            )
+            ->andWhere(
+                $qb->expr()->notIn('ficheMatiere.id', $subQueryFicheNotAlreadyCopied->getDQL())
+            )
+            ->setParameter(':idCampagne', $idCampagneCollecte)
+            ->getQuery()
+            ->getResult();
+    }
 }
