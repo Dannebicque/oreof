@@ -19,7 +19,7 @@ final class UserVariableProvider implements VariableProviderInterface
         $email = null;
 
         if (is_object($u)) {
-            $fullName = method_exists($u, 'getFullName') ? $u->getFullName() : null;
+            $fullName = method_exists($u, 'getDisplay') ? $u->getDisplay() : null;
             if ($fullName === null && method_exists($u, 'getFirstname') && method_exists($u, 'getLastname')) {
                 $fullName = trim((string)$u->getFirstname() . ' ' . $u->getLastname());
             }

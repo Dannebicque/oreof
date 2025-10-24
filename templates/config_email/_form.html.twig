@@ -18,6 +18,8 @@
                                     data-action="email-template#insertToken"
                                     data-token-value="{{ '{{ ' ~ k ~ ' }}' }}"
                                     title="{{ desc }}"
+                                    data-bs-toggle="tooltip"
+                                    data-bs-placement="bottom"
                             >{{ k }}</button>
                         {% endfor %}
                     </div>
@@ -33,20 +35,20 @@
     </div>
     <div class="col-lg-6">
         <div class="d-flex align-items-center mb-2">
-            <h5 class="mb-0">Preview</h5>
-            <span class="ms-2 text-muted small">(exemples par défaut si données manquantes)</span>
+            <h5 class="mb-0">Aperçu</h5>
+            <span class="ms-2 text-muted small">(les données sont fictives et ne servent que d'illustration)</span>
         </div>
 
         <div class="card mb-2">
             <div class="card-body">
-                <div class="text-muted small">Subject rendu</div>
+                <div class="text-muted small">Objet du mail</div>
                 <div id="preview-subject" data-email-template-target="previewSubject" class="fw-bold"></div>
             </div>
         </div>
 
         <div class="card mb-2">
             <div class="card-body">
-                <div class="text-muted small">HTML rendu</div>
+                <div class="text-muted small">Version HTML</div>
                 <iframe id="preview-iframe" data-email-template-target="previewIframe"
                         style="width:100%; height:340px; border:1px solid #ddd; border-radius:6px;"></iframe>
             </div>
@@ -54,7 +56,7 @@
 
         <div class="card">
             <div class="card-body">
-                <div class="text-muted small">Texte brut rendu</div>
+                <div class="text-muted small">Version texte brut (si HTML non supporté)</div>
                 <pre id="preview-text" data-email-template-target="previewText" class="mb-0"
                      style="white-space:pre-wrap"></pre>
             </div>

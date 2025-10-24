@@ -14,36 +14,36 @@ final class FormationVariableProvider implements VariableProviderInterface
     {
         $f = $context['formation'] ?? null;
 
-        $name = null;
-        $code = null;
+        $display = null;
+        $displayLong = null;
 
         if (is_object($f)) {
-            $name = method_exists($f, 'getName') ? $f->getName() : null;
-            $code = method_exists($f, 'getCode') ? $f->getCode() : null;
+            $display = method_exists($f, 'getDisplay') ? $f->getDisplay() : null;
+            $displayLong = method_exists($f, 'getDisplayLong') ? $f->getDisplayLong() : null;
         } elseif (is_array($f)) {
-            $name = $f['name'] ?? null;
-            $code = $f['code'] ?? null;
+            $display = $f['display'] ?? null;
+            $displayLong = $f['displayLong'] ?? null;
         }
 
         return [
-            'name' => $name ?: null,
-            'code' => $code ?: null,
+            'display' => $display ?: null,
+            'displayLong' => $displayLong ?: null,
         ];
     }
 
     public function describe(): array
     {
         return [
-            'formation.name' => 'Intitulé de la formation',
-            'formation.code' => 'Code de la formation',
+            'formation.display' => 'Intitulé de la formation',
+            'formation.displayLong' => 'Type et intitulé de la formation',
         ];
     }
 
     public function previewDefaults(): array
     {
         return [
-            'name' => 'BUT MMI',
-            'code' => 'MMI',
+            'display' => 'Métiers du Multimédia et de l\'Internet (MMI)',
+            'displayLong' => 'BUT Métiers du Multimédia et de l\'Internet (MMI)',
         ];
     }
 }
