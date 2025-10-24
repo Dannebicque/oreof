@@ -61,4 +61,19 @@ class ButApprentissageCritiqueRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function findFromAnneeUniversitaire(int $idCampagneCollecte) : array {
+        return $this->createQueryBuilder('butAppCrit')
+            ->select('DISTINCT butAppCrit.id')
+            ->join('butAppCrit.niveau', 'butNiveau')
+            ->join('butNiveau.competence', 'butCompetence')
+            ->join('butCompetence.formation', 'formation')
+            ->join('formation.parcours', 'parcours')
+            ->join('parcours.dpeParcours', 'dpeP')
+            ->join('dpeP.campagneCollecte', 'campagneC')
+            ->andWhere('campagneC.id = :idCampagne')
+            ->setParameter(':idCampagne', $idCampagneCollecte)
+            ->getQuery()
+            ->getResult();
+    }
 }
