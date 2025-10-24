@@ -10,6 +10,7 @@ use App\Entity\ButNiveau;
 use App\Entity\CampagneCollecte;
 use App\Entity\Competence;
 use App\Entity\DpeParcours;
+use App\Entity\FicheMatiere;
 use App\Entity\Formation;
 use App\Entity\Parcours;
 use App\Enums\TypeModificationDpeEnum;
@@ -31,7 +32,7 @@ class DuplicateForNewAnneeCommand extends Command
     /**
      * CONFIGURATION
      */
-    private const EXECUTION_MEMORY_LIMIT = '2500M';
+    private const EXECUTION_MEMORY_LIMIT = '5000M';
 
     private const CODE_APOGEE_CAMPAGNE_COLLECTE = '6';
 
@@ -416,6 +417,54 @@ class DuplicateForNewAnneeCommand extends Command
             $cloneButApprentissageCrit->setButApprentissageCritiqueOrigineCopie($initialButApprentissageCrit);
 
             $this->entityManager->persist($cloneButApprentissageCrit);
+            $io->progressAdvance(1);
+        }
+
+        $io->progressFinish();
+        $this->saveAndCleanUp($io);
+
+        /**
+         * 
+         * FICHE MATIERE
+         * 
+         */
+        $this->entitiesArray = $this->entityManager->getRepository(FicheMatiere::class)
+            ->findFromAnneeUniversitaire($anneeSource);
+        $io->writeln("Copie des 'Fiches Matières'...");
+        $io->progressStart(count($this->entitiesArray));
+        foreach($this->entitiesArray as $ficheMatiere) {
+            $initialFicheMatiere = $this->entityManager->getRepository(FicheMatiere::class)
+                ->findOneById($ficheMatiere);
+            $cloneFicheMatiere = clone $initialFicheMatiere;
+            $cloneFicheMatiere->prepareCloneForNewAnnee();
+            // fiche_matiere
+            $cloneFicheMatiere->setSlug($initialFicheMatiere->getSlug() . self::SLUG_YEAR_SUFFIX);
+            if($initialFicheMatiere->getParcours() !== null){
+                $linkFicheMParcours = $this->entityManager->getRepository(Parcours::class)
+                    ->findOneBy(['parcoursOrigineCopie' => $initialFicheMatiere->getParcours()]);
+                $cloneFicheMatiere->setParcours($linkFicheMParcours);
+            }
+            // fiche_matiere_competence
+            foreach($initialFicheMatiere->getCompetences() as $initialFMCompetence) {
+                $linkCompetenceFM = $this->entityManager->getRepository(Competence::class)
+                    ->findOneBy(['competenceOrigineCopie' => $initialFMCompetence]);
+                if($linkCompetenceFM !== null){
+                    $cloneFicheMatiere->addCompetence($linkCompetenceFM);
+                }
+            }
+            // fiche_matiere_but_apprentissage_critique
+            foreach($initialFicheMatiere->getApprentissagesCritiques() as $initialFMAppCrit) {
+                $linkAppCritFM = $this->entityManager->getRepository(ButApprentissageCritique::class)
+                    ->findOneBy(['butApprentissageCritiqueOrigineCopie' => $initialFMAppCrit]);
+                if($linkAppCritFM !== null){
+                    $cloneFicheMatiere->addApprentissagesCritique($linkAppCritFM);
+                }
+            }
+
+            $cloneFicheMatiere->setFicheMatiereOrigineCopie($initialFicheMatiere);
+            $cloneFicheMatiere->setCampagneCollecte($newCampagneCollecte);
+
+            $this->entityManager->persist($cloneFicheMatiere);
             $io->progressAdvance(1);
         }
 
