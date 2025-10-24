@@ -14,9 +14,17 @@ export default class extends Controller {
   static values = {
     urlListe: String,
     urlChangeDroit: String,
+    profil: String,
   }
 
   static targets = ['liste']
+
+  connect () {
+    console.log(this.profilValue)
+    if (this.profilValue !== '') {
+      this._updateListe()
+    }
+  }
 
   changeProfil() {
     this._updateListe()

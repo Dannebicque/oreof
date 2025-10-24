@@ -3,7 +3,7 @@
 <div {{ stimulus_controller('modal', {
         size: 'lg',
         modalTitle: 'Modalités de Contrôle des Connaissances et des Compétences',
-    }) 
+})
 }}>
 
 
@@ -14,7 +14,7 @@
 
 {% set hasChangedTypeMccc = not (typeMccc == typeMcccActuel) %}
 
-{% set hasDisplayComparaison = (isFromVersioning ?? 'false' != 'true') 
+    {% set hasDisplayComparaison = (isFromVersioning ?? 'false' != 'true')
     and (isMcccFromVersion ?? false == true)
     and (hasChangedTypeMccc == false)
 %}
@@ -38,7 +38,7 @@
     }}
 
     {% if hasChangedTypeMccc and isFromVersioning is defined and isFromVersioning != 'true' %}
-        <twig:alerte 
+        <twig:alerte
             type="info"
             message="Le type de MCCC a changé depuis la dernière version validée par la CFVU.<br>Vous pouvez retrouver les anciennes données ci-dessous."
         >
@@ -46,8 +46,8 @@
     {% endif %}
 
     <h3 class="mt-3">
-        {{ isMcccFromVersion ?? false == true and isFromVersioning != 'true' 
-            ? 'Type de MCCC précédemment validé : ' 
+        {{ isMcccFromVersion ?? false == true and isFromVersioning != 'true'
+        ? 'Type de MCCC précédemment validé : '
             : 'Type de MCCC : '
         }}
     </h3>

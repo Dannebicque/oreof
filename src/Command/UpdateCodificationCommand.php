@@ -73,7 +73,7 @@ class UpdateCodificationCommand extends Command
 
         $formations = $this->formationRepository->findByDpeAndTypeDiplome($campagne, $td);
         foreach ($formations as $formation) {
-            $typeD = $this->typeDiplomeResolver->get($formation->getTypeDiplome());
+            $typeD = $this->typeDiplomeResolver->getFromFormation($formation);
             $codification = new CodificationFormation($this->entityManager, $typeD);
             //utiliser la bonne méthode selon le niveau de codification
 

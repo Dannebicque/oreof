@@ -20,6 +20,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 
 class CodificationController extends BaseController
@@ -279,22 +280,15 @@ class CodificationController extends BaseController
         $parcours = $parcoursRepository->find($idParcours);
 
         if ($parcours === null) {
-            throw new Exception('Parcours non trouvé');
+            throw new NotFoundHttpException('Parcours non trouvé');
         }
 
-
-        $typeDiplome = $formation->getTypeDiplome();
-
-        if ($typeDiplome === null) {
-            throw new Exception('Type de diplôme non trouvé');
-        }
-
-        $typeD = $this->typeDiplomeResolver->get($typeDiplome);
+        $typeD = $this->typeDiplomeResolver->getFromParcours($parcours);
         $tParcours = $typeD->calculStructureParcours($parcours);
 
         return $this->render('codification/_parcours.html.twig', [
             'formation' => $formation,
-            'typeDiplome' => $typeDiplome,
+            'typeDiplome' => $formation->getTypeDiplome(),
             'dto' => $tParcours,
             'parcours' => $parcours,
             'typeD' => $typeD,

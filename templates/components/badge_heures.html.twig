@@ -37,10 +37,20 @@
                 title="Volumes Horaires"
         >
             {% if this.texte == true %}<i class="fal fa-clock"></i>{% endif %}
-            <span class="badge bg-{% if this.etatHeuresComplet == true %}success{% else %}warning{% endif %}">{% if this.texte == true %}{% if this.etatHeuresComplet == true %}Complet{% else %}A saisir{% endif %} {% else %}Heures{% endif %}
+            <span class="badge bg-{% if this.etatHeuresComplet == true or this.ecDesEnfants == true %}success{% else %}warning{% endif %}">
+
+                {% if this.texte == true %}
+                    {% if this.ecDesEnfants == true %}
+                        EC des enfants
+                    {% else %}
+                        {% if this.etatHeuresComplet == true %}Complet{% else %}A saisir{% endif %}
+                    {% endif %}
+                {% else %}Heures{% endif %}
+
                     {% if this.isParcoursProprietaire == false and this.isHeuresSpecifiques == false %}
                     <i class="fal fa-link" title="Heures reprises de la fiche matière"></i>
                     {% endif %}
+
             </span>
         </button>
     {% endif %}

@@ -18,14 +18,12 @@ class ApiSiteWebController extends AbstractController
 {
     #[Route('/api/site/web', name: 'app_api_site_web')]
     public function index(
-        GetHistorique $getHistorique,
         FormationRepository $formatinRepository,
     ): JsonResponse
     {
-
         // DATE DE PUBLICATION : 30-09-2024
         $datePublication = new DateTime();
-        $datePublication->setDate(2024, 9, 30);
+        $datePublication->setDate(2025, 9, 30);
         $datePublication->setTime(0, 0);
 
         $data = [];
@@ -48,7 +46,7 @@ class ApiSiteWebController extends AbstractController
                 if($parcours->getDpeParcours()?->last() instanceof DpeParcours){
                     $etatValidation = $parcours->getDpeParcours()?->last()->getEtatValidation();
                     $campagneCollecte = $parcours->getDpeParcours()?->last()->getCampagneCollecte()?->getId();
-                    if(($etatValidation === ['valide_a_publier' => 1] || $etatValidation === ['publie' => 1]) && $campagneCollecte === 1){
+                    if (($etatValidation === ['valide_a_publier' => 1] || $etatValidation === ['publie' => 1]) && $campagneCollecte === 2) {
                         $isPubliable = true;
                         ++$countParcours;
                     }

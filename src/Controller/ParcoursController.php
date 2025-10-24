@@ -120,10 +120,10 @@ class ParcoursController extends BaseController
         ParcoursRepository       $parcoursRepository,
         Formation                $formation
     ): Response {
-        //        if (!$this->isGranted('ROLE_RESP_FORMATION', $formation)) {
-        //            throw $this->createAccessDeniedException();
-        //        }
-
+        $this->denyAccessUnlessGranted('EDIT', [
+            'route' => 'app_formation',
+            'subject' => $formation
+        ]);
 
         $parent = null;
         $parcour = new Parcours($formation);
@@ -182,6 +182,12 @@ class ParcoursController extends BaseController
                 $event = new AddCentreParcoursEvent($parcour, ['ROLE_CO_RESP_PARCOURS'], $parcour->getCoResponsable(), $this->getCampagneCollecte());
                 $eventDispatcher->dispatch($event, AddCentreParcoursEvent::ADD_CENTRE_PARCOURS);
             }
+
+            //emets un event pour informer de la création d'un parcours
+            $event = new ParcoursEvent($parcour);
+            $eventDispatcher->dispatch($event, ParcoursEvent::PARCOURS_CREATED);
+
+            $this->addFlashBag('success', 'Le parcours a été créé');
 
             return $this->json(true);
         }

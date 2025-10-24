@@ -1,0 +1,37 @@
+{% if ue.ue.ueRaccrochee == true %}
+    {% set raccrocheUe = true or isSemestreRaccroche %}
+{% else %}
+    {% set raccrocheUe = false or isSemestreRaccroche %}
+{% endif %}
+
+{% set editableCfvu = isAccessible(dpeParcours, 'cfvu') %}
+
+<tr>
+    <th colspan="7" class="font-weight-bold">{{ ue.ue.display(parcours) }} {% if raccrocheUe == true %}<i
+                class="fa fa-link"></i>{% endif %}
+
+        {% if ue.ue.natureUeEc is defined and ue.ue.natureUeEc != null and ue.ue.natureUeEc.libre == true %}
+            <span class="badge bg-secondary">
+            UE à choix libre</span>
+        {% endif %}
+        {% if ue.ue.natureUeEc is defined and ue.ue.natureUeEc != null and ue.ue.natureUeEc.choix == true %}<span
+                class="badge bg-primary">
+            UE à choix restreint : {{ ue.uesEnfants|length }} choix possibles</span>
+        {% endif %}
+    </th>
+</tr>
+<tr>
+    <th class="font-weight-bold">EC</th>
+    <th class="font-weight-bold">Fiche</th>
+    <th class="font-weight-bold">Type EC</th>
+    <th class="font-weight-bold">ECTS</th>
+    <th class="font-weight-bold">BCC</th>
+    <th class="font-weight-bold">Vol. Horaire</th>
+    <th class="font-weight-bold">MCCC</th>
+</tr>
+{% for ec in ue.elementConstitutifs %}
+    {{ include('typeDiplome/licence/liste-ec/_ec.html.twig', {ec:ec, enfant:false}) }}
+    {% for ece in ec.elementsConstitutifsEnfants %}
+        {{ include('typeDiplome/licence/liste-ec/_ec.html.twig', {ec:ece, enfant:true}) }}
+    {% endfor %}
+{% endfor %}

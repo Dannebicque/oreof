@@ -10,6 +10,7 @@
 namespace App\TypeDiplome\Licence\Services;
 
 use App\Classes\Excel\ExcelWriter;
+use App\Entity\Mccc;
 use DateTimeInterface;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 
@@ -188,6 +189,33 @@ class AbstractLicenceMccc
         }
 
         return $texteEpreuve;
+    }
+
+    protected function displayTypeEpreuveWithDureePourcentageTp(Mccc $mccc, float $pourcentage, float $facteur = 1): string
+    {
+        $texte = '';
+        foreach ($mccc->getTypeEpreuve() as $type) {
+            if ($type !== "" && $this->typeEpreuves[$type] !== null) {
+                $duree = '';
+                if ($this->typeEpreuves[$type]->isHasDuree() === true) {
+                    $duree = ' ' . $this->displayDuree($mccc->getDuree());
+                }
+
+                if ($facteur === 1.0) {
+                    if (($mccc->getPourcentage() - $pourcentage) > 0.0) {
+                        $texte .= $this->typeEpreuves[$type]->getSigle() . $duree . ' (' . ($mccc->getPourcentage() - $pourcentage) . '%); ';
+                    }
+                } else {
+                    if (($facteur * $mccc->getPourcentage()) > 0.0) {
+                        $texte .= $this->typeEpreuves[$type]->getSigle() . $duree . ' (' . ($facteur * $mccc->getPourcentage()) . '%); ';
+                    }
+                }
+            } else {
+                $texte .= 'erreur épreuve; ';
+            }
+        }
+
+        return $texte;
     }
 
 }

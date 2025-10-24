@@ -2,10 +2,10 @@
 
 namespace App\TypeDiplome\Licence;
 
-final class LicenceHandler extends AbstractLicenceHandler
+final class DeHandler extends AbstractLicenceHandler
 {
     protected function getLibelleCourt(): string
     {
-        return 'L';
+        return 'DE';
     }
 }
