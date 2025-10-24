@@ -11,6 +11,7 @@ use App\Entity\CampagneCollecte;
 use App\Entity\Competence;
 use App\Entity\DpeParcours;
 use App\Entity\FicheMatiere;
+use App\Entity\FicheMatiereMutualisable;
 use App\Entity\Formation;
 use App\Entity\Parcours;
 use App\Enums\TypeModificationDpeEnum;
@@ -465,6 +466,37 @@ class DuplicateForNewAnneeCommand extends Command
             $cloneFicheMatiere->setCampagneCollecte($newCampagneCollecte);
 
             $this->entityManager->persist($cloneFicheMatiere);
+            $io->progressAdvance(1);
+        }
+
+        $io->progressFinish();
+        $this->saveAndCleanUp($io);
+
+        /**
+         * 
+         * FICHE MATIERE MUTUALISABLE
+         * 
+         */
+        $this->entitiesArray = $this->entityManager->getRepository(FicheMatiereMutualisable::class)
+            ->findFromAnneeUniversitaire($anneeSource);
+        $io->writeln("Copie des 'Fiches Matières Mutualisables'...");
+        $io->progressStart(count($this->entitiesArray));
+        foreach($this->entitiesArray as $ficheMutu) {
+            $initialFicheMutu = $this->entityManager->getRepository(FicheMatiereMutualisable::class)
+                ->findOneById($ficheMutu);
+            $cloneFicheMutu = clone $initialFicheMutu;
+            if($initialFicheMutu->getParcours() !== null){
+                $linkFicheMutuParcours = $this->entityManager->getRepository(Parcours::class)
+                    ->findOneBy(['parcoursOrigineCopie' => $initialFicheMutu->getParcours()]);
+                $cloneFicheMutu->setParcours($linkFicheMutuParcours);
+            }
+            if($initialFicheMutu->getFicheMatiere() !== null){
+                $linkFicheMutuFicheMatiere = $this->entityManager->getRepository(FicheMatiere::class)
+                    ->findOneBy(['ficheMatiereOrigineCopie' => $initialFicheMutu->getFicheMatiere()]);
+                $cloneFicheMutu->setFicheMatiere($linkFicheMutuFicheMatiere);
+            }
+
+            $this->entityManager->persist($cloneFicheMutu);
             $io->progressAdvance(1);
         }
 
