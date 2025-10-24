@@ -14,6 +14,7 @@ use App\Entity\FicheMatiere;
 use App\Entity\FicheMatiereMutualisable;
 use App\Entity\Formation;
 use App\Entity\Parcours;
+use App\Entity\Semestre;
 use App\Enums\TypeModificationDpeEnum;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
@@ -497,6 +498,30 @@ class DuplicateForNewAnneeCommand extends Command
             }
 
             $this->entityManager->persist($cloneFicheMutu);
+            $io->progressAdvance(1);
+        }
+
+        $io->progressFinish();
+        $this->saveAndCleanUp($io);
+
+        /**
+         * 
+         * SEMESTRE
+         * 
+         */
+        $this->entitiesArray = $this->entityManager->getRepository(Semestre::class)
+            ->findFromAnneeUniversitaire($anneeSource);
+        $io->writeln("Copie des 'Semestres'...");
+        $io->progressStart(count($this->entitiesArray));
+        foreach($this->entitiesArray as $semestre) {
+            $initialSemestre = $this->entityManager->getRepository(Semestre::class)
+                ->findOneById($semestre);
+            $cloneSemestre = clone $initialSemestre;
+            // Le semestre raccroché est pris en compte après
+            $cloneSemestre->setSemestreRaccroche(null);
+            $cloneSemestre->setSemestreOrigineCopie($initialSemestre);
+
+            $this->entityManager->persist($cloneSemestre);
             $io->progressAdvance(1);
         }
 
