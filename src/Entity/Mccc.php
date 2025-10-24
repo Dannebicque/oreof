@@ -121,7 +121,7 @@ class Mccc
 
     public function getPourcentage(): ?float
     {
-        return $this->pourcentage;
+        return $this->pourcentage ?? null;
     }
 
     public function setPourcentage(?float $pourcentage): self
