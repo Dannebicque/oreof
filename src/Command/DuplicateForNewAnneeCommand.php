@@ -4,6 +4,7 @@ namespace App\Command;
 
 use App\Entity\AnneeUniversitaire;
 use App\Entity\BlocCompetence;
+use App\Entity\ButApprentissageCritique;
 use App\Entity\ButCompetence;
 use App\Entity\ButNiveau;
 use App\Entity\CampagneCollecte;
@@ -388,6 +389,33 @@ class DuplicateForNewAnneeCommand extends Command
             $cloneButNiveau->setButNiveauOrigineCopie($initialButNiveau);
 
             $this->entityManager->persist($cloneButNiveau);
+            $io->progressAdvance(1);
+        }
+
+        $io->progressFinish();
+        $this->saveAndCleanUp($io);
+
+        /**
+         * 
+         * BUT APPRENTISSAGE CRITIQUE
+         * 
+         */
+        $this->entitiesArray = $this->entityManager
+            ->getRepository(ButApprentissageCritique::class)
+            ->findFromAnneeUniversitaire($anneeSource);
+        $io->writeln("Copie des 'BUT Apprentissage Critique'...");
+        $io->progressStart(count($this->entitiesArray));
+        foreach($this->entitiesArray as $butAppCrit) {
+            $initialButApprentissageCrit = $this->entityManager
+                ->getRepository(ButApprentissageCritique::class)
+                ->findOneById($butAppCrit);
+            $cloneButApprentissageCrit = clone $initialButApprentissageCrit;
+            $linkButAppCritButNiveau = $this->entityManager->getRepository(ButNiveau::class)
+                ->findOneBy(['butNiveauOrigineCopie' => $initialButApprentissageCrit->getNiveau()]);
+            $cloneButApprentissageCrit->setNiveau($linkButAppCritButNiveau);
+            $cloneButApprentissageCrit->setButApprentissageCritiqueOrigineCopie($initialButApprentissageCrit);
+
+            $this->entityManager->persist($cloneButApprentissageCrit);
             $io->progressAdvance(1);
         }
 
