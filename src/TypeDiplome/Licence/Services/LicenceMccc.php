@@ -445,34 +445,7 @@ class LicenceMccc extends AbstractLicenceMccc
         return Gotenberg::save($request, $dir);
     }
 
-    public function getMcccs(StructureEc $structureEc): array
-    {
-        if ($this->typeEpreuves === []) {
-            $this->getTypeEpreuves();
-        }
 
-        //todo: a mutualiser avec le code dans LicenceTypeDiplome
-        $mcccs = $structureEc->mcccs;
-        $tabMcccs = [];
-
-        if ($structureEc->typeMccc === 'cci') {
-            foreach ($mcccs as $mccc) {
-                $tabMcccs[$mccc->getNumeroSession()] = $mccc;
-            }
-        } else {
-            foreach ($mcccs as $mccc) {
-                if ($mccc->isSecondeChance()) {
-                    $tabMcccs[3]['chance'] = $mccc;
-                } elseif ($mccc->isControleContinu() === true && $mccc->isExamenTerminal() === false) {
-                    $tabMcccs[$mccc->getNumeroSession()]['cc'][$mccc->getNumeroEpreuve() ?? 1] = $mccc;
-                } elseif ($mccc->isControleContinu() === false && $mccc->isExamenTerminal() === true) {
-                    $tabMcccs[$mccc->getNumeroSession()]['et'][$mccc->getNumeroEpreuve() ?? 1] = $mccc;
-                }
-            }
-        }
-
-        return $tabMcccs;
-    }
 
     private function genereReferentielCompetences(Parcours $parcours, Formation $formation): void
     {
@@ -576,7 +549,7 @@ class LicenceMccc extends AbstractLicenceMccc
         // MCCC
         $hasQuitus = $ec->isQuitus();
         if ($structureEc->elementConstitutif->isControleAssiduite() === false) {
-            $mcccs = $this->getMcccs($structureEc);
+            $mcccs = $this->getMcccs($structureEc, $structureEc->typeMccc);
             switch ($structureEc->typeMccc) {
                 case 'cc':
                     $texte = '';

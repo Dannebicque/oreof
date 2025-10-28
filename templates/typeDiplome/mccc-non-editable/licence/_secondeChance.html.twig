@@ -16,7 +16,7 @@
             {% set hasChangedTypeMccc = false %}
         {% endif %}
 
-        {% set hasDisplayComparaison = (isFromVersioning ?? 'false' != 'true') 
+        {% set hasDisplayComparaison = (isFromVersioning ?? 'false' != 'true')
             and (isMcccFromVersion ?? false == true)
             and (hasChangedTypeMccc == false)
         %}
@@ -53,13 +53,8 @@
                             '%',
                             hasDisplayComparaison,
                             isFromVersioning ?? 'false'
-                        )  
+                        )
                     }}
-                    {# {% if mccc.pourcentage is defined %}
-                        {{ mccc.pourcentage }}%
-                    {% else %}
-                        100%
-                    {% endif %} #}
                 </td>
                 <td>
                     {% for typeE in typeEpreuves %}

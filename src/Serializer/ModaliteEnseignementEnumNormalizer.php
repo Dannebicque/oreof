@@ -12,7 +12,7 @@ class ModaliteEnseignementEnumNormalizer implements DenormalizerInterface
         return $type === ModaliteEnseignementEnum::class;
     }
 
-    public function denormalize($data, string $type, string $format = null, array $context = [])
+    public function denormalize($data, string $type, string $format = null, array $context = []): mixed
     {
         if (is_null($data)) {
             return ModaliteEnseignementEnum::NON_DEFINI;
@@ -23,5 +23,12 @@ class ModaliteEnseignementEnumNormalizer implements DenormalizerInterface
         }
 
         return ModaliteEnseignementEnum::tryFrom($data) ?? ModaliteEnseignementEnum::NON_DEFINI;
+    }
+
+    public function getSupportedTypes(?string $format): array
+    {
+        return [
+            ModaliteEnseignementEnum::class => true,
+        ];
     }
 }

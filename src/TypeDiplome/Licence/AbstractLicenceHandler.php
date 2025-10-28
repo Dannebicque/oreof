@@ -653,4 +653,12 @@ abstract class AbstractLicenceHandler implements TypeDiplomeHandlerInterface, Ty
 
         return false;
     }
+
+    public function getDisplayMccc(array $mcccs, string $typeMccc): array
+    {
+        $mccc = new Dto\Mccc($mcccs, $typeMccc, $this->typeEpreuves);
+        $mccc->calculDisplayMccc();
+
+        return $mccc->toArray();
+    }
 }

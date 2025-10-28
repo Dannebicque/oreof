@@ -19,7 +19,6 @@ use App\Repository\DpeParcoursRepository;
 use App\Repository\FicheMatiereRepository;
 use App\Utils\Tools;
 use DateTime;
-use Kreyu\Bundle\DataTableBundle\DataTableFactoryAwareTrait;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -73,8 +72,8 @@ class ValidationAdminController extends BaseController
         return $excelWriter->genereFichier($fileName, true);
     }
 
-    #[Route('dpe-test', name: 'dpe_test_index')]
-    public function dpeTest(
+    #[Route('dpe', name: 'dpe_index')]
+    public function dpe(
         DpeParcoursRepository $dpeParcoursRepository,
         ComposanteRepository  $composanteRepository,
         ValidationProcess     $validationProcess,
@@ -99,59 +98,79 @@ class ValidationAdminController extends BaseController
         }
 
 
-        return $this->render('validation/dpe_test.html.twig', [
+        return $this->render('validation/dpe.html.twig', [
             'composantes' => $composanteRepository->findPorteuse(),
             'steps' => $steps,
             'statistiques' => $statistiques,
         ]);
     }
 
-    #[Route('dpe', name: 'dpe_index')]
-    public function dpe(
-        ComposanteRepository $composanteRepository,
-        Request              $request,
-        ValidationProcess    $validationProcess,
-    ): Response
-    {
-
-        $typeValidation = $request->query->get('typeValidation');
-
-        return $this->render('validation/dpe.html.twig', [
-            'types_validation' => $validationProcess->getProcessAll(),
-            'typeValidation' => $typeValidation,
-            'composantes' => $composanteRepository->findPorteuse(),
-        ]);
-    }
+//    #[Route('dpe', name: 'dpe_index')]
+//    public function dpe(
+//        ComposanteRepository $composanteRepository,
+//        Request              $request,
+//        ValidationProcess    $validationProcess,
+//    ): Response
+//    {
+//
+//        $typeValidation = $request->query->get('typeValidation');
+//
+//        return $this->render('dpe_old.html.twig', [
+//            'types_validation' => $validationProcess->getProcessAll(),
+//            'typeValidation' => $typeValidation,
+//            'composantes' => $composanteRepository->findPorteuse(),
+//        ]);
+//    }
 
     #[Route('change-rf', name: 'change_rf_index')]
     public function changeRf(
-        ComposanteRepository      $composanteRepository,
+        ChangeRfRepository $changeRfRepository,
         Request                   $request,
         ValidationProcessChangeRf $validationProcessChangeRf,
     ): Response
     {
         $typeValidation = $request->query->get('typeValidation');
 
+        $statistiques = [];
+
+        $fiches = $changeRfRepository->findByCampagneCollecteForStats($this->getCampagneCollecte());
+        foreach ($fiches as $fiche) {
+            $keys = array_keys($fiche['etat'] ?? []);
+            $etat = $keys[0] ?? null;
+            $statistiques[$etat] = $fiche['nb'];
+        }
+
         return $this->render('validation/change_rf.html.twig', [
-            'types_validation' => $validationProcessChangeRf->getProcess(),//faire un getProcesssComposante pour filtrer par niveau composante,
+            'steps' => $validationProcessChangeRf->getProcessAll(),//faire un getProcesssComposante pour filtrer par niveau composante,
             'typeValidation' => $typeValidation,
-            'composantes' => $composanteRepository->findPorteuse(),
+            'statistiques' => $statistiques
         ]);
     }
 
     #[Route('fiche-matiere', name: 'fiche_index')]
     public function ficheMatiere(
-        ComposanteRepository          $composanteRepository,
+        FicheMatiereRepository $ficheMatiereRepository,
         Request                       $request,
         ValidationProcessFicheMatiere $validationProcessFicheMatiere,
     ): Response
     {
-        $typeValidation = $request->query->get('typeValidation');
+
+        $statistiques = [];
+        foreach ($validationProcessFicheMatiere->getProcess() as $key => $etape) {
+            $statistiques[$key] = 0;
+        }
+
+        $fiches = $ficheMatiereRepository->findByCampagneCollecteForStats($this->getCampagneCollecte());
+        //dump($fiches);
+        foreach ($fiches as $fiche) {
+            $keys = array_keys($fiche['etat'] ?? []);
+            $etat = $keys[0] ?? null;
+            $statistiques[$etat] = $fiche['nb'];
+        }
 
         return $this->render('validation/fiche_matiere.html.twig', [
-            'types_validation' => $validationProcessFicheMatiere->getProcess(),
-            'typeValidation' => $typeValidation,
-            'composantes' => $composanteRepository->findPorteuse(),
+            'steps' => $validationProcessFicheMatiere->getProcessAll(),
+            'statistiques' => $statistiques,
         ]);
     }
 

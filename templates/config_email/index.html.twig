@@ -15,6 +15,7 @@
                 <thead>
                 <tr>
                     <th>Clé</th>
+                    <th>Etape du process</th>
                     <th>MAJ</th>
                     <th></th>
                 </tr>
@@ -23,6 +24,7 @@
                 {% for t in templates %}
                     <tr>
                         <td>{{ t.workflow }}</td>
+                        <td>{{ t.workflow|afficheProcess }}</td>
                         <td>{{ t.updated|date('d/m/Y') }}</td>
                         <td>
                             <a class="btn btn-sm btn-secondary"
@@ -37,7 +39,7 @@
                     </tr>
                 {% else %}
                     <tr>
-                        <td colspan="3" class="bg-warning">Aucun template</td>
+                        <td colspan="4" class="bg-warning">Aucun template</td>
                     </tr>
                 {% endfor %}
                 </tbody>

@@ -229,10 +229,7 @@ class FormationController extends BaseController
         Request              $request,
         FormationRepository  $formationRepository
     ): Response {
-        $this->denyAccessUnlessGranted('MANAGE', [
-            'route' => 'app_formation',
-            'subject' => 'formation'
-        ]);
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
 
         $formation = new Formation($this->getCampagneCollecte());
         $form = $this->createForm(FormationSesType::class, $formation, [

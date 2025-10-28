@@ -52,9 +52,9 @@
         }}
     </h3>
     <h3 class="mb-3">
-        {{ typeMcccLibelle[typeMccc] ?? "" }}
+        {{ typeMcccLibelle[typeMccc] is defined ? typeMcccLibelle[typeMccc] : "" }}
     </h3>
 
-    {{ include('typeDiplome/mccc-non-editable/'~templateForm) }}
+    {{ include('typeDiplome/'~constant('TEMPLATE_FOLDER', typeDiplome)~'/mccc-non-editable/'~constant('TEMPLATE_FORM_MCCC', typeDiplome)) }}
     </div>
 </div>
