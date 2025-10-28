@@ -24,9 +24,18 @@
                     </tr>
                     {% for value in notification %}
                         <tr>
-                            <td>{{ value }}</td>
+                            <td>{{ value|afficheProcess(false) }}</td>
                             {% for profil in profils %}
-                                <td><input type="checkbox"></td>
+                                <td>
+                                    <label class="sr-only" for="{{ profil.id }}_{{ value }}">Activer</label>
+                                    <input type="checkbox" id="{{ profil.id }}_{{ value }}" value="true"
+                                           {% if notifications[value] is defined and profil.id in notifications[value] %}checked{% endif %}
+                                            {{ stimulus_action('notification_liste', 'change', 'click',  {
+                                                profil: profil.id,
+                                                workflow: value
+                                            }) }}
+                                    >
+                                </td>
                             {% endfor %}
                         </tr>
                     {% endfor %}

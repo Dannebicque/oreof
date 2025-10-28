@@ -47,10 +47,17 @@ class Profil
     #[ORM\Column]
     private ?bool $isMailing = false;
 
+    /**
+     * @var Collection<int, NotificationListe>
+     */
+    #[ORM\OneToMany(mappedBy: 'profil', targetEntity: NotificationListe::class)]
+    private Collection $notificationListes;
+
     public function __construct()
     {
         $this->profilDroits = new ArrayCollection();
         $this->userProfils = new ArrayCollection();
+        $this->notificationListes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -186,6 +193,36 @@ class Profil
     public function setIsMailing(bool $isMailing): static
     {
         $this->isMailing = $isMailing;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, NotificationListe>
+     */
+    public function getNotificationListes(): Collection
+    {
+        return $this->notificationListes;
+    }
+
+    public function addNotificationListe(NotificationListe $notificationListe): static
+    {
+        if (!$this->notificationListes->contains($notificationListe)) {
+            $this->notificationListes->add($notificationListe);
+            $notificationListe->setProfil($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNotificationListe(NotificationListe $notificationListe): static
+    {
+        if ($this->notificationListes->removeElement($notificationListe)) {
+            // set the owning side to null (unless already changed)
+            if ($notificationListe->getProfil() === $this) {
+                $notificationListe->setProfil(null);
+            }
+        }
 
         return $this;
     }
