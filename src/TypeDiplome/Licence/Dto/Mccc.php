@@ -181,7 +181,6 @@ class Mccc
                     foreach ($this->mcccs[1]['et'] as $mccc) {
                         $texteEpreuve .= $this->displayTypeEpreuveWithDureePourcentage($mccc);
                     }
-
                     $texteEpreuve = substr($texteEpreuve, 0, -2);
                     $this->COL_MCCC_CT = $this->addQuitus($texteEpreuve, $this->isQuitus);
                 }
