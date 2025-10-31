@@ -2,7 +2,15 @@
 
 namespace App\Controller;
 
+use App\Classes\GetDpeParcours;
+use App\Classes\JsonReponse;
+use App\Enums\TypeModificationDpeEnum;
+use App\Repository\AnneeRepository;
 use App\Repository\DpeParcoursRepository;
+use App\Repository\FormationRepository;
+use App\Repository\ParcoursRepository;
+use App\Utils\JsonRequest;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -120,4 +128,71 @@ final class OffreController extends BaseController
 
         return $this->render('offre/index.html.twig', $params);
     }
+
+    #[Route('/offre/update', name: 'app_offre_update')]
+    public function update(
+        AnneeRepository        $anneeRepository,
+        EntityManagerInterface $entityManager,
+        DpeParcoursRepository  $dpeParcoursRepository,
+        FormationRepository    $formationRepository,
+        Request                $request
+    ): Response
+    {
+        $data = JsonRequest::getFromRequest($request);
+        switch ($data['action']) {
+            case 'changeOuverture':
+                $t = explode('_', $data['id']);
+                if ($t[0] === 'formation') {
+                    $formation = $formationRepository->find($t[1]);
+                    if ($formation === null) {
+                        return JsonReponse::error('Pas de formation trouvée');
+                    }
+
+                    // on parcours tous les parcours et on les fermes
+                    foreach ($formation->getParcours() as $parcours) {
+                        $dpe = GetDpeParcours::getFromParcours($parcours);
+                        if ($dpe !== null) {
+                            $dpe->setEtatReconduction($this->convertValue($data['value']));
+                        }
+                    }
+                    $formation->setEtatReconduction($this->convertValue($data['value']));
+                    $entityManager->flush();
+                } elseif ($t[0] === 'parcours') {
+                    $dpe = $dpeParcoursRepository->find($t[1]);
+                    if ($dpe === null) {
+                        return JsonReponse::error('Pas de DPE pour le parcours');
+                    }
+
+                    $dpe->setEtatReconduction($this->convertValue($data['value']));
+                    $entityManager->flush();
+                } else {
+                    return JsonReponse::error('Action inconnue');
+                }
+                break;
+
+            case 'changeOuvertureAnnee':
+                $annee = $anneeRepository->find($data['id']);
+                if ($annee === null) {
+                    return JsonReponse::error('Pas d\'année trouvée');
+                }
+
+                // on parcours tous les parcours et on les fermes
+                $annee->setIsOuvert(!$annee->isOuvert());
+                $entityManager->flush();
+                break;
+        }
+
+        return JsonReponse::success('Mise à jour effectuée');
+    }
+
+    private function convertValue(mixed $value): TypeModificationDpeEnum
+    {
+        return match ($value) {
+            'OUVERT' => TypeModificationDpeEnum::OUVERT,
+            'NON_OUVERTURE' => TypeModificationDpeEnum::NON_OUVERTURE_CFVU,
+            'FERMETURE_DEFINITIVE' => TypeModificationDpeEnum::FERMETURE_DEFINITIVE,
+        };
+    }
+
+
 }

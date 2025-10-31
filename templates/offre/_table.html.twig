@@ -39,7 +39,11 @@
         </div>
     </form>
 
-    <table class="table">
+    <table class="table"
+            {{ stimulus_controller('offre', {
+                url: path('app_offre_update')
+            }) }}
+    >
         <thead>
         <tr>
             <th>Composante</th>
@@ -55,7 +59,11 @@
         </thead>
         <tbody>
         {% for formation in tFormations %}
-            <tr class="{% if formation.formation.hasParcours == true %}bg-info-pale{% else %}bg-warning-pale{% endif %}">
+            <tr class="{% if formation.formation.hasParcours == true %}bg-info-pale{% else %}bg-warning-pale{% endif %}"
+                data-formation-open="{{ formation.formation.etatReconduction.value }}"
+                data-formation-id="{{ formation.formation.id }}"
+
+            >
                 <td>{{ formation.formation.composantePorteuse.libelle }}</td>
                 <td>{{ formation.formation.typeDiplome.libelle }}</td>
                 <td>{{ formation.formation.display }}</td>
@@ -73,9 +81,9 @@
                 </td>
                 <td>
                     {% if formation.formation.hasParcours == true %}
-                        {{ include('offre/_select_offre.html.twig', {id: 'formation_'~formation.formation.id, valeur: 'OUVERTURE'}) }}
+                        {{ include('offre/_select_offre.html.twig', {id: 'formation_'~formation.formation.id, valeur: formation.formation.etatReconduction.value}) }}
                     {% else %}
-                        {{ include('offre/_select_offre.html.twig', {id: 'formation_'~formation.dpeParcours[0].id, valeur: 'OUVERTURE'}) }}
+                        {{ include('offre/_select_offre.html.twig', {id: 'parcours_'~formation.dpeParcours[0].id, valeur: formation.dpeParcours[0].etatReconduction.value}) }}
                     {% endif %}
                 </td>
                 <td></td>
@@ -91,13 +99,17 @@
             </tr>
             {% if formation.formation.hasParcours == true %}
                 {% for parcours in formation.dpeParcours %}
-                    <tr style="border-left: 2px solid dodgerblue">
+                    <tr style="border-left: 2px solid dodgerblue"
+                        data-parcours-open="{{ parcours.etatReconduction.value }}"
+                        data-parcours-id="{{ parcours.id }}"
+                        data-formation-id="{{ formation.formation.id }}"
+                    >
                         <td style="padding-left: 20px"
                             colspan="3">{{ parcours.parcours.libelle }} {{ parcours.parcours.typeParcours|badgeTypeParcours }}</td>
                         <td>{{ parcours.parcours.localisation != null ? parcours.parcours.localisation.libelle : 'erreur ville' }}</td>
                         <td>{{ parcours.etatReconduction|badgeTypeModification }}</td>
                         <td>
-                            {{ include('offre/_select_offre.html.twig', {id: 'parcours_'~parcours.id, valeur: 'OUVERTURE'}) }}
+                            {{ include('offre/_select_offre.html.twig', {id: 'parcours_'~parcours.id, valeur: parcours.etatReconduction.value}) }}
                         </td>
                         <td></td>
                         <td></td>
@@ -109,12 +121,12 @@
                         </td>
                     </tr>
 
-                    {{ include('offre/_annee.html.twig', {annees: parcours.parcours.annees}) }}
+                    {{ include('offre/_annee.html.twig', {annees: parcours.parcours.annees, valeur: parcours.etatReconduction.value}) }}
 
                 {% endfor %}
             {% else %}
                 {% set parcours = formation.formation.dpeParcours[0] %}
-                {{ include('offre/_annee.html.twig', {annees: parcours.parcours.annees}) }}
+                {{ include('offre/_annee.html.twig', {annees: parcours.parcours.annees, valeur: parcours.etatReconduction.value}) }}
             {% endif %}
         {% endfor %}
         </tbody>

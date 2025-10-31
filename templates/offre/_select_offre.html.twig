@@ -1,8 +1,15 @@
 <label class="sr-only" for="{{ id }}"></label>
 <select
+        {{ stimulus_action('offre', 'changeOuverture', 'change', {
+            id:id
+        }) }}
         id="{{ id }}"
         class="form-select">
-    <option value="OUVERTURE" {% if valeur == 'OUVERTURE' %}selected{% endif %}>Ouvert / reconduit</option>
-    <option value="NON_OUVERTURE" {% if valeur == 'NON_OUVERTURE' %}selected{% endif %}>Fermeture</option>
-
+    <option value="OUVERT" {% if valeur == 'OUVERT' %}selected{% endif %}>Ouvert / reconduit</option>
+    <option value="NON_OUVERTURE" {% if valeur == 'NON_OUVERTURE_CFVU' %}selected{% endif %}>non ouverture</option>
+    {% if is_granted('ROLE_ADMIN') %}
+        <option value="FERMETURE_DEFINITIVE" {% if valeur == 'FERMETURE_DEFINITIVE' %}selected{% endif %}>fermeture
+            définitive
+        </option>
+    {% endif %}
 </select>

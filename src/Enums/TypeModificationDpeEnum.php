@@ -34,6 +34,7 @@ enum TypeModificationDpeEnum: string implements BadgeEnumInterface
     case MODIFICATION_TEXTE = 'MODIFICATION_TEXTE';
     case MODIFICATION_MCCC_TEXTE = 'MODIFICATION_MCCC_TEXTE';
     case ANNULATION_REOUVERTURE = 'ANNULATION_REOUVERTURE';
+    case FERMETURE_DEFINITIVE = 'FERMETURE_DEFINITIVE';
 
     case FORMATION_SOUMIS_SES = 'FORMATION_SOUMIS_SES';
 
@@ -56,6 +57,7 @@ enum TypeModificationDpeEnum: string implements BadgeEnumInterface
             self::MODIFICATION_MCCC_TEXTE => 'modification MCCC, maquettes et des textes',
             self::ANNULATION_REOUVERTURE => 'Annulation de la réouverture',
             self::FORMATION_SOUMIS_SES => 'Formation soumise à la validation du SES',
+            self::FERMETURE_DEFINITIVE => 'Fermeture definitive',
             default => 'Non défini',
         };
     }

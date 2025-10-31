@@ -36,6 +36,17 @@ class Annee
     #[ORM\Column]
     private ?bool $isOuvert = true;
 
+    #[ORM\OneToOne(inversedBy: 'anneeCopieAnneeUniversitaire', targetEntity: self::class, cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?self $anneeOrigineCopie = null;
+
+    /** @var Annee $anneeCopieAnneeUniversitaire Référence l'élément copié, depuis l'année d'origine */
+    #[ORM\OneToOne(mappedBy: 'anneeOrigineCopie', targetEntity: self::class, cascade: ['persist', 'remove'])]
+    private ?self $anneeCopieAnneeUniversitaire = null;
+
+    #[ORM\Column()]
+    private int $capaciteAccueil = 0;
+
     public function __construct()
     {
         $this->parcoursSemestre = new ArrayCollection();
@@ -135,4 +146,51 @@ class Annee
 
         return $this;
     }
+
+    public function getAnneeOrigineCopie(): ?self
+    {
+        return $this->anneeOrigineCopie;
+    }
+
+    public function setAnneeOrigineCopie(?self $anneeOrigineCopie): static
+    {
+        $this->anneeOrigineCopie = $anneeOrigineCopie;
+
+        return $this;
+    }
+
+    public function getAnneeCopieAnneeUniversitaire(): ?self
+    {
+        return $this->anneeCopieAnneeUniversitaire;
+    }
+
+    public function setAnneeCopieAnneeUniversitaire(?self $anneeCopieAnneeUniversitaire): static
+    {
+        // unset the owning side of the relation if necessary
+        if ($anneeCopieAnneeUniversitaire === null && $this->anneeCopieAnneeUniversitaire !== null) {
+            $this->anneeCopieAnneeUniversitaire->setAnneeOrigineCopie(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($anneeCopieAnneeUniversitaire !== null && $anneeCopieAnneeUniversitaire->getAnneeOrigineCopie() !== $this) {
+            $anneeCopieAnneeUniversitaire->setAnneeOrigineCopie($this);
+        }
+
+        $this->anneeCopieAnneeUniversitaire = $anneeCopieAnneeUniversitaire;
+
+        return $this;
+    }
+
+    public function getCapaciteAccueil(): int
+    {
+        return $this->capaciteAccueil ?? 0;
+    }
+
+    public function setCapaciteAccueil(int $capaciteAccueil = 0): static
+    {
+        $this->capaciteAccueil = $capaciteAccueil;
+
+        return $this;
+    }
+
 }
