@@ -17,17 +17,13 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/structure/composante', name: 'structure_composante_')]
 class ComposanteController extends AbstractController
 {
-    #[
-        Route('/', name: 'index')
-    ]
+    #[Route('/', name: 'index')]
     public function index(): Response
     {
         return $this->render('structure/composante/index.html.twig');
     }
 
-    #[
-        Route('/liste', name: 'liste')
-    ]
+    #[Route('/liste', name: 'liste')]
     public function liste(
         ComposanteRepository $composanteRepository
     ): Response {

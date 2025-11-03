@@ -517,6 +517,7 @@ framework:
             transition: 'en_cours_redaction'
             canValide: 'valider_fiche_compo'
             check: true
+            color: 'info'
         'soumis_central':
           metadata:
             process: true
@@ -532,6 +533,7 @@ framework:
             canValide: 'valider_fiche_ses'
             canRefuse: 'refuser_fiche_ses'
             canReserve: 'reserver_fiche_ses'
+            color: 'warning'
         'valide_pour_publication':
           metadata:
             process: true
@@ -545,6 +547,7 @@ framework:
             hasDate: false
             transition: 'transmis_pour_publication'
             canValide: 'valider_fiche_pour_publication'
+            color: 'success'
         'publie':
           metadata:
             process: false
@@ -559,6 +562,7 @@ framework:
             hasDate: false
             transition: 'publie'
             canValide: ''
+            color: 'success'
       transitions:
         valider_fiche_compo:
           from: 'en_cours_redaction'
@@ -612,33 +616,40 @@ framework:
           metadata:
             process: true
             label: 'validation.demande_initialisee'
+            color: 'info'
         soumis_conseil:
           metadata:
             process: true
             icon: 'fa-people-line'
             label: 'validation.soumis_conseil'
+            color: 'success'
         soumis_ses:
           metadata:
             process: true
             icon: 'fa-school-circle-check'
             label: 'validation.soumis_ses'
+            color: 'success'
         soumis_cfvu:
           metadata:
             process: true
             icon: 'fa-shield-check'
             label: 'validation.soumis_cfvu'
+            color: 'success'
         attente_pv:
           metadata:
             process: false
             label: 'validation.attente_pv'
+            color: 'warning'
         effectuee:
           metadata:
             process: false
             label: 'validation.effectuee'
+            color: 'success'
         verification_pv:
           metadata:
             process: false
             label: 'validation.verification_pv'
+            color: 'warning'
       transitions:
         effectuer_demande:
           from: 'demande_initialisee'

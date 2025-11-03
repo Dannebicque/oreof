@@ -1,7 +1,7 @@
 <div data-turbo-frame="offre_table">
     <form method="get" action="{{ path('app_offre') }}" class="mb-2">
         <div class="row g-2 align-items-end">
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <label class="form-label mb-1" for="libelle">Libellé</label>
                 <input id="libelle" type="text" name="q" value="{{ filters.q|default('') }}" class="form-control"
                        placeholder="Rechercher..." oninput="this.form.requestSubmit()">
@@ -35,6 +35,11 @@
                                 {% if filters.ville|default('') == v %}selected{% endif %}>{{ v }}</option>
                     {% endfor %}
                 </select>
+            </div>
+            <div class="col-md-1 d-grid">
+                <a class="btn btn-danger d-block"
+                   href="{{ path('app_offre') }}"
+                   data-turbo-frame="offre_table">Effacer</a>
             </div>
         </div>
     </form>

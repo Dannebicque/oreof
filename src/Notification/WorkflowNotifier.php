@@ -13,31 +13,25 @@ namespace App\Notification;
 use App\Classes\Mailer;
 use App\Entity\User;
 use App\Entity\Notification;
-use App\EventSubscriber\DpeWorkflow\AbstractDpeMailSubscriber;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
+use RuntimeException;
 use Symfony\Component\HttpKernel\KernelInterface;
-use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
-use Symfony\Component\Workflow\WorkflowInterface;
 
 class WorkflowNotifier
 {
-    private string $baseDir = '';
+    private string $baseDir;
 
     public function __construct(
         KernelInterface $kernel,
-        private Mailer  $myMailer,
-        private EntityManagerInterface         $em,
-        private NotificationPreferenceResolver $preferenceResolver,
+        private readonly Mailer                         $myMailer,
+        private readonly EntityManagerInterface         $em,
+        private readonly NotificationPreferenceResolver $preferenceResolver,
     )
     {
         $this->baseDir = $kernel->getProjectDir();
     }
 
-    /**
-     * @param string $eventKey ex: workflow.dpeParcours.entered.soumis_cfvu
-     * @param array<string,mixed> $context (subject, transitionName, placeName, label, actor, comment, ...)
-     */
     public function notify(array $recipients, string $eventKey, string $wf, array $context): void
     {
 
@@ -49,7 +43,7 @@ class WorkflowNotifier
             $pref = $this->preferenceResolver->resolveFor($user, $wf, $eventKey);
 
             // EMAIL
-            if ($pref?->channelAllowed('email')) {
+            if ($pref->channelAllowed('email')) {
                 $this->myMailer->initEmail();
                 $this->myMailer->setTemplate(
                     file_exists(sprintf('%s/templates/mails/workflow/%s/%s.html.twig', $this->baseDir, $wf, $this->extractTransition($eventKey)))
@@ -67,14 +61,18 @@ class WorkflowNotifier
                     )
                 );
 
-                $this->myMailer->sendMessage(
-                    [$user->getEmail()],
-                    $context['subject'] ?? '[ORéOF] - ' . $this->extractTransition($eventKey)
-                );
+                try {
+                    $this->myMailer->sendMessage(
+                        [$user->getEmail()],
+                        $context['subject'] ?? '[ORéOF] - ' . $this->extractTransition($eventKey)
+                    );
+                } catch (Exception $e) {
+                    throw new RuntimeException('Erreur lors de l\'envoi de l\'email : ' . $e->getMessage());
+                }
             }
 
             // IN-APP
-            if ($pref?->channelAllowed('inapp')) {
+            if ($pref->channelAllowed('inapp')) {
                 $n = new Notification();
                 $n->setDestinataire($user);
                 $n->setTitle('notif.' . $wf . '.' . $this->extractTransition($eventKey));

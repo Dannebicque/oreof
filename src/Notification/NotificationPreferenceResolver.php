@@ -11,7 +11,7 @@ final class NotificationPreferenceResolver
     private array $channels = [];
     private string $source = '';
 
-    public function __construct(private EntityManagerInterface $em)
+    public function __construct(private readonly EntityManagerInterface $em)
     {
     }
 
