@@ -10,6 +10,26 @@
   margin-top: 120px;
 }
 
+.border-process-info {
+  border-left: 2px solid var(--info);
+  border-radius: var(--border-radius-md);
+}
+
+.border-process-warning {
+  border-left: 2px solid var(--warning);
+  border-radius: var(--border-radius-md);
+}
+
+.border-process-danger {
+  border-left: 2px solid var(--danger);
+  border-radius: var(--border-radius-md);
+}
+
+.border-process-success {
+  border-left: 2px solid var(--success);
+  border-radius: var(--border-radius-md);
+}
+
 .border-left-sousUe {
   border-left: 2px solid var(--primary);
 }
@@ -438,3 +458,20 @@ h3.modal-section-title {
   font-size: 1.1em;
   color: var(--primary);
 }
+
+.bg-info-pale {
+  background-color: var(--info-pale);
+}
+
+.bg-success-pale {
+  background-color: var(--success-pale);
+}
+
+.bg-warning-pale {
+  background-color: var(--warning-pale);
+}
+
+.bg-danger-pale {
+  background-color: var(--danger-pale);
+}
+

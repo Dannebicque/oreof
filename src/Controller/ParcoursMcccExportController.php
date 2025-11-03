@@ -9,6 +9,7 @@
 
 namespace App\Controller;
 
+use App\Classes\GetDateConseilComposante;
 use App\Classes\GetDpeParcours;
 use App\Classes\GetHistorique;
 use App\Entity\CampagneCollecte;
@@ -24,6 +25,7 @@ class ParcoursMcccExportController extends BaseController
 
     #[Route('/parcours/mccc/export/{parcours}.{_format}', name: 'app_parcours_mccc_export')]
     public function exportMcccXlsx(
+        GetDateConseilComposante $getDateConseilComposante,
         GetHistorique $getHistorique,
         Parcours $parcours,
         EntityManagerInterface $entityManager,
@@ -47,7 +49,8 @@ class ParcoursMcccExportController extends BaseController
 
         if ($dpe !== null) {
             $cfvu = $getHistorique->getHistoriqueParcoursLastStep($dpe, 'soumis_cfvu');
-            $conseil = $getHistorique->getHistoriqueParcoursLastStep($dpe, 'soumis_conseil');
+            //$conseil = $getHistorique->getHistoriqueParcoursLastStep($dpe, 'soumis_conseil');
+            $conseil = $getDateConseilComposante->getDateConseilComposante($dpe);
         }
 
         return match ($_format) {
@@ -55,7 +58,7 @@ class ParcoursMcccExportController extends BaseController
                 $this->getCampagneCollecte(),
                 $parcours,
                 $cfvu?->getDate() ?? null,
-                $conseil?->getDate() ?? null
+                $conseil
             ),
             'pdf' => $typeDiplome->exportPdfMccc(
                 $this->getCampagneCollecte(),
@@ -69,7 +72,7 @@ class ParcoursMcccExportController extends BaseController
 
     #[Route('/parcours/mccc/export-version/{parcours}.{_format}', name: 'app_parcours_mccc_export_versionning')]
     public function exportMcccVersionXlsx(
-        GetHistorique $getHistorique,
+        GetDateConseilComposante $getDateConseilComposante,
         Parcours $parcours,
         string $_format = 'xlsx'
     ): StreamedResponse|Response
@@ -85,7 +88,8 @@ class ParcoursMcccExportController extends BaseController
         //date conseil
         $dpe = GetDpeParcours::getFromParcours($parcours);
         if ($dpe !== null) {
-            $dateConseil = $getHistorique->getHistoriqueParcoursLastStep($dpe, 'soumis_conseil');
+            //$dateConseil = $getHistorique->getHistoriqueParcoursLastStep($dpe, 'soumis_conseil');
+            $dateConseil = $getDateConseilComposante->getDateConseilComposante($dpe);
         }
 
         return match ($_format) {
@@ -99,7 +103,7 @@ class ParcoursMcccExportController extends BaseController
                 $this->getCampagneCollecte(),
                 $parcours,
                 null,
-                $dateConseil?->getDate() ?? null
+                $dateConseil
             ),
             default => throw new Exception('Format non géré'),
         };
@@ -107,6 +111,7 @@ class ParcoursMcccExportController extends BaseController
 
     #[Route('/parcours/mccc/export-light/{parcours}.{_format}', name: 'app_parcours_mccc_export_light')]
     public function exportMcccLightXlsx(
+        GetDateConseilComposante $getDateConseilComposante,
         GetHistorique $getHistorique,
         Parcours $parcours,
         string $_format = 'xlsx'
@@ -123,7 +128,8 @@ class ParcoursMcccExportController extends BaseController
 
         if ($dpe !== null) {
             $cfvu = $getHistorique->getHistoriqueParcoursLastStep($dpe, 'soumis_cfvu');
-            $conseil = $getHistorique->getHistoriqueParcoursLastStep($dpe, 'soumis_conseil');
+            //$conseil = $getHistorique->getHistoriqueParcoursLastStep($dpe, 'soumis_conseil');
+            $conseil = $getDateConseilComposante->getDateConseilComposante($dpe);
         }
 
         return match ($_format) {
@@ -131,7 +137,7 @@ class ParcoursMcccExportController extends BaseController
                 $this->getCampagneCollecte(),
                 $parcours,
                 $cfvu?->getDate() ?? null,
-                $conseil?->getDate() ?? null,
+                $conseil,
                 false
             ),
             'pdf' => $typeDiplome->exportPdfMccc(

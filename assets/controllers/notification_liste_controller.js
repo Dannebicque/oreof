@@ -19,8 +19,8 @@ export default class extends Controller {
       method: 'POST',
       body: JSON.stringify({
         value: event.target.checked,
-        idNotif: event.params.id,
-        toNotif: event.params.to,
+        idProfil: event.params.profil,
+        workflow: event.params.workflow,
       }),
     }
 

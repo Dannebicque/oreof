@@ -544,41 +544,39 @@ class LicenceMcccVersion extends AbstractLicenceMccc
                 $mcccsNew = $this->getMcccs($diffEc['mcccs']['new'], $diffEc['typeMccc']->new);
 
                 //cas Original sans écrire dans les cellules
-                $displayMcccOriginal = $this->calculDisplayMccc($mcccsOriginal, $diffEc['typeMccc']->original ?? '', $diffEc['quitus']->original ?? false);
-                $displayMcccNew = $this->calculDisplayMccc($mcccsNew, $diffEc['typeMccc']->new, $diffEc['quitus']->new ?? false);
+                $displayMcccOriginal = new \App\TypeDiplome\Licence\Dto\Mccc($mcccsOriginal, $diffEc['typeMccc']->original ?? '', $this->typeEpreuves, $diffEc['quitus']->original ?? false);
+                $displayMcccOriginal->calculDisplayMccc();
+                $displayMcccNew = new \App\TypeDiplome\Licence\Dto\Mccc($mcccsNew, $diffEc['typeMccc']->new, $this->typeEpreuves, $diffEc['quitus']->new ?? false);
+                $displayMcccNew->calculDisplayMccc();
 
+                // utiliser le nouveau DTO via toArray()
+                $diffMccc = [];
+                $origArray = $displayMcccOriginal->toArray();
+                $newArray = $displayMcccNew->toArray();
 
-                //fusionner les deux tableaux $displayMcccOriginal et $displayMcccNew en construisant un objet DiffObject
-                foreach ($displayMcccOriginal as $key => $value) {
-                    if (array_key_exists($key, $displayMcccNew)) {
-                        $diffMccc[$key] = new DiffObject($value, $displayMcccNew[$key]);
-                    } else {
-                        $diffMccc[$key] = new DiffObject($value, '');
-                    }
-                }
-
-                foreach ($displayMcccNew as $key => $value) {
-                    if (!array_key_exists($key, $displayMcccOriginal)) {
-                        $diffMccc[$key] = new DiffObject('', $value);
-                    }
+                $keys = array_unique(array_merge(array_keys($origArray), array_keys($newArray)));
+                foreach ($keys as $key) {
+                    $orig = array_key_exists($key, $origArray) ? $origArray[$key] : '';
+                    $new = array_key_exists($key, $newArray) ? $newArray[$key] : '';
+                    $diffMccc[$key] = new DiffObject($orig, $new);
                 }
 
                 foreach ($diffMccc as $key => $value) {
-                    $this->excelWriter->writeCellXYDiff($key, $ligne, $value);
-
+                    $this->excelWriter->writeCellXYDiff(constant(self::class . '::' . $key), $ligne, $value);
                 }
             } elseif (array_key_exists('mcccs', $diffEc) && array_key_exists('new', $diffEc['mcccs'])) {
                 $mcccsNew = $this->getMcccs($diffEc['mcccs']['new'], $diffEc['typeMccc']->new);
 
-                $displayMcccNew = $this->calculDisplayMccc($mcccsNew, $diffEc['typeMccc']->new, $diffEc['quitus']->new ?? false);
+                //$displayMcccNew = $this->calculDisplayMccc($mcccsNew, $diffEc['typeMccc']->new, $diffEc['quitus']->new ?? false);
+                $displayMcccNew = new \App\TypeDiplome\Licence\Dto\Mccc($mcccsNew, $diffEc['typeMccc']->new, $this->typeEpreuves, $diffEc['quitus']->new ?? false);
+                $displayMcccNew->calculDisplayMccc();
 
-                foreach ($displayMcccNew as $key => $value) {
+                foreach ($displayMcccNew->toArray() as $key => $value) {
                     $diffMccc[$key] = new DiffObject('', $value);
                 }
 
                 foreach ($diffMccc as $key => $value) {
-                    $this->excelWriter->writeCellXYDiff($key, $ligne, $value);
-
+                    $this->excelWriter->writeCellXYDiff(constant(self::class . '::' . $key), $ligne, $value);
                 }
             }
 
@@ -603,226 +601,6 @@ class LicenceMcccVersion extends AbstractLicenceMccc
         $ligne++;
         return $ligne;
     }
-
-    public function getMcccs(array $mcccs, string $typeMccc): array
-    {
-        if ($this->typeEpreuves === []) {
-            $this->getTypeEpreuves();
-        }
-
-        //todo: a mutualiser avec le code dans LicenceTypeDiplome
-        $tabMcccs = [];
-
-        if ($typeMccc === 'cci') {
-            foreach ($mcccs as $mccc) {
-                $tabMcccs[$mccc->getNumeroSession()] = $mccc;
-            }
-        } else {
-            foreach ($mcccs as $mccc) {
-                if ($mccc->isSecondeChance()) {
-                    $tabMcccs[3]['chance'] = $mccc;
-                } elseif ($mccc->isControleContinu() === true && $mccc->isExamenTerminal() === false) {
-                    $tabMcccs[$mccc->getNumeroSession()]['cc'][$mccc->getNumeroEpreuve() ?? 1] = $mccc;
-                } elseif ($mccc->isControleContinu() === false && $mccc->isExamenTerminal() === true) {
-                    $tabMcccs[$mccc->getNumeroSession()]['et'][$mccc->getNumeroEpreuve() ?? 1] = $mccc;
-                }
-            }
-        }
-
-        return $tabMcccs;
-    }
-
-    private function calculDisplayMccc(array $mcccs, string $typeMccc, bool $isQuitus = false): array
-    {
-        $tDisplay = [];
-
-        switch ($typeMccc) {
-            case 'cc':
-                $texte = '';
-                $texteAvecTp = '';
-                $hasTp = false;
-                $pourcentageTp = 0;
-                if (array_key_exists(1, $mcccs) && array_key_exists('cc', $mcccs[1])) {
-                    $nb = 1;
-                    $nb2 = 1;
-                    /** @var Mccc $mccc */
-                    foreach ($mcccs[1]['cc'] as $mccc) {
-                        for ($i = 1; $i <= $mccc->getNbEpreuves(); $i++) {
-                            $texte .= 'CC' . $nb . ' (' . $mccc->getPourcentage() . '%); ';
-                            $nb++;
-                        }
-
-                        if ($mccc->hasTp()) {
-                            $hasTp = true;
-                            if ($mccc->getNbEpreuves() === 1) {
-                                //si une seule épreuve de CC, pas de prise en compte du %de TP en seconde session
-                                //todo: interdire la saisie d'un pourcentage de TP si une seule épreuve de CC
-                                $pourcentageTp += $mccc->getPourcentage();
-                            } else {
-                                $pourcentageTp += $mccc->pourcentageTp();
-                            }
-                            $texteAvecTp .= 'TPr' . $nb2 . ' (' . $mccc->getPourcentage() . '%); ';
-
-                            $nb2++;
-                        }
-                    }
-
-                    $texte = substr($texte, 0, -2);
-                    $tDisplay[self::COL_MCCC_CC] = $this->addQuitus($texte, $isQuitus);
-                }
-
-                if (array_key_exists(2, $mcccs) && array_key_exists('et', $mcccs[2]) && is_array($mcccs[2]['et'])) {
-                    $texte = '';
-                    $pourcentageTpEt = $pourcentageTp / count($mcccs[2]['et']);
-                    foreach ($mcccs[2]['et'] as $mccc) {
-                        $texte .= $this->displayTypeEpreuveWithDureePourcentage($mccc);
-                        $texteAvecTp .= $this->displayTypeEpreuveWithDureePourcentageTp($mccc, $pourcentageTpEt);
-                    }
-
-                    $texte = substr($texte, 0, -2);
-                }
-
-                if ($hasTp) {
-                    $texteAvecTp = substr($texteAvecTp, 0, -2);
-                    $tDisplay[self::COL_MCCC_SECONDE_CHANCE_CC_AVEC_TP] = $this->addQuitus(str_replace(';', '+', $texteAvecTp), $isQuitus);
-                } else {
-                    $tDisplay[self::COL_MCCC_SECONDE_CHANCE_CC_SANS_TP] = $this->addQuitus($texte, $isQuitus);
-                }
-
-                break;
-            case 'cci':
-                $texte = '';
-                /** @var Mccc $mccc */
-                foreach ($mcccs as $mccc) {
-                    $texte .= 'CC' . $mccc->getNumeroSession() . ' (' . $mccc->getPourcentage() . '%); ';
-                }
-                $texte = substr($texte, 0, -2);
-                $tDisplay[self::COL_MCCC_CCI] = $this->addQuitus($texte, $isQuitus);
-                break;
-            case 'cc_ct':
-                if (array_key_exists(1, $mcccs) && array_key_exists('cc', $mcccs[1]) && $mcccs[1]['cc'] !== null) {
-                    $texte = '';
-                    /** @var Mccc $mccc */
-                    foreach ($mcccs[1]['cc'] as $mccc) {
-                        $texte .= 'CC ' . $mccc->getNbEpreuves() . ' épreuve(s) (' . $mccc->getPourcentage() . '%); ';
-                    }
-                    $texte = substr($texte, 0, -2);
-                    $tDisplay[self::COL_MCCC_CC] = $this->addQuitus($texte, $isQuitus);
-                }
-
-                $texteAvecTp = '';
-                $texteCc = '';
-                $pourcentageTp = 0;
-                $pourcentageCc = 0;
-                $hasTp = false;
-                if (array_key_exists(1, $mcccs) && array_key_exists('cc', $mcccs[1])) {
-                    foreach ($mcccs[1]['cc'] as $mccc) {
-                        if ($mccc->hasTp()) {
-                            $hasTp = true;
-                            if ($mccc->getNbEpreuves() === 1) {
-                                //si une seule épreuve de CC, pas de prise en compte du %de TP en seconde session
-                                $pourcentageTp += $mccc->getPourcentage();
-                            } else {
-                                $pourcentageTp += $mccc->pourcentageTp();
-                            }
-                        }
-                        $pourcentageCc += $mccc->getPourcentage();
-                        $texteCc .= 'CC (' . $mccc->getPourcentage() . '%); ';
-                    }
-
-                    if ($hasTp) {
-                        $texteAvecTp .= 'TPr (' . $pourcentageTp . '%); ';
-                    }
-
-                    if (array_key_exists('et', $mcccs[1]) && $mcccs[1]['et'] !== null) {
-                        $texteEpreuve = '';
-                        foreach ($mcccs[1]['et'] as $mccc) {
-                            $texteEpreuve .= $this->displayTypeEpreuveWithDureePourcentage($mccc);
-                        }
-
-                        $texteEpreuve = substr($texteEpreuve, 0, -2);
-                        $tDisplay[self::COL_MCCC_CT] = $this->addQuitus($texteEpreuve, $isQuitus);
-                    }
-                }
-
-                if (array_key_exists(2, $mcccs) && array_key_exists('et', $mcccs[2]) && $mcccs[2]['et'] !== null) {
-                    $texteEpreuve = '';
-                    $pourcentageTpEt = $pourcentageTp / count($mcccs[2]['et']);
-                    if (count($mcccs[2]['et']) > 1) {
-                        $facteur = (100 - $pourcentageCc) / 100;
-                    } else {
-                        $facteur = 1;
-                    }
-                    $pourcentageCcEt = $pourcentageCc / count($mcccs[2]['et']);
-
-                    foreach ($mcccs[2]['et'] as $mccc) {
-                        $texteEpreuve .= $this->displayTypeEpreuveWithDureePourcentage($mccc);
-                        $texteAvecTp .= $this->displayTypeEpreuveWithDureePourcentageTp($mccc, $pourcentageTpEt);
-                        $texteCc .= $this->displayTypeEpreuveWithDureePourcentageTp($mccc, $pourcentageCcEt, $facteur);
-                    }
-
-                    $texteEpreuve = substr($texteEpreuve, 0, -2);
-                    $texteCc = substr($texteCc, 0, -2);
-                    $texteCc = str_replace('CC', 'CCr', $texteCc);
-                    $texteAvecTp = substr($texteAvecTp, 0, -2);
-
-                    if ($hasTp) {
-                        $tDisplay[self::COL_MCCC_SECONDE_CHANCE_CC_AVEC_TP] = $this->addQuitus(str_replace(';', '+', $texteAvecTp), $isQuitus);
-                    } else {
-                        //si TP cette celulle est vide...
-                        $tDisplay[self::COL_MCCC_SECONDE_CHANCE_CC_SANS_TP] = $this->addQuitus($texteEpreuve, $isQuitus);
-                    }
-                    $tDisplay[self::COL_MCCC_SECONDE_CHANCE_CC_SUP_10] = $this->addQuitus(str_replace(';', '+', $texteCc), $isQuitus);
-                }
-
-                //on garde CC et on complète avec le reste de pourcentage de l'ET
-
-                break;
-            case 'ct':
-                if (array_key_exists(1, $mcccs) && array_key_exists('et', $mcccs[1]) && $mcccs[1]['et'] !== null) {
-                    $texteEpreuve = '';
-                    foreach ($mcccs[1]['et'] as $mccc) {
-                        $texteEpreuve .= $this->displayTypeEpreuveWithDureePourcentage($mccc);
-                    }
-
-                    $texteEpreuve = substr($texteEpreuve, 0, -2);
-                    $tDisplay[self::COL_MCCC_CT] = $this->addQuitus($texteEpreuve, $isQuitus);
-                }
-
-                if (array_key_exists(2, $mcccs) && array_key_exists('et', $mcccs[2]) && $mcccs[2]['et'] !== null) {
-                    $texteEpreuve = '';
-                    foreach ($mcccs[2]['et'] as $mccc) {
-                        $texteEpreuve .= $this->displayTypeEpreuveWithDureePourcentage($mccc);
-                    }
-
-                    $texteEpreuve = substr($texteEpreuve, 0, -2);
-                    $tDisplay[self::COL_MCCC_SECONDE_CHANCE_CT] = $this->addQuitus($texteEpreuve, $isQuitus);
-                }
-                break;
-        }
-
-        return $tDisplay;
-    }
-
-    private function displayTypeEpreuveWithDureePourcentage(Mccc $mccc): string
-    {
-        $texte = '';
-        foreach ($mccc->getTypeEpreuve() as $type) {
-            if ($type !== "" && $this->typeEpreuves[$type] !== null) {
-                    $duree = '';
-                    if ($this->typeEpreuves[$type]->isHasDuree() === true) {
-                        $duree = ' ' . $this->displayDuree($mccc->getDuree());
-                    }
-
-                    $texte .= $this->typeEpreuves[$type]->getSigle() . $duree . ' (' . $mccc->getPourcentage() . '%); ';
-            } else {
-                $texte .= 'erreur épreuve; ';
-            }
-        }
-
-        return $texte;
-    }
-
 
     private function afficheEcSupprime(int $ligne, array $diffEc): int
     {

@@ -9,6 +9,7 @@
 
 namespace App\Classes;
 
+use App\Entity\ChangeRf;
 use Symfony\Component\Workflow\WorkflowInterface;
 
 class ValidationProcessChangeRf extends AbstractValidationProcess
@@ -19,9 +20,8 @@ class ValidationProcessChangeRf extends AbstractValidationProcess
         $data = [];
         foreach ($places as $place) {
             $meta = $changeRfWorkflow->getMetadataStore()->getPlaceMetadata($place);
-            if (array_key_exists('process', $meta) && (bool)$meta['process'] === true) {
-                $data[$place] = $meta;
-            }
+            $data[$place] = $meta;
+            $this->processAll[$place] = $meta;
         }
         $this->process = $data;
     }

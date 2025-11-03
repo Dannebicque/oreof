@@ -18,6 +18,7 @@ use App\Repository\UserRepository;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Workflow\Event\Event;
 
+/** @deprecated */
 class DpeCfvuMailSubscriber extends AbstractDpeMailSubscriber implements EventSubscriberInterface
 {
     public function __construct(
@@ -33,12 +34,12 @@ class DpeCfvuMailSubscriber extends AbstractDpeMailSubscriber implements EventSu
     public static function getSubscribedEvents(): array
     {
         return [
-            'workflow.dpeParcours.transition.refuser_definitif_cfvu' => 'onRefuseCfvu',
-            'workflow.dpeParcours.transition.refuser_revoir_cfvu' => 'onReserveCfvu',
-            'workflow.dpeParcours.transition.valider_reserve_cfvu' => 'onValideCfvu',
-            'workflow.dpeParcours.transition.valider_reserve_conseil_cfvu' => 'onValideCfvu',
-            'workflow.dpeParcours.transition.valider_reserve_central_cfvu' => 'onValideCfvu',
-            'workflow.dpeParcours.transition.valider_cfvu' => 'onValideCfvu',
+//         //   'workflow.dpeParcours.transition.refuser_definitif_cfvu' => 'onRefuseCfvu',
+//           // 'workflow.dpeParcours.transition.refuser_revoir_cfvu' => 'onReserveCfvu',
+//           // 'workflow.dpeParcours.transition.valider_reserve_cfvu' => 'onValideCfvu',
+//            'workflow.dpeParcours.transition.valider_reserve_conseil_cfvu' => 'onValideCfvu',
+//            'workflow.dpeParcours.transition.valider_reserve_central_cfvu' => 'onValideCfvu',
+//            'workflow.dpeParcours.transition.valider_cfvu' => 'onValideCfvu',
         ];
     }
 

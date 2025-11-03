@@ -20,143 +20,55 @@ class NotificationListe
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 50)]
-    private ?string $codeNotification = null;
+    #[ORM\ManyToOne(inversedBy: 'notificationListes')]
+    private ?Profil $profil = null;
 
-    #[ORM\Column]
-    private ?bool $toSes = false;
+    #[ORM\Column(length: 40)]
+    private ?string $workflow = null;
 
-    #[ORM\Column]
-    private ?bool $toVp = false;
-
-    #[ORM\Column]
-    private ?bool $toRespDpe = false;
-
-    #[ORM\Column]
-    private ?bool $toRespFormation = false;
-
-    #[ORM\Column]
-    private ?bool $toRespEc = false;
-
-    #[ORM\Column]
-    private ?bool $isComposante = null;
-
-    #[ORM\Column]
-    private ?bool $isCentral = null;
-
-    #[ORM\Column(length: 150)]
-    private ?string $libelle = null;
+    #[ORM\Column(length: 255)]
+    private ?string $step = null;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getCodeNotification(): ?string
+    public function getProfil(): ?Profil
     {
-        return $this->codeNotification;
+        return $this->profil;
     }
 
-    public function setCodeNotification(string $codeNotification): self
+    public function setProfil(?Profil $profil): static
     {
-        $this->codeNotification = $codeNotification;
+        $this->profil = $profil;
 
         return $this;
     }
 
-    public function isToSes(): ?bool
+    public function getWorkflow(): ?string
     {
-        return $this->toSes;
+        return $this->workflow;
     }
 
-    public function setToSes(bool $toSes): self
+    public function setWorkflow(string $workflow): static
     {
-        $this->toSes = $toSes;
+        $this->workflow = $workflow;
 
         return $this;
     }
 
-    public function isToVp(): ?bool
+    public function getStep(): ?string
     {
-        return $this->toVp;
+        return $this->step;
     }
 
-    public function setToVp(bool $toVp): self
+    public function setStep(string $step): static
     {
-        $this->toVp = $toVp;
+        $this->step = $step;
 
         return $this;
     }
 
-    public function isToRespDpe(): ?bool
-    {
-        return $this->toRespDpe;
-    }
 
-    public function setToRespDpe(bool $toRespDpe): self
-    {
-        $this->toRespDpe = $toRespDpe;
-
-        return $this;
-    }
-
-    public function isToRespFormation(): ?bool
-    {
-        return $this->toRespFormation;
-    }
-
-    public function setToRespFormation(bool $toRespFormation): self
-    {
-        $this->toRespFormation = $toRespFormation;
-
-        return $this;
-    }
-
-    public function isToRespEc(): ?bool
-    {
-        return $this->toRespEc;
-    }
-
-    public function setToRespEc(bool $toRespEc): self
-    {
-        $this->toRespEc = $toRespEc;
-
-        return $this;
-    }
-
-    public function isComposante(): ?bool
-    {
-        return $this->isComposante;
-    }
-
-    public function setIsComposante(bool $isComposante): self
-    {
-        $this->isComposante = $isComposante;
-
-        return $this;
-    }
-
-    public function isCentral(): ?bool
-    {
-        return $this->isCentral;
-    }
-
-    public function setIsCentral(bool $isCentral): self
-    {
-        $this->isCentral = $isCentral;
-
-        return $this;
-    }
-
-    public function getLibelle(): ?string
-    {
-        return $this->libelle;
-    }
-
-    public function setLibelle(string $libelle): self
-    {
-        $this->libelle = $libelle;
-
-        return $this;
-    }
 }

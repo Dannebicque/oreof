@@ -32,7 +32,9 @@
         <td {% if enfant %}class="border-left-ue-{{ ue.ordre }}"{% endif %} colspan="2">
             {{ ue.ue.descriptionUeLibre }}
         </td>
-        <th><input type="text"></th>
+        <th>
+            <label class="sr-only" for="description_{{ ue.id }}">Description</label>
+            <input id="description_{{ ue.id }}" type="text"></th>
     </tr>
 {% else %}
 {#    {% if ue.uesEnfants|length == 0 %}#}

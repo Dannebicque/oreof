@@ -18,22 +18,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[
-    Route('/structure/element-constitutif', name: 'structure_ec_')
-]
+#[Route('/structure/element-constitutif', name: 'structure_ec_')]
 class EcController extends BaseController
 {
-    #[
-        Route('/', name: 'index')
-    ]
-    public function index(): Response
-    {
-        return $this->render('structure/ec/index.html.twig');
-    }
 
-    #[
-        Route('/detail/ue/{ue}/{parcours}', name: 'detail_ue')
-    ]
+    #[Route('/detail/ue/{ue}/{parcours}', name: 'detail_ue')]
     public function detailComposante(
         Request $request,
         ElementConstitutifRepository $elementConstitutifRepository,

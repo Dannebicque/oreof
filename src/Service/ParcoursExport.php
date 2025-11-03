@@ -339,7 +339,7 @@ class ParcoursExport {
         ) {
             $valide = true;
         } else {
-            $valide = true;
+            $valide = false;
         }
 
         if ($ec->elementConstitutif->getNatureUeEc()?->isLibre() && !$isVersioning) {

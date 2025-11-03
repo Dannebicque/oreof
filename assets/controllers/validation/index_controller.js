@@ -23,7 +23,7 @@ export default class extends Controller {
   }
 
   async changeListe() {
-    this._updateListe()
+    await this._updateListe()
   }
 
   async _updateListe() {
@@ -49,15 +49,15 @@ export default class extends Controller {
   }
 
   async valider(event) {
-    this._valideChoix(event)
+    await this._valideChoix(event)
   }
 
   async refuser(event) {
-    this._valideChoix(event)
+    await this._valideChoix(event)
   }
 
   async reserver(event) {
-    this._valideChoix(event)
+    await this._valideChoix(event)
   }
 
   async _valideChoix(event) {

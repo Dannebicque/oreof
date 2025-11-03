@@ -1,0 +1,33 @@
+{% extends 'mails/base_mail.html.twig' %}
+
+{% block content %}
+    <p>Bonjour {{ user.display }},</p>
+
+    <p>Le DPE de votre composante a émis une ou des réserve(s) ont été émises sur
+        {% if hasParcours == true %}
+        le parcours <strong>{{ parcours.libelle }}</strong> de la formation <strong>{{ formation.displayLong }}</strong>
+    {% else %}
+        la formation <strong>{{ formation.displayLong }}</strong>
+        {% endif %}.</p>
+
+    <p>Détail des réserves : </p>
+
+    <p>{{ motif|nl2br|raw }}</p>
+
+
+        {% if hasParcours == true %}
+            <p>Vous pouvez modifier votre parcours en cliquant sur le lien suivant :</p>
+            <p>
+            <a href="{{ url('app_parcours_edit', {'id': parcours.id}) }}">{{ url('app_parcours_edit', {'id': parcours.id}) }}</a>
+            </p>
+        {% else %}
+            <p>Vous pouvez modifier votre formation en cliquant sur le lien suivant :</p>
+            <p>
+            <a href="{{ url('app_formation_edit', {'slug': formation.slug}) }}">{{ url('app_formation_edit', {'slug': formation.slug}) }}</a>
+            </p>
+        {% endif %}
+
+    <p>Si les réserves portent sur un parcours, le responsable du parcours peut également procéder à la modification de
+        son parcours.</p>
+
+{% endblock %}

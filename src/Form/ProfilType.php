@@ -57,6 +57,13 @@ class ProfilType extends AbstractType
                 'attr' => [
                     'class' => 'form-check-input'
                 ]
+            ])
+            ->add('isMailing', YesNoType::class, [
+                'label' => 'Peut être destinataire de mails',
+                'required' => true,
+                'attr' => [
+                    'class' => 'form-check-input'
+                ]
             ]);
     }
 

@@ -2,6 +2,7 @@
 
 namespace App\Command;
 
+use App\Classes\GetDateConseilComposante;
 use App\Classes\GetDpeParcours;
 use App\Classes\GetHistorique;
 use App\Entity\CampagneCollecte;
@@ -41,6 +42,7 @@ class McccPdfCommand extends Command
     private ButMccc $butMccc;
 
     public function __construct(
+        private GetDateConseilComposante $getDateConseilComposante,
         EntityManagerInterface $entityManager,
         Filesystem $fs,
         HttpClientInterface $httpClient,
@@ -99,7 +101,8 @@ class McccPdfCommand extends Command
                 $typeDiplomeParcours = $parcours->getFormation()->getTypeDiplome()->getLibelleCourt();
 
                 $dpeParcours = GetDpeParcours::getFromParcours($parcours);
-                $dateConseil = $this->getHistorique->getHistoriqueParcoursLastStep($dpeParcours, 'soumis_conseil')?->getDate();
+                //$dateConseil = $this->getHistorique->getHistoriqueParcoursLastStep($dpeParcours, 'soumis_conseil')?->getDate();
+                $dateConseil = $this->getDateConseilComposante->getDateConseilComposante($dpeParcours);
                 $dateCfvu = $this->getHistorique->getHistoriqueParcoursLastStep($dpeParcours, 'soumis_cfvu')?->getDate();
 
                 if($typeDiplomeParcours !== "BUT"){
@@ -200,7 +203,8 @@ class McccPdfCommand extends Command
 
                 $dpeParcours = GetDpeParcours::getFromParcours($parcours);
 
-                $dateConseil = $this->getHistorique->getHistoriqueParcoursLastStep($dpeParcours, 'soumis_conseil')?->getDate();
+                // $dateConseil = $this->getHistorique->getHistoriqueParcoursLastStep($dpeParcours, 'soumis_conseil')?->getDate();
+                $dateConseil = $this->getDateConseilComposante->getDateConseilComposante($dpeParcours);
                 $dateCfvu = $this->getHistorique->getHistoriqueParcoursLastStep($dpeParcours, 'soumis_cfvu')?->getDate();
 
                 $fileNamePdf = "MCCC-Parcours-{$parcours->getId()}-{$anneeDpe->getAnnee()}.pdf";
@@ -317,7 +321,8 @@ class McccPdfCommand extends Command
                     }
 
                     $dpeParcours = GetDpeParcours::getFromParcours($p);
-                    $dateConseil = $this->getHistorique->getHistoriqueParcoursLastStep($dpeParcours, 'soumis_conseil')?->getDate();
+                    //$dateConseil = $this->getHistorique->getHistoriqueParcoursLastStep($dpeParcours, 'soumis_conseil')?->getDate();
+                    $dateConseil = $this->getDateConseilComposante->getDateConseilComposante($dpeParcours);
                     $dateCfvu = $this->getHistorique->getHistoriqueParcoursLastStep($dpeParcours, 'soumis_cfvu')?->getDate();
 
                     // Sauvegarde de la version actuelle en PDF

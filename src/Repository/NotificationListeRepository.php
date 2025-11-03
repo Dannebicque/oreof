@@ -10,6 +10,7 @@
 namespace App\Repository;
 
 use App\Entity\NotificationListe;
+use App\Entity\Profil;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -44,5 +45,18 @@ class NotificationListeRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+    public function findIfExist(Profil $profil, string $workflow, string $step): ?NotificationListe
+    {
+        return $this->createQueryBuilder('nl')
+            ->where('nl.profil = :profil')
+            ->andWhere('nl.workflow = :workflow')
+            ->andWhere('nl.step = :step')
+            ->setParameter('profil', $profil)
+            ->setParameter('workflow', $workflow)
+            ->setParameter('step', $step)
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 }

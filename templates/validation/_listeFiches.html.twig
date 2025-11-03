@@ -1,4 +1,9 @@
 <div class="card-body">
+    <div class="alert alert-info">
+        {% set nbFiches = fiches|length %}
+        <strong>{{ nbFiches }}</strong> fiche{{ nbFiches > 1 ? 's' : '' }} matière{{ nbFiches > 1 ? 's' : '' }}
+        trouvée{{ nbFiches > 1 ? 's' : '' }}.
+    </div>
     <table class="table" {{ stimulus_controller('check_all') }}>
         <thead>
         <tr>

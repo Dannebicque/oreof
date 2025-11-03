@@ -6,8 +6,12 @@
  * @lastUpdate 14/03/2023 22:21
  */
 
-import * as bootstrap from 'bootstrap'
+window.da = {
+  loaderStimulus: '<div class="loader-stimulus text-center">... Chargement en cours ...</div>',
+  loader: document.getElementById('loader'),
+}
 
+import * as bootstrap from 'bootstrap'
 import Trix from 'trix'
 
 import callOut from './js/callOut'
@@ -25,10 +29,6 @@ import './js/scripts'
 const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
 const tooltipList = [...tooltipTriggerList].map((tooltipTriggerEl) => new bootstrap.Tooltip(tooltipTriggerEl))
 
-window.da = {
-  loaderStimulus: '<div class="loader-stimulus text-center">... Chargement en cours ...</div>',
-  loader: document.getElementById('loader'),
-}
 
 window.addEventListener('load', () => { // le dom est chargé
   document.getElementsByTagName('html')[0].dataset.color = localStorage.getItem('acorn-standard-color') ?? 'light-blue'

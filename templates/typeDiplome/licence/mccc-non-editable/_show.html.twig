@@ -1,0 +1,45 @@
+<h3>1ᵉ Session</h3>
+<div>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th class="text-center">Contrôle continu intégral (CCi)</th>
+            <th class="text-center">Contrôle continu (CC)</th>
+            <th class="text-center">Contrôle terminal (CT)</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td class="text-center">{{ mcccs.COL_MCCC_CCI is defined ? mcccs.COL_MCCC_CCI : "" }}</td>
+            <td class="text-center">{{ mcccs.COL_MCCC_CC is defined ? mcccs.COL_MCCC_CC : "" }}</td>
+            <td class="text-center">{{ mcccs.COL_MCCC_CT is defined ? mcccs.COL_MCCC_CT : "" }}</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<h3>2nde chance (hors CCi)</h3>
+<div>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th colspan="2" class="text-center">Si CC <10 en 1ère session</th>
+            <th rowspan="2" class="text-center">Si CC >= 10 en 1ère session</th>
+            <th rowspan="2" class="text-center">Cas 100%CT en 1ère session</th>
+        </tr>
+        <tr>
+            <th class="text-center">Sans TP en 1ère session</th>
+            <th class="text-center">Avec TP en 1ère session</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td class="text-center">{{ mcccs.COL_MCCC_SECONDE_CHANCE_CC_SANS_TP is defined ? mcccs.COL_MCCC_SECONDE_CHANCE_CC_SANS_TP : "" }}</td>
+            <td class="text-center">{{ mcccs.COL_MCCC_SECONDE_CHANCE_CC_AVEC_TP is defined ? mcccs.COL_MCCC_SECONDE_CHANCE_CC_AVEC_TP : "" }}</td>
+            <td class="text-center">{{ mcccs.COL_MCCC_SECONDE_CHANCE_CC_SUP_10 is defined ? mcccs.COL_MCCC_SECONDE_CHANCE_CC_SUP_10 : "" }}</td>
+            <td class="text-center">{{ mcccs.COL_MCCC_SECONDE_CHANCE_CT is defined ? mcccs.COL_MCCC_SECONDE_CHANCE_CT : "" }}</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+

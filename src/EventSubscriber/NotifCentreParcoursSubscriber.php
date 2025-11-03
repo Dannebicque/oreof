@@ -18,8 +18,7 @@ class NotifCentreParcoursSubscriber extends AbstractNotifCentreSubscriber
     {
         return [
             NotifCentreParcoursEvent::NOTIF_ADD_CENTRE => 'onAddCentreParcours',
-            NotifCentreParcoursEvent::NOTIF_REMOVE_CENTRE => 'onRemoveCentreParcours',
-            NotifCentreParcoursEvent::NOTIF_UPDATE_CENTRE => 'onUpdateCentreParcours',
+            NotifCentreParcoursEvent::NOTIF_REMOVE_CENTRE => 'onRemoveCentreParcours'
         ];
     }
 
