@@ -15,6 +15,7 @@ use App\Entity\FicheMatiereMutualisable;
 use App\Entity\Formation;
 use App\Entity\Parcours;
 use App\Entity\Semestre;
+use App\Entity\SemestreParcours;
 use App\Enums\TypeModificationDpeEnum;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
@@ -522,6 +523,33 @@ class DuplicateForNewAnneeCommand extends Command
             $cloneSemestre->setSemestreOrigineCopie($initialSemestre);
 
             $this->entityManager->persist($cloneSemestre);
+            $io->progressAdvance(1);
+        }
+
+        $io->progressFinish();
+        $this->saveAndCleanUp($io);
+
+        /**
+         * 
+         * SEMESTRES PARCOURS
+         * 
+         */
+        $this->entitiesArray = $this->entityManager->getRepository(SemestreParcours::class)
+            ->findFromAnneeUniversitaire($anneeSource);
+        $io->writeln("Copie des 'Semestres Parcours'...");
+        $io->progressStart(count($this->entitiesArray));
+        foreach($this->entitiesArray as $semestreParcours) {
+            $initialSemestreParcours = $this->entityManager->getRepository(SemestreParcours::class)
+                ->findOneById($semestreParcours);
+            $linkSemestreParcoursSemestre = $this->entityManager->getRepository(Semestre::class)
+                ->findOneBy(['semestreOrigineCopie' => $initialSemestreParcours->getSemestre()]);
+            $linkSemestreParcoursParcours = $this->entityManager->getRepository(Parcours::class)
+                ->findOneBy(['parcoursOrigineCopie' => $initialSemestreParcours->getParcours()]);
+            $cloneSemestreParcours = clone $initialSemestreParcours;
+            $cloneSemestreParcours->setSemestre($linkSemestreParcoursSemestre);
+            $cloneSemestreParcours->setParcours($linkSemestreParcoursParcours);
+
+            $this->entityManager->persist($cloneSemestreParcours);
             $io->progressAdvance(1);
         }
 
