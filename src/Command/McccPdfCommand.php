@@ -165,7 +165,7 @@ class McccPdfCommand extends Command
 
             $io->writeln("\nCommande pour générer les exports 'MCCC' au format PDF, de tous les parcours valides.\n");
 
-            $anneeDpe = $this->entityManager->getRepository(CampagneCollecte::class)->findOneBy(['defaut' => 1]);
+            $anneeDpe = $this->entityManager->getRepository(CampagneCollecte::class)->findOneBy(['defaut' => 2]);
             $parcoursArray = $this->entityManager->getRepository(Parcours::class)->findAllParcoursForDpe($anneeDpe);
 
             $parcoursArray = array_filter(
