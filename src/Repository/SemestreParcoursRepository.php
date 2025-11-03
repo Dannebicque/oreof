@@ -84,4 +84,16 @@ class SemestreParcoursRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function findFromAnneeUniversitaire(int $idCampagneCollecte) : array {
+        return $this->createQueryBuilder('semestreParcours')
+            ->select('semestreParcours.id')
+            ->join('semestreParcours.parcours', 'parcours')
+            ->join('parcours.dpeParcours', 'dpe')
+            ->join('dpe.campagneCollecte', 'campagneCollecte')
+            ->andWhere('campagneCollecte.id = :idCampagne')
+            ->setParameter(':idCampagne', $idCampagneCollecte)
+            ->getQuery()
+            ->getResult();
+    }
 }
