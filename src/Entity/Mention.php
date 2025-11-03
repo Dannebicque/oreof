@@ -37,7 +37,7 @@ class Mention
 
     /** @deprecated */
     #[Groups('parcours_json_versioning')]
-    #[ORM\ManyToOne(inversedBy: 'mentions')]
+    #[ORM\ManyToOne()]
     private ?Domaine $domaine = null;
 
     #[ORM\ManyToOne(cascade: ['persist'], inversedBy: 'mentions')]

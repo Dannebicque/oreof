@@ -15,7 +15,6 @@ export default class extends Controller {
   }
 
   async change(event) {
-    console.log(event)
     const body = {
       method: 'POST',
       body: JSON.stringify({

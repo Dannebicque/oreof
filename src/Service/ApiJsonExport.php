@@ -73,8 +73,8 @@ class ApiJsonExport {
                 if(count($lastVersion) > 0){
                     $lastVersionData = $this->versioningParcours->loadParcoursFromVersion($lastVersion[0]);
                     $tParcours[] = [
-                        'id' => $parcours->getParcoursOrigineCopie()?->getId(),
-                        'id_new' => $parcours->getId(),
+                        'id_old' => $parcours->getParcoursOrigineCopie()?->getId(),
+                        'id' => $parcours->getId(),
                         'libelle' => $lastVersionData['parcours']->getDisplay(),
                         'url' => $urlPrefix . $this->router->generate(
                                 'app_parcours_export_json_urca_cfvu_valid',
@@ -109,8 +109,8 @@ class ApiJsonExport {
 
             if(count($tParcours) > 0){
                 $dataJSON[] = [
-                    'id' => $formation->getFormationOrigineCopie()?->getId(),
-                    'id_new' => $formation->getId(),
+                    'id_old' => $formation->getFormationOrigineCopie()?->getId(),
+                    'id' => $formation->getId(),
                     'libelle' => $formation->getDisplayLong(),
                     'parcours' => $tParcours,
                     'dateValidation' => $dateValidationFormation?->format('Y-m-d H:i:s') ?? null

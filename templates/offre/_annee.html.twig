@@ -1,0 +1,55 @@
+{% set disabled = valeur == 'NON_OUVERTURE_CFVU' or valeur == 'FERMETURE_DEFINITIVE' %}
+
+<tr>
+    <td></td>
+    <th>Année</th>
+    <th></th>
+    <th></th>
+    <th>Dispensée ?</th>
+    <th>Capacités ?</th>
+    <th>Capacité <br>N-1</th>
+    <th>Capacité <br>{{ user_data.campagneCollecte.libelle }}</th>
+    <th></th>
+</tr>
+{% for annee in annees %}
+    <tr data-parcours-id="{{ parcours.id }}"
+        data-formation-id="{{ formation.formation.id }}"
+    >
+        <td style="width: 20px"></td>
+        <td style="border-left: 2px solid red">Année {{ annee.ordre }}</td>
+        <td></td>
+        <td></td>
+        <td>
+            <label for="dispense_{{ annee.id }}" class="sr-only">Année dispensée ?</label>
+            <input type="checkbox" id="dispense_{{ annee.id }}" name="dispense_{{ annee.id }}" value="false"
+                    {{ stimulus_action('offre', 'changeOuvertureAnnee', 'change', {
+                        id:annee.id
+                    }) }}
+                    {% if annee.isOuvert %}checked{% endif %}
+                    {% if disabled %}disabled{% endif %}
+            >
+        </td>
+
+        <td>
+            <label for="capacite_{{ annee.id }}" class="sr-only">Capacités à définir ?</label>
+            <input type="checkbox" id="capacite_{{ annee.id }}" name="capacite_{{ annee.id }}" value=""
+                   {% if disabled %}disabled{% endif %}
+            >
+        </td>
+        <td>
+            {{ annee.anneeOrigineCopie != null ? annee.anneeOrigineCopie.capaciteAccueil : 'N.C.' }} places
+        </td>
+        <td>
+            <label for="capacite_{{ annee.id }}" class="sr-only">Capacité accueil pour l'année N+1</label>
+            <input type="text" class="form-control" id="capacite_{{ annee.id }}" value="{{ annee.capaciteAccueil }}"
+                   {% if disabled %}disabled{% endif %}
+            >
+        </td>
+        <td></td>
+    </tr>
+{% else %}
+    <tr>
+        <td></td>
+        <td colspan="9" class="bg-danger">Erreur années / parcours</td>
+    </tr>
+{% endfor %}

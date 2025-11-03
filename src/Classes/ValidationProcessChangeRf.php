@@ -21,6 +21,7 @@ class ValidationProcessChangeRf extends AbstractValidationProcess
         foreach ($places as $place) {
             $meta = $changeRfWorkflow->getMetadataStore()->getPlaceMetadata($place);
             $data[$place] = $meta;
+            $this->processAll[$place] = $meta;
         }
         $this->process = $data;
     }
