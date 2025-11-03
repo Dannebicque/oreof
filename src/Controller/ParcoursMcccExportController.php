@@ -125,10 +125,9 @@ class ParcoursMcccExportController extends BaseController
 
         $typeDiplome = $this->typeDiplomeResolver->get($formation->getTypeDiplome());
         $dpe = GetDpeParcours::getFromParcours($parcours);
-
+        $conseil = null;
         if ($dpe !== null) {
             $cfvu = $getHistorique->getHistoriqueParcoursLastStep($dpe, 'soumis_cfvu');
-            //$conseil = $getHistorique->getHistoriqueParcoursLastStep($dpe, 'soumis_conseil');
             $conseil = $getDateConseilComposante->getDateConseilComposante($dpe);
         }
 
@@ -137,14 +136,14 @@ class ParcoursMcccExportController extends BaseController
                 $this->getCampagneCollecte(),
                 $parcours,
                 $cfvu?->getDate() ?? null,
-                $conseil,
+                $conseil ?? null,
                 false
             ),
             'pdf' => $typeDiplome->exportPdfMccc(
                 $this->getCampagneCollecte(),
                 $parcours,
                 $cfvu?->getDate() ?? null,
-                $conseil?->getDate() ?? null,
+                $conseil ?? null,
                 false
             ),
             default => throw new Exception('Format non géré'),

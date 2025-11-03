@@ -101,7 +101,6 @@ class McccPdfCommand extends Command
                 $typeDiplomeParcours = $parcours->getFormation()->getTypeDiplome()->getLibelleCourt();
 
                 $dpeParcours = GetDpeParcours::getFromParcours($parcours);
-                //$dateConseil = $this->getHistorique->getHistoriqueParcoursLastStep($dpeParcours, 'soumis_conseil')?->getDate();
                 $dateConseil = $this->getDateConseilComposante->getDateConseilComposante($dpeParcours);
                 $dateCfvu = $this->getHistorique->getHistoriqueParcoursLastStep($dpeParcours, 'soumis_cfvu')?->getDate();
 
