@@ -38,7 +38,7 @@ final class GetDateConseilComposante
         }
 
         // on regarde s'il y a eu une demande de modification (donc un état "en_cours_redaction")
-        if ($this->getHistorique->getHistoriqueParcoursLastStep($dpeParcours, 'en_cours_redaction') !== null) {
+        if ($this->getHistorique->getHistoriqueParcoursLastStep($dpeParcours, 'en_cours_redaction') !== null || $this->getHistorique->getHistoriqueParcoursLastStep($dpeParcours, 'parcours_rf') !== null) {
             // édité sur cette campagne, donc on récupère la date du conseil de composante dans l'historique ou null si pas passé
             return $this->getHistorique->getHistoriqueParcoursLastStep($dpeParcours, 'soumis_conseil')?->getDate();
         }
