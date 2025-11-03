@@ -15,6 +15,7 @@ use App\Entity\FicheMatiereMutualisable;
 use App\Entity\Formation;
 use App\Entity\Parcours;
 use App\Entity\Semestre;
+use App\Entity\SemestreMutualisable;
 use App\Entity\SemestreParcours;
 use App\Enums\TypeModificationDpeEnum;
 use DateTime;
@@ -550,6 +551,46 @@ class DuplicateForNewAnneeCommand extends Command
             $cloneSemestreParcours->setParcours($linkSemestreParcoursParcours);
 
             $this->entityManager->persist($cloneSemestreParcours);
+            $io->progressAdvance(1);
+        }
+
+        $io->progressFinish();
+        $this->saveAndCleanUp($io);
+
+        /**
+         * 
+         * SEMESTRES MUTUALISABLES & Semestres Raccrochés
+         * 
+         */
+        $this->entitiesArray = $this->entityManager->getRepository(SemestreMutualisable::class)
+            ->findFromAnneeUniversitaire($anneeSource);
+        $io->writeln("Copie des 'Semestres Mutualisables'...");
+        $io->progressStart(count($this->entitiesArray));
+        foreach($this->entitiesArray as $semestreMutualisable) {
+            $initialSemestreMutu = $this->entityManager->getRepository(SemestreMutualisable::class)
+                ->findOneById($semestreMutualisable);
+            $linkSemestreMutuSemestre = $this->entityManager->getRepository(Semestre::class)
+                ->findOneBy(['semestreOrigineCopie' => $initialSemestreMutu->getSemestre()]);
+            $linkSemestreMutuParcours = $this->entityManager->getRepository(Parcours::class)
+                ->findOneBy(['parcoursOrigineCopie' => $initialSemestreMutu->getParcours()]);
+            $cloneSemestreMutu = clone $initialSemestreMutu;
+            $cloneSemestreMutu->setSemestre($linkSemestreMutuSemestre);
+            $cloneSemestreMutu->setParcours($linkSemestreMutuParcours);
+
+            // Semestres Raccrochés
+            $semestreARaccrocherArray = $this->entityManager->getRepository(Semestre::class)
+                ->findBy(['semestreRaccroche' => $initialSemestreMutu]);
+            foreach($semestreARaccrocherArray as $semestreARaccrocher) {
+                $raccrochageSemestre = $this->entityManager->getRepository(Semestre::class)
+                    ->findOneBy(['semestreOrigineCopie' => $semestreARaccrocher]);
+
+                if($raccrochageSemestre !== null){
+                    $raccrochageSemestre->setSemestreRaccroche($cloneSemestreMutu);
+                    $this->entityManager->persist($raccrochageSemestre);
+                }
+            }
+
+            $this->entityManager->persist($cloneSemestreMutu);
             $io->progressAdvance(1);
         }
 
