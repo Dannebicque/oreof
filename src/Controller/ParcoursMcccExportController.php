@@ -97,7 +97,7 @@ class ParcoursMcccExportController extends BaseController
                 $this->getCampagneCollecte(),
                 $parcours,
                 null,
-                $dateConseil?->getDate() ?? null
+                $dateConseil
             ),
             'pdf' => $typeDiplome->exportPdfMccc(
                 $this->getCampagneCollecte(),
