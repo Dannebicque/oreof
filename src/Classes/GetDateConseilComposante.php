@@ -31,13 +31,16 @@ final class GetDateConseilComposante
         }
 
         if ($parcours instanceof Parcours) {
-            $parcours = GetDpeParcours::getFromParcours($parcours);
+            $dpeParcours = GetDpeParcours::getFromParcours($parcours);
+        } else {
+            $dpeParcours = $parcours;
+            $parcours = $dpeParcours->getParcours();
         }
 
         // on regarde s'il y a eu une demande de modification (donc un état "en_cours_redaction")
-        if ($this->getHistorique->getHistoriqueParcoursLastStep($parcours, 'en_cours_redaction') !== null) {
+        if ($this->getHistorique->getHistoriqueParcoursLastStep($dpeParcours, 'en_cours_redaction') !== null) {
             // édité sur cette campagne, donc on récupère la date du conseil de composante dans l'historique ou null si pas passé
-            return $this->getHistorique->getHistoriqueParcoursLastStep($parcours, 'soumis_conseil')?->getDate();
+            return $this->getHistorique->getHistoriqueParcoursLastStep($dpeParcours, 'soumis_conseil')?->getDate();
         }
 
         if ($parcours->getParcoursOrigineCopie() !== null) {
