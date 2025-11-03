@@ -81,21 +81,4 @@ class FormationWizardController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
-
-    /**
-     * @throws TypeDiplomeNotFoundException
-     */
-    #[Route('/{formation}/{parcours}/4', name: 'app_formation_wizard_step_4', methods: ['GET'])]
-    public function step4(
-        Formation $formation,
-        Parcours $parcours
-    ): Response {
-        $typeDiplome = $formation->getTypeDiplome();
-
-        return $this->render('formation_wizard/_step4.html.twig', [
-            'formation' => $formation,
-            'parcours' => $parcours,
-            'typeDiplome' => $typeDiplome,
-        ]);
-    }
 }

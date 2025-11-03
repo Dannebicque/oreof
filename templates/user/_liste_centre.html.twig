@@ -14,7 +14,7 @@
             <td>{{ userProfil|centre }}</td>
             <td>{{ userProfil.profil.libelle }}</td>
             <td><button {{ stimulus_action('centre', 'delete', 'click', {
-                    url:path('app_user_gestion_delete_centre',{'id': userProfil.id}),
+                    url:path('app_user_profils_delete',{'userProfil': userProfil.id}),
                     csrf: csrf_token('delete' ~ userProfil.id)
                 }) }} class="btn btn-sm text-danger">
                     <i class="{{ iconDelete }}"></i> Supprimer

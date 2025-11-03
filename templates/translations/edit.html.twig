@@ -1,32 +1,37 @@
 {% extends 'base.html.twig' %}
 
 {% block content %}
+    <div class="card">
+        <div class="card-body">
+            <form method="post">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Clé</th>
+                        <th>Texte</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody data-controller="translations">
+                    {% for key, value in translations %}
+                        <tr>
+                            <td><input name="translations[{{ key }}]" value="{{ key }}" hidden/>{{ key }}</td>
+                            <td><input class="form-control" name="translations[{{ key }}]"
+                                       value="{{ value|e('html_attr') }}"/>
+                            </td>
+                            <td></td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
 
+                <button data-action="translations#addRow" type="button" class="btn btn-secondary">+ Ajouter une ligne
+                </button>
+                <button type="submit" class="btn btn-primary">Enregistrer</button>
+            </form>
+        </div>
+    </div>
 
-    <form method="post">
-        <table class="table">
-            <thead>
-            <tr>
-                <th>Clé</th>
-                <th>Texte</th>
-                <th></th>
-            </tr>
-            </thead>
-            <tbody data-controller="translations">
-            {% for key, value in translations %}
-                <tr>
-                    <td><input name="translations[{{ key }}]" value="{{ key }}" hidden/>{{ key }}</td>
-                    <td><input class="form-control" name="translations[{{ key }}]" value="{{ value|e('html_attr') }}"/>
-                    </td>
-                    <td></td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-
-        <button data-action="translations#addRow" type="button" class="btn btn-secondary">+ Ajouter une ligne</button>
-        <button type="submit" class="btn btn-primary">Enregistrer</button>
-    </form>
 {% endblock %}
 
 {% block header %}
@@ -43,5 +48,22 @@
         <i class="{{ iconBack }}"></i>
         <span> Retour aux fichiers de traduction</span>
     </a>
+{% endblock %}
+
+{% block breadcrumb %}
+    {{ include('communs/_breadcrumb.html.twig', {liens:[
+        {
+            href:'',
+            title: 'Administration',
+        },
+        {
+            href:path('translations_index'),
+            title: 'Traductions',
+        },
+        {
+            href:'',
+            title: 'fichier : ' ~ filename,
+        }
+    ]}) }}
 {% endblock %}
 

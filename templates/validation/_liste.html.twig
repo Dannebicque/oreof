@@ -1,4 +1,9 @@
 <div class="card-body">
+    <div class="alert alert-info">
+        <strong>{{ nbParcours }}</strong> parcours, pour <strong>{{ nbFormations }}</strong>
+        formation{{ nbFormations > 1 ? 's' : '' }}
+        trouvée{{ nbFormations > 1 ? 's' : '' }}.
+    </div>
     <table class="table" {{ stimulus_controller('check_all') }}>
         <thead>
         <tr>

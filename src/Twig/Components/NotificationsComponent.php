@@ -29,6 +29,6 @@ final class NotificationsComponent extends AbstractController
 
     public function getNotifsNonLu(): int
     {
-        return $this->notificationRepository->count(['destinataire' => $this->user, 'lu' => false]);
+        return $this->notificationRepository->count(['destinataire' => $this->user, 'isRead' => false]);
     }
 }

@@ -54,7 +54,7 @@ class ChangeRfProcess extends AbstractProcess
         $motifs = [];
         $place = array_keys($this->changeRfWorkflow->getMarking($changeRf)->getPlaces())[0];
 
-        if ($request->request->has('date')) {
+        if ($request->request->has('date') && $request->request->get('date') !== null && $request->request->get('date') !== 'null') {
             $motifs['date'] = Tools::convertDate($request->request->get('date'));
         }
 

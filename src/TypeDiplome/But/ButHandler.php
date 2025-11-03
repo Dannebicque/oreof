@@ -12,6 +12,7 @@ use App\Repository\ButCompetenceRepository;
 use App\TypeDiplome\But\Services\ButMccc;
 use App\TypeDiplome\But\Services\ButMcccVersion;
 use App\TypeDiplome\TypeDiplomeHandlerInterface;
+use App\TypeDiplome\TypeDiplomeMcccInterface;
 use App\Utils\Tools;
 use DateTimeInterface;
 use Doctrine\Common\Collections\Collection;
@@ -20,7 +21,7 @@ use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
-final class ButHandler implements TypeDiplomeHandlerInterface
+final class ButHandler implements TypeDiplomeHandlerInterface, TypeDiplomeMcccInterface
 {
 
     public const TEMPLATE_FOLDER = 'but';
@@ -135,7 +136,6 @@ final class ButHandler implements TypeDiplomeHandlerInterface
     {
         if ($request->has('sansNote') && $request->get('sansNote') === 'on') {
             $elementConstitutif->setSansNote(true);
-            $elementConstitutif->setEtatMccc('Complet');
         } else {
             $elementConstitutif->setSansNote(false);
             $type = $elementConstitutif->getTypeMatiere();
@@ -168,7 +168,6 @@ final class ButHandler implements TypeDiplomeHandlerInterface
                     }
                 }
             }
-            $elementConstitutif->setEtatMccc($total >= 99.0 ? 'Complet' : 'Incomplet');
         }
 
         $this->entityManager->flush();
@@ -198,5 +197,20 @@ final class ButHandler implements TypeDiplomeHandlerInterface
     protected function getLibelleCourt(): string
     {
         return 'BUT';
+    }
+
+    public function checkIfMcccValide(ElementConstitutif|FicheMatiere $owner): bool
+    {
+        if ($owner->isSansNote()) {
+            return true;
+        }
+
+        $mccc = $owner->getMcccs();
+        $somme = 0;
+        foreach ($mccc as $m) {
+            $somme += $m->getPourcentage() * $m->getNbEpreuves();
+        }
+
+        return $somme > 99 && $somme <= 100;
     }
 }

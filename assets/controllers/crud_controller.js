@@ -122,7 +122,7 @@ export default class extends Controller {
         if (e.status === 200) {
           callOut('Suppression effectuée', 'success')
           // Après une suppression, on reste sur la même page si possible
-          this._updateListe(this.fields)
+          await this._updateListe(this.fields)
         } else {
           const data = await e.json()
           if (data.message !== undefined && data.message.trim() !== '') {

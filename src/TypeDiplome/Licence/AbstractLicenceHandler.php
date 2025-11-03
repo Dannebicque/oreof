@@ -22,6 +22,7 @@ use App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException;
 use App\TypeDiplome\Licence\Services\LicenceMccc;
 use App\TypeDiplome\Licence\Services\LicenceMcccVersion;
 use App\TypeDiplome\TypeDiplomeHandlerInterface;
+use App\TypeDiplome\TypeDiplomeMcccInterface;
 use App\Utils\Tools;
 use DateTimeInterface;
 use Doctrine\Common\Collections\Collection;
@@ -30,7 +31,7 @@ use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
-abstract class AbstractLicenceHandler implements TypeDiplomeHandlerInterface
+abstract class AbstractLicenceHandler implements TypeDiplomeHandlerInterface, TypeDiplomeMcccInterface
 {
     public const TEMPLATE_FOLDER = 'licence';
     public const SOURCE = 'licence';
@@ -159,7 +160,6 @@ abstract class AbstractLicenceHandler implements TypeDiplomeHandlerInterface
     public function saveMcccs(ElementConstitutif|FicheMatiere $elementConstitutif, InputBag $request): void
     {
         $mcccs = $this->getMcccs($elementConstitutif);
-        $typeD = 'L';
         switch ($request->get('choix_type_mccc')) {
             case 'cc':
                 if ($request->get('type_cc') === 'cc') {
@@ -202,8 +202,6 @@ abstract class AbstractLicenceHandler implements TypeDiplomeHandlerInterface
                     $mcccs = $this->sauvegardeCc($elementConstitutif, $mcccs, $request->all(), 1, 's1_cc', 'NOT-L');
                 }
                 $mcccs = $this->sauvegardeCts($elementConstitutif, $mcccs, $request->all(), 2, 's2_ct');
-                $etatMccc = $this->verificationMccc($elementConstitutif, $mcccs, $typeD);
-
                 break;
             case 'cci':
                 $pourcentages = $request->all()['pourcentage'];
@@ -241,7 +239,6 @@ abstract class AbstractLicenceHandler implements TypeDiplomeHandlerInterface
                         $this->entityManager->persist($mccc);
                     }
                 }
-                $etatMccc = $totPourcentage === 100.0;
                 break;
             case 'cc_ct':
                 $tab = [
@@ -276,7 +273,6 @@ abstract class AbstractLicenceHandler implements TypeDiplomeHandlerInterface
 
                 $mcccs = $this->sauvegardeCts($elementConstitutif, $mcccs, $data, 1, 's1_ct', false);
                 $mcccs = $this->sauvegardeCts($elementConstitutif, $mcccs, $data, 2, 's2_ct');
-                $etatMccc = $this->verificationMccc($elementConstitutif, $mcccs, $typeD);
 
                 //todo: encart sur vérification parcours/formation sur la structure selon le type, cas des licences. Permet de déporter les tests spécifiques dans les type de diplômes ou départer la vérification structure dans les types de diplômes
                 break;
@@ -287,13 +283,10 @@ abstract class AbstractLicenceHandler implements TypeDiplomeHandlerInterface
                 //récupérer toutes les clés commencant par typeEpreuve_s1_ct
                 $mcccs = $this->sauvegardeCts($elementConstitutif, $mcccs, $data, 1, 's1_ct');
                 $mcccs = $this->sauvegardeCts($elementConstitutif, $mcccs, $data, 2, 's2_ct');
-                $etatMccc = $this->verificationMccc($elementConstitutif, $mcccs, $typeD);
                 break;
-            default:
-                $etatMccc = $this->verificationMccc($elementConstitutif, $mcccs, $typeD);
+
         }
 
-        $elementConstitutif->setEtatMccc($etatMccc ? 'Complet' : 'A Saisir');
         $this->entityManager->flush();
     }
 
@@ -490,13 +483,60 @@ abstract class AbstractLicenceHandler implements TypeDiplomeHandlerInterface
         return $mcccs;
     }
 
-    private function verificationMccc(ElementConstitutif|FicheMatiere $ec, array $mcccs, $type = 'L'): bool
+    private function verificationEt(array $mcccs): bool
     {
+        $totPourcentage = 0.0;
+
+        foreach ($mcccs as $mccc) {
+            if ($mccc->getTypeEpreuve() === null || count($mccc->getTypeEpreuve()) === 0) {
+                return false;
+            }
+
+            if ($mccc->getPourcentage() === null || $mccc->getPourcentage() === 0.0) {
+                return false;
+            }
+
+            $totPourcentage += $mccc->getPourcentage();
+
+            if ($this->typeEpreuveHasDuree($mccc->getTypeEpreuve()[0]) && $mccc->getDuree() === null) {
+                return false;
+            }
+
+            if ($totPourcentage === 100.0) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function typeEpreuveHasDuree(int|string $id): bool
+    {
+        if (!array_key_exists($id, $this->typeEpreuves)) {
+            return false;
+        }
+
+        return $this->typeEpreuves[$id]->isHasDuree() ?? false;
+    }
+
+    public function clearMcccs(ElementConstitutif|FicheMatiere $objet): void
+    {
+        $mcccs = $objet->getMcccs();
+        foreach ($mcccs as $mccc) {
+            $this->entityManager->remove($mccc);
+        }
+        $this->entityManager->flush();
+    }
+
+    public function checkIfMcccValide(ElementConstitutif|FicheMatiere $owner): bool
+    {
+        $mcccs = $owner->getMcccs();
+
         if (count($mcccs) === 0) {
             return false;
         }
 
-        switch ($ec->getTypeMccc()) {
+        switch ($owner->getTypeMccc()) {
             case 'cc':
                 if (isset($mcccs[2]) && !isset($mcccs[2]['et']) && !is_array($mcccs[2]['et'])) {
                     return false;
@@ -506,16 +546,12 @@ abstract class AbstractLicenceHandler implements TypeDiplomeHandlerInterface
                     return false;
                 }
 
-                if ($type === 'L') {
-                    if (isset($mcccs[1]) && !isset($mcccs[1]['cc']) && count($mcccs[1]['cc']) !== 1) {
-                        return false;
-                    }
+                if (isset($mcccs[1]) && !isset($mcccs[1]['cc']) && count($mcccs[1]['cc']) !== 1) {
+                    return false;
+                }
 
-                    if ($mcccs[1]['cc'][1]->getPourcentage() === null || $mcccs[1]['cc'][1]->getPourcentage() !== 50.0) {
-                        return false;
-                    }
-
-                    return true;
+                if ($mcccs[1]['cc'][1]->getPourcentage() === null || $mcccs[1]['cc'][1]->getPourcentage() !== 50.0) {
+                    return false;
                 }
 
                 if (isset($mcccs[1]) && !isset($mcccs[1]['cc']) && !is_array($mcccs[1]['cc'])) {
@@ -618,48 +654,11 @@ abstract class AbstractLicenceHandler implements TypeDiplomeHandlerInterface
         return false;
     }
 
-    private function verificationEt(array $mcccs): bool
+    public function getDisplayMccc(array $mcccs, string $typeMccc): array
     {
-        $totPourcentage = 0.0;
+        $mccc = new Dto\Mccc($mcccs, $typeMccc, $this->typeEpreuves);
+        $mccc->calculDisplayMccc();
 
-        foreach ($mcccs as $mccc) {
-            if ($mccc->getTypeEpreuve() === null || count($mccc->getTypeEpreuve()) === 0) {
-                return false;
-            }
-
-            if ($mccc->getPourcentage() === null || $mccc->getPourcentage() === 0.0) {
-                return false;
-            }
-
-            $totPourcentage += $mccc->getPourcentage();
-
-            if ($this->typeEpreuveHasDuree($mccc->getTypeEpreuve()[0]) && $mccc->getDuree() === null) {
-                return false;
-            }
-
-            if ($totPourcentage === 100.0) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private function typeEpreuveHasDuree(int|string $id): bool
-    {
-        if (!array_key_exists($id, $this->typeEpreuves)) {
-            return false;
-        }
-
-        return $this->typeEpreuves[$id]->isHasDuree() ?? false;
-    }
-
-    public function clearMcccs(ElementConstitutif|FicheMatiere $objet): void
-    {
-        $mcccs = $objet->getMcccs();
-        foreach ($mcccs as $mccc) {
-            $this->entityManager->remove($mccc);
-        }
-        $this->entityManager->flush();
+        return $mccc->toArray();
     }
 }

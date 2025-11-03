@@ -18,6 +18,7 @@ use Symfony\Component\Workflow\Event\Event;
 
 class WorkflowChangeRfMailSubscriber extends AbstractDpeMailSubscriber implements EventSubscriberInterface
 {
+    //todo : WORKFLOW DE CHANGEMENT DE RF...
     public function __construct(
         protected UserRepository       $userRepository,
         protected ComposanteRepository $composanteRepository,

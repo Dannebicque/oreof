@@ -74,50 +74,103 @@ class ValidationAdminController extends BaseController
 
     #[Route('dpe', name: 'dpe_index')]
     public function dpe(
-        ComposanteRepository $composanteRepository,
-        Request              $request,
-        ValidationProcess    $validationProcess,
+        DpeParcoursRepository $dpeParcoursRepository,
+        ComposanteRepository  $composanteRepository,
+        ValidationProcess     $validationProcess,
     ): Response
     {
+        $steps = $validationProcess->getProcessAll();
 
-        $typeValidation = $request->query->get('typeValidation');
+        //statstics
+        // parcourir tous les parcours et compter les états
+        $statistiques = [];
+        $allParcours = $dpeParcoursRepository->findByCampagneCollecte($this->getCampagneCollecte());
+        foreach ($allParcours as $parcours) {
+            $etat = array_keys($parcours->getEtatValidation())[0];
+            if (!isset($statistiques[$etat])) {
+                $statistiques[$etat]['nbParcours'] = 0;
+                $statistiques[$etat]['formations'] = [];
+            }
+            $statistiques[$etat]['nbParcours']++;
+            if (!in_array($parcours->getParcours()?->getFormation()?->getId(), $statistiques[$etat]['formations'], true)) {
+                $statistiques[$etat]['formations'][] = $parcours->getParcours()?->getFormation()?->getId();
+            }
+        }
+
 
         return $this->render('validation/dpe.html.twig', [
-            'types_validation' => $validationProcess->getProcessAll(),
-            'typeValidation' => $typeValidation,
             'composantes' => $composanteRepository->findPorteuse(),
+            'steps' => $steps,
+            'statistiques' => $statistiques,
         ]);
     }
 
+//    #[Route('dpe', name: 'dpe_index')]
+//    public function dpe(
+//        ComposanteRepository $composanteRepository,
+//        Request              $request,
+//        ValidationProcess    $validationProcess,
+//    ): Response
+//    {
+//
+//        $typeValidation = $request->query->get('typeValidation');
+//
+//        return $this->render('dpe_old.html.twig', [
+//            'types_validation' => $validationProcess->getProcessAll(),
+//            'typeValidation' => $typeValidation,
+//            'composantes' => $composanteRepository->findPorteuse(),
+//        ]);
+//    }
+
     #[Route('change-rf', name: 'change_rf_index')]
     public function changeRf(
-        ComposanteRepository      $composanteRepository,
+        ChangeRfRepository $changeRfRepository,
         Request                   $request,
         ValidationProcessChangeRf $validationProcessChangeRf,
     ): Response
     {
         $typeValidation = $request->query->get('typeValidation');
 
+        $statistiques = [];
+
+        $fiches = $changeRfRepository->findByCampagneCollecteForStats($this->getCampagneCollecte());
+        foreach ($fiches as $fiche) {
+            $keys = array_keys($fiche['etat'] ?? []);
+            $etat = $keys[0] ?? null;
+            $statistiques[$etat] = $fiche['nb'];
+        }
+
         return $this->render('validation/change_rf.html.twig', [
-            'types_validation' => $validationProcessChangeRf->getProcess(),//faire un getProcesssComposante pour filtrer par niveau composante,
+            'steps' => $validationProcessChangeRf->getProcessAll(),//faire un getProcesssComposante pour filtrer par niveau composante,
             'typeValidation' => $typeValidation,
-            'composantes' => $composanteRepository->findPorteuse(),
+            'statistiques' => $statistiques
         ]);
     }
 
     #[Route('fiche-matiere', name: 'fiche_index')]
     public function ficheMatiere(
-        ComposanteRepository          $composanteRepository,
+        FicheMatiereRepository $ficheMatiereRepository,
         Request                       $request,
         ValidationProcessFicheMatiere $validationProcessFicheMatiere,
     ): Response
     {
-        $typeValidation = $request->query->get('typeValidation');
+
+        $statistiques = [];
+        foreach ($validationProcessFicheMatiere->getProcess() as $key => $etape) {
+            $statistiques[$key] = 0;
+        }
+
+        $fiches = $ficheMatiereRepository->findByCampagneCollecteForStats($this->getCampagneCollecte());
+        //dump($fiches);
+        foreach ($fiches as $fiche) {
+            $keys = array_keys($fiche['etat'] ?? []);
+            $etat = $keys[0] ?? null;
+            $statistiques[$etat] = $fiche['nb'];
+        }
 
         return $this->render('validation/fiche_matiere.html.twig', [
-            'types_validation' => $validationProcessFicheMatiere->getProcess(),
-            'typeValidation' => $typeValidation,
-            'composantes' => $composanteRepository->findPorteuse(),
+            'steps' => $validationProcessFicheMatiere->getProcessAll(),
+            'statistiques' => $statistiques,
         ]);
     }
 
@@ -141,8 +194,19 @@ class ValidationAdminController extends BaseController
 
         $allparcours = $dpeParcoursRepository->findByCampagneAndTypeValidation($this->getCampagneCollecte(), $typeValidation, $composante);
 
+        $nbParcours = count($allparcours);
+
+        $tFormations = [];
+        foreach ($allparcours as $parcours) {
+            $tFormations[] = $parcours->getParcours()?->getFormation()?->getId();
+        }
+
+        // valeurs uniques dans tFormations
+        $nbFormations = count(array_unique($tFormations));
 
         return $this->render('validation/_liste.html.twig', [
+            'nbFormations' => $nbFormations,
+            'nbParcours' => $nbParcours,
             'process' => $process,
             'allparcours' => $allparcours,
             'etape' => $typeValidation ?? null,
@@ -158,12 +222,10 @@ class ValidationAdminController extends BaseController
     {
         $typeValidation = $request->query->get('typeValidation');
 
-
         $demandes = $changeRfRepository->findByTypeValidation(
             $typeValidation,
             $this->getCampagneCollecte()
         );
-
 
         return $this->render('validation/_listeChangeRf.html.twig', [
             'demandes' => $demandes,

@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block header %}Configuration de l'offre {{ user_data.campagneCollecte.libelle }}{% endblock %}
+
+{% block content %}
+    <div class="card">
+        <div class="card-body">
+            <turbo-frame id="offre_table">
+                {% include 'offre/_table.html.twig' %}
+            </turbo-frame>
+        </div>
+    </div>
+{% endblock %}

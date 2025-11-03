@@ -10,6 +10,7 @@
 namespace App\TypeDiplome\Licence\Services;
 
 use App\Classes\Excel\ExcelWriter;
+use App\DTO\StructureEc;
 use App\Entity\Mccc;
 use DateTimeInterface;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
@@ -173,49 +174,36 @@ class AbstractLicenceMccc
         }
     }
 
-    protected function displayDuree(?DateTimeInterface $duree): string
+    public function getMcccs(StructureEc|array $structureEc, string $typeMccc): array
     {
-        if ($duree === null) {
-            return '';
+        if ($this->typeEpreuves === []) {
+            $this->getTypeEpreuves();
         }
 
-        return $duree->format('H\hi');
-    }
-
-    protected function addQuitus(string $texteEpreuve, ?bool $hasQuitus): string
-    {
-        if (!str_starts_with('QUITUS', $texteEpreuve) && $hasQuitus) {
-            $texteEpreuve = 'QUITUS ' . $texteEpreuve;
+        if (is_array($structureEc)) {
+            $mcccs = $structureEc;
+        } else {
+            $mcccs = $structureEc->mcccs;
         }
 
-        return $texteEpreuve;
-    }
+        $tabMcccs = [];
 
-    protected function displayTypeEpreuveWithDureePourcentageTp(Mccc $mccc, float $pourcentage, float $facteur = 1): string
-    {
-        $texte = '';
-        foreach ($mccc->getTypeEpreuve() as $type) {
-            if ($type !== "" && $this->typeEpreuves[$type] !== null) {
-                $duree = '';
-                if ($this->typeEpreuves[$type]->isHasDuree() === true) {
-                    $duree = ' ' . $this->displayDuree($mccc->getDuree());
+        if ($typeMccc === 'cci') {
+            foreach ($mcccs as $mccc) {
+                $tabMcccs[$mccc->getNumeroSession()] = $mccc;
+            }
+        } else {
+            foreach ($mcccs as $mccc) {
+                if ($mccc->isSecondeChance()) {
+                    $tabMcccs[3]['chance'] = $mccc;
+                } elseif ($mccc->isControleContinu() === true && $mccc->isExamenTerminal() === false) {
+                    $tabMcccs[$mccc->getNumeroSession()]['cc'][$mccc->getNumeroEpreuve() ?? 1] = $mccc;
+                } elseif ($mccc->isControleContinu() === false && $mccc->isExamenTerminal() === true) {
+                    $tabMcccs[$mccc->getNumeroSession()]['et'][$mccc->getNumeroEpreuve() ?? 1] = $mccc;
                 }
-
-                if ($facteur === 1.0) {
-                    if (($mccc->getPourcentage() - $pourcentage) > 0.0) {
-                        $texte .= $this->typeEpreuves[$type]->getSigle() . $duree . ' (' . ($mccc->getPourcentage() - $pourcentage) . '%); ';
-                    }
-                } else {
-                    if (($facteur * $mccc->getPourcentage()) > 0.0) {
-                        $texte .= $this->typeEpreuves[$type]->getSigle() . $duree . ' (' . ($facteur * $mccc->getPourcentage()) . '%); ';
-                    }
-                }
-            } else {
-                $texte .= 'erreur épreuve; ';
             }
         }
 
-        return $texte;
+        return $tabMcccs;
     }
-
 }

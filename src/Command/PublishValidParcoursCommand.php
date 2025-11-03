@@ -2,6 +2,7 @@
 
 namespace App\Command;
 
+use App\Classes\GetDateConseilComposante;
 use App\Classes\GetDpeParcours;
 use App\Classes\GetHistorique;
 use App\Entity\CampagneCollecte;
@@ -39,6 +40,7 @@ class PublishValidParcoursCommand extends Command
     private Filesystem $filesystem;
 
     public function __construct(
+        private GetDateConseilComposante $getDateConseilComposante,
         EntityManagerInterface $entityManager,
         WorkflowInterface $dpeParcoursWorkflow,
         GetHistorique $getHistorique,
@@ -194,9 +196,11 @@ class PublishValidParcoursCommand extends Command
                     $parcoursArray,
                     function($p) {
                         $dpeParcours = GetDpeParcours::getFromParcours($p);
-                        $historiqueConseil = $this->getHistorique
-                        ->getHistoriqueParcoursLastStep($dpeParcours, 'soumis_conseil')
-                        ?->getDate() === null;
+                        $historiqueConseil = $this->getDateConseilComposante->getDateConseilComposante($dpeParcours) === null;
+
+                        // $historiqueConseil = $this->getHistorique
+                        // ->getHistoriqueParcoursLastStep($dpeParcours, 'soumis_conseil')
+                        //?->getDate() === null;
                         $isValideAPublier = $p
                                 ->getDpeParcours()->last() instanceof DpeParcours
                             && ($p->getDpeParcours()->last()->getEtatValidation() === ["valide_a_publier" => 1]

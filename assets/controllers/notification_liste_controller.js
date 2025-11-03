@@ -15,12 +15,13 @@ export default class extends Controller {
   }
 
   async change(event) {
+    console.log(event)
     const body = {
       method: 'POST',
       body: JSON.stringify({
         value: event.target.checked,
-        idNotif: event.params.id,
-        toNotif: event.params.to,
+        idProfil: event.params.profil,
+        workflow: event.params.workflow,
       }),
     }
 

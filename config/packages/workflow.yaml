@@ -14,10 +14,12 @@ framework:
           metadata:
             process: false
             label: 'validation.initialisation'
+            color: 'info'
         autorisation_saisie:
           metadata:
             process: false
             label: 'validation.autorisation_saisie'
+            color: 'success'
         en_cours_redaction:
           metadata:
             process: true
@@ -27,6 +29,16 @@ framework:
             isTimeline: false
             check: true
             templateCheck: '_checkParcours.html.twig'
+            color: 'info'
+        tacite_reconduction:
+          metadata:
+            process: false
+            icon: 'fa-pencil'
+            label: 'tacite_reconduction.parcours'
+            hasUpload: false
+            isTimeline: false
+            check: false
+            color: 'success'
         soumis_parcours:
           metadata:
             process: true
@@ -35,20 +47,24 @@ framework:
             isTimeline: false
             check: true
             templateCheck: '_checkParcours.html.twig'
+            color: 'success'
         soumis_dpe_composante:
           metadata:
             process: true
             icon: 'fa-check-to-slot'
             label: 'validation.dpe'
             isTimeline: true
+            color: 'success'
         refuse_rf:
           metadata:
             process: false
             label: 'validation.refuse_rf'
+            color: 'danger'
         refuse_dpe_composante:
           metadata:
             process: false
             label: 'validation.refuse_dpe_composante'
+            color: 'danger'
         soumis_conseil:
           metadata:
             process: true
@@ -57,20 +73,24 @@ framework:
             isTimeline: true
             hasDate: true
             hasUpload: true
+            color: 'success'
         refuse_conseil:
           metadata:
             process: false
             label: 'validation.refuse_conseil'
+            color: 'danger'
         refuse_central:
           metadata:
             process: false
             label: 'validation.refuse_central'
+            color: 'danger'
         soumis_central:
           metadata:
             process: true
             icon: 'fa-school-circle-check'
             label: 'validation.ses'
             isTimeline: false
+            color: 'success'
         soumis_cfvu:
           metadata:
             process: true
@@ -78,64 +98,72 @@ framework:
             label: 'soumis.cfvu'
             hasDate: true
             isTimeline: true
+            color: 'success'
         refuse_definitif_cfvu:
           metadata:
             process: false
             label: 'validation.refuse_definitif_cfvu'
+            color: 'danger'
         valide_cfvu:
           metadata:
             process: true
             icon: 'fa-stamp'
             label: 'relecture.avant_publication'
             isTimeline: true
+            color: 'success'
         valide_a_publier: # Etape de saisie de la date pour publication post CFVU
           metadata:
             process: true
             icon: 'fa-bullhorn'
             label: 'validation.publication'
             isTimeline: false
+            color: 'success'
         publie:
           metadata:
             process: false
             icon: 'fa-bullhorn'
             label: 'publie'
             isTimeline: false
+            color: 'success'
         soumis_conseil_reserve:
           metadata:
             process: false
             label: 'validation.soumis_conseil_reserve'
+            color: 'warning'
         en_cours_redaction_ss_cfvu:
           metadata:
             process: true
             icon: 'fa-paper-plane'
             isTimeline: false
             label: 'validation.en_cours_redaction_ss_cfvu'
+            color: 'info'
         soumis_central_sans_cfvu:
           metadata:
             process: false
             icon: 'fa-school-circle-check'
             isTimeline: false
             label: 'validation.soumis_central_sans_cfvu'
+            color: 'success'
         soumis_central_reserve_cfvu:
           metadata:
             process: false
             label: 'validation.soumis_central_reserve_cfvu'
+            color: 'warning'
         soumis_dpe_composante_reserve_cfvu:
           metadata:
             process: false
             label: 'validation.soumis_dpe_composante_reserve_cfvu'
+            color: 'warning'
         non_ouverture_ses:
           metadata:
             process: false
             label: 'validation.non_ouverture_ses'
-        non_ouverture_cfvu:
-          metadata:
-            process: false
-            label: 'validation.non_ouverture_cfvu'
+            color: 'danger'
         non_ouverture:
           metadata:
             process: false
             label: 'validation.non_ouverture'
+            color: 'danger'
       transitions:
         initialiser:
           from: 'initialisation_dpe'
@@ -143,10 +171,16 @@ framework:
         autoriser:
           from: 'autorisation_saisie'
           to: 'en_cours_redaction'
+          metadata:
+            recipients: [ 'DPE', 'RF' ]
+            titre: 'Autorisation de saisie de la formation %%s'
         valider_parcours: # Soumettre du resp de parcours vers formation
           from: 'en_cours_redaction'
           to: 'soumis_parcours'
           metadata:
+            recipients: [ 'RF', 'CoRF' ]
+            titre_with_parcours: "Le parcours %%s de votre formation %%s a été soumis à validation"
+            titre: 'Un parcours de votre formation %%s a été soumis à validation'
             type: valider
             btn: success
             icon: fa-check
@@ -154,6 +188,9 @@ framework:
           from: 'soumis_parcours'
           to: 'soumis_dpe_composante'
           metadata:
+            recipients: [ 'DPE' ]
+            titre_with_parcours: 'Le parcours %%s de la formation %%s a été validé par son responsable'
+            titre: 'La formation %%s a été validée par son responsable'
             type: valider
             btn: success
             icon: fa-check
@@ -161,6 +198,9 @@ framework:
           from: 'soumis_parcours'
           to: 'en_cours_redaction'
           metadata:
+            recipients: [ 'DPE', 'RF', 'CoRF', 'RP', 'CoRP' ]
+            titre_with_parcours: 'Le parcours %%s de la formation %%s a reçu des réserves par le responsable de formation'
+            titre: 'Un parcours de la formation %%s a reçu des réserves par le responsable de formation'
             type: reserver
             btn: warning
             icon: fa-circle-exclamation-check
@@ -168,6 +208,9 @@ framework:
           from: 'soumis_dpe_composante'
           to: 'refuse_dpe_composante'
           metadata:
+            recipients: [ 'RF', 'CoRF', 'RP', 'CoRP' ]
+            titre_with_parcours: 'La fiche du parcours %%s de la formation %%s a été refusée par le DPE de votre composante'
+            titre: 'La fiche de la formation %%s a été refusée par le DPE de votre composante'
             type: refuser
             btn: danger
             icon: fa-ban
@@ -175,6 +218,7 @@ framework:
           from: 'soumis_dpe_composante'
           to: 'soumis_conseil'
           metadata:
+            recipients: [ 'RF', 'CoRF', 'RP', 'CoRP' ]
             type: valider
             btn: success
             icon: fa-check
@@ -182,6 +226,9 @@ framework:
           from: 'soumis_dpe_composante'
           to: 'en_cours_redaction'
           metadata:
+            recipients: [ 'RF', 'CoRF', 'RP', 'CoRP' ]
+            titre_with_parcours: 'La fiche du parcours %%s de la formation %%s a reçu des réserves de la part du DPE de votre composante'
+            titre: 'La fiche de la formation %%s a reçu des réserves de la part du DPE de votre composante'
             type: reserver
             btn: warning
             icon: fa-circle-exclamation-check
@@ -189,6 +236,9 @@ framework:
           from: 'soumis_conseil'
           to: 'refuse_conseil'
           metadata:
+            recipients: [ 'RF', 'CoRF', 'RP', 'CoRP' ]
+            titre_with_parcours: 'La fiche du parcours %%s de la formation %%s a été refusée par le conseil de votre composante'
+            titre: 'La fiche de la formation %%s a été refusée par le conseil de votre composante'
             type: refuser
             btn: danger
             icon: fa-ban
@@ -196,6 +246,9 @@ framework:
           from: 'soumis_conseil'
           to: 'soumis_central'
           metadata:
+            recipients: [ 'RF', 'CoRF', 'RP', 'CoRP' ]
+            titre_with_parcours: 'La fiche du parcours %%s de la formation %%s a été validée par le conseil de la composante'
+            titre: 'La fiche de la formation %%s a été validée par le conseil de la composante'
             type: valider
             btn: success
             hasDate: true
@@ -205,6 +258,9 @@ framework:
           from: 'soumis_conseil'
           to: 'en_cours_redaction'
           metadata:
+            recipients: [ 'RF', 'CoRF', 'RP', 'CoRP' ]
+            titre_with_parcours: 'La fiche du parcours %%s de la formation %%s a recu des réserves par le conseil de la composante'
+            titre: 'La fiche de la formation %%s a recu des réserves par le conseil de la composante'
             type: reserver
             btn: warning
             icon: fa-circle-exclamation-check
@@ -212,6 +268,9 @@ framework:
           from: 'soumis_central'
           to: 'refuse_central'
           metadata:
+            recipients: [ 'DPE', 'RF', 'CoRF', 'RP', 'CoRP' ]
+            titre_with_parcours: 'La fiche du parcours %%s de la formation %%s a été refusée par le SES'
+            titre: 'La fiche de la formation %%s a été refusée par le SES'
             type: refuser
             btn: danger
             icon: fa-ban
@@ -219,6 +278,9 @@ framework:
           from: 'soumis_central'
           to: 'soumis_cfvu'
           metadata:
+            recipients: [ 'DPE', 'RF', 'CoRF', 'RP', 'CoRP' ]
+            titre_with_parcours: 'La fiche du parcours %%s de la formation %%s a été validée par le SES'
+            titre: 'La fiche de la formation %%s a été validée par le SES'
             type: valider
             btn: success
             icon: fa-check
@@ -226,6 +288,9 @@ framework:
           from: 'soumis_central'
           to: 'en_cours_redaction'
           metadata:
+            recipients: [ 'DPE', 'RF', 'CoRF', 'RP', 'CoRP' ]
+            titre_with_parcours: 'La fiche du parcours %%s de la formation %%s a reçu des réserves par le SES'
+            titre: 'La fiche de la formation %%s a reçue des réserves par le SES'
             type: reserver
             btn: warning
             icon: fa-circle-exclamation-check
@@ -233,6 +298,7 @@ framework:
           from: 'soumis_central'
           to: 'valide_a_publier'
           metadata:
+            recipients: [ 'DPE', 'RF', 'CoRF', 'RP', 'CoRP' ]
             type: valider
             btn: success
             icon: fa-check
@@ -241,6 +307,9 @@ framework:
           from: 'soumis_cfvu'
           to: 'refuse_definitif_cfvu'
           metadata:
+            recipients: [ 'DPE', 'RF', 'CoRF', 'RP', 'CoRP' ]
+            titre_with_parcours: 'Votre parcours %%s de la formation %%s a reçu une refus définitif de validation par la CFVU'
+            titre: 'Votre formation %%s a reçu une refus définitif de validation par la CFVU'
             hasDate: true
             type: refuser
             btn: danger
@@ -249,6 +318,9 @@ framework:
           from: 'soumis_cfvu'
           to: 'en_cours_redaction'
           metadata:
+            recipients: [ 'DPE', 'RF', 'CoRF', 'RP', 'CoRP' ]
+            titre_with_parcours: 'Votre parcours %%s de la formation %%s a reçu des réserves de la CFVU'
+            titre: 'Votre formation %%s a reçu des réserves de la CFVU'
             hasDate: true
             type: reserver
             btn: warning
@@ -257,6 +329,9 @@ framework:
           from: 'soumis_cfvu'
           to: 'soumis_dpe_composante_reserve_cfvu'
           metadata:
+            recipients: [ 'DPE', 'RF', 'CoRF', 'RP', 'CoRP' ]
+            titre_with_parcours: 'Votre parcours %%s de la formation %%s a été validé par la CFVU'
+            titre: 'Votre formation %%s a été validée par la CFVU'
             type: valider
             btn: success
             icon: fa-check
@@ -265,6 +340,7 @@ framework:
           from: 'soumis_dpe_composante_reserve_cfvu'
           to: 'soumis_central_reserve_cfvu'
           metadata:
+            recipients: [ 'DPE', 'RF', 'CoRF', 'RP', 'CoRP' ]
             type: valider
             btn: success
             icon: fa-check
@@ -272,6 +348,9 @@ framework:
           from: 'soumis_cfvu'
           to: 'soumis_conseil_reserve' #todo mais on court-circuite le retour directement vers valider publicatio
           metadata:
+            recipients: [ 'DPE', 'RF', 'CoRF', 'RP', 'CoRP' ]
+            titre_with_parcours: 'Votre parcours %%s de la formation %%s a été validé par la CFVU'
+            titre: 'Votre formation %%s a été validée par la CFVU'
             type: valider
             btn: success
             icon: fa-check
@@ -280,21 +359,28 @@ framework:
           from: 'soumis_conseil_reserve'
           to: 'valide_cfvu'
           metadata:
+            recipients: [ 'DPE', 'RF', 'CoRF', 'RP', 'CoRP' ]
+            titre_with_parcours: 'Votre parcours %%s de la formation %%s a été validé par la CFVU'
+            titre: 'Votre formation %%s a été validée par la CFVU'
             type: valider
             btn: success
             icon: fa-check
         valider_cfvu:
           from: 'soumis_cfvu'
-          to: 'valide_cfvu' #todo: renommer en valide_cfvu => etait valide_pour_publication
+          to: 'valide_cfvu'
           metadata:
+            recipients: [ 'DPE', 'RF', 'CoRF', 'RP', 'CoRP' ]
+            titre_with_parcours: 'Votre parcours %%s de la formation %%s a été validé par la CFVU'
+            titre: 'Votre formation %%s a été validée par la CFVU'
             type: valider
             btn: success
             hasDate: true
             icon: fa-check
         valider_publication:
-          from: 'valide_cfvu' #todo: renommer en valide_cfvu etait valide_pour_publication
+          from: 'valide_cfvu'
           to: 'valide_a_publier'
           metadata:
+            recipients: [ 'DPE', 'RF', 'CoRF', 'RP', 'CoRP' ]
             type: valider
             btn: success
             icon: fa-check
@@ -304,22 +390,40 @@ framework:
           from: 'valide_a_publier'
           to: 'publie'
           metadata:
+            recipients: [ 'DPE', 'RF', 'CoRF', 'RP', 'CoRP' ]
             type: valider
             btn: success
             icon: fa-check
+        relancer_annee:
+          from: 'publie'
+          to: 'tacite_reconduction'
+        reouvrir_tacite:
+          from: 'tacite_reconduction'
+          to: 'en_cours_redaction'
+          metadata:
+            recipients: [ 'DPE', 'RF', 'CoRF', 'RP', 'CoRP' ]
         reouvrir_mccc:
           from: 'publie'
           to: 'en_cours_redaction'
+          metadata:
+            recipients: [ 'DPE', 'RF', 'CoRF', 'RP', 'CoRP' ]
         reouvrir_avant_publie:
           from: 'valide_a_publier'
           to: 'en_cours_redaction'
+          metadata:
+            recipients: [ 'DPE', 'RF', 'CoRF', 'RP', 'CoRP' ]
         reouvrir_sans_cfvu:
           from: 'publie'
           to: 'en_cours_redaction_ss_cfvu'
+          metadata:
+            recipients: [ 'DPE', 'RF', 'CoRF', 'RP', 'CoRP' ]
         valider_ouverture_sans_cfvu:
           from: 'en_cours_redaction_ss_cfvu'
           to: 'soumis_central_sans_cfvu'
           metadata:
+            recipients: [ 'DPE', 'RF', 'CoRF', 'RP', 'CoRP' ]
+            titre_with_parcours: 'Parcours %%s de la formation %%s a été modifié sans passage en CFVU'
+            titre: 'Formation %%s a été modifiée sans passage en CFVU'
             type: valider
             btn: success
             icon: fa-check
@@ -327,6 +431,9 @@ framework:
           from: 'soumis_central_sans_cfvu'
           to: 'valide_a_publier'
           metadata:
+            recipients: [ 'DPE', 'RF', 'CoRF', 'RP', 'CoRP' ]
+            titre_with_parcours: 'La fiche du parcours %%s de la formation %%s a été validée par le SES et va être publié'
+            titre: 'La fiche de la formation %%s a été validée par le SES et va être publiée'
             type: valider
             btn: success
             hasDate: true
@@ -336,6 +443,9 @@ framework:
           from: 'soumis_central_sans_cfvu'
           to: 'en_cours_redaction_ss_cfvu'
           metadata:
+            recipients: [ 'DPE', 'RF', 'CoRF', 'RP', 'CoRP' ]
+            titre_with_parcours: 'La fiche du parcours %%s de la formation %%s a reçu des réserves par le SES'
+            titre: 'La fiche de la formation %%s a reçue des réserves par le SES'
             type: reserver
             btn: warning
             icon: fa-circle-exclamation-check
@@ -355,13 +465,6 @@ framework:
             icon: fa-circle-exclamation-check
         valider_non_ouverture_ses:
           from: 'non_ouverture_ses'
-          to: 'non_ouverture_cfvu'
-          metadata:
-            type: valider
-            btn: success
-            icon: fa-check
-        valider_non_ouverture_cfvu:
-          from: 'non_ouverture_cfvu'
           to: 'non_ouverture'
           metadata:
             type: valider
@@ -507,7 +610,8 @@ framework:
       places:
         demande_initialisee:
           metadata:
-            process: false
+            process: true
+            label: 'validation.demande_initialisee'
         soumis_conseil:
           metadata:
             process: true
@@ -526,12 +630,15 @@ framework:
         attente_pv:
           metadata:
             process: false
+            label: 'validation.attente_pv'
         effectuee:
           metadata:
             process: false
+            label: 'validation.effectuee'
         verification_pv:
           metadata:
             process: false
+            label: 'validation.verification_pv'
       transitions:
         effectuer_demande:
           from: 'demande_initialisee'

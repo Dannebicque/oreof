@@ -132,6 +132,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $serviceDemande = null;
 
+    #[ORM\OneToOne(mappedBy: 'user', targetEntity: UserNotificationPreference::class, cascade: ['persist', 'remove'])]
+    private ?UserNotificationPreference $notificationPreference = null;
+
+    /**
+     * @var Collection<int, UserWorkflowNotificationSetting>
+     */
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: UserWorkflowNotificationSetting::class)]
+    private Collection $userWorkflowNotificationSettings;
+
+    /**
+     * @var Collection<int, UserCategoryNotificationSetting>
+     */
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: UserCategoryNotificationSetting::class)]
+    private Collection $userCategoryNotificationSettings;
+
     public function __construct()
     {
         $this->composantes = new ArrayCollection();
@@ -144,6 +159,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->commentaires = new ArrayCollection();
         $this->dpeDemandes = new ArrayCollection();
         $this->userProfils = new ArrayCollection();
+        $this->userWorkflowNotificationSettings = new ArrayCollection();
+        $this->userCategoryNotificationSettings = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -716,6 +733,80 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->serviceDemande = $serviceDemande;
 
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, UserWorkflowNotificationSetting>
+     */
+    public function getUserWorkflowNotificationSettings(): Collection
+    {
+        return $this->userWorkflowNotificationSettings;
+    }
+
+    public function addUserWorkflowNotificationSetting(UserWorkflowNotificationSetting $userWorkflowNotificationSetting): static
+    {
+        if (!$this->userWorkflowNotificationSettings->contains($userWorkflowNotificationSetting)) {
+            $this->userWorkflowNotificationSettings->add($userWorkflowNotificationSetting);
+            $userWorkflowNotificationSetting->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserWorkflowNotificationSetting(UserWorkflowNotificationSetting $userWorkflowNotificationSetting): static
+    {
+        if ($this->userWorkflowNotificationSettings->removeElement($userWorkflowNotificationSetting)) {
+            // set the owning side to null (unless already changed)
+            if ($userWorkflowNotificationSetting->getUser() === $this) {
+                $userWorkflowNotificationSetting->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, UserCategoryNotificationSetting>
+     */
+    public function getUserCategoryNotificationSettings(): Collection
+    {
+        return $this->userCategoryNotificationSettings;
+    }
+
+    public function addUserCategoryNotificationSetting(UserCategoryNotificationSetting $userCategoryNotificationSetting): static
+    {
+        if (!$this->userCategoryNotificationSettings->contains($userCategoryNotificationSetting)) {
+            $this->userCategoryNotificationSettings->add($userCategoryNotificationSetting);
+            $userCategoryNotificationSetting->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserCategoryNotificationSetting(UserCategoryNotificationSetting $userCategoryNotificationSetting): static
+    {
+        if ($this->userCategoryNotificationSettings->removeElement($userCategoryNotificationSetting)) {
+            // set the owning side to null (unless already changed)
+            if ($userCategoryNotificationSetting->getUser() === $this) {
+                $userCategoryNotificationSetting->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getNotificationPreference(): ?UserNotificationPreference
+    {
+        return $this->notificationPreference;
+    }
+
+    public function setNotificationPreference(UserNotificationPreference $pref): self
+    {
+        $this->notificationPreference = $pref;
+        if ($pref->getUser() !== $this) {
+            $pref->setUser($this);
+        }
         return $this;
     }
 }

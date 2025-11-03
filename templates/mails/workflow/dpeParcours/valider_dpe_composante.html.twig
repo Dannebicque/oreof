@@ -1,0 +1,12 @@
+{% extends 'mails/base_mail.html.twig' %}
+{% block content %}
+    <p>Bonjour {{ user.display }},</p>
+    <p>
+        Validation par le DPE de la composante pour
+        {% if hasParcours %}
+        le parcours <strong>{{ parcours.libelle }}</strong> de la formation <strong>{{ formation.displayLong }}</strong>
+    {% else %}
+        la formation <strong>{{ formation.displayLong }}</strong>
+        {% endif %}.
+    </p>
+{% endblock %}

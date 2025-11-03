@@ -1,0 +1,18 @@
+{% extends 'mails/base_mail.html.twig' %}
+{% block content %}
+    <p>Bonjour {{ user.display }},</p>
+    <p>
+        Refus définitif de la CFVU pour
+        {% if hasParcours %}
+        le parcours <strong>{{ parcours.libelle }}</strong> de la formation <strong>{{ formation.displayLong }}</strong>
+    {% else %}
+        la formation <strong>{{ formation.displayLong }}</strong>
+        {% endif %}.
+    </p>
+    {% if date is defined and date %}
+        <p><strong>Date de la CFVU :</strong> {{ date is not null ? date|date('d/m/Y') : '-erreur date-' }}</p>
+    {% endif %}
+    {% if motif is defined and motif %}
+        <p><strong>Motif :</strong><br>{{ motif|nl2br }}</p>
+    {% endif %}
+{% endblock %}

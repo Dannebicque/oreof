@@ -15,7 +15,7 @@
             <input type="text" class="form-control synchro-mccc" id="pourcentage_s1_cc{{ index }}"
                    name="pourcentage_s1_cc{{ index }}"
                     {% if mcccs[1]['cc'][index] is defined %}
-                        value="{{ mcccs[1]['cc'][index].pourcentage }}"
+                        value="{{ mcccs[1]['cc'][index].pourcentage is defined ? mcccs[1]['cc'][index].pourcentage : '--' }}"
                     {% else %}
                         value="50"
                     {% endif %}

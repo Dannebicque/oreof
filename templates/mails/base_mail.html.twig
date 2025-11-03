@@ -2,4 +2,6 @@
 
 {% endblock %}
 
-{{ include('mails/_signature_oreof.html.twig') }}
+{% block footer %}
+    {{ include('mails/_signature_oreof.html.twig') }}
+{% endblock %}

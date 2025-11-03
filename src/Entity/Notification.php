@@ -26,14 +26,75 @@ class Notification
     #[ORM\ManyToOne(inversedBy: 'notifications')]
     private ?User $destinataire = null;
 
-    #[ORM\Column(length: 150)]
-    private ?string $codeNotification = null;
+    #[ORM\Column(length: 255)]
+    private string $title;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $options = null;
+    #[ORM\Column(type: 'text', nullable: true)]
+    private ?string $body = null;
 
-    #[ORM\Column]
-    private ?bool $lu = false;
+    #[ORM\Column(type: 'json', nullable: true)]
+    private ?array $payload = null; // ex: lien vers workflow, transition, id objet...
+
+    #[ORM\Column(type: 'boolean')]
+    private bool $isRead = false;
+
+    #[ORM\Column(type: 'datetime_immutable')]
+    private \DateTimeImmutable $createdAt;
+
+    public function __construct()
+    {
+        $this->createdAt = new \DateTimeImmutable();
+        $this->isRead = false;
+    }
+
+    public function getTitle(): string
+    {
+        return $this->title;
+    }
+
+    public function setTitle(string $title): self
+    {
+        $this->title = $title;
+        return $this;
+    }
+
+    public function getBody(): ?string
+    {
+        return $this->body;
+    }
+
+    public function setBody(?string $body): self
+    {
+        $this->body = $body;
+        return $this;
+    }
+
+    public function getPayload(): ?array
+    {
+        return $this->payload;
+    }
+
+    public function setPayload(?array $payload): self
+    {
+        $this->payload = $payload;
+        return $this;
+    }
+
+    public function isRead(): bool
+    {
+        return $this->isRead;
+    }
+
+    public function markAsRead(): self
+    {
+        $this->isRead = true;
+        return $this;
+    }
+
+    public function getCreatedAt(): \DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
 
     public function getId(): ?int
     {

@@ -1,0 +1,33 @@
+{# templates/components/_notif_toggles.html.twig #}
+{% set ch = channels %}
+<label class="d-flex align-items-center gap-1 small mb-0">
+    <input type="checkbox" {{ ch.email ? 'checked' }} data-model="email">
+    Email
+</label>
+<label class="d-flex align-items-center gap-1 small mb-0 ms-3">
+    <input type="checkbox" {{ ch.inapp ? 'checked' }} data-model="inapp">
+    In-app
+</label>
+
+<button class="btn btn-primary btn-sm ms-3"
+        data-action="live#action"
+        data-live-action-param="save"
+        data-live-workflow-param="{{ scope.workflow }}"
+        data-live-place-param="{{ scope.place is not null ? scope.place : 'null' }}"
+        data-live-transition-param="{{ scope.transition is not null ? scope.transition : 'null' }}"
+        data-live-email-param="{{ ch.email ? 'true' : 'false' }}"
+        data-live-inapp-param="{{ ch.inapp ? 'true' : 'false' }}"
+>Enregistrer
+</button>
+
+{% if not inherited %}
+    <button class="btn btn-secondary btn-sm ms-2"
+            data-action="live#action"
+            data-live-action-param="remove"
+            data-live-args='{
+      "workflow":"{{ scope.workflow }}",
+      "place":{{ scope.place is not null ? '"'~scope.place~'"' : 'null' }},
+      "transition":{{ scope.transition is not null ? '"'~scope.transition~'"' : 'null' }}
+    }'>Revenir à l’héritage
+    </button>
+{% endif %}

@@ -9,7 +9,6 @@
 
 namespace App\Classes\Export;
 
-use App\Classes\MyPDF;
 use App\Entity\CampagneCollecte;
 use DateTimeInterface;
 use ZipArchive;
@@ -18,7 +17,6 @@ class ExportConseil
 {
     public function __construct(
         private string            $dir,
-        private MyPDF             $myPDF,
         private array             $formations,
         private CampagneCollecte  $annee,
         private DateTimeInterface $date

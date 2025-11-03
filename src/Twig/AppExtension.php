@@ -33,26 +33,26 @@ class AppExtension extends AbstractExtension
     public function getFilters(): array
     {
         return [
-            new TwigFilter('url', [$this, 'url']),
-            new TwigFilter('basename', [$this, 'basename']),
-            new TwigFilter('tel_format', [$this, 'telFormat']),
-            new TwigFilter('mailto', [$this, 'mailto'], ['is_safe' => ['html']]),
-            new TwigFilter('open_url', [$this, 'openUrl'], ['is_safe' => ['html']]),
-            new TwigFilter('dateFr', [$this, 'dateFr'], ['is_safe' => ['html']]),
-            new TwigFilter('dateTimeFr', [$this, 'dateTimeFr'], ['is_safe' => ['html']]),
-            new TwigFilter('rncp_link', [$this, 'rncpLink'], ['is_safe' => ['html']]),
-            new TwigFilter('badgeBoolean', [$this, 'badgeBoolean'], ['is_safe' => ['html']]),
-            new TwigFilter('badgeDroits', [$this, 'badgeDroits'], ['is_safe' => ['html']]),
-            new TwigFilter('badgeTypeCentre', [$this, 'badgeTypeCentre'], ['is_safe' => ['html']]),
-            new TwigFilter('centre', [$this, 'centre'], ['is_safe' => ['html']]),
-            new TwigFilter('displayOrBadge', [$this, 'displayOrBadge'], ['is_safe' => ['html']]),
-            new TwigFilter('etatRemplissage', [$this, 'etatRemplissage'], ['is_safe' => ['html']]),
-            new TwigFilter('printTexte', [$this, 'printTexte'], ['is_safe' => ['html']]),
-            new TwigFilter('filtreHeures', [$this, 'filtreHeures'], ['is_safe' => ['html']]),
-            new TwigFilter('badgeEnum', [$this, 'badgeEnum'], ['is_safe' => ['html']]),
-            new TwigFilter('badgeStatus', [$this, 'badgeStatus'], ['is_safe' => ['html']]),
-            new TwigFilter('startWith', [$this, 'startWith'], ['is_safe' => ['html']]),
-            new TwigFilter('isUeUtilisee', [$this, 'isUeUtilisee'], ['is_safe' => ['html']]),
+            new TwigFilter('url', $this->url(...)),
+            new TwigFilter('basename', $this->basename(...)),
+            new TwigFilter('tel_format', $this->telFormat(...)),
+            new TwigFilter('mailto', $this->mailto(...), ['is_safe' => ['html']]),
+            new TwigFilter('open_url', $this->openUrl(...), ['is_safe' => ['html']]),
+            new TwigFilter('dateFr', $this->dateFr(...), ['is_safe' => ['html']]),
+            new TwigFilter('dateTimeFr', $this->dateTimeFr(...), ['is_safe' => ['html']]),
+            new TwigFilter('rncp_link', $this->rncpLink(...), ['is_safe' => ['html']]),
+            new TwigFilter('badgeBoolean', $this->badgeBoolean(...), ['is_safe' => ['html']]),
+            new TwigFilter('badgeDroits', $this->badgeDroits(...), ['is_safe' => ['html']]),
+            new TwigFilter('badgeTypeCentre', $this->badgeTypeCentre(...), ['is_safe' => ['html']]),
+            new TwigFilter('centre', $this->centre(...), ['is_safe' => ['html']]),
+            new TwigFilter('displayOrBadge', $this->displayOrBadge(...), ['is_safe' => ['html']]),
+            new TwigFilter('etatRemplissage', $this->etatRemplissage(...), ['is_safe' => ['html']]),
+            new TwigFilter('printTexte', $this->printTexte(...), ['is_safe' => ['html']]),
+            new TwigFilter('filtreHeures', $this->filtreHeures(...), ['is_safe' => ['html']]),
+            new TwigFilter('badgeEnum', $this->badgeEnum(...), ['is_safe' => ['html']]),
+            new TwigFilter('badgeStatus', $this->badgeStatus(...), ['is_safe' => ['html']]),
+            new TwigFilter('startWith', $this->startWith(...), ['is_safe' => ['html']]),
+            new TwigFilter('isUeUtilisee', $this->isUeUtilisee(...), ['is_safe' => ['html']]),
         ];
     }
 
@@ -131,8 +131,8 @@ class AppExtension extends AbstractExtension
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('displaySort', [$this, 'displaySort'], ['is_safe' => ['html']]),
-            new TwigFunction('getDirection', [$this, 'getDirection'], ['is_safe' => ['html']]),
+            new TwigFunction('displaySort', $this->displaySort(...), ['is_safe' => ['html']]),
+            new TwigFunction('getDirection', $this->getDirection(...), ['is_safe' => ['html']]),
 
         ];
     }
