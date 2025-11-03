@@ -709,7 +709,7 @@ class ElementConstitutif implements McccCompletionCheckerInterface
 
     public function isQuitus(): ?bool
     {
-        return $this->quitus;
+        return $this->quitus ?? false;
     }
 
     public function setQuitus(?bool $quitus): self
