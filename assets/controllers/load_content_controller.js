@@ -19,6 +19,8 @@ export default class extends Controller {
     },
   }
 
+  isOpen = false
+
   static targets = ['content']
 
   connect() {
@@ -30,11 +32,13 @@ export default class extends Controller {
   }
 
   change(event) {
-    // soit event.target soit event.params
-    if (event.target.value !== '') {
-      this._loadContent(event.target.value)
-    } else if (event.params.value !== '') {
-      this._loadContent(event.params.value)
+    const value = event.target.value !== '' ? event.target.value : event.params.value
+    if (this.isOpen) {
+      this.contentTarget.innerHTML = ''
+      this.isOpen = false
+    } else {
+      this._loadContent(value)
+      this.isOpen = true
     }
   }
 

@@ -191,4 +191,18 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->getQuery()
             ->getResult();
     }
+
+    public function findUserWithResponsabilites(): array
+    {
+        return $this->createQueryBuilder('u')
+            ->innerJoin('u.userProfils', 'up')
+            ->where('u.isEnable = :isEnable')
+            ->andWhere('u.isDeleted = false')
+            ->setParameter('isEnable', true)
+            ->groupBy('u.id')
+            ->addOrderBy('u.nom', 'ASC')
+            ->addOrderBy('u.prenom', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
 }

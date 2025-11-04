@@ -107,7 +107,7 @@ class FormationResponsableController extends BaseController
     ): Response {
 
         $demandes = $changeRfRepository->findBy([
-            'etatDemande' => EtatChangeRfEnum::soumis_ses
+            'etatDemande' => EtatChangeRfEnum::soumis_cfvu,
         ], ['dateDemande' => 'DESC']);
 
         return $this->render('formation_responsable/liste.html.twig', [
@@ -200,39 +200,23 @@ class FormationResponsableController extends BaseController
     }
 
     #[Route(
-        '/formation/change-responsable/validation-lot/{etape}',
-        name: 'app_validation_change_rf_valider_lot'
+        '/formation/change-responsable/{key}-lot-confirme/{etape}/{transition}',
+        name: 'app_validation_change_rf_confirme_lot'
     )]
     public function validationLotChangeRf(
         ChangeRfRepository $changeRfRepository,
         Request $request,
-        string $etape
+        string $etape,
+        string $key,
+        string $transition
     ): Response {
-
-//
-//        $meta = $this->validationProcess->getMetaFromTransition($transition);
-//
-//        //upload
-//        $fileName = '';
-//        if ($request->files->has('file') && $request->files->get('file') !== null) {
-//            $file = $request->files->get('file');
-//            $fileName = md5(uniqid('', true)) . '.' . $file->guessExtension();
-//            $file->move(
-//                $this->dir,
-//                $fileName
-//            );
-//        }
-
-//        $process = $this->validationProcess->getEtape($etape);
-//        $processData = $this->changeRfProcess->etatChangeRf($demande, $process);
-
         if ($request->isMethod('POST')) {
             $demandes = $request->request->get('demandes');
             $demandes = explode(',', $demandes);
             foreach ($demandes as $demandeId) {
                 $demande = $changeRfRepository->find($demandeId);
                 if ($demande !== null) {
-                    $this->changeRfProcess->valideChangeRf($demande, $this->getUser(), $etape, $request, '');
+                    $this->changeRfProcess->valideChangeRf($demande, $this->getUser(), $transition, $request, '');
                 }
             }
 
@@ -241,6 +225,26 @@ class FormationResponsableController extends BaseController
 
         return $this->json([
             'success' => true
+        ]);
+    }
+
+    #[Route('/formation/change-responsable/{key}-lot/{etape}/{transition}',
+        name: 'app_validation_change_rf_lot')]
+    public function transitionLotChangeRf(
+        ValidationProcessChangeRf $validationProcessChangeRf,
+        string                    $key,
+        string                    $etape,
+        string                    $transition
+    ): Response
+    {
+        //on récupère la transition concernée et sa configuration pour construire le formulaire
+        $metas = $this->validationProcess->getMetaFromTransition($transition);
+
+        return $this->render('formation_responsable/_lot.html.twig', [
+            'key' => $key,
+            'etape' => $etape,
+            'transition' => $transition,
+            'metas' => $metas,
         ]);
     }
 

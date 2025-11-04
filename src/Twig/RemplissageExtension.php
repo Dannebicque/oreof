@@ -18,7 +18,7 @@ class RemplissageExtension extends AbstractExtension
     public function getFilters(): array
     {
         return [
-            new TwigFilter('remplissage', [$this, 'remplissage'], ['is_safe' => ['html']])
+            new TwigFilter('remplissage', $this->remplissage(...), ['is_safe' => ['html']])
         ];
     }
 

@@ -19,7 +19,9 @@ use App\Enums\TypeModificationDpeEnum;
 use App\Utils\Access;
 use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\Workflow\WorkflowInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Extension\AbstractExtension;
+use Twig\TwigFilter;
 use Twig\TwigFunction;
 
 class WorkflowExtension extends AbstractExtension
@@ -31,23 +33,68 @@ class WorkflowExtension extends AbstractExtension
         private readonly WorkflowInterface $dpeParcoursWorkflow,
         #[Target('changeRf')]
         private readonly WorkflowInterface $changeRfWorkflow,
+        private TranslatorInterface $translatable,
     ) {
+    }
+
+    public function getFilters(): array
+    {
+        return [
+            new TwigFilter('afficheProcess', $this->afficheProcess(...)),
+        ];
     }
 
 
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('isPass', [$this, 'isPass']),
-            new TwigFunction('isRefuse', [$this, 'isRefuse']),
-            new TwigFunction('isPublie', [$this, 'isPublie']),
-            new TwigFunction('isOuvrable', [$this, 'isOuvrable']),
-            new TwigFunction('isOuvert', [$this, 'isOuvert']),
-            new TwigFunction('isPlace', [$this, 'isPlace']),
-            new TwigFunction('isAccessible', [$this, 'isAccessible']),
-            new TwigFunction('hasHistorique', [$this, 'hasHistorique']),
-            new TwigFunction('hasTransitions', [$this, 'hasTransitions']),
+            new TwigFunction('isPass', $this->isPass(...)),
+            new TwigFunction('isRefuse', $this->isRefuse(...)),
+            new TwigFunction('isPublie', $this->isPublie(...)),
+            new TwigFunction('isOuvrable', $this->isOuvrable(...)),
+            new TwigFunction('isOuvert', $this->isOuvert(...)),
+            new TwigFunction('isPlace', $this->isPlace(...)),
+            new TwigFunction('isAccessible', $this->isAccessible(...)),
+            new TwigFunction('hasHistorique', $this->hasHistorique(...)),
+            new TwigFunction('hasTransitions', $this->hasTransitions(...)),
         ];
+    }
+
+    public function afficheProcess(string $process, bool $withWorkflow = true)
+    {
+        $parts = explode('_', $process, 2);
+        if (count($parts) !== 2) {
+            return $process; // Retourne la chaîne d'origine si le format n'est pas correct
+        }
+
+        $workflowKey = $parts[0];
+        $transition = $parts[1];
+
+        try {
+            $workflow = $this->getWorkflow($workflowKey);
+            $definition = $workflow->getDefinition();
+            $transitionObject = null;
+            foreach ($definition->getPlaces() as $t) {
+                if ($t === $transition) {
+                    $transitionObject = $t;
+                    break;
+                }
+            }
+
+            if ($transitionObject !== null) {
+                $meta = $workflow->getMetadataStore()->getPlaceMetadata($transitionObject);
+                if (is_array($meta) && array_key_exists('label', $meta) && $meta['label']) {
+                    if ($withWorkflow) {
+                        return $this->translatable->trans($meta['label'], [], 'process') . ' (' . $workflowKey . ')';
+                    }
+                    return $this->translatable->trans($meta['label'], [], 'process');
+                }
+            }
+        } catch (\Throwable $e) {
+            // fallback au nom de la transition en cas d'erreur
+        }
+
+        return $this->translatable->trans($transition, [], 'process') . ' (' . $workflowKey . ')';
     }
 
     public function isAccessible(DpeParcours|Formation $dpeParcours, string $state = 'cfvu'): bool

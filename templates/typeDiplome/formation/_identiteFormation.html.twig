@@ -19,8 +19,14 @@
                     </ul>
                 </dd>
             {% endif %}
-            <dt>Domaine</dt>
-            <dd>{{ formation.domaine != null ? formation.domaine.libelle : 'erreur' }}</dd>
+            <dt>Domaine(s)</dt>
+            <dd>
+                {% for domaine in formation.domaines %}
+                    {{ domaine.libelle }}{% if not loop.last %}, {% endif %}
+                {% else %}
+                    -erreur-
+                {% endfor %}
+            </dd>
             <dt>Composante porteuse</dt>
             <dd>{{ formation.composantePorteuse != null ? formation.composantePorteuse.libelle : 'erreur' }}</dd>
             <dt>Inscription au RNCP</dt>

@@ -23,6 +23,7 @@ class ValidationProcessFicheMatiere extends AbstractValidationProcess
         $data = [];
         foreach ($places as $place) {
             $meta = $ficheWorkflow->getMetadataStore()->getPlaceMetadata($place);
+            $this->processAll[$place] = $meta;
             if (array_key_exists('process', $meta) && (bool)$meta['process'] === true) {
                 $data[$place] = $meta;
             }

@@ -10,6 +10,7 @@
 namespace App\Controller;
 
 use App\Classes\GetDpeParcours;
+use App\Classes\GetElementConstitutif;
 use App\Classes\JsonReponse;
 use App\Classes\verif\FicheMatiereState;
 use App\DTO\StructureEc;
@@ -138,11 +139,11 @@ class FicheMatiereController extends BaseController
             'ficheMatiereParcours' => $ficheMatiereParcours,
             'ecParcours' => $ecParcours,
             'formation' => $formation,
-            'typeEpreuves' => $typeDiplome !== null ? $typeEpreuveRepository->findByTypeDiplome($typeDiplome) : $typeEpreuveRepository->findAll(),
+            'typeEpreuves' => $typeD->getTypeEpreuves(),
+            'typeD' => $typeD,
             'typeDiplome' => $typeDiplome,
             'ects' => $ficheMatiere->getEcts(),
-            'templateForm' => $typeD !== null ? $typeD::TEMPLATE_FORM_MCCC : 'licence.html.twig',
-            'mcccs' => $typeD !== null ? $typeD->getMcccs($ficheMatiere) : [],
+            'mcccs' => $typeD->getDisplayMccc($typeD->getMcccs($ficheMatiere), $ficheMatiere->getTypeMccc()),
             'bccs' => $bccs,
             'typeMccc' => $ficheMatiere->getTypeMccc(),
             'stringDifferences' => $textDifferences,

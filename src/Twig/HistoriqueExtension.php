@@ -41,10 +41,10 @@ class HistoriqueExtension extends AbstractExtension
     public function getFilters(): array
     {
         return [
-            new TwigFilter('etapeLabel', [$this, 'etapeLabel']),
-            new TwigFilter('etapeParams', [$this, 'etapeParams']),
-            new TwigFilter('etapeIcone', [$this, 'etapeIcone']),
-            new TwigFilter('isParcours', [$this, 'isParcours']),
+            new TwigFilter('etapeLabel', $this->etapeLabel(...)),
+            new TwigFilter('etapeParams', $this->etapeParams(...)),
+            new TwigFilter('etapeIcone', $this->etapeIcone(...)),
+            new TwigFilter('isParcours', $this->isParcours(...)),
         ];
     }
 

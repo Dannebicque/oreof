@@ -454,6 +454,18 @@ class FicheMatiereRepository extends ServiceEntityRepository
         return $query->getQuery()->getResult();
     }
 
+    public function findByCampagneCollecteForStats(CampagneCollecte $campagne)
+    {
+        $qb = $this->createQueryBuilder('f')
+            ->select('f.etatFiche AS etat, COUNT(f.id) AS nb')
+            ->andWhere('f.campagneCollecte = :campagne')
+            ->setParameter('campagne', $campagne)
+            ->groupBy('etat');
+
+        return $qb->getQuery()->getArrayResult();
+
+    }
+
     public function findByParcoursRangeForExport(array $parcoursIdArray, CampagneCollecte $campagneCollecte){
         $qb = $this->createQueryBuilder('f');
 

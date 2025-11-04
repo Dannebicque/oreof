@@ -14,6 +14,7 @@ use App\Entity\Traits\HasBeenEditedTrait;
 use App\Entity\Traits\LifeCycleTrait;
 use App\Enums\ModaliteEnseignementEnum;
 use App\Repository\FicheMatiereRepository;
+use App\Service\McccCompletionCheckerInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -26,7 +27,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Index(columns: ['sigle'], name: 'sigle_fiche', flags: ['fulltext'])]
 #[ORM\Index(columns: ['slug'], name: 'slug_fiche', flags: ['fulltext'])]
 #[ORM\HasLifecycleCallbacks]
-class FicheMatiere
+class FicheMatiere implements McccCompletionCheckerInterface
 {
     use LifeCycleTrait;
     use HasBeenEditedTrait;

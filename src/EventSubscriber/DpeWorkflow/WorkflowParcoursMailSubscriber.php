@@ -17,6 +17,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Workflow\Event\Event;
 
+/** @deprecated */
 class WorkflowParcoursMailSubscriber extends AbstractDpeMailSubscriber implements EventSubscriberInterface
 {
     public function __construct(
@@ -30,9 +31,9 @@ class WorkflowParcoursMailSubscriber extends AbstractDpeMailSubscriber implement
     public static function getSubscribedEvents(): array
     {
         return [
-            'workflow.dpeParcours.transition.valider_parcours' => 'onValideParcours',
-            'workflow.dpeParcours.transition.valider_rf' => 'onValideRf',
-            'workflow.dpeParcours.transition.reserver_rf' => 'onReserveRf',
+//            'workflow.dpeParcours.transition.valider_parcours' => 'onValideParcours',
+//            'workflow.dpeParcours.transition.valider_rf' => 'onValideRf',
+//            'workflow.dpeParcours.transition.reserver_rf' => 'onReserveRf',
 
         ];
     }

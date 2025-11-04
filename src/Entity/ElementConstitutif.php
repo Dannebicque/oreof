@@ -14,6 +14,7 @@ use App\Entity\Traits\HasBeenEditedTrait;
 use App\Entity\Traits\LifeCycleTrait;
 use App\Enums\ModaliteEnseignementEnum;
 use App\Repository\ElementConstitutifRepository;
+use App\Service\McccCompletionCheckerInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -23,7 +24,7 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 #[ORM\Entity(repositoryClass: ElementConstitutifRepository::class)]
 #[ORM\HasLifecycleCallbacks]
-class ElementConstitutif
+class ElementConstitutif implements McccCompletionCheckerInterface
 {
     use LifeCycleTrait;
     use HasBeenEditedTrait;
@@ -648,7 +649,7 @@ class ElementConstitutif
         return $this->etatMccc === null ? 'A Saisir' : $this->etatMccc;
     }
 
-    public function setEtatMccc(?string $etatMccc): self
+    public function setEtatMccc(?string $etatMccc): static
     {
         $this->etatMccc = $etatMccc;
 
@@ -708,7 +709,7 @@ class ElementConstitutif
 
     public function isQuitus(): ?bool
     {
-        return $this->quitus;
+        return $this->quitus ?? false;
     }
 
     public function setQuitus(?bool $quitus): self

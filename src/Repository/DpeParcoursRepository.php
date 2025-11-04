@@ -142,6 +142,7 @@ class DpeParcoursRepository extends ServiceEntityRepository
             ->setParameter('composante', $composante)
             ->orderBy('f.typeDiplome', 'ASC')
             ->addOrderBy('f.mentionTexte', 'ASC')
+            ->addOrderBy('p.libelle', 'ASC')
         ;
 
         return $query->getQuery()
@@ -167,6 +168,7 @@ class DpeParcoursRepository extends ServiceEntityRepository
             ->setParameter('composante', $composante)
             ->orderBy('f.typeDiplome', 'ASC')
             ->addOrderBy('f.mentionTexte', 'ASC')
+            ->addOrderBy('p.libelle', 'ASC')
         ;
 
         return $query->getQuery()
@@ -239,9 +241,9 @@ class DpeParcoursRepository extends ServiceEntityRepository
             ->where('dp.campagneCollecte = :campagneCollecte')
             ->setParameter('campagneCollecte', $campagneCollecte)
             ->orderBy('f.typeDiplome', 'ASC')
-
             ->addOrderBy('m.libelle', 'ASC')
             ->addOrderBy('f.mentionTexte', 'ASC')
+            ->addOrderBy('p.libelle', 'ASC')
         ;
 
         return $query->getQuery()

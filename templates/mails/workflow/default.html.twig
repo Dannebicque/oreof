@@ -1,0 +1,16 @@
+{% extends 'mails/base_mail.html.twig' %}
+
+{% block content %}
+    <p>Bonjour {{ user.display }},</p>
+    <p>{{ eventKey is defined ? eventKey : '' }}</p>
+    <p>{{ wf is defined ? wf : '' }}</p>
+    <p>{{ path is defined ? path : '' }}</p>
+    <p>
+        Un événement « {{ eventKey|default('') }} » a eu lieu pour
+        {% if hasParcours %}
+        le parcours <strong>{{ parcours.libelle }}</strong> de la formation <strong>{{ formation.displayLong }}</strong>
+    {% else %}
+        la formation <strong>{{ formation.displayLong }}</strong>
+        {% endif %}.
+    </p>
+{% endblock %}

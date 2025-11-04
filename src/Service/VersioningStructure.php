@@ -614,7 +614,7 @@ class VersioningStructure
         $mccc->setLibelle($mcccOriginal['libelle']);
         $mccc->setNumeroSession($mcccOriginal['numeroSession']);
         $mccc->setSecondeChance($mcccOriginal['secondeChance'] == 1);
-        $mccc->setPourcentage($mcccOriginal['pourcentage']);
+        $mccc->setPourcentage($mcccOriginal['pourcentage'] ?? 0.0);
         $mccc->setNbEpreuves($mcccOriginal['nbEpreuves']);
         $mccc->setTypeEpreuve($mcccOriginal['typeEpreuve']);
         $mccc->setControleContinu($mcccOriginal['controleContinu'] == 1);

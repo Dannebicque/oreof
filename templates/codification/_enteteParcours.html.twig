@@ -5,8 +5,13 @@
     </div>
     <div class="col-2 text-center">
         <p class="font-weight-bold">Domaine(s)</p>
-        {# todo: revoir car plusieurs domaines ? #}
-        <p>{{ formation.domaine != null ?  formation.domaine.codeApogee : '--' }}</p>
+        <p>
+            {% for domaine in formation.domaines %}
+                {{ domaine.codeApogee }}{% if not loop.last %}, {% endif %}
+            {% else %}
+                --
+            {% endfor %}
+        </p>
     </div>
     <div class="col-2 text-center">
         <p class="font-weight-bold">Mention</p>

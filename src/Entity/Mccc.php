@@ -121,7 +121,7 @@ class Mccc
 
     public function getPourcentage(): ?float
     {
-        return $this->pourcentage;
+        return $this->pourcentage ?? null;
     }
 
     public function setPourcentage(?float $pourcentage): self
@@ -310,5 +310,14 @@ class Mccc
         $slug .= '-' . $this->numeroSession . '-' . $this->numeroEpreuve;
 
         return $slug;
+    }
+
+    public function getOwner(): FicheMatiere|ElementConstitutif
+    {
+        if ($this->ficheMatiere !== null) {
+            return $this->ficheMatiere;
+        }
+
+        return $this->ec;
     }
 }

@@ -301,7 +301,7 @@ class ProcessValidationController extends BaseController
     {
         if ($request->isMethod('POST')) {
             $data = $request->request->all();
-            $place = $data['etat'];
+            $place = $data['etat_dpe'];
 
             //mise à jour du workflow
             switch ($type) {

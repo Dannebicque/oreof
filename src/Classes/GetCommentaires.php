@@ -64,20 +64,22 @@ class GetCommentaires
                 $formation = $this->formationRepository->find($id);
                 $commentaire = new CommentaireFormation($user, $message, $zone);
                 $commentaire->setFormation($formation);
+                $this->entityManager->persist($commentaire);
                 break;
             case 'parcours':
                 $parcours = $this->parcoursRepository->find($id);
                 $commentaire = new CommentaireParcours($user, $message, $zone);
                 $commentaire->setParcours($parcours);
+                $this->entityManager->persist($commentaire);
                 break;
             case 'ficheMatiere':
                 $ficheMatiere = $this->ficheMatiereRepository->find($id);
                 $commentaire = new CommentaireFicheMatiere($user, $message, $zone);
                 $commentaire->setFicheMatiere($ficheMatiere);
+                $this->entityManager->persist($commentaire);
                 break;
         }
 
-        $this->entityManager->persist($commentaire);
         $this->entityManager->flush();
     }
 

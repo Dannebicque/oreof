@@ -28,7 +28,7 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class ProcessReouvertureController extends BaseController
 {
-
+//todo: a voir ce qui est encore utile
     public function __construct(
         private readonly EventDispatcherInterface      $eventDispatcher,
         private readonly EntityManagerInterface        $entityManager,
@@ -464,7 +464,7 @@ class ProcessReouvertureController extends BaseController
 
         if ($request->isMethod('POST')) {
             $this->toast('success', 'Formations marquées avec des réserves');
-            return $this->redirectToRoute('app_validation_index');
+            return $this->redirectToRoute('app_validation_dpe_index', ['etape' => $etape]);
         }
 
         return $this->render('process_validation/_reserve_lot.html.twig', [
@@ -532,7 +532,7 @@ class ProcessReouvertureController extends BaseController
             $entityManager->flush();
             $this->toast('success', 'Parcours validés');
 
-            return $this->redirectToRoute('app_validation_index', [
+            return $this->redirectToRoute('app_validation_dpe_index', [
                 'step' => 'ouverture',
                 'typeValidation' => $etape
             ]);

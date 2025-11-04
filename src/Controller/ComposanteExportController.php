@@ -9,7 +9,7 @@
 
 namespace App\Controller;
 
-use App\Classes\MyPDF;
+use App\Classes\MyGotenbergPdf;
 use App\Entity\Composante;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,7 +20,9 @@ use Twig\Error\SyntaxError;
 
 class ComposanteExportController extends AbstractController
 {
-    public function __construct(private readonly MyPDF $myPdf)
+    public function __construct(
+        protected MyGotenbergPdf $myPdf
+    )
     {
     }
 
@@ -32,6 +34,7 @@ class ComposanteExportController extends AbstractController
     #[Route('/composante/export/{composante}', name: 'app_composante_export')]
     public function export(Composante $composante): Response
     {
-        return $this->myPdf::generePdf('pdf/composante.html.twig', ['composante' => $composante], 'dpe_composante_'.$composante->getLibelle());
+        //todo: a revoir
+        return $this->myPdf->render('pdf/composante.html.twig', ['composante' => $composante], 'dpe_composante_' . $composante->getLibelle());
     }
 }

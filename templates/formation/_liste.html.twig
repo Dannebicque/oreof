@@ -4,6 +4,12 @@
     {% set sort = params.sort is defined ? params.sort : 'typeDiplome' %}
     {% set direction = params.direction is defined ? params.direction : 'asc' %}
     {% set isGranted = is_granted('ROLE_ADMIN') or is_granted('SHOW', {route: 'app_etablissement', subject: 'etablissement'}) or isCfvu %}
+
+    <div class="alert alert-info">
+        <strong>{{ nbFormations }}</strong> formation{{ nbFormations > 1 ? 's' : '' }}
+        trouvée{{ nbFormations > 1 ? 's' : '' }}, et <strong>{{ nbParcours }}</strong> parcours.
+    </div>
+
     <table class="table">
         <thead>
         <tr>
@@ -48,7 +54,7 @@
             <th></th>
             <th></th>
         </tr>
-        {% if isGranted %}
+        {% if is_granted('ROLE_ADMIN') %}
             <tr>
                 <th>
                     <label for="filter-composante" class="sr-only">Composante</label>
@@ -102,7 +108,24 @@
 
                     </select>
                 </th>
-                <th></th>
+                <th>
+                    <label for="filter-responsable" class="sr-only">responsble</label>
+                    <select
+                            {{ stimulus_action('crud', 'filter', 'change', {
+                                'field': 'responsable'
+                            }) }}
+                            id="filter-responsable" class="form-select"
+                            {{ stimulus_controller('symfony/ux-autocomplete/autocomplete') }}
+                    >
+                        <option value="">Tous les responsables</option>
+                        {% for responsable in responsables %}
+                            <option value="{{ responsable.id }}"
+                                    {% if params['responsable'] is defined and params['responsable']  == responsable.id %}selected{% endif %}
+                            >{{ responsable.display }}</option>
+                        {% endfor %}
+
+                    </select>
+                </th>
                 <th></th>
                 <th>
                 </th>

@@ -18,10 +18,10 @@ class DiffBadgeExtension extends AbstractExtension
     public function getFilters(): array
     {
         return [
-            new TwigFilter('displayDiff', [$this, 'displayDiff'], ['is_safe' => ['html']]),
-            new TwigFilter('diffNew', [$this, 'diffNew'], ['is_safe' => ['html']]),
-            new TwigFilter('diffOriginal', [$this, 'diffOriginal'], ['is_safe' => ['html']]),
-            new TwigFilter('diffNewOriginal', [$this, 'diffNewOriginal'], ['is_safe' => ['html']]),
+            new TwigFilter('displayDiff', $this->displayDiff(...), ['is_safe' => ['html']]),
+            new TwigFilter('diffNew', $this->diffNew(...), ['is_safe' => ['html']]),
+            new TwigFilter('diffOriginal', $this->diffOriginal(...), ['is_safe' => ['html']]),
+            new TwigFilter('diffNewOriginal', $this->diffNewOriginal(...), ['is_safe' => ['html']]),
         ];
     }
 
