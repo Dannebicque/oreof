@@ -57,14 +57,14 @@ class ExcelWriter
     public function writeCellXY(int|string $col, int $row, mixed $value = '', array $options = []): void
     {
         if (is_string($col)) {
-            $col = (int)Coordinate::columnIndexFromString($col);
+            $col = Coordinate::columnIndexFromString($col);
         }
 
         $this->sheet->setCellValue([$col, $row], $value);
         //
         //traiter les options
         //style n'est pas un tableau
-        if (is_array($options) && $this->sheet->getCell([$col, $row])) {
+        if ($this->sheet->getCell([$col, $row])) {
             foreach ($options as $key => $valeur) {
                 switch ($key) {
                     case 'style':
@@ -97,7 +97,7 @@ class ExcelWriter
                         $this->sheet->getCell([$col, $row])->getStyle()->getNumberFormat()->setFormatCode($valeur);
                         break;
                     case 'color':
-                        if (0 === mb_strpos($valeur, '#')) {
+                        if (str_starts_with($valeur, '#')) {
                             $valeur = mb_substr($valeur, 1, mb_strlen($valeur));
                         }
 
@@ -107,7 +107,7 @@ class ExcelWriter
                         if ($valeur === 'none') {
                             $this->sheet->getCell([$col, $row])->getStyle()->getFill()->setFillType(Fill::FILL_NONE);
                         } else {
-                            if (0 === mb_strpos($valeur, '#')) {
+                            if (str_starts_with($valeur, '#')) {
                                 $valeur = mb_substr($valeur, 1, mb_strlen($valeur));
                             }
                             $this->sheet->getCell([$col, $row])->getStyle()->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB($valeur);
@@ -226,7 +226,7 @@ class ExcelWriter
     public function borderBottomCellsRange(int $col1, int $lig1, int $col2, int $lig2, array $array): void
     {
         $color = $array['color'];
-        if (0 === mb_strpos($color, '#')) {
+        if (str_starts_with($color, '#')) {
             $color = mb_substr($color, 1, mb_strlen($color));
         }
 
@@ -268,7 +268,7 @@ class ExcelWriter
             $sh->setShowGridlines($grid);
             $sh->getPageSetup()->setPaperSize(PageSetup::PAPERSIZE_A3);
             $sh->getPageSetup()->setOrientation(PageSetup::ORIENTATION_LANDSCAPE);
-            $sh->getPageSetup()->setFitToPage(1);
+            $sh->getPageSetup()->setFitToPage(true);
             $sh->getPageSetup()->setFitToWidth(1);
             $sh->getPageSetup()->setFitToHeight(1);
             $sh->getPageMargins()->setTop(1);
@@ -318,7 +318,7 @@ class ExcelWriter
             ->setEvenFooter('&L&B' . $this->spreadsheet->getProperties()->getTitle() . '&RPage &P sur &N');
     }
 
-    public function setPaperSize(string $size): void
+    public function setPaperSize(int $size): void
     {
         $this->spreadsheet->getActiveSheet()->getPageSetup()->setPaperSize($size);
     }
@@ -375,45 +375,6 @@ class ExcelWriter
     public function getRowAutosize(int $ligne): void
     {
         $this->sheet->getRowDimension($ligne)->setRowHeight(-1);
-    }
-
-    /** @deprecated */
-    public function genereFichierPdf(string $name): StreamedResponse
-    {
-        $this->pageSetup($name);
-        $nbSheets = $this->spreadsheet->getSheetCount();
-        for ($i = 0; $i < $nbSheets; $i++) {
-            $sh = $this->spreadsheet->setActiveSheetIndex($i);
-            $sh->setShowGridlines(false);
-            $sh->setPrintGridlines(false); //affichage de la grille
-
-            $sh->getPageSetup()->setPaperSize(PageSetup::PAPERSIZE_A3);
-            $sh->getPageSetup()->setOrientation(PageSetup::ORIENTATION_LANDSCAPE);
-            $sh->getPageSetup()->setHorizontalCentered(true);
-            $sh->getPageSetup()->setVerticalCentered(false);
-            $sh->getPageSetup()->setFitToPage(1);
-            $sh->getPageSetup()->setFitToWidth(1);
-            $sh->getPageSetup()->setFitToHeight(0);
-            $sh->getPageMargins()->setTop(1);
-            $sh->getPageMargins()->setRight(0.5);
-            $sh->getPageMargins()->setLeft(0.5);
-            $sh->getPageMargins()->setBottom(1);
-        }
-
-        $writer = IOFactory::createWriter($this->spreadsheet, 'Mpdf');
-        $writer->setOrientation(PageSetup::ORIENTATION_LANDSCAPE);
-        $writer->setPaperSize(PageSetup::PAPERSIZE_A3);
-        $writer->writeAllSheets();
-        return new StreamedResponse(
-            static function () use ($writer) {
-                $writer->save('php://output');
-            },
-            200,
-            [
-                'Content-Type' => 'application/pdf',
-                'Content-Disposition' => 'attachment;filename="' . $name . '.pdf"',
-            ]
-        );
     }
 
     public function setOrientationPage(string $orientation = PageSetup::ORIENTATION_LANDSCAPE): void

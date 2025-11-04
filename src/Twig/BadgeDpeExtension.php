@@ -24,18 +24,18 @@ class BadgeDpeExtension extends AbstractExtension
     public function getFilters(): array
     {
         return [
-            new TwigFilter('badgeDpe', [$this, 'badgeDpe'], ['is_safe' => ['html']]),
-            new TwigFilter('badgeTypeModification', [$this, 'badgeTypeModification'], ['is_safe' => ['html']]),
-            new TwigFilter('badgeStep', [$this, 'badgeStep'], ['is_safe' => ['html']]),
-            new TwigFilter('badgeEtatComposante', [$this, 'badgeEtatComposante'], ['is_safe' => ['html']]),
-            new TwigFilter('badgeFormation', [$this, 'badgeFormation'], ['is_safe' => ['html']]),
-            new TwigFilter('badgeEc', [$this, 'badgeEc'], ['is_safe' => ['html']]),
-            new TwigFilter('badgeFiche', [$this, 'badgeFiche'], ['is_safe' => ['html']]),
-            new TwigFilter('badge', [$this, 'badge'], ['is_safe' => ['html']]),
-            new TwigFilter('badgeValide', [$this, 'badgeValide'], ['is_safe' => ['html']]),
-            new TwigFilter('badgeChangeRf', [$this, 'badgeChangeRf'], ['is_safe' => ['html']]),
-            new TwigFilter('displayErreurs', [$this, 'displayErreurs'], ['is_safe' => ['html']]),
-            new TwigFilter('isFicheValidable', [$this, 'isFicheValidable'], ['is_safe' => ['html']])
+            new TwigFilter('badgeDpe', $this->badgeDpe(...), ['is_safe' => ['html']]),
+            new TwigFilter('badgeTypeModification', $this->badgeTypeModification(...), ['is_safe' => ['html']]),
+            new TwigFilter('badgeStep', $this->badgeStep(...), ['is_safe' => ['html']]),
+            new TwigFilter('badgeEtatComposante', $this->badgeEtatComposante(...), ['is_safe' => ['html']]),
+            new TwigFilter('badgeFormation', $this->badgeFormation(...), ['is_safe' => ['html']]),
+            new TwigFilter('badgeEc', $this->badgeEc(...), ['is_safe' => ['html']]),
+            new TwigFilter('badgeFiche', $this->badgeFiche(...), ['is_safe' => ['html']]),
+            new TwigFilter('badge', $this->badge(...), ['is_safe' => ['html']]),
+            new TwigFilter('badgeValide', $this->badgeValide(...), ['is_safe' => ['html']]),
+            new TwigFilter('badgeChangeRf', $this->badgeChangeRf(...), ['is_safe' => ['html']]),
+            new TwigFilter('displayErreurs', $this->displayErreurs(...), ['is_safe' => ['html']]),
+            new TwigFilter('isFicheValidable', $this->isFicheValidable(...), ['is_safe' => ['html']])
         ];
     }
 

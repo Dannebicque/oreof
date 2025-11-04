@@ -17,6 +17,7 @@ use App\Repository\UserRepository;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Workflow\Event\Event;
 
+/** @deprecated */
 class DpeComposanteMailSubscriber extends AbstractDpeMailSubscriber implements EventSubscriberInterface
 {
     public function __construct(
@@ -31,14 +32,14 @@ class DpeComposanteMailSubscriber extends AbstractDpeMailSubscriber implements E
     public static function getSubscribedEvents(): array
     {
         return [
-            'workflow.dpeParcours.transition.valider_rf' => 'onValideRf',
-            //todo: ajouter valider DPE pour prévenir RF et RP?
-            'workflow.dpeParcours.transition.refuser_dpe_composante' => 'onRefuseDpeComposante',
-            'workflow.dpeParcours.transition.reserver_dpe_composante' => 'onReserveDpeComposante',
-            'workflow.dpeParcours.transition.refuser_conseil' => 'onRefuseConseil',
-            'workflow.dpeParcours.transition.valider_conseil' => 'onValideConseil', //todo: ajouter un état pour prévenir RF et RP?
-            'workflow.dpeParcours.transition.reserver_conseil' => 'onReserveConseil',
-            'workflow.dpe.transition.valider_ouverture_sans_cfvu' => 'onTransmetSesSansCfvu',
+//           // 'workflow.dpeParcours.transition.valider_rf' => 'onValideRf',
+//            //todo: ajouter valider DPE pour prévenir RF et RP?
+//            'workflow.dpeParcours.transition.refuser_dpe_composante' => 'onRefuseDpeComposante',
+//            'workflow.dpeParcours.transition.reserver_dpe_composante' => 'onReserveDpeComposante',
+//            'workflow.dpeParcours.transition.refuser_conseil' => 'onRefuseConseil',
+//            'workflow.dpeParcours.transition.valider_conseil' => 'onValideConseil', //todo: ajouter un état pour prévenir RF et RP?
+//            'workflow.dpeParcours.transition.reserver_conseil' => 'onReserveConseil',
+//            'workflow.dpe.transition.valider_ouverture_sans_cfvu' => 'onTransmetSesSansCfvu',
 
         ];
     }

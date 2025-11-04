@@ -15,6 +15,7 @@ use App\Repository\NotificationRepository;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Workflow\Event\Event;
 
+/** @deprecated */
 class WorkflowDpeNotificationSubscriber implements EventSubscriberInterface
 {
     public function __construct(
@@ -25,7 +26,7 @@ class WorkflowDpeNotificationSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            'workflow.dpe.transition.initialiser' => 'onInitialise',
+            //'workflow.dpe.transition.initialiser' => 'onInitialise',
 
         ];
     }

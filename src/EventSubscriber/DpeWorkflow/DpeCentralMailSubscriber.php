@@ -17,6 +17,7 @@ use App\Repository\UserRepository;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Workflow\Event\Event;
 
+/** @deprecated */
 class DpeCentralMailSubscriber extends AbstractDpeMailSubscriber implements EventSubscriberInterface
 {
     public function __construct(
@@ -31,12 +32,12 @@ class DpeCentralMailSubscriber extends AbstractDpeMailSubscriber implements Even
     public static function getSubscribedEvents(): array
     {
         return [
-            'workflow.dpeParcours.transition.refuser_central' => 'onRefuseCentral',
-            'workflow.dpeParcours.transition.valider_central' => 'onValideCentral',
-            'workflow.dpeParcours.transition.transmettre_cfvu' => 'onValideCentral',
-            'workflow.dpeParcours.transition.valider_transmettre_ouverture_sans_cfvu' => 'onValideCentralSansCfvu',
-            'workflow.dpeParcours.transition.reserver_central' => 'onReserveCentral',
-            'workflow.dpeParcours.transition.reserver_transmettre_ouverture_sans_cfvu' => 'onReserveCentral',
+//           // 'workflow.dpeParcours.transition.refuser_central' => 'onRefuseCentral',
+//           // 'workflow.dpeParcours.transition.valider_central' => 'onValideCentral',
+//            'workflow.dpeParcours.transition.transmettre_cfvu' => 'onValideCentral',
+//            'workflow.dpeParcours.transition.valider_transmettre_ouverture_sans_cfvu' => 'onValideCentralSansCfvu',
+//            'workflow.dpeParcours.transition.reserver_central' => 'onReserveCentral',
+//            'workflow.dpeParcours.transition.reserver_transmettre_ouverture_sans_cfvu' => 'onReserveCentral',
         ];
     }
 

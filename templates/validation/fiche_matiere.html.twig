@@ -9,73 +9,57 @@
     ]}) }}
 {% endblock %}
 
-{% block bouton_header %}
-    {% if is_granted('ROLE_ADMIN') %}
-        <a href="{{ path('app_validation_verification_fiche_export') }}"
-           class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
-           data-bs-toggle="tooltip"
-           data-bs-placement="bottom"
-           title="Export contrôle fiche"
-        >
-            <i class="fas fa-check"></i>
-            <span> Vérifier Fiches</span>
-        </a>
-    {% endif %}
-{% endblock %}
-
 {% block content %}
-    <div
+    <div class="row gy-2">
+        <div class="col-12 p-0">
+            <div class="card">
+                <div class="card-body">
+                    <div>
+                        {% for value, step in steps %}
+                            <div {{ stimulus_controller('load_content', {url: path('app_validation_fiche_liste', {
+                                typeValidation: value,
+                                composante: 'all'
+                            })}) }}>
+                                <div class="card mb-2 sh-19 sh-md-8 ">
+                                    <div class="card-body pt-0 pb-0 h-100 border-process-{{ step.color }}"
+                                    >
+                                        <div class="row g-0 h-100 align-content-center">
+                                            <div class="col-12 col-md-4 d-flex flex-column justify-content-center mb-1 mb-md-0">
+                                                <div class="text-muted d-md-none">Composante</div>
+                                                {{ step.label|trans({}, 'process') }}
+                                            </div>
+                                            <div class="col-6 col-md-2 d-flex flex-column justify-content-center mb-1 mb-md-0">
+                                                <div class="text-muted d-md-none">Nb parcours / formations</div>
+                                                {% if statistiques[value] is defined and statistiques[value] > 0 %}
+                                                    Nb Fiches matières : {{ statistiques[value] }}
+                                                {% else %}
+                                                    <span class="badge bg-success">Aucun</span>
+                                                {% endif %}
+                                            </div>
+                                            <div class="col-6 col-md-1 d-flex flex-column justify-content-center
+                                            mb-1 mb-md-0">
+                                                <div class="text-muted d-md-none">Détails</div>
 
-            {{ stimulus_controller('validation--index',
-                {
-                    urlListe: path('app_validation_fiche_liste'),
-                }) }}
-    >
-        <div class="card mt-2">
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-6">
-                        <label for="composante" class="required">Composante</label>
-                        <select name="composante" id="composante" class="form-select"
-                                {{ stimulus_action('validation--index', 'changeListe') }}
-                                {{ stimulus_controller('symfony/ux-autocomplete/autocomplete') }}
-                        >
-                            <option value="">Choisir une composante</option>
-                            {% if is_granted('ROLE_ADMIN') %}
-                                <option value="all">Toutes les composantes de l'établissement</option>
-                            {% endif %}
-                            {% for composante in composantes %}
-                                <option value="{{ composante.id }}">{{ composante.libelle }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <div class="col-6">
-                        <div>
-                            <label for="type_validation" class="required">Etat actuel des fiches EC/matières</label>
-                            <select name="type_validation" id="type_validation" class="form-select"
-                                    {{ stimulus_action('validation--index', 'changeListe') }}
-                            >
-                                <option value="">Choisir l'état</option>
-                                {% for value, type in types_validation %}
-                                    <option value="{{ value }}"
-                                            {% if typeValidation == value %}selected{% endif %}>{{ (type.transition)|trans({}, 'process') }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
+                                                <button class="ms-2 btn btn-sm btn-outline-primary"
+                                                        {% if statistiques[value] is not defined or statistiques[value] <= 0 %}disabled{% endif %}
+                                                        {{ stimulus_action('load_content', 'change', 'click',
+                                                            {value:step}
+                                                        ) }}
+                                                >
+                                                    <i class="fal fa-caret-right"></i> Détails
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div {{ stimulus_target('load_content', 'content') }}></div>
+                            </div>
+                        {% endfor %}
                     </div>
                 </div>
             </div>
         </div>
-
-        <div class="card mt-2" {{ stimulus_target('validation--index', 'liste') }}>
-            <div class="card-body">
-                {{ component('alerte', {
-                    type:'info',
-                    message:'Veuillez sélectionner une composante et un état de validation pour afficher les formations concernées.'
-                }) }}
-            </div>
-        </div>
     </div>
 
-
 {% endblock %}
+

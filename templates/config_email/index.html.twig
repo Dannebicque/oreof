@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block header %}
+    Configuration des emails
+{% endblock %}
+
+{% block bouton_header %}
+    <a class="btn btn-outline-primary" href="{{ path('admin_email_template_new') }}">Ajouter un template</a>
+{% endblock %}
+
+{% block content %}
+    <div class="card">
+        <div class="card-body">
+            <table class="table table-sm table-striped">
+                <thead>
+                <tr>
+                    <th>Clé</th>
+                    <th>Etape du process</th>
+                    <th>MAJ</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for t in templates %}
+                    <tr>
+                        <td>{{ t.workflow }}</td>
+                        <td>{{ t.workflow|afficheProcess }}</td>
+                        <td>{{ t.updated|date('d/m/Y') }}</td>
+                        <td>
+                            <a class="btn btn-sm btn-secondary"
+                               href="{{ path('admin_email_template_edit', {id: t.id}) }}">Éditer</a>
+                            <form method="post" action="{{ path('admin_email_template_delete', {id: t.id}) }}"
+                                  style="display:inline" onsubmit="return confirm('Supprimer ?');">
+                                <input type="hidden" name="_token"
+                                       value="{{ csrf_token('delete_email_template_' ~ t.id) }}">
+                                <button class="btn btn-sm btn-outline-danger">Supprimer</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="4" class="bg-warning">Aucun template</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

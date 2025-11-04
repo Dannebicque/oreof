@@ -108,7 +108,7 @@ class FormationRepository extends ServiceEntityRepository
             ->leftJoin('f.dpeParcours', 'p')
             ->leftJoin('p.parcours', 'parcours')
             ->addSelect('p')
-            ->where('p.campagneCollecte = :campagneCollecte')
+            ->andWhere('p.campagneCollecte = :campagneCollecte')
             ->setParameter('campagneCollecte', $campagneCollecte)
             ->innerJoin(Mention::class, 'm', 'WITH', 'f.mention = m.id')
             ->andWhere('m.libelle LIKE :q or f.sigle LIKE :q or m.sigle LIKE :q or f.mentionTexte LIKE :q or parcours.libelle LIKE :q or parcours.sigle LIKE :q')
@@ -152,6 +152,12 @@ class FormationRepository extends ServiceEntityRepository
                 'm.domaine',
                 $filtres['domaine']
             );
+        }
+
+        // si responsable rechercher sur formation ou parcours si responsable ou co-responsable
+        if (array_key_exists('responsable', $options) && null !== $options['responsable']) {
+            $query->andWhere('f.responsableMention = :responsable OR f.coResponsable = :responsable OR parcours.respParcours = :responsable OR parcours.coResponsable = :responsable')
+                ->setParameter('responsable', $options['responsable']);
         }
 
         if ($composante !== null) {

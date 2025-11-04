@@ -141,8 +141,19 @@ class ValidationComposanteController extends BaseController
         }
         $allparcours = $dpeParcoursRepository->findByComposanteAndCampagneAndTypeValidation($composante, $this->getCampagneCollecte(), $typeValidation);
 
+        $nbParcours = count($allparcours);
+
+        $tFormations = [];
+        foreach ($allparcours as $parcours) {
+            $tFormations[] = $parcours->getParcours()?->getFormation()?->getId();
+        }
+
+        // valeurs uniques dans tFormations
+        $nbFormations = count(array_unique($tFormations));
 
         return $this->render('validation/_liste.html.twig', [
+            'nbFormations' => $nbFormations,
+            'nbParcours' => $nbParcours,
             'process' => $process,
             'allparcours' => $allparcours,
             'etape' => $typeValidation ?? null,

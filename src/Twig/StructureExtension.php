@@ -18,11 +18,12 @@ class StructureExtension extends AbstractExtension
     public function getFilters(): array
     {
         return [
-            new TwigFilter('badgeEctsSemestre', [$this, 'badgeEctsSemestre'], ['is_safe' => ['html']]),
-            new TwigFilter('badgeEctsUe', [$this, 'badgeEctsUe'], ['is_safe' => ['html']]),
-            new TwigFilter('badgeEcts', [$this, 'badgeEcts'], ['is_safe' => ['html']]),
-            new TwigFilter('badgeNb', [$this, 'badgeNb'], ['is_safe' => ['html']]),
-            new TwigFilter('badgeTypeParcours', [$this, 'badgeTypeParcours'], ['is_safe' => ['html']])
+            new TwigFilter('badgeEctsSemestre', $this->badgeEctsSemestre(...), ['is_safe' => ['html']]),
+            new TwigFilter('badgeEctsUe', $this->badgeEctsUe(...), ['is_safe' => ['html']]),
+            new TwigFilter('badgeEcts', $this->badgeEcts(...), ['is_safe' => ['html']]),
+            new TwigFilter('badgeCoeff', $this->badgeCoeff(...), ['is_safe' => ['html']]),
+            new TwigFilter('badgeNb', $this->badgeNb(...), ['is_safe' => ['html']]),
+            new TwigFilter('badgeTypeParcours', $this->badgeTypeParcours(...), ['is_safe' => ['html']])
         ];
     }
 
@@ -65,6 +66,16 @@ class StructureExtension extends AbstractExtension
         }
 
         $badge = '<span class="badge bg-'.$color.' me-2">%s ECTS</span>';
+        return sprintf($badge, $ects);
+    }
+
+    public function badgeCoeff(?float $ects, string $color = 'info'): string
+    {
+        if ($ects === null) {
+            return '<span class="badge bg-warning">Erreur Coefficient</span>';
+        }
+
+        $badge = '<span class="badge bg-' . $color . ' me-2">Coeff. %s</span>';
         return sprintf($badge, $ects);
     }
 

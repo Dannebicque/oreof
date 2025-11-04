@@ -436,8 +436,35 @@ HTML;
             }
         } else {
             // Contact de la formation
-            if ($parcours->getFormation()?->getParcours()->count() === 1) {
-                // Un seul parcours, on reprend les infos de la formation
+//            if ($parcours->getFormation()?->getParcours()->count() === 1) {
+//                // Un seul parcours, on reprend les infos de la formation
+//                if ($parcours->getFormation()?->getResponsableMention()) {
+//                    $resp = $parcours->getFormation()?->getResponsableMention();
+//                    $referentPedagogique = [
+//                        // Référent pédagogique
+//                        'type-contact' => 3,
+//                        'coordonnees' => [
+//                            'nom' => $resp ? $resp->getNom() : 'Non renseigné.',
+//                            'prenom' => $resp ? $resp->getPrenom() : 'Non renseigné.',
+//                            'courriel' => $resp ? $resp->getEmail() : 'Non renseigné.',
+//                        ]
+//                    ];
+//                    $referentsPedagogiques[] = $referentPedagogique;
+//                }
+//                if ($parcours->getFormation()?->getCoResponsable()) {
+//                    $coResp = $parcours->getFormation()?->getCoResponsable();
+//                    $coReferentPedagogique = [
+//                        // Référent pédagogique
+//                        'type-contact' => 3,
+//                        'coordonnees' => [
+//                            'nom' => $coResp ? $coResp->getNom() : 'Non renseigné.',
+//                            'prenom' => $coResp ? $coResp->getPrenom() : 'Non renseigné.',
+//                            'courriel' => $coResp ? $coResp->getEmail() : 'Non renseigné.',
+//                        ]
+//                    ];
+//                    $referentsPedagogiques[] = $coReferentPedagogique;
+//                }
+//            } else {
                 if ($parcours->getFormation()?->getResponsableMention()) {
                     $resp = $parcours->getFormation()?->getResponsableMention();
                     $referentPedagogique = [
@@ -449,7 +476,7 @@ HTML;
                             'courriel' => $resp ? $resp->getEmail() : 'Non renseigné.',
                         ]
                     ];
-                    $referentsPedagogiques[] = $referentPedagogique;
+                    $referentsPedagogiques[$resp?->getId()] = $referentPedagogique;
                 }
                 if ($parcours->getFormation()?->getCoResponsable()) {
                     $coResp = $parcours->getFormation()?->getCoResponsable();
@@ -462,34 +489,35 @@ HTML;
                             'courriel' => $coResp ? $coResp->getEmail() : 'Non renseigné.',
                         ]
                     ];
-                    $referentsPedagogiques[] = $coReferentPedagogique;
+                    $referentsPedagogiques[$coResp?->getId()] = $coReferentPedagogique;
                 }
-            } else {
                 if ($parcours->getRespParcours()) {
-                    $referentPedagogique = [
+                    $respParcours = $parcours->getRespParcours();
+                    $referentPedagogiqueParcours = [
                         // Référent pédagogique
                         'type-contact' => 3,
                         'coordonnees' => [
-                            'nom' => $parcours->getRespParcours() ? $parcours->getRespParcours()->getNom() : 'Non renseigné.',
-                            'prenom' => $parcours->getRespParcours() ? $parcours->getRespParcours()->getPrenom() : 'Non renseigné.',
-                            'courriel' => $parcours->getRespParcours() ? $parcours->getRespParcours()->getEmail() : 'Non renseigné.',
+                            'nom' => $respParcours ? $respParcours->getNom() : 'Non renseigné.',
+                            'prenom' => $respParcours ? $respParcours->getPrenom() : 'Non renseigné.',
+                            'courriel' => $respParcours ? $respParcours->getEmail() : 'Non renseigné.',
                         ]
                     ];
-                    $referentsPedagogiques[] = $referentPedagogique;
+                    $referentsPedagogiques[$respParcours?->getId()] = $referentPedagogiqueParcours;
                 }
                 if ($parcours->getCoResponsable()) {
-                    $coReferentPedagogique = [
+                    $coRespParcours = $parcours->getCoResponsable();
+                    $coReferentPedagogiqueParcours = [
                         // Référent pédagogique
                         'type-contact' => 3,
                         'coordonnees' => [
-                            'nom' => $parcours->getCoResponsable() ? $parcours->getCoResponsable()->getNom() : 'Non renseigné.',
-                            'prenom' => $parcours->getCoResponsable() ? $parcours->getCoResponsable()->getPrenom() : 'Non renseigné.',
-                            'courriel' => $parcours->getCoResponsable() ? $parcours->getCoResponsable()->getEmail() : 'Non renseigné.',
+                            'nom' => $coRespParcours ? $coRespParcours->getNom() : 'Non renseigné.',
+                            'prenom' => $coRespParcours ? $coRespParcours->getPrenom() : 'Non renseigné.',
+                            'courriel' => $coRespParcours ? $coRespParcours->getEmail() : 'Non renseigné.',
                         ]
                     ];
-                    $referentsPedagogiques[] = $coReferentPedagogique;
+                    $referentsPedagogiques[$coRespParcours?->getId()] = $coReferentPedagogiqueParcours;
                 }
-            }
+            // }
 
 
             $resultatsAttendus = $this->cleanString($parcours->getResultatsAttendus()) ?? 'Non renseigné.';

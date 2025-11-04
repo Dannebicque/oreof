@@ -18,7 +18,7 @@ class TypeOfExtension extends AbstractExtension
     public function getFilters(): array
     {
         return [
-            new TwigFilter('isElementConstitutif', [$this, 'isElementConstitutif']),
+            new TwigFilter('isElementConstitutif', $this->isElementConstitutif(...)),
         ];
     }
 

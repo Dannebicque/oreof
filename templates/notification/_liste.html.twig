@@ -5,14 +5,14 @@
 >
 <div {{ stimulus_target('notification', 'liste') }}>
     {% for notif in notifications %}
-        {% if notif.lu == false %}
+        {% if notif.isRead == false %}
             {% set color='warning' %}
             {% set icon='fa-exclamation' %}
         {% else %}
             {% set color='success' %}
             {% set icon='fa-check' %}
         {% endif %}
-        <div class="row g-0 align-items-center mb-2 {% if notif.lu == false %}non-lu{% endif %}" {{ stimulus_action('notification', 'lu', 'click', {id: notif.id}) }}>
+        <div class="row g-0 align-items-center mb-2 {% if notif.isRead == false %}non-lu{% endif %}" {{ stimulus_action('notification', 'lu', 'click', {id: notif.id}) }}>
             <div class="col-auto">
                 <div class="border border-{{ color }}  sw-5 sh-5 rounded-xl d-flex justify-content-center align-items-center">
                     <i class="fas {{ icon }} text-{{ color }} fs-3"></i>
@@ -22,7 +22,7 @@
                 <div class="row g-0">
                     <div class="col">
                         <div class="sh-5 d-flex align-items-center lh-1-25">
-                            {{ notif.codeNotification|trans({},'notif') }}
+                            {{ notif.title|trans({},'notif') }}
                         </div>
                     </div>
                     <div class="col-auto">

@@ -4,6 +4,9 @@
     </h3>
     {% if formation.formationVersionings|length > 0 %}
     <div class="col-lg-3 col-sm-6">
+        <label for="selectVersionFormation" class="sr-only">
+            Version actuelle :
+        </label>
         <select class="form-select" id="selectVersionFormation">
             <option selected value="#">Choisir...</option>
             {% for version in formation.formationVersionings %}

@@ -56,6 +56,14 @@ export default class extends Controller {
     })
   }
 
+  saveMotsCles () {
+    this._save({
+      field: 'motsCles',
+      action: 'textarea',
+      value: 'parcours_step1_motsCles',
+    })
+  }
+
   changeRythme(event) {
     this._save({
       field: 'rythmeFormation',

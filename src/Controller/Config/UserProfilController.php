@@ -272,30 +272,6 @@ class UserProfilController extends BaseController
 //        ]);
 //    }
 
-
-    #[Route('/show-attente/{id}', name: 'show_attente', methods: ['GET'])]
-    public function showAttente(
-        Request        $request,
-        ProfilRepository $profilRepository,
-        User           $user
-    ): Response
-    {
-        $dpe = (bool)$request->query->get('dpe', false);
-        if ($dpe) {
-            $roles = $profilRepository->findByDpe();
-        } else {
-            $roles = $profilRepository->findAll();
-        }
-
-        return $this->render('config/user/_show_attente.html.twig', [
-            'user' => $user,
-            'typeCentres' => CentreGestionEnum::cases(),
-            'centresUser' => $user->getUserProfils(),
-            'roles' => $roles,
-            'dpe' => $dpe
-        ]);
-    }
-
     /**
      * @throws JsonException
      */

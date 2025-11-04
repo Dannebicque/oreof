@@ -59,6 +59,9 @@ class SemestreParcours
     #[Groups('parcours_json_versioning')]
     private ?bool $isOuvert = true;
 
+    #[ORM\ManyToOne(inversedBy: 'parcoursSemestre')]
+    private ?Annee $annee = null;
+
     public function __construct(?Semestre $semestre, ?Parcours $parcours)
     {
         $this->setSemestre($semestre);
@@ -216,6 +219,13 @@ class SemestreParcours
     public function setOuvert(bool $isOuvert): static
     {
         $this->isOuvert = $isOuvert;
+
+        return $this;
+    }
+
+    public function setAnnee(?Annee $annee): static
+    {
+        $this->annee = $annee;
 
         return $this;
     }

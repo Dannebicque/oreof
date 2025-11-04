@@ -718,3 +718,65 @@ historique.cloture: 'Demande de réouverture clôturée le %date%'
 validation.non_ouverture_ses: 'Validation de la demande de non ouverture du parcours par le SES'
 validation.non_ouverture_cfvu: 'Validation de la demande de non ouverture du parcours par la CFVU'
 validation.non_ouverture: 'Demande de non ouverture du parcours'
+
+# Aliases for orchestrated workflow status bar (labels come from workflow.yaml)
+# The status bar builds keys as: <label>.<btn-class> where label is the place metadata label.
+# We map them to existing phrasing already present in this file to keep consistency.
+
+# en_cours_redaction (parcours)
+en_cours_redaction.parcours.btn-info: 'Parcours en cours de rédaction'
+en_cours_redaction.parcours.btn-success: 'Parcours transmis'
+en_cours_redaction.parcours.btn-muted: 'Parcours en cours de rédaction'
+en_cours_redaction.parcours.btn-warning: 'Parcours en cours de rédaction'
+en_cours_redaction.parcours.btn-danger: 'Parcours en cours de rédaction'
+
+# soumis_parcours -> validation.parcours_rf
+validation.parcours_rf.btn-info: 'Parcours soumis au RF'
+validation.parcours_rf.btn-warning: 'Réserves sur le parcours émises par le RF'
+validation.parcours_rf.btn-success: 'Parcours validé par le RF'
+validation.parcours_rf.btn-muted: 'Parcours non transmis'
+validation.parcours_rf.btn-danger: 'Parcours refusé par le RF'
+
+# soumis_dpe_composante -> validation.dpe
+validation.dpe.btn-info: 'Parcours en attente de validation par le DPE'
+validation.dpe.btn-warning: 'Réserves sur le parcours émises par le DPE'
+validation.dpe.btn-danger: 'Parcours refusé par le DPE'
+validation.dpe.btn-success: 'Parcours validé par le DPE'
+validation.dpe.btn-muted: 'Validation DPE indisponible'
+
+# soumis_conseil -> validation.conseil
+validation.conseil.btn-info: 'Parcours soumis au conseil de composante'
+validation.conseil.btn-warning: 'Réserves sur le parcours émises par le conseil de composante'
+validation.conseil.btn-danger: 'Parcours refusé par le conseil de composante'
+validation.conseil.btn-success: 'Parcours validé par le conseil de composante'
+validation.conseil.btn-muted: 'Validation conseil de composante indisponible'
+
+# soumis_central -> validation.ses
+validation.ses.btn-info: 'Parcours soumis au SES'
+validation.ses.btn-warning: 'Réserves sur le parcours émises par le SES'
+validation.ses.btn-danger: 'Parcours refusé par le SES'
+validation.ses.btn-success: 'Parcours validé par le SES'
+validation.ses.btn-muted: 'Validation SES indisponible'
+
+# soumis_cfvu -> soumis.cfvu
+soumis.cfvu.btn-info: 'Parcours soumis à la CFVU'
+soumis.cfvu.btn-warning: 'Réserves sur le parcours émises par la CFVU'
+soumis.cfvu.btn-danger: 'Parcours refusé par la CFVU'
+soumis.cfvu.btn-success: 'Parcours validé par la CFVU'
+soumis.cfvu.btn-muted: 'CFVU indisponible'
+
+# relecture avant publication
+relecture.avant_publication.btn-info: 'Parcours transmis pour relecture avant publication'
+relecture.avant_publication.btn-success: 'Parcours validé pour publication'
+relecture.avant_publication.btn-muted: 'Publication indisponible'
+
+# en_cours_redaction sans CFVU
+validation.en_cours_redaction_ss_cfvu.btn-info: 'Parcours en cours de rédaction (sans CFVU)'
+validation.en_cours_redaction_ss_cfvu.btn-success: 'Parcours transmis (sans CFVU)'
+validation.en_cours_redaction_ss_cfvu.btn-muted: 'Parcours en cours de rédaction (sans CFVU)'
+validation.en_cours_redaction_ss_cfvu.btn-warning: 'Parcours en cours de rédaction (sans CFVU)'
+validation.en_cours_redaction_ss_cfvu.btn-danger: 'Parcours en cours de rédaction (sans CFVU)'
+valide.relecture.avant_publication.date.label: 'Date de publication'
+relecture.avant_publication.valide.alerte: 'Indiquer la date de publication du DPE'
+btn.relecture.avant_publication.valide: 'Valider pour publication'
+

@@ -1,0 +1,7 @@
+{% extends 'mails/base_mail.html.twig' %}
+
+{% block content %}
+    <p>Bonjour {{ user.display }},</p>
+{# todo: traiter cas parcours... #}
+    <p>Votre formation : <strong>{{ formation.displayLong }}</strong> vient d’être validée par le central et sera publiée sur le site lors de la prochaine mise à jour.</p>
+{% endblock %}

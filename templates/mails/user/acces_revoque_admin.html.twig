@@ -1,10 +1,9 @@
 {% extends 'mails/base_mail.html.twig' %}
 
 {% block content %}
-Bonjour {{ user.display }},<br>
+    Bonjour {{ user.display }},<br>
 
-<p>Vos accès à l'application {{ product_name }} ont été révoqués par un administrateur.</p>
+    <p>Vos accès à l'application {{ product_name }} ont été révoqués par un administrateur.</p>
 
-<p>Pour toutes questions vous pouvez contacer {{ mail_contact }}.</p>
-
-{% enblock %}
+    <p>Pour toutes questions vous pouvez contacter {{ mail_contact }}.</p>
+{% endblock %}

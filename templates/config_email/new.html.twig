@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    {% include 'config_email/_form.html.twig' with {form, template, variables} %}
+{% endblock %}
+
+{% block header %}
+    Nouveau template
+{% endblock %}
+
+{% block bouton_header %}
+    <a class="btn btn-outline-primary" href="{{ path('app_config_email') }}">Retour aux templates</a>
+{% endblock %}
+

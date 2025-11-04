@@ -18,7 +18,7 @@
         {{ encore_entry_script_tags('app') }}
     {% endblock %}
 </head>
-<body>
+<body data-turbo="false">
 <!-- Content Container Start -->
 <div id="root">
     <!-- Nav Content Start -->
@@ -52,7 +52,6 @@
             {{ component('switch_dpe') }}
             <!-- Language Switch End -->
 
-
             <!-- User Menu Start -->
             <div class="user-container d-flex">
                 <a href="#" class="d-flex user position-relative" data-bs-toggle="dropdown" aria-haspopup="true"
@@ -69,6 +68,13 @@
                         </div>
                         <div class="col-12 ps-1 pe-1">
                             <ul class="list-unstyled">
+                                {% if is_granted('ROLE_ADMIN') %}
+                                    <li>
+                                        <a href="{{ path('i18n_toggle_keys') }}">
+                                            {{ app.session.get('i18n_keys') ? '🔤 Mode clés: ON' : '🔤 Mode clés: OFF' }}
+                                        </a>
+                                    </li>
+                                {% endif %}
                                 <li>
                                     <a href="{{ path('app_user_mes_informations') }}">Mes informations</a>
                                 </li>
@@ -155,10 +161,20 @@
                                     </a>
                                 </li>
                                 <li>
+                                    <a href="{{ path('app_offre') }}">
+                                        <span class="label">Gestion de l'offre N+1</span>
+                                    </a>
+                                </li>
+                                <li>
                                     <a href="{{ path('app_demande_dpe') }}">
                                         <span class="label">DPE ouverts</span>
                                     </a>
                                 </li>
+                                {#                                <li> #}
+                                {#                                    <a href="{{ path('app_validation_dpe_test_index') }}"> #}
+                                {#                                        <span class="label">TEST Validation DPE</span> #}
+                                {#                                    </a> #}
+                                {#                                </li> #}
                                 <li>
                                     <a href="{{ path('app_validation_dpe_index') }}">
                                         <span class="label">Validation DPE</span>
@@ -409,6 +425,11 @@
                                         <li>
                                             <a href="{{ path('translations_index') }}">
                                                 <span class="label">Traductions et textes</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ path('app_config_email') }}">
+                                                <span class="label">Configurations des emails</span>
                                             </a>
                                         </li>
                                     </ul>
