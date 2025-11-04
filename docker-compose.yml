@@ -1,0 +1,48 @@
+services:
+  web:
+    image: mmi3docker/symfony-2024
+    container_name: oreof-web
+    hostname: oreof-web
+    restart: always
+    platform: linux/amd64
+    ports:
+      - 8820:80
+    depends_on:
+      - db
+    volumes:
+      - ./docker/php-conf.d/99-custom.ini:/usr/local/etc/php/conf.d/99-custom.ini:ro
+      - ./:/var/www/oreof
+      - ./docker/apache.conf:/etc/apache2/sites-enabled/000-default.conf
+
+  db:
+    image: mariadb:10.8
+    container_name: oreof-db
+    hostname: oreof-db
+    restart: always
+
+    volumes:
+      - db-volume:/var/lib/mysql
+
+    environment:
+      MYSQL_ROOT_PASSWORD: PASSWORD
+      MYSQL_DATABASE: oreof
+      MYSQL_USER: oreof
+      MYSQL_PASSWORD: PASSWORD
+  # docker exec -i oreof-db sh -c 'exec mysql -u"$MYSQL_USER" -p"$MYSQL_PASSWORD" "$MYSQL_DATABASE"' < 2025_08_28_17_12_53.sql
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: oreof-adminsql
+    hostname: oreof-adminsql
+    restart: always
+    platform: linux/amd64
+    ports:
+      - 9020:80
+    environment:
+      PMA_HOST: db
+      MYSQL_ROOT_PASSWORD: PASSWORD
+      MYSQL_USER: oreof
+      MYSQL_PASSWORD: PASSWORD
+      MYSQL_DATABASE: oreof
+
+volumes:
+  db-volume:
