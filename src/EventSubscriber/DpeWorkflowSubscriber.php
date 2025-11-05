@@ -14,10 +14,12 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Workflow\Event\Event;
 use App\Notification\WorkflowNotifier;
 use App\Workflow\RecipientResolver;
+use Symfony\Component\Workflow\WorkflowInterface;
 
 class DpeWorkflowSubscriber implements EventSubscriberInterface
 {
     public function __construct(
+        private WorkflowInterface $dpeParcoursWorkflow,
         private WorkflowNotifier  $notifier,
         private RecipientResolver $recipients
     )
@@ -36,12 +38,11 @@ class DpeWorkflowSubscriber implements EventSubscriberInterface
     {
         $subject = $event->getSubject();
         $data = new WorkflowData($subject);
-        $wf = $event->getWorkflow();
         $transition = $event->getTransition();
-        if (null === $subject || null === $wf || null === $transition) {
+        if (null === $subject || null === $transition) {
             return;
         }
-        $meta = $wf->getMetadataStore()->getTransitionMetadata($transition) ?? [];
+        $meta = $this->dpeParcoursWorkflow->getMetadataStore()->getTransitionMetadata($transition) ?? [];
 
         $eventKey = sprintf('workflow.dpeParcours.transition.%s', $transition->getName());
         $context = [
@@ -49,8 +50,8 @@ class DpeWorkflowSubscriber implements EventSubscriberInterface
             'data' => $data,
             'context' => $event->getContext() ?? [],
         ];
-        $recipients = $this->recipients->resolveRecipients($meta, $data);
-        $this->notifier->notify($recipients['recipients'], $eventKey, $wf->getName(), $context);
+        $recipients = $this->recipients->resolveRecipients('dpeParcours', $transition->getName(), $data);
+        $this->notifier->notify($recipients['recipients'], $eventKey, $this->dpeParcoursWorkflow->getName(), $context);
     }
 
 //    public function onGuard(GuardEvent $event): void

@@ -23,6 +23,13 @@ class ValidationProcessChangeRf extends AbstractValidationProcess
             $data[$place] = $meta;
             $this->processAll[$place] = $meta;
         }
+
+        $this->transitionsAll = [];
+        $transitions = $changeRfWorkflow->getDefinition()->getTransitions();
+        foreach ($transitions as $trans) {
+            $this->transitionsAll[$trans->getName()] = $trans;
+        }
+
         $this->process = $data;
     }
 

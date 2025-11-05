@@ -57,7 +57,7 @@ class WorkflowNotifier
                             'path' => sprintf('%s/templates/mails/workflow/%s/%s.html.twig', $this->baseDir, $wf, $this->extractTransition($eventKey))
                         ],
                         $context['data']->toArray(),
-                        $context['context']
+                        $context['context'] ?? []
                     )
                 );
 

@@ -22,7 +22,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class NoticationListeController extends AbstractController
 {
-    #[Route('/notication/liste', name: 'app_notication_liste')]
+    #[Route('/administration/notification/liste', name: 'app_notication_liste')]
     public function index(
         ProfilRepository      $profilRepository,
         GetAvailableWorkflows $getAvailableWorkflows,
@@ -47,7 +47,7 @@ class NoticationListeController extends AbstractController
         ]);
     }
 
-    #[Route('/notication/liste/mise-a-jour', name: 'app_notification_liste_mise_a_jour', methods: ['POST'])]
+    #[Route('/administration/notication/liste/mise-a-jour', name: 'app_notification_liste_mise_a_jour', methods: ['POST'])]
     public function miseAJour(
         Request $request,
         EntityManagerInterface $entityManager,

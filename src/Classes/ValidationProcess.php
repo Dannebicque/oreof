@@ -13,6 +13,8 @@ use Symfony\Component\Workflow\WorkflowInterface;
 
 class ValidationProcess extends AbstractValidationProcess
 {
+
+
     public function __construct(protected WorkflowInterface $dpeParcoursWorkflow)
     {
         $places = $dpeParcoursWorkflow->getDefinition()->getPlaces();
@@ -25,6 +27,13 @@ class ValidationProcess extends AbstractValidationProcess
 
             $dataAll[$place] = $meta;
         }
+
+        $this->transitionsAll = [];
+        $transitions = $this->dpeParcoursWorkflow->getDefinition()->getTransitions();
+        foreach ($transitions as $trans) {
+            $this->transitionsAll[$trans->getName()] = $trans;
+        }
+
         $this->processAll = $dataAll;
         $this->process = $data;
     }

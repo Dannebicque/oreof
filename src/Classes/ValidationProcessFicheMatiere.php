@@ -28,6 +28,13 @@ class ValidationProcessFicheMatiere extends AbstractValidationProcess
                 $data[$place] = $meta;
             }
         }
+
+        $this->transitionsAll = [];
+        $transitions = $ficheWorkflow->getDefinition()->getTransitions();
+        foreach ($transitions as $trans) {
+            $this->transitionsAll[$trans->getName()] = $trans;
+        }
+
         $this->process = $data;
     }
 
