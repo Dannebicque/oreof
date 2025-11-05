@@ -54,7 +54,6 @@ class ExportCfvu implements ExportInterface
         $this->excelWriter->writeCellXY(9, 1, 'Présence PV');
         $this->excelWriter->writeCellXY(10, 1, 'Etat validation');
 
-
         $ligne = 2;
         foreach ($formations as $formation) {
             foreach ($formation->getParcours() as $parcours) {
