@@ -125,4 +125,18 @@ class UeRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function findFromAnneeUniversitaire(int $idCampagneCollecte) : array {
+        return $this->createQueryBuilder('ue')
+            ->select('ue.id')
+            ->join('ue.semestre', 'semestre')
+            ->join('semestre.semestreParcours', 'semP')
+            ->join('semP.parcours', 'parcours')
+            ->join('parcours.dpeParcours', 'dpe')
+            ->join('dpe.campagneCollecte', 'campagne')
+            ->andWhere('campagne.id = :idCampagne')
+            ->setParameter(':idCampagne', $idCampagneCollecte)
+            ->getQuery()
+            ->getResult();
+    }
 }
