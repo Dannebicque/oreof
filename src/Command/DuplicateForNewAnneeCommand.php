@@ -17,6 +17,7 @@ use App\Entity\Parcours;
 use App\Entity\Semestre;
 use App\Entity\SemestreMutualisable;
 use App\Entity\SemestreParcours;
+use App\Entity\Ue;
 use App\Enums\TypeModificationDpeEnum;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
@@ -591,6 +592,34 @@ class DuplicateForNewAnneeCommand extends Command
             }
 
             $this->entityManager->persist($cloneSemestreMutu);
+            $io->progressAdvance(1);
+        }
+
+        $io->progressFinish();
+        $this->saveAndCleanUp($io);
+
+        /**
+         * 
+         * UE
+         * 
+         */
+        $this->entitiesArray = $this->entityManager->getRepository(Ue::class)
+            ->findFromAnneeUniversitaire($anneeSource);
+        $io->writeln("Copie des 'UE'...");
+        $io->progressStart(count($this->entitiesArray));
+        foreach($this->entitiesArray as $ue) {
+            $initialUe = $this->entityManager->getRepository(Ue::class)->findOneById($ue);
+            $cloneUe = clone $initialUe;
+            $cloneUe->setUeParent(null);
+            $cloneUe->setUeRaccrochee(null);
+            if($initialUe->getSemestre() !== null) {
+                $linkUeSemestre = $this->entityManager->getRepository(Semestre::class)
+                    ->findOneBy(['semestreOrigineCopie' => $initialUe->getSemestre()]);
+                $cloneUe->setSemestre($linkUeSemestre);
+            }
+            $cloneUe->setUeOrigineCopie($initialUe);
+
+            $this->entityManager->persist($cloneUe);
             $io->progressAdvance(1);
         }
 
