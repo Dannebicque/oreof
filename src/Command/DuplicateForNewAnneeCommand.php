@@ -626,6 +626,34 @@ class DuplicateForNewAnneeCommand extends Command
         $io->progressFinish();
         $this->saveAndCleanUp($io);
 
+        /**
+         * 
+         * UE PARENT
+         * 
+         */
+        $this->entitiesArray = $this->entityManager->getRepository(Ue::class)
+            ->findFromAnneeUniversitaire($anneeSource);
+        $io->writeln("Copie des 'UE Parents'...");
+        $io->progressStart(count($this->entitiesArray));
+        foreach($this->entitiesArray as $ueToProcess) {
+            $initialUeToProcess = $this->entityManager->getRepository(Ue::class)
+                ->findOneById($ueToProcess);
+            if($initialUeToProcess->getUeParent() !== null){
+                $clonedUe = $this->entityManager->getRepository(Ue::class)
+                    ->findOneBy(['ueOrigineCopie' => $initialUeToProcess]);
+                $newParentForClone = $this->entityManager->getRepository(Ue::class)
+                    ->findOneBy(['ueOrigineCopie' => $initialUeToProcess->getUeParent()]);
+
+                $clonedUe->setUeParent($newParentForClone);
+                $this->entityManager->persist($clonedUe);
+            }
+
+            $io->progressAdvance(1);
+        }
+
+        $io->progressFinish();
+        $this->saveAndCleanUp($io);
+
         // Fin de la commande (succès)
         $io->success("La commande s'est exécutée correctement !");
 
