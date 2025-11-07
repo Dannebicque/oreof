@@ -18,6 +18,7 @@ use App\Entity\Semestre;
 use App\Entity\SemestreMutualisable;
 use App\Entity\SemestreParcours;
 use App\Entity\Ue;
+use App\Entity\UeMutualisable;
 use App\Enums\TypeModificationDpeEnum;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
@@ -648,6 +649,49 @@ class DuplicateForNewAnneeCommand extends Command
                 $this->entityManager->persist($clonedUe);
             }
 
+            $io->progressAdvance(1);
+        }
+
+        $io->progressFinish();
+        $this->saveAndCleanUp($io);
+
+        /**
+         * 
+         * UE MUTUALISEES et UE Raccrochées
+         * 
+         */
+        $this->entitiesArray = $this->entityManager->getRepository(UeMutualisable::class)
+            ->findFromAnneeUniversitaire($anneeSource);
+        $io->writeln("Copie des 'UE Mutualisables'...");
+        $io->progressStart(count($this->entitiesArray));
+        foreach($this->entitiesArray as $ueMutualisable) {
+            $initialUeMutualisable = $this->entityManager->getRepository(UeMutualisable::class)
+                ->findOneById($ueMutualisable);
+            $cloneUeMutualisable = clone $initialUeMutualisable;
+            if($initialUeMutualisable->getUe() !== null) {
+                $linkUeMutuUe = $this->entityManager->getRepository(Ue::class)
+                    ->findOneBy(['ueOrigineCopie' => $initialUeMutualisable->getUe()]);
+                $cloneUeMutualisable->setUe($linkUeMutuUe);
+            }
+            if($initialUeMutualisable->getParcours() !== null) {
+                $linkUeMutuParcours = $this->entityManager->getRepository(Parcours::class)
+                    ->findOneBy(['parcoursOrigineCopie' => $initialUeMutualisable->getParcours()]);
+                $cloneUeMutualisable->setParcours($linkUeMutuParcours);
+            }
+            // UE à raccrocher
+            $ueARaccrocherArray = $this->entityManager->getRepository(Ue::class)
+                ->findBy(['ueRaccrochee' => $initialUeMutualisable]);
+            foreach($ueARaccrocherArray as $ueRaccroche) {
+                $raccrochageUe = $this->entityManager->getRepository(Ue::class)
+                    ->findOneBy(['ueOrigineCopie' => $ueRaccroche]);
+                
+                if($raccrochageUe !== null){
+                    $raccrochageUe->setUeRaccrochee($cloneUeMutualisable);
+                    $this->entityManager->persist($raccrochageUe);
+                }
+            }
+
+            $this->entityManager->persist($cloneUeMutualisable);
             $io->progressAdvance(1);
         }
 
