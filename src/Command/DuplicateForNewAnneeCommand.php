@@ -738,8 +738,39 @@ class DuplicateForNewAnneeCommand extends Command
                 $cloneEc->addCompetence($linkEcCompetence);
             }
 
+            $cloneEc->setEcParent(null);
             $cloneEc->setEcOrigineCopie($initialEc);
             $this->entityManager->persist($cloneEc);
+            $io->progressAdvance(1);
+        }
+
+        $io->progressFinish();
+        $this->saveAndCleanUp($io);
+
+        /**
+         * 
+         * EC PARENT
+         * 
+         */
+        $this->entitiesArray = $this->entityManager->getRepository(ElementConstitutif::class)
+            ->findFromAnneeUniversitaire($anneeSource);
+        $io->writeln("Copie des 'EC Parents'...");
+        $io->progressStart(count($this->entitiesArray));
+        foreach($this->entitiesArray as $ecParentToLink) {
+            $initialEcParentToLink = $this->entityManager->getRepository(ElementConstitutif::class)
+                ->findOneById($ecParentToLink);
+            if($initialEcParentToLink->getEcParent() !== null) {
+                $clonedChild = $this->entityManager->getRepository(ElementConstitutif::class)
+                    ->findOneBy(['ecOrigineCopie' => $initialEcParentToLink]);
+                $clonedParent = $this->entityManager->getRepository(ElementConstitutif::class)
+                    ->findOneBy(['ecOrigineCopie' => $initialEcParentToLink->getEcParent()]);
+                if($clonedChild !== null && $clonedParent !== null) {
+                    $clonedChild->setEcParent($clonedParent);
+                    
+                    $this->entityManager->persist($clonedChild);
+                }
+            }
+
             $io->progressAdvance(1);
         }
 
