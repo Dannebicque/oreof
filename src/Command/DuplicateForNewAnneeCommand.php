@@ -189,11 +189,11 @@ class DuplicateForNewAnneeCommand extends Command
         $newCampagneCollecte->setLibelle($libelleNewCampagne);
         $newCampagneCollecte->setAnnee($anneeNewCampagne);
         $newCampagneCollecte->setDefaut(false);
-        $newCampagneCollecte->setDateOuvertureDpe(new DateTime($dateOuvertureNewCampagne));
-        $newCampagneCollecte->setDateClotureDpe(new DateTime($dateClotureNewCampagne));
-        $newCampagneCollecte->setDateTransmissionSes(new DateTime($dateTransmissionSesNewCampagne));
-        $newCampagneCollecte->setDateCfvu(new DateTime($dateCfvuNewCampagne));
-        $newCampagneCollecte->setDatePublication(new DateTime($datePublicationNewCampagne));
+        $newCampagneCollecte->setDateOuvertureDpe($this->createDateOrEmpty($dateOuvertureNewCampagne));
+        $newCampagneCollecte->setDateClotureDpe($this->createDateOrEmpty($dateClotureNewCampagne));
+        $newCampagneCollecte->setDateTransmissionSes($this->createDateOrEmpty($dateTransmissionSesNewCampagne));
+        $newCampagneCollecte->setDateCfvu($this->createDateOrEmpty($dateCfvuNewCampagne));
+        $newCampagneCollecte->setDatePublication($this->createDateOrEmpty($datePublicationNewCampagne));
         $newCampagneCollecte->setAnneeUniversitaire($newAnneeUniversitaire);
         // Code APOGEE
         $newCampagneCollecte->setCodeApogee(self::CODE_APOGEE_CAMPAGNE_COLLECTE);
@@ -713,11 +713,20 @@ class DuplicateForNewAnneeCommand extends Command
     }
 
     private function checkFullDate(string $dateToCheck) {
-        return preg_match('/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/', $dateToCheck) === 1
-            && DateTime::createFromFormat('Y-m-d', $dateToCheck) !== false;
+        return 
+            (   preg_match('/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/', $dateToCheck) === 1
+                && DateTime::createFromFormat('Y-m-d', $dateToCheck) !== false 
+            )
+            || $dateToCheck === 'empty';
     }
 
+    private function createDateOrEmpty(string $dateOrEmpty) : DateTime|null {
+        if($dateOrEmpty === 'empty'){
+            return null;
+        }
 
+        return new DateTime($dateOrEmpty);
+    }
 
     private function getInitialisationLibelleArray() {
         return [
