@@ -10,6 +10,7 @@ use App\Entity\ButNiveau;
 use App\Entity\CampagneCollecte;
 use App\Entity\Competence;
 use App\Entity\DpeParcours;
+use App\Entity\ElementConstitutif;
 use App\Entity\FicheMatiere;
 use App\Entity\FicheMatiereMutualisable;
 use App\Entity\Formation;
@@ -38,7 +39,7 @@ class DuplicateForNewAnneeCommand extends Command
     /**
      * CONFIGURATION
      */
-    private const EXECUTION_MEMORY_LIMIT = '5000M';
+    private const EXECUTION_MEMORY_LIMIT = '8000M';
 
     private const CODE_APOGEE_CAMPAGNE_COLLECTE = '6';
 
@@ -692,6 +693,53 @@ class DuplicateForNewAnneeCommand extends Command
             }
 
             $this->entityManager->persist($cloneUeMutualisable);
+            $io->progressAdvance(1);
+        }
+
+        $io->progressFinish();
+        $this->saveAndCleanUp($io);
+
+        /**
+         * 
+         * ELEMENT CONSTITUTIF
+         * 
+         */
+        $this->entitiesArray = $this->entityManager->getRepository(ElementConstitutif::class)
+            ->findFromAnneeUniversitaire($anneeSource);
+        $io->writeln("Copie des 'Éléments Constitutifs'...");
+        $io->progressStart(count($this->entitiesArray));
+        foreach($this->entitiesArray as $ec) {
+            $initialEc = $this->entityManager->getRepository(ElementConstitutif::class)
+                ->findOneById($ec);
+            $cloneEc = clone $initialEc;
+            $cloneEc->prepareCloneForNewAnnee();
+            $linkEcFicheM = null;
+            $linkEcUe = null;
+            $linkEcParcours = null;
+            if($initialEc->getFicheMatiere() !== null) {
+                $linkEcFicheM = $this->entityManager->getRepository(FicheMatiere::class)
+                    ->findOneBy(['ficheMatiereOrigineCopie' => $initialEc->getFicheMatiere()]);
+            }
+            if($initialEc->getUe() !== null) {
+                $linkEcUe = $this->entityManager->getRepository(Ue::class)
+                    ->findOneBy(['ueOrigineCopie' => $initialEc->getUe()]);
+            }
+            if($initialEc->getParcours() !== null) {
+                $linkEcParcours = $this->entityManager->getRepository(Parcours::class)
+                    ->findOneBy(['parcoursOrigineCopie' => $initialEc->getParcours()]);
+            }
+            $cloneEc->setFicheMatiere($linkEcFicheM);
+            $cloneEc->setUe($linkEcUe);
+            $cloneEc->setParcours($linkEcParcours);
+            // Compétences
+            foreach($initialEc->getCompetences() as $ecCompetence) {
+                $linkEcCompetence = $this->entityManager->getRepository(Competence::class)
+                    ->findOneBy(['competenceOrigineCopie' => $ecCompetence]);
+                $cloneEc->addCompetence($linkEcCompetence);
+            }
+
+            $cloneEc->setEcOrigineCopie($initialEc);
+            $this->entityManager->persist($cloneEc);
             $io->progressAdvance(1);
         }
 
