@@ -9,6 +9,7 @@ use App\Entity\ButCompetence;
 use App\Entity\ButNiveau;
 use App\Entity\CampagneCollecte;
 use App\Entity\Competence;
+use App\Entity\Contact;
 use App\Entity\DpeParcours;
 use App\Entity\ElementConstitutif;
 use App\Entity\FicheMatiere;
@@ -771,6 +772,35 @@ class DuplicateForNewAnneeCommand extends Command
                 }
             }
 
+            $io->progressAdvance(1);
+        }
+
+        $io->progressFinish();
+        $this->saveAndCleanUp($io);
+
+        /**
+         * 
+         * ADRESSES & CONTACTS
+         * 
+         */
+        $this->entitiesArray = $this->entityManager->getRepository(Contact::class)
+            ->findFromAnneeUniversitaire($anneeSource);
+        $io->writeln("Copie des 'Adresses' et des 'Contacts'...");
+        $io->progressStart(count($this->entitiesArray));
+        foreach($this->entitiesArray as $contact) {
+            $initialContact = $this->entityManager->getRepository(Contact::class)
+                ->findOneById($contact);
+            $linkContactParcours = $this->entityManager->getRepository(Parcours::class)
+                ->findOneBy(['parcoursOrigineCopie' => $initialContact->getParcours()]);
+
+            $cloneContact = clone $initialContact;
+            $cloneAdresse = clone $initialContact->getAdresse();
+            $cloneAdresse->setAdresseOrigineCopie($initialContact->getAdresse());
+            $cloneContact->setParcours($linkContactParcours);
+            $cloneContact->setAdresse($cloneAdresse);
+
+            $this->entityManager->persist($cloneAdresse);
+            $this->entityManager->persist($cloneContact);
             $io->progressAdvance(1);
         }
 
