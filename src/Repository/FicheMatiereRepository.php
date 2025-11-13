@@ -489,6 +489,12 @@ class FicheMatiereRepository extends ServiceEntityRepository
             ->select('fCopy.id')
             ->join('f.ficheMatiereOrigineCopie', 'fCopy');
 
+        $subQueryFicheHorsDiplomeSansParcours = $this->createQueryBuilder('ficheHD')
+            ->select('ficheHD.id')
+            ->join('ficheHD.campagneCollecte', 'camp')
+            ->andWhere('ficheHD.horsDiplome = 1')
+            ->andWhere('camp.id = :idCampagne');
+
         return $qb
             ->select('DISTINCT ficheMatiere.id')
             ->andWhere(
@@ -498,6 +504,9 @@ class FicheMatiereRepository extends ServiceEntityRepository
                     ),
                     $qb->expr()->in(
                         'ficheMatiere.id', $subQueryFicheHorsDiplomeAnnee->getDQL()
+                    ),
+                    $qb->expr()->in(
+                        'ficheMatiere.id', $subQueryFicheHorsDiplomeSansParcours->getDQL()
                     )
                 )
             )
