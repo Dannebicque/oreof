@@ -128,7 +128,7 @@ class UeRepository extends ServiceEntityRepository
 
     public function findFromAnneeUniversitaire(int $idCampagneCollecte) : array {
         return $this->createQueryBuilder('ue')
-            ->select('ue.id')
+            ->select('DISTINCT ue.id')
             ->join('ue.semestre', 'semestre')
             ->join('semestre.semestreParcours', 'semP')
             ->join('semP.parcours', 'parcours')
