@@ -445,7 +445,7 @@ class DuplicateForNewAnneeCommand extends Command
             $cloneFicheMatiere = clone $initialFicheMatiere;
             $cloneFicheMatiere->prepareCloneForNewAnnee();
             // fiche_matiere
-            $cloneFicheMatiere->setSlug($initialFicheMatiere->getSlug() . self::SLUG_YEAR_SUFFIX);
+            $cloneFicheMatiere->setSlug($this->getNewSlugForFicheMatiere($initialFicheMatiere->getSlug()));
             if($initialFicheMatiere->getParcours() !== null){
                 $linkFicheMParcours = $this->entityManager->getRepository(Parcours::class)
                     ->findOneBy(['parcoursOrigineCopie' => $initialFicheMatiere->getParcours()]);
@@ -887,5 +887,13 @@ class DuplicateForNewAnneeCommand extends Command
         $this->emptyEntitiesArray();
         $io->writeln("Enregistrement en base de données...");
         $this->entityManager->flush();
+    }
+
+    private function getNewSlugForFicheMatiere(string $initialSlug) : string {
+        if(preg_match('/(.*)-2025$/', $initialSlug, $matches)) {
+            return $matches[1] . self::SLUG_YEAR_SUFFIX;
+        }
+
+        return $initialSlug . self::SLUG_YEAR_SUFFIX;
     }
 }
