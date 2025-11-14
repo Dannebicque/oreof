@@ -15,6 +15,7 @@ use App\Entity\ElementConstitutif;
 use App\Entity\FicheMatiere;
 use App\Entity\FicheMatiereMutualisable;
 use App\Entity\Formation;
+use App\Entity\Mccc;
 use App\Entity\Parcours;
 use App\Entity\Semestre;
 use App\Entity\SemestreMutualisable;
@@ -801,6 +802,39 @@ class DuplicateForNewAnneeCommand extends Command
 
             $this->entityManager->persist($cloneAdresse);
             $this->entityManager->persist($cloneContact);
+            $io->progressAdvance(1);
+        }
+
+        $io->progressFinish();
+        $this->saveAndCleanUp($io);
+
+        /**
+         * 
+         * MCCC
+         * 
+         */
+        $this->entitiesArray = $this->entityManager->getRepository(Mccc::class) 
+            ->findFromAnneeUniversitaire($anneeSource);
+        $io->writeln("Copie des 'MCCC'...");
+        $io->progressStart(count($this->entitiesArray));
+        foreach($this->entitiesArray as $mccc) {
+            $initialMccc = $this->entityManager->getRepository(Mccc::class)
+                ->findOneById($mccc);
+            $cloneMccc = clone $initialMccc;
+            $cloneMccc->setEc(null);
+            $cloneMccc->setFicheMatiere(null);
+            if($initialMccc->getFicheMatiere() !== null) {
+                $linkMcccFicheMatiere = $this->entityManager->getRepository(FicheMatiere::class)
+                    ->findOneBy(['ficheMatiereOrigineCopie' => $initialMccc->getFicheMatiere()]);
+                $cloneMccc->setFicheMatiere($linkMcccFicheMatiere);
+            }
+            if($initialMccc->getEc() !== null) {
+                $linkMcccElementConstitutif = $this->entityManager->getRepository(ElementConstitutif::class)
+                    ->findOneBy(['ecOrigineCopie' => $initialMccc->getEc()]);
+                $cloneMccc->setEc($linkMcccElementConstitutif);
+            }
+
+            $this->entityManager->persist($cloneMccc);
             $io->progressAdvance(1);
         }
 
