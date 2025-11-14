@@ -47,6 +47,9 @@ class Annee
     #[ORM\Column()]
     private int $capaciteAccueil = 0;
 
+    #[ORM\Column]
+    private ?bool $hasCapacite = true;
+
     public function __construct()
     {
         $this->parcoursSemestre = new ArrayCollection();
@@ -189,6 +192,18 @@ class Annee
     public function setCapaciteAccueil(int $capaciteAccueil = 0): static
     {
         $this->capaciteAccueil = $capaciteAccueil;
+
+        return $this;
+    }
+
+    public function hasCapacite(): ?bool
+    {
+        return $this->hasCapacite;
+    }
+
+    public function setHasCapacite(bool $hasCapacite): static
+    {
+        $this->hasCapacite = $hasCapacite;
 
         return $this;
     }

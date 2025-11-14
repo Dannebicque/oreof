@@ -6,7 +6,7 @@
     <th></th>
     <th></th>
     <th>Dispensée ?</th>
-    <th>Capacités ?</th>
+    <th>Sans <br>Capacités ?</th>
     <th>Capacité <br>N-1</th>
     <th>Capacité <br>{{ user_data.campagneCollecte.libelle }}</th>
     <th></th>
@@ -31,8 +31,12 @@
         </td>
 
         <td>
-            <label for="capacite_{{ annee.id }}" class="sr-only">Capacités à définir ?</label>
-            <input type="checkbox" id="capacite_{{ annee.id }}" name="capacite_{{ annee.id }}" value=""
+            <label for="has_capacite_{{ annee.id }}" class="sr-only">Année sans capacités à définir ?</label>
+            <input type="checkbox" id="has_capacite_{{ annee.id }}" name="has_capacite_{{ annee.id }}" value="false"
+                    {{ stimulus_action('offre', 'changeHasCapacite', 'change', {
+                        id:annee.id
+                    }) }}
+                    {% if annee.hasCapacite == false %}checked{% endif %}
                    {% if disabled %}disabled{% endif %}
             >
         </td>
@@ -42,7 +46,11 @@
         <td>
             <label for="capacite_{{ annee.id }}" class="sr-only">Capacité accueil pour l'année N+1</label>
             <input type="text" class="form-control" id="capacite_{{ annee.id }}" value="{{ annee.capaciteAccueil }}"
-                   {% if disabled %}disabled{% endif %}
+                    {{ stimulus_action('offre', 'changeCapacite', 'change', {
+                        id:annee.id
+                    }) }}
+                    {% if disabled or annee.hasCapacite == false %}disabled{% endif %}
+                   value="{{ annee.capaciteAccueil }}"
             >
         </td>
         <td></td>
