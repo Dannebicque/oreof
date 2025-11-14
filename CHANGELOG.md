@@ -2,6 +2,29 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.46.0](https://github.com/Dannebicque/oreof/compare/v1.45.0...v1.46.0) (2025-11-14)
+
+
+### Features
+
+* **dependencies:** Add DebugBundle for development and update configuration for UX packages ([fac45ef](https://github.com/Dannebicque/oreof/commit/fac45efe88f878cefe40cef8ed46f28acbce9050))
+* **docker:** Add Apache configuration and Docker Compose setup for w… ([120d765](https://github.com/Dannebicque/oreof/commit/120d7655e26d1177ffdad568b935598a9a9662ee))
+* **docker:** Add Apache configuration and Docker Compose setup for web and database services ([57078d2](https://github.com/Dannebicque/oreof/commit/57078d26d51f59c96c265bc219af3834e59b545e))
+* **notification:** Add user notification preferences and update workflow transition handling ([13b09e4](https://github.com/Dannebicque/oreof/commit/13b09e4c297fa5a57d4f4abb2e23ae86c1530c01))
+* **offre de formation:** gestion des capacités / années ([bd35094](https://github.com/Dannebicque/oreof/commit/bd35094a9cce340ffbff3fd76887c2eb7fca28fc))
+
+
+### Bug Fixes
+
+* **date:** Correct variable usage for historique retrieval in GetDateConseilComposante ([dc5a11a](https://github.com/Dannebicque/oreof/commit/dc5a11a61366d4921593b2be81e690310e92f3da))
+* **date:** Correct variable usage for historique retrieval in GetDateConseilComposante ([be63573](https://github.com/Dannebicque/oreof/commit/be6357325fdc502eae86cac2bfefae2c16f8a421))
+* **export:** Remove unnecessary blank line and improve stage condition check in LheoXML ([d3c7390](https://github.com/Dannebicque/oreof/commit/d3c73908f5d21d161ff86a01e25e7dd493240a23))
+* **export:** Simplify retrieval of validation state in ExportCfvu ([97ff7da](https://github.com/Dannebicque/oreof/commit/97ff7dab51c632a6a5f757a91a7b3f37ae46199f))
+* **pdf:** Refactor date retrieval logic in McccPdfCommand and ParcoursMcccExportController ([13116e0](https://github.com/Dannebicque/oreof/commit/13116e07e2df99321237ff6a60837cd3377d1008))
+* **pdf:** Update default campaign retrieval in McccPdfCommand to use the correct year ([bb92350](https://github.com/Dannebicque/oreof/commit/bb92350399ce56b81aa22628e45d7cf09f3fe356))
+* **quitus:** quitus par défaut false ([0bcac35](https://github.com/Dannebicque/oreof/commit/0bcac358f3bc88d6f264fabb0c088f69ae5571b2))
+* **quitus:** quitus par défaut false ([aa3b613](https://github.com/Dannebicque/oreof/commit/aa3b613e53f1e559871ccfcf123cf8bd25a01117))
+
 ## [1.45.0](https://github.com/Dannebicque/oreof/compare/v1.44.1...v1.45.0) (2025-11-03)
 
 
