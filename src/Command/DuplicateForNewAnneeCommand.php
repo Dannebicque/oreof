@@ -283,7 +283,7 @@ class DuplicateForNewAnneeCommand extends Command
             $cloneDpeParcours->setParcours($linkParcoursDpe);
             $cloneDpeParcours->setFormation($linkFormationDpe);
             $cloneDpeParcours->setCampagneCollecte($newCampagneCollecte);
-            $cloneDpeParcours->setEtatValidation(['soumis_central' => 1]);
+            $cloneDpeParcours->setEtatValidation(['tacite_reconduction' => 1]);
             $cloneDpeParcours->setCreated($nowDate);
 
             $this->entityManager->persist($cloneDpeParcours);
