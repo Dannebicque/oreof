@@ -91,8 +91,24 @@
                         {{ include('offre/_select_offre.html.twig', {id: 'parcours_'~formation.dpeParcours[0].id, valeur: formation.dpeParcours[0].etatReconduction.value}) }}
                     {% endif %}
                 </td>
-                <td></td>
-                <td></td>
+                {% set parc = formation.dpeParcours[0].parcours %}
+                <td>
+                    {{ parc.parcoursOrigineCopie != null ? parc.parcoursOrigineCopie.capaciteAccueil : 'N.C.' }} places
+                </td>
+                <td>
+                    {% if formation.formation.hasParcours == false %}
+                        <label for="capacite_{{ parc.id }}" class="sr-only">Capacité accueil pour le parcours</label>
+                        <input type="text" class="form-control" id="capacite_{{ parc.id }}"
+                               value="{{ parc.capaciteAccueil }}"
+                                {{ stimulus_action('offre', 'changeCapaciteParcours', 'change', {
+                                    id:parc.id
+                                }) }}
+                               value="{{ parc.capaciteAccueil }}"
+                        >
+                    {% else %}
+                        {# ici c'est une formation avec des parcours #}
+                    {% endif %}
+                </td>
                 <td>
                     <a
                             class="btn btn-info btn-sm"
@@ -100,6 +116,16 @@
                             href="{{ path('app_formation_show', { 'slug': formation.formation.slug }) }}">
                         <i class="{{ iconShow }}"></i>
                     </a>
+                    {% if formation.formation.hasParcours == false %}
+                        <button
+                                {{ stimulus_action('offre', 'ouvreAnnee', 'click', {
+                                    parcours: formation.formation.dpeParcours[0].id
+                                }) }}
+                                class="btn btn-success btn-sm"
+                        >
+                            <i class="fas fa-chevron-circle-down"></i>
+                        </button>
+                    {% endif %}
                 </td>
             </tr>
             {% if formation.formation.hasParcours == true %}
@@ -116,13 +142,34 @@
                         <td>
                             {{ include('offre/_select_offre.html.twig', {id: 'parcours_'~parcours.id, valeur: parcours.etatReconduction.value}) }}
                         </td>
-                        <td></td>
-                        <td></td>
+                        <td>
+                            {{ parcours.parcours.parcoursOrigineCopie != null ? parcours.parcours.parcoursOrigineCopie.capaciteAccueil : 'N.C.' }}
+                            places
+                        </td>
+                        <td>
+                            <label for="capacite_{{ parcours.parcours.id }}" class="sr-only">Capacité accueil pour le
+                                parcours</label>
+                            <input type="text" class="form-control" id="capacite_{{ parcours.parcours.id }}"
+                                   value="{{ parcours.parcours.capaciteAccueil }}"
+                                    {{ stimulus_action('offre', 'changeCapaciteParcours', 'change', {
+                                        id:parcours.parcours.id
+                                    }) }}
+                                   value="{{ parcours.parcours.capaciteAccueil }}"
+                            >
+                        </td>
                         <td>
                             <a class="btn btn-info btn-sm" target="_blank"
                                href="{{ path('app_parcours_show', { 'id': parcours.parcours.id }) }}">
                                 <i class="{{ iconShow }}"></i>
                             </a>
+                            <button
+                                    {{ stimulus_action('offre', 'ouvreAnnee', 'click', {
+                                        parcours: parcours.id
+                                    }) }}
+                                    class="btn btn-success btn-sm"
+                            >
+                                <i class="fas fa-chevron-circle-down"></i>
+                            </button>
                         </td>
                     </tr>
 

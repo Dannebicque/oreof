@@ -109,6 +109,20 @@ export default class extends Controller {
 
   }
 
+  async changeCapaciteParcours (event) {
+    const body = {
+      method: 'POST',
+      body: JSON.stringify({
+        id: event.params.id,
+        value: event.target.value,
+        action: 'changeCapaciteParcours'
+      }),
+    }
+
+    await fetch(this.urlValue, body).then((response) => JsonResponse(response))
+
+  }
+
   async changeOuvertureAnnee (event) {
     const body = {
       method: 'POST',
@@ -134,7 +148,6 @@ export default class extends Controller {
         }
       })
     }
-
   }
 
   async changeHasCapacite (event) {
@@ -164,6 +177,19 @@ export default class extends Controller {
         }
       }
     }
+  }
+
+  ouvreAnnee (event) {
+    const idParcours = event.params.parcours
+    const trs = document.querySelectorAll(`tr.parc_${idParcours}`)
+    trs.forEach(tr => {
+      //si la classe d-none présente, retirer, sinon ajouter
+      if (tr.classList.contains('d-none')) {
+        tr.classList.remove('d-none')
+      } else {
+        tr.classList.add('d-none')
+      }
+    })
   }
 
 }

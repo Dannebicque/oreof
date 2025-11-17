@@ -1,6 +1,5 @@
 {% set disabled = valeur == 'NON_OUVERTURE_CFVU' or valeur == 'FERMETURE_DEFINITIVE' %}
-
-<tr>
+<tr class="parc_{{ parcours.id }} d-none">
     <td></td>
     <th>Année</th>
     <th></th>
@@ -14,6 +13,7 @@
 {% for annee in annees %}
     <tr data-parcours-id="{{ parcours.id }}"
         data-formation-id="{{ formation.formation.id }}"
+        class="parc_{{ parcours.id }} d-none"
     >
         <td style="width: 20px"></td>
         <td style="border-left: 2px solid red">Année {{ annee.ordre }}</td>
@@ -56,7 +56,7 @@
         <td></td>
     </tr>
 {% else %}
-    <tr>
+    <tr class="parc_{{ parcours.id }} d-none">
         <td></td>
         <td colspan="9" class="bg-danger">Erreur années / parcours</td>
     </tr>

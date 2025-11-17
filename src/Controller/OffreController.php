@@ -132,6 +132,7 @@ final class OffreController extends BaseController
 
     #[Route('/offre/update', name: 'app_offre_update')]
     public function update(
+        ParcoursRepository $parcoursRepository,
         AnneeRepository        $anneeRepository,
         EntityManagerInterface $entityManager,
         DpeParcoursRepository  $dpeParcoursRepository,
@@ -177,6 +178,15 @@ final class OffreController extends BaseController
                 }
 
                 $annee->setCapaciteAccueil((int)$data['value']);
+                $entityManager->flush();
+                break;
+            case 'changeCapaciteParcours':
+                $parcours = $parcoursRepository->find($data['id']);
+                if ($parcours === null) {
+                    return JsonReponse::error('Pas de parcours trouvée');
+                }
+
+                $parcours->setCapaciteAccueil((int)$data['value']);
                 $entityManager->flush();
                 break;
             case 'changeOuvertureAnnee':
