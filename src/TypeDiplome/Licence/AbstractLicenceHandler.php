@@ -530,8 +530,8 @@ abstract class AbstractLicenceHandler implements TypeDiplomeHandlerInterface, Ty
 
     public function checkIfMcccValide(ElementConstitutif|FicheMatiere $owner): bool
     {
-        //$mcccs = $owner->getMcccs();
-        $mcccs = $this->getMcccs($owner);
+        $mcccs = $owner->getMcccs();
+        // $mcccs = $this->getMcccs($owner);
         
         if (count($mcccs) === 0) {
             return false;
