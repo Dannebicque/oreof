@@ -107,3 +107,7 @@ services:
         - '@App\I18n\KeyModeTranslator.inner'
         - '@App\I18n\KeyModeContext'
       public: false
+
+    App\EventSubscriber\CreateUserSubscriber:
+      tags:
+        - { name: doctrine.event_subscriber }

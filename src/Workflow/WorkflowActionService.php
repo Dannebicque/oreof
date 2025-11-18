@@ -17,6 +17,7 @@ use App\Workflow\RecipientResolver;
 
 class WorkflowActionService
 {
+    //todo: est-ce utilisé ??
     public function __construct(
         private Registry            $workflows,
         private StepHandlerRegistry $handlers,
@@ -106,7 +107,7 @@ class WorkflowActionService
                 $notifyMeta
             );
         }
-        $recipients = $this->recipients->resolveRecipients($subject, $notifyMeta);
+        $recipients = $this->recipients->resolveRecipients($workflowName, $transitionName, $notifyMeta);
         $this->notifier->notify($recipients, $eventKey, $context);
     }
 

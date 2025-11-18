@@ -95,6 +95,34 @@ export default class extends Controller {
     }
   }
 
+  async changeCapacite (event) {
+    const body = {
+      method: 'POST',
+      body: JSON.stringify({
+        id: event.params.id,
+        value: event.target.value,
+        action: 'changeCapacite'
+      }),
+    }
+
+    await fetch(this.urlValue, body).then((response) => JsonResponse(response))
+
+  }
+
+  async changeCapaciteParcours (event) {
+    const body = {
+      method: 'POST',
+      body: JSON.stringify({
+        id: event.params.id,
+        value: event.target.value,
+        action: 'changeCapaciteParcours'
+      }),
+    }
+
+    await fetch(this.urlValue, body).then((response) => JsonResponse(response))
+
+  }
+
   async changeOuvertureAnnee (event) {
     const body = {
       method: 'POST',
@@ -120,7 +148,48 @@ export default class extends Controller {
         }
       })
     }
+  }
 
+  async changeHasCapacite (event) {
+    const body = {
+      method: 'POST',
+      body: JSON.stringify({
+        id: event.params.id,
+        action: 'changeHasCapacite'
+      }),
+    }
+
+    await fetch(this.urlValue, body).then((response) => JsonResponse(response))
+
+    const tr = event.target.closest('tr')
+    if (tr) {
+      const open = event.target.checked
+      const name = event.target.name
+      const capaciteFieldName = name.replace('has_', '')
+      const capaciteField = tr.querySelector(`[id="${capaciteFieldName}"]`)
+
+      if (capaciteField) {
+        capaciteField.disabled = open
+        if (open) {
+          capaciteField.setAttribute('aria-disabled', 'true')
+        } else {
+          capaciteField.removeAttribute('aria-disabled')
+        }
+      }
+    }
+  }
+
+  ouvreAnnee (event) {
+    const idParcours = event.params.parcours
+    const trs = document.querySelectorAll(`tr.parc_${idParcours}`)
+    trs.forEach(tr => {
+      //si la classe d-none présente, retirer, sinon ajouter
+      if (tr.classList.contains('d-none')) {
+        tr.classList.remove('d-none')
+      } else {
+        tr.classList.add('d-none')
+      }
+    })
   }
 
 }

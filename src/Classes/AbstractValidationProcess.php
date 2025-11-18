@@ -13,6 +13,7 @@ abstract class AbstractValidationProcess
 {
     protected array $process = [];
     protected array $processAll = [];
+    protected array $transitionsAll = [];
 
     public function getProcess(): array
     {
@@ -49,5 +50,10 @@ abstract class AbstractValidationProcess
         }
 
         return [];
+    }
+
+    public function getTransitionsAll(): array
+    {
+        return $this->transitionsAll;
     }
 }

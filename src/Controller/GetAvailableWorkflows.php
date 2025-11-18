@@ -29,14 +29,14 @@ class GetAvailableWorkflows
      */
     public function availableWorkflows(): array
     {
-        $process = array_keys($this->validationProcess->getProcessAll());
-        $processRf = array_keys($this->validationProcessChangeRf->getProcess());
-        $processFiches = array_keys($this->validationProcessFicheMatiere->getProcess());
+        $process = array_keys($this->validationProcess->getTransitionsAll());
+        $processRf = array_keys($this->validationProcessChangeRf->getTransitionsAll());
+        $processFiches = array_keys($this->validationProcessFicheMatiere->getTransitionsAll());
 
         return [
             'dpe' => array_combine(
-                array_map(fn($v) => 'dpe_' . $v, $process),
-                array_map(fn($v) => 'dpe_' . $v, $process)
+                array_map(fn($v) => 'dpeParcours_' . $v, $process),
+                array_map(fn($v) => 'dpeParcours_' . $v, $process)
             ),
             'rf' => array_combine(
                 array_map(fn($v) => 'rf_' . $v, $processRf),

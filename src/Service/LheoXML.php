@@ -264,7 +264,7 @@ HTML;
         $situationsPros = "Non concerné";
         $terMemoire = "Non concerné";
         $calendrierUniversitaire = $etablissementInformation->getCalendrierUniversitaire() ?? "";
-        if ($parcours->isHasStage()) {
+        if ($parcours->isHasStage() && $parcours->isAlternance() === false) {
             $stage = $parcours->getStageText();
         }
         if ($parcours->isHasProjet()) {

@@ -10,6 +10,7 @@ use App\Repository\DpeParcoursRepository;
 use App\Repository\FormationRepository;
 use App\Repository\ParcoursRepository;
 use App\Utils\JsonRequest;
+use App\Utils\Tools;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -131,6 +132,7 @@ final class OffreController extends BaseController
 
     #[Route('/offre/update', name: 'app_offre_update')]
     public function update(
+        ParcoursRepository $parcoursRepository,
         AnneeRepository        $anneeRepository,
         EntityManagerInterface $entityManager,
         DpeParcoursRepository  $dpeParcoursRepository,
@@ -169,7 +171,24 @@ final class OffreController extends BaseController
                     return JsonReponse::error('Action inconnue');
                 }
                 break;
+            case 'changeCapacite':
+                $annee = $anneeRepository->find($data['id']);
+                if ($annee === null) {
+                    return JsonReponse::error('Pas d\'année trouvée');
+                }
 
+                $annee->setCapaciteAccueil((int)$data['value']);
+                $entityManager->flush();
+                break;
+            case 'changeCapaciteParcours':
+                $parcours = $parcoursRepository->find($data['id']);
+                if ($parcours === null) {
+                    return JsonReponse::error('Pas de parcours trouvée');
+                }
+
+                $parcours->setCapaciteAccueil((int)$data['value']);
+                $entityManager->flush();
+                break;
             case 'changeOuvertureAnnee':
                 $annee = $anneeRepository->find($data['id']);
                 if ($annee === null) {
@@ -180,6 +199,14 @@ final class OffreController extends BaseController
                 $annee->setIsOuvert(!$annee->isOuvert());
                 $entityManager->flush();
                 break;
+            case 'changeHasCapacite':
+                $annee = $anneeRepository->find($data['id']);
+                if ($annee === null) {
+                    return JsonReponse::error('Pas d\'année trouvée');
+                }
+
+                $annee->setHasCapacite(!$annee->hasCapacite());
+                $entityManager->flush();
         }
 
         return JsonReponse::success('Mise à jour effectuée');

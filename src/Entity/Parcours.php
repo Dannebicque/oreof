@@ -295,6 +295,9 @@ class Parcours
     #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: Annee::class)]
     private Collection $annees;
 
+    #[ORM\Column]
+    private ?int $capaciteAccueil = 0;
+
     public function __construct(?Formation $formation)
     {
         $this->formation = $formation;
@@ -1727,6 +1730,18 @@ class Parcours
                 $annee->setParcours(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCapaciteAccueil(): ?int
+    {
+        return $this->capaciteAccueil ?? 0;
+    }
+
+    public function setCapaciteAccueil(int $capaciteAccueil): static
+    {
+        $this->capaciteAccueil = $capaciteAccueil;
 
         return $this;
     }
