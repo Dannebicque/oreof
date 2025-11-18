@@ -107,7 +107,7 @@
                     <li>
                         <a href="{{ path('app_homepage') }}">
                             <i class="fal fa-home icon"></i>
-                            <span class="label">Tableau de bord</span>
+                            <span class="label">{{ 'menu.tableau_de_bord'|trans({}, 'menu') }}</span>
                         </a>
                     </li>
 
@@ -115,32 +115,34 @@
                     <li>
                         <a href="#offre_formation" data-href="offre_formation">
                             <i class="fal fa-chalkboard-user icon"></i>
-                            <span class="label">Offre de formation</span>
+                            <span class="label">{{ 'menu.offre_formation'|trans({}, 'menu') }}</span>
                         </a>
                         <ul id="offre_formation">
                             <li>
                                 <a href="{{ path('app_formation_index') }}">
-                                    <span class="label">Détail des mentions/spécialités</span>
+                                    <span class="label">{{ 'menu.detail_mentions'|trans({}, 'menu') }}</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="{{ path('structure_fiche_matiere_index') }}">
-                                    <span class="label">Détail des fiches EC/matière</span>
+                                    <span class="label">
+                                        {{ 'menu.detail_fiches'|trans({}, 'menu') }}
+                                        </span>
                                 </a>
                             </li>
                             <li>
                                 <a href="{{ path('structure_fiche_matiere_index', {type:'hd'}) }}">
-                                    <span class="label">Détails fiches EC/matières "hors diplômes"</span>
+                                    <span class="label">{{ 'menu.detail_fiches_hd'|trans({}, 'menu') }}</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="{{ path('app_mutualise_index') }}">
-                                    <span class="label">Détail des éléments mutualisés</span>
+                                    <span class="label">{{ 'menu.detail_elts_mutualises'|trans({}, 'menu') }}</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="{{ path('app_export_index') }}">
-                                    <span class="label">Exports</span>
+                                    <span class="label">{{ 'menu.exports'|trans({}, 'menu') }}</span>
                                 </a>
                             </li>
                         </ul>
@@ -151,23 +153,23 @@
                             <a href="#pilotage_admin">
                                 <i class="fal fa-school icon"></i>
                                 <span class="label">
-                                    Pilotage
+                                    {{ 'menu.admin.pilotage'|trans({}, 'menu') }}
                                 </span>
                             </a>
                             <ul id="pilotage_admin">
                                 <li>
                                     <a href="{{ path('structure_composante_index') }}">
-                                        <span class="label">Consulter l'offre de formation</span>
+                                        <span class="label">{{ 'menu.admin.consulter_offre'|trans({}, 'menu') }}</span>
                                     </a>
                                 </li>
                                 <li>
                                     <a href="{{ path('app_offre') }}">
-                                        <span class="label">Gestion de l'offre N+1</span>
+                                        <span class="label">{{ 'menu.admin.gestion_offre'|trans({}, 'menu') }}</span>
                                     </a>
                                 </li>
                                 <li>
                                     <a href="{{ path('app_demande_dpe') }}">
-                                        <span class="label">DPE ouverts</span>
+                                        <span class="label">{{ 'menu.admin.dpe_ouverts'|trans({}, 'menu') }}</span>
                                     </a>
                                 </li>
                                 {#                                <li> #}
@@ -177,22 +179,22 @@
                                 {#                                </li> #}
                                 <li>
                                     <a href="{{ path('app_validation_dpe_index') }}">
-                                        <span class="label">Validation DPE</span>
+                                        <span class="label">{{ 'menu.admin.validation_dpe'|trans({}, 'menu') }}</span>
                                     </a>
                                 </li>
                                 <li>
                                     <a href="{{ path('app_validation_fiche_index') }}">
-                                        <span class="label">Validation Fiches EC/matières</span>
+                                        <span class="label">{{ 'menu.admin.validation_fiches_ec'|trans({}, 'menu') }}</span>
                                     </a>
                                 </li>
                                 <li>
                                     <a href="{{ path('app_validation_change_rf_index') }}">
-                                        <span class="label">Validation RF/co-RF</span>
+                                        <span class="label">{{ 'menu.admin.validation_rf'|trans({}, 'menu') }}</span>
                                     </a>
                                 </li>
                                 <li>
                                     <a href="{{ path('app_export_index') }}">
-                                        <span class="label">Export</span>
+                                        <span class="label">{{ 'menu.admin.exports'|trans({}, 'menu') }}</span>
                                     </a>
                                 </li>
                             </ul>
@@ -203,7 +205,7 @@
                                 <a href="#pilotage" data-href="pilotage">
                                     <i class="fal fa-school icon"></i>
                                     <span class="label">
-                                    Pilotage
+                                    {{ 'menu.compo.pilotage'|trans({}, 'menu') }}
                                 </span>
                                 </a>
                                 <ul id="pilotage">
@@ -216,37 +218,37 @@
                                                 <ul id="composante_{{ composante.id }}">
                                                     <li>
                                                         <a href="{{ path('structure_composante_index') }}">
-                                                            <span class="label">Consulter l'offre de formation</span>
+                                                            <span class="label">{{ 'menu.compo.consulter_offre'|trans({}, 'menu') }}</span>
                                                         </a>
                                                     </li>
                                                     <li>
                                                         <a href="{{ path('app_demande_dpe_composante', {composante:composante.id}) }}">
-                                                            <span class="label">DPE ouverts</span>
+                                                            <span class="label">{{ 'menu.compo.dpe_ouvert'|trans({}, 'menu') }}</span>
                                                         </a>
                                                     </li>
                                                     <li>
                                                         <a href="{{ path('app_validation_composante_dpe_index', {composante:composante.id}) }}">
-                                                            <span class="label">Validation DPE</span>
+                                                            <span class="label">{{ 'menu.compo.validation_dpe'|trans({}, 'menu') }}</span>
                                                         </a>
                                                     </li>
                                                     <li>
                                                         <a href="{{ path('app_validation_composante_fiche_index', {composante:composante.id}) }}">
-                                                            <span class="label">Validation Fiches EC/matières</span>
+                                                            <span class="label">{{ 'menu.compo.validation_ec'|trans({}, 'menu') }}</span>
                                                         </a>
                                                     </li>
                                                     <li>
                                                         <a href="{{ path('app_validation_composante_change_rf_index', {composante:composante.id}) }}">
-                                                            <span class="label">Validation RF/co-RF</span>
+                                                            <span class="label">{{ 'menu.compo.validatio,_rf'|trans({}, 'menu') }}</span>
                                                         </a>
                                                     </li>
                                                     <li>
                                                         <a href="{{ path('app_export_composante_index', {composante:composante.id}) }}">
-                                                            <span class="label">Export</span>
+                                                            <span class="label">{{ 'menu.compo.exports'|trans({}, 'menu') }}</span>
                                                         </a>
                                                     </li>
                                                     <li>
                                                         <a href="{{ path('app_plaquette', {composante:composante.id}) }}">
-                                                            <span class="label">Communication</span>
+                                                            <span class="label">{{ 'menu.compo.communication'|trans({}, 'menu') }}</span>
                                                         </a>
                                                     </li>
                                                 </ul>
@@ -262,17 +264,17 @@
                         <li>
                             <a href="#conseils" data-href="conseils">
                                 <i class="fal fa-chalkboard-user icon"></i>
-                                <span class="label">Conseils</span>
+                                <span class="label">{{ 'menu.menu_conseils'|trans({}, 'menu') }}</span>
                             </a>
                             <ul id="conseils">
                                 <li>
                                     <a href="{{ path('app_formation_responsable_liste') }}">
-                                        <span class="label">Changement RF/co RF</span>
+                                        <span class="label">{{ 'menu.conseils.chgt_rf'|trans({}, 'menu') }}</span>
                                     </a>
                                 </li>
                                 <li>
                                     <a href="{{ path('app_synthese_modification_export_pdf') }}">
-                                        <span class="label">Synthèse des modifications</span>
+                                        <span class="label">{{ 'menu.conseils.synthses_modifs'|trans({}, 'menu') }}</span>
                                     </a>
                                 </li>
                             </ul>
@@ -283,28 +285,28 @@
                         <li>
                             <a href="#droits" data-href="droits">
                                 <i class="fal fa-chalkboard-user icon"></i>
-                                <span class="label">Utilisateurs et droits</span>
+                                <span class="label">{{ 'menu.menu_droits'|trans({}, 'menu') }}</span>
                             </a>
                             <ul id="droits">
                                 <li>
                                     <a href="{{ path('app_user_profil_attente') }}">
-                                        <span class="label">Utilisateurs en attente</span>
+                                        <span class="label">{{ 'menu.droits.en_attente'|trans({}, 'menu') }}</span>
                                     </a>
                                 </li>
                                 <li>
                                     <a href="{{ path('app_user_profil_index') }}">
-                                        <span class="label">Utilisateurs : Affectation des profils</span>
+                                        <span class="label">{{ 'menu.droits.affectation_profils'|trans({}, 'menu') }} </span>
                                     </a>
                                 </li>
                                 {% if is_granted('ROLE_ADMIN') %}
                                     <li>
                                         <a href="{{ path('app_user_repertoire') }}">
-                                            <span class="label">Répertoire des contacts</span>
+                                            <span class="label">{{ 'menu.droits.repertoire'|trans({}, 'menu') }}</span>
                                         </a>
                                     </li>
                                     <li>
                                         <a href="{{ path('app_administration_profils_index') }}">
-                                            <span class="label">Gestion des profils</span>
+                                            <span class="label">{{ 'menu.droits.profils'|trans({}, 'menu') }}</span>
                                         </a>
                                     </li>
                                 {% endif %}
@@ -316,27 +318,27 @@
                         <li class="mega">
                             <a href="#administration" data-href="administration">
                                 <i class="fal fa-wrench icon"></i>
-                                <span class="label">Administration</span>
+                                <span class="label">{{ 'menu.menu_administration'|trans({}, 'menu') }}</span>
                             </a>
                             <ul id="administration">
                                 <li>
                                     <a href="#structure">
-                                        <span class="label">Configuration établissement</span>
+                                        <span class="label">{{ 'menu.config.menu_etablissement'|trans({}, 'menu') }}</span>
                                     </a>
                                     <ul id="structure">
                                         <li>
                                             <a href="{{ path('app_etablissement_index') }}">
-                                                <span class="label">Etablissement</span>
+                                                <span class="label">{{ 'menu.config.etablissement'|trans({}, 'menu') }}</span>
                                             </a>
                                         </li>
                                         <li>
                                             <a href="{{ path('app_composante_index') }}">
-                                                <span class="label">Composantes</span>
+                                                <span class="label">{{ 'menu.config.composante'|trans({}, 'menu') }}</span>
                                             </a>
                                         </li>
                                         <li>
                                             <a href="{{ path('app_ville_index') }}">
-                                                <span class="label">Villes</span>
+                                                <span class="label">{{ 'menu.config.ville'|trans({}, 'menu') }}</span>
                                             </a>
                                         </li>
                                     </ul>
@@ -344,54 +346,54 @@
 
                                 <li>
                                     <a href="#struct_formation">
-                                        <span class="label">Configuration Offre de formation</span>
+                                        <span class="label">{{ 'menu.config.offre_formation'|trans({}, 'menu') }}</span>
                                     </a>
                                     <ul id="struct_formation">
                                         <li>
                                             <a href="{{ path('app_mention_index') }}">
-                                                <span class="label">Mentions</span>
+                                                <span class="label">{{ 'menu.config.mentions'|trans({}, 'menu') }}</span>
                                             </a>
                                         </li>
                                         <li>
                                             <a href="{{ path('app_domaine_index') }}">
-                                                <span class="label">Domaines</span>
+                                                <span class="label">{{ 'menu.config.domaines'|trans({}, 'menu') }}</span>
                                             </a>
                                         </li>
                                         <li>
                                             <a href="{{ path('app_type_diplome_index') }}">
-                                                <span class="label">Type de diplôme</span>
+                                                <span class="label">{{ 'menu.config.type_diplome'|trans({}, 'menu') }}</span>
                                             </a>
                                         </li>
                                         <li>
                                             <a href="{{ path('app_type_ue_index') }}">
-                                                <span class="label">Type d'UE</span>
+                                                <span class="label">{{ 'menu.config.type_ue'|trans({}, 'menu') }}</span>
                                             </a>
                                         </li>
                                         <li>
                                             <a href="{{ path('app_type_ec_index') }}">
-                                                <span class="label">Type d'EC</span>
+                                                <span class="label">{{ 'menu.config.type_ec'|trans({}, 'menu') }}</span>
                                             </a>
                                         </li>
                                         <li>
                                             <a href="{{ path('app_nature_ue_ec_index') }}">
-                                                <span class="label">Nature des UE/EC</span>
+                                                <span class="label">{{ 'menu.config.nature_ue'|trans({}, 'menu') }}</span>
                                             </a>
                                         </li>
 
                                         <li>
                                             <a href="{{ path('app_type_epreuve_index') }}">
-                                                <span class="label">Type d'épreuve</span>
+                                                <span class="label">{{ 'menu.config.type_epreuve'|trans({}, 'menu') }}</span>
                                             </a>
                                         </li>
                                         <li>
                                             <a href="{{ path('app_langue_index') }}">
-                                                <span class="label">Langues</span>
+                                                <span class="label">{{ 'menu.config.langues'|trans({}, 'menu') }}</span>
                                             </a>
                                         </li>
 
                                         <li>
                                             <a href="{{ path('app_rythme_formation_index') }}">
-                                                <span class="label">Rythmes de formation</span>
+                                                <span class="label">{{ 'menu.config.rythme_formation'|trans({}, 'menu') }}</span>
                                             </a>
                                         </li>
                                     </ul>
@@ -399,37 +401,37 @@
 
                                 <li>
                                     <a href="#configuration">
-                                        <span class="label">Configuration générale</span>
+                                        <span class="label">{{ 'menu.menu_configuration'|trans({}, 'menu') }}</span>
                                     </a>
                                     <ul id="configuration">
                                         <li>
                                             <a href="{{ path('app_campagne_collecte_index') }}">
-                                                <span class="label">Campagne Collecte</span>
+                                                <span class="label">{{ 'menu.config.campagne_collecte'|trans({}, 'menu') }}</span>
                                             </a>
                                         </li>
                                         <li>
                                             <a href="{{ path('app_annee_universitaire_index') }}">
-                                                <span class="label">Année Universitaire</span>
+                                                <span class="label">{{ 'menu.config.annee_universitaire'|trans({}, 'menu') }}</span>
                                             </a>
                                         </li>
                                         <li>
                                             <a href="{{ path('app_actualite_index') }}">
-                                                <span class="label">Actualités ORéOF</span>
+                                                <span class="label">{{ 'menu.config.actualites'|trans({}, 'menu') }}</span>
                                             </a>
                                         </li>
                                         <li>
                                             <a href="{{ path('app_notication_liste') }}">
-                                                <span class="label">Notifications et mails</span>
+                                                <span class="label">{{ 'menu.config.notifications'|trans({}, 'menu') }}</span>
                                             </a>
                                         </li>
                                         <li>
                                             <a href="{{ path('translations_index') }}">
-                                                <span class="label">Traductions et textes</span>
+                                                <span class="label">{{ 'menu.config.traductions'|trans({}, 'menu') }}</span>
                                             </a>
                                         </li>
                                         <li>
                                             <a href="{{ path('app_config_email') }}">
-                                                <span class="label">Configurations des emails</span>
+                                                <span class="label">{{ 'menu.config.config_emails'|trans({}, 'menu') }}</span>
                                             </a>
                                         </li>
                                     </ul>

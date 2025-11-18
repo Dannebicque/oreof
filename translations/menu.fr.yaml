@@ -1,0 +1,59 @@
+menu.tableau_de_bord: Tableau de bord
+menu:
+  offre_formation: Offre de formation
+  detail_mentions: Détail des mentions/spécialités
+  detail_fiches: Détail des fiches EC/matière
+  detail_fiches_hd: Détail fiches EC/matières "hors diplômes"
+  detail_elts_mutualises: Détail des éléments mutualisés
+  exports: Exports
+  admin:
+    pilotage: Pilotage
+    consulter_offre: Consulter l'offre de formation
+    gestion_offre: Gestion de l'offre et capacités
+    dpe_ouverts: DPE ouverts
+    validation_dpe: Validation DPE
+    validation_fiches_ec: Validation Fiches EC/matières
+    validation_rf: Validation RF/co-RF
+    exports: Exports
+  compo:
+    pilotage: Pilotage
+    consulter_offre: Consulter l'offre de formation
+    dpe_ouvert: DPE ouverts
+    validation_dpe: Validation DPE
+    validation_ec: Validation Fiches EC/matières
+    validatio,_rf: Validation RF/co-RF
+    exports: Exports
+    communication: Communication
+  menu_conseils: Conseils
+  conseils:
+    chgt_rf: Changement RF/co RF
+    synthses_modifs: Synthèse des modifications
+  menu_droits: Utilisateurs et droits
+  droits:
+    en_attente: Utilisateurs en attente
+    affectation_profils: Affectation des profils
+    repertoire: Répertoire des contacts
+    profils: Gestion des profils
+  menu_administration: Administration
+  config:
+    menu_etablissement: Configuration établissement
+    etablissement: Etablissement
+    composante: Composantes
+    ville: Villes
+    offre_formation: Configuration Offre de formation
+    mentions: Mentions
+    domaines: Domaines
+    type_diplome: Type de diplôme
+    type_ue: Type d'UE
+    type_ec: Type d'EC
+    nature_ue: Nature des UE/EC
+    type_epreuve: Type d'épreuve
+    langues: Langues
+    rythme_formation: Rythmes de formation
+    campagne_collecte: Campagne Collecte
+    annee_universitaire: Année Universitaire
+    actualites: Actualités ORéOF
+    notifications: Notifications et mails
+    traductions: Traductions et textes
+    config_emails: Configurations des emails
+  menu_configuration: Configuration générale
