@@ -93,6 +93,8 @@ class SemestreParcoursRepository extends ServiceEntityRepository
             ->join('dpe.campagneCollecte', 'campagneCollecte')
             ->andWhere('campagneCollecte.id = :idCampagne')
             ->setParameter(':idCampagne', $idCampagneCollecte)
+            ->addOrderBy('parcours.id', 'ASC')
+            ->addOrderBy('semestreParcours.ordre', 'ASC')
             ->getQuery()
             ->getResult();
     }

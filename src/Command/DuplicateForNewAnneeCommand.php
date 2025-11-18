@@ -2,6 +2,7 @@
 
 namespace App\Command;
 
+use App\Entity\Annee;
 use App\Entity\AnneeUniversitaire;
 use App\Entity\BlocCompetence;
 use App\Entity\ButApprentissageCritique;
@@ -537,13 +538,14 @@ class DuplicateForNewAnneeCommand extends Command
 
         /**
          * 
-         * SEMESTRES PARCOURS
+         * SEMESTRES PARCOURS & ANNÉES
          * 
          */
         $this->entitiesArray = $this->entityManager->getRepository(SemestreParcours::class)
             ->findFromAnneeUniversitaire($anneeSource);
         $io->writeln("Copie des 'Semestres Parcours'...");
         $io->progressStart(count($this->entitiesArray));
+        $tabAnnee = [];
         foreach($this->entitiesArray as $semestreParcours) {
             $initialSemestreParcours = $this->entityManager->getRepository(SemestreParcours::class)
                 ->findOneById($semestreParcours);
@@ -555,11 +557,29 @@ class DuplicateForNewAnneeCommand extends Command
             $cloneSemestreParcours->setSemestre($linkSemestreParcoursSemestre);
             $cloneSemestreParcours->setParcours($linkSemestreParcoursParcours);
 
+            //si ordre impair on ajoute l'année, si ordre pair on récupère l'année n-1. Il faut stocker les années dans le parcours
+            $ordreSemestre = (int)$cloneSemestreParcours->getOrdre();
+            // calcul de l'ordre de l'année : (1|2)->1, (3|4)->2, ...
+            $ordreAnnee = intdiv($ordreSemestre + 1, 2);
+            if ($cloneSemestreParcours->getOrdre() % 2 !== 0) {
+                $annee = new Annee();
+                $annee->setParcours($cloneSemestreParcours->getParcours());
+                $annee->setOrdre($ordreAnnee);
+                $annee->setCodeApogeeEtapeAnnee($cloneSemestreParcours->getCodeApogeeEtapeAnnee());
+                $annee->setCodeApogeeEtapeVersion($cloneSemestreParcours->getCodeApogeeEtapeVersion());
+                $tabAnnee[$cloneSemestreParcours->getParcours()?->getId()][$cloneSemestreParcours->getOrdre()] = $annee;
+                $this->entityManager->persist($annee);
+            } else {
+                $annee = $tabAnnee[$cloneSemestreParcours->getParcours()?->getId()][$cloneSemestreParcours->getOrdre() - 1];
+            }
+            $annee->addParcoursSemestre($cloneSemestreParcours);
+
             $this->entityManager->persist($cloneSemestreParcours);
             $io->progressAdvance(1);
         }
 
         $io->progressFinish();
+        $tabAnnee = [];
         $this->saveAndCleanUp($io);
 
         /**
