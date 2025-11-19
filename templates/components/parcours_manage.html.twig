@@ -153,7 +153,7 @@
                                                                         <i class="fal {{ transition.meta.icon }}"></i> {{ ('btn.validation.'~prefix~'.'~keyTrans)|trans({}, 'process') }}
                                                                     </button>
                                                                 {% else %}
-                                                                    <button class="btn btn-sm btn-muted d-block">
+                                                                    <button class="btn btn-muted text-wrap d-block">
                                                                         {{ 'validation.indisponible'|trans({}, 'process') }}
                                                                     </button>
                                                                 {% endif %}
@@ -190,14 +190,14 @@
                                                     {% endfor %}
                                                 {% else %}
                                                     <div class="col-6 d-grid">
-                                                        <button class="btn btn-sm btn-muted d-block">
+                                                        <button class="btn btn-muted text-wrap d-block">
                                                             {{ 'validation.formation.indisponible'|trans({}, 'process') }}
                                                         </button>
                                                     </div>
                                                 {% endfor %}
                                             {% else %}
                                                 <div class="col-2 d-grid">
-                                                    <button class="btn btn-sm btn-muted d-block">
+                                                    <button class="btn btn-muted text-wrap d-block">
                                                         {{ 'validation.indisponible'|trans({}, 'process') }}
                                                     </button>
                                                 </div>
@@ -352,7 +352,7 @@
                                 or is_granted('ROLE_ADMIN') %}
                                 {% if this.dpeParcours.etatReconduction.value != 'NON_OUVERTURE' %}
                                     {% if not this.hasDemande and isOuvrable(this.parcours) %}
-                                        <button class="btn btn-sm d-block btn-outline-warning"
+                                        <button class="btn text-wrap d-block btn-outline-warning"
                                                 type="button"
                                                 {{ stimulus_controller('modal', {
                                                     size: 'lg',
@@ -371,7 +371,7 @@
                                         </button>
                                         {# todo: fermeture que si pas de MCCC/Maquette pour revenir en SES sans CFVU avant publication #}
                                     {% elseif this.hasDemande %}
-                                        <button class="btn btn-sm d-block btn-outline-warning"
+                                        <button class="btn d-block text-wrap btn-outline-warning"
                                                 type="button"
                                                 {{ stimulus_controller('modal', {
                                                     size: 'lg',
@@ -391,7 +391,7 @@
                                         </button>
 
                                         {% if this.dpeParcours.etatReconduction.value == 'MODIFICATION_TEXTE' %}
-                                            <button class="btn btn-sm mt-1 d-block btn-outline-warning"
+                                            <button class="btn mt-1 d-block text-wrap btn-outline-warning"
                                                     type="button"
                                                     {{ stimulus_controller('modal', {
                                                         size: 'lg',
