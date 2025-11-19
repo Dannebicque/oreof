@@ -150,6 +150,18 @@ export default class extends Controller {
     }
   }
 
+  async changeRecrutementAnnee (event) {
+    const body = {
+      method: 'POST',
+      body: JSON.stringify({
+        id: event.params.id,
+        action: 'changeRecrutementAnnee'
+      }),
+    }
+
+    await fetch(this.urlValue, body).then((response) => JsonResponse(response))
+  }
+
   async changeHasCapacite (event) {
     const body = {
       method: 'POST',
