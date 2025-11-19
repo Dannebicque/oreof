@@ -26,22 +26,10 @@ class MentionsFixtures extends Fixture implements DependentFixtureInterface
             $mention->setLibelle('Mention ' . $i);
             $mention->setSigle('M' . $i);
 
-            if ($i % 3 === 2) {
-                $mention->setTypeDiplome(ButTypeDiplome::class);
-            }
-
-            if ($i % 3 === 1) {
-                $mention->setTypeDiplome(LicenceProfessionnelleTypeDiplome::class);
-            }
-
-            if ($i % 3 === 0) {
-                $mention->setTypeDiplome(MasterTypeDiplome::class);
-            }
-
             if ($i % 2 === 1) {
-                $mention->setDomaine($this->getReference('domaine_st'));
+                $mention->addDomaine($this->getReference('domaine_st'));
             } else {
-                $mention->setDomaine($this->getReference('domaine_shs'));
+                $mention->addDomaine($this->getReference('domaine_shs'));
             }
             $manager->persist($mention);
         }

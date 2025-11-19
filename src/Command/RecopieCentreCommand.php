@@ -59,7 +59,6 @@ class RecopieCentreCommand extends Command
         $io->progressStart(count($centres));
         foreach ($centres as $centre) {
             if ($centre->getFormation() !== null) {
-                dump('formation');
                 if (isset($tFormations[$centre->getFormation()?->getId()])) {
                     $newCentre = new UserProfil();
                     $newCentre->setUser($centre->getUser());
@@ -70,7 +69,6 @@ class RecopieCentreCommand extends Command
                     unset($newCentre);
                 }
             } elseif ($centre->getParcours() !== null) {
-                dump('parcours');
                 if (isset($tParcours[$centre->getParcours()?->getId()])) {
                     $newCentre = new UserProfil();
                     $newCentre->setUser($centre->getUser());
@@ -81,7 +79,6 @@ class RecopieCentreCommand extends Command
                     unset($newCentre);
                 }
             } elseif ($centre->getComposante() !== null) {
-                dump('composante');
                 $newCentre = new UserProfil();
                 $newCentre->setUser($centre->getUser());
                 $newCentre->setComposante($centre->getComposante());
@@ -90,7 +87,6 @@ class RecopieCentreCommand extends Command
                 $this->entityManager->persist($newCentre);
                 unset($newCentre);
             } elseif ($centre->getEtablissement() !== null) {
-                dump('etablissement');
                 $newCentre = new UserProfil();
                 $newCentre->setUser($centre->getUser());
                 $newCentre->setEtablissement($centre->getEtablissement());
@@ -98,8 +94,6 @@ class RecopieCentreCommand extends Command
                 $newCentre->setCampagneCollecte($campagneCollecte);
                 $this->entityManager->persist($newCentre);
                 unset($newCentre);
-            } else {
-                dump('autre');
             }
 
             $io->progressAdvance();
