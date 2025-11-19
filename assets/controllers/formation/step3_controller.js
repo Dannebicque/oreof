@@ -26,14 +26,14 @@ export default class extends Controller {
     hasParcours: Boolean,
   }
 
-  connect() {
+  connect () {
     document.getElementById('form_objectifsFormation').addEventListener('trix-blur', this.saveObjectifsFormation.bind(this))
     if (this.hasParcoursValue === true) {
       this._refreshListe()
     }
   }
 
-  saveObjectifsFormation() {
+  saveObjectifsFormation () {
     this._save({
       field: 'objectifsFormation',
       action: 'textarea',
@@ -41,7 +41,7 @@ export default class extends Controller {
     })
   }
 
-  async dupliquerParcours(event) {
+  async dupliquerParcours (event) {
     event.preventDefault()
     if (confirm('Voulez-vous vraiment dupliquer ce parcours et toutes les informations associées ?')) {
       const { url } = event.params
@@ -52,7 +52,7 @@ export default class extends Controller {
     }
   }
 
-  async deleteParcours(event) {
+  async deleteParcours (event) {
     event.preventDefault()
     if (confirm('Voulez-vous vraiment supprimer ce parcours et toutes les informations associées ?')) {
       const { url } = event.params
@@ -70,13 +70,13 @@ export default class extends Controller {
     }
   }
 
-  async _refreshListe() {
+  async _refreshListe () {
     this.listeTarget.innerHTML = window.da.loaderStimulus
     const response = await fetch(this.urlListeParcoursValue)
     this.listeTarget.innerHTML = await response.text()
   }
 
-  changeSemestre(event) {
+  changeSemestre (event) {
     this._save({
       action: 'structureSemestres',
       value: event.target.value,
@@ -84,7 +84,7 @@ export default class extends Controller {
     })
   }
 
-  changeSemestreDebut(event) {
+  changeSemestreDebut (event) {
     const sem = parseInt(event.target.dataset.semestredebut, 10)
 
     if (sem !== event.target.value) {
@@ -98,27 +98,46 @@ export default class extends Controller {
     }
   }
 
-  changeHasParcours(event) {
+  changeHasParcours (event) {
     const data = event.target.value
+
+    // si des parcours sont là, warning...
 
     if (parseInt(data, 10) === 1) {
       document.getElementById('liste_Parcours').classList.remove('d-none')
       document.getElementById('bloc_pas_parcours').classList.add('d-none')
+      this._save({
+        field: 'hasParcours',
+        action: 'yesNo',
+        value: event.target.value,
+      })
+
+      this._refreshListe()
     } else {
-      document.getElementById('liste_Parcours').classList.add('d-none')
-      document.getElementById('bloc_pas_parcours').classList.remove('d-none')
+      if (confirm('Cela va transformer votre parcours existant en formation sans parcours. Voulez-vous continuer ?')) {
+        document.getElementById('liste_Parcours').classList.add('d-none')
+        document.getElementById('bloc_pas_parcours').classList.remove('d-none')
+        this._save({
+          field: 'hasParcours',
+          action: 'yesNo',
+          value: event.target.value,
+        })
+
+        this._refreshListe()
+      } else {
+        // annulation : remettre l'autre radio comme cochée (cas binaire)
+        const name = event.target.name
+        const radios = Array.from(document.querySelectorAll(`input[name="${name}"]`))
+        const previous = radios.find(r => r.value !== event.target.value) || radios[0]
+        if (previous) {
+          previous.checked = true
+          event.target.checked = false
+        }
+      }
     }
-
-    this._save({
-      field: 'hasParcours',
-      action: 'yesNo',
-      value: event.target.value,
-    })
-
-    this._refreshListe()
   }
 
-  async genereStructurePasParcours() {
+  async genereStructurePasParcours () {
     if (confirm('Voulez-vous vraiment recopier générer la structure de la formation ? ')) {
       await saveData(this.urlGenereStructureValue)
       callOut('Structure générée.', 'success')
@@ -128,11 +147,11 @@ export default class extends Controller {
     }
   }
 
-  etatStep(event) {
+  etatStep (event) {
     calculEtatStep(this.urlValue, 3, event, 'formation')
   }
 
-  async _save(options) {
+  async _save (options) {
     await saveData(this.urlValue, options).then(async () => {
       await updateEtatOnglet(this.urlValue, 'onglet3', 'formation')
     })

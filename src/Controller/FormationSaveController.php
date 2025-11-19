@@ -13,6 +13,7 @@ use App\Classes\FormationStructure;
 use App\Classes\UpdateEntity;
 use App\Classes\verif\FormationState;
 use App\Entity\Formation;
+use App\Entity\Parcours;
 use App\Enums\EtatRemplissageEnum;
 use App\Enums\ModaliteEnseignementEnum;
 use App\Events\AddCentreFormationEvent;
@@ -94,16 +95,24 @@ class FormationSaveController extends BaseController
                 );
 
             case 'yesNo':
-                $rep = $updateEntity->saveYesNo($formation, $data['field'], $data['value']);
+                $value = (bool)$data['value'];
                 if ($data['field'] === 'hasParcours') {
-                    foreach ($formation->getParcours() as $parcours) {
-                        if ($parcours->isParcoursDefaut()) {
-                            $parcours->setLibelle('[A renomer] ' . $parcours->getLibelle());
+                    if ($value === false) {
+                        // pas de parcours, on vérifie qu'il n'y en a bien qu'un seul, et on le renomme
+                        if (count($formation->getParcours()) > 1) {
+                            return $this->json(['error' => 'Il y a plus d\'un parcours']);
+                        }
+                        $formation->getParcours()[0]->setLibelle(Parcours::PARCOURS_DEFAUT);
+                    } else {
+                        // des parcours, donc on retire le parcours par défaut existant
+                        foreach ($formation->getParcours() as $parcours) {
+                            if ($parcours->isParcoursDefaut()) {
+                                $parcours->setLibelle('[A renomer] ' . $parcours->getLibelle());
+                            }
                         }
                     }
-                    $em->flush();
                 }
-
+                $rep = $updateEntity->saveYesNo($formation, $data['field'], $data['value']);
                 return $rep;
             case 'textarea':
             case 'selectWithoutEntity':

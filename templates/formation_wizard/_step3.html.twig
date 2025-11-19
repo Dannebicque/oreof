@@ -34,6 +34,7 @@
         </fieldset>
     {% endif %}
 
+
     <fieldset class="mb-3">
         <legend class="col-form-label required">
             {{ 'formation_step3.labels.hasParcours'|trans({}, 'form') }}
@@ -47,15 +48,24 @@
             <div class="form-check">
                 <input type="radio" id="formation_parcours_1" name="formation_parcours" required="required"
                        {% if formation.hasParcours == true %}checked{% endif %}
+                        {% if formation.parcours|length > 1 %}disabled{% endif %}
                        class="form-check-input" value="1" {{ stimulus_action('formation--step3', 'changeHasParcours', 'click') }}>
                 <label class="form-check-label" for="formation_parcours_1">Oui</label></div>
             <div class="form-check">
                 <input type="radio" id="formation_parcours_0" name="formation_parcours" required="required"
                        {% if formation.hasParcours is same as(false) %}checked{% endif %}
+                        {% if formation.parcours|length > 1 %}disabled{% endif %}
                        class="form-check-input" value="0" {{ stimulus_action('formation--step3', 'changeHasParcours', 'click') }}>
                 <label class="form-check-label" for="formation_parcours_0">Non</label></div>
         </div>
     </fieldset>
+
+    {% if formation.parcours|length > 1 %}
+        <twig:alertes type="warning">
+            {{ 'formation_step3.labels.hasParcours.warning'|trans({}, 'form') }}
+        </twig:alertes>
+    {% endif %}
+
     <div id="bloc_semestre" class="{% if formation.hasParcours == false %}d-none{% endif %} mt-2">
         <fieldset class="mb-3">
             {% form_theme form 'communs/form_theme.html.twig' %}
