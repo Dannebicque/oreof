@@ -27,7 +27,7 @@ class DpeParcours
     private array $etatValidation = []; //le workflow
 
     #[ORM\Column(length: 10)]
-    private ?string $version = null;
+    private ?string $version = '0.1';
 
     #[ORM\Column(length: 255, nullable: true, enumType: TypeModificationDpeEnum::class)]
     private ?TypeModificationDpeEnum $etatReconduction;
@@ -91,7 +91,7 @@ class DpeParcours
         return $this->version;
     }
 
-    public function setVersion(string $version): static
+    public function setVersion(string $version = '0.1'): static
     {
         $this->version = $version;
 
