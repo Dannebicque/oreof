@@ -31,7 +31,8 @@ final class EmailTemplateRenderer
         EmailTemplate $tpl,
         array         $context = [],
         string        $mode = 'runtime',
-        array         $previewOverrides = []
+        array   $previewOverrides = [],
+        ?string $subjectVariant = null
     ): array
     {
         // Résout un contexte "safe" et aplati (namespaces au 1er niveau)
@@ -43,7 +44,15 @@ final class EmailTemplateRenderer
         $sandbox->enableSandbox();
 
         try {
-            $subject = $this->twig->createTemplate($tpl->getSubject() ?? '')->render($safeVars);
+            $subjectTpl = $tpl->getSubject(); // défaut
+            if ($subjectVariant) {
+                $map = $tpl->getSubjects();
+                if (isset($map[$subjectVariant]) && is_string($map[$subjectVariant]) && $map[$subjectVariant] !== '') {
+                    $subjectTpl = $map[$subjectVariant];
+                }
+            }
+            $subject = $this->twig->createTemplate($subjectTpl ?? '')->render($safeVars);
+
             $html = $this->twig->createTemplate($tpl->getBodyHtml() ?? '')->render($safeVars);
 
             $textTpl = $tpl->getBodyText();

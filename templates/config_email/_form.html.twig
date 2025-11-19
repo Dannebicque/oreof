@@ -7,6 +7,7 @@
 
                 <div class="mb-2">{{ form_row(form.workflow, {attr: {'data-email-template-target':'workflow'}}) }}</div>
                 <div class="mb-2">{{ form_row(form.subject) }}</div>
+                <div class="mb-2">{{ form_row(form.subjects) }}</div>
 
                 <div class="mb-2">
                     <label class="form-label">Variables disponibles</label>
@@ -41,6 +42,17 @@
 
         <div class="card mb-2">
             <div class="card-body">
+                <div class="mb-2">
+                    <label class="form-label" for="variantes">Variante de sujet</label>
+                    <select
+                            id="variantes"
+                            class="form-select" data-email-template-target="subjectVariant"
+                            data-action="change->email-template#updatePreview">
+                        <option value="">(par défaut)</option>
+                        {# Les options seront régénérées côté JS à partir de subjectsJson #}
+                    </select>
+                </div>
+
                 <div class="text-muted small">Objet du mail</div>
                 <div id="preview-subject" data-email-template-target="previewSubject" class="fw-bold"></div>
             </div>
@@ -49,8 +61,10 @@
         <div class="card mb-2">
             <div class="card-body">
                 <div class="text-muted small">Version HTML</div>
-                <iframe id="preview-iframe" data-email-template-target="previewIframe"
-                        style="width:100%; height:340px; border:1px solid #ddd; border-radius:6px;"></iframe>
+                <div data-email-template-target="previewIframe"
+                     style="width:100%; height:340px; border:1px solid #ddd; border-radius:6px;"></div>
+                {#                <iframe id="preview-iframe" data-email-template-target="previewIframe" #}
+                {#                        style="width:100%; height:340px; border:1px solid #ddd; border-radius:6px;"></iframe> #}
             </div>
         </div>
 

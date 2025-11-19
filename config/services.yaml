@@ -84,7 +84,7 @@ services:
   # Sandbox Twig très restrictive
     Twig\Sandbox\SecurityPolicy:
       arguments:
-        $allowedTags: [ ]            # pas de structures de contrôle pour rester "logicless"
+        $allowedTags: [ 'if' ]            # pas de structures de contrôle pour rester "logicless"
         $allowedFilters: [ 'escape','upper','lower','title','date','number_format','nl2br' ]
         $allowedMethods: [ ]
         $allowedProperties: [ ]
