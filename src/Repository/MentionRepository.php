@@ -56,7 +56,7 @@ class MentionRepository extends ServiceEntityRepository
     public function findByDomaineAndTypeDiplome(Domaine $domaine, TypeDiplome $typeDiplome): array
     {
         $qb = $this->createQueryBuilder('m')
-            ->where('m.domaine = :domaine')
+            ->where(':domaine MEMBER OF m.domaines')
             ->andWhere('m.typeDiplome = :typeDiplome')
             ->setParameter('domaine', $domaine)
             ->setParameter('typeDiplome', $typeDiplome)
