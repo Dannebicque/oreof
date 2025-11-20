@@ -28,9 +28,8 @@ class TypeDiplomeType extends AbstractType
     {
         $choices = [];
         foreach ($this->typeDiplomeHandlers as $handler) {
-            if ($handler instanceof TypeDiplomeHandlerInterface) {
-                $choices[get_class($handler)] = get_class($handler);
-            }
+            $get_class = get_class($handler);
+            $choices[$get_class] = $get_class;
         }
 
         $builder

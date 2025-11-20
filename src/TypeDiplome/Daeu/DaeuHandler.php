@@ -29,7 +29,7 @@ final class DaeuHandler implements TypeDiplomeHandlerInterface
 
     public function supports(string $type): bool
     {
-        return $type === 'DAEU'; // TODO: Replace with actual type check for DAEU
+        return $type === 'DAEU';
     }
 
     public function calculStructureParcours(Parcours $parcours, bool $withEcts = true, bool $withBcc = true): \App\DTO\StructureParcours
