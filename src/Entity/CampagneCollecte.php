@@ -106,6 +106,7 @@ class CampagneCollecte
      * @var Collection<int, TimelineDate>
      */
     #[ORM\OneToMany(mappedBy: 'campagneCollecte', targetEntity: TimelineDate::class)]
+    #[ORM\OrderBy(['date' => 'ASC'])]
     private Collection $timelineDates;
 
     public function __construct()
