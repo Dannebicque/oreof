@@ -46,9 +46,9 @@ export default class extends Controller {
     }
   }
 
-  changeComposante(event) {
-    this._updateListePersonnel(event.target.value)
-  }
+  // changeComposante(event) {
+  //   this._updateListePersonnel(event.target.value)
+  // }
 
   changeTypeDiplome(event) {
     this._updateListeMention(event.target.value, document.getElementById('formation_ses_domaine').value)
@@ -62,11 +62,11 @@ export default class extends Controller {
     this._updatePersonnel(event.target.value)
   }
 
-  async _updatePersonnel(id) {
-    const responsableMention = id
-    const reponse = await fetch(`${this.urlUserValue}?id=${responsableMention}`)
-    this.userTarget.innerHTML = await reponse.text()
-  }
+  // async _updatePersonnel(id) {
+  //   const responsableMention = id
+  //   const reponse = await fetch(`${this.urlUserValue}?id=${responsableMention}`)
+  //   this.userTarget.innerHTML = await reponse.text()
+  // }
 
   changeMention(event) {
     if (event.target.value === 'autre' || event.target.value.trim() === 'null') {
