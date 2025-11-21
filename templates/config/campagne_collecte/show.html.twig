@@ -8,14 +8,23 @@
         <th>Année</th>
         <td>{{ campagne_collecte.annee }}</td>
     </tr>
+    {#    <tr> #}
+    {#        <th>Date de transmission limite au SES</th> #}
+    {#        <td>{{ campagne_collecte.dateTransmissionSes|dateFr }}</td> #}
+    {#    </tr> #}
+    {#    <tr> #}
+    {#        <th>Date de la CFVU</th> #}
+    {#        <td>{{ campagne_collecte.dateCfvu|dateFr }}</td> #}
+    {#    </tr> #}
+    {% for event in campagne_collecte.timelineDates %}
     <tr>
-        <th>Date de transmission limite au SES</th>
-        <td>{{ campagne_collecte.dateTransmissionSes|dateFr }}</td>
+        <th>{{ event.libelle }}</th>
+        <td>
+            {{ event.date|dateFr }} {{ event.heure != null ? event.heure|date('H:i') : '' }}.
+            {% if event.dateDebut != null %}(Début : {{ event.dateDebut|dateFr }}){% endif %}
+        </td>
     </tr>
-    <tr>
-        <th>Date de la CFVU</th>
-        <td>{{ campagne_collecte.dateCfvu|dateFr }}</td>
-    </tr>
+    {% endfor %}
     <tr>
         <th>Année Active</th>
         <td><span class="badge {% if campagne_collecte.defaut %}bg-success{% else %}bg-warning{% endif %}">{{

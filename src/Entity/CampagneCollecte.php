@@ -105,7 +105,7 @@ class CampagneCollecte
     /**
      * @var Collection<int, TimelineDate>
      */
-    #[ORM\OneToMany(mappedBy: 'campagneCollecte', targetEntity: TimelineDate::class)]
+    #[ORM\OneToMany(mappedBy: 'campagneCollecte', targetEntity: TimelineDate::class, cascade: ['persist', 'remove'])]
     #[ORM\OrderBy(['date' => 'ASC'])]
     private Collection $timelineDates;
 
