@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.47.0](https://github.com/Dannebicque/oreof/compare/v1.46.0...v1.47.0) (2025-11-21)
+
+
+### Features
+
+* **timeline:** implement timeline feature with dynamic progress and date markers ([8a273b0](https://github.com/Dannebicque/oreof/commit/8a273b0a6616289468c797414cb0ebad221190de))
+* **timeline:** implement timeline feature with dynamic progress and date markers ([aa0b7fe](https://github.com/Dannebicque/oreof/commit/aa0b7fe592d6b282b9dbc7f64fd631b3848c591b))
+* **timeline:** implement timeline feature with dynamic progress and date markers ([5daa2c9](https://github.com/Dannebicque/oreof/commit/5daa2c9f30d07aba8d6c5c5730742a1d94464a0f))
+* **timeline:** implement timeline feature with dynamic progress and date markers ([f2af413](https://github.com/Dannebicque/oreof/commit/f2af41379ece3a561c9ed440013085463f6970b8))
+* **timeline:** implement timeline feature with dynamic progress and date markers ([862dc26](https://github.com/Dannebicque/oreof/commit/862dc26a33602be00bb6ac7935d9771edf426351))
+
+
+### Bug Fixes
+
+* **editModal:** remove codeMentionApogee field for improved layout ([2ae5644](https://github.com/Dannebicque/oreof/commit/2ae5644b7a751e71fcc80688dbb38813eec8f68d))
+* **editModal:** remove codeMentionApogee field for improved layout ([787a1c9](https://github.com/Dannebicque/oreof/commit/787a1c99bda2515b7bcd5f4c1273d0c62ae4e6e9))
+* **formation_controller, editModal, new:** uncomment methods and adjust layout for better clarity ([e957f2f](https://github.com/Dannebicque/oreof/commit/e957f2fe2738985f29c1567373a4fe1db6c22afb))
+* **Mention, VersioningParcours:** deprecate domaine property and update null-safe access for parcours ID ([e807267](https://github.com/Dannebicque/oreof/commit/e807267e231c07475be5c5425c43781f32743783))
+* **MentionRepository:** update query to use MEMBER OF for domain filtering ([27a448d](https://github.com/Dannebicque/oreof/commit/27a448d7441ca391232f558e45bdfa02cb91e154))
+
 ## [1.46.0](https://github.com/Dannebicque/oreof/compare/v1.45.0...v1.46.0) (2025-11-20)
 
 
