@@ -41,18 +41,23 @@ class CampagneCollecte
     private ?bool $defaut = false;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    /** @deprecated */
     private ?DateTimeInterface $dateOuvertureDpe = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    /** @deprecated */
     private ?DateTimeInterface $dateClotureDpe = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    /** @deprecated */
     private ?DateTimeInterface $dateTransmissionSes = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    /** @deprecated */
     private ?DateTimeInterface $dateCfvu = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    /** @deprecated */
     private ?DateTimeInterface $datePublication = null;
 
     #[ORM\Column(length: 1)]
@@ -97,6 +102,12 @@ class CampagneCollecte
     #[ORM\OneToMany(mappedBy: 'campagneCollecte', targetEntity: DpeDemande::class)]
     private Collection $dpeDemandes;
 
+    /**
+     * @var Collection<int, TimelineDate>
+     */
+    #[ORM\OneToMany(mappedBy: 'campagneCollecte', targetEntity: TimelineDate::class)]
+    private Collection $timelineDates;
+
     public function __construct()
     {
         $this->dpeParcours = new ArrayCollection();
@@ -105,6 +116,7 @@ class CampagneCollecte
         $this->userProfils = new ArrayCollection();
         $this->butCompetences = new ArrayCollection();
         $this->dpeDemandes = new ArrayCollection();
+        $this->timelineDates = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -148,11 +160,13 @@ class CampagneCollecte
         return $this;
     }
 
+    /** @deprecated */
     public function getDateTransmissionSes(): ?DateTimeInterface
     {
         return $this->dateTransmissionSes;
     }
 
+    /** @deprecated */
     public function setDateTransmissionSes(?DateTimeInterface $dateTransmissionSes): self
     {
         $this->dateTransmissionSes = $dateTransmissionSes;
@@ -160,11 +174,13 @@ class CampagneCollecte
         return $this;
     }
 
+    /** @deprecated */
     public function getDateCfvu(): ?DateTimeInterface
     {
         return $this->dateCfvu;
     }
 
+    /** @deprecated */
     public function setDateCfvu(?DateTimeInterface $dateCfvu): self
     {
         $this->dateCfvu = $dateCfvu;
@@ -172,11 +188,14 @@ class CampagneCollecte
         return $this;
     }
 
+
+    /** @deprecated */
     public function getDateOuvertureDpe(): ?DateTimeInterface
     {
         return $this->dateOuvertureDpe;
     }
 
+    /** @deprecated */
     public function setDateOuvertureDpe(?DateTimeInterface $dateOuvertureDpe): self
     {
         $this->dateOuvertureDpe = $dateOuvertureDpe;
@@ -184,11 +203,14 @@ class CampagneCollecte
         return $this;
     }
 
+
+    /** @deprecated */
     public function getDateClotureDpe(): ?DateTimeInterface
     {
         return $this->dateClotureDpe;
     }
 
+    /** @deprecated */
     public function setDateClotureDpe(?DateTimeInterface $dateClotureDpe): self
     {
         $this->dateClotureDpe = $dateClotureDpe;
@@ -196,11 +218,13 @@ class CampagneCollecte
         return $this;
     }
 
+    /** @deprecated */
     public function getDatePublication(): ?DateTimeInterface
     {
         return $this->datePublication;
     }
 
+    /** @deprecated */
     public function setDatePublication(?DateTimeInterface $datePublication): self
     {
         $this->datePublication = $datePublication;
@@ -430,6 +454,36 @@ class CampagneCollecte
             // set the owning side to null (unless already changed)
             if ($dpeDemande->getCampagneCollecte() === $this) {
                 $dpeDemande->setCampagneCollecte(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, TimelineDate>
+     */
+    public function getTimelineDates(): Collection
+    {
+        return $this->timelineDates;
+    }
+
+    public function addTimelineDate(TimelineDate $timelineDate): static
+    {
+        if (!$this->timelineDates->contains($timelineDate)) {
+            $this->timelineDates->add($timelineDate);
+            $timelineDate->setCampagneCollecte($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTimelineDate(TimelineDate $timelineDate): static
+    {
+        if ($this->timelineDates->removeElement($timelineDate)) {
+            // set the owning side to null (unless already changed)
+            if ($timelineDate->getCampagneCollecte() === $this) {
+                $timelineDate->setCampagneCollecte(null);
             }
         }
 

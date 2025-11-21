@@ -1,79 +1,251 @@
 <!-- Stats Start -->
-<h2 class="small-title">Processus de la campagne de collecte des projets de DPE ({{ user_data.campagneCollecte.libelle }})</h2>
+<h2 class="small-title">Processus de la campagne de collecte des projets de DPE
+    ({{ user_data.campagneCollecte.libelle }})</h2>
 <div class="row gy-2">
-    <div class="col-2 p-0">
-        <div class="card me-2 sh-20 hover-border-primary">
-            <div class="h-100 p-4 text-center align-items-center d-flex flex-column justify-content-between">
-                <div class="d-flex flex-column justify-content-center align-items-center sh-5 sw-5 rounded-xl bg-gradient-light mb-2">
-                    <i class="fal fa-lock-open fa-2x"></i>
+
+    <div class="timeline">
+        <div class="progress-line" id="progressLine"></div>
+        <div class="today-marker" id="todayMarker"></div>
+        {% set hasCurrent = false %}
+        {% for event in user_data.campagneCollecte.timelineDates %}
+            <div class="timeline-step
+                {% if 'now'|date('U') > event.date|date('U') %}completed
+                {% else %}
+                    {% if not hasCurrent %}current
+                    {% set hasCurrent = true %}
+                    {% endif %}
+                {% endif %}" data-end-date="{{ event.date|date('Y-m-d') }}">
+                <div class="step-icon"
+                     data-bs-toggle="tooltip"
+                     data-bs-placement="bottom"
+                     title="{{ event.description }}"
+                >
+                    <span class="fal {{ event.icone }}"></span>
                 </div>
-                <p class="mb-0 lh-1">Ouverture de la campagne de collecte</p>
-                <p class="cta-3 mb-0 text-primary">
-                    {{ user_data.campagneCollecte != null ? user_data.campagneCollecte.dateOuvertureDpe|dateFr :
-                    'Non renseigné' }}
-                </p>
+                <div class="step-content">
+                    <div class="step-label">{{ event.libelle }}</div>
+                    <div class="step-dates">
+                        {% if event.dateDebut != null %}<span class="step-date">
+                            Début: {{ event.dateDebut|date('d/m/Y') }}</span>{% endif %}
+                        <span class="step-date">Fin: {{ event.date|date('d/m/Y') }} {{ event.heure != null ? event.heure|date('H:i'): '' }}</span>
+                    </div>
+                </div>
             </div>
-        </div>
+        {% endfor %}
+
+        {#        <div class="timeline-step completed" data-end-date="2024-01-31"> #}
+        {#            <div class="step-icon">✓</div> #}
+        {#            <div class="step-content"> #}
+        {#                <div class="step-label">Design</div> #}
+        {#                <div class="step-dates"> #}
+        {#                    <span class="step-date">Début: 16/01/2024</span> #}
+        {#                    <span class="step-date">Fin: 31/01/2024</span> #}
+        {#                </div> #}
+        {#            </div> #}
+        {#            <div class="tooltip">Création des maquettes et validation du design système</div> #}
+        {#        </div> #}
+
+        {#        <div class="timeline-step current" data-end-date="2024-02-28"> #}
+        {#            <div class="step-icon">⚙️</div> #}
+        {#            <div class="step-content"> #}
+        {#                <div class="step-label">Développement</div> #}
+        {#                <div class="step-dates"> #}
+        {#                    <span class="step-date">Fin: 28/02/2024</span> #}
+        {#                </div> #}
+        {#            </div> #}
+        {#            <div class="tooltip">Phase de développement en cours - Backend et Frontend</div> #}
+        {#        </div> #}
+
+        {#        <div class="timeline-step" data-end-date="2024-03-15"> #}
+        {#            <div class="step-icon">🧪</div> #}
+        {#            <div class="step-content"> #}
+        {#                <div class="step-label">Tests</div> #}
+        {#                <div class="step-dates"> #}
+        {#                    <span class="step-date">Fin: 15/03/2024</span> #}
+        {#                </div> #}
+        {#            </div> #}
+        {#            <div class="tooltip">Phase de tests unitaires, d'intégration et tests utilisateurs</div> #}
+        {#        </div> #}
+
+        {#        <div class="timeline-step" data-end-date="2024-03-31"> #}
+        {#            <div class="step-icon">🚀</div> #}
+        {#            <div class="step-content"> #}
+        {#                <div class="step-label">Déploiement</div> #}
+        {#                <div class="step-dates"> #}
+        {#                    <span class="step-date">Fin: 31/03/2024</span> #}
+        {#                </div> #}
+        {#            </div> #}
+        {#            <div class="tooltip">Mise en production et monitoring initial</div> #}
+        {#        </div> #}
     </div>
 
-    <div class="col-2 p-0">
-        <div class="card me-2 sh-20 hover-border-primary">
-            <div class="h-100 p-4 text-center align-items-center d-flex flex-column justify-content-between">
-                <div class="d-flex flex-column justify-content-center align-items-center sh-5 sw-5 rounded-xl bg-gradient-light mb-2">
-                    <i class="fal fa-pencil fa-2x"></i>
-                </div>
-                <p class="mb-0 lh-1">Période d'enrichissement des projets de DPE</p>
-                <p class="cta-3 mb-0 text-primary">
-                    {{ user_data.campagneCollecte != null ? user_data.campagneCollecte.dateOuvertureDpe|dateFr :
-                    'Non renseigné' }} au {{ user_data.campagneCollecte != null ? user_data.campagneCollecte
-                    .dateClotureDpe|dateFr :
-                    'Non renseigné' }}
-                </p>
-            </div>
-        </div>
-    </div>
+    <script defer>
+      function updateProgress () {
+        const steps = document.querySelectorAll('.timeline-step')
+        const currentIndex = Array.from(steps).findIndex(step => step.classList.contains('current'))
 
-    <div class="col-2 p-0">
-        <div class="card me-2 sh-20 hover-border-primary">
-            <div class="h-100 p-4 text-center align-items-center d-flex flex-column justify-content-between">
-                <div class="d-flex flex-column justify-content-center align-items-center sh-5 sw-5 rounded-xl bg-gradient-light mb-2">
-                    <i class="fal fa-paper-plane-top fa-2x"></i>
-                </div>
-                <p class="mb-0 lh-1">Date limite de transmission des projets DPE au Central</p>
-                <p class="cta-3 mb-0 text-primary">
-                    {{ user_data.campagneCollecte != null ? user_data.campagneCollecte.dateTransmissionSes|dateFr :
-                    'Non renseigné' }}
-                </p>
-            </div>
-        </div>
-    </div>
-    <div class="col-2  p-0">
-        <div class="card me-2 sh-20 hover-border-primary">
-            <div class="h-100 p-4 text-center align-items-center d-flex flex-column justify-content-between">
-                <div class="d-flex flex-column justify-content-center align-items-center sh-5 sw-5 rounded-xl bg-gradient-light mb-2">
-                    <i class="fal fa-shield-check fa-2x"></i>
-                </div>
-                <p class="mb-0 lh-1">Date prévisionnelle de passage en CFVU</p>
-                <p class="cta-3 mb-0 text-primary">
-                    {{ user_data.campagneCollecte != null ? user_data.campagneCollecte.dateCfvu|dateFr :
-                    'Non renseigné' }}
-                </p>
-            </div>
-        </div>
-    </div>
-    <div class="col-2  p-0">
-        <div class="card me-2 sh-20 hover-border-primary">
-            <div class="h-100 p-4 text-center align-items-center d-flex flex-column justify-content-between">
-                <div class="d-flex flex-column justify-content-center align-items-center sh-5 sw-5 rounded-xl bg-gradient-light mb-2">
-                    <i class="fal fa-bullhorn fa-2x"></i>
-                </div>
-                <p class="mb-0 lh-1">Publication</p>
-                <p class="cta-3 mb-0 text-primary">
-                    {{ user_data.campagneCollecte != null ? user_data.campagneCollecte.datePublication|dateFr :
-                    'Non renseigné' }}
-                </p>
-            </div>
-        </div>
-    </div>
+        if (currentIndex >= 0 && steps.length > 1) {
+          const progressPercent = (currentIndex / (steps.length - 1)) * 100
+          const progressLine = document.getElementById('progressLine')
+          progressLine.style.width = progressPercent + '%'
+        }
+      }
+
+      // Positionnement du marqueur "Aujourd'hui"
+      function updateTodayMarker () {
+        const steps = document.querySelectorAll('.timeline-step')
+        const timeline = document.querySelector('.timeline')
+        const todayMarker = document.getElementById('todayMarker')
+
+        if (steps.length === 0) return
+
+        const today = new Date()
+        today.setHours(0, 0, 0, 0)
+
+        // Récupérer les dates et positions de toutes les étapes
+        const stepsData = Array.from(steps).map((step, index) => {
+          const endDate = step.getAttribute('data-end-date')
+          const rect = step.getBoundingClientRect()
+          const timelineRect = timeline.getBoundingClientRect()
+          const positionPercent = ((rect.left + rect.width / 2 - timelineRect.left) / timelineRect.width) * 100
+
+          return {
+            endDate: endDate ? new Date(endDate) : null,
+            positionPercent: positionPercent,
+            index: index
+          }
+        }).filter(data => data.endDate !== null)
+
+        if (stepsData.length === 0) return
+
+        const firstDate = stepsData[0].endDate
+        const lastDate = stepsData[stepsData.length - 1].endDate
+
+        // Si aujourd'hui est avant la première date ou après la dernière, cacher le marqueur
+        if (today < firstDate || today > lastDate) {
+          todayMarker.style.display = 'none'
+          return
+        }
+
+        todayMarker.style.display = 'block'
+
+        // Trouver les deux étapes entre lesquelles se trouve aujourd'hui
+        let beforeStep = null
+        let afterStep = null
+
+        for (let i = 0; i < stepsData.length - 1; i++) {
+          if (today >= stepsData[i].endDate && today <= stepsData[i + 1].endDate) {
+            beforeStep = stepsData[i]
+            afterStep = stepsData[i + 1]
+            break
+          }
+        }
+
+        // Si on est avant la première étape
+        if (!beforeStep && today <= stepsData[0].endDate) {
+          const firstStepDate = stepsData[0].endDate
+          const daysDiff = (today - firstDate) / (1000 * 60 * 60 * 24)
+          const totalDays = (firstStepDate - firstDate) / (1000 * 60 * 60 * 24)
+          const ratio = daysDiff / totalDays
+          todayMarker.style.left = (stepsData[0].positionPercent * ratio) + '%'
+          return
+        }
+
+        // Calculer la position proportionnelle entre les deux étapes
+        if (beforeStep && afterStep) {
+          const totalDuration = afterStep.endDate - beforeStep.endDate
+          const elapsedDuration = today - beforeStep.endDate
+          const ratio = elapsedDuration / totalDuration
+
+          const startPos = beforeStep.positionPercent
+          const endPos = afterStep.positionPercent
+          const markerPosition = startPos + (endPos - startPos) * ratio
+
+          todayMarker.style.left = markerPosition + '%'
+        }
+      }
+
+      updateProgress()
+      updateTodayMarker()
+
+      // Recalculer la position au redimensionnement de la fenêtre
+      window.addEventListener('resize', updateTodayMarker)
+    </script>
+
+
+    {#    <div class="col-2 p-0"> #}
+    {#        <div class="card me-2 sh-20 hover-border-primary"> #}
+    {#            <div class="h-100 p-4 text-center align-items-center d-flex flex-column justify-content-between"> #}
+    {#                <div class="d-flex flex-column justify-content-center align-items-center sh-5 sw-5 rounded-xl bg-gradient-light mb-2"> #}
+    {#                    <i class="fal fa-lock-open fa-2x"></i> #}
+    {#                </div> #}
+    {#                <p class="mb-0 lh-1">Ouverture de la campagne de collecte</p> #}
+    {#                <p class="cta-3 mb-0 text-primary"> #}
+    {#                    {{ user_data.campagneCollecte != null ? user_data.campagneCollecte.dateOuvertureDpe|dateFr : #}
+    {#                    'Non renseigné' }} #}
+    {#                </p> #}
+    {#            </div> #}
+    {#        </div> #}
+    {#    </div> #}
+
+    {#    <div class="col-2 p-0"> #}
+    {#        <div class="card me-2 sh-20 hover-border-primary"> #}
+    {#            <div class="h-100 p-4 text-center align-items-center d-flex flex-column justify-content-between"> #}
+    {#                <div class="d-flex flex-column justify-content-center align-items-center sh-5 sw-5 rounded-xl bg-gradient-light mb-2"> #}
+    {#                    <i class="fal fa-pencil fa-2x"></i> #}
+    {#                </div> #}
+    {#                <p class="mb-0 lh-1">Période d'enrichissement des projets de DPE</p> #}
+    {#                <p class="cta-3 mb-0 text-primary"> #}
+    {#                    {{ user_data.campagneCollecte != null ? user_data.campagneCollecte.dateOuvertureDpe|dateFr : #}
+    {#                    'Non renseigné' }} au {{ user_data.campagneCollecte != null ? user_data.campagneCollecte #}
+    {#                    .dateClotureDpe|dateFr : #}
+    {#                    'Non renseigné' }} #}
+    {#                </p> #}
+    {#            </div> #}
+    {#        </div> #}
+    {#    </div> #}
+
+    {#    <div class="col-2 p-0"> #}
+    {#        <div class="card me-2 sh-20 hover-border-primary"> #}
+    {#            <div class="h-100 p-4 text-center align-items-center d-flex flex-column justify-content-between"> #}
+    {#                <div class="d-flex flex-column justify-content-center align-items-center sh-5 sw-5 rounded-xl bg-gradient-light mb-2"> #}
+    {#                    <i class="fal fa-paper-plane-top fa-2x"></i> #}
+    {#                </div> #}
+    {#                <p class="mb-0 lh-1">Date limite de transmission des projets DPE au Central</p> #}
+    {#                <p class="cta-3 mb-0 text-primary"> #}
+    {#                    {{ user_data.campagneCollecte != null ? user_data.campagneCollecte.dateTransmissionSes|dateFr : #}
+    {#                    'Non renseigné' }} #}
+    {#                </p> #}
+    {#            </div> #}
+    {#        </div> #}
+    {#    </div> #}
+    {#    <div class="col-2  p-0"> #}
+    {#        <div class="card me-2 sh-20 hover-border-primary"> #}
+    {#            <div class="h-100 p-4 text-center align-items-center d-flex flex-column justify-content-between"> #}
+    {#                <div class="d-flex flex-column justify-content-center align-items-center sh-5 sw-5 rounded-xl bg-gradient-light mb-2"> #}
+    {#                    <i class="fal fa-shield-check fa-2x"></i> #}
+    {#                </div> #}
+    {#                <p class="mb-0 lh-1">Date prévisionnelle de passage en CFVU</p> #}
+    {#                <p class="cta-3 mb-0 text-primary"> #}
+    {#                    {{ user_data.campagneCollecte != null ? user_data.campagneCollecte.dateCfvu|dateFr : #}
+    {#                    'Non renseigné' }} #}
+    {#                </p> #}
+    {#            </div> #}
+    {#        </div> #}
+    {#    </div> #}
+    {#    <div class="col-2  p-0"> #}
+    {#        <div class="card me-2 sh-20 hover-border-primary"> #}
+    {#            <div class="h-100 p-4 text-center align-items-center d-flex flex-column justify-content-between"> #}
+    {#                <div class="d-flex flex-column justify-content-center align-items-center sh-5 sw-5 rounded-xl bg-gradient-light mb-2"> #}
+    {#                    <i class="fal fa-bullhorn fa-2x"></i> #}
+    {#                </div> #}
+    {#                <p class="mb-0 lh-1">Publication</p> #}
+    {#                <p class="cta-3 mb-0 text-primary"> #}
+    {#                    {{ user_data.campagneCollecte != null ? user_data.campagneCollecte.datePublication|dateFr : #}
+    {#                    'Non renseigné' }} #}
+    {#                </p> #}
+    {#            </div> #}
+    {#        </div> #}
+    {#    </div> #}
 </div>
 <!-- Stats Start -->

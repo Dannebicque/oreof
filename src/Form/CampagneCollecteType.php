@@ -11,10 +11,12 @@ namespace App\Form;
 
 use App\Entity\AnneeUniversitaire;
 use App\Entity\CampagneCollecte;
+use App\Form\Type\CollectionStimulusType;
 use App\Form\Type\YesNoType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -49,26 +51,26 @@ class CampagneCollecteType extends AbstractType
             ->add('defaut', YesNoType::class, [
                 'label' => 'Campagne de collecte DPE active ?',
             ])
-            ->add('dateOuvertureDpe', DateType::class, [
-                'label' => 'Date d\'ouverture de la campagne de collecte DPE',
-                'widget' => 'single_text',
-            ])
-            ->add('dateClotureDpe', DateType::class, [
-                'label' => 'Date de clôture de la campagne de collecte DPE',
-                'widget' => 'single_text',
-            ])
-            ->add('dateTransmissionSes', DateType::class, [
-                'label' => 'Date limite de transmission des dossiers ',
-                'widget' => 'single_text',
-            ])
-            ->add('dateCfvu', DateType::class, [
-                'label' => 'Date de la CFVU ',
-                'widget' => 'single_text',
-            ])
-            ->add('datePublication', DateType::class, [
-                'label' => 'Date de publication ',
-                'widget' => 'single_text',
-            ])
+//            ->add('dateOuvertureDpe', DateType::class, [
+//                'label' => 'Date d\'ouverture de la campagne de collecte DPE',
+//                'widget' => 'single_text',
+//            ])
+//            ->add('dateClotureDpe', DateType::class, [
+//                'label' => 'Date de clôture de la campagne de collecte DPE',
+//                'widget' => 'single_text',
+//            ])
+//            ->add('dateTransmissionSes', DateType::class, [
+//                'label' => 'Date limite de transmission des dossiers ',
+//                'widget' => 'single_text',
+//            ])
+//            ->add('dateCfvu', DateType::class, [
+//                'label' => 'Date de la CFVU ',
+//                'widget' => 'single_text',
+//            ])
+//            ->add('datePublication', DateType::class, [
+//                'label' => 'Date de publication ',
+//                'widget' => 'single_text',
+//            ])
             ->add('couleur', ChoiceType::class, [
                 'label' => 'Couleur de la campagne',
                 'choices' => [
@@ -80,6 +82,19 @@ class CampagneCollecteType extends AbstractType
                     'Noir' => 'dark',
                     'Blanc' => 'light',
                 ],
+            ])
+            ->add('timelineDates', CollectionStimulusType::class, [
+                'entry_type' => TimelineDateType::class,
+                'allow_add' => true,
+                'allow_delete' => true,
+                'by_reference' => false,
+                'label' => 'Dates de la campagne de collecte',
+                'entry_options' => ['label' => false],
+                'prototype' => true,
+                'attr' => [
+                    'class' => 'selector-timelineDates',
+                ],
+                'help' => 'campagnecollecte.timelineDates.help',
             ])
         ;
     }
