@@ -14,7 +14,7 @@ class TimelineDate
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'timelineDates')]
+    #[ORM\ManyToOne(inversedBy: 'timelineDates', cascade: ['persist', 'remove'])]
     private ?CampagneCollecte $campagneCollecte = null;
 
     #[ORM\Column(length: 255)]
