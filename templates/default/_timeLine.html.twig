@@ -7,7 +7,7 @@
         <div class="progress-line" id="progressLine"></div>
         <div class="today-marker" id="todayMarker"></div>
         {% set hasCurrent = false %}
-        {% for event in user_data.campagneCollecte.timelineDates %}
+        {% for event in user_data.campagneCollecte.timelineDates|filter(event => event.inTimeline == true) %}
             <div class="timeline-step
                 {% if 'now'|date('U') > event.date|date('U') %}completed
                 {% else %}
