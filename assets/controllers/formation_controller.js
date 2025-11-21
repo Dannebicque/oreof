@@ -62,11 +62,11 @@ export default class extends Controller {
     this._updatePersonnel(event.target.value)
   }
 
-  // async _updatePersonnel(id) {
-  //   const responsableMention = id
-  //   const reponse = await fetch(`${this.urlUserValue}?id=${responsableMention}`)
-  //   this.userTarget.innerHTML = await reponse.text()
-  // }
+  async _updatePersonnel (id) {
+    const responsableMention = id
+    const reponse = await fetch(`${this.urlUserValue}?id=${responsableMention}`)
+    this.userTarget.innerHTML = await reponse.text()
+  }
 
   changeMention(event) {
     if (event.target.value === 'autre' || event.target.value.trim() === 'null') {
@@ -82,26 +82,26 @@ export default class extends Controller {
     }
   }
 
-  async _updateListePersonnel(composante) {
-    await fetch(`${this.urlListePersonnelValue}?composante=${composante}`).then((response) => response.json()).then(
-      (data) => {
-        const selectPersonnels = document.getElementById('formation_ses_responsableMention')
-        selectPersonnels.innerHTML = ''
-
-        let option = document.createElement('option')
-        option.value = null
-        option.text = ''
-        selectPersonnels.add(option)
-
-        data.forEach((personnel) => {
-          option = document.createElement('option')
-          option.value = personnel.id
-          option.text = personnel.libelle
-          selectPersonnels.add(option, null)
-        })
-      },
-    )
-  }
+  // async _updateListePersonnel(composante) {
+  //   await fetch(`${this.urlListePersonnelValue}?composante=${composante}`).then((response) => response.json()).then(
+  //     (data) => {
+  //       const selectPersonnels = document.getElementById('formation_ses_responsableMention')
+  //       selectPersonnels.innerHTML = ''
+  //
+  //       let option = document.createElement('option')
+  //       option.value = null
+  //       option.text = ''
+  //       selectPersonnels.add(option)
+  //
+  //       data.forEach((personnel) => {
+  //         option = document.createElement('option')
+  //         option.value = personnel.id
+  //         option.text = personnel.libelle
+  //         selectPersonnels.add(option, null)
+  //       })
+  //     },
+  //   )
+  // }
 
   async _updateListeMention(typeDiplome, domaine) {
     let url
