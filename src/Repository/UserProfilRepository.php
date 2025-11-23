@@ -9,6 +9,7 @@ use App\Entity\Formation;
 use App\Entity\Parcours;
 use App\Entity\Profil;
 use App\Entity\UserProfil;
+use App\Enums\CentreGestionEnum;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -140,5 +141,69 @@ class UserProfilRepository extends ServiceEntityRepository
             ->setParameter('campagneCollecte', $campagneCollecte)
             ->getQuery()
             ->getResult();
+    }
+
+    /**
+     * Liste unifiée avec filtres et tri pour l'UI (admin ou DPE composante).
+     * Params supportés:
+     *  - q: recherche texte sur user (nom, prenom, email, username)
+     *  - profil: id de Profil
+     *  - typeCentre: valeur de l'enum CentreGestionEnum
+     *  - sort: champ user (nom|prenom|username)
+     *  - direction: asc|desc
+     */
+    public function findForListe(
+        CampagneCollecte $campagneCollecte,
+        ?Composante      $composante,
+        array            $params
+    ): array
+    {
+        $qb = $this->createQueryBuilder('up')
+            ->join('up.profil', 'p')
+            ->join('up.user', 'u')
+            ->leftJoin('up.formation', 'f')
+            ->leftJoin('up.parcours', 'pa')
+            ->leftJoin('pa.formation', 'pf')
+            ->where('u.isEnable = :isEnable')
+            ->andWhere('u.isDeleted = false')
+            ->andWhere('up.campagneCollecte = :campagne OR up.campagneCollecte IS NULL')
+            ->setParameter('campagne', $campagneCollecte)
+            ->setParameter('isEnable', true);
+
+        // Périmètre composante (si non null => restreindre)
+        if ($composante !== null) {
+            $qb->andWhere('up.composante = :composante OR f.composantePorteuse = :composante OR pf.composantePorteuse = :composante')
+                ->setParameter('composante', $composante);
+        }
+
+        // Recherche texte
+        if (!empty($params['q'])) {
+            $qb->andWhere('u.nom LIKE :q OR u.prenom LIKE :q OR u.email LIKE :q OR u.username LIKE :q')
+                ->setParameter('q', '%' . $params['q'] . '%');
+        }
+
+        // Filtre par profil (id)
+        if (!empty($params['profil'])) {
+            $qb->andWhere('p.id = :profilId')
+                ->setParameter('profilId', (int)$params['profil']);
+        }
+
+        // Filtre par type de centre (enum string stockée sur Profil.centre)
+        if (!empty($params['typeCentre']) && CentreGestionEnum::has($params['typeCentre'])) {
+            $qb->andWhere('p.centre = :typeCentre')
+                ->setParameter('typeCentre', $params['typeCentre']);
+        }
+
+        // Tri
+        $sort = $params['sort'] ?? 'nom';
+        $direction = $params['direction'] ?? 'asc';
+        $allowedSort = ['nom', 'prenom', 'username'];
+        if (!in_array($sort, $allowedSort, true)) {
+            $sort = 'nom';
+        }
+        $direction = strtolower($direction) === 'desc' ? 'desc' : 'asc';
+        $qb->addOrderBy('u.' . $sort, $direction);
+
+        return $qb->getQuery()->getResult();
     }
 }

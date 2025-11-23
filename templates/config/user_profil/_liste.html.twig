@@ -28,7 +28,7 @@
             <a href="#"
                     {{ stimulus_action('crud', 'sort', 'click', {
                         'sort': 'username',
-                        'direction': getDirection('email', sort, direction)
+                        'direction': getDirection('username', sort, direction)
                     }) }}
             >
                 Login URCA
@@ -40,6 +40,55 @@
         <th>Centre</th>
         <th></th>
     </tr>
+    {% if is_granted('ROLE_ADMIN') %}
+        <tr>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th>
+                <label for="filter-profil" class="sr-only">Profil</label>
+                <select
+                        {{ stimulus_action('crud', 'filter', 'change', {
+                            'field': 'profil'
+                        }) }}
+                        id="filter-profil"
+                        class="form-select">
+                    <option value="">Tous les profils</option>
+                    {% for p in profils %}
+                        <option value="{{ p.id }}"
+                                {% if params['profil'] is defined and params['profil'] == p.id %}selected{% endif %}
+                        >{{ p.libelle }}</option>
+                    {% endfor %}
+                </select>
+            </th>
+            <th>
+                <label for="filter-type-centre" class="sr-only">Type centre</label>
+                <select
+                        {{ stimulus_action('crud', 'filter', 'change', {
+                            'field': 'typeCentre'
+                        }) }}
+                        id="filter-type-centre"
+                        class="form-select">
+                    <option value="">Tous</option>
+                    {% for c in centres %}
+                        {% if c.value != '' %}
+                            <option value="{{ c.value }}"
+                                    {% if params['typeCentre'] is defined and params['typeCentre'] == c.value %}selected{% endif %}
+                            >{{ c.getLibelle() }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            </th>
+            <th></th>
+            <th>
+                <button class="btn btn-outline-danger"
+                        {{ stimulus_action('crud', 'effaceFiltre', 'click', { }) }}
+                >
+                    Effacer les filtres
+                </button>
+            </th>
+        </tr>
+    {% endif %}
     </thead>
     <tbody>
     {% for user in users %}

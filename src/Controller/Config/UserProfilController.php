@@ -217,60 +217,43 @@ class UserProfilController extends BaseController
         return $this->json(['success' => true, 'message' => 'Profil ajouté avec succès']);
     }
 
-    #[
-        Route('/liste', name: 'liste', methods: ['GET'])]
+    #[Route('/liste', name: 'liste', methods: ['GET'])]
     public function liste(
         Request              $request,
-        UserProfilRepository $userProfilRepository
+        UserProfilRepository $userProfilRepository,
+        ProfilRepository     $profilRepository
     ): Response
     {
         $sort = $request->query->get('sort') ?? 'nom';
         $direction = $request->query->get('direction') ?? 'asc';
-        $q = $request->query->get('q') ?? null;
+        $params = $request->query->all();
 
-        if ($this->isGranted('ROLE_ADMIN')) {
-            if ($q) {
-                $users = $userProfilRepository->findEnableBySearch($this->getCampagneCollecte(), $q, $sort, $direction);
-            } else {
-                $users = $userProfilRepository->findEnable($this->getCampagneCollecte(), $sort, $direction);
-            }
-        } elseif ($this->isGranted('MANAGE', [
+        $composante = null;
+        if ($this->isGranted('MANAGE', [
             'route' => 'app_composante',
             'subject' => $this->getUser()?->getComposanteResponsableDpe()->first()
         ])) {
             foreach ($this->getUser()?->getUserProfils() as $centre) {
                 if ($centre->getComposante() !== null) {
-                    $composante = $centre->getComposante(); //au moins une composante, todo: si plusieurs ?
+                    $composante = $centre->getComposante(); // au moins une composante, todo: si plusieurs ?
+                    break;
                 }
-            }
-            if ($composante !== null) {
-                if ($q) {
-                    $users = $userProfilRepository->findByComposanteEnableBySearch($this->getCampagneCollecte(), $composante, $q, $sort, $direction);
-                } else {
-                    $users = $userProfilRepository->findByComposanteEnable($this->getCampagneCollecte(), $composante, $sort, $direction);
-                }
-            } else {
-                $users = [];
             }
         }
+
+        $users = $userProfilRepository->findForListe($this->getCampagneCollecte(), $composante, $params);
 
         return $this->render('config/user_profil/_liste.html.twig', [
             'users' => $users,
             'sort' => $sort,
             'direction' => $direction,
-            'campagneCollecte' => $this->getCampagneCollecte()
+            'campagneCollecte' => $this->getCampagneCollecte(),
+            'profils' => $profilRepository->findAll(),
+            'centres' => CentreGestionEnum::cases(),
+            'params' => $params,
         ]);
     }
 
-//    #[Route('/liste/profil/{user}', name: 'app_user_gestion_liste_modal')]
-//    public function listeProfil(User $user): Response
-//    {
-//        return $this->render('user_profils/_liste_centre.html.twig', [
-//            'user' => $user,
-//            'centres' => CentreGestionEnum::cases(),
-//            'userProfils' => $user->getUserProfils()
-//        ]);
-//    }
 
     /**
      * @throws JsonException
