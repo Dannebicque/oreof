@@ -1,6 +1,12 @@
+{% if user == null %}
+    <twig:alerte type="warning">
+        {{ 'api.user.alert.user_not_found'|trans({}, 'messages') }}
+    </twig:alerte>
+{% else %}
 <dl>
     <dt>Prénom Nom</dt>
     <dd>{{ user.display }}</dd>
     <dt>Email</dt>
     <dd>{{ user.email }}</dd>
 </dl>
+{% endif %}

@@ -114,8 +114,10 @@ class ConfigEmailController extends BaseController
     ): JsonResponse
     {
         $subject = (string)$request->request->get('subject', '');
+        $subjectVariant = $request->request->get('subjectVariant');
         $bodyHtml = (string)$request->request->get('bodyHtml', '');
         $bodyText = $request->request->get('bodyText');
+
 
         $tpl = (new EmailTemplate())
             ->setSubject($subject)
@@ -123,13 +125,22 @@ class ConfigEmailController extends BaseController
             ->setBodyText($bodyText ?: null)
             ->setWorkflow((string)$request->request->get('workflow', 'preview.workflow'));
 
+        if ($jsonSubjects = $request->request->get('subjects')) {
+            $decoded = json_decode((string)$jsonSubjects, true) ?: [];
+            if (is_array($decoded)) {
+                // filtre sécurité: valeurs string uniquement
+                $decoded = array_filter($decoded, fn($v) => is_string($v));
+                $tpl->setSubjects($decoded);
+            }
+        }
+
         // Overrides optionnels envoyés par l’UI (JSON)
         $overrides = [];
         if ($json = $request->request->get('overrides')) {
             $overrides = json_decode((string)$json, true) ?: [];
         }
 
-        $out = $renderer->render($tpl, context: [], mode: 'preview', previewOverrides: $overrides);
+        $out = $renderer->render($tpl, context: [], mode: 'preview', previewOverrides: $overrides, subjectVariant: $subjectVariant);
         return new JsonResponse($out);
     }
 }

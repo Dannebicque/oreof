@@ -2,6 +2,41 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.46.0](https://github.com/Dannebicque/oreof/compare/v1.45.0...v1.46.0) (2025-11-20)
+
+
+### Features
+
+* **cmd:** Recopie des profils d'une campagne à une autre ([daf1b01](https://github.com/Dannebicque/oreof/commit/daf1b0108a7bce10ba723ea7ea957b1db9cd6aab))
+* **dependencies:** Add DebugBundle for development and update configuration for UX packages ([fac45ef](https://github.com/Dannebicque/oreof/commit/fac45efe88f878cefe40cef8ed46f28acbce9050))
+* **docker:** Add Apache configuration and Docker Compose setup for w… ([120d765](https://github.com/Dannebicque/oreof/commit/120d7655e26d1177ffdad568b935598a9a9662ee))
+* **docker:** Add Apache configuration and Docker Compose setup for web and database services ([57078d2](https://github.com/Dannebicque/oreof/commit/57078d26d51f59c96c265bc219af3834e59b545e))
+* **email:** add support for DI ([da80fca](https://github.com/Dannebicque/oreof/commit/da80fcab01d3c89a153367f7e89468c02ceacbdf))
+* **email:** add support for subject variants and JSON subjects input ([099ce58](https://github.com/Dannebicque/oreof/commit/099ce58a848cdb6bae6b15cbfec9cc722b8c6e8f))
+* **EtatDpeEnum:** add tacite reconduction state with corresponding label ([1fa2696](https://github.com/Dannebicque/oreof/commit/1fa26968cbd705ac3d373982a54bf886efd903e6))
+* **notification:** Add user notification preferences and update workflow transition handling ([13b09e4](https://github.com/Dannebicque/oreof/commit/13b09e4c297fa5a57d4f4abb2e23ae86c1530c01))
+* **offre de formation:** add recruitment year toggle functionality ([8e19f7a](https://github.com/Dannebicque/oreof/commit/8e19f7a856555e8f83b00f7a609344d7beecaccf))
+* **offre de formation:** gestion des capacités / années ([7715825](https://github.com/Dannebicque/oreof/commit/7715825741e874231c6d30e147c6f9451c6dcee0))
+* **offre de formation:** gestion des capacités / années ([bd35094](https://github.com/Dannebicque/oreof/commit/bd35094a9cce340ffbff3fd76887c2eb7fca28fc))
+* **step3:** add warning for multiple parcours and improve hasParcours handling ([a72b9bc](https://github.com/Dannebicque/oreof/commit/a72b9bc9c85b613e8dad937279c23a25f5a9b1e6))
+* traduction des menus ([8317c6d](https://github.com/Dannebicque/oreof/commit/8317c6dd7ee04e81a07cc619c541b7dfe62dbbc5))
+* **Workflow:** enhance button styles and add tacite reconduction check ([637232e](https://github.com/Dannebicque/oreof/commit/637232e221841095398f398ba6ca71dbe407a525))
+
+
+### Bug Fixes
+
+* **AbstractLicenceHandler:** refactor mcccs retrieval method in checkIfMcccValide ([0f4dc3b](https://github.com/Dannebicque/oreof/commit/0f4dc3b80380edff7a87691bfe8028e8bef1aeb2))
+* **date:** Correct variable usage for historique retrieval in GetDateConseilComposante ([dc5a11a](https://github.com/Dannebicque/oreof/commit/dc5a11a61366d4921593b2be81e690310e92f3da))
+* **date:** Correct variable usage for historique retrieval in GetDateConseilComposante ([be63573](https://github.com/Dannebicque/oreof/commit/be6357325fdc502eae86cac2bfefae2c16f8a421))
+* **export:** Remove unnecessary blank line and improve stage condition check in LheoXML ([d3c7390](https://github.com/Dannebicque/oreof/commit/d3c73908f5d21d161ff86a01e25e7dd493240a23))
+* **export:** Simplify retrieval of validation state in ExportCfvu ([97ff7da](https://github.com/Dannebicque/oreof/commit/97ff7dab51c632a6a5f757a91a7b3f37ae46199f))
+* **formation:** création d'une nouvelle formation ([7162c01](https://github.com/Dannebicque/oreof/commit/7162c014a1660d54c65a0d7316dfb82c31a1fb53))
+* **pdf:** Refactor date retrieval logic in McccPdfCommand and ParcoursMcccExportController ([13116e0](https://github.com/Dannebicque/oreof/commit/13116e07e2df99321237ff6a60837cd3377d1008))
+* **pdf:** Update default campaign retrieval in McccPdfCommand to use the correct year ([bb92350](https://github.com/Dannebicque/oreof/commit/bb92350399ce56b81aa22628e45d7cf09f3fe356))
+* **quitus:** quitus par défaut false ([0bcac35](https://github.com/Dannebicque/oreof/commit/0bcac358f3bc88d6f264fabb0c088f69ae5571b2))
+* **quitus:** quitus par défaut false ([aa3b613](https://github.com/Dannebicque/oreof/commit/aa3b613e53f1e559871ccfcf123cf8bd25a01117))
+* **TypeDiplome:** clean up service configuration and improve code readability ([6adc11f](https://github.com/Dannebicque/oreof/commit/6adc11f899ddf5b7721edd71783edcef40ec14cb))
+
 ## [1.45.0](https://github.com/Dannebicque/oreof/compare/v1.44.1...v1.45.0) (2025-11-03)
 
 

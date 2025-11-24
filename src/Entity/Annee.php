@@ -50,6 +50,9 @@ class Annee
     #[ORM\Column]
     private ?bool $hasCapacite = true;
 
+    #[ORM\Column]
+    private ?bool $isProposeRecrutement = true;
+
     public function __construct()
     {
         $this->parcoursSemestre = new ArrayCollection();
@@ -204,6 +207,18 @@ class Annee
     public function setHasCapacite(bool $hasCapacite): static
     {
         $this->hasCapacite = $hasCapacite;
+
+        return $this;
+    }
+
+    public function isProposeRecrutement(): ?bool
+    {
+        return $this->isProposeRecrutement;
+    }
+
+    public function setIsProposeRecrutement(bool $isProposeRecrutement): static
+    {
+        $this->isProposeRecrutement = $isProposeRecrutement;
 
         return $this;
     }

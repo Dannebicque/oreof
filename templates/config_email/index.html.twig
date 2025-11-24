@@ -8,6 +8,15 @@
     <a class="btn btn-outline-primary" href="{{ path('admin_email_template_new') }}">Ajouter un template</a>
 {% endblock %}
 
+{% block breadcrumb %}
+    {{ include('communs/_breadcrumb.html.twig', {liens:[
+        {
+            href:'',
+            title: 'Administration',
+        }
+    ]}) }}
+{% endblock %}
+
 {% block content %}
     <div class="card">
         <div class="card-body">

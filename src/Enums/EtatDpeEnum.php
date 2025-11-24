@@ -66,6 +66,7 @@ enum EtatDpeEnum: string implements BadgeEnumInterface
     case non_ouverture_ses = 'non_ouverture_ses';
     case non_ouverture_cfvu = 'non_ouverture_cfvu';
     case non_ouverture = 'non_ouverture';
+    case tacite_reconduction = 'tacite_reconduction';
 
 
     public function libelle(): string
@@ -106,6 +107,7 @@ enum EtatDpeEnum: string implements BadgeEnumInterface
             self::non_ouverture_ses => 'Non ouverture, attente validation SES',
             self::non_ouverture_cfvu => 'Non ouverture, attente validation CFVU',
             self::non_ouverture => 'Non ouverture du parcours',
+            self::tacite_reconduction => 'Tacite reconduction',
         };
     }
 
@@ -116,7 +118,7 @@ enum EtatDpeEnum: string implements BadgeEnumInterface
             self::soumis_conseil_reserve, self::autorisation_saisie, self::en_cours_redaction, self::en_cours_redaction_ss_cfvu, self::reserve_parcours_rf, self::non_ouverture_ses, self::non_ouverture_cfvu => 'warning',
             self::soumis_rf, self::soumis_ec, self::soumis_dpe_composante, self::soumis_conseil, self::soumis_central, self::soumis_vp, self::soumis_cfvu,  self::soumis_parcours, self::valide_parcours_rf, self::soumis_central_sans_cfvu, self::soumis_central_reserve_cfvu, self::soumis_dpe_composante_reserve_cfvu => 'info',
             self::refuse_rf, self::refuse_ec, self::refuse_dpe_composante, self::refuse_conseil, self::refuse_central, self::refuse_definitif_cfvu, self::non_ouverture => 'danger',
-            self::valide_a_publier, self::valide_cfvu, self::publie, self::valide_pour_publication, self::transmis_rf, self::transmis_dpe  => 'success',
+            self::valide_a_publier, self::valide_cfvu, self::publie, self::valide_pour_publication, self::transmis_rf, self::transmis_dpe, self::tacite_reconduction => 'success',
         };
     }
 

@@ -38,6 +38,7 @@ use App\Service\VersioningParcours;
 use App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException;
 use App\Utils\Access;
 use App\Utils\JsonRequest;
+use App\Utils\Tools;
 use DateTime;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
@@ -250,7 +251,7 @@ class FormationController extends BaseController
             $formation->addComposantesInscription($formation->getComposantePorteuse());
             $formation->setHasParcours(true);
             $formation->setEtatReconduction(TypeModificationDpeEnum::MODIFICATION_PARCOURS);
-            $formationRepository->save($formation, true);
+            $this->entityManager->persist($formation);
 
             $parcours = new Parcours($formation);
             $parcours->setLibelle('Parcours de formation à définir (création formation)');
@@ -265,12 +266,11 @@ class FormationController extends BaseController
             $dpeParcours->setCampagneCollecte($this->getCampagneCollecte());
             $dpeParcours->setVersion('0.1');
             $dpeParcours->setEtatReconduction(TypeModificationDpeEnum::MODIFICATION_MCCC_TEXTE);
-            $dpeParcoursWorkflow->apply($dpeParcours, 'initialiser');
-            $dpeParcoursWorkflow->apply($dpeParcours, 'autoriser');
+
             $parcours->addDpeParcour($dpeParcours);
             $this->entityManager->persist($dpeParcours);
 
-            $profil = $profilRepository->findOneBy(['code_role' => 'ROLE_RESP_FORMATION']);
+            $profil = $profilRepository->findOneBy(['code' => 'ROLE_RESP_FORMATION']);
             $uc = new UserProfil();
             $uc->setUser($formation->getResponsableMention());
             $uc->setCampagneCollecte($this->getCampagneCollecte());
@@ -278,6 +278,8 @@ class FormationController extends BaseController
             $uc->setProfil($profil);
             $this->entityManager->persist($uc);
             $this->entityManager->flush();
+            $dpeParcoursWorkflow->apply($dpeParcours, 'initialiser');
+            $dpeParcoursWorkflow->apply($dpeParcours, 'autoriser');
 
             return $this->redirectToRoute('app_formation_index');
         }

@@ -199,6 +199,16 @@ final class OffreController extends BaseController
                 $annee->setIsOuvert(!$annee->isOuvert());
                 $entityManager->flush();
                 break;
+            case 'changeRecrutementAnnee':
+                $annee = $anneeRepository->find($data['id']);
+                if ($annee === null) {
+                    return JsonReponse::error('Pas d\'année trouvée');
+                }
+
+                // on parcours tous les parcours et on les fermes
+                $annee->setIsProposeRecrutement(!$annee->isProposeRecrutement());
+                $entityManager->flush();
+                break;
             case 'changeHasCapacite':
                 $annee = $anneeRepository->find($data['id']);
                 if ($annee === null) {

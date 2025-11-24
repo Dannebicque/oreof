@@ -24,6 +24,9 @@ class EmailTemplate
     #[ORM\Column(type: 'text')]
     private string $subject = '';
 
+    #[ORM\Column(type: 'json', options: ['default' => '[]'])]
+    private array $subjects = []; // ex: {"student":"Sujet {{ user.fullName }}", "tutor":"..."}
+
     #[ORM\Column(type: 'text')]
     private string $bodyHtml = '';
 
@@ -59,6 +62,17 @@ class EmailTemplate
     {
         $this->subject = $subject;
 
+        return $this;
+    }
+
+    public function getSubjects(): array
+    {
+        return $this->subjects;
+    }
+
+    public function setSubjects(array $subjects): self
+    {
+        $this->subjects = $subjects;
         return $this;
     }
 

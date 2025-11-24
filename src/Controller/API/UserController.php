@@ -9,6 +9,7 @@
 
 namespace App\Controller\API;
 
+use App\Controller\BaseController;
 use App\Repository\UserProfilRepository;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -17,7 +18,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/api/user')]
-class UserController extends AbstractController
+class UserController extends BaseController
 {
     public function __construct(
         private readonly UserRepository $userRepository,
@@ -32,27 +33,5 @@ class UserController extends AbstractController
         return $this->render('api/user/_user.html.twig', [
             'user' => $user,
         ]);
-    }
-
-    #[Route('/api/users/composante', name: 'api_user_get_all_user_composante', methods: ['GET'])]
-    public function usersComposante(
-        UserProfilRepository $userCenterRepository,
-        Request $request
-    ): Response {
-        $users = $userCenterRepository->findByComposante((int)$request->query->get('composante'));
-
-        $tab = [];
-
-        foreach ($users as $user) {
-            if ($user->getuser() !== null) {
-                $tab[] = [
-                    'id' => $user->getUser()?->getId(),
-                    'libelle' => $user->getUser()?->getDisplay(),
-                ];
-            }
-        }
-
-
-        return $this->json($tab);
     }
 }

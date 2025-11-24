@@ -54,3 +54,7 @@ public/api_json/
 .phpunit.result.cache
 /phpunit.xml
 ###< symfony/phpunit-bridge ###
+
+### exclude sql ###
+/*.sql
+/pense-bete.md

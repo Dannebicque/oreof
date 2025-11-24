@@ -32,14 +32,6 @@ class Mention
     #[ORM\Column(length: 20, nullable: true)]
     private ?string $sigle = null;
 
-//    #[ORM\Column(length: 255)]
-//    private ?string $typeDiplome = null;
-
-    /** @deprecated */
-    #[Groups('parcours_json_versioning')]
-    #[ORM\ManyToOne()]
-    private ?Domaine $domaine = null;
-
     #[ORM\ManyToOne(cascade: ['persist'], inversedBy: 'mentions')]
     private ?TypeDiplome $typeDiplome = null;
 
@@ -54,6 +46,20 @@ class Mention
      */
     #[ORM\ManyToMany(targetEntity: Domaine::class, inversedBy: 'mentions')]
     private Collection $domaines;
+
+    /** @deprecated */
+    #[Groups('parcours_json_versioning')]
+    private ?Domaine $domaine = null;
+
+    public function getDomaine(): ?Domaine
+    {
+        return $this->domaine;
+    }
+
+    public function setDomaine(?Domaine $domaine): void
+    {
+        $this->domaine = $domaine;
+    }
 
     public function __construct()
     {
@@ -86,20 +92,6 @@ class Mention
     public function setSigle(?string $sigle): self
     {
         $this->sigle = $sigle;
-
-        return $this;
-    }
-
-    /** @deprecated */
-    public function getDomaine(): ?Domaine
-    {
-        return $this->domaine;
-    }
-
-    /** @deprecated */
-    public function setDomaine(?Domaine $domaine): self
-    {
-        $this->domaine = $domaine;
 
         return $this;
     }

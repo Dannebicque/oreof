@@ -154,7 +154,7 @@ class VersioningParcours
             // Données du parcours en JSON
             $fileParcours = file_get_contents(
                 __DIR__ . "/../../versioning_json/parcours/"
-                                            . "{$lastVersion->getParcours()->getId()}/"
+                . "{$lastVersion->getParcours()?->getId()}/"
                                             . "{$lastVersion->getParcoursFileName()}.json"
             );
             $lastVersion = $this->serializer->deserialize($fileParcours, Parcours::class, 'json');

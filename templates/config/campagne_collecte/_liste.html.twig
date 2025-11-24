@@ -3,12 +3,13 @@
     <tr>
         <th>Libellé</th>
         <th>Année Universitaire</th>
-        <th>Date Ouverture</th>
-        <th>Date Clôture</th>
-        <th>Transmission SES</th>
-        <th>CFVU</th>
+        <th>Dates</th>
+        {#        <th>Date Ouverture</th> #}
+        {#        <th>Date Clôture</th> #}
+        {#        <th>Transmission SES</th> #}
+        {#        <th>CFVU</th> #}
         <th>Collecte DPE active ?</th>
-        <th>DPE informé ?</th>
+        {#        <th>DPE informé ?</th> #}
         <th></th>
     </tr>
     </thead>
@@ -17,27 +18,34 @@
         <tr>
             <td>{{ campagne_collecte.libelle }}</td>
             <td>{{ campagne_collecte.anneeUniversitaire != null ? campagne_collecte.anneeUniversitaire.libelle : 'erreur' }}</td>
-            <td>{{ campagne_collecte.dateOuvertureDpe|dateFr }}</td>
-            <td>{{ campagne_collecte.dateClotureDpe|dateFr }}</td>
-            <td>{{ campagne_collecte.dateTransmissionSes|dateFr }}</td>
-            <td>{{ campagne_collecte.dateCfvu|dateFr }}</td>
+            <td>
+                <ul>
+                    {% for event in campagne_collecte.timelineDates %}
+                        <li>{{ event.libelle }} : {{ event.date|dateFr }}</li>
+                    {% endfor %}
+                </ul>
+            </td>
+            {#            <td>{{ campagne_collecte.dateOuvertureDpe|dateFr }}</td> #}
+            {#            <td>{{ campagne_collecte.dateClotureDpe|dateFr }}</td> #}
+            {#            <td>{{ campagne_collecte.dateTransmissionSes|dateFr }}</td> #}
+            {#            <td>{{ campagne_collecte.dateCfvu|dateFr }}</td> #}
             <td><span class="badge {% if campagne_collecte.defaut %}bg-success{% else %}bg-warning{% endif %}">{{
                     campagne_collecte.defaut ? 'Active' : 'Non' }}</span></td>
-            <td><span class="badge {% if campagne_collecte.mailDpeEnvoye %}bg-success{% else %}bg-warning{% endif %}">{{
-                    campagne_collecte.mailDpeEnvoye ? 'Oui' : 'Non' }}</span></td>
+            {#            <td><span class="badge {% if campagne_collecte.mailDpeEnvoye %}bg-success{% else %}bg-warning{% endif %}">{{ #}
+            {#                    campagne_collecte.mailDpeEnvoye ? 'Oui' : 'Non' }}</span></td> #}
             <td class="text-end">
-                {% if campagne_collecte.mailDpeEnvoye == false %}
-                    <span {{ stimulus_controller('modal_confirm', {
-                        titre: 'Ouverture d\'une campagne de collecte',
-                        body: 'Êtes-vous sûr de vouloir ouvrir la campagne de collecte ? Cela enverra un mail aux DPE.',
-                    }) }}>
-                <a
-                        {{ stimulus_action('modal_confirm', 'confirm') }}
-                        href="{{ path('app_campagne_collecte_open_dpe',{'id': campagne_collecte.id}) }}" class="btn btn-sm text-success">
-                    <i class="fal fa-lock-open"></i> Ouvrir DPE
-                </a>
-                        </span>
-                {% endif %}
+                {#                {% if campagne_collecte.mailDpeEnvoye == false %} #}
+                {#                    <span {{ stimulus_controller('modal_confirm', { #}
+                {#                        titre: 'Ouverture d\'une campagne de collecte', #}
+                {#                        body: 'Êtes-vous sûr de vouloir ouvrir la campagne de collecte ? Cela enverra un mail aux DPE.', #}
+                {#                    }) }}> #}
+                {#                <a #}
+                {#                        {{ stimulus_action('modal_confirm', 'confirm') }} #}
+                {#                        href="{{ path('app_campagne_collecte_open_dpe',{'id': campagne_collecte.id}) }}" class="btn btn-sm text-success"> #}
+                {#                    <i class="fal fa-lock-open"></i> Ouvrir DPE #}
+                {#                </a> #}
+                {#                        </span> #}
+                {#                {% endif %} #}
                 <button
                         {{ stimulus_controller('modal', {
                             size: 'lg',

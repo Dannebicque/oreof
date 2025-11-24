@@ -32,7 +32,7 @@ class FormationResponsableController extends BaseController
         private readonly ChangeRfProcess $changeRfProcess,
         KernelInterface $kernel,
     ) {
-        $this->dir = $kernel->getProjectDir() . '/public/uploads/change_rf/pv/';
+        $this->dir = $kernel->getProjectDir() . '/public/uploads/conseils/';
     }
 
     #[Route('/formation/change-responsable/ajout/{formation}', name: 'app_formation_change_rf')]

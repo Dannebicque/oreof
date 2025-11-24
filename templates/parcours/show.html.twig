@@ -40,6 +40,8 @@
 {% endblock %}
 
 {% block content %}
+    {#    {{ include('parcours/_synthese_parcours-v2.html.twig') }} #}
+
     {{ include('parcours/_synthese_parcours.html.twig') }}
 
     {% if is_granted('ROLE_ADMIN') %}

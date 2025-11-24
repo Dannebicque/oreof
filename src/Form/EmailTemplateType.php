@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\EmailTemplate;
+use App\Form\Type\SubjectsJsonType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -26,6 +27,15 @@ class EmailTemplateType extends AbstractType
             ->add('subject', TextType::class, [
                 'label' => 'Sujet',
                 'attr' => ['data-email-template-target' => 'subject']
+            ])
+            ->add('subjects', SubjectsJsonType::class, [
+                'required' => false,
+                'label' => 'Sujets par variante (JSON)',
+                'help' => 'Ex: {"parcours_par_defaut":"Sujet {{ user.fullName }}","parcours":"Sujet {{ formation.code }}"}',
+                'attr' => [
+                    'rows' => 6,
+                    'data-email-template-target' => 'subjectsJson'
+                ],
             ])
             ->add('bodyHtml', TextareaType::class, [
                 'label' => 'Corps HTML (Twig autorisé)',

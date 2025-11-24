@@ -19,7 +19,7 @@ function debounce (fn, delay = 350) {
 
 export default class extends Controller {
   static targets = [
-    'subject', 'bodyHtml', 'bodyText', 'previewSubject', 'previewIframe', 'previewText', 'workflow'
+    'subject', 'bodyHtml', 'bodyText', 'previewSubject', 'previewIframe', 'previewText', 'workflow', 'subjectsJson', 'subjectVariant'
   ]
 
   get previewUrl () {
@@ -30,11 +30,48 @@ export default class extends Controller {
   connect () {
     this.updatePreview = debounce(this.updatePreview.bind(this), 300);
     // Live preview on input
-    ['subject', 'bodyHtml', 'bodyText', 'workflow'].forEach(t => {
+    ['subject', 'bodyHtml', 'bodyText', 'workflow', 'subjectsJson', 'subjectVariant'].forEach(t => {
       this[`${t}Target`].addEventListener('input', this.updatePreview)
       this[`${t}Target`].addEventListener('change', this.updatePreview)
     })
+
+    this.rebuildVariantOptions()
     this.updatePreview()
+  }
+
+  rebuildVariantOptions () {
+    if (!this.subjectsJsonTarget || !this.subjectVariantTarget) return
+    let variants = []
+    try {
+      const obj = JSON.parse(this.subjectsJsonTarget.value || '{}')
+      if (obj && typeof obj === 'object') {
+        variants = Object.keys(obj).filter(k => typeof obj[k] === 'string')
+      }
+    } catch (e) { /* JSON invalide -> pas d’options */ }
+
+    // Conserver la sélection actuelle si possible
+    const current = this.subjectVariantTarget.value || ''
+
+    // Clear + rebuild
+    this.subjectVariantTarget.innerHTML = ''
+    const optDefault = document.createElement('option')
+    optDefault.value = ''
+    optDefault.textContent = '(par défaut)'
+    this.subjectVariantTarget.appendChild(optDefault)
+
+    variants.forEach(v => {
+      const opt = document.createElement('option')
+      opt.value = v
+      opt.textContent = v
+      this.subjectVariantTarget.appendChild(opt)
+    })
+
+    // Rétablir sélection si toujours valide
+    if (variants.includes(current)) {
+      this.subjectVariantTarget.value = current
+    } else {
+      this.subjectVariantTarget.value = ''
+    }
   }
 
   insertToken (e) {
@@ -50,12 +87,15 @@ export default class extends Controller {
   }
 
   async updatePreview () {
+    this.rebuildVariantOptions()
     const payload = new FormData()
     payload.set('subject', this.subjectTarget?.value ?? '')
     payload.set('bodyHtml', this.bodyHtmlTarget?.value ?? '')
     payload.set('bodyText', this.bodyTextTarget?.value ?? '')
     payload.set('workflow', this.workflowTarget?.value ?? 'preview.workflow')
-    // Optionnel: payload.set("overrides", JSON.stringify({ user: { fullName: "Bob" } }));
+    // NEW: passer le JSON des sujets + la variante choisie
+    payload.set('subjects', this.subjectsJsonTarget?.value ?? '')
+    payload.set('subjectVariant', this.subjectVariantTarget?.value ?? '')
 
     try {
       const res = await fetch(this.previewUrl, { method: 'POST', body: payload })
@@ -63,11 +103,7 @@ export default class extends Controller {
       const data = await res.json()
       this.previewSubjectTarget.textContent = data.subject ?? ''
 
-      // injecte HTML rendu dans l'iframe
-      const doc = this.previewIframeTarget.contentDocument || this.previewIframeTarget.contentWindow.document
-      doc.open()
-      doc.write(data.html ?? '')
-      doc.close()
+      this.previewIframeTarget.innerHTML = data.html ?? ''
 
       this.previewTextTarget.textContent = data.text ?? ''
     } catch (e) {

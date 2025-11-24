@@ -509,3 +509,7 @@ profil.labels.libelle: 'Libellé du profil'
 profil.labels.code: 'Code du profil'
 profil.labels.centre.label: 'Centre(s) pour ce profil'
 register.labels.serviceDemande: 'Votre service ou fonctions'
+formation_step3:
+  labels:
+    hasParcours:
+      warning: 'Cette formation comporte plusieurs parcours. Vous devez en supprimer et n''en garder qu''un seul qui sera transformé en parcours par défaut si vous souhaitez l''utiliser et définir cette formation comme étant "sans parcours".'

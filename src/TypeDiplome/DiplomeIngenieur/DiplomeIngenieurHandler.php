@@ -7,7 +7,7 @@
  * @lastUpdate 28/05/2025 15:26
  */
 
-namespace App\TypeDiplome\Daeu;
+namespace App\TypeDiplome\DiplomeIngenieur;
 
 use App\Entity\CampagneCollecte;
 use App\Entity\ElementConstitutif;
@@ -20,16 +20,16 @@ use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
-final class DaeuHandler implements TypeDiplomeHandlerInterface
+final class DiplomeIngenieurHandler implements TypeDiplomeHandlerInterface
 {
 
-    public const TEMPLATE_FOLDER = 'daeu';
-    public const SOURCE = 'daeu';
-    public const TEMPLATE_FORM_MCCC = 'but.html.twig';
+    public const TEMPLATE_FOLDER = 'diplomeIngenieur';
+    public const SOURCE = 'diplome_ingenieur';
+    public const TEMPLATE_FORM_MCCC = 'di.html.twig';
 
     public function supports(string $type): bool
     {
-        return $type === 'DAEU';
+        return $type === 'DI';
     }
 
     public function calculStructureParcours(Parcours $parcours, bool $withEcts = true, bool $withBcc = true): \App\DTO\StructureParcours
