@@ -106,7 +106,6 @@ export default class extends Controller {
     }
 
     await fetch(this.urlValue, body).then((response) => JsonResponse(response))
-
   }
 
   async changeCapaciteParcours (event) {
@@ -120,7 +119,19 @@ export default class extends Controller {
     }
 
     await fetch(this.urlValue, body).then((response) => JsonResponse(response))
+  }
 
+  async changeCapaciteMention (event) {
+    const body = {
+      method: 'POST',
+      body: JSON.stringify({
+        id: event.params.id,
+        value: event.target.value,
+        action: 'changeCapaciteMention'
+      }),
+    }
+
+    await fetch(this.urlValue, body).then((response) => JsonResponse(response))
   }
 
   async changeOuvertureAnnee (event) {

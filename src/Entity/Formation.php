@@ -214,6 +214,9 @@ class Formation
     #[ORM\OneToMany(mappedBy: 'formation', targetEntity: DpeDemande::class, cascade: ['persist'])]
     private Collection $dpeDemandes;
 
+    #[ORM\Column]
+    private ?int $capaciteAccueil = 0;
+
     public function __construct(?CampagneCollecte $anneeUniversitaire)
     {
         $this->dpe = $anneeUniversitaire;
@@ -1141,6 +1144,18 @@ class Formation
                 $dpeDemande->setFormation(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCapaciteAccueil(): ?int
+    {
+        return $this->capaciteAccueil ?? 0;
+    }
+
+    public function setCapaciteAccueil(int $capaciteAccueil): static
+    {
+        $this->capaciteAccueil = $capaciteAccueil;
 
         return $this;
     }

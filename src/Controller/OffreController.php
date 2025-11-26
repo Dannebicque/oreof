@@ -183,10 +183,19 @@ final class OffreController extends BaseController
             case 'changeCapaciteParcours':
                 $parcours = $parcoursRepository->find($data['id']);
                 if ($parcours === null) {
-                    return JsonReponse::error('Pas de parcours trouvée');
+                    return JsonReponse::error('Pas de parcours trouvé');
                 }
 
                 $parcours->setCapaciteAccueil((int)$data['value']);
+                $entityManager->flush();
+                break;
+            case 'changeCapaciteMention':
+                $formation = $formationRepository->find($data['id']);
+                if ($formation === null) {
+                    return JsonReponse::error('Pas de formation trouvée');
+                }
+
+                $formation->setCapaciteAccueil((int)$data['value']);
                 $entityManager->flush();
                 break;
             case 'changeOuvertureAnnee':
