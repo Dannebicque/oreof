@@ -158,7 +158,22 @@
                             >
                         </td>
                         <td>
-                            <a class="btn btn-info btn-sm" target="_blank"
+                            <button
+                                    {{ stimulus_controller('modal', {
+                                        size: 'lg',
+                                        nomEvenement: 'parcoursAdded',
+                                        modalTitle: 'Modifier un parcours',
+                                        modalUrl: path('app_parcours_edit_modal', {parcours:parcours.parcours.id}) }) }}
+                                    data-action="click->modal#openModal"
+                                    class="btn btn-sm btn-outline-warning mb-1"
+                                    data-size="lg"
+                                    data-bs-toggle="tooltip"
+                                    data-bs-placement="bottom"
+                                    title=" Modifier le libellé/Responsable du parcours"
+                            >
+                                <i class="{{ iconEdit }}"></i>
+                            </button>
+                            <a class="btn btn-info btn-sm mb-1" target="_blank"
                                href="{{ path('app_parcours_show', { 'id': parcours.parcours.id }) }}">
                                 <i class="{{ iconShow }}"></i>
                             </a>
