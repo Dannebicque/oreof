@@ -61,9 +61,9 @@
     </fieldset>
 
     {% if formation.parcours|length > 1 %}
-        <twig:alertes type="warning">
+        <twig:alerte type="warning">
             {{ 'formation_step3.labels.hasParcours.warning'|trans({}, 'form') }}
-        </twig:alertes>
+        </twig:alerte>
     {% endif %}
 
     <div id="bloc_semestre" class="{% if formation.hasParcours == false %}d-none{% endif %} mt-2">
