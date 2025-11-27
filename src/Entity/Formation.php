@@ -1159,4 +1159,15 @@ class Formation
 
         return $this;
     }
+
+    public function getCapacite(): int
+    {
+        // si capacite accueil définie sur parcours, on retour cette valeur, sinon somme des capacités des parcours
+
+        if ($this->capaciteAccueil !== null && $this->capaciteAccueil > 0) {
+            return $this->capaciteAccueil;
+        }
+
+        return array_sum(array_map(fn($parcours) => $parcours->getCapaciteAccueil(), $this->getParcours()->toArray()));
+    }
 }

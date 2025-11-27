@@ -24,6 +24,13 @@ final class OffreController extends BaseController
         DpeParcoursRepository $dpeParcoursRepository,
     ): Response
     {
+        $tabStatistiques = [
+            'nbFormations' => 0,
+            'nbParcours' => 0,
+            'capacite' => 0,
+            'capaciteTotale' => 0
+        ];
+
         // récupérer l'ensemble des formations et des parcours associés, pour chacun l'état du DPE courant
         $allParcours = $dpeParcoursRepository->findByCampagneCollecte($this->getCampagneCollecte());
         $tFormations = [];
@@ -45,6 +52,7 @@ final class OffreController extends BaseController
         $composantes = [];
         $villes = [];
         foreach ($tFormations as $row) {
+            $tabStatistiques['capaciteTotale'] += $row['formation']->getCapacite();
             $f = $row['formation'];
             $types[$f->getTypeDiplome()?->getLibelle() ?? ''] = true;
             $composantes[$f->getComposantePorteuse()?->getLibelle() ?? ''] = true;
@@ -71,7 +79,7 @@ final class OffreController extends BaseController
 
         // Appliquer les filtres côté PHP sur le tableau tFormations
         if ($q || $type || $comp || $ville) {
-            $tFormations = array_filter($tFormations, static function (array $row) use ($q, $type, $comp, $ville) {
+            $tFormations = array_filter($tFormations, static function (array $row) use ($q, $type, $comp, $ville, $tabStatistiques): bool {
                 $f = $row['formation'];
                 // Libellé
                 if ($q !== '') {
@@ -99,8 +107,15 @@ final class OffreController extends BaseController
                         return false;
                     }
                 }
+
                 return true;
             });
+        }
+
+        foreach ($tFormations as $row) {
+            $tabStatistiques['nbFormations']++;
+            $tabStatistiques['nbParcours'] += count($row['dpeParcours']);
+            $tabStatistiques['capacite'] += $row['formation']->getCapacite();
         }
 
         // Déterminer si on ne doit renvoyer que le fragment du frame
@@ -120,6 +135,7 @@ final class OffreController extends BaseController
                 'composantes' => $composantes,
                 'villes' => $villes,
             ],
+            'tabStatistiques' => $tabStatistiques,
         ];
 
         if ($isFrame) {

@@ -24,7 +24,7 @@ final class M2EHandler implements TypeDiplomeHandlerInterface
 {
 
     public const TEMPLATE_FOLDER = 'licence'; //todo: a remplacer
-    public const SOURCE = 'm2e';
+    public const SOURCE = 'licence'; //todo: a remplacer
     public const TEMPLATE_FORM_MCCC = 'licence.html.twig'; //todo: a remplacer
 
     public function supports(string $type): bool

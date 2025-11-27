@@ -44,6 +44,15 @@
         </div>
     </form>
 
+    <div class="alert alert-info">
+        <strong>{{ tabStatistiques.nbFormations }}</strong> formation{{ tabStatistiques.nbFormations > 1 ? 's' : '' }}
+        trouvée{{ tabStatistiques.nbFormations > 1 ? 's' : '' }}, et <strong>{{ tabStatistiques.nbParcours }}</strong>
+        parcours.
+
+        <strong>{{ tabStatistiques.capacite }}</strong> places disponibles sur les parcours selectionnés.
+        <strong>{{ tabStatistiques.capaciteTotale }}</strong> places au total dans l'offre de formation complète.
+    </div>
+
     <table class="table"
             {{ stimulus_controller('offre', {
                 url: path('app_offre_update')
