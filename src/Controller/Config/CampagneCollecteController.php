@@ -22,6 +22,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/administration/campagne-collecte')]
 class CampagneCollecteController extends AbstractController
@@ -160,6 +161,7 @@ class CampagneCollecteController extends AbstractController
         return $this->json(false);
     }
 
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/{id}/configure/publication', name: 'app_campagne_collecte_configure_publication', methods: ['GET', 'POST'])]
     public function configurePublication(
         CampagneCollecte $campagneCollecte,
