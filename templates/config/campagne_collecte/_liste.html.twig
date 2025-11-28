@@ -10,6 +10,7 @@
         {#        <th>CFVU</th> #}
         <th>Collecte DPE active ?</th>
         {#        <th>DPE informé ?</th> #}
+        <th>Configuration de la publication<th>
         <th></th>
     </tr>
     </thead>
@@ -31,6 +32,25 @@
             {#            <td>{{ campagne_collecte.dateCfvu|dateFr }}</td> #}
             <td><span class="badge {% if campagne_collecte.defaut %}bg-success{% else %}bg-warning{% endif %}">{{
                     campagne_collecte.defaut ? 'Active' : 'Non' }}</span></td>
+
+            {% set isPublished = campagne_collecte.enablePublication == true %}
+            <td>
+                <span class="badge {{ isPublished ? 'bg-success' : 'bg-danger'}}">
+                    {{isPublished ? 'Publié' : 'Non publié'}}
+                </span>
+                {% if campagne_collecte.publicationOptions|length > 0 %}
+                    <ul class="list-unstyled">
+                    {% for optionKey, optionValue in campagne_collecte.publicationOptions %}
+                        <li>
+                            <span class="badge {{ optionValue == true ? 'bg-success' : 'bg-danger' }}">
+                                {{ libelleConfigurationPublication[optionKey] }}
+                            </span>
+                        </li>
+                    {% endfor %}
+                    </ul>
+                {% endif %}
+            </td>
+
             {#            <td><span class="badge {% if campagne_collecte.mailDpeEnvoye %}bg-success{% else %}bg-warning{% endif %}">{{ #}
             {#                    campagne_collecte.mailDpeEnvoye ? 'Oui' : 'Non' }}</span></td> #}
             <td class="text-end">

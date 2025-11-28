@@ -61,6 +61,10 @@ class CampagneCollecteController extends AbstractController
     {
         return $this->render('config/campagne_collecte/_liste.html.twig', [
             'campagne_collectes' => $campagneCollecteRepository->findAll(),
+            'libelleConfigurationPublication' => [
+                ConfigurationPublicationEnum::MAQUETTE->value => 'Maquette des enseignements',
+                ConfigurationPublicationEnum::MCCC->value => 'MCCC (PDF)'
+            ]
         ]);
     }
 
