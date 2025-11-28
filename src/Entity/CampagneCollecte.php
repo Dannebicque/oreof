@@ -109,6 +109,12 @@ class CampagneCollecte
     #[ORM\OrderBy(['date' => 'ASC'])]
     private Collection $timelineDates;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $enablePublication = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?array $publicationOptions = null;
+
     public function __construct()
     {
         $this->dpeParcours = new ArrayCollection();
@@ -487,6 +493,30 @@ class CampagneCollecte
                 $timelineDate->setCampagneCollecte(null);
             }
         }
+
+        return $this;
+    }
+
+    public function isEnablePublication(): ?bool
+    {
+        return $this->enablePublication;
+    }
+
+    public function setEnablePublication(?bool $enablePublication): static
+    {
+        $this->enablePublication = $enablePublication;
+
+        return $this;
+    }
+
+    public function getPublicationOptions(): ?array
+    {
+        return $this->publicationOptions;
+    }
+
+    public function setPublicationOptions(?array $publicationOptions): static
+    {
+        $this->publicationOptions = $publicationOptions;
 
         return $this;
     }

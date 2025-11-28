@@ -10,7 +10,9 @@
 namespace App\Controller\Config;
 
 use App\Entity\CampagneCollecte;
+use App\Enums\ConfigurationPublicationEnum;
 use App\Form\CampagneCollecteType;
+use App\Form\ConfigurePublicationType;
 use App\Repository\CampagneCollecteRepository;
 use App\Repository\DpeParcoursRepository;
 use App\Utils\JsonRequest;
@@ -152,5 +154,44 @@ class CampagneCollecteController extends AbstractController
         }
 
         return $this->json(false);
+    }
+
+    #[Route('/{id}/configure/publication', name: 'app_campagne_collecte_configure_publication', methods: ['GET', 'POST'])]
+    public function configurePublication(
+        CampagneCollecte $campagneCollecte,
+        Request $request,
+        CampagneCollecteRepository $campagneRepository
+    ) : Response {
+        $form = $this->createForm(ConfigurePublicationType::class, $campagneCollecte, 
+            [
+               'action' => $this->generateUrl('app_campagne_collecte_configure_publication', ['id' => $campagneCollecte->getId()]),
+               'hasPublishedMccc' => $campagneCollecte->getPublicationOptions()[ConfigurationPublicationEnum::MCCC->value] ?? 'none',
+               'hasPublishedMaquette' => $campagneCollecte->getPublicationOptions()[ConfigurationPublicationEnum::MAQUETTE->value] ?? 'none'
+            ]
+        );
+
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()){
+            $configToSave = [];
+            $jsonConfigValues = [
+                ConfigurationPublicationEnum::MAQUETTE->value, 
+                ConfigurationPublicationEnum::MCCC->value
+            ];
+            foreach($jsonConfigValues as $configValue){
+                if($form->has($configValue)){
+                    $configToSave[$configValue] = $form->get($configValue)->getData();
+                }
+            }
+
+            $campagneCollecte->setPublicationOptions($configToSave);
+            $campagneRepository->save($campagneCollecte, true);
+
+            return $this->json(true);
+        }
+
+        return $this->render('config/campagne_collecte/_configure_publication.html.twig', [
+            'campagneCollecte' => $campagneCollecte,
+            'form' => $form
+        ]);
     }
 }
