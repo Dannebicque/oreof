@@ -34,10 +34,33 @@
                     campagne_collecte.defaut ? 'Active' : 'Non' }}</span></td>
 
             {% set isPublished = campagne_collecte.enablePublication == true %}
+            {% set publicationTagStyle = {
+                'annee_archivee' : {
+                    label: 'Année archivée',
+                    badgeColor: 'bg-warning'
+                },
+                'annee_courante': {
+                    label: 'Année courante (N)',
+                    badgeColor: 'bg-primary'
+                },
+                'annee_suivante': {
+                    label: 'Année suivante (N+1)',
+                    badgeColor: 'bg-info'
+                }
+            } %}
             <td>
-                <span class="badge {{ isPublished ? 'bg-success' : 'bg-danger'}}">
-                    {{isPublished ? 'Publié' : 'Non publié'}}
-                </span>
+                {% if campagne_collecte.publicationTag not in ['none', null] %}
+                    <p class="my-0">
+                        <span class="badge {{ publicationTagStyle[campagne_collecte.publicationTag].badgeColor }}">
+                            {{ publicationTagStyle[campagne_collecte.publicationTag].label }}
+                        </span>
+                    </p>
+                {% endif %}
+                <p class="my-0">
+                    <span class="badge {{ isPublished ? 'bg-success' : 'bg-danger'}}">
+                        {{isPublished ? 'Publié' : 'Non publié'}}
+                    </span>
+                </p>
                 {% if campagne_collecte.publicationOptions|length > 0 %}
                     <ul class="list-unstyled">
                     {% for optionKey, optionValue in campagne_collecte.publicationOptions %}
