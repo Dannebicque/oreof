@@ -115,6 +115,9 @@ class CampagneCollecte
     #[ORM\Column(nullable: true)]
     private ?array $publicationOptions = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $publicationTag = null;
+
     public function __construct()
     {
         $this->dpeParcours = new ArrayCollection();
@@ -517,6 +520,18 @@ class CampagneCollecte
     public function setPublicationOptions(?array $publicationOptions): static
     {
         $this->publicationOptions = $publicationOptions;
+
+        return $this;
+    }
+
+    public function getPublicationTag(): ?string
+    {
+        return $this->publicationTag;
+    }
+
+    public function setPublicationTag(?string $publicationTag): static
+    {
+        $this->publicationTag = $publicationTag;
 
         return $this;
     }
