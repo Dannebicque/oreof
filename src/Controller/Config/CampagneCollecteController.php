@@ -10,6 +10,7 @@
 namespace App\Controller\Config;
 
 use App\Entity\CampagneCollecte;
+use App\Enums\CampagnePublicationTagEnum;
 use App\Enums\ConfigurationPublicationEnum;
 use App\Form\CampagneCollecteType;
 use App\Form\ConfigurePublicationType;
@@ -172,12 +173,14 @@ class CampagneCollecteController extends AbstractController
             [
                'action' => $this->generateUrl('app_campagne_collecte_configure_publication', ['id' => $campagneCollecte->getId()]),
                'hasPublishedMccc' => $campagneCollecte->getPublicationOptions()[ConfigurationPublicationEnum::MCCC->value] ?? 'none',
-               'hasPublishedMaquette' => $campagneCollecte->getPublicationOptions()[ConfigurationPublicationEnum::MAQUETTE->value] ?? 'none'
+               'hasPublishedMaquette' => $campagneCollecte->getPublicationOptions()[ConfigurationPublicationEnum::MAQUETTE->value] ?? 'none',
+               'publicationTag' => $campagneCollecte->getPublicationTag() ?? 'none'
             ]
         );
 
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
+            // Configuration de la publication
             $configToSave = [];
             $jsonConfigValues = [
                 ConfigurationPublicationEnum::MAQUETTE->value, 
@@ -188,7 +191,16 @@ class CampagneCollecteController extends AbstractController
                     $configToSave[$configValue] = $form->get($configValue)->getData();
                 }
             }
+            // Le tag ne peut être présent qu'une seule fois
+            $publicationTag = $form->get('campagneTag')->getData();
+            if(in_array($publicationTag, [CampagnePublicationTagEnum::ANNEE_COURANTE->value, CampagnePublicationTagEnum::ANNEE_SUIVANTE->value])){
+                $statusAlreadyTaken = $campagneRepository->findOneBy(['publicationTag' => $publicationTag]);
+                if($statusAlreadyTaken !== null){
+                    return $this->json(['message' => 'Ce statut est déjà utilisé'], 500);
+                }
+            }
 
+            $campagneCollecte->setPublicationTag($publicationTag);
             $campagneCollecte->setPublicationOptions($configToSave);
             $campagneRepository->save($campagneCollecte, true);
 

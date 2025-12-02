@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\CampagneCollecte;
+use App\Enums\CampagnePublicationTagEnum;
 use App\Enums\ConfigurationPublicationEnum;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -15,6 +16,23 @@ class ConfigurePublicationType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+            ->add('campagneTag', ChoiceType::class, [
+                'mapped' => false,
+                'required' => true,
+                'label' => 'Statut de la campagne de collecte',
+                'choices' => [
+                    'Sélectionner une option...' => 'none',
+                    'Année archivée' => CampagnePublicationTagEnum::ANNEE_ARCHIVEE->value,
+                    'Année courante (N)' => CampagnePublicationTagEnum::ANNEE_COURANTE->value,
+                    'Année suivante (N+1)' => CampagnePublicationTagEnum::ANNEE_SUIVANTE->value
+                ],
+                'choice_attr' => [
+                    'Sélectionner une option...' => $options['publicationTag'] === 'none' ? ['selected' => ''] : [],
+                    'Année archivée' => $options['publicationTag'] === CampagnePublicationTagEnum::ANNEE_ARCHIVEE->value ? ['selected' => ''] : [],
+                    'Année courante (N)' => $options['publicationTag'] === CampagnePublicationTagEnum::ANNEE_COURANTE->value ? ['selected' => ''] : [],
+                    'Année suivante (N+1)' => $options['publicationTag'] === CampagnePublicationTagEnum::ANNEE_SUIVANTE->value ? ['selected' => ''] : []
+                ]
+            ])
             ->add('enablePublication', CheckboxType::class, [
                 'label' => 'Activer la publication ?',
                 'required' => true
@@ -57,7 +75,8 @@ class ConfigurePublicationType extends AbstractType
         $resolver->setDefaults([
             'data_class' => CampagneCollecte::class,
             'hasPublishedMaquette' => 'none',
-            'hasPublishedMccc' => 'none'
+            'hasPublishedMccc' => 'none',
+            'publicationTag' => 'none'
         ]);
     }
 }
