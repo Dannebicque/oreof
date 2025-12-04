@@ -195,7 +195,7 @@ class CampagneCollecteController extends AbstractController
             $publicationTag = $form->get('campagneTag')->getData();
             if(in_array($publicationTag, [CampagnePublicationTagEnum::ANNEE_COURANTE->value, CampagnePublicationTagEnum::ANNEE_SUIVANTE->value])){
                 $statusAlreadyTaken = $campagneRepository->findOneBy(['publicationTag' => $publicationTag]);
-                if($statusAlreadyTaken !== null){
+                if($statusAlreadyTaken !== null && $statusAlreadyTaken->getId() !== $campagneCollecte->getId()){
                     return $this->json(['message' => 'Ce statut est déjà utilisé'], 500);
                 }
             }
