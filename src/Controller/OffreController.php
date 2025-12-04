@@ -137,7 +137,6 @@ final class OffreController extends BaseController
             ],
             'tabStatistiques' => $tabStatistiques,
         ];
-
         if ($isFrame) {
             // Répondre avec un markup contenant le <turbo-frame id="offre_table"> attendu
             return $this->render('offre/_table_frame.html.twig', $params);
