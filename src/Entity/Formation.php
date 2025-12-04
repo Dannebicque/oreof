@@ -43,7 +43,7 @@ class Formation
     private ?Domaine $domaine = null;
 
     #[Groups(['parcours_json_versioning', 'fiche_matiere_versioning', 'formation_json_versioning'])]
-    #[ORM\ManyToOne(targetEntity: Composante::class, inversedBy: 'formationsPortees')]
+    #[ORM\ManyToOne(targetEntity: Composante::class, inversedBy: 'formationsPortees', fetch: 'EAGER')]
     private ?Composante $composantePorteuse = null;
 
     #[Groups('parcours_json_versioning')]
