@@ -27,6 +27,7 @@ use App\Events\AddCentreParcoursEvent;
 use App\Form\ParcoursType;
 use App\Repository\ElementConstitutifRepository;
 use App\Repository\ParcoursRepository;
+use App\Repository\ProfilRepository;
 use App\Service\LheoXML;
 use App\Service\VersioningFormation;
 use App\Service\VersioningParcours;
@@ -202,6 +203,7 @@ class ParcoursController extends BaseController
 
     #[Route('/edit/modal/{parcours}', name: 'app_parcours_edit_modal', methods: ['GET', 'POST'])]
     public function editModal(
+        ProfilRepository $profRepository,
         EventDispatcherInterface $eventDispatcher,
         Request                  $request,
         EntityManagerInterface   $entityManager,
@@ -224,11 +226,15 @@ class ParcoursController extends BaseController
             $changeSet = $uow->getEntityChangeSet($parcours);
 
             if (isset($changeSet['respParcours'])) {
+                $profil = $profRepository->findOneBy(['code' => 'ROLE_RESP_PARCOURS']);
+                if (null === $profil) {
+                    throw $this->createNotFoundException('Profil non existant : ROLE_RESP_PARCOURS');
+                }
                 // retirer l'ancien resp des centres et droits et envoyer mail
-                $event = new AddCentreParcoursEvent($parcours, ['ROLE_RESP_PARCOURS'], $changeSet['respParcours'][0], $this->getCampagneCollecte());
+                $event = new AddCentreParcoursEvent($parcours, $changeSet['respParcours'][0], $profil, $this->getCampagneCollecte());
                 $eventDispatcher->dispatch($event, AddCentreParcoursEvent::REMOVE_CENTRE_PARCOURS);
                 // ajouter le nouveau resp, ajouter centre et droits et envoyer mail
-                $event = new AddCentreParcoursEvent($parcours, ['ROLE_RESP_PARCOURS'], $changeSet['respParcours'][1], $this->getCampagneCollecte());
+                $event = new AddCentreParcoursEvent($parcours, $changeSet['respParcours'][1], $profil, $this->getCampagneCollecte());
                 $eventDispatcher->dispatch($event, AddCentreParcoursEvent::ADD_CENTRE_PARCOURS);
             }
 
