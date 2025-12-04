@@ -38,6 +38,32 @@
             </span>
         </td>
     </tr>
+    {% set publicationTagStyle = {
+        'annee_archivee' : {
+            badgeColor: 'bg-warning',
+            label: 'Année archivée'
+        },
+        'annee_courante' : {
+            badgeColor: 'bg-primary',
+            label: 'Année courante (N)'
+        },
+        'annee_suivante' : {
+            badgeColor: 'bg-info',
+            label: 'Année suivante (N+1)'
+        },
+        'none' : {
+            badgeColor: 'bg-dark',
+            label: 'Non défini'
+        }
+    } %}
+    <tr>
+        <th>Information sur la campagne de collecte</th>
+        <td>
+            <span class="badge {{ publicationTagStyle[campagne_collecte.publicationTag ?? 'none'].badgeColor }}">
+                {{ publicationTagStyle[campagne_collecte.publicationTag ?? 'none'].label }}
+            </span>
+        </td>
+    </tr>
     {% set badgePublicationConfig = {
             'none': {
                 libelle: 'Non défini',
