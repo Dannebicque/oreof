@@ -534,9 +534,12 @@ HTML;
             }
         }
 
+        $libelleMillesimeCatalogue = GetDpeParcours::getFromParcours($parcours)->getCampagneCollecte()->getLibelle();
+        $libelleMillesimeCatalogue = "Rentrée " . $libelleMillesimeCatalogue;
+
         // EXTRAS
         $extraArray = [
-            'description-haut' => $this->cleanString($parcours->getDescriptifHautPageAffichage() ?? $etablissementInformation->getDescriptifHautPage()),
+            'description-haut' => $this->cleanString($libelleMillesimeCatalogue . " " . $parcours->getDescriptifHautPageAffichage()),
             'description-bas' => $this->cleanString($parcours->getDescriptifBasPageAffichage() ?? $etablissementInformation->getDescriptifBasPage()),
             'competences-acquises' => $this->cleanString($competencesAcquisesExtra),
             'organisation-pedagogique' => $this->cleanString($organisationPedagogique),
