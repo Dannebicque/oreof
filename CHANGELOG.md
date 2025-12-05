@@ -2,6 +2,43 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.47.0](https://github.com/Dannebicque/oreof/compare/v1.46.0...v1.47.0) (2025-12-05)
+
+
+### Features
+
+* **cpi:** add CpiHandler class for handling CPI type diploma operations ([a38b356](https://github.com/Dannebicque/oreof/commit/a38b356400448dc44efe11cbcc6c56de9453f70e))
+* **droits:** replace RoleRepository with ProfilRepository in getDroits method ([b410730](https://github.com/Dannebicque/oreof/commit/b41073039aaae079967788c5aac886efb300ccf9))
+* **droits:** replace RoleRepository with ProfilRepository in getDroits method ([cc836ba](https://github.com/Dannebicque/oreof/commit/cc836bae2dd69eee03fea480870a8f7648a4c984))
+* **droits:** replace RoleRepository with ProfilRepository in getDroits method ([ee75059](https://github.com/Dannebicque/oreof/commit/ee7505919080f0f2fcf370ad0ddf69b9e070e418))
+* **droits:** replace RoleRepository with ProfilRepository in getDroits method ([0402878](https://github.com/Dannebicque/oreof/commit/040287888689a691971227074384a0013fc3bfdc))
+* **m2e:** add M2EHandler class for handling M2E type diploma operations ([936a312](https://github.com/Dannebicque/oreof/commit/936a312ae5edd556d4a8dc4fcac0a221d740be9e))
+* **m2e:** add M2EHandler class for handling M2E type diploma operations ([51119bd](https://github.com/Dannebicque/oreof/commit/51119bdef873158acadd8930fc2ac8abbc28e60a))
+* **m2e:** add M2EHandler class for handling M2E type diploma operations ([17fbf4c](https://github.com/Dannebicque/oreof/commit/17fbf4c93e5c32cd32c1d202bb41ea334f17e313))
+* **offre:** add capability to change 'capaciteAccueil' for formations and parcours ([69f8833](https://github.com/Dannebicque/oreof/commit/69f8833e7dd4ffc46678ed19ab4ee899bec48d29))
+* **offre:** add capability to change 'capaciteAccueil' for formations and parcours ([79e51ac](https://github.com/Dannebicque/oreof/commit/79e51acdf865a592b53fdc966844bcf7c5357299))
+* **offre:** add statistics for formations and parcours in OffreController ([6b22530](https://github.com/Dannebicque/oreof/commit/6b225308b8d95ecf12fe658f9904797822b35230))
+* **offre:** enhance Offre table with statistics and improved layout ([e471de7](https://github.com/Dannebicque/oreof/commit/e471de7d0c2d0974651b76b5d49a055664795d82))
+* **parcours:** update edit modal to include ProfilRepository and handle ROLE_RESP_PARCOURS ([cff2b4c](https://github.com/Dannebicque/oreof/commit/cff2b4cb4c54901da1b70d85523a7af228b5c7bb))
+* **table:** replace link with button for editing parcours with modal ([4720c36](https://github.com/Dannebicque/oreof/commit/4720c36268f6fac4709bec17ce9c5377e044e176))
+* **timeline:** implement timeline feature with dynamic progress and date markers ([8a273b0](https://github.com/Dannebicque/oreof/commit/8a273b0a6616289468c797414cb0ebad221190de))
+* **timeline:** implement timeline feature with dynamic progress and date markers ([aa0b7fe](https://github.com/Dannebicque/oreof/commit/aa0b7fe592d6b282b9dbc7f64fd631b3848c591b))
+* **timeline:** implement timeline feature with dynamic progress and date markers ([5daa2c9](https://github.com/Dannebicque/oreof/commit/5daa2c9f30d07aba8d6c5c5730742a1d94464a0f))
+* **timeline:** implement timeline feature with dynamic progress and date markers ([f2af413](https://github.com/Dannebicque/oreof/commit/f2af41379ece3a561c9ed440013085463f6970b8))
+* **timeline:** implement timeline feature with dynamic progress and date markers ([862dc26](https://github.com/Dannebicque/oreof/commit/862dc26a33602be00bb6ac7935d9771edf426351))
+* **type diploe:** add two new type of diploma ([7420b54](https://github.com/Dannebicque/oreof/commit/7420b54ca2990b3c6aa79957cf43733a12e3d0e1))
+* **user pfofil:** filtre sur les profils ([255b9d0](https://github.com/Dannebicque/oreof/commit/255b9d0a0f06809d8660bcd903a40595e4251eb6))
+
+
+### Bug Fixes
+
+* **editModal:** remove codeMentionApogee field for improved layout ([2ae5644](https://github.com/Dannebicque/oreof/commit/2ae5644b7a751e71fcc80688dbb38813eec8f68d))
+* **editModal:** remove codeMentionApogee field for improved layout ([787a1c9](https://github.com/Dannebicque/oreof/commit/787a1c99bda2515b7bcd5f4c1273d0c62ae4e6e9))
+* **formation_controller, editModal, new:** uncomment methods and adjust layout for better clarity ([e957f2f](https://github.com/Dannebicque/oreof/commit/e957f2fe2738985f29c1567373a4fe1db6c22afb))
+* **Mention, VersioningParcours:** deprecate domaine property and update null-safe access for parcours ID ([e807267](https://github.com/Dannebicque/oreof/commit/e807267e231c07475be5c5425c43781f32743783))
+* **MentionRepository:** update query to use MEMBER OF for domain filtering ([27a448d](https://github.com/Dannebicque/oreof/commit/27a448d7441ca391232f558e45bdfa02cb91e154))
+* **step3:** correct alert tag from 'alertes' to 'alerte' ([a3049fd](https://github.com/Dannebicque/oreof/commit/a3049fdb51be2db22150795074d08a82d36e8f09))
+
 ## [1.46.0](https://github.com/Dannebicque/oreof/compare/v1.45.0...v1.46.0) (2025-11-20)
 
 
