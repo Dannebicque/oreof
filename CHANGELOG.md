@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.48.0](https://github.com/Dannebicque/oreof/compare/v1.47.0...v1.48.0) (2025-12-05)
+
+
+### Features
+
+* **fiche matiere:** enhance access control for FicheMatiere objects ([39cf2db](https://github.com/Dannebicque/oreof/commit/39cf2db572f05d53d921cb57bf1072ba2e081384))
+
 ## [1.47.0](https://github.com/Dannebicque/oreof/compare/v1.46.0...v1.47.0) (2025-12-05)
 
 
