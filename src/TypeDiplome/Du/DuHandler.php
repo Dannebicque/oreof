@@ -7,7 +7,7 @@
  * @lastUpdate 28/05/2025 15:26
  */
 
-namespace App\TypeDiplome\M2E;
+namespace App\TypeDiplome\Du;
 
 use App\Entity\CampagneCollecte;
 use App\Entity\ElementConstitutif;
@@ -20,7 +20,7 @@ use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
-final class M2EHandler implements TypeDiplomeHandlerInterface
+final class DuHandler implements TypeDiplomeHandlerInterface
 {
 
     public const TEMPLATE_FOLDER = 'licence'; //todo: a remplacer
@@ -29,7 +29,7 @@ final class M2EHandler implements TypeDiplomeHandlerInterface
 
     public function supports(string $type): bool
     {
-        return $type === 'M2E';
+        return $type === 'DU';
     }
 
     public function calculStructureParcours(Parcours $parcours, bool $withEcts = true, bool $withBcc = true): \App\DTO\StructureParcours

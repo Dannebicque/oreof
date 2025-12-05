@@ -10,7 +10,7 @@
 namespace App\Controller\API;
 
 use App\Controller\BaseController;
-use App\Repository\RoleRepository;
+use App\Repository\ProfilRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -20,7 +20,7 @@ class DroitsController extends BaseController
     #[Route('/api/droits', name: 'api_droits')]
     public function getDroits(
         Request        $request,
-        RoleRepository $roleRepository,
+        ProfilRepository $roleRepository,
     ): Response {
         $centre = $request->query->get('centre', '');
         $dpe = (bool)$request->query->get('dpe', false);

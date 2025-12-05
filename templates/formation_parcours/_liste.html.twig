@@ -29,22 +29,22 @@
             </td>
             <td class="text-end">
                 {% if not('non_ouverture' in parcour.etatDpeParcours|keys or 'non_ouverture_cfvu' in parcour.etatDpeParcours|keys or 'non_ouverture_ses' in parcour.etatDpeParcours|keys) %}
-                    <button
-                            {{ stimulus_controller('modal', {
-                                size: 'lg',
-                                nomEvenement: 'parcoursAdded',
-                                modalTitle: 'Modifier un parcours',
-                                modalUrl: path('app_parcours_edit_modal', {parcours:parcour.id}) }) }}
-                            data-action="click->modal#openModal"
-                            class="btn btn-sm text-warning btn-icon"
-                            data-size="lg"
-                            data-bs-toggle="tooltip"
-                            data-bs-placement="bottom"
-                            title="Modifier un parcours"
-                    >
-                        <i class="{{ iconEdit }}"></i>
-                        <span> Modifier le libellé/Responsable du parcours</span>
-                    </button>
+                    {#                    <button #}
+                    {#                            {{ stimulus_controller('modal', { #}
+                    {#                                size: 'lg', #}
+                    {#                                nomEvenement: 'parcoursAdded', #}
+                    {#                                modalTitle: 'Modifier un parcours', #}
+                    {#                                modalUrl: path('app_parcours_edit_modal', {parcours:parcour.id}) }) }} #}
+                    {#                            data-action="click->modal#openModal" #}
+                    {#                            class="btn btn-sm text-warning btn-icon" #}
+                    {#                            data-size="lg" #}
+                    {#                            data-bs-toggle="tooltip" #}
+                    {#                            data-bs-placement="bottom" #}
+                    {#                            title="Modifier un parcours" #}
+                    {#                    > #}
+                    {#                        <i class="{{ iconEdit }}"></i> #}
+                    {#                        <span> Modifier le libellé/Responsable du parcours</span> #}
+                    {#                    </button> #}
                     {% if constant('SOURCE', typeDiplome) != 'meef' %}
                         <a href="{{ path('app_parcours_edit', {id:parcour.id}) }}"
                            class="btn btn-sm text-warning btn-icon"
@@ -70,29 +70,29 @@
                         <span> vérifier</span>
                     </a><br>
 
-                    <button
-                            {{ stimulus_controller('modal', {
-                                size: 'lg',
-                                modalTitle: 'Dupliquer le parcours ' ~ parcour.display,
-                                modalUrl: path('app_parcours_dupliquer_modal', {'id': parcour.id}) }) }}
-                            data-action="click->modal#openModal"
-                            class="btn btn-sm text-primary"
-                            data-size="lg"
-                            data-bs-toggle="tooltip"
-                            data-bs-placement="bottom"
-                            title="Dupliquer le parcours {{ parcour.display }}"
-                    >
-                        <i class="{{ iconDuplicate }}"></i> Dupliquer
-                    </button>
+                    {#                    <button #}
+                    {#                            {{ stimulus_controller('modal', { #}
+                    {#                                size: 'lg', #}
+                    {#                                modalTitle: 'Dupliquer le parcours ' ~ parcour.display, #}
+                    {#                                modalUrl: path('app_parcours_dupliquer_modal', {'id': parcour.id}) }) }} #}
+                    {#                            data-action="click->modal#openModal" #}
+                    {#                            class="btn btn-sm text-primary" #}
+                    {#                            data-size="lg" #}
+                    {#                            data-bs-toggle="tooltip" #}
+                    {#                            data-bs-placement="bottom" #}
+                    {#                            title="Dupliquer le parcours {{ parcour.display }}" #}
+                    {#                    > #}
+                    {#                        <i class="{{ iconDuplicate }}"></i> Dupliquer #}
+                    {#                    </button> #}
 
 
-                    <button {{ stimulus_action('formation--step3', 'deleteParcours', 'click', {
-                        url:path('app_parcours_delete',{'id': parcour.id}),
-                        id: parcour.id,
-                        csrf: csrf_token('delete' ~ parcour.id)
-                    }) }} class="btn btn-sm text-danger">
-                        <i class="{{ iconDelete }}"></i> Supprimer
-                    </button>
+                    {#                    <button {{ stimulus_action('formation--step3', 'deleteParcours', 'click', { #}
+                    {#                        url:path('app_parcours_delete',{'id': parcour.id}), #}
+                    {#                        id: parcour.id, #}
+                    {#                        csrf: csrf_token('delete' ~ parcour.id) #}
+                    {#                    }) }} class="btn btn-sm text-danger"> #}
+                    {#                        <i class="{{ iconDelete }}"></i> Supprimer #}
+                    {#                    </button> #}
 
                     <button
                             {{ stimulus_controller('modal', {
@@ -209,25 +209,25 @@
             </td>
         </tr>
     {% endfor %}
-    <tr>
-        <td colspan="{% if constant('SOURCE', typeDiplome) == 'meef' %}7{% else %}6{% endif %}">
-            <button
-                    {{ stimulus_controller('modal', {
-                        size: 'lg',
-                        nomEvenement: 'parcoursAdded',
-                        modalTitle: 'Ajouter un parcours',
-                        modalUrl: path('app_parcours_new', {formation:formation.id}) }) }}
-                    data-action="click->modal#openModal"
-                    class="btn btn-sm btn-outline-success btn-icon btn-icon-end"
-                    data-size="lg"
-                    data-bs-toggle="tooltip"
-                    data-bs-placement="bottom"
-                    title="Ajouter un parcours"
-            >
-                <i class="{{ iconAdd }}"></i>
-                <span> Ajouter un parcours</span>
-            </button>
-        </td>
-    </tr>
+    {#    <tr> #}
+    {#        <td colspan="{% if constant('SOURCE', typeDiplome) == 'meef' %}7{% else %}6{% endif %}"> #}
+    {#            <button #}
+    {#                    {{ stimulus_controller('modal', { #}
+    {#                        size: 'lg', #}
+    {#                        nomEvenement: 'parcoursAdded', #}
+    {#                        modalTitle: 'Ajouter un parcours', #}
+    {#                        modalUrl: path('app_parcours_new', {formation:formation.id}) }) }} #}
+    {#                    data-action="click->modal#openModal" #}
+    {#                    class="btn btn-sm btn-outline-success btn-icon btn-icon-end" #}
+    {#                    data-size="lg" #}
+    {#                    data-bs-toggle="tooltip" #}
+    {#                    data-bs-placement="bottom" #}
+    {#                    title="Ajouter un parcours" #}
+    {#            > #}
+    {#                <i class="{{ iconAdd }}"></i> #}
+    {#                <span> Ajouter un parcours</span> #}
+    {#            </button> #}
+    {#        </td> #}
+    {#    </tr> #}
     </tbody>
 </table>

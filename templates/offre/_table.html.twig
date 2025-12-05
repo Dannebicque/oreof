@@ -1,209 +1,270 @@
 <div data-turbo-frame="offre_table">
-    <form method="get" action="{{ path('app_offre') }}" class="mb-2">
-        <div class="row g-2 align-items-end">
-            <div class="col-md-3">
-                <label class="form-label mb-1" for="libelle">Libellé</label>
-                <input id="libelle" type="text" name="q" value="{{ filters.q|default('') }}" class="form-control"
-                       placeholder="Rechercher..." oninput="this.form.requestSubmit()">
-            </div>
-            <div class="col-md-3">
-                <label class="form-label mb-1" for="type_diplome">Type diplôme</label>
-                <select id="type_diplome" name="type" class="form-select" onchange="this.form.requestSubmit()">
-                    <option value="">Tous</option>
-                    {% for t in choices.types %}
-                        <option value="{{ t }}"
-                                {% if filters.type|default('') == t %}selected{% endif %}>{{ t }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="col-md-3">
-                <label class="form-label mb-1" for="composante">Composante</label>
-                <select id="composante" name="comp" class="form-select" onchange="this.form.requestSubmit()">
-                    <option value="">Toutes</option>
-                    {% for c in choices.composantes %}
-                        <option value="{{ c }}"
-                                {% if filters.comp|default('') == c %}selected{% endif %}>{{ c }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="col-md-2">
-                <label class="form-label mb-1" for="ville">Ville</label>
-                <select id="ville" name="ville" class="form-select" onchange="this.form.requestSubmit()">
-                    <option value="">Toutes</option>
-                    {% for v in choices.villes %}
-                        <option value="{{ v }}"
-                                {% if filters.ville|default('') == v %}selected{% endif %}>{{ v }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="col-md-1 d-grid">
-                <a class="btn btn-danger d-block"
-                   href="{{ path('app_offre') }}"
-                   data-turbo-frame="offre_table">Effacer</a>
+
+    <div class="row g-3 mb-3">
+        <div class="col-6 col-md-3">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body d-flex align-items-center">
+                    <div class="me-3 fs-3 text-primary"><i class="fas fa-graduation-cap"></i></div>
+                    <div>
+                        <div class="h5 mb-0"><strong>{{ tabStatistiques.nbFormations }}</strong></div>
+                        <small class="text-muted">Formations</small>
+                    </div>
+                </div>
             </div>
         </div>
-    </form>
 
-    <table class="table"
-            {{ stimulus_controller('offre', {
-                url: path('app_offre_update')
-            }) }}
-    >
-        <thead>
-        <tr>
-            <th>Composante</th>
-            <th>Type diplôme</th>
-            <th>Libellé Mention <br> parcours</th>
-            <th>ville</th>
-            <th>Etat année <br>N-1</th>
-            <th>Etat année <br>{{ user_data.campagneCollecte.libelle }}</th>
-            <th>Capacité <br>N-1</th>
-            <th>Capacité <br>{{ user_data.campagneCollecte.libelle }}</th>
-            <th>actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for formation in tFormations %}
-            <tr class="{% if formation.formation.hasParcours == true %}bg-info-pale{% else %}bg-warning-pale{% endif %}"
-                data-formation-open="{{ formation.formation.etatReconduction.value }}"
-                data-formation-id="{{ formation.formation.id }}"
+        <div class="col-6 col-md-3">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body d-flex align-items-center">
+                    <div class="me-3 fs-3 text-success"><i class="fas fa-project-diagram"></i></div>
+                    <div>
+                        <div class="h5 mb-0"><strong>{{ tabStatistiques.nbParcours }}</strong></div>
+                        <small class="text-muted">Parcours</small>
+                    </div>
+                </div>
+            </div>
+        </div>
 
+        <div class="col-6 col-md-3">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body d-flex align-items-center">
+                    <div class="me-3 fs-3 text-warning"><i class="fas fa-user-check"></i></div>
+                    <div>
+                        <div class="h5 mb-0"><strong>{{ tabStatistiques.capacite }}</strong></div>
+                        <small class="text-muted">Places disponibles (sélection)</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-6 col-md-3">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body d-flex align-items-center">
+                    <div class="me-3 fs-3 text-info"><i class="fas fa-users"></i></div>
+                    <div>
+                        <div class="h5 mb-0"><strong>{{ tabStatistiques.capaciteTotale }}</strong></div>
+                        <small class="text-muted">Places au total</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <form method="get" action="{{ path('app_offre') }}" class="mb-2">
+                <div class="row g-2 align-items-end">
+                    <div class="col-md-3">
+                        <label class="form-label mb-1" for="libelle">Libellé</label>
+                        <input id="libelle" type="text" name="q" value="{{ filters.q|default('') }}"
+                               class="form-control"
+                               placeholder="Rechercher..." oninput="this.form.requestSubmit()">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label mb-1" for="type_diplome">Type diplôme</label>
+                        <select id="type_diplome" name="type" class="form-select" onchange="this.form.requestSubmit()">
+                            <option value="">Tous</option>
+                            {% for t in choices.types %}
+                                <option value="{{ t }}"
+                                        {% if filters.type|default('') == t %}selected{% endif %}>{{ t }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label mb-1" for="composante">Composante</label>
+                        <select id="composante" name="comp" class="form-select" onchange="this.form.requestSubmit()">
+                            <option value="">Toutes</option>
+                            {% for c in choices.composantes %}
+                                <option value="{{ c }}"
+                                        {% if filters.comp|default('') == c %}selected{% endif %}>{{ c }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label mb-1" for="ville">Ville</label>
+                        <select id="ville" name="ville" class="form-select" onchange="this.form.requestSubmit()">
+                            <option value="">Toutes</option>
+                            {% for v in choices.villes %}
+                                <option value="{{ v }}"
+                                        {% if filters.ville|default('') == v %}selected{% endif %}>{{ v }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-1 d-grid">
+                        <a class="btn btn-danger d-block"
+                           href="{{ path('app_offre') }}"
+                           data-turbo-frame="offre_table">Effacer</a>
+                    </div>
+                </div>
+            </form>
+
+
+            <table class="table"
+                    {{ stimulus_controller('offre', {
+                        url: path('app_offre_update')
+                    }) }}
             >
-                <td>{{ formation.formation.composantePorteuse.libelle }}</td>
-                <td>{{ formation.formation.typeDiplome.libelle }}</td>
-                <td>{{ formation.formation.display }}</td>
-                <td>
-                    {% if formation.formation.hasParcours == false %}
-                        {{ formation.formation.localisationMention.first != null ? formation.formation.localisationMention.first.libelle : 'erreur ville' }}
-                    {% endif %}
-                </td>
-                <td>
-                    {% if formation.formation.hasParcours == true %}
-                        {{ formation.formation.etatReconduction|badgeTypeModification }}
-                    {% else %}
-                        {{ formation.dpeParcours[0].etatReconduction|badgeTypeModification }}
-                    {% endif %}
-                </td>
-                <td>
-                    {% if formation.formation.hasParcours == true %}
-                        {{ include('offre/_select_offre.html.twig', {id: 'formation_'~formation.formation.id, valeur: formation.formation.etatReconduction.value}) }}
-                    {% else %}
-                        {{ include('offre/_select_offre.html.twig', {id: 'parcours_'~formation.dpeParcours[0].id, valeur: formation.dpeParcours[0].etatReconduction.value}) }}
-                    {% endif %}
-                </td>
-                {% set parc = formation.dpeParcours[0].parcours %}
-                <td>
-                    {{ parc.parcoursOrigineCopie != null ? parc.parcoursOrigineCopie.capaciteAccueil : 'N.C.' }} places
-                </td>
-                <td>
-                    {% if formation.formation.hasParcours == false %}
-                        <label for="capacite_{{ parc.id }}" class="sr-only">Capacité accueil pour le parcours</label>
-                        <input type="text" class="form-control" id="capacite_{{ parc.id }}"
-                               value="{{ parc.capaciteAccueil }}"
-                                {{ stimulus_action('offre', 'changeCapaciteParcours', 'change', {
-                                    id:parc.id
-                                }) }}
-                               value="{{ parc.capaciteAccueil }}"
-                        >
-                    {% else %}
-                        <label for="capacitef_{{ formation.formation.id }}" class="sr-only">Capacité accueil pour la
-                            mention</label>
-                        <input type="text" class="form-control" id="capacitef_{{ formation.formation.id }}"
-                               value="{{ formation.formation.capaciteAccueil }}"
-                                {{ stimulus_action('offre', 'changeCapaciteMention', 'change', {
-                                    id:formation.formation.id
-                                }) }}
-                               value="{{ formation.formation.capaciteAccueil }}"
-                        >
-                    {% endif %}
-                </td>
-                <td>
-                    <a
-                            class="btn btn-info btn-sm"
-                            target="_blank"
-                            href="{{ path('app_formation_show', { 'slug': formation.formation.slug }) }}">
-                        <i class="{{ iconShow }}"></i>
-                    </a>
-                    {% if formation.formation.hasParcours == false %}
-                        <button
-                                {{ stimulus_action('offre', 'ouvreAnnee', 'click', {
-                                    parcours: formation.formation.dpeParcours[0].id
-                                }) }}
-                                class="btn btn-success btn-sm"
-                        >
-                            <i class="fas fa-chevron-circle-down"></i>
-                        </button>
-                    {% endif %}
-                </td>
-            </tr>
-            {% if formation.formation.hasParcours == true %}
-                {% for parcours in formation.dpeParcours %}
-                    <tr style="border-left: 2px solid dodgerblue"
-                        data-parcours-open="{{ parcours.etatReconduction.value }}"
-                        data-parcours-id="{{ parcours.id }}"
+                <thead>
+                <tr>
+                    <th>Composante</th>
+                    <th>Type diplôme</th>
+                    <th>Libellé Mention <br> parcours</th>
+                    <th>ville</th>
+                    <th>Etat année <br>N-1</th>
+                    <th>Etat année <br>{{ user_data.campagneCollecte.libelle }}</th>
+                    <th>Capacité <br>N-1</th>
+                    <th>Capacité <br>{{ user_data.campagneCollecte.libelle }}</th>
+                    <th>actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for formation in tFormations %}
+                    <tr class="{% if formation.formation.hasParcours == true %}bg-info-pale{% else %}bg-warning-pale{% endif %}"
+                        data-formation-open="{{ formation.formation.etatReconduction.value }}"
                         data-formation-id="{{ formation.formation.id }}"
+
                     >
-                        <td style="padding-left: 20px"
-                            colspan="3">{{ parcours.parcours.libelle }} {{ parcours.parcours.typeParcours|badgeTypeParcours }}</td>
-                        <td>{{ parcours.parcours.localisation != null ? parcours.parcours.localisation.libelle : 'erreur ville' }}</td>
-                        <td>{{ parcours.etatReconduction|badgeTypeModification }}</td>
+                        <td>{{ formation.formation.composantePorteuse.libelle }}</td>
+                        <td>{{ formation.formation.typeDiplome.libelle }}</td>
+                        <td>{{ formation.formation.display }}</td>
                         <td>
-                            {{ include('offre/_select_offre.html.twig', {id: 'parcours_'~parcours.id, valeur: parcours.etatReconduction.value}) }}
+                            {% if formation.formation.hasParcours == false %}
+                                {{ formation.formation.localisationMention.first != null ? formation.formation.localisationMention.first.libelle : 'erreur ville' }}
+                            {% endif %}
                         </td>
                         <td>
-                            {{ parcours.parcours.parcoursOrigineCopie != null ? parcours.parcours.parcoursOrigineCopie.capaciteAccueil : 'N.C.' }}
+                            {% if formation.formation.hasParcours == true %}
+                                {{ formation.formation.etatReconduction|badgeTypeModification }}
+                            {% else %}
+                                {{ formation.dpeParcours[0].etatReconduction|badgeTypeModification }}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if formation.formation.hasParcours == true %}
+                                {{ include('offre/_select_offre.html.twig', {id: 'formation_'~formation.formation.id, valeur: formation.formation.etatReconduction.value}) }}
+                            {% else %}
+                                {{ include('offre/_select_offre.html.twig', {id: 'parcours_'~formation.dpeParcours[0].id, valeur: formation.dpeParcours[0].etatReconduction.value}) }}
+                            {% endif %}
+                        </td>
+                        {% set parc = formation.dpeParcours[0].parcours %}
+                        <td>
+                            {{ parc.parcoursOrigineCopie != null ? parc.parcoursOrigineCopie.capaciteAccueil : 'N.C.' }}
                             places
                         </td>
                         <td>
-                            <label for="capacite_{{ parcours.parcours.id }}" class="sr-only">Capacité accueil pour le
-                                parcours</label>
-                            <input type="text" class="form-control" id="capacite_{{ parcours.parcours.id }}"
-                                   value="{{ parcours.parcours.capaciteAccueil }}"
-                                    {{ stimulus_action('offre', 'changeCapaciteParcours', 'change', {
-                                        id:parcours.parcours.id
-                                    }) }}
-                                   value="{{ parcours.parcours.capaciteAccueil }}"
-                            >
+                            {% if formation.formation.hasParcours == false %}
+                                <label for="capacite_{{ parc.id }}" class="sr-only">Capacité accueil pour le
+                                    parcours</label>
+                                <input type="text" class="form-control" id="capacite_{{ parc.id }}"
+                                       value="{{ parc.capaciteAccueil }}"
+                                        {{ stimulus_action('offre', 'changeCapaciteParcours', 'change', {
+                                            id:parc.id
+                                        }) }}
+                                       value="{{ parc.capaciteAccueil }}"
+                                >
+                            {% else %}
+                                <label for="capacitef_{{ formation.formation.id }}" class="sr-only">Capacité accueil
+                                    pour la
+                                    mention</label>
+                                <input type="text" class="form-control" id="capacitef_{{ formation.formation.id }}"
+                                       value="{{ formation.formation.capaciteAccueil }}"
+                                        {{ stimulus_action('offre', 'changeCapaciteMention', 'change', {
+                                            id:formation.formation.id
+                                        }) }}
+                                       value="{{ formation.formation.capaciteAccueil }}"
+                                >
+                            {% endif %}
                         </td>
                         <td>
-                            <button
-                                    {{ stimulus_controller('modal', {
-                                        size: 'lg',
-                                        nomEvenement: 'parcoursAdded',
-                                        modalTitle: 'Modifier un parcours',
-                                        modalUrl: path('app_parcours_edit_modal', {parcours:parcours.parcours.id}) }) }}
-                                    data-action="click->modal#openModal"
-                                    class="btn btn-sm btn-outline-warning mb-1"
-                                    data-size="lg"
-                                    data-bs-toggle="tooltip"
-                                    data-bs-placement="bottom"
-                                    title=" Modifier le libellé/Responsable du parcours"
-                            >
-                                <i class="{{ iconEdit }}"></i>
-                            </button>
-                            <a class="btn btn-info btn-sm mb-1" target="_blank"
-                               href="{{ path('app_parcours_show', { 'id': parcours.parcours.id }) }}">
+                            <a
+                                    class="btn btn-info btn-sm"
+                                    target="_blank"
+                                    href="{{ path('app_formation_show', { 'slug': formation.formation.slug }) }}">
                                 <i class="{{ iconShow }}"></i>
                             </a>
-                            <button
-                                    {{ stimulus_action('offre', 'ouvreAnnee', 'click', {
-                                        parcours: parcours.id
-                                    }) }}
-                                    class="btn btn-success btn-sm"
-                            >
-                                <i class="fas fa-chevron-circle-down"></i>
-                            </button>
+                            {% if formation.formation.hasParcours == false %}
+                                <button
+                                        {{ stimulus_action('offre', 'ouvreAnnee', 'click', {
+                                            parcours: formation.formation.dpeParcours[0].id
+                                        }) }}
+                                        class="btn btn-success btn-sm"
+                                >
+                                    <i class="fas fa-chevron-circle-down"></i>
+                                </button>
+                            {% endif %}
                         </td>
                     </tr>
+                    {% if formation.formation.hasParcours == true %}
+                        {% for parcours in formation.dpeParcours %}
+                            <tr style="border-left: 2px solid dodgerblue"
+                                data-parcours-open="{{ parcours.etatReconduction.value }}"
+                                data-parcours-id="{{ parcours.id }}"
+                                data-formation-id="{{ formation.formation.id }}"
+                            >
+                                <td style="padding-left: 20px"
+                                    colspan="3">{{ parcours.parcours.libelle }} {{ parcours.parcours.typeParcours|badgeTypeParcours }}</td>
+                                <td>{{ parcours.parcours.localisation != null ? parcours.parcours.localisation.libelle : 'erreur ville' }}</td>
+                                <td>{{ parcours.etatReconduction|badgeTypeModification }}</td>
+                                <td>
+                                    {{ include('offre/_select_offre.html.twig', {id: 'parcours_'~parcours.id, valeur: parcours.etatReconduction.value}) }}
+                                </td>
+                                <td>
+                                    {{ parcours.parcours.parcoursOrigineCopie != null ? parcours.parcours.parcoursOrigineCopie.capaciteAccueil : 'N.C.' }}
+                                    places
+                                </td>
+                                <td>
+                                    <label for="capacite_{{ parcours.parcours.id }}" class="sr-only">Capacité accueil
+                                        pour le
+                                        parcours</label>
+                                    <input type="text" class="form-control" id="capacite_{{ parcours.parcours.id }}"
+                                           value="{{ parcours.parcours.capaciteAccueil }}"
+                                            {{ stimulus_action('offre', 'changeCapaciteParcours', 'change', {
+                                                id:parcours.parcours.id
+                                            }) }}
+                                           value="{{ parcours.parcours.capaciteAccueil }}"
+                                    >
+                                </td>
+                                <td>
+                                    <button
+                                            {{ stimulus_controller('modal', {
+                                                size: 'lg',
+                                                nomEvenement: 'parcoursAdded',
+                                                modalTitle: 'Modifier un parcours',
+                                                modalUrl: path('app_parcours_edit_modal', {parcours:parcours.parcours.id}) }) }}
+                                            data-action="click->modal#openModal"
+                                            class="btn btn-sm btn-outline-warning mb-1"
+                                            data-size="lg"
+                                            data-bs-toggle="tooltip"
+                                            data-bs-placement="bottom"
+                                            title=" Modifier le libellé/Responsable du parcours"
+                                    >
+                                        <i class="{{ iconEdit }}"></i>
+                                    </button>
+                                    <a class="btn btn-info btn-sm mb-1" target="_blank"
+                                       href="{{ path('app_parcours_show', { 'id': parcours.parcours.id }) }}">
+                                        <i class="{{ iconShow }}"></i>
+                                    </a>
+                                    <button
+                                            {{ stimulus_action('offre', 'ouvreAnnee', 'click', {
+                                                parcours: parcours.id
+                                            }) }}
+                                            class="btn btn-success btn-sm"
+                                    >
+                                        <i class="fas fa-chevron-circle-down"></i>
+                                    </button>
+                                </td>
+                            </tr>
 
-                    {{ include('offre/_annee.html.twig', {annees: parcours.parcours.annees, valeur: parcours.etatReconduction.value}) }}
+                            {{ include('offre/_annee.html.twig', {annees: parcours.parcours.annees, valeur: parcours.etatReconduction.value}) }}
 
+                        {% endfor %}
+                    {% else %}
+                        {% set parcours = formation.formation.dpeParcours[0] %}
+                        {{ include('offre/_annee.html.twig', {annees: parcours.parcours.annees, valeur: parcours.etatReconduction.value}) }}
+                    {% endif %}
                 {% endfor %}
-            {% else %}
-                {% set parcours = formation.formation.dpeParcours[0] %}
-                {{ include('offre/_annee.html.twig', {annees: parcours.parcours.annees, valeur: parcours.etatReconduction.value}) }}
-            {% endif %}
-        {% endfor %}
-        </tbody>
-    </table>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>

@@ -20,7 +20,7 @@ class DpeParcours
     #[ORM\ManyToOne(inversedBy: 'dpeParcours')]
     private ?CampagneCollecte $campagneCollecte = null;
 
-    #[ORM\ManyToOne(cascade: ['persist'], inversedBy: 'dpeParcours')]
+    #[ORM\ManyToOne(cascade: ['persist'], inversedBy: 'dpeParcours', fetch: 'EAGER')]
     private ?Parcours $parcours = null;
 
     #[ORM\Column]
@@ -35,7 +35,7 @@ class DpeParcours
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?DateTimeInterface $created;
 
-    #[ORM\ManyToOne(inversedBy: 'dpeParcours')]
+    #[ORM\ManyToOne(inversedBy: 'dpeParcours', fetch: 'EAGER')]
     private ?Formation $formation = null;
 
 
