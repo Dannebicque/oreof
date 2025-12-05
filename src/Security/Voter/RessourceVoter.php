@@ -122,6 +122,10 @@ class RessourceVoter extends Voter
             return $this->checkParcours($userProfil, $object, $attribute) || $object === 'parcours';
         }
 
+        if ($object instanceof FicheMatiere) {
+            return $this->checkFicheMatiere($userProfil, $object, $attribute) || $object === 'ficheMatiere';
+        }
+
         return false;
     }
 
@@ -160,6 +164,11 @@ class RessourceVoter extends Voter
         $canAccess = false;
         //une fiche peut être éditée par le RP, RF ou le DPE
         if ($object instanceof FicheMatiere) {
+
+            if ($object->isHorsDiplome() && $object->getResponsableFicheMatiere() === $userProfil->getUser()) {
+                return true;
+            }
+
             $isProprietaire = (
                 ($userProfil->getParcours() === $object->getParcours() && ($object->getParcours()?->getCoResponsable()?->getId() === $userProfil->getUser()?->getId() || $object->getParcours()?->getRespParcours()?->getId() === $userProfil->getUser()?->getId())) ||
                 ($userProfil->getFormation() === $object->getParcours()?->getFormation() && ($object->getParcours()?->getFormation()?->getCoResponsable()?->getId() === $userProfil->getUser()?->getId() || $object->getParcours()?->getFormation()?->getResponsableMention()?->getId() === $userProfil->getUser()?->getId())) ||
