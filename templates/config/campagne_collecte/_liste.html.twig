@@ -62,7 +62,7 @@
                     </span>
                 </p>
                 {% if campagne_collecte.publicationOptions|length > 0 %}
-                    <ul class="list-unstyled">
+                    <ul class="list-unstyled my-0">
                     {% for optionKey, optionValue in campagne_collecte.publicationOptions %}
                         <li>
                             <span class="badge {{ optionValue == true ? 'bg-success' : 'bg-danger' }}">
@@ -71,6 +71,13 @@
                         </li>
                     {% endfor %}
                     </ul>
+                {% endif %}
+                {% if campagne_collecte.isFinished %}
+                <p class="my-0">
+                    <span class="badge bg-dark">
+                        Campagne terminée
+                    </span>
+                </p>
                 {% endif %}
             </td>
 
