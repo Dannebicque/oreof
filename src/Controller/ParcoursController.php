@@ -121,10 +121,10 @@ class ParcoursController extends BaseController
         ParcoursRepository       $parcoursRepository,
         Formation                $formation
     ): Response {
-        $this->denyAccessUnlessGranted('EDIT', [
-            'route' => 'app_formation',
-            'subject' => $formation
-        ]);
+//        $this->denyAccessUnlessGranted('EDIT', [
+//            'route' => 'app_formation',
+//            'subject' => $formation
+//        ]);
 
         $parent = null;
         $parcour = new Parcours($formation);
