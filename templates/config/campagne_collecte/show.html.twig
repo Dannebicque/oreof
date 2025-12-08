@@ -38,6 +38,20 @@
             </span>
         </td>
     </tr>
+    <tr>
+        <th>État de la campagne de collecte</th>
+        <td>
+            {% if campagne_collecte.isFinished %}
+                <span class="badge bg-dark">
+                    Campagne terminée
+                </span>
+            {% else %}
+                <span class="badge bg-success">
+                    En cours
+                </span>
+            {% endif %}
+        </td>
+    </tr>
     {% set publicationTagStyle = {
         'annee_archivee' : {
             badgeColor: 'bg-warning',
