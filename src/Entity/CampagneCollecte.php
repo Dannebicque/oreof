@@ -118,6 +118,9 @@ class CampagneCollecte
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $publicationTag = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $isFinished = null;
+
     public function __construct()
     {
         $this->dpeParcours = new ArrayCollection();
@@ -532,6 +535,18 @@ class CampagneCollecte
     public function setPublicationTag(?string $publicationTag): static
     {
         $this->publicationTag = $publicationTag;
+
+        return $this;
+    }
+
+    public function isFinished(): ?bool
+    {
+        return $this->isFinished;
+    }
+
+    public function setIsFinished(?bool $isFinished): static
+    {
+        $this->isFinished = $isFinished;
 
         return $this;
     }
