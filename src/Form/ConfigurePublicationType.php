@@ -69,7 +69,7 @@ class ConfigurePublicationType extends AbstractType
             ])
             ->add('isFinished', ChoiceType::class, [
                 'required' => true,
-                'label' => 'Campagne de collecte terminée ?',
+                'label' => 'Campagne de consolidation de la collecte terminée ?',
                 'choices' => [
                     'Sélectionner une option...' => null,
                     'Oui' => true,
