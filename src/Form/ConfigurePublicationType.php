@@ -67,6 +67,15 @@ class ConfigurePublicationType extends AbstractType
                     'Non' => ($options['hasPublishedMccc'] === false) ? ['selected' => ''] : []
                 ]
             ])
+            ->add('isFinished', ChoiceType::class, [
+                'required' => true,
+                'label' => 'Campagne de collecte terminée ?',
+                'choices' => [
+                    'Sélectionner une option...' => null,
+                    'Oui' => true,
+                    'Non' => false
+                ]
+            ])
         ;
     }
 
