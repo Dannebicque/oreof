@@ -18,4 +18,6 @@ interface TypeDiplomeHandlerInterface extends DiplomeExportInterface, McccInterf
     public function getStructureCompetences(Parcours $parcours);
 
     public function getTypeEpreuves(): array;
+
+    public function getLibelleCourt(): string;
 }

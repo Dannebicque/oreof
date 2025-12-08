@@ -109,4 +109,9 @@ final class DaeuHandler implements TypeDiplomeHandlerInterface
         // TODO: Implement getTypeEpreuves() method.
         return [];
     }
+
+    public function getLibelleCourt(): string
+    {
+        return 'DAEU';
+    }
 }

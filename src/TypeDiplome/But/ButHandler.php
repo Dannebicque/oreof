@@ -130,6 +130,7 @@ final class ButHandler implements TypeDiplomeHandlerInterface, TypeDiplomeMcccIn
     public function exportAndSavePdfMccc(string $dir, CampagneCollecte $anneeUniversitaire, Parcours $parcours, ?DateTimeInterface $dateCfvu = null, ?DateTimeInterface $dateConseil = null, bool $versionFull = true): string
     {
         // TODO: Implement exportAndSavePdfMccc() method.
+        return '';
     }
 
     public function saveMcccs(FicheMatiere|ElementConstitutif $elementConstitutif, InputBag $request): void
@@ -194,7 +195,7 @@ final class ButHandler implements TypeDiplomeHandlerInterface, TypeDiplomeMcccIn
         return $this->typeEpreuves;
     }
 
-    protected function getLibelleCourt(): string
+    public function getLibelleCourt(): string
     {
         return 'BUT';
     }

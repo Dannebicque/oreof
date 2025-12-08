@@ -4,7 +4,7 @@ namespace App\TypeDiplome\Licence;
 
 final class DeustHandler extends AbstractLicenceHandler
 {
-    protected function getLibelleCourt(): string
+    public function getLibelleCourt(): string
     {
         return 'DEUST';
     }
