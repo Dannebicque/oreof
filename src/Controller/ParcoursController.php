@@ -871,7 +871,7 @@ class ParcoursController extends BaseController
         return new JsonResponse($data);
     }
 
-    #[Route('/export-json-urca/annee-suivante-light/{parcours}', name: 'app_parcours_export_json_urca_annee_suivante_light')]
+    #[Route('/{parcours}/annee-suivante-light/export-json-urca', name: 'app_parcours_export_json_urca_annee_suivante_light')]
     public function getJsonExportUrcaAnneeSuivanteLight(
         Parcours            $parcours,
     ): Response {
