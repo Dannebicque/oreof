@@ -23,9 +23,10 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 final class DiplomeIngenieurHandler implements TypeDiplomeHandlerInterface
 {
 
-    public const TEMPLATE_FOLDER = 'diplomeIngenieur';
-    public const SOURCE = 'diplome_ingenieur';
-    public const TEMPLATE_FORM_MCCC = 'di.html.twig';
+
+    public const TEMPLATE_FOLDER = 'licence'; //todo: a remplacer
+    public const SOURCE = 'licence'; //todo: a remplacer
+    public const TEMPLATE_FORM_MCCC = 'licence.html.twig'; //todo: a remplacer
 
     public function supports(string $type): bool
     {
