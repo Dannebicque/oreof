@@ -346,7 +346,7 @@
                         <div class="col-3 d-grid">
                             {% if
                                 is_granted('MANAGE', {route: 'app_parcours', subject: this.dpeParcours})
-                                or is_granted('MANAGE', {route: 'app_formation', subject: this.dpeParcours})
+                                or is_granted('MANAGE', {route: 'app_formation', subject: this.formation})
                                 or is_granted('MANAGE', {route: 'app_composante', subject: this.dpeParcours})
                                 or is_granted('MANAGE', {route: 'app_etablissement', subject: 'etablissement'})
                                 or is_granted('ROLE_ADMIN') %}
