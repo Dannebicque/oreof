@@ -120,9 +120,9 @@
     </div>
 {% endblock %}
 
-{% block header %}
+{% set header_title %}
     <strong>{{ typeDiplome|typeDiplome }} <span id="synthese_formation_libelle">{{ formation.display }}</span></strong>
-{% endblock %}
+{% endset %}
 
 {% block breadcrumb %}
     {{ include('communs/_breadcrumb.html.twig', {liens:[

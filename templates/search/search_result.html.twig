@@ -1,8 +1,8 @@
 {% extends 'base.html.twig' %}
 
-{% block header %}
+{% set header_title %}
     Résultats de la recherche
-{% endblock %}
+{% endset %}
 
 {% block stylesheets %}
 {{ parent() }}
@@ -46,7 +46,7 @@ a.fiche-matiere-search-link span {
     color: black;
 }
 
-#newSearchField:focus { 
+#newSearchField:focus {
     border-color: black;
 }
 
@@ -61,30 +61,26 @@ a.fiche-matiere-search-link span {
 
 {% if typeRecherche == 'parcours' and parcoursArray|length > 0 %}
 <p class="fs-3 text-primary text-center mt-5">
-    {{ 
-       parcoursArray|length >= 2 
+    {{ parcoursArray|length >= 2
        ? parcoursArray|length ~ ' parcours contiennent le mot-clé saisi en description'
-       : parcoursArray|length ~ ' parcours contient le mot-clé saisi en description'
-    }} 
+       : parcoursArray|length ~ ' parcours contient le mot-clé saisi en description' }}
 </p>
 {% endif %}
 
 {% if typeRecherche == 'ficheMatiere' %}
 <p class="fs-3 text-primary text-center mt-5">
-    {{ 
-       nombreTotal >= 2 
+    {{ nombreTotal >= 2
        ? nombreTotal ~ ' fiches matières contiennent le mot-clé saisi en description'
-       : nombreTotal ~ ' fiche matière contient le mot-clé saisi en description'
-    }} 
+       : nombreTotal ~ ' fiche matière contient le mot-clé saisi en description' }}
 </p>
 {% endif %}
 
 <div class="row justify-content-center my-5">
     <div class="col-8 col-md-6 col-lg-4 justify-content-center">
         <form action="{{ path('app_search_action') }}">
-            <input 
-                type="text" 
-                placeholder="Nouvelle recherche..." 
+            <input
+                    type="text"
+                    placeholder="Nouvelle recherche..."
                 id="newSearchField"
                 class="form-control"
                 name="keyword_1"

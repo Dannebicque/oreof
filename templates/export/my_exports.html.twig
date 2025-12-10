@@ -4,9 +4,9 @@
 
 {% endblock %}
 
-{% block header %}
+{% set header_title %}
     Liste des exports demandés
-{% endblock %}
+{% endset %}
 
 {% block breadcrumb %}
     {{ include('communs/_breadcrumb.html.twig', {liens:[

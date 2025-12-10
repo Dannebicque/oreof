@@ -207,9 +207,9 @@
     </div>
 {% endblock %}
 
-{% block header %}
+{% set header_title %}
     Détail de la formation : {{ formation.display }}
-{% endblock %}
+{% endset %}
 
 {% block breadcrumb %}
     {{ include('communs/_breadcrumb.html.twig', {liens:[

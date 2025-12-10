@@ -95,9 +95,9 @@
     {#    </div> #}
 {% endblock %}
 
-{% block header %}
+{% set header_title %}
     Mes notifications
-{% endblock %}
+{% endset %}
 
 {% block breadcrumb %}
     {{ include('communs/_breadcrumb.html.twig', {liens:[

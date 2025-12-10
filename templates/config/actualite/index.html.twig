@@ -12,9 +12,10 @@
     </div>
 {% endblock %}
 
-{% block header %}
+
+{% set header_title %}
     Gestion des actualités
-{% endblock %}
+{% endset %}
 
 {% block breadcrumb %}
     {{ include('communs/_breadcrumb.html.twig', {liens:[

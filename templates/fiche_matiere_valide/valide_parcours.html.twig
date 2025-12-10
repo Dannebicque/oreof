@@ -44,9 +44,9 @@ Cela entrainera la vérification des informations saisies. Seules les fiches EC/
 
 {% endblock %}
 
-{% block header %}
+{% set header_title %}
     Fiches EC/Matières pour le parcours {{ parcours.libelle }}
-{% endblock %}
+{% endset %}
 
 {% block breadcrumb %}
     {{ include('communs/_breadcrumb.html.twig', {liens:[

@@ -43,9 +43,9 @@ obligatoires'}) }}
     </div>
 {% endblock %}
 
-{% block header %}
+{% set header_title %}
     Créer une nouvelle formation
-{% endblock %}
+{% endset %}
 
 {% block breadcrumb %}
     {{ include('communs/_breadcrumb.html.twig', {liens:[

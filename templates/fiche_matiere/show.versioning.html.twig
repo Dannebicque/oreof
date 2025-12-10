@@ -48,9 +48,9 @@
     </div>
 {% endblock %}
 
-{% block header %}
+{% set header_title %}
     Détail de la fiche EC/matière : {{ ficheMatiere.libelle }} - <span class="text-primary">Version du {{ dateHeure }}</span>
-{% endblock %}
+{% endset %}
 
 {% block breadcrumb %}
     {{ include('communs/_breadcrumb.html.twig', {liens:[

@@ -34,9 +34,9 @@
 
 {% endblock %}
 
-{% block header %}
+{% set header_title %}
     <h1>Fichier : {{ filename }}</h1>
-{% endblock %}
+{% endset %}
 
 {% block bouton_header %}
     <a href="{{ path('translations_index') }}"

@@ -6,9 +6,9 @@
     {{ include('typeDiplome/'~constant('TEMPLATE_FOLDER', typeD)~'/liste-ec.html.twig') }}
 {% endblock %}
 
-{% block header %}
+{% set header_title %}
     EC pour le parcours : {{ parcours.libelle }} {{ parcours.typeParcours|badgeTypeParcours }}
-{% endblock %}
+{% endset %}
 
 {% block breadcrumb %}
     {% if parcours.parcoursDefaut == true %}

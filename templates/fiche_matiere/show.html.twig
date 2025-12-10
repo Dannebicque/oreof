@@ -90,9 +90,9 @@
     </div>
 {% endblock %}
 
-{% block header %}
+{% set header_title %}
     Fiche EC/matière <strong id="fiche_matiere_libelle">{{ ficheMatiere.libelle }}</strong> {% if ficheMatiere.ficheMatiereParcours|length > 0 %}<span class="badge bg-info">Mutualisée</span>{% endif %}
-{% endblock %}
+{% endset %}
 
 {% block breadcrumb %}
     {{ include('communs/_breadcrumb.html.twig', {liens:[

@@ -109,9 +109,9 @@
     </div>
 {% endblock %}
 
-{% block header %}
+{% set header_title %}
     EC : {{ parcours.libelle }} {{ parcours.typeParcours|badgeTypeParcours }}
-{% endblock %}
+{% endset %}
 
 {% block breadcrumb %}
     {{ include('communs/_breadcrumb.html.twig', {liens:[

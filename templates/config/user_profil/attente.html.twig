@@ -74,9 +74,9 @@
 
 {% endblock %}
 
-{% block header %}
+{% set header_title %}
     Demande d'accès en attente
-{% endblock %}
+{% endset %}
 
 {% block breadcrumb %}
     {{ include('communs/_breadcrumb.html.twig', {liens:[

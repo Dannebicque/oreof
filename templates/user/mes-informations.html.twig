@@ -35,9 +35,9 @@
     </div>
 {% endblock %}
 
-{% block header %}
+{% set header_title %}
     Mes informations
-{% endblock %}
+{% endset %}
 
 {% block breadcrumb %}
     {{ include('communs/_breadcrumb.html.twig', {liens:[

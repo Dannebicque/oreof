@@ -1,8 +1,9 @@
 {% extends 'base.html.twig' %}
 
-{% block header %}
+{% set header_title %}
     Vos commentaires
-{% endblock %}
+{% endset %}
+
 
 {% block breadcrumb %}
     {{ include('communs/_breadcrumb.html.twig', {liens:[
