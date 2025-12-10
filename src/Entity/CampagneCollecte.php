@@ -175,11 +175,11 @@ class CampagneCollecte
         return $this;
     }
 
-    /** @deprecated */
-    public function getDateCfvu(): ?DateTimeInterface
-    {
-        return $this->dateCfvu;
-    }
+//    /** @deprecated */
+//    public function getDateCfvu(): ?DateTimeInterface
+//    {
+//        return $this->dateCfvu;
+//    }
 
     /** @deprecated */
     public function setDateCfvu(?DateTimeInterface $dateCfvu): self
@@ -489,5 +489,17 @@ class CampagneCollecte
         }
 
         return $this;
+    }
+
+    public function getDateCfvu(): ?DateTimeInterface
+    {
+        $times = $this->getTimelineDates();
+        foreach ($times as $time) {
+            if ($time->isCfvu() === true) {
+                return $time->getDate();
+            }
+        }
+
+        return null;
     }
 }
