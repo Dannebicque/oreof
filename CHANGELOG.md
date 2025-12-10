@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.48.0](https://github.com/Dannebicque/oreof/compare/v1.47.0...v1.48.0) (2025-12-10)
+
+
+### Features
+
+* **fiche matiere:** enhance access control for FicheMatiere objects ([39cf2db](https://github.com/Dannebicque/oreof/commit/39cf2db572f05d53d921cb57bf1072ba2e081384))
+* **handler:** expose getLibelleCourt method in various handlers ([6ff36ec](https://github.com/Dannebicque/oreof/commit/6ff36ecc8e437d9f5c0040b6f46b873dc82a536d))
+* **parcours:** enhance event dispatching and add state display in list ([ff6ab8f](https://github.com/Dannebicque/oreof/commit/ff6ab8fe40db1b71a00a92e9645218a5dfa24db0))
+
+
+### Bug Fixes
+
+* **controller:** correct variable name in getMcccsFromFicheMatiere method ([a1b9c05](https://github.com/Dannebicque/oreof/commit/a1b9c05f814a513d3d330d703c0e0841b20710a0))
+* **RessourceVoter:** add additional permissions for manage attribute ([9c81b7f](https://github.com/Dannebicque/oreof/commit/9c81b7f47a296680ba99560d827d4ea76300800e))
+
 ## [1.47.0](https://github.com/Dannebicque/oreof/compare/v1.46.0...v1.47.0) (2025-12-05)
 
 
