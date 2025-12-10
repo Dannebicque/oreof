@@ -71,6 +71,7 @@ ec_step4.helps.volumeTpPresentiel: ''
 ec_step4.helps.volumeCmDistanciel: ''
 ec_step4.helps.volumeTdDistanciel: ''
 ec_step4.helps.volumeTpDistanciel: ''
+parcours_step1.helps.motsCles: 'Mots clés caractérisant le parcours.'
 parcours_step2.helps.modalitesEnseignement.help: "Précisez les modalités d'enseignement."
 parcours_step2.helps.hasStage.help: ''
 parcours_step2.helps.nbHeuresStages: "Précisez le nombre d'heures de stage prévu."
