@@ -13,7 +13,8 @@
                     <div class="col-8">
                         <a href="{{ path('app_parcours_show', {id: e.id}) }}">
                             <strong class="text-primary">
-                                {{e.type_formation_libelle }} - {{ e.formation_libelle }} : {{ e.parcours_libelle }}
+                                {{ e.type_formation_libelle }} - {{ e.formation_libelle }} : {{ e.parcours_libelle }}
+                                ({{ e.etatParcours|badgeDpe }})
                             </strong>
                         </a> - ID : <strong>{{ e.id }}</strong>
                     </div>
