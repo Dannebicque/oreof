@@ -109,6 +109,18 @@ class CampagneCollecte
     #[ORM\OrderBy(['date' => 'ASC'])]
     private Collection $timelineDates;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $enablePublication = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?array $publicationOptions = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $publicationTag = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?bool $isFinished = null;
+
     public function __construct()
     {
         $this->dpeParcours = new ArrayCollection();
@@ -175,11 +187,11 @@ class CampagneCollecte
         return $this;
     }
 
-//    /** @deprecated */
-//    public function getDateCfvu(): ?DateTimeInterface
-//    {
-//        return $this->dateCfvu;
-//    }
+    /** @deprecated */
+    public function getDateCfvu(): ?DateTimeInterface
+    {
+        return $this->dateCfvu;
+    }
 
     /** @deprecated */
     public function setDateCfvu(?DateTimeInterface $dateCfvu): self
@@ -487,6 +499,54 @@ class CampagneCollecte
                 $timelineDate->setCampagneCollecte(null);
             }
         }
+
+        return $this;
+    }
+
+    public function isEnablePublication(): ?bool
+    {
+        return $this->enablePublication;
+    }
+
+    public function setEnablePublication(?bool $enablePublication): static
+    {
+        $this->enablePublication = $enablePublication;
+
+        return $this;
+    }
+
+    public function getPublicationOptions(): ?array
+    {
+        return $this->publicationOptions;
+    }
+
+    public function setPublicationOptions(?array $publicationOptions): static
+    {
+        $this->publicationOptions = $publicationOptions;
+
+        return $this;
+    }
+
+    public function getPublicationTag(): ?string
+    {
+        return $this->publicationTag;
+    }
+
+    public function setPublicationTag(?string $publicationTag): static
+    {
+        $this->publicationTag = $publicationTag;
+
+        return $this;
+    }
+
+    public function isFinished(): ?bool
+    {
+        return $this->isFinished;
+    }
+
+    public function setIsFinished(?bool $isFinished): static
+    {
+        $this->isFinished = $isFinished;
 
         return $this;
     }

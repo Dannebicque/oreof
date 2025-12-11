@@ -30,5 +30,84 @@
         <td><span class="badge {% if campagne_collecte.defaut %}bg-success{% else %}bg-warning{% endif %}">{{
                 campagne_collecte.defaut ? 'Oui' : 'Non' }}</span></td>
     </tr>
+    <tr>
+        <th>État de la publication</th>
+        <td>
+            <span class="badge {{ campagne_collecte.enablePublication == true ? 'bg-success' : 'bg-danger' }}">
+                {{ campagne_collecte.enablePublication == true ? 'Publié' : 'Non publié' }}
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <th>État de la consolidation de la campagne de collecte</th>
+        <td>
+            {% if campagne_collecte.isFinished %}
+                <span class="badge bg-dark">
+                    Campagne consolidation terminée
+                </span>
+            {% else %}
+                <span class="badge bg-success">
+                    En cours
+                </span>
+            {% endif %}
+        </td>
+    </tr>
+    {% set publicationTagStyle = {
+        'annee_archivee' : {
+            badgeColor: 'bg-warning',
+            label: 'Année archivée'
+        },
+        'annee_courante' : {
+            badgeColor: 'bg-primary',
+            label: 'Année courante (N)'
+        },
+        'annee_suivante' : {
+            badgeColor: 'bg-info',
+            label: 'Année suivante (N+1)'
+        },
+        'none' : {
+            badgeColor: 'bg-dark',
+            label: 'Non défini'
+        }
+    } %}
+    <tr>
+        <th>Information sur la campagne de collecte</th>
+        <td>
+            <span class="badge {{ publicationTagStyle[campagne_collecte.publicationTag ?? 'none'].badgeColor }}">
+                {{ publicationTagStyle[campagne_collecte.publicationTag ?? 'none'].label }}
+            </span>
+        </td>
+    </tr>
+    {% set badgePublicationConfig = {
+            'none': {
+                libelle: 'Non défini',
+                badgeColor: 'bg-primary'
+            }, 
+            1 : { 
+                libelle: 'Publié',
+                badgeColor: 'bg-success'
+            },
+            0 : {
+                libelle: 'Non publié',
+                badgeColor: 'bg-danger'
+            }
+        } 
+    %}
+    <tr>
+        <th>Publication de la maquette</th>
+        <td>
+            <span class="badge {{ badgePublicationConfig[campagne_collecte.publicationOptions['publication_maquette'] ?? 'none'].badgeColor }}">
+                {{ badgePublicationConfig[campagne_collecte.publicationOptions['publication_maquette'] ?? 'none'].libelle }}
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <th>Publication des MCCC</th>
+        <td>
+            <span class="badge {{ badgePublicationConfig[campagne_collecte.publicationOptions['publication_mccc'] ?? 'none'].badgeColor }}">
+                {{ badgePublicationConfig[campagne_collecte.publicationOptions['publication_mccc'] ?? 'none'].libelle }}
+            </span>
+        </td>
+    </tr>
     </tbody>
 </table>
