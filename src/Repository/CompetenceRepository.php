@@ -79,4 +79,17 @@ class CompetenceRepository extends ServiceEntityRepository
             $this->save($competence, true);
         }
     }
+
+    public function findFromAnneeUniversitaire(int $idCampagneCollecte) : array {
+        return $this->createQueryBuilder('competence')
+            ->select('competence.id')
+            ->join('competence.blocCompetence', 'blocComp')
+            ->join('blocComp.parcours', 'parcours')
+            ->join('parcours.dpeParcours', 'dpeParcours')
+            ->join('dpeParcours.campagneCollecte', 'campagneCollecte')
+            ->andWhere('campagneCollecte.id = :idCampagne')
+            ->setParameter(':idCampagne', $idCampagneCollecte)
+            ->getQuery()
+            ->getResult();
+    }
 }

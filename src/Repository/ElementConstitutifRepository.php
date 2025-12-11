@@ -253,4 +253,16 @@ class ElementConstitutifRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function findFromAnneeUniversitaire(int $idCampagneCollecte) : array {
+        return $this->createQueryBuilder('ec')
+            ->select('ec.id')
+            ->join('ec.parcours', 'parcours')
+            ->join('parcours.dpeParcours', 'dpe')
+            ->join('dpe.campagneCollecte', 'campagne')
+            ->andWhere('campagne.id = :idCampagne')
+            ->setParameter(':idCampagne', $idCampagneCollecte)
+            ->getQuery()
+            ->getResult();
+    }
 }

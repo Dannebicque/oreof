@@ -21,6 +21,18 @@ class ContactRepository extends ServiceEntityRepository
         parent::__construct($registry, Contact::class);
     }
 
+    public function findFromAnneeUniversitaire(int $idCampagneCollecte) : array {
+        return $this->createQueryBuilder('c')
+            ->select('c.id')
+            ->join('c.parcours', 'p')
+            ->join('p.dpeParcours', 'dpe')
+            ->join('dpe.campagneCollecte', 'campagne')
+            ->andWhere('campagne.id = :idCampagne')
+            ->setParameter(':idCampagne', $idCampagneCollecte)
+            ->getQuery()
+            ->getResult();
+    }
+
 //    /**
 //     * @return Contact[] Returns an array of Contact objects
 //     */

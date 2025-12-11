@@ -39,6 +39,30 @@ class ButNiveauxRepository extends ServiceEntityRepository
         }
     }
 
+    public function findFromAnneeUniversitaire(int $idCampagneCollecte) : array {
+        $qb = $this->createQueryBuilder('butNiveau');
+
+        $subqueryCheck = $this->createQueryBuilder('butN')
+            ->select('butN.id')
+            ->join('butN.competence', 'butCompetence')
+            ->join('butCompetence.formation', 'formation')
+            ->join('formation.parcours', 'parcours')
+            ->join('parcours.dpeParcours', 'dpe')
+            ->join('dpe.campagneCollecte', 'campagneCollecte')
+            ->andWhere('campagneCollecte.id = :idCampagne');
+
+        return $qb
+            ->select('DISTINCT butNiveau.id')
+            ->andWhere(
+                $qb->expr()->in(
+                    'butNiveau.id', $subqueryCheck->getDQL()
+                )
+            )
+            ->setParameter(':idCampagne', $idCampagneCollecte)
+            ->getQuery()
+            ->getResult();
+    }
+
 //    /**
 //     * @return ButNiveaux[] Returns an array of ButNiveaux objects
 //     */

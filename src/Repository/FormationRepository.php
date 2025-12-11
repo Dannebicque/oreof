@@ -488,4 +488,15 @@ class FormationRepository extends ServiceEntityRepository
             )->getQuery()
             ->getResult();
     }
+
+    public function findFromAnneeUniversitaire(int $idCampagneCollecte) : array {
+        return $this->createQueryBuilder('formation')
+            ->select('DISTINCT formation.id')
+            ->join('formation.dpeParcours', 'dpeP')
+            ->join('dpeP.campagneCollecte', 'campagneC')
+            ->where('campagneC.id = :idCampagne')
+            ->setParameter(':idCampagne', $idCampagneCollecte)
+            ->getQuery()
+            ->getResult();
+    }
 }

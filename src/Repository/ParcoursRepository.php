@@ -297,4 +297,26 @@ class ParcoursRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function findFromAnneeUniversitaire(int $idCampagneCollecte) : array {
+        $qb = $this->createQueryBuilder('parcours');
+
+        $subqueryCheck = $this->createQueryBuilder('p')
+            ->select('pCopie.id')
+            ->join('p.parcoursOrigineCopie', 'pCopie');
+
+
+        return $qb->select('DISTINCT parcours.id')
+            ->join('parcours.dpeParcours', 'dpeP')
+            ->join('dpeP.campagneCollecte', 'campC')
+            ->andWhere('campC.id = :idCampagne')
+            ->andWhere(
+                $qb->expr()->notIn(
+                    'parcours.id', $subqueryCheck->getDQL()
+                )
+            )
+            ->setParameter(':idCampagne', $idCampagneCollecte)
+            ->getQuery()
+            ->getResult();
+    }
 }
