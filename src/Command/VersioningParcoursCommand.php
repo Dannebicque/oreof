@@ -70,7 +70,7 @@ class VersioningParcoursCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        ini_set('memory_limit', '2048M');
+        ini_set('memory_limit', '3000M');
 
         $io = new SymfonyStyle($input, $output);
 
@@ -84,7 +84,7 @@ class VersioningParcoursCommand extends Command
         if($dpeFullValidDatabase){
             $io->writeln("Sauvegarde de tous les parcours valides en cours...");
 //            $dpe = $this->entityManager->getRepository(CampagneCollecte::class)->findOneBy(['defaut' => true]);
-            $dpe = $this->entityManager->getRepository(CampagneCollecte::class)->find(1);
+            $dpe = $this->entityManager->getRepository(CampagneCollecte::class)->find(2);
             $parcoursArray = $this->entityManager->getRepository(Parcours::class)->findAllParcoursForDpe($dpe);
             $parcoursArray = array_filter(
                 $parcoursArray,
