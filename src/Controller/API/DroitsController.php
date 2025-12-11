@@ -14,10 +14,12 @@ use App\Repository\ProfilRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class DroitsController extends BaseController
 {
     #[Route('/api/droits', name: 'api_droits')]
+    #[IsGranted('ROLE_USER')]
     public function getDroits(
         Request        $request,
         ProfilRepository $roleRepository,

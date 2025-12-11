@@ -38,6 +38,9 @@ class TimelineDate
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTime $dateDebut = null;
 
+    #[ORM\Column]
+    private ?bool $isCfvu = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -135,6 +138,18 @@ class TimelineDate
     public function setDateDebut(?\DateTime $dateDebut): static
     {
         $this->dateDebut = $dateDebut;
+
+        return $this;
+    }
+
+    public function isCfvu(): ?bool
+    {
+        return $this->isCfvu;
+    }
+
+    public function setIsCfvu(bool $isCfvu): static
+    {
+        $this->isCfvu = $isCfvu;
 
         return $this;
     }

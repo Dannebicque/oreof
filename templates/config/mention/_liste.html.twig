@@ -1,145 +1,145 @@
-<table class="table">
-    <thead>
-    <tr>
-        <th>
-            <a href="#"
-                    {{ stimulus_action('crud', 'sort', 'click', {
-                        'sort': 'libelle',
-                        'direction': getDirection('libelle', sort, direction)
-                    }) }}
-            >
-                Libellé
-                {{ displaySort('libelle', sort, direction) }}
-            </a>
-        </th>
-        <th>
-            <a href="#"
-                    {{ stimulus_action('crud', 'sort', 'click', {
-                        'sort': 'sigle',
-                        'direction': getDirection('sigle', sort, direction)
-                    }) }}
-            >
-                Sigle
-                {{ displaySort('sigle', sort, direction) }}
-            </a>
-        </th>
-        <th>
-            <a href="#"
-                    {{ stimulus_action('crud', 'sort', 'click', {
-                        'sort': 'codeApogee',
-                        'direction': getDirection('codeApogee', sort, direction)
-                    }) }}
-            >
-                Code Apogée
-                {{ displaySort('codeApogee', sort, direction) }}
-            </a>
-        </th>
-        <th>
-            <a href="#"
-                    {{ stimulus_action('crud', 'sort', 'click', {
-                        'sort': 'type_diplome',
-                        'direction': getDirection('type_diplome', sort, direction)
-                    }) }}
-            >
-                Type de diplôme
-                {{ displaySort('type_diplome', sort, direction) }}
-            </a>
-        </th>
-        <th>Domaine(s)</th>
-        <th>Utilisé ?</th>
-        <th></th>
-    </tr>
-    </thead>
-    <tbody>
-    {% for mention in mentions %}
-        <tr>
-            <td>{{ mention.libelle }}</td>
-            <td>{{ mention.sigle }}</td>
-            <td>{{ mention.codeApogee|displayOrBadge }}</td>
-            <td>{{ mention.typeDiplome|typeDiplome }}</td>
-            <td>{% for domaine in mention.domaines %}{{ domaine.libelle }}{% if not loop.last %}, {% endif %}{% endfor %}</td>
-            <td>
-                {% if mention.formations|length > 0 %}
-                    <span class="badge bg-success">Utilisée ({{ mention.formations|length }})</span>
-                {% else %}
-                    <span class="badge bg-warning">Non Utilisée</span>
-                {% endif %}
-            </td>
-            <td class="text-end">
-                <button
-                        {{ stimulus_controller('modal', {
-                            size: 'lg',
-                            modalTitle: 'Voir une mention ou spécialité',
-                            modalUrl: path('app_mention_show',{'id': mention.id}) }) }}
-                        data-action="click->modal#openModal"
-                        class="btn btn-sm text-info"
-                        data-size="lg"
-                        data-bs-toggle="tooltip"
-                        data-bs-placement="bottom"
-                        title="Voir une mention ou spécialité"
-                >
-                    <i class="{{ iconShow }}"></i>
-                    <span> voir</span>
-                </button>
+{# <table class="table"> #}
+{#    <thead> #}
+{#    <tr> #}
+{#        <th> #}
+{#            <a href="#" #}
+{#                    {{ stimulus_action('crud', 'sort', 'click', { #}
+{#                        'sort': 'libelle', #}
+{#                        'direction': getDirection('libelle', sort, direction) #}
+{#                    }) }} #}
+{#            > #}
+{#                Libellé #}
+{#                {{ displaySort('libelle', sort, direction) }} #}
+{#            </a> #}
+{#        </th> #}
+{#        <th> #}
+{#            <a href="#" #}
+{#                    {{ stimulus_action('crud', 'sort', 'click', { #}
+{#                        'sort': 'sigle', #}
+{#                        'direction': getDirection('sigle', sort, direction) #}
+{#                    }) }} #}
+{#            > #}
+{#                Sigle #}
+{#                {{ displaySort('sigle', sort, direction) }} #}
+{#            </a> #}
+{#        </th> #}
+{#        <th> #}
+{#            <a href="#" #}
+{#                    {{ stimulus_action('crud', 'sort', 'click', { #}
+{#                        'sort': 'codeApogee', #}
+{#                        'direction': getDirection('codeApogee', sort, direction) #}
+{#                    }) }} #}
+{#            > #}
+{#                Code Apogée #}
+{#                {{ displaySort('codeApogee', sort, direction) }} #}
+{#            </a> #}
+{#        </th> #}
+{#        <th> #}
+{#            <a href="#" #}
+{#                    {{ stimulus_action('crud', 'sort', 'click', { #}
+{#                        'sort': 'type_diplome', #}
+{#                        'direction': getDirection('type_diplome', sort, direction) #}
+{#                    }) }} #}
+{#            > #}
+{#                Type de diplôme #}
+{#                {{ displaySort('type_diplome', sort, direction) }} #}
+{#            </a> #}
+{#        </th> #}
+{#        <th>Domaine(s)</th> #}
+{#        <th>Utilisé ?</th> #}
+{#        <th></th> #}
+{#    </tr> #}
+{#    </thead> #}
+{#    <tbody> #}
+{#    {% for mention in mentions %} #}
+{#        <tr> #}
+{#            <td>{{ mention.libelle }}</td> #}
+{#            <td>{{ mention.sigle }}</td> #}
+{#            <td>{{ mention.codeApogee|displayOrBadge }}</td> #}
+{#            <td>{{ mention.typeDiplome|typeDiplome }}</td> #}
+{#            <td>{% for domaine in mention.domaines %}{{ domaine.libelle }}{% if not loop.last %}, {% endif %}{% endfor %}</td> #}
+{#            <td> #}
+{#                {% if mention.formations|length > 0 %} #}
+{#                    <span class="badge bg-success">Utilisée ({{ mention.formations|length }})</span> #}
+{#                {% else %} #}
+{#                    <span class="badge bg-warning">Non Utilisée</span> #}
+{#                {% endif %} #}
+{#            </td> #}
+{#            <td class="text-end"> #}
+{#                <button #}
+{#                        {{ stimulus_controller('modal', { #}
+{#                            size: 'lg', #}
+{#                            modalTitle: 'Voir une mention ou spécialité', #}
+{#                            modalUrl: path('app_mention_show',{'id': mention.id}) }) }} #}
+{#                        data-action="click->modal#openModal" #}
+{#                        class="btn btn-sm text-info" #}
+{#                        data-size="lg" #}
+{#                        data-bs-toggle="tooltip" #}
+{#                        data-bs-placement="bottom" #}
+{#                        title="Voir une mention ou spécialité" #}
+{#                > #}
+{#                    <i class="{{ iconShow }}"></i> #}
+{#                    <span> voir</span> #}
+{#                </button> #}
 
-                <button
-                        {{ stimulus_controller('modal', {
-                            size: 'lg',
-                            modalTitle: 'Modifier une mention ou spécialité',
-                            modalUrl: path('app_mention_edit',{'id': mention.id}) }) }}
-                        data-action="click->modal#openModal"
-                        class="btn btn-sm text-warning"
-                        data-size="lg"
-                        data-bs-toggle="tooltip"
-                        data-bs-placement="bottom"
-                        title="Modifier une mention ou spécialité"
-                >
-                    <i class="{{ iconEdit }}"></i>
-                    <span> modifier</span>
-                </button>
+{#                <button #}
+{#                        {{ stimulus_controller('modal', { #}
+{#                            size: 'lg', #}
+{#                            modalTitle: 'Modifier une mention ou spécialité', #}
+{#                            modalUrl: path('app_mention_edit',{'id': mention.id}) }) }} #}
+{#                        data-action="click->modal#openModal" #}
+{#                        class="btn btn-sm text-warning" #}
+{#                        data-size="lg" #}
+{#                        data-bs-toggle="tooltip" #}
+{#                        data-bs-placement="bottom" #}
+{#                        title="Modifier une mention ou spécialité" #}
+{#                > #}
+{#                    <i class="{{ iconEdit }}"></i> #}
+{#                    <span> modifier</span> #}
+{#                </button> #}
 
-                <button {{ stimulus_action('crud', 'duplicate', 'click', {
-                    url:path('app_mention_duplicate',{'id': mention.id})
-                }) }} class="btn btn-sm text-success">
-                    <i class="{{ iconDuplicate }}"></i> Dupliquer
-                </button>
-                <button {{ stimulus_action('crud', 'delete', 'click', {
-                    url:path('app_mention_delete',{'id': mention.id}),
-                    csrf: csrf_token('delete' ~ mention.id)
-                }) }} class="btn btn-sm text-danger">
-                    <i class="{{ iconDelete }}"></i> Supprimer
-                </button>
-            </td>
+{#                <button {{ stimulus_action('crud', 'duplicate', 'click', { #}
+{#                    url:path('app_mention_duplicate',{'id': mention.id}) #}
+{#                }) }} class="btn btn-sm text-success"> #}
+{#                    <i class="{{ iconDuplicate }}"></i> Dupliquer #}
+{#                </button> #}
+{#                <button {{ stimulus_action('crud', 'delete', 'click', { #}
+{#                    url:path('app_mention_delete',{'id': mention.id}), #}
+{#                    csrf: csrf_token('delete' ~ mention.id) #}
+{#                }) }} class="btn btn-sm text-danger"> #}
+{#                    <i class="{{ iconDelete }}"></i> Supprimer #}
+{#                </button> #}
+{#            </td> #}
 
-        </tr>
-    {% else %}
-        <tr>
-            <td colspan="4">no records found</td>
-        </tr>
-    {% endfor %}
-    </tbody>
-</table>
+{#        </tr> #}
+{#    {% else %} #}
+{#        <tr> #}
+{#            <td colspan="4">no records found</td> #}
+{#        </tr> #}
+{#    {% endfor %} #}
+{#    </tbody> #}
+{# </table> #}
 
-<div class="d-flex justify-content-between align-items-center mt-3">
-    <div>
-        <label for="pagination" class="sr-only">Pagination</label>
-        <select
-                id="pagination"
-                class="form-select form-select-sm" {{ stimulus_action('crud', 'filter', 'change', { field: 'limit' }) }}>
-            <option value="10" {{ limit == 10 ? 'selected' : '' }}>10 par page</option>
-            <option value="20" {{ limit == 20 ? 'selected' : '' }}>20 par page</option>
-            <option value="50" {{ limit == 50 ? 'selected' : '' }}>50 par page</option>
-            <option value="100" {{ limit == 100 ? 'selected' : '' }}>100 par page</option>
-        </select>
-    </div>
-    <div>
-        {{ page }}
-        {% if total is defined %}
-            {% set nbPages = (total / limit)|round(0, 'ceil') %}
-            {% include 'communs/_pagination.html.twig' with {
-                'page': page,
-                'nbPages': nbPages
-            } %}
-        {% endif %}
-    </div>
-</div>
+{# <div class="d-flex justify-content-between align-items-center mt-3"> #}
+{#    <div> #}
+{#        <label for="pagination" class="sr-only">Pagination</label> #}
+{#        <select #}
+{#                id="pagination" #}
+{#                class="form-select form-select-sm" {{ stimulus_action('crud', 'filter', 'change', { field: 'limit' }) }}> #}
+{#            <option value="10" {{ limit == 10 ? 'selected' : '' }}>10 par page</option> #}
+{#            <option value="20" {{ limit == 20 ? 'selected' : '' }}>20 par page</option> #}
+{#            <option value="50" {{ limit == 50 ? 'selected' : '' }}>50 par page</option> #}
+{#            <option value="100" {{ limit == 100 ? 'selected' : '' }}>100 par page</option> #}
+{#        </select> #}
+{#    </div> #}
+{#    <div> #}
+{#        {{ page }} #}
+{#        {% if total is defined %} #}
+{#            {% set nbPages = (total / limit)|round(0, 'ceil') %} #}
+{#            {% include 'communs/_pagination.html.twig' with { #}
+{#                'page': page, #}
+{#                'nbPages': nbPages #}
+{#            } %} #}
+{#        {% endif %} #}
+{#    </div> #}
+{# </div> #}

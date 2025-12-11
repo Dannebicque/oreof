@@ -42,6 +42,11 @@ class Domaine
     #[ORM\ManyToMany(targetEntity: Mention::class, mappedBy: 'domaines')]
     private Collection $mentions;
 
+    public function __toString(): string
+    {
+        return $this->libelle ?? '';
+    }
+
     public function __construct()
     {
         $this->mentions = new ArrayCollection();

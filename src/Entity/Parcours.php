@@ -298,6 +298,12 @@ class Parcours
     #[ORM\Column]
     private ?int $capaciteAccueil = 0;
 
+    /**
+     * @var Collection<int, ChangeParcours>
+     */
+    #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: ChangeParcours::class)]
+    private Collection $changeParcours;
+
     public function __construct(?Formation $formation)
     {
         $this->formation = $formation;
@@ -322,6 +328,7 @@ class Parcours
         $this->niveauFrancais = NiveauLangueEnum::B2;
         $this->userProfils = new ArrayCollection();
         $this->annees = new ArrayCollection();
+        $this->changeParcours = new ArrayCollection();
     }
 
 
@@ -1742,6 +1749,36 @@ class Parcours
     public function setCapaciteAccueil(int $capaciteAccueil): static
     {
         $this->capaciteAccueil = $capaciteAccueil;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ChangeParcours>
+     */
+    public function getChangeParcours(): Collection
+    {
+        return $this->changeParcours;
+    }
+
+    public function addChangeParcour(ChangeParcours $changeParcour): static
+    {
+        if (!$this->changeParcours->contains($changeParcour)) {
+            $this->changeParcours->add($changeParcour);
+            $changeParcour->setParcours($this);
+        }
+
+        return $this;
+    }
+
+    public function removeChangeParcour(ChangeParcours $changeParcour): static
+    {
+        if ($this->changeParcours->removeElement($changeParcour)) {
+            // set the owning side to null (unless already changed)
+            if ($changeParcour->getParcours() === $this) {
+                $changeParcour->setParcours(null);
+            }
+        }
 
         return $this;
     }

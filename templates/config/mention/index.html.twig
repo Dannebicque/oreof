@@ -1,25 +1,28 @@
 {% extends 'base.html.twig' %}
 
 {% block content %}
-    <div class="card"
-            {{ stimulus_controller('crud', {
-                url: path('app_mention_liste'),
-                storageKey: 'mention_liste',
-            }) }}
-         data-action="base:refreshListe@window->crud#refreshListe"
-    >
-        <div class="card-body">
-            {{ include('communs/_recherche.html.twig') }}
-            <div {{ stimulus_target('crud', 'liste') }}>
+    {{ component('DataTable', { config: table }) }}
 
-            </div>
-        </div>
-    </div>
+    {#    ---- #}
+    {#    <div class="card" #}
+    {#            {{ stimulus_controller('crud', { #}
+    {#                url: path('app_mention_liste'), #}
+    {#                storageKey: 'mention_liste', #}
+    {#            }) }} #}
+    {#         data-action="base:refreshListe@window->crud#refreshListe" #}
+    {#    > #}
+    {#        <div class="card-body"> #}
+    {#            {{ include('communs/_recherche.html.twig') }} #}
+    {#            <div {{ stimulus_target('crud', 'liste') }}> #}
+
+    {#            </div> #}
+    {#        </div> #}
+    {#    </div> #}
 {% endblock %}
 
-{% block header %}
-    Gestion des mentions/spécialités
-{% endblock %}
+{% set header_title %}
+    {{ 'header.mention.index'|trans({}, 'header') }}
+{% endset %}
 
 {% block breadcrumb %}
     {{ include('communs/_breadcrumb.html.twig', {liens:[

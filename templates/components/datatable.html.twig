@@ -1,0 +1,369 @@
+<div {{ attributes }} class="datatable-wrapper">
+    {# Toolbar avec recherche globale et actions #}
+    <div class="card mb-3">
+        <div class="card-body">
+            <div class="row g-3 align-items-center">
+                <div class="col-md-6">
+                    <div class="input-group">
+                        <label for="recherche-datatable" class="sr-only">
+                            Recherche globale
+                        </label>
+                        <span class="input-group-text">
+                            <i class="fas fa-search"></i>
+                        </span>
+                        <input
+                                id="recherche-datatable"
+                                type="text"
+                                class="form-control"
+                                placeholder="Rechercher..."
+                                data-model="debounce(100)|globalSearch"
+                                data-action="live#update"
+                        >
+                    </div>
+                </div>
+                <div class="col-md-6 text-end">
+                    <button
+                            type="button"
+                            class="btn btn-outline-secondary"
+                            data-action="live#action"
+                            data-live-action-param="resetFilters"
+                    >
+                        <i class="fas fa-arrow-rotate-right"></i> Réinitialiser
+                    </button>
+
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-outline-primary" data-bs-toggle="collapse"
+                                title="Cliquez pour afficher/cacher les filtres"
+                                data-bs-target="#filters-collapse">
+                            <i class="fas fa-filter"></i> Filtres
+                        </button>
+                        <a href="{{ path('datatable_export', {component: _self}) }}" class="btn btn-outline-success">
+                            <i class="{{ iconDownload }}"></i> Exporter
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            {# Filtres avancés (collapsible) #}
+            <div class="collapse mt-3" id="filters-collapse">
+                <div class="card card-body bg-light">
+                    <div class="row g-3">
+                        {% for column in columns %}
+                            {% if column.filterable %}
+                                <div class="col-md-4">
+                                    <label class="form-label" for="col_{{ column.id }}">{{ column.label }}</label>
+
+                                    {% if column.type == 'text' %}
+                                        <input
+                                                id="col_{{ column.id }}"
+                                                type="text"
+                                                class="form-control"
+                                                data-model="debounce(100)|filters.{{ column.field }}"
+                                                placeholder="Filtrer par {{ column.label|lower }}"
+                                        >
+
+                                    {% elseif column.type == 'select' %}
+                                        <select
+                                                id="col_{{ column.id }}"
+                                                class="form-select"
+                                                data-model="filters.{{ column.field }}"
+                                        >
+                                            <option value="">Tous</option>
+                                            {% for key, value in column.choices %}
+                                                <option value="{{ key }}">{{ value }}</option>
+                                            {% endfor %}
+                                        </select>
+
+                                    {% elseif column.type == 'entity' %}
+                                        <select
+                                                id="col_{{ column.id }}"
+                                                class="form-select"
+                                                data-model="filters.{{ column.field }}"
+                                        >
+                                            <option value="">Tous</option>
+                                            {# Les options seront chargées dynamiquement #}
+                                        </select>
+
+                                    {% elseif column.type == 'date' %}
+                                        <div class="input-group">
+                                            <input
+                                                    id="col_{{ column.id }}"
+                                                    type="date"
+                                                    class="form-control"
+                                                    data-model="filters.{{ column.field }}.from"
+                                                    placeholder="Du"
+                                            >
+                                            <span class="input-group-text">au</span>
+                                            <label for="col_{{ column.id }}_to" class="sr-only">Au</label>
+                                            <input
+                                                    id="col_{{ column.id }}_to"
+                                                    type="date"
+                                                    class="form-control"
+                                                    data-model="filters.{{ column.field }}.to"
+                                                    placeholder="Au"
+                                            >
+                                        </div>
+
+                                    {% elseif column.type == 'boolean' %}
+                                        <select
+                                                id="col_{{ column.id }}"
+                                                class="form-select"
+                                                data-model="filters.{{ column.field }}"
+                                        >
+                                            <option value="">Tous</option>
+                                            <option value="1">Oui</option>
+                                            <option value="0">Non</option>
+                                        </select>
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-body">
+            {# Informations et pagination du haut #}
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <div>
+                    <small>{{ ((page - 1) * perPage + 1) }} à {{ min(page * perPage, this.getTotal) }}
+                        sur {{ this.getTotal }} résultats</small>
+                </div>
+                <div>
+                    <label for="perPage" class="sr-only">Elements par page</label>
+                    <select id="perPage" class="form-select form-select-sm" data-model="perPage"
+                            style="width: auto; display: inline-block;">
+                        <option value="10" {{ perPage == 10 ? 'selected' : '' }}>10</option>
+                        <option value="20" {{ perPage == 20 ? 'selected' : '' }}>20</option>
+                        <option value="50" {{ perPage == 50 ? 'selected' : '' }}>50</option>
+                        <option value="100" {{ perPage == 100 ? 'selected' : '' }}>100</option>
+                    </select>
+                    <small class="text-muted">par page</small>
+                </div>
+            </div>
+
+            {# Tableau principal #}
+            <div class="table-responsive">
+                <table class="table table-hover table-striped align-middle">
+                    <thead class="table-light">
+                    <tr>
+                        {% for column in columns %}
+                            <th class="{{ column.class }}">
+                                {% if column.sortable %}
+                                    <a
+                                            href="#"
+                                            class="text-decoration-none text-dark d-flex align-items-center justify-content-between"
+                                            data-action="live#action"
+                                            data-live-action-param="sort"
+                                            data-live-field-param="{{ column.field }}"
+                                    >
+                                        {{ column.label }}
+                                        {% if sortField == column.field %}
+                                            <i class="fas fa-arrow-{{ sortDirection == 'asc' ? 'up' : 'down' }}"></i>
+                                        {% else %}
+                                            <i class="fas fa-arrow-down-arrow-up text-muted"></i>
+                                        {% endif %}
+                                    </a>
+                                {% else %}
+                                    {{ column.label }}
+                                {% endif %}
+                            </th>
+                        {% endfor %}
+
+                        {% if actions is not empty %}
+                            <th class="text-end">Actions</th>
+                        {% endif %}
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for item in this.getData %}
+                        <tr>
+                            {% for column in columns %}
+                                <td class="{{ column.class }}">
+                                    {% if column.template %}
+                                        {% include column.template with {item: item, value: this.getFieldValue(item, column.field)} %}
+                                    {% else %}
+                                        {% set value = this.getFieldValue(item, column.field) %}
+
+                                        {% if column.format == 'date' and value %}
+                                            {{ value|date('d/m/Y') }}
+
+                                        {% elseif column.format == 'datetime' and value %}
+                                            {{ value|date('d/m/Y H:i') }}
+
+                                        {% elseif column.format == 'currency' and value %}
+                                            {{ value|number_format(2, ',', ' ') }} €
+
+                                        {% elseif column.format == 'boolean' %}
+                                            <span class="badge bg-{{ value ? 'success' : 'secondary' }}">
+                                            {{ value ? 'Oui' : 'Non' }}
+                                        </span>
+
+                                        {% elseif column.format == 'badge' %}
+                                            {% set badgeClass = column.badge_map[value] ?? column.badge_class %}
+                                            <span class="badge {{ badgeClass }}">
+                                            {{ column.choices[value] ?? value }}
+                                        </span>
+
+                                        {% elseif column.format == 'badges' and value %}
+                                            {# Pour les collections ManyToMany #}
+                                            {% if value is iterable %}
+                                                {% for item in value %}
+                                                    {% if column.collection_property == '__toString' %}
+                                                        {% set itemValue = item %}
+                                                    {% else %}
+                                                        {% set getter = 'get' ~ column.collection_property|capitalize %}
+                                                        {% set itemValue = attribute(item, getter) %}
+                                                    {% endif %}
+                                                    <span class="badge {{ column.badge_class }} me-1">{{ itemValue }}</span>
+                                                {% endfor %}
+                                            {% else %}
+                                                <span class="text-muted">-</span>
+                                            {% endif %}
+
+                                        {% elseif column.type == 'collection' and value %}
+                                            {# Pour les collections ManyToMany en texte simple #}
+                                            {% if value is iterable %}
+                                                {% set items = [] %}
+                                                {% for item in value %}
+                                                    {% if column.collection_property == '__toString' %}
+                                                        {% set itemValue = item %}
+                                                    {% else %}
+                                                        {% set getter = 'get' ~ column.collection_property|capitalize %}
+                                                        {% set itemValue = attribute(item, getter) %}
+                                                    {% endif %}
+                                                    {% set items = items|merge([itemValue]) %}
+                                                {% endfor %}
+                                                {{ items|join(column.separator) }}
+                                            {% else %}
+                                                -
+                                            {% endif %}
+
+                                        {% else %}
+                                            {{ value }}
+                                        {% endif %}
+                                    {% endif %}
+                                </td>
+                            {% endfor %}
+
+                            {% if actions is not empty %}
+                                <td class="text-end">
+                                    <div role="group">
+                                        {% for name, action in actions %}
+                                            {% set show = action.condition is null or action.condition(item) %}
+                                            {% if show %}
+                                                {% set routeUrl = path(action.route, {id: item.id}|merge(action.route_params)) %}
+
+                                                {% if action.modal %}
+                                                    {# Bouton avec modal #}
+                                                    <button
+                                                            type="button"
+                                                            class="btn {{ action.class }}"
+                                                            {{ stimulus_controller('modal', {
+                                                                size: action.modal_size,
+                                                                modalTitle: action.modal_title,
+                                                                modalUrl: routeUrl
+                                                            }) }}
+                                                            data-action="click->modal#openModal"
+                                                    >
+                                                        {% if action.icon %}
+                                                            <i class="{{ action.icon }}"></i>
+                                                        {% endif %}
+                                                        {{ action.label }}
+                                                    </button>
+                                                {% else %}
+                                                    {# Lien classique #}
+                                                    <a
+                                                            href="{{ routeUrl }}"
+                                                            class="btn {{ action.class }}"
+                                                            {% if action.confirm %}
+                                                                onclick="return confirm('{{ action.confirm }}')"
+                                                            {% endif %}
+                                                    >
+                                                        {% if action.icon %}
+                                                            <i class="{{ action.icon }}"></i>
+                                                        {% endif %}
+                                                        {{ action.label }}
+                                                    </a>
+                                                {% endif %}
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                </td>
+                            {% endif %}
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="{{ columns|length + (actions is not empty ? 1 : 0) }}"
+                                class="text-center text-muted py-5">
+                                <i class="fas fa-inbox" style="font-size: 3rem;"></i>
+                                <p class="mt-2">Aucune donnée à afficher</p>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            {# Pagination #}
+            {% set totalPages = this.getTotalPages %}
+            {% if totalPages > 1 %}
+                <nav aria-label="Pagination">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item {{ page == 1 ? 'disabled' : '' }}">
+                            <a
+                                    class="page-link"
+                                    {{ live_action('goToPage', {'page': 1 }) }}
+                                    {{ page == 1 ? 'disabled' : '' }}
+                            >
+                                <i class="fas fa-chevron-double-left"></i>
+                            </a>
+                        </li>
+                        <li class="page-item {{ page == 1 ? 'disabled' : '' }}">
+                            <a
+                                    class="page-link"
+                                    {{ live_action('goToPage', {'page': page - 1 }) }}
+                                    {{ page == 1 ? 'disabled' : '' }}
+                            >
+                                <i class="fas fa-chevron-left"></i>
+                            </a>
+                        </li>
+
+                        {% for p in range(max(1, page - 2), min(totalPages, page + 2)) %}
+                            <li class="page-item {{ p == page ? 'active' : '' }}">
+                                <a
+                                        class="page-link"
+                                        {{ live_action('goToPage', {'page': p }) }}
+                                >
+                                    {{ p }}
+                                </a>
+                            </li>
+                        {% endfor %}
+
+                        <li class="page-item {{ page == totalPages ? 'disabled' : '' }}">
+                            <a
+                                    class="page-link"
+                                    {{ live_action('goToPage', {'page': page +  1 }) }}
+                                    {{ page == totalPages ? 'disabled' : '' }}
+                            >
+                                <i class="fas fa-chevron-right"></i>
+                            </a>
+                        </li>
+                        <li class="page-item {{ page == totalPages ? 'disabled' : '' }}">
+                            <a
+                                    class="page-link"
+                                    {{ live_action('goToPage', {'page': totalPages }) }}
+                                    {{ page == totalPages ? 'disabled' : '' }}
+                            >
+                                <i class="fas fa-chevron-double-right"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            {% endif %}
+        </div>
+    </div>
+</div>

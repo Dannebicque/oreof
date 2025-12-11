@@ -147,6 +147,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: UserCategoryNotificationSetting::class)]
     private Collection $userCategoryNotificationSettings;
 
+    /**
+     * @var Collection<int, ChangeParcours>
+     */
+    #[ORM\OneToMany(mappedBy: 'auteur', targetEntity: ChangeParcours::class)]
+    private Collection $changeParcours;
+
     public function __construct()
     {
         $this->composantes = new ArrayCollection();
@@ -161,6 +167,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->userProfils = new ArrayCollection();
         $this->userWorkflowNotificationSettings = new ArrayCollection();
         $this->userCategoryNotificationSettings = new ArrayCollection();
+        $this->changeParcours = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -807,6 +814,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         if ($pref->getUser() !== $this) {
             $pref->setUser($this);
         }
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ChangeParcours>
+     */
+    public function getChangeParcours(): Collection
+    {
+        return $this->changeParcours;
+    }
+
+    public function addChangeParcour(ChangeParcours $changeParcour): static
+    {
+        if (!$this->changeParcours->contains($changeParcour)) {
+            $this->changeParcours->add($changeParcour);
+            $changeParcour->setAuteur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeChangeParcour(ChangeParcours $changeParcour): static
+    {
+        if ($this->changeParcours->removeElement($changeParcour)) {
+            // set the owning side to null (unless already changed)
+            if ($changeParcour->getAuteur() === $this) {
+                $changeParcour->setAuteur(null);
+            }
+        }
+
         return $this;
     }
 }

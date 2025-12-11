@@ -217,6 +217,12 @@ class Formation
     #[ORM\Column]
     private ?int $capaciteAccueil = 0;
 
+    /**
+     * @var Collection<int, ChangeParcours>
+     */
+    #[ORM\OneToMany(mappedBy: 'formation', targetEntity: ChangeParcours::class)]
+    private Collection $changeParcours;
+
     public function __construct(?CampagneCollecte $anneeUniversitaire)
     {
         $this->dpe = $anneeUniversitaire;
@@ -237,6 +243,7 @@ class Formation
         $this->formationVersionings = new ArrayCollection();
         $this->changeRves = new ArrayCollection();
         $this->userProfils = new ArrayCollection();
+        $this->changeParcours = new ArrayCollection();
     }
 
     #[ORM\PreFlush]
@@ -1169,5 +1176,35 @@ class Formation
         }
 
         return array_sum(array_map(fn($parcours) => $parcours->getCapaciteAccueil(), $this->getParcours()->toArray()));
+    }
+
+    /**
+     * @return Collection<int, ChangeParcours>
+     */
+    public function getChangeParcours(): Collection
+    {
+        return $this->changeParcours;
+    }
+
+    public function addChangeParcour(ChangeParcours $changeParcour): static
+    {
+        if (!$this->changeParcours->contains($changeParcour)) {
+            $this->changeParcours->add($changeParcour);
+            $changeParcour->setFormation($this);
+        }
+
+        return $this;
+    }
+
+    public function removeChangeParcour(ChangeParcours $changeParcour): static
+    {
+        if ($this->changeParcours->removeElement($changeParcour)) {
+            // set the owning side to null (unless already changed)
+            if ($changeParcour->getFormation() === $this) {
+                $changeParcour->setFormation(null);
+            }
+        }
+
+        return $this;
     }
 }

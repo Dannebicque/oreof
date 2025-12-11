@@ -15,10 +15,12 @@ use App\Entity\Ue;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class EctsController extends AbstractController
 {
     #[Route('/api/ects/ue/{ue}/{parcours}', name: 'api_ects_ue')]
+    #[IsGranted('ROLE_USER')]
     public function getComposante(
         Ue       $ue,
         Parcours $parcours,

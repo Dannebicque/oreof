@@ -10,9 +10,12 @@
 namespace App\Controller\Config;
 
 use App\DTO\MentionDto;
+use App\Entity\Mention;
+use App\Entity\TypeDiplome;
 use App\Form\MentionDtoType;
 use App\Repository\DomaineRepository;
 use App\Repository\TypeDiplomeRepository;
+use App\Service\DataTableBuilder;
 use App\Service\MentionService;
 use App\Utils\JsonRequest;
 use Exception;
@@ -42,9 +45,76 @@ class MentionController extends AbstractController
      * Affiche la page d'index des mentions.
      */
     #[Route('/', name: 'app_mention_index', methods: ['GET'])]
-    public function index(): Response
+    public function index(
+        DataTableBuilder $builder
+    ): Response
     {
-        return $this->render('config/mention/index.html.twig');
+        $table = $builder
+            ->setEntity(Mention::class)
+            ->setPerPage(20)
+            ->setDefaultSort('libelle', 'asc')
+
+            // Colonne simple avec tri et recherche
+            ->addColumn('libelle', [
+                'label' => 'Libellé de la mention',
+                'sortable' => true,
+                'filterable' => true,
+            ])
+            ->addColumn('sigle', [
+                'label' => 'Sigle',
+                'sortable' => true,
+                'filterable' => true,
+            ])
+            ->addColumn('codeApogee', [
+                'label' => 'Code Apogée',
+                'sortable' => true,
+                'filterable' => true,
+            ])
+
+            // Colonne avec relation
+            ->addColumn('typeDiplome.libelle', [
+                'label' => 'Type de diplôme',
+                'sortable' => true,
+                'filterable' => true,
+                'type' => 'entity',
+                'entity' => TypeDiplome::class,
+                'entity_label' => 'libelle',
+            ])
+            ->addColumn('domaines', [
+                'label' => 'Domaine(s)',
+                'type' => 'collection',
+                'format' => 'badges',
+                'collection_property' => 'libelle',
+                'badge_class' => 'bg-primary',
+                'searchable' => false,
+            ])
+            ->addColumn('utilise', [
+                'label' => 'Utilisé ?',
+                'sortable' => true,
+                'filterable' => true,
+                'type' => 'boolean',
+                'format' => 'boolean',
+                'searchable' => false,
+                'sort_expression' => 'SIZE(e.formations)',
+                'filter_expression' => 'CASE WHEN SIZE(e.formations) > 0 THEN 1 ELSE 0 END',
+            ])
+            ->addShowAction('app_mention_show', [
+                'modal' => true,
+                'modal_size' => 'lg',
+                'modal_title' => 'Voir une mention',
+            ])
+            ->addEditAction('app_mention_edit', [
+                'modal' => true,
+                'modal_size' => 'lg',
+                'modal_title' => 'Modifier une mention',
+            ])
+            ->addDuplicateAction('app_mention_duplicate')
+            ->addDeleteAction('app_mention_delete')
+            ->build();
+
+        return $this->render('config/mention/index.html.twig',
+            ['table' => $table]
+        );
     }
 
     /**
@@ -79,33 +149,33 @@ class MentionController extends AbstractController
     /**
      * Affiche la liste des mentions avec possibilité de filtrage et tri.
      */
-    #[Route('/liste', name: 'app_mention_liste', methods: ['GET'])]
-    public function liste(Request $request): Response
-    {
-        $sort = $request->query->get('sort') ?? 'type_diplome';
-        $direction = $request->query->get('direction') ?? 'asc';
-        $q = $request->query->get('q') ?? '';
-        $page = $request->query->getInt('page', 1);
-        $limit = $request->query->getInt('limit', 20);
-        // Calcul de l'offset en tenant compte que la page commence à 1
-        $offset = ($page) * $limit;
-
-        // Récupération des mentions pour la page courante
-        $mentions = $this->mentionService->getAllMentions($q, $sort, $direction, $limit, $offset);
-
-        // Comptage du nombre total de mentions pour la pagination
-        $total = $this->mentionService->countAllMentions($q);
-
-        return $this->render('config/mention/_liste.html.twig', [
-            'mentions' => $mentions,
-            'sort' => $sort,
-            'direction' => $direction,
-            'query' => $q,
-            'page' => $page,
-            'limit' => $limit,
-            'total' => $total,
-        ]);
-    }
+//    #[Route('/liste', name: 'app_mention_liste', methods: ['GET'])]
+//    public function liste(Request $request): Response
+//    {
+//        $sort = $request->query->get('sort') ?? 'type_diplome';
+//        $direction = $request->query->get('direction') ?? 'asc';
+//        $q = $request->query->get('q') ?? '';
+//        $page = $request->query->getInt('page', 1);
+//        $limit = $request->query->getInt('limit', 20);
+//        // Calcul de l'offset en tenant compte que la page commence à 1
+//        $offset = ($page) * $limit;
+//
+//        // Récupération des mentions pour la page courante
+//        $mentions = $this->mentionService->getAllMentions($q, $sort, $direction, $limit, $offset);
+//
+//        // Comptage du nombre total de mentions pour la pagination
+//        $total = $this->mentionService->countAllMentions($q);
+//
+//        return $this->render('config/mention/_liste.html.twig', [
+//            'mentions' => $mentions,
+//            'sort' => $sort,
+//            'direction' => $direction,
+//            'query' => $q,
+//            'page' => $page,
+//            'limit' => $limit,
+//            'total' => $total,
+//        ]);
+//    }
 
     /**
      * Affiche le formulaire de création d'une nouvelle mention.
