@@ -16,13 +16,13 @@
     {% endif %}
 {% endblock %}
 
-{% block header %}
+{% set header_title %}
     {% if parcours.parcoursParent == null %}
         Parcours <strong>{{ parcours.libelle }} {{ parcours.typeParcours|badgeTypeParcours }}</strong>
     {% else %}
         Option <strong>{{ parcours.libelle }}</strong> (parcours <strong>{{ parcours.parcoursParent.libelle }}</strong>)
     {% endif %}
-{% endblock %}
+{% endset %}
 
 {% block breadcrumb %}
     {{ include('communs/_breadcrumb.html.twig', {liens:[

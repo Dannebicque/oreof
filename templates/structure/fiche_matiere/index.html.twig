@@ -18,13 +18,13 @@
     </div>
 {% endblock %}
 
-{% block header %}
+{% set header_title %}
     {% if type == 'hd' %}
         Détail des fiches EC/matières "hors diplôme"
     {% else %}
         Détail des fiches EC/matières
     {% endif %}
-{% endblock %}
+{% endset %}
 
 {% block breadcrumb %}
     {{ include('communs/_breadcrumb.html.twig', {liens:[

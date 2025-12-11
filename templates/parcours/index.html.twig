@@ -18,9 +18,9 @@
     </div>
 {% endblock %}
 
-{% block header %}
+{% set header_title %}
     Détails des parcours
-{% endblock %}
+{% endset %}
 
 {% block breadcrumb %}
     {{ include('communs/_breadcrumb.html.twig', {liens:[

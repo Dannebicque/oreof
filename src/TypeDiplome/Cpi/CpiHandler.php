@@ -105,4 +105,9 @@ final class CpiHandler implements TypeDiplomeHandlerInterface
         // TODO: Implement getTypeEpreuves() method.
         return [];
     }
+
+    public function getLibelleCourt(): string
+    {
+        return 'CPI';
+    }
 }

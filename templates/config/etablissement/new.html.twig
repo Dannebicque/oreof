@@ -8,9 +8,9 @@
     </div>
 {% endblock %}
 
-{% block header %}
+{% set header_title %}
     {{ titre ?: '' }}
-{% endblock %}
+{% endset %}
 
 {% block breadcrumb %}
     {{ include('communs/_breadcrumb.html.twig', {liens:[

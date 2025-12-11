@@ -74,6 +74,10 @@ class StructureShowController extends AbstractController
             $diffStructure = (new VersioningStructure($structureDifferencesParcours, $dto))->calculDiff();
         }
 
+        if ($dto === null) {
+            return $this->render('typeDiplome/formation/_structure_empty.html.twig', []);
+        }
+
         return $this->render('typeDiplome/' . $typeD::TEMPLATE_FOLDER . '/structure/_structure.html.twig', [
             'parcours' => $parcours,
             'diffStructure' => $diffStructure ?? null,

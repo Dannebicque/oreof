@@ -4,9 +4,9 @@
     {% include 'config_email/_form.html.twig' with {form, template, variables} %}
 {% endblock %}
 
-{% block header %}
+{% set header_title %}
     Nouveau template
-{% endblock %}
+{% endset %}
 
 {% block breadcrumb %}
     {{ include('communs/_breadcrumb.html.twig', {liens:[

@@ -154,9 +154,9 @@
     </div>
 {% endblock %}
 
-{% block header %}
+{% set header_title %}
     Détails de la composante {{ composante.libelle }}
-{% endblock %}
+{% endset %}
 
 {% block breadcrumb %}
     {{ include('communs/_breadcrumb.html.twig', {liens:[

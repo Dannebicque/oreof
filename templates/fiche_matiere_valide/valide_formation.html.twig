@@ -160,9 +160,9 @@ Cela entrainera la vérification des informations saisies. Seules les fiches EC/
 
 {% endblock %}
 
-{% block header %}
+{% set header_title %}
     Fiches EC/Matières pour la formation {{ formation.displayLong }}
-{% endblock %}
+{% endset %}
 
 {% block breadcrumb %}
     {{ include('communs/_breadcrumb.html.twig', {liens:[

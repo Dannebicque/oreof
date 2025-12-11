@@ -192,6 +192,13 @@
                                         <span class="label">{{ 'menu.admin.validation_rf'|trans({}, 'menu') }}</span>
                                     </a>
                                 </li>
+                                {% if is_granted('ROLE_ADMIN') %}
+                                    <li>
+                                        <a href="{{ path('app_parcours_lheo_invalid_list') }}">
+                                            <span class="label">{{ 'menu.admin.controle_lheo'|trans({}, 'menu') }}</span>
+                                        </a>
+                                    </li>
+                                {% endif %}
                                 <li>
                                     <a href="{{ path('app_export_index') }}">
                                         <span class="label">{{ 'menu.admin.exports'|trans({}, 'menu') }}</span>
@@ -483,7 +490,9 @@
             </div>
             <!-- Title Start -->
             <div class="col-md-6 col-sm-6">
-                <h1 class="mb-0 pb-0 display-4" id="title">{% block header %}{% endblock %}</h1>
+                <h1 class="mb-0 pb-0 display-4" id="title">{% block header %}
+                        {{ header_title|default('Titre par défaut') }}
+                    {% endblock %}</h1>
                 <nav class="breadcrumb-container d-inline-block" aria-label="breadcrumb">
                     {% block breadcrumb %}
 

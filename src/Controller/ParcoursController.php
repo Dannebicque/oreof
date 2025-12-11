@@ -21,6 +21,7 @@ use App\Entity\Formation;
 use App\Entity\Parcours;
 use App\Entity\ParcoursVersioning;
 use App\Enums\ConfigurationPublicationEnum;
+use App\Entity\User;
 use App\Enums\EtatDpeEnum;
 use App\Enums\TypeModificationDpeEnum;
 use App\Enums\TypeParcoursEnum;
@@ -45,6 +46,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Serializer\Mapping\Loader\AttributeLoader;
 use Symfony\Component\Workflow\WorkflowInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -53,7 +55,6 @@ use Symfony\Component\Routing\Generator\UrlGenerator;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
-use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
 use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
 use Symfony\Component\Serializer\Normalizer\BackedEnumNormalizer;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
@@ -117,15 +118,16 @@ class ParcoursController extends BaseController
 
     #[Route('/new/{formation}', name: 'app_parcours_new', methods: ['GET', 'POST'])]
     public function new(
+        ProfilRepository $profRepository,
         EventDispatcherInterface $eventDispatcher,
         Request                  $request,
         ParcoursRepository       $parcoursRepository,
         Formation                $formation
     ): Response {
-        $this->denyAccessUnlessGranted('EDIT', [
-            'route' => 'app_formation',
-            'subject' => $formation
-        ]);
+//        $this->denyAccessUnlessGranted('EDIT', [
+//            'route' => 'app_formation',
+//            'subject' => $formation
+//        ]);
 
         $parent = null;
         $parcour = new Parcours($formation);
@@ -176,18 +178,19 @@ class ParcoursController extends BaseController
             $this->entityManager->flush();
             $parcour->addDpeParcour($dpeParcours);
             $parcoursRepository->save($parcour, true);
-
-            $event = new AddCentreParcoursEvent($parcour, ['ROLE_RESP_PARCOURS'], $parcour->getRespParcours(), $this->getCampagneCollecte());
-            $eventDispatcher->dispatch($event, AddCentreParcoursEvent::ADD_CENTRE_PARCOURS);
-
-            if ($parcour->getCoResponsable() !== null) {
-                $event = new AddCentreParcoursEvent($parcour, ['ROLE_CO_RESP_PARCOURS'], $parcour->getCoResponsable(), $this->getCampagneCollecte());
+            $respParcoursProfil = $profRepository->findOneBy(['code' => 'ROLE_RESP_PARCOURS']);
+            if (null !== $respParcoursProfil) {
+                $event = new AddCentreParcoursEvent($parcour, $parcour->getRespParcours(), $respParcoursProfil, $this->getCampagneCollecte());
                 $eventDispatcher->dispatch($event, AddCentreParcoursEvent::ADD_CENTRE_PARCOURS);
             }
 
-            //emets un event pour informer de la création d'un parcours
-            $event = new ParcoursEvent($parcour);
-            $eventDispatcher->dispatch($event, ParcoursEvent::PARCOURS_CREATED);
+            if ($parcour->getCoResponsable() !== null) {
+                $coRespParcoursProfil = $profRepository->findOneBy(['code' => 'ROLE_CO_RESP_PARCOURS']);
+                if (null !== $coRespParcoursProfil) {
+                    $event = new AddCentreParcoursEvent($parcour, $parcour->getCoResponsable(), $coRespParcoursProfil, $this->getCampagneCollecte());
+                    $eventDispatcher->dispatch($event, AddCentreParcoursEvent::ADD_CENTRE_PARCOURS);
+                }
+            }
 
             $this->addFlashBag('success', 'Le parcours a été créé');
 
@@ -387,9 +390,9 @@ class ParcoursController extends BaseController
             }
 
             foreach ($parcour->getSemestreParcours() as $semestreParcour) {
-                if ($semestreParcour->getSemestre()->isTroncCommun() === false) {
+                if ($semestreParcour->getSemestre()?->isTroncCommun() === false) {
                     //todo: supprimer le tronc commun s'il n'est plus utilisé
-                    foreach ($semestreParcour->getSemestre()->getUes() as $ue) {
+                    foreach ($semestreParcour->getSemestre()?->getUes() as $ue) {
                         foreach ($ue->getElementConstitutifs() as $ec) {
                             $entityManager->remove($ec);
                         }
@@ -592,7 +595,7 @@ class ParcoursController extends BaseController
     public function displayParcoursJsonData(Parcours $parcours): Response
     {
         // Définition du serializer
-        $classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
+        $classMetadataFactory = new ClassMetadataFactory(new AttributeLoader());
         $serializer = new Serializer(
             [
             new DateTimeNormalizer(),
@@ -632,10 +635,8 @@ class ParcoursController extends BaseController
             $now = new DateTimeImmutable('now');
             $dateHeure = $now->format('d-m-Y_H-i-s');
             $versioningParcours->saveVersionOfParcours($parcours, $now, true);
-            // Ajout dans les logs
-            /**
-             * @var User $user
-             */
+
+            /** @var User $user */
             $user = $this->getUser();
             $successLogTxt = "[{$dateHeure}] Le parcours {$parcours->getId()} a été versionné avec succès. ";
             $successLogTxt .= "Utilisateur : {$user->getPrenom()} {$user->getNom()} ({$user->getUsername()})\n";
@@ -644,9 +645,8 @@ class ParcoursController extends BaseController
             $this->addFlashBag('success', 'La version du parcours à bien été sauvegardée.');
             if($parcours->isParcoursDefaut() === false) {
                 return $this->redirectToRoute('app_parcours_show', ['id' => $parcours->getId()]);
-            } else {
-                return $this->redirectToRoute('app_formation_show', ['slug' => $parcours->getFormation()->getSlug()]);
             }
+            return $this->redirectToRoute('app_formation_show', ['slug' => $parcours->getFormation()->getSlug()]);
         } catch (Exception $e) {
             // Log error
             $logTxt = "[{$dateHeure}] Le versioning du parcours : {$parcours->getId()} a rencontré une erreur.\n{$e->getMessage()}\n";
@@ -691,17 +691,19 @@ class ParcoursController extends BaseController
         }
     }
 
-    #[IsGranted('ROLE_SES')]
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/check/lheo_invalid_list', name: 'app_parcours_lheo_invalid_list')]
     public function getInvalidXmlLheoList(
         LheoXML            $lheoXML,
         ParcoursRepository $parcoursRepo
     ): Response {
-        $parcoursList = [
-            ...$parcoursRepo->findByTypeValidation($this->getCampagneCollecte(), 'valide_pour_publication'),
-            ...$parcoursRepo->findByTypeValidation($this->getCampagneCollecte(), 'publie'),
-            ...$parcoursRepo->findByTypeValidation($this->getCampagneCollecte(), 'valide_a_publier')
-        ];
+//        $parcoursList = [
+//            ...$parcoursRepo->findByTypeValidation($this->getCampagneCollecte(), 'valide_pour_publication'),
+//            ...$parcoursRepo->findByTypeValidation($this->getCampagneCollecte(), 'publie'),
+//            ...$parcoursRepo->findByTypeValidation($this->getCampagneCollecte(), 'valide_a_publier')
+//        ];
+
+        $parcoursList = $parcoursRepo->findByCampagneCollecte($this->getCampagneCollecte());
 
         $errorArray = [];
         foreach ($parcoursList as $p) {
@@ -715,6 +717,7 @@ class ParcoursController extends BaseController
                 $errorArray[] = [
                     'id' => $p->getId(),
                     'parcours_libelle' => $p->getLibelle(),
+                    'etatParcours' => GetDpeParcours::getFromParcours($p)?->getEtatValidation(),
                     'formation_libelle' => $p->getFormation()?->getMention()?->getLibelle(),
                     'type_formation_libelle' => $p->getFormation()?->getTypeDiplome()?->getLibelle(),
                     'xml_errors' => $xmlErrorArray
@@ -740,6 +743,9 @@ class ParcoursController extends BaseController
         }
 
         $dpe = $entityManager->getRepository(CampagneCollecte::class)->findOneBy(['defaut' => 1]);
+        if ($dpe === null) {
+            return new Response(null, 500);
+        }
         $annee = $dpe->getAnnee();
 
         try {

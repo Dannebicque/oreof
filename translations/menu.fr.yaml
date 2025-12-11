@@ -15,6 +15,7 @@ menu:
     validation_fiches_ec: Validation Fiches EC/matières
     validation_rf: Validation RF/co-RF
     exports: Exports
+    controle_lheo: Controle LHEO
   compo:
     pilotage: Pilotage
     consulter_offre: Consulter l'offre de formation

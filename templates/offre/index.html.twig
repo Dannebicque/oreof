@@ -1,6 +1,8 @@
 {% extends 'base.html.twig' %}
 
-{% block header %}Configuration de l'offre {{ user_data.campagneCollecte.libelle }}{% endblock %}
+{% set header_title %}
+    Configuration de l'offre {{ user_data.campagneCollecte.libelle }}
+{% endset %}
 
 {% block content %}
 
@@ -8,4 +10,13 @@
         {% include 'offre/_table.html.twig' %}
     </turbo-frame>
 
+{% endblock %}
+
+{% block breadcrumb %}
+    {{ include('communs/_breadcrumb.html.twig', {liens:[
+        {
+            href:'',
+            title: 'Pilotage',
+        }
+    ]}) }}
 {% endblock %}

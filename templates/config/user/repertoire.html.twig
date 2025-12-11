@@ -15,9 +15,9 @@
     </div>
 {% endblock %}
 
-{% block header %}
+{% set header_title %}
     Répertoire des contacts
-{% endblock %}
+{% endset %}
 
 {% block breadcrumb %}
     {{ include('communs/_breadcrumb.html.twig', {liens:[

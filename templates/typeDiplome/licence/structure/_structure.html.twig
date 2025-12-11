@@ -146,6 +146,7 @@
                     {% endif %}
                 </tr>
             {% endfor %}
+            {% if dto is defined and dto.heuresEctsFormation is defined %}
             <tr>
                 <th colspan="4" class="text-end">Total formation</th>
                 <th>
@@ -202,6 +203,7 @@
                     </th>
                 {% endif %}
             </tr>
+            {% endif %}
         </table>
     </div>
 </div>

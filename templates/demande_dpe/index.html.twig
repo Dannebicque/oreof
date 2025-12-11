@@ -1,6 +1,8 @@
 {% extends 'base.html.twig' %}
 
-{% block header %}DPE ouverts {% if type == 'composante' %} : {{ composante.libelle }}{% endif %}{% endblock %}
+{% set header_title %}
+    DPE ouverts{% if type == 'composante' %} : {{ composante.libelle }}{% endif %}
+{% endset %}
 
 {% block content %}
     <div class="card"
@@ -29,7 +31,11 @@
     {{ include('communs/_breadcrumb.html.twig', {liens:[
         {
             href:'',
-            title: 'Dpe ouverts',
+            title: 'Pilotage',
+        },
+        {
+            href:'',
+            title: header_title,
         }
     ]}) }}
 {% endblock %}

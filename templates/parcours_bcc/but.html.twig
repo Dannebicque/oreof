@@ -71,9 +71,9 @@
 
 {% endblock %}
 
-{% block header %}
+{% set header_title %}
     BCC pour le parcours {{ parcours.libelle }}
-{% endblock %}
+{% endset %}
 
 {% block breadcrumb %}
     {{ include('communs/_breadcrumb.html.twig', {liens:[

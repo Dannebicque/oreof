@@ -70,9 +70,9 @@ obligatoires'}) }}
     </div>
 {% endblock %}
 
-{% block header %}
+{% set header_title %}
     Modifier une fiche d'identité de la formation
-{% endblock %}
+{% endset %}
 
 {% block breadcrumb %}
     {{ include('communs/_breadcrumb.html.twig', {liens:[

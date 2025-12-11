@@ -418,7 +418,7 @@ class ElementConstitutifMcccController extends AbstractController
         }
 
         $getElement = new GetElementConstitutif($elementConstitutif, $parcoursVersioning->getParcours());
-        $tabMcccActuels = $getElement->getMcccsFromFicheMatiere($typeDiplome);
+        $tabMcccActuels = $getElement->getMcccsFromFicheMatiere($typeD);
 
         $mcccsToDisplay = $tabMcccActuels;
         if ($isFromVersioning === 'true' || ($structureEc->typeMccc !== $typeMccc)) {

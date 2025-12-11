@@ -4,9 +4,9 @@
     {{ include('parcours_bcc/_tableauCroise.html.twig') }}
 {% endblock %}
 
-{% block header %}
+{% set header_title %}
     BCC pour le parcours {{ parcours.libelle }} {# todo: ou formation? #}
-{% endblock %}
+{% endset %}
 
 {% block breadcrumb %}
     {{ include('communs/_breadcrumb.html.twig', {liens:[

@@ -68,9 +68,9 @@
     </div>
 {% endblock %}
 
-        {% block header %}
-            Modifier Codification : {{ parcours.display }}
-        {% endblock %}
+{% set header_title %}
+    Modifier Codification : {{ parcours.display }}
+{% endset %}
 
         {% block breadcrumb %}
             {{ include('communs/_breadcrumb.html.twig', {liens:[

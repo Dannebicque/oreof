@@ -1,8 +1,8 @@
 {% extends 'base.html.twig' %}
 
-{% block header %}
+{% set header_title %}
     Configuration des emails
-{% endblock %}
+{% endset %}
 
 {% block bouton_header %}
     <a class="btn btn-outline-primary" href="{{ path('admin_email_template_new') }}">Ajouter un template</a>

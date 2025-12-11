@@ -105,4 +105,9 @@ final class M2EHandler implements TypeDiplomeHandlerInterface
         // TODO: Implement getTypeEpreuves() method.
         return [];
     }
+
+    public function getLibelleCourt(): string
+    {
+        return 'M2E';
+    }
 }
