@@ -133,9 +133,7 @@
                             {% endif %}
                         </td>
                         <td>
-                            {% if formation.formation.hasParcours == true %}
-                                {{ formation.formation.etatReconduction|badgeTypeModification }}
-                            {% else %}
+                            {% if formation.formation.hasParcours == false %}
                                 {{ formation.dpeParcours[0].etatReconduction|badgeTypeModification }}
                             {% endif %}
                         </td>
@@ -256,11 +254,34 @@
                             </tr>
 
                             {{ include('offre/_annee.html.twig', {annees: parcours.parcours.annees, valeur: parcours.etatReconduction.value}) }}
-
+                            {# todo: ajouter un parcours #}
                         {% endfor %}
+                        <tr>
+                            <td colspan="9">
+                                <button
+                                        {{ stimulus_controller('modal', {
+                                            size: 'lg',
+                                            nomEvenement: 'parcoursAdded',
+                                            modalTitle: 'Ajouter un parcours',
+                                            modalUrl: path('app_parcours_new', {formation:formation.formation.id}) }) }}
+                                        data-action="click->modal#openModal"
+                                        class="btn btn-sm btn-outline-success btn-icon btn-icon-end"
+                                        data-size="lg"
+                                        data-bs-toggle="tooltip"
+                                        data-bs-placement="bottom"
+                                        title="Ajouter un parcours"
+                                >
+                                    <i class="{{ iconAdd }}"></i>
+                                    <span> Ajouter un parcours à la formation : {{ formation.formation.display }}</span>
+                                </button>
+                            </td>
+                        </tr>
                     {% else %}
                         {% set parcours = formation.formation.dpeParcours[0] %}
                         {{ include('offre/_annee.html.twig', {annees: parcours.parcours.annees, valeur: parcours.etatReconduction.value}) }}
+                        <tr>
+                            <td>-- + --</td>
+                        </tr>
                     {% endif %}
                 {% endfor %}
                 </tbody>
