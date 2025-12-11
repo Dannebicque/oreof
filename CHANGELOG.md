@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.49.0](https://github.com/Dannebicque/oreof/compare/v1.48.0...v1.49.0) (2025-12-11)
+
+
+### Features
+
+* add ChangeParcours entity and related services for managing parcours changes ([05771e2](https://github.com/Dannebicque/oreof/commit/05771e272545068e371f109e8e487b07ef2f3624))
+* add ChangeParcours entity and related services for managing parcours changes ([44e0fd6](https://github.com/Dannebicque/oreof/commit/44e0fd6a15096c7cc101592196d2d4c447586a2c))
+
 ## [1.48.0](https://github.com/Dannebicque/oreof/compare/v1.47.0...v1.48.0) (2025-12-10)
 
 

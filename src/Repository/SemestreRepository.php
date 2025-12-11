@@ -68,4 +68,40 @@ class SemestreRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function findFromAnneeUniversitaire(int $idCampagneCollecte) : array {
+        $qb = $this->createQueryBuilder('semestre');
+
+        $subquerySemestreParcours = $this->createQueryBuilder('sem')
+            ->select('sem.id')
+            ->join('sem.semestreParcours', 'semP')
+            ->join('semP.parcours', 'parcours')
+            ->join('parcours.dpeParcours', 'dpe')
+            ->join('dpe.campagneCollecte', 'campagne')
+            ->andWhere('campagne.id = :idCampagne');
+
+        $subQuerySemestreMutualisable = $this->createQueryBuilder('semM')
+            ->select('semM.id')
+            ->join('semM.semestreMutualisables', 'semMutu')
+            ->join('semMutu.parcours', 'parcoursMutu')
+            ->join('parcoursMutu.dpeParcours', 'dpeMutu')
+            ->join('dpeMutu.campagneCollecte', 'campagneMutu')
+            ->andWhere('campagneMutu.id = :idCampagne');
+        
+        return $qb
+            ->select('DISTINCT semestre.id')
+            ->andWhere(
+                $qb->expr()->orX(
+                    $qb->expr()->in(
+                        'semestre.id', $subquerySemestreParcours->getDQL()
+                    ),
+                    $qb->expr()->in(
+                        'semestre.id', $subQuerySemestreMutualisable->getDQL()
+                    )
+                )
+            )
+            ->setParameter(':idCampagne', $idCampagneCollecte)
+            ->getQuery()
+            ->getResult();
+    }
 }

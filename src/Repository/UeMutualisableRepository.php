@@ -150,4 +150,39 @@ class UeMutualisableRepository extends ServiceEntityRepository
 
         return $qb->getQuery()->getResult();
     }
+
+    public function findFromAnneeUniversitaire(int $idCampagneCollecte) : array {
+        $qb = $this->createQueryBuilder('ueMutu');
+
+        $subQueryCheckUeSemestre = $this->createQueryBuilder('ueSemAnnee')
+            ->select('ueSemAnnee.id')
+            ->join('ueSemAnnee.ue', 'firstUe')
+            ->join('firstUe.semestre', 'firstSemestre')
+            ->join('firstSemestre.semestreParcours', 'firstSemParcours')
+            ->join('firstSemParcours.parcours', 'firstParc')
+            ->join('firstParc.dpeParcours','firstDpe')
+            ->join('firstDpe.campagneCollecte', 'firstCampagne')
+            ->andWhere('firstCampagne.id = :idCampagne');
+
+        $subQueryCheckUeParcours = $this->createQueryBuilder('ueParcoursAnnee')
+            ->select('ueParcoursAnnee.id')
+            ->join('ueParcoursAnnee.parcours', 'secondParc')
+            ->join('secondParc.dpeParcours', 'secondDpe')
+            ->join('secondDpe.campagneCollecte', 'secondCampagne')
+            ->andWhere('secondCampagne.id = :idCampagne');
+
+        return $qb->select('DISTINCT ueMutu.id')
+            ->andWhere(
+                $qb->expr()->orX(
+                    $qb->expr()->in(
+                        'ueMutu.id', $subQueryCheckUeSemestre->getDQL()
+                    ),
+                    $qb->expr()->in(
+                        'ueMutu.id', $subQueryCheckUeParcours->getDQL()
+                    )
+                )
+            )->setParameter(':idCampagne', $idCampagneCollecte)
+            ->getQuery()
+            ->getResult();
+    }
 }
