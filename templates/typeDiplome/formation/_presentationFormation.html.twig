@@ -65,6 +65,9 @@
                                 <a href="#presentation_{{ parcours.id }}">{{ parcours.libelle }} {{ parcours.typeParcours|badgeTypeParcours }}</a>
                             </td>
                             <td>
+                                {{ parcours.dpeParcours[0].etatReconduction|badgeTypeModification }}
+                            </td>
+                            <td>
                                 <a href="{{ path('app_parcours_show', {id:parcours.id}) }}"
                                    class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2 mb-1">
                                     <i class="{{ iconShow }}"></i> Fiche Descriptive</a>
