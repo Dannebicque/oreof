@@ -4,6 +4,7 @@
             id:id
         }) }}
         id="{{ id }}"
+        {% if disabled %}disabled{% endif %}
         class="form-select">
     <option value="OUVERT" {% if valeur == 'OUVERT' %}selected{% endif %}>Ouvert / reconduit</option>
     <option value="NON_OUVERTURE" {% if valeur == 'NON_OUVERTURE_CFVU' %}selected{% endif %}>non ouverture</option>

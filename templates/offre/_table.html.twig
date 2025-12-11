@@ -1,5 +1,8 @@
+{% set disabled = user_data.campagneCollecte.isFinished and not is_granted('ROLE_ADMIN') %}
+--{{ user_data.campagneCollecte.isFinished == true ? 1 : 0 }}--
+--{{ (not is_granted('ROLE_ADMIN')) == true ? 1 : 0 }}--
+--{{ disabled == true ? 1 : 0 }}--
 <div data-turbo-frame="offre_table">
-
     <div class="row g-3 mb-3">
         <div class="col-6 col-md-3">
             <div class="card h-100 shadow-sm">
@@ -159,6 +162,7 @@
                                             id:parc.id
                                         }) }}
                                        value="{{ parc.capaciteAccueil }}"
+                                        {% if disabled %}disabled{% endif %}
                                 >
                             {% else %}
                                 <label for="capacitef_{{ formation.formation.id }}" class="sr-only">Capacité accueil
@@ -170,6 +174,7 @@
                                             id:formation.formation.id
                                         }) }}
                                        value="{{ formation.formation.capaciteAccueil }}"
+                                        {% if disabled %}disabled{% endif %}
                                 >
                             {% endif %}
                         </td>
@@ -219,10 +224,12 @@
                                             {{ stimulus_action('offre', 'changeCapaciteParcours', 'change', {
                                                 id:parcours.parcours.id
                                             }) }}
+                                            {% if disabled %}disabled{% endif %}
                                            value="{{ parcours.parcours.capaciteAccueil }}"
                                     >
                                 </td>
                                 <td>
+                                    {% if not disabled %}
                                     <button
                                             {{ stimulus_controller('modal', {
                                                 size: 'lg',
@@ -238,6 +245,7 @@
                                     >
                                         <i class="{{ iconEdit }}"></i>
                                     </button>
+                                    {% endif %}
                                     <a class="btn btn-info btn-sm mb-1" target="_blank"
                                        href="{{ path('app_parcours_show', { 'id': parcours.parcours.id }) }}">
                                         <i class="{{ iconShow }}"></i>
@@ -258,6 +266,7 @@
                         {% endfor %}
                         <tr>
                             <td colspan="9">
+                                {% if not disabled %}
                                 <button
                                         {{ stimulus_controller('modal', {
                                             size: 'lg',
@@ -274,14 +283,12 @@
                                     <i class="{{ iconAdd }}"></i>
                                     <span> Ajouter un parcours à la formation : {{ formation.formation.display }}</span>
                                 </button>
+                                {% endif %}
                             </td>
                         </tr>
                     {% else %}
                         {% set parcours = formation.formation.dpeParcours[0] %}
                         {{ include('offre/_annee.html.twig', {annees: parcours.parcours.annees, valeur: parcours.etatReconduction.value}) }}
-                        <tr>
-                            <td>-- + --</td>
-                        </tr>
                     {% endif %}
                 {% endfor %}
                 </tbody>
