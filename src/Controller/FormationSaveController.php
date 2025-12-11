@@ -57,10 +57,12 @@ class FormationSaveController extends BaseController
     ): Response {
         $updateEntity->setGroups(['formation:read']);
 
-        $this->denyAccessUnlessGranted('EDIT', [
-            'route' => 'app_formation',
-            'subject' => $formation
-        ]);
+        if (!$this->isGranted('EDIT', [
+                'route' => 'app_formation',
+                'subject' => $formation,
+            ]) && !$this->isGranted('ROLE_ADMIN')) {
+            throw $this->createAccessDeniedException();
+        }
 
         $data = JsonRequest::getFromRequest($request);
         $formationState->setFormation($formation);

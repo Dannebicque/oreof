@@ -64,10 +64,14 @@ class ParcoursSaveController extends BaseController
         if (null === $dpeParcours) {
             return $this->json(['error' => 'DPE non trouvé']);
         }
-        $this->denyAccessUnlessGranted('EDIT', [
-            'route' => 'app_parcours',
-            'subject' => $dpeParcours
-        ]);
+
+        if (!$this->isGranted('EDIT', [
+                'route' => 'app_parcours',
+                'subject' => $dpeParcours,
+            ]) && !$this->isGranted('ROLE_ADMIN')) {
+            throw $this->createAccessDeniedException();
+        }
+
         $dpeParcours = GetDpeParcours::getFromParcours($parcours);
         //        if (!($this->parcoursWorkflow->can($parcours, 'valider_parcours') || $this->parcoursWorkflow->can(
         //            $parcours, 'autoriser')) && !$this->isGranted('ROLE_SES')) {
