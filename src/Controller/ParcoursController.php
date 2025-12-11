@@ -179,7 +179,7 @@ class ParcoursController extends BaseController
             $parcour->addDpeParcour($dpeParcours);
             $parcoursRepository->save($parcour, true);
             $respParcoursProfil = $profRepository->findOneBy(['code' => 'ROLE_RESP_PARCOURS']);
-            if (null !== $respParcoursProfil) {
+            if (null !== $respParcoursProfil && $parcour->getRespParcours() !== null) {
                 $event = new AddCentreParcoursEvent($parcour, $parcour->getRespParcours(), $respParcoursProfil, $this->getCampagneCollecte());
                 $eventDispatcher->dispatch($event, AddCentreParcoursEvent::ADD_CENTRE_PARCOURS);
             }
@@ -887,14 +887,14 @@ class ParcoursController extends BaseController
 
         $urlMaquettePdf = $optionsArray[ConfigurationPublicationEnum::MCCC->value] ?? false === true
             ? $this->generateUrl(
-                'app_parcours_mccc_export_cfvu_valid', 
+                'app_parcours_mccc_export_cfvu_valid',
                 ['parcours' => $parcours->getId(), 'format' => 'simplifie'], UrlGenerator::ABSOLUTE_URL
             )
             : null;
 
         $urlMaquetteJson = $optionsArray[ConfigurationPublicationEnum::MAQUETTE->value] ?? false === true
             ? $this->generateUrl(
-                'app_parcours_export_maquette_json_validee_cfvu', 
+                'app_parcours_export_maquette_json_validee_cfvu',
                 ['parcours' => $parcours->getId()], UrlGenerator::ABSOLUTE_URL
             )
             : null;
