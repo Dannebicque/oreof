@@ -907,7 +907,10 @@ class ParcoursController extends BaseController
 
         $typeD = $this->typeDiplomeResolver->get($typeDiplome);
 
-        $ects = $typeD->calculStructureParcours($parcours)->heuresEctsFormation->sommeFormationEcts;
+        $ects = null;
+        if(isset($typeD->calculStructureParcours($parcours)->heuresEctsFormation->sommeFormationEcts)){
+            $ects = $typeD->calculStructureParcours($parcours)->heuresEctsFormation->sommeFormationEcts;
+        }
 
         // Gestion de la localisation
         // Vide par défaut : -
