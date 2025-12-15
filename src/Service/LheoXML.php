@@ -5,6 +5,7 @@ namespace App\Service;
 use App\Classes\GetDpeParcours;
 use App\Entity\Etablissement;
 use App\Entity\Parcours;
+use App\Entity\Ville;
 use App\Enums\TypeModificationDpeEnum;
 use App\Enums\TypeParcoursEnum;
 use App\Repository\ElementConstitutifRepository;
@@ -552,6 +553,12 @@ HTML;
         // Description de la mention
         if($parcours->isParcoursDefaut() === false){
             $extraArray['description-mention'] = $this->cleanString($parcours->getFormation()?->getObjectifsFormation());
+        }
+
+        if(!($localisation instanceof Ville)){
+            // Si null, on affiche 'Non renseigné' plus bas.
+            // Utile pour les parcours en construction
+            $localisation = null;
         }
 
         // Génération du XML
