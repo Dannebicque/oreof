@@ -25,25 +25,22 @@ class ApiJsonExport {
 
     private UrlGeneratorInterface $router;
 
-    private LheoXML $lheoXmlService;
-
     public function __construct(
         EntityManagerInterface $entityManager,
         GetHistorique $getHistorique,
         VersioningParcours $versioningParcours,
         UrlGeneratorInterface $router,
-        LheoXML $lheoXmlService
     ){
         $this->entityManager = $entityManager;
         $this->getHistorique = $getHistorique;
         $this->versioningParcours = $versioningParcours;
         $this->router = $router;
-        $this->lheoXmlService = $lheoXmlService;
     }
 
     public function generateApiVersioning(
         string $hostname,
-        SymfonyStyle $io = null
+        SymfonyStyle $io = null,
+        LheoXML $lheoXmlService
     ): array
     {
         $dataJSON = [];
@@ -95,7 +92,7 @@ class ApiJsonExport {
                 foreach($formation->getParcours() as $parcours){
                     $lastVersion = $this->entityManager->getRepository(ParcoursVersioning::class)
                         ->findLastCfvuVersion($parcours);
-                    if(count($lastVersion) > 0 && $this->lheoXmlService->isValidLHEO($parcours)){
+                    if(count($lastVersion) > 0 && $lheoXmlService->isValidLHEO($parcours)){
                         $lastVersionData = $this->versioningParcours->loadParcoursFromVersion($lastVersion[0]);
                         $tParcours[] = [
                             'id_old' => $parcours->getParcoursOrigineCopie()?->getId(),
@@ -172,7 +169,7 @@ class ApiJsonExport {
             foreach($formationArray as $formationAnneeSuivante){
                 $addedParcours = [];
                 foreach($formationAnneeSuivante->getParcours() as $parcoursAnneeSuivante) {
-                    if($this->lheoXmlService->isValidLHEO($parcoursAnneeSuivante)){
+                    if($lheoXmlService->isValidLHEO($parcoursAnneeSuivante)){
                         $dpeParcoursToAdd = $parcoursAnneeSuivante->getDpeParcours()?->last();
                         if($dpeParcoursToAdd instanceof DpeParcours){
                             if(in_array($dpeParcoursToAdd->getEtatReconduction(), $etatReconductionCampagneSuivante)){
