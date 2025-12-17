@@ -1,8 +1,14 @@
-.PHONY: start stop restart build up down logs ps clean open help
+.PHONY: start stop restart build up down logs ps clean open help cli \
+        test test-coverage phpstan cypress-open cypress-run
 
 # URL de votre application
 URL = http://localhost:8820
 TEST_PASSWORD_HASH = \$$2y\$$13\$$gcIIWUye7S97aO3VMWNULu569aNq6CdSh5WWnl/z/6rQbhSdiXaYm
+
+# Exécution dans le conteneur web
+EXEC = docker exec -ti -w /var/www/oreof oreof-web
+PHPUNIT = ./vendor/bin/phpunit
+PHPSTAN = ./vendor/bin/phpstan
 
 # Démarre les conteneurs Docker
 start:
@@ -59,6 +65,26 @@ reset-passwords:
 	@echo "Tous les mots de passe ont été réinitialisés."
 
 
+# Tests PHP (PHPUnit)
+test:
+	$(EXEC) $(PHPUNIT)
+
+# Tests avec couverture (HTML dans var/coverage et Cobertura via phpunit.xml.dist)
+test-coverage:
+	$(EXEC) bash -lc 'XDEBUG_MODE=coverage $(PHPUNIT)'
+
+# Analyse statique PHPStan
+phpstan:
+	$(EXEC) $(PHPSTAN) analyse
+
+# Cypress (E2E)
+cypress-open:
+	npm run cypress:open
+
+cypress-run:
+	npm run cypress:run
+
+
 
 # Affiche l'aide
 help:
@@ -75,3 +101,8 @@ help:
 	@echo "  make clean    - Nettoie tout"
 	@echo "  make cli      - Accède au terminal docker"
 	@echo "  make reset-passwords - Réinitialise tous les mots de passe utilisateurs à 'test'"
+	@echo "  make test     - Lance la suite PHPUnit dans le conteneur"
+	@echo "  make test-coverage - Lance PHPUnit avec la couverture (HTML: var/coverage)"
+	@echo "  make phpstan  - Analyse statique du code"
+	@echo "  make cypress-open - Ouvre Cypress en mode interactif"
+	@echo "  make cypress-run  - Exécute Cypress en mode headless"

@@ -1,5 +1,5 @@
 parameters:
-    level: 6
+    level: 7
     symfony:
         containerXmlPath: var/cache/dev/App_KernelDevDebugContainer.xml
     # If you're using PHP config files for Symfony 5.3+, you also need this for auto-loading of `Symfony\Config`:
