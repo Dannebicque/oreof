@@ -10,7 +10,6 @@ use App\Repository\DpeParcoursRepository;
 use App\Repository\FormationRepository;
 use App\Repository\ParcoursRepository;
 use App\Utils\JsonRequest;
-use App\Utils\Tools;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -57,8 +56,8 @@ final class OffreController extends BaseController
             $types[$f->getTypeDiplome()?->getLibelle() ?? ''] = true;
             $composantes[$f->getComposantePorteuse()?->getLibelle() ?? ''] = true;
             if ($f->isHasParcours() === false) {
-                //  $ville = ($f->getLocalisationMention()->first())?->getLibelle();
-                $ville = 'test';
+                $ville = ($f->getLocalisationMention()->first())?->getLibelle();
+                //$ville = 'test';
                 $villes[$ville ?? ''] = true;
             } else {
                 // si RF, les villes sont gérées au niveau des parcours; on ne les agrège pas ici pour simplifier le POC
@@ -79,7 +78,7 @@ final class OffreController extends BaseController
 
         // Appliquer les filtres côté PHP sur le tableau tFormations
         if ($q || $type || $comp || $ville) {
-            $tFormations = array_filter($tFormations, static function (array $row) use ($q, $type, $comp, $ville, $tabStatistiques): bool {
+            $tFormations = array_filter($tFormations, static function (array $row) use ($q, $type, $comp, $ville): bool {
                 $f = $row['formation'];
                 // Libellé
                 if ($q !== '') {
@@ -170,6 +169,7 @@ final class OffreController extends BaseController
                         $dpe = GetDpeParcours::getFromParcours($parcours);
                         if ($dpe !== null) {
                             $dpe->setEtatReconduction($this->convertValue($data['value']));
+                            // todo: modifier le texte de descriptif haut selon le choix de fermeture ajouter/retirer
                         }
                     }
                     $formation->setEtatReconduction($this->convertValue($data['value']));
@@ -221,6 +221,27 @@ final class OffreController extends BaseController
 
                 // on parcours tous les parcours et on les fermes
                 $annee->setIsOuvert(!$annee->isOuvert());
+
+                $addTexte = false;
+                foreach ($annee->getParcoursSemestre() as $ps) {
+                    $ps->setOuvert($annee->isOuvert());
+                    if ($addTexte === false) {
+                        $anneeTexte = 'Année ' . $annee->getOrdre() . ' non ouverte.';
+                        if ($annee->isOuvert()) {
+                            //retirer le texte "Année xx non ouverte"
+                            $ps->getParcours()?->setDescriptifHautPageAutomatique(
+                                str_replace($anneeTexte, '', $ps->getParcours()?->getDescriptifHautPageAutomatique() ?? '')
+                            );
+                        } else {
+                            $ps->getParcours()?->setDescriptifHautPageAutomatique(($ps->getParcours()?->getDescriptifHautPageAutomatique() ?? '') . ' ' . $anneeTexte);
+                        }
+
+                        $addTexte = true;
+                    }
+
+                }
+
+
                 $entityManager->flush();
                 break;
             case 'changeRecrutementAnnee':
