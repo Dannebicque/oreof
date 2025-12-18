@@ -105,7 +105,9 @@
 
     {% if (parcours.descriptifHautPage != '' and parcours.descriptifHautPage != null)  or
         (parcours.descriptifBasPage != '' and parcours.descriptifBasPage != null) or
-        (parcours.descriptifHautPageAutomatique != '' and parcours.descriptifHautPageAutomatique != null) %}
+        (parcours.descriptifHautPageAutomatique != '' and parcours.descriptifHautPageAutomatique != null) or
+        (parcoursDeBase is defined and parcoursDeBase != null)
+    %}
         <div class="row mt-2 mb-5">
             <div class="col-12">
                 <h3 class="small-title">Informations complémentaires (affichées sur le site institutionnel)</h3>
@@ -125,6 +127,23 @@
                                     {% if (parcours.descriptifBasPage != '' and parcours.descriptifBasPage != null) %}
                                         <dt>Texte base de page</dt>
                                         <dl>{{ parcours.descriptifBasPage|raw }}</dl>
+                                    {% endif %}
+                                    {% if parcoursDeBase is defined and parcoursDeBase != null %}
+                                        <dt>
+                                        {% if (1 in missingSemestre) and (2 in missingSemestre) 
+                                            and (3 not in missingSemestre) and (4 not in missingSemestre)
+                                        %}
+                                            <a href="{{ path('app_parcours_show', {id: parcoursDeBase.getId() }) }}">
+                                                Lien vers le BUT en formation initiale correspondant pour consulter les 2 premiers semestres
+                                            </a>
+                                        {% elseif (1 in missingSemestre) and (2 in missingSemestre)
+                                            and (3 in missingSemestre) and (4 in missingSemestre) 
+                                        %}
+                                            <a href="{{ path('app_parcours_show', {id: parcoursDeBase.getId() }) }}">
+                                                Lien vers le BUT en formation initiale correspondant pour consulter les 4 premiers semestres
+                                            </a>
+                                        {% endif %}
+                                        </dt>
                                     {% endif %}
                                 </dl>
                             </div>
