@@ -106,7 +106,7 @@
     {% if (parcours.descriptifHautPage != '' and parcours.descriptifHautPage != null)  or
         (parcours.descriptifBasPage != '' and parcours.descriptifBasPage != null) or
         (parcours.descriptifHautPageAutomatique != '' and parcours.descriptifHautPageAutomatique != null) or
-        (parcoursDeBase is defined and parcoursDeBase != null)
+        (parcoursDeBase is defined and parcoursDeBase != null and missingSemestre|length > 0)
     %}
         <div class="row mt-2 mb-5">
             <div class="col-12">
@@ -128,7 +128,7 @@
                                         <dt>Texte base de page</dt>
                                         <dl>{{ parcours.descriptifBasPage|raw }}</dl>
                                     {% endif %}
-                                    {% if parcoursDeBase is defined and parcoursDeBase != null %}
+                                    {% if parcoursDeBase is defined and parcoursDeBase != null and missingSemestre|length > 0 %}
                                         <dt>
                                         {% if (1 in missingSemestre) and (2 in missingSemestre) 
                                             and (3 not in missingSemestre) and (4 not in missingSemestre)
