@@ -259,7 +259,8 @@ class ParcoursController extends BaseController
         Parcours            $parcours,
         LheoXML             $lheoXML,
         VersioningParcours $versioningParcours,
-        VersioningFormation $versioningFormation
+        VersioningFormation $versioningFormation,
+        EntityManagerInterface $entityManager,
     ): Response {
         $formation = $parcours->getFormation();
         if ($formation === null) {
@@ -278,6 +279,25 @@ class ParcoursController extends BaseController
 
         $cssDiff = DiffHelper::getStyleSheet();
 
+
+        // Ordre des semestres manquants
+        $missingSemestre = [];
+
+        // Si le parcours est en alternance sans les premiers semestres
+        // on met un lien vers le parcours de base
+        $parcoursDeBase = null;
+        if($parcours->getTypeParcours() === TypeParcoursEnum::TYPE_PARCOURS_ALTERNANCE) {
+            $parcoursDeBase = $entityManager->getRepository(Parcours::class)
+                ->findParcoursDeBaseAlternance(
+                    $parcours->getLibelle(),
+                    GetDpeParcours::getFromParcours($parcours)?->getCampagneCollecte()?->getId()
+                );
+            $parcoursDeBase = count($parcoursDeBase) > 0 ? $parcoursDeBase[0] : null;
+
+            $missingSemestre = $entityManager->getRepository(Parcours::class)
+            ->findParcoursAlternanceHasMissingSemestre($parcours);
+        }
+
         return $this->render('parcours/show.html.twig', [
             'parcours' => $parcours,
             'dpeParcours' => GetDpeParcours::getFromParcours($parcours),
@@ -291,6 +311,8 @@ class ParcoursController extends BaseController
             'hasLastVersion' => $versioningParcours->hasLastVersion($parcours),
             'cssDiff' => $cssDiff,
             'version' => $version,
+            'parcoursDeBase' => $parcoursDeBase,
+            'missingSemestre' => $missingSemestre
         ]);
     }
 
