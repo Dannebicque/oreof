@@ -286,7 +286,9 @@ class ParcoursController extends BaseController
         // Si le parcours est en alternance sans les premiers semestres
         // on met un lien vers le parcours de base
         $parcoursDeBase = null;
-        if($parcours->getTypeParcours() === TypeParcoursEnum::TYPE_PARCOURS_ALTERNANCE) {
+        if($parcours->getTypeParcours() === TypeParcoursEnum::TYPE_PARCOURS_ALTERNANCE
+           && $parcours->getFormation()?->getTypeDiplome()?->getLibelleCourt() === 'BUT' 
+        ) {
             $parcoursDeBase = $entityManager->getRepository(Parcours::class)
                 ->findParcoursDeBaseAlternance(
                     $parcours->getLibelle(),
