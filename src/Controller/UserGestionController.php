@@ -65,7 +65,6 @@ class UserGestionController extends BaseController
             //Vérifier qu'il n'existe pas
             $exist = $userRepository->findOneBy(['email' => $email]);
             if ($exist !== null) {
-
                 $ldapUser = $ldap->getDatas($email);
                 if ($ldapUser === null) {
                     return $this->json('Cet utilisateur n\'existe pas dans le LDAP !', 500);
@@ -82,6 +81,12 @@ class UserGestionController extends BaseController
             if ($ldapUser === null) {
                 return $this->json('Cet utilisateur n\'existe pas dans le LDAP !', 500);
             }
+
+            $existUsername = $userRepository->findOneBy(['username' => $ldapUser['username']]);
+            if ($existUsername !== null) {
+                return $this->json('Le login de cet utilisateur est déjà présent !', 500);
+            }
+
 
             //ajout des données
             $user->setNom($ldapUser['nom']);
