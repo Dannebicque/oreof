@@ -56,8 +56,8 @@ final class OffreController extends BaseController
             $types[$f->getTypeDiplome()?->getLibelle() ?? ''] = true;
             $composantes[$f->getComposantePorteuse()?->getLibelle() ?? ''] = true;
             if ($f->isHasParcours() === false) {
-                $ville = ($f->getLocalisationMention()->first())?->getLibelle();
-                //$ville = 'test';
+                $loc = $f->getLocalisationMention()->first();
+                $ville = is_object($loc) ? $loc->getLibelle() : null;
                 $villes[$ville ?? ''] = true;
             } else {
                 // si RF, les villes sont gérées au niveau des parcours; on ne les agrège pas ici pour simplifier le POC
