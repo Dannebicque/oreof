@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.50.0](https://github.com/Dannebicque/oreof/compare/v1.49.0...v1.50.0) (2026-01-07)
+
+
+### Features
+
+* blocage si offre consolidée ([e74691c](https://github.com/Dannebicque/oreof/commit/e74691ce440080e19b87a3446db4a95900a1713b))
+
+
+### Bug Fixes
+
+* add username existence check during user creation ([d9e986b](https://github.com/Dannebicque/oreof/commit/d9e986b2659920b00ec1085e79394ee6f4eab6bf))
+* Affichage ouverture/non ouverture parcours ([391f0ec](https://github.com/Dannebicque/oreof/commit/391f0ecd670633643f21698dc24a72100fa13aab))
+* Affichage partie offre ([270178f](https://github.com/Dannebicque/oreof/commit/270178fef07dc2ec2426ec3d25e1c0a8a7f340d7))
+* enhance access control for formation and parcours editing ([05d310b](https://github.com/Dannebicque/oreof/commit/05d310b0b670cf084d2e5f8c07bbfee4438afbbf))
+* ensure respParcours is not null before dispatching AddCentreParcoursEvent ([71fc621](https://github.com/Dannebicque/oreof/commit/71fc621e76393f988128994d918c4f2b47a44cf1))
+* improve localization handling in OffreController ([c01d19a](https://github.com/Dannebicque/oreof/commit/c01d19a272fe32410ccdfb19cda5769dce330b18))
+* typo nom template ([9b2b19f](https://github.com/Dannebicque/oreof/commit/9b2b19fcf1deebae955d148b3760916e51748b9f))
+* update parcours descriptif based on ouverture state ([0ced4fa](https://github.com/Dannebicque/oreof/commit/0ced4fa9a12a8d8d7f5654d9aa17180b89c7f3b8))
+
 ## [1.49.0](https://github.com/Dannebicque/oreof/compare/v1.48.0...v1.49.0) (2025-12-11)
 
 
