@@ -931,7 +931,7 @@ class ParcoursController extends BaseController
 
         $typeD = $this->typeDiplomeResolver->get($typeDiplome);
 
-        $ects = null;
+        $ects = 0;
         if(isset($typeD->calculStructureParcours($parcours)->heuresEctsFormation->sommeFormationEcts)){
             $ects = $typeD->calculStructureParcours($parcours)->heuresEctsFormation->sommeFormationEcts;
         }
