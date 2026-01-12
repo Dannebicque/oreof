@@ -904,6 +904,7 @@ class ParcoursController extends BaseController
     #[Route('/{parcours}/annee-suivante-light/export-json-urca', name: 'app_parcours_export_json_urca_annee_suivante_light')]
     public function getJsonExportUrcaAnneeSuivanteLight(
         Parcours            $parcours,
+        EntityManagerInterface $entityManager
     ): Response {
         $optionsArray = GetDpeParcours::getFromParcours($parcours)
             ->getCampagneCollecte()
@@ -912,16 +913,33 @@ class ParcoursController extends BaseController
         $urlMaquettePdf = $optionsArray[ConfigurationPublicationEnum::MCCC->value] ?? false === true
             ? $this->generateUrl(
                 'app_parcours_mccc_export_cfvu_valid',
-                ['parcours' => $parcours->getId(), 'format' => 'simplifie'], UrlGenerator::ABSOLUTE_URL
+                ['parcours' => $parcours->getId(), 'format' => 'simplifie'], 
+                UrlGeneratorInterface::ABSOLUTE_URL
             )
             : null;
 
-        $urlMaquetteJson = $optionsArray[ConfigurationPublicationEnum::MAQUETTE->value] ?? false === true
-            ? $this->generateUrl(
-                'app_parcours_export_maquette_json_validee_cfvu',
-                ['parcours' => $parcours->getId()], UrlGenerator::ABSOLUTE_URL
-            )
-            : null;
+        // Afficher la maquette de N pour N+1
+        // S'il n'y a pas de parcours précédent
+        // envoyer un json minimaliste
+        $parcoursOrigineVersion = [];
+        if($parcours->getParcoursOrigineCopie()){
+            $parcoursOrigineVersion = $entityManager->getRepository(ParcoursVersioning::class)
+                ->findLastCfvuVersion($parcours->getParcoursOrigineCopie());
+        }
+        if($parcours->getParcoursOrigineCopie()?->getId() && count($parcoursOrigineVersion) > 0){
+            $urlMaquetteJson = $this->generateUrl(
+                    'app_parcours_export_maquette_json_validee_cfvu',
+                    ['parcours' => $parcours->getParcoursOrigineCopie()->getId()], 
+                    UrlGeneratorInterface::ABSOLUTE_URL
+            );
+        }
+        else {
+            $urlMaquetteJson = $this->generateUrl(
+                'app_parcours_export_maquette_json_minimum',
+                ['parcours' => $parcours->getId()],
+                UrlGeneratorInterface::ABSOLUTE_URL
+            );
+        }
 
         $typeDiplome = $parcours->getFormation()?->getTypeDiplome();
 
