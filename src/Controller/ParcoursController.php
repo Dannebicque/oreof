@@ -910,13 +910,8 @@ class ParcoursController extends BaseController
             ->getCampagneCollecte()
             ->getPublicationOptions() ?? [];
 
-        $urlMaquettePdf = $optionsArray[ConfigurationPublicationEnum::MCCC->value] ?? false === true
-            ? $this->generateUrl(
-                'app_parcours_mccc_export_cfvu_valid',
-                ['parcours' => $parcours->getId(), 'format' => 'simplifie'], 
-                UrlGeneratorInterface::ABSOLUTE_URL
-            )
-            : null;
+        // Pas de PDF pour N+1
+        $urlMaquettePdf = "#";
 
         // Afficher la maquette de N pour N+1
         // S'il n'y a pas de parcours précédent
