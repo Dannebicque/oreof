@@ -124,7 +124,7 @@ class ParcoursExportController extends AbstractController
         return $this->json($json);
     }
 
-    #[Route('/parcours/{parcours}/maquette/minimum-export-json', name: 'app_parcours_export_maquette_json_minimum')]
+    #[Route('/parcours/{parcours}/maquette-minimum/export-json', name: 'app_parcours_export_maquette_json_minimum')]
     public function exportMaquetteJsonMinimum(Parcours $parcours) : Response {
         $volumesVide = ['presentiel' => 0, 'distanciel' => 0];
 
