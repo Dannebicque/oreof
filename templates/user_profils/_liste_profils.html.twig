@@ -10,11 +10,11 @@
     </tr>
     </thead>
     <tbody>
-    {% for userProfil in userProfils %}
+    {% for userProfil in userProfils|filter(userProfil => (userProfil.campagneCollecte.id == user_data.campagneCollecte.id )) %}
         <tr>
             <td>{{ userProfil.profil != null ? userProfil.profil.libelle : 'Non précisé' }}</td>
-            <td>{{ userProfil.profil != null ? userProfil.profil.centre|badgeEnum : 'Non précisé' }}</td>
-            <td>{{ userProfil.displayCentre }}</td>
+            <td>{{ userProfil|badgeTypeCentre }}</td>
+            <td>{{ userProfil|centre }}</td>
             <td>
                 <button {{ stimulus_action('profil--user', 'delete', 'click', {
                     url:path('app_user_profils_delete',{'userProfil': userProfil.id}),
