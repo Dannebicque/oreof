@@ -5,6 +5,8 @@ namespace App\Service;
 use App\Classes\GetDpeParcours;
 use App\Entity\Etablissement;
 use App\Entity\Parcours;
+use App\Entity\Ville;
+use App\Enums\CampagnePublicationTagEnum;
 use App\Enums\TypeModificationDpeEnum;
 use App\Enums\TypeParcoursEnum;
 use App\Repository\ElementConstitutifRepository;
@@ -309,7 +311,14 @@ HTML;
             . $calendrierUniversitaire;
 
         $dpeParcours = GetDpeParcours::getFromParcours($parcours);
-        if ($dpeParcours !== null && ($dpeParcours?->getEtatReconduction() !== TypeModificationDpeEnum::NON_OUVERTURE && $dpeParcours?->getEtatReconduction() !== TypeModificationDpeEnum::NON_OUVERTURE_SES && $dpeParcours?->getEtatReconduction() !== TypeModificationDpeEnum::NON_OUVERTURE_CFVU)) {
+        if ($dpeParcours !== null 
+            && ( $dpeParcours?->getEtatReconduction() !== TypeModificationDpeEnum::NON_OUVERTURE 
+                && $dpeParcours?->getEtatReconduction() !== TypeModificationDpeEnum::NON_OUVERTURE_SES 
+                && $dpeParcours?->getEtatReconduction() !== TypeModificationDpeEnum::NON_OUVERTURE_CFVU
+                )
+            // N'afficher le lien que sur l'année valide en cours (N)
+            && $dpeParcours->getCampagneCollecte()?->getPublicationTag() === CampagnePublicationTagEnum::ANNEE_COURANTE->value
+            ) {
             $organisationPedagogique .= "<h3>Maquette de la formation</h3>"
             . "<a href=\"$maquettePdf\" target=\"_blank\">Maquette et modalités de contrôle de la formation au format PDF</a>";
         }
@@ -552,6 +561,12 @@ HTML;
         // Description de la mention
         if($parcours->isParcoursDefaut() === false){
             $extraArray['description-mention'] = $this->cleanString($parcours->getFormation()?->getObjectifsFormation());
+        }
+
+        if(!($localisation instanceof Ville)){
+            // Si null, on affiche 'Non renseigné' plus bas.
+            // Utile pour les parcours en construction
+            $localisation = null;
         }
 
         // Génération du XML

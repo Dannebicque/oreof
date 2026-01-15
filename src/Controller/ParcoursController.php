@@ -259,7 +259,8 @@ class ParcoursController extends BaseController
         Parcours            $parcours,
         LheoXML             $lheoXML,
         VersioningParcours $versioningParcours,
-        VersioningFormation $versioningFormation
+        VersioningFormation $versioningFormation,
+        EntityManagerInterface $entityManager,
     ): Response {
         $formation = $parcours->getFormation();
         if ($formation === null) {
@@ -278,6 +279,27 @@ class ParcoursController extends BaseController
 
         $cssDiff = DiffHelper::getStyleSheet();
 
+
+        // Ordre des semestres manquants
+        $missingSemestre = [];
+
+        // Si le parcours est en alternance sans les premiers semestres
+        // on met un lien vers le parcours de base
+        $parcoursDeBase = null;
+        if($parcours->getTypeParcours() === TypeParcoursEnum::TYPE_PARCOURS_ALTERNANCE
+           && $parcours->getFormation()?->getTypeDiplome()?->getLibelleCourt() === 'BUT' 
+        ) {
+            $parcoursDeBase = $entityManager->getRepository(Parcours::class)
+                ->findParcoursDeBaseAlternance(
+                    $parcours->getLibelle(),
+                    GetDpeParcours::getFromParcours($parcours)?->getCampagneCollecte()?->getId()
+                );
+            $parcoursDeBase = count($parcoursDeBase) > 0 ? $parcoursDeBase[0] : null;
+
+            $missingSemestre = $entityManager->getRepository(Parcours::class)
+            ->findParcoursAlternanceHasMissingSemestre($parcours);
+        }
+
         return $this->render('parcours/show.html.twig', [
             'parcours' => $parcours,
             'dpeParcours' => GetDpeParcours::getFromParcours($parcours),
@@ -291,6 +313,8 @@ class ParcoursController extends BaseController
             'hasLastVersion' => $versioningParcours->hasLastVersion($parcours),
             'cssDiff' => $cssDiff,
             'version' => $version,
+            'parcoursDeBase' => $parcoursDeBase,
+            'missingSemestre' => $missingSemestre
         ]);
     }
 
@@ -880,24 +904,37 @@ class ParcoursController extends BaseController
     #[Route('/{parcours}/annee-suivante-light/export-json-urca', name: 'app_parcours_export_json_urca_annee_suivante_light')]
     public function getJsonExportUrcaAnneeSuivanteLight(
         Parcours            $parcours,
+        EntityManagerInterface $entityManager
     ): Response {
         $optionsArray = GetDpeParcours::getFromParcours($parcours)
             ->getCampagneCollecte()
             ->getPublicationOptions() ?? [];
 
-        $urlMaquettePdf = $optionsArray[ConfigurationPublicationEnum::MCCC->value] ?? false === true
-            ? $this->generateUrl(
-                'app_parcours_mccc_export_cfvu_valid',
-                ['parcours' => $parcours->getId(), 'format' => 'simplifie'], UrlGenerator::ABSOLUTE_URL
-            )
-            : null;
+        // Pas de PDF pour N+1
+        $urlMaquettePdf = "#";
 
-        $urlMaquetteJson = $optionsArray[ConfigurationPublicationEnum::MAQUETTE->value] ?? false === true
-            ? $this->generateUrl(
-                'app_parcours_export_maquette_json_validee_cfvu',
-                ['parcours' => $parcours->getId()], UrlGenerator::ABSOLUTE_URL
-            )
-            : null;
+        // Afficher la maquette de N pour N+1
+        // S'il n'y a pas de parcours précédent
+        // envoyer un json minimaliste
+        $parcoursOrigineVersion = [];
+        if($parcours->getParcoursOrigineCopie()){
+            $parcoursOrigineVersion = $entityManager->getRepository(ParcoursVersioning::class)
+                ->findLastCfvuVersion($parcours->getParcoursOrigineCopie());
+        }
+        if($parcours->getParcoursOrigineCopie()?->getId() && count($parcoursOrigineVersion) > 0){
+            $urlMaquetteJson = $this->generateUrl(
+                    'app_parcours_export_maquette_json_validee_cfvu',
+                    ['parcours' => $parcours->getParcoursOrigineCopie()->getId()], 
+                    UrlGeneratorInterface::ABSOLUTE_URL
+            );
+        }
+        else {
+            $urlMaquetteJson = $this->generateUrl(
+                'app_parcours_export_maquette_json_minimum',
+                ['parcours' => $parcours->getId()],
+                UrlGeneratorInterface::ABSOLUTE_URL
+            );
+        }
 
         $typeDiplome = $parcours->getFormation()?->getTypeDiplome();
 
@@ -907,7 +944,10 @@ class ParcoursController extends BaseController
 
         $typeD = $this->typeDiplomeResolver->get($typeDiplome);
 
-        $ects = $typeD->calculStructureParcours($parcours)->heuresEctsFormation->sommeFormationEcts;
+        $ects = 0;
+        if(isset($typeD->calculStructureParcours($parcours)->heuresEctsFormation->sommeFormationEcts)){
+            $ects = $typeD->calculStructureParcours($parcours)->heuresEctsFormation->sommeFormationEcts;
+        }
 
         // Gestion de la localisation
         // Vide par défaut : -

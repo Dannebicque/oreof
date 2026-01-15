@@ -319,4 +319,93 @@ class ParcoursRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function findParcoursDeBaseAlternance(string $libelle, int $idCampagneCollecte) {
+        $qb = $this->createQueryBuilder('p');
+
+        return $qb
+            ->join('p.dpeParcours', 'dpeP')
+            ->join('dpeP.campagneCollecte', 'campC')
+            ->andWhere(
+                $qb->expr()->orX(
+                    $qb->expr()->neq('p.typeParcours', ':typeAlternance'),
+                    $qb->expr()->isNull('p.typeParcours')
+                )
+            )
+            ->andWhere("p.libelle = :libelle")
+            ->andWhere('campC.id = :idCampagne')
+            ->setParameter(':libelle', $libelle)
+            ->setParameter(':idCampagne', $idCampagneCollecte)
+            ->setParameter(':typeAlternance', 'alternance')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * @return array Ordre des semestres non dispensés ou manquant - ex: [1, 2, 3, 4]
+     */
+    public function findParcoursAlternanceHasMissingSemestre(Parcours $parcours) : array {
+        // semestre 1 & 2 non dispensés ou absents
+        $subQuery1 = $this->createQueryBuilder('p1');
+        $subQuery1 = $subQuery1->select('p1.id')
+            ->leftJoin('p1.semestreParcours', 'sp1')
+            ->leftJoin('sp1.semestre', 'sem1')
+            ->andWhere(
+                $subQuery1->expr()->orX(
+                    $subQuery1->expr()->andX(
+                        $subQuery1->expr()->in('sem1.ordre', ':ordre1ou2'),
+                        $subQuery1->expr()->eq('sem1.nonDispense', ':nonDispenseFlag')
+                    ),
+                    $subQuery1->expr()->andX(
+                        $subQuery1->expr()->in('sem1.ordre', ':ordre1ou2'),
+                        $subQuery1->expr()->isNull('sp1')
+                    )
+                )
+            )
+            ->andWhere('p1.id = :parcoursId')
+            ->setParameter(':ordre1ou2', [1, 2])
+            ->setParameter(':nonDispenseFlag', 1)
+            ->setParameter(':parcoursId', $parcours->getId())
+            ->getQuery()
+            ->getResult();
+
+
+        // semestre 3 ou 4 non dispensés
+        $subQuery2 = $this->createQueryBuilder('p2');
+        $subQuery2 = $subQuery2->select('p2.id')
+            ->leftJoin('p2.semestreParcours', 'sp2')
+            ->leftJoin('sp2.semestre', 'sem2')
+            ->andWhere(
+                $subQuery2->expr()->orX(
+                    $subQuery2->expr()->andX(
+                        $subQuery2->expr()->in('sem2.ordre', ':ordre3ou4'),
+                        $subQuery2->expr()->eq('sem2.nonDispense', ':nonDispenseFlag')
+                    ),
+                    $subQuery2->expr()->andX(
+                        $subQuery2->expr()->in('sem2.ordre', ':ordre3ou4'),
+                        $subQuery2->expr()->isNull('sp2')
+                    )
+                )
+            )->andWhere('p2.id= :parcoursId')
+            ->setParameter(':ordre3ou4', [3, 4])
+            ->setParameter(':nonDispenseFlag', 1)
+            ->setParameter(':parcoursId', $parcours->getId())
+            ->getQuery()
+            ->getResult();
+
+
+        $result = [];
+        if(in_array($parcours->getId(), array_merge(...$subQuery1))) {
+            $result[] = 1;
+            $result[] = 2;
+        }
+
+        if(in_array($parcours->getId(), array_merge(...$subQuery2))) {
+            $result[] = 3;
+            $result[] = 4;
+        }
+
+        return $result;
+    }
+
 }

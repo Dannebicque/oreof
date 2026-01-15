@@ -50,7 +50,7 @@
         {% endif %}
     </td>
     <td>
-        {% set parcoursVersioning = isVersioning is defined and isVersioning == true ? parcoursVersioning : null %}
+        {% set parcoursVersioning = isVersioning is defined and isVersioning == true ? parcoursVersioning ?? null : null %}
         {{ component('badge_mccc', {
             elementConstitutif: ec.elementConstitutif,
             parcours: parcours,
