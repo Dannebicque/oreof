@@ -25,6 +25,7 @@ import './js/vendor/clamp.min'
 import './js/base/init'
 import './js/common'
 import './js/scripts'
+import './js/toggle'
 
 const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
 const tooltipList = [...tooltipTriggerList].map((tooltipTriggerEl) => new bootstrap.Tooltip(tooltipTriggerEl))

@@ -16,8 +16,8 @@ use App\Entity\Parcours;
 use App\Message\Export;
 use App\Repository\TypeDiplomeRepository;
 use App\Repository\TypeEpreuveRepository;
-use App\Service\TypeDiplomeResolver;
 use App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException;
+use App\TypeDiplome\TypeDiplomeResolver;
 use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -64,7 +64,7 @@ class FicheMatiereExportController extends AbstractController
             $typeDiplome = $typeDiplomeRepository->findOneBy(['libelle_court' => 'L']);
         }
 
-        $typeD = $typeDiplomeResolver->get($typeDiplome);
+        $typeD = $typeDiplomeResolver->fromTypeDiplome($typeDiplome);
 
         $bccs = [];
         foreach ($ficheMatiere->getCompetences() as $competence) {

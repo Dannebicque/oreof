@@ -40,6 +40,6 @@ class JsonReponse
         return new Response(json_encode([
             'message' => $this->message,
             'data' => $this->array
-        ]), $this->state, ['Content-Type' => 'application/json']);
+        ], JSON_THROW_ON_ERROR), $this->state, ['Content-Type' => 'application/json']);
     }
 }

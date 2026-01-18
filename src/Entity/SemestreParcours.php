@@ -40,8 +40,8 @@ class SemestreParcours
     #[ORM\Column]
     private ?bool $porteur = false;
 
-    #[ORM\ManyToOne(inversedBy: 'semestreParcours')]
-    private ?SemestreMutualisable $semestreRaccroche = null;
+//    #[ORM\ManyToOne(inversedBy: 'semestreParcours')]
+//    private ?SemestreMutualisable $semestreRaccroche = null;
 
     #[ORM\Column(length: 10, nullable: true)]
     private ?string $codeApogeeEtapeAnnee = null; //sera identique sur deux semestres de la même année
@@ -124,19 +124,19 @@ class SemestreParcours
         return $this;
     }
 
-    public function getSemestreRaccroche(): ?SemestreMutualisable
-    {
-        return $this->semestreRaccroche;
-    }
+//    public function getSemestreRaccroche(): ?SemestreMutualisable
+//    {
+//        return $this->semestreRaccroche;
+//    }
+//
+//    public function setSemestreRaccroche(?SemestreMutualisable $semestreRaccroche): self
+//    {
+//        $this->semestreRaccroche = $semestreRaccroche;
+//
+//        return $this;
+//    }
 
-    public function setSemestreRaccroche(?SemestreMutualisable $semestreRaccroche): self
-    {
-        $this->semestreRaccroche = $semestreRaccroche;
-
-        return $this;
-    }
-
-    public function getAnnee(): int
+    public function getOrdreAnnee(): int
     {
         //si ordre = 1 ou 2 alors année = 1
         //si ordre = 3 ou 4 alors année = 2
@@ -150,13 +150,13 @@ class SemestreParcours
         };
     }
 
-    public function getOrdreAnnee(): int
-    {
-        if ($this->ordre % 2 === 0) {
-            return 2;
-        }
-        return 1;
-    }
+//    public function getOrdreAnnee(): int
+//    {
+//        if ($this->ordre % 2 === 0) {
+//            return 2;
+//        }
+//        return 1;
+//    }
 
     public function display(): string
     {
@@ -230,5 +230,9 @@ class SemestreParcours
         return $this;
     }
 
+    public function getAnnee(): ?Annee
+    {
+        return $this->annee;
+    }
 
 }

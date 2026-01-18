@@ -9,7 +9,7 @@ use App\Repository\ElementConstitutifRepository;
 use App\Repository\FicheMatiereRepository;
 use App\Repository\TypeEcRepository;
 use App\Repository\UeRepository;
-use App\Service\TypeDiplomeResolver;
+use App\TypeDiplome\TypeDiplomeResolver;
 use App\Utils\Tools;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,7 +24,7 @@ class ParcoursEcController extends AbstractController
         TypeEcRepository             $typeEcRepository,
         Parcours                     $parcours
     ): Response {
-        $typeD = $typeDiplomeResolver->getFromParcours($parcours);
+        $typeD = $typeDiplomeResolver->fromParcours($parcours);
         $dto = $typeD->calculStructureParcours($parcours);
 
         return $this->render('parcours_ec/index.html.twig', [

@@ -15,11 +15,15 @@ framework:
             process: false
             label: 'validation.initialisation'
             color: 'info'
+            description: 'Parcours en attente d''initialisation'
+            category: 'initialisation'
         autorisation_saisie:
           metadata:
             process: false
             label: 'validation.autorisation_saisie'
             color: 'success'
+            description: 'En attente d''autorisation de saisie par le DPE'
+            category: 'initialisation'
         en_cours_redaction:
           metadata:
             process: true
@@ -30,6 +34,10 @@ framework:
             check: true
             templateCheck: '_checkParcours.html.twig'
             color: 'info'
+            description: 'Parcours en cours de rédaction par l''équipe pédagogique'
+            help_text: 'Complétez toutes les informations du parcours avant de le soumettre'
+            show_in_stepper: true
+            category: 'redaction'
         tacite_reconduction:
           metadata:
             process: false
@@ -39,6 +47,8 @@ framework:
             isTimeline: false
             check: false
             color: 'success'
+            description: 'Parcours reconduit tacitement pour la nouvelle année'
+            category: 'reconduction'
         soumis_parcours:
           metadata:
             process: true
@@ -48,6 +58,10 @@ framework:
             check: true
             templateCheck: '_checkParcours.html.twig'
             color: 'success'
+            description: 'En attente de validation par le responsable de formation'
+            help_text: 'Le responsable de formation doit valider ou émettre des réserves'
+            show_in_stepper: true
+            category: 'validation_formation'
         soumis_dpe_composante:
           metadata:
             process: true
@@ -55,16 +69,24 @@ framework:
             label: 'validation.dpe'
             isTimeline: true
             color: 'success'
+            description: 'En attente de validation par le DPE de la composante'
+            help_text: 'Le DPE examine le parcours avant transmission au conseil'
+            show_in_stepper: true
+            category: 'validation_composante'
         refuse_rf:
           metadata:
             process: false
             label: 'validation.refuse_rf'
             color: 'danger'
+            description: 'Refusé par le responsable de formation'
+            category: 'refus'
         refuse_dpe_composante:
           metadata:
             process: false
             label: 'validation.refuse_dpe_composante'
             color: 'danger'
+            description: 'Refusé par le DPE de la composante'
+            category: 'refus'
         soumis_conseil:
           metadata:
             process: true
@@ -74,16 +96,24 @@ framework:
             hasDate: true
             hasUpload: true
             color: 'success'
+            description: 'En attente de passage en conseil de composante'
+            help_text: 'Joindre le PV du conseil et indiquer la date de passage'
+            show_in_stepper: true
+            category: 'validation_composante'
         refuse_conseil:
           metadata:
             process: false
             label: 'validation.refuse_conseil'
             color: 'danger'
+            description: 'Refusé par le conseil de composante'
+            category: 'refus'
         refuse_central:
           metadata:
             process: false
             label: 'validation.refuse_central'
             color: 'danger'
+            description: 'Refusé par le service central (SES)'
+            category: 'refus'
         soumis_central:
           metadata:
             process: true
@@ -91,6 +121,10 @@ framework:
             label: 'validation.ses'
             isTimeline: false
             color: 'success'
+            description: 'En attente de validation par le SES (Service des Études et de la Scolarité)'
+            help_text: 'Le SES vérifie la conformité avant transmission à la CFVU'
+            show_in_stepper: true
+            category: 'validation_centrale'
         soumis_cfvu:
           metadata:
             process: true
@@ -99,11 +133,17 @@ framework:
             hasDate: true
             isTimeline: true
             color: 'success'
+            description: 'En attente de validation par la CFVU'
+            help_text: 'Commission de la Formation et de la Vie Universitaire'
+            show_in_stepper: true
+            category: 'validation_centrale'
         refuse_definitif_cfvu:
           metadata:
             process: false
             label: 'validation.refuse_definitif_cfvu'
             color: 'danger'
+            description: 'Refusé définitivement par la CFVU'
+            category: 'refus'
         valide_cfvu:
           metadata:
             process: true
@@ -111,6 +151,10 @@ framework:
             label: 'relecture.avant_publication'
             isTimeline: true
             color: 'success'
+            description: 'Validé par la CFVU, en attente de publication'
+            help_text: 'Relecture finale avant mise en ligne'
+            show_in_stepper: true
+            category: 'publication'
         valide_a_publier: # Etape de saisie de la date pour publication post CFVU
           metadata:
             process: true
@@ -118,6 +162,10 @@ framework:
             label: 'validation.publication'
             isTimeline: false
             color: 'success'
+            description: 'Prêt à être publié'
+            help_text: 'Définir la date de publication'
+            show_in_stepper: true
+            category: 'publication'
         publie:
           metadata:
             process: false
@@ -125,11 +173,15 @@ framework:
             label: 'publie'
             isTimeline: false
             color: 'success'
+            description: 'Parcours publié et accessible'
+            category: 'publication'
         soumis_conseil_reserve:
           metadata:
             process: false
             label: 'validation.soumis_conseil_reserve'
             color: 'warning'
+            description: 'Validé avec réserves par la CFVU, en attente du conseil'
+            category: 'reserve'
         en_cours_redaction_ss_cfvu:
           metadata:
             process: true
@@ -137,6 +189,10 @@ framework:
             isTimeline: false
             label: 'validation.en_cours_redaction_ss_cfvu'
             color: 'info'
+            description: 'Modification en cours sans passage en CFVU'
+            help_text: 'Modifications mineures ne nécessitant pas de passage en CFVU'
+            show_in_stepper: true
+            category: 'modification'
         soumis_central_sans_cfvu:
           metadata:
             process: false
@@ -144,26 +200,36 @@ framework:
             isTimeline: false
             label: 'validation.soumis_central_sans_cfvu'
             color: 'success'
+            description: 'En attente de validation SES (sans CFVU)'
+            category: 'modification'
         soumis_central_reserve_cfvu:
           metadata:
             process: false
             label: 'validation.soumis_central_reserve_cfvu'
             color: 'warning'
+            description: 'Réserves CFVU en cours de traitement par le SES'
+            category: 'reserve'
         soumis_dpe_composante_reserve_cfvu:
           metadata:
             process: false
             label: 'validation.soumis_dpe_composante_reserve_cfvu'
             color: 'warning'
+            description: 'Réserves CFVU en cours de traitement par le DPE'
+            category: 'reserve'
         non_ouverture_ses:
           metadata:
             process: false
             label: 'validation.non_ouverture_ses'
             color: 'danger'
+            description: 'Non-ouverture demandée par le SES'
+            category: 'non_ouverture'
         non_ouverture:
           metadata:
             process: false
             label: 'validation.non_ouverture'
             color: 'danger'
+            description: 'Parcours non ouvert'
+            category: 'non_ouverture'
       transitions:
         initialiser:
           from: 'initialisation_dpe'
@@ -174,9 +240,14 @@ framework:
           metadata:
             recipients: [ 'DPE', 'RF' ]
             titre: 'Autorisation de saisie de la formation %%s'
+            label: 'Autoriser la saisie'
+            description: 'Permet à l''équipe pédagogique de commencer la saisie'
+            button_class: 'success'
+            button_icon: 'fa-play'
         valider_parcours: # Soumettre du resp de parcours vers formation
           from: 'en_cours_redaction'
           to: 'soumis_parcours'
+          #guard: "service('App\\\\Workflow\\\\Service\\\\ValidationService').canTransition(subject, 'soumis_parcours')"
           metadata:
             recipients: [ 'RF', 'CoRF' ]
             titre_with_parcours: "Le parcours %%s de votre formation %%s a été soumis à validation"
@@ -184,6 +255,13 @@ framework:
             type: valider
             btn: success
             icon: fa-check
+            label: 'Soumettre le parcours'
+            description: 'Transmettre au responsable de formation pour validation'
+            button_class: 'success'
+            button_icon: 'fa-paper-plane'
+            confirmation_required: true
+            confirmation_message: 'Êtes-vous sûr de vouloir soumettre ce parcours à validation ?'
+            requires_comment: false
         valider_rf:
           from: 'soumis_parcours'
           to: 'soumis_dpe_composante'
@@ -194,6 +272,12 @@ framework:
             type: valider
             btn: success
             icon: fa-check
+            label: 'Valider'
+            description: 'Approuver le parcours et le transmettre au DPE'
+            button_class: 'success'
+            button_icon: 'fa-check'
+            confirmation_required: true
+            confirmation_message: 'Confirmez-vous la validation de ce parcours ?'
         reserver_rf:
           from: 'soumis_parcours'
           to: 'en_cours_redaction'
@@ -204,6 +288,12 @@ framework:
             type: reserver
             btn: warning
             icon: fa-circle-exclamation-check
+            label: 'Émettre des réserves'
+            description: 'Renvoyer pour corrections avec commentaires'
+            button_class: 'warning'
+            button_icon: 'fa-exclamation-triangle'
+            requires_comment: true
+            comment_placeholder: 'Décrivez les modifications attendues...'
         refuser_dpe_composante:
           from: 'soumis_dpe_composante'
           to: 'refuse_dpe_composante'
@@ -214,14 +304,29 @@ framework:
             type: refuser
             btn: danger
             icon: fa-ban
+            label: 'Refuser'
+            description: 'Refuser définitivement ce parcours'
+            button_class: 'danger'
+            button_icon: 'fa-ban'
+            confirmation_required: true
+            confirmation_message: 'Attention : cette action est définitive. Confirmez-vous le refus ?'
+            requires_comment: true
+            comment_placeholder: 'Motif du refus...'
         valider_dpe_composante:
           from: 'soumis_dpe_composante'
           to: 'soumis_conseil'
+          guard: "service('App\\\\Workflow\\\\Service\\\\ValidationService').canTransition(subject, 'soumis_conseil')"
           metadata:
             recipients: [ 'RF', 'CoRF', 'RP', 'CoRP' ]
             type: valider
             btn: success
             icon: fa-check
+            label: 'Transmettre au conseil'
+            description: 'Approuver et transmettre pour passage en conseil'
+            button_class: 'success'
+            button_icon: 'fa-check'
+            confirmation_required: true
+            confirmation_message: 'Confirmez-vous la transmission au conseil de composante ?'
         reserver_dpe_composante:
           from: 'soumis_dpe_composante'
           to: 'en_cours_redaction'
@@ -232,6 +337,12 @@ framework:
             type: reserver
             btn: warning
             icon: fa-circle-exclamation-check
+            label: 'Émettre des réserves'
+            description: 'Renvoyer pour corrections'
+            button_class: 'warning'
+            button_icon: 'fa-exclamation-triangle'
+            requires_comment: true
+            comment_placeholder: 'Précisez les points à corriger...'
         refuser_conseil:
           from: 'soumis_conseil'
           to: 'refuse_conseil'
@@ -242,6 +353,14 @@ framework:
             type: refuser
             btn: danger
             icon: fa-ban
+            label: 'Refuser'
+            description: 'Le conseil refuse ce parcours'
+            button_class: 'danger'
+            button_icon: 'fa-ban'
+            confirmation_required: true
+            confirmation_message: 'Confirmez-vous le refus par le conseil ?'
+            requires_comment: true
+            comment_placeholder: 'Motif du refus du conseil...'
         valider_conseil:
           from: 'soumis_conseil'
           to: 'soumis_central'
@@ -254,6 +373,12 @@ framework:
             hasDate: true
             hasUpload: true
             icon: fa-check
+            label: 'Valider (conseil)'
+            description: 'Approuvé par le conseil de composante'
+            button_class: 'success'
+            button_icon: 'fa-check'
+            confirmation_required: true
+            confirmation_message: 'Confirmez-vous la validation par le conseil ?'
         reserver_conseil:
           from: 'soumis_conseil'
           to: 'en_cours_redaction'
@@ -264,6 +389,12 @@ framework:
             type: reserver
             btn: warning
             icon: fa-circle-exclamation-check
+            label: 'Émettre des réserves'
+            description: 'Réserves du conseil de composante'
+            button_class: 'warning'
+            button_icon: 'fa-exclamation-triangle'
+            requires_comment: true
+            comment_placeholder: 'Réserves formulées par le conseil...'
         refuser_central:
           from: 'soumis_central'
           to: 'refuse_central'
@@ -274,9 +405,18 @@ framework:
             type: refuser
             btn: danger
             icon: fa-ban
+            label: 'Refuser'
+            description: 'Refus par le service central'
+            button_class: 'danger'
+            button_icon: 'fa-ban'
+            confirmation_required: true
+            confirmation_message: 'Confirmez-vous le refus par le SES ?'
+            requires_comment: true
+            comment_placeholder: 'Motif du refus SES...'
         valider_central:
           from: 'soumis_central'
           to: 'soumis_cfvu'
+          guard: "service('App\\\\Workflow\\\\Service\\\\ValidationService').canTransition(subject, 'soumis_cfvu')"
           metadata:
             recipients: [ 'DPE', 'RF', 'CoRF', 'RP', 'CoRP' ]
             titre_with_parcours: 'La fiche du parcours %%s de la formation %%s a été validée par le SES'
@@ -284,6 +424,12 @@ framework:
             type: valider
             btn: success
             icon: fa-check
+            label: 'Transmettre à la CFVU'
+            description: 'Validation SES et transmission pour passage en CFVU'
+            button_class: 'success'
+            button_icon: 'fa-check'
+            confirmation_required: true
+            confirmation_message: 'Confirmez-vous la transmission à la CFVU ?'
         reserver_central:
           from: 'soumis_central'
           to: 'en_cours_redaction'
@@ -294,6 +440,12 @@ framework:
             type: reserver
             btn: warning
             icon: fa-circle-exclamation-check
+            label: 'Émettre des réserves'
+            description: 'Réserves du service central'
+            button_class: 'warning'
+            button_icon: 'fa-exclamation-triangle'
+            requires_comment: true
+            comment_placeholder: 'Réserves du SES...'
         valider_publication_directe:
           from: 'soumis_central'
           to: 'valide_a_publier'
@@ -303,6 +455,10 @@ framework:
             btn: success
             icon: fa-check
             hasValidLheo: true
+            label: 'Publication directe'
+            description: 'Validation et publication sans passage CFVU'
+            button_class: 'success'
+            button_icon: 'fa-rocket'
         refuser_definitif_cfvu:
           from: 'soumis_cfvu'
           to: 'refuse_definitif_cfvu'
@@ -314,6 +470,14 @@ framework:
             type: refuser
             btn: danger
             icon: fa-ban
+            label: 'Refuser définitivement'
+            description: 'Refus définitif par la CFVU'
+            button_class: 'danger'
+            button_icon: 'fa-ban'
+            confirmation_required: true
+            confirmation_message: 'Attention : refus définitif. Confirmez-vous ?'
+            requires_comment: true
+            comment_placeholder: 'Motif du refus CFVU...'
         refuser_revoir_cfvu:
           from: 'soumis_cfvu'
           to: 'en_cours_redaction'
@@ -325,6 +489,12 @@ framework:
             type: reserver
             btn: warning
             icon: fa-circle-exclamation-check
+            label: 'Réserves CFVU'
+            description: 'Renvoi pour modifications suite aux réserves CFVU'
+            button_class: 'warning'
+            button_icon: 'fa-exclamation-triangle'
+            requires_comment: true
+            comment_placeholder: 'Réserves de la CFVU...'
         valider_reserve_cfvu:
           from: 'soumis_cfvu'
           to: 'soumis_dpe_composante_reserve_cfvu'
@@ -336,6 +506,9 @@ framework:
             btn: success
             icon: fa-check
             display: false
+            button_class: 'success'
+            button_icon: 'fa-check'
+            description: 'Validation par la CFVU avec des réserves'
         transmetre_reserve_cfvu:
           from: 'soumis_dpe_composante_reserve_cfvu'
           to: 'soumis_central_reserve_cfvu'
@@ -344,6 +517,9 @@ framework:
             type: valider
             btn: success
             icon: fa-check
+            button_class: 'success'
+            button_icon: 'fa-check'
+            description: 'Transmettre à la CFVU après réserves'
         valider_reserve_conseil_cfvu:
           from: 'soumis_cfvu'
           to: 'soumis_conseil_reserve' #todo mais on court-circuite le retour directement vers valider publicatio
@@ -355,6 +531,9 @@ framework:
             btn: success
             icon: fa-check
             display: false
+            button_class: 'success'
+            button_icon: 'fa-check'
+            description: '--'
         valider_reserve_central_cfvu:
           from: 'soumis_conseil_reserve'
           to: 'valide_cfvu'
@@ -365,6 +544,9 @@ framework:
             type: valider
             btn: success
             icon: fa-check
+            button_class: 'success'
+            button_icon: 'fa-check'
+            description: '--'
         valider_cfvu:
           from: 'soumis_cfvu'
           to: 'valide_cfvu'
@@ -376,6 +558,12 @@ framework:
             btn: success
             hasDate: true
             icon: fa-check
+            label: 'Valider CFVU'
+            description: 'Validation par la CFVU'
+            button_class: 'success'
+            button_icon: 'fa-stamp'
+            confirmation_required: true
+            confirmation_message: 'Confirmez-vous la validation CFVU ?'
         valider_publication:
           from: 'valide_cfvu'
           to: 'valide_a_publier'
@@ -386,6 +574,10 @@ framework:
             icon: fa-check
             hasDate: true
             hasValidLheo: true
+            label: 'Préparer la publication'
+            description: 'Préparer le parcours pour publication'
+            button_class: 'success'
+            button_icon: 'fa-bullhorn'
         publier:
           from: 'valide_a_publier'
           to: 'publie'
@@ -394,29 +586,55 @@ framework:
             type: valider
             btn: success
             icon: fa-check
+            label: 'Publier'
+            description: 'Mettre le parcours en ligne'
+            button_class: 'success'
+            button_icon: 'fa-globe'
+            confirmation_required: true
+            confirmation_message: 'Confirmez-vous la publication ?'
         relancer_annee:
           from: 'publie'
           to: 'tacite_reconduction'
+          metadata:
+            button_class: 'warning'
+            button_icon: 'fa-undo'
+            description: 'Relancer le parcours pour la nouvelle année'
         reouvrir_tacite:
           from: 'tacite_reconduction'
           to: 'en_cours_redaction'
           metadata:
             recipients: [ 'DPE', 'RF', 'CoRF', 'RP', 'CoRP' ]
+            label: 'Réouvrir pour modification'
+            description: 'Réouvrir le parcours reconduit pour modifications'
+            button_class: 'info'
+            button_icon: 'fa-pencil'
         reouvrir_mccc:
           from: 'publie'
           to: 'en_cours_redaction'
           metadata:
             recipients: [ 'DPE', 'RF', 'CoRF', 'RP', 'CoRP' ]
+            label: 'Réouvrir (MCCC)'
+            description: 'Réouvrir pour modification des MCCC'
+            button_class: 'info'
+            button_icon: 'fa-pencil'
         reouvrir_avant_publie:
           from: 'valide_a_publier'
           to: 'en_cours_redaction'
           metadata:
             recipients: [ 'DPE', 'RF', 'CoRF', 'RP', 'CoRP' ]
+            label: 'Réouvrir'
+            description: 'Réouvrir pour modification avant publication'
+            button_class: 'warning'
+            button_icon: 'fa-undo'
         reouvrir_sans_cfvu:
           from: 'publie'
           to: 'en_cours_redaction_ss_cfvu'
           metadata:
             recipients: [ 'DPE', 'RF', 'CoRF', 'RP', 'CoRP' ]
+            label: 'Modification sans CFVU'
+            description: 'Modifications mineures sans passage en CFVU'
+            button_class: 'info'
+            button_icon: 'fa-edit'
         valider_ouverture_sans_cfvu:
           from: 'en_cours_redaction_ss_cfvu'
           to: 'soumis_central_sans_cfvu'
@@ -427,6 +645,10 @@ framework:
             type: valider
             btn: success
             icon: fa-check
+            label: 'Soumettre au SES'
+            description: 'Transmettre les modifications au SES'
+            button_class: 'success'
+            button_icon: 'fa-paper-plane'
         valider_transmettre_ouverture_sans_cfvu:
           from: 'soumis_central_sans_cfvu'
           to: 'valide_a_publier'
@@ -439,6 +661,10 @@ framework:
             hasDate: true
             hasValidLheo: true
             icon: fa-check
+            label: 'Valider et republier'
+            description: 'Approuver les modifications et republier'
+            button_class: 'success'
+            button_icon: 'fa-check'
         reserver_transmettre_ouverture_sans_cfvu:
           from: 'soumis_central_sans_cfvu'
           to: 'en_cours_redaction_ss_cfvu'
@@ -449,6 +675,12 @@ framework:
             type: reserver
             btn: warning
             icon: fa-circle-exclamation-check
+            label: 'Émettre des réserves'
+            description: 'Réserves du SES'
+            button_class: 'warning'
+            button_icon: 'fa-exclamation-triangle'
+            requires_comment: true
+            comment_placeholder: 'Réserves du SES...'
         valider_transmettre_reserve_cfvu:
           from: 'soumis_central_reserve_cfvu'
           to: 'valide_cfvu'
@@ -456,6 +688,9 @@ framework:
             type: valider
             btn: success
             icon: fa-check
+            button_class: 'success'
+            button_icon: 'fa-check'
+            description: '--'
         reserver_transmettre_reserve_cfvu:
           from: 'soumis_central_reserve_cfvu'
           to: 'soumis_dpe_composante_reserve_cfvu'
@@ -463,6 +698,9 @@ framework:
             type: reserver
             btn: warning
             icon: fa-circle-exclamation-check
+            button_class: 'warning'
+            button_icon: 'fa-exclamation-triangle'
+            description: '--'
         valider_non_ouverture_ses:
           from: 'non_ouverture_ses'
           to: 'non_ouverture'
@@ -470,6 +708,9 @@ framework:
             type: valider
             btn: success
             icon: fa-check
+            button_class: 'success'
+            button_icon: 'fa-check'
+            description: '--'
     composante: # todo: Deprecated pas utilisé ?
       type: 'workflow'
       marking_store:

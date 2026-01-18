@@ -21,6 +21,7 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ExportBcc implements ExportInterface
 {
+    //todo: a revoir complétement
     private string $fileName;
     private string $dir;
 
@@ -36,6 +37,11 @@ class ExportBcc implements ExportInterface
         Parcours $parcours
     ): void {
         $formation = $parcours->getFormation();
+
+        if (null === $formation) {
+            return;
+        }
+
         $this->excelWriter->nouveauFichier('Export BCC');
         $this->excelWriter->setActiveSheetIndex(0);
         $col = 3;
@@ -68,75 +74,78 @@ class ExportBcc implements ExportInterface
             $debutCol = $col;
             if ($semParc->getSemestre() !== null && !$semParc->getSemestre()->isNonDispense()) {
                 if ($semParc->getSemestre()->getSemestreRaccroche() !== null) {
-                    $semestre = $semParc->getSemestre()->getSemestreRaccroche();
+                    $semestre = $semParc->getSemestre()->getSemestreRaccroche()->getSemestre();
                 } else {
                     $semestre = $semParc->getSemestre();
                 }
                 $nbCols = 0;
-
-                foreach ($semestre->getUes() as $ue) {
-                    if ($ue->getUeParent() === null) {
-                        if ($ue->getUeEnfants()->count() == 0) {
-                            $nbCols += $ue->getElementConstitutifs()->count();
-                        } else {
-                            foreach ($ue->getUeEnfants() as $uee) {
-                                $nbCols += $uee->getElementConstitutifs()->count();
+                if ($semestre !== null) {
+                    foreach ($semestre->getUes() as $ue) {
+                        if ($ue->getUeParent() === null) {
+                            if ($ue->getUeEnfants()->count() == 0) {
+                                $nbCols += $ue->getElementConstitutifs()->count();
+                            } else {
+                                foreach ($ue->getUeEnfants() as $uee) {
+                                    $nbCols += $uee->getElementConstitutifs()->count();
+                                }
                             }
                         }
                     }
-                }
-                $this->excelWriter->writeCellXY($col, $ligne, 'Semestre ' . $semParc->display(), [
-                    'style' => 'HORIZONTAL_CENTER',
-                ]);
-                $this->excelWriter->mergeCellsCaR($col, $ligne, $col + $nbCols - 1, $ligne);
-                $ligne++;
-                $col = $debutCol;
+                    $this->excelWriter->writeCellXY($col, $ligne, 'Semestre ' . $semParc->display(), [
+                        'style' => 'HORIZONTAL_CENTER',
+                    ]);
 
-                foreach ($semestre->getUes() as $ue) {
-                    if ($ue->getUeParent() === null) {
-                        if ($ue->getUeEnfants()->count() == 0) {
-                            $this->excelWriter->writeCellXY($col, $ligne, $ue->display($parcours), [
-                                'style' => 'HORIZONTAL_CENTER',
-                            ]);
-                            $this->excelWriter->mergeCellsCaR($col, $ligne, $col + $ue->getElementConstitutifs()->count() - 1, $ligne);
-                            $col += $ue->getElementConstitutifs()->count();
-                        } else {
-                            foreach ($ue->getUeEnfants() as $uee) {
-                                $this->excelWriter->writeCellXY($col, $ligne, $uee->display($parcours), [
+                    $this->excelWriter->mergeCellsCaR($col, $ligne, $col + $nbCols - 1, $ligne);
+                    $ligne++;
+                    $col = $debutCol;
+
+                    foreach ($semestre->getUes() as $ue) {
+                        if ($ue->getUeParent() === null) {
+                            if ($ue->getUeEnfants()->count() == 0) {
+                                $this->excelWriter->writeCellXY($col, $ligne, $ue->display($parcours), [
                                     'style' => 'HORIZONTAL_CENTER',
                                 ]);
-                                $this->excelWriter->mergeCellsCaR($col, $ligne, $col + $uee->getElementConstitutifs()->count() - 1, $ligne);
-                                $col += $uee->getElementConstitutifs()->count();
+                                $this->excelWriter->mergeCellsCaR($col, $ligne, $col + $ue->getElementConstitutifs()->count() - 1, $ligne);
+                                $col += $ue->getElementConstitutifs()->count();
+                            } else {
+                                foreach ($ue->getUeEnfants() as $uee) {
+                                    $this->excelWriter->writeCellXY($col, $ligne, $uee->display($parcours), [
+                                        'style' => 'HORIZONTAL_CENTER',
+                                    ]);
+                                    $this->excelWriter->mergeCellsCaR($col, $ligne, $col + $uee->getElementConstitutifs()->count() - 1, $ligne);
+                                    $col += $uee->getElementConstitutifs()->count();
+                                }
                             }
                         }
                     }
-                }
 
-                $ligne++;
-                $col = $debutCol;
-                foreach ($semestre->getUes() as $ue) {
-                    if ($ue->getUeParent() === null) {
-                        if ($ue->getUeEnfants()->count() == 0) {
-                            foreach ($ue->getElementConstitutifs() as $ec) {
-                                $this->excelWriter->writeCellXY($col, $ligne, $ec->getCode(), [
-                                    'style' => 'HORIZONTAL_CENTER',
-                                ]);
-                                $col++;
-                            }
-                        } else {
-                            foreach ($ue->getUeEnfants() as $uee) {
-                                foreach ($uee->getElementConstitutifs() as $ec) {
+                    $ligne++;
+                    $col = $debutCol;
+                    foreach ($semestre->getUes() as $ue) {
+                        if ($ue->getUeParent() === null) {
+                            if ($ue->getUeEnfants()->count() == 0) {
+                                foreach ($ue->getElementConstitutifs() as $ec) {
                                     $this->excelWriter->writeCellXY($col, $ligne, $ec->getCode(), [
                                         'style' => 'HORIZONTAL_CENTER',
                                     ]);
                                     $col++;
                                 }
+                            } else {
+                                foreach ($ue->getUeEnfants() as $uee) {
+                                    foreach ($uee->getElementConstitutifs() as $ec) {
+                                        $this->excelWriter->writeCellXY($col, $ligne, $ec->getCode(), [
+                                            'style' => 'HORIZONTAL_CENTER',
+                                        ]);
+                                        $col++;
+                                    }
+                                }
                             }
                         }
                     }
-                }
 
-                $ligne++;
+
+                    $ligne++;
+                }
 
                 foreach ($parcours->getBlocCompetences() as $bcc) {
                     foreach ($bcc->getCompetences() as $competence) {

@@ -1,0 +1,427 @@
+{# templates/components/CourseHeader.html.twig #}
+<div {{ attributes }} class="card card-body mb-3">
+    {% if parcours.isParcoursDefaut == true %}
+        {% set prefix = 'formation' %}
+    {% else %}
+        {% set prefix = 'parcours' %}
+    {% endif %}
+
+    <div class="container-fluid px-lg-4 pt-3">
+        <div class="mb-3 p-3 bg-light rounded border">
+            <div class="row g-3 small">
+                <div class="col-12 col-sm-6 col-lg-2">
+                    <dt class="fw-medium text-muted mb-1">Domaine</dt>
+                    <dd class="mb-0">{% for domaine in this.formation.domaines %}
+                            {{ domaine.libelle }}{% if not loop.last %}, {% endif %}
+                        {% else %}
+                            <span class="badge bg-danger">Non défini</span>
+                        {% endfor %}</dd>
+                </div>
+                <div class="col-12 col-sm-6 col-lg-2">
+                    <dt class="fw-medium text-muted mb-1">Type de formation</dt>
+                    <dd class="mb-0">{{ formation.typeDiplome|typeDiplome }}</dd>
+                </div>
+                <div class="col-12 col-sm-6 col-lg-2">
+                    <dt class="fw-medium text-muted mb-1">Composante</dt>
+                    <dd class="mb-0">{{ formation.composantePorteuse != null ? formation.composantePorteuse.libelle : '<span class="badge bg-danger">Non définie</span>' }}</dd>
+                </div>
+                <div class="col-12 col-sm-6 col-lg-2">
+                    <dt class="fw-medium text-muted mb-1">Mention</dt>
+                    <dd class="mb-0">
+                        {{ formation.display }}
+                    </dd>
+                </div>
+                <div class="col-12 col-sm-6 col-lg-2">
+                    <dt class="fw-medium text-muted mb-1">Responsable mention</dt>
+                    <dd class="mb-0">
+                        {{ formation.responsableMention != null ? formation.responsableMention.display : 'Non défini' }}
+                    </dd>
+                </div>
+                <div class="col-12 col-sm-6 col-lg-2">
+                    <dt class="fw-medium text-muted mb-1">Responsable parcours</dt>
+                    <dd class="mb-0">
+                        {{ parcours.respParcours != null ? parcours.respParcours.display : 'Non défini' }}
+                        {% if parcours.coResponsable != null %}
+                            <i class="fal fa-users" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                               title="Co-responsable : {{ parcours.coResponsable.display }}"></i>
+                        {% endif %}
+                    </dd>
+                </div>
+            </div>
+
+            {# Compact Validation Timeline #}
+            <div class="mt-3 pt-3 border-top">
+                <h4 class="small fw-medium mb-2">Dates de validation</h4>
+                <div class="row g-2">
+                    {% for key, process in this.process %}
+                        {% if process.isTimeline %}
+                            <div class="col-12 col-sm-6 col-lg-3">
+                                <div class="d-flex align-items-center gap-2 p-2 bg-white rounded border">
+                                    {% if this.status(key) == 'completed' %}
+                                        <i class="fas fa-check-circle text-success"></i>
+                                    {% else %}
+                                        <i class="fas fa-clock text-secondary"></i>
+                                    {% endif %}
+                                    <div class="flex-grow-1 text-truncate">
+                                        <p class="small fw-medium mb-0 text-truncate">{{ (process.label~'.timeline')|trans({}, 'process') }}</p>
+                                        <p class="small mb-0 {% if this.status(key) == 'completed' %}text-success{% else %}text-muted{% endif %}">
+                                            {{ this.dateHistorique(key) }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+
+        <div class="d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3">
+            {# Left: Title and Status #}
+            <div class="d-flex align-items-center gap-1 flex-wrap">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="d-flex align-items-center gap-2">
+                        Complétion :
+                        <div class="progress" style="width: 64px; height: 6px;">
+                            <div class="progress-bar bg-primary" role="progressbar"
+                                 style="width: {{ progressPercentage }}%"
+                                 aria-valuenow="{{ completedSteps }}"
+                                 aria-valuemin="0"
+                                 aria-valuemax="{{ validationSteps|length }}">
+                            </div>
+                        </div>
+                        <span class="small text-muted">{{ completedSteps }}/{{ validationSteps|length }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex align-items-center gap-1 flex-wrap">
+                <div class="mt-3 d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3">
+                    <div class="d-flex align-items-center gap-1 flex-wrap">
+                        {% for key, step in processSteps %}
+                            {% if validationSteps[key] is defined and validationSteps[key].status == 'completed' %}
+                                {% set class = 'success' %}
+                            {% elseif validationSteps[key] is defined and validationSteps[key].status == 'active' %}
+                                {% set class = 'info' %}
+                            {% elseif validationSteps[key] is defined and validationSteps[key].status == 'reserved' %}
+                                {% set class = 'warning' %}
+                            {% elseif validationSteps[key] is defined and validationSteps[key].status == 'refused' %}
+                                {% set class = 'danger' %}
+                            {% else %}
+                                {% set class = 'muted' %}
+                            {% endif %}
+                            <div class="d-flex align-items-center">
+                                <div class="rounded-circle d-flex align-items-center justify-content-center
+                                bg-{{ class }}-subtle text-{{ class }} bubble-process"
+                                     data-controller="tooltip" data-tooltip-placement-value="bottom"
+                                     aria-label="{{ (prefix~'.'~step.label~'.btn-'~class)|trans({}, 'process') }}"
+                                     data-bs-original-title="{{ (prefix~'.'~step.label~'.btn-'~class)|trans({}, 'process') }}"
+                                >
+                                    <i class="fas {{ step.icon }} small"></i>
+                                </div>
+                                {% if not loop.last %}
+                                    <div class="bg-{{ class }} bg-opacity-25"
+                                         style="width: 16px; height: 2px; margin: 0 4px;">
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {# Compact Process Timeline #}
+        <div class="mt-3 mb-3 d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3">
+            <div class="d-flex align-items-center gap-1 flex-wrap">
+                <div class="rounded-circle d-flex align-items-center justify-content-center
+                                bg-warning-subtle text-warning bubble-process"
+                     data-controller="tooltip" data-tooltip-placement-value="bottom"
+                     aria-label="..."
+                     data-bs-original-title="..."
+                >
+                    <i class="fas fa-lock small"></i>
+                </div>
+                Parcours verrouillé. {# todo: a gérer avec ouverture/réouverture en modif #}
+            </div>
+
+            {# Quick Actions #}
+            <div class="d-flex align-items-center gap-2">
+                {# Validation Dropdown #}
+                <button class="btn btn-sm btn-outline-secondary w-100">
+                    <i class="fas fa-download"></i> Voir PV
+                </button>
+
+                <div class="dropdown">
+                    <button class="btn btn-sm btn-success dropdown-toggle"
+                            type="button"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false"
+                    >
+                        <i class="fas fa-check"></i> Gestion du DPE
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        {% for key, option in validationOptions %}
+                            <li>
+                                <button class="dropdown-item d-flex align-items-center gap-2"
+                                        data-action="live#action"
+                                        data-live-action-param="validate:{{ key }}">
+                                        <span class="rounded-circle d-flex align-items-center justify-content-center
+                                           bg-{{ option.metadata.button_class }} text-white"
+                                              style="width: 24px; height: 24px; font-size: 0.75rem;">
+                                            <i class="fas {{ option.metadata.button_icon }}"></i>
+                                        </span>
+                                    <div>
+                                        <div class="fw-medium">{{ option.label }}</div>
+                                        <div class="small text-muted">{{ option.metadata.description }}</div>
+                                    </div>
+                                </button>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <button class="btn btn-sm btn-outline-secondary"
+                        data-toggle="actions" data-target="#actions-panel">
+                    <i class="fas fa-gear-complex"></i>
+                    Actions complémentaires
+                    <i class="fas fa-chevron-up data-toggle-icon"></i>
+                </button>
+
+                <button class="btn btn-sm btn-outline-info"
+                        data-toggle="actions" data-target="#exports-panel">
+                    <i class="fas fa-download"></i>
+                    Exports
+                    <i class="fas fa-chevron-up data-toggle-icon"></i>
+                </button>
+
+                {% if is_granted('ROLE_ADMIN') %}
+                    <button class="btn btn-sm btn-outline-secondary"
+                            data-toggle="actions" data-target="#actions-panel-admin"
+                    >
+                        <i class="fas fa-wrench"></i>
+                        Gestion SES
+                        <i class="fas fa-chevron-up data-toggle-icon"></i>
+                    </button>
+                {% endif %}
+            </div>
+        </div>
+
+        {# Expandable Actions Panel #}
+        <div class="mt-3 mb-3 p-3 bg-light rounded border hidden"
+             id="actions-panel"
+        >
+            <div class="row g-2">
+                <div class="col-6 col-sm-4 col-lg-2">
+                    <a class="btn btn-sm btn-primary w-100"
+                       href="{{ path('app_parcours_bcc', {parcours:parcours.id}) }}">
+                        <i class="fas fa-check"></i>
+                        Contrôler les BCC
+                    </a>
+                </div>
+                <div class="col-6 col-sm-4 col-lg-2">
+                    <a class="btn btn-sm btn-primary w-100"
+                       href="{{ path('app_parcours_ec', {parcours:parcours.id}) }}">
+                        <i class="fas fa-check"></i>
+                        Contrôler la maquette
+                    </a>
+                </div>
+                <div class="col-6 col-sm-4 col-lg-2">
+                    <button
+                            {{ stimulus_controller('modal', {
+                                size: 'lg',
+                                modalTitle: 'verifier.la.saisie.parcours.title'|trans({}, 'process'),
+                                modalUrl: path('app_parcours_state', {parcours:parcours.id}) }) }}
+                            data-action="click->modal#openModal"
+                            class="btn btn-sm btn-outline-success w-100"
+                            data-size="lg"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="bottom"
+                            title="{{ 'verifier.la.saisie.parcours.infobulle'|trans({}, 'process') }}"
+                    >
+                        <i class="fas fa-check"></i>
+                        <span> Vérifier la saisie</span>
+                    </button>
+                </div>
+                <div class="col-6 col-sm-4 col-lg-2">
+                    <a
+                            href="{{ path('fiche_matiere_valide_parcours', {parcours: this.parcours.id}) }}"
+                            class="btn btn-outline-success btn-sm w-100"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="bottom"
+                            title="{{ 'verifier.fiches.ec.matieres.infobulle'|trans({}, 'process') }}"
+                    >
+                        <i class="fas fa-check"></i>
+                        <span> Valider les fiches EC/matières</span>
+                    </a>
+                </div>
+                <div class="col-6 col-sm-4 col-lg-2">
+                    <button class="btn btn-sm btn-outline-primary w-100" type="button"
+                            {{ stimulus_controller('modal', {
+                                size: 'large',
+                                modalTitle: 'historique.de.validation.parcours.title'|trans({}, 'process'),
+                                right: true,
+                                modalUrl: path('app_historique_parcours', {parcours:this.parcours.id}) }) }}
+                            data-action="click->modal#openModal"
+                            data-size="lg"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="bottom"
+                            title="{{ 'historique.de.validation.parcours.infobulle'|trans({}, 'process') }}"
+                    >
+                        <i class="fal fa-timeline"></i> Historique
+                    </button>
+                </div>
+                <div class="col-6 col-sm-4 col-lg-2">
+                    {% if is_granted('ROLE_ADMIN')
+                        and hasLastVersion is defined
+                        and hasLastVersion == true %}
+                        <a class="btn btn-sm btn-outline-warning d-block"
+                           data-bs-toggle="collapse" data-bs-target="#diffGlobalParcours"
+                        >
+                            <i class="fa-light fa-not-equal"></i>
+                            Comparer les descriptifs
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {# fin Expandable Actions Panel #}
+
+        {# Expandable Exports Panel #}
+        <div class="mt-3 mb-3 p-3 bg-light rounded border hidden"
+             id="exports-panel"
+        >
+            <div class="row g-2">
+                <div class="col-6 col-sm-4 col-lg-2">
+                    <a class="btn btn-sm btn-primary w-100"
+                       href="{{ path('app_parcours_export', {parcours:parcours.id}) }}"
+                       data-bs-toggle="tooltip"
+                       data-bs-placement="bottom"
+                       title="Télécharger en PDF"
+                    >
+                        <i class="{{ iconDownload }}"></i> Fiche PDF
+                    </a>
+                </div>
+            </div>
+            <div class="row g-2 mt-2">
+                <div class="col-6 col-sm-4 col-lg-2">
+                    MCCC
+                </div>
+                {% if hasLastVersion is defined and hasLastVersion == true %}
+                    <div class="col-6 col-sm-4 col-lg-2">
+                        <a class="btn btn-outline-primary btn-sm w-100"
+                           href="{{ path('app_parcours_mccc_export_versionning', {parcours:parcours.id, _format:'xlsx'}) }}">
+                            Export MCCC Version (xlsx)
+                        </a>
+                    </div>
+                    <div class="col-6 col-sm-4 col-lg-2">
+                        <a class="btn btn-outline-primarybtn-sm  w-100"
+                           href="{{ path('app_parcours_mccc_export_cfvu_valid', {parcours:parcours.id, format:'complet'}) }}">
+                            Version complète (pdf)
+                        </a>
+                    </div>
+                    <div class="col-6 col-sm-4 col-lg-2">
+                        <a class="btn btn-outline-primary btn-sm w-100"
+                           href="{{ path('app_parcours_mccc_export_cfvu_valid', {parcours:parcours.id, format:'simplifie'}) }}">
+                            Version simplifiée (pdf)
+                        </a>
+                    </div>
+                {% else %}
+                    <div class="col-6 col-sm-4 col-lg-2">
+                        <a class="btn btn-outline-primary btn-sm w-100"
+                           href="{{ path('app_parcours_mccc_export', {parcours:parcours.id, _format:'xlsx'}) }}">
+                            Version complète (xlsx)
+                        </a>
+                    </div>
+                    <div class="col-6 col-sm-4 col-lg-2">
+                        <a class="btn btn-outline-primary btn-sm w-100"
+                           href="{{ path('app_parcours_mccc_export_light', {parcours:parcours.id, _format:'xlsx'}) }}">Version
+                            simplifiée (xlsx)</a>
+                    </div>
+                    <div class="col-6 col-sm-4 col-lg-2">
+                        <a class="btn btn-outline-primary btn-sm w-100"
+                           href="{{ path('app_parcours_mccc_export_cfvu_valid', {parcours:parcours.id, format:'complet'}) }}">
+                            Version complète (pdf)
+                        </a>
+                    </div>
+                    <div class="col-6 col-sm-4 col-lg-2">
+                        <a class="btn btn-outline-primary btn-sm w-100"
+                           href="{{ path('app_parcours_mccc_export_cfvu_valid', {parcours:parcours.id, format:'simplifie'}) }}">Version
+                            simplifiée (pdf)</a>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="row g-2 mt-2">
+                <div class="col-6 col-sm-4 col-lg-2">
+                    BCC
+                </div>
+                <div class="col-6 col-sm-4 col-lg-2">
+                    <a class="btn btn-sm btn-outline-warning w-100"
+                       href="{{ path('app_parcours_bcc', {parcours:parcours.id}) }}">
+                        Voir en ligne
+                    </a>
+                </div>
+                <div class="col-6 col-sm-4 col-lg-2">
+                    <a class="btn btn-sm btn-outline-warning w-100"
+                       href="{{ path('app_competence_export_bcc', {parcours:parcours.id}) }}">
+                        Export des BCC (pdf)
+                    </a>
+                </div>
+                <div class="col-6 col-sm-4 col-lg-2">
+                    <a class="btn btn-sm btn-outline-warning w-100"
+                       href="{{ path('app_competence_export_croise', {parcours:parcours.id}) }}">
+                        Croisé BCC/EC, semestre (pdf)
+                    </a>
+                </div>
+                <div class="col-6 col-sm-4 col-lg-2">
+                    <a class="btn btn-sm btn-outline-warning w-100"
+                       href="{{ path('app_competence_export_croise_global', {parcours:parcours.id}) }}">
+                        Croisé BCC/EC, global (xslx)
+                    </a>
+                </div>
+            </div>
+        </div>
+        {# fin Expandable Exports Panel #}
+
+        {% if is_granted('ROLE_ADMIN') %}
+            {# todo: a revoir avec les fonctions d'admin pour éditions rapides #}
+            <div class="mt-3 mb-3 p-3 bg-light rounded border hidden"
+                 id="actions-panel-admin"
+            >
+                <div class="row g-2">
+                    <div class="col-6 col-sm-4 col-lg-2">
+                        <button class="btn btn-sm btn-outline-warning w-100 border-2">
+                            <i class="fas fa-exclamation-circle"></i> Réouverture DPE
+                        </button>
+                    </div>
+                    <div class="col-6 col-sm-4 col-lg-2">
+                        <button class="btn btn-sm btn-outline-secondary w-100">
+                            <i class="fas fa-file-alt"></i> Valider fiches EC
+                        </button>
+                    </div>
+                    <div class="col-6 col-sm-4 col-lg-2">
+                        <button class="btn btn-sm btn-outline-secondary w-100">
+                            <i class="fas fa-eye"></i> Vérifier saisie
+                        </button>
+                    </div>
+                    <div class="col-6 col-sm-4 col-lg-2">
+                        <button class="btn btn-sm btn-outline-secondary w-100">
+                            <i class="fas fa-download"></i> Voir PV
+                        </button>
+                    </div>
+                    <div class="col-6 col-sm-4 col-lg-2">
+                        <button class="btn btn-sm btn-outline-secondary w-100">
+                            <i class="fas fa-cog"></i> Gérer codification
+                        </button>
+                    </div>
+                    <div class="col-6 col-sm-4 col-lg-2">
+                        <button class="btn btn-sm btn-primary w-100">
+                            <i class="fas fa-check-circle"></i> Contrôler BCC
+                        </button>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>

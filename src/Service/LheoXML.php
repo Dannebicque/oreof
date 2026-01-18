@@ -8,6 +8,7 @@ use App\Entity\Parcours;
 use App\Enums\TypeModificationDpeEnum;
 use App\Enums\TypeParcoursEnum;
 use App\Repository\ElementConstitutifRepository;
+use App\TypeDiplome\TypeDiplomeResolver;
 use Doctrine\ORM\EntityManagerInterface;
 use DOMDocument;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -119,14 +120,14 @@ class LheoXML
 
         foreach ($parcours->getContacts() as $contacts) {
 
-                $adresse = [
-                    'denomination' => '',
-                    'ligne' => '',
-                    'codepostal' => '',
-                    'ville' => '',
-                ];
-                // Adresse de l'accueil
-                $adresseComp = $contacts->getAdresse();
+            $adresse = [
+                'denomination' => '',
+                'ligne' => '',
+                'codepostal' => '',
+                'ville' => '',
+            ];
+            // Adresse de l'accueil
+            $adresseComp = $contacts->getAdresse();
 
             if ($adresseComp !== null) {
                 $adresse['denomination'] = $contacts->getDenomination();
@@ -135,19 +136,19 @@ class LheoXML
                 $adresse['ville'] = $adresseComp->getVille();
             }
 
-                // Téléphone
-                $telephone = ['numtel' => $contacts->getTelephone() ?? $contacts->getTelephone() ?? 'Non renseigné'];
-                // Résultat
-                $result = [
-                    'type-contact' => 4,
-                    'coordonnees' => [
-                        'adresse' => $adresse,
-                        'telfixe' => $telephone,
-                        'courriel' =>  $contacts->getEmail() ?? $contacts->getEmail() ?? 'Non renseigné',
-                    ]
-                ];
+            // Téléphone
+            $telephone = ['numtel' => $contacts->getTelephone() ?? 'Non renseigné'];
+            // Résultat
+            $result = [
+                'type-contact' => 4,
+                'coordonnees' => [
+                    'adresse' => $adresse,
+                    'telfixe' => $telephone,
+                    'courriel' => $contacts->getEmail() ?? 'Non renseigné',
+                ]
+            ];
 
-                $contactsOrganismes[] = $result;
+            $contactsOrganismes[] = $result;
 
         }
 
@@ -220,7 +221,7 @@ HTML;
         }
         // Si le Parcours EST un BUT
         if ($parcours->getTypeDiplome()?->getLibelleCourt() === "BUT") {
-            $typeD = $this->typeDiplomeResolver->get($parcours->getFormation()->getTypeDiplome());
+            $typeD = $this->typeDiplomeResolver->fromTypeDiplome($parcours->getFormation()->getTypeDiplome());
             $competences = $typeD->getStructureCompetences($parcours);
             if ($competences) {
                 $competencesAcquisesExtra = $competencesAcquisesExtraTitre . "<ul>";
@@ -246,18 +247,18 @@ HTML;
             ->findOneById(1)->getEtablissementInformation();
 
         // Élément Maquette Iframe
-//         $UrlMaquetteIframe = $this->router->generate('app_parcours_maquette_iframe', ['parcours' => $parcours->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
-//         $maquetteIframe = <<<HTML
-//         <iframe
-//             id="maquettePedagogiqueFormation"
-//             width="800"
-//             height="750"
-//             src="{$UrlMaquetteIframe}"
-//             style="max-height: auto;"
-//             loading="eager"
-//             >
-//         </iframe>
-// HTML;
+        //         $UrlMaquetteIframe = $this->router->generate('app_parcours_maquette_iframe', ['parcours' => $parcours->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
+        //         $maquetteIframe = <<<HTML
+        //         <iframe
+        //             id="maquettePedagogiqueFormation"
+        //             width="800"
+        //             height="750"
+        //             src="{$UrlMaquetteIframe}"
+        //             style="max-height: auto;"
+        //             loading="eager"
+        //             >
+        //         </iframe>
+        // HTML;
         // Stage et projet tuteuré (Organisation pédagogique)
         $stage = "Non concerné";
         $projetTuteure = "Non concerné";
@@ -317,11 +318,11 @@ HTML;
 
         // Informations pratiques
         $informationsPratiques = "";
-        if($parcours->getFormation()?->getTypeDiplome()?->getPresentationFormation()){
+        if ($parcours->getFormation()?->getTypeDiplome()?->getPresentationFormation()) {
             $informationsPratiques .= "<h3>Pour en savoir plus sur ce type de formation :</h3>";
             $informationsPratiques .= $parcours->getFormation()?->getTypeDiplome()?->getPresentationFormation();
         }
-        if($etablissementInformation->getInformationsPratiques()){
+        if ($etablissementInformation->getInformationsPratiques()) {
             $informationsPratiques .= "<br>" . $etablissementInformation->getInformationsPratiques();
         }
         $informationsPratiques = preg_replace("/<h1>/m", "<h3>", $informationsPratiques);
@@ -436,87 +437,87 @@ HTML;
             }
         } else {
             // Contact de la formation
-//            if ($parcours->getFormation()?->getParcours()->count() === 1) {
-//                // Un seul parcours, on reprend les infos de la formation
-//                if ($parcours->getFormation()?->getResponsableMention()) {
-//                    $resp = $parcours->getFormation()?->getResponsableMention();
-//                    $referentPedagogique = [
-//                        // Référent pédagogique
-//                        'type-contact' => 3,
-//                        'coordonnees' => [
-//                            'nom' => $resp ? $resp->getNom() : 'Non renseigné.',
-//                            'prenom' => $resp ? $resp->getPrenom() : 'Non renseigné.',
-//                            'courriel' => $resp ? $resp->getEmail() : 'Non renseigné.',
-//                        ]
-//                    ];
-//                    $referentsPedagogiques[] = $referentPedagogique;
-//                }
-//                if ($parcours->getFormation()?->getCoResponsable()) {
-//                    $coResp = $parcours->getFormation()?->getCoResponsable();
-//                    $coReferentPedagogique = [
-//                        // Référent pédagogique
-//                        'type-contact' => 3,
-//                        'coordonnees' => [
-//                            'nom' => $coResp ? $coResp->getNom() : 'Non renseigné.',
-//                            'prenom' => $coResp ? $coResp->getPrenom() : 'Non renseigné.',
-//                            'courriel' => $coResp ? $coResp->getEmail() : 'Non renseigné.',
-//                        ]
-//                    ];
-//                    $referentsPedagogiques[] = $coReferentPedagogique;
-//                }
-//            } else {
-                if ($parcours->getFormation()?->getResponsableMention()) {
-                    $resp = $parcours->getFormation()?->getResponsableMention();
-                    $referentPedagogique = [
-                        // Référent pédagogique
-                        'type-contact' => 3,
-                        'coordonnees' => [
-                            'nom' => $resp ? $resp->getNom() : 'Non renseigné.',
-                            'prenom' => $resp ? $resp->getPrenom() : 'Non renseigné.',
-                            'courriel' => $resp ? $resp->getEmail() : 'Non renseigné.',
-                        ]
-                    ];
-                    $referentsPedagogiques[$resp?->getId()] = $referentPedagogique;
-                }
-                if ($parcours->getFormation()?->getCoResponsable()) {
-                    $coResp = $parcours->getFormation()?->getCoResponsable();
-                    $coReferentPedagogique = [
-                        // Référent pédagogique
-                        'type-contact' => 3,
-                        'coordonnees' => [
-                            'nom' => $coResp ? $coResp->getNom() : 'Non renseigné.',
-                            'prenom' => $coResp ? $coResp->getPrenom() : 'Non renseigné.',
-                            'courriel' => $coResp ? $coResp->getEmail() : 'Non renseigné.',
-                        ]
-                    ];
-                    $referentsPedagogiques[$coResp?->getId()] = $coReferentPedagogique;
-                }
-                if ($parcours->getRespParcours()) {
-                    $respParcours = $parcours->getRespParcours();
-                    $referentPedagogiqueParcours = [
-                        // Référent pédagogique
-                        'type-contact' => 3,
-                        'coordonnees' => [
-                            'nom' => $respParcours ? $respParcours->getNom() : 'Non renseigné.',
-                            'prenom' => $respParcours ? $respParcours->getPrenom() : 'Non renseigné.',
-                            'courriel' => $respParcours ? $respParcours->getEmail() : 'Non renseigné.',
-                        ]
-                    ];
-                    $referentsPedagogiques[$respParcours?->getId()] = $referentPedagogiqueParcours;
-                }
-                if ($parcours->getCoResponsable()) {
-                    $coRespParcours = $parcours->getCoResponsable();
-                    $coReferentPedagogiqueParcours = [
-                        // Référent pédagogique
-                        'type-contact' => 3,
-                        'coordonnees' => [
-                            'nom' => $coRespParcours ? $coRespParcours->getNom() : 'Non renseigné.',
-                            'prenom' => $coRespParcours ? $coRespParcours->getPrenom() : 'Non renseigné.',
-                            'courriel' => $coRespParcours ? $coRespParcours->getEmail() : 'Non renseigné.',
-                        ]
-                    ];
-                    $referentsPedagogiques[$coRespParcours?->getId()] = $coReferentPedagogiqueParcours;
-                }
+            //            if ($parcours->getFormation()?->getParcours()->count() === 1) {
+            //                // Un seul parcours, on reprend les infos de la formation
+            //                if ($parcours->getFormation()?->getResponsableMention()) {
+            //                    $resp = $parcours->getFormation()?->getResponsableMention();
+            //                    $referentPedagogique = [
+            //                        // Référent pédagogique
+            //                        'type-contact' => 3,
+            //                        'coordonnees' => [
+            //                            'nom' => $resp ? $resp->getNom() : 'Non renseigné.',
+            //                            'prenom' => $resp ? $resp->getPrenom() : 'Non renseigné.',
+            //                            'courriel' => $resp ? $resp->getEmail() : 'Non renseigné.',
+            //                        ]
+            //                    ];
+            //                    $referentsPedagogiques[] = $referentPedagogique;
+            //                }
+            //                if ($parcours->getFormation()?->getCoResponsable()) {
+            //                    $coResp = $parcours->getFormation()?->getCoResponsable();
+            //                    $coReferentPedagogique = [
+            //                        // Référent pédagogique
+            //                        'type-contact' => 3,
+            //                        'coordonnees' => [
+            //                            'nom' => $coResp ? $coResp->getNom() : 'Non renseigné.',
+            //                            'prenom' => $coResp ? $coResp->getPrenom() : 'Non renseigné.',
+            //                            'courriel' => $coResp ? $coResp->getEmail() : 'Non renseigné.',
+            //                        ]
+            //                    ];
+            //                    $referentsPedagogiques[] = $coReferentPedagogique;
+            //                }
+            //            } else {
+            if ($parcours->getFormation()?->getResponsableMention()) {
+                $resp = $parcours->getFormation()?->getResponsableMention();
+                $referentPedagogique = [
+                    // Référent pédagogique
+                    'type-contact' => 3,
+                    'coordonnees' => [
+                        'nom' => $resp ? $resp->getNom() : 'Non renseigné.',
+                        'prenom' => $resp ? $resp->getPrenom() : 'Non renseigné.',
+                        'courriel' => $resp ? $resp->getEmail() : 'Non renseigné.',
+                    ]
+                ];
+                $referentsPedagogiques[$resp?->getId()] = $referentPedagogique;
+            }
+            if ($parcours->getFormation()?->getCoResponsable()) {
+                $coResp = $parcours->getFormation()?->getCoResponsable();
+                $coReferentPedagogique = [
+                    // Référent pédagogique
+                    'type-contact' => 3,
+                    'coordonnees' => [
+                        'nom' => $coResp ? $coResp->getNom() : 'Non renseigné.',
+                        'prenom' => $coResp ? $coResp->getPrenom() : 'Non renseigné.',
+                        'courriel' => $coResp ? $coResp->getEmail() : 'Non renseigné.',
+                    ]
+                ];
+                $referentsPedagogiques[$coResp?->getId()] = $coReferentPedagogique;
+            }
+            if ($parcours->getRespParcours()) {
+                $respParcours = $parcours->getRespParcours();
+                $referentPedagogiqueParcours = [
+                    // Référent pédagogique
+                    'type-contact' => 3,
+                    'coordonnees' => [
+                        'nom' => $respParcours ? $respParcours->getNom() : 'Non renseigné.',
+                        'prenom' => $respParcours ? $respParcours->getPrenom() : 'Non renseigné.',
+                        'courriel' => $respParcours ? $respParcours->getEmail() : 'Non renseigné.',
+                    ]
+                ];
+                $referentsPedagogiques[$respParcours?->getId()] = $referentPedagogiqueParcours;
+            }
+            if ($parcours->getCoResponsable()) {
+                $coRespParcours = $parcours->getCoResponsable();
+                $coReferentPedagogiqueParcours = [
+                    // Référent pédagogique
+                    'type-contact' => 3,
+                    'coordonnees' => [
+                        'nom' => $coRespParcours ? $coRespParcours->getNom() : 'Non renseigné.',
+                        'prenom' => $coRespParcours ? $coRespParcours->getPrenom() : 'Non renseigné.',
+                        'courriel' => $coRespParcours ? $coRespParcours->getEmail() : 'Non renseigné.',
+                    ]
+                ];
+                $referentsPedagogiques[$coRespParcours?->getId()] = $coReferentPedagogiqueParcours;
+            }
             // }
 
 
@@ -550,7 +551,7 @@ HTML;
         ];
 
         // Description de la mention
-        if($parcours->isParcoursDefaut() === false){
+        if ($parcours->isParcoursDefaut() === false) {
             $extraArray['description-mention'] = $this->cleanString($parcours->getFormation()?->getObjectifsFormation());
         }
 
@@ -827,8 +828,7 @@ HTML;
                 "Les 'conditions spécifiques' du parcours ont une longueur de $1 qui est supérieure au maximum de $2",
                 $message
             );
-        }
-        elseif (
+        } elseif (
             preg_match(
                 "/Element '{http:\/\/lheo.gouv.fr\/2.3}ligne'.+length of '([0-9]+)'; this exceeds.+maximum length of '([0-9]+)'./m",
                 $message
@@ -839,8 +839,7 @@ HTML;
                 "Une adresse postale a une longueur de $1 qui est supérieure au maximum de $2",
                 $message
             );
-        }
-        elseif(
+        } elseif (
             preg_match(
                 "/Element '{http:\/\/lheo.gouv.fr\/2.3}codepostal'.+length of '([0-9]+)'; this underruns.+minimum length of '([0-9]+)'./m",
                 $message
@@ -851,13 +850,12 @@ HTML;
                 "Un code postal a une longueur de $1 qui est inférieure à 5",
                 $message
             );
-        }
-        elseif(
+        } elseif (
             preg_match(
                 "/Element '{http:\/\/lheo.gouv.fr\/2.3}ville'.+length of '([0-9]+)'; this underruns.+minimum length of '([0-9]+)'./m",
                 $message
             )
-        ){
+        ) {
             $decodedMessage = preg_replace(
                 "/Element '{http:\/\/lheo.gouv.fr\/2.3}ville'.+length of '([0-9]+)'; this underruns.+minimum length of '([0-9]+)'./m",
                 "Une 'ville' (contact du parcours ou composante) a une longueur de $1 qui est inférieure au minimum de $2",

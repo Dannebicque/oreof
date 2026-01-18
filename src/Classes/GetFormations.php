@@ -16,7 +16,7 @@ use App\Repository\FormationRepository;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class GetFormations
+readonly class GetFormations
 {
 
     public function __construct(

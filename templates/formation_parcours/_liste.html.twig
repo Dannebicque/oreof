@@ -85,14 +85,13 @@
                     {#                        <i class="{{ iconDuplicate }}"></i> Dupliquer #}
                     {#                    </button> #}
 
-
-                    {#                    <button {{ stimulus_action('formation--step3', 'deleteParcours', 'click', { #}
-                    {#                        url:path('app_parcours_delete',{'id': parcour.id}), #}
-                    {#                        id: parcour.id, #}
-                    {#                        csrf: csrf_token('delete' ~ parcour.id) #}
-                    {#                    }) }} class="btn btn-sm text-danger"> #}
-                    {#                        <i class="{{ iconDelete }}"></i> Supprimer #}
-                    {#                    </button> #}
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <a href="{{ path('app_parcours_delete',{id: parcour.id,
+                            csrf: csrf_token('delete' ~ parcour.id)
+                        }) }}" class="btn btn-sm text-danger">
+                            <i class="{{ iconDelete }}"></i> Supprimer
+                        </a>
+                    {% endif %}
 
                     <button
                             {{ stimulus_controller('modal', {

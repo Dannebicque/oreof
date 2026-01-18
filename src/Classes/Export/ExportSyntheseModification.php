@@ -15,11 +15,10 @@ use App\Repository\FormationRepository;
 use App\Repository\ParcoursRepository;
 use App\Repository\TypeEpreuveRepository;
 use App\Service\ProjectDirProvider;
-use App\Service\TypeDiplomeResolver;
 use App\Service\VersioningParcours;
 use App\Service\VersioningStructureExtractDiff;
+use App\TypeDiplome\TypeDiplomeResolver;
 use App\Utils\Tools;
-use Symfony\Component\HttpKernel\KernelInterface;
 use ZipArchive;
 
 class ExportSyntheseModification
@@ -55,7 +54,7 @@ class ExportSyntheseModification
                     if ($parc['parcours']->getParcoursOrigineCopie() === null) {
                         $dto = null;
                     } else {
-                        $typeD = $this->typeDiplomeResolver->getFromFormation($form);
+                        $typeD = $this->typeDiplomeResolver->fromFormation($form);
                         $parco = $this->parcoursRepository->find($parc['parcours']->getId());
                         if ($parco === null) {
                             continue;

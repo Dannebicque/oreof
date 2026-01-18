@@ -1,0 +1,42 @@
+<div
+        id="modal"
+        class="fixed inset-0 z-50 hidden"
+        data-modalturbo-target="wrapper"
+        data-action="keydown.esc@window->modalturbo#close"
+>
+    <!-- overlay -->
+    <div class="absolute inset-0 bg-black/50" data-action="click->modalturbo#close"></div>
+
+    <!-- updated snippet for templates/_ui/modal_wrapper.html.twig -->
+    <div class="absolute inset-0 flex items-center justify-center p-4">
+        <div class="w-full max-w-4xl rounded-sm bg-white shadow-xl flex flex-col max-h-[75vh] overflow-hidden">
+            <!-- header (ne se contracte pas) -->
+            <div class="flex items-start justify-between gap-4 border-b px-6 py-4 flex-shrink-0">
+                <turbo-frame id="modal_title">
+                    <div class="text-lg font-semibold text-gray-800">Titre</div>
+                </turbo-frame>
+
+                <button type="button"
+                        class="rounded-md p-2 hover:bg-gray-100"
+                        data-action="modalturbo#close"
+                        aria-label="Fermer">
+                    ✕
+                </button>
+            </div>
+
+            <!-- body (prend l'espace restant et scroll si nécessaire) -->
+            <div class="px-6 py-4 flex-1 overflow-auto min-h-0">
+                <turbo-frame id="modal_body">
+                    {# contenu #}
+                </turbo-frame>
+            </div>
+
+            <!-- footer (ne se contracte pas) -->
+            <div class="border-t px-6 py-4 bg-gray-50 flex-shrink-0">
+                <turbo-frame id="modal_footer">
+                    {# boutons #}
+                </turbo-frame>
+            </div>
+        </div>
+    </div>
+</div>

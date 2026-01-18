@@ -13,14 +13,17 @@ use App\Entity\DpeParcours;
 use App\Entity\Formation;
 use App\Entity\Parcours;
 
-abstract class GetDpeParcours {
+abstract class GetDpeParcours
+{
 
-    public function __construct() {
+    public function __construct()
+    {
     }
 
-    public static function getFromParcours(Parcours $parcours): ?DpeParcours {
+    public static function getFromParcours(Parcours $parcours): ?DpeParcours
+    {
         if ($parcours->getDpeParcours()->count() > 0) {
-            return $parcours->getDpeParcours()->first(); //trié par ordre décroissant, le premier est donc le plus récent
+            return $parcours->getDpeParcours()->first() !== false ? $parcours->getDpeParcours()->first() : null; //trié par ordre décroissant, le premier est donc le plus récent
         }
         return null; //trié par ordre décroissant, le premier est donc le plus récent
     }
@@ -30,7 +33,7 @@ abstract class GetDpeParcours {
         if (null !== $formation) {
             $parcours = $formation->getParcours();
             if ($parcours->count() > 0) {
-                return self::getFromParcours($parcours->first()); //todo: quel parcours prendre ?
+                return self::getFromParcours($parcours->first() !== false ? $parcours->first() : null); //todo: quel parcours prendre ?
             }
         }
 

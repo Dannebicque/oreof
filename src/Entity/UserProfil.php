@@ -12,6 +12,7 @@ namespace App\Entity;
 use App\Enums\CentreGestionEnum;
 use App\Repository\UserProfilRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserProfilRepository::class)]
 class UserProfil
@@ -52,7 +53,7 @@ class UserProfil
         return $this->user;
     }
 
-    public function setUser(?User $user): static
+    public function setUser(?UserInterface $user): static
     {
         $this->user = $user;
 

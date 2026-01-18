@@ -363,7 +363,7 @@
   position: fixed !important;
   right: -1px;
   top: 50%;
-  z-index: 1000 !important;
+  z-index: 40 !important;
   margin-top: -70px;
 }
 
@@ -400,12 +400,12 @@ html[data-show=true] .settings-button {
 }
 
 .fixed-title-container {
-  position: fixed;
+  //position: fixed;
   top: 0;
   left: 0;
   padding-top: 80px;
   width: 100%;
-  z-index: 1000;
+  z-index: 40;
   padding-left: var(--main-spacing-horizontal);
   padding-right: var(--main-spacing-horizontal);
   background-color: var(--background);
@@ -515,3 +515,53 @@ table.fixed-table thead th:first-child {
   z-index: 6;
 }
 
+.bg-success-subtle {
+  background-color: var(--success-pale);
+}
+
+.bg-danger-subtle {
+  background-color: var(--danger-pale);
+}
+
+.bg-warning-subtle {
+  background-color: var(--warning-pale);
+}
+
+.bg-info-subtle {
+  background-color: var(--info-pale);
+}
+
+.bg-primary-subtle {
+  background-color: var(--primary-pale);
+}
+
+.bg-secondary-subtle {
+  background-color: var(--secondary-pale);
+}
+
+.bg-muted-subtle {
+  background-color: var(--muted-pale);
+}
+
+.bg-complementaire-subtle {
+  background-color: var(--complementaire-pale);
+}
+
+.bg-light-subtle {
+  background-color: var(--light-pale);
+}
+
+.hidden {
+  display: none;
+}
+
+.bubble-process {
+  height: 42px;
+  width: 42px;
+  font-size: 24px;
+}
+
+.turbo-progress-bar {
+  height: 3px;
+  background-color: #4f46e5; /* Indigo-600 */
+}

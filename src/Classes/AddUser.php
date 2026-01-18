@@ -22,7 +22,8 @@ readonly class AddUser
     public function __construct(
         private ProfilRepository $profilRepository,
         private UserRepository       $userRepository,
-        private Ldap             $ldap, private EntityManagerInterface $entityManager
+        private Ldap                   $ldap,
+        private EntityManagerInterface $entityManager
     ) {
     }
 

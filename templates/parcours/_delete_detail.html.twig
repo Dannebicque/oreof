@@ -1,0 +1,45 @@
+<div class="alert alert-warning mt-3">
+    <p><strong>Avant de supprimer :</strong></p>
+    <ul>
+        <li>
+            {% if sem_shared_count == 0 %}
+                Aucun semestre partagé.
+            {% elseif sem_shared_count == 1 %}
+                Ce parcours est lié à <strong>1</strong> semestre partagé
+            {% else %}
+                Ce parcours est lié à <strong>{{ sem_shared_count }}</strong> semestres partagés
+            {% endif %}
+        </li>
+        <li>
+            {% if ue_shared_count == 0 %}
+                Aucune UE référencée.
+            {% elseif ue_shared_count == 1 %}
+                <strong>1</strong> UE référencée.
+            {% else %}
+                <strong>{{ ue_shared_count }}</strong> UEs référencées.
+            {% endif %}
+        </li>
+
+        <li>
+            {% if fiche_shared_count == 0 %}
+                Aucune fiche matière partagée.
+            {% elseif fiche_shared_count == 1 %}
+                Il y a <strong>1</strong> fiche matière portée par ce parcours qui est partagée.
+            {% else %}
+                Il y a
+                <strong>{{ fiche_shared_count }}</strong> fiches matières portées par ce parcours qui sont partagées.
+            {% endif %}
+        </li>
+        <li>
+            {% if ec_utilise == 0 %}
+                Aucune réutilisation d'EC dans d'autres parcours.
+            {% elseif ec_utilise == 1 %}
+                <strong>1</strong> réutilisation dans d'autres parcours (présence sur un EC).
+            {% else %}
+                <strong>{{ ec_utilise }}</strong> réutilisations dans d'autres parcours (présence sur des EC).
+            {% endif %}
+        </li>
+    </ul>
+    <p>Veuillez modifier ou détacher ces éléments avant de supprimer le parcours. La suppression est désactivée tant que
+        des liens existent.</p>
+</div>

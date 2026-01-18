@@ -10,7 +10,6 @@
 namespace App\Controller;
 
 use App\Classes\GetDpeParcours;
-use App\Classes\GetElementConstitutif;
 use App\Classes\JsonReponse;
 use App\Classes\verif\FicheMatiereState;
 use App\DTO\StructureEc;
@@ -125,7 +124,7 @@ class FicheMatiereController extends BaseController
             throw new TypeDiplomeNotFoundException();
         }
 
-        $typeD = $this->typeDiplomeResolver->get($typeDiplome);
+        $typeD = $this->typeDiplomeResolver->fromTypeDiplome($typeDiplome);
 
         $cssDiff = DiffHelper::getStyleSheet();
         $textDifferences = $ficheMatiereVersioningService
@@ -184,24 +183,26 @@ class FicheMatiereController extends BaseController
         FicheMatiere $ficheMatiere,
         FicheMatiereState $ficheMatiereState,
     ): Response {
-        //todo: a revoir...
-        if (!($this->isGranted('EDIT',
+        if (!($this->isGranted(
+                'EDIT',
             [
                 'route' => 'app_fiche_matiere',
                 'subject' => $ficheMatiere,
-            ]) || $this->isGranted('EDIT',
+            ]
+            ) || $this->isGranted(
+                'EDIT',
                 [
                     'route' => 'app_fiche_matiere',
-                    'subject' => 'formation',
-                ]) || $this->isGranted('EDIT',
+                    'subject' => $ficheMatiere->getParcours(),
+                ]
+            )
+            || $this->isGranted(
+                'EDIT',
                 [
                     'route' => 'app_fiche_matiere',
-                    'subject' => 'parcours',
-                ]) || $this->isGranted('EDIT',
-                [
-                    'route' => 'app_fiche_matiere_hd',
-                    'subject' => 'etablissement',
-                ]) || $this->isGranted('ROLE_ADMIN'))) {
+                    'subject' => $ficheMatiere->getParcours()?->getFormation(),
+                ]
+            ))) {
             return $this->redirectToRoute('app_fiche_matiere_show', ['slug' => $ficheMatiere->getSlug()]);
         }
 
@@ -233,7 +234,6 @@ class FicheMatiereController extends BaseController
     #[Route('/{slug}/dupliquer', name: 'app_fiche_matiere_dupliquer', methods: ['GET'])]
     public function dupliquer(
         FicheMatiere $ficheMatiere,
-        ElementConstitutifRepository $elementConstitutifRepository,
         EntityManagerInterface $entityManager,
     ): Response {
         $newFicheMatiere = clone $ficheMatiere;
@@ -243,7 +243,7 @@ class FicheMatiereController extends BaseController
         $entityManager->persist($newFicheMatiere);
         $entityManager->flush();
 
-        foreach($ficheMatiere->getFicheMatiereParcours() as $parcours) {
+        foreach ($ficheMatiere->getFicheMatiereParcours() as $parcours) {
             //on duplique les parcours de mutualisation
             $newFicheMatiereParcours = clone $parcours;
             $newFicheMatiereParcours->setFicheMatiere($newFicheMatiere);
@@ -297,6 +297,11 @@ class FicheMatiereController extends BaseController
     {
 
         $ficheMatiere = $ec->getFicheMatiere();
+
+        if (null === $ficheMatiere) {
+            throw $this->createNotFoundException('Fiche matière non trouvée pour cet élément constitutif.');
+        }
+
         $isBUT = $ficheMatiere->getParcours()?->getTypeDiplome()?->getLibelleCourt() === 'BUT';
         $structureEC = new StructureEc($ec, $parcours, $isBUT, true, false);
 
@@ -332,7 +337,6 @@ class FicheMatiereController extends BaseController
             'typeDiplome' => $ficheMatiere->getParcours()?->getFormation()?->getTypeDiplome(),
             'formation' => $ficheMatiere->getParcours()?->getFormation(),
             'maquetteOrigineURL' => $parcours ? $this->generateUrl('app_parcours_maquette_iframe', ['parcours' => $parcours->getId()]) : "#",
-            // $parcours ? $this->generateUrl('app_versioning_parcours_maquette_iframe', ['parcours' => $parcours->getId()]) : "#",
             'ects' => $ects,
             'heuresEctsEc' => [
                 'volCmPres' => $volCmPres,

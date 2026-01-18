@@ -89,7 +89,9 @@ class FormationStructure
             }
         }
 
-        $this->abstractGenereStructure($parcours, $semestres, $nbUes);
+        if ($parcours instanceof Parcours) {
+            $this->abstractGenereStructure($parcours, $semestres, $nbUes);
+        }
 
         $this->entityManager->flush();
     }
@@ -130,25 +132,25 @@ class FormationStructure
         }
 
         foreach ($semestres as $key => $format) {
-            $semestre = null;
-            if ($format === 'tronc_commun') {
-                if (array_key_exists($key, $tSemestres) === false) {
-                    $semestre = new Semestre();
-                    $semestre->setOrdre($key);
-                    $semestre->setTroncCommun(true);
-
-                    $this->entityManager->persist($semestre);
-                    $tSemestres[$key] = $semestre;
-                    $this->generesUe($semestre, $nbUes);
-                } else {
-                    $semestre = $tSemestres[$key];
-                }
-            } else {
+            // $semestre = null;
+//            if ($format === 'tronc_commun') {
+//                if (array_key_exists($key, $tSemestres) === false) {
+//                    $semestre = new Semestre();
+//                    $semestre->setOrdre($key);
+//                    $semestre->setTroncCommun(true);
+//
+//                    $this->entityManager->persist($semestre);
+//                    $tSemestres[$key] = $semestre;
+//                    $this->generesUe($semestre, $nbUes);
+//                } else {
+//                    $semestre = $tSemestres[$key];
+//                }
+//            } else {
                 $semestre = new Semestre();
                 $semestre->setOrdre($key);
                 $this->entityManager->persist($semestre);
                 $this->generesUe($semestre, $nbUes);
-            }
+            // }
             $sp = new SemestreParcours($semestre, $parcours);
             $this->entityManager->persist($sp);
             $parcours->addSemestreParcour($sp);
@@ -173,10 +175,10 @@ class FormationStructure
         }
 
         foreach ($parcoursOriginal->getSemestreParcours() as $semestreParcour) {
-            if ($semestreParcour->getSemestre()?->isTroncCommun()) {
-                $spNew = new SemestreParcours($semestreParcour->getSemestre(), $parcours);
-                $this->entityManager->persist($spNew);
-            } else {
+//            if ($semestreParcour->getSemestre()?->isTroncCommun()) {
+//                $spNew = new SemestreParcours($semestreParcour->getSemestre(), $parcours);
+//                $this->entityManager->persist($spNew);
+//            } else {
                 //Pas tronc commun, on duplique semestre, UE et EC
                 $newSemestre = clone $semestreParcour->getSemestre();
                 $this->entityManager->persist($newSemestre);
@@ -198,7 +200,7 @@ class FormationStructure
                         }
                     }
                 }
-            }
+            // }
 
             $this->entityManager->flush();
         }

@@ -1,0 +1,279 @@
+<table class="w-full table-auto border-collapse">
+    <tbody class="divide-y divide-gray-200">
+    {% for blocCompetence in competences %}
+        <tr class="bg-blue-50">
+            <th colspan="2" class="text-left py-2 px-4 font-semibold text-gray-800">
+                {{ blocCompetence.code }} - {{ blocCompetence.libelle }}
+            </th>
+            <th class="text-right py-2 px-4">
+                <div class="flex items-center justify-end space-x-1">
+                    <button
+                            {{ stimulus_controller('modal', {
+                                size: 'lg',
+                                modalTitle: 'Modifier un bloc de compétences',
+                                modalUrl: path('app_bloc_competence_edit',{'id': blocCompetence.id}) }) }}
+                            data-action="click->modal#openModal"
+                            class="inline-flex items-center gap-2 px-3 py-1 text-sm rounded-md text-yellow-700 hover:bg-yellow-50 transition"
+                            title="Modifier un bloc de compétences"
+                            aria-label="Modifier le bloc de compétences {{ blocCompetence.code }}"
+                    >
+                        <i class="{{ iconEdit }}"></i>
+                        <span class="sr-only">modifier</span>
+                    </button>
+
+                    <button
+                            {{ stimulus_action('parcours--step3', 'duplicate', 'click', {
+                                url:path('app_bloc_competence_duplicate',{'id': blocCompetence.id})
+                            }) }}
+                            class="inline-flex items-center gap-2 px-3 py-1 text-sm rounded-md text-green-700 hover:bg-green-50 transition"
+                            title="Dupliquer le bloc de compétences"
+                            aria-label="Dupliquer le bloc {{ blocCompetence.code }}"
+                    >
+                        <i class="{{ iconDuplicate }}"></i>
+                        <span class="sr-only">Dupliquer</span>
+                    </button>
+
+                    <button
+                            {{ stimulus_action('parcours--step3', 'delete', 'click', {
+                                url:path('app_bloc_competence_delete',{'id': blocCompetence.id}),
+                                csrf: csrf_token('delete' ~ blocCompetence.id)
+                            }) }}
+                            class="inline-flex items-center gap-2 px-3 py-1 text-sm rounded-md text-red-700 hover:bg-red-50 transition"
+                            title="Supprimer le bloc de compétences"
+                            aria-label="Supprimer le bloc {{ blocCompetence.code }}"
+                    >
+                        <i class="{{ iconDelete }}"></i>
+                        <span class="sr-only">Supprimer</span>
+                    </button>
+
+                    {% if not loop.first %}
+                        <button
+                                class="inline-flex items-center p-2 text-gray-600 rounded hover:bg-gray-100 transition"
+                                {{ stimulus_action('parcours--step3', 'deplacerBcc', 'click', {url: path('app_bloc_competence_deplacer',{sens: 'up', id: blocCompetence.id})}) }}
+                                title="Déplacer vers le haut"
+                                aria-label="Déplacer le bloc {{ blocCompetence.code }} vers le haut"
+                        >
+                            <i class="fal fa-circle-up"></i>
+                        </button>
+                    {% else %}
+                        <button class="inline-flex items-center p-2 text-gray-300 rounded" disabled aria-hidden="true">
+                            <i
+                                    class="fal fa-circle-up"></i></button>
+                    {% endif %}
+
+                    {% if not loop.last %}
+                        <button
+                                class="inline-flex items-center p-2 text-gray-600 rounded hover:bg-gray-100 transition"
+                                {{ stimulus_action('parcours--step3', 'deplacerBcc', 'click', {url: path('app_bloc_competence_deplacer',{sens: 'down', id: blocCompetence.id})}) }}
+                                title="Déplacer vers le bas"
+                                aria-label="Déplacer le bloc {{ blocCompetence.code }} vers le bas"
+                        >
+                            <i class="fal fa-circle-down"></i>
+                        </button>
+                    {% else %}
+                        <button class="inline-flex items-center p-2 text-gray-300 rounded" disabled aria-hidden="true">
+                            <i
+                                    class="fal fa-circle-down"></i></button>
+                    {% endif %}
+                </div>
+            </th>
+        </tr>
+
+        {% for competence in blocCompetence.competences %}
+            {% if loop.first %}
+                <tr>
+                    <td rowspan="{{ (blocCompetence.competences|length * 2) + 1 }}"
+                        class="w-12 text-center align-middle font-bold text-gray-600 py-4">
+                        &nbsp;
+                    </td>
+                    <td colspan="3" class="py-2 px-4">
+                        <div class="py-2">
+                            <button
+                                    {{ stimulus_controller('modal', {
+                                        size: 'lg',
+                                        modalTitle: 'Ajouter une compétence dans le bloc de compétences '~
+                                        blocCompetence.code,
+                                        modalUrl: path('app_competence_new', {bcc:blocCompetence.id, ordre:competence
+                                        .ordre}) }) }}
+                                    data-action="click->modal#openModal"
+                                    class="inline-flex items-center gap-2 px-3 py-2 text-sm rounded-md text-green-700 bg-green-50 hover:bg-green-100 transition"
+                                    title="Ajouter une compétence avant {{ competence.code }}"
+                                    aria-label="Ajouter une compétence avant {{ competence.code }} dans le bloc {{ blocCompetence.code }}"
+                            >
+                                <i class="{{ iconAdd }}"></i>
+                                <span class="truncate">Ajouter une compétence dans le bloc <strong
+                                            class="font-medium">{{ blocCompetence.code }}</strong> avant <strong
+                                            class="font-medium">{{ competence.code }}</strong></span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            {% endif %}
+            <tr class="bg-white">
+                <td class="py-1 px-4 align-top">
+                    <div class="text-gray-800">{{ competence.code }} - {{ competence.libelle }}</div>
+                </td>
+                <td class="text-right py-3 px-4">
+                    <div class="flex items-center justify-end space-x-1">
+
+                        <button
+                                {{ stimulus_controller('modal', {
+                                    size: 'lg',
+                                    modalTitle: 'Modifier une compétence',
+                                    modalUrl: path('app_competence_edit',{'id': competence.id}) }) }}
+                                data-action="click->modal#openModal"
+                                class="inline-flex items-center gap-2 px-3 py-1 text-sm rounded-md text-yellow-700 hover:bg-yellow-50 transition"
+                                title="Modifier la compétence"
+                                aria-label="Modifier la compétence {{ competence.code }}"
+                        >
+                            <i class="{{ iconEdit }}"></i>
+                            <span class="sr-only">modifier</span>
+                        </button>
+
+                        <button
+                                {{ stimulus_action('parcours--step3', 'duplicate', 'click', {
+                                    url:path('app_competence_duplicate',{'id': competence.id})
+                                }) }}
+                                class="inline-flex items-center gap-2 px-3 py-1 text-sm rounded-md text-green-700 hover:bg-green-50 transition"
+                                title="Dupliquer la compétence"
+                                aria-label="Dupliquer la compétence {{ competence.code }}"
+                        >
+                            <i class="{{ iconDuplicate }}"></i>
+                            <span class="sr-only">Dupliquer</span>
+                        </button>
+
+                        <button
+                                {{ stimulus_action('parcours--step3', 'delete', 'click', {
+                                    url:path('app_competence_delete',{'id': competence.id}),
+                                    csrf: csrf_token('delete' ~ competence.id)
+                                }) }}
+                                class="inline-flex items-center gap-2 px-3 py-1 text-sm rounded-md text-red-700 hover:bg-red-50 transition"
+                                title="Supprimer la compétence"
+                                aria-label="Supprimer la compétence {{ competence.code }}"
+                        >
+                            <i class="{{ iconDelete }}"></i>
+                            <span class="sr-only">Supprimer</span>
+                        </button>
+
+                        {% if not loop.first %}
+                            <button
+                                    class="inline-flex items-center p-2 text-gray-600 rounded hover:bg-gray-100 transition"
+                                    {{ stimulus_action('parcours--step3', 'deplacerCc', 'click', {url: path('app_competence_deplacer',{sens: 'up', id: competence.id})}) }}
+                                    title="Monter la compétence"
+                                    aria-label="Monter la compétence {{ competence.code }}"
+                            >
+                                <i class="fal fa-circle-up"></i>
+                            </button>
+                        {% else %}
+                            <button class="inline-flex items-center p-2 text-gray-300 rounded" disabled
+                                    aria-hidden="true">
+                                <i class="fal fa-circle-up"></i></button>
+                        {% endif %}
+                        {% if not loop.last %}
+                            <button
+                                    class="inline-flex items-center p-2 text-gray-600 rounded hover:bg-gray-100 transition"
+                                    {{ stimulus_action('parcours--step3', 'deplacerCc', 'click', {url: path('app_competence_deplacer',{sens: 'down', id: competence.id})}) }}
+                                    title="Descendre la compétence"
+                                    aria-label="Descendre la compétence {{ competence.code }}"
+                            >
+                                <i class="fal fa-circle-down"></i>
+                            </button>
+                        {% else %}
+                            <button class="inline-flex items-center p-2 text-gray-300 rounded" disabled
+                                    aria-hidden="true">
+                                <i class="fal fa-circle-down"></i></button>
+                        {% endif %}
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" class="py-2 px-4">
+                    <button
+                            {{ stimulus_controller('modal', {
+                                size: 'lg',
+                                modalTitle: 'Ajouter une compétence dans le bloc de compétences '~
+                                blocCompetence.code,
+                                modalUrl: path('app_competence_new', {bcc:blocCompetence.id, ordre:competence
+                                .ordre+1}) }) }}
+                            data-action="click->modal#openModal"
+                            class="inline-flex items-center gap-2 px-3 py-2 text-sm rounded-md text-green-700 bg-green-50 hover:bg-green-100 transition"
+                            title="Ajouter une compétence après {{ competence.code }}"
+                            aria-label="Ajouter une compétence après {{ competence.code }} dans le bloc {{ blocCompetence.code }}"
+                    >
+                        <i class="{{ iconAdd }}"></i>
+                        <span class="truncate">Ajouter une compétence dans le bloc <strong
+                                    class="font-medium">{{ blocCompetence.code }}</strong> après <strong
+                                    class="font-medium">{{ competence.code }}</strong></span>
+                    </button>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td class="py-3 px-4">&nbsp;</td>
+                <td colspan="4" class="py-2 px-4">
+                    <div class="py-2">
+                        <button
+                                {{ stimulus_controller('modal', {
+                                    size: 'lg',
+                                    modalTitle: 'Ajouter une compétence dans le bloc de compétences '~
+                                    blocCompetence.code,
+                                    modalUrl: path('app_competence_new', {bcc:blocCompetence.id}) }) }}
+                                data-action="click->modal#openModal"
+                                class="inline-flex items-center gap-2 px-3 py-2 text-sm rounded-md text-green-700 bg-green-50 hover:bg-green-100 transition"
+                                title="Ajouter une compétence"
+                                aria-label="Ajouter une compétence dans le bloc {{ blocCompetence.code }}"
+                        >
+                            <i class="{{ iconAdd }}"></i>
+                            <span class="truncate">Ajouter une compétence dans le bloc <strong
+                                        class="font-medium">{{ blocCompetence.code }}</strong></span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+
+        <tr>
+            <td colspan="5" class="py-3 px-4">
+                <div class="py-2">
+                    <button
+                            {{ stimulus_controller('modal', {
+                                size: 'lg',
+                                modalTitle: 'Ajouter un bloc de compétences',
+                                modalUrl: path('app_bloc_competence_new_parcours', {parcours:parcours is defined ? parcours.id : null, ordre: blocCompetence.ordre+1})
+                            }) }}
+                            data-action="click->modal#openModal"
+                            class="inline-flex items-center gap-2 px-3 py-2 text-sm rounded-md text-green-700 bg-green-50 hover:bg-green-100 transition"
+                            title="Ajouter un bloc de compétences après {{ blocCompetence.code }}"
+                            aria-label="Ajouter un bloc de compétences après {{ blocCompetence.code }}"
+                    >
+                        <i class="{{ iconAdd }}"></i>
+                        <span>Ajouter un bloc de compétences après <strong
+                                    class="font-medium">{{ blocCompetence.code }}</strong></span>
+                    </button>
+                </div>
+            </td>
+        </tr>
+    {% else %}
+        <tr>
+            <td colspan="5" class="py-3 px-4">
+                <div class="py-2">
+                    <button
+                            {{ stimulus_controller('modal', {
+                                size: 'lg',
+                                modalTitle: 'Ajouter un bloc de compétences',
+                                modalUrl: path('app_bloc_competence_new_parcours', {parcours:parcours is defined ? parcours.id : null}) }) }}
+                            data-action="click->modal#openModal"
+                            class="inline-flex items-center gap-2 px-3 py-2 text-sm rounded-md text-green-700 bg-green-50 hover:bg-green-100 transition"
+                            title="Ajouter un bloc de compétences"
+                            aria-label="Ajouter un bloc de compétences"
+                    >
+                        <i class="{{ iconAdd }}"></i>
+                        <span>Ajouter un bloc de compétences</span>
+                    </button>
+                </div>
+            </td>
+        </tr>
+    {% endfor %}
+
+    </tbody>
+</table>

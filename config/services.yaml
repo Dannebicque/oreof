@@ -33,6 +33,7 @@ services:
         exclude:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
+            - '../src/DTO/'
             - '../src/Kernel.php'
             - '../src/TypeDiplome/DependencyInjection/'
 
@@ -49,16 +50,14 @@ services:
       # L’autoconfiguration ajoutera le tag si défini dans la config de l’interface
 
     _instanceof:
-      App\TypeDiplome\TypeDiplomeHandlerInterface:
-        tags: [ 'app.type_diplome_handler' ]
-  #      App\Workflow\StepCheckInterface:
-  #        tags: [ 'app.workflow.step_check' ]
+      App\Workflow\Validator\StepValidatorInterface:
+        tags: [ 'workflow.validator' ]
       App\Email\Vars\VariableProviderInterface:
         tags: [ 'app.variable_provider' ]
 
-    App\Service\TypeDiplomeResolver:
-        arguments:
-            $handlers: !tagged app.type_diplome_handler
+    App\TypeDiplome\TypeDiplomeResolver:
+      arguments:
+        $handlersByCode: !tagged_locator { tag: 'app.type_diplome_handler', index_by: 'code' }
 
     App\Service\TranslationFileManager:
         arguments:
@@ -111,3 +110,6 @@ services:
     App\EventSubscriber\CreateUserSubscriber:
       tags:
         - { name: doctrine.event_subscriber }
+
+    App\Twig\TurboExtension:
+      tags: [ 'twig.extension' ]

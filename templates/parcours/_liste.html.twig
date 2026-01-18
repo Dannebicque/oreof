@@ -135,13 +135,12 @@
                     </a>
                 {% endif %}
 
-                {% if is_granted('CAN_FORMATION_DELETE_MY') %}
-                    <button {{ stimulus_action('crud', 'delete', 'click', {
-                        url:path('app_parcours_delete',{'id': parcour.id}),
+                {% if is_granted('ROLE_ADMIN') %}
+                    <a href="{{ path('app_parcours_delete',{'id': parcour.id,
                         csrf: csrf_token('delete' ~ parcour.id)
-                    }) }} class="btn btn-sm text-danger">
+                    }) }}" class="btn btn-sm text-danger">
                         <i class="{{ iconDelete }}"></i> Supprimer
-                    </button>
+                    </a>
                 {% endif %}
             </td>
         </tr>

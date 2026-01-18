@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Formation;
 use App\Repository\FicheMatiereRepository;
-use App\Service\TypeDiplomeResolver;
+use App\TypeDiplome\TypeDiplomeResolver;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -108,7 +108,7 @@ class FormationSynchronisationController extends AbstractController
     ): Response {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
 
-        $typeDiplome = $typeDiplomeResolver->get($formation->getTypeDiplome());
+        $typeDiplome = $typeDiplomeResolver->fromTypeDiplome($formation->getTypeDiplome());
         $state = $typeDiplome->synchroniser($formation);
 
         if ($state) {
@@ -129,7 +129,7 @@ class FormationSynchronisationController extends AbstractController
     ): Response {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
 
-        $typeDiplome = $typeDiplomeResolver->get($formation->getTypeDiplome());
+        $typeDiplome = $typeDiplomeResolver->fromTypeDiplome($formation->getTypeDiplome());
         $state = $typeDiplome->synchroniserMccc($formation);
 
         if ($state) {

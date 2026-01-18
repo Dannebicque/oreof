@@ -1,0 +1,14 @@
+<div class="flex justify-end gap-2">
+    <button type="button"
+            class="rounded-lg px-3 py-2 hover:bg-gray-100"
+            data-action="modalturbo#close">
+        Annuler
+    </button>
+
+    {# Soumet le premier form présent dans le body #}
+    <button type="submit"
+            class="rounded-lg bg-green-600 text-white px-4 py-2 font-semibold"
+            form="modal_form">
+        {{ submitLabel ?? 'Enregistrer' }}
+    </button>
+</div>

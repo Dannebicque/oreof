@@ -3,9 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Parcours;
-use App\Service\TypeDiplomeResolver;
 use App\Service\VersioningParcours;
 use App\Service\VersioningStructure;
+use App\TypeDiplome\TypeDiplomeResolver;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -66,12 +66,12 @@ class StructureShowController extends AbstractController
         bool $hasLastVersion = false
     ): Response {
 
-        $typeD = $this->typeDiplomeResolver->get($parcours?->getTypeDiplome());
+        $typeD = $this->typeDiplomeResolver->fromTypeDiplome($parcours?->getTypeDiplome());
         $dto = $typeD->calculStructureParcours($parcours);
 
         $structureDifferencesParcours = $versioningParcours->getStructureDifferencesBetweenParcoursAndLastVersion($parcours);
         if ($structureDifferencesParcours !== null) {
-            $diffStructure = (new VersioningStructure($structureDifferencesParcours, $dto))->calculDiff();
+            $diffStructure = (VersioningStructure::setDto($structureDifferencesParcours, $dto))->calculDiff();
         }
 
         if ($dto === null) {

@@ -42,10 +42,6 @@
                     </a>
                 </button>
 
-                <button {{ stimulus_action('crud', 'duplicate', 'click', {
-                    url:path('app_etablissement_delete',{'id': etablissement.id})
-                })}} class="btn btn-sm text-success">
-                    <i class="{{ iconDuplicate }}"></i> Dupliquer</button>
                 <button {{ stimulus_action('crud', 'delete', 'click', {
                     url:path('app_etablissement_delete',{'id': etablissement.id})
                 })}} class="btn btn-sm text-danger">

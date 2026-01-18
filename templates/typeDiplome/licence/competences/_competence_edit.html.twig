@@ -1,0 +1,135 @@
+<turbo-frame id="tab-content">
+    <header class="border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+        <div>
+            <h2 class="text-xl font-black text-slate-800 tracking-tight">Référentiel de compétences</h2>
+            <p class="text-xs text-slate-400 font-bold uppercase mt-1">Construire le référentiel de compétences pour le
+                parcours. Définir les blocs et les compétences.</p>
+        </div>
+        <div class="flex gap-3">
+            <div class="h-full flex items-center">
+                <label for="etatStructure" class="inline-flex items-center gap-3 cursor-pointer select-none px-3 py-2 rounded-md shadow-sm
+        {% if parcours.getEtatStep(2) %}bg-green-50 border border-green-200{% else %}bg-amber-50 border border-amber-200{% endif %}">
+                    <input id="etatStructure"
+                           type="checkbox"
+                           class="sr-only peer"
+                           {% if parcours.getEtatStep(2) %}checked{% endif %}
+                            {{ stimulus_action('parcours--step2', 'etatStep', 'change') }}>
+                    <span class="w-10 h-6 bg-slate-200 rounded-full relative transition-colors duration-200 peer-checked:bg-green-500">
+                        <span class="absolute left-0.5 top-0.5 w-5 h-5 bg-white rounded-full shadow transform transition-transform duration-200 peer-checked:translate-x-4"></span>
+                    </span>
+                    <span class="text-sm font-medium text-slate-700">
+                        Cochez cette case si vous avez terminé ...
+                    </span>
+                </label>
+            </div>
+        </div>
+    </header>
+
+    <div class="flex-1 overflow-y-auto mt-4 custom-scrollbar">
+        <div id="alertEtatStructure"></div>
+
+        <div class="flex flex-col md:flex-row items-stretch gap-4">
+
+            {# Form 1 - Réinitialiser les blocs de compétences #}
+            <form method="post" action="{{ path('app_parcours_v2_competences_reset', {parcours: parcours.id}) }}"
+                  class="flex-1 flex flex-col"
+                  data-turbo-frame="parcours-step3-{{ parcours.id }}">
+                <div class="bg-white border border-slate-100 rounded-lg p-4 shadow-sm flex flex-col h-full">
+                    <div class="flex-1">
+                        <h3 class="text-sm font-semibold text-red-700 mb-2">Réinitialiser les blocs de compétences</h3>
+                        <p class="text-xs text-slate-500 mb-4">
+                            Cette action supprimera toutes les compétences et blocs de compétences associés à cette
+                            formation et aux fiches EC/matière.
+                        </p>
+                    </div>
+
+                    <div class="flex mt-auto">
+                        <input type="hidden" name="_token" value="{{ csrf_token('reset_bcc'~parcours.id) }}">
+                        <button type="submit"
+                                class="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-red-700 bg-red-50 border border-red-200 rounded-md hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-300 transition"
+                        >
+                            <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                 stroke="currentColor" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5-4h4m-7 4h10"/>
+                            </svg>
+                            Réinitialiser les BCCs
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+            {# Form 2 - Récupérer des compétences #}
+            <form method="post"
+                  class="flex-1 flex flex-col"
+                  action="{{ path('app_parcours_recopie_bcc', {parcours: parcours.id}) }}"
+                  data-turbo-frame="parcours-step3-{{ parcours.id }}">
+                <div class="bg-white border border-slate-100 rounded-lg p-4 shadow-sm flex flex-col h-full">
+
+                    <input type="hidden" name="_token" value="{{ csrf_token('recopie_bcc'~parcours.id) }}">
+
+                    <div class="flex-1 mb-3">
+                        <h3 class="text-sm font-semibold text-slate-800 mb-2">Récupérer des compétences</h3>
+                        <p class="text-xs text-slate-500 mb-3">
+                            Récupérez les compétences d'un autre parcours de cette mention. Les compétences seront
+                            copiées et ajoutées à ce parcours.
+                        </p>
+
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                            <div class="md:col-span-2">
+                                {% if listeParcours|length > 1 %}
+                                    <label for="parcoursSource" class="block text-xs font-medium text-slate-600 mb-1">Parcours
+                                        source</label>
+                                    <select
+                                            id="parcoursSource"
+                                            name="parcoursSource"
+                                            class="block w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-300">
+                                        <option value="">Choisissez un parcours de cette mention</option>
+                                        {% for lp in listeParcours|filter(lp => lp.id != parcours.id) %}
+                                            <option value="{{ lp.id }}">{{ lp.libelle }}</option>
+                                        {% endfor %}
+                                    </select>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-3 flex mt-auto">
+                        <button
+                                class="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
+                                aria-label="Récupérer les compétences du parcours sélectionné"
+                        >
+                            <i class="fas fa-sync-alt"></i>
+                            Récupérer les compétences du parcours sélectionné
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <button
+                {{ stimulus_controller('modal', {
+                    size: 'lg',
+                    modalTitle: 'Ajouter des compétences transversales (Référentiel RNCP)',
+                    modalUrl: path('app_bloc_competence_liste_transverse', {parcours:parcours.id}) }) }}
+                data-action="click->modal#openModal"
+                class="w-full sm:w-auto inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-emerald-700 bg-emerald-50 border border-emerald-100 rounded-md hover:bg-emerald-100 focus:outline-none focus:ring-2 focus:ring-emerald-300 transition"
+                data-size="lg"
+                title="Ajouter des compétences transversales (RNCP)"
+        >
+            <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                 stroke="currentColor" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+            </svg>
+            <span>Ajouter des compétences transversales (RNCP)</span>
+        </button>
+
+        {# zone liste qui peut être mise à jour par Turbo/stream #}
+        <div id="parcours-step3-liste" class="mt-2">
+            {# contenu initial (peut être rendu via fragment include) #}
+            {{ include('typeDiplome/licence/competences/_refCompetences.html.twig') }}
+        </div>
+    </div>
+</turbo-frame>

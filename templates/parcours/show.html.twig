@@ -40,8 +40,7 @@
 {% endblock %}
 
 {% block content %}
-    {#    {{ include('parcours/_synthese_parcours-v2.html.twig') }} #}
-
+    <twig:ParcoursHeader parcoursId="{{ parcours.id }}" formationId="{{ formation.id }}"/>
     {{ include('parcours/_synthese_parcours.html.twig') }}
 
     {% if is_granted('ROLE_ADMIN') %}
@@ -221,65 +220,23 @@
 {% endblock %}
 
 {% block bouton_header %}
-    {% if is_granted('ROLE_ADMIN')
-        and hasLastVersion is defined
-        and hasLastVersion == true
-    %}
-        <a class ="btn btn-sm btn-outline-info d-block mx-2 mb-1"
-            data-bs-toggle="collapse" data-bs-target="#diffGlobalParcours"
-        >
-            <i class="fa-light fa-not-equal"></i>
-            Comparer les descriptifs
-        </a>
-    {% endif %}
+    <div class="d-flex flex-wrap gap-2 justify-content-lg-end">
+        {% if (is_granted('EDIT', {route: 'app_parcours', subject: dpeParcours})
+            or is_granted('EDIT', {route: 'app_formation', subject: dpeParcours})
+            or is_granted('EDIT', {route: 'app_composante', subject: dpeParcours})
+            or is_granted('EDIT', {route: 'app_etbalissement', subject: dpeParcours})
+            or is_granted('ROLE_ADMIN')) and isOuvert(dpeParcours) %}
+            <a href="{{ path('app_parcours_edit', {id:parcours.id}) }}"
+               class="btn btn-sm btn-warning btn-icon btn-icon-end w-100 w-sm-auto"
+               data-bs-toggle="tooltip"
+               data-bs-placement="bottom"
+               title="Modifier le parcours"
+            >
+                <i class="{{ iconEdit }}"></i>
+                <span> Modifier le parcours</span>
+            </a>
+        {% endif %}
 
-    {{ include('btn/export_mccc.html.twig') }}
 
-    <div class="btn-group">
-        <button type="button"
-                class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2 dropdown-toggle mb-1"
-                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="{{ iconDownload }}"></i> BCC
-        </button>
-        <div class="dropdown-menu" style="">
-            <a class="dropdown-item" href="{{ path('app_parcours_bcc', {parcours:parcours.id}) }}">
-                Voir en ligne
-            </a>
-            <a class="dropdown-item" href="{{ path('app_competence_export_bcc', {parcours:parcours.id}) }}">
-                Export des BCC (pdf)
-            </a>
-            <a class="dropdown-item" href="{{ path('app_competence_export_croise', {parcours:parcours.id}) }}">
-                Export du tableau croisé BCC/EC, par semestre (pdf)
-            </a>
-            <a class="dropdown-item" href="{{ path('app_competence_export_croise_global', {parcours:parcours.id}) }}">
-                Export du tableau croisé BCC/EC, global (xslx)
-            </a>
-        </div>
     </div>
-
-    <a href="{{ path('app_parcours_export', {parcours:parcours.id}) }}"
-       class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2"
-       data-bs-toggle="tooltip"
-       data-bs-placement="bottom"
-       title="Télécharger en PDF"
-    >
-        <i class="{{ iconDownload }}"></i>
-        <span> Fiche descriptive (PDF)</span>
-    </a>
-
-    {% if (is_granted('EDIT', {route: 'app_parcours', subject: dpeParcours})
-        or is_granted('EDIT', {route: 'app_formation', subject: dpeParcours})
-        or is_granted('EDIT', {route: 'app_composante', subject: dpeParcours})
-        or is_granted('EDIT', {route: 'app_etbalissement', subject: dpeParcours})
-        or is_granted('ROLE_ADMIN')) and isOuvert(dpeParcours) %}
-        <a href="{{ path('app_parcours_edit', {id:parcours.id}) }}"
-           class="btn btn-sm btn-outline-warning btn-icon btn-icon-end w-100 w-sm-auto mx-2"
-           data-bs-toggle="tooltip"
-           data-bs-placement="bottom"
-           title="Modifier le parcours"
-        >
-            <i class="{{ iconEdit }}"></i>
-            <span> Modifier le parcours</span>
-        </a>
-    {% endif %}
 {% endblock %}

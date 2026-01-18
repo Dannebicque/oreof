@@ -10,12 +10,18 @@
 namespace App\TypeDiplome;
 
 use App\DTO\StructureParcours;
+use App\DTO\StructureSemestre;
 use App\Entity\Parcours;
+use App\Entity\SemestreParcours;
+use App\TypeDiplome\Dto\OptionsCalculStructure;
 
 interface StructureInterface
 {
+    public function calcul(Parcours $parcours, OptionsCalculStructure $optionsCalculStructure = new OptionsCalculStructure()): StructureParcours;
 
-    public function calcul(Parcours $parcours, bool $withEcts = true, bool $withBcc = true, bool $dataFromFicheMatiere = false): StructureParcours;
+    public function calculStructureSemestre(SemestreParcours $semestreParcours, Parcours $parcours, OptionsCalculStructure $optionsCalculStructure = new OptionsCalculStructure()): ?StructureSemestre;
 
-    public function calculVersioning(Parcours $parcours): StructureParcours;
+    public function calculVersioning(Parcours $parcours, OptionsCalculStructure $optionsCalculStructure = new OptionsCalculStructure()): StructureParcours;
+
+    public function showStructure(Parcours $parcours, OptionsCalculStructure $optionsCalculStructure = new OptionsCalculStructure()): array;
 }

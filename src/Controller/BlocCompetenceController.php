@@ -37,12 +37,11 @@ class BlocCompetenceController extends BaseController
             ]);
         }
 
-        $competences = $this->typeDiplomeResolver
-            ->getFromParcours($parcours)
-            ->getStructureCompetences($parcours);
+        $typeD = $this->typeDiplomeResolver->fromParcours($parcours);
+        $competences = $typeD->getStructureCompetences($parcours);
 
         return $this->render(
-            'typeDiplome/' . $this->typeDiplomeResolver->getTemplateFolder() . '/_refCompetences.html.twig',
+            'typeDiplome/' . $typeD->getTemplateFolder() . '/_refCompetences.html.twig',
             [
                 'competences' => $competences,
                 'parcours' => $parcours,
@@ -54,12 +53,11 @@ class BlocCompetenceController extends BaseController
     public function afficheBUTReferentiel(
         Parcours            $parcours
     ): Response {
-        $competences = $this->typeDiplomeResolver
-            ->getFromParcours($parcours)
-            ->getStructureCompetences($parcours);
+        $typeD = $this->typeDiplomeResolver->fromParcours($parcours);
+        $competences = $typeD->getStructureCompetences($parcours);
 
         return $this->render(
-            'typeDiplome/' . $this->typeDiplomeResolver->getTemplateFolder() . '/_refCompetences.html.twig',
+            'typeDiplome/' . $typeD->getTemplateFolder() . '/_refCompetences.html.twig',
             [
                 'competences' => $competences,
                 'parcours' => $parcours,

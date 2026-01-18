@@ -92,7 +92,7 @@ class ParcoursWizardController extends BaseController
             throw new Exception('Le parcours n\'est pas lié à une formation.');
         }
 
-        $typeDiplome = $this->typeDiplomeResolver->get($parcours->getFormation()->getTypeDiplome());
+        $typeDiplome = $this->typeDiplomeResolver->fromTypeDiplome($parcours->getFormation()->getTypeDiplome());
         $listeParcours = $parcoursRepository->findBy(['formation' => $parcours->getFormation()]);
         return $this->render('parcours_wizard/_step3.html.twig', [
             'parcours' => $parcours,

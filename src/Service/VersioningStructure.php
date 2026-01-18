@@ -25,11 +25,20 @@ use Doctrine\Common\Collections\Collection;
 class VersioningStructure
 {
     private bool $isBut = false;
+    private StructureParcours $dtoOrigine;
+    private StructureParcours $dtoNouveau;
 
     public function __construct(
-        private StructureParcours $dtoOrigine,
-        private StructureParcours $dtoNouveau
     ) {
+    }
+
+    public static function setDto(StructureParcours $dtoOrigine, StructureParcours $dtoNouveau): self
+    {
+        $versioning = new VersioningStructure();
+        $versioning->dtoOrigine = $dtoOrigine;
+        $versioning->dtoNouveau = $dtoNouveau;
+        return $versioning;
+
     }
 
     public function calculDiff($isBut = false): array

@@ -45,7 +45,7 @@ class Parcours
     private ?string $libelle = null;
 
     #[Groups(['parcours_json_versioning', 'fiche_matiere_versioning'])]
-    #[ORM\ManyToOne(targetEntity: Formation::class, cascade: ['persist'], inversedBy: 'parcours')]
+    #[ORM\ManyToOne(targetEntity: Formation::class, cascade: ['persist'], fetch: 'EAGER', inversedBy: 'parcours')]
     private ?Formation $formation;
 
     #[Groups('parcours_json_versioning')]
@@ -1238,6 +1238,11 @@ class Parcours
         return $str;
     }
 
+    public function getDisplayCourt(): string
+    {
+        return $this->getFormation()?->getTypeDiplome()?->getLibelleCourt() . ' ' . $this->getSigle();
+    }
+
     public function displayRegimeInscription(): string
     {
         $texte = '';
@@ -1568,7 +1573,7 @@ class Parcours
             TypeModificationDpeEnum::MODIFICATION_TEXTE,
             TypeModificationDpeEnum::MODIFICATION_MCCC,
             TypeModificationDpeEnum::MODIFICATION_MCCC_TEXTE,
-        ])  ;
+        ], true);
     }
 
     public function withCfvu() : bool
@@ -1781,5 +1786,14 @@ class Parcours
         }
 
         return $this;
+    }
+
+    public function colorStep(int $step): string
+    {
+        return match ($this->getEtatStep($step)) {
+            true => 'green',
+            false => 'orange',
+            default => 'red'
+        };
     }
 }

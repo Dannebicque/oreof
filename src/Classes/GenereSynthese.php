@@ -13,9 +13,9 @@ use App\Entity\CampagneCollecte;
 use App\Entity\Composante;
 use App\Entity\Parcours;
 use App\Repository\ParcoursRepository;
-use App\Service\TypeDiplomeResolver;
 use App\Service\VersioningParcours;
 use App\Service\VersioningStructure;
+use App\TypeDiplome\TypeDiplomeResolver;
 
 class GenereSynthese
 {
@@ -37,12 +37,12 @@ class GenereSynthese
         $parcours = $this->parcoursRepository->findByTypeValidationAttenteCfvuAndComposante($dpe, 'soumis_central', $composante); //soumis_cfvu
 
         foreach ($parcours as $parc) {
-            $typeD = $this->typeDiplomeResolver->getFromParcours($parc);
+            $typeD = $this->typeDiplomeResolver->fromParcours($parc);
             // récupérer les demandes de changement et de modification
             $dto = $typeD->calculStructureParcours($parc, true, false);
             $structureDifferencesParcours = $this->versioningParcours->getStructureDifferencesBetweenParcoursAndLastVersion($parc);
             if ($structureDifferencesParcours !== null) {
-                $diffStructure = (new VersioningStructure($structureDifferencesParcours, $dto))->calculDiff();
+                $diffStructure = (VersioningStructure::setDto($structureDifferencesParcours, $dto))->calculDiff();
             } else {
                 $diffStructure = null;
             }
@@ -54,12 +54,12 @@ class GenereSynthese
 
     public function getSyntheseByParcours(Parcours $parcours, Composante $composante, CampagneCollecte $dpe): array
     {
-        $typeD = $this->typeDiplomeResolver->getFromParcours($parcours);
+        $typeD = $this->typeDiplomeResolver->fromParcours($parcours);
         // récupérer les demandes de changement et de modification
         $dto = $typeD->calculStructureParcours($parcours, true, false);
         $structureDifferencesParcours = $this->versioningParcours->getStructureDifferencesBetweenParcoursAndLastVersion($parcours);
         if ($structureDifferencesParcours !== null) {
-            $diffStructure = (new VersioningStructure($structureDifferencesParcours, $dto))->calculDiff();
+            $diffStructure = (VersioningStructure::setDto($structureDifferencesParcours, $dto))->calculDiff();
         } else {
             $diffStructure = null;
         }

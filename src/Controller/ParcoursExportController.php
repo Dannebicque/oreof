@@ -15,9 +15,9 @@ use App\DTO\StructureUe;
 use App\Entity\Parcours;
 use App\Entity\ParcoursVersioning;
 use App\Service\ParcoursExport;
-use App\Service\TypeDiplomeResolver;
 use App\Service\VersioningParcours;
 use App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException;
+use App\TypeDiplome\TypeDiplomeResolver;
 use App\Utils\CleanTexte;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
@@ -55,7 +55,7 @@ class ParcoursExportController extends AbstractController
             throw new Exception('Type de diplôme non trouvé');
         }
 
-        $typeD = $typeDiplomeResolver->get($typeDiplome);
+        $typeD = $typeDiplomeResolver->fromTypeDiplome($typeDiplome);
 
 
         return $this->myPdf->render('pdf/parcours.html.twig', [
@@ -135,7 +135,7 @@ class ParcoursExportController extends AbstractController
             throw new Exception('Type de diplôme non trouvé');
         }
 
-        $typeD = $typeDiplomeResolver->get($typeDiplome);
+        $typeD = $typeDiplomeResolver->fromTypeDiplome($typeDiplome);
         $dto = $typeD->calculStructureParcours($parcours);
 
         $data = [

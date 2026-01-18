@@ -21,7 +21,7 @@ class FormationParcoursController extends BaseController
         ParcoursRepository  $parcoursRepository,
         Formation $formation
     ): Response {
-        $typeDiplome = $this->typeDiplomeResolver->get($formation->getTypeDiplome());
+        $typeDiplome = $this->typeDiplomeResolver->fromTypeDiplome($formation->getTypeDiplome());
         $parcours = $parcoursRepository->findByFormation($formation);
         return $this->render('formation_parcours/_liste.html.twig', [
             'parcours' => $parcours,

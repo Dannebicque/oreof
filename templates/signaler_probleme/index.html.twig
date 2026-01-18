@@ -1,0 +1,27 @@
+<form action="{{ path('app_signaler_probleme') }}" method="post">
+    <label for="url">URL</label>
+    <input type="text" name="url" id="url" class="form-control" disabled value="{{ url }}"/>
+
+    <label for="nom">Nom</label>
+    <input type="text" name="nom" id="nom" class="form-control" disabled value="{{ user.nom }}"/>
+
+    <label for="prenom">Prénom</label>
+    <input type="text" name="prenom" id="prenom" class="form-control" disabled value="{{ user.prenom }}"/>
+
+    <label for="sujet" class="required">Sujet <i class="fal fa-question-circle ms-1"
+                                                 data-controller="tooltip"
+                                                 data-tooltip-placement-value="bottom"
+                                                 aria-label="{{ 'parcours_step6.helps.codeRome.help'|trans({}, 'help') }}"
+                                                 data-bs-original-title="{{ 'parcours_step6.helps.codeRome.help'|trans({}, 'help') }}"></i></label>
+    <input type="text" name="sujet" id="sujet" required class="form-control"/>
+
+    <label for="message" class="required">Message <i class="fal fa-question-circle ms-1"
+                                                     data-controller="tooltip"
+                                                     data-tooltip-placement-value="bottom"
+                                                     aria-label="{{ 'parcours_step6.helps.codeRome.help'|trans({}, 'help') }}"
+                                                     data-bs-original-title="{{ 'parcours_step6.helps.codeRome.help'|trans({}, 'help') }}"></i></label>
+    <textarea name="message" id="message" required class="form-control" rows="8"></textarea>
+
+    <button type="submit" class="btn btn-success mt-2">Envoyer</button>
+
+</form>

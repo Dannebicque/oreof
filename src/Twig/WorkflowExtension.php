@@ -17,6 +17,9 @@ use App\Entity\Formation;
 use App\Entity\Parcours;
 use App\Enums\TypeModificationDpeEnum;
 use App\Utils\Access;
+use App\Workflow\Service\ValidationService;
+use App\Workflow\Service\WorkflowMetadataService;
+use App\Workflow\Validator\ValidationResult;
 use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\Workflow\WorkflowInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -33,7 +36,9 @@ class WorkflowExtension extends AbstractExtension
         private readonly WorkflowInterface $dpeParcoursWorkflow,
         #[Target('changeRf')]
         private readonly WorkflowInterface $changeRfWorkflow,
-        private TranslatorInterface $translatable,
+        private readonly TranslatorInterface     $translatable,
+        private readonly WorkflowMetadataService $metadataService,
+        private readonly ValidationService       $validationService,
     ) {
     }
 
@@ -57,6 +62,19 @@ class WorkflowExtension extends AbstractExtension
             new TwigFunction('isAccessible', $this->isAccessible(...)),
             new TwigFunction('hasHistorique', $this->hasHistorique(...)),
             new TwigFunction('hasTransitions', $this->hasTransitions(...)),
+            // Nouvelles fonctions pour les métadonnées et la validation
+            new TwigFunction('workflow_place_meta', $this->getPlaceMeta(...)),
+            new TwigFunction('workflow_transition_meta', $this->getTransitionMeta(...)),
+            new TwigFunction('workflow_place_icon', $this->getPlaceIcon(...)),
+            new TwigFunction('workflow_place_color', $this->getPlaceColor(...)),
+            new TwigFunction('workflow_place_label', $this->getPlaceLabel(...)),
+            new TwigFunction('workflow_place_description', $this->getPlaceDescription(...)),
+            new TwigFunction('workflow_place_help', $this->getPlaceHelpText(...)),
+            new TwigFunction('workflow_button_config', $this->getButtonConfig(...)),
+            new TwigFunction('workflow_stepper_places', $this->getStepperPlaces(...)),
+            new TwigFunction('workflow_places_by_category', $this->getPlacesByCategory(...)),
+            new TwigFunction('validate_step', $this->validateStep(...)),
+            new TwigFunction('can_validate_transition', $this->canValidateTransition(...)),
         ];
     }
 
@@ -289,5 +307,157 @@ class WorkflowExtension extends AbstractExtension
             }
         }
         return $data;
+    }
+
+    // ========================================
+    // Nouvelles méthodes pour les métadonnées
+    // ========================================
+
+    /**
+     * Récupère toutes les métadonnées d'une place.
+     */
+    public function getPlaceMeta(string $placeName, string $workflowName = 'dpeParcours'): array
+    {
+        return $this->metadataService->getPlaceMetadata($placeName, $workflowName);
+    }
+
+    /**
+     * Récupère toutes les métadonnées d'une transition.
+     */
+    public function getTransitionMeta(string $transitionName, string $workflowName = 'dpeParcours'): array
+    {
+        return $this->metadataService->getTransitionMetadata($transitionName, $workflowName);
+    }
+
+    /**
+     * Récupère l'icône d'une place.
+     */
+    public function getPlaceIcon(string $placeName, string $workflowName = 'dpeParcours'): ?string
+    {
+        return $this->metadataService->getPlaceIcon($placeName, $workflowName);
+    }
+
+    /**
+     * Récupère la couleur d'une place.
+     */
+    public function getPlaceColor(string $placeName, string $workflowName = 'dpeParcours'): string
+    {
+        return $this->metadataService->getPlaceColor($placeName, $workflowName);
+    }
+
+    /**
+     * Récupère le label traduit d'une place.
+     */
+    public function getPlaceLabel(string $placeName, string $workflowName = 'dpeParcours'): string
+    {
+        $label = $this->metadataService->getPlaceLabel($placeName, $workflowName);
+
+        if ($label !== null) {
+            return $this->translatable->trans($label, [], 'process');
+        }
+
+        return $placeName;
+    }
+
+    /**
+     * Récupère la description d'une place.
+     */
+    public function getPlaceDescription(string $placeName, string $workflowName = 'dpeParcours'): ?string
+    {
+        return $this->metadataService->getPlaceDescription($placeName, $workflowName);
+    }
+
+    /**
+     * Récupère le texte d'aide d'une place.
+     */
+    public function getPlaceHelpText(string $placeName, string $workflowName = 'dpeParcours'): ?string
+    {
+        return $this->metadataService->getPlaceHelpText($placeName, $workflowName);
+    }
+
+    /**
+     * Récupère la configuration du bouton pour une transition.
+     *
+     * @return array{label: string, class: string, icon: ?string, confirmation: array, comment: array}
+     */
+    public function getButtonConfig(string $transitionName, string $workflowName = 'dpeParcours'): array
+    {
+        $config = $this->metadataService->getTransitionButtonConfig($transitionName, $workflowName);
+
+        // Traduire le label si présent
+        if (isset($config['label'])) {
+            $config['label'] = $this->translatable->trans($config['label'], [], 'process');
+        }
+
+        // Traduire le message de confirmation si présent
+        if (isset($config['confirmation']['message'])) {
+            $config['confirmation']['message'] = $this->translatable->trans(
+                $config['confirmation']['message'],
+                [],
+                'process'
+            );
+        }
+
+        // Traduire le placeholder du commentaire si présent
+        if (isset($config['comment']['placeholder'])) {
+            $config['comment']['placeholder'] = $this->translatable->trans(
+                $config['comment']['placeholder'],
+                [],
+                'process'
+            );
+        }
+
+        return $config;
+    }
+
+    /**
+     * Récupère les places à afficher dans le stepper.
+     *
+     * @return array<string, array>
+     */
+    public function getStepperPlaces(string $workflowName = 'dpeParcours'): array
+    {
+        $places = $this->metadataService->getStepperPlaces($workflowName);
+
+        // Traduire les labels
+        foreach ($places as $placeName => &$metadata) {
+            if (isset($metadata['label'])) {
+                $metadata['label_translated'] = $this->translatable->trans($metadata['label'], [], 'process');
+            }
+        }
+
+        return $places;
+    }
+
+    /**
+     * Récupère les places d'une catégorie donnée.
+     *
+     * @return array<string, array>
+     */
+    public function getPlacesByCategory(string $category, string $workflowName = 'dpeParcours'): array
+    {
+        return $this->metadataService->getPlacesByCategory($category, $workflowName);
+    }
+
+    // ========================================
+    // Méthodes de validation
+    // ========================================
+
+    /**
+     * Valide un DpeParcours pour une étape donnée.
+     *
+     * @return ValidationResult
+     */
+    public function validateStep(DpeParcours $dpeParcours, string $stepCode): ValidationResult
+    {
+        return $this->validationService->validateForStep($dpeParcours, $stepCode);
+    }
+
+    /**
+     * Vérifie si une transition vers une étape est autorisée.
+     */
+    public function canValidateTransition(DpeParcours $dpeParcours, string $targetStepCode): bool
+    {
+        return $this->validationService->canTransition($dpeParcours, $targetStepCode);
     }
 }

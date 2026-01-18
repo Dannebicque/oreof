@@ -24,7 +24,8 @@ class Remplissage
     public function calcul(): float
     {
         if (0 !== $this->total) {
-            return round(($this->score / $this->total) * 100);
+            $this->pourcentage = round(($this->score / $this->total) * 100);
+            return $this->pourcentage;
         }
 
         return 0;

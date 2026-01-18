@@ -9,12 +9,11 @@
 
 namespace App\Classes;
 
+use App\Entity\DpeParcours;
 use Symfony\Component\Workflow\WorkflowInterface;
 
 class ValidationProcess extends AbstractValidationProcess
 {
-
-
     public function __construct(protected WorkflowInterface $dpeParcoursWorkflow)
     {
         $places = $dpeParcoursWorkflow->getDefinition()->getPlaces();
@@ -48,5 +47,29 @@ class ValidationProcess extends AbstractValidationProcess
         }
 
         return [];
+    }
+
+    public function getOptionsForStep(DpeParcours $dpeParcours): array
+    {
+        $enabled = [];
+
+        $transitions = $this->dpeParcoursWorkflow->getDefinition()->getTransitions();
+        foreach ($transitions as $t) {
+            if ($this->dpeParcoursWorkflow->can($dpeParcours, $t->getName())) {
+                $enabled[] = $t;
+            }
+        }
+
+        $options = [];
+        foreach ($enabled as $trans) {
+            $meta = $this->dpeParcoursWorkflow->getMetadataStore()->getTransitionMetadata($trans);
+            $name = $trans->getName();
+            $options[$name] = [
+                'label' => $meta['label'] ?? $name,
+                'metadata' => $meta,
+            ];
+        }
+
+        return $options;
     }
 }

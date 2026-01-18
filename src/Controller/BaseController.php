@@ -13,14 +13,17 @@ use App\Classes\DataUserSession;
 use App\Entity\CampagneCollecte;
 use App\Entity\Constantes;
 use App\Entity\Etablissement;
-use App\Service\TypeDiplomeResolver;
+use App\TypeDiplome\TypeDiplomeResolver;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Contracts\Service\Attribute\Required;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class BaseController extends AbstractController
 {
     protected DataUserSession $dataUserSession;
     protected ?TypeDiplomeResolver $typeDiplomeResolver = null;
+
+    private ?RequestStack $requestStack = null;
 
     #[Required]
     public function setDataUserSession(DataUserSession $dataUserSession): void
@@ -32,6 +35,36 @@ class BaseController extends AbstractController
     public function getTypeDiplomeResolver(TypeDiplomeResolver $typeDiplomeResolver): void
     {
         $this->typeDiplomeResolver = $typeDiplomeResolver;
+    }
+
+    #[Required]
+    public function setRequestStack(RequestStack $requestStack): void
+    {
+        $this->requestStack = $requestStack;
+    }
+
+    protected function isTurboFrameRequest(): bool
+    {
+        if ($this->requestStack === null) {
+            return false;
+        }
+
+        $req = $this->requestStack->getCurrentRequest();
+
+        if (!$req) {
+            return false;
+        }
+
+        if ($req->headers->has('Turbo-Frame')) {
+            return true;
+        }
+
+        $accept = $req->headers->get('Accept', '');
+        if (str_contains($accept, 'text/vnd.turbo-stream.html') || str_contains($accept, 'text/vnd.turbo-html')) {
+            return true;
+        }
+
+        return false;
     }
 
     public function addFlashBag(string $niveau, string $message): void

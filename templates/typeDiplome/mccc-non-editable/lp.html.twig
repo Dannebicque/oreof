@@ -28,7 +28,7 @@
         </div>
         <div class="col-4">
             <span>Nb d'épreuve(s)</span><br>
-            {{ 
+            {{
                 compareMccc.displayMccc(
                     mcccs[1]['cc'].nbEpreuves,
                     mcccVersioning[1]['cc'].nbEpreuves ?? false,
@@ -58,11 +58,11 @@
             {% if mcccs[1]['et'].typeEpreuve[0] is defined and typeEpreuves[mcccs[1]['et'].typeEpreuve[0]] is defined%}
                 {{
                     compareMccc.displayMccc(
-                        typeEpreuves[mcccs[1]['et'].typeEpreuve[0]].display 
+                        typeEpreuves[mcccs[1]['et'].typeEpreuve[0]].display,
                         typeEpreuves[mcccVersioning[1]['et'].typeEpreuve[0]].display ?? false,
                         "",
                         hasDisplayComparaison
-                    ) 
+                    )
                 }}
             {% else %}
                 erreur
@@ -114,7 +114,7 @@
         <div class="col-4">
             <span>Type d'épreuve</span><br>
             {% if mcccs[2]['et'].typeEpreuve[0] is defined and typeEpreuves[mcccs[2]['et'].typeEpreuve[0]] is defined %}
-                {{ 
+                {{
                     compareMccc.displayMccc(
                         typeEpreuves[mcccs[2]['et'].typeEpreuve[0]].display,
                         typeEpreuves[mcccVersioning[2]['et'].typeEpreuve[0]].display ?? false,

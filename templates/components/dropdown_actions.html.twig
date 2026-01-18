@@ -1,0 +1,71 @@
+<div class="relative inline-block text-left"
+     data-controller="dropdown"
+     {% if id %}id="{{ id }}"{% endif %}
+>
+    <button
+            type="button"
+            class="inline-flex items-center justify-center rounded-full p-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100
+               focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            aria-haspopup="true"
+            aria-expanded="false"
+            data-action="click->dropdown#toggle"
+            data-dropdown-target="button"
+    >
+        <span class="sr-only">{{ label }}</span>
+        <i class="{{ icon }}"></i>
+    </button>
+
+    <div
+            class="absolute right-0 z-50 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black/5 hidden"
+            role="menu"
+            data-dropdown-target="menu"
+    >
+        <div class="py-1" role="none">
+            {% for item in items %}
+                {% set danger = item.danger ?? false %}
+                {% set disabled = item.disabled ?? false %}
+                {% set method = item.method ?? 'GET' %}
+                {% set turboFrame = item.turboFrame ?? null %}
+                {% set confirm = item.confirm ?? null %}
+
+                {% if method == 'GET' %}
+                    <a
+                            href="{{ item.url ?? '#' }}"
+                            class="block px-4 py-2 text-sm
+                               {{ danger ? 'text-red-600 hover:bg-red-50' : 'text-gray-700 hover:bg-gray-100' }}
+                               {{ disabled ? 'opacity-50 pointer-events-none' : '' }}"
+                            role="menuitem"
+                            {% if turboFrame != null %}data-turbo-frame="{{ turboFrame }}"{% endif %}
+                            {% if confirm %}data-action="click->dropdown#confirm" data-dropdown-confirm-value="{{ confirm|e('html_attr') }}"{% endif %}
+                    >
+                        {% if item.icon is defined %}<i class="{{ item.icon }}"></i>{% endif %}
+                        {{ item.label }}
+                    </a>
+                {% else %}
+                    {# Actions non-GET : petit form pour respecter HTTP + CSRF si besoin #}
+                    <form method="post"
+                          action="{{ item.url ?? '#' }}"
+                          class="block"
+                          {% if confirm %}data-action="submit->dropdown#confirm"
+                          data-dropdown-confirm-value="{{ confirm|e('html_attr') }}"{% endif %}
+                    >
+                        {# Si tu veux : _method pour DELETE/PUT #}
+                        {% if method != 'POST' %}
+                            <input type="hidden" name="_method" value="{{ method }}">
+                        {% endif %}
+
+                        <button
+                                type="submit"
+                                class="w-full text-left px-4 py-2 text-sm
+                                   {{ danger ? 'text-red-600 hover:bg-red-50' : 'text-gray-700 hover:bg-gray-100' }}
+                                   {{ disabled ? 'opacity-50 pointer-events-none' : '' }}"
+                                role="menuitem"
+                        >
+                            {{ item.label }}
+                        </button>
+                    </form>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</div>

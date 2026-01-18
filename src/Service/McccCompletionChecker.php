@@ -4,8 +4,7 @@ namespace App\Service;
 
 use App\Entity\ElementConstitutif;
 use App\Entity\FicheMatiere;
-use App\Entity\Mccc;
-use Doctrine\ORM\EntityManagerInterface;
+use App\TypeDiplome\TypeDiplomeResolver;
 
 final class McccCompletionChecker
 {
@@ -34,7 +33,7 @@ final class McccCompletionChecker
             throw new \InvalidArgumentException('Invalid owner type');
         }
 
-        $typeD = $this->typeDiplomeResolver->getFromParcours($parcours);
+        $typeD = $this->typeDiplomeResolver->fromParcours($parcours);
 
         if ($typeD === null) {
             return false;

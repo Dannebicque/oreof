@@ -1,0 +1,26 @@
+{% for key, ue in ues %}
+    <turbo-stream action="update" target="ue_number_{{ key }}">
+        <template>
+            {{ ue }}
+        </template>
+    </turbo-stream>
+{% endfor %}
+
+{% for key, ue in ues %}
+    <turbo-stream action="update" target="ue_titre_number_{{ key }}">
+        <template>
+            {{ ue }}
+        </template>
+    </turbo-stream>
+{% endfor %}
+
+{% if toastMessage is defined %}
+    <turbo-stream action="append" target="flash_toasts">
+        <template>
+            {{ include('turbo/toast.stream.html.twig', {
+                message: toastMessage,
+                undo: undo
+            }) }}
+        </template>
+    </turbo-stream>
+{% endif %}

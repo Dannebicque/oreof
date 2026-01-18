@@ -15,6 +15,7 @@ use App\Classes\Process\FicheMatiereProcess;
 use App\Classes\Process\ParcoursProcess;
 use App\Classes\ValidationProcess;
 use App\Classes\ValidationProcessFicheMatiere;
+use App\Enums\TypeModificationDpeEnum;
 use App\Events\HistoriqueFormationEvent;
 use App\Events\HistoriqueParcoursEvent;
 use App\Repository\DpeParcoursRepository;
@@ -339,6 +340,66 @@ class ProcessValidationController extends BaseController
                     //mettre à jour l'historique
                     $histoEvent = new HistoriqueParcoursEvent($objet, $this->getUser(), $place, 'valide', $request);
                     $this->eventDispatcher->dispatch($histoEvent, HistoriqueParcoursEvent::ADD_HISTORIQUE_PARCOURS);
+                    $this->entityManager->flush();
+                    return JsonReponse::success('Validation modifiée');
+            }
+
+            return JsonReponse::error('Erreur lors de la modification de l\'état de validation');
+        }
+
+        return $this->render('process_validation/_edit.html.twig', [
+            'etats' => $this->validationProcess->getProcess(),
+            'type' => $type,
+            'id' => $id,
+        ]);
+    }
+
+    #[Route('/type_modif_dpe/edit/{type}/{id}', name: 'app_type_modif_dpe_edit')]
+    public function typeModifDpeEdit(
+        DpeParcoursRepository $dpeParcoursRepository,
+        ParcoursRepository    $parcoursRepository,
+        FormationRepository   $formationRepository,
+        Request               $request,
+        string                $type,
+        int                   $id
+    ): Response
+    {
+        if ($request->isMethod('POST')) {
+            $data = $request->request->all();
+            $place = $data['type_modif_dpe'];
+
+            //mise à jour du workflow
+            switch ($type) {
+                case 'formation':
+                    $objet = $formationRepository->find($id);
+
+                    if ($objet === null) {
+                        return JsonReponse::error('Formation non trouvée');
+                    }
+
+                    if ($objet->isHasParcours() === false) {
+                        //formation sans parcours
+                        $dpe = $dpeParcoursRepository->findOneBy(['parcours' => $objet->getParcours()->first(), 'campagneCollecte' => $this->getCampagneCollecte()]);
+                        if ($dpe === null) {
+                            return JsonReponse::error('Formation non trouvée');
+                        }
+                        $dpe->setEtatReconduction(TypeModificationDpeEnum::from($place));
+                        $this->entityManager->flush();
+                        return JsonReponse::success('Validation modifiée');
+                    }
+
+                    break;
+                case 'parcours':
+                    //récupérer la transition de départ en fonction de la place selectionnée
+
+                    $objet = $parcoursRepository->find($id);
+                    $dpe = $dpeParcoursRepository->findOneBy(['parcours' => $objet, 'campagneCollecte' => $this->getCampagneCollecte()]);
+                    if ($objet === null) {
+                        return JsonReponse::error('Parcours non trouvé');
+                    }
+
+                    $dpe->setEtatReconduction(TypeModificationDpeEnum::from($place));
+                    //mettre à jour l'historique
                     $this->entityManager->flush();
                     return JsonReponse::success('Validation modifiée');
             }

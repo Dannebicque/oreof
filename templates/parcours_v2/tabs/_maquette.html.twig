@@ -1,0 +1,24 @@
+<turbo-frame id="tab-content">
+    <header class="border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+        <div>
+            <h2 class="text-xl font-black text-slate-800 tracking-tight">Structure de la maquette</h2>
+            <p class="text-xs text-slate-400 font-bold uppercase mt-1">Édition des années, semestres et
+                unités d'enseignement</p>
+        </div>
+        <div class="flex gap-3">
+            {#            <button class="px-6 py-2 bg-white border border-slate-200 rounded-xl text-xs font-black shadow-sm"> #}
+            {#                Prévisualiser #}
+            {#            </button> #}
+            {#            <button class="px-6 py-2 bg-indigo-600 text-white rounded-xl text-xs font-black shadow-lg"> #}
+            {#                Enregistrer #}
+            {#            </button> #}
+        </div>
+    </header>
+
+    <div class="flex-1 overflow-y-auto p-2 custom-scrollbar">
+        {{ render(controller('App\\Controller\\StructureShowController::parcoursShow', {
+            parcours: parcours.id,
+            hasLastVersion: false,
+        })) }}{# todo: gérer version #}
+    </div>
+</turbo-frame>

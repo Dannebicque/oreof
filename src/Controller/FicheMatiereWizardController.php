@@ -280,7 +280,7 @@ class FicheMatiereWizardController extends BaseController
 
         if ($type === 'but') {
             $form = $this->createForm(FicheMatiereStep4Type::class, $ficheMatiere);
-            $typeD = $this->typeDiplomeResolver->get($typeDiplome);
+            $typeD = $this->typeDiplomeResolver->fromTypeDiplome($typeDiplome);
 
             return $this->render('fiche_matiere_wizard/_step4But.html.twig', [
                 'mcccs' => $typeD->getMcccs($ficheMatiere),
@@ -292,7 +292,7 @@ class FicheMatiereWizardController extends BaseController
 
 
         if ($type === 'other') {
-            $typeD = $this->typeDiplomeResolver->get($typeDiplome);
+            $typeD = $this->typeDiplomeResolver->fromTypeDiplome($typeDiplome);
             return $this->render('fiche_matiere_wizard/_step4Other.html.twig', [
                 'ficheMatiere' => $ficheMatiere,
                'parcours' => $parcours,

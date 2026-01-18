@@ -26,15 +26,15 @@ class SemestreMutualisable
     #[ORM\ManyToOne(inversedBy: 'semestreMutualisables')]
     private ?Parcours $parcours = null;
 
-    #[ORM\OneToMany(mappedBy: 'semestreRaccroche', targetEntity: SemestreParcours::class)]
-    private Collection $semestreParcours;
+//    #[ORM\OneToMany(mappedBy: 'semestreRaccroche', targetEntity: SemestreParcours::class)]
+//    private Collection $semestreParcours;
 
     #[ORM\OneToMany(mappedBy: 'semestreRaccroche', targetEntity: Semestre::class)]
     private Collection $semestres;
 
     public function __construct()
     {
-        $this->semestreParcours = new ArrayCollection();
+//        $this->semestreParcours = new ArrayCollection();
         $this->semestres = new ArrayCollection();
     }
 
@@ -67,35 +67,35 @@ class SemestreMutualisable
         return $this;
     }
 
-    /**
-     * @return Collection<int, SemestreParcours>
-     */
-    public function getSemestreParcours(): Collection
-    {
-        return $this->semestreParcours;
-    }
-
-    public function addSemestreParcour(SemestreParcours $semestreParcour): self
-    {
-        if (!$this->semestreParcours->contains($semestreParcour)) {
-            $this->semestreParcours->add($semestreParcour);
-            $semestreParcour->setSemestreRaccroche($this);
-        }
-
-        return $this;
-    }
-
-    public function removeSemestreParcour(SemestreParcours $semestreParcour): self
-    {
-        if ($this->semestreParcours->removeElement($semestreParcour)) {
-            // set the owning side to null (unless already changed)
-            if ($semestreParcour->getSemestreRaccroche() === $this) {
-                $semestreParcour->setSemestreRaccroche(null);
-            }
-        }
-
-        return $this;
-    }
+//    /**
+//     * @return Collection<int, SemestreParcours>
+//     */
+//    public function getSemestreParcours(): Collection
+//    {
+//        return $this->semestreParcours;
+//    }
+//
+//    public function addSemestreParcour(SemestreParcours $semestreParcour): self
+//    {
+//        if (!$this->semestreParcours->contains($semestreParcour)) {
+//            $this->semestreParcours->add($semestreParcour);
+//            $semestreParcour->setSemestreRaccroche($this);
+//        }
+//
+//        return $this;
+//    }
+//
+//    public function removeSemestreParcour(SemestreParcours $semestreParcour): self
+//    {
+//        if ($this->semestreParcours->removeElement($semestreParcour)) {
+//            // set the owning side to null (unless already changed)
+//            if ($semestreParcour->getSemestreRaccroche() === $this) {
+//                $semestreParcour->setSemestreRaccroche(null);
+//            }
+//        }
+//
+//        return $this;
+//    }
 
     /**
      * @return Collection<int, Semestre>

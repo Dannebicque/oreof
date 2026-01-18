@@ -1,0 +1,40 @@
+{% form_theme form 'communs/form_theme_v2.html.twig' %}
+{{ form_start(form) }}
+<div
+        {{ stimulus_controller('ue') }}
+>
+    {{ form_row(form.libelle) }}
+    {{ form_row(form.ects) }}
+    <div>
+        {{ form_row(form.typeUe, {'row_attr' : {'id' : 'typeUe' }}) }}
+
+        <button class="btn text-info"
+                {{ stimulus_action('ue','ajoutTypeUe', 'click') }}
+        >
+            <i class="{{ iconAdd }}"></i>
+            Absent de la liste, ajouter un type d'UE
+        </button>
+    </div>
+
+    {{ form_row(form.typeUeTexte, {'row_attr' : {'class' : 'd-none', 'id' : 'typeUeTexte' }, 'attr' :
+        {'data-action' : 'keyup->ue#changeTypeUeTexte'}}) }}
+    <div>
+        {{ form_row(form.natureUeEc, {'row_attr' : {'id' : 'natureUeEc' }}) }}
+    </div>
+    <div id="descriptionUeLibre"
+         {% if ue is defined and ue.natureUeEc != null and ue.natureUeEc.libre == true %}class=""
+         {% else %}class="d-none"{% endif %}
+    >
+        {{ form_row(form.descriptionUeLibre, {'row_attr' : {'id' : 'natureUeEc' }}) }}
+    </div>
+</div>
+{# <button type="submit" class="btn btn-success" #}
+{#        {{ stimulus_action('base','sauvegardeFormModal', 'click') }} #}
+{# > #}
+{#    <i class="fal fa-floppy-disk"></i> #}
+{#    Enregistrer #}
+{# </button> #}
+
+{# {{ component('alerte', {type:"info", message:'tous les champs avec un <span class="text-red">*</span> sont #}
+{# obligatoires'}) }} #}
+{{ form_end(form) }}

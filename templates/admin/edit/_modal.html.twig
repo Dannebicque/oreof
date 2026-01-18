@@ -27,6 +27,33 @@
         </div>
     </form>
 </div>
+
+<div>
+    <h3 class="modal-section-title">
+        {{ 'modifier.ouverture.title'|trans({}, 'process') }}
+    </h3>
+
+    <form action="{{ path('app_type_modif_dpe_edit', {type:type, id:id}) }}" method="post">
+        <label for="type_modif_dpe"> {{ 'process.type_modif_dpe'|trans({}, 'process') }}</label>
+        <select class="form-select" id="type_modif_dpe" name="etat_dpe">
+            {% for etat in typesModifs %}
+                <option value="{{ etat.value }}">
+                    {{ ('type_modif_dpe.'~etat.value)|trans({}, 'process') }}
+                </option>
+            {% endfor %}
+        </select>
+        <div class="mt-2">
+            <button type="submit" class="btn btn-success"
+                    {{ stimulus_action('base','sauvegardeFormModal', 'click') }}
+                    data-action="live#emit"
+                    data-event="edit"
+            >
+                <i class="fal fa-floppy-disk"></i>
+                Enregistrer
+            </button>
+        </div>
+    </form>
+</div>
 <div>
     <h3 class="modal-section-title">
         Commentaire libre (uniquement admin/SES)
@@ -40,7 +67,14 @@
                 :formation="object"
         />
     {% endif %}
-
+</div>
+<div>
+    <h3 class="modal-section-title">
+        {{ 'fichiers.publies'|trans({}, 'process') }}
+    </h3>
+    <a href="{{ url('app_parcours_mccc_export_cfvu_valid', {'parcours' : object.id, 'format' : 'simplifie'}) }}"
+       target="_blank" class="btn btn-info"><i class="{{ iconShow }}"></i> Voir le fichier MCCC publié</a>
+    <button class="btn btn-warning">Mettre à jour le fichier MCCC</button>
 </div>
 
 

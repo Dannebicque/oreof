@@ -32,18 +32,18 @@ use Symfony\Component\Workflow\WorkflowInterface;
 class RessourceVoter extends Voter
 {
     public function __construct(
-        private WorkflowInterface $dpeParcoursWorkflow,
-        private WorkflowInterface $ficheWorkflow,
-        private readonly Security $security,
-        private UserProfilRepository   $userProfilRepository,
-        private ProfilDroitsRepository $profilDroitsRepository,
+        private readonly WorkflowInterface      $dpeParcoursWorkflow,
+        private readonly WorkflowInterface      $ficheWorkflow,
+        private readonly Security               $security,
+        private readonly UserProfilRepository   $userProfilRepository,
+        private readonly ProfilDroitsRepository $profilDroitsRepository,
     )
     {
     }
 
     protected function supports(string $attribute, mixed $subject): bool
     {
-        return in_array($attribute, PermissionEnum::getAvailableTypes())
+        return in_array($attribute, PermissionEnum::getAvailableTypes(), true)
             && is_array($subject)
             && isset($subject['route'], $subject['subject']);
     }
@@ -78,10 +78,8 @@ class RessourceVoter extends Voter
         foreach ($userProfils as $userProfil) {
             $profile = $userProfil->getProfil();
             foreach ($attributesToCheck as $attr) {
-                if ($this->profilDroitsRepository->hasDroit($profile, $attr, $route)) {
-                    if ($this->checkScope($userProfil, $object, $attr)) {
-                        return true;
-                    }
+                if ($this->profilDroitsRepository->hasDroit($profile, $attr, $route) && $this->checkScope($userProfil, $object, $attr)) {
+                    return true;
                 }
             }
         }
@@ -114,16 +112,16 @@ class RessourceVoter extends Voter
 
         if ($object instanceof Formation) {
             // Si l'objet est une formation, on vérifie si la composante porteuse de la formation correspond à la composante de l'utilisateur
-            return $this->checkFormation($userProfil, $object, $attribute) || $object === 'formation';
+            return $this->checkFormation($userProfil, $object, $attribute);
         }
 
         if ($object instanceof DpeParcours || $object instanceof Parcours) {
             // Si l'objet est un DPE Parcours, on vérifie si la composante porteuse de la formation correspond à la composante de l'utilisateur
-            return $this->checkParcours($userProfil, $object, $attribute) || $object === 'parcours';
+            return $this->checkParcours($userProfil, $object, $attribute);
         }
 
         if ($object instanceof FicheMatiere) {
-            return $this->checkFicheMatiere($userProfil, $object, $attribute) || $object === 'ficheMatiere';
+            return $this->checkFicheMatiere($userProfil, $object, $attribute);
         }
 
         return false;
@@ -140,19 +138,19 @@ class RessourceVoter extends Voter
 
         if ($object instanceof Formation) {
             // Si l'objet est une formation, on vérifie si la composante porteuse de la formation correspond à la composante de l'utilisateur
-            return $this->checkFormation($userProfil, $object, $attribute) || $object === 'formation';
+            return $this->checkFormation($userProfil, $object, $attribute);
         }
 
         if ($object instanceof DpeParcours || $object instanceof Parcours) {
             // Si l'objet est un DPE Parcours, on vérifie si la composante porteuse de la formation correspond à la composante de l'utilisateur
-            return $this->checkParcours($userProfil, $object, $attribute) || $object === 'parcours';
+            return $this->checkParcours($userProfil, $object, $attribute);
         }
 
         if ($object instanceof FicheMatiere) {
             if ($object->isHorsDiplome() === true) {
                 return true;
             }
-            return $this->checkFicheMatiere($userProfil, $object, $attribute) || $object === 'ficheMatiere';
+            return $this->checkFicheMatiere($userProfil, $object, $attribute);
         }
 
         return false;
@@ -165,18 +163,18 @@ class RessourceVoter extends Voter
         //une fiche peut être éditée par le RP, RF ou le DPE
         if ($object instanceof FicheMatiere) {
 
+            $canAccess = $this->ficheWorkflow->can($object, 'autoriser') || $this->ficheWorkflow->can($object, 'valider_fiche_compo');
+
             if ($object->isHorsDiplome() && $object->getResponsableFicheMatiere() === $userProfil->getUser()) {
-                return true;
+                return $canAccess;
             }
 
             $isProprietaire = (
                 ($userProfil->getParcours() === $object->getParcours() && ($object->getParcours()?->getCoResponsable()?->getId() === $userProfil->getUser()?->getId() || $object->getParcours()?->getRespParcours()?->getId() === $userProfil->getUser()?->getId())) ||
                 ($userProfil->getFormation() === $object->getParcours()?->getFormation() && ($object->getParcours()?->getFormation()?->getCoResponsable()?->getId() === $userProfil->getUser()?->getId() || $object->getParcours()?->getFormation()?->getResponsableMention()?->getId() === $userProfil->getUser()?->getId())) ||
-                ($userProfil->getComposante() === $object->getParcours()?->getFormation()?->getComposantePorteuse() && $object->getParcours()?->getFormation()?->getComposantePorteuse()?->getResponsableDpe()?->getId() === $userProfil->getUser()?->getId()));
+                ($userProfil->getComposante() === $object->getParcours()?->getFormation()?->getComposantePorteuse() && $object->getParcours()?->getFormation()?->getComposantePorteuse()?->getResponsableDpe()?->getId() === $userProfil->getUser()?->getId())
+            );
         }
-
-        $canAccess = $this->ficheWorkflow->can($object, 'autoriser') || $this->ficheWorkflow->can($object, 'valider_fiche_compo');
-
 
         return $isProprietaire && $canAccess;
     }
@@ -186,12 +184,11 @@ class RessourceVoter extends Voter
         if ($object instanceof Formation) {
             $isProprietaire = (($userProfil->getFormation() === $object && ($object->getCoResponsable()?->getId() === $userProfil->getUser()?->getId() || $object->getResponsableMention()?->getId() === $userProfil->getUser()?->getId())) || ($userProfil->getComposante() === $object->getComposantePorteuse() && $object->getComposantePorteuse()?->getResponsableDpe()?->getId() === $userProfil->getUser()?->getId()));
 
-//todo: gérer le workflow?
+            //todo: gérer le workflow?
             $canAccess =
                 $object->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_TEXTE ||
                 $object->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_MCCC_TEXTE ||
                 $object->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_MCCC ||
-                $object->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_PARCOURS ||
                 $object->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_PARCOURS ||
                 $object->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION;
 

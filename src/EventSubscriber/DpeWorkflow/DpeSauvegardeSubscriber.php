@@ -10,7 +10,7 @@
 namespace App\EventSubscriber\DpeWorkflow;
 
 use App\Entity\DpeParcours;
-use App\Service\TypeDiplomeResolver;
+use App\TypeDiplome\TypeDiplomeResolver;
 use App\Utils\Tools;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -56,7 +56,7 @@ class DpeSauvegardeSubscriber implements EventSubscriberInterface
         } else {
             return ;
         }
-        $typeDiplome = $this->typeDiplomeResolver->get($formation->getTypeDiplome());
+        $typeDiplome = $this->typeDiplomeResolver->fromTypeDiplome($formation->getTypeDiplome());
 
         if (null === $typeDiplome) {
             throw new Exception('Aucun modèle MCC n\'est défini pour ce diplôme');

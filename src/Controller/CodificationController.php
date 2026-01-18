@@ -283,7 +283,7 @@ class CodificationController extends BaseController
             throw new NotFoundHttpException('Parcours non trouvé');
         }
 
-        $typeD = $this->typeDiplomeResolver->getFromParcours($parcours);
+        $typeD = $this->typeDiplomeResolver->fromParcours($parcours);
         $tParcours = $typeD->calculStructureParcours($parcours);
 
         return $this->render('codification/_parcours.html.twig', [

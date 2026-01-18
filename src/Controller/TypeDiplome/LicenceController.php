@@ -19,9 +19,9 @@ use App\Entity\TypeDiplome;
 use App\Repository\ElementConstitutifRepository;
 use App\Repository\TypeDiplomeRepository;
 use App\Repository\TypeEpreuveRepository;
-use App\Service\TypeDiplomeResolver;
 use App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException;
 use App\TypeDiplome\TypeDiplomeHandlerInterface;
+use App\TypeDiplome\TypeDiplomeResolver;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Component\HttpFoundation\Request;
@@ -43,7 +43,7 @@ class LicenceController extends BaseController
             throw new Exception('Type de diplome Licence non trouvé');
         }
 
-        $this->typeDiplomeHandler = $typeDiplomeResolver->get($this->typeDiplome);
+        $this->typeDiplomeHandler = $typeDiplomeResolver->fromTypeDiplome($this->typeDiplome);
     }
 
 
@@ -120,7 +120,7 @@ class LicenceController extends BaseController
         }
 
         $typeEpreuves = $typeEpreuveRepository->findByTypeDiplome($typeDiplome);
-        $typeDiplomeHandler = $this->typeDiplomeResolver->get($typeDiplome);
+        $typeDiplomeHandler = $this->typeDiplomeResolver->fromTypeDiplome($typeDiplome);
         $raccroche = $elementConstitutif->getFicheMatiere()?->getParcours()?->getId() !== $parcours->getId();
         $getElement = new GetElementConstitutif($elementConstitutif, $parcours);
         $disabled = ($elementConstitutif->isMcccSpecifiques() === false && $raccroche) || $elementConstitutif->getFicheMatiere()?->isMcccImpose();

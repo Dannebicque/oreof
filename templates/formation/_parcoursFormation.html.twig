@@ -82,14 +82,12 @@
                                 </a>
                             {% endif %}
 
-                            {% if is_granted('CAN_FORMATION_DELETE_MY') or is_granted('ROLE_ADMIN') %}
-                                {# todo manque formation sur le isgranted #}
-                                <button {{ stimulus_action('crud', 'delete', 'click', {
-                                    url:path('app_parcours_delete',{'id': parcours.id}),
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <a href="{{ path('app_parcours_delete',{'id': parcours.id,
                                     csrf: csrf_token('delete' ~ parcours.id)
-                                }) }} class="btn btn-sm text-danger">
+                                }) }}" class="btn btn-sm text-danger">
                                     <i class="{{ iconDelete }}"></i> Supprimer
-                                </button>
+                                </a>
                             {% endif %}
                         </td>
                     </tr>

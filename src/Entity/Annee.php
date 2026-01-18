@@ -109,7 +109,7 @@ class Annee
     {
         if ($this->parcoursSemestre->removeElement($parcoursSemestre)) {
             // set the owning side to null (unless already changed)
-            if ($parcoursSemestre->getAnnee() === $this) {
+            if ($parcoursSemestre->getOrdreAnnee() === $this) {
                 $parcoursSemestre->setAnnee(null);
             }
         }
@@ -223,4 +223,8 @@ class Annee
         return $this;
     }
 
+    public function isValid(): bool
+    {
+        return $this->getParcours() !== null;
+    }
 }

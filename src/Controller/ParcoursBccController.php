@@ -19,7 +19,7 @@ class ParcoursBccController extends BaseController
     public function index(
         Parcours $parcours): Response
     {
-        $typeD = $this->typeDiplomeResolver->get($parcours->getFormation()?->getTypeDiplome());
+        $typeD = $this->typeDiplomeResolver->fromTypeDiplome($parcours->getFormation()?->getTypeDiplome());
         $dto = $typeD->calculStructureParcours($parcours, false);
         return $this->render('parcours_bcc/index.html.twig', [
             'parcours' => $parcours,

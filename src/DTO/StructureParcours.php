@@ -9,6 +9,7 @@
 
 namespace App\DTO;
 
+use App\Entity\Annee;
 use App\Entity\Parcours;
 
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -22,6 +23,8 @@ class StructureParcours
     #[Groups(['DTO_json_versioning'])]
     public array $semestres = [];
 
+    public array $annees = [];
+
     #[Groups(['DTO_json_versioning'])]
     public HeuresEctsFormation $heuresEctsFormation;
 
@@ -33,19 +36,41 @@ class StructureParcours
     )
     {
     }
-    public function setParcours(Parcours $parcours): void
+
+    // Factory statique : crée un DTO à partir d'une Entity (pas autowiré)
+    public static function fromEntity(Parcours $parcours, bool $withEcts = true, bool $withBcc = true): self
     {
-        $this->statsFichesMatieresParcours = new StatsFichesMatieresParcours($parcours);
-        $this->parcours = $parcours;
-        if ($this->withEcts) {
-            $this->heuresEctsFormation = new HeuresEctsFormation();
+        $self = new self($withEcts, $withBcc);
+        $self->parcours = $parcours;
+        $self->statsFichesMatieresParcours = new StatsFichesMatieresParcours($parcours); //todo: a déplacer ? hors de ce DTO
+
+        if ($withEcts) {
+            $self->heuresEctsFormation = new HeuresEctsFormation();
         }
 
+        /** @var Annee $annee */
+        foreach ($parcours->getAnnees() as $annee) {
+            $self->annees[$annee->getOrdre()]['annee'] = $annee;
+            $self->annees[$annee->getOrdre()]['semestres'] = [];
+        }
+
+        return $self;
     }
+
+//    public function setParcours(Parcours $parcours): void
+//    {
+//        $this->statsFichesMatieresParcours = new StatsFichesMatieresParcours($parcours);
+//        $this->parcours = $parcours;
+//        if ($this->withEcts) {
+//            $this->heuresEctsFormation = new HeuresEctsFormation();
+//        }
+//
+//    }
 
     public function addSemestre(int $ordre, StructureSemestre $structureSemestre): void
     {
         $this->semestres[$ordre] = $structureSemestre;
+        $this->annees[$structureSemestre->semestreParcours?->getAnnee()?->getOrdre()]['semestres'][$ordre] = $structureSemestre;
         if ($this->withEcts) {
             $this->heuresEctsFormation->addSemestre($structureSemestre->heuresEctsSemestre);
         }

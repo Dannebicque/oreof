@@ -28,11 +28,11 @@ class UeType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $typeDiplome = $options['typeDiplome'];
-        $isAdmin = $options['isAdmin'];
+//        $isAdmin = $options['isAdmin'] ?? false;
 
-        if (true === $isAdmin) {
-            $builder->add('ordre', IntegerType::class);
-        }
+//        if (true === $isAdmin) {
+//            $builder->add('ordre', IntegerType::class);
+//        }
 
 
         $builder
@@ -89,7 +89,7 @@ class UeType extends AbstractType
             'data_class' => Ue::class,
             'translation_domain' => 'form',
             'typeDiplome' => null,
-            'isAdmin' => false
+//            'isAdmin' => false
         ]);
     }
 }

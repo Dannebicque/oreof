@@ -1,0 +1,196 @@
+<turbo-frame id="tab-content">
+    {% if semestre == null %}
+        Semestre inexistant
+    {% else %}
+        <header class="border-b border-slate-100 flex justify-between items-center bg-slate-50 p-2">
+            <div>
+                <div class="flex items-baseline gap-3">
+                    <h2 class="text-xl font-black text-slate-800 tracking-tight">
+                        Semestre {{ semestreParcours.ordre }}</h2>
+                    <span class="px-2 py-1 {% if semestreParcours.isOuvert == false %}bg-red-100 text-red-700{% else %}bg-green-100 text-green-700{% endif %} text-[10px] font-black rounded uppercase">{% if semestreParcours.isOuvert == false %}
+                            <i class="fal fa-do-not-enter"></i> Non ouvert{% else %}Ouvert{% endif %}</span>
+                </div>
+                <p class="text-xs text-slate-400 font-bold uppercase mt-1">Total horaire
+                    : {{ semestre.heuresEctsSemestre.sommeSemestreTotalPres }} heures</p>
+                <div class="flex gap-4 mt-1">
+                    <span class="text-xs font-bold text-green-600 flex items-center gap-1">● Conforme aux règles</span>
+                    <span class="text-xs font-medium text-slate-400">Dernière modif : il y a 2h</span>
+                </div>
+            </div>
+            <div class="flex gap-3">
+                <div class="text-right">
+                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Total ECTS
+                        S{{ semestreParcours.ordre }}</p>
+                    <p class="text-2xl font-black text-green-600">{{ semestre.heuresEctsSemestre.sommeSemestreEcts }} /
+                        30</p> {# todo: mettre rouge ou orange si pas 30 #}
+                </div>
+                <button class="p-2">
+                    <i class="fal fa-cogs"></i>
+                </button>
+                {#            <button class="px-6 py-2 bg-indigo-600 text-white rounded-xl text-xs font-black shadow-lg"> #}
+                {#                Enregistrer #}
+                {#            </button> #}
+            </div>
+        </header>
+
+        <div class="flex-1 overflow-y-auto pt-3 custom-scrollbar">
+            {#        --- Démo -- -#}
+            {#        <section #}
+            {#                class="bg-white border border-slate-200 rounded-sm shadow-sm overflow-hidden border-l-8 border-slate-300"> #}
+            {#            <div class="p-2 flex items-center justify-between bg-slate-50/50"> #}
+            {#                <div class="flex items-center gap-2"> #}
+            {#                    <div class="w-12 h-12 bg-gray-600 text-white rounded-2xl flex items-center justify-center font-black shadow-lg shadow-gray-100"> #}
+            {#                        1.1 <i class="ms-2 fas fa-lock"></i></div> #}
+            {#                    <div> #}
+            {#                        <h3 class="text-xl font-black text-slate-800">UE 1.1 : Spécialisation SVT</h3> #}
+            {#                        <p class="text-xs font-bold text-orange-500 uppercase tracking-tighter"><i #}
+            {#                                    class="fal fa-chain"></i> Repris de : L1-Chimie</p> #}
+            {#                    </div> #}
+            {#                </div> #}
+            {#                <div class="flex items-center gap-4"> #}
+            {#                    <span class="text-lg font-black text-slate-600">6 ECTS</span> #}
+            {#                    <button class="p-2 hover:bg-slate-100 rounded-lg"><i class="fal fa-cogs"></i></button> #}
+            {#                </div> #}
+
+            {#                #}{#                <div class="flex items-center gap-5"> #}
+            {#                #}{#                    <div class="text-slate-400" title="Verrouillé - Maquette de référence"> #}
+            {#                #}{#                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg> #}
+            {#                #}{#                    </div> #}
+            {#                #}{#                    <div> #}
+            {#                #}{#                        <div class="flex items-center gap-2"> #}
+            {#                #}{#                            <h3 class="text-xl font-black text-slate-800">UE 1.1 : Tronc Commun Scientifique</h3> #}
+            {#                #}{#                            <span class="px-2 py-0.5 bg-blue-100 text-blue-700 text-[10px] font-black rounded uppercase">Partagé</span> #}
+            {#                #}{#                        </div> #}
+            {#                #}{#                        <p class="text-sm text-slate-500">6 ECTS • 🔗 Accroché à : L1-Chimie</p> #}
+            {#                #}{#                    </div> #}
+            {#                #}{#                </div> #}
+            {#            </div> #}
+            {#            <div class="p-6 space-y-4"> #}
+            {#                <div class="flex items-center justify-between p-4 bg-slate-50 rounded-2xl border border-slate-100 opacity-70"> #}
+            {#                    <div class="flex items-center gap-3 italic"> #}
+            {#                        <span>🔒</span> #}
+            {#                        <span class="font-bold">EC 1 : Biologie Moléculaire</span> #}
+            {#                    </div> #}
+            {#                    <span class="text-xs font-mono">24h CM • 12h TD</span> #}
+            {#                </div> #}
+            {#            </div> #}
+            {#        </section> #}
+            {#        <section #}
+            {#                class="bg-white border border-slate-200 rounded-sm shadow-sm overflow-hidden border-l-8 border-indigo-500 mt-2"> #}
+            {#            <div class="p-2 flex items-center justify-between border-b border-slate-100"> #}
+            {#                <div class="flex items-center gap-2"> #}
+            {#                    <div class="w-12 h-12 bg-indigo-600 text-white rounded-2xl flex items-center justify-center font-black shadow-lg shadow-indigo-100"> #}
+            {#                        1.2 #}
+            {#                    </div> #}
+            {#                    <div> #}
+            {#                        <h3 class="text-xl font-black text-slate-800">UE 1.2 : Spécialisation SVT</h3> #}
+            {#                        <div class="flex gap-2 mt-1"> #}
+            {#                            <span class="px-2 py-0.5 bg-orange-100 text-orange-700 text-[9px] font-black rounded uppercase">UE à choix restreint (1 parmis 2)</span> #}
+            {#                            <span class="px-2 py-0.5 bg-blue-100 text-blue-700 text-[9px] font-black rounded uppercase tracking-tighter italic">Mutualisé avec : L-Math, L-Chimie</span> #}
+            {#                        </div> #}
+            {#                    </div> #}
+            {#                </div> #}
+            {#                <div class="flex items-center gap-4"> #}
+            {#                    <span class="text-lg font-black text-slate-600">6 ECTS</span> #}
+            {#                    <button class="p-2 hover:bg-slate-100 rounded-lg" data-dashlane-label="true" #}
+            {#                            data-dashlane-rid="6f8b22fac4e9d030" data-dashlane-classification="other">⚙️ #}
+            {#                    </button> #}
+            {#                </div> #}
+            {#            </div> #}
+
+            {#            <div class="p-2"> #}
+
+            {#            </div> #}
+            {#        </section> #}
+            {#        --- Fin démo -- -#}
+            {% if semestreParcours.semestre.nonDispense == true %}
+                <!-- html -->
+                <div
+                        class="border-3 border-dashed border-orange-200 bg-orange-50 text-orange-700 p-4 rounded-sm flex items-center justify-between gap-4"
+                        role="status" aria-live="polite" aria-atomic="true"
+                >
+                    <div class="flex items-center gap-4">
+                        <!-- icône d'avertissement / état -->
+                        <span class="p-3 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center">
+                          <!-- exclamation-triangle (accessible) -->
+                          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 20 20"
+                               fill="currentColor"
+                               aria-hidden="true">
+                            <path fill-rule="evenodd"
+                                  d="M8.257 3.099c.765-1.36 2.72-1.36 3.486 0l6.518 11.597A1.75 1.75 0 0 1 17.518 17H2.482a1.75 1.75 0 0 1-1.743-2.304L8.257 3.1zM9 7a1 1 0 1 1 2 0v3a1 1 0 1 1-2 0V7zm1 7a1.25 1.25 0 1 0 0 2.5A1.25 1.25 0 0 0 10 14z"
+                                  clip-rule="evenodd"/>
+                          </svg>
+                          <span class="sr-only">Semestre non dispensé</span>
+                        </span>
+
+                        <div>
+                            <p class="font-semibold text-sm">Semestre non dispensé</p>
+                            <p class="text-xs text-orange-700/80">Aucun contenu pour ce semestre. Dispenser pour ouvrir
+                                la
+                                saisie.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-3">
+                        <!-- formulaire POST pour action "dispenser" (Turbo enabled) -->
+                        <form method="post" action="" data-turbo="true" class="m-0">
+                            <input type="hidden" name="_token"
+                                   value="{{ csrf_token('dispense' ~ semestreParcours.semestre.id) }}">
+                            <button
+                                    type="submit"
+                                    class="px-3 py-2 bg-orange-600 text-white rounded-md font-semibold hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-400"
+                                    aria-label="Dispenser ce semestre"
+                            >
+                                Dispenser ce semestre
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+            {% else %}
+                <div
+                        data-controller="sortable"
+                        data-sortable-type-value="ue"
+                        data-sortable-url-value="{{ path('parcours_structure_api_semestre_reorder_ue', {id: semestreParcours.semestre.id}) }}"
+                >
+                    {% for ue in semestre.ues %}
+                        {{ include('parcours_v2/tabs/_ue.html.twig', {ue:ue}) }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+            {#            <button #}
+            {#                    id="{{ semestre.semestre.id }}-add-ue-btn" #}
+            {#                    class="p-2 hover:bg-slate-100 rounded-lg flex items-center text-green-600" #}
+            {#                    data-action="click->modalturbo#open" #}
+            {#                    data-modal-url="{{ path('parcours_config_ec', { parcours: parcours.id, id: elem.id }) }}" #}
+            {#                    type="button"> #}
+            {#                <i class="{{ iconAdd }} me-1"></i> #}
+            {#                <span>Ajouter une UE au semestre</span> #}
+            {#            </button> #}
+
+            {#            {{ stimulus_controller('modal', { #}
+            {#                size: 'lg', #}
+            {#                modalTitle: 'Ajouter une UE avant l\'' ~displayUee, #}
+            {#                modalUrl: path('structure_ue_add_ue_semestre', {parcours:parcours.id, semestre:semestre.id, ue: uee.id, sens:'before'}) #}
+            {#            }) }} #}
+
+            {#            <button class="text-xs font-black text-slate-700" #}
+            {#                    type="button" #}
+            {#                    data-action="click->modalturbo#open" #}
+            {#                    data-modal-url="{{ path('parcours_structure_add_ue_semestre', {parcours:parcours.id, semestre:semestre.semestre.id}) }}" #}
+            {#                    data-modal-title="Ajouter une UE au semestre {{ semestreParcours.ordre }}" #}
+            {#            > #}
+            {#                <i class="{{ iconAdd }} me-1"></i> #}
+            {#                <span>Ajouter une UE au semestre</span> #}
+            {#            </button> #}
+
+            <a
+                    href="{{ path('parcours_structure_add_ue_semestre', {parcours:parcours.id, semestre:semestre.semestre.id}) }}"
+                    data-turbo="true"
+                    data-action="click->modalturbo#open"
+            >
+                + Ajouter une EC
+            </a>
+        </div>
+    {% endif %}
+</turbo-frame>

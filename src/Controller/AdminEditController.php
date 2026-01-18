@@ -10,6 +10,7 @@
 namespace App\Controller;
 
 use App\Classes\ValidationProcess;
+use App\Enums\TypeModificationDpeEnum;
 use App\Repository\FormationRepository;
 use App\Repository\ParcoursRepository;
 use Symfony\Component\HttpFoundation\Response;
@@ -58,6 +59,7 @@ class AdminEditController extends BaseController
             'type' => $type,
             'object' => $object,
             'etats' => $this->validationProcess->getProcess(),
+            'typesModifs' => TypeModificationDpeEnum::cases()
         ]);
     }
 }

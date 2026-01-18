@@ -43,7 +43,7 @@ class ParcoursMcccExportController extends BaseController
             throw new Exception('Pas de formation.');
         }
 
-        $typeDiplome = $this->typeDiplomeResolver->get($formation->getTypeDiplome());
+        $typeDiplome = $this->typeDiplomeResolver->fromTypeDiplome($formation->getTypeDiplome());
 
         $dpe = GetDpeParcours::getFromParcours($parcours);
 
@@ -83,7 +83,7 @@ class ParcoursMcccExportController extends BaseController
             throw new Exception('Pas de formation.');
         }
 
-        $typeDiplome = $this->typeDiplomeResolver->get($formation->getTypeDiplome());
+        $typeDiplome = $this->typeDiplomeResolver->fromTypeDiplome($formation->getTypeDiplome());
 
         //date conseil
         $dpe = GetDpeParcours::getFromParcours($parcours);
@@ -123,7 +123,7 @@ class ParcoursMcccExportController extends BaseController
             throw new Exception('Pas de formation.');
         }
 
-        $typeDiplome = $this->typeDiplomeResolver->get($formation->getTypeDiplome());
+        $typeDiplome = $this->typeDiplomeResolver->fromTypeDiplome($formation->getTypeDiplome());
         $dpe = GetDpeParcours::getFromParcours($parcours);
         $conseil = null;
         if ($dpe !== null) {

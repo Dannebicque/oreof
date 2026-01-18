@@ -18,7 +18,9 @@
         {{ encore_entry_script_tags('app') }}
     {% endblock %}
 </head>
-<body data-turbo="false">
+<body
+        data-controller="modalturbo"
+>
 <!-- Content Container Start -->
 <div id="root">
     <!-- Nav Content Start -->
@@ -705,5 +707,7 @@
         </div>
     </div>
 </div>
+
+{% include '_ui/modal_wrapper.html.twig' with { open: false } %}
 </body>
 </html>

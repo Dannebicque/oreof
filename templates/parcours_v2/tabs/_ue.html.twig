@@ -1,0 +1,115 @@
+<section
+        class="bg-white border border-slate-200 rounded-sm shadow-sm overflow-hidden border-l-8 border-indigo-500 mb-2"
+        data-sortable-item
+        data-id="{{ ue.ue.id }}"
+>
+    <div class="p-2 flex items-center justify-between border-b border-slate-100">
+        <div class="flex items-center gap-2">
+            <div class="group inline-flex">
+                <div
+                        class="min-w-12 px-2 h-12 bg-indigo-600 text-white rounded-md flex items-center justify-center font-black
+           shadow-lg shadow-indigo-100 cursor-grab active:cursor-grabbing gap-2"
+                        data-sortable-handle
+                        title="Déplacer l’UE"
+                >
+                    <span id="ue_number_{{ ue.ue.id }}">
+                      {{ ue.display }}
+                    </span>
+                    <span class="opacity-0 group-hover:opacity-100 transition-opacity duration-150">⠿</span>
+                </div>
+            </div>
+            <div>
+                <div class="flex items-center gap-2">
+                    <h3 class="text-xl font-black text-slate-800">
+                        <span id="ue_titre_number_{{ ue.ue.id }}">
+                          {{ ue.display }}
+                        </span> : {{ ue.ue.libelle }}
+                    </h3>
+                </div>
+                <div class="flex gap-2 mt-1">
+                    {% if ue.ue.natureUeEc == null %}
+                        <span class="px-2 py-0.5 bg-red-100 text-red-700 text-[9px] font-black rounded uppercase">Erreur, non défini</span>
+                    {% elseif ue.ue.natureUeEc.isChoix %}
+                        <span class="px-2 py-0.5 bg-orange-100 text-orange-700 text-[9px] font-black rounded uppercase">UE à choix restreint (1 parmi {{ ue.ueEnfants|length }})</span>
+                    {% elseif ue.ue.natureUeEc.isLibre %}
+                        <span class="px-2 py-0.5 bg-blue-100 text-blue-700 text-[9px] font-black rounded uppercase">UE libre</span>
+                    {% else %}
+                        <span class="px-2 py-0.5 bg-green-100 text-green-700 text-[9px] font-black rounded uppercase">UE Obligatoire</span>
+                    {% endif %}
+
+                    {% if ue.ue.typeUe == null %}
+                        <span class="px-2 py-0.5 bg-red-100 text-red-700 text-[9px] font-black rounded uppercase">Type UE non défini</span>
+                    {% else %}
+                        <span class="px-2 py-0.5 bg-green-100 text-green-700 text-[9px] font-black rounded uppercase">{{ ue.ue.typeUe.libelle }}</span>
+                    {% endif %}
+                </div>
+                {% if ue.ue.ueMutualisables|length > 0 %}
+                    <div class="flex gap-2 mt-1">
+                    <span class="px-2 py-0.5 bg-blue-100 text-blue-700 text-[9px] font-black rounded uppercase tracking-tighter italic">Mutualisé avec :
+                    {% for l in ue.ue.ueMutualisables %}
+                        {{ l.parcours.displayCourt }}{% if not loop.last %}, {% endif %}
+                    {% endfor %}
+                    </span>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="flex items-center gap-2">
+
+            {% set idBase = 'ue-' ~ ue.ue.id %}
+
+            {% if ue.ue.ueParent != null %}
+                <button
+                        id="{{ idBase }}-add-ue-enfant-btn"
+                        class="p-2 hover:bg-slate-100 rounded-lg flex items-center text-green-600"
+                        type="button">
+                    <i class="{{ iconAdd }} me-1"></i>
+                    <span>UE enfant</span>
+                </button>
+            {% endif %}
+            <!-- ajouter un EC -->
+            <button
+                    id="{{ idBase }}-add-ec-btn"
+                    class="p-2 hover:bg-slate-100 rounded-lg flex items-center text-green-600"
+                    type="button">
+                <i class="{{ iconAdd }} me-1"></i>
+                <span>EC</span>
+            </button>
+
+            <!-- bouton modifier (ouvre modal) -->
+            <button
+                    id="{{ idBase }}-edit-btn"
+                    class="p-2 hover:bg-slate-100 rounded-lg flex items-center text-orange-600"
+                    type="button">
+                <i class="{{ iconEdit }}"></i>
+                <span class="sr-only">Modifier</span>
+            </button>
+
+            <!-- menu d'actions secondaire -->
+            {{ component('dropdown_actions', {
+                label: 'Actions sur la formation',
+                icon: 'fal fa-cogs',
+                items: [
+                    { label: 'Déplacer l\'UE',
+                        icon: 'fal fa-right-left',
+                        url: path('structure_ue_changer', {parcours:parcours.id, ue: ue.ue.id}) },
+                    { label: 'Mutualiser l\'UE', url: path('structure_ue_mutualiser', {semestre:semestre.semestre.id, ue: ue.ue.id}) },
+                    { label: 'Raccrocher une UE', url: path('structure_ue_raccrocher', {ue:ue.ue.id, parcours: parcours.id})},
+                    { label: 'Supprimer l\'UE', url: path('structure_ue_delete', {id: ue.ue.id}), method: 'DELETE', danger: true, confirm: 'Confirmer la suppression ?' },
+                ]
+            }) }}
+
+            <span class="text-lg font-black text-slate-600">{{ ue.heuresEctsUe.sommeUeEcts }} ECTS</span>
+        </div>
+    </div>
+
+    <div class="p-2">
+        {% for uee in ue.uesEnfants %}
+            {{ include('parcours_v2/tabs/_ue.html.twig', {ue:uee}) }}
+        {% endfor %}
+
+        {% for ec in ue.elementConstitutifs %}
+            {{ include('parcours_v2/tabs/_ec.html.twig', {ec:ec}) }}
+        {% endfor %}
+    </div>
+</section>

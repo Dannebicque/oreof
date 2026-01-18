@@ -19,11 +19,10 @@ use App\Entity\SemestreParcours;
 use App\Repository\DpeParcoursRepository;
 use App\Repository\FormationRepository;
 use App\Service\ProjectDirProvider;
-use App\Service\TypeDiplomeResolver;
+use App\TypeDiplome\TypeDiplomeResolver;
 use App\Utils\Tools;
 use DateTime;
 use Symfony\Component\HttpFoundation\StreamedResponse;
-use Symfony\Component\HttpKernel\KernelInterface;
 
 class ExportCap
 {
@@ -78,7 +77,7 @@ class ExportCap
             if ($this->dpeParcours !== null) {
                 $parcours = $this->dpeParcours->getParcours();
                 $formation = $this->dpeParcours->getParcours()?->getFormation();
-                $typeDiplome = $this->typeDiplomeResolver->getFromFormation($formation);
+                $typeDiplome = $this->typeDiplomeResolver->fromFormation($formation);
                 if ($formation !== null && $parcours !== null) {
 //                foreach ($formation->getParcours() as $parcours) {
                     $this->data[1] = $formation->getComposantePorteuse()?->getLibelle();

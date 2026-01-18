@@ -12,7 +12,7 @@ namespace App\Classes\Export;
 use App\Entity\CampagneCollecte;
 use App\Repository\DpeParcoursRepository;
 use App\Repository\FormationRepository;
-use App\Service\TypeDiplomeResolver;
+use App\TypeDiplome\TypeDiplomeResolver;
 use App\Utils\Tools;
 use DateTimeInterface;
 use ZipArchive;
@@ -52,7 +52,7 @@ class ExportMccc
         foreach ($this->formations as $formationId) {
             $formation = $this->formationRepository->findOneBy(['id' => $formationId, 'anneeUniversitaire' => $this->annee->getId()]);
             if ($formation !== null) {
-                $typeDiplome = $this->typeDiplomeResolver->getFromFormation($formation);
+                $typeDiplome = $this->typeDiplomeResolver->fromFormation($formation);
                 if (null !== $typeDiplome) {
                     foreach ($formation->getParcours() as $parcours) {
                         if ($this->format === 'xlsx') {
@@ -119,7 +119,7 @@ class ExportMccc
             $formation = $parcours->getFormation();
 
             if ($formation !== null) {
-                $typeDiplome = $this->typeDiplomeResolver->getFromFormation($formation);
+                $typeDiplome = $this->typeDiplomeResolver->fromFormation($formation);
                 if (null !== $typeDiplome) {
                         if ($formation->isHasParcours() === true) {
                             $texte = $formation->gettypeDiplome()?->getLibelleCourt(). ' ' . $formation->getSigle() . ' ' . $parcours->getSigle();

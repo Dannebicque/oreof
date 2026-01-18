@@ -36,7 +36,6 @@ export default class extends Controller {
       await fetch(url).then((e) => {
         if (e.status === 200) {
           if (this.reloadValue === true) {
-            console.log('refreshPage')
             this.dispatch('refreshPage2', {})
           }
           callOut('Opération effectuée', 'success')

@@ -81,9 +81,7 @@
                                     <div class="col-6 col-md-2 flex-column
                                            mb-1 mb-md-0 text-end">
                                         <div class="text-muted text-small d-md-none">Actions</div>
-                                        {% if (is_granted('MANAGE', {route: 'app_formation', subject: formation})) and workflow_can
-                                            (formation,
-                                            'valider_rf')) %}
+                                        {% if (is_granted('MANAGE', {route: 'app_formation', subject: formation}) and workflow_can(formation, 'valider_rf')) %}
                                             <button
                                                     {{ stimulus_controller('modal', {
                                                         size: 'lg',

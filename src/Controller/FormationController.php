@@ -171,7 +171,7 @@ class FormationController extends BaseController
 
             $parcourss = $formation->getParcours();
             $stats[$formation->getId()]['stats'] = new StatsFichesMatieres();
-            $typeD = $this->typeDiplomeResolver->get($formation->getTypeDiplome());
+            $typeD = $this->typeDiplomeResolver->fromTypeDiplome($formation->getTypeDiplome());
             foreach ($parcourss as $parcours) {
 
                 $stats[$formation->getId()][$parcours->getId()] = $typeD->calculStructureParcours($parcours, false, false);
@@ -254,7 +254,7 @@ class FormationController extends BaseController
             $this->entityManager->persist($formation);
 
             $parcours = new Parcours($formation);
-            $parcours->setLibelle('Parcours de formation à définir (création formation)');
+            $parcours->setLibelle('[A renommer] Parcours par défaut');
             $parcours->setRespParcours($formation->getResponsableMention());
 
             $this->entityManager->persist($parcours);
@@ -385,7 +385,7 @@ class FormationController extends BaseController
             throw new Exception('Type de diplôme non trouvé');
         }
 
-        $typeD = $this->typeDiplomeResolver->get($typeDiplome);
+        $typeD = $this->typeDiplomeResolver->fromTypeDiplome($typeDiplome);
         $hasLastVersion = false;
         /**
          * VERSIONING PARCOURS PAR DÉFAUT
@@ -450,7 +450,7 @@ class FormationController extends BaseController
         }
 
         $formationState->setFormation($formation);
-        $typeD = $this->typeDiplomeResolver->get($formation->getTypeDiplome());
+        $typeD = $this->typeDiplomeResolver->fromTypeDiplome($formation->getTypeDiplome());
         if ($formation->getParcours()?->first() !== false) {
             $parcoursState->setParcours($formation->getParcours()?->first());
         }
@@ -595,8 +595,8 @@ class FormationController extends BaseController
     {
         try {
             $formation = $versionFormationService->loadFormationFromVersion($versionFormation);
-            $typeD = $this->typeDiplomeResolver->get($versionFormation->getFormation()?->getTypeDiplome());
-            $dateHeureVersion = $versionFormation->getVersionTimestamp()->format('d/m/Y à H:i');
+            $typeD = $this->typeDiplomeResolver->fromTypeDiplome($versionFormation->getFormation()?->getTypeDiplome());
+            $dateHeureVersion = $versionFormation->getVersionTimestamp()?->format('d/m/Y à H:i');
 
             $parcoursVersionArray = [];
             foreach ($versionFormation->getFormation()->getParcours() as $p) {

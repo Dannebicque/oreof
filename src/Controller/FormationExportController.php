@@ -11,8 +11,8 @@ namespace App\Controller;
 
 use App\Classes\MyGotenbergPdf;
 use App\Entity\Formation;
-use App\Service\TypeDiplomeResolver;
 use App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException;
+use App\TypeDiplome\TypeDiplomeResolver;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -46,7 +46,7 @@ class FormationExportController extends AbstractController
             throw new TypeDiplomeNotFoundException();
         }
 
-        $typeD = $typeDiplomeResolver->get($typeDiplome);
+        $typeD = $typeDiplomeResolver->fromTypeDiplome($typeDiplome);
 
         $tParcours = [];
         foreach ($formation->getParcours() as $parcours) {

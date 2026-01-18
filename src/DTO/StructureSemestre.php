@@ -19,7 +19,7 @@ class StructureSemestre
     #[Groups(['DTO_json_versioning'])]
     public Semestre $semestre;
 
-    public ?SemestreParcours $semestreParcours;
+    public ?SemestreParcours $calculStructureParcours;
 
     #[Groups(['DTO_json_versioning'])]
     public bool $raccroche = false;

@@ -1,0 +1,178 @@
+<turbo-frame id="modal_frame">
+    <!-- Header -->
+    <div class="flex items-center justify-between px-3 py-3 border-b">
+        <h2 class="text-lg font-semibold">
+            Heures de l'EC {{ ec.display }}
+        </h2>
+
+        <button
+                class="text-gray-500 hover:text-gray-700"
+                data-action="click->modalturbo#hide"
+                aria-label="Fermer"
+        >
+            ✕
+        </button>
+    </div>
+
+    <!-- Body -->
+    <div class="flex-1 overflow-y-auto p-3 space-y-4">
+        <div class="p-2 bg-amber-50 border border-amber-200 rounded-sm flex gap-3 italic text-xs text-amber-700">
+            <span>⚠️</span>
+            <p>Cette matière est <strong>partagée</strong>. Toute modification impactera les coûts et volumes des
+                parcours SVT et Chimie.</p>
+        </div>
+
+        <div
+                {#                {{ stimulus_controller('ec--structure', { #}
+                {#                    urlUpdate: path('app_parcours_ec_update'), #}
+                {#                }) }} #}
+        >
+            {% form_theme form 'communs/form_theme_v2.html.twig' %}
+            <form method="post"
+                  action="{{ path('parcours_structure_saisir_heures_post', {parcours:parcours.id, id:ec.id}) }}">
+                {% if ec.ficheMatiere != null and ec.ficheMatiere.volumesHorairesImpose %}
+                    <div class="bg-blue-50 border border-blue-200 text-blue-800 rounded-sm p-2">
+                        <p class="text-sm">Les heures de cette fiche EC/matière sont imposées et ne sont pas
+                            modifiables</p>
+                    </div>
+                {% elseif isParcoursProprietaire == false %}
+                    <div class="bg-yellow-50 border border-yellow-200 text-yellow-800 rounded-sm p-2">
+                        <p class="text-sm mb-3">
+                            Cet EC est raccroché, les données sont reprises par défaut de l'EC d'origine du parcours
+                            <strong>{{ ec.parcours != null ? ec.parcours.libelle : '-non défini-' }}</strong>.
+                            Mais vous pouvez définir des données spécifiques sur cet EC.
+                        </p>
+
+                        <div class="flex items-center gap-3">
+                            <label for="heuresSpecifiques" class="flex items-center cursor-pointer select-none">
+                                <input
+                                        id="heuresSpecifiques"
+                                        name="heuresSpecifiques"
+                                        type="checkbox"
+                                        class="sr-only"
+                                        {{ stimulus_action('ec--structure', 'heuresSpecifiques', 'change', { ec:ec.id }) }}
+                                        {% if ec.heuresSpecifiques == true %}checked{% endif %}
+                                />
+                                <span class="w-10 h-6 bg-gray-200 rounded-full relative transition-colors"
+                                      aria-hidden="true">
+                        <span class="block w-4 h-4 bg-white rounded-full shadow transform transition-transform
+                                     {% if ec.heuresSpecifiques == true %}translate-x-4{% else %}translate-x-0{% endif %}"></span>
+                    </span>
+                                <span class="ml-3 text-sm">Définir spécifiquement les heures pour cet EC.</span>
+                            </label>
+
+                            <i class="fal fa-question-circle text-gray-400" data-controller="tooltip"
+                               data-tooltip-placement-value="bottom"
+                               title="{{ 'parcours_ec.helps.heuresSpecifiques'|trans({}, 'help') }}"></i>
+                        </div>
+                    </div>
+                {% endif %}
+
+                {% set disabled = (ec.heuresSpecifiques == false and isParcoursProprietaire == false) or (ec.ficheMatiere != null and ec.ficheMatiere.volumesHorairesImpose) %}
+
+                {% if ec.parcours.modalitesEnseignement == null %}
+                    {{ component('alerte', {type:'warning', message:'Vous devez d\'abord définir les modalités d\'enseignement du parcours.'}) }}
+                {% else %}
+
+                    {% if (ec.parcours.modalitesEnseignement != null and ec.parcours.modalitesEnseignement.value == 1) or ec.modaliteEnseignement == null %}
+                        {{ form_row(form.modaliteEnseignement, {disabled: ec.heuresSpecifiques == false}) }}
+                    {% endif %}
+
+                    {% if parcours.modalitesEnseignement == null %}
+                        <div class="mb-4">
+                            {{ form_row(form.modaliteEnseignement) }}
+                        </div>
+                    {% endif %}
+
+                    <div class="flex items-start gap-3 mb-4">
+                        <label for="sansHeure" class="flex items-center cursor-pointer">
+                            <input id="sansHeure" name="sansHeure" type="checkbox"
+                                   class="mr-2 h-4 w-4 text-indigo-600 border-gray-300 rounded"
+                                   {% if ec.sansHeure == true %}checked{% endif %}
+                                    {% if disabled %}disabled{% endif %}
+                            />
+                            <span class="text-sm">{{ 'mccc.ec.labels.sansHeures'|trans({}, 'form') }}</span>
+                        </label>
+
+                        <i class="fal fa-question-circle text-gray-400" data-controller="tooltip"
+                           data-tooltip-placement-value="bottom"
+                           title="{{ 'mccc.ec.helps.sansHeures'|trans({}, 'help') }}"></i>
+                    </div>
+
+                    {% set disabled = disabled or ec.sansHeure %}
+
+                    <div id="bloc_presentiel"
+                         class="{% if modalite != null and modalite.value != 2 %}block{% else %}hidden{% endif %} mb-6"
+                         aria-hidden="{% if modalite != null and modalite.value == 2 %}true{% else %}false{% endif %}">
+                        <h3 class="text-base font-semibold mb-3">Volume Présentiel</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
+                            <div>{{ form_row(form.volumeCmPresentiel, {'disabled': disabled}) }}</div>
+                            <div>{{ form_row(form.volumeTdPresentiel, {'disabled': disabled}) }}</div>
+                            <div>{{ form_row(form.volumeTpPresentiel, {'disabled': disabled}) }}</div>
+                        </div>
+                    </div>
+
+                    <div id="bloc_distanciel"
+                         class="{% if modalite != null and modalite.value != 0 %}block{% else %}hidden{% endif %} mb-6"
+                         aria-hidden="{% if modalite != null and modalite.value == 0 %}true{% else %}false{% endif %}">
+                        <h3 class="text-base font-semibold mb-3">Volume Distanciel</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
+                            <div>{{ form_row(form.volumeCmDistanciel, {'disabled': disabled}) }}</div>
+                            <div>{{ form_row(form.volumeTdDistanciel, {'disabled': disabled}) }}</div>
+                            <div>{{ form_row(form.volumeTpDistanciel, {'disabled': disabled}) }}</div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <h3 class="text-base font-semibold mb-3">Volume horaire Travail Etudiant (TE)</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
+                            <div>{{ form_row(form.volumeTe, {'disabled': disabled}) }}</div>
+                            <div></div>
+                            <div></div>
+                        </div>
+                    </div>
+
+                {% endif %}
+
+                {% if ec.ecEnfants|length > 0 %}
+                    <div class="flex items-center gap-3 mb-3">
+                        <input class="h-4 w-4 text-indigo-600 border-gray-300 rounded" type="checkbox"
+                               id="ec_step4_heures_enfants_identiques"
+                               name="ec_step4[heuresEnfantsIdentiques]"
+                               {% if ec.heuresEnfantsIdentiques == true %}checked{% endif %}
+                        />
+                        <label for="ec_step4_heures_enfants_identiques" class="text-sm">
+                            {{ 'ec_step4.labels.heures_enfants_edentiques'|trans({}, 'form') }}
+                        </label>
+                        <i class="fal fa-question-circle text-gray-400" data-controller="tooltip"
+                           data-tooltip-placement-value="bottom"
+                           title="{{ 'ec_step4.helps.heures_enfants_edentiques'|trans({}, 'help') }}"></i>
+                    </div>
+                {% endif %}
+
+                {% if ec.ecParent != null %}
+                    <div class="flex items-center gap-3 mb-2">
+                        <input class="h-4 w-4 text-indigo-600 border-gray-300 rounded" type="checkbox"
+                               id="ec_step4_heures_enfants_identiques_parent"
+                               name="ec_step4[heuresEnfantsIdentiquesParent]"
+                               {% if ec.ecParent.heuresEnfantsIdentiques == true %}checked{% endif %}
+                        />
+                        <label for="ec_step4_heures_enfants_identiques_parent" class="text-sm">
+                            {{ 'ec_step4.labels.heures_enfants_edentiques_parent'|trans({}, 'form') }}
+                        </label>
+                        <i class="fal fa-question-circle text-gray-400" data-controller="tooltip"
+                           data-tooltip-placement-value="bottom"
+                           title="{{ 'ec_step4.helps.heures_enfants_edentiques_parent'|trans({}, 'help') }}"></i>
+                    </div>
+                {% endif %}
+                <div class="mt-auto border-t border-gray-100 bg-white/50 py-3 flex justify-end">
+                    <button type="submit"
+                            class="text-xs bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded-sm transition-shadow shadow-sm">
+                        Enregistrer les modifications
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</turbo-frame>
+

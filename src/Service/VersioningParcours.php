@@ -6,6 +6,7 @@ use App\DTO\StructureParcours;
 use App\Entity\Parcours;
 use App\Entity\ParcoursVersioning;
 use App\Serializer\IdEntityDenormalizer;
+use App\TypeDiplome\TypeDiplomeResolver;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Jfcherng\Diff\DiffHelper;

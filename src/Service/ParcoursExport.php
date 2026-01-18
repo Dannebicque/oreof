@@ -9,6 +9,7 @@ use App\Entity\FicheMatiere;
 use App\Entity\Parcours;
 use App\Entity\TypeDiplome;
 use App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException;
+use App\TypeDiplome\TypeDiplomeResolver;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -58,7 +59,7 @@ class ParcoursExport {
             throw new Exception('Type de diplôme non trouvé');
         }
 
-        $typeD = $this->typeDiplomeResolver->get($typeDiplome);
+        $typeD = $this->typeDiplomeResolver->fromTypeDiplome($typeDiplome);
         $dto = $typeD->calculStructureParcours($parcours);
 
         return $this->getMaquetteJson($dto, $parcours, $typeDiplome)        ;

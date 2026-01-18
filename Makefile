@@ -12,7 +12,7 @@ PHPSTAN = ./vendor/bin/phpstan
 
 # Démarre les conteneurs Docker
 start:
-	docker-compose up -d
+	docker compose up -d
 
 # Démarre les conteneurs et ouvre le navigateur
 open: start
@@ -22,34 +22,34 @@ open: start
 
 # Arrête les conteneurs Docker
 stop:
-	docker-compose stop
+	docker compose stop
 
 # Redémarre les conteneurs
 restart: stop start
 
 # Build les images Docker
 build:
-	docker-compose build
+	docker compose build
 
 # Build et démarre les conteneurs
 up:
-	docker-compose up -d --build
+	docker compose up -d --build
 
 # Arrête et supprime les conteneurs
 down:
-	docker-compose down
+	docker compose down
 
 # Affiche les logs
 logs:
-	docker-compose logs -f
+	docker compose logs -f
 
 # Liste les conteneurs en cours d'exécution
 ps:
-	docker-compose ps
+	docker compose ps
 
 # Nettoie les conteneurs, volumes et images
 clean:
-	docker-compose down -v --remove-orphans
+	docker compose down -v --remove-orphans
 	docker system prune -f
 
 # cli pour accéder au terminal docker dans le bon dossier

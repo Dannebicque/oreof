@@ -61,80 +61,76 @@ class ExcelWriter
         }
 
         $this->sheet->setCellValue([$col, $row], $value);
-        //
-        //traiter les options
-        //style n'est pas un tableau
-        if ($this->sheet->getCell([$col, $row])) {
-            foreach ($options as $key => $valeur) {
-                switch ($key) {
-                    case 'style':
-                        switch ($valeur) {
-                            case 'HORIZONTAL_RIGHT':
-                                $this->sheet->getCell([$col, $row])->getStyle()->getAlignment()->setHorizontal(Alignment::HORIZONTAL_RIGHT);
-                                break;
-                            case 'HORIZONTAL_CENTER':
-                                $this->sheet->getCell([$col, $row])->getStyle()->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
-                                break;
-                            case 'numerique':
-                                $this->sheet->getCell([$col, $row])->getStyle()->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
-                                break;
-                        }
-                        break;
-                    case 'valign':
-                        switch ($valeur) {
-                            case 'VERTICAL_TOP':
-                                $this->sheet->getCell([$col, $row])->getStyle()->getAlignment()->setVertical(Alignment::VERTICAL_TOP);
-                                break;
-                            case 'VERTICAL_CENTER':
-                                $this->sheet->getCell([$col, $row])->getStyle()->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
-                                break;
-                            case 'VERTICAL_BOTTOM':
-                                $this->sheet->getCell([$col, $row])->getStyle()->getAlignment()->setVertical(Alignment::VERTICAL_BOTTOM);
-                                break;
-                        }
-                        break;
-                    case 'number_format':
-                        $this->sheet->getCell([$col, $row])->getStyle()->getNumberFormat()->setFormatCode($valeur);
-                        break;
-                    case 'color':
+        foreach ($options as $key => $valeur) {
+            switch ($key) {
+                case 'style':
+                    switch ($valeur) {
+                        case 'HORIZONTAL_RIGHT':
+                            $this->sheet->getCell([$col, $row])->getStyle()->getAlignment()->setHorizontal(Alignment::HORIZONTAL_RIGHT);
+                            break;
+                        case 'HORIZONTAL_CENTER':
+                            $this->sheet->getCell([$col, $row])->getStyle()->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+                            break;
+                        case 'numerique':
+                            $this->sheet->getCell([$col, $row])->getStyle()->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                            break;
+                    }
+                    break;
+                case 'valign':
+                    switch ($valeur) {
+                        case 'VERTICAL_TOP':
+                            $this->sheet->getCell([$col, $row])->getStyle()->getAlignment()->setVertical(Alignment::VERTICAL_TOP);
+                            break;
+                        case 'VERTICAL_CENTER':
+                            $this->sheet->getCell([$col, $row])->getStyle()->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
+                            break;
+                        case 'VERTICAL_BOTTOM':
+                            $this->sheet->getCell([$col, $row])->getStyle()->getAlignment()->setVertical(Alignment::VERTICAL_BOTTOM);
+                            break;
+                    }
+                    break;
+                case 'number_format':
+                    $this->sheet->getCell([$col, $row])->getStyle()->getNumberFormat()->setFormatCode($valeur);
+                    break;
+                case 'color':
+                    if (str_starts_with($valeur, '#')) {
+                        $valeur = mb_substr($valeur, 1, mb_strlen($valeur));
+                    }
+
+                    $this->sheet->getCell([$col, $row])->getStyle()->getFont()->getColor()->setARGB('FF' . $valeur);
+                    break;
+                case 'bgcolor':
+                    if ($valeur === 'none') {
+                        $this->sheet->getCell([$col, $row])->getStyle()->getFill()->setFillType(Fill::FILL_NONE);
+                    } else {
                         if (str_starts_with($valeur, '#')) {
                             $valeur = mb_substr($valeur, 1, mb_strlen($valeur));
                         }
-
-                        $this->sheet->getCell([$col, $row])->getStyle()->getFont()->getColor()->setARGB('FF' . $valeur);
-                        break;
-                    case 'bgcolor':
-                        if ($valeur === 'none') {
-                            $this->sheet->getCell([$col, $row])->getStyle()->getFill()->setFillType(Fill::FILL_NONE);
-                        } else {
-                            if (str_starts_with($valeur, '#')) {
-                                $valeur = mb_substr($valeur, 1, mb_strlen($valeur));
-                            }
-                            $this->sheet->getCell([$col, $row])->getStyle()->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB($valeur);
-                        }
-                        break;
-                    case 'font-size':
-                        $this->sheet->getCell([$col, $row])->getStyle()->getFont()->setSize($valeur);
-                        break;
-                    case 'font-weight':
-                        $this->sheet->getCell([$col, $row])->getStyle()->getFont()->setBold($valeur);
-                        break;
-                    case 'font-italic':
-                        $this->sheet->getCell([$col, $row])->getStyle()->getFont()->setItalic(true);
-                        break;
-                    case 'wrap':
-                        $this->sheet->getCell([$col, $row])->getStyle()->getAlignment()->setWrapText(true);
-                        break;
-                    case 'pourcentage':
-                        $this->sheet->getCell([$col, $row])->getStyle()->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_PERCENTAGE_00);
-                        break;
-                    case 'bold':
-                        if ($valeur === true) {
-                            $this->sheet->getCell([$col, $row])->getStyle()->getFont()->setBold(true);
-                        }
-                }
+                        $this->sheet->getCell([$col, $row])->getStyle()->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB($valeur);
+                    }
+                    break;
+                case 'font-size':
+                    $this->sheet->getCell([$col, $row])->getStyle()->getFont()->setSize($valeur);
+                    break;
+                case 'font-weight':
+                    $this->sheet->getCell([$col, $row])->getStyle()->getFont()->setBold($valeur);
+                    break;
+                case 'font-italic':
+                    $this->sheet->getCell([$col, $row])->getStyle()->getFont()->setItalic(true);
+                    break;
+                case 'wrap':
+                    $this->sheet->getCell([$col, $row])->getStyle()->getAlignment()->setWrapText(true);
+                    break;
+                case 'pourcentage':
+                    $this->sheet->getCell([$col, $row])->getStyle()->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_PERCENTAGE_00);
+                    break;
+                case 'bold':
+                    if ($valeur === true) {
+                        $this->sheet->getCell([$col, $row])->getStyle()->getFont()->setBold(true);
+                    }
             }
         }
+
     }
 
     public function writeCellName(string $adresse, mixed $value, array $options = []): void
@@ -488,13 +484,13 @@ class ExcelWriter
 
                 $richText = new RichText();
                 if ($diffObject->original !== null && $diffObject->original !== '') {
-                    $ancienneValeur = $richText->createTextRun($diffObject->original);
+                    $ancienneValeur = $richText->createTextRun((string)$diffObject->original);
                     $ancienneValeur->getFont()?->setStrikethrough(true);
                     $ancienneValeur->getFont()?->setColor(new Color(Color::COLOR_RED));
                 }
 
                 if ($diffObject->new !== null && $diffObject->new !== '') {
-                    $nouvelleValeur = $richText->createTextRun($diffObject->new);
+                    $nouvelleValeur = $richText->createTextRun((string)$diffObject->new);
                     $nouvelleValeur->getFont()?->setStrikethrough(false);
                     $nouvelleValeur->getFont()?->setBold(true);
                     $nouvelleValeur->getFont()?->setColor(new Color(Color::COLOR_DARKGREEN));

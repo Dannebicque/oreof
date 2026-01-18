@@ -90,9 +90,9 @@
 {% endblock %}
 
 
-{% block header %}
+{% set header_title %}
     Gérer les notifications
-{% endblock %}
+{% endset %}
 
 {% block breadcrumb %}
     {{ include('communs/_breadcrumb.html.twig', {liens:[

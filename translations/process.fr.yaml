@@ -780,3 +780,87 @@ valide.relecture.avant_publication.date.label: 'Date de publication'
 relecture.avant_publication.valide.alerte: 'Indiquer la date de publication du DPE'
 btn.relecture.avant_publication.valide: 'Valider pour publication'
 
+# ================================================
+# Validation errors and warnings (workflow validators)
+# ================================================
+workflow:
+  validation:
+    error:
+      # Erreurs communes
+      parcours.missing: 'Le parcours associé est manquant.'
+      formation.missing: 'La formation associée est manquante.'
+      type_diplome.missing: 'Le type de diplôme n''est pas défini.'
+      parcours.libelle.empty: 'Le libellé du parcours est obligatoire.'
+      composante.missing: 'La composante porteuse de la formation n''est pas définie.'
+
+      # Erreurs SoumisParcoursValidator
+      remplissage.insufficient: 'Le taux de remplissage du parcours est insuffisant. Minimum requis : %min%%, actuel : %current%%.'
+      parcours.objectifs.empty: 'Les objectifs du parcours doivent être renseignés.'
+      parcours.responsable.missing: 'Le responsable du parcours doit être défini.'
+      parcours.regime_inscription.empty: 'Le régime d''inscription doit être défini.'
+      structure.semestres.empty: 'Aucun semestre n''est défini pour ce parcours.'
+
+      # Erreurs spécifiques BUT
+      but.competences.missing: 'Les blocs de compétences sont obligatoires pour un BUT.'
+
+      # Erreurs spécifiques Licence Professionnelle
+      lp.stage.required: 'Le stage est obligatoire pour une Licence Professionnelle.'
+      lp.stage.duration.insufficient: 'Le stage doit être d''au moins 420 heures (12 semaines) pour une LP. Actuel : %hours%h.'
+
+      # Erreurs SoumisConseilValidator
+      conseil.contenu_formation.empty: 'Le contenu de la formation doit être renseigné avant le passage en conseil.'
+      conseil.mccc.incomplete: '%count% EC sur %total% n''ont pas de MCCC définies (%percentage%%). Les MCCC doivent être complètes avant le conseil.'
+      conseil.fiches.not_validated: '%count% fiches matières sur %total% ne sont pas validées (%percentage%%).'
+
+      # Erreurs SoumisCfvuValidator
+      cfvu.remplissage.insufficient: 'Le taux de remplissage est insuffisant pour la CFVU. Minimum requis : %min%%, actuel : %current%%.'
+      cfvu.niveau_entree.missing: 'Le niveau d''entrée de la formation doit être défini.'
+      cfvu.niveau_sortie.missing: 'Le niveau de sortie de la formation doit être défini.'
+      cfvu.objectifs_formation.missing: 'Les objectifs de la formation doivent être renseignés.'
+      cfvu.debouches.missing: 'Les débouchés professionnels doivent être renseignés pour la CFVU.'
+      cfvu.mccc.incomplete: '%count% EC sur %total% n''ont pas de MCCC définies. Toutes les MCCC doivent être renseignées pour la CFVU.'
+      cfvu.fiches.not_validated: '%count% fiches matières ne sont pas validées. Toutes les fiches doivent être validées pour la CFVU.'
+      cfvu.fiches.pending_ses: '%count% fiches matières sont en attente de validation par le SES.'
+      cfvu.ects.mismatch: 'Le total ECTS (%actual%) ne correspond pas au total attendu (%expected%).'
+
+    warning:
+      # Avertissements communs
+      remplissage.incomplete: 'Le parcours n''est pas complètement rempli (%current%%). Il est recommandé de compléter toutes les informations.'
+      parcours.contenu.empty: 'Le contenu de la formation n''est pas renseigné.'
+      parcours.debouches.empty: 'Les débouchés du parcours ne sont pas renseignés.'
+      parcours.prerequis.empty: 'Les prérequis du parcours ne sont pas renseignés.'
+      parcours.modalites_enseignement.empty: 'Les modalités d''enseignement ne sont pas définies.'
+      parcours.localisation.empty: 'La localisation du parcours n''est pas définie.'
+      structure.semestre.ues.empty: 'Le semestre %semestre% ne contient aucune UE.'
+
+      # Avertissements spécifiques Licence Professionnelle
+      lp.alternance.recommended: 'L''alternance est recommandée pour une Licence Professionnelle.'
+
+      # Avertissements spécifiques Master
+      master.rncp.missing: 'Le code RNCP devrait être renseigné pour un Master.'
+      master.poursuites_etudes.empty: 'Les poursuites d''études ne sont pas renseignées.'
+
+      # Avertissements spécifiques Licence
+      licence.competences.empty: 'Les blocs de compétences ne sont pas définis pour cette Licence.'
+
+      # Avertissements SoumisConseilValidator
+      conseil.previous_step.not_completed: 'Assurez-vous que la validation DPE composante a bien été effectuée.'
+      conseil.resultats_attendus.empty: 'Les résultats attendus ne sont pas renseignés.'
+      conseil.modalites_admission.empty: 'Les modalités d''admission ne sont pas renseignées.'
+      conseil.descriptif.empty: 'Le descriptif de présentation (haut de page) n''est pas renseigné.'
+      conseil.mccc.partial: '%count% EC sur %total% n''ont pas de MCCC définies.'
+      conseil.fiches.empty: 'Aucune fiche matière n''est associée à ce parcours.'
+      conseil.fiches.partially_validated: '%count% fiches matières sur %total% ne sont pas encore validées.'
+      conseil.fiches.incomplete: '%count% fiches matières ne sont pas complètes.'
+
+      # Avertissements SoumisCfvuValidator
+      cfvu.remplissage.not_complete: 'Le parcours n''est pas complètement rempli (%current%%). Complétez toutes les informations pour une présentation optimale en CFVU.'
+      cfvu.rncp.missing: 'Le code RNCP devrait être renseigné pour ce diplôme.'
+      cfvu.codes_rome.missing: 'Les codes ROME ne sont pas renseignés. Ils sont utiles pour l''orientation des étudiants.'
+      cfvu.niveau_francais.missing: 'Le niveau de français requis n''est pas défini.'
+      cfvu.conseil.not_passed: 'Vérifiez que le parcours a bien été validé par le service central (SES).'
+      cfvu.ects.slight_mismatch: 'Le total ECTS (%actual%) diffère légèrement du total attendu (%expected%).'
+
+# Labels pour les boutons de transition enrichis
+tacite_reconduction.parcours: 'Parcours reconduit tacitement'
+

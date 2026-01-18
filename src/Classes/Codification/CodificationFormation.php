@@ -15,6 +15,7 @@ use App\DTO\StructureUe;
 use App\Entity\FicheMatiere;
 use App\Entity\Formation;
 use App\Entity\Parcours;
+use App\Entity\Ville;
 use App\Enums\TypeParcoursEnum;
 use App\TypeDiplome\TypeDiplomeHandlerInterface;
 use Doctrine\ORM\EntityManagerInterface;
@@ -145,10 +146,10 @@ class CodificationFormation
                     $code = '2';
                 } else {
                     if ($parcours->getTypeParcours() !== null && ($parcours->getTypeParcours() === TypeParcoursEnum::TYPE_PARCOURS_LAS1 || $parcours->getTypeParcours() === TypeParcoursEnum::TYPE_PARCOURS_LAS23)) {
-                        $code = $sp->getAnnee() === $parcours->getFormation()?->getTypeDiplome()?->getNbAnnee() ? '6' : '1';
+                        $code = $sp->getOrdreAnnee() === $parcours->getFormation()?->getTypeDiplome()?->getNbAnnee() ? '6' : '1';
                     } else {
 
-                        $code = $sp->getAnnee() === $parcours->getFormation()?->getTypeDiplome()?->getNbAnnee() ? '2' : '1';
+                        $code = $sp->getOrdreAnnee() === $parcours->getFormation()?->getTypeDiplome()?->getNbAnnee() ? '2' : '1';
                     }
                 }
 
@@ -174,7 +175,7 @@ class CodificationFormation
             }
 
             if ($parcours->isParcoursDefaut()) {
-                $code .= $parcours->getFormation()?->getLocalisationMention()->first()?->getCodeApogee();
+                $code .= (($loc = $parcours->getFormation()?->getLocalisationMention()->first()) instanceof Ville) ? $loc->getCodeApogee() : '';
             } else {
                 $code .= $parcours->getLocalisation()?->getCodeApogee();
             }
@@ -192,7 +193,7 @@ class CodificationFormation
         $semestres = $parcours->getSemestreParcours();
 
         foreach ($semestres as $semestre) {
-            $semestre->setCodeApogeeEtapeAnnee($parcours->getCodeDiplome($semestre->getAnnee()) . $semestre->getAnnee());
+            $semestre->setCodeApogeeEtapeAnnee($parcours->getCodeDiplome($semestre->getOrdreAnnee()) . $semestre->getOrdreAnnee());
             $semestre->setCodeApogeeEtapeVersion($this->setCodificationVersionEtape($parcours));
         }
     }

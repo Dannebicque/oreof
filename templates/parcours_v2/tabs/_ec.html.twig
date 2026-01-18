@@ -1,0 +1,123 @@
+{#
+démo avec vérouilage
+<div class="flex items-center justify-between p-4 bg-white border border-slate-100 rounded-sm hover:border-indigo-300 transition group cursor-pointer mb-2" #}
+{#     onclick="document.getElementById('sidePanel').classList.remove('translate-x-full')"> #}
+{#    <div class="flex items-center gap-4"> #}
+{#        <div class="min-w-12 px-2 h-12 bg-indigo-600 text-white rounded-md flex items-center justify-center font-black shadow-lg shadow-indigo-100"> #}
+{#            {{ elem.code }} #}
+{#        </div> #}
+{#        <div> #}
+{#            <p class="text-sm font-black text-slate-700">{{ elem.display }}</p> #}
+{#            <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-0.5">Repris de : Portail #}
+{#                Math-Info • Verrouillé 🔒</p> #}
+{#        </div> #}
+{#    </div> #}
+{#    <div class="flex items-center gap-6"> #}
+{#        <span class="text-xs font-bold text-slate-500 bg-slate-100 px-3 py-1 rounded-full">24h CM • 12h TD • 12h TP</span> #}
+{#        <span class="text-xs font-black text-slate-700">3 ECTS</span> #}
+{#    </div> #}
+{# </div> #}
+{% set elem = ec.elementConstitutif %}
+{# <section> #}
+{#    <div class="flex items-center justify-between p-2 bg-white border border-slate-200 rounded-sm hover:border-indigo-400 cursor-pointer transition shadow-sm group mb-2"> #}
+<section
+        class="bg-white border border-slate-200 rounded-sm shadow-sm overflow-hidden border-l-8 border-indigo-500 mt-2">
+    <div class="p-2 flex items-center justify-between border-b border-slate-100">
+        <div class="flex items-center gap-4">
+            <div class="min-w-12 px-2 h-20 bg-indigo-600 text-white rounded-md flex items-center justify-center font-black shadow-lg shadow-indigo-100">
+                {{ elem.code }}
+            </div>
+            <div>
+                <h4 class="text-sm font-black text-slate-700 max-w-[60ch] break-words whitespace-normal">
+                    {{ elem.display }}
+                </h4>
+                <div class="flex mt-2 gap-x-2">
+                    {% if ec.elementConstitutif.natureUeEc == null %}
+                        <span class="px-2 py-0.5 bg-red-100 text-red-700 text-[9px] font-black rounded uppercase">Erreur, non défini</span>
+                    {% elseif ec.elementConstitutif.natureUeEc.isLibre %}
+                        <span class="px-2 py-0.5 bg-blue-100 text-blue-700 text-[9px] font-black rounded uppercase">EC Libre</span>
+                    {% elseif ec.elementConstitutif.natureUeEc.isChoix %}
+                        <span class="px-2 py-0.5 bg-orange-100 text-orange-700 text-[9px] font-black rounded uppercase">EC à choix (1 parmi {{ ec.elementsConstitutifsEnfants|length }})</span>
+                    {% else %}
+                        <span class="px-2 py-0.5 bg-green-100 text-green-700 text-[9px] font-black rounded uppercase">EC Obligatoire</span>
+                    {% endif %}
+
+                    {% if ec.elementConstitutif.typeEc == null %}
+                        <span class="px-2 py-0.5 bg-red-100 text-red-700 text-[9px] font-black rounded uppercase">Erreur, type EC non défini</span>
+                    {% else %}
+                        <span class="px-2 py-0.5 bg-green-100 text-green-700 text-[9px] font-black rounded uppercase">{{ ec.elementConstitutif.typeEc.libelle }}</span>
+                    {% endif %}
+                </div>
+                <div class="flex items-center gap-x-2 mt-2 flex-wrap">
+                    <button type="button"
+                            data-action="click->modalturbo#open"
+                            data-modal-url="{{ path('parcours_structure_saisir_heures', { parcours: parcours.id, id: elem.id }) }}"
+                            class="text-[10px] font-black text-indigo-600 group-hover:underline uppercase flex items-center gap-1.5 pe-2 py-1 rounded hover:bg-slate-50">
+                        <span class="w-1.5 h-1.5 rounded-full bg-red-500" id="badge_heure_{{ elem.id }}"></span>
+                        Saisir Heures
+                    </button>
+
+                    <button class="text-[10px] font-black text-indigo-600 group-hover:underline uppercase flex items-center gap-1.5 px-2 py-1 rounded hover:bg-slate-50"
+                            type="button"
+                            data-action="click->modalturbo#open"
+                            data-modal-url="{{ path('parcours_mccc_saisir', { parcours: parcours.id, id: elem.id }) }}"
+                    >
+                        <span class="w-1.5 h-1.5 rounded-full bg-orange-500" id="badge_mccc_{{ elem.id }}"></span>
+                        Saisir MCCC
+                    </button>
+                    <button class="text-[10px] font-black text-indigo-600 group-hover:underline uppercase flex items-center gap-1.5 px-2 py-1 rounded hover:bg-slate-50"
+                            type="button"
+                            data-action="click->modalturbo#open"
+                            data-modal-url="{{ path('parcours_bcc_saisir', { parcours: parcours.id, id: elem.id }) }}"
+                    >
+                        <span class="w-1.5 h-1.5 rounded-full bg-green-500" id="badge_bcc_{{ elem.id }}"></span>
+                        Saisir BCC
+                    </button>
+                    {% if elem.ficheMatiere != null %}
+                        {% set ficheMatiere = elem.ficheMatiere %}
+                        {% set ficheComplete = ficheMatiere.remplissage.calcul() == 100 ? 'green' : 'orange' %}
+                        <a class="text-[10px] font-black text-indigo-600 group-hover:underline uppercase flex items-center gap-1.5 px-2 py-1 rounded hover:bg-slate-50"
+                           href="{{ path('app_fiche_matiere_show', {slug: ficheMatiere.slug}) }}"
+                           target="_blank"
+                        >
+                            <span class="w-1.5 h-1.5 rounded-full bg-{{ ficheComplete }}-500"
+                                  id="badge_bcc_{{ elem.id }}"></span>
+                            Voir la fiche matière
+                        </a>
+                    {% else %}
+                        {# todo: si pas d efichier et qu'une est nécessaire créer ? #}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="flex items-center gap-6">
+            {% if ec.elementConstitutif.natureUeEc.isLibre == true %}
+                <span class="text-xs font-bold text-blue-500 bg-blue-100 px-3 py-1 rounded-full">EC Libre</span>
+            {% else %}
+                <span class="text-xs font-bold text-slate-500 bg-slate-100 px-3 py-1 rounded-full">{{ ec.heuresEctsEc.cmPres }}h CM • {{ ec.heuresEctsEc.tdPres }}h TD • {{ ec.heuresEctsEc.tpPres }}h TP</span>
+            {% endif %}
+            {% if ec.elementsConstitutifsEnfants|length > 0 or ec.elementConstitutif.natureUeEc.isChoix %}
+                <button
+                        id="{{ idBase }}-add-ec-enfant-btn"
+                        class="p-2 hover:bg-slate-100 rounded-lg flex items-center text-green-600"
+                        type="button">
+                    <i class="{{ iconAdd }} me-1"></i>
+                    <span>EC enfant</span>
+                </button>
+            {% endif %}
+            <span class="text-xs font-black text-slate-700">{{ ec.heuresEctsEc.ects }} ECTS</span>
+            <button class="text-xs font-black text-slate-700"
+                    type="button"
+                    data-action="click->modalturbo#open"
+                    data-modal-url="{{ path('parcours_config_ec', { parcours: parcours.id, id: elem.id }) }}"
+            >
+                <i class="fal fa-cogs"></i>
+            </button>
+        </div>
+    </div>
+    <div class="p-2 mt-2">
+        {% for ece in ec.elementsConstitutifsEnfants %}
+            {{ include('parcours_v2/tabs/_ec.html.twig', {ec:ece}) }}
+        {% endfor %}
+    </div>
+</section>

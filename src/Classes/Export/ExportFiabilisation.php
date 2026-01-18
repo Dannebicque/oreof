@@ -16,11 +16,10 @@ use App\Entity\SemestreParcours;
 use App\Repository\DpeParcoursRepository;
 use App\Repository\FormationRepository;
 use App\Service\ProjectDirProvider;
-use App\Service\TypeDiplomeResolver;
+use App\TypeDiplome\TypeDiplomeResolver;
 use App\Utils\Tools;
 use DateTime;
 use Symfony\Component\HttpFoundation\StreamedResponse;
-use Symfony\Component\HttpKernel\KernelInterface;
 
 class ExportFiabilisation
 {
@@ -74,7 +73,7 @@ class ExportFiabilisation
                 $parcours = $dpeParcours->getParcours();
                 $formation = $dpeParcours->getParcours()?->getFormation();
                 if ($formation !== null && $parcours !== null) {
-                    $typeD = $this->typeDiplomeResolver->getFromFormation($formation);
+                    $typeD = $this->typeDiplomeResolver->fromFormation($formation);
                     //                    foreach ($formation->getParcours() as $parcours) {
                     $this->data[1] = $formation->getComposantePorteuse()?->getLibelle();
                     $this->data[2] = $formation->getTypeDiplome()?->getLibelle();

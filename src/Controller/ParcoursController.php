@@ -270,7 +270,7 @@ class ParcoursController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        $typeD = $this->typeDiplomeResolver->get($typeDiplome);
+        $typeD = $this->typeDiplomeResolver->fromTypeDiplome($typeDiplome);
 
         $textDifferencesParcours = $versioningParcours->getDifferencesBetweenParcoursAndLastVersion($parcours);
         $textDifferencesFormation = $versioningFormation->getDifferencesBetweenFormationAndLastVersion($formation);
@@ -330,7 +330,7 @@ class ParcoursController extends BaseController
             throw $this->createNotFoundException('Type de diplôme non trouvé pour le parcours.');
         }
 
-        $typeD = $this->typeDiplomeResolver->get($typeDiplome);
+        $typeD = $this->typeDiplomeResolver->fromTypeDiplome($typeDiplome);
         return $this->render('parcours/edit.html.twig', [
             'dpeParcours' => $dpeParcours,
             'parcours' => $parcour,
@@ -376,8 +376,35 @@ class ParcoursController extends BaseController
     /**
      * @throws JsonException
      */
-    #[Route('/{id}', name: 'app_parcours_delete', methods: ['DELETE'])]
+    #[Route('/supprimer/{id}', name: 'app_parcours_delete', methods: ['GET'])]
     public function delete(
+        Request  $request,
+        Parcours $parcour,
+    ): Response
+    {
+
+        $csrf = $request->query->get('csrf');
+
+
+        if (!$this->isCsrfTokenValid('delete' . $parcour->getId(), $csrf)) {
+            throw $this->createAccessDeniedException('Token CSRF invalide');
+        }
+
+        // on affiche une page de confirmation indiquant tous les liens avec le parcours et les impacts de sa suppression
+        return $this->render('parcours/delete.html.twig', [
+            'dpeParcours' => GetDpeParcours::getFromParcours($parcour),
+            'parcours' => $parcour,
+            'formation' => $parcour->getFormation(),
+        ]);
+
+    }
+
+
+    /**
+     * @throws JsonException
+     */
+    #[Route('/{id}/confirmation', name: 'app_parcours_delete_confirm', methods: ['GET'])]
+    public function deleteConfirmation(
         ElementConstitutifRepository $elementConstitutifRepository,
         EntityManagerInterface       $entityManager,
         Request                      $request,
@@ -436,10 +463,10 @@ class ParcoursController extends BaseController
 
             $parcoursRepository->remove($parcour, true);
 
-            return $this->json(true);
+            return JsonReponse::success('Parcours supprimé avec succès');
         }
 
-        return $this->json(false);
+        return JsonReponse::error('Erreur lors de la suppression du parcours');
     }
 
     #[Route('/{parcours}/maquette_iframe', name: 'app_parcours_maquette_iframe')]
@@ -515,7 +542,7 @@ class ParcoursController extends BaseController
             throw $this->createNotFoundException('Type de diplôme non trouvé pour le parcours.');
         }
 
-        $typeD = $this->typeDiplomeResolver->get($typeDiplome);
+        $typeD = $this->typeDiplomeResolver->fromTypeDiplome($typeDiplome);
 
         $ects = $typeD->calculStructureParcours($parcours)->heuresEctsFormation->sommeFormationEcts;
 
@@ -671,7 +698,7 @@ class ParcoursController extends BaseController
                 'parcours' => $loadedVersion['parcours'],
                 'formation' => $loadedVersion['parcours']->getFormation(),
                 'typeDiplome' => $loadedVersion['parcours']->getTypeDiplome(),
-                'typeD' => $this->typeDiplomeResolver->get($loadedVersion['parcours']->getTypeDiplome()),
+                'typeD' => $this->typeDiplomeResolver->fromTypeDiplome($loadedVersion['parcours']->getTypeDiplome()),
                 'dto' => $loadedVersion['dto'],
                 'hasParcours' => $loadedVersion['parcours']->getFormation()->isHasParcours(),
                 // 'isBut' => $loadedVersion['parcours']->getTypeDiplome()->getLibelleCourt() === 'BUT',
@@ -905,7 +932,7 @@ class ParcoursController extends BaseController
             throw $this->createNotFoundException('Type de diplôme non trouvé pour le parcours.');
         }
 
-        $typeD = $this->typeDiplomeResolver->get($typeDiplome);
+        $typeD = $this->typeDiplomeResolver->fromTypeDiplome($typeDiplome);
 
         $ects = $typeD->calculStructureParcours($parcours)->heuresEctsFormation->sommeFormationEcts;
 

@@ -1,0 +1,20 @@
+<turbo-stream action="update" target="modal_title">
+    <template>
+        <div class="text-lg font-semibold text-gray-800">{{ title }}</div>
+        {% if subtitle %}
+            <div class="text-sm text-gray-500 mt-1">{{ subtitle }}</div>
+        {% endif %}
+    </template>
+</turbo-stream>
+
+<turbo-stream action="update" target="modal_body">
+    <template>
+        {{ body|raw }}
+    </template>
+</turbo-stream>
+
+<turbo-stream action="update" target="modal_footer">
+    <template>
+        {{ footer|raw }}
+    </template>
+</turbo-stream>

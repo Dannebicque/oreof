@@ -10,9 +10,8 @@
 namespace App\Classes\Export;
 
 use App\Entity\CampagneCollecte;
-use App\Entity\Composante;
 use App\Service\ProjectDirProvider;
-use App\Service\TypeDiplomeResolver;
+use App\TypeDiplome\TypeDiplomeResolver;
 use DateTimeInterface;
 
 class Export
@@ -23,8 +22,6 @@ class Export
     private ?CampagneCollecte $campagneCollecte;
     private ?DateTimeInterface $date;
     private string $dir;
-
-    private ?Composante $composante = null;
 
     public function __construct(
         protected TypeDiplomeResolver $typeDiplomeResolver,
@@ -113,7 +110,6 @@ class Export
     {
         $export = new ExportConseil(
             $this->dir,
-            $this->myPDF,
             $this->formations,
             $this->campagneCollecte,
             $this->date
@@ -209,10 +205,5 @@ class Export
     private function exportSyntheseModifications(): string
     {
         return $this->exportSyntheseModification->exportLink($this->formations, $this->campagneCollecte);
-    }
-
-    public function setComposante(?Composante $composante): void
-    {
-        $this->composante = $composante;
     }
 }

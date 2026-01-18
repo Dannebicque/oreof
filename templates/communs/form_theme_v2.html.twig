@@ -1,0 +1,165 @@
+{# templates/form/form_theme_v2.html.twig #}
+{% use "form_div_layout.html.twig" %}
+{% trans_default_domain 'form' %}
+
+{# --- LIGNE DE FORMULAIRE (ROW) --- #}
+{% block form_row %}
+    <div class="space-y-2 group mb-4">
+        {{ form_label(form) }}
+        {{ form_widget(form) }}
+        {{ form_help(form) }}
+        {{ form_errors(form) }}
+    </div>
+{% endblock form_row %}
+
+{# --- LABEL --- #}
+{% block form_label %}
+    {% if label is not same as(false) %}
+        <div class="flex justify-between items-center mb-1">
+            <label {% with { attr: label_attr|merge({ class: 'text-[12px] font-black text-slate-600 group-focus-within:text-indigo-500 transition-colors' }) } %}{{ block('attributes') }}{% endwith %}>
+                {{- block('form_label_content') -}}
+            </label>
+            {% if required %}<span class="text-[10px] font-bold text-red-300 uppercase">Champs Requis</span>{% endif %}
+        </div>
+    {% endif %}
+{% endblock form_label %}
+
+{# --- INPUT TEXT / EMAIL / PASSWORD --- #}
+{% block form_widget_simple %}
+    {#    {% set attr = attr|merge({ class: attr.class|default('') ~ ' w-full p-2 bg-white border border-slate-200 rounded-sm font-semibold text-slate-700 focus:ring-4 focus:ring-indigo-50 focus:border-indigo-500 outline-none transition-all shadow-sm placeholder:text-slate-300' }) %}    #}
+
+    {% set attr = attr|merge({ class: attr.class|default('') ~ ' w-full p-2 bg-slate-50 border border-slate-200 rounded-sm font-bold' }) %}
+    {{ parent() }}
+{% endblock form_widget_simple %}
+
+{# --- TEXTAREA --- #}
+{% block textarea_widget %}
+    {% set attr = attr|merge({ class: attr.class|default('') ~ ' w-full p-2 bg-slate-50 border border-slate-200 rounded-sm font-medium text-slate-700 focus:ring-4 focus:ring-indigo-50 focus:border-indigo-500 outline-none transition-all shadow-sm min-h-[150px]' }) %}
+    {{ parent() }}
+{% endblock textarea_widget %}
+
+{# --- SELECT --- #}
+{% block choice_widget_collapsed %}
+    {% set attr = attr|merge({ class: attr.class|default('') ~ ' w-full p-4 bg-slate-50 border border-slate-200 rounded-sm font-semibold text-slate-700 focus:ring-4 focus:ring-indigo-50 focus:border-indigo-500 outline-none transition-all shadow-sm appearance-none cursor-pointer' }) %}
+    <div class="relative">
+        {{ parent() }}
+        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-400">
+            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7"></path>
+            </svg>
+        </div>
+    </div>
+{% endblock choice_widget_collapsed %}
+
+{# --- AIDE (HELP) --- #}
+{% block form_help %}
+    {% import _self as macros %}
+    {% set help = macros.form_parent_help_name(form) %}
+    {% if help is defined and help|trim|trans({}, 'help') != '' %}
+        <p class="text-[11px] text-slate-400 italic mt-1 pl-1 flex items-start gap-2">
+            <span class="flex-shrink-0 w-5 h-5 bg-slate-200 text-slate-500 flex items-center justify-center text-[10px] rounded-full"><i
+                        class="fa-sharp fa-solid fa-circle-info"></i></span>
+            <span>{{ help|trim|trans({}, 'help')|raw }}</span>
+        </p>
+    {% endif %}
+{% endblock form_help %}
+
+{# --- ERREURS --- #}
+{% block form_errors %}
+    {% if errors|length > 0 %}
+        <div class="mt-2 space-y-1">
+            {% for error in errors %}
+                <p class="text-[10px] font-bold text-red-500 uppercase flex items-center gap-1">
+                    <span class="w-1 h-1 bg-red-500 rounded-full"></span>
+                    {{ error.message }}
+                </p>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock form_errors %}
+
+{%- block form_label_content -%}
+    {% import _self as macros %}
+    {% apply spaceless %}
+        {%- if label is empty -%}
+            {% set label = macros.form_parent_name(form) %}
+        {%- endif -%}
+        {%- if translation_domain is same as(false) -%}
+            {%- if label_html is same as(false) -%}
+                {{- label -}}
+            {%- else -%}
+                {{- label|raw -}}
+            {%- endif -%}
+        {%- else -%}
+            {%- if label_html is same as(false) -%}
+                {{- label|trim|trans(label_translation_parameters, translation_domain) -}}
+            {%- else -%}
+                {{- label|trim|trans(label_translation_parameters, translation_domain)|raw -}}
+            {%- endif -%}
+        {%- endif -%}
+    {% endapply %}
+{%- endblock form_label_content -%}
+
+{% macro form_parent_name(form, prefix) %}
+    {% apply spaceless %}
+        {% import _self as macros %}
+
+        {% set prefix = prefix|default(false) %}
+
+        {% if form.parent is empty %}
+            {{- form.vars.name -}}.labels
+        {% else %}
+            {% if form.vars.compound and not prefix %}
+                {{- macros.form_parent_name(form.parent) -}}.{{- form.vars.name -}}.label
+            {% else %}
+                {{- macros.form_parent_name(form.parent, true) -}}.{{- form.vars.name -}}
+            {% endif %}
+        {% endif %}
+    {% endapply %}
+{% endmacro %}
+
+{% macro form_parent_help_name(form, prefix) %}
+    {% apply spaceless %}
+        {% import _self as macros %}
+
+        {% set prefix = prefix|default(false) %}
+
+        {% if form.parent is empty %}
+            {{- form.vars.name -}}.helps
+        {% else %}
+            {% if form.vars.compound and not prefix %}
+                {{- macros.form_parent_help_name(form.parent) -}}.{{- form.vars.name -}}.help
+            {% else %}
+                {{- macros.form_parent_help_name(form.parent, true) -}}.{{- form.vars.name -}}
+            {% endif %}
+        {% endif %}
+    {% endapply %}
+{% endmacro %}
+
+{%- block checkbox_radio_label -%}
+    {#- Do not display the label if widget is not defined in order to prevent double label rendering -#}
+    {%- if widget is defined -%}
+        {%- set label_attr_class = label_attr_class|default(label_attr.class|default('')) -%}
+        {%- if 'btn' not in label_attr_class -%}
+            {%- set label_attr_class = label_attr_class ~ ' form-check-label' -%}
+        {%- endif -%}
+        {%- set label_attr = label_attr|merge({class: label_attr_class|trim}) -%}
+        {%- if not compound -%}
+            {% set label_attr = label_attr|merge({'for': id}) %}
+        {%- endif -%}
+        {#        {%- if required -%} #}
+        {#            {%- set label_attr = label_attr|merge({class: (label_attr.class|default('') ~ ' required')|trim}) -%} #}
+        {#        {%- endif -%} #}
+        {%- if parent_label_class is defined -%}
+            {%- set label_attr = label_attr|merge({class: (label_attr.class|default('') ~ ' ' ~ parent_label_class)|replace({'checkbox-inline': '', 'radio-inline': ''})|trim}) -%}
+        {%- endif -%}
+
+        {{ widget|raw }}
+        <label{% with { attr: label_attr } %}{{ block('attributes') }}{% endwith %}>
+            {%- if label is not same as(false) -%}
+                {{- block('form_label_content') -}}
+            {%- endif -%}
+        </label>
+    {%- endif -%}
+{%- endblock checkbox_radio_label %}
+

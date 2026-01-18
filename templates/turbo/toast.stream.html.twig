@@ -1,0 +1,118 @@
+<turbo-stream action="append" target="flash_toasts">
+    <template>
+        {% set toast_type = type|default('info') %}
+
+        {% if toast_type == 'info' %}
+            {% set bg = 'bg-white/80 dark:bg-blue-800/80' %}
+            {% set icon_color = 'text-indigo-700 dark:text-indigo-300' %}
+            {% set border = 'border-blue-100 dark:border-blue-700' %}
+            {% set progress = 'bg-indigo-500 dark:bg-indigo-400' %}
+            {% set icon_svg %}
+                <svg class="h-8 w-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                     stroke="currentColor" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M13 16h-1v-4h-1m1-4h.01M12 20a8 8 0 100-16 8 8 0 000 16z"/>
+                </svg>
+            {% endset %}
+        {% elseif toast_type == 'warning' %}
+            {% set bg = 'bg-yellow-50/90 dark:bg-yellow-800/60' %}
+            {% set icon_color = 'text-yellow-700 dark:text-yellow-300' %}
+            {% set border = 'border-yellow-100 dark:border-yellow-700' %}
+            {% set progress = 'bg-yellow-400 dark:bg-yellow-300' %}
+            {% set icon_svg %}
+                <svg class="h-8 w-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                     stroke="currentColor" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M10.29 3.86L1.82 18a1 1 0 00.86 1.5h18.64a1 1 0 00.86-1.5L13.71 3.86a1 1 0 00-1.72 0zM12 9v4m0 4h.01"/>
+                </svg>
+            {% endset %}
+        {% elseif toast_type == 'danger' %}
+            {% set bg = 'bg-red-50/90 dark:bg-red-800/60' %}
+            {% set icon_color = 'text-red-700 dark:text-red-300' %}
+            {% set border = 'border-red-100 dark:border-red-700' %}
+            {% set progress = 'bg-red-500 dark:bg-red-400' %}
+            {% set icon_svg %}
+                <svg class="h-8 w-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                     stroke="currentColor" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M10.29 3.86L1.82 18a1 1 0 00.86 1.5h18.64a1 1 0 00.86-1.5L13.71 3.86a1 1 0 00-1.72 0zM12 9v4m0 4h.01"/>
+                </svg>
+            {% endset %}
+        {% else %}
+            {% set bg = 'bg-white/80 dark:bg-gray-800/80' %}
+            {% set icon_color = 'text-indigo-700 dark:text-indigo-300' %}
+            {% set border = 'border-gray-100 dark:border-gray-700' %}
+            {% set progress = 'bg-indigo-500 dark:bg-indigo-400' %}
+            {% set icon_svg %}
+                <svg class="h-8 w-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                     stroke="currentColor" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M13 16h-1v-4h-1m1-4h.01M12 20a8 8 0 100-16 8 8 0 000 16z"/>
+                </svg>
+            {% endset %}
+        {% endif %}
+
+        <div
+                role="status"
+                aria-live="polite"
+                class="max-w-md w-full mx-auto rounded-2xl {{ bg }} {{ border }} shadow-lg p-4 flex items-start gap-4 transform transition-all duration-300 ease-out"
+                data-controller="toast"
+                data-toast-timeout-value="{{ timeout ?? 3500 }}"
+        >
+            <!-- Icon -->
+            <div class="flex-shrink-0 mt-0.5 {{ icon_color }}">
+                {{ icon_svg|raw }}
+            </div>
+
+            <!-- Content -->
+            <div class="min-w-0 flex-1">
+                <div class="flex items-start justify-between gap-4">
+                    <div class="text-sm font-semibold text-gray-900 dark:text-gray-100 break-words">
+                        {{ message }}
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                        {% if undo is defined and undo %}
+                            <button
+                                    type="button"
+                                    class="inline-flex items-center gap-2 px-2 py-1 text-sm font-medium text-indigo-600 bg-indigo-50 hover:bg-indigo-100 rounded-md transition"
+                                    data-action="toast#undo"
+                                    data-toast-undo-payload-value="{{ undo.payload|json_encode|e('html_attr') }}"
+                                    data-toast-undo-url-value="{{ undo.url }}"
+                            >
+                                <!-- undo icon -->
+                                <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                     stroke="currentColor" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                          d="M15 10l-4-4-4 4m8 4l-4 4-4-4"/>
+                                </svg>
+                                Annuler
+                            </button>
+                        {% endif %}
+
+                        <button
+                                type="button"
+                                class="p-1 text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 rounded-full transition"
+                                data-action="toast#close"
+                                aria-label="Fermer"
+                        >
+                            <span class="sr-only">Fermer</span>
+                            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                 stroke="currentColor" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M6 18L18 6M6 6l12 12"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Progress bar (visual timeout indicator) -->
+                <div class="mt-3 h-1 w-full bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden"
+                     aria-hidden="true" data-toast-progress-target>
+                    <div class="h-full {{ progress }} w-full transform origin-left transition-all"
+                         data-toast-progress-bar style="width:100%"></div>
+                </div>
+            </div>
+        </div>
+    </template>
+</turbo-stream>
