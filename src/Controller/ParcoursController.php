@@ -727,7 +727,7 @@ class ParcoursController extends BaseController
 //            ...$parcoursRepo->findByTypeValidation($this->getCampagneCollecte(), 'valide_a_publier')
 //        ];
 
-        $parcoursList = $parcoursRepo->findByCampagneCollecte($this->getCampagneCollecte());
+        $parcoursList = $parcoursRepo->findAllByCampagneCollecte($this->getCampagneCollecte());
 
         $errorArray = [];
         foreach ($parcoursList as $p) {
