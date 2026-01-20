@@ -29,7 +29,7 @@ class ApiJsonExport {
         EntityManagerInterface $entityManager,
         GetHistorique $getHistorique,
         VersioningParcours $versioningParcours,
-        UrlGeneratorInterface $router
+        UrlGeneratorInterface $router,
     ){
         $this->entityManager = $entityManager;
         $this->getHistorique = $getHistorique;
@@ -39,7 +39,8 @@ class ApiJsonExport {
 
     public function generateApiVersioning(
         string $hostname,
-        SymfonyStyle $io = null
+        SymfonyStyle $io = null,
+        LheoXML $lheoXmlService
     ): array
     {
         $dataJSON = [];
@@ -54,6 +55,15 @@ class ApiJsonExport {
 
         $campagneSuivante = $this->entityManager->getRepository(CampagneCollecte::class)
             ->findOneBy(['publicationTag' => CampagnePublicationTagEnum::ANNEE_SUIVANTE->value]);
+
+        $etatReconductionCampagneSuivante = [
+            TypeModificationDpeEnum::OUVERT,
+            TypeModificationDpeEnum::NON_OUVERTURE_CFVU,
+            TypeModificationDpeEnum::NON_OUVERTURE_SES,
+            TypeModificationDpeEnum::FERMETURE_DEFINITIVE,
+            TypeModificationDpeEnum::MODIFICATION_TEXTE,
+            TypeModificationDpeEnum::MODIFICATION_MCCC_TEXTE
+        ];
 
         /**
          * Filtrage sur la campagne de collecte en cours (ANNEE COURANTE) (N)
@@ -82,7 +92,7 @@ class ApiJsonExport {
                 foreach($formation->getParcours() as $parcours){
                     $lastVersion = $this->entityManager->getRepository(ParcoursVersioning::class)
                         ->findLastCfvuVersion($parcours);
-                    if(count($lastVersion) > 0){
+                    if(count($lastVersion) > 0 && $lheoXmlService->isValidLHEO($parcours)){
                         $lastVersionData = $this->versioningParcours->loadParcoursFromVersion($lastVersion[0]);
                         $tParcours[] = [
                             'id_old' => $parcours->getParcoursOrigineCopie()?->getId(),
@@ -140,13 +150,13 @@ class ApiJsonExport {
         if($campagneSuivante && $campagneSuivante->isEnablePublication()){
             $formationArray = $this->entityManager->getRepository(Formation::class)->findAll();
             $formationArray = array_filter($formationArray, 
-                function($f) use ($campagneSuivante) {
+                function($f) use ($campagneSuivante, $etatReconductionCampagneSuivante) {
                     $parcoursCampagneSuivante = array_filter($f->getParcours()->toArray(), 
-                        function($p) use ($campagneSuivante) {
+                        function($p) use ($campagneSuivante, $etatReconductionCampagneSuivante) {
                             $dpeParcours = $p->getDpeParcours()?->last();
                             if($dpeParcours instanceof DpeParcours){
                                 return $dpeParcours->getCampagneCollecte()?->getId() === $campagneSuivante->getId()
-                                    && $dpeParcours->getEtatReconduction() === TypeModificationDpeEnum::OUVERT;
+                                    && in_array($dpeParcours->getEtatReconduction(), $etatReconductionCampagneSuivante);
                             }
                     });
 
@@ -159,22 +169,24 @@ class ApiJsonExport {
             foreach($formationArray as $formationAnneeSuivante){
                 $addedParcours = [];
                 foreach($formationAnneeSuivante->getParcours() as $parcoursAnneeSuivante) {
-                    $dpeParcoursToAdd = $parcoursAnneeSuivante->getDpeParcours()?->last();
-                    if($dpeParcoursToAdd instanceof DpeParcours){
-                        if($dpeParcoursToAdd->getEtatReconduction() === TypeModificationDpeEnum::OUVERT){
-                            $addedParcours[] = [
-                                'id_old' => $parcoursAnneeSuivante->getParcoursOrigineCopie()?->getId(),
-                                'id' => $parcoursAnneeSuivante->getId(),
-                                'libelle' => $parcoursAnneeSuivante->getDisplay(),
-                                'url' => $urlPrefix . $this->router->generate(
-                                    'app_parcours_export_json_urca_annee_suivante_light',
-                                    ['parcours' => $parcoursAnneeSuivante->getId()]
-                                )
-                            ];
+                    if($lheoXmlService->isValidLHEO($parcoursAnneeSuivante)){
+                        $dpeParcoursToAdd = $parcoursAnneeSuivante->getDpeParcours()?->last();
+                        if($dpeParcoursToAdd instanceof DpeParcours){
+                            if(in_array($dpeParcoursToAdd->getEtatReconduction(), $etatReconductionCampagneSuivante)){
+                                $addedParcours[] = [
+                                    'id_old' => $parcoursAnneeSuivante->getParcoursOrigineCopie()?->getId(),
+                                    'id' => $parcoursAnneeSuivante->getId(),
+                                    'libelle' => $parcoursAnneeSuivante->getDisplay(),
+                                    'url' => $urlPrefix . $this->router->generate(
+                                        'app_parcours_export_json_urca_annee_suivante_light',
+                                        ['parcours' => $parcoursAnneeSuivante->getId()]
+                                    )
+                                ];
+                            }
                         }
-                    }
 
-                    ++$countParcoursCampagneSuivante;
+                        ++$countParcoursCampagneSuivante;
+                    }
                 }
                 if(count($addedParcours) > 0) {
                     $dataJSON[] = [

@@ -3,6 +3,7 @@
 namespace App\Command;
 
 use App\Service\ApiJsonExport;
+use App\Service\LheoXML;
 use DateTime;
 use Exception;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -26,16 +27,20 @@ class ApiJsonVersioningCommand extends Command
 
     private ParameterBagInterface $parameterBag;
 
+    private LheoXML $lheoXml;
+
     public function __construct(
         Filesystem $fs,
         ApiJsonExport $apiJsonExport,
-        ParameterBagInterface $parameterBag
+        ParameterBagInterface $parameterBag,
+        LheoXML $lheoXml
     )
     {
         parent::__construct();
         $this->fs = $fs;
         $this->apiJsonExport = $apiJsonExport;
         $this->parameterBag = $parameterBag;
+        $this->lheoXml = $lheoXml;
     }
 
     protected function configure(): void
@@ -74,7 +79,7 @@ class ApiJsonVersioningCommand extends Command
                 $now = (new DateTime())->format('d-m-Y_H-i');
                 $this->fs->rename($path . $filename, $path . $now . "-" .  $filename);
             }
-            $apiJson = $this->apiJsonExport->generateApiVersioning($hostname, $io);
+            $apiJson = $this->apiJsonExport->generateApiVersioning($hostname, $io, $this->lheoXml);
             $this->fs->appendToFile($path . $filename, json_encode($apiJson));
 
             $io->success("Index de l'API JSON (versioning) créé avec succès !");
