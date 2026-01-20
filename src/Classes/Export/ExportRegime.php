@@ -109,7 +109,7 @@ class ExportRegime implements ExportInterface
                     $i++;
                 }
 
-                $this->excelWriter->getColumnsAutoSize('A', 'M');
+                $this->excelWriter->getColumnsAutoSize('A', 'Z');
                 $ligne++;
             }
         }
