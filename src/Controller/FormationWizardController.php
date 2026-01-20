@@ -62,9 +62,9 @@ class FormationWizardController extends AbstractController
         Formation $formation
     ): Response {
 
-//        if (!Access::isAccessibleMention($formation, 'cfvu')) {
-//            return $this->render('parcours_wizard/_access_denied.html.twig');
-//        }
+        if (!Access::isAccessibleMention($formation, 'cfvu')) {
+            return $this->render('parcours_wizard/_access_denied.html.twig');
+        }
 
         $form = $this->createFormBuilder($formation)
             ->add('objectifsFormation', TextareaAutoSaveType::class, [

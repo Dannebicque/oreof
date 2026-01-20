@@ -23,7 +23,8 @@
                 </a>
             </li>
             <li class="nav-item" role="presentation">
-                <a class="nav-link {% if selectedStep == 3 %}active{% endif %}" data-bs-toggle="tab" href="#"
+                <a class="nav-link {% if selectedStep == 3 %}active{% endif %} {% if not isAccessible(formation, 'cfvu') %}disabled{% endif %}"
+                   data-bs-toggle="tab" href="#"
                    role="tab" aria-selected="false"
                         {{ stimulus_action('formation_wizard', 'changeStep', 'click', {step: 3}) }}
                 >Structure et organisation de la
