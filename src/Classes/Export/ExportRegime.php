@@ -48,14 +48,22 @@ class ExportRegime implements ExportInterface
         $this->excelWriter->writeCellXY(4, 1, 'Parcours');
         $this->excelWriter->writeCellXY(5, 1, 'Lieu de formation');
         $this->excelWriter->writeCellXY(6, 1, 'Resp. Mention');
-        $this->excelWriter->writeCellXY(7, 1, 'Co. Resp. Mention');
-        $this->excelWriter->writeCellXY(8, 1, 'Resp. Parcours');
-        $this->excelWriter->writeCellXY(9, 1, 'Co. Resp. Parcours');
-        $this->excelWriter->writeCellXY(10, 1, 'RNCP');
-        $this->excelWriter->writeCellXY(11, 1, 'Validation CFVU');
+        $this->excelWriter->writeCellXY(7, 1, 'Resp. Mention Mail');
+        $this->excelWriter->writeCellXY(8, 1, 'Resp. Mention Login');
+        $this->excelWriter->writeCellXY(9, 1, 'Co. Resp. Mention');
+        $this->excelWriter->writeCellXY(10, 1, 'Co. Resp. Mention Mail');
+        $this->excelWriter->writeCellXY(11, 1, 'Co. Resp. Mention Login');
+        $this->excelWriter->writeCellXY(12, 1, 'Resp. Parcours');
+        $this->excelWriter->writeCellXY(13, 1, 'Resp. Parcours Mail');
+        $this->excelWriter->writeCellXY(14, 1, 'Resp. Parcours Login');
+        $this->excelWriter->writeCellXY(15, 1, 'Co. Resp. Parcours');
+        $this->excelWriter->writeCellXY(16, 1, 'Co. Resp. Parcours Mail');
+        $this->excelWriter->writeCellXY(17, 1, 'Co. Resp. Parcours Login');
+        $this->excelWriter->writeCellXY(18, 1, 'RNCP');
+        $this->excelWriter->writeCellXY(19, 1, 'Validation CFVU');
         $i = 0;
         foreach (RegimeInscriptionEnum::cases() as $regime) {
-            $this->excelWriter->writeCellXY(12 + $i, 1, $regime->value);
+            $this->excelWriter->writeCellXY(20 + $i, 1, $regime->value);
             $i++;
         }
 
@@ -78,22 +86,30 @@ class ExportRegime implements ExportInterface
                 }
                 $dpeParcours = GetDpeParcours::getFromParcours($parcours);
                 $this->excelWriter->writeCellXY(6, $ligne, $formation->getResponsableMention()?->getDisplay());
-                $this->excelWriter->writeCellXY(7, $ligne, $formation->getCoResponsable()?->getDisplay());
-                $this->excelWriter->writeCellXY(8, $ligne, $parcours->getRespParcours()?->getDisplay());
-                $this->excelWriter->writeCellXY(9, $ligne, $parcours->getCoResponsable()?->getDisplay());
-                $this->excelWriter->writeCellXY(10, $ligne, $formation->getCodeRNCP());
-                $this->excelWriter->writeCellXY(11, $ligne, $this->getHistorique->getHistoriqueParcoursLastStep($dpeParcours, 'cfvu')?->getDate()?->format('d/m/Y') ?? 'Non validé');
+                $this->excelWriter->writeCellXY(7, $ligne, $formation->getResponsableMention()?->getEmail());
+                $this->excelWriter->writeCellXY(8, $ligne, $formation->getResponsableMention()?->getUsername());
+                $this->excelWriter->writeCellXY(9, $ligne, $formation->getCoResponsable()?->getDisplay());
+                $this->excelWriter->writeCellXY(10, $ligne, $formation->getCoResponsable()?->getEmail());
+                $this->excelWriter->writeCellXY(11, $ligne, $formation->getCoResponsable()?->getUsername());
+                $this->excelWriter->writeCellXY(12, $ligne, $parcours->getRespParcours()?->getDisplay());
+                $this->excelWriter->writeCellXY(13, $ligne, $parcours->getRespParcours()?->getEmail());
+                $this->excelWriter->writeCellXY(14, $ligne, $parcours->getRespParcours()?->getUsername());
+                $this->excelWriter->writeCellXY(15, $ligne, $parcours->getCoResponsable()?->getDisplay());
+                $this->excelWriter->writeCellXY(16, $ligne, $parcours->getCoResponsable()?->getEmail());
+                $this->excelWriter->writeCellXY(17, $ligne, $parcours->getCoResponsable()?->getUsername());
+                $this->excelWriter->writeCellXY(18, $ligne, $formation->getCodeRNCP());
+                $this->excelWriter->writeCellXY(19, $ligne, $this->getHistorique->getHistoriqueParcoursLastStep($dpeParcours, 'cfvu')?->getDate()?->format('d/m/Y') ?? 'Non validé');
                 $i = 0;
                 foreach (RegimeInscriptionEnum::cases() as $regime) {
                     if (in_array($regime, $parcours->getRegimeInscription())) {
-                        $this->excelWriter->writeCellXY(12 + $i, $ligne, 'X', [
+                        $this->excelWriter->writeCellXY(20 + $i, $ligne, 'X', [
                             'style' => 'HORIZONTAL_CENTER'
                         ]);
                     }
                     $i++;
                 }
 
-                $this->excelWriter->getColumnsAutoSize('A', 'M');
+                $this->excelWriter->getColumnsAutoSize('A', 'Z');
                 $ligne++;
             }
         }
