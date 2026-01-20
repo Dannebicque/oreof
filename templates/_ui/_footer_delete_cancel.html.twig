@@ -1,0 +1,18 @@
+<div class="flex justify-end gap-2">
+    <button type="button"
+            class="rounded-lg px-3 py-2 hover:bg-gray-100"
+            data-action="modalturbo#close">
+        Annuler
+    </button>
+
+    {# Soumet le premier form présent dans le body #}
+    <form action="{{ url }}" method="post" id="modal_form">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token(csrf_token) }}">
+        <input type="hidden" name="_method" value="delete">
+        <button type="submit"
+                class="rounded-lg bg-red-600 text-white px-4 py-2 font-semibold"
+                form="modal_form">
+            {{ submitLabel ?? 'Confirmer suppression' }}
+        </button>
+    </form>
+</div>

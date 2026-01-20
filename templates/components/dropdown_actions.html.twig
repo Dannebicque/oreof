@@ -1,4 +1,4 @@
-<div class="relative inline-block text-left"
+<div class="relative inline-block text-left overflow-visible"
      data-controller="dropdown"
      {% if id %}id="{{ id }}"{% endif %}
 >
@@ -26,8 +26,24 @@
                 {% set disabled = item.disabled ?? false %}
                 {% set method = item.method ?? 'GET' %}
                 {% set turboFrame = item.turboFrame ?? null %}
-                {% set confirm = item.confirm ?? null %}
+                {% set hasConfirm = item.confirm is defined %}
+                {% set modal = item.modal is defined and item.modal == true %}
 
+                {% if modal %}
+                    <a
+                            class="block px-4 py-2 text-sm
+                               {{ danger ? 'text-red-600 hover:bg-red-50' : 'text-gray-700 hover:bg-gray-100' }}
+                               {{ disabled ? 'opacity-50 pointer-events-none' : '' }}"
+                            role="menuitem"
+                            href="{{ item.url }}"
+                            data-turbo="true"
+                            data-action="click->modalturbo#open"
+                    >
+                        {% if item.icon is defined %}<i class="{{ item.icon }}"></i>{% endif %}
+                        {{ item.label }}
+                    </a>
+
+                {% else %}
                 {% if method == 'GET' %}
                     <a
                             href="{{ item.url ?? '#' }}"
@@ -36,7 +52,7 @@
                                {{ disabled ? 'opacity-50 pointer-events-none' : '' }}"
                             role="menuitem"
                             {% if turboFrame != null %}data-turbo-frame="{{ turboFrame }}"{% endif %}
-                            {% if confirm %}data-action="click->dropdown#confirm" data-dropdown-confirm-value="{{ confirm|e('html_attr') }}"{% endif %}
+                            {% if hasConfirm %}data-action="click->dropdown#confirm" data-dropdown-confirm-value="{{ item.confirm|e('html_attr') }}"{% endif %}
                     >
                         {% if item.icon is defined %}<i class="{{ item.icon }}"></i>{% endif %}
                         {{ item.label }}
@@ -46,9 +62,12 @@
                     <form method="post"
                           action="{{ item.url ?? '#' }}"
                           class="block"
-                          {% if confirm %}data-action="submit->dropdown#confirm"
-                          data-dropdown-confirm-value="{{ confirm|e('html_attr') }}"{% endif %}
+                          {% if hasConfirm %}data-action="submit->dropdown#confirm"
+                          data-dropdown-confirm-value="{{ item.confirm|e('html_attr') }}"{% endif %}
                     >
+                        {% if item.csrf is defined %}
+                            <input type="hidden" name="csrf_token" value="{{ item.csrf }}">
+                        {% endif %}
                         {# Si tu veux : _method pour DELETE/PUT #}
                         {% if method != 'POST' %}
                             <input type="hidden" name="_method" value="{{ method }}">
@@ -64,6 +83,7 @@
                             {{ item.label }}
                         </button>
                     </form>
+                {% endif %}
                 {% endif %}
             {% endfor %}
         </div>

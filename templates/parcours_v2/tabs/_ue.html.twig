@@ -1,4 +1,5 @@
 <section
+        id="ue-{{ ue.ue.id }}"
         class="bg-white border border-slate-200 rounded-sm shadow-sm overflow-hidden border-l-8 border-indigo-500 mb-2"
         data-sortable-item
         data-id="{{ ue.ue.id }}"
@@ -95,9 +96,28 @@
                         url: path('structure_ue_changer', {parcours:parcours.id, ue: ue.ue.id}) },
                     { label: 'Mutualiser l\'UE', url: path('structure_ue_mutualiser', {semestre:semestre.semestre.id, ue: ue.ue.id}) },
                     { label: 'Raccrocher une UE', url: path('structure_ue_raccrocher', {ue:ue.ue.id, parcours: parcours.id})},
-                    { label: 'Supprimer l\'UE', url: path('structure_ue_delete', {id: ue.ue.id}), method: 'DELETE', danger: true, confirm: 'Confirmer la suppression ?' },
+                    { label: 'Supprimer l\'UE',
+                        modal: true,
+                        url: path('parcours_structure_pre_delete_ue_semestre', {
+                        ue: ue.ue.id,
+                        semestreParcours: semestre.semestreParcours.id,
+                        parcours:parcours.id}), danger: true},
                 ]
             }) }}
+
+            {#            <a #}
+            {#                    #}{#                                                                            {% if raccrocheEnfant == true %} #}
+            {#                    #}{#                                                                                disabled #}
+            {#                    #}{#                                                                                title="UE raccrochée, modifiable uniquement depuis le parcours d'origine" #}
+            {#                    #}{#                                                                            {% else %} #}
+            {#                    {{ stimulus_action('structure--ue', 'delete', 'click', { #}
+            {#                        url:path('structure_ue_delete',{'id': uee.id}), #}
+            {#                        csrf: csrf_token('delete' ~ uee.id) #}
+            {#                    }) }} #}
+            {#                    #}{#                                                                            {% endif %} #}
+            {#                    class="btn btn-sm text-danger"> #}
+            {#                <i class="{{ iconDelete }}"></i> Supprimer #}
+            {#            </a> #}
 
             <span class="text-lg font-black text-slate-600">{{ ue.heuresEctsUe.sommeUeEcts }} ECTS</span>
         </div>

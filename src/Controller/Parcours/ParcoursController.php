@@ -58,6 +58,7 @@ class ParcoursController extends BaseController
 
     #[Route('/{parcours}/semestre/{semestreParcours}', name: 'app_parcours_v2_semestre')]
     public function semestre(
+        Request $request,
         TypeDIplomeResolver $typeDiplomeResolver,
         Parcours            $parcours,
         SemestreParcours    $semestreParcours
@@ -67,11 +68,32 @@ class ParcoursController extends BaseController
         $typeD = $typeDiplomeResolver->fromParcours($parcours);
         $dtoSemestre = $typeD->calculStructureSemestre($semestreParcours, $parcours);
 
-        return $this->render('parcours_v2/tabs/_semestre.html.twig', [
+//        return $this->render('parcours_v2/tabs/_semestre.html.twig', [
+//            'semestreParcours' => $semestreParcours,
+//            'semestre' => $dtoSemestre,
+//            'parcours' => $parcours
+//        ]);
+
+        $parameters = [
             'semestreParcours' => $semestreParcours,
             'semestre' => $dtoSemestre,
             'parcours' => $parcours
-        ]);
+        ];
+
+        // Si la requête vient d'un Turbo Frame (header `Turbo-Frame` présent), renvoyer uniquement le fragment
+        if ($request->headers->has('Turbo-Frame')) {
+            return $this->render('parcours_v2/tabs/_semestre.html.twig', $parameters);
+        }
+
+        $typeD = $typeDiplomeResolver->fromParcours($parcours);
+        $dto = $typeD->calculStructureParcours($parcours);
+
+        // Sinon renvoyer la page complète (index) qui inclura le fragment dans son corps
+        return $this->render('parcours_v2/index.html.twig', array_merge($parameters, [
+            'tab' => 'semestre',
+            'dpeParcours' => GetDpeParcours::getFromParcours($parcours),
+            'dto' => $dto
+        ]));
     }
 
     #[Route('/{parcours}/tabs/{tab}', name: 'app_parcours_v2_tabs')]

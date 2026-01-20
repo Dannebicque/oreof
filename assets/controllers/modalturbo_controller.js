@@ -17,6 +17,7 @@ export default class extends Controller {
   }
 
   close () {
+
     this.wrapperTarget.classList.add('hidden')
     document.documentElement.classList.remove('overflow-hidden')
   }
@@ -24,7 +25,7 @@ export default class extends Controller {
   // static targets = ["wrapper", "frame"]
   //
   connect () {
-    this.closeHandler = () => this.hide()
+    this.closeHandler = () => this.close()
     window.addEventListener('modal:close', this.closeHandler)
   }
 

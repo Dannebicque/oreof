@@ -24,6 +24,7 @@ class DropdownActionsComponent
      *   confirm?: string,
      *   danger?: bool,
      *   disabled?: bool,
+     *   csrf?: string
      * }>
      */
     public array $items = [];
