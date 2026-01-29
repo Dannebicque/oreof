@@ -29,11 +29,11 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[Route('/parcours/v2/competences/')]
+#[Route('/parcours/v2/competences', name: 'parcours_v2_competences_')]
 #[IsGranted('ROLE_ADMIN')]
 class ParcoursCompetencesController extends BaseController
 {
-    #[Route('/{parcours}/competences/', name: 'app_parcours_v2_competences')]
+    #[Route('/{parcours}/competences/', name: 'index')]
     public function competences(
         TypeDIplomeResolver $typeDiplomeResolver,
         Parcours            $parcours,
@@ -51,7 +51,7 @@ class ParcoursCompetencesController extends BaseController
         ]);
     }
 
-    #[Route('/{parcours}/competences/reset', name: 'app_parcours_v2_competences_reset')]
+    #[Route('/{parcours}/competences/reset', name: 'reset')]
     public function competencesReset(
         TypeDIplomeResolver $typeDiplomeResolver,
         Parcours            $parcours,
@@ -65,7 +65,7 @@ class ParcoursCompetencesController extends BaseController
     }
 
 
-    #[Route('/{parcours}/competences/recopie', name: 'app_parcours_recopie_bcc')]
+    #[Route('/{parcours}/competences/recopie', name: 'recopie_bcc')]
     public function competencesRecopie(
         TypeDIplomeResolver $typeDiplomeResolver,
         Parcours            $parcours,

@@ -25,17 +25,13 @@
         </div>
     {% endif %}
     <div class="col-sm-12">
-        <ul class="list-unstyled">
             {% for bc in parcours.blocCompetences %}
-                <li>{{ bc.display }}</li>
-                <li>
-                    <ul>
+                <p class="flex items-center gap-2 text-indigo-500 font-black uppercase text-xs tracking-widest mt-1">
+                    <span class="w-2 h-2 bg-indigo-500 rounded-full"></span> {{ bc.display }}</p>
                         {% for c in bc.competences %}
-                            <li>{{ c.display }}</li>
+                            <p class="flex items-center gap-2 text-slate-600 text-xs tracking-widest"><span
+                                        class="w-2 h-2 bg-emerald-500 rounded-full ms-2"></span>{{ c.display }}</p>
                         {% endfor %}
-                    </ul>
-                </li>
             {% endfor %}
-        </ul>
     </div>
 </div>

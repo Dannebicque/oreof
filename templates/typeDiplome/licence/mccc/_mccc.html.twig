@@ -1,0 +1,11 @@
+<div
+        {{ stimulus_controller('mccc--licence', {
+            url: path('type_diplome_licence_change', {elementConstitutif:ec.id, parcours: parcours.id}),
+        }) }}
+>
+    {% form_theme form 'communs/form_theme_v2.html.twig' %}
+    {{ form_start(form) }}
+    {{ form_row(form.typeMccc) }}
+    <div {{ stimulus_target('mccc--licence', 'zone') }}></div>
+    {{ form_end(form) }}
+</div>

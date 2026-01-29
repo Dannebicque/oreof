@@ -212,11 +212,26 @@ class SemestreController extends BaseController
         Semestre $semestre,
         Parcours $parcours
     ): Response {
-        return $this->render('structure/semestre/_changer.html.twig', [
+        $body = $this->renderView('structure/semestre/_changer.html.twig', [
             'semestre' => $semestre,
             'parcours' => $parcours,
             'formation' => $parcours->getFormation()
         ]);
+
+        $footer = $this->renderView('_ui/_footer_submit_cancel.html.twig', [
+            'submitLabel' => 'Déplacer le semestre',
+        ]);
+
+        return new Response(
+            $this->renderView('_ui/open.stream.html.twig', [
+                'title' => 'Déplacer le semestre',
+                'subtitle' => 'Dans : semestre ' . $semestre->display(),
+                'body' => $body,
+                'footer' => $footer,
+            ]),
+            200,
+            ['Content-Type' => 'text/vnd.turbo-stream.html']
+        );
     }
 
     #[Route('/changer-ajax/{semestre}/{parcours}', name: 'changer_ajax')]
@@ -546,11 +561,26 @@ class SemestreController extends BaseController
         Semestre             $semestre,
         Parcours             $parcours
     ): Response {
-        return $this->render('structure/semestre/_mutualiser.html.twig', [
+
+        $body = $this->renderView('structure/semestre/_mutualiser.html.twig', [
             'semestre' => $semestre,
             'parcours' => $parcours,
             'composantes' => $composanteRepository->findAll()
         ]);
+
+        $footer = $this->renderView('_ui/_footer_cancel.html.twig', [
+        ]);
+
+        return new Response(
+            $this->renderView('_ui/open.stream.html.twig', [
+                'title' => 'Gérer les mutualisations du semestre',
+                'subtitle' => 'Dans : semestre ' . $semestre->display(),
+                'body' => $body,
+                'footer' => $footer,
+            ]),
+            200,
+            ['Content-Type' => 'text/vnd.turbo-stream.html']
+        );
     }
 
     #[Route('/{semestre}/mutualise/ajax', name: 'mutualise_add_ajax', methods: [
@@ -652,11 +682,26 @@ class SemestreController extends BaseController
     ): Response {
         $semestres = $semestreMutualisableRepository->findBy(['parcours' => $parcours]);
 
-        return $this->render('structure/semestre/_raccrocher.html.twig', [
+        $body = $this->renderView('structure/semestre/_raccrocher.html.twig', [
             'semestre' => $semestre,
             'semestres' => $semestres,
             'parcours' => $parcours
         ]);
+
+        $footer = $this->renderView('_ui/_footer_submit_cancel.html.twig', [
+            'submitLabel' => 'Enregistrer le rattachement',
+        ]);
+
+        return new Response(
+            $this->renderView('_ui/open.stream.html.twig', [
+                'title' => 'Rattacher le semestre à un semestre mutualisé',
+                'subtitle' => 'Dans : semestre ' . $semestre->display(),
+                'body' => $body,
+                'footer' => $footer,
+            ]),
+            200,
+            ['Content-Type' => 'text/vnd.turbo-stream.html']
+        );
     }
 
     #[Route('/tronc-commun/{semestreParcours}/{parcours}', name: 'definir_tronc_commun')]

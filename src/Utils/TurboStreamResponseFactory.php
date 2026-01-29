@@ -40,4 +40,40 @@ final class TurboStreamResponseFactory
             ['Content-Type' => 'text/vnd.turbo-stream.html']
         );
     }
+
+    /**
+     * Ouvre une modal via Turbo Stream (template: `_ui/open.stream.html.twig`).
+     * $bodyHtml et $footerHtml sont attendus comme du HTML déjà rendu.
+     */
+    public function streamOpenModal(
+        string  $title,
+        ?string $subtitle,
+        string  $bodyHtml,
+        string  $footerHtml,
+        int     $status = 200
+    ): Response
+    {
+        return $this->stream('_ui/open.stream.html.twig', [
+            'title' => $title,
+            'subtitle' => $subtitle,
+            'body' => $bodyHtml,
+            'footer' => $footerHtml,
+        ], $status);
+    }
+
+    public function streamOpenModalFromTemplates(
+        string  $title,
+        ?string $subtitle,
+        string  $bodyTemplate,
+        array   $bodyContext,
+        string  $footerTemplate,
+        array   $footerContext,
+        int     $status = 200
+    ): Response
+    {
+        $bodyHtml = $this->twig->render($bodyTemplate, $bodyContext);
+        $footerHtml = $this->twig->render($footerTemplate, $footerContext);
+
+        return $this->streamOpenModal($title, $subtitle, $bodyHtml, $footerHtml, $status);
+    }
 }

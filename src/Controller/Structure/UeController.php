@@ -31,6 +31,7 @@ use App\Repository\UeMutualisableRepository;
 use App\Repository\UeRepository;
 use App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException;
 use App\Utils\JsonRequest;
+use App\Utils\TurboStreamResponseFactory;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -80,6 +81,7 @@ class UeController extends BaseController
         Semestre             $semestre,
         Parcours             $parcours
     ): Response {
+        //todo: deprecated
         $isAdmin = $this->isGranted('ROLE_ADMIN');
         $ue = new Ue();
         $ueOrigine = $request->query->get('ue');
@@ -92,7 +94,7 @@ class UeController extends BaseController
         $typeDiplome = $parcours->getFormation()?->getTypeDiplome();
 
         if ($typeDiplome === null) {
-            throw new Exception('Type de diplôme non trouvé');
+            throw new \RuntimeException('Type de diplôme non trouvé');
         }
         $form = $this->createForm(UeType::class, $ue, [
             'action' => $this->generateUrl('structure_ue_add_ue_semestre', [
@@ -238,9 +240,10 @@ class UeController extends BaseController
         return $this->json(true);
     }
 
-    #[Route('/{id}/{parcours}/modifier', name: 'edit', methods: ['GET', 'POST'])]
+    /** @deprecated */
+    #[Route('/{ue}/{parcours}/modifier', name: 'edit', methods: ['GET', 'POST'])]
     public function edit(
-        NatureUeEcRepository $natureUeEcRepository,
+        TurboStreamResponseFactory $turboStreamResponseFactory,
         TypeUeRepository     $typeUeRepository,
         Request              $request,
         Ue                   $ue,
@@ -254,11 +257,10 @@ class UeController extends BaseController
         $isAdmin = $this->isGranted('ROLE_ADMIN');
         $form = $this->createForm(UeType::class, $ue, [
             'action' => $this->generateUrl('structure_ue_edit', [
-                'id' => $ue->getId(),
+                'ue' => $ue->getId(),
                 'parcours' => $parcours->getId()
             ]),
-            'typeDiplome' => $typeDiplome,
-            'isAdmin' => $isAdmin
+            'typeDiplome' => $typeDiplome
         ]);
 
         $form->handleRequest($request);
@@ -298,11 +300,22 @@ class UeController extends BaseController
             return $this->json(true);
         }
 
-        return $this->render('structure/ue/_new.html.twig', [
-            'form' => $form->createView(),
-            'ue' => $ue,
-            'isAdmin' => $isAdmin ?? false,
-        ]);
+//        return $this->render('structure/ue/_new.html.twig', [
+//            'form' => $form->createView(),
+//            'ue' => $ue,
+//            'isAdmin' => $isAdmin ?? false,
+//        ]);
+
+        return $turboStreamResponseFactory->streamOpenModalFromTemplates(
+            'Modifier l\'' . $ue->display(),
+            'Dans : le semestre  ' . $ue->getSemestre()?->display(),
+            'parcours/v2/ue/_new.html.twig',
+            [
+                'form' => $form->createView(),
+            ],
+            '_ui/_footer_submit_cancel.html.twig',
+            ['submitLabel' => 'Modifier']
+        );
     }
 
     /**
@@ -358,11 +371,31 @@ class UeController extends BaseController
         Ue                   $ue,
         Semestre             $semestre
     ): Response {
-        return $this->render('structure/ue/_mutualiser.html.twig', [
+//        return $this->render('structure/ue/_mutualiser.html.twig', [
+//            'semestre' => $semestre,
+//            'ue' => $ue,
+//            'composantes' => $composanteRepository->findAll()
+//        ]);
+
+        $body = $this->renderView('structure/ue/_mutualiser.html.twig', [
             'semestre' => $semestre,
             'ue' => $ue,
             'composantes' => $composanteRepository->findAll()
         ]);
+
+        $footer = $this->renderView('_ui/_footer_cancel.html.twig', [
+        ]);
+
+        return new Response(
+            $this->renderView('_ui/open.stream.html.twig', [
+                'title' => 'Mutualiser l\'UE',
+                'subtitle' => 'Dans : UE ' . $ue->display(),
+                'body' => $body,
+                'footer' => $footer,
+            ]),
+            200,
+            ['Content-Type' => 'text/vnd.turbo-stream.html']
+        );
     }
 
     #[Route('/{ue}/mutualise/ajax', name: 'mutualise_add_ajax', methods: [
@@ -465,11 +498,32 @@ class UeController extends BaseController
         $ues = $ueMutualisableRepository->findBy(['parcours' => $parcours]);
 
 
-        return $this->render('structure/ue/_raccrocher.html.twig', [
+//        return $this->render('structure/ue/_raccrocher.html.twig', [
+//            'ue' => $ue,
+//            'parcours' => $parcours,
+//            'ues' => $ues
+//        ]);
+
+        $body = $this->renderView('structure/ue/_raccrocher.html.twig', [
             'ue' => $ue,
             'parcours' => $parcours,
             'ues' => $ues
         ]);
+
+        $footer = $this->renderView('_ui/_footer_submit_cancel.html.twig', [
+            'submitLabel' => 'Enregistrer le rattachement',
+        ]);
+
+        return new Response(
+            $this->renderView('_ui/open.stream.html.twig', [
+                'title' => 'Rattacher l\'UE a une UE mutualisée',
+                'subtitle' => 'Dans : UE ' . $ue->display(),
+                'body' => $body,
+                'footer' => $footer,
+            ]),
+            200,
+            ['Content-Type' => 'text/vnd.turbo-stream.html']
+        );
     }
 
     #[Route('/dupliquer/{ue}/{parcours}', name: 'dupliquer')]
@@ -489,11 +543,32 @@ class UeController extends BaseController
         Ue       $ue,
         Parcours $parcours
     ): Response {
-        return $this->render('structure/ue/_changer.html.twig', [
+//        return $this->render('structure/ue/_changer.html.twig', [
+//            'ue' => $ue,
+//            'parcours' => $parcours,
+//            'formation' => $parcours->getFormation()
+//        ]);
+
+        $body = $this->renderView('structure/ue/_changer.html.twig', [
             'ue' => $ue,
             'parcours' => $parcours,
             'formation' => $parcours->getFormation()
         ]);
+
+        $footer = $this->renderView('_ui/_footer_submit_cancel.html.twig', [
+            'submitLabel' => 'Déplacer l\'UE',
+        ]);
+
+        return new Response(
+            $this->renderView('_ui/open.stream.html.twig', [
+                'title' => 'Déplacer l\'UE',
+                'subtitle' => 'Dans : UE ' . $ue->display(),
+                'body' => $body,
+                'footer' => $footer,
+            ]),
+            200,
+            ['Content-Type' => 'text/vnd.turbo-stream.html']
+        );
     }
 
     #[Route('/changer-ajax/{ue}/{parcours}', name: 'changer_ajax')]

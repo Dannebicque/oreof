@@ -9,7 +9,13 @@
 
 namespace App\TypeDiplome;
 
+use App\DTO\StructureParcours;
+use App\DTO\StructureSemestre;
+use App\Service\Validation\Dto\ValidationResult;
+
 interface ValideParcoursInterface
 {
+    public function valideParcours(StructureParcours $structureParcours): ValidationResult;
 
+    public function valideSemestre(StructureSemestre $structureSemestre): ValidationResult;
 }

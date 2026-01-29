@@ -4,15 +4,21 @@
 >
     <button
             type="button"
-            class="inline-flex items-center justify-center rounded-full p-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100
+            class="inline-flex items-center justify-center rounded-sm bg-slate-100 p-2 text-slate-600 hover:text-slate-900 hover:bg-slate-300
                focus:outline-none focus:ring-2 focus:ring-indigo-500"
             aria-haspopup="true"
             aria-expanded="false"
             data-action="click->dropdown#toggle"
             data-dropdown-target="button"
+            {% if help != '' %}
+                data-bs-toggle="tooltip"
+                data-bs-placement="bottom"
+                title="{{ help }}"
+            {% endif %}
+
     >
-        <span class="sr-only">{{ label }}</span>
         <i class="{{ icon }}"></i>
+        <span class="{% if labelSrOnly %}sr-only{% endif %} ms-1">{{ label }}</span>
     </button>
 
     <div
@@ -28,11 +34,11 @@
                 {% set turboFrame = item.turboFrame ?? null %}
                 {% set hasConfirm = item.confirm is defined %}
                 {% set modal = item.modal is defined and item.modal == true %}
-
+                {% set color = item.color is defined ? item.color : 'slate' %}
                 {% if modal %}
                     <a
                             class="block px-4 py-2 text-sm
-                               {{ danger ? 'text-red-600 hover:bg-red-50' : 'text-gray-700 hover:bg-gray-100' }}
+                               {{ danger ? 'text-red-600 hover:bg-red-50' : 'text-'~color~'-700 hover:bg-'~color~'-100' }}
                                {{ disabled ? 'opacity-50 pointer-events-none' : '' }}"
                             role="menuitem"
                             href="{{ item.url }}"
@@ -48,7 +54,7 @@
                     <a
                             href="{{ item.url ?? '#' }}"
                             class="block px-4 py-2 text-sm
-                               {{ danger ? 'text-red-600 hover:bg-red-50' : 'text-gray-700 hover:bg-gray-100' }}
+                               {{ danger ? 'text-red-600 hover:bg-red-50' : 'text-'~color~'-700 hover:bg-'~color~'-100' }}
                                {{ disabled ? 'opacity-50 pointer-events-none' : '' }}"
                             role="menuitem"
                             {% if turboFrame != null %}data-turbo-frame="{{ turboFrame }}"{% endif %}

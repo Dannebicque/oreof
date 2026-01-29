@@ -1,0 +1,250 @@
+{% extends 'base.html.twig' %}
+
+{% set header_title %}
+    {% if parcours.parcoursParent == null %}
+        Parcours <strong>{{ parcours.libelle }} {{ parcours.typeParcours|badgeTypeParcours }}</strong>
+    {% else %}
+        Option <strong>{{ parcours.libelle }}</strong> (parcours <strong>{{ parcours.parcoursParent.libelle }}</strong>)
+    {% endif %}
+{% endset %}
+
+{% block breadcrumb %}
+    {{ include('communs/_breadcrumb.html.twig', {liens:[
+        {href: path('app_formation_index'), title: 'Liste des formations'},
+        {href: path('app_formation_show', {slug:formation.slug}), title:'Formation :  ' ~ formation.display},
+    ]}) }}
+{% endblock %}
+
+{% block bouton_header %}
+    <div class="d-flex flex-wrap gap-2 justify-content-lg-end">
+        {% if (is_granted('EDIT', {route: 'app_parcours', subject: dpeParcours})
+            or is_granted('EDIT', {route: 'app_formation', subject: dpeParcours})
+            or is_granted('EDIT', {route: 'app_composante', subject: dpeParcours})
+            or is_granted('EDIT', {route: 'app_etbalissement', subject: dpeParcours})
+            or is_granted('ROLE_ADMIN')) and isOuvert(dpeParcours) %}
+            <a href="{{ path('parcours_v2_modifier', {parcours:parcours.id}) }}"
+               class="btn btn-sm btn-warning btn-icon btn-icon-end w-100 w-sm-auto"
+               data-bs-toggle="tooltip"
+               data-bs-placement="bottom"
+               title="Modifier le parcours"
+            >
+                <i class="{{ iconEdit }}"></i>
+                <span> Modifier le parcours</span>
+            </a>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script type="module">
+      import { Application, Controller } from 'https://unpkg.com/@hotwired/stimulus/dist/stimulus.js'
+
+      window.Stimulus = Application.start()
+
+      Stimulus.register('scroll-spy', class extends Controller {
+        static targets = ['link', 'section']
+
+        connect () {
+          const options = {
+            root: null,
+            rootMargin: '-10% 0px -70% 0px', // Déclenchement quand la section est en haut
+            threshold: 0
+          }
+
+          this.observer = new IntersectionObserver(this.onIntersection.bind(this), options)
+          this.sectionTargets.forEach(section => this.observer.observe(section))
+        }
+
+        onIntersection (entries) {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              this.activateLink(entry.target.id)
+            }
+          })
+        }
+
+        activateLink (id) {
+          this.linkTargets.forEach(link => {
+            const isActive = link.getAttribute('href') === `#${id}`
+            link.classList.toggle('text-indigo-600', isActive)
+            link.classList.toggle('bg-indigo-50', isActive)
+            link.classList.toggle('border-indigo-600', isActive)
+            link.classList.toggle('text-slate-400', !isActive)
+            link.classList.toggle('border-transparent', !isActive)
+          })
+        }
+
+        disconnect () {
+          this.observer.disconnect()
+        }
+      })
+    </script>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #F8FAFC;
+            padding: 40px;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+
+    <twig:ParcoursHeader parcoursId="{{ parcours.id }}" formationId="{{ parcours.formation.id }}"/>
+
+    <div class="flex" data-controller="scroll-spy">
+        <aside class="w-72 bg-white rounded-md shadow-md border-slate-200 flex flex-col p-3 space-y-8">
+            <div class="sticky top-40 space-y-8">
+                <div>
+                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-6 px-4">Navigation</p>
+                    <nav class="space-y-1">
+                        <a href="#identite_formation" data-scroll-spy-target="link"
+                           class="flex items-center gap-3 px-5 py-3 text-[11px] font-black uppercase tracking-widest rounded-md border-l-4 border-transparent transition-all duration-300">
+                            Identité de la formation
+                        </a>
+
+                        <a href="#presentation" data-scroll-spy-target="link"
+                           class="flex items-center gap-3 px-5 py-3 text-[11px] font-black uppercase tracking-widest rounded-md border-l-4 border-transparent transition-all duration-300">
+                            Présentation de la formation
+                        </a>
+
+                        <a href="#descriptif" data-scroll-spy-target="link"
+                           class="flex items-center gap-3 px-5 py-3 text-[11px] font-black uppercase tracking-widest rounded-md border-l-4 border-transparent transition-all duration-300">
+                            Descriptif de la formation
+                        </a>
+
+                        <a href="#presentation_{{ parcours.id }}" data-scroll-spy-target="link"
+                           class="flex items-center gap-3 px-5 py-3 text-[11px] font-black uppercase tracking-widest rounded-md border-l-4 border-transparent transition-all duration-300">
+                            Présentation du parcours
+                        </a>
+
+                        <a href="#descriptif_{{ parcours.id }}" data-scroll-spy-target="link"
+                           class="flex items-center gap-3 px-5 py-3 text-[11px] font-black uppercase tracking-widest rounded-md border-l-4 border-transparent transition-all duration-300">
+                            Descriptif du parcours
+                        </a>
+
+
+                        <a href="#localisation_{{ parcours.id }}" data-scroll-spy-target="link"
+                           class="flex items-center gap-3 px-5 py-3 text-[11px] font-black uppercase tracking-widest rounded-md border-l-4 border-transparent transition-all duration-300">
+                            Localisation
+                        </a>
+
+                        <a href="#competences_{{ parcours.id }}" data-scroll-spy-target="link"
+                           class="flex items-center gap-3 px-5 py-3 text-[11px] font-black uppercase tracking-widest rounded-md border-l-4 border-transparent transition-all duration-300">
+                            Compétences Acquises
+                        </a>
+
+                        <a href="#structure_{{ parcours.id }}" data-scroll-spy-target="link"
+                           class="flex items-center gap-3 px-5 py-3 text-[11px] font-black uppercase tracking-widest rounded-md border-l-4 border-transparent transition-all duration-300">
+                            Structure & maquette
+                        </a>
+                        <a href="#admission_{{ parcours.id }}" data-scroll-spy-target="link"
+                           class="flex items-center gap-3 px-5 py-3 text-[11px] font-black uppercase tracking-widest rounded-md border-l-4 border-transparent transition-all duration-300">
+                            Admission
+                        </a>
+
+                        <a href="#inscription_{{ parcours.id }}" data-scroll-spy-target="link"
+                           class="flex items-center gap-3 px-5 py-3 text-[11px] font-black uppercase tracking-widest rounded-md border-l-4 border-transparent transition-all duration-300">
+                            Inscription
+                        </a>
+
+                        <a href="#et_apres_{{ parcours.id }}" data-scroll-spy-target="link"
+                           class="flex items-center gap-3 px-5 py-3 text-[11px] font-black uppercase tracking-widest rounded-md border-l-4 border-transparent transition-all duration-300">
+                            Et après...
+                        </a>
+
+                        <a href="#contacts_{{ parcours.id }}" data-scroll-spy-target="link"
+                           class="flex items-center gap-3 px-5 py-3 text-[11px] font-black uppercase tracking-widest rounded-md border-l-4 border-transparent transition-all duration-300">
+                            Contacts pédagogiques
+                        </a>
+                    </nav>
+                </div>
+
+                {% set valideLheo = lheoXML.isValidLheo(parcours) %}
+                {% set percent = parcours.remplissage.calcul() %}
+                {% set isFull = parcours.remplissage.isFull() == true %}
+                {% set color = isFull and valideLheo ? 'green' : 'orange' %}
+
+                <div class="p-6 bg-{{ color }}-600 rounded-sm text-white shadow-xl shadow-{{ color }}-100">
+                    <p class="text-[10px] font-black uppercase opacity-60 mb-2">Statut Global</p>
+                    <p class="text-sm font-bold leading-tight">
+                        {% if lheoXML.isValidLheo(parcours) %}
+                            Le parcours est prêt pour la publication LHEO.
+                        {% else %}
+                            Le parcours est invalide LHEO, publication impossible
+                        {% endif %}
+                    </p>
+                    <div class="mt-4 w-full bg-indigo-400/30 h-1.5 rounded-full overflow-hidden">
+                        <div class="w-[{{ percent }}%] h-full bg-white"></div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+        <div class="p-3 flex-1 overflow-y-auto flex flex-col">
+
+            {{ include('typeDiplome/'~constant('TEMPLATE_FOLDER', typeD)~'/_show_parcours.html.twig') }}
+
+
+            {#            <section id="identite" data-scroll-spy-target="section" class="bg-white rounded-[2.5rem] p-10 border border-slate-100 shadow-sm scroll-mt-32"> #}
+            {#                <div class="flex justify-between items-center mb-8"> #}
+            {#                    <h3 class="text-2xl font-black text-slate-800 tracking-tighter">Identité de la formation</h3> #}
+            {#                    <span class="text-[10px] font-black px-3 py-1 bg-green-100 text-green-700 rounded-lg uppercase">Validé</span> #}
+            {#                </div> #}
+            {#                <div class="grid grid-cols-2 gap-8"> #}
+            {#                    <div class="space-y-1"> #}
+            {#                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Id formation</p> #}
+            {#                        <p class="font-bold text-slate-700">#212-BGG</p> #}
+            {#                    </div> #}
+            {#                    <div class="space-y-1"> #}
+            {#                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Type de diplôme</p> #}
+            {#                        <p class="font-bold text-slate-700">Licence (Bac+3)</p> #}
+            {#                    </div> #}
+            {#                    <div class="col-span-2 space-y-1 border-t pt-4"> #}
+            {#                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Composante porteuse</p> #}
+            {#                        <p class="font-bold text-slate-700">UFR Sciences Exactes et Naturelles</p> #}
+            {#                    </div> #}
+            {#                </div> #}
+            {#            </section> #}
+
+            {#            <section id="presentation" data-scroll-spy-target="section" class="bg-white rounded-[2.5rem] p-10 border border-slate-100 shadow-sm scroll-mt-32"> #}
+            {#                <h3 class="text-2xl font-black text-slate-800 tracking-tighter mb-8 italic">Présentation du parcours</h3> #}
+            {#                <div class="space-y-6 text-sm text-slate-600 leading-relaxed"> #}
+            {#                    <div class="bg-slate-50 p-6 rounded-3xl border border-slate-100"> #}
+            {#                        <h4 class="font-black text-slate-800 mb-2 uppercase text-[11px]">Organisation de la formation</h4> #}
+            {#                        <p>Le parcours BGG est un parcours généraliste en SVT. Il aborde les différents aspects des sciences de la vie (biologie animale et végétale, biologie cellulaire et moléculaire, microbiologie, physiologie, écologie...) et des sciences de la terre (géologie régionale, géodynamique, pétrologie, sédimentologie, paléoenvironnements...).</p> #}
+            {#                    </div> #}
+            {#                    <h4 class="font-black text-slate-800 uppercase text-[11px] pt-4 border-l-4 border-indigo-500 pl-4">Objectifs du parcours</h4> #}
+            {#                    <p>À la fin de la formation l'étudiant aura acquis des connaissances et des compétences dans les différents domaines des sciences de la vie et des sciences de la terre ainsi qu'une culture naturaliste.</p> #}
+            {#                </div> #}
+            {#            </section> #}
+
+            {#            <section id="maquette" data-scroll-spy-target="section" class="bg-white rounded-[2.5rem] p-10 border border-slate-100 shadow-sm scroll-mt-32"> #}
+            {#                <h3 class="text-2xl font-black text-slate-800 tracking-tighter mb-8 uppercase">Structure & Maquette</h3> #}
+            {#                <div class="space-y-4"> #}
+            {#                    <div class="flex items-center justify-between p-4 bg-slate-50 rounded-2xl border border-slate-100"> #}
+            {#                        <span class="font-bold text-slate-700 uppercase text-xs tracking-widest">Semestre 1</span> #}
+            {#                        <span class="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-lg text-[10px] font-black italic">30 ECTS</span> #}
+            {#                    </div> #}
+            {#                    <div class="flex items-center justify-between p-4 bg-slate-50 rounded-2xl border border-slate-100 opacity-60"> #}
+            {#                        <span class="font-bold text-slate-700 uppercase text-xs tracking-widest">Semestre 2</span> #}
+            {#                        <span class="px-3 py-1 bg-slate-200 text-slate-500 rounded-lg text-[10px] font-black italic">30 ECTS</span> #}
+            {#                    </div> #}
+            {#                </div> #}
+            {#            </section> #}
+
+            {#            <section id="admission" data-scroll-spy-target="section" class="bg-white rounded-[2.5rem] p-10 border border-slate-100 shadow-sm scroll-mt-32 min-h-[600px]"> #}
+            {#                <h3 class="text-2xl font-black text-slate-800 tracking-tighter mb-8 uppercase">Admission & Inscription</h3> #}
+            {#                <p class="text-sm text-slate-500 italic">Contenu en cours de rédaction...</p> #}
+            {#            </section> #}
+        </div>
+    </div>
+{% endblock %}
+

@@ -1,0 +1,20 @@
+{% if issues|length > 0 %}
+    <div class="mb-4 rounded-sm border border-amber-200 bg-amber-50 p-4">
+        <div class="font-bold text-amber-900">Champs à compléter</div>
+
+        <ul class="mt-2 list-disc pl-5 text-sm text-amber-900 space-y-1">
+            {% for issue in issues %}
+                <li>
+                    <a href="#"
+                       data-action="click->issues#scroll"
+                       data-field="{{ issue.field|e('html_attr') }}"
+                       class="underline underline-offset-2 hover:no-underline">
+                        {{ issue.label }}
+                    </a>
+                    <span class="text-amber-800"> — {{ issue.message }}</span>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}
+

@@ -151,6 +151,7 @@ class Parcours
 
     #[Groups('parcours_json_versioning')]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    /** @deprecated */
     private ?string $coordSecretariat = null;
 
     #[Groups('parcours_json_versioning')]
@@ -304,6 +305,12 @@ class Parcours
     #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: ChangeParcours::class)]
     private Collection $changeParcours;
 
+    /**
+     * @var Collection<int, ParcoursTabState>
+     */
+    #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: ParcoursTabState::class)]
+    private Collection $parcoursTabStates;
+
     public function __construct(?Formation $formation)
     {
         $this->formation = $formation;
@@ -329,6 +336,7 @@ class Parcours
         $this->userProfils = new ArrayCollection();
         $this->annees = new ArrayCollection();
         $this->changeParcours = new ArrayCollection();
+        $this->parcoursTabStates = new ArrayCollection();
     }
 
 
@@ -714,11 +722,13 @@ class Parcours
         return $this;
     }
 
+    /** @deprecated */
     public function getCoordSecretariat(): ?string
     {
         return $this->coordSecretariat;
     }
 
+    /** @deprecated */
     public function setCoordSecretariat(?string $coordSecretariat): self
     {
         $this->coordSecretariat = $coordSecretariat;
@@ -1795,5 +1805,35 @@ class Parcours
             false => 'orange',
             default => 'red'
         };
+    }
+
+    /**
+     * @return Collection<int, ParcoursTabState>
+     */
+    public function getParcoursTabStates(): Collection
+    {
+        return $this->parcoursTabStates;
+    }
+
+    public function addParcoursTabState(ParcoursTabState $parcoursTabState): static
+    {
+        if (!$this->parcoursTabStates->contains($parcoursTabState)) {
+            $this->parcoursTabStates->add($parcoursTabState);
+            $parcoursTabState->setParcours($this);
+        }
+
+        return $this;
+    }
+
+    public function removeParcoursTabState(ParcoursTabState $parcoursTabState): static
+    {
+        if ($this->parcoursTabStates->removeElement($parcoursTabState)) {
+            // set the owning side to null (unless already changed)
+            if ($parcoursTabState->getParcours() === $this) {
+                $parcoursTabState->setParcours(null);
+            }
+        }
+
+        return $this;
     }
 }

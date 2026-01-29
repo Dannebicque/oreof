@@ -38,6 +38,7 @@ class TypeUe
     public function __construct()
     {
         $this->typeDiplomes = new ArrayCollection();
+        $this->type = TypeUeEcEnum::NORMAL;
     }
 
     public function getId(): ?int

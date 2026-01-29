@@ -1,10 +1,13 @@
 {% if formation.hasParcours == false %}
-    <div class="row">
-        {# todo: ne doit pas être là? #}
-        <div class="col-sm-12">
             <dl>
-                <dt>Contenu de la formation</dt>
-                <dd>{{ formation.contenuFormation|raw }}</dd>
+                <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Contenu de la formation</dt>
+                <dd>
+                    <div class="not-prose bg-white border-l-4 border-indigo-500 p-8 rounded-r-[2.5rem] shadow-sm mb-5 mt-3">
+                        <p class="text-slate-600 leading-relaxed font-medium">
+                            {{ formation.contenuFormation|raw }}
+                        </p>
+                    </div>
+                </dd>
                 {% if stringDifferencesFormation.presentationFormationContenuFormation is defined %}
                     {{ include('communs/_comparaison_versioning_no_button.html.twig',
                         {
@@ -13,7 +16,8 @@
                         }
                     ) }}
                 {% endif %}
-                <dt>Résultats attendus de la formation</dt>
+                <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Résultats attendus de la formation
+                </dt>
                 <dd>{{ formation.resultatsAttendus|raw }}</dd>
                 {% if stringDifferencesFormation.presentationFormationResultatsAttendus is defined %}
                     {{ include('communs/_comparaison_versioning_no_button.html.twig',
@@ -23,11 +27,13 @@
                         }
                     ) }}
                 {% endif %}
-                <dt>Rythme de formation</dt>
+                <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Rythme de formation</dt>
                 <dd>
                     {{ formation.rythmeFormation != null ? formation.rythmeFormation.libelle : 'Non précisé' }}
                 </dd>
-                <dt>Précisions sur le rythme de formation</dt>
+                <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Précisions sur le rythme de
+                    formation
+                </dt>
                 <dd>{{ formation.rythmeFormationTexte|raw }}</dd>
             </dl>
         </div>
@@ -36,9 +42,15 @@
     <div class="row">
         <div class="col-sm-12">
             <dl>
-                <dt>Organisation et objectifs de la formation</dt>
+                <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Organisation et objectifs de la
+                    formation
+                </dt>
                 <dd>
+                    <div class="not-prose bg-white border-l-4 border-indigo-500 p-8 rounded-r-[2.5rem] shadow-sm mb-5 mt-2">
+                        <p class="text-slate-600 leading-relaxed font-medium">
                     {{ formation.objectifsFormation|raw }}
+                        </p>
+                    </div>
                 </dd>
                 {% if stringDifferencesFormation.presentationFormationObjectifsFormation is defined %}
                     {{ include('communs/_comparaison_versioning_no_button.html.twig',

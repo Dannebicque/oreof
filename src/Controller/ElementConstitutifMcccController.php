@@ -71,6 +71,7 @@ class ElementConstitutifMcccController extends AbstractController
             throw new RuntimeException('Type de diplome non trouvé');
         }
 
+        $typeDiplome = $parcours->getFormation()->getTypeDiplome();
         $typeD = $this->typeDiplomeResolver->fromParcours($parcours);
 
         $raccroche = $elementConstitutif->getFicheMatiere()?->getParcours()?->getId() !== $parcours->getId();
@@ -79,7 +80,7 @@ class ElementConstitutifMcccController extends AbstractController
         $typeEpreuve = $getElement->getTypeMcccFromFicheMatiere();
 
         // centralisation des paramètres ec_step4
-        $ecStep4 = (array)$request->request->get('ec_step4', []);
+        $ecStep4 = (array)$request->request->get('ec_step4');
 
         /**
          * Contrôles du formulaire
@@ -219,7 +220,7 @@ class ElementConstitutifMcccController extends AbstractController
                 'typeMccc' => $typeMccc,
                 'typeEpreuves' => $typeD->getTypeEpreuves(),
                 'ec' => $elementConstitutif,
-                'typeDiplome' => $typeD,
+                'typeDiplome' => $typeDiplome,
                 'ects' => $getElement->getFicheMatiereEcts(),
                 'templateForm' => $typeD::TEMPLATE_FORM_MCCC,
                 'mcccs' => $getElement->getMcccsFromFicheMatiereCollection(),

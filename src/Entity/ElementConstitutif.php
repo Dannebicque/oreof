@@ -12,6 +12,7 @@ namespace App\Entity;
 use App\Classes\GetElementConstitutif;
 use App\Entity\Traits\HasBeenEditedTrait;
 use App\Entity\Traits\LifeCycleTrait;
+use App\Entity\Traits\ValidatableTrait;
 use App\Enums\ModaliteEnseignementEnum;
 use App\Repository\ElementConstitutifRepository;
 use App\Service\McccCompletionCheckerInterface;
@@ -28,6 +29,7 @@ class ElementConstitutif implements McccCompletionCheckerInterface
 {
     use LifeCycleTrait;
     use HasBeenEditedTrait;
+    use ValidatableTrait;
 
     #[Groups(['fiche_matiere_versioning_ec_parcours', 'DTO_json_versioning'])]
     #[ORM\Id]

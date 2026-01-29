@@ -12,6 +12,7 @@ import { updateEtatOnglet } from '../../js/updateEtatOnglet'
 import { calculEtatStep } from '../../js/calculEtatStep'
 import trixEditor from '../../js/trixEditor'
 
+/** @deprecated */
 export default class extends Controller {
   static targets = [
     'content',

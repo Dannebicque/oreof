@@ -31,6 +31,8 @@ class DropdownActionsComponent
 
     /** Texte SR pour le bouton */
     public string $label = 'Actions';
+    public string $help = 'Actions';
+    public bool $labelSrOnly = false;
 
     /** Permet de distinguer plusieurs dropdown sur une page (facultatif) */
     public ?string $id = null;

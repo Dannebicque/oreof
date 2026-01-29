@@ -1,0 +1,44 @@
+<?php
+/*
+ * Copyright (c) 2026. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Enums/ValidationStatusEnum.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 22/01/2026 06:58
+ */
+
+
+namespace App\Enums;
+
+enum ValidationStatusEnum: string implements BadgeEnumInterface
+{
+    case VALID = 'valid';
+    case INVALID = 'invalid';
+    case INCOMPLETE = 'incomplete';
+    case NA = 'na';
+
+    public function label(): string
+    {
+        return match ($this) {
+            self::VALID => 'Valide',
+            self::INVALID => 'Invalide',
+            self::INCOMPLETE => 'Incomplet',
+            self::NA => 'Non applicable',
+        };
+    }
+
+    public function isFinal(): bool
+    {
+        return $this === self::VALID || $this === self::INVALID;
+    }
+
+    public function getLibelle(): string
+    {
+        // TODO: Implement getLibelle() method.
+    }
+
+    public function getBadge(): string
+    {
+        // TODO: Implement getBadge() method.
+    }
+}

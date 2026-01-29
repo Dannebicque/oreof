@@ -44,5 +44,50 @@ services:
       MYSQL_PASSWORD: PASSWORD
       MYSQL_DATABASE: oreof
 
+  #  mercure:
+  #    image: dunglas/mercure
+  #    restart: always
+  #    environment:
+  #      SERVER_NAME: ':80'
+  #      MERCURE_PUBLISHER_JWT_KEY: '!ChangeThisMercureHubPublisherJWTKey!'
+  #      MERCURE_SUBSCRIBER_JWT_KEY: '!ChangeThisMercureHubSubscriberJWTKey!'
+  #      # En dev, on autorise les connexions anonymes pour simplifier
+  #      ALLOW_ANONYMOUS: 1
+  #      CORS_ALLOWED_ORIGINS: '*'
+  #    ports:
+  #      - "8070:80"
+
+  ###> symfony/mercure-bundle ###
+  mercure:
+    image: dunglas/mercure
+    restart: unless-stopped
+    environment:
+      # Uncomment the following line to disable HTTPS,
+      SERVER_NAME: ':80'
+      MERCURE_PUBLISHER_JWT_KEY: '!ChangeThisMercureHubJWTSecretKey!'
+      MERCURE_SUBSCRIBER_JWT_KEY: '!ChangeThisMercureHubJWTSecretKey!'
+      # Set the URL of your Symfony project (without trailing slash!) as value of the cors_origins directive
+    #      MERCURE_EXTRA_DIRECTIVES: |
+    #        cors_origins http://127.0.0.1:8000
+    # Comment the following line to disable the development mode
+    #command: /usr/bin/caddy run --config /etc/caddy/dev.Caddyfile --adapter caddyfile
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8070/healthz" ]
+      timeout: 5s
+      retries: 5
+      start_period: 60s
+    ports:
+      - "8070:80"
+    volumes:
+      - ./docker/mercure/dev.Caddyfile:/etc/caddy/dev.Caddyfile:ro
+      - mercure_data:/data
+      - mercure_config:/config
+###< symfony/mercure-bundle ###
+
 volumes:
   db-volume:
+
+  ###> symfony/mercure-bundle ###
+  mercure_data:
+  mercure_config:
+###< symfony/mercure-bundle ###

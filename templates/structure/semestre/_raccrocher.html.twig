@@ -1,34 +1,42 @@
-<div {{ stimulus_controller('semestre--raccrocher', {
-    url: path('structure_semestre_mutualise_add_ajax', {semestre:semestre.id})
-}) }}
-        data-action="semestre--raccrocher:modalHide@window->base#modalHide"
+<div
+        {#        {{ stimulus_controller('semestre--raccrocher', { #}
+        {#    url: path('structure_semestre_mutualise_add_ajax', {semestre:semestre.id}) #}
+        {# }) }} #}
+        {#        data-action="semestre--raccrocher:modalHide@window->base#modalHide" #}
 >
-    <div class="mb-1">
-        <label class="form-label" for="raccrocher">
-            {{ 'semestre.raccrocher.label'|trans({}, 'form') }}
-            <span class="required"></span>
-            <i class="fal fa-question-circle ms-1" data-controller="tooltip" data-tooltip-placement-value="bottom" title="{{ 'semestre.raccrocher.helps'|trans({}, 'help') }}"></i>
-        </label>
-        <select id="raccrocher"
-                name="raccrocher"
-                required="required"
-                class="form-select"
-        >
-            <option value="">Choisir un semestre mutualisé</option>
-            {% for sem in semestres %}
-                <option value="{{ sem.id }}"
-                        {% if semestre.semestreRaccroche != null and  semestre.semestreRaccroche.id == sem.id %}selected{% endif %}
-                >{{ sem.semestre.semestreParcours[0].display }} - {{ sem.semestre.semestreParcours[0].parcours.libelle }}</option>
-            {% endfor %}
-            {# todo: le 0 n'est pas idéal, est-ce que ca marche à chaque fois ?? #}
-        </select>
-    </div>
-    <button class="btn btn-success" {{ stimulus_action('semestre--raccrocher', 'valideReutilise') }}>
-        {{ 'semestre.raccrocher.bouton'|trans({}, 'form') }}
-    </button>
-    {% if semestre.semestreRaccroche != null %}
-        <button class="btn text-danger" {{ stimulus_action('semestre--raccrocher', 'valideDecrocher') }}>
-            {{ 'semestre.decrocher.bouton'|trans({}, 'form') }}
-        </button>
-    {% endif %}
+    <form method="post" id="modal_form"
+          action="{{ path('structure_semestre_mutualise_add_ajax', {semestre:semestre.id}) }}"
+    >
+        <div class="mb-1">
+            <input type="hidden" name="field" value="raccrocher">
+            <label class="form-label" for="raccrocher">
+                {{ 'semestre.raccrocher.label'|trans({}, 'form') }}
+                <span class="required"></span>
+                <i class="fal fa-question-circle ms-1" data-controller="tooltip" data-tooltip-placement-value="bottom"
+                   title="{{ 'semestre.raccrocher.helps'|trans({}, 'help') }}"></i>
+            </label>
+            <select id="raccrocher"
+                    name="raccrocher"
+                    required="required"
+                    class="form-select"
+            >
+                <option value="">Choisir un semestre mutualisé</option>
+                {% for sem in semestres %}
+                    <option value="{{ sem.id }}"
+                            {% if semestre.semestreRaccroche != null and  semestre.semestreRaccroche.id == sem.id %}selected{% endif %}
+                    >{{ sem.semestre.semestreParcours[0].display }}
+                        - {{ sem.semestre.semestreParcours[0].parcours.libelle }}</option>
+                {% endfor %}
+                {# todo: le 0 n'est pas idéal, est-ce que ca marche à chaque fois ?? #}
+            </select>
+        </div>
+        {#    <button class="btn btn-success" {{ stimulus_action('semestre--raccrocher', 'valideReutilise') }}> #}
+        {#        {{ 'semestre.raccrocher.bouton'|trans({}, 'form') }} #}
+        {#    </button> #}
+        {% if semestre.semestreRaccroche != null %}
+            <button class="btn text-danger" {{ stimulus_action('semestre--raccrocher', 'valideDecrocher') }}>
+                {{ 'semestre.decrocher.bouton'|trans({}, 'form') }}
+            </button>
+        {% endif %}
+    </form>
 </div>

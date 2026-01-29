@@ -10,6 +10,7 @@
 namespace App\Entity;
 
 use App\Entity\Traits\HasBeenEditedTrait;
+use App\Entity\Traits\ValidatableTrait;
 use App\Repository\SemestreRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -23,6 +24,7 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
 class Semestre
 {
     use HasBeenEditedTrait;
+    use ValidatableTrait;
 
     #[Groups(['DTO_json_versioning'])]
     #[ORM\Id]
@@ -68,11 +70,21 @@ class Semestre
     #[ORM\OneToOne(targetEntity: self::class)]
     private ?self $semestreOrigineCopie = null;
 
+    #[ORM\Column]
+    private ?\DateTimeImmutable $lastModification = null;
+
+    /**
+     * @var Collection<int, ValidationIssue>
+     */
+    #[ORM\OneToMany(mappedBy: 'semestre', targetEntity: ValidationIssue::class)]
+    private Collection $validationIssues;
+
     public function __construct()
     {
         $this->ues = new ArrayCollection();
         $this->semestreParcours = new ArrayCollection();
         $this->semestreMutualisables = new ArrayCollection();
+        $this->validationIssues = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -278,6 +290,48 @@ class Semestre
     public function setSemestreOrigineCopie(?self $semestreOrigineCopie): static
     {
         $this->semestreOrigineCopie = $semestreOrigineCopie;
+
+        return $this;
+    }
+
+    public function getLastModification(): ?\DateTimeImmutable
+    {
+        return $this->lastModification;
+    }
+
+    public function setLastModification(\DateTimeImmutable $lastModification): static
+    {
+        $this->lastModification = $lastModification;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ValidationIssue>
+     */
+    public function getValidationIssues(): Collection
+    {
+        return $this->validationIssues;
+    }
+
+    public function addValidationIssue(ValidationIssue $validationIssue): static
+    {
+        if (!$this->validationIssues->contains($validationIssue)) {
+            $this->validationIssues->add($validationIssue);
+            $validationIssue->setSemestre($this);
+        }
+
+        return $this;
+    }
+
+    public function removeValidationIssue(ValidationIssue $validationIssue): static
+    {
+        if ($this->validationIssues->removeElement($validationIssue)) {
+            // set the owning side to null (unless already changed)
+            if ($validationIssue->getSemestre() === $this) {
+                $validationIssue->setSemestre(null);
+            }
+        }
 
         return $this;
     }

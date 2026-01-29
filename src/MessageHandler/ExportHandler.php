@@ -33,11 +33,6 @@ class ExportHandler
         $this->export->setTypeDocument($exportMessage->getTypeDocument());
         $this->export->setDate($exportMessage->getDate());
 
-        if (null !== $exportMessage->getComposante()) {
-            $composante = $this->composanteRepository->find($exportMessage->getComposante());
-            $this->export->setComposante($composante);
-        }
-
         $user = $this->userRepository->find($exportMessage->getUser());
 
         $lien = $this->export->exportFormations($exportMessage->getFormations(), $exportMessage->getCampagneCollecte());

@@ -41,6 +41,12 @@ class NatureUeEc
     #[ORM\Column(length: 2)]
     private ?string $type = self::Nature_EC;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $descriptionCourte = null;
+
+    #[ORM\Column(length: 50, nullable: true)]
+    private ?string $icone = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -90,6 +96,30 @@ class NatureUeEc
     public function setType(string $type): static
     {
         $this->type = $type;
+
+        return $this;
+    }
+
+    public function getDescriptionCourte(): ?string
+    {
+        return $this->descriptionCourte;
+    }
+
+    public function setDescriptionCourte(?string $descriptionCourte): static
+    {
+        $this->descriptionCourte = $descriptionCourte;
+
+        return $this;
+    }
+
+    public function getIcone(): ?string
+    {
+        return $this->icone;
+    }
+
+    public function setIcone(?string $icone): static
+    {
+        $this->icone = $icone;
 
         return $this;
     }

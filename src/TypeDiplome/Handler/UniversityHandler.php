@@ -20,22 +20,23 @@ use App\Entity\SemestreParcours;
 use App\Entity\TypeEpreuve;
 use App\Repository\BlocCompetenceRepository;
 use App\Repository\TypeDiplomeRepository;
-use App\TypeDiplome\DiplomeExportInterface;
-use App\TypeDiplome\Dto\OptionsCalculStructure;
-use App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException;
 use App\TypeDiplome\Diplomes\Licence\Dto;
+use App\TypeDiplome\Diplomes\Licence\Form\McccType;
 use App\TypeDiplome\Diplomes\Licence\Services\LicenceMccc;
 use App\TypeDiplome\Diplomes\Licence\Services\LicenceMcccVersion;
 use App\TypeDiplome\Diplomes\Licence\StructureParcoursLicence;
-use App\TypeDiplome\McccInterface;
-use App\TypeDiplome\StructureInterface;
+use App\TypeDiplome\Diplomes\Licence\ValideParcoursLicence;
+use App\TypeDiplome\Dto\OptionsCalculStructure;
+use App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException;
 use App\TypeDiplome\TypeDiplomeHandlerInterface;
-use App\TypeDiplome\TypeDiplomeMcccInterface;
+use App\TypeDiplome\ValideParcoursInterface;
 use App\Utils\Tools;
 use DateTimeInterface;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
+use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -64,12 +65,15 @@ class UniversityHandler implements TypeDiplomeHandlerInterface
     private array $typeEpreuves;
 
     public function __construct(
+        private readonly FormFactoryInterface     $formFactory,
         TypeDiplomeRepository                     $typeDiplomeRepository,
         protected EntityManagerInterface          $entityManager,
         protected LicenceMccc                     $licenceMccc,
         protected LicenceMcccVersion              $licenceMcccVersion,
         private readonly BlocCompetenceRepository $blocCompetenceRepository,
-        private readonly StructureParcoursLicence $structureParcoursLicence)
+        private readonly StructureParcoursLicence $structureParcoursLicence,
+        private readonly ValideParcoursLicence    $valideParcoursLicence
+    )
     {
         //todo: comment gérer avec le code ?
         $typeD = $typeDiplomeRepository->findOneBy(['libelle_court' => 'L']);
@@ -79,6 +83,12 @@ class UniversityHandler implements TypeDiplomeHandlerInterface
         }
 
         $this->typeEpreuves = $this->entityManager->getRepository(TypeEpreuve::class)->findByTypeDiplome($typeD);
+    }
+
+    public function createFormMccc(ElementConstitutif|FicheMatiere $element): FormInterface
+    {
+        $form = $this->formFactory->create(McccType::class, $element, []);
+        return $form;
     }
 
     public function getTypeEpreuves(): array
@@ -695,8 +705,13 @@ class UniversityHandler implements TypeDiplomeHandlerInterface
         // TODO: Implement calculVersioning() method.
     }
 
-    public function calculStructureSemestre(SemestreParcours $semestreParcours, Parcours $parcours, OptionsCalculStructure $optionsCalculStructure = new OptionsCalculStructure()): ?StructureSemestre
+    public function calculStructureSemestre(SemestreParcours $semestreParcours, Parcours $parcours, OptionsCalculStructure $optionsCalculStructure = new OptionsCalculStructure()): StructureSemestre
     {
         return $this->structureParcoursLicence->calculStructureSemestre($semestreParcours, $parcours, $optionsCalculStructure);
+    }
+
+    public function getValidator(): ValideParcoursInterface
+    {
+        return $this->valideParcoursLicence;
     }
 }

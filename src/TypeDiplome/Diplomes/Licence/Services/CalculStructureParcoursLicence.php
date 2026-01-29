@@ -151,14 +151,16 @@ final class CalculStructureParcoursLicence
 
         if ($semestreParcours->getSemestre()?->getSemestreRaccroche() !== null) {
             $semestre = $semestreParcours->getSemestre()?->getSemestreRaccroche()?->getSemestre();
+            $parcoursRaccroche = $semestreParcours->getSemestre()?->getSemestreRaccroche()?->getParcours();
             $raccrocheSemestre = true;
         } else {
             $semestre = $semestreParcours->getSemestre();
             $raccrocheSemestre = false;
+            $parcoursRaccroche = null;
         }
 
         if ($semestre !== null && $semestre->isNonDispense() === false && $semestreParcours->isOuvert() === true) {
-            $dtoSemestre = new StructureSemestre($semestre, $semestreParcours->getOrdre(), $raccrocheSemestre, $semestreParcours, $optionsCalculStructure->withEcts, $optionsCalculStructure->withBcc);
+            $dtoSemestre = new StructureSemestre($semestre, $semestreParcours->getOrdre(), $raccrocheSemestre, $semestreParcours, $optionsCalculStructure->withEcts, $optionsCalculStructure->withBcc, $parcoursRaccroche);
             $ues = $this->ueRepository->getBySemestre($semestre);
             foreach ($ues as $ue) {
                 if ($ue !== null && $ue->getUeParent() === null) {

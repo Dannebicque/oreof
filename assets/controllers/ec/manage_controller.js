@@ -11,7 +11,7 @@ import TomSelect from 'tom-select'
 import callOut from '../../js/callOut'
 
 export default class extends Controller {
-  static targets = ['matieres']
+  static targets = ['matieres', 'natureSection']
 
   code = 0
 
@@ -29,7 +29,7 @@ export default class extends Controller {
 
   tom = null
 
-  async connect() {
+  async connect () {
     if (document.getElementById('element_constitutif_natureUeEc')) {
       const natureEc = document.getElementById('element_constitutif_natureUeEc').value
       if (natureEc !== '') {
@@ -60,7 +60,7 @@ export default class extends Controller {
     }
   }
 
-  async changeNatureEc(event) {
+  async changeNatureEc (event) {
     if (this.editValue === true) {
       if (!confirm('Attention, le changement de la nature d\'EC va supprimer les données préalablement saisies. Voulez vous continuer ?')) {
         event.preventDefault()
@@ -80,16 +80,16 @@ export default class extends Controller {
     if (document.getElementById('ficheMatiere')) {
       this.tom = new TomSelect('#ficheMatiere', { allowEmptyOption: true })
       this.tom.settings.placeholder = 'Choisir une fiche matière'
-      this.tom.inputState();
+      this.tom.inputState()
     }
   }
 
-  ajoutTypeEc(event) {
+  ajoutTypeEc (event) {
     event.preventDefault()
     document.getElementById('typeEcTexte').classList.remove('d-none')
   }
 
-  changeTypeEcTexte(event) {
+  changeTypeEcTexte (event) {
     event.preventDefault()
     if (document.getElementById('element_constitutif_typeEc')) {
       document.getElementById('element_constitutif_typeEc').disabled = event.currentTarget.value.length > 0
@@ -100,7 +100,7 @@ export default class extends Controller {
     }
   }
 
-  addFromListe(event) {
+  addFromListe (event) {
     // ne pas soumettre le formulaire
     event.preventDefault()
 
@@ -136,7 +136,7 @@ export default class extends Controller {
     this.code++
   }
 
-  addNewFiche(event) {
+  addNewFiche (event) {
     event.preventDefault()
     const matiereLibelle = document.getElementById('ficheMatiereLibelle').value
     const table = document.getElementById('tableFiches')
@@ -167,10 +167,10 @@ export default class extends Controller {
     this.code++
   }
 
-  valider(event) {
+  valider (event) {
     event.preventDefault()
     const isChoixEc = document.getElementById('element_constitutif_choixEc').value
-    const form = document.getElementById('formEc')
+    const form = document.getElementById('modal_form')
     if (isChoixEc === 'true') {
       // choix multiple
       // compter le nombre de matières dans le tableau #tableFiches, partie body
@@ -208,9 +208,9 @@ export default class extends Controller {
       })
   }
 
-  validerEnfant(event) {
+  validerEnfant (event) {
     event.preventDefault()
-    const form = document.getElementById('formEc')
+    const form = document.getElementById('modal_form')
 
     fetch(form.action, {
       method: form.method,
@@ -223,7 +223,7 @@ export default class extends Controller {
       })
   }
 
-  nouvelleFiche(event) {
+  nouvelleFiche (event) {
     event.preventDefault()
     if (document.getElementById('ficheMatiereLibelle').value !== '') {
       if (confirm(`Voulez-vous créer une nouvelle fiche de matière ${document.getElementById('ficheMatiereLibelle').value} ? Il faudra ensuite compléter les éléments de cette fiche EC/matière.`)) {
@@ -234,7 +234,7 @@ export default class extends Controller {
     }
   }
 
-  async removeEcEnfant(event) {
+  async removeEcEnfant (event) {
     event.preventDefault()
     // suppression dans this.matieres
     const index = this.matieres.indexOf(`id_${event.params.fichematiere}`)
@@ -246,5 +246,13 @@ export default class extends Controller {
       await fetch(`${this.urlValue}?delete=${event.params.ecenfant}`)
       event.target.parentElement.parentElement.remove()
     }
+  }
+
+  updateNature (event) {
+    const val = event ? event.target.value : '9'
+    this.natureSectionTargets.forEach(el => {
+      el.classList.add('hidden')
+      if (el.dataset.nature === 'nature_' + val) el.classList.remove('hidden')
+    })
   }
 }

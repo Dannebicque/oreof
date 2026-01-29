@@ -2,19 +2,22 @@
 <div class="row">
     <div class="col-6">
         <dl>
-            <dt>Localisation(s) de la mention/spécialité</dt>
+            <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Localisation(s) de la mention/spécialité
+            </dt>
             <dd>
                 {% for ville in formation.localisationMention %}{{ ville.libelle }}{% if not loop.last %}, {% endif %}{% endfor %}
             </dd>
-            <dt>Régime(s) d'inscription</dt>
+            <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Régime(s) d'inscription</dt>
             <dd>
                 {% if formation.hasParcours %}
-                    {{ parcours.displayRegimeInscription|raw }}
+                    {% for regime in parcours.regimeInscription %}
+                        <span class="px-2 py-1 bg-indigo-50 rounded-lg text-xs font-bold text-indigo-600 mt-1">{{ regime.value }}</span>
+                    {% endfor %}
                 {% else %}
                     {{ formation.regimeInscriptionTexte|raw }}
                 {% endif %}
             </dd>
-            <dt>Modalités de l'alternance</dt>
+            <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Modalités de l'alternance</dt>
             <dd>
                 {% if formation.hasParcours %}
                     {{ parcours.modalitesAlternance|raw }}
@@ -28,17 +31,20 @@
     <div class="col-6">
         {% for composante in formation.composantesInscription %}
             <dl>
-                <dt>Composante d'inscription</dt>
-                <dd>{{ composante.libelle }}</dd>
-                <dt>Adresse</dt>
-                <dd>{{ composante.adresse != null ? composante.adresse.display|raw : 'Erreur'}}</dd>
-                <dt>Téléphone</dt>
-                <dd>{{ composante.telStandard|tel_format }} {% if composante.telComplementaire != null %}ou {{ composante
-                    .telComplementaire|tel_format }}{% endif %}</dd>
-                <dt>Email</dt>
-                <dd>{{ composante.mailContact|mailto }}</dd>
-                <dt>Site web</dt>
-                <dd>{{ composante.urlSite|open_url }}</dd>
+                <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Composante d'inscription</dt>
+                <dd>
+                    <div class="not-prose bg-white border-l-4 border-indigo-500 p-8 rounded-r-sm shadow-sm mb-5 mt-3">
+                        <p class="text-slate-600 leading-relaxed font-medium">
+                            {{ composante.libelle }}<br>
+                            {{ composante.adresse != null ? composante.adresse.display|raw :
+                            'Erreur' }}<br>
+                            {{ composante.telStandard|tel_format }} {% if composante.telComplementaire != null %}ou {{ composante
+                            .telComplementaire|tel_format }}{% endif %}<br>
+                            {{ composante.mailContact|mailto }}<br>
+                            {{ composante.urlSite|open_url }}<br>
+                        </p>
+                    </div>
+                </dd>
             </dl>
         {% endfor %}
     </div>

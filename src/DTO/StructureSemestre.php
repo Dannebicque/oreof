@@ -9,6 +9,7 @@
 
 namespace App\DTO;
 
+use App\Entity\Parcours;
 use App\Entity\Semestre;
 use App\Entity\SemestreParcours;
 
@@ -33,15 +34,19 @@ class StructureSemestre
 
     #[Groups(['DTO_json_versioning'])]
     public HeuresEctsSemestre $heuresEctsSemestre;
+
+    public ?Parcours $parcoursRaccroche = null;
+    public ?SemestreParcours $semestreParcours = null;
     private bool $withEcts;
     private bool $withBcc;
 
-    public function __construct(Semestre $semestre, int $ordre, bool $raccroche = false, SemestreParcours $semestreParcours = null, bool $withEcts = true, $withBcc = true)
+    public function __construct(Semestre $semestre, int $ordre, bool $raccroche = false, SemestreParcours $semestreParcours = null, bool $withEcts = true, $withBcc = true, ?Parcours $parcoursRaccroche = null)
     {
         $this->withEcts = $withEcts;
         $this->withBcc = $withBcc;
         $this->ordre = $ordre;
         $this->semestre = $semestre;
+        $this->parcoursRaccroche = $parcoursRaccroche;
         $this->semestreParcours = $semestreParcours;
         $this->raccroche = $raccroche;
         if ($this->withEcts) {

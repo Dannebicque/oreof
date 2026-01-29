@@ -138,14 +138,14 @@
     {% if parcoursDeBase is defined and parcoursDeBase != null and missingSemestre|length > 0 %}
         <div class="card mt-2 mb-5">
             <div class="card-body">
-                {% if (1 in missingSemestre) and (2 in missingSemestre) 
+                {% if (1 in missingSemestre) and (2 in missingSemestre)
                     and (3 not in missingSemestre) and (4 not in missingSemestre)
                 %}
                     <a href="{{ path('app_parcours_show', {id: parcoursDeBase.getId() }) }}">
                         Lien vers le BUT en formation initiale correspondant pour consulter les 2 premiers semestres
                     </a>
                 {% elseif (1 in missingSemestre) and (2 in missingSemestre)
-                    and (3 in missingSemestre) and (4 in missingSemestre) 
+                    and (3 in missingSemestre) and (4 in missingSemestre)
                 %}
                     <a href="{{ path('app_parcours_show', {id: parcoursDeBase.getId() }) }}">
                         Lien vers le BUT en formation initiale correspondant pour consulter les 4 premiers semestres
@@ -257,7 +257,5 @@
                 <span> Modifier le parcours</span>
             </a>
         {% endif %}
-
-
     </div>
 {% endblock %}

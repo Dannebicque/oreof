@@ -9,6 +9,7 @@
 
 namespace App\Classes\verif;
 
+//todo: a déprécier, si repris dans type de diplome
 abstract class AbstractValide
 {
     public const COMPLET = 'complet';

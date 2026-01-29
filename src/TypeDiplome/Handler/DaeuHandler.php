@@ -18,9 +18,11 @@ use App\Entity\Parcours;
 use App\Entity\SemestreParcours;
 use App\TypeDiplome\Dto\OptionsCalculStructure;
 use App\TypeDiplome\TypeDiplomeHandlerInterface;
+use App\TypeDiplome\ValideParcoursInterface;
 use DateTimeInterface;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -32,6 +34,11 @@ final class DaeuHandler implements TypeDiplomeHandlerInterface
     public const TEMPLATE_FOLDER = 'licence'; //todo: a remplacer
     public const SOURCE = 'licence'; //todo: a remplacer
     public const TEMPLATE_FORM_MCCC = 'licence.html.twig'; //todo: a remplacer
+
+    public function createFormMccc(ElementConstitutif|FicheMatiere $element): FormInterface
+    {
+
+    }
 
     public function calculStructureParcours(Parcours $parcours, bool $withEcts = true, bool $withBcc = true): StructureParcours
     {
@@ -138,5 +145,10 @@ final class DaeuHandler implements TypeDiplomeHandlerInterface
     public function checkIfMcccValide(ElementConstitutif|FicheMatiere $owner): bool
     {
         // TODO: Implement checkIfMcccValide() method.
+    }
+
+    public function getValidator(): ValideParcoursInterface
+    {
+        // TODO: Implement getValidator() method.
     }
 }

@@ -14,46 +14,44 @@ use App\Controller\BaseController;
 use App\Entity\ElementConstitutif;
 use App\Entity\Parcours;
 use App\Form\EcStep4Type;
+use App\TypeDiplome\TypeDiplomeResolver;
+use App\Utils\TurboStreamResponseFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[Route('/parcours/v2/mccc/', name: 'parcours_mccc')]
+#[Route('/parcours/v2/ec', name: 'parcours_mccc')]
 #[IsGranted('ROLE_ADMIN')]
 class ParcoursMcccController extends BaseController
 {
-    #[Route('/{parcours}/ec/{id}', name: '_saisir', methods: ['GET'])]
-    public function saisir(Parcours $parcours, ElementConstitutif $elementConstitutif): Response
+    #[Route('/{parcours}/mccc/{id}', name: '_saisir', methods: ['GET'])]
+    public function saisir(
+        TypeDiplomeResolver        $typeDiplomeResolver,
+        TurboStreamResponseFactory $turboStream,
+        Parcours                   $parcours, ElementConstitutif $elementConstitutif): Response
     {
         $isParcoursProprietaire = $elementConstitutif->getFicheMatiere()?->getParcours()?->getId() === $parcours->getId();
 
-        $getElement = new GetElementConstitutif($elementConstitutif, $parcours);
-        $ecHeures = $getElement->getFicheMatiereHeures();
+        $typeDiplome = $typeDiplomeResolver->fromParcours($parcours);
 
-        $form = $this->createForm(EcStep4Type::class, $ecHeures, [
-            'isModal' => true,
-            'data_class' => $ecHeures::class,
-            'modalite' => $parcours->getModalitesEnseignement(),
-            'action' => $this->generateUrl(
-                'app_element_constitutif_structure',
-                [
-                    'id' => $elementConstitutif->getId(),
-                    'parcours' => $parcours->getId()
-                ]
-            ),
-        ]);
-
-        return $this->render('parcours_v2/ec/_heures_ec.html.twig', [
-            'ec' => $elementConstitutif,
-            'parcours' => $parcours,
-            'form' => $form->createView(),
-            'isParcoursProprietaire' => $isParcoursProprietaire,
-            'modalite' => $parcours->getModalitesEnseignement()
-        ]);
+        return $turboStream->streamOpenModalFromTemplates(
+            'Modifier les MCCC de l\'EC',
+            'Dans l\'EC ' . $elementConstitutif->display(),
+            'typeDiplome/' . $typeDiplome::TEMPLATE_FOLDER . '/mccc/_mccc.html.twig',
+            [
+                'form' => $typeDiplome->createFormMccc($elementConstitutif)->createView(),
+                'ec' => $elementConstitutif,
+                'parcours' => $parcours,
+            ],
+            '_ui/_footer_submit_cancel.html.twig',
+            [
+                'submitLabel' => 'Enregistrer les MCCC de l\'EC',
+            ]
+        );
     }
 
-    #[Route('/{parcours}/ec/{id}', name: '_saisir_post', methods: ['POST'])]
+    #[Route('/{parcours}/mccc/{id}', name: '_saisir_post', methods: ['POST'])]
     public function saisirPost(
         Request            $request,
         Parcours           $parcours,

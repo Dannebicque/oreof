@@ -1,70 +1,66 @@
 <div class="col-12">
     <dl>
         {% if formation.isHasParcours == false and formation.parcours|length == 1 %}
-            <dt>Responsable de formation</dt>
+            <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Responsable de formation</dt>
             <dd>{{ parcours.formation.responsableMention != null ? parcours.formation.responsableMention.display : 'Non concerné' }}</dd>
-            <dt>Co-responsable de formation</dt>
+            <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Co-responsable de formation</dt>
             <dd>{{ parcours.formation.coResponsable != null ? parcours.formation.coResponsable.display : 'Non concerné' }}</dd>
         {% else %}
-            <dt>Responsable du parcours</dt>
-            <dd>{{ parcours.respParcours != null ? parcours.respParcours.display : 'Non concerné' }}</dd>
+            <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Responsable du parcours</dt>
+            <dd>{{ parcours.respParcours != null ? parcours.respParcours.display : 'Non concerné' }}<br>
+                <a href="mailto:{{ parcours.respParcours != null ? parcours.respParcours.email : 'Non concerné' }}"
+                   class="text-xs text-indigo-500 hover:underline">
+                    {{ parcours.respParcours != null ? parcours.respParcours.email : 'Non concerné' }}
+                </a>
+
+            </dd>
             {% if stringDifferencesParcours.contactsParcoursResponsableParcours is defined %}
-                {{ include('communs/_comparaison_versioning_no_button.html.twig', 
-                        {
-                            textDifferences: stringDifferencesParcours.contactsParcoursResponsableParcours,
-                            idCollapse: 'diffGlobalParcours'
-                        }
-                    ) 
-                }}
+                {{ include('communs/_comparaison_versioning_no_button.html.twig',
+                    {
+                        textDifferences: stringDifferencesParcours.contactsParcoursResponsableParcours,
+                        idCollapse: 'diffGlobalParcours'
+                    }
+                ) }}
             {% endif %}
-            <dt>Email</dt>
-            <dd>{{ parcours.respParcours != null ? parcours.respParcours.email : 'Non concerné' }}</dd>
-            {% if stringDifferencesParcours.emailParcoursResponsableParcours is defined %}
-                {{ include('communs/_comparaison_versioning_no_button.html.twig', 
-                        {
-                            textDifferences: stringDifferencesParcours.emailParcoursResponsableParcours,
-                            idCollapse: 'diffGlobalParcours'
-                        }
-                    ) 
-                }}
-            {% endif %}
+
             {% if parcours.coResponsable != null %}
-                <dt>Co-responsable du parcours</dt>
-                <dd>{{ parcours.coResponsable != null ? parcours.coResponsable.display : 'Non concerné' }}</dd>
+                <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Co-responsable du parcours</dt>
+                <dd>{{ parcours.coResponsable != null ? parcours.coResponsable.display : 'Non concerné' }}
+
+                    <br>
+                    <a href="mailto:{{ parcours.coResponsable != null ? parcours.coResponsable.email : 'Non concerné' }}"
+                       class="text-xs text-indigo-500 hover:underline">
+                        {{ parcours.coResponsable != null ? parcours.coResponsable.email : 'Non concerné' }}
+                    </a>
+                </dd>
                 {% if stringDifferencesParcours.contactsParcoursCoResponsableDuParcours is defined %}
-                    {{ include('communs/_comparaison_versioning_no_button.html.twig', 
-                            {
-                                textDifferences: stringDifferencesParcours.contactsParcoursCoResponsableDuParcours,
-                                idCollapse: 'diffGlobalParcours'
-                            }
-                        ) 
-                    }}
-                {% endif %}
-                <dt>Email</dt>
-                <dd>{{ parcours.coResponsable != null ? parcours.coResponsable.email : 'Non concerné' }}</dd>
-                {% if stringDifferencesParcours.emailParcoursCoResponsableDuParcours is defined %}
-                    {{ include('communs/_comparaison_versioning_no_button.html.twig', 
-                            {
-                                textDifferences: stringDifferencesParcours.emailParcoursCoResponsableDuParcours,
-                                idCollapse: 'diffGlobalParcours'
-                            }
-                        ) 
-                    }}
+                    {{ include('communs/_comparaison_versioning_no_button.html.twig',
+                        {
+                            textDifferences: stringDifferencesParcours.contactsParcoursCoResponsableDuParcours,
+                            idCollapse: 'diffGlobalParcours'
+                        }
+                    ) }}
                 {% endif %}
             {% endif %}
         {% endif %}
-        <dt>Coordonnées secrétariat</dt>
-        <dd>{{ parcours.coordSecretariat|raw }}</dd>
-    </dl>
-    <div class="row">
-        {% for contact in parcours.contacts %}
-            <div class="col-4">
-                <strong>{{ contact.denomination }}</strong>
-                <p>{{ contact.display }}</p>
-                <p>{{ contact.telephone|tel_format }}</p>
-                <p>{{ contact.email|mailto }}</p>
-                <p>{{ contact.adresse != null ? contact.adresse.display|raw : 'Pas d\'adresse' }}</p>
+        <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Coordonnées secrétariat</dt>
+        <dd>
+            <div class="row">
+                {% for contact in parcours.contacts %}
+                    <div class="col-4">
+                        <div class="not-prose bg-white border-l-4 border-indigo-500 p-8 rounded-r-sm shadow-sm mb-5 mt-3">
+                            <p class="text-slate-600 leading-relaxed font-medium">
+                                <span class="text-[10px] font-black text-black-400 uppercase mt-3">{{ contact.denomination }}</span><br>
+                                {{ contact.display }}<br>
+                                {{ contact.telephone|tel_format }}<br>
+                                {{ contact.email|mailto }}<br>
+                                {{ contact.adresse != null ? contact.adresse.display|raw : 'Pas d\'adresse' }}<br>
+                            </p>
+                        </div>
+                    </div>
+                {% endfor %}
             </div>
-        {% endfor %}
-    </div>
+        </dd>
+    </dl>
+
 </div>

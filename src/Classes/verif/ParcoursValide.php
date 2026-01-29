@@ -33,6 +33,7 @@ class ParcoursValide extends AbstractValide
             $this->etat['objectifsParcours'] = $this->nonVide($this->parcours->getObjectifsParcours());
             $this->etat['resultatsAttendus'] = $this->nonVide($this->parcours->getResultatsAttendus());
             $this->etat['contenuParcours'] = $this->nonVide($this->parcours->getContenuFormation());
+            $this->etat['motsCles'] = $this->nonVide($this->parcours->getMotsCles());
             $this->etat['rythmeParcours'] = $this->parcours->getRythmeFormation() !== null || $this->nonVide($this->parcours->getRythmeFormationTexte()) ? self::COMPLET : self::VIDE;
             $this->etat['localisation'] = $this->parcours->getLocalisation() ? self::COMPLET : self::VIDE;
         }

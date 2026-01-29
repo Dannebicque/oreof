@@ -17,6 +17,8 @@ use App\Entity\Semestre;
 use App\Entity\TypeDiplome;
 use App\Entity\Ue;
 
+//todo: a déprécier, si repris dans type de diplome
+
 abstract class ValideStructure extends AbstractValide
 {
     private static Parcours $parcours;

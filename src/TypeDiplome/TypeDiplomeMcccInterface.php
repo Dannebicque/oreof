@@ -11,8 +11,11 @@ namespace App\TypeDiplome;
 
 use App\Entity\ElementConstitutif;
 use App\Entity\FicheMatiere;
+use Symfony\Component\Form\FormInterface;
 
 interface TypeDiplomeMcccInterface
 {
     public function checkIfMcccValide(FicheMatiere|ElementConstitutif $owner): bool;
+
+    public function createFormMccc(ElementConstitutif|FicheMatiere $element): FormInterface;
 }

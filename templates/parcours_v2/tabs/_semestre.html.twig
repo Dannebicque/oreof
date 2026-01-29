@@ -1,4 +1,5 @@
 <turbo-frame id="tab-content">
+    {% set sem = semestre.semestre %}
     {% if semestre == null %}
         Semestre inexistant
     {% else %}
@@ -8,30 +9,105 @@
                     <h2 class="text-xl font-black text-slate-800 tracking-tight">
                         Semestre {{ semestreParcours.ordre }}</h2>
                     <span class="px-2 py-1 {% if semestreParcours.isOuvert == false %}bg-red-100 text-red-700{% else %}bg-green-100 text-green-700{% endif %} text-[10px] font-black rounded uppercase">{% if semestreParcours.isOuvert == false %}
-                            <i class="fal fa-do-not-enter"></i> Non ouvert{% else %}Ouvert{% endif %}</span>
+                            <i class="fal fa-do-not-enter"></i> Non ouvert{% else %}Ouvert{% endif %}
+                    </span>
+                    {% if semestre.raccroche == true %}
+                        <span class="px-2 py-1 bg-orange-100 text-orange-700 text-[10px] font-black rounded uppercase">
+                            <i class="fal fa-chain"></i> Raccroché de {{ semestre.parcoursRaccroche.displayCourt }}
+                    </span>
+                    {% elseif sem.semestreMutualisables|length > 0 %}
+                        <span class="px-2 py-0.5 bg-blue-100 text-blue-700 text-[9px] font-black rounded uppercase tracking-tighter italic">Mutualisé avec :
+                    {% for l in sem.semestreMutualisables %}
+                        {{ l.parcours.displayCourt }}{% if not loop.last %}, {% endif %}
+                    {% endfor %}
+                    </span>
+                    {% endif %}
                 </div>
                 <p class="text-xs text-slate-400 font-bold uppercase mt-1">Total horaire
-                    : {{ semestre.heuresEctsSemestre.sommeSemestreTotalPres }} heures</p>
-                <div class="flex gap-4 mt-1">
-                    <span class="text-xs font-bold text-green-600 flex items-center gap-1">● Conforme aux règles</span>
-                    <span class="text-xs font-medium text-slate-400">Dernière modif : il y a 2h</span>
+                    : {{ semestre.heuresEctsSemestre.sommeSemestreTotalPres }}
+                    heures</p> {# todo à update avec turbo... #}
+                <div class="flex items-center gap-4 mt-1">
+                    <span class="flex items-center gap-1">
+                        {{ sem.validationStatus|badgeValidationLong }} {# todo à update avec turbo... #}
+                    </span>
+                    <span class="text-xs font-medium text-slate-400 flex items-center">Dernière modif : {{ sem.lastModification|time_ago }}</span> {# todo à update avec turbo... #}
                 </div>
             </div>
             <div class="flex gap-3">
+                {{ component('dropdown_actions', {
+                    label: 'Actions',
+                    help: 'Actions disponibles pour ce semestre',
+                    icon: 'fal fa-ellipsis-vertical',
+                    items: [
+                        { label: 'Ajouter une UE au semestre',
+                            icon: 'fal fa-plus-circle',
+                            modal: true,
+                            color: 'green',
+                            url: path('parcours_structure_add_ue_semestre', {parcours:parcours.id, semestreParcours:semestre.semestreParcours.id}) },
+                        { label: 'Vérifier le semestre',
+                            icon: 'fal fa-refresh',
+                            url: path('parcours_v2_semestre_validation', {semestreParcours:semestreParcours.id, parcours: parcours.id}) },
+                        { label: 'Déplacer le semestre',
+                            icon: 'fal fa-right-left',
+                            modal: true,
+                            url: path('structure_semestre_changer', {semestre:sem.id, parcours: parcours.id}) },
+                        { label: 'Mutualiser le semestre',
+                            modal: true,
+                            icon: 'fal fa-share-nodes',
+                            url: path('structure_semestre_mutualiser', {semestre:sem.id, parcours: parcours.id}) },
+                        { label: 'Raccrocher un semestre',
+                            icon: 'fal fa-link',
+                            modal: true,
+                            url: path('structure_semestre_raccrocher', {semestre:sem.id, parcours: parcours.id})},
+                        { label: 'Réinitialiser le semestre',
+                            icon: 'fal fa-trash-alt',
+                            modal: true,
+                            url: path('structure_semestre_reinitialiser', {
+                            semestre: sem.id,
+                            parcours:parcours.id}), danger: true},
+                    ]
+                }) }}
+
                 <div class="text-right">
-                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Total ECTS
-                        S{{ semestreParcours.ordre }}</p>
-                    <p class="text-2xl font-black text-green-600">{{ semestre.heuresEctsSemestre.sommeSemestreEcts }} /
-                        30</p> {# todo: mettre rouge ou orange si pas 30 #}
+                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                        Total ECTS S{{ semestreParcours.ordre }}
+                    </p>
+                    <p class="text-2xl font-black text-{% if semestre.heuresEctsSemestre.sommeSemestreEcts < 30 %}red{% else %}green{% endif %}-600">
+                        {{ semestre.heuresEctsSemestre.sommeSemestreEcts }} / 30
+                    </p>
                 </div>
-                <button class="p-2">
-                    <i class="fal fa-cogs"></i>
-                </button>
-                {#            <button class="px-6 py-2 bg-indigo-600 text-white rounded-xl text-xs font-black shadow-lg"> #}
-                {#                Enregistrer #}
-                {#            </button> #}
+
+
             </div>
         </header>
+
+        {% if validationsIssues is defined and validationsIssues|length > 0 %}
+            <div class="border-2 border-red-200 bg-red-50 text-red-800 p-4 rounded-sm flex items-start gap-4 mt-2"
+                 role="status"
+                 aria-live="polite" aria-atomic="true">
+              <span class="p-2 bg-red-100 text-red-700 rounded-full flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor"
+                     aria-hidden="true">
+                  <path fill-rule="evenodd"
+                        d="M8.257 3.099c.765-1.36 2.72-1.36 3.486 0l6.518 11.597A1.75 1.75 0 0 1 17.518 17H2.482a1.75 1.75 0 0 1-1.743-2.304L8.257 3.1zM9 7a1 1 0 1 1 2 0v3a1 1 0 1 1-2 0V7z"
+                        clip-rule="evenodd"/>
+                </svg>
+                <span class="sr-only">Erreurs</span>
+              </span>
+
+                <div class="flex-1">
+                    <p class="font-semibold text-sm">Erreurs dans le semestre</p>
+
+                    <ul class="mt-2 space-y-1 text-sm list-disc list-inside">
+                        {% if validationsIssues is defined and validationsIssues|length > 0 %}
+                            {% for err in validationsIssues %}
+                                <li class="text-red-700">{{ err.ruleCode }} : {{ err.message }}</li>
+                            {% endfor %}
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        {% endif %}
 
         <div class="flex-1 overflow-y-auto pt-3 custom-scrollbar">
             {% if semestreParcours.semestre.nonDispense == true %}
@@ -56,9 +132,8 @@
 
                         <div>
                             <p class="font-semibold text-sm">Semestre non dispensé</p>
-                            <p class="text-xs text-orange-700/80">Aucun contenu pour ce semestre. Dispenser pour ouvrir
-                                la
-                                saisie.</p>
+                            <p class="text-xs text-orange-700/80">
+                                Aucun contenu pour ce semestre. Dispenser pour ouvrir la saisie.</p>
                         </div>
                     </div>
 
@@ -79,14 +154,6 @@
                 </div>
 
             {% else %}
-                <a
-                        class="text-xs font-green text-green-700"
-                        href="{{ path('parcours_structure_add_ue_semestre', {parcours:parcours.id, semestreParcours:semestre.semestreParcours.id}) }}"
-                        data-turbo="true"
-                        data-action="click->modalturbo#open"
-                >
-                    + Ajouter une UE
-                </a>
                 <div
                         data-controller="sortable"
                         data-sortable-type-value="ue"
@@ -97,15 +164,6 @@
                     {% endfor %}
                 </div>
             {% endif %}
-
-            <a
-                    class="text-xs font-green text-green-700"
-                    href="{{ path('parcours_structure_add_ue_semestre', {parcours:parcours.id, semestreParcours:semestre.semestreParcours.id}) }}"
-                    data-turbo="true"
-                    data-action="click->modalturbo#open"
-            >
-                + Ajouter une UE
-            </a>
         </div>
     {% endif %}
 </turbo-frame>

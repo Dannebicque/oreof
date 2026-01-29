@@ -5,8 +5,9 @@
  * @project oreof
  * @lastUpdate 14/03/2023 21:21
  */
+//@import "tailwindcss"; /*preflight(none);  Désactive le reset global */
 
-@import "~bootstrap/dist/css/bootstrap.min.css";
+@import "../../node_modules/bootstrap/dist/css/bootstrap.min.css";
 @import "./vendor/OverlayScrollbars.min.css";
 
 @import "@fortawesome/fontawesome-pro/css/fontawesome.min.css";
@@ -19,28 +20,29 @@
 @import "trix/dist/trix.css";
 
 //@import 'themes/shared';
-@import 'themes/dark.blue';
-@import 'themes/dark.green';
-@import 'themes/dark.red';
-@import 'themes/dark.purple';
-@import 'themes/dark.pink';
-@import 'themes/dark.teal';
-@import 'themes/dark.lime';
-@import 'themes/dark.sky';
-@import 'themes/light.blue';
-@import 'themes/light.green';
-@import 'themes/light.red';
-@import 'themes/light.purple';
-@import 'themes/light.pink';
-@import 'themes/light.teal';
-@import 'themes/light.lime';
-@import 'themes/light.sky';
+//@import 'themes/dark.blue';
+//@import 'themes/dark.green';
+//@import 'themes/dark.red';
+//@import 'themes/dark.purple';
+//@import 'themes/dark.pink';
+//@import 'themes/dark.teal';
+//@import 'themes/dark.lime';
+//@import 'themes/dark.sky';
+//@import 'themes/light.blue';
+//@import 'themes/light.green';
+//@import 'themes/light.red';
+//@import 'themes/light.purple';
+//@import 'themes/light.pink';
+//@import 'themes/light.teal';
+//@import 'themes/light.lime';
+//@import 'themes/light.sky';
 
 @import "./_but.scss";
 @import "./_settings.scss";
 @import "./_timeline.scss";
 
 @import url('https://fonts.cdnfonts.com/css/open-dyslexic');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
 //@font-face {
 //  font-family: 'opendyslexic';
 //  src: url('https://dyslexicfonts.com/fonts/OpenDyslexic-Regular.otf');
@@ -75,7 +77,7 @@ html[data-dyslexique='true'] {
 }
 
 html[data-dyslexique='false'] {
-  --font: 'Raleway', sans-serif;
+  --font: 'Plus Jakarta Sans', sans-serif;
   --font-heading: 'Montserrat', sans-serif;
 }
 

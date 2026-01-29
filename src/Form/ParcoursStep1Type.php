@@ -12,6 +12,8 @@ namespace App\Form;
 use App\Entity\Parcours;
 use App\Entity\RythmeFormation;
 use App\Entity\User;
+use App\Entity\Ville;
+use App\Form\Type\EntityWithAddType;
 use App\Form\Type\TextareaAutoSaveType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -25,13 +27,13 @@ class ParcoursStep1Type extends AbstractType
     {
         $formation = $options['data']->getFormation();
 
-        $villes = [];
-        foreach ($formation->getLocalisationMention() as $ville) {
-            $villes[$ville->getLibelle()] = $ville->getId();
-        }
+//        $villes = [];
+//        foreach ($formation->getLocalisationMention() as $ville) {
+//            $villes[$ville->getLibelle()] = $ville->getId();
+//        }
 
         $builder
-            ->add('respParcours', EntityType::class, [
+            ->add('respParcours', EntityWithAddType::class, [
                 'required' => true,
                 'help' => '',
                 'class' => User::class,
@@ -42,9 +44,10 @@ class ParcoursStep1Type extends AbstractType
                         ->orderBy('u.nom', 'ASC')
                         ->addOrderBy('u.prenom', 'ASC');
                 },
-                'attr' => ['data-action' => 'change->parcours--step1#saveRespParcours']
+                'help_to_add' => 'Saisir l\'email urca de la personne à ajouter.',
+                'placeholder' => 'Choisir dans la liste ou choisir "+" pour ajouter un utilisateur',
             ])
-            ->add('coResponsable', EntityType::class, [
+            ->add('coResponsable', EntityWithAddType::class, [
                 'required' => false,
                 'help' => '',
                 'autocomplete' => true,
@@ -55,14 +58,14 @@ class ParcoursStep1Type extends AbstractType
                         ->orderBy('u.nom', 'ASC')
                         ->addOrderBy('u.prenom', 'ASC');
                 },
-                'attr' => ['data-action' => 'change->parcours--step1#saveCoRespParcours']
+                'help_to_add' => 'Saisir l\'email urca de la personne à ajouter.',
+                'placeholder' => 'Choisir dans la liste ou choisir "+" pour ajouter un utilisateur',
             ])
             ->add('objectifsParcours', TextareaAutoSaveType::class, [
                 'help' => '-',
                 'attr' => [
                     'rows' => 10,
                     'maxlength' => 3000,
-                    'data-action' => 'change->parcours--step1#saveObjectifsParcours'
                 ],
             ])
             ->add('motsCles', TextareaAutoSaveType::class, [
@@ -70,38 +73,35 @@ class ParcoursStep1Type extends AbstractType
                 'attr' => [
                     'rows' => 10,
                     'maxlength' => 3000,
-                    'data-action' => 'change->parcours--step1#saveMotsCles'
                 ],
             ])
             ->add('resultatsAttendus', TextareaAutoSaveType::class, [
                 'help' => '-',
-                'attr' => ['rows' => 10, 'maxlength' => 3000, 'data-action' => 'change->parcours--step1#saveResultats'],
+                'attr' => ['rows' => 10, 'maxlength' => 3000,],
             ])
             ->add('contenuFormation', TextareaAutoSaveType::class, [
                 'help' => '-',
-                'attr' => ['rows' => 20, 'maxlength' => 3000, 'data-action' => 'change->parcours--step1#saveContenu'],
+                'attr' => ['rows' => 20, 'maxlength' => 3000,],
             ])
             ->add('rythmeFormation', EntityType::class, [
                 'placeholder' => 'Choisissez un rythme de formation ou complétez le champ ci-dessous',
-                'required' => false,
+                'required' => true,
                 'help' => '-',
                 'class' => RythmeFormation::class,
                 'choice_label' => 'libelle',
-                'attr' => ['data-action' => 'change->parcours--step1#changeRythme'],
             ])
             ->add('rythmeFormationTexte', TextareaAutoSaveType::class, [
                 'required' => false,
                 'help' => '-',
-                'attr' => ['rows' => 10, 'maxlength' => 3000, 'data-action' => 'change->parcours--step1#saveRythme'],
+                'attr' => ['rows' => 10, 'maxlength' => 3000],
             ])
-            ->add('localisation', ChoiceType::class, [
+            ->add('localisation', EntityType::class, [
+                'class' => Ville::class,
+                'choice_label' => 'libelle',
                 'placeholder' => 'Choisissez une ville',
                 'expanded' => false,
-                'choices' => $villes,
-                'data' => $options['data']->getLocalisation()?->getId() ?? 0,
-                'attr' => [
-                    'data-action' => 'change->parcours--step1#changeLocalisation',
-                ]
+                'choices' => $formation->getLocalisationMention()->toArray(),
+                'data' => $options['data']->getLocalisation(),
             ]);
     }
 

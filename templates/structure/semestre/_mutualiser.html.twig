@@ -1,7 +1,8 @@
-<div {{ stimulus_controller('semestre--mutualise', {
-    url: path('structure_semestre_mutualise_add_ajax', {semestre:semestre.id})
-}) }}>
-
+<div
+        {{ stimulus_controller('semestre--mutualise', {
+            url: path('structure_semestre_mutualise_add_ajax', {semestre:semestre.id})
+        }) }}
+>
     <label class="form-label" for="mutualiser">
         {{ 'semestre.mutualiser.label'|trans({}, 'form') }}
         <span class="required"></span>
@@ -9,7 +10,7 @@
            title="{{ 'semestre.mutualiser.helps'|trans({}, 'help') }}"></i>
     </label>
 
-   <div {{ stimulus_target('semestre--mutualise', 'liste') }}></div>
+    <div {{ stimulus_target('semestre--mutualise', 'liste') }}></div>
 
     <div class="row">
         <div class="col-12">

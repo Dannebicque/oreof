@@ -12,17 +12,54 @@
     </div>
 {% endblock form_row %}
 
+{% block trix_widget %}
+    <input id="trix-input-{{ trixId }}" value="{{ value }}" type="hidden" name="{{ full_name }}">
+    <trix-editor input="trix-input-{{ trixId }}"></trix-editor>
+{% endblock %}
+
 {# --- LABEL --- #}
 {% block form_label %}
     {% if label is not same as(false) %}
         <div class="flex justify-between items-center mb-1">
-            <label {% with { attr: label_attr|merge({ class: 'text-[12px] font-black text-slate-600 group-focus-within:text-indigo-500 transition-colors' }) } %}{{ block('attributes') }}{% endwith %}>
+            <label {% with { attr: label_attr|merge({ class: 'text-[12px] font-black text-slate-500 group-focus-within:text-indigo-500 transition-colors uppercase' }) } %}{{ block('attributes') }}{% endwith %}>
                 {{- block('form_label_content') -}}
             </label>
             {% if required %}<span class="text-[10px] font-bold text-red-300 uppercase">Champs Requis</span>{% endif %}
         </div>
     {% endif %}
 {% endblock form_label %}
+
+{% block form_label_inline_create_entity_select %}
+    {% if label is not same as(false) %}
+        <div class="flex items-center mb-1 gap-2 w-full">
+            <div class="flex items-center gap-2 min-w-0">
+                <label
+                        {% with { attr: label_attr|merge({
+                            class: 'text-[12px] font-black text-slate-500 group-focus-within:text-indigo-500 transition-colors uppercase'
+                        }) } %}
+                            {{ block('attributes') }}
+                        {% endwith %}
+                >
+                    {{- block('form_label_content') -}}
+                </label>
+
+                <button type="button"
+                        data-inline-create-target="toggleButton"
+                        data-action="click->inline-create#toggleNewField"
+                        class="text-[10px] font-black text-indigo-600 hover:underline shrink-0">
+                    + Créer nouveau
+                </button>
+            </div>
+
+            {% if required %}
+                <span class="ml-auto text-[10px] font-bold text-red-300 uppercase whitespace-nowrap shrink-0">
+            Champ requis
+        </span>
+            {% endif %}
+        </div>
+
+    {% endif %}
+{% endblock form_label_inline_create_entity_select %}
 
 {# --- INPUT TEXT / EMAIL / PASSWORD --- #}
 {% block form_widget_simple %}
@@ -136,30 +173,300 @@
     {% endapply %}
 {% endmacro %}
 
-{%- block checkbox_radio_label -%}
-    {#- Do not display the label if widget is not defined in order to prevent double label rendering -#}
-    {%- if widget is defined -%}
-        {%- set label_attr_class = label_attr_class|default(label_attr.class|default('')) -%}
-        {%- if 'btn' not in label_attr_class -%}
-            {%- set label_attr_class = label_attr_class ~ ' form-check-label' -%}
-        {%- endif -%}
-        {%- set label_attr = label_attr|merge({class: label_attr_class|trim}) -%}
-        {%- if not compound -%}
-            {% set label_attr = label_attr|merge({'for': id}) %}
-        {%- endif -%}
-        {#        {%- if required -%} #}
-        {#            {%- set label_attr = label_attr|merge({class: (label_attr.class|default('') ~ ' required')|trim}) -%} #}
-        {#        {%- endif -%} #}
-        {%- if parent_label_class is defined -%}
-            {%- set label_attr = label_attr|merge({class: (label_attr.class|default('') ~ ' ' ~ parent_label_class)|replace({'checkbox-inline': '', 'radio-inline': ''})|trim}) -%}
-        {%- endif -%}
+{# --- GROUPES D'OPTIONS (checkbox/radio) --- #}
 
-        {{ widget|raw }}
-        <label{% with { attr: label_attr } %}{{ block('attributes') }}{% endwith %}>
-            {%- if label is not same as(false) -%}
-                {{- block('form_label_content') -}}
-            {%- endif -%}
-        </label>
-    {%- endif -%}
-{%- endblock checkbox_radio_label %}
+{% block choice_widget_expanded %}
+    {# Container principal qui aligne les groupes Oui et Non #}
+    <div {{ block('widget_container_attributes') }} class="flex flex-row items-center gap-6">
+        {%- for child in form %}
+            {# Container individuel pour CHAQUE radio (ex: le bouton + le mot "Oui") #}
+            <div class="flex items-center gap-2">
+                {{- form_widget(child) -}}
+                {{- form_label(child) -}}
+            </div>
+        {% endfor -%}
+    </div>
+{% endblock choice_widget_expanded %}
+
+{% block radio_label %}
+    {%- set label_attr = label_attr|merge({class: (label_attr.class|default('') ~ ' text-sm font-medium text-gray-700 cursor-pointer')|trim}) -%}
+    <label{% with { attr: label_attr } %}{{ block('attributes') }}{% endwith %}>
+        {{- label|trans({}, translation_domain) -}}
+    </label>
+{% endblock radio_label %}
+
+{% block entity_with_add_row %}
+    <div {{ stimulus_controller('entity_with_add') }}>
+        {{- form_row(form) -}}
+    </div>
+{% endblock %}
+
+{% block entity_with_add_widget %}
+    <div class="flex flex-col gap-1">
+        <div class="flex-1">
+            {{ block('choice_widget') }}
+        </div>
+        <div>
+            <button
+                    {{ stimulus_action('entity_with_add', 'showAdd', 'click') }}
+                    type="button"
+                    class="text-emerald-600 hover:underline text-sm font-medium mt-1 p-0 bg-transparent"
+            >
+                {% if iconAdd is defined and iconAdd != '' %}<i
+                class="{{ iconAdd }} mr-1 text-emerald-600"></i>{% endif %}Ajouter
+            </button>
+        </div>
+    </div>
+    <div class="mt-2 hidden" {{ stimulus_target('entity_with_add', 'zoneAdd') }}>
+        <div class="flex items-center gap-4">
+            <div class="flex-1">
+                <label for="{{ name_field_to_add }}" class="sr-only">{{ name_field_to_add }}</label>
+                <input type="text" class="w-full p-2 bg-white border border-slate-200 rounded-sm text-slate-700"
+                       name="{{ name_field_to_add }}" id="{{ name_field_to_add }}">
+                <span class="text-sm text-slate-500 block mt-1">{{ help_to_add }}</span>
+            </div>
+            <div class="flex-none w-24">
+                &nbsp;
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{# {% block inline_create_entity_select_widget %} #}
+{#    <div class="field-group space-y-2" data-controller="inline-create"> #}
+{#        <div class="flex justify-between items-center"> #}
+{#            <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest"> #}
+{#                {{ form.vars.label ?: 'Sélection' }} #}
+{#            </label> #}
+
+{#            <button type="button" #}
+{#                    data-action="click->inline-create#toggleNewField" #}
+{#                    class="text-[10px] font-black text-indigo-600 hover:underline"> #}
+{#                + Créer nouveau #}
+{#            </button> #}
+{#        </div> #}
+
+{#        {{ form_widget(form.entity, { #}
+{#            attr: { #}
+{#                class: 'select-field w-full p-4 bg-white border border-slate-200 rounded-2xl font-semibold appearance-none cursor-pointer focus:ring-4 focus:ring-indigo-50', #}
+{#                'data-inline-create-target': 'select' #}
+{#            } #}
+{#        }) }} #}
+
+{#        {{ form_widget(form.new, { #}
+{#            attr: { #}
+{#                class: 'input-field hidden w-full p-4 bg-emerald-50 border border-emerald-200 rounded-2xl font-semibold outline-none' #}
+{#            } #}
+{#        }) }} #}
+{#    </div> #}
+{# {% endblock %} #}
+
+
+{% block inline_create_entity_select_row %}
+    <div class="field-group space-y-2 group mb-4" data-controller="inline-create">
+        <div class="flex justify-between items-center">
+            {{ block('form_label_inline_create_entity_select') }}
+        </div>
+
+        {{ form_widget(form.entity, {
+            attr: {
+                class: 'select-field w-full p-4 bg-white border border-slate-200 rounded-2xl font-semibold appearance-none cursor-pointer focus:ring-4 focus:ring-indigo-50',
+                'data-inline-create-target': 'select',
+                'data-inline-create-original-required': form.entity.vars.required ? '1' : '0'
+
+            }
+        }) }}
+
+        {{ form_widget(form.new, {
+            attr: {
+                class: 'input-field hidden w-full p-4 bg-emerald-50 border border-emerald-200 rounded-2xl font-semibold outline-none',
+                'data-inline-create-target': 'newInput',
+                'data-inline-create-original-required': form.entity.vars.required ? '1' : '0'
+
+            }
+        }) }}
+        {{ form_help(form) }}
+        {{ form_errors(form) }}
+    </div>
+{% endblock %}
+
+{# templates/form/cards_choice_theme.html.twig #}
+
+{% block cards_choice_widget %}
+    <div class="space-y-4 w-full"
+            {% if on_change_action or event_name or update_target %}
+                data-controller="cards-choice"
+                {% if event_name %}data-cards-choice-event-name-value="{{ event_name }}"{% endif %}
+                {% if update_target %}data-cards-choice-update-target-value="{{ update_target }}"{% endif %}
+            {% endif %}
+    >
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-{{ columns|default(3) }} gap-4">
+            {#            {% for child in form %} #}
+            {#                {% set subtitle = child.vars.attr['data-card-subtitle'] ?? '' %} #}
+            {#                {% set icon = child.vars.attr['data-card-icon'] ?? '' %} #}
+            {#                {% set isDisabled = (child.vars.attr['disabled'] ?? false) ? true : false %} #}
+            {#                {% set childId = child.vars.id %} #}
+
+
+            {#                <label for="{{ childId }}" class="relative flex flex-col p-4 bg-white border border-slate-200 rounded-sm cursor-pointer shadow-sm hover:border-indigo-300 transition-all group"> #}
+
+            {#                    {{ form_widget(child, { #}
+            {#                    id: childId, #}
+            {#                    attr: { #}
+            {#                    class: 'sr-only peer', #}
+            {#                    name: full_name, #}
+            {#                    'data-action': on_change_action ?: 'change->cards-choice#changed' #}
+            {#                    } #}
+            {#                    }) }} #}
+
+            {#                    #}{# Cet élément devient le "fond" qui réagit au peer #}
+            {#                    <div class="absolute inset-0 border border-transparent rounded-sm peer-checked:border-indigo-600 peer-checked:ring-2 peer-checked:ring-indigo-100 pointer-events-none transition-all"></div> #}
+
+            {#                    <div class="relative z-10"> #}{# On met le contenu dans un z-index pour rester au dessus du fond #}
+            {#                        <div class="flex justify-between items-start mb-2"> #}
+            {#            <span class="w-10 h-10 bg-slate-50 text-slate-600 rounded-sm flex items-center justify-center peer-checked:group-[]:bg-indigo-600 peer-checked:group-[]:text-white transition-colors mr-3 p-1"> #}
+            {#                {% if icon %} #}
+            {#                    <i class="{{ icon }} text-xl" aria-hidden="true"></i> #}
+            {#                {% endif %} #}
+            {#            </span> #}
+
+            {#            <div class="h-4 w-4 rounded-full border-2 border-slate-300 peer-checked:group-[]:border-indigo-600 peer-checked:group-[]:bg-indigo-600 flex items-center justify-center transition-all"> #}
+            {#                <div class="h-1.5 w-1.5 rounded-full bg-white opacity-0 peer-checked:group-[]:opacity-100 transition-opacity"></div> #}
+            {#            </div> #}
+            {#        </div> #}
+
+            {#        <span class="font-bold text-slate-900 leading-tight block">{{ child.vars.label|trans }}</span> #}
+
+            {#        {% if subtitle %} #}
+            {#            <span class="text-xs text-slate-500 leading-tight mt-1 block"> #}
+            {#                {{ subtitle|trans }} #}
+            {#            </span> #}
+            {#        {% endif %} #}
+            {#    </div> #}
+            {# </label> #}
+
+            {#                <label for="{{ childId }}" class="relative flex flex-col p-4 bg-white border border-slate-200 rounded-sm cursor-pointer shadow-sm hover:border-indigo-300 transition-all has-[:checked]:border-indigo-600 has-[:checked]:ring-2 has-[:checked]:ring-indigo-100 group"> #}
+            {#                    {{ form_widget(child, #}{# } #}
+            {#                        attr: #}{# } #}
+            {#                            class: 'sr-only', #}
+            {#                            'data-action': on_change_action ?: 'change->cards-choice#changed' #}
+            {#                        } #}
+            {#                    }) }} #}
+            {#                    <input type="radio" name="mccc_type" value="ct" class="sr-only"> #}
+            {#                    <div class="flex justify-between items-start mb-2"> #}
+            {#                        <span class="w-10 h-10 bg-slate-50 text-slate-600 rounded-sm flex items-center justify-center group-has-[:checked]:bg-indigo-600 group-has-[:checked]:text-white transition-colors mr-3 p-1"> #}
+            {#                            {% if icon %} #}
+            {#                                <i class="{{ icon }} text-xl" aria-hidden="true"></i> #}
+            {#                            {% endif %} #}
+            {#                        </span> #}
+            {#                        <div class="h-4 w-4 rounded-full border-2 border-slate-300 group-has-[:checked]:border-indigo-600 group-has-[:checked]:bg-indigo-600 flex items-center justify-center"> #}
+            {#                            <div class="h-1.5 w-1.5 rounded-full bg-white"></div> #}
+            {#                        </div> #}
+            {#                    </div> #}
+            {#                    <span class="font-bold text-slate-900">{{ child.vars.label }}</span> #}
+            {#                    <span class="text-xs text-slate-500 leading-tight"> #}
+            {#                         {% if subtitle %} #}
+            {#                            {{ subtitle }} #}
+            {#                        {% endif %} #}
+            {#                    </span> #}
+            {#                </label> #}
+            {#            {% endfor %} #}
+
+
+            {% for child in form %}
+                {% set subtitle = child.vars.attr['data-card-subtitle'] ?? '' %}
+                {% set icon = child.vars.attr['data-card-icon'] ?? '' %}
+                {% set childId = child.vars.id %}
+
+                <div class="relative min-h-full">
+                    {# 1. L'input est le premier élément du bloc #}
+                    {{ form_widget(child, {
+                        id: childId,
+                        attr: {
+                            class: 'sr-only peer',
+                            name: full_name,
+                            'data-action': on_change_action ?: 'change->cards-choice#changed'
+                        }
+                    }) }}
+
+                    {# 2. Le LABEL est un frère de l'input. On lui donne une classe de base. #}
+                    <label for="{{ childId }}" class="relative flex flex-col h-full p-4 bg-white border-2 border-slate-200 rounded-lg cursor-pointer transition-all
+            peer-checked:border-indigo-600 peer-checked:ring-4 peer-checked:ring-indigo-50">
+
+                        <div class="flex justify-between items-start mb-3">
+                            {# ICI : On utilise les sélecteurs arbitraires de Tailwind pour cibler l'état du PEER (l'input) #}
+                            <div class="w-10 h-10 bg-slate-100 text-slate-500 rounded-md flex items-center justify-center transition-colors
+                    peer-checked:bg-indigo-600 peer-checked:text-white">
+                                {% if icon %}
+                                    <i class="{{ icon }} text-lg"></i>
+                                {% endif %}
+                            </div>
+
+                            <div class="h-5 w-5 rounded-full border-2 border-slate-300 flex items-center justify-center transition-all
+                    peer-checked:border-indigo-600 peer-checked:bg-indigo-600">
+                                <div class="h-2 w-2 rounded-full bg-white opacity-0 peer-checked:opacity-100 transition-opacity"></div>
+                            </div>
+                        </div>
+
+                        <span class="font-bold text-slate-900 leading-tight">{{ child.vars.label|trans }}</span>
+
+                        {% if subtitle %}
+                            <span class="text-xs text-slate-500 mt-1 italic">{{ subtitle|trans }}</span>
+                        {% endif %}
+                    </label>
+                </div>
+            {% endfor %}
+            {# todo: a reprendre pour le bon rendu CSS avec le picto et le checked coché... : https://gemini.google.com/share/854a0d72406c #}
+            {#                {% for child in form %} #}
+            {#                    {% set subtitle = child.vars.attr['data-card-subtitle'] ?? '' %} #}
+            {#                    {% set icon = child.vars.attr['data-card-icon'] ?? '' %} #}
+            {#                    {% set childId = child.vars.id %} #}
+
+            {#                    #}{# On place le 'group' ici pour qu'il soit UNIQUE à chaque carte #}
+            {#                    <label for="{{ childId }}" class="group relative flex flex-col p-4 bg-white border-2 border-slate-200 rounded-lg cursor-pointer transition-all #}
+            {#        has-[:checked]:border-indigo-600 has-[:checked]:ring-4 has-[:checked]:ring-indigo-50"> #}
+
+            {#                        {{ form_widget(child, { #}
+            {#                            id: childId, #}
+            {#                            attr: { #}
+            {#                                class: 'sr-only', #}
+            {#                                name: full_name, #}
+            {#                                'data-action': on_change_action ?: 'change->cards-choice#changed' #}
+            {#                            } #}
+            {#                        }) }} #}
+
+            {#                        <div class="flex justify-between items-start mb-3"> #}
+            {#                            #}{# ICI : On dit à la div de l'icône de ne regarder QUE si son propre parent direct est coché #}
+            {#                            <div class="w-10 h-10 rounded-md flex items-center justify-center transition-colors #}
+            {#                bg-slate-100 text-slate-500 #}
+            {#                group-has-[:checked]:bg-indigo-600 group-has-[:checked]:text-white"> #}
+
+            {#                                {% if icon %} #}
+            {#                                    <i class="{{ icon }} text-lg"></i> #}
+            {#                                {% endif %} #}
+            {#                            </div> #}
+
+            {#                            #}{# IDEM pour le cercle radio #}
+            {#                            <div class="h-5 w-5 rounded-full border-2 border-slate-300 flex items-center justify-center transition-all #}
+            {#                group-has-[:checked]:border-indigo-600 group-has-[:checked]:bg-indigo-600"> #}
+            {#                                <div class="h-2 w-2 rounded-full bg-white opacity-0 group-has-[:checked]:opacity-100 transition-opacity"></div> #}
+            {#                            </div> #}
+            {#                        </div> #}
+
+            {#                        <span class="font-bold text-slate-900 leading-tight">{{ child.vars.label|trans }}</span> #}
+
+            {#                        {% if subtitle %} #}
+            {#                            <span class="text-xs text-slate-500 mt-1 italic">{{ subtitle|trans }}</span> #}
+            {#                        {% endif %} #}
+            {#                    </label> #}
+            {#                {% endfor %} #}
+        </div>
+
+        {% if form.vars.help %}
+            <p class="text-xs text-slate-500">{{ form.vars.help }}</p>
+        {% endif %}
+    </div>
+{% endblock %}
+
 

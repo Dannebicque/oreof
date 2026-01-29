@@ -12,4 +12,5 @@ interface TypeDiplomeHandlerInterface extends TypeDiplomeMcccInterface, Structur
 
     public function getTemplateFolder(): string;
 
+    public function getValidator(): ValideParcoursInterface;
 }

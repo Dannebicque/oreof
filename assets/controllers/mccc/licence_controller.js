@@ -18,6 +18,7 @@ export default class extends Controller {
   }
 
   connect() {
+    console.log('MCCC licence')
     if (this.typeMcccValue !== null && this.afficheMcccValue === true) {
       this._loadTypeMccc(this.typeMcccValue).then(() => {
         this._verifyTypeEpreuveCt()
@@ -30,6 +31,12 @@ export default class extends Controller {
     if (this.typeMcccValue !== null && this.afficheMcccValue === true) {
       this._loadTypeMccc(this.typeMcccValue)
     }
+  }
+
+  updateType (event) {
+    console.log('change type mccc')
+    console.log(event.target.value)
+    this._loadTypeMccc(event.target.value)
   }
 
   _verifyTypeEpreuveEt() {

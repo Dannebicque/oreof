@@ -1,60 +1,73 @@
 <div class="row">
     <div class="col-sm-12">
         <dl>
-            <dt>Modalités d'enseignement</dt>
-            <dd>{{ parcours.modalitesEnseignement != null ? parcours.modalitesEnseignement.libelle : 'Erreur' }}</dd>
+            <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Modalités d'enseignement</dt>
+            <dd>
+                {% if parcours.modalitesEnseignement != null %}
+                    <span class="px-2 py-1 bg-indigo-50 rounded-lg text-xs font-bold text-indigo-600 mt-1">
+                    {{ parcours.modalitesEnseignement.libelle }}
+                </span>
+                {% else %}
+                    <span class="px-2 py-1 bg-orange-50 rounded-lg text-xs font-bold text-orange-600 mt-1">
+                    Non précisé
+                </span>
+                {% endif %}
+            </dd>
 
-            {% if typeDiplome.hasStage %}
-                <dt>Stage(s)</dt>
+            {% if typeDiplome.hasStage or parcours.hasStage == true %}
+                <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Stage(s)</dt>
                 <dd>
                     {% if parcours.hasStage == true %}
-                        Oui ({{ parcours.nbHeuresStages }} heures). {{ parcours.stageText|printTexte }}
+                        <span class="px-2 py-1 bg-indigo-50 rounded-lg text-xs font-bold text-indigo-600 mt-1">Oui ({{ parcours.nbHeuresStages }} heures).</span>
+                        <br> <p class="mt-1">{{ parcours.stageText|printTexte }}</p>
                         {% if stringDifferencesParcours.stageTextParcours is defined %}
                             {{ include('communs/_comparaison_versioning_no_button.html.twig', {
                                     textDifferences: stringDifferencesParcours.stageTextParcours,
                                     idCollapse: 'diffGlobalParcours'
-                                }) 
+                            })
                             }}
                         {% endif %}
                     {% else %}
-                        Non
+                        <span class="px-2 py-1 bg-orange-50 rounded-lg text-xs font-bold text-orange-600 mt-1">Non</span>
                     {% endif %}
                 </dd>
             {% endif %}
-            {% if typeDiplome.hasProjet %}
-                <dt>Projet(s) tutoré(s)</dt>
+            {% if typeDiplome.hasProjet or parcours.hasProjet == true %}
+                <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Projet(s) tutoré(s)</dt>
                 <dd>
                     {% if parcours.hasProjet == true %}
-                        Oui ({{ parcours.nbHeuresProjet }} heures). {{ parcours.projetText|printTexte }}
+                        <span class="px-2 py-1 bg-indigo-50 rounded-lg text-xs font-bold text-indigo-600 mt-1">Oui ({{ parcours.nbHeuresProjet }} heures).</span>
+                        <br> <p class="mt-1"> {{ parcours.projetText|printTexte }}</p>
                     {% else %}
-                        Non
+                        <span class="px-2 py-1 bg-orange-50 rounded-lg text-xs font-bold text-orange-600 mt-1">Non</span>
                     {% endif %}
                 </dd>
             {% endif %}
-            {% if typeDiplome.hasMemoire %}
-                <dt>TER/Mémoire</dt>
+            {% if typeDiplome.hasMemoire or parcours.hasMemoire == true %}
+                <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">TER/Mémoire</dt>
                 <dd>
                     {% if parcours.hasMemoire == true %}
-                        Oui. {{ parcours.memoireText|printTexte }}
+                        <span class="px-2 py-1 bg-indigo-50 rounded-lg text-xs font-bold text-indigo-600 mt-1">Oui.</span>
+                        <br> <p class="mt-1"> {{ parcours.memoireText|printTexte }}</p>
                         {% if stringDifferencesParcours.memoireTextParcours is defined %}
                             {{ include('communs/_comparaison_versioning_no_button.html.twig', {
                                     textDifferences: stringDifferencesParcours.memoireTextParcours,
                                     idCollapse: 'diffGlobalParcours'
-                                }) 
+                            })
                             }}
                         {% endif %}
                     {% else %}
-                        Non
+                        <span class="px-2 py-1 bg-orange-50 rounded-lg text-xs font-bold text-orange-600 mt-1">Non</span>
                     {% endif %}
                 </dd>
             {% endif %}
-            {% if typeDiplome.hasSituationPro %}
-                <dt>Situation professionnelle</dt>
+            {% if typeDiplome.hasSituationPro  or parcours.hasSituationPro == true %}
+                <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Situation professionnelle</dt>
                 <dd>
                     {% if parcours.hasSituationPro == true %}
-                        Oui ({{ parcours.nbHeuresSituationPro }} heures).
+                        <span class="px-2 py-1 bg-indigo-50 rounded-lg text-xs font-bold text-indigo-600 mt-1"> Oui ({{ parcours.nbHeuresSituationPro }} heures).</span>
                     {% else %}
-                        Non
+                        <span class="px-2 py-1 bg-orange-50 rounded-lg text-xs font-bold text-orange-600 mt-1">Non</span>
                     {% endif %}
                 </dd>
             {% endif %}

@@ -1,0 +1,257 @@
+{% extends 'base.html.twig' %}
+{% set formation = parcours.formation %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://cdn.tailwindcss.com" defer></script>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        @layer components {
+            .is-chosen {
+                @apply ring-2 ring-indigo-400;
+            }
+
+            .is-ghost {
+                @apply opacity-50;
+            }
+
+            .is-dragging {
+                @apply cursor-grabbing;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% set header_title %}
+    {% if parcours.parcoursParent == null %}
+        Parcours <strong>{{ parcours.libelle }} {{ parcours.typeParcours|badgeTypeParcours }}</strong>
+    {% else %}
+        Option <strong>{{ parcours.libelle }}</strong> (parcours <strong>{{ parcours.parcoursParent.libelle }}</strong>)
+    {% endif %}
+{% endset %}
+
+{% block bouton_header %}
+    <a href="{{ path('parcours_v2_voir', {parcours:parcours.id}) }}"
+       class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+       data-bs-toggle="tooltip"
+       data-bs-placement="bottom"
+       title="Voir le parcours"
+    >
+        <i class="{{ iconShow }}"></i>
+        <span> Voir la fiche descriptive</span>
+    </a>
+    <a href="{{ path('app_formation_edit', {slug:formation.slug}) }}"
+       class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+       data-bs-toggle="tooltip"
+       data-bs-placement="bottom"
+       title="Retour à la formation"
+    >
+        <i class="{{ iconBack }}"></i>
+        <span> Retour à la formation</span>
+    </a>
+{% endblock %}
+
+
+{% block breadcrumb %}
+    {{ include('communs/_breadcrumb.html.twig', {liens:[
+        {href: path('app_formation_index'), title: 'Liste des formations'},
+        {href: path('app_formation_show', {slug:formation.slug}), title:'Formation :  ' ~ formation.display},
+    ]}) }}
+{% endblock %}
+
+{% block content %}
+    <div id="flash_toasts" class="fixed bottom-4 right-4 z-50 w-[min(24rem,calc(100vw-2rem))]"></div>
+
+
+
+    <twig:ParcoursHeader parcoursId="{{ parcours.id }}" formationId="{{ parcours.formation.id }}"/>
+
+    <div class="flex">
+        <aside class="w-72 bg-white rounded-md shadow-md border-slate-200 flex flex-col p-3 space-y-8">
+            <nav class="flex-1 space-y-1">
+                <p class="text-[10px] font-black text-slate-400 uppercase mb-4 tracking-widest px-3">Configuration
+                    Parcours</p>
+
+                <div class="p-6 bg-gray-200" id="pecent_completude">{# a mettre à jour avec turbo #}
+                    {% set percent = parcours.remplissage.calcul() %}
+                    {% set percentColor = parcours.remplissage.isFull() == true ? 'green' : 'orange' %}
+                    <div class="flex justify-between items-end mb-2">
+                        <span class="text-[10px] font-bold uppercase tracking-widest text-slate-500">Complétude Parcours</span>
+                        <span class="text-xs font-bold text-{{ percentColor }}-600 italic">{{ percent|number_format(2) }}%</span>
+                    </div>
+                    <div class="w-full h-1 bg-slate-700 rounded-full overflow-hidden">
+                        <div class="bg-{{ percentColor }}-500 h-full w-[{{ percent|number_format(0) }}%]"></div>
+                    </div>
+                </div>
+
+                <a class="nav-link w-full flex items-center justify-between p-3 rounded-2xl text-sm font-bold text-slate-500 hover:bg-white transition group"
+                   href="{{ path('parcours_v2_tabs', { parcours: parcours.id, tab: 'presentation_formation' }) }}"
+                   data-turbo-frame="tab-content"
+                   data-turbo-action="advance"
+                   data-tabs-target="tab">
+                    <span class="flex items-center gap-3">
+                        Présentation formation
+                    </span>
+                    <span id="tab_badge_presentation_formation">
+                      {{ include('parcours_v2/tabs/_badge.html.twig', { tabKey: 'presentation_formation', status: tabStates['presentation_formation'].status ?? 'red' }) }}
+                    </span>
+                </a>
+
+                <a class="nav-link w-full flex items-center justify-between p-3 rounded-2xl text-sm font-bold text-slate-500 hover:bg-white transition group"
+                   href="{{ path('parcours_v2_tabs', { parcours: parcours.id, tab: 'presentation' }) }}"
+                   data-turbo-frame="tab-content"
+                   data-turbo-action="advance"
+                   data-tabs-target="tab">
+                    <span class="flex items-center gap-3">
+                        Présentation parcours
+                    </span>
+                    <span id="tab_badge_presentation">
+                      {{ include('parcours_v2/tabs/_badge.html.twig', { tabKey: 'presentation', status: tabStates['presentation'].status ?? 'red' }) }}
+                    </span>
+                </a>
+
+
+                <a class="nav-link w-full flex items-center justify-between p-3 rounded-2xl text-sm font-bold text-slate-500 hover:bg-white transition group"
+                   href="{{ path('parcours_v2_tabs', { parcours: parcours.id, tab: 'descriptif' }) }}"
+                   data-turbo-frame="tab-content"
+                   data-turbo-action="advance"
+                   data-tabs-target="tab">
+                    <span class="flex items-center gap-3">
+                        Descriptif
+                        </span>
+                    <span id="tab_badge_descriptif">
+                      {{ include('parcours_v2/tabs/_badge.html.twig', { tabKey: 'descriptif', status: tabStates['descriptif'].status ?? 'red' }) }}
+                    </span>
+                </a>
+
+                <a class="nav-link w-full flex items-center justify-between p-3 rounded-2xl text-sm font-bold text-slate-500 hover:bg-white transition group"
+                   href="{{ path('parcours_v2_competences_index', { parcours: parcours.id }) }}"
+                   data-turbo-frame="tab-content"
+                   data-turbo-action="advance"
+                   data-tabs-target="tab"
+                >
+                    <span class="flex items-center gap-3">
+                        Compétences
+                    </span>
+                    <span class="w-2 h-2 bg-{{ parcours.colorStep(3) }}-500 rounded-full"></span>
+                </a>
+
+                <a
+                        href="{{ path('parcours_v2_tabs', { parcours: parcours.id, tab: 'maquette' }) }}"
+                        data-turbo-frame="tab-content"
+                        data-turbo-action="advance"
+                        data-tabs-target="tab"
+                        class="nav-link active w-full flex items-center justify-between p-3 rounded-2xl text-sm font-bold transition group">
+                    <span class="flex items-center gap-3">
+                        Structure Maquette
+                    </span>
+                    <span class="w-2 h-2 bg-{{ parcours.colorStep(4) }}-500 rounded-full"></span>
+                </a>
+
+                <div id="sidebar-tree" class="space-y-2">
+                    <div class="space-y-1">
+                        {% for annee in dto.annees %}
+                            <div class="flex items-center p-2 bg-gray-200 rounded-md text-[11px] font-black text-slate-500">
+                                <span>
+                                    <a href="{{ path('parcours_v2_annee', { parcours: parcours.id, annee: annee.annee.id }) }}"
+                                       data-turbo-frame="tab-content"
+                                       data-turbo-action="advance"
+                                       data-tabs-target="tab"
+                                    > Année {{ annee.annee.ordre }} {% if annee.annee.isOuvert == false %}<i
+                                                class="fal fa-do-not-enter"></i> Non ouvert{% endif %}</a>
+                                </span>
+                                <div class="flex items-center gap-2 ml-auto">
+                                    {#                                    <span><i class="fal fa-cogs"></i></span> #}
+                                    <span class="w-1.5 h-1.5 rounded-full bg-orange-400"></span>
+                                </div>
+                            </div>
+
+                            <div class="ml-4 pl-2 border-l border-slate-700 space-y-1 pt-1">
+                                {% for sem in annee.semestres %}
+                                    <div class="flex items-center p-2 text-[10px] font-bold text-slate-500">
+                                        <span>
+                                            <a href="{{ path('parcours_v2_semestre', { parcours: parcours.id, semestreParcours: sem.semestreParcours.id }) }}"
+                                               data-turbo-frame="tab-content"
+                                               data-turbo-action="advance"
+                                               data-tabs-target="tab"
+                                            >
+                                            S{{ sem.semestreParcours.ordre }} {% if sem.raccroche == true %}<i
+                                                        class="fal fa-chain"></i>{% endif %} {% if sem.semestreParcours.isOuvert == false %}
+                                                    <i class="fal fa-do-not-enter"></i> Non ouvert{% endif %}
+                                            </a>
+                                        </span>
+                                        <div class="flex items-center gap-2 ml-auto">
+                                            {#                                            <span><i class="fal fa-cogs"></i></span> #}
+                                            <span class="text-[8px] opacity-80">{{ sem.heuresEctsSemestre.sommeSemestreEcts }} ECTS</span>
+                                            {{ sem.semestre.validationStatus|badgeValidationShort }}
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    <div class="flex items-center p-2 text-[10px] font-bold text-slate-500">
+                                        Pas de semestres
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <a class="nav-link w-full flex items-center justify-between p-3 rounded-2xl text-sm font-bold text-slate-500 hover:bg-white transition group"
+                   href="{{ path('parcours_v2_tabs', { parcours: parcours.id, tab: 'admission' }) }}"
+                   data-turbo-frame="tab-content"
+                   data-turbo-action="advance"
+                   data-tabs-target="tab"
+                >
+                    <span class="flex items-center gap-3">
+                        Admission & inscription
+                        </span>
+                    <span id="tab_badge_admission">
+                      {{ include('parcours_v2/tabs/_badge.html.twig', { tabKey: 'admission', status: tabStates['admission'].status ?? 'red' }) }}
+                    </span>
+                </a>
+
+                <a class="nav-link w-full flex items-center justify-between p-3 rounded-2xl text-sm font-bold text-slate-500 hover:bg-white transition group"
+                   href="{{ path('parcours_v2_tabs', { parcours: parcours.id, tab: 'et_apres' }) }}"
+                   data-turbo-frame="tab-content"
+                   data-turbo-action="advance"
+                   data-tabs-target="tab">
+                    <span class="flex items-center gap-3">
+                        Et après...
+                        </span>
+                    <span id="tab_badge_et_apres">
+                      {{ include('parcours_v2/tabs/_badge.html.twig', { tabKey: 'et_apres', status: tabStates['et_apres'].status ?? 'red' }) }}
+                    </span>
+                </a>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <div class="pt-8">
+                        <a class="w-full flex items-center gap-3 p-3 rounded-2xl text-sm font-bold text-slate-400 hover:text-slate-800 transition"
+                           href="{{ path('parcours_v2_tabs', { parcours: parcours.id, tab: 'configuration' }) }}"
+                           data-turbo-frame="tab-content"
+                           data-turbo-action="advance"
+                           data-tabs-target="tab">
+                        <span>
+                        <i class="fal fa-cogs"></i> Configuration Admin.
+                            </span>
+                        </a>
+                    </div>
+                {% endif %}
+            </nav>
+        </aside>
+
+        <div class="p-3 flex-1 overflow-y-auto bg-white ms-2 rounded-md shadow-md border-slate-200 flex flex-col">
+            <turbo-frame
+                    id="tab-content"
+            >
+                {% if tab is defined %}
+                    {% include 'parcours_v2/tabs/_' ~ tab ~ '.html.twig' %}
+                {% else %}
+                    <div>Sélectionnez un onglet.</div>
+                {% endif %}
+
+            </turbo-frame>
+        </div>
+    </div>
+{% endblock %}

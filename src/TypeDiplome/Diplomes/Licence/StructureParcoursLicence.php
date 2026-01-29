@@ -39,7 +39,7 @@ final class StructureParcoursLicence implements StructureInterface
         // TODO: Implement showStructure() method.
     }
 
-    public function calculStructureSemestre(SemestreParcours $semestreParcours, Parcours $parcours, OptionsCalculStructure $optionsCalculStructure = new OptionsCalculStructure()): ?StructureSemestre
+    public function calculStructureSemestre(SemestreParcours $semestreParcours, Parcours $parcours, OptionsCalculStructure $optionsCalculStructure = new OptionsCalculStructure()): StructureSemestre
     {
         return $this->calculStructureParcoursLicence->calculSemestre($semestreParcours, $optionsCalculStructure, $parcours);
     }

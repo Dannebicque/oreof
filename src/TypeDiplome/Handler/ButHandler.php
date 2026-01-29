@@ -22,16 +22,19 @@ use App\TypeDiplome\Diplomes\But\Services\ButMccc;
 use App\TypeDiplome\Diplomes\But\Services\ButMcccVersion;
 use App\TypeDiplome\Diplomes\But\StructureParcoursBut;
 use App\TypeDiplome\DiplomeExportInterface;
+use App\TypeDiplome\Diplomes\But\ValideParcoursBut;
 use App\TypeDiplome\Dto\OptionsCalculStructure;
 use App\TypeDiplome\McccInterface;
 use App\TypeDiplome\StructureInterface;
 use App\TypeDiplome\TypeDiplomeHandlerInterface;
 use App\TypeDiplome\TypeDiplomeMcccInterface;
+use App\TypeDiplome\ValideParcoursInterface;
 use App\Utils\Tools;
 use DateTimeInterface;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -60,9 +63,15 @@ final class ButHandler implements TypeDiplomeHandlerInterface
         protected ButMccc                        $butMccc,
         protected ButMcccVersion                 $butMcccVersion,
         private readonly ButCompetenceRepository $butCompetenceRepository,
-        private readonly StructureParcoursBut    $structureParcoursBut
+        private readonly StructureParcoursBut $structureParcoursBut,
+        private readonly ValideParcoursBUt    $valideParcoursBut
     )
     {
+    }
+
+    public function createFormMccc(ElementConstitutif|FicheMatiere $element): FormInterface
+    {
+
     }
 
     public function calculStructureParcours(Parcours $parcours, OptionsCalculStructure $optionsCalculStructure = new OptionsCalculStructure()): StructureParcours
@@ -245,5 +254,10 @@ final class ButHandler implements TypeDiplomeHandlerInterface
     public function calculStructureSemestre(SemestreParcours $semestreParcours, Parcours $parcours, OptionsCalculStructure $optionsCalculStructure = new OptionsCalculStructure()): StructureSemestre
     {
         return new StructureSemestre();
+    }
+
+    public function getValidator(): ValideParcoursInterface
+    {
+        return $this->valideParcoursBut;
     }
 }

@@ -1,0 +1,13 @@
+{% form_theme form 'communs/form_theme_v2.html.twig' %}
+{{ form_start(form, {
+    attr: {
+        id: 'tab_form_' ~ tabKey,
+        'data-controller': 'autosave',
+        'data-autosave-url-value': path('parcours_v2_tab_autosave', {id: parcours.id, tabKey: tabKey}),
+        'data-action': 'input->autosave#onChange change->autosave#onChange'
+    }
+}) }}
+
+{{ form_errors(form) }}
+{{ form_widget(form) }}
+{{ form_end(form) }}
