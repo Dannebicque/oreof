@@ -35,6 +35,7 @@ enum TypeParcoursEnum: string
         return match ($this) {
             self::TYPE_PARCOURS_CLASSIQUE, self::TYPE_PARCOURS_LAS1 => 'primary',
             self::TYPE_PARCOURS_LAS23, self::TYPE_PARCOURS_CPI, self::TYPE_PARCOURS_ALTERNANCE => 'info',
+            self::TYPE_PARCOURS_LAS123 => 'primary'
         };
     }
 
