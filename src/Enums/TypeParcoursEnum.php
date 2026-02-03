@@ -14,6 +14,7 @@ enum TypeParcoursEnum: string
     case TYPE_PARCOURS_CLASSIQUE = 'classique';
     case TYPE_PARCOURS_LAS1 = 'las1';
     case TYPE_PARCOURS_LAS23 = 'las23';
+    case TYPE_PARCOURS_LAS123 = 'las123';
     case TYPE_PARCOURS_CPI = 'cpi';
     case TYPE_PARCOURS_ALTERNANCE = 'alternance';
 
@@ -23,6 +24,7 @@ enum TypeParcoursEnum: string
             self::TYPE_PARCOURS_CLASSIQUE => 'Classique',
             self::TYPE_PARCOURS_LAS1 => 'LAS1',
             self::TYPE_PARCOURS_LAS23 => 'LAS2/LAS3',
+            self::TYPE_PARCOURS_LAS123 => 'LAS 1/2/3',
             self::TYPE_PARCOURS_CPI => 'CPI',
             self::TYPE_PARCOURS_ALTERNANCE => 'En alternance',
         };
@@ -40,7 +42,7 @@ enum TypeParcoursEnum: string
     {
         return match ($this) {
             self::TYPE_PARCOURS_CLASSIQUE => 'Classique',
-            self::TYPE_PARCOURS_LAS1, self::TYPE_PARCOURS_LAS23 => 'Accès santé',
+            self::TYPE_PARCOURS_LAS1, self::TYPE_PARCOURS_LAS23, self::TYPE_PARCOURS_LAS123 => 'Accès santé',
             self::TYPE_PARCOURS_CPI => 'CPI',
             self::TYPE_PARCOURS_ALTERNANCE => 'En alternance',
         };
