@@ -586,11 +586,15 @@ class ParcoursController extends BaseController
         $typeF = [];
         $typeF[] = $typeDiplome?->getLibelle() ?? '-';
 
+        $lasTypeP = [
+            TypeParcoursEnum::TYPE_PARCOURS_LAS1,
+            TypeParcoursEnum::TYPE_PARCOURS_LAS23,
+            TypeParcoursEnum::TYPE_PARCOURS_LAS123
+        ];
+
         if ($parcours->getTypeParcours() === TypeParcoursEnum::TYPE_PARCOURS_CPI) {
             $typeF[] = 'Diplômes d’ingénieur / CMI / CPI';
-        } elseif ($parcours->getTypeParcours() === TypeParcoursEnum::TYPE_PARCOURS_LAS1) {
-            $typeF[] = 'Licence Accès Santé';
-        } elseif ($parcours->getTypeParcours() === TypeParcoursEnum::TYPE_PARCOURS_LAS23) {
+        } elseif (in_array($parcours->getTypeParcours(), $lasTypeP, true)) {
             $typeF[] = 'Licence Accès Santé';
         }
 
@@ -873,11 +877,15 @@ class ParcoursController extends BaseController
             ->findOneById($parcoursVersion->getParcours()->getId())
             ->getTypeParcours();
 
+        $lasTypeP = [
+            TypeParcoursEnum::TYPE_PARCOURS_LAS1,
+            TypeParcoursEnum::TYPE_PARCOURS_LAS23,
+            TypeParcoursEnum::TYPE_PARCOURS_LAS123
+        ];
+
         if ($typeParcours === TypeParcoursEnum::TYPE_PARCOURS_CPI) {
             $typeF[] = 'Diplômes d’ingénieur / CMI / CPI';
-        } elseif ($typeParcours === TypeParcoursEnum::TYPE_PARCOURS_LAS1) {
-            $typeF[] = 'Licence Accès Santé';
-        } elseif ($typeParcours === TypeParcoursEnum::TYPE_PARCOURS_LAS23) {
+        } elseif (in_array($typeParcours, $lasTypeP, true)) {
             $typeF[] = 'Licence Accès Santé';
         }
 
@@ -992,11 +1000,15 @@ class ParcoursController extends BaseController
         $typeF = [];
         $typeF[] = $typeDiplome?->getLibelle() ?? '-';
 
+        $lasTypeP = [
+            TypeParcoursEnum::TYPE_PARCOURS_LAS1,
+            TypeParcoursEnum::TYPE_PARCOURS_LAS23,
+            TypeParcoursEnum::TYPE_PARCOURS_LAS123
+        ];
+
         if ($parcours->getTypeParcours() === TypeParcoursEnum::TYPE_PARCOURS_CPI) {
             $typeF[] = 'Diplômes d’ingénieur / CMI / CPI';
-        } elseif ($parcours->getTypeParcours() === TypeParcoursEnum::TYPE_PARCOURS_LAS1) {
-            $typeF[] = 'Licence Accès Santé';
-        } elseif ($parcours->getTypeParcours() === TypeParcoursEnum::TYPE_PARCOURS_LAS23) {
+        } elseif (in_array($parcours->getTypeParcours(), $lasTypeP, true)) {
             $typeF[] = 'Licence Accès Santé';
         }
 
