@@ -595,7 +595,7 @@ class ParcoursController extends BaseController
         $isDiplomeInge = in_array($typeDiplome?->getLibelleCourt() ?? '-', ['DI', 'CMI', 'CPI'], true);
 
         if ($parcours->getTypeParcours() === TypeParcoursEnum::TYPE_PARCOURS_CPI || $isDiplomeInge) {
-            $typeF[] = "Diplôme d'ingénieur / CMI / CPI";
+            $typeF[] = "Diplôme d’ingénieur / CMI / CPI";
         } elseif (in_array($parcours->getTypeParcours(), $lasTypeP, true)) {
             $typeF[] = 'Licence Accès Santé';
         }
@@ -888,7 +888,7 @@ class ParcoursController extends BaseController
         $isDiplomeInge = in_array($typeDiplome?->getLibelleCourt() ?? '-', ['DI', 'CMI', 'CPI'], true);
 
         if ($typeParcours === TypeParcoursEnum::TYPE_PARCOURS_CPI || $isDiplomeInge) {
-            $typeF[] = "Diplôme d'ingénieur / CMI / CPI";
+            $typeF[] = "Diplôme d’ingénieur / CMI / CPI";
         } elseif (in_array($typeParcours, $lasTypeP, true)) {
             $typeF[] = 'Licence Accès Santé';
         }
@@ -1013,7 +1013,7 @@ class ParcoursController extends BaseController
         $isDiplomeInge = in_array($typeDiplome?->getLibelleCourt() ?? '-', ['DI', 'CMI', 'CPI'], true);
 
         if ($parcours->getTypeParcours() === TypeParcoursEnum::TYPE_PARCOURS_CPI || $isDiplomeInge) {
-            $typeF[] = "Diplôme d'ingénieur / CMI / CPI";
+            $typeF[] = "Diplôme d’ingénieur / CMI / CPI";
         } elseif (in_array($parcours->getTypeParcours(), $lasTypeP, true)) {
             $typeF[] = 'Licence Accès Santé';
         }
