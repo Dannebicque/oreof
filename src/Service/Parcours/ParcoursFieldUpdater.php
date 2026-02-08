@@ -3,6 +3,7 @@
 namespace App\Service\Parcours;
 
 use App\Entity\Parcours;
+use App\Enums\ModaliteEnseignementEnum;
 use App\Enums\NiveauLangueEnum;
 use App\Enums\RegimeInscriptionEnum;
 use App\Repository\VilleRepository;
@@ -62,7 +63,7 @@ final readonly class ParcoursFieldUpdater
             // ----------------- STEP 2 (descriptif) -----------------
             // EnumType : si ton setter attend un enum, adapte via toEnum()
             'parcours_step2[modalitesEnseignement]' => function (Parcours $p, $v) {
-                $p->setModalitesEnseignement($this->toEnumOrNull(ModalitesEnseignementEnum::class, $v));
+                $p->setModalitesEnseignement($this->toEnumOrNull(ModaliteEnseignementEnum::class, $v));
             },
             // YesNoType -> bool|null
             'parcours_step2[hasStage]' => fn(Parcours $p, $v) => $p->setHasStage($this->toBoolOrNull($v)),

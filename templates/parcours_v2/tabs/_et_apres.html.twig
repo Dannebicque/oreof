@@ -16,6 +16,22 @@
         {{ form_errors(form) }}
         {{ form_widget(form) }}
 
+        {# todo: revoir pour meilleure intégration visuelle (formtype?) #}
+        <div {{ stimulus_controller('parcours--step6', {
+            url: path('app_parcours_save', {parcours:parcours.id}),
+            urlCodeRome: path('app_parcours_wizard_step_6_code_rome', {parcours:parcours.id}),
+            urlCodeRomeGere: path('app_parcours_wizard_step_6_code_rome_gere', {parcours:parcours.id}),
+        }) }}>
+            <label class="col-form-label required">
+                {{ 'parcours_step6.labels.codeRome'|trans({}, 'form') }}
+            </label>
+            <div {{ stimulus_target('parcours--step6', 'listeCodes') }}>
+
+            </div>
+
+        </div>
+
+
         {{ form_end(form) }}
     </div>
 

@@ -25,8 +25,8 @@ export default class extends Controller {
   }
 
   connect() {
-    document.getElementById('parcours_step6_poursuitesEtudes').addEventListener('trix-blur', this.savePoursuitesEtudes.bind(this))
-    document.getElementById('parcours_step6_debouches').addEventListener('trix-blur', this.saveDebouches.bind(this))
+    // document.getElementById('parcours_step6_poursuitesEtudes').addEventListener('trix-blur', this.savePoursuitesEtudes.bind(this))
+    // document.getElementById('parcours_step6_debouches').addEventListener('trix-blur', this.saveDebouches.bind(this))
 
     this._loadRome()
   }
@@ -53,11 +53,18 @@ export default class extends Controller {
 
   async addCode(event) {
     event.preventDefault()
+    const codeInput = document.getElementById('codeRomeToAdd').value.trim()
+    const code = codeInput.toUpperCase()
+    const romeRegex = /^[A-Z]\d{4}$/
+    if (!romeRegex.test(code)) {
+      callOut('Code ROME invalide', 'danger')
+      return
+    }
     const body = {
       method: 'POST',
       body: JSON.stringify({
         action: 'ADD',
-        code: document.getElementById('codeRomeToAdd').value,
+        code,
       }),
     }
 
@@ -77,29 +84,29 @@ export default class extends Controller {
     this.listeCodesTarget.innerHTML = await response.text()
   }
 
-  async _save(options) {
-    await saveData(this.urlValue, options).then(async () => {
-      await updateEtatOnglet(this.urlValue, 'onglet6', 'parcours')
-    })
-  }
+  // async _save(options) {
+  //   await saveData(this.urlValue, options).then(async () => {
+  //     await updateEtatOnglet(this.urlValue, 'onglet6', 'parcours')
+  //   })
+  // }
 
-  savePoursuitesEtudes() {
-    this._save({
-      field: 'poursuitesEtudes',
-      action: 'textarea',
-      value: trixEditor('parcours_step6_poursuitesEtudes'),
-    })
-  }
+  // savePoursuitesEtudes() {
+  //   this._save({
+  //     field: 'poursuitesEtudes',
+  //     action: 'textarea',
+  //     value: trixEditor('parcours_step6_poursuitesEtudes'),
+  //   })
+  // }
+  //
+  // saveDebouches() {
+  //   this._save({
+  //     field: 'debouches',
+  //     action: 'textarea',
+  //     value: trixEditor('parcours_step6_debouches'),
+  //   })
+  // }
 
-  saveDebouches() {
-    this._save({
-      field: 'debouches',
-      action: 'textarea',
-      value: trixEditor('parcours_step6_debouches'),
-    })
-  }
-
-  etatStep(event) {
-    calculEtatStep(this.urlValue, 6, event, 'parcours')
-  }
+  // etatStep(event) {
+  //   calculEtatStep(this.urlValue, 6, event, 'parcours')
+  // }
 }
