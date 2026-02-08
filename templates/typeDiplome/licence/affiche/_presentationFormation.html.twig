@@ -1,0 +1,164 @@
+{% if formation.hasParcours == false %}
+    <dl>
+        <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Contenu de la formation</dt>
+        <dd>
+            <div class="not-prose bg-white border-l-4 border-indigo-500 p-8 rounded-r-[2.5rem] shadow-sm mb-5 mt-3">
+                <p class="text-slate-600 leading-relaxed font-medium">
+                    {{ formation.contenuFormation|raw }}
+                </p>
+            </div>
+        </dd>
+        {% if stringDifferencesFormation.presentationFormationContenuFormation is defined %}
+            {{ include('communs/_comparaison_versioning_no_button.html.twig',
+                {
+                    textDifferences: stringDifferencesFormation.presentationFormationContenuFormation,
+                    idCollapse: 'diffGlobalParcours'
+                }
+            ) }}
+        {% endif %}
+        <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Résultats attendus de la formation
+        </dt>
+        <dd>{{ formation.resultatsAttendus|raw }}</dd>
+        {% if stringDifferencesFormation.presentationFormationResultatsAttendus is defined %}
+            {{ include('communs/_comparaison_versioning_no_button.html.twig',
+                {
+                    textDifferences: stringDifferencesFormation.presentationFormationResultatsAttendus,
+                    idCollapse: 'diffGlobalParcours'
+                }
+            ) }}
+        {% endif %}
+        <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Rythme de formation</dt>
+        <dd>
+            {{ formation.rythmeFormation != null ? formation.rythmeFormation.libelle : 'Non précisé' }}
+        </dd>
+        <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Précisions sur le rythme de
+            formation
+        </dt>
+        <dd>{{ formation.rythmeFormationTexte|raw }}</dd>
+    </dl>
+{% else %}
+    <div class="row">
+        <div class="col-sm-12">
+            <dl>
+                <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Organisation et objectifs de la
+                    formation
+                </dt>
+                <dd>
+                    <div class="not-prose bg-white border-l-4 border-indigo-500 p-8 rounded-r-[2.5rem] shadow-sm mb-5 mt-2">
+                        <p class="text-slate-600 leading-relaxed font-medium">
+                            {{ formation.objectifsFormation|raw }}
+                        </p>
+                    </div>
+                </dd>
+                {% if stringDifferencesFormation.presentationFormationObjectifsFormation is defined %}
+                    {{ include('communs/_comparaison_versioning_no_button.html.twig',
+                        {
+                            textDifferences: stringDifferencesFormation.presentationFormationObjectifsFormation,
+                            idCollapse: 'diffGlobalParcours'
+                        }
+                    ) }}
+                {% endif %}
+            </dl>
+        </div>
+    </div>
+{% endif %}
+{% if (print is defined and print == false) %}
+    {% if formation.isHasParcours == true %}
+        <div class="row">
+            <div class="col-sm-12">
+                <h3 class="text-[12px] font-black text-indigo-400 uppercase mt-3">Parcours</h3>
+                <div class="w-full overflow-x-auto">
+                    <table class="w-full min-w-[720px] table-auto bg-white rounded-lg shadow-sm divide-y divide-slate-200">
+                        <thead class="bg-slate-50">
+                        <tr>
+                            <th class="text-left px-4 py-3 text-xs font-semibold text-slate-600 uppercase">Parcours</th>
+                            <th class="text-left px-4 py-3 text-xs font-semibold text-slate-600 uppercase">Statut</th>
+                            <th class="text-center px-4 py-3 text-xs font-semibold text-slate-600 uppercase">Fiche</th>
+                            <th class="text-center px-4 py-3 text-xs font-semibold text-slate-600 uppercase">Export
+                                MCCC
+                            </th>
+                            <th class="text-center px-4 py-3 text-xs font-semibold text-slate-600 uppercase">BCC</th>
+                            <th class="text-center px-4 py-3 text-xs font-semibold text-slate-600 uppercase">Fiches EC /
+                                matières
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 text-sm text-slate-700">
+                        {% for parcours in formation.parcours %}
+                            <tr class="hover:bg-slate-50">
+                                <td class="px-4 py-3">
+                                    <a href="#presentation_{{ parcours.id }}"
+                                       class="inline-flex items-center gap-2 text-slate-800 hover:text-indigo-600">
+                                        <span class="font-medium">{{ parcours.libelle }}</span>
+                                        <span class="inline-block">{{ parcours.typeParcours|badgeTypeParcours }}</span>
+                                    </a>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <span class="inline-block">{{ parcours.dpeParcours[0].etatReconduction|badgeTypeModification }}</span>
+                                </td>
+                                <td class="px-4 py-3 text-center">
+                                    <a href="{{ path('app_parcours_show', {id:parcours.id}) }}"
+                                       class="inline-flex items-center gap-2 px-3 py-1.5 text-xs font-medium border border-slate-200 rounded-md text-indigo-600 hover:bg-indigo-50">
+                                        <i class="{{ iconShow }}"></i>
+                                        <span>Fiche descriptive</span>
+                                    </a>
+                                </td>
+                                <td class="px-4 py-3 text-center">
+                                    {{ include('btn/export_mccc.html.twig') }}
+                                </td>
+                                <td class="px-4 py-3 text-center">
+                                    <details class="relative inline-block">
+                                        <summary
+                                                class="inline-flex items-center gap-2 px-3 py-1.5 text-xs font-medium border border-slate-200 rounded-md cursor-pointer text-slate-700 hover:bg-slate-50">
+                                            <i class="{{ iconDownload }}"></i>
+                                            <span>BCC</span>
+                                        </summary>
+                                        <div class="absolute z-10 mt-2 right-0 w-64 bg-white border border-slate-200 rounded-md shadow-lg py-2">
+                                            <a class="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50"
+                                               href="{{ path('app_parcours_bcc', {parcours:parcours.id}) }}">Voir en
+                                                ligne</a>
+                                            <a class="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50"
+                                               href="{{ path('app_competence_export_bcc', {parcours:parcours.id}) }}">Export
+                                                des BCC (pdf)</a>
+                                            <a class="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50"
+                                               href="{{ path('app_competence_export_croise', {parcours:parcours.id}) }}">Export
+                                                tableau croisé BCC/EC (pdf)</a>
+                                            <a class="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50"
+                                               href="{{ path('app_competence_export_croise_global', {parcours:parcours.id}) }}">Export
+                                                croisé global (xlsx)</a>
+                                        </div>
+                                    </details>
+                                </td>
+                                <td class="px-4 py-3 text-center">
+                                    <details class="relative inline-block">
+                                        <summary
+                                                class="inline-flex items-center gap-2 px-3 py-1.5 text-xs font-medium border border-slate-200 rounded-md cursor-pointer text-slate-700 hover:bg-slate-50">
+                                            <i class="{{ iconDownload }}"></i>
+                                            <span>Fiches EC / matières</span>
+                                        </summary>
+                                        <div class="absolute z-10 mt-2 right-0 w-64 bg-white border border-slate-200 rounded-md shadow-lg py-2">
+                                            <a class="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50"
+                                               href="{{ path('fiche_matiere_export_all', {parcours:parcours.id}) }}">Version
+                                                complète (1 pdf)</a>
+                                            <a class="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50"
+                                               href="{{ path('fiche_matiere_export_zip', {parcours:parcours.id}) }}">Version
+                                                zip (1 pdf / fiche)</a>
+                                        </div>
+                                    </details>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="row">
+            <div class="col-sm-12">
+                <h3>Parcours</h3>
+                <p>Il n'y a pas de parcours pour cette formation.</p>
+            </div>
+        </div>
+    {% endif %}
+{% endif %}

@@ -28,6 +28,7 @@ class AdminEditController extends BaseController
     {
     }
 
+    //todo: deprecated
     #[Route('/{id}/{type}', name: '_modal')]
     public function afficheModal(
         ParcoursRepository  $parcoursRepository,

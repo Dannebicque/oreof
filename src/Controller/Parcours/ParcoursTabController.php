@@ -39,18 +39,7 @@ final class ParcoursTabController extends AbstractController
 
         $state = $states->getOrCreate($parcours, $tabKey);
 //
-//        // Toute modification décoche done
         $state->setDone(false);
-//        $isComplete = $checker->isTabComplete($parcours, $tabKey);
-//        $state->setStatus($checker->computeStatus($isComplete, false));
-//        $em->flush();
-//
-//        return $this->turboStreamsResponse(
-//            $parcours,
-//            $tabKey,
-//            $state->getStatus(),
-//            $state->isDone(),
-//        );
         $issues = $checker->getTabIssues($parcours, $tabKey);
         $isComplete = count($issues) === 0;
 

@@ -1,15 +1,22 @@
 <turbo-frame id="tab-content">
-    <header class="border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
-        <div>
-            <h2 class="text-xl font-black text-slate-800 tracking-tight">{{ titre }}</h2>
-            <p class="text-xs text-slate-400 font-bold uppercase mt-1">{{ texte_help }}</p>
-        </div>
-        <div class="flex gap-3">
+    {{ include('parcours_v2/tabs/_header.html.twig', {tabKey: 'maquette'}) }}
 
-        </div>
-    </header>
+    <div class="flex-1 overflow-y-auto mt-4 custom-scrollbar">
+        {% form_theme form 'communs/form_theme_v2.html.twig' %}
+        {{ form_start(form, {
+            attr: {
+                id: 'tab_form_maquette',
+                'data-controller': 'autosave',
+                'data-autosave-url-value': path('parcours_v2_tab_autosave', { id: parcours.id, tabKey: 'maquette' }),
+                'data-action': 'change->autosave#queue'
 
-    <div class="flex-1 overflow-y-auto p-2 custom-scrollbar">
+            }
+        }) }}
 
+        {{ form_errors(form) }}
+        {{ form_widget(form) }}
+
+        {{ form_end(form) }}
     </div>
 </turbo-frame>
+

@@ -1,15 +1,16 @@
 <div{{ attributes }}>
     <!-- component HTML -->
     {% if this.isEditable %}
-        <label for="commentaire">{{ 'admin.edit.modal.commentaire'|trans }}</label>
+        <label for="commentaire">{{ 'ses.edit.commentaire.parcours'|trans }}</label>
         <textarea
-                class="form-control"
+                class="w-full p-2 bg-slate-50 border border-slate-200 rounded-sm font-medium text-slate-700 focus:ring-4 focus:ring-indigo-50 focus:border-indigo-500 outline-none transition-all shadow-sm min-h-[150px]"
                 id="commentaire"
                 data-model="commentaire"
-                rows="10">{{ this.commentaire|raw }}</textarea>
+                rows="10">{{ this.commentaire|raw }}
+        </textarea>
 
         <div class="col-sm-offset-2 col-sm-10">
-            <button class="btn btn-success"
+            <button class="rounded-lg bg-green-600 text-white px-4 py-2 font-semibold"
                     data-action="live#action"
                     data-live-action-param="sauvegarde"
             >
@@ -18,13 +19,17 @@
             </button>
         </div>
     {% else %}
-        {{ this.commentaire|raw }}
+        {% if this.commentaire == null %}
+            <p>Pas de commentaire pour ce parcours</p>
+        {% else %}
+            <p>{{ this.commentaire|raw }}</p>
+        {% endif %}
         <button
-                class="btn btn-warning"
+                class="rounded-lg bg-amber-600 text-white px-4 py-2"
                 data-action="live#action"
                 data-live-action-param="edit"
         >
-            Modifier
+            Modifier/compléter le commentaire
         </button>
     {% endif %}
 </div>

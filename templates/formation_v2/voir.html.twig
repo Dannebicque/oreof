@@ -1,0 +1,430 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        {#        {{ cssDiff }}#}
+        {#        {{ include('communs/versioning_view_style.html.twig') }}#}
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #F8FAFC;
+            padding: 40px;
+        }
+    </style>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script type="module">
+      import { Application, Controller } from 'https://unpkg.com/@hotwired/stimulus/dist/stimulus.js'
+
+      window.Stimulus = Application.start()
+
+      Stimulus.register('scroll-spy', class extends Controller {
+        static targets = ['link', 'section']
+
+        connect () {
+          const options = {
+            root: null,
+            rootMargin: '-10% 0px -70% 0px', // Déclenchement quand la section est en haut
+            threshold: 0
+          }
+
+          this.observer = new IntersectionObserver(this.onIntersection.bind(this), options)
+          this.sectionTargets.forEach(section => this.observer.observe(section))
+        }
+
+        onIntersection (entries) {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              this.activateLink(entry.target.id)
+            }
+          })
+        }
+
+        activateLink (id) {
+          this.linkTargets.forEach(link => {
+            const isActive = link.getAttribute('href') === `#${id}`
+            link.classList.toggle('text-indigo-600', isActive)
+            link.classList.toggle('bg-indigo-50', isActive)
+            link.classList.toggle('border-indigo-600', isActive)
+            link.classList.toggle('text-slate-400', !isActive)
+            link.classList.toggle('border-transparent', !isActive)
+          })
+        }
+
+        disconnect () {
+          this.observer.disconnect()
+        }
+      })
+    </script>
+
+    <!-- Test Script -->
+    <script>
+      let isSaveClicked = false
+
+      function showVersion () {
+        let select = document.querySelector('#selectVersion')
+        let versionSelected = select.options[select.selectedIndex].value
+        if (versionSelected !== '#') {
+          window.location = `/parcours/${versionSelected}/versioning/view`
+        }
+      }
+
+      function saveVersion (event) {
+        if (isSaveClicked === false) {
+          let spinner = document.querySelector('#spinnerParcours')
+          spinner.classList.remove('d-none')
+          spinner.classList.add('d-flex')
+          isSaveClicked = true
+        } else {
+          event.preventDefault()
+          return false
+        }
+      }
+
+      function saveFormationVersion (event) {
+        if (isSaveClicked === false) {
+          let spinnerFormation = document.querySelector('#spinnerFormation')
+          spinnerFormation.classList.remove('d-none')
+          spinnerFormation.classList.add('d-flex')
+          isSaveClicked = true
+        } else {
+          event.preventDefault()
+          return false
+        }
+      }
+
+      function showFormationVersion () {
+        let select = document.querySelector('#selectVersionFormation')
+        let versionSelected = select.options[select.selectedIndex].value
+        if (versionSelected !== '#') {
+          window.location = `/formation/${versionSelected}/versioning/view`
+        }
+      }
+
+    </script>
+{% endblock %}
+
+{% block title %}Formation{% endblock %}
+
+{% block content %}
+    <twig:FormationHeader formationId="{{ formation.id }}"/>
+    {% if formation.hasParcours == false %}
+        {# si la formation n'a pas de parcours i.e. parcours par défaut, alors on affiche le menu aussi du parcours pour le processus. #}
+        <twig:ParcoursHeader formationId="{{ formation.id }}" parcoursId="{{ formation.parcours[0].id }}"/>
+    {% endif %}
+
+
+    {#    {{ include('formation/_synthese_formation.html.twig') }} #}
+
+    {#    {% if is_granted('ROLE_ADMIN') or is_granted('CAN_ETABLISSEMENT_SCOLARITE_ALL') or is_granted('CAN_FORMATION_SCOLARITE_MY', formation) %} #}
+    {#        #}{# Versioning pour les parcours par défaut #}
+    {#        {% if formation.isHasParcours == false and formation.parcours|length == 1 %} #}
+    {#            {{ include('formation/_manage_versioning_parcours.html.twig', {parcours: formation.parcours[0]}) }} #}
+    {#        {% endif %} #}
+    {#        {% if is_granted('ROLE_ADMIN') %} #}
+    {#            {{ include('formation/_manage_versioning_formation.html.twig') }} #}
+    {#        {% endif %} #}
+    {#    {% endif %} #}
+
+
+    <div class="flex" data-controller="scroll-spy">
+        <aside class="w-72 bg-white rounded-md shadow-md border-slate-200 flex flex-col p-3 space-y-8">
+            <div class="sticky top-40 space-y-8">
+                <div>
+                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-6 px-4">Navigation</p>
+                    <nav class="space-y-1">
+                        <a href="#identite_formation" data-scroll-spy-target="link"
+                           class="flex items-center gap-3 px-5 py-3 text-[11px] font-black uppercase tracking-widest rounded-md border-l-4 border-transparent transition-all duration-300">
+                            Identité de la formation
+                        </a>
+                        <a href="#localisation" data-scroll-spy-target="link"
+                           class="flex items-center gap-3 px-5 py-3 text-[11px] font-black uppercase tracking-widest rounded-md border-l-4 border-transparent transition-all duration-300">
+                            Localisation
+                        </a>
+                        <a href="#presentation" data-scroll-spy-target="link"
+                           class="flex items-center gap-3 px-5 py-3 text-[11px] font-black uppercase tracking-widest rounded-md border-l-4 border-transparent transition-all duration-300">
+                            Présentation de la formation
+                        </a>
+
+                        {% if formation.isHasParcours == false %}
+                            {# formation sans parcours #}
+                            <a href="#competences" data-scroll-spy-target="link"
+                               class="flex items-center gap-3 px-5 py-3 text-[11px] font-black uppercase tracking-widest rounded-md border-l-4 border-transparent transition-all duration-300">
+                                Compétences Acquises
+                            </a>
+
+                            <a href="#structure" data-scroll-spy-target="link"
+                               class="flex items-center gap-3 px-5 py-3 text-[11px] font-black uppercase tracking-widest rounded-md border-l-4 border-transparent transition-all duration-300">
+                                Structure & maquette
+                            </a>
+                            <a href="#admission" data-scroll-spy-target="link"
+                               class="flex items-center gap-3 px-5 py-3 text-[11px] font-black uppercase tracking-widest rounded-md border-l-4 border-transparent transition-all duration-300">
+                                Admission
+                            </a>
+
+                            <a href="#inscription" data-scroll-spy-target="link"
+                               class="flex items-center gap-3 px-5 py-3 text-[11px] font-black uppercase tracking-widest rounded-md border-l-4 border-transparent transition-all duration-300">
+                                Inscription
+                            </a>
+
+                            <a href="#et_apres" data-scroll-spy-target="link"
+                               class="flex items-center gap-3 px-5 py-3 text-[11px] font-black uppercase tracking-widest rounded-md border-l-4 border-transparent transition-all duration-300">
+                                Et après...
+                            </a>
+
+                            <a href="#contacts" data-scroll-spy-target="link"
+                               class="flex items-center gap-3 px-5 py-3 text-[11px] font-black uppercase tracking-widest rounded-md border-l-4 border-transparent transition-all duration-300">
+                                Contacts pédagogiques
+                            </a>
+                        {% else %}
+                            {% for parcours in formation.parcours %}
+                                <p class="text-[10px] font-black text-amber-800 uppercase tracking-[0.2em] mb-6 px-4">
+                                    Parcours {{ parcours.libelle }} {{ parcours.typeParcours|badgeTypeParcours }}</p>
+
+
+                                <a href="#presentation_{{ parcours.id }}" data-scroll-spy-target="link"
+                                   class="flex items-center gap-3 px-5 py-3 text-[11px] font-black uppercase tracking-widest rounded-md border-l-4 border-transparent transition-all duration-300">
+                                    Présentation du parcours
+                                </a>
+
+                                <a href="#descriptif_{{ parcours.id }}" data-scroll-spy-target="link"
+                                   class="flex items-center gap-3 px-5 py-3 text-[11px] font-black uppercase tracking-widest rounded-md border-l-4 border-transparent transition-all duration-300">
+                                    Descriptif du parcours
+                                </a>
+
+                                <a href="#competences_{{ parcours.id }}" data-scroll-spy-target="link"
+                                   class="flex items-center gap-3 px-5 py-3 text-[11px] font-black uppercase tracking-widest rounded-md border-l-4 border-transparent transition-all duration-300">
+                                    Compétences Acquises
+                                </a>
+
+                                <a href="#structure_{{ parcours.id }}" data-scroll-spy-target="link"
+                                   class="flex items-center gap-3 px-5 py-3 text-[11px] font-black uppercase tracking-widest rounded-md border-l-4 border-transparent transition-all duration-300">
+                                    Structure & maquette
+                                </a>
+                                <a href="#admission_{{ parcours.id }}" data-scroll-spy-target="link"
+                                   class="flex items-center gap-3 px-5 py-3 text-[11px] font-black uppercase tracking-widest rounded-md border-l-4 border-transparent transition-all duration-300">
+                                    Admission
+                                </a>
+
+                                <a href="#inscription_{{ parcours.id }}" data-scroll-spy-target="link"
+                                   class="flex items-center gap-3 px-5 py-3 text-[11px] font-black uppercase tracking-widest rounded-md border-l-4 border-transparent transition-all duration-300">
+                                    Inscription
+                                </a>
+
+                                <a href="#et_apres_{{ parcours.id }}" data-scroll-spy-target="link"
+                                   class="flex items-center gap-3 px-5 py-3 text-[11px] font-black uppercase tracking-widest rounded-md border-l-4 border-transparent transition-all duration-300">
+                                    Et après...
+                                </a>
+
+                                <a href="#contacts_{{ parcours.id }}" data-scroll-spy-target="link"
+                                   class="flex items-center gap-3 px-5 py-3 text-[11px] font-black uppercase tracking-widest rounded-md border-l-4 border-transparent transition-all duration-300">
+                                    Contacts pédagogiques
+                                </a>
+                            {% endfor %}
+                        {% endif %}
+
+
+                    </nav>
+                </div>
+
+                {#                {% set valideLheo = lheoXML.isValidLheo(parcours) %} #}
+                {#                {% set percent = parcours.remplissage.calcul() %} #}
+                {#                {% set isFull = parcours.remplissage.isFull() == true %} #}
+                {#                {% set color = isFull and valideLheo ? 'green' : 'orange' %} #}
+
+                {#                <div class="p-6 bg-{{ color }}-600 rounded-sm text-white shadow-xl shadow-{{ color }}-100"> #}
+                {#                    <p class="text-[10px] font-black uppercase opacity-60 mb-2">Statut Global</p> #}
+                {#                    <p class="text-sm font-bold leading-tight"> #}
+                {#                        {% if lheoXML.isValidLheo(parcours) %} #}
+                {#                            Le parcours est prêt pour la publication LHEO. #}
+                {#                        {% else %} #}
+                {#                            Le parcours est invalide LHEO, publication impossible #}
+                {#                        {% endif %} #}
+                {#                    </p> #}
+                {#                    <div class="mt-4 w-full bg-indigo-400/30 h-1.5 rounded-full overflow-hidden"> #}
+                {#                        <div class="w-[{{ percent }}%] h-full bg-white"></div> #}
+                {#                    </div> #}
+                {#                </div> #}
+            </div>
+        </aside>
+        <div class="p-3 flex-1 overflow-y-auto flex flex-col pt-0">
+
+            {{ include('typeDiplome/'~constant('TEMPLATE_FOLDER', typeD)~'/_show_formation.html.twig') }}
+        </div>
+    </div>
+{% endblock %}
+
+{% set header_title %}
+    Détail de la formation : {{ formation.display }}
+{% endset %}
+
+{% block breadcrumb %}
+    {{ include('communs/_breadcrumb.html.twig', {liens:[
+        {href: path('app_formation_index'), title: 'Liste des formations'},
+    ]}) }}
+{% endblock %}
+
+{% block bouton_header %}
+
+    {#    {% if is_granted('ROLE_ADMIN') #}
+    {#        and versioningParcours is defined #}
+    {#        and versioningParcours != null %} #}
+    {#        <a class="btn btn-sm btn-outline-info d-block mx-2 mb-1" #}
+    {#           data-bs-toggle="collapse" data-bs-target="#diffGlobalParcours" #}
+    {#        > #}
+    {#            <i class="fa-light fa-not-equal"></i> #}
+    {#            Comparer les descriptifs #}
+    {#        </a> #}
+    {#    {% endif %} #}
+
+    {#    {% if formation.isHasParcours == false and formation.parcours|length == 1 %} #}
+    {#        {% set parcours = formation.parcours[0] %} #}
+    {#        {{ include('btn/export_mccc.html.twig') }} #}
+    {#        <div class="btn-group"> #}
+    {#            <button type="button" #}
+    {#                    class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2 dropdown-toggle mb-1" #}
+    {#                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> #}
+    {#                <i class="{{ iconDownload }}"></i> BCC #}
+    {#            </button> #}
+    {#            <div class="dropdown-menu" style=""> #}
+    {#                <a class="dropdown-item" href="{{ path('app_parcours_bcc', {parcours:parcours.id}) }}"> #}
+    {#                    Voir en ligne #}
+    {#                </a> #}
+    {#                <a class="dropdown-item" href="{{ path('app_competence_export_bcc', {parcours:parcours.id}) }}"> #}
+    {#                    Export des BCC (pdf) #}
+    {#                </a> #}
+    {#                <a class="dropdown-item" href="{{ path('app_competence_export_croise', {parcours:parcours.id}) }}"> #}
+    {#                    Export du tableau croisé BCC/EC, par semestre (pdf) #}
+    {#                </a> #}
+    {#                <a class="dropdown-item" #}
+    {#                   href="{{ path('app_competence_export_croise_global', {parcours:parcours.id}) }}"> #}
+    {#                    Export du tableau croisé BCC/EC, global (xslx) #}
+    {#                </a> #}
+    {#            </div> #}
+    {#        </div> #}
+    {#        <div class="btn-group"> #}
+    {#            <button type="button" #}
+    {#                    class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2 dropdown-toggle mb-1" #}
+    {#                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> #}
+    {#                <i class="{{ iconShow }}"></i> Voir / Télécharger #}
+    {#            </button> #}
+    {#            <div class="dropdown-menu" style=""> #}
+    {#                <a href="{{ path('app_formation_export', {slug:formation.slug}) }}" #}
+    {#                   class="dropdown-item" #}
+    {#                   data-bs-toggle="tooltip" #}
+    {#                   data-bs-placement="bottom" #}
+    {#                   title="Télécharger en PDF" #}
+    {#                > #}
+    {#                    <i class="{{ iconDownload }}"></i> #}
+    {#                    <span> Fiche descriptive (PDF)</span> #}
+    {#                </a> #}
+
+    {#                <a href="{{ path('app_plaquette_formation_export', {slug:formation.slug}) }}" #}
+    {#                   class="dropdown-item" #}
+    {#                   data-bs-toggle="tooltip" #}
+    {#                   data-bs-placement="bottom" #}
+    {#                   title="Télécharger la plaquette en PDF" #}
+    {#                > #}
+    {#                    <i class="{{ iconDownload }}"></i> #}
+    {#                    <span> Plaquette (PDF)</span> #}
+    {#                </a> #}
+    {#            </div> #}
+    {#        </div> #}
+    {#    {% else %} #}
+    {#        <div class="btn-group"> #}
+    {#            <button type="button" #}
+    {#                    class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2 dropdown-toggle mb-1" #}
+    {#                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> #}
+    {#                <i class="{{ iconShow }}"></i> Voir / Télécharger #}
+    {#            </button> #}
+    {#            <div class="dropdown-menu" style=""> #}
+    {#                <a class="dropdown-item" #}
+    {#                   href="#presentation" #}
+    {#                   data-bs-toggle="tooltip" #}
+    {#                   data-bs-placement="bottom" #}
+    {#                   title="Télécharger les MCCC" #}
+    {#                > #}
+    {#                    <i class="{{ iconShow }}"></i> #}
+    {#                    <span> MCCC Parcours</span> #}
+    {#                </a> #}
+    {#                <a href="#presentation" #}
+    {#                   class="dropdown-item" #}
+    {#                   data-bs-toggle="tooltip" #}
+    {#                   data-bs-placement="bottom" #}
+    {#                   title="Voir les BCC" #}
+    {#                > #}
+    {#                    <i class="{{ iconShow }}"></i> #}
+    {#                    <span> BCC Parcours</span> #}
+    {#                </a> #}
+    {#                <a href="{{ path('app_formation_export', {slug:formation.slug}) }}" #}
+    {#                   class="dropdown-item" #}
+    {#                   data-bs-toggle="tooltip" #}
+    {#                   data-bs-placement="bottom" #}
+    {#                   title="Télécharger en PDF" #}
+    {#                > #}
+    {#                    <i class="{{ iconDownload }}"></i> #}
+    {#                    <span> Fiche descriptive (PDF)</span> #}
+    {#                </a> #}
+
+    {#                <a href="{{ path('app_plaquette_formation_export', {slug:formation.slug}) }}" #}
+    {#                   class="dropdown-item" #}
+    {#                   data-bs-toggle="tooltip" #}
+    {#                   data-bs-placement="bottom" #}
+    {#                   title="Télécharger la plaquette en PDF" #}
+    {#                > #}
+    {#                    <i class="{{ iconDownload }}"></i> #}
+    {#                    <span> Plaquette (PDF)</span> #}
+    {#                </a> #}
+    {#            </div> #}
+    {#        </div> #}
+    {#    {% endif %} #}
+
+    {% if formation.hasParcours == true %}
+        {% if (is_granted('EDIT', {route: 'app_formation', subject: formation})
+            or is_granted('EDIT', {route: 'app_composante', subject: formation})
+            or is_granted('EDIT', {route: 'app_etablissement', subject: formation})
+            or is_granted('ROLE_ADMIN')) and isOuvert(formation) %}
+            <a href="{{ path('app_formation_edit', {slug:formation.slug}) }}"
+               class="btn btn-sm btn-outline-warning btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+               data-bs-toggle="tooltip"
+               data-bs-placement="bottom"
+               title="Modifier le DPE"
+            >
+                <i class="{{ iconEdit }}"></i>
+                <span> Modifier le DPE</span>
+            </a>
+        {% endif %}
+
+    {% else %}
+        {% if (is_granted('EDIT', {route: 'app_formation', subject: formation})
+            or is_granted('EDIT', {route: 'app_composante', subject: formation})
+            or is_granted('EDIT', {route: 'app_etablissement', subject: formation})
+            or is_granted('ROLE_ADMIN')) and isOuvert(formation.parcours[0].dpeParcours[0]) %}
+            <a href="{{ path('app_formation_edit', {slug:formation.slug}) }}"
+               class="btn btn-sm btn-outline-warning btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+               data-bs-toggle="tooltip"
+               data-bs-placement="bottom"
+               title="Modifier le DPE"
+            >
+                <i class="{{ iconEdit }}"></i>
+                <span> Modifier le DPE</span>
+            </a>
+        {% endif %}
+    {% endif %}
+
+    <a href="{{ path('app_formation_index') }}"
+       class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+       data-bs-toggle="tooltip"
+       data-bs-placement="bottom"
+       title="Retour à la liste des formations"
+    >
+        <i class="{{ iconBack }}"></i>
+        <span> Retour à la liste des formations</span>
+    </a>
+{% endblock %}

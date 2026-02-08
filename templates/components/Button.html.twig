@@ -1,0 +1,14 @@
+<div{{ attributes }}>
+    <!-- component HTML -->
+    <button type="submit"
+            class="rounded-lg bg-{{ color }}-600 text-white px-4 py-2 font-semibold"
+            {% if form != '' %}
+                form="{{ form }}"
+            {% endif %}
+    >
+        {% if icon != '' %}
+            <i class="{{ icon }}"></i>
+        {% endif %}
+        {{ submitLabel != '' ? submitLabel : 'Enregistrer' }}
+    </button>
+</div>

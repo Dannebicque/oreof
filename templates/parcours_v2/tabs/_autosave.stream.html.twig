@@ -1,7 +1,7 @@
 <turbo-stream action="replace" target="tab_badge_{{ tabKey }}">
     <template>
         <div id="tab_badge_{{ tabKey }}">
-            {{ include('parcours_v2/tabs/_badge.html.twig', { tabKey: tabKey, status: status }) }}
+            {{ include('communs/_badge.html.twig', { tabKey: tabKey, status: status }) }}
         </div>
     </template>
 </turbo-stream>
@@ -17,7 +17,7 @@
 <turbo-stream action="replace" target="tab_issues_{{ tabKey }}">
     <template>
         <div id="tab_issues_{{ tabKey }}" data-controller="issues">
-            {{ include('parcours_v2/tabs/_issues.html.twig', { issues: issues }) }}
+            {{ include('communs/_issues.html.twig', { issues: issues }) }}
         </div>
     </template>
 </turbo-stream>

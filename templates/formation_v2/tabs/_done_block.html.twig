@@ -1,0 +1,37 @@
+{% set warn = (status == 'orange') %}
+{% set disabled = (status == 'red') %}
+
+{% if warn %}
+    {% set color = 'amber' %}
+{% elseif disabled %}
+    {% set color = 'red' %}
+{% else %}
+    {% set color = 'green' %}
+{% endif %}
+
+
+<div class="mt-4 p-3 rounded-sm bg-{{ color }}-50 ring-1 ring-{{ color }}-200">
+    <form
+            data-controller="tab-done"
+            data-tab-done-url-value="{{ path('formation_v2_tab_done', {id: formation.id, tabKey: tabKey}) }}"
+            data-action="change->tab-done#toggle"
+    >
+        <input type="hidden" name="_token"
+               value="{{ csrf_token('formation_tab_done_' ~ formation.id ~ '_' ~ tabKey) }}">
+
+        <label class="flex items-center gap-2">
+            <input type="checkbox" name="done" value="1" {{ done ? 'checked' : '' }}>
+            <span class="font-medium">{% if disabled %}Indiquer les champs manquants/en erreur{% else %}J’ai terminé {% endif %}</span>
+        </label>
+
+        <p class="text-xs mt-1 text-{{ color }}-700">
+            {% if status == 'red' %}
+                Il manque des informations ou certains champs sont invalides.
+            {% elseif status == 'orange' %}
+                Tout est complet — cocher pour valider l’onglet.
+            {% else %}
+                Onglet validé.
+            {% endif %}
+        </p>
+    </form>
+</div>

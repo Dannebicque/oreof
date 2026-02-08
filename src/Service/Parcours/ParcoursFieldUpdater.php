@@ -80,6 +80,10 @@ final readonly class ParcoursFieldUpdater
             'parcours_step2[nbHeuresSituationPro]' => fn(Parcours $p, $v) => $p->setNbHeuresSituationPro($this->toFloatOrNull($v)),
             'parcours_step2[situationProText]' => fn(Parcours $p, $v) => $p->setSituationProText($this->toString($v)),
 
+            // ----------------- STEP 3 (Structure maquette) -----------------
+            'parcours_step3[semestreDebut]' => fn(Parcours $p, $v) => $p->setSemestreDebut($this->toIntOrNull($v)),
+            'parcours_step3[semestreFin]' => fn(Parcours $p, $v) => $p->setSemestreFin($this->toIntOrNull($v)),
+
             // ----------------- STEP 5 (admission) -----------------
             'parcours_step5[niveauFrancais]' => function (Parcours $p, $v) {
                 $p->setNiveauFrancais($this->toEnumOrNull(NiveauLangueEnum::class, $v));
@@ -130,6 +134,10 @@ final readonly class ParcoursFieldUpdater
                 'parcours_step2[hasSituationPro]',
                 'parcours_step2[nbHeuresSituationPro]',
                 'parcours_step2[situationProText]',
+            ],
+            'maquette' => [
+                'parcours_step3[semestreDebut]',
+                'parcours_step3[semestreFin]',
             ],
             'admission' => [
                 'parcours_step5[niveauFrancais]',
@@ -282,6 +290,17 @@ final readonly class ParcoursFieldUpdater
         }
 
         return array_values($uniq);
+    }
+
+    private function toIntOrNull(mixed $v): ?int
+    {
+        if ($v === null) {
+            return null;
+        }
+        if (\is_string($v) && trim($v) === '') {
+            return null;
+        }
+        return (int)$v;
     }
 
 }

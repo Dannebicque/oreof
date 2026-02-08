@@ -2,13 +2,31 @@
     {% for key, etape in this.process %}
         {% if (etape.showOn is defined and etape.showOn != false) or etape.showOn is not defined %}
             {% set class =  this.stateProcess(key) %}
-            <button class="btn btn-sm btn-icon btn-icon-only {{ class.color }} ms-1" type="button"
-                    data-controller="tooltip" data-tooltip-placement-value="bottom"
-                    aria-label="{{ etape.label|trans({}, 'process') }}"
-                    data-bs-original-title="{{ (etape.label~'.'~class.color)|trans({}, 'process') }}"
-            >
-                <i class="fal {{ etape.icon }}"></i>
-            </button>
+            {% if mode == 'liste' %}
+                <button class="btn btn-sm btn-icon btn-icon-only btn-{{ class.color }} ms-1" type="button"
+                        data-controller="tooltip" data-tooltip-placement-value="bottom"
+                        aria-label="{{ etape.label|trans({}, 'process') }}"
+                        data-bs-original-title="{{ (etape.label~'.'~class.color)|trans({}, 'process') }}"
+                >
+                    <i class="fal {{ etape.icon }}"></i>
+                </button>
+            {% else %}
+                <div class="d-flex align-items-center">
+                    <div class="rounded-circle d-flex align-items-center justify-content-center
+                                bg-{{ class.color }}-subtle text-{{ class.color }} bubble-process"
+                         data-controller="tooltip" data-tooltip-placement-value="bottom"
+                         aria-label="{{ etape.label|trans({}, 'process') }}"
+                         data-bs-original-title="{{ (etape.label~'.'~class.color)|trans({}, 'process') }}"
+                    >
+                        <i class="fas {{ etape.icon }} small"></i>
+                    </div>
+                    {% if not loop.last %}
+                        <div class="bg-{{ class.color }} bg-opacity-25"
+                             style="width: 16px; height: 2px; margin: 0 4px;">
+                        </div>
+                    {% endif %}
+                </div>
+            {% endif %}
         {% endif %}
     {% endfor %}
 </div>

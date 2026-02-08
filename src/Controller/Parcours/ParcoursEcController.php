@@ -146,18 +146,134 @@ class ParcoursEcController extends BaseController
             return $this->json(true);
         }
 
-//        // todo: modal
-//        return $this->render('element_constitutif/new.html.twig', [
-//            'elementConstitutif' => $elementConstitutif,
-//            'form' => $form->createView(),
-//            'ue' => $ue,
-//            'parcours' => $parcours,
-//            'isAdmin' => $isAdmin,
-//        ]);
-
         return $turboStream->streamOpenModalFromTemplates(
             'Ajouter une EC',
             'Dans l\UE ' . $ue->display(),
+            'parcours_v2/ec/_new.html.twig',
+            [
+                'elementConstitutif' => $elementConstitutif,
+                'form' => $form->createView(),
+                'ue' => $ue,
+                'parcours' => $parcours,
+                'isAdmin' => $isAdmin,
+            ],
+            '_ui/_footer_submit_cancel.html.twig',
+            [
+                'submitLabel' => 'Créer l\'EC',
+            ]
+        );
+
+
+    }
+
+
+    #[Route('/{parcours}/modifier-ec/{elementConstitutif}', name: '_modifier_ec_ue', methods: ['GET', 'POST'])]
+    public function modifier(
+        TurboStreamResponseFactory   $turboStream,
+        NatureUeEcRepository         $natureUeEcRepository,
+        EcOrdre                      $ecOrdre,
+        Request                      $request,
+        TypeEcRepository             $typeEcRepository,
+        FicheMatiereRepository       $ficheMatiereRepository,
+        ElementConstitutifRepository $elementConstitutifRepository,
+        ElementConstitutif           $elementConstitutif,
+        Parcours                     $parcours
+    ): Response
+    {
+        $isAdmin = $this->isGranted('ROLE_ADMIN');
+        $typeDiplome = $parcours->getFormation()?->getTypeDiplome();
+        $ue = $elementConstitutif->getUe();
+
+        $form = $this->createForm(ElementConstitutifType::class, $elementConstitutif, [
+            'action' => $this->generateUrl(
+                'parcours_ec_ajouter_ec_ue',
+                ['ue' => $ue->getId(), 'parcours' => $parcours->getId(), 'element' => $request->query->get('element')]
+            ),
+            'typeDiplome' => $typeDiplome,
+            'formation' => $parcours->getFormation(),
+            'isAdmin' => $isAdmin
+        ]);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            if ($form->get('typeEcTexte')->getData() !== null && $form->get('typeEc')->getData() === null) {
+                $tu = new TypeEc();
+                $tu->setLibelle($form->get('typeEcTexte')->getData());
+                $tu->addTypeDiplome($typeDiplome);
+                $tu->setFormation($parcours->getFormation());
+                $typeEcRepository->save($tu, true);
+                $elementConstitutif->setTypeEc($tu);
+            }
+
+            if ($elementConstitutif->getNatureUeEc()?->isChoix() === false and $elementConstitutif->getNatureUeEc()?->isLibre() === false) {
+                if (str_starts_with($request->request->get('ficheMatiere'), 'id_')) {
+                    $ficheMatiere = $ficheMatiereRepository->find((int)str_replace(
+                        'id_',
+                        '',
+                        $request->request->get('ficheMatiere')
+                    ));
+                } else {
+                    $ficheMatiere = new FicheMatiere();
+                    $ficheMatiere->setCampagneCollecte($this->getCampagneCollecte());
+                    $ficheMatiere->setLibelle($request->request->get('ficheMatiereLibelle'));
+                    $ficheMatiere->setParcours($parcours);
+                    $ficheMatiereRepository->save($ficheMatiere, true);
+                }
+                $lastEc = $ecOrdre->getOrdreSuivant($ue, $request);
+                $elementConstitutif->setFicheMatiere($ficheMatiere);
+                $elementConstitutif->setOrdre($lastEc);
+                $elementConstitutif->genereCode();
+                $elementConstitutifRepository->save($elementConstitutif, true);
+            } elseif ($elementConstitutif->getNatureUeEc()?->isChoix() === true) {
+                $lastEc = $ecOrdre->getOrdreSuivant($ue, $request);
+                $elementConstitutif->setLibelle($request->request->get('ficheMatiereLibre'));
+                $elementConstitutif->setFicheMatiere(null);
+                $elementConstitutif->setOrdre($lastEc);
+                $elementConstitutif->genereCode();
+                $elementConstitutifRepository->save($elementConstitutif, true);
+                //on récupère le champs matières, on découpe selon la ,. Si ca commence par "id_", on récupère la matière, sinon on créé la matière
+                $matieres = explode(',', $request->request->get('matieres'));
+                $natureEc = $natureUeEcRepository->findOneBy(['choix' => false, 'libre' => false, 'type' => 'ec']);
+                foreach ($matieres as $matiere) {
+                    $ec = new ElementConstitutif();
+                    $nextSousEc = $ecOrdre->getOrdreEnfantSuivant($elementConstitutif);
+                    $ec->setEcParent($elementConstitutif);
+                    $ec->setParcours($parcours);
+                    $ec->setModaliteEnseignement($parcours?->getModalitesEnseignement());
+                    $ec->setUe($ue);
+                    $ec->setNatureUeEc($natureEc);
+
+                    if (str_starts_with($matiere, 'id_')) {
+                        $ficheMatiere = $ficheMatiereRepository->find((int)str_replace('id_', '', $matiere));
+                    } else {
+                        $ficheMatiere = new FicheMatiere();
+                        $ficheMatiere->setCampagneCollecte($this->getCampagneCollecte());
+                        $ficheMatiere->setLibelle(str_replace('ac_', '', $matiere));
+                        $ficheMatiere->setParcours($parcours); //todo: ajouter le semestre
+                        $ficheMatiereRepository->save($ficheMatiere, true);
+                    }
+
+                    $ec->setFicheMatiere($ficheMatiere);
+                    $ec->setOrdre($nextSousEc);
+                    $ec->genereCode();
+                    $elementConstitutifRepository->save($ec, true);
+                }
+            } else {
+                $lastEc = $ecOrdre->getOrdreSuivant($ue, $request);
+                $elementConstitutif->setTexteEcLibre($request->request->get('ficheMatiereLibre'));
+                $elementConstitutif->setLibelle($request->request->get('ficheMatiereLibreLibelle'));
+                $elementConstitutif->setOrdre($lastEc);
+                $elementConstitutif->genereCode();
+                $elementConstitutifRepository->save($elementConstitutif, true);
+            }
+
+            return $this->json(true);
+        }
+
+        return $turboStream->streamOpenModalFromTemplates(
+            'Modifier une EC',
+            'EC :  ' . $elementConstitutif->display(),
             'parcours_v2/ec/_new.html.twig',
             [
                 'elementConstitutif' => $elementConstitutif,

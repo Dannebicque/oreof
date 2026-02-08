@@ -96,7 +96,7 @@
                         Présentation formation
                     </span>
                     <span id="tab_badge_presentation_formation">
-                      {{ include('parcours_v2/tabs/_badge.html.twig', { tabKey: 'presentation_formation', status: tabStates['presentation_formation'].status ?? 'red' }) }}
+                      {{ include('communs/_badge.html.twig', { tabKey: 'presentation_formation', status: tabStates['presentation_formation'].status ?? 'red' }) }}
                     </span>
                 </a>
 
@@ -109,7 +109,7 @@
                         Présentation parcours
                     </span>
                     <span id="tab_badge_presentation">
-                      {{ include('parcours_v2/tabs/_badge.html.twig', { tabKey: 'presentation', status: tabStates['presentation'].status ?? 'red' }) }}
+                      {{ include('communs/_badge.html.twig', { tabKey: 'presentation', status: tabStates['presentation'].status ?? 'red' }) }}
                     </span>
                 </a>
 
@@ -123,7 +123,7 @@
                         Descriptif
                         </span>
                     <span id="tab_badge_descriptif">
-                      {{ include('parcours_v2/tabs/_badge.html.twig', { tabKey: 'descriptif', status: tabStates['descriptif'].status ?? 'red' }) }}
+                      {{ include('communs/_badge.html.twig', { tabKey: 'descriptif', status: tabStates['descriptif'].status ?? 'red' }) }}
                     </span>
                 </a>
 
@@ -148,7 +148,9 @@
                     <span class="flex items-center gap-3">
                         Structure Maquette
                     </span>
-                    <span class="w-2 h-2 bg-{{ parcours.colorStep(4) }}-500 rounded-full"></span>
+                    <span id="tab_badge_maquette">
+                      {{ include('communs/_badge.html.twig', { tabKey: 'maquette', status: tabStates['maquette'].status ?? 'red' }) }}
+                    </span>
                 </a>
 
                 <div id="sidebar-tree" class="space-y-2">
@@ -209,7 +211,7 @@
                         Admission & inscription
                         </span>
                     <span id="tab_badge_admission">
-                      {{ include('parcours_v2/tabs/_badge.html.twig', { tabKey: 'admission', status: tabStates['admission'].status ?? 'red' }) }}
+                      {{ include('communs/_badge.html.twig', { tabKey: 'admission', status: tabStates['admission'].status ?? 'red' }) }}
                     </span>
                 </a>
 
@@ -222,7 +224,7 @@
                         Et après...
                         </span>
                     <span id="tab_badge_et_apres">
-                      {{ include('parcours_v2/tabs/_badge.html.twig', { tabKey: 'et_apres', status: tabStates['et_apres'].status ?? 'red' }) }}
+                      {{ include('communs/_badge.html.twig', { tabKey: 'et_apres', status: tabStates['et_apres'].status ?? 'red' }) }}
                     </span>
                 </a>
                 {% if is_granted('ROLE_ADMIN') %}

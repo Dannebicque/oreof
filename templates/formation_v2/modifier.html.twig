@@ -1,0 +1,170 @@
+{% extends 'base.html.twig' %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://cdn.tailwindcss.com" defer></script>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        @layer components {
+            .is-chosen {
+                @apply ring-2 ring-indigo-400;
+            }
+
+            .is-ghost {
+                @apply opacity-50;
+            }
+
+            .is-dragging {
+                @apply cursor-grabbing;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% set header_title %}
+    <strong>{{ typeDiplome|typeDiplome }} <span id="synthese_formation_libelle">{{ formation.display }}</span></strong>
+{% endset %}
+
+{% block bouton_header %}
+    <a href="{{ path('app_formation_show', {slug:formation.slug}) }}"
+       class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+       data-bs-toggle="tooltip"
+       data-bs-placement="bottom"
+       title="Voir la formation"
+    >
+        <i class="{{ iconShow }}"></i>
+        <span>Voir la fiche descriptive</span>
+    </a>
+    <a href="{{ path('app_formation_index') }}"
+       class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+       data-bs-toggle="tooltip"
+       data-bs-placement="bottom"
+       title="Retour à la liste des formations"
+    >
+        <i class="{{ iconBack }}"></i>
+        <span> Retour à la liste des formations</span>
+    </a>
+{% endblock %}
+
+
+{% block breadcrumb %}
+    {{ include('communs/_breadcrumb.html.twig', {liens:[
+        {href: path('app_formation_index'), title: 'Liste des formations'},
+    ]}) }}
+{% endblock %}
+
+{% block content %}
+    <div id="flash_toasts" class="fixed bottom-4 right-4 z-50 w-[min(24rem,calc(100vw-2rem))]"></div>
+
+
+
+    <twig:FormationHeader formationId="{{ formation.id }}"/>
+
+    {% if formation.hasParcours == false %}
+        {# si la formation n'a pas de parcours i.e. parcours par défaut, alors on affiche le menu aussi du parcours pour le processus. #}
+        <twig:ParcoursHeader formationId="{{ formation.id }}" parcoursId="{{ formation.parcours[0].id }}"/>
+    {% endif %}
+
+    <div class="flex">
+        <aside class="w-72 bg-white rounded-md shadow-md border-slate-200 flex flex-col p-3 space-y-8">
+            <nav class="flex-1 space-y-1">
+                <p class="text-[10px] font-black text-slate-400 uppercase mb-4 tracking-widest px-3">Configuration
+                    Formation</p>
+
+                <div class="p-6 bg-gray-200" id="pecent_completude">{# a mettre à jour avec turbo #}
+                    {% set percent = formation.remplissage.calcul() %}
+                    {% set percentColor = formation.remplissage.isFull() == true ? 'green' : 'orange' %}
+                    <div class="flex justify-between items-end mb-2">
+                        <span class="text-[10px] font-bold uppercase tracking-widest text-slate-500">Complétude Formation</span>
+                        <span class="text-xs font-bold text-{{ percentColor }}-600 italic">{{ percent|number_format(2) }}%</span>
+                    </div>
+                    <div class="w-full h-1 bg-slate-700 rounded-full overflow-hidden">
+                        <div class="bg-{{ percentColor }}-500 h-full w-[{{ percent|number_format(0) }}%]"></div>
+                    </div>
+                </div>
+
+                <a class="nav-link w-full flex items-center justify-between p-3 rounded-2xl text-sm font-bold text-slate-500 hover:bg-white transition group"
+                   href="{{ path('formation_v2_tabs', { formation: formation.id, tab: 'localisation' }) }}"
+                   data-turbo-frame="tab-content"
+                   data-turbo-action="advance"
+                   data-tabs-target="tab">
+                    <span class="flex items-center gap-3">
+                        Localisation de la formation
+                    </span>
+                    <span id="tab_badge_localisation">
+                      {{ include('communs/_badge.html.twig', { tabKey: 'localisation', status: tabStates['localisation'].status ?? 'red' }) }}
+                    </span>
+                </a>
+
+                <a class="nav-link w-full flex items-center justify-between p-3 rounded-2xl text-sm font-bold text-slate-500 hover:bg-white transition group"
+                   href="{{ path('formation_v2_tabs', { formation: formation.id, tab: 'presentation' }) }}"
+                   data-turbo-frame="tab-content"
+                   data-turbo-action="advance"
+                   data-tabs-target="tab">
+                    <span class="flex items-center gap-3">
+                        Présentation de la formation
+                    </span>
+                    <span id="tab_badge_presentation">
+                      {{ include('communs/_badge.html.twig', { tabKey: 'presentation', status: tabStates['presentation'].status ?? 'red' }) }}
+                    </span>
+                </a>
+
+                <a class="nav-link w-full flex items-center justify-between p-3 rounded-2xl text-sm font-bold text-slate-500 hover:bg-white transition group"
+                   href="{{ path('formation_v2_tabs', { formation: formation.id, tab: 'structure' }) }}"
+                   data-turbo-frame="tab-content"
+                   data-turbo-action="advance"
+                   data-tabs-target="tab">
+                    <span class="flex items-center gap-3">
+                        Structure de la formation
+                    </span>
+                    <span id="tab_badge_structure">
+                      {{ include('communs/_badge.html.twig', { tabKey: 'structure', status: tabStates['structure'].status ?? 'red' }) }}
+                    </span>
+                </a>
+
+                {#                <a class="nav-link w-full flex items-center justify-between p-3 rounded-2xl text-sm font-bold text-slate-500 hover:bg-white transition group" #}
+                {#                   href="{{ path('parcours_v2_tabs', { parcours: parcours.id, tab: 'presentation' }) }}" #}
+                {#                   data-turbo-frame="tab-content" #}
+                {#                   data-turbo-action="advance" #}
+                {#                   data-tabs-target="tab"> #}
+                {#                    <span class="flex items-center gap-3"> #}
+                {#                        Présentation parcours #}
+                {#                    </span> #}
+                {#                    <span id="tab_badge_presentation"> #}
+                {#                      {{ include('parcours_v2/tabs/_badge.html.twig', { tabKey: 'presentation', status: tabStates['presentation'].status ?? 'red' }) }} #}
+                {#                    </span> #}
+                {#                </a> #}
+
+                {% if is_granted('ROLE_ADMIN') %}
+                    {#                    <div class="pt-8"> #}
+                    {#                        <a class="w-full flex items-center gap-3 p-3 rounded-2xl text-sm font-bold text-slate-400 hover:text-slate-800 transition" #}
+                    {#                           href="{{ path('parcours_v2_tabs', { parcours: parcours.id, tab: 'configuration' }) }}" #}
+                    {#                           data-turbo-frame="tab-content" #}
+                    {#                           data-turbo-action="advance" #}
+                    {#                           data-tabs-target="tab"> #}
+                    {#                        <span> #}
+                    {#                        <i class="fal fa-cogs"></i> Configuration Admin. #}
+                    {#                            </span> #}
+                    {#                        </a> #}
+                    {#                    </div> #}
+                {% endif %}
+            </nav>
+        </aside>
+
+        <div class="p-3 flex-1 overflow-y-auto bg-white ms-2 rounded-md shadow-md border-slate-200 flex flex-col">
+            <turbo-frame
+                    id="tab-content"
+            >
+                {% if tab is defined %}
+                    {% include 'formation_v2/tabs/_' ~ tab ~ '.html.twig' %}
+                {% else %}
+                    <div>Sélectionnez un onglet.</div>
+                {% endif %}
+
+            </turbo-frame>
+        </div>
+    </div>
+{% endblock %}

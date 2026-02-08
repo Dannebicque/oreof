@@ -25,6 +25,8 @@ class FormationStateComponent
     public array $process;
     public Formation $formation;
 
+    public string $mode = 'liste'; //liste mode classique sur le dashboard, process, dans le header
+
     public function __construct(
         #[Target('dpeParcours')]
         private readonly WorkflowInterface             $dpeParcoursWorkflow,

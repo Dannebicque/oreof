@@ -164,6 +164,7 @@ class ParcoursTabCompletionChecker
         return match ($tabKey) {
             'presentation' => $this->presentationIssues($p),
             'descriptif' => $this->descriptifIssues($p),
+            'maquette' => $this->maquetteIssues($p), //structure semestre début/fin uniquement
             'admission' => $this->admissionIssues($p),
             'et_apres' => $this->etApresIssues($p),
             default => [],
@@ -299,6 +300,20 @@ class ParcoursTabCompletionChecker
         }
         if (!$this->filled($p->getDebouches())) {
             $issues[] = new TabIssue('parcours_step6[debouches]', 'Débouchés', 'Renseigne les débouchés.');
+        }
+
+        return $issues;
+    }
+
+    private function maquetteIssues(Parcours $p): array
+    {
+        $issues = [];
+
+        if (!$this->filled($p->getSemestreDebut())) {
+            $issues[] = new TabIssue('parcours_step3[semestreDebut]', 'Semestre de départ', 'Renseignez le semestre de départ du parcours (ex: S1 => 1, ...).');
+        }
+        if (!$this->filled($p->getSemestreFin())) {
+            $issues[] = new TabIssue('parcours_step3[semestreFin]', 'Semestre de fin', 'Renseignez le semestre de fin du parcours (ex: S6 => 6, ...).');
         }
 
         return $issues;

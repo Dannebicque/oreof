@@ -1,0 +1,16 @@
+<div class="row">
+    <div class="col-12">
+        <dl>
+            <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Niveau de français requis</dt>
+            <dd>{{ parcours.niveauFrancais != null ? parcours.niveauFrancais.libelle : 'Non précisé' }}</dd>
+            <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Prérequis recommandés</dt>
+            <dd>{{ parcours.prerequis|raw }}</dd>
+            {% if stringDifferencesParcours.prerequisRecommandesParcours is defined %}
+                {{ include("communs/_comparaison_versioning_no_button.html.twig", {
+                    textDifferences: stringDifferencesParcours.prerequisRecommandesParcours,
+                    idCollapse: "diffGlobalParcours"
+                }) }}
+            {% endif %}
+        </dl>
+    </div>
+</div>

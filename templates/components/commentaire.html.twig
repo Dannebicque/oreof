@@ -1,4 +1,4 @@
-<div{{ attributes }}>
+<div {{ attributes }}>
     <button
             {{ stimulus_controller('modal', {
                 size: 'large',
@@ -16,7 +16,7 @@
             data-bs-placement="bottom"
             title="Mettre un commentaire"
             type="button"
-            class="btn btn-foreground hover-outline btn-icon btn-icon-only btn-sm position-absolute e-0 t-0 me-card mt-card z-index-1"
+            class="inline-flex items-center justify-center w-9 h-9 p-2 rounded-xl bg-white text-slate-700 border border-slate-100 shadow-sm hover:shadow-md transition z-10"
     >
         <i class="fal {% if this.hasComments %}fa-comment-lines{% else %}fa-comment{% endif %}"></i>
     </button>

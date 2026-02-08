@@ -17,13 +17,10 @@ export default class extends Controller {
   }
 
   close () {
-
     this.wrapperTarget.classList.add('hidden')
     document.documentElement.classList.remove('overflow-hidden')
   }
 
-  // static targets = ["wrapper", "frame"]
-  //
   connect () {
     this.closeHandler = () => this.close()
     window.addEventListener('modal:close', this.closeHandler)
@@ -32,20 +29,5 @@ export default class extends Controller {
   disconnect () {
     window.removeEventListener('modal:close', this.closeHandler)
   }
-
-  //
-  // open(event) {
-  //   const url = event.currentTarget.dataset.modalUrl;
-  //   if (!url) return;
-  //   // show wrapper and load turbo-frame content
-  //   this.wrapperTarget.classList.remove('hidden');
-  //   this.frameTarget.src = url;
-  // }
-  //
-  // hide() {
-  //   // clear frame and hide wrapper
-  //   try { this.frameTarget.removeAttribute('src'); } catch(e){}
-  //   this.wrapperTarget.classList.add('hidden');
-  // }
 }
 

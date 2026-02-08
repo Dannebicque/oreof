@@ -1,14 +1,18 @@
 {% extends 'base.html.twig' %}
 
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://cdn.tailwindcss.com" defer></script>
+{% endblock %}
+
 {% block content %}
     <div class="card"
             {{ stimulus_controller('formation', {
                 url: path('app_formation_api'),
-                urlUser: path('api_user_get_user')
             }) }}
     >
         <div class="card-body">
-            {% form_theme form 'communs/form_theme.html.twig' %}
+            {% form_theme form 'communs/form_theme_v2.html.twig' %}
             {{ form_start(form) }}
             <div class="row">
                 <div class="col-6">{{ form_row(form.typeDiplome) }}</div>
@@ -26,15 +30,13 @@
                 <div class="col-4">{{ form_row(form.codeMentionApogee) }}</div>
 
                 <div class="col-12">{{ form_row(form.responsableMention) }}</div>
-                <div class="col-12" {{ stimulus_target('formation', 'user') }}>
-                    <i>.:: Choisir le responsable pour afficher ses informations ::.</i>
-                </div>
             </div>
 
-            <button class="btn btn-success">
-                <i class="fal fa-floppy-disk"></i>
-                Enregistrer
-            </button>
+            <twig:Button icon="fal fa-floppy-disk"/>
+            {#            <button class="btn btn-success"> #}
+            {#                <i class="fal fa-floppy-disk"></i> #}
+            {#                Enregistrer #}
+            {#            </button> #}
 
             {{ component('alerte', {type:"info", message:'tous les champs avec un <span class="text-red">*</span> sont
 obligatoires'}) }}

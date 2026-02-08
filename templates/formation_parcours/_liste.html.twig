@@ -46,12 +46,12 @@
                     {#                        <span> Modifier le libellé/Responsable du parcours</span> #}
                     {#                    </button> #}
                     {% if constant('SOURCE', typeDiplome) != 'meef' %}
-                        <a href="{{ path('app_parcours_edit', {id:parcour.id}) }}"
+                        <a href="{{ path('parcours_v2_modifier', {parcours:parcour.id}) }}"
                            class="btn btn-sm text-warning btn-icon"
                            target="_blank"
                         >
                             <i class="{{ iconEdit }}"></i>
-                            Editer la fiche du parcours
+                            Modifier la fiche du parcours
                         </a>
                     {% endif %}
                     <a href="#"

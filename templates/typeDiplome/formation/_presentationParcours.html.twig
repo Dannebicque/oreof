@@ -65,7 +65,7 @@
             {% endif %}
             <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Précisions sur le rythme de formation</dt>
             <dd>
-                {% if parcours.rythmeFormationTexte != null and parcours.rythmeFormationTexte.trim != '' %}
+                {% if parcours.rythmeFormationTexte != null and parcours.rythmeFormationTexte != '' %}
                     {{ parcours.rythmeFormationTexte|printTexte }}
                 {% else %}
                     <span class="px-2 py-1 bg-orange-50 rounded-lg text-xs font-bold text-orange-600">

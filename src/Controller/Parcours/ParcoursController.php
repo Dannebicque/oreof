@@ -17,6 +17,7 @@ use App\Entity\SemestreParcours;
 use App\Form\FormationStep2Type;
 use App\Form\ParcoursStep1Type;
 use App\Form\ParcoursStep2Type;
+use App\Form\ParcoursStep3Type;
 use App\Form\ParcoursStep5Type;
 use App\Form\ParcoursStep6Type;
 use App\Form\ParcoursStep7Type;
@@ -234,7 +235,9 @@ class ParcoursController extends BaseController
                 $texte_help = 'Indiquez les éléments du parcours';
                 break;
             case 'maquette':
-                $form = $this->createForm(ParcoursStep1Type::class, $parcours);
+                $form = $this->createForm(ParcoursStep3Type::class, $parcours, [
+                    'typeDiplome' => $parcours->getFormation()?->getTypeDiplome()
+                ]);
                 $tabView = 'maquette';
                 $titre = 'Structure de la maquette';
                 $texte_help = '...??...';

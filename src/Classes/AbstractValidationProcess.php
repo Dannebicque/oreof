@@ -20,6 +20,16 @@ abstract class AbstractValidationProcess
         return $this->process;
     }
 
+    public function getProcessForListe(): array
+    {
+        $tab = [];
+        foreach ($this->process as $cle => $etape) {
+            $tab['workflow.' . $etape['label']] = $cle;
+        }
+
+        return $tab;
+    }
+
     public function getProcessAll(): array
     {
         return $this->processAll;

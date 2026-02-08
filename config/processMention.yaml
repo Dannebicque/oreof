@@ -6,43 +6,67 @@ process:
     isTimeline: false
     transition: 'en_cours_redaction'
     check: true
+    button_class: 'success'
+    button_icon: 'fa-check'
+    description: '--'
   parcours:
     icon: 'fa-paper-plane'
     label: 'validation.parcours'
     isTimeline: false
     transition: 'en_cours_redaction'
     check: true
+    button_class: 'success'
+    button_icon: 'fa-check'
+    description: '--'
   formation:
     icon: 'fa-file-circle-check'
     label: 'validation.formation'
     isTimeline: false
     transition: 'en_cours_redaction'
     check: true
+    button_class: 'success'
+    button_icon: 'fa-check'
+    description: '--'
   dpe:
     icon: 'fa-check-to-slot'
     label: 'validation.dpe'
     isTimeline: true
     showOn: false
     transition: 'soumis_dpe_composante'
+    button_class: 'success'
+    button_icon: 'fa-check'
+    description: '--'
   conseil:
     icon: 'fa-people-line'
     label: 'validation.conseil'
     isTimeline: true
     showOn: false
     transition: 'soumis_conseil'
+    button_class: 'success'
+    button_icon: 'fa-check'
+    description: '--'
   change_rf:
     icon: 'fa-person-chalkboard'
     label: 'validation.change_rf'
     isTimeline: false
     transition: 'soumis_cfvu'
+    button_class: 'success'
+    button_icon: 'fa-check'
+    description: '--'
   cfvu:
     icon: 'fa-stamp'
     label: 'validation.cfvu'
     isTimeline: true
     showOn: false
     transition: 'soumis_cfvu'
+    button_class: 'success'
+    button_icon: 'fa-check'
+    description: '--'
   publication:
     icon: 'fa-bullhorn'
     label: 'validation.publication'
     isTimeline: true
     transition: 'valide_pour_publication'
+    button_class: 'success'
+    button_icon: 'fa-check'
+    description: '--'

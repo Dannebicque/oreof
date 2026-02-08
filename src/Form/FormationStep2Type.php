@@ -12,6 +12,7 @@ namespace App\Form;
 use App\Entity\Formation;
 use App\Entity\RythmeFormation;
 use App\Form\Type\TextareaAutoSaveType;
+use App\Form\Type\YesNoType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;

@@ -244,6 +244,7 @@ framework:
             description: 'Permet à l''équipe pédagogique de commencer la saisie'
             button_class: 'success'
             button_icon: 'fa-play'
+            type: valider
         valider_parcours: # Soumettre du resp de parcours vers formation
           from: 'en_cours_redaction'
           to: 'soumis_parcours'
@@ -509,6 +510,8 @@ framework:
             button_class: 'success'
             button_icon: 'fa-check'
             description: 'Validation par la CFVU avec des réserves'
+            hasArgumentaire: true
+            hasDate: true
         transmetre_reserve_cfvu:
           from: 'soumis_dpe_composante_reserve_cfvu'
           to: 'soumis_central_reserve_cfvu'
@@ -534,6 +537,8 @@ framework:
             button_class: 'success'
             button_icon: 'fa-check'
             description: '--'
+            hasArgumentaire: true
+            hasDate: true
         valider_reserve_central_cfvu:
           from: 'soumis_conseil_reserve'
           to: 'valide_cfvu'
@@ -596,6 +601,7 @@ framework:
           from: 'publie'
           to: 'tacite_reconduction'
           metadata:
+            type: reouvrir
             button_class: 'warning'
             button_icon: 'fa-undo'
             description: 'Relancer le parcours pour la nouvelle année'
@@ -605,6 +611,7 @@ framework:
           metadata:
             recipients: [ 'DPE', 'RF', 'CoRF', 'RP', 'CoRP' ]
             label: 'Réouvrir pour modification'
+            type: 'reouvrir'
             description: 'Réouvrir le parcours reconduit pour modifications'
             button_class: 'info'
             button_icon: 'fa-pencil'
@@ -616,6 +623,7 @@ framework:
             label: 'Réouvrir (MCCC)'
             description: 'Réouvrir pour modification des MCCC'
             button_class: 'info'
+            type: 'reouvrir'
             button_icon: 'fa-pencil'
         reouvrir_avant_publie:
           from: 'valide_a_publier'
@@ -626,6 +634,7 @@ framework:
             description: 'Réouvrir pour modification avant publication'
             button_class: 'warning'
             button_icon: 'fa-undo'
+            type: 'reouvrir'
         reouvrir_sans_cfvu:
           from: 'publie'
           to: 'en_cours_redaction_ss_cfvu'
@@ -635,6 +644,7 @@ framework:
             description: 'Modifications mineures sans passage en CFVU'
             button_class: 'info'
             button_icon: 'fa-edit'
+            type: 'reouvrir'
         valider_ouverture_sans_cfvu:
           from: 'en_cours_redaction_ss_cfvu'
           to: 'soumis_central_sans_cfvu'

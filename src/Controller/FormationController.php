@@ -222,7 +222,7 @@ class FormationController extends BaseController
         ]);
     }
 
-    #[Route('/new', name: 'app_formation_new', methods: ['GET', 'POST'])]
+    #[Route('/creer', name: 'app_formation_new', methods: ['GET', 'POST'])]
     public function new(
         WorkflowInterface $dpeParcoursWorkflow,
         ProfilRepository $profilRepository,
@@ -277,6 +277,15 @@ class FormationController extends BaseController
             $uc->setFormation($formation);
             $uc->setProfil($profil);
             $this->entityManager->persist($uc);
+
+            $profil = $profilRepository->findOneBy(['code' => 'ROLE_RESP_PARCOURS']);
+            $uc = new UserProfil();
+            $uc->setUser($formation->getResponsableMention());
+            $uc->setCampagneCollecte($this->getCampagneCollecte());
+            $uc->setParcours($parcours);
+            $uc->setProfil($profil);
+            $this->entityManager->persist($uc);
+
             $this->entityManager->flush();
             $dpeParcoursWorkflow->apply($dpeParcours, 'initialiser');
             $dpeParcoursWorkflow->apply($dpeParcours, 'autoriser');

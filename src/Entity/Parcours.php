@@ -311,6 +311,12 @@ class Parcours
     #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: ParcoursTabState::class)]
     private Collection $parcoursTabStates;
 
+    #[ORM\Column(nullable: true)]
+    private ?int $semestreDebut = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $semestreFin = null;
+
     public function __construct(?Formation $formation)
     {
         $this->formation = $formation;
@@ -1833,6 +1839,76 @@ class Parcours
                 $parcoursTabState->setParcours(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getSemestreDebut(): ?int
+    {
+// si c'est null, tenter formation, puis type de diplôme (depuis formation)
+        if ($this->semestreDebut !== null) {
+            return $this->semestreDebut;
+        }
+
+        $formation = $this->getFormation();
+        if ($formation === null) {
+            return null;
+        }
+
+        // Priorité : information explicite sur la formation si disponible
+        if (method_exists($formation, 'getSemestreDebut')) {
+            $val = $formation->getSemestreDebut();
+            if ($val !== null) {
+                return $val;
+            }
+        }
+
+        // Sinon, tenter depuis le type de diplôme associé à la formation
+        $typeDiplome = $formation->getTypeDiplome();
+        if ($typeDiplome !== null && method_exists($typeDiplome, 'getSemestreDebut')) {
+            return $typeDiplome->getSemestreDebut();
+        }
+
+
+        return $this->semestreDebut ?? 1;
+    }
+
+    public function setSemestreDebut(?int $semestreDebut): static
+    {
+        $this->semestreDebut = $semestreDebut;
+
+        return $this;
+    }
+
+    public function getSemestreFin(): ?int
+    {
+        if ($this->semestreFin !== null) {
+            return $this->semestreFin;
+        }
+
+        $formation = $this->getFormation();
+        if ($formation === null) {
+            return null;
+        }
+
+        if (method_exists($formation, 'getSemestreFin')) {
+            $val = $formation->getSemestreFin();
+            if ($val !== null) {
+                return $val;
+            }
+        }
+
+        $typeDiplome = $formation->getTypeDiplome();
+        if ($typeDiplome !== null && method_exists($typeDiplome, 'getSemestreFin')) {
+            return $typeDiplome->getSemestreFin();
+        }
+
+        return 1;
+    }
+
+    public function setSemestreFin(?int $semestreFin): static
+    {
+        $this->semestreFin = $semestreFin;
 
         return $this;
     }

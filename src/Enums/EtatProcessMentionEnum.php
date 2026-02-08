@@ -19,10 +19,10 @@ enum EtatProcessMentionEnum: string
     public function color(): string
     {
         return match ($this) {
-            self::NON_FAIT => 'btn-muted',
-            self::WIP => 'btn-info',
-            self::RESERVE => 'btn-warning',
-            self::COMPLETE => 'btn-success',
+            self::NON_FAIT => 'muted',
+            self::WIP => 'info',
+            self::RESERVE => 'warning',
+            self::COMPLETE => 'success',
         };
     }
 }

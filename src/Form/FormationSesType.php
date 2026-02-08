@@ -15,8 +15,10 @@ use App\Entity\Formation;
 use App\Entity\TypeDiplome;
 use App\Entity\User;
 use App\Enums\NiveauFormationEnum;
+use App\Form\Type\InlineCreateEntitySelectType;
 use App\Form\Type\YesNoType;
 use App\Repository\MentionRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -113,12 +115,45 @@ class FormationSesType extends AbstractType
                 'required' => false,
                 'attr' => ['maxlength' => 10],
             ])
-            ->add('responsableMention', EntityType::class, [
+            ->add('responsableMention', InlineCreateEntitySelectType::class, [
+                'help' => '',
                 'class' => User::class,
                 'choice_label' => 'display',
-                'autocomplete' => true,
-                'attr' => ['data-action' => 'change->formation#changeResponsableMention']
+                'query_builder' => function ($er) {
+                    return $er->createQueryBuilder('u')
+                        ->orderBy('u.nom', 'ASC')
+                        ->addOrderBy('u.prenom', 'ASC');
+                },
+                'placeholder' => 'Choisir dans la liste ou choisir "+" pour ajouter un utilisateur',
+                'new_placeholder' => 'Email du responsable de la mention',
+                'required' => true,
+                'label' => 'Responsable de la mention',
+                'ldap_check' => true,
+
+                // évite doublons (optionnel)
+                'find_existing' => function (string $label, $scope, EntityManagerInterface $em) {
+                    return $em->getRepository(User::class)->createQueryBuilder('t')
+                        ->andWhere('LOWER(t.email) = LOWER(:l)')
+                        ->setParameter('l', $label)
+                        ->getQuery()
+                        ->getOneOrNullResult();
+                },
+
+                // création (obligatoire)
+                'create' => function (string $label, EntityManagerInterface $em) {
+                    $e = new User();
+                    $e->setEmail($label);
+                    return $e; // persist/flush gérés par le type (ou tu peux le faire ici)
+                },
+
             ])
+//            ->add('responsableMention', EntityType::class, [
+//                'class' => User::class,
+//                'choice_label' => 'display',
+//                'autocomplete' => true,
+//                'attr' => ['data-action' => 'change->formation#changeResponsableMention']
+//            ])
+
             ->addEventListener(
                 FormEvents::POST_SUBMIT,
                 static function (FormEvent $event) use ($mentionRepository) {

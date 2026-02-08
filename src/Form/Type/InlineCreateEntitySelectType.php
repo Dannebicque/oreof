@@ -3,6 +3,8 @@
 // src/Form/Type/InlineCreateEntitySelectType.php
 namespace App\Form\Type;
 
+use App\Validator\Constraints\LdapEmailExists;
+use App\Validator\Constraints\LdapEmailExistsValidator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -12,6 +14,8 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Validator\Constraints\EmailValidator;
 
 final class InlineCreateEntitySelectType extends AbstractType
 {
@@ -28,8 +32,20 @@ final class InlineCreateEntitySelectType extends AbstractType
                 'placeholder' => $options['placeholder'],
                 'required' => $options['required'],
                 'query_builder' => $options['query_builder'], // callable|null (Doctrine attend callable(repo): QB)
-            ])
-            ->add('new', TextType::class, [
+            ]);
+
+        if ($options['ldap_check']) {
+            $builder->add('new', TextType::class, [
+                'mapped' => false,
+                'required' => false,
+                'attr' => [
+                    'placeholder' => $options['new_placeholder'],
+                    'data-inline-create-target' => 'ldapCheckInput',
+                ],
+                'constraints' => [new Email(), new LdapEmailExists()]
+            ]);
+        } else {
+            $builder->add('new', TextType::class, [
                 'mapped' => false,
                 'required' => false,
                 'attr' => [
@@ -37,7 +53,7 @@ final class InlineCreateEntitySelectType extends AbstractType
                     'data-inline-create-target' => 'newInput',
                 ],
             ]);
-
+        }
         $builder->addModelTransformer(new CallbackTransformer(
             function ($modelValue) {
                 return ['entity' => $modelValue];
@@ -98,6 +114,7 @@ final class InlineCreateEntitySelectType extends AbstractType
             'choice_label' => 'id',
             'placeholder' => 'Choisir…',
             'required' => false,
+            'ldap_check' => false,
 
             // texte de l’input
             'new_placeholder' => 'Nom du nouveau…',
@@ -116,6 +133,7 @@ final class InlineCreateEntitySelectType extends AbstractType
         ]);
 
         $resolver->setAllowedTypes('class', 'string');
+        $resolver->setAllowedTypes('ldap_check', ['boolean']);
         $resolver->setAllowedTypes('choice_label', ['string', 'callable']);
         $resolver->setAllowedTypes('query_builder', ['null', 'callable']);
         $resolver->setAllowedTypes('create', 'callable');

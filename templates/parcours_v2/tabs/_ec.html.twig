@@ -80,31 +80,40 @@
             {% else %}
                 <span class="text-xs font-bold text-slate-500 bg-slate-100 px-3 py-1 rounded-full">{{ ec.heuresEctsEc.cmPres }}h CM • {{ ec.heuresEctsEc.tdPres }}h TD • {{ ec.heuresEctsEc.tpPres }}h TP</span>
             {% endif %}
+
+
+            {% set items =  [
+                { label: 'Modifier l\'EC',
+                    modal: true,
+                    icon: 'fal fa-pencil-alt',
+                    url: path('parcours_ec_modifier_ec_ue',{elementConstitutif: ec.elementConstitutif.id, parcours:parcours.id}) },
+                { label: 'Supprimer l\'EC',
+                    icon: 'fal fa-trash-alt',
+                    modal: true,
+                    url: path('app_element_constitutif_delete',{'id': ec.elementConstitutif.id}), danger: true}
+            ] %}
+
             {% if ec.elementsConstitutifsEnfants|length > 0 or ec.elementConstitutif.natureUeEc.isChoix %}
-                <button
-                        id="{{ idBase }}-add-ec-enfant-btn"
-                        class="p-2 hover:bg-slate-100 rounded-lg flex items-center text-green-600"
-                        type="button">
-                    <i class="{{ iconAdd }} me-1"></i>
-                    <span>EC enfant</span>
-                </button>
+                {% set items = items|merge([{
+                    label: 'Ajouter un EC enfant',
+                    icon: 'fal fa-plus',
+                    modal: true,
+                    url: path('parcours_ec_ajouter_ec_ue',{parcours: parcours.id, ue: ue.ue.id, parent: ec.elementConstitutif.id}),
+                }]) %}
+                {#                <button #}
+                {#                        id="{{ idBase }}-add-ec-enfant-btn" #}
+                {#                        class="p-2 hover:bg-slate-100 rounded-lg flex items-center text-green-600" #}
+                {#                        type="button"> #}
+                {#                    <i class="{{ iconAdd }} me-1"></i> #}
+                {#                    <span>EC enfant</span> #}
+                {#                </button> #}
             {% endif %}
 
-            {# todo: refactor + placer dans parcours/ #}
             {{ component('dropdown_actions', {
                 label: 'Actions',
                 help: 'Actions disponibles pour cet EC',
                 icon: 'fal fa-ellipsis-vertical',
-                items: [
-                    { label: 'Modifier l\'EC',
-                        modal: true,
-                        icon: 'fal fa-pencil-alt',
-                        url: path('app_element_constitutif_edit',{'id': ec.elementConstitutif.id, parcours:parcours.id}) },
-                    { label: 'Supprimer l\'EC',
-                        icon: 'fal fa-trash-alt',
-                        modal: true,
-                        url: path('app_element_constitutif_delete',{'id': ec.elementConstitutif.id}), danger: true}
-                ]
+                items: items
             }) }}
 
             <span class="text-xs font-black text-slate-700">{{ ec.heuresEctsEc.ects }} ECTS</span>

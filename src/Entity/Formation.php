@@ -81,7 +81,7 @@ class Formation
 
     #[Groups('formation_json_versioning')]
     #[ORM\Column]
-    private ?int $semestreDebut = 1;
+    private ?int $semestreDebut = 1; //todo: a déplacer dans parcours ?
 
     #[Groups(['parcours_json_versioning', 'formation_json_versioning'])]
     #[ORM\ManyToMany(targetEntity: Ville::class, cascade: ['persist'])]
@@ -223,6 +223,12 @@ class Formation
     #[ORM\OneToMany(mappedBy: 'formation', targetEntity: ChangeParcours::class)]
     private Collection $changeParcours;
 
+    /**
+     * @var Collection<int, FormationTabState>
+     */
+    #[ORM\OneToMany(mappedBy: 'formation', targetEntity: FormationTabState::class)]
+    private Collection $formationTabStates;
+
     public function __construct(?CampagneCollecte $anneeUniversitaire)
     {
         $this->dpe = $anneeUniversitaire;
@@ -244,6 +250,7 @@ class Formation
         $this->changeRves = new ArrayCollection();
         $this->userProfils = new ArrayCollection();
         $this->changeParcours = new ArrayCollection();
+        $this->formationTabStates = new ArrayCollection();
     }
 
     #[ORM\PreFlush]
@@ -1202,6 +1209,63 @@ class Formation
             // set the owning side to null (unless already changed)
             if ($changeParcour->getFormation() === $this) {
                 $changeParcour->setFormation(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function hasParcours(): ?bool
+    {
+        return $this->hasParcours;
+    }
+
+    public function addCommentaire(CommentaireFormation $commentaire): static
+    {
+        if (!$this->commentaires->contains($commentaire)) {
+            $this->commentaires->add($commentaire);
+            $commentaire->setFormation($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCommentaire(CommentaireFormation $commentaire): static
+    {
+        if ($this->commentaires->removeElement($commentaire)) {
+            // set the owning side to null (unless already changed)
+            if ($commentaire->getFormation() === $this) {
+                $commentaire->setFormation(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, FormationTabState>
+     */
+    public function getFormationTabStates(): Collection
+    {
+        return $this->formationTabStates;
+    }
+
+    public function addFormationTabState(FormationTabState $formationTabState): static
+    {
+        if (!$this->formationTabStates->contains($formationTabState)) {
+            $this->formationTabStates->add($formationTabState);
+            $formationTabState->setFormation($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFormationTabState(FormationTabState $formationTabState): static
+    {
+        if ($this->formationTabStates->removeElement($formationTabState)) {
+            // set the owning side to null (unless already changed)
+            if ($formationTabState->getFormation() === $this) {
+                $formationTabState->setFormation(null);
             }
         }
 

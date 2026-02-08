@@ -12,23 +12,20 @@ use App\Repository\HistoriqueFormationRepository;
 use App\Repository\HistoriqueParcoursRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Target;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Workflow\WorkflowInterface;
 use Symfony\UX\LiveComponent\Attribute\AsLiveComponent;
 use Symfony\UX\LiveComponent\Attribute\LiveAction;
+use Symfony\UX\LiveComponent\Attribute\LiveArg;
 use Symfony\UX\LiveComponent\Attribute\LiveProp;
 use Symfony\UX\LiveComponent\DefaultActionTrait;
+use Symfony\UX\LiveComponent\LiveResponder;
 use Symfony\UX\TwigComponent\Attribute\PostMount;
 
 #[AsLiveComponent]
 final class ParcoursHeader
 {
     use DefaultActionTrait;
-
-    #[LiveProp(writable: true)]
-    public bool $showActionsAdmin = false;
-
-    #[LiveProp(writable: true)]
-    public bool $showActions = false;
 
     #[LiveProp(writable: true)]
     public array $validationSteps = [];
@@ -57,6 +54,8 @@ final class ParcoursHeader
     private array $historiques = [];
 
     public function __construct(
+        private readonly UrlGeneratorInterface $urlGenerator,
+        private readonly LiveResponder         $responder,
         private readonly HistoriqueFormationRepository $historiqueFormationRepository,
         private readonly HistoriqueParcoursRepository  $historiqueParcoursRepository,
         private readonly ValidationProcess             $validationProcess,
@@ -67,13 +66,6 @@ final class ParcoursHeader
     )
     {
         $this->process = $this->validationProcess->getProcess();
-    }
-
-    #[LiveAction]
-    public function toggleActionsAdmin(): void
-    {
-        $this->reloadDerived();
-        $this->showActionsAdmin = !$this->showActionsAdmin;
     }
 
     private function reloadDerived(): void
@@ -209,25 +201,30 @@ final class ParcoursHeader
     }
 
     #[LiveAction]
-    public function toggleActions(): void
+    public function reouvrir(#[LiveArg] $key): void
     {
-        $this->reloadDerived();
-        $this->showActions = !$this->showActions;
+        $url = match ($key) {
+            'reouvrir_dpe' => $this->urlGenerator->generate('app_actualite_index', [
+                'parcours' => $this->parcoursId,
+            ]),
+            'historique' => $this->urlGenerator->generate('app_actualite_new', [
+                'parcours' => $this->parcoursId,
+            ]),
+            default => null,
+        };
+
+        if ($url === null) {
+            return;
+        }
+
+        // Event envoyé au navigateur \=\> un controller Stimulus ouvre modal_wrapper
+        $this->responder->dispatchBrowserEvent('modal:open', [
+            'url' => $url,
+            'type' => $key,
+            'size' => 'lg',
+        ]);
+
     }
-
-    #[LiveAction]
-    public function validate(string $optionId): void
-    {
-        // Logique de validation selon l'option choisie
-        // Exemple : envoyer un événement, sauvegarder en base, etc.
-
-        // Pour l'instant, on log juste l'action
-        error_log("Action de validation: " . $optionId);
-
-        // Vous pouvez ajouter un message flash ou dispatch un événement
-        // $this->addFlash('success', 'Validation effectuée avec succès');
-    }
-
     public function status(string $transition): string
     {
         return $this->dateHistorique($transition) === '- à venir -' ? 'pending' : 'completed';

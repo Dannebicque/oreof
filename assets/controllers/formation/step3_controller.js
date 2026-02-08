@@ -27,7 +27,7 @@ export default class extends Controller {
   }
 
   connect () {
-    document.getElementById('form_objectifsFormation').addEventListener('trix-blur', this.saveObjectifsFormation.bind(this))
+    // document.getElementById('form_objectifsFormation').addEventListener('trix-blur', this.saveObjectifsFormation.bind(this))
     if (this.hasParcoursValue === true) {
       this._refreshListe()
     }
@@ -84,19 +84,19 @@ export default class extends Controller {
     })
   }
 
-  changeSemestreDebut (event) {
-    const sem = parseInt(event.target.dataset.semestredebut, 10)
-
-    if (sem !== event.target.value) {
-      if (confirm('Voulez-vous vraiment modifier le semestre de début des parcours ? Cela  va modifier la structure de votre parcours/formation et peut effacer les semestres caduques/devenus inutiles.')) {
-        this._save({
-          action: 'semestreDebut',
-          value: event.target.value,
-        })
-        event.target.dataset.semestredebut = event.target.value
-      }
-    }
-  }
+  // changeSemestreDebut (event) {
+  //   const sem = parseInt(event.target.dataset.semestredebut, 10)
+  //
+  //   if (sem !== event.target.value) {
+  //     if (confirm('Voulez-vous vraiment modifier le semestre de début des parcours ? Cela  va modifier la structure de votre parcours/formation et peut effacer les semestres caduques/devenus inutiles.')) {
+  //       this._save({
+  //         action: 'semestreDebut',
+  //         value: event.target.value,
+  //       })
+  //       event.target.dataset.semestredebut = event.target.value
+  //     }
+  //   }
+  // }
 
   changeHasParcours (event) {
     const data = event.target.value

@@ -1,0 +1,8 @@
+{{ component('alerte', {
+    type: 'info',
+    message: ('ses.commentaires.alerte')|trans({}, 'process')|nl2br|raw
+}) }}
+
+<twig:CommentaireAdmin
+        :parcours="parcours"
+/>

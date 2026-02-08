@@ -67,4 +67,15 @@ class Ldap
 
         return null;
     }
+
+    public function emailExists(string $email): bool
+    {
+        $query = $this->ds->query(
+            $this->parameterBag->get('LDAP_BASE_DN'),
+            '(mail=' . $email . ')',
+            ['filter' => ['uid', 'sn', 'givenName']]
+        );
+        $results = $query->execute()->toArray();
+        return 1 === count($results);
+    }
 }

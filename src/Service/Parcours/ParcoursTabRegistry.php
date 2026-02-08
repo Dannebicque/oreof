@@ -11,12 +11,13 @@ namespace App\Service\Parcours;
 
 use App\Form\ParcoursStep1Type;
 use App\Form\ParcoursStep2Type;
+use App\Form\ParcoursStep3Type;
 use App\Form\ParcoursStep5Type;
 use App\Form\ParcoursStep6Type;
 
 final class ParcoursTabRegistry
 {
-    public const TABS = ['presentation', 'descriptif', 'et_apres', 'admission'];
+    public const TABS = ['presentation', 'descriptif', 'maquette', 'et_apres', 'admission'];
 
     public static function assertTab(string $tabKey): void
     {
@@ -30,6 +31,7 @@ final class ParcoursTabRegistry
         return match ($tabKey) {
             'presentation' => ParcoursStep1Type::class,
             'descriptif' => ParcoursStep2Type::class,
+            'maquette' => ParcoursStep3Type::class,
             'et_apres' => ParcoursStep6Type::class,
             'admission' => ParcoursStep5Type::class,
         };

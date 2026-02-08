@@ -8,6 +8,7 @@ use App\Repository\ButApprentissageCritiqueRepository;
 use App\Repository\CompetenceRepository;
 use App\Repository\ElementConstitutifRepository;
 use App\Repository\FicheMatiereRepository;
+use App\TypeDiplome\Dto\OptionsCalculStructure;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,7 +21,7 @@ class ParcoursBccController extends BaseController
         Parcours $parcours): Response
     {
         $typeD = $this->typeDiplomeResolver->fromTypeDiplome($parcours->getFormation()?->getTypeDiplome());
-        $dto = $typeD->calculStructureParcours($parcours, false);
+        $dto = $typeD->calculStructureParcours($parcours, new OptionsCalculStructure(false, true, false));
         return $this->render('parcours_bcc/index.html.twig', [
             'parcours' => $parcours,
             'dto' => $dto,

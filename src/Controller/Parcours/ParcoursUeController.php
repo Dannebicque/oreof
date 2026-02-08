@@ -112,7 +112,7 @@ class ParcoursUeController extends BaseController
         return $turboStream->streamOpenModalFromTemplates(
             'Ajouter une UE',
             'Dans : semestre ' . $semestreParcours->getSemestre()?->getOrdre(),
-            'parcours/v2/ue/_new.html.twig',
+            'parcours_v2/ue/_new.html.twig',
             [
                 'form' => $form->createView(),
             ],
@@ -196,7 +196,7 @@ class ParcoursUeController extends BaseController
         return $turboStreamResponseFactory->streamOpenModalFromTemplates(
             'Modifier l\'' . $ue->display(),
             'Dans : le semestre  ' . $ue->getSemestre()?->display(),
-            'parcours/v2/ue/_new.html.twig',
+            'parcours_v2/ue/_new.html.twig',
             [
                 'form' => $form->createView(),
             ],
@@ -218,7 +218,7 @@ class ParcoursUeController extends BaseController
         return $turboStream->streamOpenModalFromTemplates(
             'Supprimer une UE',
             'Dans : semestre ' . $semestreParcours->getSemestre()?->getOrdre(),
-            'parcours/v2/ue/_delete.html.twig',
+            'parcours_v2/ue/_delete.html.twig',
             [],
             '_ui/_footer_delete_cancel.html.twig',
             [
