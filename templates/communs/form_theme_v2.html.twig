@@ -77,7 +77,11 @@
 
 {# --- SELECT --- #}
 {% block choice_widget_collapsed %}
-    {% set attr = attr|merge({ class: attr.class|default('') ~ ' w-full p-4 bg-slate-50 border border-slate-200 rounded-sm font-semibold text-slate-700 focus:ring-4 focus:ring-indigo-50 focus:border-indigo-500 outline-none transition-all shadow-sm appearance-none cursor-pointer' }) %}
+    {% set isDisabled = (attr.disabled is defined and attr.disabled) or (disabled is defined and disabled) or (form.vars.disabled is defined and form.vars.disabled) %}
+    {% set baseClass = ' w-full p-4 rounded-sm font-semibold focus:ring-4 focus:ring-indigo-50 focus:border-indigo-500 outline-none transition-all shadow-sm appearance-none' %}
+    {% set normalClass = ' bg-slate-50 border border-slate-200 text-slate-700 cursor-pointer' %}
+    {% set disabledClass = ' bg-slate-200 border border-slate-200 text-slate-400 cursor-not-allowed opacity-70' %}
+    {% set attr = attr|merge({ class: attr.class|default('') ~ baseClass ~ (isDisabled ? disabledClass : normalClass) }) %}
     <div class="relative">
         {{ parent() }}
         <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-400">
@@ -175,14 +179,42 @@
 
 {# --- GROUPES D'OPTIONS (checkbox/radio) --- #}
 
+{# {% block choice_widget_expanded %} #}
+{#    #}{# Container principal qui aligne les groupes Oui et Non #}
+{#    <div {{ block('widget_container_attributes') }} class="flex flex-row items-center gap-6"> #}
+{#        {%- for child in form %} #}
+{#            #}{# Container individuel pour CHAQUE radio (ex: le bouton + le mot "Oui") #}
+{#            <div class="flex items-center gap-2"> #}
+{#                {{- form_widget(child) -}} #}
+{#                {{- form_label(child) -}} #}
+{#            </div> #}
+{#        {% endfor -%} #}
+{#    </div> #}
+{# {% endblock choice_widget_expanded %} #}
+
 {% block choice_widget_expanded %}
-    {# Container principal qui aligne les groupes Oui et Non #}
-    <div {{ block('widget_container_attributes') }} class="flex flex-row items-center gap-6">
+    {# On récupère le nombre de colonnes, par défaut 1 si non défini #}
+    {% set cols = attr.columns|default(4) %}
+
+    {# Mapping pour transformer le chiffre en classe Tailwind #}
+    {% set gridClasses = {
+        '1': 'grid-cols-1',
+        '2': 'grid-cols-2',
+        '3': 'grid-cols-3',
+        '4': 'grid-cols-4'
+    } %}
+
+    <div {{ block('widget_container_attributes') }}
+            class="grid {{ gridClasses[cols]|default('grid-cols-1') }} gap-4">
+
         {%- for child in form %}
-            {# Container individuel pour CHAQUE radio (ex: le bouton + le mot "Oui") #}
             <div class="flex items-center gap-2">
-                {{- form_widget(child) -}}
-                {{- form_label(child) -}}
+                {{- form_widget(child, {
+                    'attr': {'class': 'focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300'}
+                }) -}}
+                {{- form_label(child, null, {
+                    'label_attr': {'for': child.vars.id, 'class': 'text-sm font-medium text-gray-700'}
+                }) -}}
             </div>
         {% endfor -%}
     </div>

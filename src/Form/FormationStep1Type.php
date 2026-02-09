@@ -31,7 +31,6 @@ class FormationStep1Type extends AbstractType
         $builder
             ->add('responsableMention', EntityType::class, [
                 'required' => false,
-                'help' => '',
                 'disabled' => true,
                 'class' => User::class,
                 'choice_label' => 'display',
@@ -39,14 +38,7 @@ class FormationStep1Type extends AbstractType
             ->add('coResponsable', EntityType::class, [
                 'required' => false,
                 'disabled' => true,
-                'help' => '',
                 'class' => User::class,
-//                'query_builder' => function ($er) {
-//                    return $er->createQueryBuilder('u')
-//                        ->orderBy('u.nom', 'ASC')
-//                        ->addOrderBy('u.prenom', 'ASC');
-//                },
-//                'attr' => ['data-action' => 'change->formation--step1#saveCoRespFormation'],
                 'choice_label' => 'display',
             ])
             ->add('sigle', TextType::class, [
@@ -78,10 +70,13 @@ class FormationStep1Type extends AbstractType
                     return $composanteRepository->createQueryBuilder('comp')
                         ->orderBy('comp.libelle', 'ASC');
                 },
-                'choice_attr' => function () {
-                    return ['data-action' => 'change->formation--step1#changeComposanteInscription'];
-                },
-                'attr' => ['data-action' => 'change->formation--step6#changeComposanteInscription']
+//                'choice_attr' => function () {
+//                    return ['data-action' => 'change->formation--step1#changeComposanteInscription'];
+//                },
+                'attr' => [
+                    'columns' => 2,
+//                    'data-action' => 'change->formation--step6#changeComposanteInscription'
+                ],
             ])
             ->add('regimeInscription', EnumType::class, [
                 'help' => 'Régime d\'inscription',
@@ -89,15 +84,30 @@ class FormationStep1Type extends AbstractType
                 'translation_domain' => 'form',
                 'multiple' => true,
                 'expanded' => true,
-                'attr' => ['data-action' => 'change->formation--step1#changeRegimeInscription']
+                //'attr' => ['data-action' => 'change->formation--step1#changeRegimeInscription']
+                'choice_attr' => function ($choice) {
+                    // On marque chaque checkbox comme une cible 'trigger'
+                    return [
+                        'data-conditional-field-target' => 'trigger',
+                        'data-action' => 'change->conditional-field#toggle'
+                    ];
+                },
+//                'attr' => [
+//                    'data-controller' => 'conditional-display',
+//                    'data-conditional-display-expected-values-value' => json_encode(['FI_APPRENTISSAGE', 'FC_CONTRAT_PRO'])
+//                ]
             ])
             ->add('modalitesAlternance', TextareaAutoSaveType::class, [
                 'help' => 'Indiquez en 3000 caractères maximum les périodes et leurs durées en centre ou en entreprise.',
                 'attr' => [
                     'rows' => 10,
                     'maxlength' => 3000,
-                    'data-action' => 'change->formation--step1#saveModalitesAlternance'
+                    //'data-action' => 'change->formation--step1#saveModalitesAlternance'
                 ],
+                'row_attr' => [
+//                    'data-conditional-display-target' => 'container',
+                    'class' => 'd-none' // Sera retiré par le connect() si déjà coché
+                ]
             ]);
     }
 

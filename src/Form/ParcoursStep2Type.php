@@ -31,8 +31,6 @@ class ParcoursStep2Type extends AbstractType
             ->add('modalitesEnseignement', EnumType::class, [
                 //http://lheo.gouv.fr/2.3/lheo/dict-modalites-enseignement.html#dict-modalites-enseignement
                 'class' => ModaliteEnseignementEnum::class,
-                'help' => '-',
-                'attr' => ['data-action' => 'change->parcours--step2#changeModaliteEnseignement'],
                 'choice_label' => fn ($choice) => match ($choice) {
                     modaliteEnseignementEnum::NON_DEFINI => 'Choisissez une modalité d\'enseignement',
                     modaliteEnseignementEnum::PRESENTIELLE => 'En présentiel',
@@ -42,94 +40,102 @@ class ParcoursStep2Type extends AbstractType
                 'expanded' => false,
             ]);
 
-       // if ($typeDiplome->isHasStage() === true) {
+        if ($typeDiplome->isHasStage() === true) {
             $builder->add('hasStage', YesNoType::class, [
-                'help' => '-',
-                'attr' => ['data-action' => 'change->parcours--step2#changeStage'],
+                'choice_attr' => function ($choice) {
+                    return [
+                        'data-conditional-field-target' => 'trigger',
+                        'data-action' => 'change->conditional-field#toggle'
+                    ];
+                },
             ])
                 ->add('stageText', TextareaAutoSaveType::class, [
                     'attr' => [
                         'rows' => 15,
                         'maxlength' => 3000,
-                        'data-action' => 'change->parcours--step2#saveStageText'
                     ],
-                    'help' => '-',
                 ])
                 ->add('nbHeuresStages', NumberType::class, [
                     'html5' => true,
                     'scale' => 1,
                     'input_suffix_text' => 'heure(s)',
-                    'attr' => [
-                        'data-action' => 'change->parcours--step2#changeNbHeuresStages',
-                    ],
                     'row_attr' => [
                         'class' => 'col-sm-3',
                     ],
                 ]);
-       // }
+        }
 
         //alors zone de saisi
         //si L ou M, nombre d'heures
-        //if ($typeDiplome->isHasProjet() === true) {
+        if ($typeDiplome->isHasProjet() === true) {
             $builder->
             add('hasProjet', YesNoType::class, [
-                'attr' => ['data-action' => 'change->parcours--step2#changeProjet'],
+                'choice_attr' => function ($choice) {
+                    return [
+                        'data-conditional-field-target' => 'trigger',
+                        'data-action' => 'change->conditional-field#toggle'
+                    ];
+                },
             ])
                 ->add('projetText', TextareaAutoSaveType::class, [
-                    'help' => '-',
                     'attr' => [
                         'rows' => 15,
                         'maxlength' => 3000,
-                        'data-action' => 'change->parcours--step2#saveProjetText'
                     ],
                 ])
                 ->add('nbHeuresProjet', NumberType::class, [
                     'html5' => true,
                     'scale' => 1,
                     'input_suffix_text' => 'heure(s)',
-                    'attr' => ['data-action' => 'change->parcours--step2#changeNbHeuresProjet'],
                     'row_attr' => [
                         'class' => 'col-sm-3',
                     ],
                 ]);
-       // }
+        }
 
-       // if ($typeDiplome->isHasMemoire() === true) {
+        if ($typeDiplome->isHasMemoire() === true) {
             $builder->add('hasMemoire', YesNoType::class, [
-                'attr' => ['data-action' => 'change->parcours--step2#changeMemoire'],
+                'choice_attr' => function ($choice) {
+                    // On marque chaque checkbox comme une cible 'trigger'
+                    return [
+                        'data-conditional-field-target' => 'trigger',
+                        'data-action' => 'change->conditional-field#toggle'
+                    ];
+                },
             ])
                 ->add('memoireText', TextareaAutoSaveType::class, [
-                    'help' => '-',
                     'attr' => [
                         'rows' => 15,
                         'maxlength' => 3000,
-                        'data-action' => 'change->parcours--step2#saveMemoireText'
                     ],
                 ]);
-       // }
+        }
 
 
-        if ($typeDiplome !== null && $typeDiplome->isHasSituationPro()) {
+        if ($typeDiplome->isHasSituationPro()) {
             $builder
                 ->add('hasSituationPro', YesNoType::class, [
-                    'attr' => ['data-action' => 'change->parcours--step2#changeSituationPro'],
+                    'choice_attr' => function ($choice) {
+                        // On marque chaque checkbox comme une cible 'trigger'
+                        return [
+                            'data-conditional-field-target' => 'trigger',
+                            'data-action' => 'change->conditional-field#toggle'
+                        ];
+                    },
                     'data' => (bool)$typeDiplome?->isHasSituationPro(),
                 ])
                 ->add('nbHeuresSituationPro', NumberType::class, [
                     'html5' => true,
                     'scale' => 1,
                     'input_suffix_text' => 'heure(s)',
-                    'attr' => ['data-action' => 'change->parcours--step2#changeNbHeuresSituationPro'],
                     'row_attr' => [
                         'class' => 'col-sm-3',
                     ],
                 ])
                 ->add('situationProText', TextareaAutoSaveType::class, [
-                    'help' => '-',
                     'attr' => [
                         'rows' => 15,
                         'maxlength' => 3000,
-                        'data-action' => 'change->parcours--step2#saveSituationProText'
                     ],
                 ]);
         }

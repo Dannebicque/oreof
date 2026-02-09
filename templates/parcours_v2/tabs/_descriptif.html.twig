@@ -14,7 +14,55 @@
         }) }}
 
         {{ form_errors(form) }}
-        {{ form_widget(form) }}
+        {{ form_row(form.modalitesEnseignement) }}
+
+        {% if typeDiplome.hasStage %}
+            <div data-controller="conditional-field"
+                 data-conditional-field-expected-values-value='["1"]'>
+                {{ form_row(form.hasStage) }}
+
+                <div data-conditional-field-target="container">
+                    {{ form_row(form.stageText) }}
+                    {{ form_row(form.nbHeuresStages) }}
+                </div>
+            </div>
+        {% endif %}
+
+        {% if typeDiplome.hasProjet %}
+            <div data-controller="conditional-field"
+                 data-conditional-field-expected-values-value='["1"]'>
+                {{ form_row(form.hasProjet) }}
+
+                <div data-conditional-field-target="container">
+                    {{ form_row(form.projetText) }}
+                    {{ form_row(form.nbHeuresProjet) }}
+                </div>
+            </div>
+        {% endif %}
+
+        {% if typeDiplome.hasMemoire %}
+            <div data-controller="conditional-field"
+                 data-conditional-field-expected-values-value='["1"]'>
+                {{ form_row(form.hasMemoire) }}
+
+                <div data-conditional-field-target="container">
+                    {{ form_row(form.memoireText) }}
+                </div>
+            </div>
+        {% endif %}
+
+        {% if typeDiplome.isHasSituationPro %}
+            <div data-controller="conditional-field"
+                 data-conditional-field-expected-values-value='["1"]'>
+                {{ form_row(form.hasSituationPro) }}
+
+                <div data-conditional-field-target="container">
+                    {{ form_row(form.situationProText) }}
+                    {{ form_row(form.nbHeuresSituationPro) }}
+                </div>
+            </div>
+        {% endif %}
+
 
         {{ form_end(form) }}
     </div>

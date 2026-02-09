@@ -11,39 +11,11 @@ namespace App\Service\Parcours;
 
 use App\DTO\TabIssue;
 use App\Entity\Parcours;
-use Symfony\Component\Form\FormInterface;
+use App\Enums\RegimeInscriptionEnum;
+use App\Service\AbstractChecker;
 
-class ParcoursTabCompletionChecker
+class ParcoursTabCompletionChecker extends AbstractChecker
 {
-    /**
-     * Règle:
-     * - red    : form invalide
-     * - orange : form valide mais done=false
-     * - green  : form valide et done=true
-     */
-    public function computeStatus(bool $isComplete, bool $done): string
-    {
-        if (!$isComplete) {
-            return 'red';
-        }
-        return $done ? 'green' : 'orange';
-    }
-
-    private function allFilled(array $values): bool
-    {
-        foreach ($values as $v) {
-            if ($v === null) {
-                return false;
-            }
-            if (is_string($v) && trim($v) === '') {
-                return false;
-            }
-            if (is_array($v) && count($v) === 0) {
-                return false;
-            }
-        }
-        return true;
-    }
 
     public function isTabComplete(Parcours $p, string $tabKey): bool
     {
@@ -76,49 +48,64 @@ class ParcoursTabCompletionChecker
             return false;
         }
 
+        $typeDiplome = $p->getTypeDiplome();
         // Stage
-        if ($p->isHasStage() === null) {
-            return false;
-        }
-        if ($p->isHasStage() === true) {
-            if (!$this->filled($p->getStageText())) {
+        if ($typeDiplome?->isHasStage()) {
+
+            if ($p->isHasStage() === null) {
                 return false;
             }
-            if ($p->getNbHeuresStages() === null) {
-                return false;
+            if ($p->isHasStage() === true) {
+                if (!$this->filled($p->getStageText())) {
+                    return false;
+                }
+                if ($p->getNbHeuresStages() === null) {
+                    return false;
+                }
             }
         }
 
         // Projet
-        if ($p->isHasProjet() === null) {
-            return false;
-        }
-        if ($p->isHasProjet() === true) {
-            if (!$this->filled($p->getProjetText())) {
+        if ($typeDiplome?->isHasProjet()) {
+
+            if ($p->isHasProjet() === null) {
                 return false;
             }
-            if ($p->getNbHeuresProjet() === null) {
-                return false;
+            if ($p->isHasProjet() === true) {
+                if (!$this->filled($p->getProjetText())) {
+                    return false;
+                }
+                if ($p->getNbHeuresProjet() === null) {
+                    return false;
+                }
             }
         }
 
         // Mémoire
-        if ($p->isHasMemoire() === null) {
-            return false;
-        }
-        if ($p->isHasMemoire() === true) {
-            if (!$this->filled($p->getMemoireText())) {
+        if ($typeDiplome?->isHasMemoire()) {
+
+            if ($p->isHasMemoire() === null) {
                 return false;
+            }
+            if ($p->isHasMemoire() === true) {
+                if (!$this->filled($p->getMemoireText())) {
+                    return false;
+                }
             }
         }
 
-        // Situation pro (selon ton modèle, parfois absent)
-        if ($p->isHasSituationPro() === true) {
-            if (!$this->filled($p->getSituationProText())) {
+        if ($typeDiplome?->isHasSituationPro()) {
+            if ($p->isHasSituationPro() === null) {
                 return false;
             }
-            if ($p->getNbHeuresSituationPro() === null) {
-                return false;
+
+            if ($p->isHasSituationPro() === true) {
+                if (!$this->filled($p->getSituationProText())) {
+                    return false;
+                }
+                if ($p->getNbHeuresSituationPro() === null) {
+                    return false;
+                }
             }
         }
 
@@ -142,20 +129,6 @@ class ParcoursTabCompletionChecker
     private function etApresComplete(Parcours $p): bool
     {
         return $this->filled($p->getPoursuitesEtudes()) && $this->filled($p->getDebouches());
-    }
-
-    private function filled(mixed $v): bool
-    {
-        if ($v === null) {
-            return false;
-        }
-        if (\is_string($v)) {
-            return trim($v) !== '';
-        }
-        if (\is_array($v)) {
-            return count($v) > 0;
-        }
-        return true;
     }
 
     /** @return TabIssue[] */
@@ -207,54 +180,62 @@ class ParcoursTabCompletionChecker
     private function descriptifIssues(Parcours $p): array
     {
         $issues = [];
+        $typeDiplome = $p->getTypeDiplome();
 
         if ($p->getModalitesEnseignement() === null) {
             $issues[] = new TabIssue('parcours_step2[modalitesEnseignement]', 'Modalités d’enseignement', 'Choisis une modalité.');
         }
-
         // Stage
-        if ($p->isHasStage() === null) {
-            $issues[] = new TabIssue('parcours_step2[hasStage]', 'Stage', 'Indique si un stage est prévu.');
-        } elseif ($p->isHasStage() === true) {
-            if (!$this->filled($p->getStageText())) {
-                $issues[] = new TabIssue('parcours_step2[stageText]', 'Texte du stage', 'Obligatoire si stage = oui.');
-            }
-            if ($p->getNbHeuresStages() === null) {
-                $issues[] = new TabIssue('parcours_step2[nbHeuresStages]', 'Heures de stage', 'Indique un volume horaire.');
+        if ($typeDiplome?->isHasStage() === true) {
+            if ($p->isHasStage() === null) {
+                $issues[] = new TabIssue('parcours_step2[hasStage]', 'Stage', 'Indique si un stage est prévu.');
+            } elseif ($p->isHasStage() === true) {
+                if (!$this->filled($p->getStageText())) {
+                    $issues[] = new TabIssue('parcours_step2[stageText]', 'Texte du stage', 'Obligatoire si stage = oui.');
+                }
+                if ($p->getNbHeuresStages() === null || $p->getNbHeuresStages() <= 0) {
+                    $issues[] = new TabIssue('parcours_step2[nbHeuresStages]', 'Heures de stage', 'Indique un volume horaire (>= 0).');
+                }
             }
         }
 
         // Projet
-        if ($p->isHasProjet() === null) {
-            $issues[] = new TabIssue('parcours_step2[hasProjet]', 'Projet', 'Indique si un projet est prévu.');
-        } elseif ($p->isHasProjet() === true) {
-            if (!$this->filled($p->getProjetText())) {
-                $issues[] = new TabIssue('parcours_step2[projetText]', 'Texte du projet', 'Obligatoire si projet = oui.');
-            }
-            if ($p->getNbHeuresProjet() === null) {
-                $issues[] = new TabIssue('parcours_step2[nbHeuresProjet]', 'Heures de projet', 'Indique un volume horaire.');
+        if ($typeDiplome?->isHasProjet()) {
+            if ($p->isHasProjet() === null) {
+                $issues[] = new TabIssue('parcours_step2[hasProjet]', 'Projet', 'Indique si un projet est prévu.');
+            } elseif ($p->isHasProjet() === true) {
+                if (!$this->filled($p->getProjetText())) {
+                    $issues[] = new TabIssue('parcours_step2[projetText]', 'Texte du projet', 'Obligatoire si projet = oui.');
+                }
+                if ($p->getNbHeuresProjet() === null || $p->getNbHeuresProjet() <= 0) {
+                    $issues[] = new TabIssue('parcours_step2[nbHeuresProjet]', 'Heures de projet', 'Indique un volume horaire.');
+                }
             }
         }
 
         // Mémoire
-        if ($p->isHasMemoire() === null) {
-            $issues[] = new TabIssue('parcours_step2[hasMemoire]', 'Mémoire', 'Indique si un mémoire est prévu.');
-        } elseif ($p->isHasMemoire() === true) {
-            if (!$this->filled($p->getMemoireText())) {
-                $issues[] = new TabIssue('parcours_step2[memoireText]', 'Texte du mémoire', 'Obligatoire si mémoire = oui.');
+        if ($typeDiplome?->isHasMemoire()) {
+            if ($p->isHasMemoire() === null) {
+                $issues[] = new TabIssue('parcours_step2[hasMemoire]', 'Mémoire', 'Indique si un mémoire est prévu.');
+            } elseif ($p->isHasMemoire() === true) {
+                if (!$this->filled($p->getMemoireText())) {
+                    $issues[] = new TabIssue('parcours_step2[memoireText]', 'Texte du mémoire', 'Obligatoire si mémoire = oui.');
+                }
             }
         }
 
         // Situation pro
-        if ($p->isHasSituationPro() === true) {
-            if (!$this->filled($p->getSituationProText())) {
-                $issues[] = new TabIssue('parcours_step2[situationProText]', 'Texte situation pro', 'Obligatoire si situation pro = oui.');
+        if ($typeDiplome?->isHasSituationPro() === true) {
+            if ($p->isHasSituationPro() === null) {
+                $issues[] = new TabIssue('parcours_step2[hasSituationPro]', 'Situation professionnelle', 'Indique si une situation pro est prévue.');
+            } elseif ($p->isHasSituationPro() === true) {
+                if (!$this->filled($p->getSituationProText())) {
+                    $issues[] = new TabIssue('parcours_step2[situationProText]', 'Texte situation pro', 'Obligatoire si situation pro = oui.');
+                }
+                if ($p->getNbHeuresSituationPro() === null || $p->getNbHeuresSituationPro() <= 0) {
+                    $issues[] = new TabIssue('parcours_step2[nbHeuresSituationPro]', 'Heures situation pro', 'Indique un volume horaire.');
+                }
             }
-            if ($p->getNbHeuresSituationPro() === null) {
-                $issues[] = new TabIssue('parcours_step2[nbHeuresSituationPro]', 'Heures situation pro', 'Indique un volume horaire.');
-            }
-        } elseif ($p->isHasSituationPro() === null) {
-            $issues[] = new TabIssue('parcours_step2[hasSituationPro]', 'Situation professionnelle', 'Indique si une situation pro est prévue.');
         }
 
         return $issues;
@@ -275,12 +256,11 @@ class ParcoursTabCompletionChecker
             $issues[] = new TabIssue('parcours_step5[composanteInscription]', 'Composante d’inscription', 'Choisis une composante.');
         }
 
-        $regimes = $p->getRegimeInscription();
-        if (!\is_array($regimes) || count($regimes) === 0) {
-            $issues[] = new TabIssue('parcours_step5[regimeInscription][]', 'Régime d’inscription', 'Coche au moins un régime.');
+        if ($this->filled($p->getModalitesAlternance()) === false && (in_array(RegimeInscriptionEnum::FC_CONTRAT_PRO, $p->getRegimeInscription(), true) || in_array(RegimeInscriptionEnum::FI_APPRENTISSAGE, $p->getRegimeInscription(), true))) {
+            $issues[] = new TabIssue('parcours_step5[modalitesAlternance]', 'Modalités d\'alternance', 'Vous avez indiquez FC en contrat pro ou FI en apprentissage, vous devez préciser les modalités.');
         }
 
-        if (!$this->filled($p->getCoordSecretariat())) {
+        if ($p->getContacts()->count() === 0) {
             $issues[] = new TabIssue('parcours_step5[coordSecretariat]', 'Coordonnées secrétariat', 'Renseigne les coordonnées.');
         }
         if (!$this->filled($p->getModalitesAdmission())) {

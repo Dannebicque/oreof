@@ -124,7 +124,7 @@ class FormationSesType extends AbstractType
                         ->orderBy('u.nom', 'ASC')
                         ->addOrderBy('u.prenom', 'ASC');
                 },
-                'placeholder' => 'Choisir dans la liste ou choisir "+" pour ajouter un utilisateur',
+                'placeholder' => 'Choisir dans la liste ou choisir "+ Créer nouveau" pour ajouter un utilisateur',
                 'new_placeholder' => 'Email du responsable de la mention',
                 'required' => true,
                 'label' => 'Responsable de la mention',

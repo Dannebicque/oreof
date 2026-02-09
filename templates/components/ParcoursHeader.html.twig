@@ -148,9 +148,9 @@
                                 bg-warning-subtle text-warning bubble-process"
                          data-controller="tooltip" data-tooltip-placement-value="bottom"
                          data-bs-original-title="Parcours verrouillé."
-                >
-                    <i class="fas fa-lock small"></i>
-                </div>
+                    >
+                        <i class="fas fa-lock small"></i>
+                    </div>
                     Parcours verrouillé.
                 {% endif %}
             </div>
@@ -210,13 +210,22 @@
                 </button>
 
                 {% if is_granted('ROLE_ADMIN') %}
-                    <button class="btn btn-sm btn-outline-secondary"
+                    <button class="btn btn-sm btn-outline-secondary relative inline-flex items-center"
                             data-toggle-group="accordion-1"
-                            data-toggle="actions" data-target="#actions-panel-admin"
+                            data-toggle="actions"
+                            data-target="#actions-panel-admin"
                     >
-                        <i class="fas fa-wrench"></i>
+                        <i class="fas fa-wrench mr-2"></i>
                         Gestion SES
-                        <i class="fas fa-chevron-up data-toggle-icon"></i>
+                        <i class="fas fa-chevron-up data-toggle-icon ml-2"></i>
+
+                        {# Marqueur de notification #}
+                        {% if parcours.commentaire != null %}
+                            <span class="absolute -top-1 -right-1 flex h-3 w-3">
+                        {#        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span> #}
+                                <span class="relative inline-flex rounded-full h-3 w-3 bg-orange-500 border border-white"></span>
+                            </span>
+                        {% endif %}
                     </button>
                 {% endif %}
             </div>
@@ -423,13 +432,22 @@
                         </a>
                     </div>
                     <div class="col-6 col-sm-4 col-lg-2">
-                        <a class="btn btn-sm btn-outline-secondary w-100"
+                        <a class="btn btn-sm btn-outline-secondary w-100 relative inline-flex items-center justify-center"
                            data-action="click->modalturbo#open"
                            data-turbo="true"
                            href="{{ path('parcours_ses_commentaires', { dpeParcours: dpeParcours.id }) }}"
                         >
-                            <i class="fas fa-comments"></i> Commentaires
+                            <i class="fas fa-comments mr-2"></i> Commentaires
+
+                            {# Le marqueur (Badge) #}
+                            {% if parcours.commentaire != null %}
+                                <span class="absolute -top-1 -right-1 flex h-3 w-3">
+                        {#        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span> #}
+                                    <span class="relative inline-flex rounded-full h-3 w-3 bg-red-500 border border-white"></span>
+                                </span>
+                            {% endif %}
                         </a>
+
                     </div>
                     <div class="col-6 col-sm-4 col-lg-2">
                         <button class="btn btn-sm btn-outline-secondary w-100">

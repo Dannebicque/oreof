@@ -31,11 +31,6 @@ class ParcoursStep1Type extends AbstractType
     {
         $formation = $options['data']->getFormation();
 
-//        $villes = [];
-//        foreach ($formation->getLocalisationMention() as $ville) {
-//            $villes[$ville->getLibelle()] = $ville->getId();
-//        }
-
         $builder
             ->add('respParcours', InlineCreateEntitySelectType::class, [
                 'help' => '',
@@ -46,7 +41,7 @@ class ParcoursStep1Type extends AbstractType
                         ->orderBy('u.nom', 'ASC')
                         ->addOrderBy('u.prenom', 'ASC');
                 },
-                'placeholder' => 'Choisir dans la liste ou choisir "+" pour ajouter un utilisateur',
+                'placeholder' => 'Choisir dans la liste ou choisir "+ Créer Nouveau" pour ajouter un utilisateur',
                 'new_placeholder' => 'Email du responsable du parcours',
                 'required' => true,
                 'label' => 'Responsable du parcours',
@@ -78,7 +73,7 @@ class ParcoursStep1Type extends AbstractType
                         ->orderBy('u.nom', 'ASC')
                         ->addOrderBy('u.prenom', 'ASC');
                 },
-                'placeholder' => 'Choisir dans la liste ou choisir "+" pour ajouter un utilisateur',
+                'placeholder' => 'Choisir dans la liste ou choisir "+ Créer Nouveau" pour ajouter un utilisateur',
                 'new_placeholder' => 'Email du co-responsable du parcours',
                 'required' => true,
                 'label' => 'Co-Responsable du parcours',

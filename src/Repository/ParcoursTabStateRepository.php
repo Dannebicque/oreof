@@ -38,6 +38,7 @@ class ParcoursTabStateRepository extends ServiceEntityRepository
         foreach ($states as $s) {
             $map[$s->getTabKey()] = $s;
         }
+
         return $map;
     }
 }

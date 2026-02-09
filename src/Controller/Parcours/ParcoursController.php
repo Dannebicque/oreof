@@ -56,6 +56,7 @@ class ParcoursController extends BaseController
             'texte_help' => 'Indiquez les éléments du parcours',
             'dpeParcours' => GetDpeParcours::getFromParcours($parcours),
             'tabStates' => $tabStates,
+            'typeDiplome' => $parcours->getFormation()?->getTypeDiplome(),
         ];
 
         // Si Turbo charge un frame, ne calcule pas la structure complète
@@ -243,7 +244,9 @@ class ParcoursController extends BaseController
                 $texte_help = '...??...';
                 break;
             case 'descriptif':
-                $form = $this->createForm(ParcoursStep2Type::class, $parcours);
+                $form = $this->createForm(ParcoursStep2Type::class, $parcours, [
+                    'typeDiplome' => $parcours->getTypeDiplome()
+                ]);
                 $titre = 'Descriptif du parcours';
                 $texte_help = 'Description du parcours';
                 break;
@@ -272,7 +275,8 @@ class ParcoursController extends BaseController
             'form' => $form?->createView(),
             'titre' => $titre,
             'texte_help' => $texte_help,
-            'tabStates' => $tabStates
+            'tabStates' => $tabStates,
+            'typeDiplome' => $parcours->getFormation()?->getTypeDiplome(),
         ];
 
         // Si la requête vient d'un Turbo Frame (header `Turbo-Frame` présent), renvoyer uniquement le fragment

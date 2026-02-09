@@ -27,14 +27,13 @@ class ParcoursStep5Type extends AbstractType
     {
         $builder
             ->add('niveauFrancais', EnumType::class, [
-        'class' => NiveauLangueEnum::class,
-        'choice_label' => static function (UnitEnum $choice): string {
-            return $choice->libelle();
-        },
-                'attr' => ['data-action' => 'change->parcours--step5#changeNiveauLangue'],
-    ])
+                'class' => NiveauLangueEnum::class,
+                'choice_label' => static function (UnitEnum $choice): string {
+                    return $choice->libelle();
+                },
+            ])
             ->add('prerequis', TextareaAutoSaveType::class, [
-                'attr' => ['rows' => 15, 'maxlength' => 3000, 'data-action' => 'change->parcours--step5#savePrerequis'],
+                'attr' => ['rows' => 15, 'maxlength' => 3000],
                 'help' => '-',
             ])
             ->add('composanteInscription', EntityType::class, [
@@ -48,25 +47,25 @@ class ParcoursStep5Type extends AbstractType
                         ->orderBy('c.libelle', 'ASC');
                 },
                 'autocomplete' => true,
-                'attr' => ['data-action' => 'change->parcours--step5#changeComposanteInscription'],
             ])
             ->add('regimeInscription', EnumType::class, [
                 'class' => RegimeInscriptionEnum::class,
                 'translation_domain' => 'enum',
                 'multiple' => true,
                 'expanded' => true,
-                'attr' => ['data-action' => 'change->parcours--step5#changeRegimeInscription']
+                'choice_attr' => function ($choice) {
+                    return [
+                        'data-conditional-field-target' => 'trigger',
+                        'data-action' => 'change->conditional-field#toggle'
+                    ];
+                },
             ])
             ->add('modalitesAlternance', TextareaAutoSaveType::class, [
                 'help' => 'Indiquez en 3000 caractères maximum les périodes et leurs durées en centre ou en entreprise.',
-                'attr' => ['rows' => 20, 'maxlength' => 3000, 'data-action' => 'change->parcours--step5#saveModalitesAlternance'],
+                'attr' => ['rows' => 20, 'maxlength' => 3000],
             ])
-//            ->add('coordSecretariat', TextareaAutoSaveType::class, [
-//                'attr' => ['rows' => 5, 'maxlength' => 3000, 'data-action' => 'change->parcours--step5#coordSecretariat'],
-//                'help' => '-',
-//            ])
             ->add('modalitesAdmission', TextareaAutoSaveType::class, [
-                'attr' => ['rows' => 8, 'maxlength' => 3000, 'data-action' => 'change->parcours--step5#saveModalitesAdmission'],
+                'attr' => ['rows' => 8, 'maxlength' => 3000],
                 'label' => "Modalités d'admission"
             ])
         ;

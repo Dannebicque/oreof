@@ -23,13 +23,13 @@ final class ParcoursTabController extends AbstractController
 {
     #[Route('/{id}/tab/{tabKey}/autosave', name: 'tab_autosave', methods: ['POST'])]
     public function autosave(
-        Request                      $request,
-        Parcours                     $parcours,
-        string                       $tabKey,
+        Request                    $request,
+        Parcours                   $parcours,
+        string                     $tabKey,
         ParcoursFieldUpdater         $updater,
-        ParcoursTabStateRepository   $states,
+        ParcoursTabStateRepository $states,
         ParcoursTabCompletionChecker $checker,
-        EntityManagerInterface       $em,
+        EntityManagerInterface     $em,
     ): Response
     {
         $field = (string)$request->request->get('field');
@@ -54,12 +54,12 @@ final class ParcoursTabController extends AbstractController
 
     #[Route('/{id}/tab/{tabKey}/done', name: 'tab_done', methods: ['POST'])]
     public function done(
-        Request                      $request,
-        Parcours                     $parcours,
-        string                       $tabKey,
-        ParcoursTabStateRepository   $states,
+        Request                    $request,
+        Parcours                   $parcours,
+        string                     $tabKey,
+        ParcoursTabStateRepository $states,
         ParcoursTabCompletionChecker $checker,
-        EntityManagerInterface       $em,
+        EntityManagerInterface     $em,
     ): Response
     {
         ParcoursTabRegistry::assertTab($tabKey);
