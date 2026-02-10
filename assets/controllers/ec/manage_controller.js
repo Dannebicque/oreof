@@ -29,6 +29,7 @@ export default class extends Controller {
 
   tom = null
 
+  /** @deprecated */
   async connect () {
     if (document.getElementById('element_constitutif_natureUeEc')) {
       const natureEc = document.getElementById('element_constitutif_natureUeEc').value
@@ -60,6 +61,7 @@ export default class extends Controller {
     }
   }
 
+  /** @deprecated */
   async changeNatureEc (event) {
     if (this.editValue === true) {
       if (!confirm('Attention, le changement de la nature d\'EC va supprimer les données préalablement saisies. Voulez vous continuer ?')) {
@@ -84,11 +86,13 @@ export default class extends Controller {
     }
   }
 
+  /** @deprecated */
   ajoutTypeEc (event) {
     event.preventDefault()
     document.getElementById('typeEcTexte').classList.remove('d-none')
   }
 
+  /** @deprecated */
   changeTypeEcTexte (event) {
     event.preventDefault()
     if (document.getElementById('element_constitutif_typeEc')) {
@@ -100,6 +104,7 @@ export default class extends Controller {
     }
   }
 
+  /** @deprecated */
   addFromListe (event) {
     // ne pas soumettre le formulaire
     event.preventDefault()
@@ -234,6 +239,7 @@ export default class extends Controller {
     }
   }
 
+  /** @deprecated */
   async removeEcEnfant (event) {
     event.preventDefault()
     // suppression dans this.matieres

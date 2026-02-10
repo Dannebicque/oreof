@@ -10,30 +10,49 @@
 namespace App\Form;
 
 use App\Entity\ElementConstitutif;
+use App\Entity\FicheMatiere;
 use App\Entity\NatureUeEc;
 use App\Entity\TypeEc;
+use App\Entity\User;
 use App\Form\Type\CardsChoiceType;
 use App\Form\Type\InlineCreateEntitySelectType;
+use App\Repository\FicheMatiereRepository;
 use App\Repository\NatureUeEcRepository;
 use App\Repository\TypeEcRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ElementConstitutifType extends AbstractType
 {
-    public function __construct(private NatureUeEcRepository $natureUeEcRepository)
+    public function __construct(
+        private FicheMatiereRepository $ficheMatiereRepository,
+        private NatureUeEcRepository   $natureUeEcRepository)
     {
     }
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $typeDiplome = $options['typeDiplome'];
-        $formation = $options['formation'];
+        $parcours = $options['parcours'];
+        $formation = $parcours->getFormation();
+        $campagneCollecte = $options['campagneCollecte'];
         $isAdmin = $options['isAdmin'];
+
+        $matieres = [];
+        $matieres[] = $this->ficheMatiereRepository->findByParcours($parcours, $campagneCollecte);
+        $matieres[] = $this->ficheMatiereRepository->findAllByHd($campagneCollecte);
+
+// fusionner et dédupliquer par id
+        $mergedById = [];
+        foreach (array_merge(...$matieres) as $m) {
+            $mergedById[$m->getId()] = $m;
+        }
+        $choices = array_values($mergedById);
 
         if ($isAdmin) {
             $builder
@@ -103,7 +122,11 @@ class ElementConstitutifType extends AbstractType
                 'choices' => $natures, // entités
                 'choice_label' => fn($e) => $e->getLibelle(),
                 'choice_value' => fn($e) => (string)$e?->getId(),
-
+//                'choice_attr' => function ($choice) {
+//                    return [
+//                        'data-action' => 'change->ec--manage#changeNatureEc'
+//                    ];
+//                },
                 'columns' => 3,
 
                 // 🔹 champs entité
@@ -112,6 +135,34 @@ class ElementConstitutifType extends AbstractType
                 //'disabled_property' => 'disabled',          // ex: isDisabled() ou getDisabled()
 
                 'on_change_action' => 'change->ec--manage#updateNature',
+            ])
+            ->add('texteEcLibre', TextareaType::class, ['attr' => ['maxlength' => 250]])
+            ->add('ficheMatiere', InlineCreateEntitySelectType::class, [
+                'help' => '',
+                'class' => FicheMatiere::class,
+                'choice_label' => 'libelle',
+                'query_builder' => fn(FicheMatiereRepository $repo) => $repo->qbForParcoursOrHd($parcours, $campagneCollecte),
+                'placeholder' => 'Choisir dans la liste ou choisir "+ Créer Nouveau" pour ajouter une fiche matière',
+                'new_placeholder' => 'Libelle de la fiche matière',
+                'required' => true,
+                'label' => 'Fiche matière obligatoire',
+
+//                // évite doublons (optionnel)
+//                'find_existing' => function (string $label, $scope, EntityManagerInterface $em) {
+//                    return $em->getRepository(FicheMatiere::class)->createQueryBuilder('t')
+//                        ->andWhere('LOWER(t.email) = LOWER(:l)')
+//                        ->setParameter('l', $label)
+//                        ->getQuery()
+//                        ->getOneOrNullResult();
+//                },
+
+                // création (obligatoire)
+                'create' => function (string $label, EntityManagerInterface $em) {
+                    $e = new FicheMatiere();
+                    $e->setLibelle($label);
+                    return $e; // persist/flush gérés par le type (ou tu peux le faire ici)
+                },
+
             ])
 
 //        ->add('natureUeEc', EntityType::class, [
@@ -136,7 +187,8 @@ class ElementConstitutifType extends AbstractType
             'data_class' => ElementConstitutif::class,
             'translation_domain' => 'form',
             'typeDiplome' => null,
-            'formation' => null,
+            'campagneCollecte' => null,
+            'parcours' => null,
             'isAdmin' => false,
         ]);
     }

@@ -239,7 +239,6 @@ class ParcoursController extends BaseController
                 $form = $this->createForm(ParcoursStep3Type::class, $parcours, [
                     'typeDiplome' => $parcours->getFormation()?->getTypeDiplome()
                 ]);
-                $tabView = 'maquette';
                 $titre = 'Structure de la maquette';
                 $texte_help = '...??...';
                 break;
@@ -262,7 +261,6 @@ class ParcoursController extends BaseController
                 break;
             case 'configuration':
                 $form = $this->createForm(ParcoursStep7Type::class, $parcours);
-                $tabView = 'tabs';
                 $titre = 'Configuration du parcours';
                 $texte_help = '...';
                 break;

@@ -17,6 +17,7 @@ use Symfony\Component\Workflow\WorkflowInterface;
 use Symfony\UX\LiveComponent\Attribute\AsLiveComponent;
 use Symfony\UX\LiveComponent\Attribute\LiveAction;
 use Symfony\UX\LiveComponent\Attribute\LiveArg;
+use Symfony\UX\LiveComponent\Attribute\LiveListener;
 use Symfony\UX\LiveComponent\Attribute\LiveProp;
 use Symfony\UX\LiveComponent\DefaultActionTrait;
 use Symfony\UX\LiveComponent\LiveResponder;
@@ -62,11 +63,11 @@ final class ParcoursHeader
         #[Target('dpeParcours')]
         private readonly WorkflowInterface             $dpeParcoursWorkflow,
         private readonly EntityManagerInterface        $em,
-
     )
     {
         $this->process = $this->validationProcess->getProcess();
     }
+
 
     private function reloadDerived(): void
     {
@@ -169,9 +170,6 @@ final class ParcoursHeader
                     $status = (isset($this->historiques[$stepKey]) && $this->historiques[$stepKey]->getCreated()) ? 'completed' : 'pending';
                 } elseif ($i === $currentIndex) {
                     $status = 'active';
-                } else {
-                    // étapes après la place courante restent pending, même si un historique existe
-                    $status = 'pending';
                 }
             }
 
@@ -181,7 +179,7 @@ final class ParcoursHeader
                 'status' => $status,
             ];
         }
-        dump($this->validationSteps);
+
         $this->completedSteps = $this->getCompletedSteps();
         $this->progressPercentage = (int)round($this->getProgressPercentage());
     }

@@ -4,10 +4,11 @@
 }) }}
 
 {% form_theme form 'communs/form_theme_v2.html.twig' %}
-{{ form(form) }}
+{# {{ form(form) }} #}
 
 <form action="{{ path('parcours_process_valider', {transition:transition, dpeParcours:dpeParcours.id}) }}"
       method="post"
+      id="modal_form"
       enctype="multipart/form-data">
 
     {% if meta.hasValidLheo is defined and meta.hasValidLheo == true %}

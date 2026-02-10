@@ -19,6 +19,7 @@ use App\Entity\Composante;
 use App\Entity\DpeParcours;
 use App\Entity\Formation;
 use App\Entity\FormationVersioning;
+use App\Entity\HistoriqueParcours;
 use App\Entity\Parcours;
 use App\Entity\ParcoursVersioning;
 use App\Entity\UserProfil;
@@ -269,6 +270,15 @@ class FormationController extends BaseController
 
             $parcours->addDpeParcour($dpeParcours);
             $this->entityManager->persist($dpeParcours);
+
+            // Historique
+            $histo = new HistoriqueParcours();
+            $histo->setParcours($parcours);
+            $histo->setCreated(new DateTime());
+            $histo->setEtat('valide');
+            $histo->setEtape('en_cours_redaction');
+            $histo->setUser($this->getUser());
+            $this->entityManager->persist($histo);
 
             $profil = $profilRepository->findOneBy(['code' => 'ROLE_RESP_FORMATION']);
             $uc = new UserProfil();

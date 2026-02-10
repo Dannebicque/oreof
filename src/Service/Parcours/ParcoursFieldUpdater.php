@@ -105,6 +105,12 @@ final class ParcoursFieldUpdater extends AbstractFieldUpdater
             // ----------------- STEP 6 (et_apres) -----------------
             'parcours_step6[poursuitesEtudes]' => fn(Parcours $p, $v) => $p->setPoursuitesEtudes($this->toString($v)),
             'parcours_step6[debouches]' => fn(Parcours $p, $v) => $p->setDebouches($this->toString($v)),
+
+            // ----------------- STEP 7 (configuration) -----------------
+            'parcours_step7[descriptifHautPageAutomatique]' => fn(Parcours $p, $v) => $p->setDescriptifHautPageAutomatique($this->toString($v)),
+            'parcours_step7[descriptifHautPage]' => fn(Parcours $p, $v) => $p->setDescriptifHautPage($this->toString($v)),
+            'parcours_step7[descriptifBasPage]' => fn(Parcours $p, $v) => $p->setDescriptifBasPage($this->toString($v)),
+            'parcours_step7[codeRNCP]' => fn(Parcours $p, $v) => $p->setCodeRNCP($this->toString($v)),
         ];
     }
 
@@ -153,6 +159,12 @@ final class ParcoursFieldUpdater extends AbstractFieldUpdater
             'et_apres' => [
                 'parcours_step6[poursuitesEtudes]',
                 'parcours_step6[debouches]',
+            ],
+            'configuration' => [
+                'parcours_step7[descriptifHautPageAutomatique]',
+                'parcours_step7[descriptifHautPage]',
+                'parcours_step7[descriptifBasPage]',
+                'parcours_step7[codeRNCP]'
             ],
         ];
     }

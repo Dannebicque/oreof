@@ -1,0 +1,12 @@
+<turbo-stream action="replace" target="parcours_header_component">
+    <template>
+        <twig:ParcoursHeader parcoursId="{{ parcours.id }}" formationId="{{ parcours.formation.id }}"/>
+    </template>
+</turbo-stream>
+
+{% set toastMessage = 'Validé' %}
+    {% set undo = false %}
+    {% set toastType = 'success' %}
+        {{ include('turbo/toast.stream.html.twig', { message: toastMessage, undo: undo|default(null), type: toastType|default('success') }) }}
+
+{{ include('_ui/_force_close_modal.html.twig') }}

@@ -63,6 +63,23 @@ class ParcoursProcessController extends BaseController
         Request                    $request
     ): Response
     {
+        if ($request->isMethod('POST')) {
+            //return $this->parcoursProcess->valideParcours($parcours, $this->getUser(), $transition, $request, $fileName);
+
+            //            $html =  $this->renderView('modal/success.stream.html.twig');
+            //
+            //            return $turboStream->stream($html);
+
+            $response = $this->render('parcours_v2/turbo/success.stream.html.twig', [
+                'parcours' => $dpeParcours->getParcours(),
+                'formation' => $dpeParcours->getParcours()?->getFormation(),
+            ]);
+            //['Content-Type' => 'text/vnd.turbo-stream.html']
+            $response->headers->set('Content-Type', 'text/vnd.turbo-stream.html');
+            return $response;
+        }
+
+
         $id = $request->query->get('id');
         $meta = $this->validationProcess->getMetaFromTransition($transition);
 
@@ -138,28 +155,14 @@ class ParcoursProcessController extends BaseController
         }
 
         $processData = $this->parcoursProcess->etatParcours($dpeParcours, $meta);
-        //
-        //if ($request->isMethod('POST')) {
-        //    return $this->parcoursProcess->valideParcours($parcours, $this->getUser(), $transition, $request, $fileName);
-        //}
-        //
-        //break;
-        //case 'ficheMatiere':
-        //                $process = $this->validationProcessFicheMatiere->getEtape($etape);
-        //
-        //                $objet = $ficheMatiereRepository->find($id);
-        //
-        //                if ($objet === null) {
-        //                    return JsonReponse::error('Fiche matière non trouvée');
-        //                }
-        //
-        //                $processData = $this->ficheMatiereProcess->etatFicheMatiere($objet, $process);
-        //
-        //                if ($request->isMethod('POST')) {
-        //                    return $this->ficheMatiereProcess->valideFicheMatiere($objet, $this->getUser(), $process, $etape, $request);
-        //                }
-        //                break;
-        //      }
+
+
+        if ($request->isMethod('POST')) {
+            //return $this->parcoursProcess->valideParcours($parcours, $this->getUser(), $transition, $request, $fileName);
+
+            return $this->render('modal/success.stream.html.twig');
+        }
+
 
         return $turboStream->streamOpenModalFromTemplates(
             'Valider le parcours',

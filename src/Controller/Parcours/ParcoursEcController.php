@@ -59,27 +59,32 @@ class ParcoursEcController extends BaseController
 
         $typeDiplome = $parcours->getFormation()?->getTypeDiplome();
 
+        // récupération des fiches matières
+
+
+
         $form = $this->createForm(ElementConstitutifType::class, $elementConstitutif, [
             'action' => $this->generateUrl(
                 'parcours_ec_ajouter_ec_ue',
                 ['ue' => $ue->getId(), 'parcours' => $parcours->getId(), 'element' => $request->query->get('element')]
             ),
             'typeDiplome' => $typeDiplome,
-            'formation' => $parcours->getFormation(),
+            'parcours' => $parcours,
+            'campagneCollecte' => $this->getCampagneCollecte(),
             'isAdmin' => $isAdmin
         ]);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            if ($form->get('typeEcTexte')->getData() !== null && $form->get('typeEc')->getData() === null) {
-                $tu = new TypeEc();
-                $tu->setLibelle($form->get('typeEcTexte')->getData());
-                $tu->addTypeDiplome($typeDiplome);
-                $tu->setFormation($parcours->getFormation());
-                $typeEcRepository->save($tu, true);
-                $elementConstitutif->setTypeEc($tu);
-            }
+//            if ($form->get('typeEcTexte')->getData() !== null && $form->get('typeEc')->getData() === null) {
+//                $tu = new TypeEc();
+//                $tu->setLibelle($form->get('typeEcTexte')->getData());
+//                $tu->addTypeDiplome($typeDiplome);
+//                $tu->setFormation($parcours->getFormation());
+//                $typeEcRepository->save($tu, true);
+//                $elementConstitutif->setTypeEc($tu);
+//            }
 
             if ($elementConstitutif->getNatureUeEc()?->isChoix() === false and $elementConstitutif->getNatureUeEc()?->isLibre() === false) {
                 if (str_starts_with($request->request->get('ficheMatiere'), 'id_')) {

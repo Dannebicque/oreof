@@ -1,0 +1,11 @@
+<turbo-stream action="replace" target="sidebar-tree">
+    <template>
+        {{ include('parcours_v2/_sideBarStructure.html.twig') }}
+    </template>
+</turbo-stream>
+
+<turbo-stream action="replace" target="flash_toasts">
+    <template>
+        {{ include('turbo/toast.stream.html.twig', { message: toastMessage, undo: undo|default(null), type: toastType|default('success') }) }}
+    </template>
+</turbo-stream>

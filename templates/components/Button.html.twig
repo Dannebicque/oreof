@@ -1,14 +1,24 @@
 <div{{ attributes }}>
+    {% if href == '' %}
+        {% set balise = 'button' %}
+    {% else %}
+        {% set balise = 'a' %}
+    {% endif %}
     <!-- component HTML -->
-    <button type="submit"
-            class="rounded-lg bg-{{ color }}-600 text-white px-4 py-2 font-semibold"
-            {% if form != '' %}
-                form="{{ form }}"
-            {% endif %}
+    <{{ balise }}
+    {% if href == '' %}
+        type="submit"
+    {% else %}
+        href="{{ href }}"
+    {% endif %}
+    class="rounded-lg bg-{{ color }}-600 text-white px-4 py-2 font-semibold"
+    {% if form != '' %}
+        form="{{ form }}"
+    {% endif %}
     >
         {% if icon != '' %}
             <i class="{{ icon }}"></i>
         {% endif %}
         {{ submitLabel != '' ? submitLabel : 'Enregistrer' }}
-    </button>
+</{{ balise }}>
 </div>

@@ -161,6 +161,11 @@
                 >
                     {% for ue in semestre.ues %}
                         {{ include('parcours_v2/tabs/_ue.html.twig', {ue:ue}) }}
+                    {% else %}
+                        <twig:alerte type="info">
+                            Aucune UE dans ce semestre pour le moment. Pour saisir votre première UE, choisir "Actions"
+                            en haut à droite.
+                        </twig:alerte>
                     {% endfor %}
                 </div>
             {% endif %}

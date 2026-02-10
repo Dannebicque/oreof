@@ -21,6 +21,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use RuntimeException;
 use Symfony\Component\Workflow\WorkflowInterface;
 
+/** @deprecated("Sans doute plus nécessaire... A revoir.) */
 class FormationStructure
 {
     public function __construct(

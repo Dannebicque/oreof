@@ -85,6 +85,7 @@ class Semestre
         $this->semestreParcours = new ArrayCollection();
         $this->semestreMutualisables = new ArrayCollection();
         $this->validationIssues = new ArrayCollection();
+        $this->lastModification = new \DateTimeImmutable();
     }
 
     public function getId(): ?int

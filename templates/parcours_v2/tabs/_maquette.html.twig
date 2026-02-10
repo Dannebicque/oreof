@@ -13,10 +13,17 @@
             }
         }) }}
 
-        {{ form_errors(form) }}
         {{ form_widget(form) }}
-
         {{ form_end(form) }}
+
+        {% if tabStates['maquette'] is defined and tabStates['maquette'].done == true %}
+            <twig:alerte type="warning"
+                         message="Cette opération permet de générer la structure (créer les semestres) selon les semestres indiquez ci-dessus. Attention, si une structure existe déjà elle sera mise à jour."></twig:alerte>
+            {# todo: gérer un confirm ? #}
+            <twig:Button
+                    href="{{ path('parcours_structure_genere', {parcours: parcours.id}) }}"
+                    submitLabel="Générer la structure"></twig:Button>
+        {% endif %}
     </div>
 </turbo-frame>
 

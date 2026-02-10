@@ -517,4 +517,18 @@ class FicheMatiereRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function qbForParcoursOrHd(Parcours $parcours, CampagneCollecte $campagneCollecte): QueryBuilder
+    {
+        //
+//        $matieres[] = $this->ficheMatiereRepository->findByParcours($parcours, $campagneCollecte);
+//        $matieres[] = $this->ficheMatiereRepository->findAllByHd($campagneCollecte);
+        return $this->createQueryBuilder('fm')
+            ->where('fm.parcours = :parcours')
+            ->orWhere('fm.horsDiplome = 1 AND fm.campagneCollecte = :campagneCollecte')
+            ->setParameter('parcours', $parcours)
+            ->setParameter('campagneCollecte', $campagneCollecte)
+            ->orderBy('fm.libelle', 'ASC');
+    }
+
 }

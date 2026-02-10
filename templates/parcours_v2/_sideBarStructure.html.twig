@@ -1,0 +1,43 @@
+<div class="space-y-1">
+    {% for annee in dto.annees %}
+        <div class="flex items-center p-2 bg-gray-200 rounded-md text-[11px] font-black text-slate-500">
+                                <span>
+                                    <a href="{{ path('parcours_v2_annee', { parcours: parcours.id, annee: annee.annee.id }) }}"
+                                       data-turbo-frame="tab-content"
+                                       data-turbo-action="advance"
+                                       data-tabs-target="tab"
+                                    > Année {{ annee.annee.ordre }} {% if annee.annee.isOuvert == false %}<i
+                                                class="fal fa-do-not-enter"></i> Non ouvert{% endif %}</a>
+                                </span>
+            <div class="flex items-center gap-2 ml-auto">
+                <span class="w-1.5 h-1.5 rounded-full bg-orange-400"></span>
+            </div>
+        </div>
+
+        <div class="ml-4 pl-2 border-l border-slate-700 space-y-1 pt-1">
+            {% for sem in annee.semestres %}
+                <div class="flex items-center p-2 text-[10px] font-bold text-slate-500">
+                                        <span>
+                                            <a href="{{ path('parcours_v2_semestre', { parcours: parcours.id, semestreParcours: sem.semestreParcours.id }) }}"
+                                               data-turbo-frame="tab-content"
+                                               data-turbo-action="advance"
+                                               data-tabs-target="tab"
+                                            >
+                                            S{{ sem.semestreParcours.ordre }} {% if sem.raccroche == true %}<i
+                                                        class="fal fa-chain"></i>{% endif %} {% if sem.semestreParcours.isOuvert == false %}
+                                                    <i class="fal fa-do-not-enter"></i> Non ouvert{% endif %}
+                                            </a>
+                                        </span>
+                    <div class="flex items-center gap-2 ml-auto">
+                        <span class="text-[8px] opacity-80">{{ sem.heuresEctsSemestre.sommeSemestreEcts }} ECTS</span>
+                        {{ sem.semestre.validationStatus|badgeValidationShort }}
+                    </div>
+                </div>
+            {% else %}
+                <div class="flex items-center p-2 text-[10px] font-bold text-slate-500">
+                    Pas de semestres
+                </div>
+            {% endfor %}
+        </div>
+    {% endfor %}
+</div>

@@ -98,15 +98,13 @@ class ParcoursUeController extends BaseController
             // Message de toast
             $toastMessage = 'UE créée avec succès';
 
-            $html = $this->renderView('parcours_v2/turbo/add_ue_success.stream.html.twig', [
+            return $turboStream->stream('parcours_v2/turbo/add_ue_success.stream.html.twig', [
                 'parcours' => $parcours,
                 'semestreParcours' => $semestreParcours,
                 'semestre' => $dtoSemestre,
                 'toastMessage' => $toastMessage,
                 'newUeId' => $ue->getId(),
             ]);
-
-            return $turboStream->stream($html);
         }
 
         return $turboStream->streamOpenModalFromTemplates(
@@ -256,15 +254,13 @@ class ParcoursUeController extends BaseController
             // Message de toast
             $toastMessage = 'UE supprimée avec succès';
 
-            $html = $this->renderView('parcours_v2/turbo/add_ue_success.stream.html.twig', [
+            return $turboStream->stream('parcours_v2/turbo/add_ue_success.stream.html.twig', [
                 'parcours' => $parcours,
                 'semestreParcours' => $semestreParcours,
                 'semestre' => $dtoSemestre,
                 'toastMessage' => $toastMessage,
                 'newUeId' => $ue->getId(),
             ]);
-
-            return $turboStream->stream($html);
         }
 
         return $turboStream->streamToastError(

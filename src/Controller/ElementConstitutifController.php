@@ -44,6 +44,7 @@ class ElementConstitutifController extends BaseController
         ]);
     }
 
+    /** @deprecated */
     #[Route('/type-ec/{ue}/{parcours}', name: 'app_element_constitutif_type_ec', methods: ['GET'])]
     public function typeEc(
         ElementConstitutifRepository $elementConstitutifRepository,

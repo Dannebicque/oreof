@@ -1,9 +1,12 @@
-<div {{ stimulus_controller('ec--manage', {
-    url:path('app_element_constitutif_type_ec', {ec: elementConstitutif.id, ue:ue.id, parcours:parcours.id}),
-    ue:ue.id,
-    parcours:parcours.id,
-    edit: false
-}) }}
+<div
+        {{ stimulus_controller('ec--manage') }}
+        {#        { #}
+        {#    url:path('app_element_constitutif_type_ec', {ec: elementConstitutif.id, ue:ue.id, parcours:parcours.id}), #}
+        {#    ue:ue.id, #}
+        {#    parcours:parcours.id, #}
+        {#    edit: false #}
+        {# } #}
+
 >
 
     {% form_theme form 'communs/form_theme_v2.html.twig' %}
@@ -27,16 +30,18 @@
 
     {{ form_row(form.natureUeEc) }}
 
-    <div data-ec--manage-target="natureSection" data-nature="nature_9" class="space-y-2">
-        <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest" for="matiere_libre">Description
-            libre</label>
-        <textarea rows="3"
-                  id="matiere_libre"
-                  class="w-full p-4 bg-slate-50 border border-slate-200 rounded-sm outline-none focus:border-indigo-500 transition-all"
-                  placeholder="Détails du contenu de l'EC..."></textarea>
+    <div data-ec--manage-target="natureSection" data-nature="nature_9" class="hidden space-y-2">
+        {#        <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest" for="matiere_libre">Description #}
+        {#            libre</label> #}
+        {#        <textarea rows="3" #}
+        {#                  id="matiere_libre" #}
+        {#                  class="w-full p-4 bg-slate-50 border border-slate-200 rounded-sm outline-none focus:border-indigo-500 transition-all" #}
+        {#                  placeholder="Détails du contenu de l'EC..."></textarea> #}
+
+        {{ form_row(form.texteEcLibre) }}
     </div>
 
-    <div data-ec--manage-target="natureSection" data-nature="nature_8" class="hidden space-y-6"
+    <div data-ec--manage-target="natureSection" data-nature="nature_7" class="hidden space-y-6"
          data-controller="multi-tags">
         <div class="space-y-3">
             <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest italic"
@@ -99,24 +104,25 @@
         </div>
     </div>
 
-    <div data-ec--manage-target="natureSection" data-nature="nature_7" class="hidden field-group space-y-2">
-        <div class="flex justify-between items-center">
-            <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest italic"
-                   for="matiere_obligatoire">
-                Matière obligatoire
-            </label>
-            <button type="button" data-action="click->ec--manage#toggleNewField"
-                    class="text-[10px] font-black text-indigo-600 hover:underline">+ Créer nouvelle
-            </button>
-        </div>
-        <select
-                id="matiere_obligatoire"
-                class="select-field w-full p-4 bg-white border border-slate-200 rounded-2xl font-semibold shadow-sm focus:ring-4 focus:ring-indigo-50 outline-none">
-            <option>Mathématiques appliquées</option>
-            <option>Anglais technique</option>
-        </select>
-        <input type="text" placeholder="Nom de la nouvelle matière..."
-               class="input-field hidden w-full p-4 bg-emerald-50 border border-emerald-200 rounded-2xl font-semibold outline-none">
+    <div data-ec--manage-target="natureSection" data-nature="nature_8" class="hidden field-group space-y-2">
+        {{ form_row(form.ficheMatiere) }}
+        {#        <div class="flex justify-between items-center"> #}
+        {#            <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest italic" #}
+        {#                   for="matiere_obligatoire"> #}
+        {#                Matière obligatoire #}
+        {#            </label> #}
+        {#            <button type="button" data-action="click->ec--manage#toggleNewField" #}
+        {#                    class="text-[10px] font-black text-indigo-600 hover:underline">+ Créer nouvelle #}
+        {#            </button> #}
+        {#        </div> #}
+        {#        <select #}
+        {#                id="matiere_obligatoire" #}
+        {#                class="select-field w-full p-4 bg-white border border-slate-200 rounded-2xl font-semibold shadow-sm focus:ring-4 focus:ring-indigo-50 outline-none"> #}
+        {#            <option>Mathématiques appliquées</option> #}
+        {#            <option>Anglais technique</option> #}
+        {#        </select> #}
+        {#        <input type="text" placeholder="Nom de la nouvelle matière..." #}
+        {#               class="input-field hidden w-full p-4 bg-emerald-50 border border-emerald-200 rounded-2xl font-semibold outline-none"> #}
     </div>
 
     {{ form_end(form) }}

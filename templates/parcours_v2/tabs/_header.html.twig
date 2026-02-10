@@ -5,6 +5,7 @@
     </div>
     <div class="flex gap-3 min-w-[20rem]">
         <div class="h-full flex items-center flex-1">
+            {% if not (withNoDone is defined and withNoDone == true) %}
             <div id="tab_done_block_{{ tabKey }}" class="w-full">
                 {{ include('parcours_v2/tabs/_done_block.html.twig', {
                     parcours: parcours,
@@ -13,6 +14,7 @@
                     done: tabStates[tabKey].done ?? false
                 }) }}
             </div>
+            {% endif %}
         </div>
     </div>
 </header>

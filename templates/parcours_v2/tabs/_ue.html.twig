@@ -128,6 +128,11 @@
 
         {% for ec in ue.elementConstitutifs %}
             {{ include('parcours_v2/tabs/_ec.html.twig', {ec:ec}) }}
+        {% else %}
+            <twig:alerte type="info">
+                Aucun EC dans cette UE pour le moment. Pour saisir votre premier EC, choisir "Actions" en haut à droite
+                du bloc de l'UE.
+            </twig:alerte>
         {% endfor %}
     </div>
 </section>
