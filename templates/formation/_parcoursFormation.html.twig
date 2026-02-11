@@ -41,7 +41,7 @@
                             </td>
                         {% endif %}
                         <td class="text-end">
-                            <a href="{{ path('app_parcours_show',{'id': parcours.id}) }}"
+                            <a href="{{ path('parcours_v2_voir',{'parcours': parcours.id}) }}"
                                class="btn btn-sm text-info"
                                data-bs-toggle="tooltip"
                                data-bs-placement="bottom"
@@ -70,7 +70,7 @@
 
                             {% if
                                 is_granted('EDIT', {route: 'app_parcours', subject:  dpesParcours[parcours.id]}) %}
-                                <a href="{{ path('app_parcours_edit',{'id': parcours.id}) }}"
+                                <a href="{{ path('parcours_v2_modifier',{'parcours': parcours.id}) }}"
                                    class="btn btn-sm text-warning"
                                    data-bs-toggle="tooltip"
                                    data-bs-placement="bottom"
