@@ -75,6 +75,10 @@ class LheoXML
             if ($parcours->getTypeParcours() === TypeParcoursEnum::TYPE_PARCOURS_LAS23) {
                 $intituleFormation .= " - LAS 2 et 3";
             }
+
+            if ($parcours->getTypeParcours() === TypeParcoursEnum::TYPE_PARCOURS_LAS123) {
+                $intituleFormation .= " - L.AS 1, 2 et 3";
+            }
         }
 
         // Niveau d'entree

@@ -408,4 +408,13 @@ class ParcoursRepository extends ServiceEntityRepository
         return $result;
     }
 
+    public function findAllByCampagneCollecte(CampagneCollecte $campagneC) {
+        return $this->createQueryBuilder("p")
+            ->join('p.dpeParcours', 'dpe')
+            ->join('dpe.campagneCollecte', 'camp')
+            ->andWhere('camp.id = :idCampagne')
+            ->setParameter(':idCampagne', $campagneC->getId())
+            ->getQuery()
+            ->getResult();
+    } 
 }
