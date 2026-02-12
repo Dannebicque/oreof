@@ -14,7 +14,7 @@
 
 {% set hasChangedTypeMccc = not (typeMccc == typeMcccActuel) %}
 
-    {% set hasDisplayComparaison = (isFromVersioning ?? 'false' != 'true')
+{% set hasDisplayComparaison = (isFromVersioning ?? 'false' != 'true')
     and (isMcccFromVersion ?? false == true)
     and (hasChangedTypeMccc == false)
 %}
