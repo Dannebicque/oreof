@@ -32,7 +32,15 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor;
+use Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor;
+use Symfony\Component\PropertyInfo\PropertyInfoExtractor;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
+use Symfony\Component\Serializer\Mapping\Loader\AttributeLoader;
+use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 
 #[Route('/element/constitutif')]
 class ElementConstitutifMcccController extends AbstractController
@@ -399,26 +407,37 @@ class ElementConstitutifMcccController extends AbstractController
             ]);
         }
 
+        // Denormalizer - récupération du bon type de MCCC
+        $classMetadataFactory = new ClassMetadataFactory(new AttributeLoader());
+        $extractors = new PropertyInfoExtractor([], [new PhpDocExtractor(), new ReflectionExtractor()]);
+        $serializer = new Serializer(
+            [new DateTimeNormalizer(), new ObjectNormalizer($classMetadataFactory, propertyTypeExtractor: $extractors)]
+        );
+        $restoreMcccType = function (array $mccc) use ($serializer) {
+            return $serializer->denormalize($mccc, Mccc::class);
+        };
         // Mise en forme du tableau des MCCC
         $tabMcccVersioning = [];
         if ($structureEc->typeMccc === 'cci') {
             foreach ($structureEc->mcccs as $mccc) {
-                $tabMcccVersioning[$mccc['numeroSession']] = $mccc;
+                $tabMcccVersioning[$mccc['numeroSession']] = $restoreMcccType($mccc);
             }
         } else {
             foreach ($structureEc->mcccs as $mccc) {
                 if ($mccc['secondeChance']) {
-                    $tabMcccVersioning[3]['chance'] = $mccc;
+                    $tabMcccVersioning[3]['chance'] = $restoreMcccType($mccc);
                 } elseif ($mccc['controleContinu'] === true && $mccc['examenTerminal'] === false) {
-                    $tabMcccVersioning[$mccc['numeroSession']]['cc'][$mccc['numeroEpreuve'] ?? 1] = $mccc;
+                    $tabMcccVersioning[$mccc['numeroSession']]['cc'][$mccc['numeroEpreuve'] ?? 1] = $restoreMcccType($mccc);
                 } elseif ($mccc['controleContinu'] === false && $mccc['examenTerminal'] === true) {
-                    $tabMcccVersioning[$mccc['numeroSession']]['et'][$mccc['numeroEpreuve'] ?? 1] = $mccc;
+                    $tabMcccVersioning[$mccc['numeroSession']]['et'][$mccc['numeroEpreuve'] ?? 1] = $restoreMcccType($mccc);
                 }
             }
         }
-
+        // Nouvelle mise en forme pour le template
+        $tabMcccVersioning = $typeD->getDisplayMccc($tabMcccVersioning, $structureEc->typeMccc);
+        // MCCC Actuels
         $getElement = new GetElementConstitutif($elementConstitutif, $parcoursVersioning->getParcours());
-        $tabMcccActuels = $getElement->getMcccsFromFicheMatiere($typeD);
+        $tabMcccActuels = $typeD->getDisplayMccc($getElement->getMcccsFromFicheMatiere($typeD), $typeMccc);
 
         $mcccsToDisplay = $tabMcccActuels;
         if ($isFromVersioning === 'true' || ($structureEc->typeMccc !== $typeMccc)) {
@@ -428,7 +447,7 @@ class ElementConstitutifMcccController extends AbstractController
         return $this->render('element_constitutif/_mcccEcNonEditable.html.twig', [
             'isMcccImpose' => $structureEc->elementConstitutif->getFicheMatiere()?->isMcccImpose(),
             'isEctsImpose' => $structureEc->elementConstitutif->getFicheMatiere()?->isEctsImpose(),
-            'typeMccc' => $typeMccc, //Versioning
+            'typeMccc' => $structureEc->typeMccc, //Versioning
             'typeMcccActuel' => $typeMccc, // Actuel
             'typeEpreuves' => $typeEpreuveDiplome,
             'typeMcccLibelle' => $typeMcccLibelle,
@@ -437,7 +456,7 @@ class ElementConstitutifMcccController extends AbstractController
             'typeDiplome' => $typeD,
             'ectsVersioning' => $structureEc->heuresEctsEc->ects, // Versioning
             'templateForm' => $templateForm,
-            'mcccVersioning' => $tabMcccVersioning,
+            'mcccVersioning' => $tabMcccVersioning, // Versioning
             'mcccs' => $mcccsToDisplay,
             'isMcccFromVersion' => true,
             'parcoursId' => $parcoursVersioning->getParcours()?->getId(),
