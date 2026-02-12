@@ -24,7 +24,7 @@ use App\Service\Apogee\Classes\ParametrageAnnuelCeDTO2;
 use App\Service\Apogee\Classes\TableauParametrageChargeEnseignementDTO2;
 use App\Service\Apogee\Classes\TableauTypeHeureDTO;
 use App\Service\Apogee\Classes\TypeHeureDTO;
-use App\Service\TypeDiplomeResolver;
+use App\TypeDiplome\TypeDiplomeResolver;
 use DateTime;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
@@ -1157,7 +1157,7 @@ class ExportElpApogeeCommand extends Command
      */
     private function getDTOForParcours(Parcours $parcours): StructureParcours
     {
-        return $this->typeDiplomeResolver->getFromParcours($parcours)->calculStructureParcours($parcours);
+        return $this->typeDiplomeResolver->fromParcours($parcours)->calculStructureParcours($parcours);
     }
 
     /**

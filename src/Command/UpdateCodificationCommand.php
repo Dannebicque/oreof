@@ -6,7 +6,7 @@ use App\Classes\Codification\CodificationFormation;
 use App\Repository\CampagneCollecteRepository;
 use App\Repository\FormationRepository;
 use App\Repository\TypeDiplomeRepository;
-use App\Service\TypeDiplomeResolver;
+use App\TypeDiplome\TypeDiplomeResolver;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -73,7 +73,7 @@ class UpdateCodificationCommand extends Command
 
         $formations = $this->formationRepository->findByDpeAndTypeDiplome($campagne, $td);
         foreach ($formations as $formation) {
-            $typeD = $this->typeDiplomeResolver->getFromFormation($formation);
+            $typeD = $this->typeDiplomeResolver->fromFormation($formation);
             $codification = new CodificationFormation($this->entityManager, $typeD);
             //utiliser la bonne méthode selon le niveau de codification
 
