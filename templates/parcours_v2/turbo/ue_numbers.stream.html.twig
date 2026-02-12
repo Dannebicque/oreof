@@ -14,13 +14,9 @@
     </turbo-stream>
 {% endfor %}
 
-{% if toastMessage is defined %}
-    <turbo-stream action="append" target="flash_toasts">
-        <template>
-            {{ include('turbo/toast.stream.html.twig', {
+
+{{ include('turbo/toast.stream.html.twig', {
                 message: toastMessage,
                 undo: undo
             }) }}
-        </template>
-    </turbo-stream>
-{% endif %}
+

@@ -94,8 +94,20 @@
 
 {# --- AIDE (HELP) --- #}
 {% block form_help %}
-    {% import _self as macros %}
-    {% set help = macros.form_parent_help_name(form) %}
+
+
+    {%- if help is empty -%}
+        {%- set t = help_translation_parameters['%transition%'] ?? null -%}
+        {%- set f = help_translation_parameters['%field%'] ?? null -%}
+
+        {%- if t and f -%}
+            {%- set help = 'workflow.' ~ t ~ '.' ~ f ~ '.help' -%}
+        {% else %}
+            {% import _self as macros %}
+            {% set help = macros.form_parent_help_name(form) %}
+        {%- endif -%}
+    {%- endif -%}
+
     {% if help is defined and help|trim|trans({}, 'help') != '' %}
         <p class="text-[11px] text-slate-400 italic mt-1 pl-1 flex items-start gap-2">
             <span class="flex-shrink-0 w-5 h-5 bg-slate-200 text-slate-500 flex items-center justify-center text-[10px] rounded-full"><i
@@ -123,7 +135,16 @@
     {% import _self as macros %}
     {% apply spaceless %}
         {%- if label is empty -%}
-            {% set label = macros.form_parent_name(form) %}
+            {%- set t = label_translation_parameters['%transition%'] ?? null -%}
+            {%- set f = label_translation_parameters['%field%'] ?? null -%}
+
+            {%- if t and f -%}
+                {%- set label = 'workflow.' ~ t ~ '.' ~ f ~ '.label' -%}
+            {%- else -%}
+                {# fallback existant #}
+                {% import _self as macros %}
+                {% set label = macros.form_parent_name(form) %}
+            {%- endif -%}
         {%- endif -%}
         {%- if translation_domain is same as(false) -%}
             {%- if label_html is same as(false) -%}

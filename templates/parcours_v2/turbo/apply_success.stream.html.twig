@@ -1,0 +1,15 @@
+<turbo-stream action="replace" target="parcours_header_component">
+    <template>
+        <div id="parcours_header_component">
+            <twig:ParcoursHeader
+                    parcoursId="{{ dpeParcours.parcours.id }}"
+                    formationId="{{ dpeParcours.parcours.formation.id }}"
+            />
+        </div>
+    </template>
+</turbo-stream>
+
+{{ include('turbo/toast.stream.html.twig', { message: ('toast.'~transition~'.'~type~'.success')|trans({},'process'), undo: null, type: 'success' }) }}
+
+{{ include('_ui/_force_close_modal.html.twig') }}
+

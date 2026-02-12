@@ -9,10 +9,6 @@
     </template>
 </turbo-stream>
 
-<turbo-stream action="replace" target="flash_toasts">
-    <template>
-        {{ include('turbo/toast.stream.html.twig', { message: toastMessage, undo: undo|default(null), type: toastType|default('danger') }) }}
-    </template>
-</turbo-stream>
+{{ include('turbo/toast.stream.html.twig', { message: toastMessage, undo: undo|default(null), type: toastType|default('danger') }) }}
 
 {{ include('_ui/_force_close_modal.html.twig') }}

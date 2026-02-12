@@ -240,11 +240,12 @@ framework:
           metadata:
             recipients: [ 'DPE', 'RF' ]
             titre: 'Autorisation de saisie de la formation %%s'
-            label: 'Autoriser la saisie'
-            description: 'Permet à l''équipe pédagogique de commencer la saisie'
             button_class: 'success'
             button_icon: 'fa-play'
             type: valider
+            handler: "autoriser"
+            form:
+              fields: [ ]
         valider_parcours: # Soumettre du resp de parcours vers formation
           from: 'en_cours_redaction'
           to: 'soumis_parcours'
@@ -256,13 +257,14 @@ framework:
             type: valider
             btn: success
             icon: fa-check
-            label: 'Soumettre le parcours'
-            description: 'Transmettre au responsable de formation pour validation'
             button_class: 'success'
             button_icon: 'fa-paper-plane'
-            confirmation_required: true
-            confirmation_message: 'Êtes-vous sûr de vouloir soumettre ce parcours à validation ?'
-            requires_comment: false
+            #confirmation_required: true
+            #confirmation_message: 'Êtes-vous sûr de vouloir soumettre ce parcours à validation ?'
+            #requires_comment: false
+            handler: "valider"
+            form:
+              fields: [ ]
         valider_rf:
           from: 'soumis_parcours'
           to: 'soumis_dpe_composante'
@@ -273,12 +275,11 @@ framework:
             type: valider
             btn: success
             icon: fa-check
-            label: 'Valider'
-            description: 'Approuver le parcours et le transmettre au DPE'
             button_class: 'success'
             button_icon: 'fa-check'
-            confirmation_required: true
-            confirmation_message: 'Confirmez-vous la validation de ce parcours ?'
+            handler: "valider"
+            form:
+              fields: [ ]
         reserver_rf:
           from: 'soumis_parcours'
           to: 'en_cours_redaction'
@@ -289,12 +290,16 @@ framework:
             type: reserver
             btn: warning
             icon: fa-circle-exclamation-check
-            label: 'Émettre des réserves'
-            description: 'Renvoyer pour corrections avec commentaires'
             button_class: 'warning'
             button_icon: 'fa-exclamation-triangle'
-            requires_comment: true
-            comment_placeholder: 'Décrivez les modifications attendues...'
+            handler: "reserver_commentaire"
+            form:
+              fields:
+                - name: argumentaire
+                  type: textarea
+                  required: true
+                  options:
+                    attr: { rows: 6 }
         refuser_dpe_composante:
           from: 'soumis_dpe_composante'
           to: 'refuse_dpe_composante'
@@ -306,13 +311,16 @@ framework:
             btn: danger
             icon: fa-ban
             label: 'Refuser'
-            description: 'Refuser définitivement ce parcours'
             button_class: 'danger'
             button_icon: 'fa-ban'
-            confirmation_required: true
-            confirmation_message: 'Attention : cette action est définitive. Confirmez-vous le refus ?'
-            requires_comment: true
-            comment_placeholder: 'Motif du refus...'
+            handler: "refuser_commentaire"
+            form:
+              fields:
+                - name: argumentaire
+                  type: textarea
+                  required: true
+                  options:
+                    attr: { rows: 6 }
         valider_dpe_composante:
           from: 'soumis_dpe_composante'
           to: 'soumis_conseil'
@@ -322,12 +330,11 @@ framework:
             type: valider
             btn: success
             icon: fa-check
-            label: 'Transmettre au conseil'
-            description: 'Approuver et transmettre pour passage en conseil'
             button_class: 'success'
             button_icon: 'fa-check'
-            confirmation_required: true
-            confirmation_message: 'Confirmez-vous la transmission au conseil de composante ?'
+            handler: "valider"
+            form:
+              fields: [ ]
         reserver_dpe_composante:
           from: 'soumis_dpe_composante'
           to: 'en_cours_redaction'
@@ -338,12 +345,16 @@ framework:
             type: reserver
             btn: warning
             icon: fa-circle-exclamation-check
-            label: 'Émettre des réserves'
-            description: 'Renvoyer pour corrections'
             button_class: 'warning'
             button_icon: 'fa-exclamation-triangle'
-            requires_comment: true
-            comment_placeholder: 'Précisez les points à corriger...'
+            handler: "reserver_commentaire"
+            form:
+              fields:
+                - name: argumentaire
+                  type: textarea
+                  required: true
+                  options:
+                    attr: { rows: 6 }
         refuser_conseil:
           from: 'soumis_conseil'
           to: 'refuse_conseil'
@@ -355,13 +366,16 @@ framework:
             btn: danger
             icon: fa-ban
             label: 'Refuser'
-            description: 'Le conseil refuse ce parcours'
             button_class: 'danger'
             button_icon: 'fa-ban'
-            confirmation_required: true
-            confirmation_message: 'Confirmez-vous le refus par le conseil ?'
-            requires_comment: true
-            comment_placeholder: 'Motif du refus du conseil...'
+            handler: "refuser_conseil"
+            form:
+              fields:
+                - name: argumentaire
+                  type: textarea
+                  required: true
+                  options:
+                    attr: { rows: 6 }
         valider_conseil:
           from: 'soumis_conseil'
           to: 'soumis_central'
@@ -374,12 +388,19 @@ framework:
             hasDate: true
             hasUpload: true
             icon: fa-check
-            label: 'Valider (conseil)'
-            description: 'Approuvé par le conseil de composante'
             button_class: 'success'
             button_icon: 'fa-check'
-            confirmation_required: true
-            confirmation_message: 'Confirmez-vous la validation par le conseil ?'
+            handler: "valider_conseil"
+            form:
+              fields:
+                - name: dateConseil
+                  type: date
+                  required: true
+                - name: upload
+                  type: file
+                - name: laissezPasser
+                  type: checkbox
+
         reserver_conseil:
           from: 'soumis_conseil'
           to: 'en_cours_redaction'
@@ -390,12 +411,18 @@ framework:
             type: reserver
             btn: warning
             icon: fa-circle-exclamation-check
-            label: 'Émettre des réserves'
-            description: 'Réserves du conseil de composante'
             button_class: 'warning'
             button_icon: 'fa-exclamation-triangle'
-            requires_comment: true
-            comment_placeholder: 'Réserves formulées par le conseil...'
+            handler: "reserver_conseil"
+            form:
+              fields:
+                - name: argumentaire
+                  type: textarea
+                  required: true
+                  options:
+                    attr: { rows: 6 }
+                - name: dateConseil
+                  type: date
         refuser_central:
           from: 'soumis_central'
           to: 'refuse_central'
@@ -407,13 +434,16 @@ framework:
             btn: danger
             icon: fa-ban
             label: 'Refuser'
-            description: 'Refus par le service central'
             button_class: 'danger'
             button_icon: 'fa-ban'
-            confirmation_required: true
-            confirmation_message: 'Confirmez-vous le refus par le SES ?'
-            requires_comment: true
-            comment_placeholder: 'Motif du refus SES...'
+            handler: "refuser_commentaire"
+            form:
+              fields:
+                - name: argumentaire
+                  type: textarea
+                  required: true
+                  options:
+                    attr: { rows: 6 }
         valider_central:
           from: 'soumis_central'
           to: 'soumis_cfvu'
@@ -425,12 +455,15 @@ framework:
             type: valider
             btn: success
             icon: fa-check
-            label: 'Transmettre à la CFVU'
-            description: 'Validation SES et transmission pour passage en CFVU'
+            #            label: 'Transmettre à la CFVU'
+            #            description: 'Validation SES et transmission pour passage en CFVU'
             button_class: 'success'
             button_icon: 'fa-check'
-            confirmation_required: true
-            confirmation_message: 'Confirmez-vous la transmission à la CFVU ?'
+            #            confirmation_required: true
+            #            confirmation_message: 'Confirmez-vous la transmission à la CFVU ?'
+            handler: "valider"
+            form:
+              fields: [ ]
         reserver_central:
           from: 'soumis_central'
           to: 'en_cours_redaction'
@@ -441,12 +474,16 @@ framework:
             type: reserver
             btn: warning
             icon: fa-circle-exclamation-check
-            label: 'Émettre des réserves'
-            description: 'Réserves du service central'
             button_class: 'warning'
             button_icon: 'fa-exclamation-triangle'
-            requires_comment: true
-            comment_placeholder: 'Réserves du SES...'
+            handler: "reserver_commentaire"
+            form:
+              fields:
+                - name: argumentaire
+                  type: textarea
+                  required: true
+                  options:
+                    attr: { rows: 6 }
         valider_publication_directe:
           from: 'soumis_central'
           to: 'valide_a_publier'
@@ -455,11 +492,14 @@ framework:
             type: valider
             btn: success
             icon: fa-check
-            hasValidLheo: true
-            label: 'Publication directe'
-            description: 'Validation et publication sans passage CFVU'
+            #            hasValidLheo: true
+            #            label: 'Publication directe'
+            #            description: 'Validation et publication sans passage CFVU'
             button_class: 'success'
             button_icon: 'fa-rocket'
+            handler: "valider"
+            form:
+              fields: [ ]
         refuser_definitif_cfvu:
           from: 'soumis_cfvu'
           to: 'refuse_definitif_cfvu'
@@ -471,14 +511,18 @@ framework:
             type: refuser
             btn: danger
             icon: fa-ban
-            label: 'Refuser définitivement'
-            description: 'Refus définitif par la CFVU'
             button_class: 'danger'
             button_icon: 'fa-ban'
-            confirmation_required: true
-            confirmation_message: 'Attention : refus définitif. Confirmez-vous ?'
-            requires_comment: true
-            comment_placeholder: 'Motif du refus CFVU...'
+            handler: "refuser_commentaire_date"
+            form:
+              fields:
+                - name: argumentaire
+                  type: textarea
+                  required: true
+                  options:
+                    attr: { rows: 6 }
+                - name: dateCfvu
+                  type: date
         refuser_revoir_cfvu:
           from: 'soumis_cfvu'
           to: 'en_cours_redaction'
@@ -490,12 +534,18 @@ framework:
             type: reserver
             btn: warning
             icon: fa-circle-exclamation-check
-            label: 'Réserves CFVU'
-            description: 'Renvoi pour modifications suite aux réserves CFVU'
             button_class: 'warning'
             button_icon: 'fa-exclamation-triangle'
-            requires_comment: true
-            comment_placeholder: 'Réserves de la CFVU...'
+            handler: "refuser_commentaire_date"
+            form:
+              fields:
+                - name: argumentaire
+                  type: textarea
+                  required: true
+                  options:
+                    attr: { rows: 6 }
+                - name: dateCfvu
+                  type: date
         valider_reserve_cfvu:
           from: 'soumis_cfvu'
           to: 'soumis_dpe_composante_reserve_cfvu'
@@ -509,9 +559,16 @@ framework:
             display: false
             button_class: 'success'
             button_icon: 'fa-check'
-            description: 'Validation par la CFVU avec des réserves'
-            hasArgumentaire: true
-            hasDate: true
+            handler: "valider_reserve_date"
+            form:
+              fields:
+                - name: argumentaire
+                  type: textarea
+                  required: true
+                  options:
+                    attr: { rows: 6 }
+                - name: dateCfvu
+                  type: date
         transmetre_reserve_cfvu:
           from: 'soumis_dpe_composante_reserve_cfvu'
           to: 'soumis_central_reserve_cfvu'
@@ -522,7 +579,15 @@ framework:
             icon: fa-check
             button_class: 'success'
             button_icon: 'fa-check'
-            description: 'Transmettre à la CFVU après réserves'
+            #            description: 'Transmettre à la CFVU après réserves'
+            handler: "valider_commentaire"
+            form:
+              fields:
+                - name: argumentaire
+                  type: textarea
+                  required: true
+                  options:
+                    attr: { rows: 6 }
         valider_reserve_conseil_cfvu:
           from: 'soumis_cfvu'
           to: 'soumis_conseil_reserve' #todo mais on court-circuite le retour directement vers valider publicatio
@@ -536,9 +601,9 @@ framework:
             display: false
             button_class: 'success'
             button_icon: 'fa-check'
-            description: '--'
-            hasArgumentaire: true
-            hasDate: true
+            handler: "valider"
+            form:
+              fields: [ ]
         valider_reserve_central_cfvu:
           from: 'soumis_conseil_reserve'
           to: 'valide_cfvu'
@@ -552,6 +617,9 @@ framework:
             button_class: 'success'
             button_icon: 'fa-check'
             description: '--'
+            handler: "valider"
+            form:
+              fields: [ ]
         valider_cfvu:
           from: 'soumis_cfvu'
           to: 'valide_cfvu'
@@ -563,12 +631,13 @@ framework:
             btn: success
             hasDate: true
             icon: fa-check
-            label: 'Valider CFVU'
-            description: 'Validation par la CFVU'
             button_class: 'success'
             button_icon: 'fa-stamp'
-            confirmation_required: true
-            confirmation_message: 'Confirmez-vous la validation CFVU ?'
+            handler: "valider_date"
+            form:
+              fields:
+                - name: dateCfvu
+                  type: date
         valider_publication:
           from: 'valide_cfvu'
           to: 'valide_a_publier'
@@ -577,12 +646,17 @@ framework:
             type: valider
             btn: success
             icon: fa-check
-            hasDate: true
-            hasValidLheo: true
-            label: 'Préparer la publication'
-            description: 'Préparer le parcours pour publication'
+            #            hasDate: true
+            #            hasValidLheo: true
+            #            label: 'Préparer la publication'
+            #            description: 'Préparer le parcours pour publication'
             button_class: 'success'
             button_icon: 'fa-bullhorn'
+            handler: "valider_date"
+            form:
+              fields:
+                - name: datePublication
+                  type: date
         publier:
           from: 'valide_a_publier'
           to: 'publie'
@@ -591,12 +665,15 @@ framework:
             type: valider
             btn: success
             icon: fa-check
-            label: 'Publier'
-            description: 'Mettre le parcours en ligne'
+            #            label: 'Publier'
+            #            description: 'Mettre le parcours en ligne'
             button_class: 'success'
             button_icon: 'fa-globe'
-            confirmation_required: true
-            confirmation_message: 'Confirmez-vous la publication ?'
+            #            confirmation_required: true
+            #            confirmation_message: 'Confirmez-vous la publication ?'
+            handler: "valider"
+            form:
+              fields: [ ]
         relancer_annee:
           from: 'publie'
           to: 'tacite_reconduction'
@@ -605,6 +682,9 @@ framework:
             button_class: 'warning'
             button_icon: 'fa-undo'
             description: 'Relancer le parcours pour la nouvelle année'
+            handler: "valider"
+            form:
+              fields: [ ]
         reouvrir_tacite:
           from: 'tacite_reconduction'
           to: 'en_cours_redaction'
@@ -615,6 +695,15 @@ framework:
             description: 'Réouvrir le parcours reconduit pour modifications'
             button_class: 'info'
             button_icon: 'fa-pencil'
+            handler: "valider_commentaire"
+            form:
+              fields:
+                - name: argumentaire
+                  type: textarea
+                  required: true
+                  label: "Argumentaire"
+                  options:
+                    attr: { rows: 6 }
         reouvrir_mccc:
           from: 'publie'
           to: 'en_cours_redaction'
@@ -625,6 +714,15 @@ framework:
             button_class: 'info'
             type: 'reouvrir'
             button_icon: 'fa-pencil'
+            handler: "valider_commentaire"
+            form:
+              fields:
+                - name: argumentaire
+                  type: textarea
+                  required: true
+                  label: "Argumentaire"
+                  options:
+                    attr: { rows: 6 }
         reouvrir_avant_publie:
           from: 'valide_a_publier'
           to: 'en_cours_redaction'
@@ -635,6 +733,29 @@ framework:
             button_class: 'warning'
             button_icon: 'fa-undo'
             type: 'reouvrir'
+            handler: "reouvrir_avant_publie"
+            form:
+              title: "Réouvrir avant publication"
+              submit_label: "Valider la demande"
+              fields:
+                - name: argumentaire
+                  type: textarea
+                  required: false
+                  label: "Argumentaire"
+                  options:
+                    attr: { rows: 6 }
+
+        #                - name: urgent
+        #                  type: checkbox
+        #                  required: false
+        #                  label: "Traitement urgent"
+        #
+        #                - name: date_effet
+        #                  type: date
+        #                  required: false
+        #                  label: "Date d'effet"
+        #                  options:
+        #                    widget: single_text
         reouvrir_sans_cfvu:
           from: 'publie'
           to: 'en_cours_redaction_ss_cfvu'
@@ -645,6 +766,18 @@ framework:
             button_class: 'info'
             button_icon: 'fa-edit'
             type: 'reouvrir'
+            handler: "reouvrir_avant_publie"
+            form:
+              title: "Réouvrir sans passage en CFVU"
+              submit_label: "Valider la demande"
+              fields:
+                - name: argumentaire
+                  type: textarea
+                  required: false
+                  label: "Argumentaire"
+                  options:
+                    attr: { rows: 6 }
+
         valider_ouverture_sans_cfvu:
           from: 'en_cours_redaction_ss_cfvu'
           to: 'soumis_central_sans_cfvu'

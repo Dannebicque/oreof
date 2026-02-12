@@ -45,7 +45,6 @@ class ParcoursEcController extends BaseController
         NatureUeEcRepository         $natureUeEcRepository,
         EcOrdre                      $ecOrdre,
         Request                      $request,
-        TypeEcRepository             $typeEcRepository,
         FicheMatiereRepository       $ficheMatiereRepository,
         ElementConstitutifRepository $elementConstitutifRepository,
         Ue                           $ue,

@@ -113,3 +113,7 @@ services:
 
     App\Twig\TurboExtension:
       tags: [ 'twig.extension' ]
+
+    App\Workflow\Handler\Handlers\:
+      resource: '../src/Workflow/Handler/Handlers/'
+      tags: [ 'app.workflow_transition_handler' ]

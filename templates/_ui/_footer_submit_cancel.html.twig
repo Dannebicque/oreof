@@ -9,6 +9,6 @@
     <button type="submit"
             class="rounded-lg bg-green-600 text-white px-4 py-2 font-semibold"
             form="modal_form">
-        {{ submitLabel ?? 'Enregistrer' }}
+        {{ submitLabel ? submitLabel|trans({},'modal') : 'Enregistrer' }}
     </button>
 </div>

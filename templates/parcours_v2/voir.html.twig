@@ -98,7 +98,9 @@
 
 {% block content %}
 
-    <twig:ParcoursHeader parcoursId="{{ parcours.id }}" formationId="{{ parcours.formation.id }}"/>
+    <div id="parcours_header_component">
+        <twig:ParcoursHeader parcoursId="{{ parcours.id }}" formationId="{{ parcours.formation.id }}"/>
+    </div>
 
     {% if (parcours.descriptifHautPage != '' and parcours.descriptifHautPage != null)  or
         (parcours.descriptifBasPage != '' and parcours.descriptifBasPage != null) or

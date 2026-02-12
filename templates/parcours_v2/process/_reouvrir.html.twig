@@ -1,7 +1,0 @@
-{{ component('alerte', {
-    type: 'info',
-    message: ('demande.reouverture.'~transition~'.alerte')|trans({}, 'process')|nl2br|raw
-}) }}
-
-{% form_theme form 'communs/form_theme_v2.html.twig' %}
-{{ form(form) }}
