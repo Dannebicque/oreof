@@ -15,6 +15,7 @@ use App\Controller\BaseController;
 use App\Entity\ElementConstitutif;
 use App\Entity\FicheMatiere;
 use App\Entity\Parcours;
+use App\Entity\SemestreParcours;
 use App\Entity\TypeEc;
 use App\Entity\Ue;
 use App\Form\EcStep4Type;
@@ -29,6 +30,7 @@ use App\Utils\TurboStreamResponseFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/parcours/v2/ec', name: 'parcours_ec')]
@@ -36,8 +38,9 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class ParcoursEcController extends BaseController
 {
 
-    #[Route('/{parcours}/ajouter-ec/{ue}', name: '_ajouter_ec_ue', methods: ['GET', 'POST'])]
+    #[Route('/{semestreParcours}/ajouter-ec/{ue}', name: '_ajouter_ec_ue', methods: ['GET', 'POST'])]
     public function new(
+        TypeDiplomeResolver $typeDiplomeResolver,
         TurboStreamResponseFactory   $turboStream,
         NatureUeEcRepository         $natureUeEcRepository,
         EcOrdre                      $ecOrdre,
@@ -46,9 +49,10 @@ class ParcoursEcController extends BaseController
         FicheMatiereRepository       $ficheMatiereRepository,
         ElementConstitutifRepository $elementConstitutifRepository,
         Ue                           $ue,
-        Parcours                     $parcours
+        SemestreParcours    $semestreParcours
     ): Response
     {
+        $parcours = $semestreParcours->getParcours();
         $isAdmin = $this->isGranted('ROLE_ADMIN');
         $elementConstitutif = new ElementConstitutif();
         $elementConstitutif->setFicheMatiere(null);
@@ -66,7 +70,7 @@ class ParcoursEcController extends BaseController
         $form = $this->createForm(ElementConstitutifType::class, $elementConstitutif, [
             'action' => $this->generateUrl(
                 'parcours_ec_ajouter_ec_ue',
-                ['ue' => $ue->getId(), 'parcours' => $parcours->getId(), 'element' => $request->query->get('element')]
+                ['ue' => $ue->getId(), 'semestreParcours' => $semestreParcours->getId(), 'element' => $request->query->get('element')]
             ),
             'typeDiplome' => $typeDiplome,
             'parcours' => $parcours,
@@ -87,21 +91,21 @@ class ParcoursEcController extends BaseController
 //            }
 
             if ($elementConstitutif->getNatureUeEc()?->isChoix() === false and $elementConstitutif->getNatureUeEc()?->isLibre() === false) {
-                if (str_starts_with($request->request->get('ficheMatiere'), 'id_')) {
-                    $ficheMatiere = $ficheMatiereRepository->find((int)str_replace(
-                        'id_',
-                        '',
-                        $request->request->get('ficheMatiere')
-                    ));
-                } else {
-                    $ficheMatiere = new FicheMatiere();
-                    $ficheMatiere->setCampagneCollecte($this->getCampagneCollecte());
-                    $ficheMatiere->setLibelle($request->request->get('ficheMatiereLibelle'));
-                    $ficheMatiere->setParcours($parcours);
-                    $ficheMatiereRepository->save($ficheMatiere, true);
-                }
+//                if (str_starts_with($request->request->get('ficheMatiere'), 'id_')) {
+//                    $ficheMatiere = $ficheMatiereRepository->find((int)str_replace(
+//                        'id_',
+//                        '',
+//                        $request->request->get('ficheMatiere')
+//                    ));
+//                } else {
+//                    $ficheMatiere = new FicheMatiere();
+//                    $ficheMatiere->setCampagneCollecte($this->getCampagneCollecte());
+//                    $ficheMatiere->setLibelle($request->request->get('ficheMatiereLibelle'));
+//                    $ficheMatiere->setParcours($parcours);
+//                    $ficheMatiereRepository->save($ficheMatiere, true);
+//                }
                 $lastEc = $ecOrdre->getOrdreSuivant($ue, $request);
-                $elementConstitutif->setFicheMatiere($ficheMatiere);
+//                $elementConstitutif->setFicheMatiere($ficheMatiere);
                 $elementConstitutif->setOrdre($lastEc);
                 $elementConstitutif->genereCode();
                 $elementConstitutifRepository->save($elementConstitutif, true);
@@ -148,7 +152,18 @@ class ParcoursEcController extends BaseController
                 $elementConstitutifRepository->save($elementConstitutif, true);
             }
 
-            return $this->json(true);
+            $typeD = $typeDiplomeResolver->fromParcours($parcours);
+            $dtoSemestre = $typeD->calculStructureSemestre($semestreParcours, $parcours);
+
+            //rechargement de l'UE
+            return $turboStream->stream('parcours_v2/turbo/add_ec_success.stream.html.twig', [
+                'parcours' => $parcours,
+                'ue' => $dtoSemestre->getUe($ue->getOrdre()), //todo: tester, car si UE enfant, ca ne marche pas
+                'toastMessage' => 'EC ajouté avec succès',
+                'semestreParcours' => $semestreParcours,
+                'semestre' => $ue->getSemestre(),
+                'newEcId' => $elementConstitutif->getId(),
+            ]);
         }
 
         return $turboStream->streamOpenModalFromTemplates(
@@ -172,7 +187,7 @@ class ParcoursEcController extends BaseController
     }
 
 
-    #[Route('/{parcours}/modifier-ec/{elementConstitutif}', name: '_modifier_ec_ue', methods: ['GET', 'POST'])]
+    #[Route('/{semestreParcours}/modifier-ec/{elementConstitutif}', name: '_modifier_ec_ue', methods: ['GET', 'POST'])]
     public function modifier(
         TurboStreamResponseFactory   $turboStream,
         NatureUeEcRepository         $natureUeEcRepository,
@@ -182,17 +197,18 @@ class ParcoursEcController extends BaseController
         FicheMatiereRepository       $ficheMatiereRepository,
         ElementConstitutifRepository $elementConstitutifRepository,
         ElementConstitutif           $elementConstitutif,
-        Parcours                     $parcours
+        SemestreParcours $semestreParcours
     ): Response
     {
         $isAdmin = $this->isGranted('ROLE_ADMIN');
+        $parcours = $semestreParcours->getParcours();
         $typeDiplome = $parcours->getFormation()?->getTypeDiplome();
         $ue = $elementConstitutif->getUe();
 
         $form = $this->createForm(ElementConstitutifType::class, $elementConstitutif, [
             'action' => $this->generateUrl(
                 'parcours_ec_ajouter_ec_ue',
-                ['ue' => $ue->getId(), 'parcours' => $parcours->getId(), 'element' => $request->query->get('element')]
+                ['ue' => $ue->getId(), 'semestreParcours' => $semestreParcours->getId(), 'element' => $request->query->get('element')]
             ),
             'typeDiplome' => $typeDiplome,
             'formation' => $parcours->getFormation(),
@@ -322,6 +338,7 @@ class ParcoursEcController extends BaseController
             'ec' => $elementConstitutif,
             'parcours' => $parcours,
             'isParcoursProprietaire' => $isParcoursProprietaire,
+            'isMutualisee' => $elementConstitutif->getFicheMatiere()?->getElementConstitutifs()->count() > 0, //todo: mais plus large ca peut venir de l'UE ou du semestre
             'modalite' => $parcours->getModalitesEnseignement()
         ]);
 
@@ -361,5 +378,68 @@ class ParcoursEcController extends BaseController
             ], new Response(headers: ['Content-Type' => 'text/vnd.turbo-stream.html']));
         }
         //todo: ?? où
+    }
+
+    #[Route('/{semestreParcours}/ue/{ue}/{ec}/pre-delete-ec', name: '_pre_delete')]
+    public function preDeleteEc(
+        TurboStreamResponseFactory $turboStream,
+        CsrfTokenManagerInterface  $csrfTokenManager,
+        SemestreParcours           $semestreParcours,
+        ElementConstitutif         $ec,
+        Ue                         $ue
+    ): Response
+    {
+
+        return $turboStream->streamOpenModalFromTemplates(
+            'Supprimer un EC',
+            'Dans : ' . $ue->display() . ', semestre ' . $semestreParcours->getSemestre()?->getOrdre(),
+            'parcours_v2/ec/_delete.html.twig',
+            [],
+            '_ui/_footer_delete_cancel.html.twig',
+            [
+                'submitLabel' => 'Supprimer l\'EC',
+                'url' => $this->generateUrl('parcours_ec_delete', [
+                    'semestreParcours' => $semestreParcours->getId(),
+                    'ue' => $ue->getId(),
+                    'ec' => $ec->getId()
+                ]),
+                'csrf_token' => $csrfTokenManager->getToken('delete' . $ec->getId()),
+            ]
+        );
+    }
+
+    #[Route('/{semestreParcours}/ue/{ue}/{ec}/delete-ec', name: '_delete')]
+    public function deleteEc(
+        TurboStreamResponseFactory $turboStream,
+        Request                    $request,
+        SemestreParcours           $semestreParcours,
+        ElementConstitutif         $ec,
+        Ue                         $ue,
+        TypeDiplomeResolver        $typeDiplomeResolver
+    ): Response
+    {
+        if ($this->isCsrfTokenValid(
+            'delete' . $ec->getId(),
+            $request->query->get('csrf_token')
+        )) {
+            $parcours = $semestreParcours->getParcours();
+            $typeD = $typeDiplomeResolver->fromParcours($parcours);
+            $dtoSemestre = $typeD->calculStructureSemestre($semestreParcours, $parcours);
+
+            //todo: supprimer l'EC, les EC enfants, renuméroter
+            //faire un service avec renumérotation en option, pourra servir pour la suppression d'un semestre ou d'un aprcours
+
+            return $turboStream->stream('parcours_v2/turbo/add_ec_success.stream.html.twig', [
+                'parcours' => $parcours,
+                'ue' => $dtoSemestre->getUe($ue->getOrdre()), //todo: tester, car si UE enfant, ca ne marche pas
+                'toastMessage' => 'EC supprimé avec succès',
+                'semestreParcours' => $semestreParcours,
+                'semestre' => $ue->getSemestre()
+            ]);
+        }
+
+        return $turboStream->streamToastError(
+            'Erreur lors de la suppression de l\'UE',
+        );
     }
 }

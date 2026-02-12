@@ -1,0 +1,25 @@
+<turbo-stream action="replace" target="tab-ue-{{ ue.ue.id }}">
+    <template>
+        {# Rendu complet du semestre mis à jour #}
+        {{ include('parcours_v2/tabs/_ue.html.twig', {ue:ue}) }}
+
+        <script data-turbo-eval="true">
+          (function () {
+            const el = document.getElementById('ec-{{ newEcId }}')
+            if (!el) return
+            el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+            el.classList.add('ring-4', 'ring-green-300', 'bg-green-50')
+            setTimeout(() => el.classList.remove('ring-4', 'ring-green-300', 'bg-green-50'), 3500)
+          })()
+        </script>
+    </template>
+</turbo-stream>
+
+<turbo-stream action="replace" target="flash_toasts">
+    <template>
+        {{ include('turbo/toast.stream.html.twig', { message: toastMessage, undo: undo|default(null), type: toastType|default('success') }) }}
+    </template>
+</turbo-stream>
+
+{{ include('_ui/_force_close_modal.html.twig') }}
+

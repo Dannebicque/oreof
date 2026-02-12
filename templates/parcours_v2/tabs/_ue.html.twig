@@ -77,6 +77,7 @@
 
 
             <!-- menu d'actions secondaire -->
+            {# todo: semestre => semestreParcours sur mutualiser #}
             {{ component('dropdown_actions', {
                 label: 'Actions',
                 help: 'Actions disponibles pour cette UE',
@@ -86,7 +87,7 @@
                         icon: 'fal fa-plus-circle',
                         modal: true,
                         color: 'green',
-                        url: path('parcours_ec_ajouter_ec_ue', {parcours:parcours.id, ue: ue.ue.id}) },
+                        url: path('parcours_ec_ajouter_ec_ue', {semestreParcours:semestreParcours.id, ue: ue.ue.id}) },
                     { label: 'Modifier l\'UE',
                         icon: 'fal fa-pencil',
                         modal: true,
@@ -102,7 +103,7 @@
                     { label: 'Mutualiser l\'UE',
                         icon: 'fal fa-share-nodes',
                         modal: true,
-                        url: path('structure_ue_mutualiser', {semestre:semestre.semestre.id, ue: ue.ue.id}) },
+                        url: path('structure_ue_mutualiser', {semestre:semestreParcours.id, ue: ue.ue.id}) },
                     { label: 'Raccrocher une UE',
                         modal: true,
                         icon: 'fal fa-link',
@@ -112,7 +113,7 @@
                         icon: 'fal fa-trash-alt',
                         url: path('parcours_structure_pre_delete_ue_semestre', {
                         ue: ue.ue.id,
-                        semestreParcours: semestre.semestreParcours.id,
+                        semestreParcours: semestreParcours.id,
                         parcours:parcours.id}), danger: true},
                 ]
             }) }}

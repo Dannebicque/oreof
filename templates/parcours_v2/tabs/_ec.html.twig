@@ -1,5 +1,6 @@
 {% set elem = ec.elementConstitutif %}
 <section
+        id="ec-{{ elem.id }}"
         class="bg-white border border-slate-200 rounded-sm shadow-sm overflow-hidden border-l-8 border-indigo-500 mt-2">
     <div class="p-2 flex items-center justify-between border-b border-slate-100">
         <div class="flex items-center gap-4">
@@ -86,11 +87,14 @@
                 { label: 'Modifier l\'EC',
                     modal: true,
                     icon: 'fal fa-pencil-alt',
-                    url: path('parcours_ec_modifier_ec_ue',{elementConstitutif: ec.elementConstitutif.id, parcours:parcours.id}) },
+                    url: path('parcours_ec_modifier_ec_ue',{elementConstitutif: ec.elementConstitutif.id, semestreParcours:semestreParcours.id}) },
                 { label: 'Supprimer l\'EC',
                     icon: 'fal fa-trash-alt',
                     modal: true,
-                    url: path('app_element_constitutif_delete',{'id': ec.elementConstitutif.id}), danger: true}
+                    url: path('parcours_ec_pre_delete',{
+                    ec: ec.elementConstitutif.id,
+                    ue: ue.ue.id,
+                    semestreParcours:semestreParcours.id}), danger: true}
             ] %}
 
             {% if ec.elementsConstitutifsEnfants|length > 0 or ec.elementConstitutif.natureUeEc.isChoix %}
@@ -98,7 +102,7 @@
                     label: 'Ajouter un EC enfant',
                     icon: 'fal fa-plus',
                     modal: true,
-                    url: path('parcours_ec_ajouter_ec_ue',{parcours: parcours.id, ue: ue.ue.id, parent: ec.elementConstitutif.id}),
+                    url: path('parcours_ec_ajouter_ec_ue',{semestreParcours: semestreParcours.id, ue: ue.ue.id, parent: ec.elementConstitutif.id}),
                 }]) %}
                 {#                <button #}
                 {#                        id="{{ idBase }}-add-ec-enfant-btn" #}

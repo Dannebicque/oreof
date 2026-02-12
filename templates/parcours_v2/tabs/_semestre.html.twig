@@ -160,7 +160,9 @@
                         data-sortable-url-value="{{ path('parcours_structure_api_semestre_reorder_ue', {id: semestreParcours.semestre.id}) }}"
                 >
                     {% for ue in semestre.ues %}
-                        {{ include('parcours_v2/tabs/_ue.html.twig', {ue:ue}) }}
+                        <turbo-frame id="tab-ue-{{ ue.ue.id }}">
+                            {{ include('parcours_v2/tabs/_ue.html.twig', {ue:ue}) }}
+                        </turbo-frame>
                     {% else %}
                         <twig:alerte type="info">
                             Aucune UE dans ce semestre pour le moment. Pour saisir votre première UE, choisir "Actions"

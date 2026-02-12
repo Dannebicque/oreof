@@ -26,27 +26,10 @@ final class FormationHeader
     use DefaultActionTrait;
 
     #[LiveProp(writable: true)]
-    public bool $showActionsAdmin = false;
-
-    #[LiveProp(writable: true)]
-    public bool $showActions = false;
-
-    #[LiveProp(writable: true)]
-    public array $validationSteps = [];
-
-    #[LiveProp(writable: true)]
-    public array $validationOptions = [];
-
-    #[LiveProp]
-    public array $processSteps = [];
-
-    #[LiveProp(writable: true)]
     public array $process = [];
 
     public ?Formation $formation = null;
 
-    public int $progressPercentage = 50;
-    public int $completedSteps = 0;
     public string $place = '';
     public bool $hasDemande = true;
 
@@ -58,20 +41,11 @@ final class FormationHeader
     public function __construct(
         private readonly HistoriqueFormationRepository $historiqueFormationRepository,
         private readonly MentionProcess                $validationProcess,
-        #[Target('dpeParcours')]
-        private readonly WorkflowInterface             $dpeParcoursWorkflow,
         private readonly EntityManagerInterface        $em,
 
     )
     {
         $this->process = $this->validationProcess->getProcess();
-    }
-
-    #[LiveAction]
-    public function toggleActionsAdmin(): void
-    {
-        $this->reloadDerived();
-        $this->showActionsAdmin = !$this->showActionsAdmin;
     }
 
     private function reloadDerived(): void
@@ -95,36 +69,16 @@ final class FormationHeader
 
         $this->init();
         $this->getHistorique();
-        $this->processSteps = $this->validationProcess->getProcess();
-        $this->validationOptions = $this->validationProcess->getOptionsForStep($this->formation);
     }
 
     private function init(): void
     {
-//        $this->place = $this->getPlace();
         $this->hasDemande = $this->formation->getEtatReconduction() !== TypeModificationDpeEnum::OUVERT || TypeModificationDpeEnum::FERMETURE_DEFINITIVE; //todo: peut être d'autres cas ou traiter dans le sens ouvert
     }
 
-//    private function getPlace(): string
-//    {
-//        return array_keys($this->getWorkflow()->getMarking($this->dpeParcours)->getPlaces())[0];
-//    }
-
-//    private function getWorkflow(): WorkflowInterface
-//    {
-//        return $this->dpeParcoursWorkflow;
-//    }
-
     public function getHistorique()
     {
-//        if (null === $this->dpeParcours) {
-//            return;
-//        }
-
-//        $entriesParcours = $this->historiqueParcoursRepository->findBy(['parcours' => $this->parcours], ['created' => 'ASC']);
         $entriesFormation = $this->historiqueFormationRepository->findBy(['formation' => $this->formation], ['created' => 'ASC']);
-
-//        $entries = array_merge($entriesParcours, $entriesFormation);
 
         usort($entriesFormation, fn($a, $b) => (
             ($a->getCreated() ? $a->getCreated()->getTimestamp() : 0)
@@ -148,73 +102,6 @@ final class FormationHeader
         }
 
         $this->historiques = $map;
-
-        // Construire les étapes ordonnées à partir du process
-        $ordered = array_keys($this->process);
-        $currentIndex = array_search($this->place, $ordered, true);
-
-        $this->validationSteps = [];
-        foreach ($ordered as $i => $stepKey) {
-            $label = is_array($this->process[$stepKey] ?? null) ? ($this->process[$stepKey]['label'] ?? $stepKey) : $stepKey;
-            $status = 'pending';
-
-            if ($currentIndex === false) {
-                // pas de place connue : se baser uniquement sur l'historique
-                $status = (isset($this->historiques[$stepKey]) && $this->historiques[$stepKey]->getCreated()) ? 'completed' : 'pending';
-            } else {
-                if ($i < $currentIndex) {
-                    $status = (isset($this->historiques[$stepKey]) && $this->historiques[$stepKey]->getCreated()) ? 'completed' : 'pending';
-                } elseif ($i === $currentIndex) {
-                    $status = 'active';
-                } else {
-                    // étapes après la place courante restent pending, même si un historique existe
-                    $status = 'pending';
-                }
-            }
-
-            $this->validationSteps[$stepKey] = [
-                'key' => $stepKey,
-                'label' => $label,
-                'status' => $status,
-            ];
-        }
-//        dump($this->validationSteps);
-        $this->completedSteps = $this->getCompletedSteps();
-        $this->progressPercentage = (int)round($this->getProgressPercentage());
-    }
-
-    public function getCompletedSteps(): int
-    {
-        return count(array_filter($this->validationSteps, fn($step) => $step['status'] === 'completed'));
-    }
-
-    public function getProgressPercentage(): float
-    {
-        $total = count($this->validationSteps);
-        if ($total === 0) {
-            return 0;
-        }
-        return ($this->getCompletedSteps() / $total) * 100;
-    }
-
-    #[LiveAction]
-    public function toggleActions(): void
-    {
-        $this->reloadDerived();
-        $this->showActions = !$this->showActions;
-    }
-
-    #[LiveAction]
-    public function validate(string $optionId): void
-    {
-        // Logique de validation selon l'option choisie
-        // Exemple : envoyer un événement, sauvegarder en base, etc.
-
-        // Pour l'instant, on log juste l'action
-        error_log("Action de validation: " . $optionId);
-
-        // Vous pouvez ajouter un message flash ou dispatch un événement
-        // $this->addFlash('success', 'Validation effectuée avec succès');
     }
 
     public function status(string $transition): string

@@ -25,22 +25,22 @@ class McccType extends AbstractType
             'cci' => [
                 'label' => 'CCI',
                 'description' => 'Contrôle continu intégral',
-                'icone' => 'fal fa-mark'
+                'icone' => 'fal fa-infinity'
             ],
             'cc_ct' => [
                 'label' => 'CC_CT',
-                'description' => 'Contrôle continu intégral',
-                'icone' => 'fal fa-mark'
+                'description' => 'Contrôle continu & contrôle terminal',
+                'icone' => 'fal fa-arrow-right-long-to-line'
             ],
             'ct' => [
                 'label' => 'CT',
-                'description' => 'Contrôle continu intégral',
-                'icone' => 'fal fa-mark'
+                'description' => 'Contrôle terminal',
+                'icone' => 'fal fa-stopwatch'
             ],
             'cc' => [
                 'label' => 'CC',
-                'description' => 'Contrôle continu intégral',
-                'icone' => 'fal fa-mark'
+                'description' => 'Contrôle continu',
+                'icone' => 'fal fa-arrow-right'
             ]
         ];
 

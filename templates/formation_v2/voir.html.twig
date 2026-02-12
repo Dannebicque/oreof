@@ -232,29 +232,9 @@
 
                     </nav>
                 </div>
-
-                {#                {% set valideLheo = lheoXML.isValidLheo(parcours) %} #}
-                {#                {% set percent = parcours.remplissage.calcul() %} #}
-                {#                {% set isFull = parcours.remplissage.isFull() == true %} #}
-                {#                {% set color = isFull and valideLheo ? 'green' : 'orange' %} #}
-
-                {#                <div class="p-6 bg-{{ color }}-600 rounded-sm text-white shadow-xl shadow-{{ color }}-100"> #}
-                {#                    <p class="text-[10px] font-black uppercase opacity-60 mb-2">Statut Global</p> #}
-                {#                    <p class="text-sm font-bold leading-tight"> #}
-                {#                        {% if lheoXML.isValidLheo(parcours) %} #}
-                {#                            Le parcours est prêt pour la publication LHEO. #}
-                {#                        {% else %} #}
-                {#                            Le parcours est invalide LHEO, publication impossible #}
-                {#                        {% endif %} #}
-                {#                    </p> #}
-                {#                    <div class="mt-4 w-full bg-indigo-400/30 h-1.5 rounded-full overflow-hidden"> #}
-                {#                        <div class="w-[{{ percent }}%] h-full bg-white"></div> #}
-                {#                    </div> #}
-                {#                </div> #}
             </div>
         </aside>
-        <div class="p-3 flex-1 overflow-y-auto flex flex-col pt-0">
-
+        <div class="ps-3 flex-1 overflow-y-auto flex flex-col pt-0">
             {{ include('typeDiplome/'~constant('TEMPLATE_FOLDER', typeD)~'/_show_formation.html.twig') }}
         </div>
     </div>

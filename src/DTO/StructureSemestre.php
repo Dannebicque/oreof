@@ -90,4 +90,8 @@ class StructureSemestre
     //     sort($this->ues);
     //     return $this->ues;
     // }
+    public function getUe(?int $getid): ?StructureUe
+    {
+        return $this->ues[$getid] ?? null;
+    }
 }
