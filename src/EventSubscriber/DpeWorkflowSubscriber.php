@@ -14,14 +14,15 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Workflow\Event\Event;
 use App\Notification\WorkflowNotifier;
 use App\Workflow\RecipientResolver;
+use Symfony\Component\Workflow\Event\TransitionEvent;
 use Symfony\Component\Workflow\WorkflowInterface;
 
 class DpeWorkflowSubscriber implements EventSubscriberInterface
 {
     public function __construct(
-        private WorkflowInterface $dpeParcoursWorkflow,
-        private WorkflowNotifier  $notifier,
-        private RecipientResolver $recipients
+        private readonly WorkflowInterface $dpeParcoursWorkflow,
+        private readonly WorkflowNotifier  $notifier,
+        private readonly RecipientResolver $recipients
     )
     {
     }
@@ -34,7 +35,7 @@ class DpeWorkflowSubscriber implements EventSubscriberInterface
         ];
     }
 
-    public function onTransition(Event $event): void
+    public function onTransition(TransitionEvent $event): void
     {
         $subject = $event->getSubject();
         $data = new WorkflowData($subject);
@@ -50,7 +51,10 @@ class DpeWorkflowSubscriber implements EventSubscriberInterface
             'data' => $data,
             'context' => $event->getContext() ?? [],
         ];
+        dump($event);
+        dump($context);
         $recipients = $this->recipients->resolveRecipients('dpeParcours', $transition->getName(), $data);
+        dump($recipients);
         $this->notifier->notify($recipients['recipients'], $eventKey, $this->dpeParcoursWorkflow->getName(), $context);
     }
 

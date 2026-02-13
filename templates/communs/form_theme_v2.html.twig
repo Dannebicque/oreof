@@ -522,4 +522,18 @@
     </div>
 {% endblock %}
 
+{% block checkbox_row %}
+    <div>
+        {{ form_errors(form) }}
 
+        <label class="flex items-start gap-3 cursor-pointer">
+            {{ form_widget(form, {
+                attr: {
+                    class: 'mt-1 h-4 w-4 rounded border-gray-300'
+                }
+            }) }}
+            {{ form_label(form) }}
+        </label>
+    </div>
+    {{ form_help(form) }}
+{% endblock %}

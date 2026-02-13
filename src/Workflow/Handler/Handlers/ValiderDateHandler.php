@@ -33,7 +33,7 @@ final class ValiderDateHandler extends AbstractDpeParcoursHandler implements Tra
     ): void
     {
         // Récupération safe des champs (2–3 max => simple)
-        $date = Tools::convertDate((string)($data['dateConseil']));
+        $date = $data['dateConseil'] ?? null;
 
         if ($date === null) {
             throw new \DomainException("Date obligatoire.");

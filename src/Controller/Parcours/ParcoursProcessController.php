@@ -234,11 +234,13 @@ class ParcoursProcessController extends BaseController
                         (array)$form->getData());
                     // l'étape c'est la clé du tableau $dpeParcours->getEtatValidation()
                     $etape = array_keys($dpeParcours->getEtatValidation($dpeParcours))[0] ?? 'inconnue';
+                    dump($etape);
                     $histoEvent = new HistoriqueParcoursEvent($dpeParcours->getParcours(), $this->getUser(), $etape, $metaDto->type, $request);
                     $this->eventDispatcher->dispatch($histoEvent, HistoriqueParcoursEvent::ADD_HISTORIQUE_PARCOURS);
 
                 } catch (\Throwable $e) {
                     //toast erreur
+                    dump($e->getMessage());
                     return $turboStream->stream('parcours_v2/turbo/apply_error.stream.html.twig', [
                         'dpeParcours' => $dpeParcours,
                         'transition' => $transition,

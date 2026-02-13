@@ -34,7 +34,7 @@ final class ValiderReserveCommentaireDateHandler extends AbstractDpeParcoursHand
     {
         // Récupération safe des champs (2–3 max => simple)
         $argumentaire = (string)($data['argumentaire'] ?? '');
-        $date = Tools::convertDate((string)($data['dateConseil']));
+        $date = $data['dateConseil'];
 
         if ($argumentaire === '') {
             throw new \DomainException("Argumentaire obligatoire.");

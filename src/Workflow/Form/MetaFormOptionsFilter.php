@@ -4,11 +4,11 @@ namespace App\Workflow\Form;
 
 final class MetaFormOptionsFilter
 {
-    private const ALLOWED = [
+    private const array ALLOWED = [
         'attr', 'row_attr',
         'widget', 'placeholder',
         'choices', 'expanded', 'multiple',
-        'input', 'years', 'format',
+        'input', 'years', 'format', 'file', 'value'
     ];
 
     public function filter(array $options): array

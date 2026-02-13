@@ -34,7 +34,7 @@ final class RefuserCommentaireDateHandler extends AbstractDpeParcoursHandler imp
     {
         // Récupération safe des champs (2–3 max => simple)
         $argumentaire = (string)($data['argumentaire'] ?? '');
-        $date = Tools::convertDate((string)($data['dateConseil']));
+        $date = $data['dateConseil'] ?? null;
 
         if ($argumentaire === '') {
             throw new \DomainException("Argumentaire obligatoire.");

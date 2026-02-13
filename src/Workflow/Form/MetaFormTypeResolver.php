@@ -12,13 +12,15 @@ namespace App\Workflow\Form;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 final class MetaFormTypeResolver
 {
-    private const MAP = [
+    private const array MAP = [
         'text' => TextType::class,
+        'file' => FileType::class,
         'textarea' => TextareaType::class,
         'checkbox' => CheckboxType::class,
         'date' => DateType::class,

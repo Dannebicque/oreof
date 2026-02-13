@@ -15,11 +15,11 @@ use App\Utils\Tools;
 use App\Workflow\Handler\AbstractDpeParcoursHandler;
 use App\Workflow\Handler\TransitionHandlerInterface;
 
-final class ReserverCommentaireDateHandler extends AbstractDpeParcoursHandler implements TransitionHandlerInterface
+final class ValiderConseilHandler extends AbstractDpeParcoursHandler implements TransitionHandlerInterface
 {
     public function supports(string $code): bool
     {
-        return $code === 'reserver_commentaire_date';
+        return $code === 'valider_conseil';
     }
 
     /**
@@ -33,20 +33,20 @@ final class ReserverCommentaireDateHandler extends AbstractDpeParcoursHandler im
     ): void
     {
         // Récupération safe des champs (2–3 max => simple)
-        $argumentaire = (string)($data['argumentaire'] ?? '');
         $date = $data['dateConseil'] ?? null;
-
-        if ($argumentaire === '') {
-            throw new \DomainException("Argumentaire obligatoire.");
-        }
+//        $laissezPasser = (string)($data['dateConseil']);
+//        $pv = Tools::convertDate((string)($data['dateConseil']));
 
         if ($date === null) {
             throw new \DomainException("Date obligatoire.");
         }
 
+//        if ($laissezPasser === null && $pv === null) {
+//            throw new \DomainException("Au moins une date de laissez-passer ou de PV doit être renseignée.");
+//        }
+//todo: a gérer...
         //appliquer la transition, gérer l'historique
         $this->dpeParcoursWorkflow->apply($dpeParcours, $transition, [
-            'motif' => $argumentaire,
             'date' => $date
         ]);
     }
