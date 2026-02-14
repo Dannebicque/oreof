@@ -19,7 +19,12 @@
         <ul>
             {# todo: géré au parcours ?? A tester #}
             {% if context.sousReserveConseil is defined and context.sousReserveConseil  == true %}
-                <p>- Sous réserve du dépôt du PV du conseil de composante. Vous pouvez retourner sur la fiche descriptive de cette formation ou du parcours (<a href="{{ url('app_formation_show', {'slug': formation.slug}) }}">{{ url('app_formation_show', {'slug': formation.slug}) }}</a>) et téléverser le PV dans le menu du processus de validation ou vous pouvez déposer un même PV pour un ensemble de formations/parcours en accédant au menu "mes composantes" puis "Processus validation"</p>
+                <p>- Sous réserve du dépôt du PV du conseil de composante. Vous pouvez retourner sur la fiche
+                    descriptive de cette formation ou du parcours (<a
+                            href="{{ url('formation_v2_voir', {'slug': formation.slug}) }}">{{ url('formation_v2_voir', {'slug': formation.slug}) }}</a>)
+                    et téléverser le PV dans le menu du processus de validation ou vous pouvez déposer un même PV pour
+                    un ensemble de formations/parcours en accédant au menu "mes composantes" puis "Processus validation"
+                </p>
             {% endif %}
             {% if sousReserveModifications is defined and sousReserveModifications  == true %}
                 <p>- Sous réserve des modifications suivantes
@@ -33,7 +38,7 @@
                 <p>Vous pouvez modifier votre formation en cliquant sur le lien suivant :</p>
 
                 <p>
-                    <a href="{{ url('app_formation_edit', {'slug': formation.slug}) }}">{{ url('app_formation_edit', {'slug': formation.slug}) }}</a>
+                    <a href="{{ url('formation_v2_modifier', {'slug': formation.slug}) }}">{{ url('formation_v2_modifier', {'slug': formation.slug}) }}</a>
                 </p>
             {% endif %}
         </ul>

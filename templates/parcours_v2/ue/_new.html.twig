@@ -11,11 +11,9 @@
     {{ form_row(form.ects) }}
     {{ form_row(form.typeUe, {'row_attr' : {'id' : 'typeUe' }}) }}
     {{ form_row(form.natureUeEc, {'row_attr' : {'id' : 'natureUeEc' }}) }}
-    <div id="descriptionUeLibre"
-         {% if ue is defined and ue.natureUeEc != null and ue.natureUeEc.libre == true %}class=""
-         {% else %}class="d-none"{% endif %}
-    >
-        {{ form_row(form.descriptionUeLibre, {'row_attr' : {'id' : 'natureUeEc' }}) }}
+
+    <div data-ue-target="natureSection" data-nature="nature_9" class="hidden space-y-2">
+        {{ form_row(form.descriptionUeLibre) }}
     </div>
 </div>
 

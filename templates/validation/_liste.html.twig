@@ -107,7 +107,7 @@
                 </td>
                 <td class="text-end">
                     {% if formation.hasParcours and formation.parcours|length > 0 %}
-                        <a href="{{ path('app_parcours_show',{'id': parcours.id}) }}"
+                        <a href="{{ path('parcours_v2_voir', {parcours: parcours.id}) }}"
                            class="btn btn-sm text-info"
                            data-bs-toggle="tooltip"
                            data-bs-placement="bottom"
@@ -134,7 +134,7 @@
                         </a>
                         {% if isCfvu is not defined or not isCfvu %}
                             {% if is_granted('EDIT', {route: 'app_parcours', subject: parcours}) %}
-                                <a href="{{ path('app_parcours_edit',{'id': parcours.id}) }}"
+                                <a href="{{ path('parcours_v2_modifier', {parcours: parcours.id}) }}"
                                    class="btn btn-sm text-warning"
                                    data-bs-toggle="tooltip"
                                    data-bs-placement="bottom"
@@ -146,7 +146,7 @@
                             {% endif %}
                         {% endif %}
                     {% else %}
-                        <a href="{{ path('app_formation_show',{'slug': formation.slug}) }}"
+                        <a href="{{ path('formation_v2_voir',{'slug': formation.slug}) }}"
                            class="btn btn-sm text-info"
                            data-bs-toggle="tooltip"
                            data-bs-placement="bottom"
@@ -173,7 +173,7 @@
                         </a>
 
                         {% if is_granted('EDIT', {route: 'app_formation', subject: formation}) %}
-                            <a href="{{ path('app_formation_edit',{'slug': formation.slug}) }}"
+                            <a href="{{ path('formation_v2_modifier',{'slug': formation.slug}) }}"
                                class="btn btn-sm text-warning"
                                data-bs-toggle="tooltip"
                                data-bs-placement="bottom"

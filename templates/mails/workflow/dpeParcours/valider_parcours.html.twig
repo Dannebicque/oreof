@@ -7,6 +7,8 @@
 
     <p>Vous pouvez maintenant le valider ou émettre des réserves en cliquant sur le lien suivant :</p>
 
-    <p><a href="{{ url('app_parcours_edit', {'id': parcours.id}) }}">{{ url('app_parcours_edit', {'id': parcours.id}) }}</a></p>
+    <p>
+        <a href="{{ url('parcours_v2_modifier', {parcours: parcours.id}) }}">{{ url('parcours_v2_modifier', {parcours: parcours.id}) }}</a>
+    </p>
 
 {% endblock %}

@@ -52,9 +52,9 @@
                                 <div class="d-flex">
                                     <a class="btn btn-outline-info btn-sm ms-1" type="button"
                                             {% if commentaire.formation is defined and commentaire.formation != null %}
-                                                {% set url = path('app_formation_show', {slug:commentaire.formation.slug})~'#'~commentaire.zone %}
+                                                {% set url = path('formation_v2_voir', {slug:commentaire.formation.slug})~'#'~commentaire.zone %}
                                             {% elseif commentaire.parcours is defined and commentaire.parcours != null %}
-                                                {% set url = path('app_parcours_show', {id:commentaire.parcours.id})~'#'~commentaire.zone %}
+                                                {% set url = path('parcours_v2_voir', {parcours:commentaire.parcours.id})~'#'~commentaire.zone %}
                                             {% elseif commentaire.ficheMatiere is defined and commentaire.ficheMatiere != null %}
                                                 {% set url = path('app_fiche_matiere_show', {slug:commentaire.ficheMatiere.slug})~'#'~commentaire.zone %}
                                             {% else %}

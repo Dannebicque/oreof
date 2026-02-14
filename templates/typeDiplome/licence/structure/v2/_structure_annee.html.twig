@@ -1,0 +1,35 @@
+<section id="L1" class="mb-24">
+    <div class="sticky-year bg-slate-50/95 backdrop-blur-sm py-4 border-b border-slate-200 mb-8 flex items-center justify-between">
+        <h2 class="text-xl font-black text-slate-800 uppercase tracking-tighter">Licence 1</h2>
+        <div class="flex gap-4">
+            <div class="flex items-center gap-2 px-3 py-1 bg-blue-50 border border-blue-100 rounded-md">
+                <div class="w-2 h-2 bg-blue-500 rounded-full"></div>
+                <span class="text-[10px] font-bold text-blue-700 uppercase tracking-wider">Présentiel</span>
+            </div>
+            <div class="flex items-center gap-2 px-3 py-1 bg-orange-50 border border-orange-100 rounded-md">
+                <div class="w-2 h-2 bg-orange-500 rounded-full"></div>
+                <span class="text-[10px] font-bold text-orange-700 uppercase tracking-wider">Distanciel</span>
+            </div>
+        </div>
+    </div>
+    {% for ordre, semestre in dto.semestres|filter(semestre => (semestre.semestre.nonDispense == false)) %}
+        {% set diffSemestre = diffStructure is defined and diffStructure != null ? diffStructure.semestres[ordre] : null %}
+        {{ include('typeDiplome/licence/structure/v2/_structure_semeste.html.twig') }}
+    {% endfor %}
+
+    <div class="ml-6 mt-10 p-6 bg-slate-900 rounded-2xl text-white flex flex-wrap justify-between items-center shadow-2xl">
+        <div class="flex gap-10 items-center">
+            <span class="text-xs font-black uppercase tracking-[0.2em] text-indigo-400">Bilan Annuel L1</span>
+            <div class="text-center"><p class="text-[9px] opacity-50 uppercase font-bold">Crédits</p>
+                <p class="text-xl font-black">60 ECTS</p></div>
+            <div class="text-center"><p class="text-[9px] opacity-50 uppercase font-bold text-blue-400">Présentiel</p>
+                <p class="text-xl font-black">340h</p></div>
+            <div class="text-center"><p class="text-[9px] opacity-50 uppercase font-bold text-orange-400">Distanciel</p>
+                <p class="text-xl font-black">52h</p></div>
+        </div>
+        <div class="text-right">
+            <p class="text-[9px] opacity-50 uppercase font-bold">Volume Annuel</p>
+            <p class="text-3xl font-black italic tracking-tighter">392h</p>
+        </div>
+    </div>
+</section>

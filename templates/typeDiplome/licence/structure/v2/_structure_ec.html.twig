@@ -1,0 +1,140 @@
+{#    <tr> #}
+{#        <td class="px-5 py-4 font-semibold text-slate-700 border-l-4 border-indigo-500">Humanités numériques</td> #}
+{#        <td class="text-center bg-blue-50/10 empty-cell">-</td> #}
+{#        <td class="text-center bg-blue-50/10 font-bold">10h</td> #}
+{#        <td class="text-center bg-blue-50/10 empty-cell border-r border-slate-100">-</td> #}
+{#        <td class="text-center bg-orange-50/10 font-bold text-orange-600">8h</td> #}
+{#        <td class="text-center bg-orange-50/10 empty-cell">-</td> #}
+{#        <td class="text-center bg-orange-50/10 empty-cell border-r border-slate-100">-</td> #}
+{#        <td class="px-5 py-4 text-right font-black">18h</td> #}
+{#    </tr> #}
+<tr class="ec">
+    <td class="ps-2 py-2 font-semibold text-slate-700 border-l-4 border-indigo-500">{% if ecEnfant %}<span
+            class="badge bg-ec-{{ ec.elementConstitutif.ordre }}">&nbsp;</span>{% endif %}
+        {% if (isBut is defined and isBut == false) or isBut is not defined %}
+            <strong>{{ ec.elementConstitutif.code }}</strong>{% endif %}
+        {% if ec.elementConstitutif.ficheMatiere != null %}
+            <a href="{{ url('app_fiche_matiere_show', {slug: ec.elementConstitutif.ficheMatiere.slug}) }}"
+               target="_blank">
+                {% if isBut is defined and isBut == true %}
+                    <strong>{{ ec.elementConstitutif.ficheMatiere.sigle }}</strong> {{ ec.elementConstitutif.ficheMatiere.libelle }} ({{ ec.elementConstitutif.displayCodeApogee }})
+                {% else %}
+                    <span class="show_versioning d-none d-print-none">{{ diffEc ? diffEc.libelle|displayDiff : '' }}</span>
+                    <span class="show_current">{{ ec.elementConstitutif.ficheMatiere.display }}
+                        {% if isVersioning is not defined or isVersioning == false %}
+                            ({{ ec.elementConstitutif.displayCodeApogee }})
+                        {% endif %}
+                    </span>
+                {% endif %}
+            </a>
+            {% if app.user != null and
+                is_granted('CAN_PARCOURS_EDIT_MY', ec.elementConstitutif.ficheMatiere) and
+                workflow_can(ec.elementConstitutif.ficheMatiere, 'valider_fiche_compo') %}
+
+                <a href="{{ url('app_fiche_matiere_edit', {slug: ec.elementConstitutif.ficheMatiere.slug}) }}"
+                   target="_blank"
+                   class="btn btn-sm text-warning">
+                    <i class="{{ iconEdit }}"></i>
+                </a>
+            {% endif %}
+
+            {% if source is defined and source != 'codification' %}
+                {{ ec.elementConstitutif.ficheMatiere.etatFiche|badgeFiche }}
+            {% endif %}
+        {% else %}
+            <span class="show_versioning d-none d-print-none">{{ diffEc ? diffEc.libelle|displayDiff : '' }}</span>
+            <span class="show_current">{{ ec.elementConstitutif.libelle }}</span>
+        {% endif %}
+        {% if is_granted('ROLE_ADMIN') %}
+            #{{ ec.elementConstitutif.id }}
+        {% endif %}
+        {% if ec.elementConstitutif.natureUeEc is defined
+            and ec.elementConstitutif.natureUeEc != null
+            and ec.elementConstitutif.natureUeEc.isLibre == true %}
+            ({{ ec.elementConstitutif.displayCodeApogee }}) <span class="badge bg-success">EC à choix libre</span>
+        {% endif %}
+        {% if ec.elementsConstitutifsEnfants|length > 0 %}
+            ({{ ec.elementConstitutif.displayCodeApogee }}) <span class="badge bg-info">
+             EC à choix restreint : {{ ec.elementsConstitutifsEnfants|length }} choix possibles</span>
+        {% endif %}
+    </td>
+    <td>
+        {% set parcoursVersioning = isVersioning is defined and isVersioning == true ? parcoursVersioning ?? null : null %}
+        {{ component('badge_mccc', {
+            elementConstitutif: ec.elementConstitutif,
+            parcours: parcours,
+            deplacer: false,
+            editable: false,
+            ue: ue.ue,
+            isVersioning: isVersioning ?? false,
+            indexEc: indexEc,
+            indexEcEnfant: indexEcEnfant,
+            UeDisplay: UeDisplay,
+            parcoursVersioning: parcoursVersioning
+        }) }}
+    </td>
+    <td class="text-indigo-600 font-black whitespace-nowrap text-center">
+        <span class="show_versioning d-none d-print-none">{{ diffEc ? diffEc.heuresEctsEc.ects|displayDiff : '' }} ECTS</span>
+        <p class="show_current">{{ ec.heuresEctsEc.ects }}</p>
+    </td>
+
+    {% if presentiel %}
+        {% if ec.elementsConstitutifsEnfants|length > 0 %}
+            <td colspan="5"></td>
+        {% else %}
+            <td class="text-center bg-blue-50/10 font-bold">
+                <span class="show_versioning d-none d-print-none">{{ diffEc ? diffEc.heuresEctsEc.cmPres|displayDiff : '' }}</span>
+                <span class="show_current">{{ ec.heuresEctsEc.cmPres|filtreHeures }}</span>
+            </td>
+            <td class="text-center bg-blue-50/10 font-bold">
+                <span class="show_versioning d-none d-print-none">{{ diffEc ? diffEc.heuresEctsEc.tdPres|displayDiff : '' }}</span>
+                <span class="show_current">{{ ec.heuresEctsEc.tdPres|filtreHeures }}</span>
+            </td>
+            <td class="text-center bg-blue-50/10 font-bold">
+                <span class="show_versioning d-none d-print-none">{{ diffEc ? diffEc.heuresEctsEc.tpPres|displayDiff : '' }}</span>
+                <span class="show_current">{{ ec.heuresEctsEc.tpPres|filtreHeures }}</span>
+            </td>
+
+            <td class="text-center bg-blue-50/10 font-bold">
+                <span class="show_versioning d-none d-print-none">{{ diffEc ? diffEc.heuresEctsEc.sommeEcTotalPres|displayDiff : '' }}</span>
+                <span class="show_current">{{ ec.heuresEctsEc.sommeEcTotalPres|filtreHeures }}</span>
+            </td>
+            <td class="text-center bg-blue-50/10 empty-cell border-r border-slate-100">
+                <span class="show_versioning d-none d-print-none">{{ diffEc ? diffEc.heuresEctsEc.tePres|displayDiff : '' }}</span>
+                <span class="show_current">{{ ec.heuresEctsEc.tePres|filtreHeures }}</span>
+            </td>
+        {% endif %}
+    {% endif %}
+
+    {% if distanciel %}
+        {% if ec.elementsConstitutifsEnfants|length > 0 %}
+            <td colspan="4"></td>
+        {% else %}
+            <td class="text-center bg-orange-50/10 font-bold text-orange-600">
+                <span class="show_versioning d-none d-print-none">{{ diffEc ? diffEc.heuresEctsEc.cmDist|displayDiff : '' }}</span>
+                <span class="show_current">{{ ec.heuresEctsEc.cmDist|filtreHeures }}</span>
+            </td>
+            <td class="text-center bg-orange-50/10 font-bold text-orange-600">
+                <span class="show_versioning d-none d-print-none">{{ diffEc ? diffEc.heuresEctsEc.tdDist|displayDiff : '' }}</span>
+                <span class="show_current">{{ ec.heuresEctsEc.tdDist|filtreHeures }}</span>
+            </td>
+            <td class="text-center bg-orange-50/10 font-bold text-orange-600">
+                <span class="show_versioning d-none d-print-none">{{ diffEc ? diffEc.heuresEctsEc.tpDist|displayDiff : '' }}</span>
+                <span class="show_current">{{ ec.heuresEctsEc.tpDist|filtreHeures }}</span>
+            </td>
+            <td class="text-center bg-orange-50/10 empty-cell border-r border-slate-100">
+                <span class="show_versioning d-none d-print-none">{{ diffEc ? diffEc.heuresEctsEc.sommeEcTotalDist|displayDiff : '' }}</span>
+                <span class="show_current">{{ ec.heuresEctsEc.sommeEcTotalDist|filtreHeures }}</span>
+            </td>
+        {% endif %}
+    {% endif %}
+
+    {% if parcours.modalitesEnseignement != null and (parcours.modalitesEnseignement.value == 1) %}
+        <td class="px-5 py-4 text-right font-black">
+            <span class="show_versioning d-none d-print-none">{{ diffEc ? diffEc.heuresEctsEc.sommeEcTotalPresDist|displayDiff : '' }}</span>
+            <span class="show_current">{{ ec.heuresEctsEc.sommeEcTotalPresDist|filtreHeures }}</span>
+        </td>
+    {% endif %}
+</tr>
+
+

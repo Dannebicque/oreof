@@ -217,7 +217,8 @@
                 btnAnnuler: 'Annuler',
             }) }}>
 
-                <a href="{{ path('app_parcours_show', {id: parcours.id}) }}" class="btn btn-outline-secondary me-2">Annuler</a>
+                <a href="{{ path('parcours_v2_voir', {parcours: parcours.id}) }}"
+                   class="btn btn-outline-secondary me-2">Annuler</a>
 
                 <a
                         class="btn btn-danger"
@@ -235,7 +236,7 @@
 {% endblock %}
 
 {% block bouton_header %}
-    <a href="{{ path('app_parcours_show', {id:parcours.id}) }}"
+    <a href="{{ path('parcours_v2_voir', {parcours:parcours.id}) }}"
        class="btn btn-outline-primary"
     >
         <i class="{{ iconBack }}"></i> Retour

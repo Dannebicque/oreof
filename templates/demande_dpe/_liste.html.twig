@@ -120,14 +120,14 @@
             </td>
             <td>
                 {% if demande.niveauDemande == 'F' %}
-                    <a href="{{ path('app_formation_show', {'slug': demande.formation.slug}) }}"
+                    <a href="{{ path('formation_v2_voir', {'slug': demande.formation.slug}) }}"
                        target="_blank"
                        class="btn btn-sm text-info"
                        title="Voir la formation">
                         <i class="{{ iconShow }}"></i> Voir la formation
                     </a>
                 {% else %}
-                    <a href="{{ path('app_parcours_show', {'id': demande.parcours.id}) }}"
+                    <a href="{{ path('parcours_v2_voir', {parcours: demande.parcours.id}) }}"
                        target="_blank"
                        class="btn btn-sm text-info"
                        title="Voir le parcours">

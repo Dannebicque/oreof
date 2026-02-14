@@ -1,0 +1,6 @@
+{% set presentiel = parcours.modalitesEnseignement != null and (parcours.modalitesEnseignement.value == 0 or parcours.modalitesEnseignement.value == 1) %}
+{% set distanciel = parcours.modalitesEnseignement != null and (parcours.modalitesEnseignement.value == 2 or parcours.modalitesEnseignement.value == 1) %}
+
+{{ include('typeDiplome/licence/structure/v2/_structure_annee.html.twig') }}
+
+

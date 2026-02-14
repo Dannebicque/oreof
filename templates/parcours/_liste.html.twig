@@ -97,7 +97,7 @@
                 {{ parcour.remplissage|remplissage }}
             </td>
             <td>
-                <a href="{{ path('app_parcours_show',{'id': parcour.id}) }} }}"
+                <a href="{{ path('parcours_v2_voir', {parcours: parcour.id}) }} }}"
                    class="btn btn-sm text-info"
                    data-bs-toggle="tooltip"
                    data-bs-placement="bottom"
@@ -124,7 +124,7 @@
                 </a>
 
                 {% if is_granted('EDIT', {route: 'app_parcours', subject: parcour}) or is_granted('ROLE_ADMIN') %}
-                    <a href="{{ path('app_parcours_edit',{'id': parcour.id}) }}"
+                    <a href="{{ path('parcours_v2_modifier', {parcours: parcour.id}) }}"
                        class="btn btn-sm text-warning"
                        data-bs-toggle="tooltip"
                        data-bs-placement="bottom"

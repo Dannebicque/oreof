@@ -64,7 +64,7 @@
             title: 'Codification des formations',
         },
         {
-            href:path('app_formation_show', {slug:formation.slug}),
+            href:path('formation_v2_voir', {slug:formation.slug}),
             title: 'Formation ' ~formation.displayLong,
         }
     ]}) }}
@@ -86,7 +86,7 @@
             data-bs-toggle="tooltip"
             data-bs-placement="bottom"
             title="Voir la formation"
-            href="{{ path('app_formation_show', {slug:formation.slug}) }}"
+            href="{{ path('formation_v2_voir', {slug:formation.slug}) }}"
     >
         <i class="{{ iconShow }}"></i>
         <span> Voir la formation</span>

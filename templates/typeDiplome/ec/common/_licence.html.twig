@@ -63,7 +63,7 @@
                             {% if ec.parcours != null %}
                                 <li>
                                     {% if ec.parcours.isParcoursDefaut == true %}
-                                        <a href="{{ path('app_formation_show', {slug:ec.parcours.formation.slug}) }}"
+                                        <a href="{{ path('formation_v2_voir', {slug:ec.parcours.formation.slug}) }}"
                                            target="_blank" class="text-primary">
                                             <i class="fas fa-eye"></i>
                                             <strong>Formation sans parcours</strong> - {{ ec.ue.display(ec.parcours) }}
@@ -72,7 +72,7 @@
                                         </a>
                                     {% else %}
                                         {% if ec.parcours != null and ec.parcours.formation != null %}
-                                            <a href="{{ path('app_parcours_show', {id:ec.parcours.id}) }}"
+                                            <a href="{{ path('parcours_v2_voir', {parcours:ec.parcours.id}) }}"
                                                target="_blank" class="text-primary">
                                                 <i class="fas fa-eye"></i>
                                                 <strong>{{ ec.parcours.libelle }} {% if ec.parcours.typeparcours != null and ec.parcours.typeparcours.value != 'classique' %} {{ ec.parcours.typeparcours|badgeTypeParcours }}{% endif %}</strong>

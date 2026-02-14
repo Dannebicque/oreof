@@ -1,3 +1,5 @@
+{# todo: a custom tailwindcss #}
+
 {% if ue.ueParent != null and ue.ueParent.ueMutualisables|length %}
 <twig:alerte type="info">
     <p>
@@ -40,6 +42,10 @@
                     <i class="{{ iconDelete }}"></i> Supprimer
                 </button>
             </td>
+        </tr>
+    {% else %}
+        <tr>
+            <td colspan="5" class="bg-warning-pale text-center">UE mutualisée avec aucun parcours</td>
         </tr>
     {% endfor %}
     </tbody>

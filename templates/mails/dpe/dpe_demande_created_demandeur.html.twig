@@ -5,11 +5,14 @@
     {% if dpeDemande.niveauDemande == 'F'  %}
         <p>Pour information, une demande d'ouverture de DPE a été faite pour la formation {{ dpeDemande.formation.displayLong(false) }}.</p>
 
-        <p>Pour consulter la formation, cliquez sur le lien suivant : <a href="{{ url('app_formation_show', {'slug': dpeDemande.formation.slug}) }}">voir la formation</a>.</p>
+        <p>Pour consulter la formation, cliquez sur le lien suivant : <a
+                    href="{{ url('formation_v2_voir', {'slug': dpeDemande.formation.slug}) }}">voir la formation</a>.
+        </p>
     {% else %}
         <p>Pour information, une demande d'ouverture de DPE a été faite pour le parcours {{ dpeDemande.parcours.libelle }} ({{ dpeDemande.formation.displayLong(false) }}).</p>
 
-        <p>Pour consulter le parcours, cliquez sur le lien suivant : <a href="{{ url('app_parcours_show', {'id': dpeDemande.parcours.id}) }}">voir le parcours</a>.</p>
+        <p>Pour consulter le parcours, cliquez sur le lien suivant : <a
+                    href="{{ url('parcours_v2_voir', {parcours: dpeDemande.parcours.id}) }}">voir le parcours</a>.</p>
     {% endif %}
 
     <p>La demande concerne une modification : {{ dpeDemande.niveauModification.libelle }}.

@@ -9,7 +9,7 @@
                             {% if isParcoursDefautArray[loop.index0] == true %}
                                 <div class="col-8">
                                     <a
-                                        href="{{ path('app_formation_show', {slug: p.formation_slug}) }}"
+                                            href="{{ path('formation_v2_voir', {slug: p.formation_slug}) }}"
                                         class="text-primary font-weight-bold"
                                         target="_blank"
                                     >
@@ -24,7 +24,7 @@
                             {% else %}
                                 <div class="col-8">
                                     <a
-                                        href="{{ path('app_parcours_show', {id: p.parcours_id}) }}"
+                                            href="{{ path('parcours_v2_voir', {parcours: p.parcours_id}) }}"
                                         class="text-primary font-weight-bold"
                                         target="_blank"
                                     >

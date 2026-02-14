@@ -9,7 +9,7 @@
                             <span class="badge bg-info">Fiche hors diplôme</span>
                         {% else %}
                             {% if ficheMatiere.parcours != null %}
-                                <a href="{{ path('app_parcours_edit', {id:ficheMatiere.parcours.id}) }}"
+                                <a href="{{ path('parcours_v2_modifier', {parcours:ficheMatiere.parcours.id}) }}"
                                    target="_blank">
                                     {{ ficheMatiere.parcours.formation.display }}
                                     {% if ficheMatiere.parcours.formation.hasParcours == true %}

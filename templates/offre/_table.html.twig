@@ -182,7 +182,7 @@
                             <a
                                     class="btn btn-info btn-sm"
                                     target="_blank"
-                                    href="{{ path('app_formation_show', { 'slug': formation.formation.slug }) }}">
+                                    href="{{ path('formation_v2_voir', { 'slug': formation.formation.slug }) }}">
                                 <i class="{{ iconShow }}"></i>
                             </a>
                             {% if formation.formation.hasParcours == false %}
@@ -247,7 +247,7 @@
                                     </button>
                                     {% endif %}
                                     <a class="btn btn-info btn-sm mb-1" target="_blank"
-                                       href="{{ path('app_parcours_show', { 'id': parcours.parcours.id }) }}">
+                                       href="{{ path('parcours_v2_voir', {parcours: parcours.parcours.id }) }}">
                                         <i class="{{ iconShow }}"></i>
                                     </a>
                                     <button

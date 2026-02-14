@@ -3,7 +3,7 @@
     data-nb-fiches-total="{{ nombreTotal }}"
     data-keyword="{{ keyword_1 }}"
     data-fetch-url="{{ path('app_search_fiche_matiere_pagination', {page: 1234567890, mot_cle: 'µ#+'}) }}"
-    data-parcours-view-url="{{ path('app_parcours_show', {id: 'µ%$£'}) }}"
+    data-parcours-view-url="{{ path('parcours_v2_voir', {parcours: 'µ%$£'}) }}"
     data-fiche-matiere-view-url="{{ path('app_fiche_matiere_show', {slug: 'µ%$£'}) }}"
     class="d-none">
 </div>
@@ -45,7 +45,7 @@
         <!-- Loading Icon -->
     </div>
     <div class="col-10 col-md-8 col-lg-6 rootNodeForFicheMatiereList">
-    
+
     </div>
 </div>
 {% endif %}

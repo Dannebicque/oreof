@@ -3,29 +3,29 @@
 }) }}
         data-action="ue--raccrocher:modalHide@window->base#modalHide"
 >
-    <div class="mb-1">
-        <label class="form-label" for="raccrocher">
-            {{ 'ue.raccrocher.label'|trans({}, 'form') }}
-            <span class="required"></span>
-            <i class="fal fa-question-circle ms-1" data-controller="tooltip" data-tooltip-placement-value="bottom" title="{{ 'ue.raccrocher.helps'|trans({}, 'help') }}"></i>
-        </label>
-        <select id="raccrocher"
-                name="raccrocher"
-                required="required"
-                class="form-select"
-                {{ stimulus_controller('symfony/ux-autocomplete/autocomplete') }}
-        >
-            <option value="">Choisir une UE mutualisée</option>
-            {% for u in ues %}
-                <option value="{{ u.id }}"
-                {% if ue.ueRaccrochee != null and  ue.ueRaccrochee.id == u.id %}selected{% endif %}
-                >{{ u.ue.display() }} - {{ u.ue.libelle }} ({{ u.ue.semestre.semestreParcours[0].parcours.libelle }})</option> {# todo: display nul pour se baser sur le numéro du semestre de l'UE de départ... O mais est-ce pertinent ?  #}
-            {% endfor %}
-        </select>
-    </div>
-    <button class="btn btn-success" {{ stimulus_action('ue--raccrocher', 'valideReutilise') }}>
-        {{ 'ue.raccrocher.bouton'|trans({}, 'form') }}
-    </button>
+    {% form_theme form 'communs/form_theme_v2.html.twig' %}
+    {{ form(form) }}
+    {#    <div class="mb-1"> #}
+    {#        <label class="form-label" for="raccrocher"> #}
+    {#            {{ 'ue.raccrocher.label'|trans({}, 'form') }} #}
+    {#            <span class="required"></span> #}
+    {#            <i class="fal fa-question-circle ms-1" data-controller="tooltip" data-tooltip-placement-value="bottom" title="{{ 'ue.raccrocher.helps'|trans({}, 'help') }}"></i> #}
+    {#        </label> #}
+    {#        <select id="raccrocher" #}
+    {#                name="raccrocher" #}
+    {#                required="required" #}
+    {#                class="form-select" #}
+    {#                {{ stimulus_controller('symfony/ux-autocomplete/autocomplete') }} #}
+    {#        > #}
+    {#            <option value="">Choisir une UE mutualisée</option> #}
+    {#            {% for u in ues %} #}
+    {#                <option value="{{ u.id }}" #}
+    {#                {% if ue.ueRaccrochee != null and  ue.ueRaccrochee.id == u.id %}selected{% endif %} #}
+    {#                >{{ u.ue.display() }} - {{ u.ue.libelle }} ({{ u.ue.semestre.semestreParcours[0].parcours.libelle }})</option> #}{# todo: display nul pour se baser sur le numéro du semestre de l'UE de départ... O mais est-ce pertinent ?  #}
+    {#            {% endfor %} #}
+    {#        </select> #}
+    {#    </div> #}
+
     {% if ue.ueRaccrochee != null %}
     <button class="btn text-danger" {{ stimulus_action('ue--raccrocher', 'valideDecrocher') }}>
         {{ 'ue.decrocher.bouton'|trans({}, 'form') }}

@@ -141,13 +141,13 @@
                 {% if (1 in missingSemestre) and (2 in missingSemestre)
                     and (3 not in missingSemestre) and (4 not in missingSemestre)
                 %}
-                    <a href="{{ path('app_parcours_show', {id: parcoursDeBase.getId() }) }}">
+                    <a href="{{ path('parcours_v2_voir', {parcours: parcoursDeBase.getId() }) }}">
                         Lien vers le BUT en formation initiale correspondant pour consulter les 2 premiers semestres
                     </a>
                 {% elseif (1 in missingSemestre) and (2 in missingSemestre)
                     and (3 in missingSemestre) and (4 in missingSemestre)
                 %}
-                    <a href="{{ path('app_parcours_show', {id: parcoursDeBase.getId() }) }}">
+                    <a href="{{ path('parcours_v2_voir', {parcours: parcoursDeBase.getId() }) }}">
                         Lien vers le BUT en formation initiale correspondant pour consulter les 4 premiers semestres
                     </a>
                 {% endif %}
@@ -236,7 +236,7 @@
 {% block breadcrumb %}
     {{ include('communs/_breadcrumb.html.twig', {liens:[
         {href: path('app_formation_index'), title: 'Liste des formations'},
-        {href: path('app_formation_show', {slug:formation.slug}), title:'Formation :  ' ~ formation.display},
+        {href: path('formation_v2_voir', {slug:formation.slug}), title:'Formation :  ' ~ formation.display},
     ]}) }}
 {% endblock %}
 
@@ -247,7 +247,7 @@
             or is_granted('EDIT', {route: 'app_composante', subject: dpeParcours})
             or is_granted('EDIT', {route: 'app_etbalissement', subject: dpeParcours})
             or is_granted('ROLE_ADMIN')) and isOuvert(dpeParcours) %}
-            <a href="{{ path('app_parcours_edit', {id:parcours.id}) }}"
+            <a href="{{ path('parcours_v2_modifier', {parcours:parcours.id}) }}"
                class="btn btn-sm btn-warning btn-icon btn-icon-end w-100 w-sm-auto"
                data-bs-toggle="tooltip"
                data-bs-placement="bottom"

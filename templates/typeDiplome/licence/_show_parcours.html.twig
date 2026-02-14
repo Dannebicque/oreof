@@ -94,6 +94,12 @@
                     parcours: parcours.id,
                     hasLastVersion: hasLastVersion ?? false,
                 })) }}
+                <hr>
+                <hr>
+                {{ render(controller('App\\Controller\\StructureShowController::parcoursShowV2', {
+                    parcours: parcours.id,
+                    hasLastVersion: hasLastVersion ?? false,
+                })) }}
             </div>
         </section>
     {% else %}

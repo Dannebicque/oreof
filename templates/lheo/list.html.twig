@@ -11,7 +11,7 @@
             <div class="col-12">
                 <div class="row">
                     <div class="col-8">
-                        <a href="{{ path('app_parcours_show', {id: e.id}) }}">
+                        <a href="{{ path('parcours_v2_voir', {parcours: e.id}) }}">
                             <strong class="text-primary">
                                 {{ e.type_formation_libelle }} - {{ e.formation_libelle }} : {{ e.parcours_libelle }}
                                 ({{ e.etatParcours|badgeDpe }})
@@ -20,7 +20,7 @@
                     </div>
                     <div class="col-3">
                         {# Bouton pour voir le parcours #}
-                        <a href="{{ path('app_parcours_show',{'id': e.id}) }}"
+                        <a href="{{ path('parcours_v2_voir', {parcours: e.id}) }}"
                         class="btn btn-sm text-info"
                         data-bs-toggle="tooltip"
                         data-bs-placement="bottom"
@@ -32,7 +32,7 @@
                             </span>
                         </a>
                         {# Bouton pour modifier le parcours #}
-                        <a href="{{ path('app_parcours_edit',{'id': e.id}) }}"
+                        <a href="{{ path('parcours_v2_modifier', {parcours: e.id}) }}"
                             class="btn btn-sm text-warning"
                             data-bs-toggle="tooltip"
                             data-bs-placement="bottom"

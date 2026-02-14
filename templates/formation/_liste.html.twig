@@ -267,7 +267,7 @@
                                 or is_granted('EDIT', {route: 'app_composante', subject: formation})
                                 or is_granted('EDIT', {route: 'app_etablissement', subject: formation})
                                 or is_granted('ROLE_ADMIN')) and isOuvert(formation.parcours[0].dpeParcours[0]) %}
-                                <a href="{{ path('app_formation_edit', {slug:formation.slug}) }}"
+                                <a href="{{ path('formation_v2_modifier', {slug:formation.slug}) }}"
                                    class="btn btn-sm text-warning"
                                    data-bs-toggle="tooltip"
                                    data-bs-placement="bottom"
