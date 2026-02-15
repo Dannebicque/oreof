@@ -15,6 +15,7 @@ use App\Controller\BaseController;
 use App\Entity\FicheMatiereMutualisable;
 use App\Entity\Parcours;
 use App\Entity\Semestre;
+use App\Entity\SemestreParcours;
 use App\Entity\TypeUe;
 use App\Entity\Ue;
 use App\Entity\UeMutualisable;
@@ -34,8 +35,10 @@ use App\Utils\JsonRequest;
 use App\Utils\TurboStreamResponseFactory;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
 use Exception;
 use JsonException;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -365,36 +368,26 @@ class UeController extends BaseController
         return $this->json(false);
     }
 
-    #[Route('/mutualiser/{ue}/{semestre}', name: 'mutualiser')]
+    #[Route('/mutualiser/{ue}/{semestreParcours}', name: 'mutualiser')]
     public function mutualiser(
+        TurboStreamResponseFactory $turboStreamResponseFactory,
         ComposanteRepository $composanteRepository,
         Ue                   $ue,
-        Semestre             $semestre
+        SemestreParcours           $semestreParcours
     ): Response {
-//        return $this->render('structure/ue/_mutualiser.html.twig', [
-//            'semestre' => $semestre,
-//            'ue' => $ue,
-//            'composantes' => $composanteRepository->findAll()
-//        ]);
 
-        $body = $this->renderView('structure/ue/_mutualiser.html.twig', [
-            'semestre' => $semestre,
-            'ue' => $ue,
-            'composantes' => $composanteRepository->findAll()
-        ]);
 
-        $footer = $this->renderView('_ui/_footer_cancel.html.twig', [
-        ]);
-
-        return new Response(
-            $this->renderView('_ui/open.stream.html.twig', [
-                'title' => 'Mutualiser l\'UE',
-                'subtitle' => 'Dans : UE ' . $ue->display(),
-                'body' => $body,
-                'footer' => $footer,
-            ]),
-            200,
-            ['Content-Type' => 'text/vnd.turbo-stream.html']
+        return $turboStreamResponseFactory->streamOpenModalFromTemplates(
+            'Mutualiser l\'UE',
+            'Depuis : ' . $ue->display(),
+            'structure/ue/_mutualiser.html.twig',
+            [
+                'semestre' => $semestreParcours,
+                'ue' => $ue,
+                'composantes' => $composanteRepository->findAll()
+            ],
+            '_ui/_footer_cancel.html.twig',
+            []
         );
     }
 
@@ -491,38 +484,44 @@ class UeController extends BaseController
 
     #[Route('/raccrocher/{ue}/{parcours}', name: 'raccrocher')]
     public function raccrocher(
-        UeMutualisableRepository $ueMutualisableRepository,
+        TurboStreamResponseFactory $turboStreamResponseFactory,
         Parcours                 $parcours,
         Ue                       $ue
     ): Response {
-        $ues = $ueMutualisableRepository->findBy(['parcours' => $parcours]);
+        //todo: gérer le nom du parcours en flat dans la BDD ? gérer l'update si maj du parcours
 
+        $form = $this->createFormBuilder()
+            ->add('raccrocher', EntityType::class, [
+                'class' => UeMutualisable::class,
+                //{{ u.ue.display() }} - {{ u.ue.libelle }} ({{ u.ue.semestre.semestreParcours[0].parcours.libelle }})
+                'choice_label' => function (UeMutualisable $uem) use ($ue) {
+                    return $uem->getUe()?->display() . ' - ' . $uem->getUe()?->getLibelle() . ' (' . $uem->getUe()?->getSemestre()?->getSemestreParcours()->first()?->getLibelle() . ')';
+                },
+                'placeholder' => 'choisir.ue.a.raccrocher',
+                'translation_domain' => 'form',
+                'query_builder' => function (EntityRepository $er) use ($parcours) {
+                    return $er->createQueryBuilder('uem')
+                        ->join('uem.ue', 'ue')
+                        ->where('uem.parcours = :parcours')
+                        ->setParameter('parcours', $parcours)
+                        ->orderBy('ue.ordre', 'ASC');
+                }
+            ])
+            ->getForm();
 
-//        return $this->render('structure/ue/_raccrocher.html.twig', [
-//            'ue' => $ue,
-//            'parcours' => $parcours,
-//            'ues' => $ues
-//        ]);
-
-        $body = $this->renderView('structure/ue/_raccrocher.html.twig', [
-            'ue' => $ue,
-            'parcours' => $parcours,
-            'ues' => $ues
-        ]);
-
-        $footer = $this->renderView('_ui/_footer_submit_cancel.html.twig', [
-            'submitLabel' => 'Enregistrer le rattachement',
-        ]);
-
-        return new Response(
-            $this->renderView('_ui/open.stream.html.twig', [
-                'title' => 'Rattacher l\'UE a une UE mutualisée',
-                'subtitle' => 'Dans : UE ' . $ue->display(),
-                'body' => $body,
-                'footer' => $footer,
-            ]),
-            200,
-            ['Content-Type' => 'text/vnd.turbo-stream.html']
+        return $turboStreamResponseFactory->streamOpenModalFromTemplates(
+            'Rattacher l\'UE a une UE mutualisée',
+            'Dans : ' . $ue->display(),
+            'structure/ue/_raccrocher.html.twig',
+            [
+                'ue' => $ue,
+                'parcours' => $parcours,
+                'form' => $form->createView()
+            ],
+            '_ui/_footer_submit_cancel.html.twig',
+            [
+                'submitLabel' => 'Enregistrer le rattachement',
+            ]
         );
     }
 

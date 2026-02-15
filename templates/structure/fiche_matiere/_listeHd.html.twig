@@ -128,7 +128,7 @@
                 <td>{{ ficheMatiere.etatFiche|badgeFiche }}</td>
                 <td class="text-end">
                     <a
-                            href="{{ path('app_fiche_matiere_show',{slug: ficheMatiere.slug}) }}"
+                            href="{{ path('fiche_matiere_v2_voir',{slug: ficheMatiere.slug}) }}"
                             class="btn btn-sm text-info"
                             data-bs-toggle="tooltip"
                             data-bs-placement="bottom"
@@ -143,7 +143,7 @@
                         subject: ficheMatiere
                     }) or is_granted('ROLE_ADMIN') %}
                     <a
-                            href="{{ path('app_fiche_matiere_edit',{slug: ficheMatiere.slug}) }}"
+                            href="{{ path('fiche_matiere_v2_modifier',{slug: ficheMatiere.slug}) }}"
                             class="btn btn-sm text-warning"
                             data-bs-toggle="tooltip"
                             data-bs-placement="bottom"

@@ -29,6 +29,9 @@ class ParcoursTabState
     #[ORM\Column]
     private ?\DateTimeImmutable $updatedAt = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?array $issues = null;
+
     public function __construct(Parcours $parcours, string $tabKey)
     {
         $this->parcours = $parcours;
@@ -102,6 +105,18 @@ class ParcoursTabState
     public function setUpdatedAt(\DateTimeImmutable $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function getIssues(): ?array
+    {
+        return $this->issues ?? [];
+    }
+
+    public function setIssues(?array $issues): static
+    {
+        $this->issues = $issues;
 
         return $this;
     }

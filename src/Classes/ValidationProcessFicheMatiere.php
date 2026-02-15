@@ -9,6 +9,7 @@
 
 namespace App\Classes;
 
+use App\Entity\FicheMatiere;
 use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\Workflow\WorkflowInterface;
 
@@ -48,5 +49,29 @@ class ValidationProcessFicheMatiere extends AbstractValidationProcess
         }
 
         return [];
+    }
+
+    public function getOptionsForStep(FicheMatiere $ficheMatiere): array
+    {
+        $enabled = [];
+
+        $transitions = $this->ficheWorkflow->getDefinition()->getTransitions();
+        foreach ($transitions as $t) {
+            if ($this->ficheWorkflow->can($ficheMatiere, $t->getName())) {
+                $enabled[] = $t;
+            }
+        }
+
+        $options = [];
+        foreach ($enabled as $trans) {
+            $meta = $this->ficheWorkflow->getMetadataStore()->getTransitionMetadata($trans);
+            $name = $trans->getName();
+            $options[$name] = [
+                'label' => $meta['label'] ?? $name,
+                'metadata' => $meta,
+            ];
+        }
+
+        return $options;
     }
 }

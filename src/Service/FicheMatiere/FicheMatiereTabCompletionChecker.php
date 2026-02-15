@@ -1,0 +1,108 @@
+<?php
+/*
+ * Copyright (c) 2026. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Service/FicheMatiere/FicheMatiereTabCompletionChecker.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 14/02/2026 22:01
+ */
+
+namespace App\Service\FicheMatiere;
+
+use App\DTO\TabIssue;
+use App\Entity\FicheMatiere;
+use App\Enums\RegimeInscriptionEnum;
+use App\Service\AbstractChecker;
+
+class FicheMatiereTabCompletionChecker extends AbstractChecker
+{
+    public function isTabComplete(FicheMatiere $p, string $tabKey): bool
+    {
+        return count($this->getTabIssues($p, $tabKey)) === 0;
+    }
+
+    /** @return TabIssue[] */
+    public function getTabIssues(FicheMatiere $p, string $tabKey): array
+    {
+        return match ($tabKey) {
+            'identite' => $this->identiteIssues($p),
+            'presentation' => $this->presentationIssues($p),
+            'mutualisation' => $this->mutualisationIssues($p),
+            'volumes_horaires' => $this->volumesHorairesIssues($p),
+            'mccc' => $this->mcccIssues($p),
+            default => [],
+        };
+    }
+
+    private function identiteIssues(FicheMatiere $p): array
+    {
+        $issues = [];
+
+        if (!$this->filled($p->getSigle())) {
+            $issues[] = new TabIssue('fiche_matiere_step1[sigle]', 'Sigle de la fiche matière', 'Vous devez renseigner un sigle pour la fiche matière.');
+        }
+
+        if (!$this->filled($p->getLibelle())) {
+            $issues[] = new TabIssue('fiche_matiere_step1[libelle]', 'Libellé', 'Vous devez renseigner un libellé pour la fiche matière.');
+        }
+        if (!$this->filled($p->getLibelleAnglais())) {
+            $issues[] = new TabIssue('fiche_matiere_step1[libelleAnglais]', 'Libellé en anglais', 'Vous devez décrirele libellé en anglais.');
+        }
+
+        return $issues;
+    }
+
+    private function presentationIssues(FicheMatiere $p): array
+    {
+        $issues = [];
+
+        if (!$this->filled($p->getDescription())) {
+            $issues[] = new TabIssue('fiche_matiere_step2[description]', 'Description de la fiche matière', 'Vous devez renseigner une description.');
+        }
+        if (!$this->filled($p->getObjectifs())) {
+            $issues[] = new TabIssue('fiche_matiere_step2[objectifs]', 'Objectifs de la fiche matière', 'Vous devez renseigner les objectifs.');
+        }
+
+        if ($p->getLangueSupport()->count() === 0) {
+            $issues[] = new TabIssue('fiche_matiere_step2[langueSupport][]', 'Langue des supports', 'Vous devez renseigner au moins une langue pour les supports.');
+        }
+
+        if ($p->getLangueDispense()->count() === 0) {
+            $issues[] = new TabIssue('fiche_matiere_step2[langueDispense][]', 'Langue des cours', 'Vous devez renseigner au moins une langue pour les cours.');
+        }
+
+        return $issues;
+    }
+
+    public function mutualisationIssues(FicheMatiere $p): array
+    {
+        $issues = [];
+
+        return $issues;
+    }
+
+    private function volumesHorairesIssues(FicheMatiere $f): array
+    {
+        $issues = [];
+
+
+        return $issues;
+    }
+
+    /** @return TabIssue[] */
+    private function mcccIssues(FicheMatiere $p): array
+    {
+        $issues = [];
+
+        if (!$this->filled($p->isEnseignementMutualise())) {
+            $issues[] = new TabIssue('fiche_matiere_step1b[enseignementMutualise]', 'Enseignement mutualisé', 'Vous devez indiquer si l\'enseignement est mutualisé ou non.');
+        }
+
+        if ($p->isEnseignementMutualise() === true) {
+            $issues[] = new TabIssue('fiche_matiere_step1b[enseignementMutualise]', 'Fiche matière mutualisée', 'Vous avec indiqué que la fiche matière est mutualisée, devez renseigner au moins un parcours pour la mutualisation.');
+        }
+
+
+        return $issues;
+    }
+}

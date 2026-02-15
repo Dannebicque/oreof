@@ -1,0 +1,44 @@
+<turbo-frame id="tab-content">
+    {{ include('fiche_matiere_v2/tabs/_header.html.twig', {tabKey: 'mutualisation'}) }}
+
+    <div class="flex-1 overflow-y-auto mt-4 custom-scrollbar"
+            {{ stimulus_controller('fichematiere--step1', {
+                urlMutualise: path('app_fiche_matiere_wizard_step_1_mutualise', {ficheMatiere:fiche_matiere.id}),
+            }) }}
+    >
+        {% form_theme form 'communs/form_theme_v2.html.twig' %}
+        {{ form_start(form, {
+            attr: {
+                id: 'tab_form_mutualisation',
+                'data-controller': 'autosave',
+                'data-autosave-url-value': path('fiche_matiere_v2_tab_autosave', { id: fiche_matiere.id, tabKey: 'mutualisation' }),
+                'data-action': 'change->autosave#queue'
+
+            }
+        }) }}
+
+        {{ form_errors(form) }}
+        {{ form(form) }}
+
+
+        <div style="{% if fiche_matiere.enseignementMutualise == false %}display:none{% endif %}" id="coursMutualises">
+
+            <div class="col-form-label required">
+                {{ 'fiche_matiere_step1.labels.previserMutualisation'|trans({}, 'form') }}
+                <i class="fal fa-question-circle ms-1"
+                   data-controller="tooltip"
+                   data-tooltip-placement-value="bottom"
+                   aria-label="{{ 'fiche_matiere_step1.helps.preciserMutualisation.help'|trans({}, 'help') }}"
+                   data-bs-original-title="{{ 'fiche_matiere_step1.helps.preciserMutualisation.help'|trans({}, 'help') }}"></i>
+            </div>
+
+            <div class="row" {{ stimulus_target('fichematiere--step1','zoneMutualise') }}
+                 data-action="base:modalClose@window->fichematiere--step1#refreshListe"
+            >
+
+            </div>
+        </div>
+
+        {{ form_end(form) }}
+    </div>
+</turbo-frame>

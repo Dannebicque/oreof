@@ -14320,7 +14320,7 @@ main {
     min-height: 100%;
     padding-left: calc(var(--nav-size) + var(--main-spacing-horizontal));
     padding-right: var(--main-spacing-horizontal);
-    padding-top: var(--main-spacing-vertical);
+    /*padding-top: var(--main-spacing-vertical);*/
     padding-bottom: var(--main-spacing-vertical);
 }
 
@@ -14335,7 +14335,7 @@ main > .container-xl {
 
 html[data-placement='horizontal'] main {
     padding-left: var(--main-spacing-horizontal);
-    padding-top: calc(var(--nav-size-slim) + calc(var(--main-spacing-horizontal) / 2));
+    /*padding-top: calc(var(--nav-size-slim) + calc(var(--main-spacing-horizontal) / 2));*/
 }
 
 html[data-placement='vertical'][data-dimension='mobile'] main {

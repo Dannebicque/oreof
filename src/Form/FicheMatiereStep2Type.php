@@ -25,15 +25,12 @@ class FicheMatiereStep2Type extends AbstractType
         $builder
 
             ->add('description', TextareaAutoSaveType::class, [
-                'attr' => ['data-action' => 'change->fichematiere--step2#saveDescription', 'maxlength' => 3000, 'rows' => 20],
-                'help' => '-'
+                'attr' => ['maxlength' => 3000, 'rows' => 20],
             ])
             ->add('objectifs', TextareaAutoSaveType::class, [
-                'attr' => ['data-action' => 'change->fichematiere--step2#saveObjectifs', 'maxlength' => 3000, 'rows' => 20],
-                'help' => '-'
+                'attr' => ['maxlength' => 3000, 'rows' => 20],
             ])
             ->add('langueDispense', EntityType::class, [
-                'attr' => ['data-action' => 'change->fichematiere--step2#changeLangue', 'data-fichematiere--step2-type-param' => 'langueDispense' ],
                 'class' => Langue::class,
                 'query_builder' => function (LangueRepository $lr) {
                     return $lr->createQueryBuilder('l')
@@ -43,10 +40,8 @@ class FicheMatiereStep2Type extends AbstractType
                 'expanded' => true,
                 'multiple' => true,
                 'required' => true,
-                'help' => '-'
             ])
             ->add('langueSupport', EntityType::class, [
-                'attr' => ['data-action' => 'change->fichematiere--step2#changeLangue', 'data-fichematiere--step2-type-param' => 'langueSupport'],
                 'class' => Langue::class,
                 'choice_label' => 'libelle',
                 'query_builder' => function (LangueRepository $lr) {
@@ -56,7 +51,6 @@ class FicheMatiereStep2Type extends AbstractType
                 'expanded' => true,
                 'multiple' => true,
                 'required' => true,
-                'help' => '-'
             ])
         ;
     }

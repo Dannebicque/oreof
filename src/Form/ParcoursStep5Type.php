@@ -61,12 +61,10 @@ class ParcoursStep5Type extends AbstractType
                 },
             ])
             ->add('modalitesAlternance', TextareaAutoSaveType::class, [
-                'help' => 'Indiquez en 3000 caractères maximum les périodes et leurs durées en centre ou en entreprise.',
                 'attr' => ['rows' => 20, 'maxlength' => 3000],
             ])
             ->add('modalitesAdmission', TextareaAutoSaveType::class, [
                 'attr' => ['rows' => 8, 'maxlength' => 3000],
-                'label' => "Modalités d'admission"
             ])
         ;
     }

@@ -21,12 +21,10 @@ class ParcoursStep6Type extends AbstractType
     {
         $builder
             ->add('poursuitesEtudes', TextareaAutoSaveType::class, [
-                'attr' => ['rows' => 20, 'maxlength' => 3000, 'data-action' => 'change->parcours--step6#savePoursuitesEtudes'],
-                'help' =>'-',
+                'attr' => ['rows' => 20, 'maxlength' => 3000],
             ])
             ->add('debouches', TextareaAutoSaveType::class, [
-                'attr' => ['rows' => 10, 'maxlength' => 3000, 'data-action' => 'change->parcours--step6#saveDebouches'],
-                'help' => '-',
+                'attr' => ['rows' => 10, 'maxlength' => 3000],
             ])
         ;
     }

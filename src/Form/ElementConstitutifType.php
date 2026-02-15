@@ -32,7 +32,8 @@ class ElementConstitutifType extends AbstractType
 {
     public function __construct(
         private FicheMatiereRepository $ficheMatiereRepository,
-        private NatureUeEcRepository   $natureUeEcRepository)
+        private NatureUeEcRepository $natureUeEcRepository
+    )
     {
     }
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -47,7 +48,7 @@ class ElementConstitutifType extends AbstractType
         $matieres[] = $this->ficheMatiereRepository->findByParcours($parcours, $campagneCollecte);
         $matieres[] = $this->ficheMatiereRepository->findAllByHd($campagneCollecte);
 
-// fusionner et dédupliquer par id
+        // fusionner et dédupliquer par id
         $mergedById = [];
         foreach (array_merge(...$matieres) as $m) {
             $mergedById[$m->getId()] = $m;
@@ -122,18 +123,9 @@ class ElementConstitutifType extends AbstractType
                 'choices' => $natures, // entités
                 'choice_label' => fn($e) => $e->getLibelle(),
                 'choice_value' => fn($e) => (string)$e?->getId(),
-//                'choice_attr' => function ($choice) {
-//                    return [
-//                        'data-action' => 'change->ec--manage#changeNatureEc'
-//                    ];
-//                },
                 'columns' => 3,
-
-                // 🔹 champs entité
                 'subtitle_property' => 'descriptionCourte', // ex: getDescriptionCourte()
                 'icon_property' => 'icone',                  // ex: CI / TD / TP / ...
-                //'disabled_property' => 'disabled',          // ex: isDisabled() ou getDisabled()
-
                 'on_change_action' => 'change->ec--manage#updateNature',
             ])
             ->add('texteEcLibre', TextareaType::class, ['attr' => ['maxlength' => 250]])

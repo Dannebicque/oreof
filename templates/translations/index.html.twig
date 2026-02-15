@@ -37,6 +37,22 @@
     Gestion des Traductions
 {% endset %}
 
+{% block bouton_header %}
+    <div class="d-flex flex-wrap gap-2 justify-content-lg-end">
+        {% if is_granted('ROLE_ADMIN') %}
+            <a href="{{ path('admin_export_translations_xlsx') }}"
+               class="btn btn-sm btn-info btn-icon btn-icon-end w-100 w-sm-auto"
+               data-bs-toggle="tooltip"
+               data-bs-placement="bottom"
+               title="Exporter traductions"
+            >
+                <i class="{{ iconDownload }}"></i>
+                <span> Exporter traductions</span>
+            </a>
+        {% endif %}
+    </div>
+{% endblock %}
+
 {% block breadcrumb %}
     {{ include('communs/_breadcrumb.html.twig', {liens:[
         {

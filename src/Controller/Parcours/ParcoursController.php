@@ -78,6 +78,7 @@ class ParcoursController extends BaseController
         ]));
     }
 
+    /** @deprecated */
     #[Route('/{parcours}', name: 'voir', methods: ['GET'])]
     public function show(
         Parcours               $parcours,

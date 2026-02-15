@@ -1,0 +1,27 @@
+{{ component('alerte', {
+    type: 'info',
+    message: ('modal_description.'~transition~'.'~metaDto.type)|trans({}, 'process')|nl2br|raw
+}) }}
+
+{% if view and view.mode == 'report' %}
+    {% if view.messages is empty %}
+        <div class="p-3 rounded bg-green-50 text-green-800">
+            Aucun blocage détecté.
+        </div>
+    {% else %}
+        <ul class="space-y-2">
+            {% for m in view.messages %}
+                <li class="p-3 rounded border">
+                    <strong class="mr-2">{{ m.level|upper }}</strong>{{ m.message }}
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endif %}
+
+{% form_theme form 'communs/form_theme_v2.html.twig' %}
+{{ form_start(form, {
+    action: path('fiche_matiere_process_apply', { ficheMatiere: ficheMatiere.id, transition: transition,type: metaDto.type
+    }) }) }}
+{{ form_widget(form) }}
+{{ form_end(form) }}

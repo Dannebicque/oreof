@@ -111,12 +111,7 @@ final class ParcoursHeader
             return 'initialisation_dpe';
         }
 
-        return array_keys($this->getWorkflow()->getMarking($this->dpeParcours)->getPlaces())[0];
-    }
-
-    private function getWorkflow(): WorkflowInterface
-    {
-        return $this->dpeParcoursWorkflow;
+        return array_keys($this->dpeParcoursWorkflow->getMarking($this->dpeParcours)->getPlaces())[0];
     }
 
     public function getHistorique()

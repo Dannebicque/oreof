@@ -1,0 +1,14 @@
+<turbo-stream action="replace" target="fiche_matiere_header_component">
+    <template>
+        <div id="fiche_matiere_header_component">
+            <twig:FicheMatiereHeader
+                    ficheMatiereId="{{ ficheMatiere.id }}"
+            />
+        </div>
+    </template>
+</turbo-stream>
+
+{{ include('turbo/toast.stream.html.twig', { message: ('toast.'~transition~'.'~type~'.success')|trans({},'process'), undo: null, type: 'success' }) }}
+
+{{ include('_ui/_force_close_modal.html.twig') }}
+

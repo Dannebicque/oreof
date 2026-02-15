@@ -203,7 +203,7 @@ class FicheMatiereController extends BaseController
                     'subject' => $ficheMatiere->getParcours()?->getFormation(),
                 ]
             ))) {
-            return $this->redirectToRoute('app_fiche_matiere_show', ['slug' => $ficheMatiere->getSlug()]);
+            return $this->redirectToRoute('fiche_matiere_v2_voir', ['slug' => $ficheMatiere->getSlug()]);
         }
 
         if ($ficheMatiere->getParcours() !== null) {
@@ -380,7 +380,7 @@ class FicheMatiereController extends BaseController
                 'type' => 'success',
                 'text' => 'La fiche matière a bien été sauvegardée.',
             ]);
-            return $this->redirectToRoute('app_fiche_matiere_show', ['slug' => $ficheMatiere->getSlug()]);
+            return $this->redirectToRoute('fiche_matiere_v2_voir', ['slug' => $ficheMatiere->getSlug()]);
         } catch (Exception $e) {
             // Log error
             $logTxt = "[{$dateHeure}] Le versioning de la fiche matière : "
@@ -392,7 +392,7 @@ class FicheMatiereController extends BaseController
                 'type' => 'error',
                 'text' => "Une erreur est survenue lors de la sauvegarde."
             ]);
-            return $this->redirectToRoute('app_fiche_matiere_show', ['slug' => $ficheMatiere->getSlug()]);
+            return $this->redirectToRoute('fiche_matiere_v2_voir', ['slug' => $ficheMatiere->getSlug()]);
         }
     }
 
@@ -464,7 +464,7 @@ class FicheMatiereController extends BaseController
                 'type' => 'error',
                 'text' => "Une erreur est survenue lors de la visualisation."
             ]);
-            return $this->redirectToRoute('app_fiche_matiere_show', ['slug' => $ficheMatiere->getSlug()]);
+            return $this->redirectToRoute('fiche_matiere_v2_voir', ['slug' => $ficheMatiere->getSlug()]);
         }
     }
 

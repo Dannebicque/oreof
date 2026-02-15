@@ -40,4 +40,34 @@ class FormationTabStateRepository extends ServiceEntityRepository
         }
         return $map;
     }
+
+    /**
+     * Récupère les FormationTabState pour une formation et un ensemble de tabKeys en une seule requête.
+     * Retourne un tableau indexé par tabKey.
+     *
+     * @param Formation $formation
+     * @param string[] $tabKeys
+     * @return array<string, FormationTabState>
+     */
+    public function findByFormationAndTabs(Formation $formation, array $tabKeys): array
+    {
+        if (count($tabKeys) === 0) {
+            return [];
+        }
+
+        $qb = $this->createQueryBuilder('s')
+            ->andWhere('s.formation = :formation')
+            ->andWhere('s.tabKey IN (:tabs)')
+            ->setParameter('formation', $formation)
+            ->setParameter('tabs', $tabKeys);
+
+        $states = $qb->getQuery()->getResult();
+
+        $map = [];
+        foreach ($states as $s) {
+            $map[$s->getTabKey()] = $s;
+        }
+
+        return $map;
+    }
 }

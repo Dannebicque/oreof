@@ -222,7 +222,7 @@ class SearchController extends AbstractController
         foreach($activeWorksheet->getRowIterator(2, count($data)) as $row){
             foreach($row->getCellIterator('D') as $cell){
                 $cell->getHyperlink()->setUrl(
-                    $this->generateUrl('app_fiche_matiere_show',
+                    $this->generateUrl('fiche_matiere_v2_voir',
                         ['slug' => $cell->getValue()],
                         UrlGeneratorInterface::ABSOLUTE_URL
                     )

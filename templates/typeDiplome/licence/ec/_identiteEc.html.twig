@@ -1,0 +1,64 @@
+<div class="row">
+    <div class="col-6">
+        <dl>
+            {% if is_granted('ROLE_ADMIN') %}
+                <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Id Fiche</dt>
+                <dd>#{{ ficheMatiere.id }}</dd>
+            {% endif %}
+
+            {% if ficheMatiere.horsDiplome == false %}
+                <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Type de diplôme</dt>
+                <dd>{{ typeDiplome != null ? typeDiplome|typeDiplome : 'N.C.' }}</dd>
+                <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Mention/Spécialité</dt>
+                <dd>{{ formation != null ? formation.display : '' }}</dd>
+            {% else %}
+                <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Type de diplôme</dt>
+                <dd>Fiche hors diplôme</dd>
+            {% endif %}
+            <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Parcours porteur</dt>
+            <dd>
+                {% if ficheMatiere.parcours != null %}
+                    {% if ficheMatiere.parcours.parcoursDefaut == false %}
+                        {{ ficheMatiere.parcours.libelle }}
+                    {% else %}
+                        Mention sans parcours
+                    {% endif %}
+                {% else %}
+                    Pas de parcours précisé
+                {% endif %}
+            </dd>
+            {% if ficheMatiere.horsDiplome == false %}
+                <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Composante porteuse</dt>
+                <dd>{{ (formation != null and formation.composantePorteuse != null) ? formation.composantePorteuse.libelle : 'erreur' }}</dd>
+            {% endif %}
+        </dl>
+    </div>
+    <div class="col-6">
+        <dl>
+            <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Intitulé de l'EC</dt>
+            <dd>{{ ficheMatiere.libelle }}</dd>
+            <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Intitulé de l'EC en anglais</dt>
+            <dd>{{ ficheMatiere.libelleAnglais }}</dd>
+            <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Enseignement mutualisé ?</dt>
+            <dd>{{ ficheMatiere.enseignementMutualise == true or ficheMatiere.ficheMatiereParcours|length > 0 ? 'Oui' : 'Non' }}</dd>
+            {% if ficheMatiere.enseignementMutualise == true or ficheMatiereParcours|length > 0 %}
+                <dt>Parcours/formation avec lequel la fiche est mutualisée</dt>
+                <dd>
+                    <ul>
+                        {% for parc in ficheMatiereParcours %}
+                            {% if parc.parcours.formation is defined and parc.parcours.formation is not null %}
+                                {% if parc.parcours.isParcoursDefaut %}
+                                    <li>{{ parc.parcours.formation.displayLong }} (mention sans parcours)</li>
+                                {% else %}
+                                    <li>{{ parc.parcours.libelle }} ({{ parc.parcours.formation.displayLong }})</li>
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </dd>
+            {% endif %}
+            <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Code Apogée</dt>
+            <dd>{{ ficheMatiere.codeApogee ?? 'Non calculé' }}</dd>
+        </dl>
+    </div>
+</div>

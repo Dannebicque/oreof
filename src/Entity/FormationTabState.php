@@ -6,6 +6,7 @@ use App\Repository\FormationTabStateRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: FormationTabStateRepository::class)]
+#[ORM\Table(name: 'formation_tab_state', uniqueConstraints: [new ORM\UniqueConstraint(name: 'formation_tab_unique', columns: ['formation_id', 'tab_key'])])]
 class FormationTabState
 {
     #[ORM\Id]
@@ -17,7 +18,7 @@ class FormationTabState
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?Formation $formation = null;
 
-    #[ORM\Column(length: 30)]
+    #[ORM\Column(length: 30, name: 'tab_key')]
     private ?string $tabKey = null;
 
     #[ORM\Column(options: ['default' => false])]
@@ -28,6 +29,9 @@ class FormationTabState
 
     #[ORM\Column]
     private ?\DateTimeImmutable $updatedAt = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?array $issues = null;
 
     public function __construct(Formation $formation, string $tabKey)
     {
@@ -102,6 +106,18 @@ class FormationTabState
     public function setUpdatedAt(\DateTimeImmutable $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function getIssues(): ?array
+    {
+        return $this->issues ?? [];
+    }
+
+    public function setIssues(?array $issues): static
+    {
+        $this->issues = $issues;
 
         return $this;
     }

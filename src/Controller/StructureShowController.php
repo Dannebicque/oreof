@@ -85,4 +85,32 @@ class StructureShowController extends AbstractController
             'hasLastVersion' => $hasLastVersion,
         ]);
     }
+
+    #[Route('/structure/parcours/show/v2/', name: 'app_structure_parcours_show_v2')]
+    public function parcoursShowV2(
+        VersioningParcours $versioningParcours,
+        Parcours           $parcours,
+        bool               $hasLastVersion = false
+    ): Response
+    {
+
+        $typeD = $this->typeDiplomeResolver->fromTypeDiplome($parcours?->getTypeDiplome());
+        $dto = $typeD->calculStructureParcours($parcours);
+
+        $structureDifferencesParcours = $versioningParcours->getStructureDifferencesBetweenParcoursAndLastVersion($parcours);
+        if ($structureDifferencesParcours !== null) {
+            $diffStructure = (VersioningStructure::setDto($structureDifferencesParcours, $dto))->calculDiff();
+        }
+
+        if ($dto === null) {
+            return $this->render('typeDiplome/formation/_structure_empty.html.twig', []);
+        }
+
+        return $this->render('typeDiplome/' . $typeD::TEMPLATE_FOLDER . '/structure/v2/_structure.html.twig', [
+            'parcours' => $parcours,
+            'diffStructure' => $diffStructure ?? null,
+            'dto' => $dto,
+            'hasLastVersion' => $hasLastVersion,
+        ]);
+    }
 }

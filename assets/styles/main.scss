@@ -6,10 +6,6 @@
  * @lastUpdate 14/03/2023 22:25
  */
 
-.container {
-  margin-top: 120px;
-}
-
 .border-process-info {
   border-left: 2px solid var(--info);
   border-radius: var(--border-radius-md);
@@ -412,9 +408,9 @@ html[data-show=true] .settings-button {
 
 }
 
-html[data-placement='horizontal'] main {
-  padding-top: 150px;
-}
+//html[data-placement='horizontal'] main {
+//  padding-top: 150px;
+//}
 
 .table-container {
   display: block;

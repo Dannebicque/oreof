@@ -22,27 +22,27 @@ class ParcoursStep7Type extends AbstractType
     {
         $builder
             ->add('descriptifHautPageAutomatique', TextareaAutoSaveType::class, [
-                'label' => 'Texte affiché en haut des pages parcours (généré automatiquement)',
-                'help' => 'Ce texte est généré par la configuration du parcours et des semestres. Ce texte sera affiché par défaut en haut des pages parcours. Il peut être remplacé par un texte spécifique à chaque parcours.',
+//                'label' => 'Texte affiché en haut des pages parcours (généré automatiquement)',
+//                'help' => 'Ce texte est généré par la configuration du parcours et des semestres. Ce texte sera affiché par défaut en haut des pages parcours. Il peut être remplacé par un texte spécifique à chaque parcours.',
                 'required' => false,
-                'attr' => ['rows' => 20, 'maxlength' => 2500, 'data-action' => 'change->parcours--step7#saveDescriptifHautPageAutomatique'],
+                'attr' => ['rows' => 20, 'maxlength' => 2500],
             ])
             ->add('descriptifHautPage', TextareaAutoSaveType::class, [
-                'label' => 'Texte affiché en haut des pages parcours',
-                'help' => 'Ce texte sera affiché par défaut en haut des pages parcours. Il peut être remplacé par un texte spécifique à chaque parcours.',
+//                'label' => 'Texte affiché en haut des pages parcours',
+//                'help' => 'Ce texte sera affiché par défaut en haut des pages parcours. Il peut être remplacé par un texte spécifique à chaque parcours.',
                 'required' => false,
-                'attr' => ['rows' => 20, 'maxlength' => 2500, 'data-action' => 'change->parcours--step7#saveDescriptifHautPage'],
+                'attr' => ['rows' => 20, 'maxlength' => 2500],
             ])
             ->add('descriptifBasPage', TextareaAutoSaveType::class, [
-                'label' => 'Texte affiché en bas des pages parcours',
-                'help' => 'Ce texte sera affiché par défaut en bas des pages parcours. Il peut être remplacé par un texte spécifique à chaque parcours.',
+//                'label' => 'Texte affiché en bas des pages parcours',
+//                'help' => 'Ce texte sera affiché par défaut en bas des pages parcours. Il peut être remplacé par un texte spécifique à chaque parcours.',
                 'required' => false,
-                'attr' => ['rows' => 20, 'maxlength' => 2500, 'data-action' => 'change->parcours--step7#saveDescriptifBasPage'],
+                'attr' => ['rows' => 20, 'maxlength' => 2500],
 
             ])
             ->add('codeRNCP', TextType::class, [
                 'required' => false,
-                'attr' => ['maxlength' => 10, 'data-action' => 'change->parcours--step7#saveCodeRNCP'],
+                'attr' => ['maxlength' => 10],
             ])
         ;
     }

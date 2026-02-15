@@ -1,0 +1,176 @@
+{% extends 'base.html.twig' %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://cdn.tailwindcss.com" defer></script>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        @layer components {
+            .is-chosen {
+                @apply ring-2 ring-indigo-400;
+            }
+
+            .is-ghost {
+                @apply opacity-50;
+            }
+
+            .is-dragging {
+                @apply cursor-grabbing;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% set header_title %}
+    Fiche EC/matière <strong
+        id="fiche_matiere_libelle">{{ fiche_matiere.libelle }}</strong> {% if fiche_matiere.ficheMatiereParcours|length > 0 %}
+    <span class="badge bg-info">Mutualisée</span>{% endif %}
+{% endset %}
+
+{% block bouton_header %}
+    <a href="{{ path('fiche_matiere_v2_voir', {slug:fiche_matiere.slug}) }}"
+       class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+       data-bs-toggle="tooltip"
+       data-bs-placement="bottom"
+       title="Voir la fiche EC/matière"
+    >
+        <i class="{{ iconShow }}"></i>
+        <span> Voir la fiche EC/matière</span>
+    </a>
+    {% if source == 'liste' %}
+        <a href="{{ path('structure_fiche_matiere_index') }}"
+           class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+           data-bs-toggle="tooltip"
+           data-bs-placement="bottom"
+           title="Retour à la liste des fiches EC/matières"
+        >
+            <i class="{{ iconBack }}"></i>
+            <span> Retour à la liste des fiches EC/matières</span>
+        </a>
+    {% else %}
+        <a href="{{ link }}"
+           class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+           data-bs-toggle="tooltip"
+           data-bs-placement="bottom"
+           title="Retour au parcours"
+        >
+            <i class="{{ iconBack }}"></i>
+            <span> Retour au parcours</span>
+        </a>
+    {% endif %}
+{% endblock %}
+
+
+{% block breadcrumb %}
+    {{ include('communs/_breadcrumb.html.twig', {liens:[
+        {href: path('structure_fiche_matiere_index'), title: 'Liste des fiches EC/matières'},
+    ]}) }}
+{% endblock %}
+
+{% block content %}
+    <div id="fiche_matiere_header_component">
+        <twig:FicheMatiereHeader ficheMatiereId="{{ fiche_matiere.id }}"/>
+    </div>
+
+    <div class="flex">
+        <aside class="w-72 bg-white rounded-md shadow-md border-slate-200 flex flex-col p-3 space-y-8">
+            <nav class="flex-1 space-y-1">
+                <p class="text-[10px] font-black text-slate-400 uppercase mb-4 tracking-widest px-3">Configuration
+                    Fiche Matière</p>
+
+                <div class="p-6 bg-gray-200" id="pecent_completude">{# a mettre à jour avec turbo #}
+                    {% set percent = fiche_matiere.remplissage.calcul() %}
+                    {% set percentColor = fiche_matiere.remplissage.isFull() == true ? 'green' : 'orange' %}
+                    <div class="flex justify-between items-end mb-2">
+                        <span class="text-[10px] font-bold uppercase tracking-widest text-slate-500">Complétude Fiche Matière</span>
+                        <span class="text-xs font-bold text-{{ percentColor }}-600 italic">{{ percent|number_format(2) }}%</span>
+                    </div>
+                    <div class="w-full h-1 bg-slate-700 rounded-full overflow-hidden">
+                        <div class="bg-{{ percentColor }}-500 h-full w-[{{ percent|number_format(0) }}%]"></div>
+                    </div>
+                </div>
+
+                <a class="nav-link w-full flex items-center justify-between p-3 rounded-2xl text-sm font-bold text-slate-500 hover:bg-white transition group"
+                   href="{{ path('fiche_matiere_v2_tabs', { slug: fiche_matiere.slug, tab: 'identite' }) }}"
+                   data-turbo-frame="tab-content"
+                   data-turbo-action="advance"
+                   data-tabs-target="tab">
+                    <span class="flex items-center gap-3">
+                        Identité
+                    </span>
+                    <span id="tab_badge_identite">
+                      {{ include('communs/_badge.html.twig', { tabKey: 'identite', status: tabStates['identite'].status ?? 'red' }) }}
+                    </span>
+                </a>
+
+                <a class="nav-link w-full flex items-center justify-between p-3 rounded-2xl text-sm font-bold text-slate-500 hover:bg-white transition group"
+                   href="{{ path('fiche_matiere_v2_tabs', { slug: fiche_matiere.slug, tab: 'mutualisation' }) }}"
+                   data-turbo-frame="tab-content"
+                   data-turbo-action="advance"
+                   data-tabs-target="tab">
+                    <span class="flex items-center gap-3">
+                        Mutualisation
+                    </span>
+                    <span id="tab_badge_mutualisation">
+                      {{ include('communs/_badge.html.twig', { tabKey: 'mutualisation', status: tabStates['mutualisation'].status ?? 'red' }) }}
+                    </span>
+                </a>
+
+                <a class="nav-link w-full flex items-center justify-between p-3 rounded-2xl text-sm font-bold text-slate-500 hover:bg-white transition group"
+                   href="{{ path('fiche_matiere_v2_tabs', { slug: fiche_matiere.slug, tab: 'presentation' }) }}"
+                   data-turbo-frame="tab-content"
+                   data-turbo-action="advance"
+                   data-tabs-target="tab">
+                    <span class="flex items-center gap-3">
+                        Présentation et objectifs
+                    </span>
+                    <span id="tab_badge_presentation">
+                      {{ include('communs/_badge.html.twig', { tabKey: 'presentation', status: tabStates['presentation'].status ?? 'red' }) }}
+                    </span>
+                </a>
+
+                <a class="nav-link w-full flex items-center justify-between p-3 rounded-2xl text-sm font-bold text-slate-500 hover:bg-white transition group"
+                   href="{{ path('fiche_matiere_v2_tabs', { slug: fiche_matiere.slug, tab: 'volumes_horaires' }) }}"
+                   data-turbo-frame="tab-content"
+                   data-turbo-action="advance"
+                   data-tabs-target="tab">
+                    <span class="flex items-center gap-3">
+                        Volumes horaires
+                    </span>
+                    <span id="tab_badge_volumes_horaires">
+                      {{ include('communs/_badge.html.twig', { tabKey: 'volumes_horaires', status: tabStates['volumes_horaires'].status ?? 'red' }) }}
+                    </span>
+                </a>
+
+                <a class="nav-link w-full flex items-center justify-between p-3 rounded-2xl text-sm font-bold text-slate-500 hover:bg-white transition group"
+                   href="{{ path('fiche_matiere_v2_tabs', { slug: fiche_matiere.slug, tab: 'mccc' }) }}"
+                   data-turbo-frame="tab-content"
+                   data-turbo-action="advance"
+                   data-tabs-target="tab">
+                    <span class="flex items-center gap-3">
+                        MCCC
+                    </span>
+                    <span id="tab_badge_mccc">
+                      {{ include('communs/_badge.html.twig', { tabKey: 'mccc', status: tabStates['mccc'].status ?? 'red' }) }}
+                    </span>
+                </a>
+            </nav>
+        </aside>
+
+        <div class="p-3 flex-1 overflow-y-auto bg-white ms-2 rounded-md shadow-md border-slate-200 flex flex-col">
+            <turbo-frame
+                    id="tab-content"
+            >
+                {% if tab is defined %}
+                    {% include 'fiche_matiere_v2/tabs/_' ~ tab ~ '.html.twig' %}
+                {% else %}
+                    <div>Sélectionnez un onglet.</div>
+                {% endif %}
+
+            </turbo-frame>
+        </div>
+    </div>
+{% endblock %}

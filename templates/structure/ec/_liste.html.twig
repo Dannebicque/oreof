@@ -85,7 +85,7 @@
                                                 {% if ec.ficheMatiere != null %}
                                                     {% if isBut %}
                                                         <a
-                                                                href="{{ path('app_fiche_matiere_edit',{slug: ec.ficheMatiere.slug}) }}"
+                                                                href="{{ path('fiche_matiere_v2_modifier',{slug: ec.ficheMatiere.slug}) }}"
                                                                 class="btn btn-sm btn-outline-info  px-1"
                                                                 data-bs-toggle="tooltip"
                                                                 target="_blank" data-bs-placement="bottom"
@@ -100,7 +100,7 @@
                                                     {% else %}
                                                         {% if ec.ficheMatiere.parcours != null and ec.ficheMatiere.parcours.id == parcours.id %}
                                                             <a
-                                                                    href="{{ path('app_fiche_matiere_edit',{slug: ec.ficheMatiere.slug}) }}"
+                                                                    href="{{ path('fiche_matiere_v2_modifier',{slug: ec.ficheMatiere.slug}) }}"
                                                                     class="btn btn-sm btn-outline-info  px-1"
                                                                     data-bs-toggle="tooltip"
                                                                     target="_blank" data-bs-placement="bottom"
@@ -114,7 +114,7 @@
                                                             </a>
                                                         {% else %}
                                                             <a
-                                                                    href="{{ path('app_fiche_matiere_show',{slug: ec.ficheMatiere.slug}) }}"
+                                                                    href="{{ path('fiche_matiere_v2_voir',{slug: ec.ficheMatiere.slug}) }}"
                                                                     class="btn btn-sm btn-outline-info  px-1"
                                                                     data-bs-toggle="tooltip"
                                                                     target="_blank" data-bs-placement="bottom"
@@ -461,7 +461,7 @@
                                                         {% if ece.ficheMatiere != null %}
                                                             {% if editable == true and isUeRaccrochee == false %}
                                                                 <a
-                                                                        href="{{ path('app_fiche_matiere_edit',{slug: ece
+                                                                        href="{{ path('fiche_matiere_v2_modifier',{slug: ece
                                                                         .ficheMatiere.slug}) }}"
                                                                         class="btn btn-sm btn-outline-info px-1"
                                                                         data-bs-toggle="tooltip" target="_blank"
@@ -476,7 +476,7 @@
                                                                 </a>
                                                             {% else %}
                                                                 <a
-                                                                        href="{{ path('app_fiche_matiere_show',{slug: ece.ficheMatiere.slug}) }}"
+                                                                        href="{{ path('fiche_matiere_v2_voir',{slug: ece.ficheMatiere.slug}) }}"
                                                                         class="btn btn-sm btn-outline-info  px-1"
                                                                         data-bs-toggle="tooltip"
                                                                         target="_blank"

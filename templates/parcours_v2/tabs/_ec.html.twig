@@ -62,7 +62,7 @@
                         {% set ficheMatiere = elem.ficheMatiere %}
                         {% set ficheComplete = ficheMatiere.remplissage.calcul() == 100 ? 'green' : 'orange' %}
                         <a class="text-[10px] font-black text-indigo-600 group-hover:underline uppercase flex items-center gap-1.5 px-2 py-1 rounded hover:bg-slate-50"
-                           href="{{ path('app_fiche_matiere_show', {slug: ficheMatiere.slug}) }}"
+                           href="{{ path('fiche_matiere_v2_voir', {slug: ficheMatiere.slug}) }}"
                            target="_blank"
                         >
                             <span class="w-1.5 h-1.5 rounded-full bg-{{ ficheComplete }}-500"

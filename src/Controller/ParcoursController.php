@@ -287,7 +287,7 @@ class ParcoursController extends BaseController
         // on met un lien vers le parcours de base
         $parcoursDeBase = null;
         if($parcours->getTypeParcours() === TypeParcoursEnum::TYPE_PARCOURS_ALTERNANCE
-           && $parcours->getFormation()?->getTypeDiplome()?->getLibelleCourt() === 'BUT' 
+            && $parcours->getFormation()?->getTypeDiplome()?->getLibelleCourt() === 'BUT'
         ) {
             $parcoursDeBase = $entityManager->getRepository(Parcours::class)
                 ->findParcoursDeBaseAlternance(
@@ -321,6 +321,7 @@ class ParcoursController extends BaseController
     /**
      * @throws TypeDiplomeNotFoundException
      */
+    /** @deprecated */
     #[Route('/{id}/edit', name: 'app_parcours_edit', methods: ['GET', 'POST'])]
     public function edit(
         Request             $request,
@@ -959,7 +960,7 @@ class ParcoursController extends BaseController
         if($parcours->getParcoursOrigineCopie()?->getId() && count($parcoursOrigineVersion) > 0){
             $urlMaquetteJson = $this->generateUrl(
                     'app_parcours_export_maquette_json_validee_cfvu',
-                    ['parcours' => $parcours->getParcoursOrigineCopie()->getId()], 
+                ['parcours' => $parcours->getParcoursOrigineCopie()->getId()],
                     UrlGeneratorInterface::ABSOLUTE_URL
             );
         }

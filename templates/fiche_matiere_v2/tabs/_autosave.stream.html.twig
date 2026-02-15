@@ -1,0 +1,23 @@
+<turbo-stream action="replace" target="tab_badge_{{ tabKey }}">
+    <template>
+        <div id="tab_badge_{{ tabKey }}">
+            {{ include('communs/_badge.html.twig', { tabKey: tabKey, status: status }) }}
+        </div>
+    </template>
+</turbo-stream>
+
+<turbo-stream action="replace" target="tab_done_block_{{ tabKey }}">
+    <template>
+        <div id="tab_done_block_{{ tabKey }}" class="w-full">
+            {{ include('fiche_matiere_v2/tabs/_done_block.html.twig', { fiche_matiere: fiche_matiere, tabKey: tabKey, status: status, done: done }) }}
+        </div>
+    </template>
+</turbo-stream>
+
+<turbo-stream action="replace" target="tab_issues_{{ tabKey }}">
+    <template>
+        <div id="tab_issues_{{ tabKey }}" data-controller="issues">
+            {{ include('communs/_issues.html.twig', { issues: issues }) }}
+        </div>
+    </template>
+</turbo-stream>

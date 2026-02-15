@@ -182,7 +182,7 @@ ue.helps.natureUeEc: '"'
 ue.helps.natureUeEcTexte: "Précisez la nature de l'UE si elle n'est pas présente dans la liste déroulante du champ précédent."
 parcours_step6.helps.poursuitesEtudes: 'Indiquez en 3000 caractères maximum quelles sont les poursuites d’études envisageables.'
 parcours_step6.helps.debouches: 'Indiquez les principaux débouchés professionnels accessibles à l’issue de cette formation.'
-parcours_step6.helps.codeRome.help: 'Ajoutez les codes ROME pour préciser les métiers accessibles aux diplômés     (cf. https://www.pole-emploi.fr/employeur/vos-recrutements/le-rome-et-les-fiches-metiers.html).'
+parcours_step6.helps.codeRome.help: 'Ajoutez les codes ROME pour préciser les métiers accessibles aux diplômés     (cf. <a href="https://www.pole-emploi.fr/employeur/vos-recrutements/le-rome-et-les-fiches-metiers.html" target="_blank">https://www.pole-emploi.fr/employeur/vos-recrutements/le-rome-et-les-fiches-metiers.html</a>).'
 element_constitutif.helps.natureUeEc: '"'
 element_constitutif.helps.ficheMatiere: element_constitutif.helps.ficheMatiere
 fiche_matiere.helps.libelle: "Indiquez le libellé exact de l'enseignement"

@@ -1,0 +1,198 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        {#        {{ cssDiff }}#}
+        {#        {{ include('communs/versioning_view_style.html.twig') }}#}
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #F8FAFC;
+            padding: 40px;
+        }
+    </style>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script type="module">
+      import { Application, Controller } from 'https://unpkg.com/@hotwired/stimulus/dist/stimulus.js'
+
+      window.Stimulus = Application.start()
+
+      Stimulus.register('scroll-spy', class extends Controller {
+        static targets = ['link', 'section']
+
+        connect () {
+          const options = {
+            root: null,
+            rootMargin: '-10% 0px -70% 0px', // Déclenchement quand la section est en haut
+            threshold: 0
+          }
+
+          this.observer = new IntersectionObserver(this.onIntersection.bind(this), options)
+          this.sectionTargets.forEach(section => this.observer.observe(section))
+        }
+
+        onIntersection (entries) {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              this.activateLink(entry.target.id)
+            }
+          })
+        }
+
+        activateLink (id) {
+          this.linkTargets.forEach(link => {
+            const isActive = link.getAttribute('href') === `#${id}`
+            link.classList.toggle('text-indigo-600', isActive)
+            link.classList.toggle('bg-indigo-50', isActive)
+            link.classList.toggle('border-indigo-600', isActive)
+            link.classList.toggle('text-slate-400', !isActive)
+            link.classList.toggle('border-transparent', !isActive)
+          })
+        }
+
+        disconnect () {
+          this.observer.disconnect()
+        }
+      })
+    </script>
+
+    <!-- Test Script -->
+    <script>
+      let isSaveClicked = false
+
+      function showVersion () {
+        let select = document.querySelector('#selectVersion')
+        let versionSelected = select.options[select.selectedIndex].value
+        if (versionSelected !== '#') {
+          window.location = `/fiche/matiere/${versionSelected}/versioning/view`
+        }
+      }
+
+      function saveVersion (event) {
+        if (isSaveClicked === false) {
+          let spinner = document.querySelector('#spinner')
+          spinner.classList.remove('d-none')
+          spinner.classList.add('d-flex')
+          isSaveClicked = true
+        } else {
+          event.preventDefault()
+          return false
+        }
+      }
+
+    </script>
+{% endblock %}
+
+{% block title %}Formation{% endblock %}
+
+{% block content %}
+    <div id="fiche_matiere_header_component">
+        <twig:FicheMatiereHeader ficheMatiereId="{{ ficheMatiere.id }}"/>
+    </div>
+
+    <div class="flex" data-controller="scroll-spy">
+        <aside class="w-72 bg-white rounded-md shadow-md border-slate-200 flex flex-col p-3 space-y-8">
+            <div class="sticky top-40 space-y-8">
+                <div>
+                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-6 px-4">Navigation</p>
+                    <nav class="space-y-1">
+                        <a href="#identite_enseignement" data-scroll-spy-target="link"
+                           class="flex items-center gap-3 px-5 py-3 text-[11px] font-black uppercase tracking-widest rounded-md border-l-4 border-transparent transition-all duration-300">
+                            Identité de l'enseignement
+                        </a>
+                        <a href="#presentation" data-scroll-spy-target="link"
+                           class="flex items-center gap-3 px-5 py-3 text-[11px] font-black uppercase tracking-widest rounded-md border-l-4 border-transparent transition-all duration-300">
+                            Présentation
+                        </a>
+                        <a href="#volumes_horaires" data-scroll-spy-target="link"
+                           class="flex items-center gap-3 px-5 py-3 text-[11px] font-black uppercase tracking-widest rounded-md border-l-4 border-transparent transition-all duration-300">
+                            Volumes horaires
+                        </a>
+
+                        <a href="#mccc" data-scroll-spy-target="link"
+                           class="flex items-center gap-3 px-5 py-3 text-[11px] font-black uppercase tracking-widest rounded-md border-l-4 border-transparent transition-all duration-300">
+                            MCCC
+                        </a>
+
+                        <a href="#bcc" data-scroll-spy-target="link"
+                           class="flex items-center gap-3 px-5 py-3 text-[11px] font-black uppercase tracking-widest rounded-md border-l-4 border-transparent transition-all duration-300">
+                            Compétences acquises
+                        </a>
+                        {% if ficheMatiere.enseignementMutualise == true or ficheMatiere.elementConstitutifs|length > 0 %}
+                            <a href="#mutualisation" data-scroll-spy-target="link"
+                               class="flex items-center gap-3 px-5 py-3 text-[11px] font-black uppercase tracking-widest rounded-md border-l-4 border-transparent transition-all duration-300">
+                                Détail des mutualisations
+                            </a>
+
+                        {% endif %}
+                        <a href="#infos" data-scroll-spy-target="link"
+                           class="flex items-center gap-3 px-5 py-3 text-[11px] font-black uppercase tracking-widest rounded-md border-l-4 border-transparent transition-all duration-300">
+                            Infos Pratiques
+                        </a>
+                    </nav>
+                </div>
+            </div>
+        </aside>
+        <div class="ps-3 flex-1 overflow-y-auto flex flex-col pt-0">
+            {{ include('typeDiplome/'~constant('TEMPLATE_FOLDER', typeD)~'/_show_fiche_matiere.html.twig') }}
+        </div>
+    </div>
+{% endblock %}
+
+{% set header_title %}
+    Fiche EC/matière <strong
+        id="fiche_matiere_libelle">{{ ficheMatiere.libelle }}</strong> {% if ficheMatiere.ficheMatiereParcours|length > 0 %}
+    <span class="badge bg-info">Mutualisée</span>{% endif %}
+{% endset %}
+
+{% block breadcrumb %}
+    {{ include('communs/_breadcrumb.html.twig', {liens:[
+        {href: path('structure_fiche_matiere_index'), title: 'Liste des fiches EC/matières'},
+    ]}) }}
+{% endblock %}
+
+{% block bouton_header %}
+    {% if
+        is_granted('EDIT', {route: 'app_fiche_matiere', subject: ficheMatiere})
+        or is_granted('EDIT', {route: 'app_fiche_matiere_hd', subject: 'etablissement'})
+        or is_granted('EDIT', {route: 'app_fiche_matiere', subject: 'formation'})
+        or is_granted('EDIT', {route: 'app_fiche_matiere', subject: 'parcours'})
+        or is_granted('ROLE_ADMIN') %}
+        <a
+                href="{{ path('fiche_matiere_v2_modifier',{slug: ficheMatiere.slug}) }}"
+                class="btn btn-sm btn-outline-warning"
+                data-bs-toggle="tooltip"
+                data-bs-placement="bottom"
+                title="Modifier une fiche EC/matière"
+        >
+            <i class="{{ iconEdit }}"></i>
+            <span> modifier</span>
+        </a>
+    {% endif %}
+
+    <a href="{{ path('app_fiche_matiere_export', {id:ficheMatiere.id}) }}"
+       class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+       data-bs-toggle="tooltip"
+       data-bs-placement="bottom"
+       title="Télécharger en PDF"
+    >
+        <i class="{{ iconDownload }}"></i>
+        <span> Télécharger en PDF</span>
+    </a>
+    <a href="{{ path('structure_fiche_matiere_index') }}"
+       class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+       data-bs-toggle="tooltip"
+       data-bs-placement="bottom"
+       title="Retour à la liste des fiches EC/matières"
+    >
+        <i class="{{ iconBack }}"></i>
+        <span> Retour à la liste des fiches EC/matières</span>
+    </a>
+{% endblock %}

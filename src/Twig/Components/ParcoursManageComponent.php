@@ -21,6 +21,7 @@ use Symfony\UX\LiveComponent\Attribute\LiveProp;
 use Symfony\UX\LiveComponent\DefaultActionTrait;
 use Symfony\UX\TwigComponent\Attribute\PostMount;
 
+/** @deprecated */
 #[AsLiveComponent('parcours_manage')]
 final class ParcoursManageComponent extends AbstractController
 {

@@ -21,13 +21,13 @@ final class FormationTabController extends AbstractController
 {
     #[Route('/{id}/tab/{tabKey}/autosave', name: 'tab_autosave', methods: ['POST'])]
     public function autosave(
-        Request                       $request,
-        Formation                     $formation,
-        string                        $tabKey,
+        Request                     $request,
+        Formation                   $formation,
+        string                      $tabKey,
         FormationFieldUpdater         $updater,
-        FormationTabStateRepository   $states,
+        FormationTabStateRepository $states,
         FormationTabCompletionChecker $checker,
-        EntityManagerInterface        $em,
+        EntityManagerInterface      $em,
     ): Response
     {
         $field = (string)$request->request->get('field');
@@ -53,6 +53,7 @@ final class FormationTabController extends AbstractController
         $isComplete = count($issues) === 0;
 
         $state->setDone(false);
+        $state->setIssues($issues); //todo: sauvegardedes issues dans la BDD
         $state->setStatus($checker->computeStatus($isComplete, false));
         $em->flush();
 
@@ -63,12 +64,12 @@ final class FormationTabController extends AbstractController
 
     #[Route('/{id}/tab/{tabKey}/done', name: 'tab_done', methods: ['POST'])]
     public function done(
-        Request                       $request,
-        Formation                     $formation,
-        string                        $tabKey,
-        FormationTabStateRepository   $states,
+        Request                     $request,
+        Formation                   $formation,
+        string                      $tabKey,
+        FormationTabStateRepository $states,
         FormationTabCompletionChecker $checker,
-        EntityManagerInterface        $em,
+        EntityManagerInterface      $em,
     ): Response
     {
         FormationTabRegistry::assertTab($tabKey);
@@ -87,6 +88,7 @@ final class FormationTabController extends AbstractController
         $isComplete = count($issues) === 0;
 
         $state->setDone($askedDone && $isComplete);
+        $state->setIssues($issues); //todo: sauvegardedes issues dans la BDD
         $state->setStatus($checker->computeStatus($isComplete, $state->isDone()));
         $em->flush();
 

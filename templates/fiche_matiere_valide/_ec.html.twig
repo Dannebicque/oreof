@@ -79,7 +79,7 @@
         {% elseif ec.elementConstitutif.ficheMatiere != null and ec.elementConstitutif.ficheMatiere.parcours != null %}
             {% if ec.elementConstitutif.ficheMatiere.parcours.id == parcours.id and ec.raccroche == false and raccrocheUe == false and raccrocheSemestre == false %}
                 <a
-                        href="{{ path('app_fiche_matiere_edit',{slug:  ec.elementConstitutif.ficheMatiere.slug}) }}"
+                        href="{{ path('fiche_matiere_v2_modifier',{slug:  ec.elementConstitutif.ficheMatiere.slug}) }}"
                         class="btn btn-sm btn-outline-info"
                         data-bs-toggle="tooltip"
                         target="_blank"
@@ -95,7 +95,7 @@
                 </a>
             {% else %}
                 <a
-                        href="{{ path('app_fiche_matiere_show',{slug:  ec.elementConstitutif.ficheMatiere.slug}) }}"
+                        href="{{ path('fiche_matiere_v2_voir',{slug:  ec.elementConstitutif.ficheMatiere.slug}) }}"
                         class="btn btn-sm btn-outline-info"
                         data-bs-toggle="tooltip"
                         data-bs-placement="bottom"
@@ -121,7 +121,8 @@
         {% if (isBut is defined and isBut == false) or isBut is not defined %}
             <strong>{{ ec.elementConstitutif.code }}</strong>{% endif %}
         {% if ec.elementConstitutif.ficheMatiere != null %}
-            <a href="{{ url('app_fiche_matiere_show', {slug: ec.elementConstitutif.ficheMatiere.slug}) }}" target="_blank">
+            <a href="{{ url('fiche_matiere_v2_voir', {slug: ec.elementConstitutif.ficheMatiere.slug}) }}"
+               target="_blank">
                 {% if isBut is defined and isBut == true %}
                     <strong>{{ ec.elementConstitutif.ficheMatiere.sigle }}</strong> {{ ec.elementConstitutif.ficheMatiere.libelle }}
                 {% else %}

@@ -212,7 +212,7 @@
                     {#                        'initialiser') ) %} #}
                     {% if ficheMatiere.slug != "" %}
                         <a
-                                href="{{ path('app_fiche_matiere_show',{slug: ficheMatiere.slug}) }}"
+                                href="{{ path('fiche_matiere_v2_voir',{slug: ficheMatiere.slug}) }}"
                                 class="btn btn-sm text-info"
                                 data-bs-toggle="tooltip"
                                 data-bs-placement="bottom"
@@ -231,7 +231,7 @@
                         {#                        ('ROLE_EC_EDIT_MY', ec)) and  workflow_can(ec, #}
                         {#                        'valider_ec')) %} #}
                         <a
-                                href="{{ path('app_fiche_matiere_edit',{slug: ficheMatiere.slug}) }}"
+                                href="{{ path('fiche_matiere_v2_modifier',{slug: ficheMatiere.slug}) }}"
                                 class="btn btn-sm text-warning"
                                 data-bs-toggle="tooltip"
                                 target="_blank"

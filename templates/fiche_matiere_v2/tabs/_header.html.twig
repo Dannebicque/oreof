@@ -1,0 +1,22 @@
+<header class="border-b border-slate-100 flex justify-between items-center bg-slate-50/50 mb-2">
+    <div>
+        <h2 class="text-xl font-black text-slate-800 tracking-tight">{{ titre }}</h2>
+        <p class="text-xs text-slate-400 font-bold uppercase mt-1">{{ texte_help }}</p>
+    </div>
+    <div class="flex gap-3 min-w-[20rem]">
+        <div class="h-full flex items-center flex-1">
+            <div id="tab_done_block_{{ tabKey }}" class="w-full">
+                {{ include('fiche_matiere_v2/tabs/_done_block.html.twig', {
+                    fiche_matiere: fiche_matiere,
+                    tabKey: tabKey,
+                    status: tabStates[tabKey].status ?? 'red',
+                    done: tabStates[tabKey].done ?? false
+                }) }}
+            </div>
+        </div>
+    </div>
+</header>
+
+<div id="tab_issues_{{ tabKey }}" data-controller="issues">
+    {{ include('communs/_issues.html.twig', { issues: issues ?? [] }) }}
+</div>

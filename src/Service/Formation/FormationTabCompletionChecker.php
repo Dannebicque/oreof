@@ -1,10 +1,10 @@
 <?php
 /*
  * Copyright (c) 2026. | David Annebicque | ORéOF  - All Rights Reserved
- * @file /Users/davidannebicque/Sites/oreof/src/Service/Parcours/ParcoursTabCompletionChecker.php
+ * @file /Users/davidannebicque/Sites/oreof/src/Service/Formation/FormationTabCompletionChecker.php
  * @author davidannebicque
  * @project oreof
- * @lastUpdate 23/01/2026 09:13
+ * @lastUpdate 11/02/2026 16:19
  */
 
 namespace App\Service\Formation;
@@ -52,7 +52,7 @@ class FormationTabCompletionChecker extends AbstractChecker
         if (!$hasRythme) {
             $issues[] = new TabIssue('formation_step2[rythmeFormationTexte]', 'Rythme de formation', 'Vous devez choisir un rythme de formation ou préciser les modalités dans le texte libre.');
         }
-
+//todo: sauvegarder les issues dans le tabState ?
         return $issues;
     }
 

@@ -19,6 +19,7 @@ use App\Entity\Semestre;
 use App\Entity\SemestreMutualisable;
 use App\Entity\SemestreParcours;
 use App\Entity\Ue;
+use App\Entity\UeMutualisable;
 use App\Enums\TypeModificationDpeEnum;
 use App\Repository\ComposanteRepository;
 use App\Repository\FicheMatiereMutualisableRepository;
@@ -27,10 +28,14 @@ use App\Repository\ParcoursRepository;
 use App\Repository\SemestreMutualisableRepository;
 use App\Repository\SemestreParcoursRepository;
 use App\Utils\JsonRequest;
+use App\Utils\TurboStreamResponseFactory;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\UX\Turbo\TurboStreamResponse;
 
 #[
     Route('/structure/semestre', name: 'structure_semestre_')
@@ -676,31 +681,41 @@ class SemestreController extends BaseController
 
     #[Route('/raccrocher/{semestre}/{parcours}', name: 'raccrocher')]
     public function raccrocher(
-        SemestreMutualisableRepository $semestreMutualisableRepository,
+        TurboStreamResponseFactory $turboStreamResponseFactory,
         Semestre                       $semestre,
         Parcours                       $parcours
     ): Response {
-        $semestres = $semestreMutualisableRepository->findBy(['parcours' => $parcours]);
-
-        $body = $this->renderView('structure/semestre/_raccrocher.html.twig', [
+        //todo: gérer le nom du parcours en flat dans la BDD ? gérer l'update si maj du parcours
+        $form = $this->createFormBuilder(null, [
+            'action' => $this->generateUrl('structure_semestre_mutualise_add_ajax', ['semestre' => $semestre->getId()]),
+        ])
+            ->add('raccrocher', EntityType::class, [
+                'class' => SemestreMutualisable::class,
+                'choice_label' => function (SemestreMutualisable $sem) {
+                    return $sem->getSemestre()?->getSemestreParcours()?->first()->display() . ' - ' . $sem->getSemestre()?->getSemestreParcours()?->first()?->getParcours()?->getLibelle() . ')';
+                },
+                'placeholder' => 'choisir.semestre.a.raccrocher',
+                'translation_domain' => 'form',
+                'query_builder' => function (EntityRepository $er) use ($parcours) {
+                    return $er->createQueryBuilder('sem')
+                        ->join('sem.semestre', 'semestre')
+                        ->where('sem.parcours = :parcours')
+                        ->setParameter('parcours', $parcours)
+                        ->orderBy('semestre.ordre', 'ASC');
+                }
+            ])
+            ->getForm();
+        return $turboStreamResponseFactory->streamOpenModalFromTemplates(
+            'Rattacher le semestre à un semestre mutualisé',
+            'Dans : semestre ' . $semestre->display(),
+            'structure/semestre/_raccrocher.html.twig', [
             'semestre' => $semestre,
-            'semestres' => $semestres,
+            'form' => $form->createView(),
             'parcours' => $parcours
-        ]);
-
-        $footer = $this->renderView('_ui/_footer_submit_cancel.html.twig', [
-            'submitLabel' => 'Enregistrer le rattachement',
-        ]);
-
-        return new Response(
-            $this->renderView('_ui/open.stream.html.twig', [
-                'title' => 'Rattacher le semestre à un semestre mutualisé',
-                'subtitle' => 'Dans : semestre ' . $semestre->display(),
-                'body' => $body,
-                'footer' => $footer,
-            ]),
-            200,
-            ['Content-Type' => 'text/vnd.turbo-stream.html']
+        ],
+            '_ui/_footer_submit_cancel.html.twig', [
+                'submitLabel' => 'Enregistrer le rattachement',
+            ]
         );
     }
 

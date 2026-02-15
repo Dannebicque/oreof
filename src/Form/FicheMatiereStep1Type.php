@@ -47,66 +47,23 @@ class FicheMatiereStep1Type extends AbstractType
                 },
                 'disabled' => !$access,
                 'required' => false,
-                'attr' => ['data-action' => 'change->fichematiere--step1#changeResponsableEc'],
                 'choice_label' => 'display',
             ])
             ->add('sigle', TextType::class, [
-                'attr' => ['data-action' => 'change->fichematiere--step1#saveSigle', 'maxlength' => 250],
+                'attr' => ['maxlength' => 250],
                 'required' => false
             ])
             ->add('libelle', TextType::class, [
                 'disabled' => !$access,
-                'attr' => ['data-action' => 'change->fichematiere--step1#saveContenuFr', 'maxlength' => 250],
+                'attr' => ['maxlength' => 250],
             ])
             ->add('libelleAnglais', TextType::class, [
-                'attr' => ['data-action' => 'change->fichematiere--step1#saveContenuEn', 'maxlength' => 250],
-            ])
-            ->add('enseignementMutualise', YesNoType::class, [
-                'attr' => ['data-action' => 'change->fichematiere--step1#changeEnseignementMutualise'],
-            ])
-            ->add('isCmPresentielMutualise', YesNoType::class, [
-                'attr' => [
-                    'data-action' => 'change->fichematiere--step1#isMutualise',
-                    'data-fichematiere--step1-type-param' => 'isCmPresentielMutualise'
-                ],
-            ])
-            ->add('isTdPresentielMutualise', YesNoType::class, [
-                'attr' => [
-                    'data-action' => 'change->fichematiere--step1#isMutualise',
-                    'data-fichematiere--step1-type-param' => 'isTdPresentielMutualise'
-                ],
-            ])
-            ->add('isTpPresentielMutualise', YesNoType::class, [
-                'attr' => [
-                    'data-action' => 'change->fichematiere--step1#isMutualise',
-                    'data-fichematiere--step1-type-param' => 'isTpPresentielMutualise'
-                ],
-            ])
-            ->add('isCmDistancielMutualise', YesNoType::class, [
-                'attr' => [
-                    'data-action' => 'change->fichematiere--step1#isMutualise',
-                    'data-fichematiere--step1-type-param' => 'isCmDistancielMutualise'
-                ],
-                'help' => '-'
-            ])
-            ->add('isTdDistancielMutualise', YesNoType::class, [
-                'attr' => [
-                    'data-action' => 'change->fichematiere--step1#isMutualise',
-                    'data-fichematiere--step1-type-param' => 'isTdDistancielMutualise'
-                ],
-                'help' => '-'
-            ])
-            ->add('isTpDistancielMutualise', YesNoType::class, [
-                'attr' => [
-                    'data-action' => 'change->fichematiere--step1#isMutualise',
-                    'data-fichematiere--step1-type-param' => 'isTpDistancielMutualise'
-                ],
-                'help' => '-'
+                'attr' => ['maxlength' => 250],
             ]);
 
         if ($options['isScol']) {
             $builder->add('codeApogee', TextType::class, [
-                'attr' => ['data-action' => 'change->fichematiere--step1#saveCodeApogee', 'maxlength' => 8],
+                'attr' => ['maxlength' => 8],
                 'required' => false
             ]);
         }
@@ -117,7 +74,6 @@ class FicheMatiereStep1Type extends AbstractType
                     'ressource' => 'ressource',
                     'sae' => 'sae'
                 ],
-                'attr' => ['data-action' => 'change->fichematiere--step1#changeTypeMatiere'],
                 'expanded' => true,
                 'multiple' => false,
                 'required' => true,

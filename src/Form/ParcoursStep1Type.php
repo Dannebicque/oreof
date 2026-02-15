@@ -111,37 +111,31 @@ class ParcoursStep1Type extends AbstractType
 //                'placeholder' => 'Choisir dans la liste ou choisir "+" pour ajouter un utilisateur',
 //            ])
             ->add('objectifsParcours', TextareaAutoSaveType::class, [
-                'help' => '-',
                 'attr' => [
                     'rows' => 10,
                     'maxlength' => 3000,
                 ],
             ])
             ->add('motsCles', TextareaAutoSaveType::class, [
-                'help' => '-',
                 'attr' => [
                     'rows' => 10,
                     'maxlength' => 3000,
                 ],
             ])
             ->add('resultatsAttendus', TextareaAutoSaveType::class, [
-                'help' => '-',
                 'attr' => ['rows' => 10, 'maxlength' => 3000,],
             ])
             ->add('contenuFormation', TextareaAutoSaveType::class, [
-                'help' => '-',
                 'attr' => ['rows' => 20, 'maxlength' => 3000,],
             ])
             ->add('rythmeFormation', EntityType::class, [
                 'placeholder' => 'Choisissez un rythme de formation ou complétez le champ ci-dessous',
                 'required' => true,
-                'help' => '-',
                 'class' => RythmeFormation::class,
                 'choice_label' => 'libelle',
             ])
             ->add('rythmeFormationTexte', TextareaAutoSaveType::class, [
                 'required' => false,
-                'help' => '-',
                 'attr' => ['rows' => 10, 'maxlength' => 3000],
             ])
             ->add('localisation', EntityType::class, [

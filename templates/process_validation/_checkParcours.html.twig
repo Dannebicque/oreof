@@ -59,7 +59,7 @@
                 </td>
                 <td>
                     {% if val.fiche != 'sans objet' %}
-                        <a href="{{ path('app_fiche_matiere_show', {slug:val.fiche.slug}) }}"
+                        <a href="{{ path('fiche_matiere_v2_voir', {slug:val.fiche.slug}) }}"
                            target="_blank"
                            class="btn btn-outline-info btn-sm">Voir la fiche EC/matière et valider</a>
                     {% endif %}

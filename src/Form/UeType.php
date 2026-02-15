@@ -106,7 +106,6 @@ class UeType extends AbstractType
                 'choices' => $natures, // entités
                 'choice_label' => fn($e) => $e->getLibelle(),
                 'choice_value' => fn($e) => (string)$e?->getId(),
-
                 'columns' => 4,
 
                 // 🔹 champs entité
@@ -114,7 +113,7 @@ class UeType extends AbstractType
                 'icon_property' => 'icone',                  // ex: CI / TD / TP / ...
                 //'disabled_property' => 'disabled',          // ex: isDisabled() ou getDisabled()
 
-                'on_change_action' => 'change->ec--manage#updateNature',
+                'on_change_action' => 'change->ue#changeNatureUe',
             ])
 //            ->add('natureUeEc', CardsChoiceType::class, [
 //                'class' => NatureUeEc::class,

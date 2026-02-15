@@ -56,7 +56,7 @@
                                             {% elseif commentaire.parcours is defined and commentaire.parcours != null %}
                                                 {% set url = path('parcours_v2_voir', {parcours:commentaire.parcours.id})~'#'~commentaire.zone %}
                                             {% elseif commentaire.ficheMatiere is defined and commentaire.ficheMatiere != null %}
-                                                {% set url = path('app_fiche_matiere_show', {slug:commentaire.ficheMatiere.slug})~'#'~commentaire.zone %}
+                                                {% set url = path('fiche_matiere_v2_voir', {slug:commentaire.ficheMatiere.slug})~'#'~commentaire.zone %}
                                             {% else %}
                                                 {% set url = '' %}
                                             {% endif %}
