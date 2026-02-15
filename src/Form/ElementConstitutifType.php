@@ -128,6 +128,8 @@ class ElementConstitutifType extends AbstractType
                 'icon_property' => 'icone',                  // ex: CI / TD / TP / ...
                 'on_change_action' => 'change->ec--manage#updateNature',
             ])
+            ->add('libelleLibre', TextType::class, ['mapped' => false, 'attr' => ['maxlength' => 250], 'data' => $builder->getData()?->getLibelle()])
+            ->add('libelleChoix', TextType::class, ['mapped' => false, 'attr' => ['maxlength' => 250], 'data' => $builder->getData()?->getLibelle()])
             ->add('texteEcLibre', TextareaType::class, ['attr' => ['maxlength' => 250]])
             ->add('ficheMatiere', InlineCreateEntitySelectType::class, [
                 'help' => '',

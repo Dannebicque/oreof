@@ -105,6 +105,8 @@ services:
       arguments:
         - '@App\I18n\KeyModeTranslator.inner'
         - '@App\I18n\KeyModeContext'
+        - '@monolog.logger.translation'
+        - '%kernel.debug%'
       public: false
 
     App\EventSubscriber\CreateUserSubscriber:

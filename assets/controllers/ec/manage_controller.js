@@ -31,33 +31,40 @@ export default class extends Controller {
 
   /** @deprecated */
   async connect () {
-    if (document.getElementById('element_constitutif_natureUeEc')) {
-      const natureEc = document.getElementById('element_constitutif_natureUeEc').value
-      if (natureEc !== '') {
-        let url
-        if (this.urlValue.includes('?')) {
-          url = `${this.urlValue}&choix=${natureEc}`
-        } else {
-          url = `${this.urlValue}?choix=${natureEc}`
-        }
+    // if (document.getElementById('element_constitutif_natureUeEc')) {
+    //   const natureEc = document.getElementById('element_constitutif_natureUeEc').value
+    //   if (natureEc !== '') {
+    //     let url
+    //     if (this.urlValue.includes('?')) {
+    //       url = `${this.urlValue}&choix=${natureEc}`
+    //     } else {
+    //       url = `${this.urlValue}?choix=${natureEc}`
+    //     }
+    //
+    //     const response = await fetch(url)
+    //     this.matieresTarget.innerHTML = await response.text()
+    //     if (document.getElementById('ficheMatiere')) {
+    //       this.tom = new TomSelect('#ficheMatiere')
+    //     }
+    //
+    //     if (document.getElementById('tableFiches')) {
+    //       // parcourir les lignes de tbody pour ajouter dans matieres
+    //       const table = document.getElementById('tableFiches')
+    //       const tbody = table.getElementsByTagName('tbody')[0]
+    //       const lignes = tbody.getElementsByTagName('tr')
+    //       for (let i = 0; i < lignes.length; i++) {
+    //         const { id } = lignes[i].getElementsByTagName('td')[0].dataset
+    //         this.matieres.push(id)
+    //       }
+    //     }
+    //   }
+    // }
 
-        const response = await fetch(url)
-        this.matieresTarget.innerHTML = await response.text()
-        if (document.getElementById('ficheMatiere')) {
-          this.tom = new TomSelect('#ficheMatiere')
-        }
-
-        if (document.getElementById('tableFiches')) {
-          // parcourir les lignes de tbody pour ajouter dans matieres
-          const table = document.getElementById('tableFiches')
-          const tbody = table.getElementsByTagName('tbody')[0]
-          const lignes = tbody.getElementsByTagName('tr')
-          for (let i = 0; i < lignes.length; i++) {
-            const { id } = lignes[i].getElementsByTagName('td')[0].dataset
-            this.matieres.push(id)
-          }
-        }
-      }
+    // Initialiser l'affichage et l'état (required/disabled) des sections
+    try {
+      this.updateNature()
+    } catch (e) {
+      // ignore
     }
   }
 
@@ -255,10 +262,42 @@ export default class extends Controller {
   }
 
   updateNature (event) {
-    const val = event ? event.target.value : '9'
+    const val = (event && event.target && event.target.value) ? event.target.value : (document.querySelector('input[name="element_constitutif[natureUeEc]"]:checked')?.value ?? (document.getElementById('element_constitutif_natureUeEc') ? document.getElementById('element_constitutif_natureUeEc').value : '9'))
+    console.log(val)
     this.natureSectionTargets.forEach(el => {
-      el.classList.add('hidden')
-      if (el.dataset.nature === 'nature_' + val) el.classList.remove('hidden')
+      const matches = (el.dataset.nature === 'nature_' + val)
+      // toggle visibility
+      el.classList.toggle('hidden', !matches)
+
+      // find form controls inside the section
+      const controls = el.querySelectorAll('input, select, textarea')
+      controls.forEach((ctrl) => {
+        try {
+          if (matches) {
+            console.log('matching: ' + ctrl.id + '')
+            // enable and mark required
+            ctrl.removeAttribute('disabled')
+            // set required only for meaningful inputs (ignore buttons)
+            if (['INPUT', 'SELECT', 'TEXTAREA'].includes(ctrl.tagName)) {
+              console.log('set required')
+              // avoid setting required on hidden or readonly controls
+              if (ctrl.type !== 'hidden' && !ctrl.readOnly && ctrl.name !== 'element_constitutif[ficheMatiere][new]') {
+                ctrl.required = true
+                ctrl.setAttribute('aria-required', 'true')
+              }
+            }
+          } else {
+            // disable and remove required
+            ctrl.setAttribute('disabled', 'disabled')
+            if (['INPUT', 'SELECT', 'TEXTAREA'].includes(ctrl.tagName)) {
+              ctrl.required = false
+              ctrl.removeAttribute('aria-required')
+            }
+          }
+        } catch (e) {
+          // ignore control manipulation errors
+        }
+      })
     })
   }
 }

@@ -498,7 +498,11 @@ class ElementConstitutif implements McccCompletionCheckerInterface
             return $this->ficheMatiere->getLibelle();
         }
 
-        return $this->texteEcLibre ?? $this->libelle ?? 'Aucun libellé';
+        if ($this->libelle !== null) {
+            return $this->libelle;
+        }
+
+        return $this->texteEcLibre ?? 'Aucun libellé';
     }
 
     public function getFicheMatiere(): ?FicheMatiere

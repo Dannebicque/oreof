@@ -58,6 +58,7 @@ class ParcoursContactController extends BaseController
             return $this->json(true);
         }
 
+        //todo: modal à adapter à V2
         return $this->render('parcours_contact/new.html.twig', [
             'contact' => $contact,
             'form' => $form->createView(),

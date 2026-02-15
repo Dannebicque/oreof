@@ -92,6 +92,27 @@
     </div>
 {% endblock choice_widget_collapsed %}
 
+{# {% block textarea_auto_save_row %} #}
+{#    {%- set widget_attr = {} -%} #}
+{#    {%- if help is not empty -%} #}
+{#        {%- set widget_attr = {attr: {'aria-describedby': id ~"_help"}} -%} #}
+{#    {%- endif -%} #}
+{#    <div{% with {attr: row_attr} %}{{ block('attributes') }}{% endwith %} {{ stimulus_controller('textarea', { #}
+{#        'maxLength': maxLength, #}
+{#    }) }} #}
+{#            class="mt-3"> #}
+{#        {{- form_label(form) -}} #}
+{#        {{- form_errors(form) -}} #}
+{#        {{- form_widget(form, widget_attr) -}} #}
+{#        {%- if help is not empty -%} #}
+{#            {%- set help_attr = help_attr|merge({class: (help_attr.class|default('') ~ ' text-small')|trim}) -%} #}
+{#            <div id="{{ id }}_help"{% with { attr: help_attr } %}{{ block('attributes') }}{% endwith %}> #}
+{#                <span {{ stimulus_target('textarea', 'texte') }} class="text-secondary"></span> #}
+{#            </div> #}
+{#        {%- endif -%} #}
+{#    </div> #}
+{# {% endblock %} #}
+
 {# --- AIDE (HELP) --- #}
 {% block form_help %}
 

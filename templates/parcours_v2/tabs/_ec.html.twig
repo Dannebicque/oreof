@@ -73,6 +73,10 @@
                         {# todo: si pas d efichier et qu'une est nécessaire créer ? #}
                     {% endif %}
                 </div>
+                {% if ec.elementConstitutif.natureUeEc.isLibre %}
+                    <p class="text-sm"><span
+                                class="font-bold">Choix libre :</span> {{ ec.elementConstitutif.texteEcLibre }}</p>
+                {% endif %}
             </div>
         </div>
         <div class="flex items-center gap-6">

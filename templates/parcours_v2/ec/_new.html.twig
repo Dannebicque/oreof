@@ -37,12 +37,14 @@
         {#                  id="matiere_libre" #}
         {#                  class="w-full p-4 bg-slate-50 border border-slate-200 rounded-sm outline-none focus:border-indigo-500 transition-all" #}
         {#                  placeholder="Détails du contenu de l'EC..."></textarea> #}
-
+        {{ form_row(form.libelleLibre) }}
         {{ form_row(form.texteEcLibre) }}
     </div>
 
     <div data-ec--manage-target="natureSection" data-nature="nature_7" class="hidden space-y-6"
          data-controller="multi-tags">
+        {{ form_row(form.libelleChoix) }}
+
         <div class="space-y-3">
             <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest italic"
                    for="matiere_choix"
