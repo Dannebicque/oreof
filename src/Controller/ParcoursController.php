@@ -273,8 +273,14 @@ class ParcoursController extends BaseController
 
         $typeD = $this->typeDiplomeResolver->get($typeDiplome);
 
+        // Entre versions JSON
         $textDifferencesParcours = $versioningParcours->getDifferencesBetweenParcoursAndLastVersion($parcours);
         $textDifferencesFormation = $versioningFormation->getDifferencesBetweenFormationAndLastVersion($formation);
+        // Entre N et N+1
+        $textDiffParcoursCampagne = $versioningParcours->getDifferencesBetweenParcoursAndLastVersion($parcours, true);
+        $textDiffFormationCampagne = $versioningFormation->getDifferencesBetweenFormationAndLastVersion($formation, true);
+        $hasLastVersionCampagne = count($textDiffParcoursCampagne) > 0 || count($textDiffFormationCampagne) > 0;
+
         $version = $versioningParcours->hasLastVersion($parcours);
 
         $cssDiff = DiffHelper::getStyleSheet();
@@ -310,7 +316,9 @@ class ParcoursController extends BaseController
             'lheoXML' => $lheoXML,
             'stringDifferencesParcours' => $textDifferencesParcours,
             'stringDifferencesFormation' => $textDifferencesFormation,
-            'hasLastVersion' => $versioningParcours->hasLastVersion($parcours),
+            'stringDifferencesParcoursCampagne' => $textDiffParcoursCampagne,
+            'stringDifferencesFormationCampagne' => $textDiffFormationCampagne,
+            'hasLastVersion' => $versioningParcours->hasLastVersion($parcours) || $hasLastVersionCampagne,
             'cssDiff' => $cssDiff,
             'version' => $version,
             'parcoursDeBase' => $parcoursDeBase,
