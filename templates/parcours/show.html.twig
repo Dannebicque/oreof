@@ -37,6 +37,7 @@
       }
 
     </script>
+    <script src="{{ asset('versioning/display_differences.js') }}"></script>
 {% endblock %}
 
 {% block content %}
@@ -246,12 +247,7 @@
         and hasLastVersion is defined
         and hasLastVersion == true
     %}
-        <a class ="btn btn-sm btn-outline-info d-block mx-2 mb-1"
-            data-bs-toggle="collapse" data-bs-target="#diffGlobalParcours"
-        >
-            <i class="fa-light fa-not-equal"></i>
-            Comparer les descriptifs
-        </a>
+        {{ include('communs/_bouton_difference_descriptifs.html.twig') }}
     {% endif %}
 
     {{ include('btn/export_mccc.html.twig') }}

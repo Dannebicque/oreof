@@ -1,7 +1,7 @@
 {% if is_granted('ROLE_ADMIN') and textDifferences is defined and textDifferences != null %}
     {% if textDifferences|length > 0 %}
     <div class="row">
-        <div class="col-sm-12 col-md-10 col-lg-8 collapse mb-3" id="{{ idCollapse }}">
+        <div class="col-sm-12 col-md-10 col-lg-8 mb-3 d-none" id="{{ idCollapse }}">
             <div class="d-inline-flex">
                 {{ textDifferences|raw  }} 
             </div>
