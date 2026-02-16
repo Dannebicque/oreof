@@ -91,33 +91,6 @@ class ParcoursEcController extends BaseController
                 $elementConstitutif->setOrdre($lastEc);
                 $elementConstitutif->genereCode();
                 $elementConstitutifRepository->save($elementConstitutif, true);
-                //on récupère le champs matières, on découpe selon la ,. Si ca commence par "id_", on récupère la matière, sinon on créé la matière
-                $matieres = explode(',', $request->request->get('matieres'));
-                $natureEc = $natureUeEcRepository->findOneBy(['choix' => false, 'libre' => false, 'type' => 'ec']);
-                foreach ($matieres as $matiere) {
-                    $ec = new ElementConstitutif();
-                    $nextSousEc = $ecOrdre->getOrdreEnfantSuivant($elementConstitutif);
-                    $ec->setEcParent($elementConstitutif);
-                    $ec->setParcours($parcours);
-                    $ec->setModaliteEnseignement($parcours?->getModalitesEnseignement());
-                    $ec->setUe($ue);
-                    $ec->setNatureUeEc($natureEc);
-
-                    if (str_starts_with($matiere, 'id_')) {
-                        $ficheMatiere = $ficheMatiereRepository->find((int)str_replace('id_', '', $matiere));
-                    } else {
-                        $ficheMatiere = new FicheMatiere();
-                        $ficheMatiere->setCampagneCollecte($this->getCampagneCollecte());
-                        $ficheMatiere->setLibelle(str_replace('ac_', '', $matiere));
-                        $ficheMatiere->setParcours($parcours); //todo: ajouter le semestre
-                        $ficheMatiereRepository->save($ficheMatiere, true);
-                    }
-
-                    $ec->setFicheMatiere($ficheMatiere);
-                    $ec->setOrdre($nextSousEc);
-                    $ec->genereCode();
-                    $elementConstitutifRepository->save($ec, true);
-                }
             } else {
                 $lastEc = $ecOrdre->getOrdreSuivant($ue, $request);
                 $elementConstitutif->setLibelle($form->get('libelleLibre')->getData());
@@ -164,11 +137,9 @@ class ParcoursEcController extends BaseController
     #[Route('/{semestreParcours}/modifier-ec/{elementConstitutif}', name: '_modifier_ec_ue', methods: ['GET', 'POST'])]
     public function modifier(
         TurboStreamResponseFactory   $turboStream,
-        NatureUeEcRepository         $natureUeEcRepository,
         EcOrdre                      $ecOrdre,
         Request                      $request,
         TypeDiplomeResolver $typeDiplomeResolver,
-        FicheMatiereRepository       $ficheMatiereRepository,
         ElementConstitutifRepository $elementConstitutifRepository,
         ElementConstitutif           $elementConstitutif,
         SemestreParcours $semestreParcours
@@ -205,33 +176,6 @@ class ParcoursEcController extends BaseController
                 $elementConstitutif->setOrdre($lastEc);
                 $elementConstitutif->genereCode();
                 $elementConstitutifRepository->save($elementConstitutif, true);
-                //on récupère le champs matières, on découpe selon la ,. Si ca commence par "id_", on récupère la matière, sinon on créé la matière
-                $matieres = explode(',', $request->request->get('matieres'));
-                $natureEc = $natureUeEcRepository->findOneBy(['choix' => false, 'libre' => false, 'type' => 'ec']);
-                foreach ($matieres as $matiere) {
-                    $ec = new ElementConstitutif();
-                    $nextSousEc = $ecOrdre->getOrdreEnfantSuivant($elementConstitutif);
-                    $ec->setEcParent($elementConstitutif);
-                    $ec->setParcours($parcours);
-                    $ec->setModaliteEnseignement($parcours?->getModalitesEnseignement());
-                    $ec->setUe($ue);
-                    $ec->setNatureUeEc($natureEc);
-
-                    if (str_starts_with($matiere, 'id_')) {
-                        $ficheMatiere = $ficheMatiereRepository->find((int)str_replace('id_', '', $matiere));
-                    } else {
-                        $ficheMatiere = new FicheMatiere();
-                        $ficheMatiere->setCampagneCollecte($this->getCampagneCollecte());
-                        $ficheMatiere->setLibelle(str_replace('ac_', '', $matiere));
-                        $ficheMatiere->setParcours($parcours); //todo: ajouter le semestre
-                        $ficheMatiereRepository->save($ficheMatiere, true);
-                    }
-
-                    $ec->setFicheMatiere($ficheMatiere);
-                    $ec->setOrdre($nextSousEc);
-                    $ec->genereCode();
-                    $elementConstitutifRepository->save($ec, true);
-                }
             } else {
                 $lastEc = $ecOrdre->getOrdreSuivant($ue, $request);
                 $elementConstitutif->setLibelle($form->get('libelleLibre')->getData());

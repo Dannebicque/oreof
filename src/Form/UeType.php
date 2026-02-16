@@ -49,15 +49,6 @@ class UeType extends AbstractType
             ->add('ects', FloatType::class, [
                 'required' => false
             ])
-//            ->add('typeUe', InlineCreateEntitySelectType::class, [
-//                'class' => TypeUe::class,
-//                'choice_label' => 'libelle',
-//                'autocomplete' => true,
-//                'query_builder' => fn (
-//                    TypeUeRepository $typeUeRepository
-//                ) => $typeUeRepository->findByTypeDiplome($typeDiplome),
-//                'required' => false,
-//            ])
             ->add('typeUe', InlineCreateEntitySelectType::class, [
 
                 'class' => TypeUe::class,
@@ -94,40 +85,16 @@ class UeType extends AbstractType
                     return $e; // persist/flush gérés par le type (ou tu peux le faire ici)
                 },
             ])
-//            ->add('typeUeTexte', TextType::class, [
-//                'attr' => [
-//                    'maxlength' => 100,
-//                ],
-//                'required' => false,
-//                'mapped' => false,
-//            ])
             ->add('natureUeEc', CardsChoiceType::class, [
                 'label' => "Nature de l'élément",
                 'choices' => $natures, // entités
                 'choice_label' => fn($e) => $e->getLibelle(),
                 'choice_value' => fn($e) => (string)$e?->getId(),
                 'columns' => 4,
-
-                // 🔹 champs entité
-                'subtitle_property' => 'descriptionCourte', // ex: getDescriptionCourte()
-                'icon_property' => 'icone',                  // ex: CI / TD / TP / ...
-                //'disabled_property' => 'disabled',          // ex: isDisabled() ou getDisabled()
-
+                'subtitle_property' => 'descriptionCourte',
+                'icon_property' => 'icone',
                 'on_change_action' => 'change->ue#changeNatureUe',
             ])
-//            ->add('natureUeEc', CardsChoiceType::class, [
-//                'class' => NatureUeEc::class,
-//                'choice_label' => 'libelle',
-//                'autocomplete' => true,
-//                'attr' => ['data-action' => 'change->ue#changeNatureUe'],
-//                'query_builder' => fn (
-//                    NatureUeEcRepository $natureUeEcRepository
-//                ) => $natureUeEcRepository->findByBuilder(NatureUeEc::Nature_UE),
-//                'choice_attr' => function ($choice) {
-//                    return ['data-choix' => $choice->isChoix() ? 'true' : 'false', 'data-libre' => $choice->isLibre() ? 'true' : 'false'];
-//                },
-//                'required' => false,
-//            ])
             ->add('descriptionUeLibre', TextareaType::class, [
                 'attr' => [
                     'maxlength' => 255,

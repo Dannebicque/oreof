@@ -1,3 +1,6 @@
+<div
+        {{ stimulus_controller('ue') }}
+>
 {% form_theme form 'communs/form_theme_v2.html.twig' %}
 {{ form_start(form,{
     'attr': {
@@ -12,9 +15,10 @@
     {{ form_row(form.typeUe, {'row_attr' : {'id' : 'typeUe' }}) }}
     {{ form_row(form.natureUeEc, {'row_attr' : {'id' : 'natureUeEc' }}) }}
 
-    <div data-ue-target="natureSection" data-nature="nature_9" class="hidden space-y-2">
+    <div data-ue-target="natureSection" data-nature="nature_10" class="hidden space-y-2">
         {{ form_row(form.descriptionUeLibre) }}
     </div>
 </div>
 
 {{ form_end(form) }}
+</div>

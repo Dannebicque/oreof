@@ -10,10 +10,12 @@
 namespace App\Controller\Parcours;
 
 use App\Controller\BaseController;
+use App\Entity\NatureUeEc;
 use App\Entity\Parcours;
 use App\Entity\SemestreParcours;
 use App\Entity\Ue;
 use App\Form\UeType;
+use App\Repository\NatureUeEcRepository;
 use App\Repository\UeRepository;
 use App\TypeDiplome\TypeDiplomeResolver;
 use App\Utils\TurboStreamResponseFactory;
@@ -33,6 +35,7 @@ class ParcoursUeController extends BaseController
         TurboStreamResponseFactory $turboStream,
         Request                    $request,
         UeRepository               $ueRepository,
+        NatureUeEcRepository $natureUeEcRepository,
         SemestreParcours           $semestreParcours,
         Parcours                   $parcours,
         TypeDiplomeResolver        $typeDiplomeResolver
@@ -66,14 +69,14 @@ class ParcoursUeController extends BaseController
             $ordre = $ueRepository->getMaxOrdre($semestre);
             $ue->setOrdre($ordre + 1);
             $ueRepository->save($ue, true);
+            $ueObligatoire = $natureUeEcRepository->findOneBy(['type' => NatureUeEc::Nature_UE, 'choix' => false, 'libre' => false]);
 
             if ($ue->getNatureUeEc()?->isChoix() === true && $ue->getUeParent() === null) {
                 if ($ue->getUeEnfants()->count() === 0) {
                     //on ajoute par défaut deux UE enfants
                     $ueEnfant1 = new Ue();
                     $ueEnfant1->setSemestre($semestre);
-                    $ueEnfant1->setNatureUeEc(null);
-                    $ueEnfant1->setNatureUeEc($ue->getNatureUeEc());
+                    $ueEnfant1->setNatureUeEc($ueObligatoire);
                     $ueEnfant1->setOrdre(1);
                     $ueEnfant1->setUeParent($ue);
                     $ueEnfant1->setLibelle('Choix 1');
@@ -81,8 +84,7 @@ class ParcoursUeController extends BaseController
 
                     $ueEnfant2 = new Ue();
                     $ueEnfant2->setSemestre($semestre);
-                    $ueEnfant2->setNatureUeEc(null);
-                    $ueEnfant2->setNatureUeEc($ue->getNatureUeEc());
+                    $ueEnfant2->setNatureUeEc($ueObligatoire);
                     $ueEnfant2->setOrdre(2);
                     $ueEnfant2->setUeParent($ue);
                     $ueEnfant2->setLibelle('Choix 2');
@@ -134,7 +136,7 @@ class ParcoursUeController extends BaseController
     {
         $typeDiplome = $parcours->getFormation()?->getTypeDiplome();
         if ($typeDiplome === null) {
-            throw new Exception('Type de diplôme non trouvé');
+            throw new \RuntimeException('Type de diplôme non trouvé');
         }
         $isAdmin = $this->isGranted('ROLE_ADMIN');
         $form = $this->createForm(UeType::class, $ue, [
@@ -177,18 +179,13 @@ class ParcoursUeController extends BaseController
             $typeD = $typeDiplomeResolver->fromParcours($parcours);
             $dtoSemestre = $typeD->calculStructureSemestre($semestreParcours, $parcours);
 
-            // Message de toast
-            $toastMessage = 'UE modifiée avec succès';
-
-            $html = $this->renderView('parcours_v2/turbo/add_ue_success.stream.html.twig', [
+            return $turboStreamResponseFactory->stream('parcours_v2/turbo/add_ue_success.stream.html.twig', [
                 'parcours' => $parcours,
                 'semestreParcours' => $semestreParcours,
                 'semestre' => $dtoSemestre,
-                'toastMessage' => $toastMessage,
+                'toastMessage' => 'UE modifiée avec succès',
                 'newUeId' => $ue->getId(),
             ]);
-
-            return $turboStreamResponseFactory->stream($html);
         }
 
         return $turboStreamResponseFactory->streamOpenModalFromTemplates(
@@ -251,14 +248,11 @@ class ParcoursUeController extends BaseController
             //todo: supprimer l'UE, les UE enfants, les EC associés, renuméroter
             //faire un service avec renumérotation en option, pourra servir pour la suppression d'un semestre ou d'un aprcours
 
-            // Message de toast
-            $toastMessage = 'UE supprimée avec succès';
-
             return $turboStream->stream('parcours_v2/turbo/add_ue_success.stream.html.twig', [
                 'parcours' => $parcours,
                 'semestreParcours' => $semestreParcours,
                 'semestre' => $dtoSemestre,
-                'toastMessage' => $toastMessage,
+                'toastMessage' => 'UE supprimée avec succès',
                 'newUeId' => $ue->getId(),
             ]);
         }

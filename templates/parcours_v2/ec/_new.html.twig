@@ -1,12 +1,5 @@
 <div
         {{ stimulus_controller('ec--manage') }}
-        {#        { #}
-        {#    url:path('app_element_constitutif_type_ec', {ec: elementConstitutif.id, ue:ue.id, parcours:parcours.id}), #}
-        {#    ue:ue.id, #}
-        {#    parcours:parcours.id, #}
-        {#    edit: false #}
-        {# } #}
-
 >
 
     {% form_theme form 'communs/form_theme_v2.html.twig' %}
@@ -27,63 +20,16 @@
     {% endif %}
 
     {{ form_row(form.typeEc) }}
-
     {{ form_row(form.natureUeEc) }}
 
     <div data-ec--manage-target="natureSection" data-nature="nature_9" class="hidden space-y-2">
-        {#        <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest" for="matiere_libre">Description #}
-        {#            libre</label> #}
-        {#        <textarea rows="3" #}
-        {#                  id="matiere_libre" #}
-        {#                  class="w-full p-4 bg-slate-50 border border-slate-200 rounded-sm outline-none focus:border-indigo-500 transition-all" #}
-        {#                  placeholder="Détails du contenu de l'EC..."></textarea> #}
         {{ form_row(form.libelleLibre) }}
         {{ form_row(form.texteEcLibre) }}
     </div>
 
-    <div data-ec--manage-target="natureSection" data-nature="nature_7" class="hidden space-y-6"
-         data-controller="multi-tags">
+    <div data-ec--manage-target="natureSection" data-nature="nature_7" class="hidden space-y-6">
         {{ form_row(form.libelleChoix) }}
-
-        <div class="space-y-3">
-            <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest italic"
-                   for="matiere_choix"
-            >
-                Gestion des matières (EC de type Choix)
-            </label>
-            <div class="relative group">
-                <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none">
-                    <svg class="w-4 h-4 text-slate-400 group-focus-within:text-indigo-500" fill="none"
-                         stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                    </svg>
-                </div>
-                <input type="text" data-multi-tags-target="input"
-                       id="matiere_choix"
-                       data-action="keydown.enter->multi-tags#addFromInput"
-                       placeholder="Rechercher ou taper le nom d'une nouvelle matière..."
-                       class="w-full pl-12 pr-4 py-4 bg-white border border-slate-200 rounded-2xl font-semibold shadow-sm focus:ring-4 focus:ring-indigo-50 focus:border-indigo-500 outline-none transition-all">
-                <div class="absolute right-3 top-3">
-                    <kbd
-                            class="px-2 py-1 bg-slate-100 border border-slate-200 rounded-lg text-[10px] font-black text-slate-400 uppercase">Entrée</kbd>
-                </div>
-            </div>
-        </div>
-
-        <div class="p-6 bg-slate-50/50 border-2 border-dashed border-slate-200 rounded-sm space-y-4">
-            <div class="flex justify-between items-center">
-                <p class="text-[10px] font-black text-slate-500 uppercase tracking-tighter">Matières
-                    sélectionnées</p>
-                <span data-multi-tags-target="count"
-                      class="text-[10px] font-black text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md">0</span>
-            </div>
-
-            <div data-multi-tags-target="list" class="flex flex-wrap gap-3">
-                <p data-multi-tags-target="empty" class="text-xs text-slate-400 italic">Aucune matière
-                    ajoutée pour le moment.</p>
-            </div>
-        </div>
+        <twig:alerte type="info">L'ajout des choix se fera directement dans la maquette.</twig:alerte>
     </div>
 
     <div data-ec--manage-target="natureSection" data-nature="nature_8" class="hidden field-group space-y-2">

@@ -31,7 +31,7 @@
                     {% if ue.ue.natureUeEc == null %}
                         <span class="px-2 py-0.5 bg-red-100 text-red-700 text-[9px] font-black rounded uppercase">Erreur, non défini</span>
                     {% elseif ue.ue.natureUeEc.isChoix %}
-                        <span class="px-2 py-0.5 bg-orange-100 text-orange-700 text-[9px] font-black rounded uppercase">UE à choix restreint (1 parmi {{ ue.ueEnfants|length }})</span>
+                        <span class="px-2 py-0.5 bg-orange-100 text-orange-700 text-[9px] font-black rounded uppercase">UE à choix restreint (1 parmi {{ ue.uesEnfants|length }})</span>
                     {% elseif ue.ue.natureUeEc.isLibre %}
                         <span class="px-2 py-0.5 bg-blue-100 text-blue-700 text-[9px] font-black rounded uppercase">UE libre</span>
                     {% else %}
@@ -125,15 +125,30 @@
     <div class="p-2">
         {% for uee in ue.uesEnfants %}
             {{ include('parcours_v2/tabs/_ue.html.twig', {ue:uee}) }}
+        {% else %}
+            {% if ue.ue.natureUeEc.isChoix == true and ue.uesEnfants|length == 0 %}
+                <twig:alerte type="info">
+                    Aucune UE dans cette <strong>UE à choix</strong> pour le moment. Pour saisir votre premier choix
+                    d'UE, choisir "Actions" en haut à droite
+                    du bloc de l'UE parent.
+                </twig:alerte>
+            {% endif %}
         {% endfor %}
 
         {% for ec in ue.elementConstitutifs %}
             {{ include('parcours_v2/tabs/_ec.html.twig', {ec:ec}) }}
         {% else %}
-            <twig:alerte type="info">
-                Aucun EC dans cette UE pour le moment. Pour saisir votre premier EC, choisir "Actions" en haut à droite
-                du bloc de l'UE.
-            </twig:alerte>
+            {% if ue.ue.natureUeEc.isLibre == true %}
+                <twig:alerte type="success">
+                    UE à choix libre : <p>{{ ue.ue.descriptionUeLibre }}</p>
+                </twig:alerte>
+            {% elseif ue.ue.natureUeEc.isLibre == false and ue.ue.natureUeEc.isChoix == false %}
+                <twig:alerte type="info">
+                    Aucun EC dans cette UE pour le moment. Pour saisir votre premier EC, choisir "Actions" en haut à
+                    droite
+                    du bloc de l'UE.
+                </twig:alerte>
+            {% endif %}
         {% endfor %}
     </div>
 </section>

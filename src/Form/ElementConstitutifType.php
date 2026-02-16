@@ -53,7 +53,7 @@ class ElementConstitutifType extends AbstractType
         foreach (array_merge(...$matieres) as $m) {
             $mergedById[$m->getId()] = $m;
         }
-        $choices = array_values($mergedById);
+        $choices = array_reverse(array_values($mergedById));
 
         if ($isAdmin) {
             $builder
@@ -80,7 +80,7 @@ class ElementConstitutifType extends AbstractType
         //                'mapped' => false,
         //            ])
 
-        $natures = $this->natureUeEcRepository->findBy(['type' => NatureUeEc::Nature_EC], ['libelle' => 'ASC']);
+        $natures = $this->natureUeEcRepository->findBy(['type' => NatureUeEc::Nature_EC], ['id' => 'ASC']);
 
         $builder->add('typeEc', InlineCreateEntitySelectType::class, [
 

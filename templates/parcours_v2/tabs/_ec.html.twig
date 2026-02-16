@@ -87,10 +87,23 @@
             {% endif %}
 
 
-            {% set items =  [
+            {% if ec.elementsConstitutifsEnfants|length > 0 or ec.elementConstitutif.natureUeEc.isChoix %}
+                {% set items = [{
+                    label: 'Ajouter un EC enfant',
+                    icon: 'fal fa-plus-circle',
+                    color: 'green',
+                    modal: true,
+                    url: path('parcours_ec_ajouter_ec_ue',{semestreParcours: semestreParcours.id, ue: ue.ue.id, parent: ec.elementConstitutif.id}),
+                }] %}
+            {% else %}
+                {% set items = [] %}
+            {% endif %}
+
+            {% set items =  items|merge([
                 { label: 'Modifier l\'EC',
                     modal: true,
                     icon: 'fal fa-pencil-alt',
+                    color:'orange',
                     url: path('parcours_ec_modifier_ec_ue',{elementConstitutif: ec.elementConstitutif.id, semestreParcours:semestreParcours.id}) },
                 { label: 'Supprimer l\'EC',
                     icon: 'fal fa-trash-alt',
@@ -99,23 +112,9 @@
                     ec: ec.elementConstitutif.id,
                     ue: ue.ue.id,
                     semestreParcours:semestreParcours.id}), danger: true}
-            ] %}
+            ]) %}
 
-            {% if ec.elementsConstitutifsEnfants|length > 0 or ec.elementConstitutif.natureUeEc.isChoix %}
-                {% set items = items|merge([{
-                    label: 'Ajouter un EC enfant',
-                    icon: 'fal fa-plus',
-                    modal: true,
-                    url: path('parcours_ec_ajouter_ec_ue',{semestreParcours: semestreParcours.id, ue: ue.ue.id, parent: ec.elementConstitutif.id}),
-                }]) %}
-                {#                <button #}
-                {#                        id="{{ idBase }}-add-ec-enfant-btn" #}
-                {#                        class="p-2 hover:bg-slate-100 rounded-lg flex items-center text-green-600" #}
-                {#                        type="button"> #}
-                {#                    <i class="{{ iconAdd }} me-1"></i> #}
-                {#                    <span>EC enfant</span> #}
-                {#                </button> #}
-            {% endif %}
+
 
             {{ component('dropdown_actions', {
                 label: 'Actions',
@@ -130,6 +129,14 @@
     <div class="p-2 mt-2">
         {% for ece in ec.elementsConstitutifsEnfants %}
             {{ include('parcours_v2/tabs/_ec.html.twig', {ec:ece}) }}
+        {% else %}
+            {% if ec.elementConstitutif.natureUeEc.isChoix == true and ec.elementsConstitutifsEnfants|length == 0 %}
+                <twig:alerte type="info">
+                    Aucun EC dans cette <strong>EC à choix</strong> pour le moment. Pour saisir votre premier choix
+                    d'EC, choisir "Actions" en haut à droite
+                    du bloc de l'EC parent.
+                </twig:alerte>
+            {% endif %}
         {% endfor %}
     </div>
 </section>
