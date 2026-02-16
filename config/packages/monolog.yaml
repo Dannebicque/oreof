@@ -38,8 +38,8 @@ monolog:
             path: "%kernel.logs_dir%/%kernel.environment%.critical.log"
             level: critical
         translation:
-          type: rotating_file
-          max_files: 30
-          path: "%kernel.logs_dir%/%kernel.environment%.translations.log"
-          level: warning
-          channels: [ translation ]
+            type: rotating_file
+            max_files: 30
+            path: "%kernel.logs_dir%/%kernel.environment%.translations.log"
+            level: warning
+            channels: [ translation ]
