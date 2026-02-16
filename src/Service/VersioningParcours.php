@@ -129,12 +129,24 @@ class VersioningParcours
         return count($lastVersion) > 0 ? $lastVersion[0] : null;
     }
 
-    public function getDifferencesBetweenParcoursAndLastVersion(Parcours $parcours): array
+    public function getDifferencesBetweenParcoursAndLastVersion(Parcours $parcours, bool $fromLastYear = false): array
     {
         $this->textDifferences = [];
 
-        if($this->hasLastVersion($parcours)) {
-            $lastVersion = $this->getLastVersion($parcours);
+        if($this->hasLastVersion($parcours) || ($fromLastYear && $parcours->getParcoursOrigineCopie() !== null)) {
+            if($fromLastYear){
+                $lastVersion = $parcours->getParcoursOrigineCopie();
+            }
+            else {
+                // Données du parcours en JSON
+                $lastVersion = $this->getLastVersion($parcours);
+                $fileParcours = file_get_contents(
+                    __DIR__ . "/../../versioning_json/parcours/"
+                    . "{$lastVersion->getParcours()?->getId()}/"
+                    . "{$lastVersion->getParcoursFileName()}.json"
+                );
+                $lastVersion = $this->serializer->deserialize($fileParcours, Parcours::class, 'json');
+            }
             // Configuration du calcul des différences
             $rendererName = 'Combined';
             $differOptions = [
@@ -151,13 +163,7 @@ class VersioningParcours
                 'separateBlock' => false,
                 'wordGlues' => [' ', '.']
             ];
-            // Données du parcours en JSON
-            $fileParcours = file_get_contents(
-                __DIR__ . "/../../versioning_json/parcours/"
-                . "{$lastVersion->getParcours()?->getId()}/"
-                                            . "{$lastVersion->getParcoursFileName()}.json"
-            );
-            $lastVersion = $this->serializer->deserialize($fileParcours, Parcours::class, 'json');
+            
             $this->textDifferences = [
                 'presentationParcoursContenuFormation' =>
                 self::cleanUpComparison(
