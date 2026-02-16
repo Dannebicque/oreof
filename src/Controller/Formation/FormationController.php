@@ -57,7 +57,7 @@ class FormationController extends BaseController
             'formation' => $formation,
             'typeDiplome' => $formation->getTypeDiplome(),
             'form' => $this->createForm(FormationStep1Type::class, $formation),
-            'titre' => 'Localisation de la formation',
+            'titre' => 'Localisation et organisation de la formation',
             'texte_help' => 'Indiquez les éléments de localisation et d\'organisation de la formation',
             'tabStates' => $tabStates,
         ];
@@ -210,7 +210,7 @@ class FormationController extends BaseController
         switch ($tab) {
             case 'localisation':
                 $form = $this->createForm(FormationStep1Type::class, $formation);
-                $titre = 'Localisation de la formation';
+                $titre = 'Localisation et organisation de la formation';
                 $texte_help = 'Indiquez les éléments de localisation et d\'organisation de la formation';
                 break;
             case 'presentation':

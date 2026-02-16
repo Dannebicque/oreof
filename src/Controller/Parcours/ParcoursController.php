@@ -227,9 +227,8 @@ class ParcoursController extends BaseController
 
         switch ($tab) {
             case 'presentation_formation':
-                $form = $this->createForm(FormationStep2Type::class, $parcours->getFormation());
                 $titre = 'Présentation de la formation';
-                $texte_help = 'Indiquez les éléments de la formaiton, commun aux parcours';
+                $texte_help = 'Indiquez les éléments de la formation, commun aux parcours';
                 break;
             case 'presentation':
                 $form = $this->createForm(ParcoursStep1Type::class, $parcours);
@@ -268,11 +267,13 @@ class ParcoursController extends BaseController
         }
 
         $tabStates = $statesRepo->indexByTabKey($parcours);
+        $typeD = $typeDiplomeResolver->fromParcours($parcours);
 
         $parameters = [
             'parcours' => $parcours,
             'form' => $form?->createView(),
             'titre' => $titre,
+            'typeD' => $typeD,
             'texte_help' => $texte_help,
             'tabStates' => $tabStates,
             'typeDiplome' => $parcours->getFormation()?->getTypeDiplome(),
@@ -283,7 +284,6 @@ class ParcoursController extends BaseController
             return $this->render('parcours_v2/tabs/_' . $tabView . '.html.twig', $parameters);
         }
 
-        $typeD = $typeDiplomeResolver->fromParcours($parcours);
         $dto = $typeD->calculStructureParcours($parcours); //todo: un dto plus léger pour juste la structure...
 
         // Sinon renvoyer la page complète (index) qui inclura le fragment dans son corps
