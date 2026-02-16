@@ -16,6 +16,15 @@
                                 }) 
                             }}
                         {% endif %}
+                        {% if stringDifferencesParcoursCampagne.stageTextParcours is defined %}
+                            {{ include('communs/_comparaison_versioning_no_button.html.twig',
+                                    {
+                                        textDifferences: stringDifferencesParcoursCampagne.stageTextParcours,
+                                        idCollapse: 'diffGlobalParcoursCampagne'
+                                    }
+                                )
+                            }}
+                        {% endif %}
                     {% else %}
                         Non
                     {% endif %}
@@ -41,6 +50,15 @@
                                     textDifferences: stringDifferencesParcours.memoireTextParcours,
                                     idCollapse: 'diffGlobalParcours'
                                 }) 
+                            }}
+                        {% endif %}
+                        {% if stringDifferencesParcoursCampagne.memoireTextParcours is defined %}
+                            {{ include('communs/_comparaison_versioning_no_button.html.twig',
+                                    {
+                                        textDifferences: stringDifferencesParcoursCampagne.memoireTextParcours,
+                                        idCollapse: 'diffGlobalParcoursCampagne'
+                                    }
+                                )
                             }}
                         {% endif %}
                     {% else %}
