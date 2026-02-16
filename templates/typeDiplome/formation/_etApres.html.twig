@@ -10,6 +10,15 @@
                     }) 
                 }}
             {% endif %}
+            {% if stringDifferencesParcoursCampagne.poursuiteEtudesParcours is defined %}
+                {{ include('communs/_comparaison_versioning_no_button.html.twig',
+                        {
+                            textDifferences: stringDifferencesParcoursCampagne.poursuiteEtudesParcours,
+                            idCollapse: 'diffGlobalParcoursCampagne'
+                        }
+                    )
+                }}
+            {% endif %}
             <dt>Débouchés</dt>
             <dd>{{ parcours.debouches|raw }}</dd>
             {% if stringDifferencesParcours.debouchesTextParcours is defined %}
@@ -17,6 +26,15 @@
                         textDifferences: stringDifferencesParcours.debouchesTextParcours,
                         idCollapse: 'diffGlobalParcours'
                     }) 
+                }}
+            {% endif %}
+            {% if stringDifferencesParcoursCampagne.debouchesTextParcours is defined %}
+                {{ include('communs/_comparaison_versioning_no_button.html.twig',
+                        {
+                            textDifferences: stringDifferencesParcoursCampagne.debouchesTextParcours,
+                            idCollapse: 'diffGlobalParcoursCampagne'
+                        }
+                    )
                 }}
             {% endif %}
         </dl>
