@@ -19,7 +19,6 @@ use App\Repository\NatureUeEcRepository;
 use App\Repository\UeRepository;
 use App\TypeDiplome\TypeDiplomeResolver;
 use App\Utils\TurboStreamResponseFactory;
-use Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;

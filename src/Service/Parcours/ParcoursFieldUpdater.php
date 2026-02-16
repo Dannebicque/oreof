@@ -100,7 +100,7 @@ final class ParcoursFieldUpdater extends AbstractFieldUpdater
             },
             'parcours_step5[modalitesAlternance]' => fn(Parcours $p, $v) => $p->setModalitesAlternance($this->toString($v)),
             'parcours_step5[coordSecretariat]' => fn(Parcours $p, $v) => $p->setCoordSecretariat($this->toString($v)),
-            'parcours_step5[modalitesAdmission]' => fn(Parcours $p, $v) => $p->setModalitesAdmission($this->toString($v)),
+            //'parcours_step5[modalitesAdmission]' => fn(Parcours $p, $v) => $p->setModalitesAdmission($this->toString($v)),
 
             // ----------------- STEP 6 (et_apres) -----------------
             'parcours_step6[poursuitesEtudes]' => fn(Parcours $p, $v) => $p->setPoursuitesEtudes($this->toString($v)),

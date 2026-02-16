@@ -122,8 +122,9 @@ class ParcoursTabCompletionChecker extends AbstractChecker
             $this->filled($p->getPrerequis()) &&
             $p->getComposanteInscription() !== null &&
             $hasRegime &&
-            $this->filled($p->getCoordSecretariat()) &&
-            $this->filled($p->getModalitesAdmission());
+            $this->filled($p->getCoordSecretariat());
+        // &&
+        //$this->filled($p->getModalitesAdmission());
     }
 
     private function etApresComplete(Parcours $p): bool

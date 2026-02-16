@@ -63,9 +63,9 @@ class ParcoursStep5Type extends AbstractType
             ->add('modalitesAlternance', TextareaAutoSaveType::class, [
                 'attr' => ['rows' => 20, 'maxlength' => 3000],
             ])
-            ->add('modalitesAdmission', TextareaAutoSaveType::class, [
-                'attr' => ['rows' => 8, 'maxlength' => 3000],
-            ])
+//            ->add('modalitesAdmission', TextareaAutoSaveType::class, [
+//                'attr' => ['rows' => 8, 'maxlength' => 3000],
+//            ])
         ;
     }
 

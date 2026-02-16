@@ -171,6 +171,7 @@ class ParcoursController extends BaseController
             'semestreParcours' => $semestreParcours,
             'semestre' => $dtoSemestre,
             'parcours' => $parcours,
+            'typeD' => $typeD,
             'validationsIssues' => $validationIssueRepository->findBySemestre($dtoSemestre->semestre->getId())
         ];
 

@@ -373,7 +373,7 @@ class UeController extends BaseController
         TurboStreamResponseFactory $turboStreamResponseFactory,
         ComposanteRepository $composanteRepository,
         Ue                   $ue,
-        SemestreParcours           $semestreParcours
+        SemestreParcours $semestreParcours
     ): Response {
 
 
@@ -384,7 +384,7 @@ class UeController extends BaseController
             [
                 'semestre' => $semestreParcours,
                 'ue' => $ue,
-                'composantes' => $composanteRepository->findAll()
+                'composantes' => $composanteRepository->findPorteuse()
             ],
             '_ui/_footer_cancel.html.twig',
             []
@@ -495,7 +495,7 @@ class UeController extends BaseController
                 'class' => UeMutualisable::class,
                 //{{ u.ue.display() }} - {{ u.ue.libelle }} ({{ u.ue.semestre.semestreParcours[0].parcours.libelle }})
                 'choice_label' => function (UeMutualisable $uem) use ($ue) {
-                    return $uem->getUe()?->display() . ' - ' . $uem->getUe()?->getLibelle() . ' (' . $uem->getUe()?->getSemestre()?->getSemestreParcours()->first()?->getLibelle() . ')';
+                    return $uem->getUe()?->display() . ' - ' . $uem->getUe()?->getLibelle() . ' (' . $uem->getUe()?->getSemestre()?->getSemestreParcours()->first()?->getParcours()?->getLibelle() . ')';
                 },
                 'placeholder' => 'choisir.ue.a.raccrocher',
                 'translation_domain' => 'form',

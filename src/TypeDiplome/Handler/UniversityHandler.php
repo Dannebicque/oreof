@@ -52,7 +52,7 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 #[AutoconfigureTag('app.type_diplome_handler', ['code' => 'DI'])]
 #[AutoconfigureTag('app.type_diplome_handler', ['code' => 'M'])]
 #[AutoconfigureTag('app.type_diplome_handler', ['code' => 'MEEF'])]
-#[AutoconfigureTag('app.type_diplome_handler', ['code' => 'LPRO'])]
+#[AutoconfigureTag('app.type_diplome_handler', ['code' => 'LP'])]
 class UniversityHandler implements TypeDiplomeHandlerInterface
 {
     public const TEMPLATE_FOLDER = 'licence';

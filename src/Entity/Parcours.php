@@ -221,6 +221,7 @@ class Parcours
     private Collection $parcoursVersionings;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    /** @deprecated */
     #[Groups('parcours_json_versioning')]
     private ?string $modalitesAdmission = null;
 
@@ -1269,11 +1270,13 @@ class Parcours
         return substr($texte, 0, -2);
     }
 
+    /** @deprecated */
     public function getModalitesAdmission(): ?string
     {
         return $this->modalitesAdmission;
     }
 
+    /** @deprecated */
     public function setModalitesAdmission(?string $modalitesAdmission): static
     {
         $this->modalitesAdmission = $modalitesAdmission;

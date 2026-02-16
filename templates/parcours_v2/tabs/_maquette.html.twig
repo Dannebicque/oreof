@@ -16,7 +16,6 @@
         {{ form_widget(form) }}
         {{ form_end(form) }}
 
-        {# --- Préparer les structures JS/Twig : liste des ordres de semestres présents dans le parcours et map ordre -> semestre --- #}
         {% set parcoursOrdres = [] %}
         {% set semByOrdre = {} %}
         {% for annee in parcours.annees %}
@@ -26,18 +25,7 @@
             {% endfor %}
         {% endfor %}
 
-        {# Déterminer le nombre max de semestres à afficher :
-           - si un objet `typeDiplome` fournit une liste `semestres` on l'utilisera
-           - sinon on prendra le maximum trouvé dans le parcours (ou 4 par défaut)
-        #}
-        {#        {% if typeDiplome is defined %} #}
         {% set maxOrdre = typeDiplome.semestreFin %}
-        {#        {% else %} #}
-        {#            {% set maxOrdre = parcoursOrdres | max(default(4)) %} #}
-        {#            {% if maxOrdre is not defined %} #}
-        {#                {% set maxOrdre = 4 %} #}
-        {#            {% endif %} #}
-        {#        {% endif %} #}
 
         {% set yearsCount = ((maxOrdre / 2) | round(0, 'ceil')) %}
 

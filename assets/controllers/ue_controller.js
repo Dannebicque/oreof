@@ -8,40 +8,60 @@
 
 import { Controller } from '@hotwired/stimulus'
 import { useDebounce } from 'stimulus-use'
-import { saveData } from '../js/saveData';
 
 export default class extends Controller {
-  static debounces = ['changeNatureUeEcTexte', 'changeTypeUeTexte'];
+  static debounces = ['changeNatureUeEcTexte', 'changeTypeUeTexte']
+  static targets = ['natureSection']
 
-  connect() {
+  connect () {
     useDebounce(this)
   }
 
-  ajoutTypeUe(event) {
+  ajoutTypeUe (event) {
     event.preventDefault()
     document.getElementById('typeUeTexte').classList.remove('d-none')
   }
 
-  changeTypeUeTexte(event) {
+  changeTypeUeTexte (event) {
     event.preventDefault()
     document.getElementById('ue_typeUe').disabled = event.currentTarget.value.length > 0
   }
 
-  changeNatureUe(event) {
-    // récupérer data-choix sur la balise option selectionnée
+  changeNatureUe (event) {
+    //todo: remettre warning si changement et les risques
+    const val = (event && event.target && event.target.value) ? event.target.value : document.querySelector('input[name="ue[natureUeEc]"]:checked')?.value
+    this.natureSectionTargets.forEach(el => {
+      const matches = (el.dataset.nature === 'nature_' + val)
+      // toggle visibility
+      el.classList.toggle('hidden', !matches)
 
-    const { choix } = event.target.options[event.target.selectedIndex].dataset
-    const { libre } = event.target.options[event.target.selectedIndex].dataset
-    if (choix === 'true') {
-      if (confirm('Attention, vous allez changer la nature de l\'UE pour une UE impliquant plusieurs choix. Vous devez définir au moins deux UE de choix. Souhaitez-vous continuer ?')) {
-        document.getElementById('descriptionUeLibre').classList.add('d-none')
-      }
-    } else if (libre === 'true') {
-      if (confirm('Attention, vous allez changer la nature de l\'UE. Souhaitez-vous continuer ?')) {
-        document.getElementById('descriptionUeLibre').classList.remove('d-none')
-      }
-    } else {
-      document.getElementById('descriptionUeLibre').classList.add('d-none')
-    }
+      // find form controls inside the section
+      const controls = el.querySelectorAll('input, select, textarea')
+      controls.forEach((ctrl) => {
+        try {
+          if (matches) {
+            // enable and mark required
+            ctrl.removeAttribute('disabled')
+            // set required only for meaningful inputs (ignore buttons)
+            if (['INPUT', 'SELECT', 'TEXTAREA'].includes(ctrl.tagName)) {
+              // avoid setting required on hidden or readonly controls
+              if (ctrl.type !== 'hidden' && !ctrl.readOnly && ctrl.name !== 'element_constitutif[ficheMatiere][new]') {
+                ctrl.required = true
+                ctrl.setAttribute('aria-required', 'true')
+              }
+            }
+          } else {
+            // disable and remove required
+            ctrl.setAttribute('disabled', 'disabled')
+            if (['INPUT', 'SELECT', 'TEXTAREA'].includes(ctrl.tagName)) {
+              ctrl.required = false
+              ctrl.removeAttribute('aria-required')
+            }
+          }
+        } catch (e) {
+          // ignore control manipulation errors
+        }
+      })
+    })
   }
 }
