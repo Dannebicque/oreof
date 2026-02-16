@@ -33,7 +33,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted('ROLE_ADMIN')]
 class ParcoursCompetencesController extends BaseController
 {
-    #[Route('/{parcours}/competences/', name: 'index')]
+    #[Route('/{parcours}/', name: 'index')]
     public function competences(
         TypeDIplomeResolver $typeDiplomeResolver,
         Parcours            $parcours,

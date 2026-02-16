@@ -16,70 +16,183 @@
         {{ form_widget(form) }}
         {{ form_end(form) }}
 
-        {#        {% if tabStates['maquette'] is defined and tabStates['maquette'].done == true %} #}
-        {#            <twig:alerte type="warning" #}
-        {#                         message="Cette opération permet de générer la structure (créer les semestres) selon les semestres indiquez ci-dessus. Attention, si une structure existe déjà elle sera mise à jour."></twig:alerte> #}
-        {#            #}{# todo: gérer un confirm ? #}
-        {#            <twig:Button #}
-        {#                    href="{{ path('parcours_structure_genere', {parcours: parcours.id}) }}" #}
-        {#                    submitLabel="Générer la structure"></twig:Button> #}
-        {#        {% endif %} #}
-        <table class="min-w-full divide-y divide-gray-200 mt-4">
-            <thead class="bg-gray-50">
-            <tr>
-                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Année /
-                    Semestre
-                </th>
-                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Dispensé</th>
-                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Statut</th>
-            </tr>
-            </thead>
-            <tbody class="bg-white divide-y divide-gray-200">
-            {% for annee in parcours.annees %}
-                <tr class="hover:bg-gray-50">
-                    <td class="px-4 py-3 font-semibold text-gray-700">Année {{ annee.ordre }}</td>
-                    <td class="px-4 py-3 text-sm text-gray-500">—</td>
-                    <td class="px-4 py-3">
-                        {% if annee.isOuvert %}
-                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                <svg class="w-3 h-3 mr-1 text-green-600" fill="currentColor" viewBox="0 0 8 8"
-                                     aria-hidden="true"><circle cx="4" cy="4" r="4"/></svg>
-                                Ouvert
-                            </span>
-                        {% else %}
-                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                                <svg class="w-3 h-3 mr-1 text-red-600" fill="currentColor" viewBox="0 0 8 8"
-                                     aria-hidden="true"><circle cx="4" cy="4" r="4"/></svg>
-                                Non ouvert
-                            </span>
-                        {% endif %}
-                    </td>
-                </tr>
-
-                {% for semestre in annee.parcoursSemestre %}
-                    <tr class="hover:bg-gray-50">
-                        <td class="px-4 py-2 text-sm text-gray-600 pl-8">S{{ semestre.ordre }}</td>
-                        <td class="px-4 py-2 text-sm text-gray-500">—</td>
-                        <td class="px-4 py-2">
-                            {% if semestre.isOuvert %}
-                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-50 text-green-700">
-                                    <svg class="w-3 h-3 mr-1 text-green-600" fill="currentColor" viewBox="0 0 8 8"
-                                         aria-hidden="true"><circle cx="4" cy="4" r="4"/></svg>
-                                    Ouvert
-                                </span>
-                            {% else %}
-                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-50 text-red-700">
-                                    <svg class="w-3 h-3 mr-1 text-red-600" fill="currentColor" viewBox="0 0 8 8"
-                                         aria-hidden="true"><circle cx="4" cy="4" r="4"/></svg>
-                                    Non ouvert
-                                </span>
-                            {% endif %}
-                        </td>
-                    </tr>
-                {% endfor %}
+        {# --- Préparer les structures JS/Twig : liste des ordres de semestres présents dans le parcours et map ordre -> semestre --- #}
+        {% set parcoursOrdres = [] %}
+        {% set semByOrdre = {} %}
+        {% for annee in parcours.annees %}
+            {% for semestre in annee.parcoursSemestre %}
+                {% set parcoursOrdres = parcoursOrdres | merge([semestre.ordre]) %}
+                {% set semByOrdre = semByOrdre | merge({ (semestre.ordre) : semestre }) %}
             {% endfor %}
-            </tbody>
-        </table>
+        {% endfor %}
+
+        {# Déterminer le nombre max de semestres à afficher :
+           - si un objet `typeDiplome` fournit une liste `semestres` on l'utilisera
+           - sinon on prendra le maximum trouvé dans le parcours (ou 4 par défaut)
+        #}
+        {#        {% if typeDiplome is defined %} #}
+        {% set maxOrdre = typeDiplome.semestreFin %}
+        {#        {% else %} #}
+        {#            {% set maxOrdre = parcoursOrdres | max(default(4)) %} #}
+        {#            {% if maxOrdre is not defined %} #}
+        {#                {% set maxOrdre = 4 %} #}
+        {#            {% endif %} #}
+        {#        {% endif %} #}
+
+        {% set yearsCount = ((maxOrdre / 2) | round(0, 'ceil')) %}
+
+        <div class="mt-6">
+            <h3 class="text-lg font-black text-slate-800 mb-4">Maquette semestrielle</h3>
+
+            <div class="bg-white shadow rounded-lg overflow-hidden">
+                <div class="px-4 py-3 sm:px-6 bg-slate-50 border-b border-slate-100">
+                    <div class="flex items-center justify-between">
+                        <div class="text-sm font-semibold text-slate-700">Vue par année</div>
+                        <div class="text-xs text-slate-500">Type de diplôme : {{ typeDiplome.libelle }}</div>
+                    </div>
+                </div>
+
+                <div class="p-4">
+                    {% for y in 1..yearsCount %}
+                        {% set sem1 = (2 * y - 1) %}
+                        {% set sem2 = (2 * y) %}
+
+                        <div class="mb-6">
+                            <div class="flex items-center justify-between mb-3">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 bg-indigo-50 text-indigo-600 rounded-full flex items-center justify-center font-black">{{ typeDiplome.libelleCourt }} {{ y }}</div>
+                                    <div>
+                                        <div class="text-sm font-black text-slate-800">Année {{ y }}</div>
+                                        <div class="text-xs text-slate-400">
+                                            S{{ sem1 }}{% if sem2 <= maxOrdre %} &amp; S{{ sem2 }}{% endif %}</div>
+                                    </div>
+                                </div>
+                                <div class="text-xs text-slate-500">&nbsp;</div>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                {# Carte pour semestre impaire #}
+                                <div class="p-4 border rounded-lg flex flex-col justify-between h-full">
+                                    <div>
+                                        <div class="flex items-start justify-between">
+                                            <div>
+                                                <h4 class="text-sm font-bold text-slate-700">Semestre S{{ sem1 }}</h4>
+                                            </div>
+                                            <div>
+                                                {% if sem1 in parcoursOrdres %}
+                                                    {% set s = semByOrdre[sem1] %}
+                                                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-50 text-green-700">
+                                                        <svg class="w-3 h-3 mr-1 text-green-600" fill="currentColor"
+                                                             viewBox="0 0 8 8" aria-hidden="true"><circle cx="4" cy="4"
+                                                                                                          r="4"/></svg>
+                                                        Dispensé
+                                                    </span>
+                                                {% else %}
+                                                    <div class="border-2 border-dashed border-orange-200 bg-orange-50 rounded p-2 flex items-center gap-3">
+                                                        <svg class="w-5 h-5 text-orange-400" fill="none"
+                                                             stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                  stroke-width="2"
+                                                                  d="M13 16h-1v-4h-1m4-4h.01M12 20h.01"></path>
+                                                        </svg>
+                                                        <div class="text-xs text-orange-600">Non dispensé</div>
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+
+                                        <div class="mt-3">
+                                            <div class="text-xs text-slate-500 mb-2"></div>
+
+                                            {% if sem1 in parcoursOrdres %}
+                                                <div class="flex items-center gap-3">
+                                                    {% set s = semByOrdre[sem1] %}
+                                                    {% if s.isOuvert %}
+                                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">Ouvert</span>
+                                                    {% else %}
+                                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">Fermé</span>
+                                                    {% endif %}
+
+                                                    {# Toggle ouverture: formulaire POST via Turbo #}
+                                                    <form method="post"
+                                                          action="{{ path('parcours_v2_semestre_toggle_open', { parcours: parcours.id, ordre: sem1 }) }}"
+                                                          data-turbo="true" class="inline-block">
+                                                        <input type="hidden" name="_token"
+                                                               value="{{ csrf_token('toggle-semestre' ~ parcours.id ~ '-' ~ sem1) }}">
+                                                        <button type="submit"
+                                                                class="ml-2 text-xs font-black px-3 py-1 rounded-lg border {{ (s.isOuvert ? 'border-green-600 text-green-600' : 'border-slate-200 text-slate-600') }} bg-white hover:shadow-sm">{{ s.isOuvert ? 'Fermer' : 'Ouvrir' }}</button>
+                                                    </form>
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {# Carte pour semestre paire (si <= maxOrdre) #}
+                                {% if sem2 <= maxOrdre %}
+                                    <div class="p-4 border rounded-lg flex flex-col justify-between h-full">
+                                        <div>
+                                            <div class="flex items-start justify-between">
+                                                <div>
+                                                    <h4 class="text-sm font-bold text-slate-700">Semestre
+                                                        S{{ sem2 }}</h4>
+                                                </div>
+                                                <div>
+                                                    {% if sem2 in parcoursOrdres %}
+                                                        {% set s2 = semByOrdre[sem2] %}
+                                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-50 text-green-700">
+                                                            <svg class="w-3 h-3 mr-1 text-green-600" fill="currentColor"
+                                                                 viewBox="0 0 8 8" aria-hidden="true"><circle cx="4"
+                                                                                                              cy="4"
+                                                                                                              r="4"/></svg>
+                                                            Dispensé
+                                                        </span>
+                                                    {% else %}
+                                                        <div class="border-2 border-dashed border-orange-200 bg-orange-50 rounded p-2 flex items-center gap-3">
+                                                            <svg class="w-5 h-5 text-orange-400" fill="none"
+                                                                 stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                      stroke-width="2"
+                                                                      d="M13 16h-1v-4h-1m4-4h.01M12 20h.01"></path>
+                                                            </svg>
+                                                            <div class="text-xs text-orange-600">Non dispensé</div>
+                                                        </div>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+
+                                            <div class="mt-3">
+                                                <div class="text-xs text-slate-500 mb-2"></div>
+
+                                                {% if sem2 in parcoursOrdres %}
+                                                    <div class="flex items-center gap-3">
+                                                        {% set s2 = semByOrdre[sem2] %}
+                                                        {% if s2.isOuvert %}
+                                                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">Ouvert</span>
+                                                        {% else %}
+                                                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">Fermé</span>
+                                                        {% endif %}
+
+                                                        <form method="post"
+                                                              action="{{ path('parcours_v2_semestre_toggle_open', { parcours: parcours.id, ordre: sem2 }) }}"
+                                                              data-turbo="true" class="inline-block">
+                                                            <input type="hidden" name="_token"
+                                                                   value="{{ csrf_token('toggle-semestre' ~ parcours.id ~ '-' ~ sem2) }}">
+                                                            <button type="submit"
+                                                                    class="ml-2 text-xs font-black px-3 py-1 rounded-lg border {{ (s2.isOuvert ? 'border-green-600 text-green-600' : 'border-slate-200 text-slate-600') }} bg-white hover:shadow-sm">{{ s2.isOuvert ? 'Fermer' : 'Ouvrir' }}</button>
+                                                        </form>
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
     </div>
 </turbo-frame>
 

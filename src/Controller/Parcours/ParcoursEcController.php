@@ -64,8 +64,6 @@ class ParcoursEcController extends BaseController
 
         // récupération des fiches matières
 
-
-
         $form = $this->createForm(ElementConstitutifType::class, $elementConstitutif, [
             'action' => $this->generateUrl(
                 'parcours_ec_ajouter_ec_ue',
@@ -80,31 +78,9 @@ class ParcoursEcController extends BaseController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-//            if ($form->get('typeEcTexte')->getData() !== null && $form->get('typeEc')->getData() === null) {
-//                $tu = new TypeEc();
-//                $tu->setLibelle($form->get('typeEcTexte')->getData());
-//                $tu->addTypeDiplome($typeDiplome);
-//                $tu->setFormation($parcours->getFormation());
-//                $typeEcRepository->save($tu, true);
-//                $elementConstitutif->setTypeEc($tu);
-//            }
-
             if ($elementConstitutif->getNatureUeEc()?->isChoix() === false and $elementConstitutif->getNatureUeEc()?->isLibre() === false) {
-//                if (str_starts_with($request->request->get('ficheMatiere'), 'id_')) {
-//                    $ficheMatiere = $ficheMatiereRepository->find((int)str_replace(
-//                        'id_',
-//                        '',
-//                        $request->request->get('ficheMatiere')
-//                    ));
-//                } else {
-//                    $ficheMatiere = new FicheMatiere();
-//                    $ficheMatiere->setCampagneCollecte($this->getCampagneCollecte());
-//                    $ficheMatiere->setLibelle($request->request->get('ficheMatiereLibelle'));
-//                    $ficheMatiere->setParcours($parcours);
-//                    $ficheMatiereRepository->save($ficheMatiere, true);
-//                }
+
                 $lastEc = $ecOrdre->getOrdreSuivant($ue, $request);
-//                $elementConstitutif->setFicheMatiere($ficheMatiere);
                 $elementConstitutif->setOrdre($lastEc);
                 $elementConstitutif->genereCode();
                 $elementConstitutifRepository->save($elementConstitutif, true);
@@ -191,7 +167,7 @@ class ParcoursEcController extends BaseController
         NatureUeEcRepository         $natureUeEcRepository,
         EcOrdre                      $ecOrdre,
         Request                      $request,
-        TypeEcRepository             $typeEcRepository,
+        TypeDiplomeResolver $typeDiplomeResolver,
         FicheMatiereRepository       $ficheMatiereRepository,
         ElementConstitutifRepository $elementConstitutifRepository,
         ElementConstitutif           $elementConstitutif,
@@ -217,31 +193,8 @@ class ParcoursEcController extends BaseController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-//            if ($form->get('typeEcTexte')->getData() !== null && $form->get('typeEc')->getData() === null) {
-//                $tu = new TypeEc();
-//                $tu->setLibelle($form->get('typeEcTexte')->getData());
-//                $tu->addTypeDiplome($typeDiplome);
-//                $tu->setFormation($parcours->getFormation());
-//                $typeEcRepository->save($tu, true);
-//                $elementConstitutif->setTypeEc($tu);
-//            }
-
             if ($elementConstitutif->getNatureUeEc()?->isChoix() === false and $elementConstitutif->getNatureUeEc()?->isLibre() === false) {
-//                if (str_starts_with($request->request->get('ficheMatiere'), 'id_')) {
-//                    $ficheMatiere = $ficheMatiereRepository->find((int)str_replace(
-//                        'id_',
-//                        '',
-//                        $request->request->get('ficheMatiere')
-//                    ));
-//                } else {
-//                    $ficheMatiere = new FicheMatiere();
-//                    $ficheMatiere->setCampagneCollecte($this->getCampagneCollecte());
-//                    $ficheMatiere->setLibelle($request->request->get('ficheMatiereLibelle'));
-//                    $ficheMatiere->setParcours($parcours);
-//                    $ficheMatiereRepository->save($ficheMatiere, true);
-//                }
                 $lastEc = $ecOrdre->getOrdreSuivant($ue, $request);
-//                $elementConstitutif->setFicheMatiere($ficheMatiere);
                 $elementConstitutif->setOrdre($lastEc);
                 $elementConstitutif->genereCode();
                 $elementConstitutifRepository->save($elementConstitutif, true);
@@ -287,7 +240,17 @@ class ParcoursEcController extends BaseController
                 $elementConstitutifRepository->save($elementConstitutif, true);
             }
 
-            return $this->json(true);
+            $typeD = $typeDiplomeResolver->fromParcours($parcours);
+            $dtoSemestre = $typeD->calculStructureSemestre($semestreParcours, $parcours);
+
+            return $turboStream->stream('parcours_v2/turbo/add_ec_success.stream.html.twig', [
+                'parcours' => $parcours,
+                'ue' => $dtoSemestre->getUe($ue->getOrdre()), //todo: tester, car si UE enfant, ca ne marche pas
+                'toastMessage' => 'EC modifié avec succès',
+                'semestreParcours' => $semestreParcours,
+                'semestre' => $ue->getSemestre(),
+                'newEcId' => $elementConstitutif->getId(),
+            ]);
         }
 
         return $turboStream->streamOpenModalFromTemplates(

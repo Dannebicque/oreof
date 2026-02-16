@@ -78,9 +78,8 @@ class ParcoursController extends BaseController
         ]));
     }
 
-    /** @deprecated */
     #[Route('/{parcours}', name: 'voir', methods: ['GET'])]
-    public function show(
+    public function voir(
         Parcours               $parcours,
         LheoXML                $lheoXML,
         VersioningParcours     $versioningParcours,
