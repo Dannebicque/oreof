@@ -57,6 +57,9 @@ export default class extends Controller {
             .then((responseText) => this.zoneToRefreshTarget.innerHTML = responseText);
         }
       })
-      .catch(this.zoneToRefreshTarget.innerHTML = errorText);
+      .catch(err => {
+        console.log(err);
+        this.zoneToRefreshTarget.innerHTML = errorText
+      });
   }
 }
