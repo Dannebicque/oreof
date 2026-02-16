@@ -50,6 +50,15 @@
                     )
                 }}
             {% endif %}
+            {% if stringDifferencesFormationCampagne.responsableDeFormation is defined %}
+                {{ include('communs/_comparaison_versioning_no_button.html.twig',
+                        {
+                            textDifferences: stringDifferencesFormationCampagne.responsableDeFormation,
+                            idCollapse: 'diffGlobalParcoursCampagne'
+                        }
+                    ) 
+                }}
+            {% endif %}
             <dt>Email</dt>
             <dd>{{ formation.responsableMention != null ? formation.responsableMention.email : 'erreur' }}</dd>
             {% if stringDifferencesFormation.emailResponsableFormation is defined %}
@@ -57,6 +66,15 @@
                         {
                             textDifferences: stringDifferencesFormation.emailResponsableFormation,
                             idCollapse: 'diffGlobalParcours'
+                        }
+                    )
+                }}
+            {% endif %}
+            {% if stringDifferencesFormationCampagne.emailResponsableFormation is defined %}
+                {{ include('communs/_comparaison_versioning_no_button.html.twig',
+                        {
+                            textDifferences: stringDifferencesFormationCampagne.emailReponsableFormation,
+                            idCollapse: 'diffGlobalParcoursCampagne'
                         }
                     )
                 }}
@@ -73,6 +91,15 @@
                         )
                     }}
                 {% endif %}
+                {% if stringDifferencesFormationCampagne.coResponsableDeFormation is defined %}
+                    {{ include('communs/_comparaison_versioning_no_button.html.twig',
+                            {
+                                textDifferences: stringDifferencesFormationCampagne.coResponsableDeFormation,
+                                idCollapse: 'diffGlobalParcoursCampagne'
+                            }
+                        )
+                    }}
+                {% endif %}
                 <dt>Email</dt>
                 <dd>{{ formation.coResponsable != null ? formation.coResponsable.email : 'erreur' }}</dd>
                 {% if stringDifferencesFormation.emailCoResponsable is defined %}
@@ -80,6 +107,15 @@
                             {
                                 textDifferences: stringDifferencesFormation.emailCoResponsable,
                                 idCollapse: 'diffGlobalParcours'
+                            }
+                        )
+                    }}
+                {% endif %}
+                {% if stringDifferencesFormationCampagne.emailCoResponsable is defined %}
+                    {{ include('communs/_comparaison_versioning_no_button.html.twig',
+                            {
+                                textDifferences: stringDifferencesFormationCampagne.emailCoResponsable,
+                                idCollapse: 'diffGlobalParcoursCampagne'
                             }
                         )
                     }}
