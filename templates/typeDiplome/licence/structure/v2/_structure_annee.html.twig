@@ -14,7 +14,7 @@
     </div>
     {% for ordre, semestre in dto.semestres|filter(semestre => (semestre.semestre.nonDispense == false)) %}
         {% set diffSemestre = diffStructure is defined and diffStructure != null ? diffStructure.semestres[ordre] : null %}
-        {{ include('typeDiplome/licence/structure/v2/_structure_semeste.html.twig') }}
+        {{ include('typeDiplome/licence/structure/v2/_structure_semestre.html.twig') }}
     {% endfor %}
 
     <div class="ml-6 mt-10 p-6 bg-slate-900 rounded-2xl text-white flex flex-wrap justify-between items-center shadow-2xl">

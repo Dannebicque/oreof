@@ -714,7 +714,7 @@ framework:
             button_class: 'info'
             type: 'reouvrir'
             button_icon: 'fa-pencil'
-            handler: "valider_commentaire"
+            handler: "reouvrir_mccc"
             form:
               fields:
                 - name: argumentaire
@@ -766,7 +766,7 @@ framework:
             button_class: 'info'
             button_icon: 'fa-edit'
             type: 'reouvrir'
-            handler: "reouvrir_avant_publie"
+            handler: "reouvrir_sans_cfvu"
             form:
               title: "Réouvrir sans passage en CFVU"
               submit_label: "Valider la demande"
@@ -804,10 +804,12 @@ framework:
             hasDate: true
             hasValidLheo: true
             icon: fa-check
-            label: 'Valider et republier'
             description: 'Approuver les modifications et republier'
             button_class: 'success'
             button_icon: 'fa-check'
+            handler: "valider"
+            form:
+              fields: [ ]
         reserver_transmettre_ouverture_sans_cfvu:
           from: 'soumis_central_sans_cfvu'
           to: 'en_cours_redaction_ss_cfvu'

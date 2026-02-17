@@ -109,26 +109,18 @@ final class InlineCreateEntitySelectType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setRequired(['class', 'create']);
+        $resolver->setRequired(['class']);
         $resolver->setDefaults([
             'choice_label' => 'id',
             'placeholder' => 'Choisir…',
             'required' => false,
             'ldap_check' => false,
-
+            'create' => null,
             // texte de l’input
             'new_placeholder' => 'Nom du nouveau…',
-
-            // filtre contextuel (ex: typediplome, tenant, etc.)
             'scope' => null,
-
-            // callable|null: fn(Repository $repo) => QueryBuilder
             'query_builder' => null,
-
-            // callable|null: fn(string $label, mixed $scope, EntityManagerInterface $em) => ?object
             'find_existing' => null,
-
-            // (Block prefix + theme)
             'label' => false,
         ]);
 
@@ -136,7 +128,7 @@ final class InlineCreateEntitySelectType extends AbstractType
         $resolver->setAllowedTypes('ldap_check', ['boolean']);
         $resolver->setAllowedTypes('choice_label', ['string', 'callable']);
         $resolver->setAllowedTypes('query_builder', ['null', 'callable']);
-        $resolver->setAllowedTypes('create', 'callable');
+        $resolver->setAllowedTypes('create', ['null', 'callable']);
         $resolver->setAllowedTypes('find_existing', ['null', 'callable']);
     }
 

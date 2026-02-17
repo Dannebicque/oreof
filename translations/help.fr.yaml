@@ -295,12 +295,14 @@ parcours_ec.helps.synchroEcts: parcours_ec.helps.synchroEcts
 parcours_ec.helps.synchroHeures: parcours_ec.helps.synchroHeures
 parcours_ec.helps.synchroMccc: parcours_ec.helps.synchroMccc
 parcours_step1.helps.coResponsable: 'Le cas échéant, indiquez le co-responsable de ce parcours.'
+parcours_step1.helps.coResponsable.help: parcours_step1.helps.coResponsable.help
 parcours_step1.helps.contenuFormation: 'Indiquez en 3000 caractères maximum le contenu de la formation. Faites une description détaillée des différentes thématiques traitées dans la formation, en fonction des objectifs pédagogiques définis précédemment.'
 parcours_step1.helps.localisation: 'Choisissez le lieu où le parcours est proposé. Si le parcours est dispensé sur plusieurs sites, créer autant de parcours que de lieux de formation.'
 parcours_step1.helps.localisation.help: 'Choisissez le lieu où le parcours est proposé. Si le parcours est dispensé sur plusieurs sites, créer autant de parcours que de lieux de formation.'
 parcours_step1.helps.motsCles: 'Mots clés caractérisant le parcours.'
 parcours_step1.helps.objectifsParcours: "Décrivez en 3000 caractères maximum la finalité de la formation et/ou les activités visées par l’apprenant une fois le diplôme obtenu. L'objectif de formation est souvent exprimé au moyen d'une phrase courte qui commence par : 'A la fin de la formation, le diplômé sera capable de...' et peut être rédigé selon 3 axes : •\tle savoir et la connaissance •\tle savoir-faire et la compétence professionnelle •\tle savoir-être et la capacité d'adaptation à différentes situations"
 parcours_step1.helps.respParcours: 'Non modifiable. Veuillez contacter le responsable de la mention/spécialité en cas de changement.'
+parcours_step1.helps.respParcours.help: parcours_step1.helps.respParcours.help
 parcours_step1.helps.resultatsAttendus: "Indiquez en 3000 caractères maximum les compétences acquises via la  formation (compétences à acquérir, à améliorer ou à entretenir). La description des compétences doit être précise et courte et doit utiliser des verbes d’action exprimant un savoir ou une capacité tels que 'savoir, maitriser, être capable de…'."
 parcours_step1.helps.rythmeFormation: 'Indiquez le rythme de la formation (temps plein, temps partiel, cours du soir, etc.).'
 parcours_step1.helps.rythmeFormationTexte: 'Le cas échéant, précisez en 3000 caractères maximum le rythme de la formation (déroulé, calendrier, périodes, etc.).'
@@ -317,6 +319,8 @@ parcours_step2.helps.nbHeuresStages: "Précisez le nombre d'heures de stage pré
 parcours_step2.helps.projetText: 'Indiquez en quoi consiste le projet tutoré (nombre, sur quel(s) semestre(s) ils sont prévus, les modalités, etc.).'
 parcours_step2.helps.situationProText: 'Décrivez en quoi consiste la mise en situation professionnelle.'
 parcours_step2.helps.stageText: 'Indiquez en quoi consiste le stage (nombre, sur quel(s) semestre(s) ils sont prévus, les modalités, etc.).'
+parcours_step3.helps.semestreDebut: parcours_step3.helps.semestreDebut
+parcours_step3.helps.semestreFin: parcours_step3.helps.semestreFin
 parcours_step5.helps.adresses.0.adresse1: parcours_step5.helps.adresses.0.adresse1
 parcours_step5.helps.adresses.0.adresse2: parcours_step5.helps.adresses.0.adresse2
 parcours_step5.helps.adresses.0.codePostal: parcours_step5.helps.adresses.0.codePostal
@@ -459,4 +463,13 @@ user_ldap.helps.role.help: "Définissez le rôle de l'utilisateur (et donc ses d
 ville.helps.codeApogee: 'Code Apogée de la ville.'
 ville.helps.etablissement: ''
 ville.helps.libelle: ''
+workflow.refuser_definitif_cfvu.argumentaire.help: workflow.refuser_definitif_cfvu.argumentaire.help
+workflow.refuser_definitif_cfvu.dateCfvu.help: workflow.refuser_definitif_cfvu.dateCfvu.help
+workflow.refuser_revoir_cfvu.argumentaire.help: workflow.refuser_revoir_cfvu.argumentaire.help
+workflow.refuser_revoir_cfvu.dateCfvu.help: workflow.refuser_revoir_cfvu.dateCfvu.help
+workflow.reouvrir_avant_publie.argumentaire.help: workflow.reouvrir_avant_publie.argumentaire.help
+workflow.valider_cfvu.dateConseil.help: workflow.valider_cfvu.dateConseil.help
+workflow.valider_publication.datePublication.help: workflow.valider_publication.datePublication.help
+workflow.valider_reserve_cfvu.argumentaire.help: workflow.valider_reserve_cfvu.argumentaire.help
+workflow.valider_reserve_cfvu.dateCfvu.help: workflow.valider_reserve_cfvu.dateCfvu.help
 

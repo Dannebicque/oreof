@@ -181,6 +181,13 @@
                 </div>
             </div>
         </div>
+
+        {% if is_granted('ROLE_ADMIN') %}
+            ---Provisoirement pour tester---
+            <twig:Button
+                    href="{{ path('parcours_structure_genere', {parcours: parcours.id}) }}"
+                    submitLabel="Générer la structure"></twig:Button>
+        {% endif %}
     </div>
 </turbo-frame>
 

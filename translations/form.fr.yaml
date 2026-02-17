@@ -57,6 +57,8 @@ Chaumont: Chaumont
 'Choisissez une ville': '-'
 'Châlons en Champagne': 'Châlons en Champagne'
 Civilité: Civilité
+'Co-Responsable du parcours': 'Co-Responsable du parcours'
+'Co-responsable du parcours': 'Co-responsable du parcours'
 'Code Apogée': 'Code Apogée'
 'Code CIP (Apogée)': 'Code CIP (Apogée)'
 'Code Composante': 'Code Composante'
@@ -89,6 +91,8 @@ Droits: Rôle
 'EC à choix libre': 'EC à choix libre'
 'EC à choix restreint': 'EC à choix restreint'
 Email: Email
+'Email du co-responsable du parcours': 'Email du co-responsable du parcours'
+'Email du responsable du parcours': 'Email du responsable du parcours'
 'En distanciel': 'En distanciel'
 'En présentiel': 'En présentiel'
 "Envoyer un email de conformation à l'utilisateur": "Envoyer un email de conformation à l'utilisateur"
@@ -156,6 +160,12 @@ Restauration: Restauration
 SES: SES
 STAGE: STAGE
 'Sans niveau spécifique': 'Sans niveau spécifique'
+'Semestre 1': 'Semestre 1'
+'Semestre 2': 'Semestre 2'
+'Semestre 3': 'Semestre 3'
+'Semestre 4': 'Semestre 4'
+'Semestre 5': 'Semestre 5'
+'Semestre 6': 'Semestre 6'
 Sigle: Sigle
 Stage: Stage
 'TER – travail d’étude et de recherche': 'TER (travail d’étude et de recherche)'
@@ -414,6 +424,8 @@ parcours_step2.labels.nbHeuresStages: "Nombre d'heures de stage(s) prévu"
 parcours_step2.labels.projetText: 'Description du/des projet(s) tutoré(s)'
 parcours_step2.labels.situationProText: 'Description de la/des mise(s) en situation professionnelle'
 parcours_step2.labels.stageText: 'Description du/des stage(s)'
+parcours_step3.labels.semestreDebut: parcours_step3.labels.semestreDebut
+parcours_step3.labels.semestreFin: parcours_step3.labels.semestreFin
 parcours_step5.labels.adresses.label: parcours_step5.labels.adresses.label
 parcours_step5.labels.adresses.label.0.label: parcours_step5.labels.adresses.label.0.label
 parcours_step5.labels.adresses.label.__name__.label: parcours_step5.labels.adresses.label.__name__.label

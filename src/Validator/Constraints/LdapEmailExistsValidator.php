@@ -7,6 +7,7 @@ use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 
+//todo: pas utile ?
 final class LdapEmailExistsValidator extends ConstraintValidator
 {
     public function __construct(private readonly Ldap $lookup)
@@ -20,6 +21,7 @@ final class LdapEmailExistsValidator extends ConstraintValidator
         }
 
         $email = trim((string)$value);
+        dump($email);
         if ($email === '') {
             return;
         }
@@ -27,7 +29,6 @@ final class LdapEmailExistsValidator extends ConstraintValidator
         if (!filter_var($email, \FILTER_VALIDATE_EMAIL)) {
             return;
         }
-
         if ($this->lookup->emailExists($email) === false) {
             $this->context
                 ->buildViolation($constraint->message)

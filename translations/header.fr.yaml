@@ -1,1 +1,16 @@
-header.mention.index: Gestion des mentions/spécialités
+header.mention.index: 'Gestion des mentions/spécialités'
+texte_help.parcours.admission.header: texte_help.parcours.admission.header
+texte_help.parcours.configuration.header: texte_help.parcours.configuration.header
+texte_help.parcours.descriptif.header: texte_help.parcours.descriptif.header
+texte_help.parcours.et_apres.header: texte_help.parcours.et_apres.header
+texte_help.parcours.maquette.header: texte_help.parcours.maquette.header
+texte_help.parcours.presentation.header: texte_help.parcours.presentation.header
+texte_help.parcours.presentation_formation.header: texte_help.parcours.presentation_formation.header
+titre.parcours.admission.header: titre.parcours.admission.header
+titre.parcours.configuration.header: titre.parcours.configuration.header
+titre.parcours.descriptif.header: titre.parcours.descriptif.header
+titre.parcours.et_apres.header: titre.parcours.et_apres.header
+titre.parcours.maquette.header: titre.parcours.maquette.header
+titre.parcours.presentation.header: titre.parcours.presentation.header
+titre.parcours.presentation_formation.header: titre.parcours.presentation_formation.header
+

@@ -18,11 +18,11 @@ use App\Enums\TypeModificationDpeEnum;
 use App\Workflow\Handler\AbstractDpeParcoursHandler;
 use App\Workflow\Handler\TransitionHandlerInterface;
 
-final class ReouvrirAvantPublieHandler extends AbstractDpeParcoursHandler implements TransitionHandlerInterface
+final class ReouvrirMcccHandler extends AbstractDpeParcoursHandler implements TransitionHandlerInterface
 {
     public function supports(string $code): bool
     {
-        return $code === 'reouvrir_avant_publie';
+        return $code === 'reouvrir_mccc';
     }
 
     /**
@@ -30,14 +30,20 @@ final class ReouvrirAvantPublieHandler extends AbstractDpeParcoursHandler implem
      */
     public function handle(
         DpeParcours               $dpeParcours,
-        User $user,
+        User                      $user,
         WorkflowTransitionMetaDto $metaDto,
         string                    $transition,
         array                     $data
     ): void
     {
         // Récupération safe des champs (2–3 max => simple)
-        $argumentaire = (string)($data['argumentaire'] ?? null);
+        $argumentaire = (string)($data['argumentaire'] ?? '');
+
+        if ($argumentaire === '') {
+            // Normalement déjà bloqué par required/NotBlank,
+            // mais garder un garde-fou métier n’est jamais mauvais.
+            throw new \DomainException("Argumentaire obligatoire.");
+        }
 
         //créer le dpeDemande
         $parcours = $dpeParcours->getParcours();

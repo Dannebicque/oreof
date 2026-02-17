@@ -17,7 +17,7 @@
                         {% endfor %}</dd>
                 </div>
                 <div class="col-12 col-sm-6 col-lg-2">
-                    <dt class="fw-medium text-muted mb-1">Type de formation</dt>
+                    <dt class="fw-medium text-muted mb-1">Type de diplôme</dt>
                     <dd class="mb-0">{{ formation.typeDiplome|typeDiplome }}</dd>
                 </div>
                 <div class="col-12 col-sm-6 col-lg-2">
@@ -81,23 +81,21 @@
             <div class="d-flex align-items-center gap-1 flex-wrap">
                 <div class="d-flex align-items-center gap-3">
                     {% if hasDemande == true %}
-                        <div class="rounded-circle d-flex align-items-center justify-content-center
-                                bg-warning-subtle text-warning bubble-process"
+                        <div class="rounded-full flex items-center justify-center w-8 h-8 bg-green-200 bg-opacity-60 text-green-700 ring-1 ring-green-400 shadow-sm p-2"
                              data-controller="tooltip" data-tooltip-placement-value="bottom"
                              data-bs-original-title="Parcours en cours de modification."
                         >
                             <i class="fas fa-unlock small"></i>
                         </div>
-                        Parcours en cours de modification.
+                        <span class="text-green-600">Parcours en cours de modification.</span>
                     {% else %}
-                        <div class="rounded-circle d-flex align-items-center justify-content-center
-                                bg-warning-subtle text-warning bubble-process"
+                        <div class="rounded-full flex items-center justify-center w-8 h-8 bg-amber-200 bg-opacity-60 text-amber-700 ring-1 ring-amber-400 shadow-sm p-2"
                              data-controller="tooltip" data-tooltip-placement-value="bottom"
                              data-bs-original-title="Parcours verrouillé."
                         >
                             <i class="fas fa-lock small"></i>
                         </div>
-                        Parcours verrouillé.
+                        <span class="text-amber-600">Parcours verrouillé.</span>
                     {% endif %}
                 </div>
             </div>

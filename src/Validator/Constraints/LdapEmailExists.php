@@ -4,6 +4,7 @@ namespace App\Validator\Constraints;
 
 use Symfony\Component\Validator\Constraint;
 
+//todo: pas utile ?
 #[\Attribute(\Attribute::TARGET_PROPERTY | \Attribute::TARGET_METHOD | \Attribute::TARGET_PARAMETER)]
 final class LdapEmailExists extends Constraint
 {
@@ -17,6 +18,7 @@ final class LdapEmailExists extends Constraint
         mixed                   $payload = null
     )
     {
+        dump($options);
         parent::__construct($options ?? [], $groups, $payload);
 
         if ($message !== null) {

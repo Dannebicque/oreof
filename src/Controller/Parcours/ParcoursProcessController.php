@@ -204,17 +204,17 @@ class ParcoursProcessController extends BaseController
 
         $view = $this->transitionModalViewBuilder->build($transition, $dpeParcours, $rawMeta);
 
-        if ($view?->mode === 'report') {
-            $formId = $metaDto->form?->formId ?? 'modal_form';
-            $form = $this->metaDrivenFormFactory->createEmpty($formId);
-        } else {
+//        if ($view?->mode === 'report') {
+//            $formId = $metaDto->form?->formId ?? 'modal_form';
+//            $form = $this->metaDrivenFormFactory->createEmpty($formId);
+//        } else {
             // si pas de form dans metadata : form vide
             if ($metaDto->form === null) {
                 $form = $this->metaDrivenFormFactory->createEmpty();
             } else {
                 $form = $this->metaDrivenFormFactory->create($metaDto->form, $transition);
             }
-        }
+        // }
 
         $form->handleRequest($request);
 
@@ -229,6 +229,7 @@ class ParcoursProcessController extends BaseController
                     dump($this->transitionHandlers->get($handlerCode));
                     $this->transitionHandlers->get($handlerCode)->handle(
                         $dpeParcours,
+                        $this->getUser(),
                         $metaDto,
                         $transition,
                         (array)$form->getData());

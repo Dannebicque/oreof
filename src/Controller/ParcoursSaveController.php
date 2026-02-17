@@ -36,7 +36,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class ParcoursSaveController extends BaseController
 {
-    public function __construct(private WorkflowInterface $dpeParcoursWorkflow)
+    public function __construct(private readonly WorkflowInterface $dpeParcoursWorkflow)
     {
     }
 

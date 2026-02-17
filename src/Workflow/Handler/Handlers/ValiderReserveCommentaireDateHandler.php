@@ -11,6 +11,7 @@ namespace App\Workflow\Handler\Handlers;
 
 use App\DTO\Workflow\WorkflowTransitionMetaDto;
 use App\Entity\DpeParcours;
+use App\Entity\User;
 use App\Utils\Tools;
 use App\Workflow\Handler\AbstractDpeParcoursHandler;
 use App\Workflow\Handler\TransitionHandlerInterface;
@@ -27,6 +28,7 @@ final class ValiderReserveCommentaireDateHandler extends AbstractDpeParcoursHand
      */
     public function handle(
         DpeParcours               $dpeParcours,
+        User $user,
         WorkflowTransitionMetaDto $metaDto,
         string                    $transition,
         array                     $data

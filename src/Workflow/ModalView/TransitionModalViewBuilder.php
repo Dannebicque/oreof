@@ -23,8 +23,8 @@ final class TransitionModalViewBuilder
 
     public function build(string $transition, DpeParcours $dpeParcours, array $rawMeta): ?TransitionModalView
     {
-        // ✅ règle simple : si form.fields est vide => on veut un report
-        if (isset($rawMeta['form']['fields']) && \is_array($rawMeta['form']['fields']) && $rawMeta['form']['fields'] === []) {
+        // Si on a une entrée view dans les métadata on veut une vue. view contiendra les verifs et éventuellement le template
+        if (isset($rawMeta['view'])) {
 
             // TODO: remplace par ton service
             $messages = [

@@ -18,11 +18,11 @@ use App\Enums\TypeModificationDpeEnum;
 use App\Workflow\Handler\AbstractDpeParcoursHandler;
 use App\Workflow\Handler\TransitionHandlerInterface;
 
-final class ReouvrirAvantPublieHandler extends AbstractDpeParcoursHandler implements TransitionHandlerInterface
+final class ReouvrirSansCfvuHandler extends AbstractDpeParcoursHandler implements TransitionHandlerInterface
 {
     public function supports(string $code): bool
     {
-        return $code === 'reouvrir_avant_publie';
+        return $code === 'reouvrir_sans_cfvu';
     }
 
     /**
@@ -30,7 +30,7 @@ final class ReouvrirAvantPublieHandler extends AbstractDpeParcoursHandler implem
      */
     public function handle(
         DpeParcours               $dpeParcours,
-        User $user,
+        User                      $user,
         WorkflowTransitionMetaDto $metaDto,
         string                    $transition,
         array                     $data
@@ -48,11 +48,12 @@ final class ReouvrirAvantPublieHandler extends AbstractDpeParcoursHandler implem
         $demande->setCampagneCollecte($campagneCollecte);
         $demande->setParcours($parcours);
         $demande->setAuteur($user);
-        $demande->setEtatDemande(EtatDpeEnum::en_cours_redaction);
+        $demande->setEtatDemande(EtatDpeEnum::en_cours_redaction_ss_cfvu);
         $demande->setNiveauDemande('P'); // P Parcours (plus de log des demandes niveau formation?)
         $demande->setArgumentaireDemande($argumentaire);
-        $demande->setNiveauModification(TypeModificationDpeEnum::MODIFICATION_MCCC_TEXTE);
-        $dpeParcours->setEtatReconduction(TypeModificationDpeEnum::MODIFICATION_MCCC_TEXTE);
+        $demande->setNiveauModification(TypeModificationDpeEnum::MODIFICATION_TEXTE);
+        $dpeParcours->setEtatReconduction(TypeModificationDpeEnum::MODIFICATION_TEXTE);
+
         $this->entityManager->persist($demande);
         $this->entityManager->flush();
 

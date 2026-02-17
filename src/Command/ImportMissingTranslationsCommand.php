@@ -23,8 +23,9 @@ final class ImportMissingTranslationsCommand extends Command
 {
     protected function configure(): void
     {
+        $defaultDate = date('Y-m-d');
         $this
-            ->addArgument('logfile', InputArgument::OPTIONAL, 'Chemin du fichier de log à parser', '%kernel.project_dir%/var/log/dev.translations-2026-02-15.log')
+            ->addArgument('logfile', InputArgument::OPTIONAL, 'Chemin du fichier de log à parser', '%kernel.project_dir%/var/log/dev.translations-' . $defaultDate . '.log')
             ->addOption('translations-dir', null, InputOption::VALUE_REQUIRED, 'Répertoire des fichiers de traduction', '%kernel.project_dir%/translations')
             ->addOption('simulate', null, InputOption::VALUE_NONE, 'Ne pas écrire les fichiers, afficher les changements')
             ->addOption('overwrite', null, InputOption::VALUE_NONE, 'Écraser les clés existantes (attention)');

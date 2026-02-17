@@ -2,23 +2,31 @@
 
 namespace App\Service\Parcours;
 
+use App\Classes\LdapImporter;
 use App\Entity\Parcours;
+use App\Entity\User;
 use App\Enums\ModaliteEnseignementEnum;
 use App\Enums\NiveauLangueEnum;
 use App\Enums\RegimeInscriptionEnum;
+use App\Events\AddCentreParcoursEvent;
+use App\Repository\ProfilRepository;
 use App\Repository\VilleRepository;
 use App\Repository\UserRepository;
 use App\Repository\RythmeFormationRepository;
 use App\Repository\ComposanteRepository;
 use App\Service\AbstractFieldUpdater;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 final class ParcoursFieldUpdater extends AbstractFieldUpdater
 {
     public function __construct(
-        private UserRepository            $userRepo,
-        private VilleRepository           $villeRepo,
-        private RythmeFormationRepository $rythmeRepo,
-        private ComposanteRepository      $composanteRepo,
+        private readonly UserRepository            $userRepo,
+        private readonly VilleRepository           $villeRepo,
+        private readonly RythmeFormationRepository $rythmeRepo,
+        private readonly ComposanteRepository      $composanteRepo,
+        private readonly LdapImporter              $ldapImporter,
+        private readonly ProfilRepository          $profilRepository,
+        private readonly EventDispatcherInterface  $eventDispatcher
     )
     {
     }
@@ -43,11 +51,11 @@ final class ParcoursFieldUpdater extends AbstractFieldUpdater
     {
         return [
             // ----------------- STEP 1 (presentation) -----------------
-            'parcours_step1[respParcours]' => function (Parcours $p, $v) {
-                $p->setRespParcours($this->toEntity($this->userRepo, $v));
+            'parcours_step1[respParcours][entity]' => function (Parcours $p, $v) {
+                $p->setRespParcours($this->addFromEntity($v, 'ROLE_RESP_PARCOURS', $p));
             },
-            'parcours_step1[coResponsable]' => function (Parcours $p, $v) {
-                $p->setCoResponsable($this->toEntity($this->userRepo, $v));
+            'parcours_step1[coResponsable][entity]' => function (Parcours $p, $v) {
+                $p->setCoResponsable($this->addFromEntity($v, 'ROLE_CO_RESP_PARCOURS', $p));
             },
             'parcours_step1[objectifsParcours]' => fn(Parcours $p, $v) => $p->setObjectifsParcours($this->toString($v)),
             'parcours_step1[motsCles]' => fn(Parcours $p, $v) => $p->setMotsCles($this->toString($v)),
@@ -60,6 +68,9 @@ final class ParcoursFieldUpdater extends AbstractFieldUpdater
             'parcours_step1[localisation]' => function (Parcours $p, $v) {
                 $p->setLocalisation($this->toEntity($this->villeRepo, $v));
             },
+            'parcours_step1[coResponsable][new]' => fn(Parcours $p, $v) => $p->setCoResponsable($this->addFromLdap($v, 'ROLE_CO_RESP_PARCOURS', $p)),
+            'parcours_step1[respParcours][new]' => fn(Parcours $p, $v) => $p->setRespParcours($this->addFromLdap($v, 'ROLE_RESP_PARCOURS', $p)),
+
 
             // ----------------- STEP 2 (descriptif) -----------------
             // EnumType : si ton setter attend un enum, adapte via toEnum()
@@ -119,8 +130,8 @@ final class ParcoursFieldUpdater extends AbstractFieldUpdater
     {
         return [
             'presentation' => [
-                'parcours_step1[respParcours]',
-                'parcours_step1[coResponsable]',
+                'parcours_step1[respParcours][entity]',
+                'parcours_step1[coResponsable][entity]',
                 'parcours_step1[objectifsParcours]',
                 'parcours_step1[motsCles]',
                 'parcours_step1[resultatsAttendus]',
@@ -128,6 +139,8 @@ final class ParcoursFieldUpdater extends AbstractFieldUpdater
                 'parcours_step1[rythmeFormation]',
                 'parcours_step1[rythmeFormationTexte]',
                 'parcours_step1[localisation]',
+                'parcours_step1[coResponsable][new]',
+                'parcours_step1[respParcours][new]'
             ],
             'descriptif' => [
                 'parcours_step2[modalitesEnseignement]',
@@ -167,5 +180,64 @@ final class ParcoursFieldUpdater extends AbstractFieldUpdater
                 'parcours_step7[codeRNCP]'
             ],
         ];
+    }
+
+    private function addFromLdap(string $email, string $codeProfil, Parcours $parcours): ?User
+    {
+        $user = $this->ldapImporter->addFromLdap($email);
+
+        if (!$user) {
+            return null;
+        }
+
+        $this->updateProfil($user, $codeProfil, $parcours);
+        return $user;
+    }
+
+    private function addFromEntity(mixed $v, string $codeProfil, Parcours $parcours): ?User
+    {
+        $user = $this->toEntity($this->userRepo, $v);
+
+        if (!$user) {
+            return null;
+        }
+
+        $this->updateProfil($user, $codeProfil, $parcours);
+        return $user;
+    }
+
+    private function updateProfil(User $user, string $codeProfil, Parcours $parcours): void
+    {
+        $campagneCollecte = $parcours->getDpeParcours()->first()->getCampagneCollecte();
+        //ajouter des droits.
+        //On retire les anciens
+        switch ($codeProfil) {
+            case 'ROLE_CO_RESP_PARCOURS':
+                $profil = $this->profilRepository->findOneBy(['code' => $codeProfil]);
+                if (null === $profil) {
+                    throw new \InvalidArgumentException('Profil ' . $codeProfil . ' not found');
+                }
+                if ($parcours->getCoResponsable() !== null) {
+                    $event = new AddCentreParcoursEvent($parcours, $parcours->getCoResponsable(), $profil, $campagneCollecte);
+                    $this->eventDispatcher->dispatch($event, AddCentreParcoursEvent::REMOVE_CENTRE_PARCOURS);
+                }
+                $event = new AddCentreParcoursEvent($parcours, $user, $profil, $campagneCollecte);
+                $this->eventDispatcher->dispatch($event, AddCentreParcoursEvent::ADD_CENTRE_PARCOURS);
+
+                break;
+            case 'ROLE_RESP_PARCOURS':
+                $profil = $this->profilRepository->findOneBy(['code' => $codeProfil]);
+                if (null === $profil) {
+                    throw new \InvalidArgumentException('Profil ' . $codeProfil . ' not found');
+                }
+                if ($parcours->getRespParcours() !== null) {
+                    $event = new AddCentreParcoursEvent($parcours, $parcours->getRespParcours(), $profil, $campagneCollecte);
+                    $this->eventDispatcher->dispatch($event, AddCentreParcoursEvent::REMOVE_CENTRE_PARCOURS);
+                }
+                $event = new AddCentreParcoursEvent($parcours, $user, $profil, $campagneCollecte);
+                $this->eventDispatcher->dispatch($event, AddCentreParcoursEvent::ADD_CENTRE_PARCOURS);
+
+                break;
+        }
     }
 }
