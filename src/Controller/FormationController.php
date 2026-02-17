@@ -393,6 +393,7 @@ class FormationController extends BaseController
         $cssDiff = DiffHelper::getStyleSheet();
         if ($formation->isHasParcours() === false && count($formation->getParcours()) === 1) {
             $textDifferencesParcours = $versioningParcours->getDifferencesBetweenParcoursAndLastVersion($formation->getParcours()[0]);
+            $textDifferencesParcoursCampagne = $versioningParcours->getDifferencesBetweenParcoursAndLastVersion($formation->getParcours()[0], true);
             $hasLastVersion = $versioningParcours->hasLastVersion($formation->getParcours()[0]);
         }
 
@@ -400,14 +401,17 @@ class FormationController extends BaseController
          * VERSIONING FORMATION
          */
         $formationStringDifferences = $versioningFormation->getDifferencesBetweenFormationAndLastVersion($formation);
+        $formationCampagneStringDifferences = $versioningFormation->getDifferencesBetweenFormationAndLastVersion($formation, true);
 
         return $this->render('formation/show.html.twig', [
             'formation' => $formation,
             'typeDiplome' => $typeDiplome,
             'typeD' => $typeD,
             'cssDiff' => $cssDiff,
-            'stringDifferencesParcours' => $textDifferencesParcours ?? [],
+            'stringDifferencesParcoursDefautCampagne' => $textDifferencesParcoursCampagne ?? [],
+            'stringDifferencesParcoursDefaut' => $textDifferencesParcours ?? [],
             'stringDifferencesFormation' => $formationStringDifferences ?? [],
+            'stringDifferencesFormationCampagne' => $formationCampagneStringDifferences ?? [],
             'versioningParcours' => $versioningParcours,
             'hasLastVersion' => $hasLastVersion,
         ]);
