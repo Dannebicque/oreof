@@ -685,25 +685,26 @@ framework:
             handler: "valider"
             form:
               fields: [ ]
-        reouvrir_tacite:
-          from: 'tacite_reconduction'
-          to: 'en_cours_redaction'
-          metadata:
-            recipients: [ 'DPE', 'RF', 'CoRF', 'RP', 'CoRP' ]
-            label: 'Réouvrir pour modification'
-            type: 'reouvrir'
-            description: 'Réouvrir le parcours reconduit pour modifications'
-            button_class: 'info'
-            button_icon: 'fa-pencil'
-            handler: "valider_commentaire"
-            form:
-              fields:
-                - name: argumentaire
-                  type: textarea
-                  required: true
-                  label: "Argumentaire"
-                  options:
-                    attr: { rows: 6 }
+        #        reouvrir_tacite:
+        #          from: 'tacite_reconduction'
+        #          to: 'en_cours_redaction'
+        #          metadata:
+        #            recipients: [ 'DPE', 'RF', 'CoRF', 'RP', 'CoRP' ]
+        #            label: 'Réouvrir pour modification'
+        #            type: 'reouvrir'
+        #            description: 'Réouvrir le parcours reconduit pour modifications'
+        #            button_class: 'info'
+        #            button_icon: 'fa-pencil'
+        #            handler: "valider_commentaire"
+        #            form:
+        #              fields:
+        #                - name: argumentaire
+        #                  type: textarea
+        #                  required: true
+        #                  label: "Argumentaire"
+        #                  options:
+        #                    attr: { rows: 6 }
+        ##### Rouvrir #####
         reouvrir_mccc:
           from: 'publie'
           to: 'en_cours_redaction'
@@ -723,6 +724,70 @@ framework:
                   label: "Argumentaire"
                   options:
                     attr: { rows: 6 }
+        reouvrir_sans_cfvu:
+          from: 'publie'
+          to: 'en_cours_redaction_ss_cfvu'
+          metadata:
+            recipients: [ 'DPE', 'RF', 'CoRF', 'RP', 'CoRP' ]
+            label: 'Modification sans CFVU'
+            description: 'Modifications mineures sans passage en CFVU'
+            button_class: 'info'
+            button_icon: 'fa-edit'
+            type: 'reouvrir'
+            handler: "reouvrir_sans_cfvu"
+            form:
+              title: "Réouvrir sans passage en CFVU"
+              submit_label: "Valider la demande"
+              fields:
+                - name: argumentaire
+                  type: textarea
+                  required: false
+                  label: "Argumentaire"
+                  options:
+                    attr: { rows: 6 }
+
+
+        reouvrir_tacite_mccc:
+          from: 'tacite_reconduction'
+          to: 'en_cours_redaction'
+          metadata:
+            recipients: [ 'DPE', 'RF', 'CoRF', 'RP', 'CoRP' ]
+            label: 'Réouvrir (MCCC)'
+            description: 'Réouvrir pour modification des MCCC'
+            button_class: 'info'
+            type: 'reouvrir'
+            button_icon: 'fa-pencil'
+            handler: "reouvrir_mccc"
+            form:
+              fields:
+                - name: argumentaire
+                  type: textarea
+                  required: true
+                  label: "Argumentaire"
+                  options:
+                    attr: { rows: 6 }
+        reouvrir_tacite_sans_cfvu:
+          from: 'tacite_reconduction'
+          to: 'en_cours_redaction_ss_cfvu'
+          metadata:
+            recipients: [ 'DPE', 'RF', 'CoRF', 'RP', 'CoRP' ]
+            label: 'Modification sans CFVU'
+            description: 'Modifications mineures sans passage en CFVU'
+            button_class: 'info'
+            button_icon: 'fa-edit'
+            type: 'reouvrir'
+            handler: "reouvrir_sans_cfvu"
+            form:
+              title: "Réouvrir sans passage en CFVU"
+              submit_label: "Valider la demande"
+              fields:
+                - name: argumentaire
+                  type: textarea
+                  required: false
+                  label: "Argumentaire"
+                  options:
+                    attr: { rows: 6 }
+
         reouvrir_avant_publie:
           from: 'valide_a_publier'
           to: 'en_cours_redaction'
@@ -745,38 +810,6 @@ framework:
                   options:
                     attr: { rows: 6 }
 
-        #                - name: urgent
-        #                  type: checkbox
-        #                  required: false
-        #                  label: "Traitement urgent"
-        #
-        #                - name: date_effet
-        #                  type: date
-        #                  required: false
-        #                  label: "Date d'effet"
-        #                  options:
-        #                    widget: single_text
-        reouvrir_sans_cfvu:
-          from: 'publie'
-          to: 'en_cours_redaction_ss_cfvu'
-          metadata:
-            recipients: [ 'DPE', 'RF', 'CoRF', 'RP', 'CoRP' ]
-            label: 'Modification sans CFVU'
-            description: 'Modifications mineures sans passage en CFVU'
-            button_class: 'info'
-            button_icon: 'fa-edit'
-            type: 'reouvrir'
-            handler: "reouvrir_sans_cfvu"
-            form:
-              title: "Réouvrir sans passage en CFVU"
-              submit_label: "Valider la demande"
-              fields:
-                - name: argumentaire
-                  type: textarea
-                  required: false
-                  label: "Argumentaire"
-                  options:
-                    attr: { rows: 6 }
 
         valider_ouverture_sans_cfvu:
           from: 'en_cours_redaction_ss_cfvu'
