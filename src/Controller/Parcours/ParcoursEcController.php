@@ -34,7 +34,6 @@ use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/parcours/v2/ec', name: 'parcours_ec')]
-#[IsGranted('ROLE_ADMIN')]
 class ParcoursEcController extends BaseController
 {
 
@@ -42,10 +41,8 @@ class ParcoursEcController extends BaseController
     public function new(
         TypeDiplomeResolver $typeDiplomeResolver,
         TurboStreamResponseFactory   $turboStream,
-        NatureUeEcRepository         $natureUeEcRepository,
         EcOrdre                      $ecOrdre,
         Request                      $request,
-        FicheMatiereRepository       $ficheMatiereRepository,
         ElementConstitutifRepository $elementConstitutifRepository,
         Ue                           $ue,
         SemestreParcours    $semestreParcours

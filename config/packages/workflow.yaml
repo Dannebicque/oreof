@@ -13,223 +13,223 @@ framework:
         initialisation_dpe:
           metadata:
             process: false
-            label: 'validation.initialisation'
-            color: 'info'
-            description: 'Parcours en attente d''initialisation'
-            category: 'initialisation'
+        #            label: 'validation.initialisation'
+        #            color: 'info'
+        #            description: 'Parcours en attente d''initialisation'
+        #            category: 'initialisation'
         autorisation_saisie:
           metadata:
             process: false
             label: 'validation.autorisation_saisie'
-            color: 'success'
-            description: 'En attente d''autorisation de saisie par le DPE'
-            category: 'initialisation'
+        #            color: 'success'
+        #            description: 'En attente d''autorisation de saisie par le DPE'
+        #            category: 'initialisation'
         en_cours_redaction:
           metadata:
             process: true
             icon: 'fa-pencil'
             label: 'en_cours_redaction.parcours'
-            hasUpload: false
+            #            hasUpload: false
             isTimeline: false
-            check: true
-            templateCheck: '_checkParcours.html.twig'
-            color: 'info'
-            description: 'Parcours en cours de rédaction par l''équipe pédagogique'
-            help_text: 'Complétez toutes les informations du parcours avant de le soumettre'
-            show_in_stepper: true
-            category: 'redaction'
+        #            check: true
+        #            templateCheck: '_checkParcours.html.twig'
+        #            color: 'info'
+        #            description: 'Parcours en cours de rédaction par l''équipe pédagogique'
+        #            help_text: 'Complétez toutes les informations du parcours avant de le soumettre'
+        #            show_in_stepper: true
+        #            category: 'redaction'
         tacite_reconduction:
           metadata:
             process: false
             icon: 'fa-pencil'
             label: 'tacite_reconduction.parcours'
-            hasUpload: false
+            #            hasUpload: false
             isTimeline: false
-            check: false
-            color: 'success'
-            description: 'Parcours reconduit tacitement pour la nouvelle année'
-            category: 'reconduction'
+        #            check: false
+        #            color: 'success'
+        #            description: 'Parcours reconduit tacitement pour la nouvelle année'
+        #            category: 'reconduction'
         soumis_parcours:
           metadata:
             process: true
             icon: 'fa-memo-circle-check'
             label: 'validation.parcours_rf'
             isTimeline: false
-            check: true
-            templateCheck: '_checkParcours.html.twig'
-            color: 'success'
-            description: 'En attente de validation par le responsable de formation'
-            help_text: 'Le responsable de formation doit valider ou émettre des réserves'
-            show_in_stepper: true
-            category: 'validation_formation'
+        #            check: true
+        #            templateCheck: '_checkParcours.html.twig'
+        #            color: 'success'
+        #            description: 'En attente de validation par le responsable de formation'
+        #            help_text: 'Le responsable de formation doit valider ou émettre des réserves'
+        #            show_in_stepper: true
+        #            category: 'validation_formation'
         soumis_dpe_composante:
           metadata:
             process: true
             icon: 'fa-check-to-slot'
             label: 'validation.dpe'
             isTimeline: true
-            color: 'success'
-            description: 'En attente de validation par le DPE de la composante'
-            help_text: 'Le DPE examine le parcours avant transmission au conseil'
-            show_in_stepper: true
-            category: 'validation_composante'
+        #            color: 'success'
+        #            description: 'En attente de validation par le DPE de la composante'
+        #            help_text: 'Le DPE examine le parcours avant transmission au conseil'
+        #            show_in_stepper: true
+        #            category: 'validation_composante'
         refuse_rf:
           metadata:
             process: false
             label: 'validation.refuse_rf'
             color: 'danger'
-            description: 'Refusé par le responsable de formation'
-            category: 'refus'
+        #            description: 'Refusé par le responsable de formation'
+        #            category: 'refus'
         refuse_dpe_composante:
           metadata:
             process: false
             label: 'validation.refuse_dpe_composante'
             color: 'danger'
-            description: 'Refusé par le DPE de la composante'
-            category: 'refus'
+        #            description: 'Refusé par le DPE de la composante'
+        #            category: 'refus'
         soumis_conseil:
           metadata:
             process: true
             icon: 'fa-people-line'
             label: 'validation.conseil'
             isTimeline: true
-            hasDate: true
-            hasUpload: true
-            color: 'success'
-            description: 'En attente de passage en conseil de composante'
-            help_text: 'Joindre le PV du conseil et indiquer la date de passage'
-            show_in_stepper: true
-            category: 'validation_composante'
+        #            hasDate: true
+        #            hasUpload: true
+        #            color: 'success'
+        #            description: 'En attente de passage en conseil de composante'
+        #            help_text: 'Joindre le PV du conseil et indiquer la date de passage'
+        #            show_in_stepper: true
+        #            category: 'validation_composante'
         refuse_conseil:
           metadata:
             process: false
             label: 'validation.refuse_conseil'
-            color: 'danger'
-            description: 'Refusé par le conseil de composante'
-            category: 'refus'
+        #            color: 'danger'
+        #            description: 'Refusé par le conseil de composante'
+        #            category: 'refus'
         refuse_central:
           metadata:
             process: false
             label: 'validation.refuse_central'
-            color: 'danger'
-            description: 'Refusé par le service central (SES)'
-            category: 'refus'
+        #            color: 'danger'
+        #            description: 'Refusé par le service central (SES)'
+        #            category: 'refus'
         soumis_central:
           metadata:
             process: true
             icon: 'fa-school-circle-check'
             label: 'validation.ses'
             isTimeline: false
-            color: 'success'
-            description: 'En attente de validation par le SES (Service des Études et de la Scolarité)'
-            help_text: 'Le SES vérifie la conformité avant transmission à la CFVU'
-            show_in_stepper: true
-            category: 'validation_centrale'
+        #            color: 'success'
+        #            description: 'En attente de validation par le SES (Service des Études et de la Scolarité)'
+        #            help_text: 'Le SES vérifie la conformité avant transmission à la CFVU'
+        #            show_in_stepper: true
+        #            category: 'validation_centrale'
         soumis_cfvu:
           metadata:
             process: true
             icon: 'fa-shield-check'
             label: 'soumis.cfvu'
-            hasDate: true
+            #            hasDate: true
             isTimeline: true
-            color: 'success'
-            description: 'En attente de validation par la CFVU'
-            help_text: 'Commission de la Formation et de la Vie Universitaire'
-            show_in_stepper: true
-            category: 'validation_centrale'
+        #            color: 'success'
+        #            description: 'En attente de validation par la CFVU'
+        #            help_text: 'Commission de la Formation et de la Vie Universitaire'
+        #            show_in_stepper: true
+        #            category: 'validation_centrale'
         refuse_definitif_cfvu:
           metadata:
             process: false
             label: 'validation.refuse_definitif_cfvu'
-            color: 'danger'
-            description: 'Refusé définitivement par la CFVU'
-            category: 'refus'
+        #            color: 'danger'
+        #            description: 'Refusé définitivement par la CFVU'
+        #            category: 'refus'
         valide_cfvu:
           metadata:
             process: true
             icon: 'fa-stamp'
             label: 'relecture.avant_publication'
             isTimeline: true
-            color: 'success'
-            description: 'Validé par la CFVU, en attente de publication'
-            help_text: 'Relecture finale avant mise en ligne'
-            show_in_stepper: true
-            category: 'publication'
+        #            color: 'success'
+        #            description: 'Validé par la CFVU, en attente de publication'
+        #            help_text: 'Relecture finale avant mise en ligne'
+        #            show_in_stepper: true
+        #            category: 'publication'
         valide_a_publier: # Etape de saisie de la date pour publication post CFVU
           metadata:
             process: true
             icon: 'fa-bullhorn'
             label: 'validation.publication'
             isTimeline: false
-            color: 'success'
-            description: 'Prêt à être publié'
-            help_text: 'Définir la date de publication'
-            show_in_stepper: true
-            category: 'publication'
+        #            color: 'success'
+        #            description: 'Prêt à être publié'
+        #            help_text: 'Définir la date de publication'
+        #            show_in_stepper: true
+        #            category: 'publication'
         publie:
           metadata:
             process: false
             icon: 'fa-bullhorn'
             label: 'publie'
             isTimeline: false
-            color: 'success'
-            description: 'Parcours publié et accessible'
-            category: 'publication'
+        #            color: 'success'
+        #            description: 'Parcours publié et accessible'
+        #            category: 'publication'
         soumis_conseil_reserve:
           metadata:
             process: false
             label: 'validation.soumis_conseil_reserve'
-            color: 'warning'
-            description: 'Validé avec réserves par la CFVU, en attente du conseil'
-            category: 'reserve'
+        #            color: 'warning'
+        #            description: 'Validé avec réserves par la CFVU, en attente du conseil'
+        #            category: 'reserve'
         en_cours_redaction_ss_cfvu:
           metadata:
             process: true
             icon: 'fa-paper-plane'
             isTimeline: false
             label: 'validation.en_cours_redaction_ss_cfvu'
-            color: 'info'
-            description: 'Modification en cours sans passage en CFVU'
-            help_text: 'Modifications mineures ne nécessitant pas de passage en CFVU'
-            show_in_stepper: true
-            category: 'modification'
+        #            color: 'info'
+        #            description: 'Modification en cours sans passage en CFVU'
+        #            help_text: 'Modifications mineures ne nécessitant pas de passage en CFVU'
+        #            show_in_stepper: true
+        #            category: 'modification'
         soumis_central_sans_cfvu:
           metadata:
             process: false
             icon: 'fa-school-circle-check'
             isTimeline: false
             label: 'validation.soumis_central_sans_cfvu'
-            color: 'success'
-            description: 'En attente de validation SES (sans CFVU)'
-            category: 'modification'
+        #            color: 'success'
+        #            description: 'En attente de validation SES (sans CFVU)'
+        #            category: 'modification'
         soumis_central_reserve_cfvu:
           metadata:
             process: false
             label: 'validation.soumis_central_reserve_cfvu'
             color: 'warning'
-            description: 'Réserves CFVU en cours de traitement par le SES'
-            category: 'reserve'
+        #            description: 'Réserves CFVU en cours de traitement par le SES'
+        #            category: 'reserve'
         soumis_dpe_composante_reserve_cfvu:
           metadata:
             process: false
             label: 'validation.soumis_dpe_composante_reserve_cfvu'
             color: 'warning'
-            description: 'Réserves CFVU en cours de traitement par le DPE'
-            category: 'reserve'
+        #            description: 'Réserves CFVU en cours de traitement par le DPE'
+        #            category: 'reserve'
         non_ouverture_ses:
           metadata:
             process: false
             label: 'validation.non_ouverture_ses'
             color: 'danger'
-            description: 'Non-ouverture demandée par le SES'
-            category: 'non_ouverture'
+        #            description: 'Non-ouverture demandée par le SES'
+        #            category: 'non_ouverture'
         non_ouverture:
           metadata:
             process: false
             label: 'validation.non_ouverture'
-            color: 'danger'
-            description: 'Parcours non ouvert'
-            category: 'non_ouverture'
+      #            color: 'danger'
+      #            description: 'Parcours non ouvert'
+      #            category: 'non_ouverture'
       transitions:
         initialiser:
           from: 'initialisation_dpe'
@@ -870,61 +870,61 @@ framework:
             process: true
             icon: 'fa-ballot-check'
             label: 'validation.fiche_matiere'
-            hasValid: true
-            hasReserve: false
-            hasRefuse: false
-            hasUpload: false
-            isTimeline: false
-            hasDate: false
-            transition: 'en_cours_redaction'
-            canValide: 'valider_fiche_compo'
-            check: true
-            color: 'info'
+        #            hasValid: true
+        #            hasReserve: false
+        #            hasRefuse: false
+        #            hasUpload: false
+        #            isTimeline: false
+        #            hasDate: false
+        #            transition: 'en_cours_redaction'
+        #            canValide: 'valider_fiche_compo'
+        #            check: true
+        #            color: 'info'
         'soumis_central':
           metadata:
             process: true
             icon: 'fa-school-circle-check'
             label: 'validation.fiche_matiere.ses'
-            hasValid: true
-            hasReserve: true
-            hasRefuse: true
-            hasUpload: false
-            isTimeline: false
-            hasDate: false
-            transition: 'transmis_ses'
-            canValide: 'valider_fiche_ses'
-            canRefuse: 'refuser_fiche_ses'
-            canReserve: 'reserver_fiche_ses'
-            color: 'warning'
+        #            hasValid: true
+        #            hasReserve: true
+        #            hasRefuse: true
+        #            hasUpload: false
+        #            isTimeline: false
+        #            hasDate: false
+        #            transition: 'transmis_ses'
+        #            canValide: 'valider_fiche_ses'
+        #            canRefuse: 'refuser_fiche_ses'
+        #            canReserve: 'reserver_fiche_ses'
+        #            color: 'warning'
         'valide_pour_publication':
           metadata:
             process: true
             icon: 'fa-stamp'
             label: 'validation.fiche_matiere.publication'
-            hasValid: false
-            hasReserve: false
-            hasRefuse: false
-            hasUpload: false
-            isTimeline: true
-            hasDate: false
-            transition: 'transmis_pour_publication'
-            canValide: 'valider_fiche_pour_publication'
-            color: 'success'
+        #            hasValid: false
+        #            hasReserve: false
+        #            hasRefuse: false
+        #            hasUpload: false
+        #            isTimeline: true
+        #            hasDate: false
+        #            transition: 'transmis_pour_publication'
+        #            canValide: 'valider_fiche_pour_publication'
+        #            color: 'success'
         'publie':
           metadata:
             process: false
-            showOn: false
+            #            showOn: false
             icon: 'fa-pencil'
             label: 'fiche_matiere.rouvrir_fiche_matiere'
-            hasValid: false
-            hasReserve: false
-            hasRefuse: false
-            hasUpload: false
-            isTimeline: false
-            hasDate: false
-            transition: 'publie'
-            canValide: ''
-            color: 'success'
+      #            hasValid: false
+      #            hasReserve: false
+      #            hasRefuse: false
+      #            hasUpload: false
+      #            isTimeline: false
+      #            hasDate: false
+      #            transition: 'publie'
+      #            canValide: ''
+      #            color: 'success'
       transitions:
         valider_fiche_compo:
           from: 'en_cours_redaction'
@@ -932,7 +932,6 @@ framework:
           metadata:
             button_class: 'success'
             button_icon: 'fa-ballot-check'
-            description: 'Validation par la composante'
             type: valider
             handler: "autoriser_fiche"
             form:
@@ -942,7 +941,6 @@ framework:
           to: 'valide_pour_publication'
           metadata:
             button_class: 'success'
-            description: 'Validation par le SES'
             button_icon: 'fa-stamp'
             type: valider
             handler: "autoriser_fiche"
@@ -954,7 +952,6 @@ framework:
           metadata:
             type: reserver
             button_class: 'warning'
-            description: 'Reserve émise par le SES'
             button_icon: 'fa-check'
             handler: "reserver_argumentaire_fiche"
             form:
@@ -969,6 +966,12 @@ framework:
           from: 'valide_pour_publication'
           to: 'publie'
           metadata:
+            type: valider
+            button_class: 'success'
+            button_icon: 'fa-stamp'
+            handler: "valider" #todo : un handler ici ?
+            form:
+              fields: [ ]
 
         rouvrir_fiche_matiere:
           from: 'publie'
@@ -985,9 +988,11 @@ framework:
           from: 'soumis_central'
           to: 'en_cours_redaction'
           metadata:
-            type: valider
-            btn: warning
-            icon: 'fa-pencil'
+            button_class: 'warning'
+            button_icon: 'fa-pencil'
+            handler: "valider" #todo : un handler ici ?
+            form:
+              fields: [ ]
     changeRf:
       type: 'workflow'
       marking_store:

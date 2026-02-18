@@ -38,9 +38,9 @@ class FicheMatiereTabCompletionChecker extends AbstractChecker
     {
         $issues = [];
 
-        if (!$this->filled($p->getSigle())) {
-            $issues[] = new TabIssue('fiche_matiere_step1[sigle]', 'Sigle de la fiche matière', 'Vous devez renseigner un sigle pour la fiche matière.');
-        }
+        //        if (!$this->filled($p->getSigle())) {
+        //            $issues[] = new TabIssue('fiche_matiere_step1[sigle]', 'Sigle de la fiche matière', 'Vous devez renseigner un sigle pour la fiche matière.');
+        //        }
 
         if (!$this->filled($p->getLibelle())) {
             $issues[] = new TabIssue('fiche_matiere_step1[libelle]', 'Libellé', 'Vous devez renseigner un libellé pour la fiche matière.');
@@ -84,6 +84,19 @@ class FicheMatiereTabCompletionChecker extends AbstractChecker
     private function volumesHorairesIssues(FicheMatiere $f): array
     {
         $issues = [];
+
+        if ($f->isSansHeures() === null) {
+            $issues[] = new TabIssue('fiche_matiere_step4[horaires]', 'Volume horaire avec/sans heure', 'Vous devez précisez si la fiche à des heures ou non.');
+        }
+
+        // vérifier que la somme des heures de la fiche est > 0
+        if ($f->getTotalHeures() <= 0 && $f->isSansHeures() === false) {
+            $issues[] = new TabIssue('fiche_matiere_step4[horaires]', 'Volume horaire', 'Vous devez précisez un volume horaire > 0 au total.');
+        }
+
+        if ($f->getTotalHeures() > 0 && $f->isSansHeures() === true) {
+            $issues[] = new TabIssue('fiche_matiere_step4[horaires]', 'Volume horaire incohérent', 'Vous avez indiqué une fiche matière sans heures, mais avec un volume horaire > 0.');
+        }
 
 
         return $issues;

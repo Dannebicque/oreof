@@ -3,7 +3,14 @@
 
     <div class="flex-1 overflow-y-auto mt-4 custom-scrollbar">
         {% form_theme form 'communs/form_theme_v2.html.twig' %}
-        {{ form_start(form) }}
+        {{ form_start(form, {
+            attr: {
+                id: 'tab_form_presentation',
+                'data-controller': 'autosave',
+                'data-autosave-url-value': path('fiche_matiere_v2_tab_autosave', { id: fiche_matiere.id, tabKey: 'volumes_horaires' }),
+                'data-action': 'change->autosave#queue'
+            }
+        }) }}
         <h3>Répartition des heures</h3>
         <div class="form-check mb-2">
             <input class="form-check-input" type="checkbox" id="volumesHorairesImpose" name="volumesHorairesImpose"

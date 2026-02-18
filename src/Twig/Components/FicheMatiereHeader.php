@@ -54,25 +54,6 @@ final class FicheMatiereHeader
         $this->process = $this->validationProcess->getProcess();
     }
 
-    public function status(string $transition): string
-    {
-        return $this->dateHistorique($transition) === '- à venir -' ? 'pending' : 'completed';
-    }
-
-    public function dateHistorique(string $transition): string
-    {
-        if (array_key_exists($transition, $this->historiques)) {
-            if ($this->historiques[$transition]->getEtape() === 'soumis_conseil' && ($this->ficheMatiere->getEtatValidation() === TypeModificationDpeEnum::MODIFICATION_MCCC || $this->ficheMatiere->getEtatValidation() === TypeModificationDpeEnum::MODIFICATION_MCCC_TEXTE)) {
-                if (!array_key_exists('fichier', $this->historiques[$transition]->getComplements())) {
-                    return '- à venir -';
-                }
-            }
-
-            return $this->historiques[$transition]->getDate() !== null ? $this->historiques[$transition]->getDate()->format('d/m/Y') : '- à venir -';
-        }
-        return '- à venir -';
-    }
-
     private function reloadDerived(): void
     {
         // utile si l'action a pu être appelée sans que postMount soit (ré)exécuté
@@ -100,7 +81,7 @@ final class FicheMatiereHeader
 
     private function init(): void
     {
-        $this->hasDemande = $this->ficheMatiere->getEtatValidation() !== TypeModificationDpeEnum::OUVERT || TypeModificationDpeEnum::FERMETURE_DEFINITIVE;
+        $this->hasDemande = $this->ficheMatiere?->getEtatValidation() === null || array_key_exists('en_cours_redaction', $this->ficheMatiere->getEtatValidation());
 
         $this->place = $this->getPlace();
     }

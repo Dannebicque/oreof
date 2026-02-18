@@ -20,7 +20,6 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/parcours/v2/bcc/', name: 'parcours_bcc')]
-#[IsGranted('ROLE_ADMIN')]
 class ParcoursBccController extends BaseController
 {
     #[Route('/{parcours}/bcc/{id}', name: '_saisir', methods: ['GET'])]

@@ -11,6 +11,7 @@ namespace App\Form;
 
 use App\Entity\FicheMatiere;
 use App\Entity\User;
+use App\Repository\UserRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -31,6 +32,11 @@ class FicheMatiereType extends AbstractType
                 'choice_label' => 'display',
                 'autocomplete' => true,
                 'required' => true,
+                // limit results to avoid hydrating full user table when rendering the form
+                'query_builder' => function (UserRepository $ur) {
+                    return $ur->createQueryBuilder('u')
+                        ->orderBy('u.nom', 'ASC');
+                },
             ]);
     }
 

@@ -18,7 +18,6 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/parcours/v2', name: 'parcours_v2_')]
-#[IsGranted('ROLE_ADMIN')]
 final class ParcoursTabController extends AbstractController
 {
     #[Route('/{id}/tab/{tabKey}/autosave', name: 'tab_autosave', methods: ['POST'])]

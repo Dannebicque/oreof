@@ -23,7 +23,6 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/parcours/v2/ses', name: 'parcours_ses_')]
-#[IsGranted('ROLE_ADMIN')]
 class ParcoursSesController extends BaseController
 {
     public function __construct(

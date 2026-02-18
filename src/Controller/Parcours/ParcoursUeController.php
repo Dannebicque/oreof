@@ -26,7 +26,6 @@ use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/parcours/v2/structure/ue/', name: 'parcours_structure')]
-#[IsGranted('ROLE_ADMIN')]
 class ParcoursUeController extends BaseController
 {
     #[Route('/{parcours}/semestre/{semestreParcours}/ajout-ue', name: '_add_ue_semestre')]
@@ -227,7 +226,7 @@ class ParcoursUeController extends BaseController
         );
     }
 
-    #[Route('/{parcours}/semestre/{semestreParcours}/{ue}/delete-ue', name: '_delete_ue_semestre')]
+    #[Route('/{parcours}/semestre/{semestreParcours}/{ue}/delete-ue', name: '_delete_ue_semestre', methods: ['DELETE', 'POST'])]
     public function deleteUe(
         TurboStreamResponseFactory $turboStream,
         Request                    $request,
@@ -239,7 +238,7 @@ class ParcoursUeController extends BaseController
     {
         if ($this->isCsrfTokenValid(
             'delete' . $ue->getId(),
-            $request->query->get('csrf_token')
+            $request->request->get('csrf_token')
         )) {
             $typeD = $typeDiplomeResolver->fromParcours($parcours);
             $dtoSemestre = $typeD->calculStructureSemestre($semestreParcours, $parcours);
@@ -252,7 +251,6 @@ class ParcoursUeController extends BaseController
                 'semestreParcours' => $semestreParcours,
                 'semestre' => $dtoSemestre,
                 'toastMessage' => 'UE supprimée avec succès',
-                'newUeId' => $ue->getId(),
             ]);
         }
 

@@ -61,6 +61,14 @@ final class FicheMatiereFieldUpdater extends AbstractFieldUpdater
                 'fiche_matiere_step1b[enseignementMutualise]'
             ],
             'volumes_horaires' => [
+                'volumesHorairesImpose',
+                'fiche_matiere_step4_hd[volumeCmPresentiel]',
+                'fiche_matiere_step4_hd[volumeTdPresentiel]',
+                'fiche_matiere_step4_hd[volumeTpPresentiel]',
+                'fiche_matiere_step4_hd[volumeCmDistanciel]',
+                'fiche_matiere_step4_hd[volumeTdDistanciel]',
+                'fiche_matiere_step4_hd[volumeTpDistanciel]',
+                'fiche_matiere_step4_hd[volumeTe]',
             ],
             'mccc' => []
         ];
@@ -115,7 +123,17 @@ final class FicheMatiereFieldUpdater extends AbstractFieldUpdater
             // ----------------- STEP 3 (Mutualisation) -----------------
             'fiche_matiere_step1b[enseignementMutualise]' => function (FicheMatiere $p, $v) {
                 $p->setEnseignementMutualise($this->toBoolOrNull($v));
-            }
+            },
+
+            // ----------------- STEP 4 (Volumes horaires) -----------------
+            'volumesHorairesImpose' => fn(FicheMatiere $p, $v) => $p->setVolumesHorairesImpose($this->toFloatOrNull($v)),
+            'fiche_matiere_step4_hd[volumeCmPresentiel]' => fn(FicheMatiere $p, $v) => $p->setVolumeCmPresentiel($this->toFloatOrNull($v)),
+            'fiche_matiere_step4_hd[volumeTdPresentiel]' => fn(FicheMatiere $p, $v) => $p->setVolumeTdPresentiel($this->toFloatOrNull($v)),
+            'fiche_matiere_step4_hd[volumeTpPresentiel]' => fn(FicheMatiere $p, $v) => $p->setVolumeTpPresentiel($this->toFloatOrNull($v)),
+            'fiche_matiere_step4_hd[volumeCmDistanciel]' => fn(FicheMatiere $p, $v) => $p->setVolumeCmDistanciel($this->toFloatOrNull($v)),
+            'fiche_matiere_step4_hd[volumeTdDistanciel]' => fn(FicheMatiere $p, $v) => $p->setVolumeTdDistanciel($this->toFloatOrNull($v)),
+            'fiche_matiere_step4_hd[volumeTpDistanciel]' => fn(FicheMatiere $p, $v) => $p->setVolumeTpDistanciel($this->toFloatOrNull($v)),
+            'fiche_matiere_step4_hd[volumeTe]' => fn(FicheMatiere $p, $v) => $p->setVolumeTe($this->toFloatOrNull($v))
         ];
     }
 }

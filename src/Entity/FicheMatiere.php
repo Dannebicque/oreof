@@ -243,6 +243,9 @@ class FicheMatiere implements McccCompletionCheckerInterface
     #[ORM\Column(length: 1000, nullable: true)]
     private ?string $quitusText = null;
 
+    #[ORM\OneToMany(mappedBy: 'ficheMatiere', targetEntity: FicheMatiereTabState::class, orphanRemoval: true)]
+    private ?Collection $ficheMatiereTabStates = null;
+
     public function __construct()
     {
         $this->mcccs = new ArrayCollection();
@@ -260,6 +263,7 @@ class FicheMatiere implements McccCompletionCheckerInterface
         $this->composante = new ArrayCollection();
         $this->commentaires = new ArrayCollection();
         $this->ficheMatiereVersionings = new ArrayCollection();
+        $this->ficheMatiereTabStates = new ArrayCollection();
     }
 
     public function getEtatStep(int $step): bool
@@ -1284,6 +1288,66 @@ class FicheMatiere implements McccCompletionCheckerInterface
     public function setQuitusText(?string $quitusText): static
     {
         $this->quitusText = $quitusText;
+
+        return $this;
+    }
+
+    public function isCmPresentielMutualise(): ?bool
+    {
+        return $this->isCmPresentielMutualise;
+    }
+
+    public function isTdPresentielMutualise(): ?bool
+    {
+        return $this->isTdPresentielMutualise;
+    }
+
+    public function isTpPresentielMutualise(): ?bool
+    {
+        return $this->isTpPresentielMutualise;
+    }
+
+    public function isCmDistancielMutualise(): ?bool
+    {
+        return $this->isCmDistancielMutualise;
+    }
+
+    public function isTdDistancielMutualise(): ?bool
+    {
+        return $this->isTdDistancielMutualise;
+    }
+
+    public function isTpDistancielMutualise(): ?bool
+    {
+        return $this->isTpDistancielMutualise;
+    }
+
+    /**
+     * @return Collection<int, FicheMatiere>
+     */
+    public function getFicheMatiereTabStates(): Collection
+    {
+        return $this->ficheMatiereTabStates;
+    }
+
+    public function addFicheMatiereTabState(FicheMatiere $ficheMatiereTabState): static
+    {
+        if (!$this->ficheMatiereTabStates->contains($ficheMatiereTabState)) {
+            $this->ficheMatiereTabStates->add($ficheMatiereTabState);
+            $ficheMatiereTabState->setFicheMatiere($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFicheMatiereTabState(FicheMatiere $ficheMatiereTabState): static
+    {
+        if ($this->ficheMatiereTabStates->removeElement($ficheMatiereTabState)) {
+            // set the owning side to null (unless already changed)
+            if ($ficheMatiereTabState->getFicheMatiere() === $this) {
+                $ficheMatiereTabState->setFicheMatiere(null);
+            }
+        }
 
         return $this;
     }

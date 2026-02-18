@@ -18,7 +18,12 @@
                 <div class="flex flex-col">
                     <dt class="fw-medium text-muted mb-1">Type diplôme</dt>
                     <dd class="mb-0">
-                        {{ formation.typeDiplome|typeDiplome }}
+                        {% if ficheMatiere.horsDiplome == true %}
+                            <span class="badge bg-warning">Hors Diplôme</span>
+                        {% else %}
+                            {{ formation.typeDiplome|typeDiplome }}
+                        {% endif %}
+
                     </dd>
                 </div>
                 <div class="flex flex-col">
@@ -70,15 +75,23 @@
             <div class="d-flex align-items-center gap-1 flex-wrap">
                 <div class="d-flex align-items-center gap-3">
                     <div class="d-flex align-items-center gap-1 flex-wrap">
-                        <div class="rounded-circle d-flex align-items-center justify-content-center
-                                bg-warning-subtle text-warning bubble-process"
-                             data-controller="tooltip" data-tooltip-placement-value="bottom"
-                             aria-label="..."
-                             data-bs-original-title="..."
-                        >
-                            <i class="fas fa-lock small"></i>
-                        </div>
-                        Fiche matière verrouillée. {# todo: a gérer avec ouverture/réouverture en modif #}
+                        {% if hasDemande == true %}
+                            <div class="rounded-full flex items-center justify-center w-8 h-8 bg-green-200 bg-opacity-60 text-green-700 ring-1 ring-green-400 shadow-sm p-2"
+                                 data-controller="tooltip" data-tooltip-placement-value="bottom"
+                                 data-bs-original-title="Fiche matière en cours de modification."
+                            >
+                                <i class="fas fa-unlock small"></i>
+                            </div>
+                            <span class="text-green-600">Fiche matière en cours de modification.</span>
+                        {% else %}
+                            <div class="rounded-full flex items-center justify-center w-8 h-8 bg-amber-200 bg-opacity-60 text-amber-700 ring-1 ring-amber-400 shadow-sm p-2"
+                                 data-controller="tooltip" data-tooltip-placement-value="bottom"
+                                 data-bs-original-title="Fiche matière verrouillée."
+                            >
+                                <i class="fas fa-lock small"></i>
+                            </div>
+                            <span class="text-amber-600">Fiche matière verrouillée.</span>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -128,39 +141,13 @@
             {# Quick Actions #}
             <div class="d-flex align-items-center gap-2">
                 {# Validation Dropdown #}
-
-                {% if is_granted('MANAGE', {route: 'app_fiche_matiere', subject: ficheMatiere}) or is_granted('ROLE_ADMIN') %}
-                    réouverture
-                    {#                    <button #}
-                    {#                            href="#" #}
-                    {#                            {{ stimulus_controller('modal', { #}
-                    {#                                size: 'lg', #}
-                    {#                                modalTitle: 'fiche_matiere.change_rf.title'|trans({}, 'form'), #}
-                    {#                                nomEvenement: 'refreshPage', #}
-                    {#                                modalUrl: path('app_fiche_matiere_change_rf', {fiche_matiere: fiche_matiere.id}) }) }} #}
-                    {#                            data-action="click->modal#openModal" #}
-                    {#                            data-size="lg" #}
-                    {#                            class="btn btn-sm btn-outline-warning w-100" #}
-                    {#                            data-bs-toggle="tooltip" #}
-                    {#                            data-bs-placement="bottom" #}
-                    {#                            title="{{ 'fiche_matiere.change_rf.title'|trans({}, 'form') }}" #}
-                    {#                    > #}
-                    {#                        <i class="fal fa-repeat"></i> #}
-                    {#                        <span> {{ 'fiche_matiere.change_rf.label'|trans({}, 'form') }}</span> #}
-                    {#                    </button> #}
-                {% endif %}
-
-                <button class="btn btn-sm btn-outline-secondary w-100">
-                    <i class="fas fa-download"></i> Voir PV
-                </button>
-
                 <div class="dropdown">
                     <button class="btn btn-sm btn-success dropdown-toggle"
                             type="button"
                             data-bs-toggle="dropdown"
                             aria-expanded="false"
                     >
-                        <i class="fas fa-check"></i> Gestion du DPE
+                        <i class="fas fa-check"></i> Gestion fiche matière
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end">
                         {% for key, option in validationOptions %}

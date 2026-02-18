@@ -35,7 +35,6 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/parcours/v2', name: 'parcours_v2_')]
-#[IsGranted('ROLE_ADMIN')]
 class ParcoursController extends BaseController
 {
     #[Route('/{parcours}/modifier', name: 'modifier')]

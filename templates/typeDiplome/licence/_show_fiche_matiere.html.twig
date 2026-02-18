@@ -6,7 +6,8 @@
         {{ include('communs/_header_show.html.twig', {
             title: 'Identité de la fiche matière',
             icon: 'fa-solid fa-id-card',
-            color: 'indigo'
+            color: 'indigo',
+            print:true
         }) }}
         <div>
             {{ include('typeDiplome/licence/ec/_identiteEc.html.twig') }}
@@ -20,7 +21,8 @@
         {{ include('communs/_header_show.html.twig', {
             title: 'Présentation de la fiche matière',
             icon: 'fa-solid fa-book-open',
-            color: 'indigo'
+            color: 'indigo',
+            print:true
         }) }}
         <div>
             {{ include('typeDiplome/licence/ec/_presentation.html.twig') }}
@@ -34,7 +36,8 @@
         {{ include('communs/_header_show.html.twig', {
             title: 'Volumes horaires de la fiche matière',
             icon: 'fa-solid fa-clock',
-            color: 'indigo'
+            color: 'indigo',
+            print:true
         }) }}
         <div>
             <twig:alerte type="info"
@@ -52,7 +55,8 @@
         {{ include('communs/_header_show.html.twig', {
             title: 'MCCC',
             icon: 'fa-solid fa-sitemap',
-            color: 'indigo'
+            color: 'indigo',
+            print:true
         }) }}
         <div>
             <twig:alerte type="info"
@@ -71,7 +75,8 @@
         {{ include('communs/_header_show.html.twig', {
             title: 'Compétences associées à la fiche matière',
             icon: 'fa-solid fa-tasks',
-            color: 'indigo'
+            color: 'indigo',
+            print:true
         }) }}
         <div>
             {{ include('typeDiplome/formation/_objectifs.html.twig') }}
@@ -86,7 +91,8 @@
             {{ include('communs/_header_show.html.twig', {
                 title: 'Mutualisations de la fiche matière',
                 icon: 'fa-solid fa-share-nodes',
-                color: 'indigo'
+                color: 'indigo',
+                print:true
             }) }}
             <div>
                 <ul class="list-unstyled">
@@ -129,7 +135,8 @@
         {{ include('communs/_header_show.html.twig', {
             title: 'Infos pratiques',
             icon: 'fa-solid fa-address-book',
-            color: 'indigo'
+            color: 'indigo',
+            print:true
         }) }}
         <div>
             {{ include('typeDiplome/licence/ec/_infos.html.twig') }}

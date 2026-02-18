@@ -78,7 +78,6 @@ class FicheMatiereController extends BaseController
                 $ficheMatiere->addLangueSupport($langueFr);
                 $langueFr->addLanguesSupportsFicheMatiere($ficheMatiere);
             }
-
             $entityManager->persist($ficheMatiere);
             $entityManager->flush();
 

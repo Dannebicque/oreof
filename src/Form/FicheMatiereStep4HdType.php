@@ -24,8 +24,6 @@ class FicheMatiereStep4HdType extends AbstractType
             'scale' => 1,
             'required' => false,
             'attr' => [
-                'data-action' => 'change->fichematiere--step4#saveVolume',
-                'data-fichematiere--step4-type-param' => 'volumeCmPresentiel',
                 'min' => 0,
             ],
         ])
@@ -34,8 +32,6 @@ class FicheMatiereStep4HdType extends AbstractType
                 'scale' => 1,
                 'required' => false,
                 'attr' => [
-                    'data-action' => 'change->fichematiere--step4#saveVolume',
-                    'data-fichematiere--step4-type-param' => 'volumeTdPresentiel',
                     'min' => 0,
                 ],
             ])
@@ -44,8 +40,6 @@ class FicheMatiereStep4HdType extends AbstractType
                 'scale' => 1,
                 'required' => false,
                 'attr' => [
-                    'data-action' => 'change->fichematiere--step4#saveVolume',
-                    'data-fichematiere--step4-type-param' => 'volumeTpPresentiel',
                     'min' => 0,
                 ],
             ]);
@@ -54,8 +48,6 @@ class FicheMatiereStep4HdType extends AbstractType
             'scale' => 1,
             'required' => false,
             'attr' => [
-                'data-action' => 'change->fichematiere--step4#saveVolume',
-                'data-fichematiere--step4-type-param' => 'volumeCmDistanciel',
                 'min' => 0,
             ],
         ])
@@ -64,8 +56,6 @@ class FicheMatiereStep4HdType extends AbstractType
                 'scale' => 1,
                 'required' => false,
                 'attr' => [
-                    'data-action' => 'change->fichematiere--step4#saveVolume',
-                    'data-fichematiere--step4-type-param' => 'volumeTdDistanciel',
                     'min' => 0,
                 ],
             ])
@@ -74,8 +64,6 @@ class FicheMatiereStep4HdType extends AbstractType
                 'scale' => 1,
                 'required' => false,
                 'attr' => [
-                    'data-action' => 'change->fichematiere--step4#saveVolume',
-                    'data-fichematiere--step4-type-param' => 'volumeTpDistanciel',
                     'min' => 0,
                 ],
             ])
@@ -84,8 +72,6 @@ class FicheMatiereStep4HdType extends AbstractType
                 'scale' => 1,
                 'required' => false,
                 'attr' => [
-                    'data-action' => 'change->fichematiere--step4#saveEcts',
-                    'data-fichematiere--step4-type-param' => 'ects',
                     'min' => 0,
                 ],
             ]);
@@ -96,8 +82,6 @@ class FicheMatiereStep4HdType extends AbstractType
             'scale' => 1,
             'required' => false,
             'attr' => [
-                'data-action' => 'change->fichematiere--step4#saveVolume',
-                'data-fichematiere--step4-type-param' => 'volumeTe',
                 'min' => 0,
             ],
         ]);

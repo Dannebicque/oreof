@@ -33,7 +33,6 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/parcours/v2/process', name: 'parcours_process')]
-#[IsGranted('ROLE_ADMIN')]
 class ParcoursProcessController extends BaseController
 {
 
