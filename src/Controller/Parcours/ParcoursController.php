@@ -14,7 +14,7 @@ use App\Controller\BaseController;
 use App\Entity\Annee;
 use App\Entity\Parcours;
 use App\Entity\SemestreParcours;
-use App\Form\FormationStep2Type;
+use App\Enums\ValidationStatusEnum;
 use App\Form\ParcoursStep1Type;
 use App\Form\ParcoursStep2Type;
 use App\Form\ParcoursStep3Type;
@@ -28,11 +28,11 @@ use App\Service\Validation\SemesterValidationRefresher;
 use App\Service\VersioningFormation;
 use App\Service\VersioningParcours;
 use App\TypeDiplome\TypeDiplomeResolver;
+use App\Utils\TurboStreamResponseFactory;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/parcours/v2', name: 'parcours_v2_')]
 class ParcoursController extends BaseController
@@ -191,7 +191,7 @@ class ParcoursController extends BaseController
 
     #[Route('/{parcours}/modifier/semestre/{semestreParcours}/validation', name: 'semestre_validation')]
     public function semestreValidation(
-        Request                     $request,
+        TurbostreamResponseFactory $turboStream,
         TypeDIplomeResolver         $typeDiplomeResolver,
         Parcours                    $parcours,
         SemestreParcours            $semestreParcours,
@@ -204,13 +204,31 @@ class ParcoursController extends BaseController
         $typeD = $typeDiplomeResolver->fromParcours($parcours);
         $dtoSemestre = $typeD->calculStructureSemestre($semestreParcours, $parcours);
 
+
+        dump($dtoSemestre);
+
+        switch ($dtoSemestre->semestre->getValidationStatus()) {
+            case ValidationStatusEnum::VALID:
+                $toastMessage = 'Semestre vérifié et conforme';
+                $toastType = 'success';
+                break;
+            case ValidationStatusEnum::INVALID:
+            case ValidationStatusEnum::INCOMPLETE:
+                $toastMessage = 'Semestre non conforme';
+                $toastType = 'danger';
+                break;
+
+        }
+
         $parameters = [
             'semestreParcours' => $semestreParcours,
             'semestre' => $dtoSemestre,
-            'parcours' => $parcours
+            'parcours' => $parcours,
+            'toastMessage' => $toastMessage ?? '',
+            'toastType' => $toastType ?? null,
         ];
 
-        return $this->render('parcours_v2/tabs/_semestre.html.twig', $parameters);
+        return $turboStream->stream('parcours_v2/turbo/semestre_validation.stream.html.twig', $parameters);
     }
 
     #[Route('/{parcours}/modifier/tabs/{tab}', name: 'tabs')]

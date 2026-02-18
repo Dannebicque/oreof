@@ -10,6 +10,7 @@ use Symfony\UX\TwigComponent\Attribute\AsTwigComponent;
 use Symfony\UX\TwigComponent\Attribute\PostMount;
 
 #[AsTwigComponent('badge_heures')]
+/** @deprecated */
 final class BadgeHeuresComponent
 {
     public ?ElementConstitutif $elementConstitutif = null;

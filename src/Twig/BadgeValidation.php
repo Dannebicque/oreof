@@ -9,6 +9,7 @@
 
 namespace App\Twig;
 
+use App\Entity\ValidationIssue;
 use App\Enums\ValidationStatusEnum;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
@@ -20,7 +21,29 @@ class BadgeValidation extends AbstractExtension
         return [
             new TwigFilter('badgeValidationLong', $this->badgeValidationLong(...), ['is_safe' => ['html']]),
             new TwigFilter('badgeValidationShort', $this->badgeValidationShort(...), ['is_safe' => ['html']]),
+            new TwigFilter('displayMessage', $this->displayMessage(...), ['is_safe' => ['html']])
         ];
+    }
+
+    public function displayMessage(ValidationIssue $issue): string
+    {
+
+        switch ($issue->getRuleCode()) {
+            case 'EC_MISSING':
+                return $issue->getMessage() . '(' . $issue->getPayload()['ec'] . ')';
+            case 'UE_MISSING':
+                return $issue->getMessage() . '(' . $issue->getPayload()['ue'] . ')';
+            case 'MCCC_MISSING':
+                return $issue->getMessage() . '(' . $issue->getPayload()['ec'] . ')';
+            case 'BCC_INCOMPLETE':
+                return $issue->getMessage() . '(' . $issue->getPayload()['ec'] . ')';
+            case 'ECTS_INVALID':
+                return $issue->getMessage() . '(' . $issue->getPayload()['ec'] . ')';
+            case 'FICHE_MATIERE_MISSING':
+                return $issue->getMessage() . '(' . $issue->getPayload()['ec'] . ', ' . $issue->getPayload()['ue'] . ' )';
+            default:
+                return $issue->getMessage();
+        }
     }
 
     public function badgeValidationShort(ValidationStatusEnum $status, string $size = '1.5'): string

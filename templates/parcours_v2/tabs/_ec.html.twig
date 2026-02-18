@@ -33,21 +33,30 @@
                     {% endif %}
                 </div>
                 <div class="flex items-center gap-x-2 mt-2 flex-wrap">
+                    {% if ec.elementConstitutif.natureUeEc != null and  ec.elementConstitutif.natureUeEc.isLibre == true %}
+                        <span class="text-[10px] font-black text-indigo-600 group-hover:underline uppercase flex items-center gap-1.5 pe-2 py-1 rounded hover:bg-slate-50"> <span
+                                    class="w-1.5 h-1.5 rounded-full bg-green-500"></span> EC Libre</span>
+                    {% else %}
+                        {% set heureComplete = elem.isHeuresComplete ? 'green' : 'orange' %}
                     <a
                             data-action="click->modalturbo#open"
                             data-turbo="true"
                             href="{{ path('parcours_ec_saisir_heures', { parcours: parcours.id, id: elem.id }) }}"
                             class="text-[10px] font-black text-indigo-600 group-hover:underline uppercase flex items-center gap-1.5 pe-2 py-1 rounded hover:bg-slate-50">
-                        <span class="w-1.5 h-1.5 rounded-full bg-red-500" id="badge_heure_{{ elem.id }}"></span>
+                        <span class="w-1.5 h-1.5 rounded-full bg-{{ heureComplete }}-500"
+                              id="badge_heure_{{ elem.id }}"></span>
                         Saisir Heures
                     </a>
+                    {% endif %}
 
+                    {% set mcccComplete = elem.isMcccComplete(parcours) ? 'green' : 'orange' %}
                     <a class="text-[10px] font-black text-indigo-600 group-hover:underline uppercase flex items-center gap-1.5 px-2 py-1 rounded hover:bg-slate-50"
                        data-turbo="true"
                        data-action="click->modalturbo#open"
                        href="{{ path('parcours_mccc_saisir', { parcours: parcours.id, id: elem.id }) }}"
                     >
-                        <span class="w-1.5 h-1.5 rounded-full bg-orange-500" id="badge_mccc_{{ elem.id }}"></span>
+                        <span class="w-1.5 h-1.5 rounded-full bg-{{ mcccComplete }}-500"
+                              id="badge_mccc_{{ elem.id }}"></span>
                         Saisir MCCC
                     </a>
                     <a class="text-[10px] font-black text-indigo-600 group-hover:underline uppercase flex items-center gap-1.5 px-2 py-1 rounded hover:bg-slate-50"
@@ -73,20 +82,31 @@
                         {# todo: si pas d efichier et qu'une est nécessaire créer ? #}
                     {% endif %}
                 </div>
-                {% if ec.elementConstitutif.natureUeEc.isLibre %}
+                {% if ec.elementConstitutif.natureUeEc != null %}
+                    {% if ec.elementConstitutif.natureUeEc.isLibre %}
+                        <p class="text-sm"><span
+                                    class="font-bold">Choix libre :</span> {{ ec.elementConstitutif.texteEcLibre }}</p>
+                    {% endif %}
+                {% else %}
                     <p class="text-sm"><span
-                                class="font-bold">Choix libre :</span> {{ ec.elementConstitutif.texteEcLibre }}</p>
+                                class="font-bold text-red-800">Erreur :</span> Nature de l'EC non défini</p>
                 {% endif %}
             </div>
         </div>
         <div class="flex items-center gap-6">
-            {% if ec.elementConstitutif.natureUeEc.isLibre == true %}
-                <span class="text-xs font-bold text-blue-500 bg-blue-100 px-3 py-1 rounded-full">EC Libre</span>
+            {% if ec.elementConstitutif.natureUeEc != null %}
+                {% if ec.elementConstitutif.natureUeEc.isLibre == true %}
+                    <span class="text-xs font-bold text-blue-500 bg-blue-100 px-3 py-1 rounded-full">EC Libre</span>
+                {% else %}
+                    <span class="text-xs font-bold text-slate-500 bg-slate-100 px-3 py-1 rounded-full">{{ ec.heuresEctsEc.cmPres }}h CM • {{ ec.heuresEctsEc.tdPres }}h TD • {{ ec.heuresEctsEc.tpPres }}h TP</span>
+                {% endif %}
             {% else %}
-                <span class="text-xs font-bold text-slate-500 bg-slate-100 px-3 py-1 rounded-full">{{ ec.heuresEctsEc.cmPres }}h CM • {{ ec.heuresEctsEc.tdPres }}h TD • {{ ec.heuresEctsEc.tpPres }}h TP</span>
+                <span
+                        class="font-bold text-red-800">Erreur : Nature de l'EC non défini</span>
             {% endif %}
 
 
+            {% if ec.elementConstitutif.natureUeEc != null %}
             {% if ec.elementsConstitutifsEnfants|length > 0 or ec.elementConstitutif.natureUeEc.isChoix %}
                 {% set items = [{
                     label: 'Ajouter un EC enfant',
@@ -97,6 +117,10 @@
                 }] %}
             {% else %}
                 {% set items = [] %}
+            {% endif %}
+            {% else %}
+                <p class="text-sm"><span
+                            class="font-bold text-red-800">Erreur :</span> Nature de l'EC non défini</p>
             {% endif %}
 
             {% set items =  items|merge([
@@ -113,8 +137,7 @@
                     ue: ue.ue.id,
                     semestreParcours:semestreParcours.id}), danger: true}
             ]) %}
-
-
+            e
 
             {{ component('dropdown_actions', {
                 label: 'Actions',
@@ -130,12 +153,17 @@
         {% for ece in ec.elementsConstitutifsEnfants %}
             {{ include('parcours_v2/tabs/_ec.html.twig', {ec:ece}) }}
         {% else %}
+            {% if ec.elementConstitutif.natureUeEc != null %}
             {% if ec.elementConstitutif.natureUeEc.isChoix == true and ec.elementsConstitutifsEnfants|length == 0 %}
                 <twig:alerte type="info">
                     Aucun EC dans cette <strong>EC à choix</strong> pour le moment. Pour saisir votre premier choix
                     d'EC, choisir "Actions" en haut à droite
                     du bloc de l'EC parent.
                 </twig:alerte>
+            {% endif %}
+            {% else %}
+                <p class="text-sm"><span
+                            class="font-bold text-red-800">Erreur :</span> Nature de l'EC non défini</p>
             {% endif %}
         {% endfor %}
     </div>

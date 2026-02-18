@@ -10,6 +10,7 @@ use App\Entity\Parcours;
 use App\Enums\TypeModificationDpeEnum;
 use App\Repository\HistoriqueFormationRepository;
 use App\Repository\HistoriqueParcoursRepository;
+use App\Utils\Access;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -101,7 +102,7 @@ final class ParcoursHeader
     {
         $this->dpeParcours = GetDpeParcours::getFromParcours($this->parcours);
         $this->place = $this->getPlace();
-        $this->hasDemande = $this->dpeParcours->isReouvert();
+        $this->hasDemande = Access::isOuvert($this->dpeParcours);
     }
 
     private function getPlace(): string

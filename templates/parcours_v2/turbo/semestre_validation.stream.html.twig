@@ -1,0 +1,10 @@
+<turbo-stream action="replace" target="valide_semestre_{{ semestreParcours.id }}">
+    <template>
+        <div class="flex items-center gap-4 mt-1" id="valide_semestre_{{ semestreParcours.id }}">
+            {{ include('parcours_v2/_valideSemestre.html.twig', {sem:semestre.semestre}) }}
+        </div>
+    </template>
+</turbo-stream>
+
+
+{{ include('turbo/toast.stream.html.twig', { message: toastMessage, undo: undo|default(null), type: toastType|default('success') }) }}

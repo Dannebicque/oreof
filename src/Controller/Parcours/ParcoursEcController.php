@@ -24,9 +24,11 @@ use App\Repository\ElementConstitutifRepository;
 use App\Repository\FicheMatiereRepository;
 use App\Repository\NatureUeEcRepository;
 use App\Repository\TypeEcRepository;
+use App\Service\EC\Heures;
 use App\Service\Validation\ValidationDirtyMarker;
 use App\TypeDiplome\TypeDiplomeResolver;
 use App\Utils\TurboStreamResponseFactory;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -214,8 +216,13 @@ class ParcoursEcController extends BaseController
 
     }
 
-    #[Route('/{parcours}/saisie-heure/{id}', name: '_saisir_heures', methods: ['GET'])]
-    public function saisirHeures(Parcours $parcours, ElementConstitutif $elementConstitutif): Response
+    #[Route('/{parcours}/saisie-heure/{id}', name: '_saisir_heures', methods: ['GET', 'POST'])]
+    public function saisirHeures(
+        TurboStreamResponseFactory $turboStream,
+        Heures                     $heures,
+        ValidationDirtyMarker      $dirtyMarker,
+        Request                    $request,
+        Parcours                   $parcours, ElementConstitutif $elementConstitutif): Response
     {
         $isParcoursProprietaire = $elementConstitutif->getFicheMatiere()?->getParcours()?->getId() === $parcours->getId();
 
@@ -227,13 +234,27 @@ class ParcoursEcController extends BaseController
             'data_class' => $ecHeures::class,
             'modalite' => $parcours->getModalitesEnseignement(),
             'action' => $this->generateUrl(
-                'app_element_constitutif_structure',
+                'parcours_ec_saisir_heures',
                 [
                     'id' => $elementConstitutif->getId(),
                     'parcours' => $parcours->getId()
                 ]
             ),
         ]);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $dirtyMarker->markEcDirty($elementConstitutif);
+
+            //sauvegarde des heures
+            $heures->saveHeures($elementConstitutif, $parcours, $ecHeures, $request->request);
+
+
+            return $turboStream->stream('parcours_v2/turbo/heures_ec_success.stream.html.twig', [
+                'ec' => $elementConstitutif,
+                'parcours' => $parcours,
+            ]);
+        }
 
         $body = $this->renderView('parcours_v2/ec/_heures_ec.html.twig', [
             'form' => $form->createView(),
@@ -260,27 +281,20 @@ class ParcoursEcController extends BaseController
         );
     }
 
-    #[Route('/{parcours}/saisie-heure/{id}', name: '_saisir_heures_post', methods: ['POST'])]
-    public function ecPost(
-        ValidationDirtyMarker $dirtyMarker,
-        Request               $request,
-        Parcours              $parcours,
-        ElementConstitutif    $id
-    ): Response
-    {
-        // Turbo Stream si Turbo le demande (Accept: text/vnd.turbo-stream.html)
-        $accept = $request->headers->get('Accept', '');
-        $wantsTurboStream = str_contains($accept, 'text/vnd.turbo-stream.html');
-        $dirtyMarker->markEcDirty($id);
-
-        if ($wantsTurboStream) {
-            return $this->render('parcours_v2/ec/_heures_ec_valide.html.twig', [
-                'ec' => $id,
-                'parcours' => $parcours,
-            ], new Response(headers: ['Content-Type' => 'text/vnd.turbo-stream.html']));
-        }
-        //todo: ?? où
-    }
+//    #[Route('/{parcours}/saisie-heure/{id}', name: '_saisir_heures_post', methods: ['POST'])]
+//    public function ecPost(
+//        ValidationDirtyMarker $dirtyMarker,
+//        Request               $request,
+//        Parcours              $parcours,
+//        ElementConstitutif    $id
+//    ): Response
+//    {
+//        // Turbo Stream si Turbo le demande (Accept: text/vnd.turbo-stream.html)
+//        $accept = $request->headers->get('Accept', '');
+//        $wantsTurboStream = str_contains($accept, 'text/vnd.turbo-stream.html');
+//
+//        //todo: ?? où
+//    }
 
     #[Route('/{semestreParcours}/ue/{ue}/{ec}/pre-delete-ec', name: '_pre_delete')]
     public function preDeleteEc(

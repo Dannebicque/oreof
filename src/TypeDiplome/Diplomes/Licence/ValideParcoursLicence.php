@@ -224,7 +224,7 @@ class ValideParcoursLicence implements ValideParcoursInterface
             // MCCC via DTO (au lieu de GetElementConstitutif)
             // Ton StructureEc remplit $mcccs depuis fiche matière si option dataFromFicheMatiere
             $mcccs = $ecDto->mcccs ?? [];
-            if (empty($mcccs) && $ec->isControleAssiduite() === false) {
+            if (empty($mcccs) && $ec->isControleAssiduite() === false && $ec->getNatureUeEc()?->isLibre() === false) {
                 $status = $this->worst($status, ValidationStatusEnum::INCOMPLETE);
                 $result->addIssue(new ValidationIssueDto(
                     scopeType: 'ec',
@@ -257,7 +257,7 @@ class ValideParcoursLicence implements ValideParcoursInterface
 
             // Heures via DTO
             $heuresOk = $ecDto->getHeuresEctsEc()->etatHeures ?? 'Complet'; // adapte
-            if ($heuresOk !== 'Complet') {
+            if ($heuresOk !== 'Complet' && $ec->getNatureUeEc()?->isChoix() === false && $ec->getNatureUeEc()?->isLibre() === false) {
                 $status = $this->worst($status, ValidationStatusEnum::INCOMPLETE);
                 $result->addIssue(new ValidationIssueDto(
                     scopeType: 'ec',

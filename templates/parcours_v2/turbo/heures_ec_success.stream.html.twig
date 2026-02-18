@@ -1,13 +1,14 @@
 {# templates/user/create_success.stream.html.twig #}
-
 <turbo-stream action="replace" target="badge_heure_{{ ec.id }}">
     <template>
         <span class="w-1.5 h-1.5 rounded-full bg-green-500" id="badge_heure_{{ ec.id }}"></span>
     </template>
 </turbo-stream>
 
-<turbo-stream action="replace" target="modal_wrapper">
-    <template>
-        {% include '../../_ui/modal_wrapper.html.twig' with { open: false } %}
-    </template>
-</turbo-stream>
+{# todo: MAJ total maquette + valide structure ? #}
+
+
+
+{{ include('turbo/toast.stream.html.twig', { message: 'Heures mises à jour', undo: undo|default(null), type: toastType|default('success') }) }}
+
+{{ include('_ui/_force_close_modal.html.twig') }}

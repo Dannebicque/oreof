@@ -515,6 +515,7 @@ class ElementConstitutifController extends BaseController
     }
 
     #[Route('/{id}/structure-ec/{parcours}', name: 'app_element_constitutif_structure', methods: ['GET', 'POST'])]
+    /** @deprecated */
     public function structureEc(
         EventDispatcherInterface $eventDispatcher,
         EntityManagerInterface       $entityManager,

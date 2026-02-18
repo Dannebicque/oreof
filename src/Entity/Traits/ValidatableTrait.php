@@ -7,7 +7,6 @@
  * @lastUpdate 22/01/2026 06:57
  */
 
-
 namespace App\Entity\Traits;
 
 use App\Enums\ValidationStatusEnum;
@@ -18,8 +17,8 @@ trait ValidatableTrait
     #[ORM\Column(
         type: 'string',
         length: 16,
-        enumType: ValidationStatusEnum::class,
-        nullable: true
+        nullable: true,
+        enumType: ValidationStatusEnum::class
     )]
     private ValidationStatusEnum $validationStatus = ValidationStatusEnum::INCOMPLETE;
 

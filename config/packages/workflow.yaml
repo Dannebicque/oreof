@@ -810,7 +810,6 @@ framework:
                   options:
                     attr: { rows: 6 }
 
-
         valider_ouverture_sans_cfvu:
           from: 'en_cours_redaction_ss_cfvu'
           to: 'soumis_central_sans_cfvu'

@@ -2,9 +2,11 @@
 <div class="flex-1 overflow-y-auto">
     <div>
         {% form_theme form 'communs/form_theme_v2.html.twig' %}
-        <form method="post"
-              id="modal_form"
-              action="{{ path('parcours_ec_saisir_heures_post', {parcours:parcours.id, id:ec.id}) }}">
+        {{ form_start(form, {
+            'attr': {
+                id:"modal_form"
+            }}) }}
+
             {% if ec.ficheMatiere != null and ec.ficheMatiere.volumesHorairesImpose %}
                 <twig:alerte type="info">
                     Les heures de cette fiche EC/matière sont imposées et ne sont pas
@@ -148,7 +150,7 @@
                        title="{{ 'ec_step4.helps.heures_enfants_edentiques_parent'|trans({}, 'help') }}"></i>
                 </div>
             {% endif %}
-        </form>
+        {{ form_end(form) }}
     </div>
 </div>
 

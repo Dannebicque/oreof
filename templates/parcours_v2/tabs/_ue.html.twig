@@ -65,7 +65,7 @@
         <div class="flex items-center gap-2">
 
             {% set idBase = 'ue-' ~ ue.ue.id %}
-
+            {% if ue.ue.natureUeEc != null %}
             {% if ue.ue.natureUeEc.isChoix == true %}
                 {% set items =  [
                     { label: 'Ajouter une UE enfant à l\'UE',
@@ -83,6 +83,7 @@
                         disabled: isRaccrocher,
                         color: 'green',
                         url: path('parcours_ec_ajouter_ec_ue', {semestreParcours:semestreParcours.id, ue: ue.ue.id}) }] %}
+            {% endif %}
             {% endif %}
 
             {% set items = items|merge([
@@ -138,6 +139,7 @@
         {% for uee in ue.uesEnfants %}
             {{ include('parcours_v2/tabs/_ue.html.twig', {ue:uee}) }}
         {% else %}
+            {% if ue.ue.natureUeEc != null %}
             {% if ue.ue.natureUeEc.isChoix == true and ue.uesEnfants|length == 0 %}
                 <twig:alerte type="info">
                     Aucune UE dans cette <strong>UE à choix</strong> pour le moment. Pour saisir votre premier choix
@@ -145,11 +147,17 @@
                     du bloc de l'UE parent.
                 </twig:alerte>
             {% endif %}
+            {% else %}
+                <twig:alerte type="danger">
+                    La nature de l'UE n'est pas définie.
+                </twig:alerte>
+            {% endif %}
         {% endfor %}
 
         {% for ec in ue.elementConstitutifs %}
             {{ include('parcours_v2/tabs/_ec.html.twig', {ec:ec}) }}
         {% else %}
+            {% if ue.ue.natureUeEc != null %}
             {% if ue.ue.natureUeEc.isLibre == true %}
                 <twig:alerte type="success">
                     UE à choix libre : <p>{{ ue.ue.descriptionUeLibre }}</p>
@@ -159,6 +167,11 @@
                     Aucun EC dans cette UE pour le moment. Pour saisir votre premier EC, choisir "Actions" en haut à
                     droite
                     du bloc de l'UE.
+                </twig:alerte>
+            {% endif %}
+            {% else %}
+                <twig:alerte type="danger">
+                    La nature de l'UE n'est pas définie.
                 </twig:alerte>
             {% endif %}
         {% endfor %}

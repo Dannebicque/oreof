@@ -986,4 +986,43 @@ class ElementConstitutif implements McccCompletionCheckerInterface
 
         return false;
     }
+
+    //todo: inutile si passe par le DTO ?
+    public function isHeuresComplete(): bool
+    {
+        if ($this->isHeuresSpecifiques() === true) {
+            $etatHeuresComplet = $this->etatStructure() === 'Complet';
+        } elseif ($this->getFicheMatiere() !== null) {
+            $etatHeuresComplet = $this->getFicheMatiere()->etatStructure() === 'Complet';
+        } else {
+            $etatHeuresComplet = $this->etatStructure() === 'Complet';
+        }
+
+        if ($this->getEcParent() !== null && $this->getEcParent()->isHeuresEnfantsIdentiques() === true) {
+            if ($this->getEcParent()->getFicheMatiere() !== null) {
+                $etatHeuresComplet = $this->getEcParent()->getFicheMatiere()->etatStructure() === 'Complet';
+            } else {
+                $etatHeuresComplet = $this->getEcParent()->etatStructure() === 'Complet';
+            }
+        }
+
+        if ($this->getEcParent() === null && $this->getNatureUeEc()?->isChoix() && $this->isHeuresEnfantsIdentiques() === false) {
+            $etatHeuresComplet = true;
+        }
+
+        return $etatHeuresComplet;
+    }
+
+    public function isMcccComplete(Parcours $parcours): bool
+    {
+        if ($this->getNatureUeEc()?->isLibre()) {
+            $etatMcccComplet = $this->getEcts() !== 0; // sur un EC libre, juste des ECTS
+        } else {
+            $getElement = new GetElementConstitutif($this, $parcours);
+            $etatMcccComplet = $this->isControleAssiduite() === true || $getElement->getEtatsMccc() === 'Complet';
+        }
+
+        return $etatMcccComplet;
+    }
+
 }

@@ -48,7 +48,7 @@ abstract class Access {
                 TypeModificationDpeEnum::MODIFICATION_PARCOURS->value,
                 TypeModificationDpeEnum::MODIFICATION_MCCC->value,
                 TypeModificationDpeEnum::MODIFICATION_MCCC_TEXTE->value,
-            ]);
+            ], true);
         }
 
         if ($entity instanceof Parcours) {
@@ -61,7 +61,7 @@ abstract class Access {
                     TypeModificationDpeEnum::MODIFICATION_PARCOURS->value,
                     TypeModificationDpeEnum::MODIFICATION_MCCC->value,
                     TypeModificationDpeEnum::MODIFICATION_MCCC_TEXTE->value,
-                ]);
+                ], true);
             }
         }
 
@@ -73,7 +73,7 @@ abstract class Access {
                 TypeModificationDpeEnum::MODIFICATION_PARCOURS->value,
                 TypeModificationDpeEnum::MODIFICATION_MCCC->value,
                 TypeModificationDpeEnum::MODIFICATION_MCCC_TEXTE->value,
-            ]);
+            ], true);
         }
 
         return false;
