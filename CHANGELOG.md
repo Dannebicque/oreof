@@ -2,6 +2,37 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.50.0](https://github.com/Dannebicque/oreof/compare/v1.49.0...v1.50.0) (2026-02-19)
+
+
+### Features
+
+* blocage si offre consolidée ([e74691c](https://github.com/Dannebicque/oreof/commit/e74691ce440080e19b87a3446db4a95900a1713b))
+
+
+### Bug Fixes
+
+* add username existence check during user creation ([d9e986b](https://github.com/Dannebicque/oreof/commit/d9e986b2659920b00ec1085e79394ee6f4eab6bf))
+* Affichage ouverture/non ouverture parcours ([391f0ec](https://github.com/Dannebicque/oreof/commit/391f0ecd670633643f21698dc24a72100fa13aab))
+* Affichage partie offre ([270178f](https://github.com/Dannebicque/oreof/commit/270178fef07dc2ec2426ec3d25e1c0a8a7f340d7))
+* apostrophe ([e7b9bd0](https://github.com/Dannebicque/oreof/commit/e7b9bd055a83ca7791cf420feb09050e6d3bdcae))
+* apostrophe ([62a260e](https://github.com/Dannebicque/oreof/commit/62a260ed6157292d4d276342606d9d2e60300b47))
+* enhance access control for formation and parcours editing ([05d310b](https://github.com/Dannebicque/oreof/commit/05d310b0b670cf084d2e5f8c07bbfee4438afbbf))
+* ensure respParcours is not null before dispatching AddCentreParcoursEvent ([71fc621](https://github.com/Dannebicque/oreof/commit/71fc621e76393f988128994d918c4f2b47a44cf1))
+* export JSON - parcours N+1 ([1bd2fe7](https://github.com/Dannebicque/oreof/commit/1bd2fe79478401b68534643991b6a5ac02d21079))
+* improve localization handling in OffreController ([c01d19a](https://github.com/Dannebicque/oreof/commit/c01d19a272fe32410ccdfb19cda5769dce330b18))
+* LHEO - parcours en construction ([7ed1457](https://github.com/Dannebicque/oreof/commit/7ed145763d3df9e01a6ce9a93faa069a57adff99))
+* lien alternance / formation initiale ([4e6cb46](https://github.com/Dannebicque/oreof/commit/4e6cb466aa07912be87e8061805dd8c1a34fa693))
+* nullable parcoursVersioning variable ([64478c4](https://github.com/Dannebicque/oreof/commit/64478c45f06cb7d4b3c58e8d99e95293a16e9eb8))
+* optimize user profile display by filtering based on campagneCollecte ([c5c258e](https://github.com/Dannebicque/oreof/commit/c5c258ec485b261bf12e54cfcc100217f6b4f729))
+* remove access check for formation in FormationWizardController ([b51721f](https://github.com/Dannebicque/oreof/commit/b51721f11870a414e33f98920ce5892500eec62a))
+* remove access check for formation in FormationWizardController ([29d2101](https://github.com/Dannebicque/oreof/commit/29d210165f8a7d6b17406b52bffb45aafe86ae05))
+* routing api json versioning ([e58ec7e](https://github.com/Dannebicque/oreof/commit/e58ec7ea1f2b047598fe0e7ba583c16a052ceae1))
+* typeParcours enum ([ace856a](https://github.com/Dannebicque/oreof/commit/ace856ad0d8b56c289a9c1b2eb5724b3de102b19))
+* typo nom template ([9b2b19f](https://github.com/Dannebicque/oreof/commit/9b2b19fcf1deebae955d148b3760916e51748b9f))
+* update parcours descriptif based on ouverture state ([0ced4fa](https://github.com/Dannebicque/oreof/commit/0ced4fa9a12a8d8d7f5654d9aa17180b89c7f3b8))
+* Workflow uniquement sur dpe ([ebfe1d6](https://github.com/Dannebicque/oreof/commit/ebfe1d617817d8af2eb0ae3c63eb8b249268f90e))
+
 ## [1.49.0](https://github.com/Dannebicque/oreof/compare/v1.48.0...v1.49.0) (2025-12-11)
 
 
