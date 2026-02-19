@@ -19,8 +19,11 @@ export default class extends Controller {
 
   connect() {
     console.log('MCCC licence')
-    if (this.typeMcccValue !== null && this.afficheMcccValue === true) {
-      this._loadTypeMccc(this.typeMcccValue).then(() => {
+    //récupérer la valeur checked dans mccc[typeMccc]
+    const choix = document.querySelector(`input[name="mccc[typeMccc]"]:checked`).value
+    console.log(choix)
+    if (choix !== null) {
+      this._loadTypeMccc(choix).then(() => {
         this._verifyTypeEpreuveCt()
         this._verifyTypeEpreuveEt()
       })

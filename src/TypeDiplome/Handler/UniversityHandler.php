@@ -87,7 +87,8 @@ class UniversityHandler implements TypeDiplomeHandlerInterface
 
     public function createFormMccc(ElementConstitutif|FicheMatiere $element): FormInterface
     {
-        $form = $this->formFactory->create(McccType::class, $element, []);
+        $form = $this->formFactory->create(McccType::class, $element, [
+        ]);
         return $form;
     }
 

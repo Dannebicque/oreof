@@ -51,7 +51,6 @@ class McccType extends AbstractType
         }
 
         $builder->add('typeMccc', CardsChoiceType::class, [
-            'mapped' => false,
             'label' => "Type de MCCC",
             'choices' => $choices,
             'columns' => 4,

@@ -5,10 +5,11 @@
  * @project oreof
  * @lastUpdate 14/03/2023 21:21
  */
-//@import "tailwindcss"; /*preflight(none);  Désactive le reset global */
 
 @import "../../node_modules/bootstrap/dist/css/bootstrap.min.css";
 @import "./vendor/OverlayScrollbars.min.css";
+@import "tailwindcss";
+/*preflight(none);  Désactive le reset global */
 
 @import "@fortawesome/fontawesome-pro/css/fontawesome.min.css";
 @import "@fortawesome/fontawesome-pro/css/duotone.min.css";

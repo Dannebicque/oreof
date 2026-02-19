@@ -45,6 +45,7 @@ class FormationController extends BaseController
     #[Route('/{slug}/modifier', name: 'modifier')]
     public function modifier(
         Request                     $request,
+        ParcoursTabStateRepository $parcoursTabStateRepository,
         FormationTabStateRepository $statesRepo,
         TypeDiplomeResolver         $typeDiplomeResolver,
         Formation                   $formation
@@ -61,6 +62,17 @@ class FormationController extends BaseController
             'texte_help' => 'Indiquez les éléments de localisation et d\'organisation de la formation',
             'tabStates' => $tabStates,
         ];
+
+        if ($formation->hasParcours() === false) {
+            $parcours = $formation->getParcours()->first();
+            //pas de parcours, donc on calcul les data du parcours par défaut
+            $tabStatesParcours = $parcoursTabStateRepository->indexByTabKey($parcours);
+            $typeD = $typeDiplomeResolver->fromParcours($parcours);
+            $dto = $typeD->calculStructureParcours($parcours);
+
+            $parameters['tabStatesParcours'] = $tabStatesParcours;
+            $parameters['dto'] = $dto;
+        }
 
         // Si Turbo charge un frame, ne calcule pas la structure complète
         if ($request->headers->has('Turbo-Frame')) {

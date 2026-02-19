@@ -124,31 +124,92 @@
                     </span>
                 </a>
 
-                {#                <a class="nav-link w-full flex items-center justify-between p-3 rounded-2xl text-sm font-bold text-slate-500 hover:bg-white transition group" #}
-                {#                   href="{{ path('parcours_v2_tabs', { parcours: parcours.id, tab: 'presentation' }) }}" #}
-                {#                   data-turbo-frame="tab-content" #}
-                {#                   data-turbo-action="advance" #}
-                {#                   data-tabs-target="tab"> #}
-                {#                    <span class="flex items-center gap-3"> #}
-                {#                        Présentation parcours #}
-                {#                    </span> #}
-                {#                    <span id="tab_badge_presentation"> #}
-                {#                      {{ include('parcours_v2/tabs/_badge.html.twig', { tabKey: 'presentation', status: tabStates['presentation'].status ?? 'red' }) }} #}
-                {#                    </span> #}
-                {#                </a> #}
+                {% if formation.hasParcours == false %}
+                    {% set parcours = formation.parcours[0] %}
+                    <a class="nav-link w-full flex items-center justify-between p-3 rounded-2xl text-sm font-bold text-slate-500 hover:bg-white transition group"
+                       href="{{ path('parcours_v2_tabs', { parcours: parcours.id, tab: 'descriptif' }) }}"
+                       data-turbo-frame="tab-content"
+                       data-turbo-action="advance"
+                       data-tabs-target="tab">
+                    <span class="flex items-center gap-3">
+                        Descriptif
+                        </span>
+                        <span id="tab_badge_descriptif">
+                      {{ include('communs/_badge.html.twig', { tabKey: 'descriptif', status: tabStatesParcours['descriptif'].status ?? 'red' }) }}
+                    </span>
+                    </a>
 
-                {% if is_granted('ROLE_ADMIN') %}
-                    {#                    <div class="pt-8"> #}
-                    {#                        <a class="w-full flex items-center gap-3 p-3 rounded-2xl text-sm font-bold text-slate-400 hover:text-slate-800 transition" #}
-                    {#                           href="{{ path('parcours_v2_tabs', { parcours: parcours.id, tab: 'configuration' }) }}" #}
-                    {#                           data-turbo-frame="tab-content" #}
-                    {#                           data-turbo-action="advance" #}
-                    {#                           data-tabs-target="tab"> #}
-                    {#                        <span> #}
-                    {#                        <i class="fal fa-cogs"></i> Configuration Admin. #}
-                    {#                            </span> #}
-                    {#                        </a> #}
-                    {#                    </div> #}
+                    <a class="nav-link w-full flex items-center justify-between p-3 rounded-2xl text-sm font-bold text-slate-500 hover:bg-white transition group"
+                       href="{{ path('parcours_v2_competences_index', { parcours: parcours.id }) }}"
+                       data-turbo-frame="tab-content"
+                       data-turbo-action="advance"
+                       data-tabs-target="tab"
+                    >
+                    <span class="flex items-center gap-3">
+                        Compétences
+                    </span>
+                        <span id="tab_badge_competences">
+                      {{ include('communs/_badge.html.twig', { tabKey: 'competences', status: tabStatesParcours['competences'].status ?? 'red' }) }}
+                    </span>
+                    </a>
+
+                    <a
+                            href="{{ path('parcours_v2_tabs', { parcours: parcours.id, tab: 'maquette' }) }}"
+                            data-turbo-frame="tab-content"
+                            data-turbo-action="advance"
+                            data-tabs-target="tab"
+                            class="nav-link active w-full flex items-center justify-between p-3 rounded-2xl text-sm font-bold transition group">
+                    <span class="flex items-center gap-3">
+                        Structure Maquette
+                    </span>
+                        <span id="tab_badge_maquette">
+                      {{ include('communs/_badge.html.twig', { tabKey: 'maquette', status: tabStatesParcours['maquette'].status ?? 'red' }) }}
+                    </span>
+                    </a>
+
+                    <turbo-frame id="sidebar-tree" class="space-y-2">
+                        {{ include('parcours_v2/_sideBarStructure.html.twig') }}
+                    </turbo-frame>
+
+                    <a class="nav-link w-full flex items-center justify-between p-3 rounded-2xl text-sm font-bold text-slate-500 hover:bg-white transition group"
+                       href="{{ path('parcours_v2_tabs', { parcours: parcours.id, tab: 'admission' }) }}"
+                       data-turbo-frame="tab-content"
+                       data-turbo-action="advance"
+                       data-tabs-target="tab"
+                    >
+                    <span class="flex items-center gap-3">
+                        Admission & inscription
+                        </span>
+                        <span id="tab_badge_admission">
+                      {{ include('communs/_badge.html.twig', { tabKey: 'admission', status: tabStatesParcours['admission'].status ?? 'red' }) }}
+                    </span>
+                    </a>
+
+                    <a class="nav-link w-full flex items-center justify-between p-3 rounded-2xl text-sm font-bold text-slate-500 hover:bg-white transition group"
+                       href="{{ path('parcours_v2_tabs', { parcours: parcours.id, tab: 'et_apres' }) }}"
+                       data-turbo-frame="tab-content"
+                       data-turbo-action="advance"
+                       data-tabs-target="tab">
+                    <span class="flex items-center gap-3">
+                        Et après...
+                        </span>
+                        <span id="tab_badge_et_apres">
+                      {{ include('communs/_badge.html.twig', { tabKey: 'et_apres', status: tabStatesParcours['et_apres'].status ?? 'red' }) }}
+                    </span>
+                    </a>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <div class="pt-8">
+                            <a class="w-full flex items-center gap-3 p-3 rounded-2xl text-sm font-bold text-slate-400 hover:text-slate-800 transition"
+                               href="{{ path('parcours_v2_tabs', { parcours: parcours.id, tab: 'configuration' }) }}"
+                               data-turbo-frame="tab-content"
+                               data-turbo-action="advance"
+                               data-tabs-target="tab">
+                        <span>
+                        <i class="fal fa-cogs"></i> Configuration Admin.
+                            </span>
+                            </a>
+                        </div>
+                    {% endif %}
                 {% endif %}
             </nav>
         </aside>

@@ -33,7 +33,9 @@ class ParcoursMcccController extends BaseController
         $isParcoursProprietaire = $elementConstitutif->getFicheMatiere()?->getParcours()?->getId() === $parcours->getId();
 
         $typeDiplome = $typeDiplomeResolver->fromParcours($parcours);
-
+        $getElement = new GetElementConstitutif($elementConstitutif, $parcours);
+        $typeMccc = $getElement->getTypeMcccFromFicheMatiere();
+        $elementConstitutif->settypeMccc($typeMccc);
         return $turboStream->streamOpenModalFromTemplates(
             'Modifier les MCCC de l\'EC',
             'Dans l\'EC ' . $elementConstitutif->display(),
