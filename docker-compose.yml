@@ -1,10 +1,10 @@
 services:
   web:
-    image: mmi3docker/symfony-2024
+    image: dannebicque/symfony-app:latest
     container_name: oreof-web
     hostname: oreof-web
     restart: always
-    platform: linux/amd64
+    platform: linux/arm64
     ports:
       - 8820:80
     depends_on:
@@ -43,6 +43,7 @@ services:
       MYSQL_USER: oreof
       MYSQL_PASSWORD: PASSWORD
       MYSQL_DATABASE: oreof
-
+  mercure:
+    image: dunglas/mercure
 volumes:
   db-volume:
