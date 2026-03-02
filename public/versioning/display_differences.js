@@ -30,6 +30,11 @@ function registerShowDifferencesClick(buttonElement, idToShow, idToHide) {
 };
 
 document.addEventListener('DOMContentLoaded', (e) => {
+    let urlParam = (new URLSearchParams(document.location.search)).get('optionDisplay');
+    if(urlParam !== null){
+        currentDisplay = urlParam;
+    }
+
     let buttonShowDiffLastYear = document.querySelector("#showDiffWithLastYear");
     let buttonShowDiffLastVersion = document.querySelector("#showDiffWithLastVersion");
     registerShowDifferencesClick(buttonShowDiffLastVersion, idDiffLastVersion, idDiffLastYear);
