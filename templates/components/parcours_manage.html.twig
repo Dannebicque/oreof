@@ -212,6 +212,13 @@
                             {% endif %}
                         {% endif %}
                         <div class="col-6 d-flex justify-content-center">
+                            {{ include('communs/_bouton_difference_descriptifs.html.twig', 
+                                    {
+                                        withUrlLink: true, 
+                                        parcours_id: this.parcours.id
+                                    }
+                                ) 
+                            }}
                             {% if this.parcours.isParcoursDefaut == false %}
                                 <a
                                         href="{{ path('fiche_matiere_valide_parcours', {parcours: this.parcours.id}) }}"
