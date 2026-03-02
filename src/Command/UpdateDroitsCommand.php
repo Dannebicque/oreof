@@ -36,11 +36,12 @@ class UpdateDroitsCommand extends Command
     )
     {
         parent::__construct();
+        $this->campagne = $this->campagneCollecteRepository->find($this->idCampagne);
     }
 
     protected function configure(): void
     {
-        $this->campagne = $this->campagneCollecteRepository->find($this->idCampagne);
+
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
