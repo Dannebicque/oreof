@@ -29,7 +29,7 @@ class DpeWorkflowSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            'workflow.transition' => 'onTransition',
+            'workflow.dpeParcours.transition' => 'onTransition',
 //            'workflow.dpeParcours.guard'     => 'onGuard',
         ];
     }
