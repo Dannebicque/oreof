@@ -5,8 +5,16 @@
         {% else %}
             {% set hasDisplay = 'd-none' %}
         {% endif %}
-    <div class="row">
+    {% set libelleVersion = {
+        'diffGlobalParcours': 'Comparaison avec la version initiale de cette année', 
+        'diffGlobalParcoursCampagne': "Comparaison avec l'année précédente"
+        } 
+    %}
+    <div class="row mt-2">
         <div class="col-sm-12 col-md-10 col-lg-8 mb-3 {{ hasDisplay }}" id="{{ idCollapse }}">
+            <p class="mb-1">
+                <span class="fw-semibold fst-italic">{{ libelleVersion[idCollapse] }}</span>
+            </p>
             <div class="d-inline-flex">
                 {{ textDifferences|raw  }} 
             </div>
