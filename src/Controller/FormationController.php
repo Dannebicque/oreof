@@ -176,7 +176,7 @@ class FormationController extends BaseController
 
                 $stats[$formation->getId()][$parcours->getId()] = $typeD->calculStructureParcours($parcours, false, false);
                 $stats[$formation->getId()]['stats']->addStatsParcours(
-                    $stats[$formation->getId()][$parcours->getId()]->statsFichesMatieresParcours
+                    $stats[$formation->getId()][$parcours->getId()]?->statsFichesMatieresParcours
                 );
             }
         }
