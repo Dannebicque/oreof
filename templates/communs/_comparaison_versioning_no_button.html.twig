@@ -1,7 +1,12 @@
 {% if is_granted('ROLE_ADMIN') and textDifferences is defined and textDifferences != null %}
     {% if textDifferences|length > 0 %}
+        {% if idCollapse == displayComparaison ?? 'false' %}
+            {% set hasDisplay = '' %}
+        {% else %}
+            {% set hasDisplay = 'd-none' %}
+        {% endif %}
     <div class="row">
-        <div class="col-sm-12 col-md-10 col-lg-8 mb-3 d-none" id="{{ idCollapse }}">
+        <div class="col-sm-12 col-md-10 col-lg-8 mb-3 {{ hasDisplay }}" id="{{ idCollapse }}">
             <div class="d-inline-flex">
                 {{ textDifferences|raw  }} 
             </div>
