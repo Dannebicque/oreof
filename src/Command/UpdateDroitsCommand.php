@@ -7,6 +7,7 @@ use App\Entity\CampagneCollecte;
 use App\Entity\UserProfil;
 use App\Repository\CampagneCollecteRepository;
 use App\Repository\DpeParcoursRepository;
+use App\Repository\FormationRepository;
 use App\Repository\ProfilRepository;
 use App\Repository\SemestreParcoursRepository;
 use App\Repository\UserProfilRepository;
@@ -28,6 +29,7 @@ class UpdateDroitsCommand extends Command
     public ?CampagneCollecte $campagne;
 
     public function __construct(
+        protected FormationRepository $formationRepository,
         protected UserProfilRepository       $userProfilRepository,
         protected ProfilRepository           $profilRepository,
         protected DpeParcoursRepository      $dpeParcoursRepository,
@@ -95,7 +97,10 @@ class UpdateDroitsCommand extends Command
                 $prRp->setUser($dpe->getParcours()->getCoResponsable());
                 $this->entityManager->persist($prRp);
             }
-            $formation = $dpe->getParcours()?->getFormation();
+        }
+
+        $formations = $this->formationRepository->findBy(['dpe' => $this->idCampagne]);
+        foreach ($formations as $formation) {
             if ($formation->getResponsableMention() !== null) {
                 // RP
                 $prRp = new UserProfil();
