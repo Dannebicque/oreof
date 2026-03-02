@@ -24,8 +24,8 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 class UpdateDroitsCommand extends Command
 {
 
-    public int $idCampagne = 4;
-    public CampagneCollecte $campagne;
+    public int $idCampagne = 3;
+    public ?CampagneCollecte $campagne;
 
     public function __construct(
         protected UserProfilRepository       $userProfilRepository,
