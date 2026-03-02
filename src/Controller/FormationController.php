@@ -403,6 +403,10 @@ class FormationController extends BaseController
         $formationStringDifferences = $versioningFormation->getDifferencesBetweenFormationAndLastVersion($formation);
         $formationCampagneStringDifferences = $versioningFormation->getDifferencesBetweenFormationAndLastVersion($formation, true);
 
+        // Afficher les comparaisons directement
+        $request = Request::createFromGlobals();
+        $displayComparaison = $request->query->get('optionDisplay', 'false');
+
         return $this->render('formation/show.html.twig', [
             'formation' => $formation,
             'typeDiplome' => $typeDiplome,
@@ -414,6 +418,7 @@ class FormationController extends BaseController
             'stringDifferencesFormationCampagne' => $formationCampagneStringDifferences ?? [],
             'versioningParcours' => $versioningParcours,
             'hasLastVersion' => $hasLastVersion,
+            'displayComparaison' => $displayComparaison
         ]);
     }
 

@@ -285,6 +285,9 @@ class ParcoursController extends BaseController
 
         $cssDiff = DiffHelper::getStyleSheet();
 
+        // Afficher les comparaisons directement
+        $request = Request::createFromGlobals();
+        $displayComparaison = $request->query->get('optionDisplay', 'false');
 
         // Ordre des semestres manquants
         $missingSemestre = [];
@@ -322,7 +325,8 @@ class ParcoursController extends BaseController
             'cssDiff' => $cssDiff,
             'version' => $version,
             'parcoursDeBase' => $parcoursDeBase,
-            'missingSemestre' => $missingSemestre
+            'missingSemestre' => $missingSemestre,
+            'displayComparaison' => $displayComparaison,
         ]);
     }
 
