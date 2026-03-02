@@ -114,13 +114,19 @@ class LicenceController extends BaseController
         Parcours $parcours
     ): Response
     {
-        $typeDiplome = $elementConstitutif->getFicheMatiere()?->getParcours()?->getFormation()?->getTypeDiplome();
-        if ($typeDiplome === null) {
-            throw new TypeDiplomeNotFoundException();
+        if ($elementConstitutif->getFicheMatiere()?->isHorsDiplome() === true) {
+            $typeDiplome = $this->typeDiplome;
+            $typeDiplomeHandler = $this->typeDiplomeHandler;
+        } else {
+            $typeDiplome = $elementConstitutif->getFicheMatiere()?->getParcours()?->getFormation()?->getTypeDiplome();
+            if ($typeDiplome === null) {
+                throw new TypeDiplomeNotFoundException();
+            }
+            $typeDiplomeHandler = $this->typeDiplomeResolver->get($typeDiplome);
         }
 
         $typeEpreuves = $typeEpreuveRepository->findByTypeDiplome($typeDiplome);
-        $typeDiplomeHandler = $this->typeDiplomeResolver->get($typeDiplome);
+
         $raccroche = $elementConstitutif->getFicheMatiere()?->getParcours()?->getId() !== $parcours->getId();
         $getElement = new GetElementConstitutif($elementConstitutif, $parcours);
         $disabled = ($elementConstitutif->isMcccSpecifiques() === false && $raccroche) || $elementConstitutif->getFicheMatiere()?->isMcccImpose();
