@@ -32,8 +32,7 @@ final class McccEntityListener
     {
         $em = $args->getObjectManager();
         $uow = $em->getUnitOfWork();
-
-        $owner->setEtatMccc($this->checker->isCompletedForOwner($owner));
+        $owner->setEtatMccc($this->checker->isCompletedForOwner($owner) ? 'Complet' : 'A saisir');
 
         // Recompute le change set pour forcer le flush du flag
         $meta = $em->getClassMetadata($owner::class);
