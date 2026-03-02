@@ -1,3 +1,10 @@
+{% set hrefLastVersion = "#" %}
+{% set hrefLastYear = "#" %}
+{% if withUrlLink is defined and withUrlLink == true %}
+    {% set hrefLastVersion = path('app_parcours_show', {id: parcours_id}) ~ "?optionDisplay=diffGlobalParcours" %}
+    {% set hrefLastYear = path('app_parcours_show', {id: parcours_id}) ~ "?optionDisplay=diffGlobalParcoursCampagne" %}
+{% endif %}
+
 <div class="btn-group">
     <button 
         type="button"
@@ -9,10 +16,10 @@
         Comparer les descriptifs
     </button>
     <div class="dropdown-menu">
-        <a class="dropdown-item" href="#" id="showDiffWithLastVersion">
+        <a class="dropdown-item" href="{{ hrefLastVersion }}" id="showDiffWithLastVersion">
             Version initiale de cette année
         </a>
-        <a class="dropdown-item" href="#" id="showDiffWithLastYear">
+        <a class="dropdown-item" href="{{ hrefLastYear }}" id="showDiffWithLastYear">
             Descriptifs de l'année précédente
         </a>
     </div>
