@@ -48,10 +48,10 @@ class UpdateDroitsCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
-        $profilRf = $this->profilRepository->findOneBy(['code' => 'ROLE_RF']);
-        $profilCoRf = $this->profilRepository->findOneBy(['code' => 'ROLE_CO_RF']);
-        $profilRp = $this->profilRepository->findOneBy(['code' => 'ROLE_RF']);
-        $profilCoRp = $this->profilRepository->findOneBy(['code' => 'ROLE_RF']);
+        $profilRf = $this->profilRepository->findOneBy(['code' => 'ROLE_RESP_FORMATION']);
+        $profilCoRf = $this->profilRepository->findOneBy(['code' => 'ROLE_CO_RESP_FORMATION']);
+        $profilRp = $this->profilRepository->findOneBy(['code' => 'ROLE_RESP_PARCOURS']);
+        $profilCoRp = $this->profilRepository->findOneBy(['code' => 'ROLE_CO_RESP_PARCOURS']);
 
         $profils = $this->userProfilRepository->findBy(['profil' => $profilRf, 'campagneCollecte' => $this->idCampagne]);
         foreach ($profils as $profil) {
