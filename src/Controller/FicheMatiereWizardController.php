@@ -295,11 +295,12 @@ class FicheMatiereWizardController extends BaseController
             $typeD = $this->typeDiplomeResolver->get($typeDiplome);
             return $this->render('fiche_matiere_wizard/_step4Other.html.twig', [
                 'ficheMatiere' => $ficheMatiere,
-               'parcours' => $parcours,
+                'parcours' => $parcours,
                 'typeEpreuves' => $typeD !== null ? $typeD->getTypeEpreuves() : $typeEpreuveRepository->findAll(),
                 'mcccs' => $typeD !== null ? $typeD->getMcccs($ficheMatiere) : [],
                 'ecProprietaire' => $ecProprietaire,
                 'typeMccc' => $ficheMatiere->getTypeMccc(),
+                'typeD' => $typeD,
                 'templateForm' => $typeD !== null ? $typeD::TEMPLATE_FORM_MCCC : '',
             ]);
         }
