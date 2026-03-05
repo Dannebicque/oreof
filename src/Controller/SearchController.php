@@ -165,7 +165,7 @@ class SearchController extends AbstractController
         elseif($typeRechercheValide === 'ficheMatiere'){
             $countFiche = $entityManager
                 ->getRepository(FicheMatiere::class)
-                ->findCountForKeyword($keyword_1)[0]['nombre_total'];
+                ->findCountForKeyword($keyword_1, $campagneCollecte)[0]['nombre_total'];
 
             $dataTwigRenderer = [
                 'typeRecherche' => 'ficheMatiere',
@@ -199,8 +199,11 @@ class SearchController extends AbstractController
         EntityManagerInterface $entityManager
     ): \Symfony\Component\HttpFoundation\JsonResponse
     {
+        $campagneCollecteDefaut = $entityManager->getRepository(CampagneCollecte::class)
+            ->findOneBy(['defaut' => true]);
+
         $data = $entityManager->getRepository(FicheMatiere::class)
-                ->findFicheMatiereWithKeywordAndPagination($mot_cle, $page);
+                ->findFicheMatiereWithKeywordAndPagination($mot_cle, $page, true, $campagneCollecteDefaut);
 
         return $this->json($data);
     }
