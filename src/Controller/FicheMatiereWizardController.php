@@ -296,8 +296,7 @@ class FicheMatiereWizardController extends BaseController
             return $this->render('fiche_matiere_wizard/_step4Other.html.twig', [
                 'ficheMatiere' => $ficheMatiere,
                 'parcours' => $parcours,
-                'typeEpreuves' => $typeD !== null ? $typeD->getTypeEpreuves() : $typeEpreuveRepository->findAll(),
-                'mcccs' => $typeD !== null ? $typeD->getMcccs($ficheMatiere) : [],
+                'mcccs' => $typeD->getDisplayMccc($typeD->getMcccs($ficheMatiere), $ficheMatiere->getTypeMccc()),
                 'ecProprietaire' => $ecProprietaire,
                 'typeMccc' => $ficheMatiere->getTypeMccc(),
                 'typeD' => $typeD,
