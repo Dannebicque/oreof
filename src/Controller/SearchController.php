@@ -215,8 +215,11 @@ class SearchController extends AbstractController
         Filesystem $fs
     ) : Response {
 
+        $campagne = $entityManager->getRepository(CampagneCollecte::class)
+            ->findOneBy(['defaut' => true]);
+
         $data = $entityManager->getRepository(FicheMatiere::class)
-            ->findFicheMatiereWithKeywordAndPagination($mot_cle, 0, false);
+            ->findFicheMatiereWithKeywordAndPagination($mot_cle, 0, false, $campagne);
 
         $data = array_map(function($ficheMatiere){
             $libelleMention = $ficheMatiere['type_diplome_libelle'] ? $ficheMatiere['type_diplome_libelle'] . ' - ' : '';
@@ -265,6 +268,9 @@ class SearchController extends AbstractController
         if($fs->exists($path . $filename)){
             $fs->remove($path . $filename);
         }
+
+        // Création d'un fichier vide
+        $fs->appendToFile($path . $filename, "");
 
         $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
         $writer->save($path . $filename);
