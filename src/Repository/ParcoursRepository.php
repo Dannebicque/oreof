@@ -230,7 +230,8 @@ class ParcoursRepository extends ServiceEntityRepository
                     'p.id AS parcours_id', 'p.libelle AS parcours_libelle',
                     'p.sigle AS parcours_sigle', 'p.objectifsParcours',
                     'p.poursuitesEtudes', 'p.contenuFormation',
-                    'p.resultatsAttendus', 'f.id AS formation_id'
+                    'p.resultatsAttendus', 'f.id AS formation_id',
+                    'p.typeParcours AS type_parcours'
                 ]
             )
             ->join('p.formation', 'f', 'WITH', 'p.formation = f.id')
@@ -268,7 +269,8 @@ class ParcoursRepository extends ServiceEntityRepository
                 [
                     'f.id AS formation_id', 'f.slug AS formation_slug', 'p.id AS parcours_id',
                     'f.contenuFormation', 'f.resultatsAttendus', 'f.objectifsFormation',
-                    'p.poursuitesEtudes', 'p.libelle AS parcours_libelle', 'f.sigle AS formation_sigle'
+                    'p.poursuitesEtudes', 'p.libelle AS parcours_libelle', 'f.sigle AS formation_sigle',
+                    'p.typeParcours AS type_parcours'
                 ]
             )
             ->where(

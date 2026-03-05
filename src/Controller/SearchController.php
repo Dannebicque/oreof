@@ -6,6 +6,7 @@ use App\Entity\CampagneCollecte;
 use App\Entity\FicheMatiere;
 use App\Entity\Formation;
 use App\Entity\Parcours;
+use App\Enums\TypeParcoursEnum;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -92,11 +93,17 @@ class SearchController extends AbstractController
                     ->findOneById($parcoursArray[$i]['formation_id'])
                     ->getDisplayLong() ?? "";
 
+                $typeParcoursLibelle = "";
+                if($parcoursArray[$i]['type_parcours'] !== null){
+                    $typeParcoursLibelle = $parcoursArray[$i]['type_parcours']->getLabel();
+                }
+
                 $resultArrayBadge[] =
                 [
                     ...$textContains,
                     'fichesMatieres' => [...$linkedFicheMatiere],
-                    'libelleMention' => $libelleMention
+                    'libelleMention' => $libelleMention,
+                    'typeParcoursLibelle' => $typeParcoursLibelle
                 ];
 
                 $isParcoursParDefautArray[] = $parcoursArray[$i]['parcours_libelle'] === Parcours::PARCOURS_DEFAUT;

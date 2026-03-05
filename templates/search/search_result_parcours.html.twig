@@ -30,6 +30,11 @@
                                     >
                                         {{ resultArrayBadge[loop.index0]['libelleMention'] }}
                                         - Parcours {{ p.parcours_libelle }}
+                                        {% if resultArrayBadge[loop.index0]['typeParcoursLibelle']|length > 0 %}
+                                            <span class="badge rounded-pill text-bg-dark">
+                                                {{ resultArrayBadge[loop.index0]['typeParcoursLibelle'] }}
+                                            </span>
+                                        {% endif %}
                                     </a>
                                 </div>
                                 <div class="col-4">
