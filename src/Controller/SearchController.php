@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\CampagneCollecte;
 use App\Entity\FicheMatiere;
 use App\Entity\Formation;
 use App\Entity\Parcours;
@@ -32,6 +33,9 @@ class SearchController extends AbstractController
         EntityManagerInterface $entityManager,
     ): \Symfony\Component\HttpFoundation\RedirectResponse|Response
     {
+        $campagneCollecte = $entityManager->getRepository(CampagneCollecte::class)
+            ->findOneBy(['defaut' => true]);
+
         $request = Request::createFromGlobals();
         $keyword_1 = $request->query->get('keyword_1');
         $typeRecherche = $request->query->get('searchType');
@@ -55,8 +59,10 @@ class SearchController extends AbstractController
             $resultArrayBadge = [];
             $isParcoursParDefautArray = [];
 
-            $parcoursArray = $entityManager->getRepository(Parcours::class)->findWithKeyword($keyword_1);
-            $parcoursParDefautArray = $entityManager->getRepository(Parcours::class)->findWithKeywordForDefaultParcours($keyword_1);
+            $parcoursArray = $entityManager->getRepository(Parcours::class)
+                ->findWithKeyword($keyword_1, $campagneCollecte);
+            $parcoursParDefautArray = $entityManager->getRepository(Parcours::class)
+                ->findWithKeywordForDefaultParcours($keyword_1, $campagneCollecte);
 
             for($i = 0; $i < count($parcoursArray); $i++){
                 $textContains = [];
