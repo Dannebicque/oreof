@@ -137,10 +137,16 @@ class SearchController extends AbstractController
                     ->findOneById($parcoursParDefautArray[$j]['formation_id'])
                     ->getDisplayLong() ?? "";
 
+                $typeParcoursDefautLibelle = "";
+                if($parcoursParDefautArray[$j]['type_parcours'] !== null){
+                    $typeParcoursDefautLibelle = $parcoursParDefautArray[$j]['type_parcours']->getLabel();
+                }
+
                 $resultArrayBadge[] = [
                     ...$textContainsDefault,
                     'fichesMatieres' => [...$linkedFicheMatiereDefault],
-                    'libelleMention' => $libelleMentionParDefaut
+                    'libelleMention' => $libelleMentionParDefaut,
+                    'typeParcoursLibelle' => $typeParcoursDefautLibelle
                 ];
 
                 $isParcoursParDefautArray[] = $parcoursParDefautArray[$j]['parcours_libelle'] === Parcours::PARCOURS_DEFAUT;
