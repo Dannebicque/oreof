@@ -550,9 +550,6 @@ abstract class AbstractLicenceHandler implements TypeDiplomeHandlerInterface, Ty
                     return false;
                 }
 
-                if ($mcccs[1]['cc'][1]->getPourcentage() === null || $mcccs[1]['cc'][1]->getPourcentage() !== 50.0) {
-                    return false;
-                }
 
                 if (isset($mcccs[1]) && !isset($mcccs[1]['cc']) && !is_array($mcccs[1]['cc'])) {
                     return false;
