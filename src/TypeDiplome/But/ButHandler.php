@@ -217,7 +217,6 @@ final class ButHandler implements TypeDiplomeHandlerInterface, TypeDiplomeMcccIn
 
     public function getDisplayMccc(array $mcccs, string $typeMccc): array
     {
-        dump($mcccs);
         return $mcccs;
     }
 }
