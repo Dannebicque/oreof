@@ -1,0 +1,29 @@
+{% set types = ["Ressources", "SAÉ"] %}
+
+<table class="table table-bordered table-striped">
+    <thead>
+    <tr>
+        <th>Type épreuve</th>
+        <th>Coefficient</th>
+        <th>Nb notes</th>
+    </tr>
+    </thead>
+    {% for type in types %}
+        <tr>
+            <th colspan="3" class="text-center">{{ type }}</th>
+        </tr>
+        {% for typeE in typeEpreuves[type == 'Ressources' ? 'ressource' : 'sae'] %}
+            <tr>
+                <td>
+                    {{ typeE|trans({}, 'but') }}
+                </td>
+                <td>
+                    {% if mcccs[typeE] is defined and mcccs[typeE].pourcentage != 0.0 %}{{ mcccs[typeE].pourcentage }}{% endif %}
+                </td>
+                <td>
+                    {% if mcccs[typeE] is defined and mcccs[typeE].nbEpreuves != 0 %}{{ mcccs[typeE].nbEpreuves }}{% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    {% endfor %}
+</table>

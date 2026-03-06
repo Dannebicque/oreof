@@ -214,4 +214,10 @@ final class ButHandler implements TypeDiplomeHandlerInterface, TypeDiplomeMcccIn
 
         return $somme > 99 && $somme <= 100;
     }
+
+    public function getDisplayMccc(array $mcccs, string $typeMccc): array
+    {
+        dump($mcccs);
+        return $mcccs;
+    }
 }
