@@ -279,7 +279,7 @@ class ElementConstitutifMcccController extends AbstractController
         Parcours                     $parcours,
         EntityManagerInterface       $entityManager
     ): Response {
-
+//todo: gérer par type de diplôme
         $dpeParcours = GetDpeParcours::getFromParcours($parcours);
 
         if ($dpeParcours === null) {
@@ -320,7 +320,7 @@ class ElementConstitutifMcccController extends AbstractController
             'ects' => $ects,
             'typeDiplome' => $typeD,
             'templateForm' => $typeD::TEMPLATE_FORM_MCCC,
-            'mcccs' => $typeD->getDisplayMccc($getElement->getMcccsFromFicheMatiere($typeD), $typeMccc),
+            'mcccs' => $typeD->getDisplayMccc($getElement->getMcccsFromFicheMatiere($typeD), $typeMccc ?? ''),
             'isFromVersioning' => 'false',
             'lastVersion' => $lastVersion,
             'libelleQuelleVersion' => 'Version actuellement saisie en attente de validation',
