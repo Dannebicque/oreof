@@ -564,17 +564,13 @@ abstract class AbstractLicenceHandler implements TypeDiplomeHandlerInterface, Ty
                 }
                 return $totPourcentage === 100.0;
             case 'cci':
-                if (isset($mcccs[1]) && !isset($mcccs[1]['cc'])) {
-                    return false;
-                }
-
-                if (count($mcccs[1]['cc']) < 3) {
+                if (count($mcccs) < 3) {
                     return false;
                 }
 
                 $totPourcentage = 0.0;
-                foreach ($mcccs[1]['cc'] as $mccc) {
-                    if ($mccc->getPourcentage() === null || $mccc->getPourcentage() === 0.0) {
+                foreach ($mcccs as $mccc) {
+                    if ($mccc->getPourcentage() === null || $mccc->getPourcentage() === 0.0 || $mccc->getPourcentage() > 50) {
                         return false;
                     }
                     $totPourcentage += $mccc->getPourcentage();
