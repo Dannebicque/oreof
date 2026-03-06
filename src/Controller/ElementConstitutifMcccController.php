@@ -274,7 +274,7 @@ class ElementConstitutifMcccController extends AbstractController
     public function mcccEcNonEditable(
         ElementConstitutif           $elementConstitutif,
         Parcours                     $parcours,
-        EntityManagerInterface       $entityManager
+        VersioningParcours           $versioningParcours
     ): Response {
 
         $dpeParcours = GetDpeParcours::getFromParcours($parcours);
@@ -297,8 +297,7 @@ class ElementConstitutifMcccController extends AbstractController
         $typeMccc = $getElement->getTypeMcccFromFicheMatiere();
         $ects = $getElement->getFicheMatiereEcts();
 
-        $lastVersion = $entityManager->getRepository(ParcoursVersioning::class)->findLastCfvuVersion($parcours);
-        $lastVersion = $lastVersion[0] ?? null;
+        $lastVersion = $versioningParcours->getLastVersionOrLastYearCfvu($parcours);
 
         $typeMcccLibelle = [
             'ct' => 'Contrôle Terminal',
@@ -387,14 +386,19 @@ class ElementConstitutifMcccController extends AbstractController
         $ueArray = array_merge(...$ueArray);
 
         // Et on cherche le StructureEc de la version qui a le même Id
+        // ou l'ID de l'année dernière
         $structureEc = null;
         foreach ($ueArray as $structUe) {
             foreach ($structUe->elementConstitutifs as $structEc) {
-                if ($structEc->elementConstitutif->getDeserializedId() === $elementConstitutif->getId()) {
+                if (($structEc->elementConstitutif->getDeserializedId() === $elementConstitutif->getId())
+                    || ($structEc->elementConstitutif->getDeserializedId() === $elementConstitutif->getEcOrigineCopie()->getId())
+                ) {
                     $structureEc = $structEc;
                 }
                 foreach ($structEc->elementsConstitutifsEnfants as $structEcEnfant) {
-                    if ($structEcEnfant->elementConstitutif->getDeserializedId() === $elementConstitutif->getId()) {
+                    if (($structEcEnfant->elementConstitutif->getDeserializedId() === $elementConstitutif->getId())
+                        || ($structEcEnfant->elementConstitutif->getDeserializedId() === $elementConstitutif->getEcOrigineCopie()->getId())
+                    ) {
                         $structureEc = $structEcEnfant;
                     }
                 }
