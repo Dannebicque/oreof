@@ -69,7 +69,7 @@ class StructureShowController extends AbstractController
         $typeD = $this->typeDiplomeResolver->get($parcours?->getTypeDiplome());
         $dto = $typeD->calculStructureParcours($parcours);
 
-        $structureDifferencesParcours = $versioningParcours->getStructureDifferencesBetweenParcoursAndLastVersion($parcours);
+        $structureDifferencesParcours = $versioningParcours->getStructureDifferencesBetweenParcoursAndLastCfvu($parcours);
         if ($structureDifferencesParcours !== null) {
             $diffStructure = (new VersioningStructure($structureDifferencesParcours, $dto))->calculDiff();
         }
