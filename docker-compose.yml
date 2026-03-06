@@ -10,7 +10,8 @@ services:
     depends_on:
       - db
     volumes:
-      - ./docker/php-conf.d/99-custom.ini:/usr/local/etc/php/conf.d/99-custom.ini:ro
+      - ./docker/php-conf.d/99-custom.ini:/etc/php/8.5/cli/conf.d/99-custom.ini:ro
+      - ./docker/php-conf.d/99-custom.ini:/etc/php/8.5/apache2/conf.d/99-custom.ini:ro
       - ./:/var/www/oreof
       - ./docker/apache.conf:/etc/apache2/sites-enabled/000-default.conf
 
