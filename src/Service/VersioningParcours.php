@@ -129,6 +129,18 @@ class VersioningParcours
         return count($lastVersion) > 0 ? $lastVersion[0] : null;
     }
 
+    public function getLastVersionOrLastYearCfvu(Parcours $parcours) { 
+        // Dernière version CFVU
+        $lastVersion = $this->entityManager->getRepository(ParcoursVersioning::class)->findLastCfvuVersion($parcours);
+        if(count($lastVersion) === 0 && $parcours->getParcoursOrigineCopie() !== null){
+            // Sinon, on prend la plus récente de l'année dernière
+            $lastVersion = $this->entityManager->getRepository(ParcoursVersioning::class)
+                ->findLastCfvuVersion($parcours->getParcoursOrigineCopie());
+        }
+
+        return $lastVersion[0] ?? null;
+    }
+
     public function getDifferencesBetweenParcoursAndLastVersion(Parcours $parcours, bool $fromLastYear = false): array
     {
         $this->textDifferences = [];
