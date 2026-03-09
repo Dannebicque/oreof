@@ -50,11 +50,13 @@ class ExportMccc
         }
 
         foreach ($this->formations as $formationId) {
-            $formation = $this->formationRepository->findOneBy(['id' => $formationId]);
-            if ($formation !== null) {
-                $typeDiplome = $this->typeDiplomeResolver->getFromFormation($formation);
+            $dpe = $this->dpeParcoursRepository->findOneBy(['id' => $formationId]);
+            if ($dpe !== null) {
+                $typeDiplome = $this->typeDiplomeResolver->getFromParcours($dpe->getParcours());
                 if (null !== $typeDiplome) {
-                    foreach ($formation->getParcours() as $parcours) {
+                    $formation = $dpe->getParcours()->getFormation();
+                    $parcours = $dpe->getParcours();
+                    {
                         if ($this->format === 'xlsx') {
                             $fichier = $typeDiplome->exportAndSaveExcelMccc(
                                 $dir,
