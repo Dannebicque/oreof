@@ -74,23 +74,38 @@
             <td colspan="5"></td>
         {% else %}
             <td>
+                <span class="show_versioning_campagne d-none d-print-none">
+                    {{ diffEcCampagne ? diffEcCampagne.heuresEctsEc.cmPres|displayDiff : '' }}
+                </span>
                 <span class="show_versioning d-none d-print-none">{{ diffEc ? diffEc.heuresEctsEc.cmPres|displayDiff : '' }}</span>
                 <span class="show_current">{{ ec.heuresEctsEc.cmPres|filtreHeures }}</span>
             </td>
             <td>
+                <span class="show_versioning_campagne d-none d-print-none">
+                    {{ diffEcCampagne ? diffEcCampagne.heuresEctsEc.tdPres|displayDiff : '' }}
+                </span>
                 <span class="show_versioning d-none d-print-none">{{ diffEc ? diffEc.heuresEctsEc.tdPres|displayDiff : '' }}</span>
                 <span class="show_current">{{ ec.heuresEctsEc.tdPres|filtreHeures }}</span>
             </td>
             <td>
+                <span class="show_versioning_campagne d-none d-print-none">
+                    {{ diffEcCampagne ? diffEcCampagne.heuresEctsEc.tpPres|displayDiff : '' }}
+                </span>
                 <span class="show_versioning d-none d-print-none">{{ diffEc ? diffEc.heuresEctsEc.tpPres|displayDiff : '' }}</span>
                 <span class="show_current">{{ ec.heuresEctsEc.tpPres|filtreHeures }}</span>
             </td>
 
             <td>
+                <span class="show_versioning_campagne d-none d-print-none">
+                    {{ diffEcCampagne ? diffEcCampagne.heuresEctsEc.sommeEcTotalPres|displayDiff : '' }}
+                </span>
                 <span class="show_versioning d-none d-print-none">{{ diffEc ? diffEc.heuresEctsEc.sommeEcTotalPres|displayDiff : '' }}</span>
                 <span class="show_current">{{ ec.heuresEctsEc.sommeEcTotalPres|filtreHeures }}</span>
             </td>
             <td>
+                <span class="show_versioning_campagne d-none d-print-none">
+                    {{ diffEcCampagne ? diffEcCampagne.heuresEctsEc.tePres|displayDiff : '' }}
+                </span>
                 <span class="show_versioning d-none d-print-none">{{ diffEc ? diffEc.heuresEctsEc.tePres|displayDiff : '' }}</span>
                 <span class="show_current">{{ ec.heuresEctsEc.tePres|filtreHeures }}</span>
             </td>
@@ -102,18 +117,30 @@
             <td colspan="4"></td>
         {% else %}
             <td>
+                <span class="show_versioning_campagne d-none d-print-none">
+                    {{ diffEcCampagne ? diffEcCampagne.heuresEctsEc.cmDist|displayDiff : '' }}
+                </span>
                 <span class="show_versioning d-none d-print-none">{{ diffEc ? diffEc.heuresEctsEc.cmDist|displayDiff : '' }}</span>
                 <span class="show_current">{{ ec.heuresEctsEc.cmDist|filtreHeures }}</span>
             </td>
             <td>
+                <span class="show_versioning_campagne d-none d-print-none">
+                    {{ diffEcCampagne ? diffEcCampagne.heuresEctsEc.tdDist|displayDiff : '' }}
+                </span>
                 <span class="show_versioning d-none d-print-none">{{ diffEc ? diffEc.heuresEctsEc.tdDist|displayDiff : '' }}</span>
                 <span class="show_current">{{ ec.heuresEctsEc.tdDist|filtreHeures }}</span>
             </td>
             <td>
+                <span class="show_versioning_campagne d-none d-print-none">
+                    {{ diffEcCampagne ? diffEcCampagne.heuresEctsEc.tpDist|displayDiff : '' }}
+                </span>
                 <span class="show_versioning d-none d-print-none">{{ diffEc ? diffEc.heuresEctsEc.tpDist|displayDiff : '' }}</span>
                 <span class="show_current">{{ ec.heuresEctsEc.tpDist|filtreHeures }}</span>
             </td>
             <td>
+                <span class="show_versioning_campagne d-none d-print-none">
+                    {{ diffEcCampagne ? diffEcCampagne.heuresEctsEc.sommeEcTotalDist|displayDiff : '' }}
+                </span>
                 <span class="show_versioning d-none d-print-none">{{ diffEc ? diffEc.heuresEctsEc.sommeEcTotalDist|displayDiff : '' }}</span>
                 <span class="show_current">{{ ec.heuresEctsEc.sommeEcTotalDist|filtreHeures }}</span>
             </td>
