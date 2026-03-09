@@ -74,6 +74,16 @@ class StructureShowController extends AbstractController
             $diffStructure = (new VersioningStructure($structureDifferencesParcours, $dto))->calculDiff();
         }
 
+        $diffStructureCampagnePrecedente = null;
+        if($parcours->getParcoursOrigineCopie()){
+            $dtoAnneePrecedente = $versioningParcours->loadParcoursFromVersion(
+                $versioningParcours->getLastCfvuVersion($parcours->getParcoursOrigineCopie())
+            )['dto'] ?? null;
+            if($dtoAnneePrecedente !== null){
+                $diffStructureCampagnePrecedente = (new VersioningStructure($dtoAnneePrecedente, $dto))->calculDiff();
+            }
+        }
+
         if ($dto === null) {
             return $this->render('typeDiplome/formation/_structure_empty.html.twig', []);
         }
@@ -81,6 +91,7 @@ class StructureShowController extends AbstractController
         return $this->render('typeDiplome/' . $typeD::TEMPLATE_FOLDER . '/structure/_structure.html.twig', [
             'parcours' => $parcours,
             'diffStructure' => $diffStructure ?? null,
+            'diffStructureCampagne' => $diffStructureCampagnePrecedente ?? null,
             'dto' => $dto,
             'hasLastVersion' => $hasLastVersion,
         ]);
