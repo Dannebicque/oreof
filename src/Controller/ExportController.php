@@ -171,24 +171,24 @@ class ExportController extends BaseController
         ]);
     }
 
-    #[Route('/export/test-exports', name: 'app_export_test_exports')]
-    public function tests(MessageBusInterface $messageBus): Response
-    {
-        $user = $this->getUser();
-
-        $parameters = [
-            // paramètres optionnels de l’export
-        ];
-
-        // Dispatch la demande de génération
-        $messageBus->dispatch(new RequestGenerationJobMessage(
-            $this->getUser()?->getId(),
-            'formation_export',
-            $parameters
-        ));
-
-        $this->addFlash('success', 'Votre export a été demandé. Vous recevrez un fichier une fois prêt.');
-
-        return $this->redirectToRoute('app_export_index');
-    }
+//    #[Route('/export/test-exports', name: 'app_export_test_exports')]
+//    public function tests(MessageBusInterface $messageBus): Response
+//    {
+//        $user = $this->getUser();
+//
+//        $parameters = [
+//            // paramètres optionnels de l’export
+//        ];
+//
+//        // Dispatch la demande de génération
+//        $messageBus->dispatch(new RequestGenerationJobMessage(
+//            $this->getUser()?->getId(),
+//            'formation_export',
+//            $parameters
+//        ));
+//
+//        $this->addFlash('success', 'Votre export a été demandé. Vous recevrez un fichier une fois prêt.');
+//
+//        return $this->redirectToRoute('app_export_index');
+//    }
 }
