@@ -143,7 +143,7 @@ class FicheMatiereController extends BaseController
             'typeD' => $typeD,
             'typeDiplome' => $typeDiplome,
             'ects' => $ficheMatiere->getEcts(),
-            'mcccs' => $typeD->getDisplayMccc($typeD->getMcccs($ficheMatiere), $ficheMatiere->getTypeMccc()),
+            'mcccs' => $typeD->getDisplayMccc($typeD->getMcccs($ficheMatiere), $ficheMatiere->getTypeMccc() ?? ''),
             'bccs' => $bccs,
             'typeMccc' => $ficheMatiere->getTypeMccc(),
             'stringDifferences' => $textDifferences,
