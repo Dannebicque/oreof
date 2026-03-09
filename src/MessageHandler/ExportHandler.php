@@ -10,6 +10,7 @@
 namespace App\MessageHandler;
 
 use App\Classes\Export\Export;
+use App\Repository\CampagneCollecteRepository;
 use App\Repository\ComposanteRepository;
 use App\Repository\UserRepository;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
@@ -17,12 +18,13 @@ use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler(fromTransport: 'async_export')]
-class ExportHandler
+readonly class ExportHandler
 {
     public function __construct(
+        private CampagneCollecteRepository $campagneCollecteRepository,
         private ComposanteRepository $composanteRepository,
         private UserRepository             $userRepository,
-        private readonly MailerInterface   $mailer,
+        private MailerInterface            $mailer,
         private Export                     $export
     )
     {
@@ -38,8 +40,12 @@ class ExportHandler
             $this->export->setComposante($composante);
         }
 
+        if (null !== $exportMessage->getCampagneCollecte()) {
+            $campagneCollecte = $this->campagneCollecteRepository->find($exportMessage->getCampagneCollecte());
+        }
+
         $user = $this->userRepository->find($exportMessage->getUser());
-        $lien = $this->export->exportFormations($exportMessage->getFormations(), $exportMessage->getCampagneCollecte());
+        $lien = $this->export->exportFormations($exportMessage->getFormations(), $campagneCollecte ?? null);
 
         if (null !== $user && $lien !== null) {
             $mail = (new TemplatedEmail())
