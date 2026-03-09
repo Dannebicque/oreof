@@ -129,6 +129,11 @@ class VersioningParcours
         return count($lastVersion) > 0 ? $lastVersion[0] : null;
     }
 
+    public function getLastCfvuVersion(Parcours $parcours) : ParcoursVersioning|null {
+        $lastCfvu = $this->entityManager->getRepository(ParcoursVersioning::class)->findLastCfvuVersion($parcours);
+        return $lastCfvu[0] ?? null;
+    }
+
     public function getLastVersionOrLastYearCfvu(Parcours $parcours) { 
         // Dernière version CFVU
         $lastVersion = $this->entityManager->getRepository(ParcoursVersioning::class)->findLastCfvuVersion($parcours);
