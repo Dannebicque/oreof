@@ -97,6 +97,7 @@
             semestreOrdre:semestreOrdre,
             ecEnfant:false,
             diffEc: diffUe.elementConstitutifs[ordEc] ?? null,
+            diffEcCampagne: diffUeCampagne.elementConstitutifs[ordEc] ?? null,
             indexEc: indexEc,
             indexEcEnfant: -1,
             UeDisplay: ue.display
@@ -108,6 +109,7 @@
                 semestreOrdre:semestreOrdre,
                 ecEnfant:true,
                 diffEc: diffUe.elementConstitutifs[ordEc].ecEnfants[ordEce] ?? null,
+                diffEcCampagne: diffUeCampagne.elementConstitutifs[ordEc].ecEnfants[ordEce] ?? null,
                 indexEc: indexEc,
                 indexEcEnfant: indexEcEnfant,
                 UeDisplay: ue.display
@@ -132,22 +134,37 @@
     </th>
     {% if presentiel %}
         <th>
+            <span class="show_versioning_campagne d-none d-print-none">
+                {{ diffUeCampagne ? diffUeCampagne.heuresEctsUe.sommeUeCmPres|displayDiff : '' }}
+            </span>
             <span class="show_versioning d-none d-print-none">{{ diffUe ? diffUe.heuresEctsUe.sommeUeCmPres|displayDiff : '' }} </span>
             <span class="show_current">{{ ue.heuresEctsUe.sommeUeCmPres|filtreHeures }}</span>
         </th>
         <th>
+            <span class="show_versioning_campagne d-none d-print-none">
+                {{ diffUeCampagne ? diffUeCampagne.heuresEctsUe.sommeUeTdPres|displayDiff : '' }}
+            </span>
             <span class="show_versioning d-none d-print-none">{{ diffUe ? diffUe.heuresEctsUe.sommeUeTdPres|displayDiff : '' }}</span>
             <span class="show_current">{{ ue.heuresEctsUe.sommeUeTdPres|filtreHeures }}</span>
         </th>
         <th>
+            <span class="show_versioning_campagne d-none d-print-none">
+                {{ diffUeCampagne ? diffUeCampagne.heuresEctsUe.sommeUeTpPres|displayDiff : '' }}
+            </span>
             <span class="show_versioning d-none d-print-none">{{ diffUe ? diffUe.heuresEctsUe.sommeUeTpPres|displayDiff : '' }}</span>
             <span class="show_current">{{ ue.heuresEctsUe.sommeUeTpPres|filtreHeures }}</span>
         </th>
         <th>
+            <span class="show_versioning_campagne d-none d-print-none">
+                {{ diffUeCampagne ? diffUeCampagne.heuresEctsUe.sommeUeTotalPres|displayDiff : '' }}
+            </span>
             <span class="show_versioning d-none d-print-none">{{ diffUe ? diffUe.heuresEctsUe.sommeUeTotalPres|displayDiff : '' }}</span>
             <span class="show_current">{{ ue.heuresEctsUe.sommeUeTotalPres|filtreHeures }}</span>
         </th>
         <th>
+            <span class="show_versioning_campagne d-none d-print-none">
+                {{ diffUeCampagne ? diffUeCampagne.heuresEctsUe.sommeUeTePres|displayDiff : '' }}
+            </span>
             <span class="show_versioning d-none d-print-none">{{ diffUe ? diffUe.heuresEctsUe.sommeUeTePres|displayDiff : '' }}</span>
             <span class="show_current">{{ ue.heuresEctsUe.sommeUeTePres|filtreHeures }}</span>
         </th>
@@ -155,18 +172,30 @@
 
     {% if distanciel %}
         <th>
+            <span class="show_versioning_campagne d-none d-print-none">
+                {{ diffUeCampagne ? diffUeCampagne.heuresEctsUe.sommeUeCmDist|displayDiff: '' }}
+            </span>
             <span class="show_versioning d-none d-print-none">{{ diffUe ? diffUe.heuresEctsUe.sommeUeCmDist|displayDiff : '' }}</span>
             <span class="show_current">{{ ue.heuresEctsUe.sommeUeCmDist|filtreHeures }}</span>
         </th>
         <th>
+            <span class="show_versioning_campagne d-none d-print-none">
+                {{ diffUeCampagne ? diffUeCampagne.heuresEctsUe.sommeUeTdDist|displayDiff: '' }}
+            </span>
             <span class="show_versioning d-none d-print-none">{{ diffUe ? diffUe.heuresEctsUe.sommeUeTdDist|displayDiff : '' }}</span>
             <span class="show_current">{{ ue.heuresEctsUe.sommeUeTdDist|filtreHeures }}</span>
         </th>
         <th>
+            <span class="show_versioning_campagne d-none d-print-none">
+                {{ diffUeCampagne ? diffUeCampagne.heuresEctsUe.sommeUeTpDist|displayDiff: '' }}
+            </span>
             <span class="show_versioning d-none d-print-none">{{ diffUe ? diffUe.heuresEctsUe.sommeUeTpDist|displayDiff : '' }}</span>
             <span class="show_current">{{ ue.heuresEctsUe.sommeUeTpDist|filtreHeures }}</span>
         </th>
         <th>
+            <span class="show_versioning_campagne d-none d-print-none">
+                {{ diffUeCampagne ? diffUeCampagne.heuresEctsUe.sommeUeTotalDist|displayDiff: '' }}
+            </span>
             <span class="show_versioning d-none d-print-none">{{ diffUe ? diffUe.heuresEctsUe.sommeUeTotalDist|displayDiff : '' }}</span>
             <span class="show_current">{{ ue.heuresEctsUe.sommeUeTotalDist|filtreHeures }}</span>
         </th>
@@ -174,6 +203,9 @@
 
     {% if parcours.modalitesEnseignement != null and (parcours.modalitesEnseignement.value == 1) %}
         <th>
+            <span class="show_versioning_campagne d-none d-print-none">
+                {{ diffUeCampagne ? diffUeCampagne.heuresEctsUe.sommeUeTotalPresDist|displayDiff : '' }}
+            </span>
             <span class="show_versioning d-none d-print-none">{{ diffUe ? diffUe.heuresEctsUe.sommeUeTotalPresDist|displayDiff : '' }}</span>
             <span class="show_current">{{ ue.heuresEctsUe.sommeUeTotalPresDist|filtreHeures }}</span>
         </th>
