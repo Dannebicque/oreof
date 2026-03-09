@@ -186,12 +186,12 @@ class ButMccc extends AbstractButMccc
                     foreach ($ue->getElementConstitutifs() as $ec) {
                         $fiche = $ec->getFicheMatiere();
                         if ($fiche !== null) {
-                            if ($fiche->getTypeMatiere() === FicheMatiere::TYPE_MATIERE_RESSOURCE) {
+                            if ($fiche->getTypeMatiere() === FicheMatiere::TYPE_MATIERE_RESSOURCE && $fiche->getSigle() !== null) {
                                 $tabFichesRessources[$fiche->getSigle()] = $ec;
                                 $tabFichesUes[$fiche->getSigle()][$ue->getId()] = $ec->getEcts();
                             }
 
-                            if ($fiche->getTypeMatiere() === FicheMatiere::TYPE_MATIERE_SAE) {
+                            if ($fiche->getTypeMatiere() === FicheMatiere::TYPE_MATIERE_SAE && $fiche->getSigle() !== null) {
                                 $tabFichesSaes[$fiche->getSigle()] = $ec;
                                 $tabFichesUes[$fiche->getSigle()][$ue->getId()] = $ec->getEcts();
                             }
