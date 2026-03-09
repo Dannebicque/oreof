@@ -146,7 +146,7 @@ class FormationResponsableController extends BaseController
 
         foreach ($this->getCampagneCollecte()->getTimelineDates() as $date) {
             if ($date->isCfvu()) {
-                $dateCfvu = $date;
+                $dateCfvu = $date->getDate();
                 break;
             }
         }
