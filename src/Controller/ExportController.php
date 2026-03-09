@@ -41,11 +41,10 @@ class ExportController extends BaseController
     ];
 
 
-    #[Route('/export', name: 'app_export_index')]
+    #[Route('/export/', name: 'app_export_index')]
     public function index(
         ComposanteRepository       $composanteRepository,
     ): Response {
-
         if (!$this->isGranted('ROLE_ADMIN') &&
             !$this->isGranted('SHOW', [
                 'route' => 'app_etablissement',
@@ -130,9 +129,15 @@ class ExportController extends BaseController
                 'subject' => 'etablissement'
             ])) {
             $dpes = $dpeParcoursRepository->findParcoursByComposante($this->getCampagneCollecte(), $composante);
-        } elseif ($this->isGranted('CAN_ETABLISSEMENT_CONSEILLER_ALL', $this->getUser())) {
+        } elseif ($this->isGranted('SHOW', [
+            'route' => 'app_etablissement',
+            'subject' => 'etablissement'
+        ])) {
             $dpes = $dpeParcoursRepository->findParcoursByComposanteCfvu($this->getCampagneCollecte(), $composante);
-        } elseif ($this->isGranted('CAN_COMPOSANTE_SHOW_MY', $this->getUser())) {
+        } elseif ($this->isGranted('SHOW', [
+            'route' => 'app_composante',
+            'subject' => $composante
+        ])) {
             $dpes = $dpeParcoursRepository->findParcoursByComposante($this->getCampagneCollecte(), $composante);
         } else {
             $dpes = [];
