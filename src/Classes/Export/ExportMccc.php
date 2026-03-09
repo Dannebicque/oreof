@@ -45,10 +45,8 @@ class ExportMccc
         $dir = $this->dir;
         if ($this->format === 'xlsx') {
             $dir = $this->dir . '/mccc/';
-            $prefix_dir = 'mccc/';
         } elseif ($this->format === 'pdf') {
             $dir = $this->dir  . '/pdf/';
-            $prefix_dir = 'pdf/';
         }
 
         foreach ($this->formations as $formationId) {
@@ -94,7 +92,7 @@ class ExportMccc
             }
         }
 
-        return $prefix_dir . $fileName;
+        return $fileName;
     }
 
     public function exportVersionZip(): string
