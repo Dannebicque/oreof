@@ -39,7 +39,6 @@ class ExportHandler
         }
 
         $user = $this->userRepository->find($exportMessage->getUser());
-
         $lien = $this->export->exportFormations($exportMessage->getFormations(), $exportMessage->getCampagneCollecte());
 
         if (null !== $user && $lien !== null) {

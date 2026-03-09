@@ -8,7 +8,7 @@ use App\Service\PythonJobLauncher;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
-#[AsMessageHandler]
+//#[AsMessageHandler]
 class ProcessGenerationJobHandler
 {
     public function __construct(
