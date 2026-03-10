@@ -65,6 +65,9 @@
         }) }}
     </td>
     <td>
+        <span class="show_versioning_campagne d-none d-print-none">
+            {{ diffEcCampagne ? diffEcCampagne.heuresEctsEc.ects|displayDiff : '' }}
+        </span>
         <span class="show_versioning d-none d-print-none">{{ diffEc ? diffEc.heuresEctsEc.ects|displayDiff : '' }} ECTS</span>
         <p class="show_current">{{ ec.heuresEctsEc.ects|badgeEcts }}</p>
     </td>
