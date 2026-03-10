@@ -1,8 +1,10 @@
 <tr>
     <th class="border-left-semestre-{{ semestreOrdre }}">&nbsp;</th>
     <th colspan="5" {% if enfant %}class="border-left-ue-{{ ue.ordre }}"{% endif %}>
+        <span class="show_versioning_campagne d-none d-print-none">{{ diffUeCampagne ? diffUeCampagne.display|displayDiff : '' }}</span>
         <span class="show_versioning d-none d-print-none">{{ diffUe ? diffUe.display|displayDiff : '' }}</span>
         <span class="show_current"> {{ ue.display }}</span> |
+        <span class="show_versioning_campagne d-none d-print-none">{{ diffUeCampagne ? diffUeCampagne.libelle|displayDiff : '' }}</span>
         <span class="show_versioning d-none d-print-none">{{ diffUe ? diffUe.libelle|displayDiff : '' }}</span>
         <span class="show_current"> {{ ue.ue.libelle }}</span>
         {% if isVersioning is not defined or isVersioning == false %}
