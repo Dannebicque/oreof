@@ -36,6 +36,19 @@ function registerShowDifferencesClick(buttonElement, idToShow, idToHide) {
     }
 };
 
+function registerShowCurrentDataClick(buttonElement) {
+    buttonElement.addEventListener('click', e => {
+        e.preventDefault();
+        [idDiffLastVersion, idDiffLastYear].forEach(
+            id => {
+                document.querySelectorAll(`#${id}`).forEach(elt => { elt.classList.add('d-none')});
+            }
+        );
+        toggleMaquetteDifferences('undefined');
+        currentDisplay = undefined;
+    })
+}
+
 function toggleMaquetteDifferences(elementToShow) {
     for(key in maquetteDifferences){
         if(`${elementToShow}` === key){
@@ -58,6 +71,8 @@ document.addEventListener('DOMContentLoaded', (e) => {
 
     let buttonShowDiffLastYear = document.querySelector("#showDiffWithLastYear");
     let buttonShowDiffLastVersion = document.querySelector("#showDiffWithLastVersion");
+    let buttonShowCurrentData = document.querySelector('#showCurrentData');
     registerShowDifferencesClick(buttonShowDiffLastVersion, idDiffLastVersion, idDiffLastYear);
     registerShowDifferencesClick(buttonShowDiffLastYear, idDiffLastYear, idDiffLastVersion);
+    registerShowCurrentDataClick(buttonShowCurrentData);
 })
