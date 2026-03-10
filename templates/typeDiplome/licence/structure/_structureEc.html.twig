@@ -10,6 +10,9 @@
                 {% if isBut is defined and isBut == true %}
                     <strong>{{ ec.elementConstitutif.ficheMatiere.sigle }}</strong> {{ ec.elementConstitutif.ficheMatiere.libelle }} ({{ ec.elementConstitutif.displayCodeApogee }})
                 {% else %}
+                    <span class="show_versioning_campagne d-none d-print-none">
+                        {{ diffEcCampagne ? diffEcCampagne.libelle|displayDiff : '' }}
+                    </span>
                     <span class="show_versioning d-none d-print-none">{{ diffEc ? diffEc.libelle|displayDiff : '' }}</span>
                     <span class="show_current">{{ ec.elementConstitutif.ficheMatiere.display }}
                         {% if isVersioning is not defined or isVersioning == false %}
@@ -33,6 +36,9 @@
                 {{ ec.elementConstitutif.ficheMatiere.etatFiche|badgeFiche }}
             {% endif %}
         {% else %}
+            <span class="show_versioning_campagne d-none d-print-none">
+                {{ diffEcCampagne ? diffEcCampagne.libelle|displayDiff : '' }}
+            </span>
             <span class="show_versioning d-none d-print-none">{{ diffEc ? diffEc.libelle|displayDiff : '' }}</span>
             <span class="show_current">{{ ec.elementConstitutif.libelle }}</span>
         {% endif %}
