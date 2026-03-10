@@ -496,7 +496,7 @@ abstract class AbstractLicenceHandler implements TypeDiplomeHandlerInterface, Ty
                 return false;
             }
 
-            $totPourcentage += $mccc->getPourcentage();
+            $totPourcentage += $mccc->getPourcentage() * $mccc->getNbEpreuves();
 
             if ($this->typeEpreuveHasDuree($mccc->getTypeEpreuve()[0]) && $mccc->getDuree() === null) {
                 return false;
@@ -546,11 +546,6 @@ abstract class AbstractLicenceHandler implements TypeDiplomeHandlerInterface, Ty
                     return false;
                 }
 
-                if (isset($mcccs[1]) && !isset($mcccs[1]['cc']) && count($mcccs[1]['cc']) !== 1) {
-                    return false;
-                }
-
-
                 if (isset($mcccs[1]) && !isset($mcccs[1]['cc']) && !is_array($mcccs[1]['cc'])) {
                     return false;
                 }
@@ -560,7 +555,7 @@ abstract class AbstractLicenceHandler implements TypeDiplomeHandlerInterface, Ty
                     if ($mccc->getPourcentage() === null || $mccc->getPourcentage() === 0.0) {
                         return false;
                     }
-                    $totPourcentage += $mccc->getPourcentage();
+                    $totPourcentage += $mccc->getPourcentage() * $mccc->getNbEpreuves();
                 }
                 return $totPourcentage === 100.0;
             case 'cci':
