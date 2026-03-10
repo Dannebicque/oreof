@@ -2,6 +2,11 @@ let idDiffLastVersion = "diffGlobalParcours";
 let idDiffLastYear = "diffGlobalParcoursCampagne";
 
 let currentDisplay = undefined;
+let maquetteDifferences =  {
+    'undefined': 'show_current',
+    'diffGlobalParcours': 'show_versioning',
+    'diffGlobalParcoursCampagne': 'show_versioning_campagne'
+};
 
 function registerShowDifferencesClick(buttonElement, idToShow, idToHide) {
     if(buttonElement){
@@ -17,6 +22,7 @@ function registerShowDifferencesClick(buttonElement, idToShow, idToHide) {
                         elt.classList.add('d-none');
                     });
                 currentDisplay = idToShow;
+                toggleMaquetteDifferences(currentDisplay);
             }
             else {
                 document.querySelectorAll(`#${idToShow}`)
@@ -24,15 +30,30 @@ function registerShowDifferencesClick(buttonElement, idToShow, idToHide) {
                         elt.classList.add('d-none');
                     });
                 currentDisplay = undefined;
+                toggleMaquetteDifferences(currentDisplay);
             }
         });
     }
 };
 
+function toggleMaquetteDifferences(elementToShow) {
+    for(key in maquetteDifferences){
+        if(`${elementToShow}` === key){
+            document.querySelectorAll(`.${maquetteDifferences[key]}`)
+                .forEach(elt => { elt.classList.remove('d-none'); });
+        }
+        else {
+            document.querySelectorAll(`.${maquetteDifferences[key]}`)
+                .forEach(elt => { elt.classList.add('d-none'); })
+        }
+    }
+}
+
 document.addEventListener('DOMContentLoaded', (e) => {
     let urlParam = (new URLSearchParams(document.location.search)).get('optionDisplay');
     if(urlParam !== null){
         currentDisplay = urlParam;
+        toggleMaquetteDifferences(currentDisplay);
     }
 
     let buttonShowDiffLastYear = document.querySelector("#showDiffWithLastYear");
