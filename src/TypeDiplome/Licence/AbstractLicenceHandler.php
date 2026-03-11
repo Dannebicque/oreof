@@ -37,8 +37,9 @@ abstract class AbstractLicenceHandler implements TypeDiplomeHandlerInterface, Ty
     public const SOURCE = 'licence';
     public const TEMPLATE_FORM_MCCC = 'licence.html.twig';
     public const NB_ANNEE = 3;
+
     /**
-     * @var TypeEpreuve[]|array|object[]
+     * @var TypeEpreuve[]|array
      */
     private array $typeEpreuves;
 
@@ -292,7 +293,19 @@ abstract class AbstractLicenceHandler implements TypeDiplomeHandlerInterface, Ty
 
     public function getMcccs(ElementConstitutif|FicheMatiere $elementConstitutif): array|Collection
     {
-        $mcccs = $elementConstitutif->getMcccs();
+        // Source canonique: évite les collections inverses potentiellement vides/stales après remove+add.
+        if ($elementConstitutif->getId() !== null) {
+            $criteria = $elementConstitutif instanceof FicheMatiere
+                ? ['ficheMatiere' => $elementConstitutif]
+                : ['ec' => $elementConstitutif];
+
+            $mcccs = $this->entityManager
+                ->getRepository(Mccc::class)
+                ->findBy($criteria, ['numeroSession' => 'ASC', 'numeroEpreuve' => 'ASC', 'id' => 'ASC']);
+        } else {
+            $mcccs = $elementConstitutif->getMcccs()->toArray();
+        }
+
         $tabMcccs = [];
 
         if ($elementConstitutif->getTypeMccc() === 'cci') {
@@ -538,7 +551,8 @@ abstract class AbstractLicenceHandler implements TypeDiplomeHandlerInterface, Ty
 
         switch ($owner->getTypeMccc()) {
             case 'cc':
-                if (isset($mcccs[2]) && !isset($mcccs[2]['et']) && !is_array($mcccs[2]['et'])) {
+
+            if (isset($mcccs[2]) && !isset($mcccs[2]['et']) && !is_array($mcccs[2]['et'])) {
                     return false;
                 }
 
