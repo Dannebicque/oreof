@@ -35,10 +35,8 @@ use App\Repository\TypeDiplomeRepository;
 use App\Repository\UserRepository;
 use App\Service\VersioningFormation;
 use App\Service\VersioningParcours;
-use App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException;
 use App\Utils\Access;
 use App\Utils\JsonRequest;
-use App\Utils\Tools;
 use DateTime;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
@@ -344,9 +342,6 @@ class FormationController extends BaseController
         ]);
     }
 
-    /**
-     * @throws TypeDiplomeNotFoundException
-     */
     #[Route('/api', name: 'app_formation_api', methods: ['GET'])]
     public function api(
         MentionRepository     $mentionRepository,
@@ -370,9 +365,6 @@ class FormationController extends BaseController
         ]);
     }
 
-    /**
-     * @throws TypeDiplomeNotFoundException
-     */
     #[Route('/{slug}', name: 'app_formation_show', methods: ['GET'])]
     public function show(
         Formation               $formation,
@@ -413,9 +405,6 @@ class FormationController extends BaseController
         ]);
     }
 
-    /**
-     * @throws TypeDiplomeNotFoundException
-     */
     #[Route('/{slug}/edit', name: 'app_formation_edit', methods: ['GET', 'POST'])]
     public function edit(
         VersioningParcours $versioningParcours,

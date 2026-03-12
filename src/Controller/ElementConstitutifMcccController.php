@@ -42,10 +42,6 @@ class ElementConstitutifMcccController extends AbstractController
     {
     }
 
-
-    /**
-     * @throws TypeDiplomeNotFoundException
-     */
     #[Route('/{id}/mccc-ec/{parcours}', name: 'app_element_constitutif_mccc', methods: ['GET', 'POST'])]
     public function mcccEc(
         EventDispatcherInterface $eventDispatcher,
@@ -65,10 +61,6 @@ class ElementConstitutifMcccController extends AbstractController
         $formation = $parcours?->getFormation();
         if ($formation === null) {
             throw new RuntimeException('Formation non trouvée');
-        }
-        $typeDiplome = $formation->getTypeDiplome();
-        if ($typeDiplome === null) {
-            throw new RuntimeException('Type de diplome non trouvé');
         }
 
         $typeD = $this->typeDiplomeResolver->getFromParcours($parcours);

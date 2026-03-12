@@ -12,6 +12,8 @@ namespace App\Service;
 use App\Entity\Formation;
 use App\Entity\Parcours;
 use App\Entity\TypeDiplome;
+use App\Repository\TypeDiplomeRepository;
+use App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException;
 use App\TypeDiplome\TypeDiplomeHandlerInterface;
 use LogicException;
 
@@ -21,23 +23,28 @@ final class TypeDiplomeResolver
     private TypeDiplomeHandlerInterface $handler;
 
     /** @param iterable<TypeDiplomeHandlerInterface> $handlers */
-    public function __construct(private iterable $handlers)
+    public function __construct(
+        private iterable              $handlers,
+        private TypeDiplomeRepository $typeDiplomeRepository,
+    )
     {
     }
 
+    /**
+     * @throws TypeDiplomeNotFoundException
+     */
     public function getFromFormation(?Formation $formation): TypeDiplomeHandlerInterface
     {
         if (null === $formation) {
             throw new LogicException('No formation');
         }
 
-        if (null === $formation->getTypeDiplome()) {
-            throw new LogicException('No type diplome');
-        }
-
         return $this->get($formation->getTypeDiplome());
     }
 
+    /**
+     * @throws TypeDiplomeNotFoundException
+     */
     public function getFromParcours(?Parcours $parcours): TypeDiplomeHandlerInterface
     {
         if (null === $parcours) {
@@ -48,15 +55,22 @@ final class TypeDiplomeResolver
             throw new LogicException('No formation');
         }
 
-        if (null === $parcours->getFormation()->getTypeDiplome()) {
-            throw new LogicException('No type diplome');
-        }
-
         return $this->get($parcours->getFormation()->getTypeDiplome());
     }
 
-    public function get(TypeDiplome $type): TypeDiplomeHandlerInterface
+    /**
+     * @throws TypeDiplomeNotFoundException
+     */
+    public function get(?TypeDiplome $type): TypeDiplomeHandlerInterface
     {
+        if ($type === null) {
+            $type = $this->typeDiplomeRepository->findOneBy(['libelle_court' => 'L']);
+
+            if ($type === null) {
+                throw new TypeDiplomeNotFoundException();
+            }
+        }
+
         foreach ($this->handlers as $h) {
             if ($h->supports($type->getLibelleCourt())) {
                 $this->handler = $h;

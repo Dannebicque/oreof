@@ -274,10 +274,6 @@ class FicheMatiereWizardController extends BaseController
 
         $typeDiplome = $ficheMatiere->getParcours()?->getFormation()?->getTypeDiplome();
 
-        if ($typeDiplome === null) {
-            throw new TypeDiplomeNotFoundException('Type de diplôme non trouvé pour la fiche matière.');
-        }
-
         if ($type === 'but') {
             $form = $this->createForm(FicheMatiereStep4Type::class, $ficheMatiere);
             $typeD = $this->typeDiplomeResolver->get($typeDiplome);
