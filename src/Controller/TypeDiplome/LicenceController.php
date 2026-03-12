@@ -108,7 +108,6 @@ class LicenceController extends BaseController
         Request $request,
         EntityManagerInterface $entityManager,
         TypeEpreuveRepository $typeEpreuveRepository,
-        ElementConstitutifRepository $elementConstitutifRepository,
         ElementConstitutif $elementConstitutif,
         Parcours $parcours
     ): Response
@@ -121,7 +120,7 @@ class LicenceController extends BaseController
             $typeDiplomeHandler = $this->typeDiplomeResolver->get($typeDiplome);
         }
 
-        $typeEpreuves = $typeEpreuveRepository->findByTypeDiplome($typeDiplome);
+        $typeEpreuves = $typeEpreuveRepository->findByTypeDiplome($typeDiplome ?? $this->typeDiplome);
 
         $raccroche = $elementConstitutif->getFicheMatiere()?->getParcours()?->getId() !== $parcours->getId();
         $getElement = new GetElementConstitutif($elementConstitutif, $parcours);
