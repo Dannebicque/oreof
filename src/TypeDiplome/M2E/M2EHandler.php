@@ -9,13 +9,21 @@
 
 namespace App\TypeDiplome\M2E;
 
+use App\DTO\StructureParcours;
 use App\Entity\CampagneCollecte;
 use App\Entity\ElementConstitutif;
 use App\Entity\FicheMatiere;
 use App\Entity\Parcours;
+use App\Entity\TypeEpreuve;
+use App\Repository\BlocCompetenceRepository;
+use App\Repository\TypeDiplomeRepository;
+use App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException;
+use App\TypeDiplome\M2E\Services\M2eMccc;
+use App\TypeDiplome\M2E\Services\M2eMcccVersion;
 use App\TypeDiplome\TypeDiplomeHandlerInterface;
 use DateTimeInterface;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -23,18 +31,112 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 final class M2EHandler implements TypeDiplomeHandlerInterface
 {
 
-    public const TEMPLATE_FOLDER = 'licence'; //todo: a remplacer
-    public const SOURCE = 'licence'; //todo: a remplacer
-    public const TEMPLATE_FORM_MCCC = 'licence.html.twig'; //todo: a remplacer
+    public const TEMPLATE_FOLDER = 'm2e';
+    public const SOURCE = 'm2e';
+    public const TEMPLATE_FORM_MCCC = 'm2e.html.twig';
+
+    private array $typeEpreuves;
+
+    public function __construct(
+        TypeDiplomeRepository            $typeDiplomeRepository,
+        protected EntityManagerInterface $entityManager,
+        protected M2eMccc                $m2eMccc,
+        protected M2eMcccVersion         $m2eMcccVersion,
+        private BlocCompetenceRepository $blocCompetenceRepository,
+        private StructureParcoursM2e     $structureParcoursM2e
+    )
+    {
+        $typeD = $typeDiplomeRepository->findOneBy(['libelle_court' => $this->getLibelleCourt()]);
+
+        if ($typeD === null) {
+            throw new TypeDiplomeNotFoundException();
+        }
+
+        $this->typeEpreuves = $this->entityManager->getRepository(TypeEpreuve::class)->findByTypeDiplome($typeD);
+    }
+
+    public function getTypeEpreuves(): array
+    {
+        return $this->typeEpreuves;
+    }
 
     public function supports(string $type): bool
     {
         return $type === 'M2E';
     }
 
-    public function calculStructureParcours(Parcours $parcours, bool $withEcts = true, bool $withBcc = true): \App\DTO\StructureParcours
+    public function exportExcelMccc(
+        CampagneCollecte   $anneeUniversitaire,
+        Parcours           $parcours,
+        ?DateTimeInterface $dateCfvu = null,
+        ?DateTimeInterface $dateConseil = null,
+        bool               $versionFull = true
+    ): StreamedResponse
     {
-        return new \App\DTO\StructureParcours();
+        return $this->m2eMccc->exportExcelLicenceMccc($anneeUniversitaire, $parcours, $dateCfvu, $dateConseil, $versionFull);
+    }
+
+    public function exportExcelVersionMccc(
+        CampagneCollecte   $anneeUniversitaire,
+        Parcours           $parcours,
+        ?DateTimeInterface $dateCfvu = null,
+        ?DateTimeInterface $dateConseil = null,
+        bool               $versionFull = true
+    ): StreamedResponse
+    {
+        return $this->m2eMcccVersion->exportExcelLicenceMccc($anneeUniversitaire, $parcours, $dateCfvu, $dateConseil, $versionFull);
+    }
+
+    public function exportExcelAndSaveVersionMccc(
+        CampagneCollecte   $anneeUniversitaire,
+        Parcours           $parcours,
+        string             $dir,
+        string             $fichier,
+        ?DateTimeInterface $dateCfvu = null,
+        ?DateTimeInterface $dateConseil = null
+    ): string
+    {
+        return $this->m2eMcccVersion->exportAndSaveExcelLicenceMccc($anneeUniversitaire, $parcours, $dir, $fichier, $dateCfvu, $dateConseil);
+    }
+
+    public function exportPdfMccc(
+        CampagneCollecte   $anneeUniversitaire,
+        Parcours           $parcours,
+        ?DateTimeInterface $dateCfvu = null,
+        ?DateTimeInterface $dateConseil = null,
+        bool               $versionFull = true
+    ): Response
+    {
+        return $this->m2eMccc->exportPdfLicenceMccc($anneeUniversitaire, $parcours, $dateCfvu, $dateConseil, $versionFull);
+    }
+
+    public function exportAndSaveExcelMccc(
+        string             $dir,
+        CampagneCollecte   $anneeUniversitaire,
+        Parcours           $parcours,
+        ?DateTimeInterface $dateCfvu = null,
+        ?DateTimeInterface $dateConseil = null,
+        bool               $versionFull = true
+    ): string
+    {
+        return $this->m2eMccc->exportAndSaveExcelLicenceMccc($anneeUniversitaire, $parcours, $dir, $dateCfvu, $dateConseil, $versionFull);
+    }
+
+    public function exportAndSavePdfMccc(
+        string             $dir,
+        CampagneCollecte   $anneeUniversitaire,
+        Parcours           $parcours,
+        ?DateTimeInterface $dateCfvu = null,
+        ?DateTimeInterface $dateConseil = null,
+        bool               $versionFull = true
+    ): string
+    {
+        return $this->m2eMccc->exportAndSavePdfLicenceMccc($anneeUniversitaire, $parcours, $dir, $dateCfvu, $dateConseil, $versionFull);
+    }
+
+    public function calculStructureParcours(Parcours $parcours, bool $withEcts = true, bool $withBcc = true): StructureParcours
+    {
+        return new StructureParcours();
     }
 
     public function showStructure(Parcours $parcours): array
@@ -43,45 +145,9 @@ final class M2EHandler implements TypeDiplomeHandlerInterface
         return [];
     }
 
-    public function getStructureCompetences(Parcours $parcours)
+    public function getStructureCompetences(Parcours $parcours): array
     {
-        // TODO: Implement getStructureCompetences() method.
-    }
-
-    public function exportExcelMccc(CampagneCollecte $anneeUniversitaire, Parcours $parcours, ?DateTimeInterface $dateCfvu = null, ?DateTimeInterface $dateConseil = null, bool $versionFull = true): StreamedResponse
-    {
-        // TODO: Implement exportExcelMccc() method.
-        return new StreamedResponse();
-    }
-
-    public function exportExcelVersionMccc(CampagneCollecte $anneeUniversitaire, Parcours $parcours, ?DateTimeInterface $dateCfvu = null, ?DateTimeInterface $dateConseil = null, bool $versionFull = true): StreamedResponse
-    {
-        // TODO: Implement exportExcelVersionMccc() method.
-        return new StreamedResponse();
-    }
-
-    public function exportExcelAndSaveVersionMccc(CampagneCollecte $anneeUniversitaire, Parcours $parcours, string $dir, string $fichier, ?DateTimeInterface $dateCfvu = null, ?DateTimeInterface $dateConseil = null): string
-    {
-        // TODO: Implement exportExcelAndSaveVersionMccc() method.
-        return '';
-    }
-
-    public function exportPdfMccc(CampagneCollecte $anneeUniversitaire, Parcours $parcours, ?DateTimeInterface $dateCfvu = null, ?DateTimeInterface $dateConseil = null, bool $versionFull = true): Response
-    {
-        // TODO: Implement exportPdfMccc() method.
-        return new Response();
-    }
-
-    public function exportAndSaveExcelMccc(string $dir, CampagneCollecte $anneeUniversitaire, Parcours $parcours, ?DateTimeInterface $dateCfvu = null, ?DateTimeInterface $dateConseil = null, bool $versionFull = true): string
-    {
-        // TODO: Implement exportAndSaveExcelMccc() method.
-        return '';
-    }
-
-    public function exportAndSavePdfMccc(string $dir, CampagneCollecte $anneeUniversitaire, Parcours $parcours, ?DateTimeInterface $dateCfvu = null, ?DateTimeInterface $dateConseil = null, bool $versionFull = true): string
-    {
-        // TODO: Implement exportAndSavePdfMccc() method.
-        return '';
+        return $this->blocCompetenceRepository->findByParcours($parcours);
     }
 
     public function clearMcccs(ElementConstitutif|FicheMatiere $objet): void
@@ -98,12 +164,6 @@ final class M2EHandler implements TypeDiplomeHandlerInterface
     public function saveMcccs(ElementConstitutif|FicheMatiere $elementConstitutif, InputBag $request): void
     {
         // TODO: Implement saveMcccs() method.
-    }
-
-    public function getTypeEpreuves(): array
-    {
-        // TODO: Implement getTypeEpreuves() method.
-        return [];
     }
 
     public function getLibelleCourt(): string
