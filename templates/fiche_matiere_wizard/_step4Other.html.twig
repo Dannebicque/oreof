@@ -2,27 +2,13 @@
     url: path('app_fiche_matiere_save', {ficheMatiere:ficheMatiere.id}),
 }) }}>
     <twig:alerte type="info"
-                 message="Les volumes horaires, les ECTS et les MCCC sont renseignés sur la fiche EC/matière et appliqués, par défaut, à tous les EC qui utilisent cette fiche EC/matière.<br>Les données peuvent être modifiées à partir de l'onglet <strong>structure de la maquette</strong> de la fiche parcours ou formation  :
-                 <ul>
-<li>Depuis l'EC <strong>{{ ecProprietaire != null ? ecProprietaire.display : '-' }}</strong> du parcours <strong>{{ ecProprietaire != null ? ecProprietaire.parcours.display : '-' }}</strong> pour impacter tous les EC qui utilisent cette fiche EC/matière mutualisée</li>
-                     <li>Depuis l'EC de la structure qui utilise la fiche EC/matière mutualisée pour une application spécifique <strong>sur le parcours modifié</strong></li></ul>"/>
+                 message="Les volumes horaires, les ECTS et les MCCC indiqués sur cette fiche matière sont fournis à titre indicatif. Par défaut, ils s'appliquent à tous les EC qui utilisent cette fiche matière.<br><br>Les données peuvent être modifiées à partir de l'onglet <strong>structure de la maquette</strong>du parcours <strong> {{ ecProprietaire != null ? ecProprietaire.parcours.display : '-' }} | {{ ecProprietaire != null ? ecProprietaire.parcours.formation.displayLong : '-' }} </strong> (EC <strong>{{ ecProprietaire != null ? ecProprietaire.display : '-' }} ({{ ecProprietaire != null ? ecProprietaire.ue.display : '-' }})</strong> .<br><br>
+<strong>Attention</strong> : En cas de mutualisation de la fiche matière, toute modification de la part du parcours porteur aura un impact sur l'ensemble des EC qui utilisent cette fiche. Toutefois, chaque parcours utilisateur peut y apporter des adaptations spécifiques propres à sa formation via son propre onglet Structure de la maquette ."/>
+
     <h2>Volumes horaires</h2>
     {{ include('typeDiplome/ec/_structure.html.twig') }}
 
     <h2>ECTS et MCCC</h2>
 
     {{ include('typeDiplome/ec/_mccc.html.twig') }}
-
-
-{#    <div class="alert {% if ficheMatiere.getEtatStep(4) %}alert-success{% else %}alert-warning{% endif %} mt-2"#}
-{#         id="alertEtatStructure">#}
-{#        <input type="checkbox"#}
-{#               id="etatStructure"#}
-{#               class="form-check-inline"#}
-{#               {% if ficheMatiere.getEtatStep(4) %}checked{% endif %}#}
-{#                {{ stimulus_action('fichematiere--step4', 'etatStep', 'change') }}#}
-
-{#        ><label for="etatStructure">#}
-{#            Cochez cette case si vous avez terminé ...</label>#}
-{#    </div>#}
 </div>

@@ -274,10 +274,6 @@ class FicheMatiereWizardController extends BaseController
 
         $typeDiplome = $ficheMatiere->getParcours()?->getFormation()?->getTypeDiplome();
 
-        if ($typeDiplome === null) {
-            throw new TypeDiplomeNotFoundException('Type de diplôme non trouvé pour la fiche matière.');
-        }
-
         if ($type === 'but') {
             $form = $this->createForm(FicheMatiereStep4Type::class, $ficheMatiere);
             $typeD = $this->typeDiplomeResolver->get($typeDiplome);
@@ -295,11 +291,11 @@ class FicheMatiereWizardController extends BaseController
             $typeD = $this->typeDiplomeResolver->get($typeDiplome);
             return $this->render('fiche_matiere_wizard/_step4Other.html.twig', [
                 'ficheMatiere' => $ficheMatiere,
-               'parcours' => $parcours,
-                'typeEpreuves' => $typeD !== null ? $typeD->getTypeEpreuves() : $typeEpreuveRepository->findAll(),
-                'mcccs' => $typeD !== null ? $typeD->getMcccs($ficheMatiere) : [],
+                'parcours' => $parcours,
+                'mcccs' => $typeD->getDisplayMccc($typeD->getMcccs($ficheMatiere), $ficheMatiere->getTypeMccc()) ?? '',
                 'ecProprietaire' => $ecProprietaire,
                 'typeMccc' => $ficheMatiere->getTypeMccc(),
+                'typeD' => $typeD,
                 'templateForm' => $typeD !== null ? $typeD::TEMPLATE_FORM_MCCC : '',
             ]);
         }

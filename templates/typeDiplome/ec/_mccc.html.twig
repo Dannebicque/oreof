@@ -2,5 +2,8 @@
     <dt>ECTS</dt>
     <dd>{{ ficheMatiere.ects ?? 0 }}</dd>
 </dl>
+{% if typeD is defined and constant('TEMPLATE_FOLDER', typeD) is defined %}
 {{ include('typeDiplome/'~constant('TEMPLATE_FOLDER', typeD)~'/mccc-non-editable/'~constant('TEMPLATE_FORM_MCCC', typeD)) }}
-
+{% else %}
+    {{ include('typeDiplome/licence/mccc-non-editable/licence.html.twig') }}
+{% endif %}

@@ -501,17 +501,7 @@
                                                         ue: ue
                                                     }) }}
                                                 </div>
-                                                <div class="col-md-1 d-flex flex-column justify-content-center">
-                                                    <div class="text-muted text-small d-md-none">MCCC</div>
-                                                    {{ component('badge_mccc', {
-                                                        elementConstitutif: ece,
-                                                        elementConstitutifParent: ec,
-                                                        parcours: parcours,
-                                                        deplacer: deplacer,
-                                                        editable: editable and isUeRaccrochee == false,
-                                                        ue: ue
-                                                    }) }}
-                                                </div>
+
                                                 <div class="col-md-1 d-flex flex-column justify-content-center">
                                                     <div class="text-muted text-small d-md-none">Volumes Horaires</div>
                                                     {% if ece.natureUeEc != null and ece.natureUeEc.isLibre ==  true %}
@@ -530,6 +520,17 @@
                                                             }) }}
                                                         {% endif %}
                                                     {% endif %}
+                                                </div>
+                                                <div class="col-md-1 d-flex flex-column justify-content-center">
+                                                    <div class="text-muted text-small d-md-none">MCCC</div>
+                                                    {{ component('badge_mccc', {
+                                                        elementConstitutif: ece,
+                                                        elementConstitutifParent: ec,
+                                                        parcours: parcours,
+                                                        deplacer: deplacer,
+                                                        editable: editable and isUeRaccrochee == false,
+                                                        ue: ue
+                                                    }) }}
                                                 </div>
                                                 <div class="col-md-4 d-flex flex-column justify-content-center">
                                                     <div class="text-muted text-small d-md-none">Actions</div>

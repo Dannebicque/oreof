@@ -50,10 +50,6 @@ class ElementConstitutifMcccController extends AbstractController
     {
     }
 
-
-    /**
-     * @throws TypeDiplomeNotFoundException
-     */
     #[Route('/{id}/mccc-ec/{parcours}', name: 'app_element_constitutif_mccc', methods: ['GET', 'POST'])]
     public function mcccEc(
         EventDispatcherInterface $eventDispatcher,
@@ -73,10 +69,6 @@ class ElementConstitutifMcccController extends AbstractController
         $formation = $parcours?->getFormation();
         if ($formation === null) {
             throw new RuntimeException('Formation non trouvée');
-        }
-        $typeDiplome = $formation->getTypeDiplome();
-        if ($typeDiplome === null) {
-            throw new RuntimeException('Type de diplome non trouvé');
         }
 
         $typeD = $this->typeDiplomeResolver->getFromParcours($parcours);
@@ -105,18 +97,29 @@ class ElementConstitutifMcccController extends AbstractController
 
         foreach ($request->request->all() as $fieldName => $fieldValue) {
             if (preg_match('/typeEpreuve_s([0-9])_ct([0-9])/', $fieldName, $matches) === 1) {
-                $hasJustification = array_values(
+//                $hasJustification = array_values(
+//                    array_filter(
+//                        $typeEpreuvesArray,
+//                        fn($type) => $type->getId() === (int)$fieldValue
+//                    )
+//                )[0]->hasJustification();
+
+                $filtered = array_values(
                     array_filter(
                         $typeEpreuvesArray,
                         fn($type) => $type->getId() === (int)$fieldValue
                     )
-                )[0]->hasJustification();
-                if ($hasJustification && mb_strlen($request->request->all()["justification_s{$matches[1]}_ct{$matches[2]}"]) < $minLengthJustification) {
-                    return $this->json(
-                        ['message' => "La justification d'un MCCC doit être supérieure à {$minLengthJustification} caractères."],
-                        500,
-                        ['Content-Type' => 'application/json']
-                    );
+                );
+                $hasJustification = false;
+                if (isset($filtered[0])) {
+                    $hasJustification = $filtered[0]->hasJustification();
+                    if ($hasJustification && mb_strlen($request->request->all()["justification_s{$matches[1]}_ct{$matches[2]}"]) < $minLengthJustification) {
+                        return $this->json(
+                            ['message' => "La justification d'un MCCC doit être supérieure à {$minLengthJustification} caractères."],
+                            500,
+                            ['Content-Type' => 'application/json']
+                        );
+                    }
                 }
             }
         }
@@ -276,7 +279,7 @@ class ElementConstitutifMcccController extends AbstractController
         Parcours                     $parcours,
         VersioningParcours           $versioningParcours
     ): Response {
-
+//todo: gérer par type de diplôme
         $dpeParcours = GetDpeParcours::getFromParcours($parcours);
 
         if ($dpeParcours === null) {
@@ -316,7 +319,7 @@ class ElementConstitutifMcccController extends AbstractController
             'ects' => $ects,
             'typeDiplome' => $typeD,
             'templateForm' => $typeD::TEMPLATE_FORM_MCCC,
-            'mcccs' => $typeD->getDisplayMccc($getElement->getMcccsFromFicheMatiere($typeD), $typeMccc),
+            'mcccs' => $typeD->getDisplayMccc($getElement->getMcccsFromFicheMatiere($typeD), $typeMccc ?? ''),
             'isFromVersioning' => 'false',
             'lastVersion' => $lastVersion,
             'libelleQuelleVersion' => 'Version actuellement saisie en attente de validation',

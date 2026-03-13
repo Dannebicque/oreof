@@ -9,14 +9,14 @@
     ]}) }}
 {% endblock %}
 
-{% block bouton_header %}
-    <a href="{{ path("app_export_my_exports") }}"
-       class="btn btn-outline-info"
-    >
-        <i class="{{ iconDownload }}"></i>
-        Voir mes exports</a>
-    <a href="{{ path("app_export_test_exports") }}">test mes exports</a>
-{% endblock %}
+{# {% block bouton_header %} #}
+{#    <a href="{{ path("app_export_my_exports") }}" #}
+{#       class="btn btn-outline-info" #}
+{#    > #}
+{#        <i class="{{ iconDownload }}"></i> #}
+{#        Voir mes exports</a> #}
+{#    <a href="{{ path("app_export_test_exports") }}">test mes exports</a> #}
+{# {% endblock %} #}
 
 {% block content %}
     <div
@@ -35,8 +35,8 @@
             {% else %}
                 {{ stimulus_controller('export',
                     {
-                        url: path('app_export_liste'),
-                        urlValide: path('app_export_valide')
+                        url: path('app_export_liste', {composante:composante.id}),
+                        urlValide: path('app_export_valide', {composante:composante.id})
                     }) }}
             {% endif %}
     >

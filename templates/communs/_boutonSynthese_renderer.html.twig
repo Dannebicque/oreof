@@ -1,0 +1,48 @@
+{% set downloadIcon = iconDownload|default('fas fa-download') %}
+{% set resolvedCol = col|default('col-3') %}
+{% if resolvedCol matches '/^\\d+$/' %}
+    {% set resolvedCol = 'col-' ~ resolvedCol %}
+{% endif %}
+
+<div class="{{ resolvedCol }} d-grid">
+    {% for button in buttonSet.checks %}
+        <a class="{{ button.classes }}" href="{{ path(button.route, button.routeParams) }}">
+            {% if button.icon %}
+                <i class="{{ button.icon }}"></i>
+            {% endif %}
+            {{ button.label }}
+        </a>
+    {% endfor %}
+
+    {% for button in buttonSet.adminLinks %}
+        <a href="{{ path(button.route, button.routeParams) }}" class="{{ button.classes }}">
+            {% if button.icon %}
+                <i class="{{ button.icon }}"></i>
+            {% endif %}
+            {{ button.label }}
+        </a>
+    {% endfor %}
+
+    {% if buttonSet.showExportsAsDropdown %}
+        <div class="btn-group">
+            <button class="btn btn-outline-primary d-block mt-1 dropdown-toggle" data-bs-toggle="dropdown">
+                <i class="{{ downloadIcon }}"></i> Exports MCCC
+            </button>
+            <div class="dropdown-menu">
+                {% for button in buttonSet.exports %}
+                    <a class="dropdown-item" href="{{ path(button.route, button.routeParams) }}">
+                        <i class="{{ downloadIcon }}"></i> {{ button.label }}
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+    {% else %}
+        {% for button in buttonSet.exports %}
+            <a class="{{ button.classes }}" href="{{ path(button.route, button.routeParams) }}">
+                <i class="{{ button.icon ?? downloadIcon }}"></i>
+                {{ button.label }}
+            </a>
+        {% endfor %}
+    {% endif %}
+</div>
+

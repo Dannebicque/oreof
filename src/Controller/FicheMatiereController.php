@@ -29,9 +29,6 @@ use App\Repository\TypeEpreuveRepository;
 use App\Repository\UeRepository;
 use App\Service\VersioningFicheMatiere;
 use App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException;
-use App\TypeDiplome\Source\ButTypeDiplome;
-use App\TypeDiplome\Source\LicenceTypeDiplome;
-use App\TypeDiplome\Source\MeefTypeDiplome;
 use App\Utils\JsonRequest;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
@@ -92,15 +89,10 @@ class FicheMatiereController extends BaseController
         ]);
     }
 
-    /**
-     * @throws TypeDiplomeNotFoundException
-     */
     #[Route('/{slug}', name: 'app_fiche_matiere_show', methods: ['GET'])]
     public function show(
         ElementConstitutifRepository $elementConstitutifRepository,
         FicheMatiereMutualisableRepository $ficheMatiereMutualisableRepository,
-        TypeDiplomeRepository $typeDiplomeRepository,
-        TypeEpreuveRepository        $typeEpreuveRepository,
         FicheMatiere                 $ficheMatiere,
         VersioningFicheMatiere       $ficheMatiereVersioningService
     ): Response {
@@ -115,16 +107,7 @@ class FicheMatiereController extends BaseController
             $bccs[$competence->getBlocCompetence()?->getId()]['competences'][] = $competence;
         }
 
-        if ($formation !== null) {
-            $typeDiplome = $formation->getTypeDiplome();
-        } else {
-            $typeDiplome = $typeDiplomeRepository->findOneBy(['libelle_court' => 'L']);
-        }
-
-        if ($typeDiplome === null) {
-            throw new TypeDiplomeNotFoundException();
-        }
-
+        $typeDiplome = $formation->getTypeDiplome();
         $typeD = $this->typeDiplomeResolver->get($typeDiplome);
 
         $cssDiff = DiffHelper::getStyleSheet();
@@ -143,7 +126,7 @@ class FicheMatiereController extends BaseController
             'typeD' => $typeD,
             'typeDiplome' => $typeDiplome,
             'ects' => $ficheMatiere->getEcts(),
-            'mcccs' => $typeD->getDisplayMccc($typeD->getMcccs($ficheMatiere), $ficheMatiere->getTypeMccc()),
+            'mcccs' => $typeD->getDisplayMccc($typeD->getMcccs($ficheMatiere), $ficheMatiere->getTypeMccc() ?? ''),
             'bccs' => $bccs,
             'typeMccc' => $ficheMatiere->getTypeMccc(),
             'stringDifferences' => $textDifferences,

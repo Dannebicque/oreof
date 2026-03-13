@@ -41,11 +41,6 @@ class FormationExportController extends AbstractController
     ): Response
     {
         $typeDiplome = $formation->getTypeDiplome();
-
-        if ($typeDiplome === null) {
-            throw new TypeDiplomeNotFoundException();
-        }
-
         $typeD = $typeDiplomeResolver->get($typeDiplome);
 
         $tParcours = [];

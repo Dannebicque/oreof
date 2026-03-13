@@ -20,7 +20,6 @@ use App\Repository\ElementConstitutifRepository;
 use App\Repository\TypeDiplomeRepository;
 use App\Repository\TypeEpreuveRepository;
 use App\Service\TypeDiplomeResolver;
-use App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException;
 use App\TypeDiplome\TypeDiplomeHandlerInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -109,25 +108,28 @@ class LicenceController extends BaseController
         Request $request,
         EntityManagerInterface $entityManager,
         TypeEpreuveRepository $typeEpreuveRepository,
-        ElementConstitutifRepository $elementConstitutifRepository,
         ElementConstitutif $elementConstitutif,
         Parcours $parcours
     ): Response
     {
-        $typeDiplome = $elementConstitutif->getFicheMatiere()?->getParcours()?->getFormation()?->getTypeDiplome();
-        if ($typeDiplome === null) {
-            throw new TypeDiplomeNotFoundException();
+        if ($elementConstitutif->getFicheMatiere()?->isHorsDiplome() === true) {
+            $typeDiplome = $this->typeDiplome;
+            $typeDiplomeHandler = $this->typeDiplomeHandler;
+        } else {
+            $typeDiplome = $elementConstitutif->getFicheMatiere()?->getParcours()?->getFormation()?->getTypeDiplome();
+            $typeDiplomeHandler = $this->typeDiplomeResolver->get($typeDiplome);
         }
 
-        $typeEpreuves = $typeEpreuveRepository->findByTypeDiplome($typeDiplome);
-        $typeDiplomeHandler = $this->typeDiplomeResolver->get($typeDiplome);
+        $typeEpreuves = $typeEpreuveRepository->findByTypeDiplome($typeDiplome ?? $this->typeDiplome);
+
         $raccroche = $elementConstitutif->getFicheMatiere()?->getParcours()?->getId() !== $parcours->getId();
         $getElement = new GetElementConstitutif($elementConstitutif, $parcours);
         $disabled = ($elementConstitutif->isMcccSpecifiques() === false && $raccroche) || $elementConstitutif->getFicheMatiere()?->isMcccImpose();
 
-        if ($request->query->get('type') !== $elementConstitutif->getTypeMccc()) {
-            $elementConstitutif->setTypeMccc($request->query->get('type'));
-            $elementConstitutifRepository->save($elementConstitutif, true);
+        $owner = $getElement->getElementConstitutif();
+
+        if ($request->query->get('type') !== $owner->getTypeMccc()) {
+            $owner->setTypeMccc($request->query->get('type'));
             $typeDiplomeHandler->clearMcccs($elementConstitutif);
             $entityManager->flush();
             $entityManager->refresh($elementConstitutif);
