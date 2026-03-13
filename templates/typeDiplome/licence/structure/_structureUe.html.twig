@@ -132,7 +132,7 @@
 
     <th>
         <span class="show_versioning_campagne d-none d-print-none">
-            {{ diffUeCampagne ? diffUeCampagne.heuresEctsUe.sommeUeEcts|displayDiff : '' }}
+            {{ diffUeCampagne ? diffUeCampagne.heuresEctsUe.sommeUeEcts|displayDiff : '' }} ECTS
         </span>
         <span class="show_versioning d-none d-print-none">{{ diffUe ? diffUe.heuresEctsUe.sommeUeEcts|displayDiff : '' }} ECTS</span>
         <p class="show_current">{{ ue.heuresEctsUe.sommeUeEcts|badgeEcts('primary') }}</p>

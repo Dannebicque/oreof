@@ -95,7 +95,7 @@
                     <th class="border-left-semestre-{{ ordre }} text-end" colspan="4">Total Semestre {{ ordre }}</th>
                     <th>
                         <span class="show_versioning_campagne d-none d-print-none">
-                            {{ diffSemestreCampagne ? diffSemestreCampagne.heuresEctsSemestre.sommeSemestreEcts|displayDiff : '' }}
+                            {{ diffSemestreCampagne ? diffSemestreCampagne.heuresEctsSemestre.sommeSemestreEcts|displayDiff : '' }} ECTS
                         </span>
                         <span class="show_versioning d-none d-print-none">{{ diffSemestre is defined and diffSemestre != null ? diffSemestre.heuresEctsSemestre.sommeSemestreEcts|displayDiff : '' }} ECTS</span>
                         <p class="show_current">{{ semestre.heuresEctsSemestre.sommeSemestreEcts|filtreHeures }}</p>
