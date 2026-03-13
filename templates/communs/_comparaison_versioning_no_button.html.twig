@@ -1,4 +1,4 @@
-{% if is_granted('ROLE_ADMIN') and textDifferences is defined and textDifferences != null %}
+{% if (canSeeDifferences ?? false == true) and textDifferences is defined and textDifferences != null %}
     {% if textDifferences|length > 0 %}
         {% if idCollapse == displayComparaison ?? 'false' %}
             {% set hasDisplay = '' %}

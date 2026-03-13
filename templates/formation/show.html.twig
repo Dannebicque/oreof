@@ -220,8 +220,7 @@
 
 {% block bouton_header %}
 
-    {% if is_granted('ROLE_ADMIN')
-        and versioningParcours is defined
+    {% if versioningParcours is defined
         and versioningParcours != null %}
         {{ include('communs/_bouton_difference_descriptifs.html.twig') }}
     {% endif %}

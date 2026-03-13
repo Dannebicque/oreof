@@ -243,8 +243,7 @@
 {% endblock %}
 
 {% block bouton_header %}
-    {% if is_granted('ROLE_ADMIN')
-        and hasLastVersion is defined
+    {% if hasLastVersion is defined
         and hasLastVersion == true
     %}
         {{ include('communs/_bouton_difference_descriptifs.html.twig') }}
