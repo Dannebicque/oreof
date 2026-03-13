@@ -280,6 +280,13 @@ class ParcoursController extends BaseController
         $textDiffParcoursCampagne = $versioningParcours->getDifferencesBetweenParcoursAndLastVersion($parcours, true);
         $textDiffFormationCampagne = $versioningFormation->getDifferencesBetweenFormationAndLastVersion($formation, true);
         $hasLastVersionCampagne = count($textDiffParcoursCampagne) > 0 || count($textDiffFormationCampagne) > 0;
+        // Si l'utilisateur peut voir les différences
+        $dpeParcours = GetDpeParcours::getFromParcours($parcours);
+        $canSeeDifferences = false;
+        if ( $this->isGranted('EDIT', ['route' => 'app_parcours', 'subject' => $dpeParcours->getParcours()]) 
+            || $this->isGranted('EDIT', ['route' => 'app_formation', 'subject' => $dpeParcours]) ) {
+            $canSeeDifferences = true;
+        }
 
         $version = $versioningParcours->hasLastVersion($parcours);
 
@@ -327,6 +334,7 @@ class ParcoursController extends BaseController
             'parcoursDeBase' => $parcoursDeBase,
             'missingSemestre' => $missingSemestre,
             'displayComparaison' => $displayComparaison,
+            'canSeeDifferences' => $canSeeDifferences
         ]);
     }
 
@@ -350,6 +358,8 @@ class ParcoursController extends BaseController
             throw $this->createNotFoundException();
         }
 
+        $canSeeDifferences = false;
+
         if (!(
             $this->isGranted('EDIT', ['route' => 'app_parcours', 'subject' => $dpeParcours->getParcours()]) ||
             $this->isGranted('EDIT', ['route' => 'app_formation', 'subject' => $dpeParcours])
@@ -357,6 +367,7 @@ class ParcoursController extends BaseController
             return $this->redirectToRoute('app_parcours_show', ['id' => $parcour->getId()]);
         }
 
+        $canSeeDifferences = true;
         $version = $versioningParcours->hasLastVersion($parcour);
 
         $parcoursState->setParcours($parcour);
@@ -376,6 +387,7 @@ class ParcoursController extends BaseController
             'parcoursState' => $parcoursState,
             'step' => $request->query->get('step') ?? 0,
             'version' => $version,
+            'canSeeDifferences' => $canSeeDifferences
         ]);
     }
 

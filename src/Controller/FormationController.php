@@ -403,6 +403,17 @@ class FormationController extends BaseController
         $formationStringDifferences = $versioningFormation->getDifferencesBetweenFormationAndLastVersion($formation);
         $formationCampagneStringDifferences = $versioningFormation->getDifferencesBetweenFormationAndLastVersion($formation, true);
 
+        //Si l'utilisateur peut voir les différences
+        $canSeeDifferences = false;
+        if ( ( $this->isGranted('EDIT', ['route' => 'app_formation', 'subject' => $formation]) 
+                || $this->isGranted('EDIT', ['route' => 'app_composante', 'subject' => $formation])
+                || $this->isGranted('EDIT', ['route' => 'app_etablissement', 'subject' => $formation])
+                || $this->isGranted('ROLE_ADMIN'))
+        ){
+            $canSeeDifferences = true;
+        }
+
+
         // Afficher les comparaisons directement
         $request = Request::createFromGlobals();
         $displayComparaison = $request->query->get('optionDisplay', 'false');
@@ -418,7 +429,8 @@ class FormationController extends BaseController
             'stringDifferencesFormationCampagne' => $formationCampagneStringDifferences ?? [],
             'versioningParcours' => $versioningParcours,
             'hasLastVersion' => $hasLastVersion,
-            'displayComparaison' => $displayComparaison
+            'displayComparaison' => $displayComparaison,
+            'canSeeDifferences' => $canSeeDifferences
         ]);
     }
 
