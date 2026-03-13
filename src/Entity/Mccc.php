@@ -312,7 +312,7 @@ class Mccc
         return $slug;
     }
 
-    public function getOwner(): FicheMatiere|ElementConstitutif
+    public function getOwner(): FicheMatiere|ElementConstitutif|null
     {
         if ($this->ficheMatiere !== null) {
             return $this->ficheMatiere;
