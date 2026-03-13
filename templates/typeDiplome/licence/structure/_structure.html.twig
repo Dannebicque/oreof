@@ -22,6 +22,17 @@
                         </button>
                     {% endif %}
                     #}
+                    
+                    {# Indication pour la comparaison de la maquette (versioning) #}
+                    <p class="show_versioning d-inline d-none">
+                        <span>Mode de comparaison : </span>
+                        <span class="text-info fst-italic fw-bold">Dernières saisies validées</span>
+                    </p>
+                    <p class="show_versioning_campagne d-inline d-none">
+                        <span>Mode de comparaison : </span>
+                        <span class="text-info fst-italic fw-bold">Saisies de l'année précédente</span>
+                    </p>
+                    
                     <button type="button"
                             class="btn btn-sm btn-outline-info btn-icon w-sm-auto mx-2 mb-1"
                             {{ stimulus_action('structure--affichage', 'toggleEc') }}
