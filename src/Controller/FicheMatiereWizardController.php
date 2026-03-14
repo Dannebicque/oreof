@@ -9,8 +9,10 @@
 
 namespace App\Controller;
 
+use App\Classes\Mailer;
 use App\Entity\FicheMatiere;
 use App\Entity\FicheMatiereMutualisable;
+use App\Entity\Notification;
 use App\Form\FicheMatiereStep1Type;
 use App\Form\FicheMatiereStep2Type;
 use App\Form\FicheMatiereStep3Type;
@@ -19,6 +21,7 @@ use App\Form\FicheMatiereStep4Type;
 use App\Repository\BlocCompetenceRepository;
 use App\Repository\ButCompetenceRepository;
 use App\Repository\ComposanteRepository;
+use App\Repository\ElementConstitutifRepository;
 use App\Repository\FicheMatiereMutualisableRepository;
 use App\Repository\FormationRepository;
 use App\Repository\ParcoursRepository;
@@ -91,6 +94,120 @@ class FicheMatiereWizardController extends BaseController
         return $this->render('fiche_matiere_wizard/_step1_mutualise_add.html.twig', [
             'ficheMatiere' => $ficheMatiere,
             'composantes' => $composantes
+        ]);
+    }
+
+    #[Route('/{ficheMatiere}/mutualise/impacts', name: 'app_fiche_matiere_wizard_step_1_mutualise_impacts', methods: ['GET'])]
+    public function mutualiseImpacts(FicheMatiere $ficheMatiere): Response
+    {
+        return $this->render('fiche_matiere_wizard/_step1_mutualise_impacts.html.twig', [
+            'ficheMatiere' => $ficheMatiere,
+        ]);
+    }
+
+    #[Route('/{ficheMatiere}/mutualise/remove-all', name: 'app_fiche_matiere_wizard_step_1_mutualise_remove_all', methods: ['DELETE'])]
+    public function mutualiseRemoveAll(
+        ElementConstitutifRepository       $ecRepository,
+        EntityManagerInterface             $entityManager,
+        FicheMatiereMutualisableRepository $ficheMatiereParcoursRepository,
+        Mailer                             $mailer,
+        FicheMatiere                       $ficheMatiere,
+    ): Response
+    {
+        $ecUtilsateurs = $ecRepository->findBy(['ficheMatiere' => $ficheMatiere]);
+        $liaisons = $ficheMatiereParcoursRepository->findBy(['ficheMatiere' => $ficheMatiere]);
+
+        $notifications = [];
+        // suppression des EC utilisant la fiche, on gère les notif sur les deux
+        foreach ($ecUtilsateurs as $ec) {
+            $parcours = $ec->getParcours();
+            if ($parcours !== null) {
+                $resp = $parcours->getRespParcours();
+                if ($resp !== null) {
+                    $userKey = $resp->getId() ?? spl_object_id($resp);
+                    if (!array_key_exists($userKey, $notifications)) {
+                        $notifications[$userKey] = [
+                            'user' => $resp,
+                            'parcours' => [],
+                        ];
+                    }
+
+                    $notifications[$userKey]['parcours'][$parcours->getId() ?? spl_object_id($parcours)] = $parcours;
+                }
+                $ec->setFicheMatiere(null);
+
+            }
+        }
+
+        $notifications = [];
+        foreach ($liaisons as $liaison) {
+            $parcours = $liaison->getParcours();
+            if ($parcours !== null) {
+                $resp = $parcours->getRespParcours();
+                if ($resp !== null) {
+                    $userKey = $resp->getId() ?? spl_object_id($resp);
+                    if (!array_key_exists($userKey, $notifications)) {
+                        $notifications[$userKey] = [
+                            'user' => $resp,
+                            'parcours' => [],
+                        ];
+                    }
+
+                    $notifications[$userKey]['parcours'][$parcours->getId() ?? spl_object_id($parcours)] = $parcours;
+                }
+            }
+            $entityManager->remove($liaison);
+        }
+
+        $ficheMatiere->setEnseignementMutualise(false);
+        $entityManager->flush();
+
+        $mailErrors = 0;
+        foreach ($notifications as $notificationData) {
+            $user = $notificationData['user'];
+            $parcoursImpactes = array_values($notificationData['parcours']);
+            $listeParcours = array_map(static fn($parcours) => $parcours->getDisplay(), $parcoursImpactes);
+
+            $notification = new Notification();
+            $notification->setDestinataire($user);
+            $notification->setTitle('Mutualisation supprimée');
+            $notification->setBody(sprintf(
+                'La fiche matière "%s" n\'est plus mutualisée avec %d parcours : %s. Veuillez vérifier vos éléments constitutifs.',
+                $ficheMatiere->getLibelle() ?? 'sans libellé',
+                count($listeParcours),
+                implode(', ', $listeParcours)
+            ));
+            $notification->setPayload([
+                'ficheMatiere' => $ficheMatiere->getId(),
+                'parcours' => array_map(static fn($parcours) => $parcours->getId(), $parcoursImpactes),
+            ]);
+            $entityManager->persist($notification);
+
+            if ($user->getEmail() !== null) {
+                try {
+                    $mailer->initEmail();
+                    $mailer->setTemplate('mails/mutualisation/fiche_demutualisee.html.twig', [
+                        'user' => $user,
+                        'ficheMatiere' => $ficheMatiere,
+                        'parcoursImpactes' => $parcoursImpactes,
+                    ]);
+                    $mailer->sendMessage(
+                        [$user->getEmail()],
+                        '[ORéOF] Suppression de mutualisation d\'une fiche matière'
+                    );
+                } catch (\Throwable) {
+                    ++$mailErrors;
+                }
+            }
+        }
+
+        $entityManager->flush();
+
+        return $this->json([
+            'success' => true,
+            'count' => count($liaisons),
+            'notified' => count($notifications),
+            'mailErrors' => $mailErrors,
         ]);
     }
 

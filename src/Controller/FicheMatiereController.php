@@ -96,7 +96,6 @@ class FicheMatiereController extends BaseController
         FicheMatiere                 $ficheMatiere,
         VersioningFicheMatiere       $ficheMatiereVersioningService
     ): Response {
-        $formation = $ficheMatiere->getParcours()?->getFormation();
 
         $bccs = [];
         foreach ($ficheMatiere->getCompetences() as $competence) {
@@ -107,8 +106,16 @@ class FicheMatiereController extends BaseController
             $bccs[$competence->getBlocCompetence()?->getId()]['competences'][] = $competence;
         }
 
-        $typeDiplome = $formation->getTypeDiplome();
-        $typeD = $this->typeDiplomeResolver->get($typeDiplome);
+        if ($ficheMatiere->getParcours() !== null) {
+            $formation = $ficheMatiere->getParcours()?->getFormation();
+            $typeDiplome = $formation->getTypeDiplome();
+            $typeD = $this->typeDiplomeResolver->get($typeDiplome);
+        } else {
+            $formation = null;
+            $typeDiplome = null;
+            $typeD = $this->typeDiplomeResolver->get(null);
+        }
+
 
         $cssDiff = DiffHelper::getStyleSheet();
         $textDifferences = $ficheMatiereVersioningService
