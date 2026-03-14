@@ -36,7 +36,6 @@ use Symfony\Component\HttpKernel\KernelInterface;
 class M2eMccc extends AbstractM2eMccc
 {
     //todo: ajouter un watermark sur le doc ou une mention que la mention est définitive ou pas.
-    //todo: gérer la date de vote
 
 
     public function __construct(
@@ -52,7 +51,7 @@ class M2eMccc extends AbstractM2eMccc
 
     }
 
-    public function exportExcelLicenceMccc(
+    public function exportExcelMccc(
         CampagneCollecte   $anneeUniversitaire,
         Parcours           $parcours,
         ?DateTimeInterface $dateCfvu = null,
@@ -60,7 +59,7 @@ class M2eMccc extends AbstractM2eMccc
         bool               $versionFull = true,
     ): StreamedResponse
     {
-        $this->genereExcelLicenceMccc($anneeUniversitaire, $parcours, $dateCfvu, $dateConseil, $versionFull);
+        $this->genereExcelMccc($anneeUniversitaire, $parcours, $dateCfvu, $dateConseil, $versionFull);
         return $this->excelWriter->genereFichier($this->fileName);
     }
 
@@ -68,7 +67,7 @@ class M2eMccc extends AbstractM2eMccc
      * @throws Exception
      * @throws \Exception
      */
-    public function genereExcelLicenceMccc(
+    public function genereExcelMccc(
         CampagneCollecte   $anneeUniversitaire,
         Parcours           $parcours,
         ?DateTimeInterface $dateCfvu = null,
@@ -86,7 +85,7 @@ class M2eMccc extends AbstractM2eMccc
         if (null === $formation) {
             throw new \Exception('La formation n\'existe pas');
         }
-        $this->excelWriter->createFromTemplate('Annexe_MCCC.xlsx');
+        $this->excelWriter->createFromTemplate(self::FICHIER_MCCC_XSLX);
 
         // Prépare le modèle avant de dupliquer
         $modele = $this->excelWriter->getSheetByName(self::PAGE_MODELE);
@@ -164,6 +163,7 @@ class M2eMccc extends AbstractM2eMccc
             $ligne = 19;
             if (array_key_exists($i, $tabSemestresAnnee)) {
                 $totalAnnee = new TotalVolumeHeure();
+                $totalEcts = 0;
                 $this->excelWriter->setSheet($clonedWorksheet);
                 $this->excelWriter->writeCellName(self::CEL_ANNEE_ETUDE, Tools::adjNumeral($i) . ' année');
                 $this->lignesSemestre = [];
@@ -171,7 +171,7 @@ class M2eMccc extends AbstractM2eMccc
                 /** @var StructureSemestre $semestre */
                 foreach ($semestres as $semestre) {
                     $totalAnnee->addSemestre($semestre->heuresEctsSemestre);
-                    $debutSemestre = $ligne;
+                    $totalEcts += $semestre->heuresEctsSemestre->sommeSemestreEcts;
                     foreach ($semestre->ues as $ue) { //todo: changement ici avec modif du DTO ? un impact ?
                         //UE
                         $debut = $ligne;
@@ -200,8 +200,8 @@ class M2eMccc extends AbstractM2eMccc
                                     $this->excelWriter->borderOutsiteInside(self::COL_LANGUE_EC, $debut, self::COL_LANGUE_EC, $ligne - 1);
                                     $this->excelWriter->borderOutsiteInside(self::COL_SUPPORT_ANGLAIS, $debut, self::COL_SUPPORT_ANGLAIS, $ligne - 1);
                                     $this->excelWriter->borderOutsiteInside(self::COL_TYPE_EC, $debut, self::COL_TYPE_EC, $ligne - 1);
-                                    $this->excelWriter->borderOutsiteInside(self::COL_COURS_MUTUALISE, $debut, self::COL_COURS_MUTUALISE, $ligne - 1);
-                                    $this->excelWriter->borderOutsiteInside(self::COL_COMPETENCES, $debut, self::COL_COMPETENCES, $ligne - 1);
+//                                    $this->excelWriter->borderOutsiteInside(self::COL_COURS_MUTUALISE, $debut, self::COL_COURS_MUTUALISE, $ligne - 1);
+//                                    $this->excelWriter->borderOutsiteInside(self::COL_COMPETENCES, $debut, self::COL_COMPETENCES, $ligne - 1);
                                     $this->excelWriter->borderOutsiteInside(self::COL_ECTS, $debut, self::COL_ECTS, $ligne - 1);
                                     $this->excelWriter->borderOutsiteInside(self::COL_HEURES_PRES_CM, $debut, self::COL_HEURES_PRES_TP, $ligne - 1);
                                     $this->excelWriter->borderOutsiteInside(self::COL_HEURES_PRES_TOTAL, $debut, self::COL_HEURES_PRES_TOTAL, $ligne - 1);
@@ -246,10 +246,8 @@ class M2eMccc extends AbstractM2eMccc
                             $this->excelWriter->writeCellXY(self::COL_INTITULE_UE, $debut, $uee->ue->getLibelle(), ['wrap' => true]);
                         }
                     }
-                    $ligne = $this->afficheSommeSemestre($ligne, $totalAnnee, $semestre);
 
-                    $this->excelWriter->mergeCellsCaR(self::COL_SEMESTRE, $debutSemestre, self::COL_SEMESTRE, $ligne - 1);
-                    $this->excelWriter->writeCellXY(self::COL_SEMESTRE, $debutSemestre, 'S' . $semestre->ordre);
+                    $this->excelWriter->writeCellXY(self::COL_ECTS, $ligne, $totalEcts === 0.0 ? '' : $totalEcts, ['style' => 'HORIZONTAL_CENTER']);
 
                     $this->excelWriter->writeCellXY(self::COL_HEURES_PRES_CM, $ligne, $totalAnnee->totalCmPresentiel === 0.0 ? '' : $totalAnnee->totalCmPresentiel, ['style' => 'HORIZONTAL_CENTER']);
                     $this->excelWriter->writeCellXY(self::COL_HEURES_PRES_TD, $ligne, $totalAnnee->totalTdPresentiel === 0.0 ? '' : $totalAnnee->totalTdPresentiel, ['style' => 'HORIZONTAL_CENTER']);
@@ -329,24 +327,6 @@ class M2eMccc extends AbstractM2eMccc
                     $totalAnnee->getTotalEtudiant() === 0.0 ? '' : $totalAnnee->getTotalEtudiant(),
                     ['style' => 'HORIZONTAL_CENTER']
                 );
-            }
-
-            // couleur des lignes semestres
-            foreach ($this->lignesSemestre as $ligneSemestre) {
-                $this->excelWriter->setRangeStyle('B' . $ligneSemestre . ':AD' . $ligneSemestre, [
-                    'font' => [
-                        'bold' => true,
-                    ],
-                    'fill' => [
-                        'fillType' => Fill::FILL_SOLID,
-                        'rotation' => 90,
-                        'startColor' => [
-                            'argb' => 'FFafafaf',
-                        ],
-                        'endColor' => [
-                            'argb' => 'FFafafaf',
-                        ],
-                    ],]);
             }
 
             foreach ($this->lignesEcColorees as $lignesEcColoree) {
@@ -434,7 +414,7 @@ class M2eMccc extends AbstractM2eMccc
             }
             $this->excelWriter->writeCellXY(self::COL_SUPPORT_ANGLAIS, $ligne, $anglais === true ? 'O' : 'N');
 
-            $this->excelWriter->writeCellXY(self::COL_COURS_MUTUALISE, $ligne, $ec->getFicheMatiere()->isEnseignementMutualise() === true ? 'O' : 'N');
+//            $this->excelWriter->writeCellXY(self::COL_COURS_MUTUALISE, $ligne, $ec->getFicheMatiere()->isEnseignementMutualise() === true ? 'O' : 'N');
 
 
             // BCC
@@ -448,7 +428,7 @@ class M2eMccc extends AbstractM2eMccc
             //suppression des doublons
             $texte = array_unique($texte);
             $texte = implode(', ', $texte);
-            $this->excelWriter->writeCellXY(self::COL_COMPETENCES, $ligne, $texte);
+//            $this->excelWriter->writeCellXY(self::COL_COMPETENCES, $ligne, $texte);
         } else {
             $this->excelWriter->writeCellXY(self::COL_INTITULE_EC, $ligne, $ec->getTexteEcLibre(), ['wrap' => true]);
         }
@@ -458,7 +438,7 @@ class M2eMccc extends AbstractM2eMccc
         if ($structureEc->elementConstitutif->isControleAssiduite() === false) {
             if ($structureEc->typeMccc !== null) {
                 $mcccs = $this->getMcccs($structureEc, $structureEc->typeMccc);
-                $displayMccc = new \App\TypeDiplome\Licence\Dto\Mccc($mcccs, $structureEc->typeMccc, $this->typeEpreuves, $hasQuitus);
+                $displayMccc = new \App\TypeDiplome\M2E\Dto\Mccc($mcccs, $structureEc->typeMccc, $this->typeEpreuves, $hasQuitus);
                 $displayMccc->calculDisplayMccc();
                 $mcccArray = $displayMccc->toArray();
                 foreach ($mcccArray as $key => $value) {
@@ -491,35 +471,35 @@ class M2eMccc extends AbstractM2eMccc
         return $ligne;
     }
 
-    private function afficheSommeSemestre(int $ligne, TotalVolumeHeure $totalAnnee, StructureSemestre $semestre): int
-    {
-        $this->excelWriter->insertNewRowBefore($ligne);
-
-        $this->excelWriter->mergeCellsCaR(self::COL_UE, $ligne, self::COL_COMPETENCES, $ligne);
-        $this->excelWriter->mergeCellsCaR(self::COL_MCCC_CCI, $ligne, self::COL_MCCC_SECONDE_CHANCE_CT, $ligne);
-        $this->excelWriter->writeCellXY(self::COL_UE, $ligne, 'Total semestre S' . $semestre->ordre . ' ', ['style' => 'HORIZONTAL_RIGHT']);
-        //somme ECTS semestre
-        $this->excelWriter->writeCellXY(self::COL_ECTS, $ligne, $semestre->heuresEctsSemestre->sommeSemestreEcts === 0.0 ? '' : $semestre->heuresEctsSemestre->sommeSemestreEcts, ['style' => 'HORIZONTAL_CENTER']);
-
-        //ligne de somme du semestre
-        $this->excelWriter->writeCellXY(self::COL_HEURES_PRES_CM, $ligne, $semestre->heuresEctsSemestre->sommeSemestreCmPres === 0.0 ? '' : $semestre->heuresEctsSemestre->sommeSemestreCmPres, ['style' => 'HORIZONTAL_CENTER']);
-        $this->excelWriter->writeCellXY(self::COL_HEURES_PRES_TD, $ligne, $semestre->heuresEctsSemestre->sommeSemestreTdPres === 0.0 ? '' : $semestre->heuresEctsSemestre->sommeSemestreTdPres, ['style' => 'HORIZONTAL_CENTER']);
-        $this->excelWriter->writeCellXY(self::COL_HEURES_PRES_TP, $ligne, $semestre->heuresEctsSemestre->sommeSemestreTpPres === 0.0 ? '' : $semestre->heuresEctsSemestre->sommeSemestreTpPres, ['style' => 'HORIZONTAL_CENTER']);
-        $this->excelWriter->writeCellXY(self::COL_HEURES_PRES_TOTAL, $ligne, $semestre->heuresEctsSemestre->sommeSemestreTotalPres() === 0.0 ? '' : $semestre->heuresEctsSemestre->sommeSemestreTotalPres(), ['style' => 'HORIZONTAL_CENTER']);
-
-        $this->excelWriter->writeCellXY(self::COL_HEURES_DIST_CM, $ligne, $semestre->heuresEctsSemestre->sommeSemestreCmDist === 0.0 ? '' : $semestre->heuresEctsSemestre->sommeSemestreCmDist, ['style' => 'HORIZONTAL_CENTER']);
-        $this->excelWriter->writeCellXY(self::COL_HEURES_DIST_TD, $ligne, $semestre->heuresEctsSemestre->sommeSemestreTdDist === 0.0 ? '' : $semestre->heuresEctsSemestre->sommeSemestreTdDist, ['style' => 'HORIZONTAL_CENTER']);
-        $this->excelWriter->writeCellXY(self::COL_HEURES_DIST_TP, $ligne, $semestre->heuresEctsSemestre->sommeSemestreTpDist === 0.0 ? '' : $semestre->heuresEctsSemestre->sommeSemestreTpDist, ['style' => 'HORIZONTAL_CENTER']);
-        $this->excelWriter->writeCellXY(self::COL_HEURES_DIST_TOTAL, $ligne, $semestre->heuresEctsSemestre->sommeSemestreTotalDist() === 0.0 ? '' : $semestre->heuresEctsSemestre->sommeSemestreTotalDist(), ['style' => 'HORIZONTAL_CENTER']);
-
-        $this->excelWriter->writeCellXY(self::COL_HEURES_TOTAL, $ligne, $semestre->heuresEctsSemestre->sommeSemestreTotalPresDist() === 0.0 ? '' : $semestre->heuresEctsSemestre->sommeSemestreTotalPresDist(), ['style' => 'HORIZONTAL_CENTER']);
-
-        $this->excelWriter->writeCellXY(self::COL_HEURES_AUTONOMIE, $ligne, $semestre->heuresEctsSemestre->sommeSemestreTePres === 0.0 ? '' : $semestre->heuresEctsSemestre->sommeSemestreTePres, ['style' => 'HORIZONTAL_CENTER']);
-        $this->lignesSemestre[] = $ligne;
-
-        $ligne++;
-        return $ligne;
-    }
+//    private function afficheSommeSemestre(int $ligne, TotalVolumeHeure $totalAnnee, StructureSemestre $semestre): int
+//    {
+//        $this->excelWriter->insertNewRowBefore($ligne);
+//
+////        $this->excelWriter->mergeCellsCaR(self::COL_UE, $ligne, self::COL_COMPETENCES, $ligne);
+//        $this->excelWriter->mergeCellsCaR(self::COL_MCCC_CCI, $ligne, self::COL_MCCC_SECONDE_CHANCE_CT, $ligne);
+//        $this->excelWriter->writeCellXY(self::COL_UE, $ligne, 'Total semestre S' . $semestre->ordre . ' ', ['style' => 'HORIZONTAL_RIGHT']);
+//        //somme ECTS semestre
+//        $this->excelWriter->writeCellXY(self::COL_ECTS, $ligne, $semestre->heuresEctsSemestre->sommeSemestreEcts === 0.0 ? '' : $semestre->heuresEctsSemestre->sommeSemestreEcts, ['style' => 'HORIZONTAL_CENTER']);
+//
+//        //ligne de somme du semestre
+//        $this->excelWriter->writeCellXY(self::COL_HEURES_PRES_CM, $ligne, $semestre->heuresEctsSemestre->sommeSemestreCmPres === 0.0 ? '' : $semestre->heuresEctsSemestre->sommeSemestreCmPres, ['style' => 'HORIZONTAL_CENTER']);
+//        $this->excelWriter->writeCellXY(self::COL_HEURES_PRES_TD, $ligne, $semestre->heuresEctsSemestre->sommeSemestreTdPres === 0.0 ? '' : $semestre->heuresEctsSemestre->sommeSemestreTdPres, ['style' => 'HORIZONTAL_CENTER']);
+//        $this->excelWriter->writeCellXY(self::COL_HEURES_PRES_TP, $ligne, $semestre->heuresEctsSemestre->sommeSemestreTpPres === 0.0 ? '' : $semestre->heuresEctsSemestre->sommeSemestreTpPres, ['style' => 'HORIZONTAL_CENTER']);
+//        $this->excelWriter->writeCellXY(self::COL_HEURES_PRES_TOTAL, $ligne, $semestre->heuresEctsSemestre->sommeSemestreTotalPres() === 0.0 ? '' : $semestre->heuresEctsSemestre->sommeSemestreTotalPres(), ['style' => 'HORIZONTAL_CENTER']);
+//
+//        $this->excelWriter->writeCellXY(self::COL_HEURES_DIST_CM, $ligne, $semestre->heuresEctsSemestre->sommeSemestreCmDist === 0.0 ? '' : $semestre->heuresEctsSemestre->sommeSemestreCmDist, ['style' => 'HORIZONTAL_CENTER']);
+//        $this->excelWriter->writeCellXY(self::COL_HEURES_DIST_TD, $ligne, $semestre->heuresEctsSemestre->sommeSemestreTdDist === 0.0 ? '' : $semestre->heuresEctsSemestre->sommeSemestreTdDist, ['style' => 'HORIZONTAL_CENTER']);
+//        $this->excelWriter->writeCellXY(self::COL_HEURES_DIST_TP, $ligne, $semestre->heuresEctsSemestre->sommeSemestreTpDist === 0.0 ? '' : $semestre->heuresEctsSemestre->sommeSemestreTpDist, ['style' => 'HORIZONTAL_CENTER']);
+//        $this->excelWriter->writeCellXY(self::COL_HEURES_DIST_TOTAL, $ligne, $semestre->heuresEctsSemestre->sommeSemestreTotalDist() === 0.0 ? '' : $semestre->heuresEctsSemestre->sommeSemestreTotalDist(), ['style' => 'HORIZONTAL_CENTER']);
+//
+//        $this->excelWriter->writeCellXY(self::COL_HEURES_TOTAL, $ligne, $semestre->heuresEctsSemestre->sommeSemestreTotalPresDist() === 0.0 ? '' : $semestre->heuresEctsSemestre->sommeSemestreTotalPresDist(), ['style' => 'HORIZONTAL_CENTER']);
+//
+//        $this->excelWriter->writeCellXY(self::COL_HEURES_AUTONOMIE, $ligne, $semestre->heuresEctsSemestre->sommeSemestreTePres === 0.0 ? '' : $semestre->heuresEctsSemestre->sommeSemestreTePres, ['style' => 'HORIZONTAL_CENTER']);
+//        $this->lignesSemestre[] = $ligne;
+//
+//        $ligne++;
+//        return $ligne;
+//    }
 
     private function genereReferentielCompetences(Parcours $parcours, Formation $formation): void
     {
@@ -564,7 +544,7 @@ class M2eMccc extends AbstractM2eMccc
         );
     }
 
-    public function exportPdfLicenceMccc(
+    public function exportPdfMccc(
         CampagneCollecte   $anneeUniversitaire,
         Parcours           $parcours,
         ?DateTimeInterface $dateCfvu = null,
@@ -572,7 +552,7 @@ class M2eMccc extends AbstractM2eMccc
         bool               $versionFull = true,
     ): Response
     {
-        $this->genereExcelLicenceMccc($anneeUniversitaire, $parcours, $dateCfvu, $dateConseil, $versionFull);
+        $this->genereExcelMccc($anneeUniversitaire, $parcours, $dateCfvu, $dateConseil, $versionFull);
 
         $fichier = $this->excelWriter->saveFichier($this->fileName, $this->dir . '/temp/');
 
@@ -592,7 +572,7 @@ class M2eMccc extends AbstractM2eMccc
         ]);
     }
 
-    public function exportAndSaveExcelLicenceMccc(
+    public function exportAndSaveExcelMccc(
         CampagneCollecte   $anneeUniversitaire,
         Parcours           $parcours,
         string             $dir,
@@ -602,7 +582,7 @@ class M2eMccc extends AbstractM2eMccc
     ): string
     {
         try {
-            $this->genereExcelLicenceMccc($anneeUniversitaire, $parcours, $dateCfvu, $dateConseil, $versionFull);
+            $this->genereExcelMccc($anneeUniversitaire, $parcours, $dateCfvu, $dateConseil, $versionFull);
         } catch (\Exception $e) {
             throw new \RuntimeException($e->getMessage());
         }
@@ -631,7 +611,7 @@ class M2eMccc extends AbstractM2eMccc
     //        return $texte;
     //    }
 
-    public function exportAndSavePdfLicenceMccc(
+    public function exportAndSavePdfMccc(
         CampagneCollecte   $anneeUniversitaire,
         Parcours           $parcours,
         string             $dir,
@@ -640,7 +620,7 @@ class M2eMccc extends AbstractM2eMccc
         bool               $versionFull = true,
     ): string
     {
-        $this->genereExcelLicenceMccc($anneeUniversitaire, $parcours, $dateCfvu, $dateConseil, $versionFull);
+        $this->genereExcelMccc($anneeUniversitaire, $parcours, $dateCfvu, $dateConseil, $versionFull);
 
         $fichier = $this->excelWriter->saveFichier($this->fileName, $dir);
 

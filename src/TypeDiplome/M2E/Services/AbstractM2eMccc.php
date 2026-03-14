@@ -1,7 +1,7 @@
 <?php
 /*
  * Copyright (c) 2024. | David Annebicque | ORéOF  - All Rights Reserved
- * @file /Users/davidannebicque/Sites/oreof/src/TypeDiplome/Export/AbstractLicenceMcc.php
+ * @file /Users/davidannebicque/Sites/oreof/src/TypeDiplome/Export/AbstractM2EMcc.php
  * @author davidannebicque
  * @project oreof
  * @lastUpdate 19/05/2024 20:35
@@ -24,12 +24,12 @@ class AbstractM2eMccc
     public const PAGE_MODELE = 'modele';
     public const PAGE_REF_COMPETENCES = 'ref. compétences';
     // Cellules
-    public const CEL_TYPE_FORMATION = 'G5';
-    public const CEL_INTITULE_FORMATION = 'G6';
-    public const CEL_INTITULE_PARCOURS = 'G7';
-    public const CEL_ANNEE_ETUDE = 'G9';
-    public const CEL_COMPOSANTE = 'G11';
-    public const CEL_SITE_FORMATION = 'G13';
+    public const CEL_TYPE_FORMATION = 'J5';
+    public const CEL_INTITULE_FORMATION = 'J6';
+    public const CEL_INTITULE_PARCOURS = 'J7';
+    public const CEL_ANNEE_ETUDE = 'J9';
+    public const CEL_COMPOSANTE = 'J11';
+    public const CEL_SITE_FORMATION = 'J13';
     public const CEL_ANNEE_UNIVERSITAIRE = 'A3';
     public const CEL_RESPONSABLE_MENTION = 'E25';
     public const CEL_RESPONSABLE_PARCOURS = 'E26';
@@ -51,30 +51,28 @@ class AbstractM2eMccc
     public const COL_RESP_EC = 6;
     public const COL_LANGUE_EC = 8;
     public const COL_SUPPORT_ANGLAIS = 9;
-    public const COL_TYPE_EC = 11;
-    public const COL_COURS_MUTUALISE = 10;
-    public const COL_COMPETENCES = 12;
-    public const COL_ECTS = 13;
-    public const COL_HEURES_PRES_CM = 14;
-    public const COL_HEURES_PRES_TD = 15;
-    public const COL_HEURES_PRES_TP = 16;
-    public const COL_HEURES_PRES_TOTAL = 17;
+    public const COL_TYPE_EC = 7;
+    public const COL_ECTS = 10;
+    public const COL_HEURES_PRES_CM = 11;
+    public const COL_HEURES_PRES_TD = 12;
+    public const COL_HEURES_PRES_TP = 13;
+    public const COL_HEURES_PRES_TOTAL = 14;
 
-    public const COL_HEURES_DIST_CM = 18;
-    public const COL_HEURES_DIST_TD = 19;
-    public const COL_HEURES_DIST_TP = 20;
-    public const COL_HEURES_DIST_TOTAL = 21;
-    public const COL_HEURES_AUTONOMIE = 23;
-    public const COL_HEURES_TOTAL = 22;
-    public const COL_MCCC_CCI = 24;
-    public const COL_MCCC_CC = 25;
-    public const COL_MCCC_CT = 26;
-    public const COL_MCCC_SECONDE_CHANCE_CC_SANS_TP = 27;
-    public const COL_MCCC_SECONDE_CHANCE_CC_AVEC_TP = 28;
-    public const COL_MCCC_SECONDE_CHANCE_CC_SUP_10 = 29;
-    public const COL_MCCC_SECONDE_CHANCE_CT = 30;
+    public const COL_HEURES_DIST_CM = 15;
+    public const COL_HEURES_DIST_TD = 16;
+    public const COL_HEURES_DIST_TP = 17;
+    public const COL_HEURES_DIST_TOTAL = 18;
+    public const COL_HEURES_AUTONOMIE = 20;
+    public const COL_HEURES_TOTAL = 19;
+    public const COL_MCCC_CCI = 21;
+    public const COL_MCCC_CC = 22;
+    public const COL_MCCC_CT = 23;
+    public const COL_MCCC_SECONDE_CHANCE_CC_SANS_TP = 24;
+    public const COL_MCCC_SECONDE_CHANCE_CC_AVEC_TP = 25;
+    public const COL_MCCC_SECONDE_CHANCE_CC_SUP_10 = 26;
+    public const COL_MCCC_SECONDE_CHANCE_CT = 27;
 
-    public const COL_DETAIL_TYPE_EPREUVES = "A27";
+    public const COL_DETAIL_TYPE_EPREUVES = "A28";
 
     protected array $typeEpreuves = [];
     protected bool $versionFull = true;

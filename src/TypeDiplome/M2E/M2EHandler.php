@@ -73,7 +73,7 @@ final class M2EHandler implements TypeDiplomeHandlerInterface
         bool               $versionFull = true
     ): StreamedResponse
     {
-        return $this->m2eMccc->exportExcelLicenceMccc($anneeUniversitaire, $parcours, $dateCfvu, $dateConseil, $versionFull);
+        return $this->m2eMccc->exportExcelMccc($anneeUniversitaire, $parcours, $dateCfvu, $dateConseil, $versionFull);
     }
 
     public function exportExcelVersionMccc(
@@ -84,7 +84,7 @@ final class M2EHandler implements TypeDiplomeHandlerInterface
         bool               $versionFull = true
     ): StreamedResponse
     {
-        return $this->m2eMcccVersion->exportExcelLicenceMccc($anneeUniversitaire, $parcours, $dateCfvu, $dateConseil, $versionFull);
+        return $this->m2eMcccVersion->exportExcelMccc($anneeUniversitaire, $parcours, $dateCfvu, $dateConseil, $versionFull);
     }
 
     public function exportExcelAndSaveVersionMccc(
@@ -96,7 +96,7 @@ final class M2EHandler implements TypeDiplomeHandlerInterface
         ?DateTimeInterface $dateConseil = null
     ): string
     {
-        return $this->m2eMcccVersion->exportAndSaveExcelLicenceMccc($anneeUniversitaire, $parcours, $dir, $fichier, $dateCfvu, $dateConseil);
+        return $this->m2eMcccVersion->exportAndSaveExcelMccc($anneeUniversitaire, $parcours, $dir, $fichier, $dateCfvu, $dateConseil);
     }
 
     public function exportPdfMccc(
@@ -107,7 +107,7 @@ final class M2EHandler implements TypeDiplomeHandlerInterface
         bool               $versionFull = true
     ): Response
     {
-        return $this->m2eMccc->exportPdfLicenceMccc($anneeUniversitaire, $parcours, $dateCfvu, $dateConseil, $versionFull);
+        return $this->m2eMccc->exportPdfMccc($anneeUniversitaire, $parcours, $dateCfvu, $dateConseil, $versionFull);
     }
 
     public function exportAndSaveExcelMccc(
@@ -119,7 +119,7 @@ final class M2EHandler implements TypeDiplomeHandlerInterface
         bool               $versionFull = true
     ): string
     {
-        return $this->m2eMccc->exportAndSaveExcelLicenceMccc($anneeUniversitaire, $parcours, $dir, $dateCfvu, $dateConseil, $versionFull);
+        return $this->m2eMccc->exportAndSaveExcelMccc($anneeUniversitaire, $parcours, $dir, $dateCfvu, $dateConseil, $versionFull);
     }
 
     public function exportAndSavePdfMccc(
@@ -131,7 +131,7 @@ final class M2EHandler implements TypeDiplomeHandlerInterface
         bool               $versionFull = true
     ): string
     {
-        return $this->m2eMccc->exportAndSavePdfLicenceMccc($anneeUniversitaire, $parcours, $dir, $dateCfvu, $dateConseil, $versionFull);
+        return $this->m2eMccc->exportAndSavePdfMccc($anneeUniversitaire, $parcours, $dir, $dateCfvu, $dateConseil, $versionFull);
     }
 
     public function calculStructureParcours(Parcours $parcours, bool $withEcts = true, bool $withBcc = true): StructureParcours
