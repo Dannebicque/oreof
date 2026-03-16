@@ -126,10 +126,9 @@ class LicenceController extends BaseController
 
         $typeEpreuves = $typeEpreuveRepository->findByTypeDiplome($typeDiplome ?? $this->typeDiplome);
 
-        $raccroche = $elementConstitutif->getFicheMatiere()?->getParcours()?->getId() !== $parcours->getId();
+        $raccroche = !($elementConstitutif->getNatureUeEc()->isChoix() || $elementConstitutif->getNatureUeEc()->isLibre()) && $elementConstitutif->getFicheMatiere()?->getParcours()?->getId() !== $parcours->getId();
         $getElement = new GetElementConstitutif($elementConstitutif, $parcours);
-        $disabled = ($elementConstitutif->isMcccSpecifiques() === false && $raccroche) || $elementConstitutif->getFicheMatiere()?->isMcccImpose();
-
+        $disabled = ($elementConstitutif->isMcccSpecifiques() === false && $raccroche) || ($elementConstitutif->getFicheMatiere()?->isMcccImpose());
         $owner = $getElement->getElementConstitutif();
 
         if ($request->query->get('type') !== $owner->getTypeMccc()) {

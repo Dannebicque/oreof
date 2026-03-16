@@ -107,9 +107,9 @@
 
         {% if isMcccImpose == false %}
             {% set quitusDisabled = isParcoursProprietaire == false and ec.ectsSpecifiques == false %}
-            {% set quitusChecked = 
-                (ec.quitus == true and ec.mcccSpecifiques == true) 
-                or (ec.ficheMatiere.quitus == true and ec.mcccSpecifiques == false)
+            {% set quitusChecked =
+                (ec.quitus == true and ec.mcccSpecifiques == true)
+                or (ec.ficheMatiere != null and ec.ficheMatiere.quitus == true and ec.mcccSpecifiques == false)
             %}
             {% set minimumLengthTextArea = 15 %}
             <div {{ stimulus_controller('required_text_area') }}
@@ -133,26 +133,26 @@
                     <label for="quitusArgumentaire" class="form-label">
                         Argumentaire du quitus<span class="required"></span>
                     </label>
-                    {% set quitusText = ec.mcccSpecifiques and ec.quitus 
-                        ? ec.quitusText 
-                        : ec.ficheMatiere.quitus and ec.mcccSpecifiques == false
+                    {% set quitusText = ec.mcccSpecifiques and ec.quitus
+                        ? ec.quitusText
+                        : ec.ficheMatiere != null and ec.ficheMatiere.quitus and ec.mcccSpecifiques == false
                         ? ec.ficheMatiere.quitusText
-                        : '' 
+                        : ''
                     %}
-                    <textarea 
+                    <textarea
                         class="form-control mb-2"
-                        name="ec_step4[quitus_argument]" 
+                        name="ec_step4[quitus_argument]"
                         id="quitusArgumentaire"
                         {{ stimulus_target('required_text_area', 'textarea') }}
                         {{ stimulus_action('required_text_area', 'checkTextAreaLength', 'input') }}
                         {{ quitusChecked ? 'required' : '' }}
                         {{ quitusDisabled ? 'disabled' : '' }}
-                    >{{ quitusText }}</textarea>  
+                    >{{ quitusText }}</textarea>
                     <div class="text-danger small my-2 {{ quitusText|length > minimumLengthTextArea ? 'd-none' : ''}}"
                         {{ stimulus_target('required_text_area', 'invalidFieldText') }}
                     >
                         L'argumentaire doit faire au moins 15 caractères.
-                    </div>          
+                    </div>
                 </div>
             </div>
         {% endif %}
