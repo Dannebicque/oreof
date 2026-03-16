@@ -42,19 +42,19 @@ final class ParcoursAccessVoter extends Voter
     private function isUserLinkedToParcours(mixed $subject, int $userId) {
         $responsablesId = [];
         if ($subject instanceof Parcours){
-            $responsablesId[] = $subject->getRespParcours()->getId() ?? null;
-            $responsablesId[] = $subject->getCoResponsable()->getId() ?? null;
-            $responsablesId[] = $subject->getFormation()->getResponsableMention()->getId() ?? null;
-            $responsablesId[] = $subject->getFormation()->getCoResponsable()->getId() ?? null;
-            $responsablesId[] = $subject->getFormation()->getComposantePorteuse()->getResponsableDpe()->getId() ?? null;
+            $responsablesId[] = $subject->getRespParcours()?->getId() ?? null;
+            $responsablesId[] = $subject->getCoResponsable()?->getId() ?? null;
+            $responsablesId[] = $subject->getFormation()?->getResponsableMention()?->getId() ?? null;
+            $responsablesId[] = $subject->getFormation()?->getCoResponsable()?->getId() ?? null;
+            $responsablesId[] = $subject->getFormation()?->getComposantePorteuse()?->getResponsableDpe()?->getId() ?? null;
         }
         elseif ($subject instanceof Formation) {
-            $responsablesId[] = $subject->getResponsableMention()->getId() ?? null;
-            $responsablesId[] = $subject->getCoResponsable()->getId() ?? null;
-            $responsablesId[] = $subject->getComposantePorteuse()->getResponsableDpe()->getId() ?? null;
+            $responsablesId[] = $subject->getResponsableMention()?->getId() ?? null;
+            $responsablesId[] = $subject->getCoResponsable()?->getId() ?? null;
+            $responsablesId[] = $subject->getComposantePorteuse()?->getResponsableDpe()?->getId() ?? null;
             foreach($subject->getParcours() as $p) {
-                $responsablesId[] = $p->getRespParcours()->getId() ?? null;
-                $responsablesId[] = $p->getCoResponsable()->getId() ?? null;
+                $responsablesId[] = $p->getRespParcours()?->getId() ?? null;
+                $responsablesId[] = $p->getCoResponsable()?->getId() ?? null;
             }
         }
 
