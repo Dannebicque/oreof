@@ -526,7 +526,7 @@ class ElementConstitutifController extends BaseController
         //            $elementConstitutif->getParcours()->getFormation()
         //        )) { //todo: ajouter le workflow...
 
-        $isParcoursProprietaire = $elementConstitutif->getFicheMatiere()?->getParcours()?->getId() === $parcours->getId();
+        $isParcoursProprietaire = $elementConstitutif->getFicheMatiere()?->getParcours()?->getId() === $parcours->getId() || ($elementConstitutif->getNatureUeEc()?->isChoix() && $elementConstitutif->getParcours()?->getId() === $parcours->getId());
 
         //todo: deprecated $raccroche ?
         $raccroche = $elementConstitutif->getFicheMatiere()?->getParcours()?->getId() !== $parcours->getId();
