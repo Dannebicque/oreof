@@ -32,11 +32,11 @@ use Symfony\Component\Workflow\WorkflowInterface;
 class RessourceVoter extends Voter
 {
     public function __construct(
-        private WorkflowInterface $dpeParcoursWorkflow,
-        private WorkflowInterface $ficheWorkflow,
-        private readonly Security $security,
-        private UserProfilRepository   $userProfilRepository,
-        private ProfilDroitsRepository $profilDroitsRepository,
+        private readonly WorkflowInterface      $dpeParcoursWorkflow,
+        private readonly WorkflowInterface      $ficheWorkflow,
+        private readonly Security               $security,
+        private readonly UserProfilRepository   $userProfilRepository,
+        private readonly ProfilDroitsRepository $profilDroitsRepository,
     )
     {
     }
