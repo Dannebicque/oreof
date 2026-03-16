@@ -281,11 +281,7 @@ class ParcoursController extends BaseController
         $hasLastVersionCampagne = count($textDiffParcoursCampagne) > 0 || count($textDiffFormationCampagne) > 0;
         // Si l'utilisateur peut voir les différences
         $dpeParcours = GetDpeParcours::getFromParcours($parcours);
-        $canSeeDifferences = false;
-        if ( $this->isGranted('EDIT', ['route' => 'app_parcours', 'subject' => $dpeParcours->getParcours()]) 
-            || $this->isGranted('EDIT', ['route' => 'app_formation', 'subject' => $dpeParcours]) ) {
-            $canSeeDifferences = true;
-        }
+        $canSeeDifferences = $this->isGranted('RELATED_TO_PARCOURS', $parcours);
 
         $version = $versioningParcours->hasLastVersion($parcours);
 
