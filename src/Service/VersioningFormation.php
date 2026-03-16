@@ -92,7 +92,7 @@ class VersioningFormation
         return $this->serializer->deserialize($version, Formation::class, 'json');
     }
 
-    public function getDifferencesBetweenFormationAndLastVersion(Formation $formation): array
+    public function getDifferencesBetweenFormationAndLastVersion(Formation $formation, bool $fromLastYear = false): array
     {
         $this->formationTextDifferences = [];
         $lastVersion = $this->entityManager->getRepository(FormationVersioning::class)->findBy(
@@ -100,8 +100,13 @@ class VersioningFormation
             ['version_timestamp' => 'DESC']
         );
         $lastVersion = count($lastVersion) > 0 ? $lastVersion[0] : null;
-        if($lastVersion) {
-            $lastVersion = $this->loadFormationFromVersion($lastVersion);
+        if($lastVersion || ($fromLastYear && $formation->getFormationOrigineCopie() !== null)) {
+            if($fromLastYear){
+                $lastVersion = $formation->getFormationOrigineCopie();
+            }
+            else {
+                $lastVersion = $this->loadFormationFromVersion($lastVersion);
+            }
             // Configuration du calcul des différences
             $rendererName = 'Combined';
             $differOptions = [

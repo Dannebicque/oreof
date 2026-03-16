@@ -1,7 +1,20 @@
-{% if is_granted('ROLE_ADMIN') and textDifferences is defined and textDifferences != null %}
+{% if (canSeeDifferences ?? false == true) and textDifferences is defined and textDifferences != null %}
     {% if textDifferences|length > 0 %}
-    <div class="row">
-        <div class="col-sm-12 col-md-10 col-lg-8 collapse mb-3" id="{{ idCollapse }}">
+        {% if idCollapse == displayComparaison ?? 'false' %}
+            {% set hasDisplay = '' %}
+        {% else %}
+            {% set hasDisplay = 'd-none' %}
+        {% endif %}
+    {% set libelleVersion = {
+        'diffGlobalParcours': 'Comparaison avec la version initiale de cette année', 
+        'diffGlobalParcoursCampagne': "Comparaison avec l'année précédente"
+        } 
+    %}
+    <div class="row mt-2">
+        <div class="col-sm-12 col-md-10 col-lg-8 mb-3 {{ hasDisplay }}" id="{{ idCollapse }}">
+            <p class="mb-1">
+                <span class="fw-semibold fst-italic text-info">{{ libelleVersion[idCollapse] }}</span>
+            </p>
             <div class="d-inline-flex">
                 {{ textDifferences|raw  }} 
             </div>
