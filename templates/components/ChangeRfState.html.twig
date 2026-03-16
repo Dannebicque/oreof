@@ -104,15 +104,15 @@
                                         <i class="fal {{ etape.icon }}"></i>
                                     </button>
                                 {% endfor %}
-                                {# todo: uniquement si pas encore CFVU? #}
-                                <a href="{{ path('app_formation_change_rf_suppression', {demande:demande.id}) }}"
-                                   data-controller="tooltip" data-tooltip-placement-value="bottom"
-                                   data-bs-original-title="Supprimer la demande"
-                                   class="btn btn-sm btn-icon btn-icon-only btn-danger ms-4"><i
-                                            class="{{ iconDelete }}"></i>
-                                </a>
+                                {% if place != 'soumis_ses' and place != 'soumis_cfvu' %}
+                                    <a href="{{ path('app_formation_change_rf_suppression', {demande:demande.id}) }}"
+                                       data-controller="tooltip" data-tooltip-placement-value="bottom"
+                                       data-bs-original-title="Supprimer la demande"
+                                       class="btn btn-sm btn-icon btn-icon-only btn-danger ms-4"><i
+                                                class="{{ iconDelete }}"></i>
+                                    </a>
+                                {% endif %}
                             </div>
-
                         </div>
                     {% endfor %}
                 </div>
