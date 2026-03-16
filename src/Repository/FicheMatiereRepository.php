@@ -373,7 +373,7 @@ class FicheMatiereRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
-    public function findCountForKeyword(string $keyword) : array
+    public function findCountForKeyword(string $keyword, CampagneCollecte $campagne) : array
     {
         $qb = $this->createQueryBuilder('fm');
 
@@ -383,12 +383,16 @@ class FicheMatiereRepository extends ServiceEntityRepository
             ->join('f.mention', 'm')
             ->join('f.typeDiplome', 'td')
             ->where(
-                $qb->expr()->like('UPPER(fm.description)', 'UPPER(:keyword)')
-            )
-            ->orWhere(
-                $qb->expr()->like('UPPER(fm.objectifs)', 'UPPER(:keyword)')
+                $qb->expr()->andX(
+                    $qb->expr()->orX(
+                        $qb->expr()->like('UPPER(fm.description)', 'UPPER(:keyword)'),
+                        $qb->expr()->like('UPPER(fm.objectifs)', 'UPPER(:keyword)')
+                    ),
+                    $qb->expr()->eq('fm.campagneCollecte', ':campagne')
+                )
             )
             ->setParameter('keyword', '%' . $keyword . '%')
+            ->setParameter(':campagne', $campagne)
         ->getQuery()
         ->getResult();
 
@@ -396,7 +400,12 @@ class FicheMatiereRepository extends ServiceEntityRepository
 
     }
 
-    public function findFicheMatiereWithKeywordAndPagination(string $keyword, int $pageNumber, bool $paginate = true) : array
+    public function findFicheMatiereWithKeywordAndPagination(
+        string $keyword, 
+        int $pageNumber, 
+        bool $paginate = true,
+        CampagneCollecte $campagne,
+    ) : array
     {
         $qb = $this->createQueryBuilder('fm');
 
@@ -417,12 +426,18 @@ class FicheMatiereRepository extends ServiceEntityRepository
         ->join('f.mention', 'm')
         ->join('f.typeDiplome', 'td')
         ->where(
-            $qb->expr()->like('UPPER(fm.description)', 'UPPER(:keyword)')
+            $qb->expr()->andX(
+                $qb->expr()->orX(
+                    $qb->expr()->like('UPPER(fm.description)', 'UPPER(:keyword)'),
+                    $qb->expr()->like('UPPER(fm.objectifs)', 'UPPER(:keyword)')
+                ),
+                $qb->expr()->eq('fm.campagneCollecte', ':campagne')
+            )
         )
-        ->orWhere(
-            $qb->expr()->like('UPPER(fm.objectifs)', 'UPPER(:keyword)')
-        )
-        ->setParameter('keyword', '%' . $keyword . '%');
+        ->setParameter('keyword', '%' . $keyword . '%')
+        ->setParameter(':campagne', $campagne);
+
+
         if($paginate) {
             $qb = $qb->setFirstResult($firstResults)
                 ->setMaxResults(30);

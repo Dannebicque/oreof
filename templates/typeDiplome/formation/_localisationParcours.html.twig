@@ -22,6 +22,15 @@
                     })
                 }}
             {% endif %}
+            {% if stringDifferencesParcoursCampagne.regimeInscriptionParcours is defined %}
+                {{ include('communs/_comparaison_versioning_no_button.html.twig',
+                        {
+                            textDifferences: stringDifferencesParcoursCampagne.regimeInscriptionParcours,
+                            idCollapse: 'diffGlobalParcoursCampagne'
+                        }
+                    )
+                }}
+            {% endif %}
             <dt>Modalités de l'alternance</dt>
             <dd>
                 {{ parcours.modalitesAlternance|raw }}

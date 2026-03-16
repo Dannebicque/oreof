@@ -2,9 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\CampagneCollecte;
 use App\Entity\FicheMatiere;
 use App\Entity\Formation;
 use App\Entity\Parcours;
+use App\Enums\TypeParcoursEnum;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -32,6 +34,9 @@ class SearchController extends AbstractController
         EntityManagerInterface $entityManager,
     ): \Symfony\Component\HttpFoundation\RedirectResponse|Response
     {
+        $campagneCollecte = $entityManager->getRepository(CampagneCollecte::class)
+            ->findOneBy(['defaut' => true]);
+
         $request = Request::createFromGlobals();
         $keyword_1 = $request->query->get('keyword_1');
         $typeRecherche = $request->query->get('searchType');
@@ -55,8 +60,10 @@ class SearchController extends AbstractController
             $resultArrayBadge = [];
             $isParcoursParDefautArray = [];
 
-            $parcoursArray = $entityManager->getRepository(Parcours::class)->findWithKeyword($keyword_1);
-            $parcoursParDefautArray = $entityManager->getRepository(Parcours::class)->findWithKeywordForDefaultParcours($keyword_1);
+            $parcoursArray = $entityManager->getRepository(Parcours::class)
+                ->findWithKeyword($keyword_1, $campagneCollecte);
+            $parcoursParDefautArray = $entityManager->getRepository(Parcours::class)
+                ->findWithKeywordForDefaultParcours($keyword_1, $campagneCollecte);
 
             for($i = 0; $i < count($parcoursArray); $i++){
                 $textContains = [];
@@ -86,11 +93,17 @@ class SearchController extends AbstractController
                     ->findOneById($parcoursArray[$i]['formation_id'])
                     ->getDisplayLong() ?? "";
 
+                $typeParcoursLibelle = "";
+                if($parcoursArray[$i]['type_parcours'] !== null){
+                    $typeParcoursLibelle = $parcoursArray[$i]['type_parcours']->getLabel();
+                }
+
                 $resultArrayBadge[] =
                 [
                     ...$textContains,
                     'fichesMatieres' => [...$linkedFicheMatiere],
-                    'libelleMention' => $libelleMention
+                    'libelleMention' => $libelleMention,
+                    'typeParcoursLibelle' => $typeParcoursLibelle
                 ];
 
                 $isParcoursParDefautArray[] = $parcoursArray[$i]['parcours_libelle'] === Parcours::PARCOURS_DEFAUT;
@@ -124,10 +137,16 @@ class SearchController extends AbstractController
                     ->findOneById($parcoursParDefautArray[$j]['formation_id'])
                     ->getDisplayLong() ?? "";
 
+                $typeParcoursDefautLibelle = "";
+                if($parcoursParDefautArray[$j]['type_parcours'] !== null){
+                    $typeParcoursDefautLibelle = $parcoursParDefautArray[$j]['type_parcours']->getLabel();
+                }
+
                 $resultArrayBadge[] = [
                     ...$textContainsDefault,
                     'fichesMatieres' => [...$linkedFicheMatiereDefault],
-                    'libelleMention' => $libelleMentionParDefaut
+                    'libelleMention' => $libelleMentionParDefaut,
+                    'typeParcoursLibelle' => $typeParcoursDefautLibelle
                 ];
 
                 $isParcoursParDefautArray[] = $parcoursParDefautArray[$j]['parcours_libelle'] === Parcours::PARCOURS_DEFAUT;
@@ -146,7 +165,7 @@ class SearchController extends AbstractController
         elseif($typeRechercheValide === 'ficheMatiere'){
             $countFiche = $entityManager
                 ->getRepository(FicheMatiere::class)
-                ->findCountForKeyword($keyword_1)[0]['nombre_total'];
+                ->findCountForKeyword($keyword_1, $campagneCollecte)[0]['nombre_total'];
 
             $dataTwigRenderer = [
                 'typeRecherche' => 'ficheMatiere',
@@ -180,8 +199,11 @@ class SearchController extends AbstractController
         EntityManagerInterface $entityManager
     ): \Symfony\Component\HttpFoundation\JsonResponse
     {
+        $campagneCollecteDefaut = $entityManager->getRepository(CampagneCollecte::class)
+            ->findOneBy(['defaut' => true]);
+
         $data = $entityManager->getRepository(FicheMatiere::class)
-                ->findFicheMatiereWithKeywordAndPagination($mot_cle, $page);
+                ->findFicheMatiereWithKeywordAndPagination($mot_cle, $page, true, $campagneCollecteDefaut);
 
         return $this->json($data);
     }
@@ -193,8 +215,11 @@ class SearchController extends AbstractController
         Filesystem $fs
     ) : Response {
 
+        $campagne = $entityManager->getRepository(CampagneCollecte::class)
+            ->findOneBy(['defaut' => true]);
+
         $data = $entityManager->getRepository(FicheMatiere::class)
-            ->findFicheMatiereWithKeywordAndPagination($mot_cle, 0, false);
+            ->findFicheMatiereWithKeywordAndPagination($mot_cle, 0, false, $campagne);
 
         $data = array_map(function($ficheMatiere){
             $libelleMention = $ficheMatiere['type_diplome_libelle'] ? $ficheMatiere['type_diplome_libelle'] . ' - ' : '';
@@ -243,6 +268,9 @@ class SearchController extends AbstractController
         if($fs->exists($path . $filename)){
             $fs->remove($path . $filename);
         }
+
+        // Création d'un fichier vide
+        $fs->appendToFile($path . $filename, "");
 
         $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
         $writer->save($path . $filename);
