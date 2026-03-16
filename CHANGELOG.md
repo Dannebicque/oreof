@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.51.0](https://github.com/Dannebicque/oreof/compare/v1.50.0...v1.51.0) (2026-03-15)
+
+
+### Features
+
+* add M2E structure and export functionalities ([f7b61dd](https://github.com/Dannebicque/oreof/commit/f7b61dd217992e32a4964749add9c5adbf593ee3))
+* add mutualisation impacts modal and remove all liaisons functionality ([e068905](https://github.com/Dannebicque/oreof/commit/e06890501721b961a27403f1ffb6b76e970b7fd2))
+* implement M2E coefficient calculation and update related methods ([31e22f9](https://github.com/Dannebicque/oreof/commit/31e22f96938dcc63de35a74a7928f3a800690b22))
+* implement Synthese button functionality and context management ([791e9bf](https://github.com/Dannebicque/oreof/commit/791e9bf1748dc6c979825929d1bab3e6f93745d5))
+* update Makefile for Docker commands and add database import/export functionalities ([386f6c9](https://github.com/Dannebicque/oreof/commit/386f6c9e5803a6bfa5908556664daa999f9595ef))
+* update Makefile for Docker commands and add database import/export functionalities ([d0d2158](https://github.com/Dannebicque/oreof/commit/d0d21585146089690e78fdaafeb7e30cc2ced266))
+
+
+### Bug Fixes
+
+* handle null TypeDiplome in LicenceController to ensure fallback value ([b0ec3dd](https://github.com/Dannebicque/oreof/commit/b0ec3dd1c6b93a676dc2be1b5aa515247bb2c9f7))
+* handle null TypeDiplome in typeEpreuves retrieval ([54a36f4](https://github.com/Dannebicque/oreof/commit/54a36f4d710e4a725fce5e184e475726ff22dd4c))
+* reorder MCCC badge display in _liste.html.twig for better layout ([fab40f1](https://github.com/Dannebicque/oreof/commit/fab40f12c13b259ee20f78802a6e65bd3bb8bb43))
+* update getOwner method to allow null return type and comment out unused menu item in base.html.twig ([90cdac1](https://github.com/Dannebicque/oreof/commit/90cdac17477569161f8f9bbcbe82e811c061a6ea))
+
 ## [1.50.0](https://github.com/Dannebicque/oreof/compare/v1.49.0...v1.50.0) (2026-03-11)
 
 

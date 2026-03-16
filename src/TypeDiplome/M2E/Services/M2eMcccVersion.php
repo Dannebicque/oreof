@@ -234,8 +234,6 @@ class M2eMcccVersion extends AbstractM2eMccc implements TypeDiplomeExportInterfa
                                     $this->excelWriter->borderOutsiteInside(self::COL_LANGUE_EC, $debut, self::COL_LANGUE_EC, $ligne - 1);
                                     $this->excelWriter->borderOutsiteInside(self::COL_SUPPORT_ANGLAIS, $debut, self::COL_SUPPORT_ANGLAIS, $ligne - 1);
                                     $this->excelWriter->borderOutsiteInside(self::COL_TYPE_EC, $debut, self::COL_TYPE_EC, $ligne - 1);
-                                    $this->excelWriter->borderOutsiteInside(self::COL_COURS_MUTUALISE, $debut, self::COL_COURS_MUTUALISE, $ligne - 1);
-                                    $this->excelWriter->borderOutsiteInside(self::COL_COMPETENCES, $debut, self::COL_COMPETENCES, $ligne - 1);
                                     $this->excelWriter->borderOutsiteInside(self::COL_ECTS, $debut, self::COL_ECTS, $ligne - 1);
                                     $this->excelWriter->borderOutsiteInside(self::COL_HEURES_PRES_CM, $debut, self::COL_HEURES_PRES_TP, $ligne - 1);
                                     $this->excelWriter->borderOutsiteInside(self::COL_HEURES_PRES_TOTAL, $debut, self::COL_HEURES_PRES_TOTAL, $ligne - 1);
@@ -326,20 +324,6 @@ class M2eMcccVersion extends AbstractM2eMccc implements TypeDiplomeExportInterfa
                             }
                         }
                     }
-
-                    //                    //traitement des UE supprimés
-                    //                    foreach ($diffSemestre['ues'] as $ordreUe => $ue) {
-                    //                        if (!in_array($ordreUe, $tabEcAffiches)) {
-                    //                            //EC supprimé
-                    //                            $ligne = $this->afficheEcSupprime($ligne, $ece);
-                    //                        }
-                    //                    }
-
-
-                    $ligne = $this->afficheSommeSemestre($ligne, $semestre, $diffSemestre);
-
-                    $this->excelWriter->mergeCellsCaR(self::COL_SEMESTRE, $debutSemestre, self::COL_SEMESTRE, $ligne - 1);
-                    $this->excelWriter->writeCellXY(self::COL_SEMESTRE, $debutSemestre, 'S' . $semestre->ordre);
 
                     $this->excelWriter->writeCellXYDiff(self::COL_HEURES_PRES_CM, $ligne, new DiffObject($totalAnneeOriginal->totalCmPresentiel, $totalAnnee->totalCmPresentiel));
                     $this->excelWriter->writeCellXYDiff(self::COL_HEURES_PRES_TD, $ligne, new DiffObject($totalAnneeOriginal->totalTdPresentiel, $totalAnnee->totalTdPresentiel));
@@ -521,9 +505,6 @@ class M2eMcccVersion extends AbstractM2eMccc implements TypeDiplomeExportInterfa
             }
             $this->excelWriter->writeCellXY(self::COL_SUPPORT_ANGLAIS, $ligne, $anglais === true ? 'O' : 'N');
 
-            $this->excelWriter->writeCellXY(self::COL_COURS_MUTUALISE, $ligne, $ec->getFicheMatiere()->isEnseignementMutualise() === true ? 'O' : 'N');
-
-
             // BCC
             $texte = [];
             foreach ($structureEc->bccs as $comp) {
@@ -533,7 +514,6 @@ class M2eMcccVersion extends AbstractM2eMccc implements TypeDiplomeExportInterfa
             //suppression des doublons
             $texte = array_unique($texte);
             $texte = implode(', ', $texte);
-            $this->excelWriter->writeCellXY(self::COL_COMPETENCES, $ligne, $texte);
         } else {
             $this->excelWriter->writeCellXY(self::COL_INTITULE_EC, $ligne, $ec->getTexteEcLibre(), ['wrap' => true]);
         }
@@ -547,9 +527,9 @@ class M2eMcccVersion extends AbstractM2eMccc implements TypeDiplomeExportInterfa
                 $mcccsNew = $this->getMcccs($diffEc['mcccs']['new'], $diffEc['typeMccc']->new);
 
                 //cas Original sans écrire dans les cellules
-                $displayMcccOriginal = new \App\TypeDiplome\Licence\Dto\Mccc($mcccsOriginal, $diffEc['typeMccc']->original ?? '', $this->typeEpreuves, $diffEc['quitus']->original ?? false);
+                $displayMcccOriginal = new \App\TypeDiplome\M2E\Dto\Mccc($mcccsOriginal, $diffEc['typeMccc']->original ?? '', $this->typeEpreuves, $diffEc['quitus']->original ?? false);
                 $displayMcccOriginal->calculDisplayMccc();
-                $displayMcccNew = new \App\TypeDiplome\Licence\Dto\Mccc($mcccsNew, $diffEc['typeMccc']->new, $this->typeEpreuves, $diffEc['quitus']->new ?? false);
+                $displayMcccNew = new \App\TypeDiplome\M2E\Dto\Mccc($mcccsNew, $diffEc['typeMccc']->new, $this->typeEpreuves, $diffEc['quitus']->new ?? false);
                 $displayMcccNew->calculDisplayMccc();
 
                 // utiliser le nouveau DTO via toArray()
@@ -571,7 +551,7 @@ class M2eMcccVersion extends AbstractM2eMccc implements TypeDiplomeExportInterfa
                 $mcccsNew = $this->getMcccs($diffEc['mcccs']['new'], $diffEc['typeMccc']->new);
 
                 //$displayMcccNew = $this->calculDisplayMccc($mcccsNew, $diffEc['typeMccc']->new, $diffEc['quitus']->new ?? false);
-                $displayMcccNew = new \App\TypeDiplome\Licence\Dto\Mccc($mcccsNew, $diffEc['typeMccc']->new, $this->typeEpreuves, $diffEc['quitus']->new ?? false);
+                $displayMcccNew = new \App\TypeDiplome\M2E\Dto\Mccc($mcccsNew, $diffEc['typeMccc']->new, $this->typeEpreuves, $diffEc['quitus']->new ?? false);
                 $displayMcccNew->calculDisplayMccc();
 
                 foreach ($displayMcccNew->toArray() as $key => $value) {
@@ -626,36 +606,6 @@ class M2eMcccVersion extends AbstractM2eMccc implements TypeDiplomeExportInterfa
         $this->excelWriter->writeCellXYDiff(self::COL_HEURES_AUTONOMIE, $ligne, $diffEc['heuresEctsEc']['tePres']);
 
         $this->excelWriter->writeCellXYDiff(self::COL_HEURES_TOTAL, $ligne, $diffEc['heuresEctsEc']['sommeEcTotalPresDist']);
-
-        $ligne++;
-        return $ligne;
-    }
-
-    private function afficheSommeSemestre(int $ligne, StructureSemestre $semestre, $diffSemestre): int
-    {
-        $this->excelWriter->insertNewRowBefore($ligne);
-
-        $this->excelWriter->mergeCellsCaR(self::COL_UE, $ligne, self::COL_COMPETENCES, $ligne);
-        $this->excelWriter->mergeCellsCaR(self::COL_MCCC_CCI, $ligne, self::COL_MCCC_SECONDE_CHANCE_CT, $ligne);
-        $this->excelWriter->writeCellXY(self::COL_UE, $ligne, 'Total semestre S' . $semestre->ordre . ' ', ['style' => 'HORIZONTAL_RIGHT']);
-        //somme ECTS semestre
-        $this->excelWriter->writeCellXYDiff(self::COL_ECTS, $ligne, $diffSemestre['heuresEctsSemestre']['sommeSemestreEcts']);
-
-        //ligne de somme du semestre
-        $this->excelWriter->writeCellXYDiff(self::COL_HEURES_PRES_CM, $ligne, $diffSemestre['heuresEctsSemestre']['sommeSemestreCmPres']);
-        $this->excelWriter->writeCellXYDiff(self::COL_HEURES_PRES_TD, $ligne, $diffSemestre['heuresEctsSemestre']['sommeSemestreTdPres']);
-        $this->excelWriter->writeCellXYDiff(self::COL_HEURES_PRES_TP, $ligne, $diffSemestre['heuresEctsSemestre']['sommeSemestreTpPres']);
-        $this->excelWriter->writeCellXYDiff(self::COL_HEURES_PRES_TOTAL, $ligne, $diffSemestre['heuresEctsSemestre']['sommeSemestreTotalPres']);
-
-        $this->excelWriter->writeCellXYDiff(self::COL_HEURES_DIST_CM, $ligne, $diffSemestre['heuresEctsSemestre']['sommeSemestreCmDist']);
-        $this->excelWriter->writeCellXYDiff(self::COL_HEURES_DIST_TD, $ligne, $diffSemestre['heuresEctsSemestre']['sommeSemestreTdDist']);
-        $this->excelWriter->writeCellXYDiff(self::COL_HEURES_DIST_TP, $ligne, $diffSemestre['heuresEctsSemestre']['sommeSemestreTpDist']);
-        $this->excelWriter->writeCellXYDiff(self::COL_HEURES_DIST_TOTAL, $ligne, $diffSemestre['heuresEctsSemestre']['sommeSemestreTotalDist']);
-
-        $this->excelWriter->writeCellXYDiff(self::COL_HEURES_TOTAL, $ligne, $diffSemestre['heuresEctsSemestre']['sommeSemestreTotalPresDist']);
-
-        $this->excelWriter->writeCellXYDiff(self::COL_HEURES_AUTONOMIE, $ligne, $diffSemestre['heuresEctsSemestre']['sommeSemestreTePres']);
-        $this->lignesSemestre[] = $ligne;
 
         $ligne++;
         return $ligne;

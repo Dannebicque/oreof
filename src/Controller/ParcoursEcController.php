@@ -89,6 +89,7 @@ class ParcoursEcController extends AbstractController
         ]);
     }
 
+    //todo: devrait être dans type diplôme
     #[Route('/parcours/ressources-sae/{parcours}/coeff', name: 'app_parcours_ressources_sae_but_coeff')]
     public function ressourcesSaeCoeff(
         Parcours $parcours
@@ -126,6 +127,50 @@ class ParcoursEcController extends AbstractController
         }
 
         return $this->render('parcours_ec/ressources_saes_coeff.html.twig', [
+            'parcours' => $parcours,
+            'tabEcs' => $tabEcs,
+            'tabEcUes' => $tabEcUes,
+            'tabUes' => $tabUes,
+        ]);
+    }
+
+    #[Route('/parcours/m2e-ec/{parcours}/coeff', name: 'app_parcours_ec_m2e_coeff')]
+    public function m2eEcCoeff(
+        Parcours $parcours
+    ): Response
+    {
+        $tabEcs = [];
+        $tabEcUes = [];
+        $tabUes = [];
+        foreach ($parcours->getSemestreParcours() as $semParc) {
+            if ($semParc->getSemestre()?->getSemestreRaccroche() !== null) {
+                $semParc = $semParc->getSemestre()?->getSemestreRaccroche()?->getSemestre();
+            } else {
+                $semParc = $semParc->getSemestre();
+            }
+
+            if ($semParc !== null) {
+                $tabEcs[$semParc->getOrdre()] = [];
+                foreach ($semParc->getUes() as $ue) {
+                    if ($ue->getUeRaccrochee() !== null) {
+                        $ue = $ue->getUeRaccrochee();
+                    }
+
+                    $tabEcUes[$semParc->getOrdre()][$ue->getId()] = [];
+                    $tabUes[$semParc->getOrdre()][$ue->getId()] = $ue;
+                    foreach ($ue->getElementConstitutifs() as $ec) {
+                        if ($ec->getFicheMatiere() !== null) {
+                            $tabEcUes[$semParc->getOrdre()][$ue->getId()][$ec->getId()] = $ec;
+                            $tabEcs[$semParc->getOrdre()][$ec->getId()] = $ec;
+                        }
+                    }
+                }
+
+                ksort($tabEcs[$semParc->getOrdre()]);
+            }
+        }
+
+        return $this->render('parcours_ec/m2e_coeff.html.twig', [
             'parcours' => $parcours,
             'tabEcs' => $tabEcs,
             'tabEcUes' => $tabEcUes,

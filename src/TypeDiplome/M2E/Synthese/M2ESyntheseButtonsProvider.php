@@ -29,9 +29,9 @@ final class M2ESyntheseButtonsProvider implements SyntheseButtonsProviderInterfa
         $id = $parcours->getId();
 
         $checks = [
-            new SyntheseButton('Contrôler les AC/Compétences', 'app_parcours_bcc_but', ['parcours' => $id], 'btn btn-outline-primary d-block', 'fas fa-check'),
-            new SyntheseButton('Contrôler les Ressources/SAE', 'app_parcours_ressources_sae_but', ['parcours' => $id], 'btn btn-outline-primary d-block mt-1', 'fas fa-check'),
-            new SyntheseButton('Coeff. / UE / Ressources/SAE', 'app_parcours_ressources_sae_but_coeff', ['parcours' => $id], 'btn btn-outline-primary d-block mt-1', 'fas fa-check'),
+            new SyntheseButton('Contrôler les BCC', 'app_parcours_bcc', ['parcours' => $id], 'btn btn-outline-primary d-block', 'fas fa-check'),
+            new SyntheseButton('Contrôler la maquette', 'app_parcours_ec', ['parcours' => $id], 'btn btn-outline-primary d-block mt-1', 'fas fa-check'),
+            new SyntheseButton('Coeff. / UE / EC', 'app_parcours_ec_m2e_coeff', ['parcours' => $id], 'btn btn-outline-primary d-block mt-1', 'fas fa-check'),
         ];
 
         $exports = [

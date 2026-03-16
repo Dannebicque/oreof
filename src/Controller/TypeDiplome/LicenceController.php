@@ -117,7 +117,11 @@ class LicenceController extends BaseController
             $typeDiplomeHandler = $this->typeDiplomeHandler;
         } else {
             $typeDiplome = $elementConstitutif->getFicheMatiere()?->getParcours()?->getFormation()?->getTypeDiplome();
+            if ($typeDiplome === null) {
+                $typeDiplome = $this->typeDiplome;
+            }
             $typeDiplomeHandler = $this->typeDiplomeResolver->get($typeDiplome);
+
         }
 
         $typeEpreuves = $typeEpreuveRepository->findByTypeDiplome($typeDiplome ?? $this->typeDiplome);
