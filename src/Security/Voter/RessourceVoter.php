@@ -272,10 +272,10 @@ class RessourceVoter extends Voter
                 $this->dpeParcoursWorkflow->can($dpeParcours, 'valider_publication') ||
 
                 $this->dpeParcoursWorkflow->can($dpeParcours, 'valider_rf');
+        }
 
-            if ($attribute === 'manage') {
-                $canAccess = $canAccess || $this->dpeParcoursWorkflow->can($dpeParcours, 'reouvrir_mccc') || $this->dpeParcoursWorkflow->can($dpeParcours, 'relancer_annee') || $this->dpeParcoursWorkflow->can($dpeParcours, 'reouvrir_tacite') || $this->dpeParcoursWorkflow->can($dpeParcours, 'reouvrir_avant_publie');
-            }
+        if ($attribute === 'manage') {
+            $canAccess = $canAccess || $this->dpeParcoursWorkflow->can($dpeParcours, 'reouvrir_mccc') || $this->dpeParcoursWorkflow->can($dpeParcours, 'relancer_annee') || $this->dpeParcoursWorkflow->can($dpeParcours, 'reouvrir_tacite') || $this->dpeParcoursWorkflow->can($dpeParcours, 'reouvrir_avant_publie');
         }
 
         if ($this->security->isGranted('ROLE_ADMIN')) {
