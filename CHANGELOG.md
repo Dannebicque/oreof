@@ -2,6 +2,34 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.52.0](https://github.com/Dannebicque/oreof/compare/v1.51.0...v1.52.0) (2026-03-18)
+
+
+### Features
+
+* add bug report functionality with modal form and email notifications ([742b402](https://github.com/Dannebicque/oreof/commit/742b402e7df2194fa860bea0a4e70cdb2f24f568))
+* add configuration files and commands for improved application structure ([cc615ed](https://github.com/Dannebicque/oreof/commit/cc615ed7f0414c1673e3d47c87573804d1619297))
+* add configuration files and commands for improved application structure ([97a08c0](https://github.com/Dannebicque/oreof/commit/97a08c0940bccb3cdc2f641f405ddb66a8140b96))
+* add select all/deselect all functionality for BCC competencies in step3 ([b86279a](https://github.com/Dannebicque/oreof/commit/b86279a4cb96f44692a2b553b2f50c1c9feae68b))
+* implement parcours porteur management with dynamic selection and AJAX updates ([e50f164](https://github.com/Dannebicque/oreof/commit/e50f164404ed5a9f22dfd03b5cb7c6bd706ffad8))
+
+
+### Bug Fixes
+
+* add null checks for co-responsable before dispatching events in UserGestionController ([c1bd68c](https://github.com/Dannebicque/oreof/commit/c1bd68c1af289e6ec52da666b885780adac2d731))
+* add type check for existingCentre before removal in UserProfilsController ([2a9347d](https://github.com/Dannebicque/oreof/commit/2a9347db971e009eeb6d9fae4c5ca3ffb925d10b))
+* bugs dans les logs ([541ccec](https://github.com/Dannebicque/oreof/commit/541ccec84674f518703f3b498ec987ed6a212a29))
+* enhance ownership logic in ElementConstitutifController ([bccd374](https://github.com/Dannebicque/oreof/commit/bccd374bad9bb22972b7283f176371bd8f62bdfa))
+* implement MCCC management methods in M2EHandler for better data handling ([9c5b96b](https://github.com/Dannebicque/oreof/commit/9c5b96b73fec8a89d5abe987e90a3b2572f406bc))
+* improve quitus logic in LicenceController and related template ([790ed64](https://github.com/Dannebicque/oreof/commit/790ed64f02aacdeac24e4d802c16feb5691a5a5c))
+* improve quitus logic in LicenceController and related template ([c606ccc](https://github.com/Dannebicque/oreof/commit/c606ccc3858944d1cfb272af8774ecae9aa9e94c))
+* refactor access control logic in RessourceVoter for better readability ([2b9dce5](https://github.com/Dannebicque/oreof/commit/2b9dce50dff26c022277902eab670a25a517d24a))
+* refactor constructor properties in RessourceVoter and update permission checks in fiche_matiere_manage template ([0d94d6b](https://github.com/Dannebicque/oreof/commit/0d94d6bafba33dc492180d9d34debca8f92245d7))
+* update saveMotsCles method to use event target value for better input handling ([9d1aa4b](https://github.com/Dannebicque/oreof/commit/9d1aa4b36aea3a5b59c2d958daa178bc43fded55))
+* update saveMotsCles method to use event target value for better input handling ([09eecb7](https://github.com/Dannebicque/oreof/commit/09eecb7730a1faab2dbcea830552a7c3bed07d5f))
+* update suppression link visibility for admins in ChangeRfState templates ([2812fe4](https://github.com/Dannebicque/oreof/commit/2812fe437021c6aa1f3a99b1a68bed54d3379b3e))
+* update suppression link visibility logic in ChangeRfState template ([47a90ca](https://github.com/Dannebicque/oreof/commit/47a90cab0757d9121503d20f098569bc64163d8e))
+
 ## [1.51.0](https://github.com/Dannebicque/oreof/compare/v1.50.0...v1.51.0) (2026-03-15)
 
 
