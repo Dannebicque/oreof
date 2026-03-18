@@ -56,11 +56,11 @@ export default class extends Controller {
     })
   }
 
-  saveMotsCles () {
+  saveMotsCles (event) {
     this._save({
       field: 'motsCles',
       action: 'textarea',
-      value: 'parcours_step1_motsCles',
+      value: event.target.value,
     })
   }
 
