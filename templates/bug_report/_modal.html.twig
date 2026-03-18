@@ -1,0 +1,50 @@
+<form method="post" action="{{ path('app_bug_report_modal') }}">
+    <input type="hidden" name="_token" value="{{ csrf_token('bug_report') }}">
+    <input type="hidden" name="formation" value="{{ context.formationId ?? '' }}">
+    <input type="hidden" name="parcours" value="{{ context.parcoursId ?? '' }}">
+    <input type="hidden" name="page" value="{{ context.page ?? '' }}">
+
+    <div class="mb-3">
+        <label for="bug_report_user" class="form-label">Personne connectée</label>
+        <input id="bug_report_user" type="text" class="form-control" readonly
+               value="{{ user.display }}{% if user.email is not empty %} ({{ user.email }}){% endif %}">
+    </div>
+
+    <div class="mb-3">
+        <label for="bug_report_formation" class="form-label">Formation</label>
+        <input id="bug_report_formation" type="text" class="form-control" readonly
+               value="{{ context.formationLabel }}">
+    </div>
+
+    <div class="mb-3">
+        <label for="bug_report_parcours" class="form-label">Parcours</label>
+        <input id="bug_report_parcours" type="text" class="form-control" readonly
+               value="{{ context.parcoursLabel }}">
+    </div>
+
+    <div class="mb-3">
+        <label for="bug_report_page" class="form-label">Page</label>
+        <input id="bug_report_page" type="text" class="form-control" readonly
+               value="{{ context.page is not empty ? context.page : 'Non définie' }}">
+    </div>
+
+    <div class="mb-3">
+        <label for="bug_report_title" class="form-label required">Titre</label>
+        <input id="bug_report_title" type="text" name="title" class="form-control" maxlength="200" required>
+    </div>
+
+    <div class="mb-3">
+        <label for="bug_report_message" class="form-label required">Message</label>
+        <textarea id="bug_report_message" name="message" class="form-control" rows="8" required
+                  placeholder="Décrivez le problème, les étapes pour le reproduire et le résultat attendu."></textarea>
+    </div>
+
+    <div class="d-flex justify-content-end">
+        <button type="submit" class="btn btn-warning"
+                {{ stimulus_action('base','sauvegardeFormModal', 'click') }}>
+            <i class="fal fa-bug"></i>
+            Envoyer le signalement
+        </button>
+    </div>
+</form>
+
