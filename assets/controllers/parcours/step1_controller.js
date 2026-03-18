@@ -26,6 +26,7 @@ export default class extends Controller {
     document.getElementById('parcours_step1_objectifsParcours').addEventListener('trix-blur', this.saveObjectifsParcours.bind(this))
     document.getElementById('parcours_step1_resultatsAttendus').addEventListener('trix-blur', this.saveResultats.bind(this))
     document.getElementById('parcours_step1_rythmeFormationTexte').addEventListener('trix-blur', this.saveRythme.bind(this))
+    document.getElementById('parcours_step1_motsCles').addEventListener('trix-blur', this.saveMotsCles.bind(this))
   }
 
   etatStep(event) {
@@ -56,11 +57,11 @@ export default class extends Controller {
     })
   }
 
-  saveMotsCles (event) {
+  saveMotsCles () {
     this._save({
       field: 'motsCles',
       action: 'textarea',
-      value: event.target.value,
+      value: trixEditor('parcours_step1_motsCles'),
     })
   }
 
