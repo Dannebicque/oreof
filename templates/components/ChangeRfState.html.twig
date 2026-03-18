@@ -104,7 +104,7 @@
                                         <i class="fal {{ etape.icon }}"></i>
                                     </button>
                                 {% endfor %}
-                                {% if place != 'soumis_ses' and place != 'soumis_cfvu' %}
+                                {% if (place != 'soumis_ses' and place != 'soumis_cfvu') or is_granted('ROLE_ADMIN') %}
                                     <a href="{{ path('app_formation_change_rf_suppression', {demande:demande.id}) }}"
                                        data-controller="tooltip" data-tooltip-placement-value="bottom"
                                        data-bs-original-title="Supprimer la demande"
