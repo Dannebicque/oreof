@@ -13,6 +13,7 @@ use App\Classes\Mailer;
 use App\Entity\FicheMatiere;
 use App\Entity\FicheMatiereMutualisable;
 use App\Entity\Notification;
+use App\Entity\Parcours;
 use App\Form\FicheMatiereStep1Type;
 use App\Form\FicheMatiereStep2Type;
 use App\Form\FicheMatiereStep3Type;
@@ -95,6 +96,133 @@ class FicheMatiereWizardController extends BaseController
             'ficheMatiere' => $ficheMatiere,
             'composantes' => $composantes
         ]);
+    }
+
+    #[Route('/{ficheMatiere}/parcours-porteur', name: 'app_fiche_matiere_wizard_change_parcours_porteur', methods: ['GET'])]
+    public function changeParcoursPorteur(
+        FormationRepository $formationRepository,
+        FicheMatiere        $ficheMatiere,
+    ): Response
+    {
+        return $this->render('fiche_matiere_wizard/_change_parcours_porteur.html.twig', [
+            'ficheMatiere' => $ficheMatiere,
+            'formations' => $this->getAvailableFormationsForParcoursPorteur($formationRepository, $ficheMatiere),
+        ]);
+    }
+
+    #[Route('/{ficheMatiere}/parcours-porteur/ajax', name: 'app_fiche_matiere_wizard_change_parcours_porteur_ajax', methods: ['POST'])]
+    public function changeParcoursPorteurAjax(
+        Request                            $request,
+        EntityManagerInterface             $entityManager,
+        FormationRepository                $formationRepository,
+        ParcoursRepository                 $parcoursRepository,
+        ElementConstitutifRepository       $elementConstitutifRepository,
+        FicheMatiereMutualisableRepository $ficheMatiereParcoursRepository,
+        FicheMatiere                       $ficheMatiere,
+    ): Response
+    {
+        $data = JsonRequest::getFromRequest($request);
+
+        switch ($data['field'] ?? null) {
+            case 'parcours':
+                $formation = isset($data['value']) ? $formationRepository->find($data['value']) : null;
+                if (!$this->isFormationAvailableForParcoursPorteur($formationRepository, $ficheMatiere, $formation)) {
+                    return $this->json([]);
+                }
+
+                $t = [];
+                foreach ($parcoursRepository->findByFormation($formation) as $parcours) {
+                    $t[] = [
+                        'id' => $parcours->getId(),
+                        'libelle' => $parcours->isParcoursDefaut() ? Parcours::PARCOURS_DEFAUT : $parcours->getDisplay(),
+                    ];
+                }
+
+                return $this->json($t);
+
+            case 'save':
+                $formation = isset($data['formation']) ? $formationRepository->find($data['formation']) : null;
+                if (!$this->isFormationAvailableForParcoursPorteur($formationRepository, $ficheMatiere, $formation)) {
+                    return $this->json([
+                        'success' => false,
+                        'message' => 'La mention sélectionnée n\'est pas disponible pour cette fiche matière.',
+                    ], Response::HTTP_BAD_REQUEST);
+                }
+
+                $parcours = $this->resolveParcoursPorteurCible(
+                    $formation,
+                    $data['parcours'] ?? null,
+                    $parcoursRepository
+                );
+
+                if ($parcours === null || $parcours->getFormation() !== $formation) {
+                    return $this->json([
+                        'success' => false,
+                        'message' => 'Veuillez sélectionner un parcours valide.',
+                    ], Response::HTTP_BAD_REQUEST);
+                }
+
+                if ($ficheMatiere->getParcours()?->getId() === $parcours->getId()) {
+                    return $this->json([
+                        'success' => false,
+                        'message' => 'Le parcours sélectionné est déjà le parcours porteur de cette fiche matière.',
+                    ], Response::HTTP_BAD_REQUEST);
+                }
+
+                $ancienParcours = $ficheMatiere->getParcours();
+                $ancienParcoursMutualise = false;
+
+                $liaisonCible = $ficheMatiereParcoursRepository->findOneBy([
+                    'ficheMatiere' => $ficheMatiere,
+                    'parcours' => $parcours,
+                ]);
+                if ($liaisonCible !== null) {
+                    $entityManager->remove($liaisonCible);
+                }
+
+                if ($ancienParcours !== null) {
+                    $usagesAncienParcours = $elementConstitutifRepository->findBy([
+                        'ficheMatiere' => $ficheMatiere,
+                        'parcours' => $ancienParcours,
+                    ]);
+
+                    if (count($usagesAncienParcours) > 0) {
+                        $this->updateFicheMatiereMutualisable(
+                            $ficheMatiereParcoursRepository,
+                            $ficheMatiere,
+                            $ancienParcours,
+                            $entityManager
+                        );
+                        $ancienParcoursMutualise = true;
+                    }
+                }
+
+                $ficheMatiere->setParcours($parcours);
+                $composante = $parcours->getFormation()?->getComposantePorteuse();
+                if ($composante !== null && !$ficheMatiere->getComposante()->contains($composante)) {
+                    $ficheMatiere->addComposante($composante);
+                    $composante->addFicheMatiere($ficheMatiere);
+                }
+
+                $entityManager->flush();
+
+                $ficheMatiere->setEnseignementMutualise(
+                    $ficheMatiereParcoursRepository->count(['ficheMatiere' => $ficheMatiere]) > 0
+                );
+                $entityManager->flush();
+
+                return $this->json([
+                    'success' => true,
+                    'ancienParcoursMutualise' => $ancienParcoursMutualise,
+                    'message' => sprintf(
+                        'Le parcours porteur est désormais "%s / %s".',
+                        $parcours->getFormation()?->getDisplay() ?? 'Formation inconnue',
+                        $parcours->isParcoursDefaut() ? Parcours::PARCOURS_DEFAUT : $parcours->getDisplay()
+                    ),
+                ]);
+        }
+
+        return $this->json([]);
     }
 
     #[Route('/{ficheMatiere}/mutualise/impacts', name: 'app_fiche_matiere_wizard_step_1_mutualise_impacts', methods: ['GET'])]
@@ -438,5 +566,55 @@ class FicheMatiereWizardController extends BaseController
             $entityManager->persist($ficheMatiereParcours);
             $entityManager->flush();
         }
+    }
+
+    private function getAvailableFormationsForParcoursPorteur(
+        FormationRepository $formationRepository,
+        FicheMatiere        $ficheMatiere,
+    ): array
+    {
+        $typeDiplome = $ficheMatiere->getParcours()?->getFormation()?->getTypeDiplome();
+
+        if ($typeDiplome !== null) {
+            return $formationRepository->findByDpeAndTypeDiplome($this->getCampagneCollecte(), $typeDiplome);
+        }
+
+        return $formationRepository->findByCampagneCollecte($this->getCampagneCollecte());
+    }
+
+    private function isFormationAvailableForParcoursPorteur(
+        FormationRepository    $formationRepository,
+        FicheMatiere           $ficheMatiere,
+        ?\App\Entity\Formation $formation,
+    ): bool
+    {
+        if ($formation === null) {
+            return false;
+        }
+
+        foreach ($this->getAvailableFormationsForParcoursPorteur($formationRepository, $ficheMatiere) as $availableFormation) {
+            if ($availableFormation->getId() === $formation->getId()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function resolveParcoursPorteurCible(
+        ?\App\Entity\Formation $formation,
+        mixed                  $parcoursId,
+        ParcoursRepository     $parcoursRepository,
+    ): ?\App\Entity\Parcours
+    {
+        if ($formation === null) {
+            return null;
+        }
+
+        if ($parcoursId !== null && $parcoursId !== '') {
+            return $parcoursRepository->find($parcoursId);
+        }
+
+        return $formation->defaultParcours();
     }
 }
