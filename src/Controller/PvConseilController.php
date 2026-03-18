@@ -71,7 +71,7 @@ class PvConseilController extends BaseController
                 //todo:  mail à la CFVU, avec un event ? ou workflow sur laisserPasser
                 $myMailer->initEmail();
                 $myMailer->setTemplate(
-                    'mails/workflow/formation/conseil_pv_depose.html.twig',
+                    'mails/workflow/dpeParcours/conseil_pv_depose.html.twig',
                     ['parcours' => $parcours]
                 ); //todo: revoir le texte du mail si avec ou sans parcours
                 $myMailer->sendMessage(
