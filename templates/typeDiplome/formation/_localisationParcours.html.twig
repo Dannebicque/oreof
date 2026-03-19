@@ -35,6 +35,24 @@
             <dd>
                 {{ parcours.modalitesAlternance|raw }}
             </dd>
+            {% if stringDifferencesParcours.modaliteAlternanceParcours is defined %}
+                {{ include('communs/_comparaison_versioning_no_button.html.twig',
+                        {
+                            textDifferences: stringDifferencesParcours.modaliteAlternanceParcours,
+                            idCollapse: 'diffGlobalParcours'
+                        }
+                    )
+                }}
+            {% endif %}
+            {% if stringDifferencesParcoursCampagne.modaliteAlternanceParcours is defined %}
+                {{ include('communs/_comparaison_versioning_no_button.html.twig', 
+                        {
+                            textDifferences: stringDifferencesParcoursCampagne.modaliteAlternanceParcours,
+                            idCollapse: 'diffGlobalParcoursCampagne'
+                        }
+                    ) 
+                }}
+            {% endif %}
 
             {% if parcours.composanteInscription != null %}
                 <dt>Composante  d'inscription</dt>
