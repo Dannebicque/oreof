@@ -350,6 +350,18 @@ class VersioningParcours
                             $rendererOptions
                         )
                     )
+                ),
+                "modaliteAlternanceParcours" =>
+                self::cleanUpComparison(
+                    html_entity_decode(
+                        DiffHelper::calculate(
+                        self::cleanUpHtmlTextForComparison($lastVersion->getModalitesAlternance() ?? ""),                        
+                        self::cleanUpHtmlTextForComparison($parcours->getModalitesAlternance() ?? ""),
+                        $rendererName,
+                        $differOptions,
+                        $rendererOptions
+                        )
+                    )
                 )
             ];
         }
