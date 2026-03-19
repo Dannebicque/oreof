@@ -362,6 +362,18 @@ class VersioningParcours
                             $rendererOptions
                         )
                     )
+                ),
+                "rythmeFormationTexteParcours" => 
+                self::cleanUpComparison(
+                    html_entity_decode(
+                        DiffHelper::calculate(
+                            self::cleanUpHtmlTextForComparison($lastVersion->getRythmeFormationTexte() ?? ""),
+                            self::cleanUpHtmlTextForComparison($parcours->getRythmeFormationTexte() ?? ""),
+                            $rendererName,
+                            $differOptions,
+                            $rendererOptions
+                        )
+                    )
                 )
             ];
         }
