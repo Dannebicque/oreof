@@ -126,11 +126,11 @@ class VersioningFormation
 
             $localisationVersion = implode(", ", array_map(
                 fn ($ville) => $ville->getLibelle(),
-                $lastVersion->getLocalisationMention()->toArray()
+                $lastVersion?->getLocalisationMention()->toArray()
             ));
             $localisationActuelle = implode(", ", array_map(
                 fn ($ville) => $ville->getLibelle(),
-                $formation->getLocalisationMention()->toArray()
+                $formation?->getLocalisationMention()->toArray()
             ));
 
             $this->formationTextDifferences = [
