@@ -150,7 +150,9 @@ class VersioningParcours
     {
         $this->textDifferences = [];
 
-        if($this->hasLastVersion($parcours) || ($fromLastYear && $parcours->getParcoursOrigineCopie() !== null)) {
+        if( ($this->hasLastVersion($parcours) && $fromLastYear === false) 
+            || ($fromLastYear && $parcours->getParcoursOrigineCopie() !== null)
+        ) {
             if($fromLastYear){
                 $lastVersion = $parcours->getParcoursOrigineCopie();
             }
@@ -345,6 +347,30 @@ class VersioningParcours
                         DiffHelper::calculate(
                             self::cleanUpHtmlTextForComparison($lastVersion->getPoursuitesEtudes() ?? ""),
                             self::cleanUpHtmlTextForComparison($parcours->getPoursuitesEtudes() ?? ""),
+                            $rendererName,
+                            $differOptions,
+                            $rendererOptions
+                        )
+                    )
+                ),
+                "modaliteAlternanceParcours" =>
+                self::cleanUpComparison(
+                    html_entity_decode(
+                        DiffHelper::calculate(
+                            self::cleanUpHtmlTextForComparison($lastVersion->getModalitesAlternance() ?? ""),                        
+                            self::cleanUpHtmlTextForComparison($parcours->getModalitesAlternance() ?? ""),
+                            $rendererName,
+                            $differOptions,
+                            $rendererOptions
+                        )
+                    )
+                ),
+                "rythmeFormationTexteParcours" => 
+                self::cleanUpComparison(
+                    html_entity_decode(
+                        DiffHelper::calculate(
+                            self::cleanUpHtmlTextForComparison($lastVersion->getRythmeFormationTexte() ?? ""),
+                            self::cleanUpHtmlTextForComparison($parcours->getRythmeFormationTexte() ?? ""),
                             $rendererName,
                             $differOptions,
                             $rendererOptions
