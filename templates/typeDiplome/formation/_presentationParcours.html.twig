@@ -93,6 +93,24 @@
             {% endif %}
             <dt>Précisions sur le rythme de formation</dt>
             <dd>{{ parcours.rythmeFormationTexte|printTexte }}</dd>
+            {% if stringDifferencesParcours.rythmeFormationTexteParcours is defined %}
+                {{ include('communs/_comparaison_versioning_no_button.html.twig',
+                        {
+                            textDifferences: stringDifferencesParcours.rythmeFormationTexteParcours,
+                            idCollapse: 'diffGlobalParcours'
+                        }
+                    )
+                }}
+            {% endif %}
+            {% if stringDifferencesParcoursCampagne.rythmeFormationTexteParcours is defined %}
+                {{ include('communs/_comparaison_versioning_no_button.html.twig',
+                        {
+                            textDifferences: stringDifferencesParcoursCampagne.rythmeFormationTexteParcours,
+                            idCollapse: 'diffGlobalParcoursCampagne'
+                        }
+                    )
+                }}
+            {% endif %}
         </dl>
     </div>
 </div>

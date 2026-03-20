@@ -100,7 +100,9 @@ class VersioningFormation
             ['version_timestamp' => 'DESC']
         );
         $lastVersion = count($lastVersion) > 0 ? $lastVersion[0] : null;
-        if($lastVersion || ($fromLastYear && $formation->getFormationOrigineCopie() !== null)) {
+        if( ($lastVersion && $fromLastYear === false) 
+            || ($fromLastYear && $formation->getFormationOrigineCopie() !== null)
+        ) {
             if($fromLastYear){
                 $lastVersion = $formation->getFormationOrigineCopie();
             }
@@ -127,12 +129,12 @@ class VersioningFormation
             if ($lastVersion !== null) {
                 $localisationVersion = implode(", ", array_map(
                     fn($ville) => $ville->getLibelle(),
-                    $lastVersion?->getLocalisationMention()->toArray()
+                    $lastVersion?->getLocalisationMention()->toArray() ?? []
                 ));
             }
             $localisationActuelle = implode(", ", array_map(
                 fn ($ville) => $ville->getLibelle(),
-                $formation?->getLocalisationMention()->toArray()
+                $formation?->getLocalisationMention()->toArray() ?? []
             ));
 
             $this->formationTextDifferences = [
