@@ -3,6 +3,24 @@
         <dl>
             <dt>Niveau de français requis</dt>
             <dd>{{ parcours.niveauFrancais != null ? parcours.niveauFrancais.libelle : 'Non précisé' }}</dd>
+            {% if stringDifferencesParcours.niveauFrancaisParcours is defined %}
+                {{ include("communs/_comparaison_versioning_no_button.html.twig",
+                        {
+                            textDifferences: stringDifferencesParcours.niveauFrancaisParcours,
+                            idCollapse: 'diffGlobalParcours'
+                        }
+                    )
+                }}
+            {% endif %}
+            {% if stringDifferencesParcoursCampagne.niveauFrancaisParcours is defined %}
+                {{ include("communs/_comparaison_versioning_no_button.html.twig",
+                        {
+                            textDifferences: stringDifferencesParcoursCampagne.niveauFrancaisParcours,
+                            idCollapse: 'diffGlobalParcoursCampagne'
+                        }
+                    )
+                }}
+            {% endif %}
             <dt>Prérequis recommandés</dt>
             <dd>{{ parcours.prerequis|raw }}</dd>
             {% if stringDifferencesParcours.prerequisRecommandesParcours is defined %}
