@@ -275,6 +275,18 @@ class FormationController extends BaseController
             $uc->setFormation($formation);
             $uc->setProfil($profil);
             $this->entityManager->persist($uc);
+
+            if ($formation->getCoResponsable() !== null) {
+                $profil = $profilRepository->findOneBy(['code' => 'ROLE_CO_RESP_FORMATION']);
+                $ucCo = new UserProfil();
+                $ucCo->setUser($formation->getCoResponsable());
+                $ucCo->setCampagneCollecte($this->getCampagneCollecte());
+                $ucCo->setFormation($formation);
+                $ucCo->setProfil($profil);
+                $this->entityManager->persist($ucCo);
+            }
+
+
             $this->entityManager->flush();
             $dpeParcoursWorkflow->apply($dpeParcours, 'initialiser');
             $dpeParcoursWorkflow->apply($dpeParcours, 'autoriser');

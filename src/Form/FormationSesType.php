@@ -117,7 +117,11 @@ class FormationSesType extends AbstractType
                 'class' => User::class,
                 'choice_label' => 'display',
                 'autocomplete' => true,
-                'attr' => ['data-action' => 'change->formation#changeResponsableMention']
+            ])
+            ->add('coResponsable', EntityType::class, [
+                'class' => User::class,
+                'choice_label' => 'display',
+                'autocomplete' => true,
             ])
             ->addEventListener(
                 FormEvents::POST_SUBMIT,
