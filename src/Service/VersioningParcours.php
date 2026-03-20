@@ -150,7 +150,9 @@ class VersioningParcours
     {
         $this->textDifferences = [];
 
-        if($this->hasLastVersion($parcours) || ($fromLastYear && $parcours->getParcoursOrigineCopie() !== null)) {
+        if( ($this->hasLastVersion($parcours) && $fromLastYear === false) 
+            || ($fromLastYear && $parcours->getParcoursOrigineCopie() !== null)
+        ) {
             if($fromLastYear){
                 $lastVersion = $parcours->getParcoursOrigineCopie();
             }
