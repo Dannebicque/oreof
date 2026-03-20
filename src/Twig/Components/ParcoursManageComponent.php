@@ -77,6 +77,7 @@ final class ParcoursManageComponent extends AbstractController
         'vp' => 5,
         'soumis_central' => 5,
         'soumis_central_sans_cfvu' => 5,
+        'soumis_conseil_reserve' => 4,
         'valide_cfvu' => 7,
         'soumis_cfvu' => 6,
         'cfvu' => 6,

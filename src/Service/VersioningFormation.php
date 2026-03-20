@@ -124,13 +124,15 @@ class VersioningFormation
                 'wordGlues' => [' ', '.']
             ];
 
-            $localisationVersion = implode(", ", array_map(
-                fn ($ville) => $ville->getLibelle(),
-                $lastVersion->getLocalisationMention()->toArray()
-            ));
+            if ($lastVersion !== null) {
+                $localisationVersion = implode(", ", array_map(
+                    fn($ville) => $ville->getLibelle(),
+                    $lastVersion?->getLocalisationMention()->toArray()
+                ));
+            }
             $localisationActuelle = implode(", ", array_map(
                 fn ($ville) => $ville->getLibelle(),
-                $formation->getLocalisationMention()->toArray()
+                $formation?->getLocalisationMention()->toArray()
             ));
 
             $this->formationTextDifferences = [
@@ -140,7 +142,7 @@ class VersioningFormation
                         "</p><p class=\"list-item\">",
                         array_map(
                             fn ($composante) => $composante->getLibelle(),
-                            $lastVersion->getComposantesInscription()->toArray()
+                            $lastVersion?->getComposantesInscription()->toArray() ?? []
                         )
                     ) . "</p>",
                     "<p class=\"list-item\">"
@@ -148,7 +150,7 @@ class VersioningFormation
                         "</p><p class=\"list-item\">",
                         array_map(
                             fn ($composante) => $composante->getLibelle(),
-                            $formation->getComposantesInscription()->toArray()
+                            $formation->getComposantesInscription()->toArray() ?? []
                         )
                     ) . "</p>",
                     $rendererName,
@@ -161,7 +163,7 @@ class VersioningFormation
                         "</p><p class=\"list-item\">",
                         array_map(
                             fn ($regime) => $regime->value,
-                            $lastVersion->getRegimeInscription()
+                            $lastVersion?->getRegimeInscription() ?? []
                         )
                     ) . "</p>",
                     "<p class=\"list-item\">"
@@ -169,7 +171,7 @@ class VersioningFormation
                         "</p><p class=\"list-item\">",
                         array_map(
                             fn ($regime) => $regime->value,
-                            $formation->getRegimeInscription()
+                            $formation->getRegimeInscription() ?? []
                         )
                     ) . "</p>",
                     $rendererName,
@@ -179,9 +181,9 @@ class VersioningFormation
                 "responsableDeFormation" => html_entity_decode(DiffHelper::calculate(
                     // Version
                     (
-                        $lastVersion->getResponsableMention()->getNom()
+                        $lastVersion?->getResponsableMention()->getNom()
                      . " " .
-                     $lastVersion->getResponsableMention()->getPrenom()
+                        $lastVersion?->getResponsableMention()->getPrenom()
                     ),
                     // Actuel
                     (
@@ -195,7 +197,7 @@ class VersioningFormation
                 )),
                 "emailResponsableFormation" => html_entity_decode(DiffHelper::calculate(
                     // Version
-                    $lastVersion->getResponsableMention()->getEmail() ?? "",
+                    $lastVersion?->getResponsableMention()->getEmail() ?? "",
                     // Actuel
                     $formation->getResponsableMention()->getEmail() ?? "",
                     $rendererName,
@@ -204,11 +206,11 @@ class VersioningFormation
                 )),
                 "coResponsableDeFormation" => html_entity_decode(DiffHelper::calculate(
                     // Version
-                    $lastVersion->getCoResponsable() ?
+                    $lastVersion?->getCoResponsable() ?
                     (
-                        $lastVersion->getCoResponsable()->getNom()
+                        $lastVersion?->getCoResponsable()->getNom()
                      . " " .
-                     $lastVersion->getCoResponsable()->getPrenom()
+                        $lastVersion?->getCoResponsable()->getPrenom()
                     )  : "",
                     // Actuel
                     $formation->getCoResponsable() ?
@@ -223,7 +225,7 @@ class VersioningFormation
                 )),
                 "emailCoResponsable" => html_entity_decode(DiffHelper::calculate(
                     // Version
-                    $lastVersion->getCoResponsable()?->getEmail() ?? "",
+                    $lastVersion?->getCoResponsable()?->getEmail() ?? "",
                     // Actuel
                     $formation->getCoResponsable()?->getEmail() ?? "",
                     $rendererName,
@@ -242,7 +244,7 @@ class VersioningFormation
                 'presentationFormationObjectifsFormation' =>
                 VersioningParcours::cleanUpComparison(
                     html_entity_decode(DiffHelper::calculate(
-                        VersioningParcours::cleanUpHtmlTextForComparison($lastVersion->getObjectifsFormation() ?? ""),
+                        VersioningParcours::cleanUpHtmlTextForComparison($lastVersion?->getObjectifsFormation() ?? ""),
                         VersioningParcours::cleanUpHtmlTextForComparison($formation->getObjectifsFormation() ?? ""),
                         $rendererName,
                         $differOptions,
@@ -252,7 +254,7 @@ class VersioningFormation
                 'presentationFormationContenuFormation' =>
                 VersioningParcours::cleanUpComparison(
                     html_entity_decode(DiffHelper::calculate(
-                        VersioningParcours::cleanUpHtmlTextForComparison($lastVersion->getContenuFormation() ?? ""),
+                        VersioningParcours::cleanUpHtmlTextForComparison($lastVersion?->getContenuFormation() ?? ""),
                         VersioningParcours::cleanUpHtmlTextForComparison($formation->getContenuFormation() ?? ""),
                         $rendererName,
                         $differOptions,
@@ -262,7 +264,7 @@ class VersioningFormation
                 'presentationFormationResultatsAttendus' =>
                 VersioningParcours::cleanUpComparison(
                     html_entity_decode(DiffHelper::calculate(
-                        VersioningParcours::cleanUpHtmlTextForComparison($lastVersion->getResultatsAttendus() ?? ""),
+                        VersioningParcours::cleanUpHtmlTextForComparison($lastVersion?->getResultatsAttendus() ?? ""),
                         VersioningParcours::cleanUpHtmlTextForComparison($formation->getResultatsAttendus() ?? ""),
                         $rendererName,
                         $differOptions,
