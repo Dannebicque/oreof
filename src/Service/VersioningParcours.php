@@ -376,6 +376,18 @@ class VersioningParcours
                             $rendererOptions
                         )
                     )
+                ),
+                "niveauFrancaisParcours" => 
+                self::cleanUpComparison(
+                    html_entity_decode(
+                        DiffHelper::calculate(
+                            $lastVersion->getNiveauFrancais()?->libelle() ?? "",
+                            $parcours->getNiveauFrancais()?->libelle() ?? "",
+                            $rendererName,
+                            $differOptions,
+                            $rendererOptions
+                        )
+                    )
                 )
             ];
         }
