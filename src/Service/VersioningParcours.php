@@ -400,6 +400,18 @@ class VersioningParcours
                             $rendererOptions
                         )
                     )
+                ),
+                'localisationParcours' =>
+                self::cleanUpComparison(
+                    html_entity_decode(
+                        DiffHelper::calculate(
+                            $lastVersion->getLocalisation()?->getLibelle() ?? "",
+                            $parcours->getLocalisation()?->getLibelle() ?? "",
+                            $rendererName,
+                            $differOptions,
+                            $rendererOptions
+                        )
+                    )
                 )
             ];
         }
