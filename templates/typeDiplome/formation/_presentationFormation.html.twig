@@ -65,6 +65,24 @@
                 {% endif %}
                 <dt>Précisions sur le rythme de formation</dt>
                 <dd>{{ formation.rythmeFormationTexte|raw }}</dd>
+                {% if stringDifferencesFormation.rythmeDeFormationTexte is defined %}
+                    {{ include("communs/_comparaison_versioning_no_button.html.twig",
+                            {
+                                textDifferences: stringDifferencesFormation.rythmeDeFormationTexte,
+                                idCollapse: "diffGlobalParcours"  
+                            }
+                        )
+                    }}
+                {% endif %}
+                {% if stringDifferencesFormationCampagne.rythmeDeFormationTexte is defined %}
+                    {{ include("communs/_comparaison_versioning_no_button.html.twig",
+                            {
+                                textDifferences: stringDifferencesFormationCampagne.rythmeDeFormationTexte,
+                                idCollapse: "diffGlobalParcoursCampagne"
+                            }
+                        )
+                    }}
+                {% endif %}
             </dl>
         </div>
     </div>
