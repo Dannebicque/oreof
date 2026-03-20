@@ -67,6 +67,28 @@
                 <dd>{{ parcours.composanteInscription.mailContact|mailto }}</dd>
                 <dt>Site web</dt>
                 <dd>{{ parcours.composanteInscription.urlSite|open_url }}</dd>
+
+                {% if stringDifferencesParcours.composanteInscriptionParcours is defined %}
+                    {{ include('communs/_comparaison_versioning_no_button.html.twig', 
+                            {
+                                textDifferences: stringDifferencesParcours.composanteInscriptionParcours,
+                                idCollapse: 'diffGlobalParcours'
+                            }
+                        )
+
+                    }}
+                {% endif %}
+                {% if stringDifferencesParcoursCampagne.composanteInscriptionParcours is defined %}
+                    {{ include('communs/_comparaison_versioning_no_button.html.twig', 
+                            {
+                                textDifferences: stringDifferencesParcoursCampagne.composanteInscriptionParcours,
+                                idCollapse: 'diffGlobalParcoursCampagne'
+                            }
+                        )
+
+                    }}
+                {% endif %}
+
         {% else %}
             Non précisé
         {% endif %}
