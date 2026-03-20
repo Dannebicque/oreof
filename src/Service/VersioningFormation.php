@@ -283,6 +283,17 @@ class VersioningFormation
                             $rendererOptions
                         )
                     )
+                ),
+                'rythmeDeFormationTexte' =>
+                VersioningParcours::cleanUpComparison(
+                    html_entity_decode(DiffHelper::calculate(
+                            $lastVersion?->getRythmeFormationTexte() ?? "",
+                            $formation->getRythmeFormationTexte() ?? "",
+                            $rendererName,
+                            $differOptions,
+                            $rendererOptions
+                        )
+                    )
                 )
             ];
         }
