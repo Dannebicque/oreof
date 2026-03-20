@@ -12,52 +12,9 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class StructureShowController extends AbstractController
 {
-
     public function __construct(protected TypeDiplomeResolver $typeDiplomeResolver)
     {
     }
-
-//    #[Route('/structure/show/licence', name: 'app_structure_show_licence')]
-//    public function licence(
-//        VersioningParcours $versioningParcours,
-//        LicenceTypeDiplome $typeD,
-//        Parcours $parcours,
-//        bool $hasLastVersion = false
-//    ): Response {
-//        $dto = $typeD->calculStructureParcours($parcours, true, false);
-//        $structureDifferencesParcours = $versioningParcours->getStructureDifferencesBetweenParcoursAndLastVersion($parcours);
-//        if ($structureDifferencesParcours !== null) {
-//            $diffStructure = (new VersioningStructure($structureDifferencesParcours, $dto))->calculDiff();
-//        }
-//
-//        return $this->render('typeDiplome/formation/_structure.html.twig', [
-//             'parcours' => $parcours,
-//            'diffStructure' => $diffStructure ?? null,
-//            'dto' => $dto,
-//            'hasLastVersion' => $hasLastVersion,
-//         ]);
-//    }
-
-//    #[Route('/structure/show/but', name: 'app_structure_show_but')]
-//    public function but(
-//        VersioningParcours $versioningParcours,
-//        ButTypeDiplome $typeD,
-//        Parcours $parcours,
-//        bool $hasLastVersion = false
-//    ): Response {
-//        $dto = $typeD->calculStructureParcours($parcours);
-//        $structureDifferencesParcours = $versioningParcours->getStructureDifferencesBetweenParcoursAndLastVersion($parcours);
-//        if ($structureDifferencesParcours !== null) {
-//            $diffStructure = (new VersioningStructure($structureDifferencesParcours, $dto))->calculDiff();
-//        }
-//
-//        return $this->render('typeDiplome/formation/_structure_but.html.twig', [
-//            'parcours' => $parcours,
-//            'diffStructure' => $diffStructure ?? null,
-//            'dto' => $dto,
-//            'hasLastVersion' => $hasLastVersion,
-//        ]);
-//    }
 
     #[Route('/structure/parcours/show/', name: 'app_structure_parcours_show')]
     public function parcoursShow(
@@ -76,11 +33,14 @@ class StructureShowController extends AbstractController
 
         $diffStructureCampagnePrecedente = null;
         if($parcours->getParcoursOrigineCopie()){
-            $dtoAnneePrecedente = $versioningParcours->loadParcoursFromVersion(
-                $versioningParcours->getLastCfvuVersion($parcours->getParcoursOrigineCopie())
-            )['dto'] ?? null;
+            $version = $versioningParcours->getLastCfvuVersion($parcours->getParcoursOrigineCopie());
+            $dtoAnneePrecedente = null;
+
+            if ($version !== null) {
+                $dtoAnneePrecedente = $versioningParcours->loadParcoursFromVersion($version)['dto'] ?? null;
+            }
             if($dtoAnneePrecedente !== null){
-                $diffStructureCampagnePrecedente = (new VersioningStructure($dtoAnneePrecedente, $dto))->calculDiff();
+                $diffStructureCampagnePrecedente = new VersioningStructure($dtoAnneePrecedente, $dto)->calculDiff();
             }
         }
 
