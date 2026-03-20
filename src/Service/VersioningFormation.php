@@ -142,7 +142,7 @@ class VersioningFormation
                         "</p><p class=\"list-item\">",
                         array_map(
                             fn ($composante) => $composante->getLibelle(),
-                            $lastVersion?->getComposantesInscription()->toArray()
+                            $lastVersion?->getComposantesInscription()->toArray() ?? []
                         )
                     ) . "</p>",
                     "<p class=\"list-item\">"
@@ -150,7 +150,7 @@ class VersioningFormation
                         "</p><p class=\"list-item\">",
                         array_map(
                             fn ($composante) => $composante->getLibelle(),
-                            $formation->getComposantesInscription()->toArray()
+                            $formation->getComposantesInscription()->toArray() ?? []
                         )
                     ) . "</p>",
                     $rendererName,
@@ -163,7 +163,7 @@ class VersioningFormation
                         "</p><p class=\"list-item\">",
                         array_map(
                             fn ($regime) => $regime->value,
-                            $lastVersion?->getRegimeInscription()
+                            $lastVersion?->getRegimeInscription() ?? []
                         )
                     ) . "</p>",
                     "<p class=\"list-item\">"
@@ -171,7 +171,7 @@ class VersioningFormation
                         "</p><p class=\"list-item\">",
                         array_map(
                             fn ($regime) => $regime->value,
-                            $formation->getRegimeInscription()
+                            $formation->getRegimeInscription() ?? []
                         )
                     ) . "</p>",
                     $rendererName,
