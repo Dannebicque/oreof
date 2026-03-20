@@ -124,10 +124,12 @@ class VersioningFormation
                 'wordGlues' => [' ', '.']
             ];
 
-            $localisationVersion = implode(", ", array_map(
-                fn ($ville) => $ville->getLibelle(),
-                $lastVersion?->getLocalisationMention()->toArray()
-            ));
+            if ($lastVersion !== null) {
+                $localisationVersion = implode(", ", array_map(
+                    fn($ville) => $ville->getLibelle(),
+                    $lastVersion?->getLocalisationMention()->toArray()
+                ));
+            }
             $localisationActuelle = implode(", ", array_map(
                 fn ($ville) => $ville->getLibelle(),
                 $formation?->getLocalisationMention()->toArray()
