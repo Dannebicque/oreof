@@ -120,8 +120,16 @@
     {% endfor %}
 {% endif %}
 
-{% for ueE in ue.uesEnfants %}
-    {{ include('typeDiplome/licence/structure/_structureUe.html.twig', {ue:ueE, enfant: true}) }}
+{% for idxEnfant, ueE in ue.uesEnfants %}
+    {{ include('typeDiplome/licence/structure/_structureUe.html.twig', 
+            {
+                ue: ueE, 
+                enfant: true,
+                diffUe: diffUe.uesEnfants[idxEnfant],  
+                diffUeCampagne: diffUeCampagne.uesEnfants[idxEnfant]
+            }
+        ) 
+    }}
 {% endfor %}
 
 <tr>
