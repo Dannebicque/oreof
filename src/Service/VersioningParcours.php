@@ -388,6 +388,18 @@ class VersioningParcours
                             $rendererOptions
                         )
                     )
+                ),
+                'composanteInscriptionParcours' =>
+                self::cleanUpComparison(
+                    html_entity_decode(
+                        DiffHelper::calculate(
+                            $lastVersion->getComposanteInscription()?->getLibelle() ?? "",
+                            $parcours->getComposanteInscription()?->getLibelle() ?? "",
+                            $rendererName,
+                            $differOptions,
+                            $rendererOptions
+                        )
+                    )
                 )
             ];
         }
