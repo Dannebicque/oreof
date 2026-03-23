@@ -21,6 +21,7 @@ use App\Entity\TypeDiplome;
 use App\Entity\TypeEpreuve;
 use App\Events\McccUpdateEvent;
 use App\Repository\TypeEpreuveRepository;
+use App\Service\McccCompletionChecker;
 use App\Service\TypeDiplomeResolver;
 use App\Service\VersioningParcours;
 use App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException;
@@ -294,6 +295,29 @@ class ElementConstitutifMcccController extends AbstractController
         ]);
     }
 
+    #[Route('/{id}/mccc-ec/{parcours}/recompute-validity', name: 'app_element_constitutif_mccc_recompute', methods: ['POST'])]
+    public function recomputeMcccValidity(
+        ElementConstitutif     $elementConstitutif,
+        Parcours               $parcours,
+        McccCompletionChecker  $mcccCompletionChecker,
+        EntityManagerInterface $entityManager,
+    ): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
+        if ($elementConstitutif->getParcours()?->getId() !== $parcours->getId()) {
+            return JsonReponse::error('EC / parcours incohérents.');
+        }
+
+        $owner = $this->resolveMcccOwner($elementConstitutif);
+        $owner->setEtatMccc($mcccCompletionChecker->isCompletedForOwner($owner) ? 'Complet' : 'A saisir');
+
+        $entityManager->persist($owner);
+        $entityManager->flush();
+
+        return JsonReponse::success('Contrôle MCCC recalculé.');
+    }
+
     #[Route('/{id}/mccc-ec/{parcours}/non-editable', name: 'app_element_constitutif_mccc_non_editable', methods: ['GET', 'POST'])]
     public function mcccEcNonEditable(
         ElementConstitutif           $elementConstitutif,
@@ -538,6 +562,7 @@ class ElementConstitutifMcccController extends AbstractController
             ]);
         }
         //todo: else ?
+        return $this->json(['message' => 'Acces refuse'], Response::HTTP_FORBIDDEN);
 
 
     }
@@ -554,5 +579,24 @@ class ElementConstitutifMcccController extends AbstractController
         return implode(';', $mcccs);
 
 
+    }
+
+    private function resolveMcccOwner(ElementConstitutif $elementConstitutif): FicheMatiere|ElementConstitutif
+    {
+        $isMcccImpose = $elementConstitutif->getFicheMatiere()?->isMcccImpose() ?? false;
+
+        if ($elementConstitutif->isMcccSpecifiques() && !$isMcccImpose) {
+            return $elementConstitutif;
+        }
+
+        if ($elementConstitutif->getEcParent()?->isMcccEnfantsIdentique() && !$isMcccImpose) {
+            return $elementConstitutif->getEcParent();
+        }
+
+        if ($elementConstitutif->getFicheMatiere() !== null) {
+            return $elementConstitutif->getFicheMatiere();
+        }
+
+        return $elementConstitutif;
     }
 }
