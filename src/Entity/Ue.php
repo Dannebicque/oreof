@@ -16,7 +16,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: UeRepository::class)]
@@ -143,7 +142,7 @@ class Ue
                 if($this->getSemestre()->getSemestreParcours()) {
                     foreach ($this->getSemestre()?->getSemestreParcours() as $semestreParcours) {
                         if ($semestreParcours->getParcours() === $parcours) {
-                            if ($parcours->getFormation()?->getTypeDiplome()?->getLibelleCourt() === 'BUT') {
+                            if ($parcours->getFormation()?->getTypeDiplome()?->getLibelleCourt() === 'BUT' || $parcours->getFormation()?->getTypeDiplome()?->getLibelleCourt() === 'M2E') {
                                 return 'UE ' . $semestreParcours->getOrdre() . '.' . $ordreue . ' (' . $this->getLibelle() . ')';
                             }
 
@@ -154,7 +153,7 @@ class Ue
             }
 
 
-            if ($parcours->getFormation()?->getTypeDiplome()?->getLibelleCourt() === 'BUT') {
+            if ($parcours->getFormation()?->getTypeDiplome()?->getLibelleCourt() === 'BUT' || $parcours->getFormation()?->getTypeDiplome()?->getLibelleCourt() === 'M2E') {
                 return 'UE ' . $this->getSemestre()?->getOrdre() . '.' . $ordreue . ' (' . $this->getLibelle() . ')';
             }
         }

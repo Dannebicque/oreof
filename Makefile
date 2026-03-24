@@ -84,7 +84,36 @@ cypress-open:
 cypress-run:
 	npm run cypress:run
 
+# Importe une base de données depuis un fichier SQL
+# Usage: make import-db FILE=dump.sql DB=orebut
+import-db:
+ifndef FILE
+	@echo "Erreur: Vous devez spécifier un fichier SQL"
+	@echo "Usage: make import-db FILE=dump.sql DB=oreof_2026"
+	@exit 1
+endif
+ifndef DB
+	@echo "Erreur: Vous devez spécifier le nom de la base de données"
+	@echo "Usage: make import-db FILE=dump.sql DB=oreof_2026"
+	@exit 1
+endif
+	@echo "Vérification de l'existence de la base $(DB)..."
+	@docker exec oreof-db mysql -u"root" -p"PASSWORD" -e "CREATE DATABASE IF NOT EXISTS \`$(DB)\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;" 2>/dev/null || true
+	@echo "Import de $(FILE) dans la base $(DB)..."
+	@docker exec -i oreof-db mysql -u"root" -p"PASSWORD" "$(DB)" < $(FILE)
+	@echo "Import terminé!"
 
+# Supprime une base de données
+# Usage: make drop-db DB=nom_base
+drop-db:
+ifndef DB
+	@echo "Erreur: Vous devez spécifier le nom de la base de données"
+	@echo "Usage: make drop-db DB=nom_base"
+	@exit 1
+endif
+	@echo "Suppression de la base $(DB)..."
+	@docker exec oreof-db mysql -u"root" -p"PASSWORD" -e "DROP DATABASE IF EXISTS \`$(DB)\`;"
+	@echo "Base $(DB) supprimée!"
 
 # Affiche l'aide
 help:
@@ -106,3 +135,5 @@ help:
 	@echo "  make phpstan  - Analyse statique du code"
 	@echo "  make cypress-open - Ouvre Cypress en mode interactif"
 	@echo "  make cypress-run  - Exécute Cypress en mode headless"
+	@echo "  make import-db FILE=dump.sql DB=orebut - Importe une base depuis un fichier SQL"
+	@echo "  make drop-db DB=nom_base - Supprime une base de données"

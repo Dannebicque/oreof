@@ -28,7 +28,7 @@ class StructureParcours
     #[Groups(['DTO_json_versioning'])]
     public HeuresEctsFormation $heuresEctsFormation;
 
-    public StatsFichesMatieresParcours $statsFichesMatieresParcours;
+    public ?StatsFichesMatieresParcours $statsFichesMatieresParcours = null;
 
     public function __construct(
         private $withEcts = true,

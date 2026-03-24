@@ -22,11 +22,11 @@ use App\Repository\ProfilRepository;
 use App\Repository\UserRepository;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 #[Route('/administration/user/gestion')]
 class UserGestionController extends BaseController
@@ -173,11 +173,12 @@ class UserGestionController extends BaseController
 
                     $parcours = $parcoursRepository->find($request->query->get('id'));
                     if ($parcours !== null) {
-                        // retirer l'ancien resp des centres et droits et envoyer mail
-                        $event = new AddCentreParcoursEvent($parcours, $parcours->getCoResponsable(),
-                            $profil, $this->getCampagneCollecte());
-                        $this->eventDispatcher->dispatch($event, AddCentreParcoursEvent::REMOVE_CENTRE_PARCOURS);
-
+                        if ($parcours->getCoResponsable() !== null) {
+                            // retirer l'ancien resp des centres et droits et envoyer mail
+                            $event = new AddCentreParcoursEvent($parcours, $parcours->getCoResponsable(),
+                                $profil, $this->getCampagneCollecte());
+                            $this->eventDispatcher->dispatch($event, AddCentreParcoursEvent::REMOVE_CENTRE_PARCOURS);
+                        }
                         // ajouter le nouveau resp, ajouter centre et droits et envoyer mail
                         $parcours->setCoResponsable($user);
                         $event = new AddCentreParcoursEvent(
@@ -203,9 +204,12 @@ class UserGestionController extends BaseController
 
                     $formation = $formationRepository->find($request->query->get('id'));
                     if ($formation !== null) {
-                        // retirer l'ancien resp des centres et droits et envoyer mail
-                        $event = new AddCentreFormationEvent($formation, $formation->getCoResponsable(), $profil, $this->getCampagneCollecte());
-                        $this->eventDispatcher->dispatch($event, AddCentreFormationEvent::REMOVE_CENTRE_FORMATION);
+
+                        if ($formation->getCoResponsable() !== null) {
+                            // retirer l'ancien resp des centres et droits et envoyer mail
+                            $event = new AddCentreFormationEvent($formation, $formation->getCoResponsable(), $profil, $this->getCampagneCollecte());
+                            $this->eventDispatcher->dispatch($event, AddCentreFormationEvent::REMOVE_CENTRE_FORMATION);
+                        }
                         // ajouter le nouveau resp, ajouter centre et droits et envoyer mail
                         $formation->setCoResponsable($user);
 

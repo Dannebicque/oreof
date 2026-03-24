@@ -12,6 +12,15 @@
                     })
                 }}
             {% endif %}
+            {% if stringDifferencesParcoursCampagne.prerequisRecommandesParcours is defined %}
+                {{ include('communs/_comparaison_versioning_no_button.html.twig',
+                        {
+                            textDifferences: stringDifferencesParcoursCampagne.prerequisRecommandesParcours,
+                            idCollapse: 'diffGlobalParcoursCampagne'
+                        }
+                    )
+                }}
+            {% endif %}
         </dl>
     </div>
 </div>

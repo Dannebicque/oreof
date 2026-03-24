@@ -114,8 +114,9 @@
                         {% else %}
                             {% if
                                 ((is_granted('MANAGE', {route: 'app_fiche_matiere', subject: this.ficheMatiere}) or
-                                is_granted('MANAGE', {route: 'app_fiche_matiere_hd', subject: 'etablissement'}) or
-                                is_granted('MANAGE', {route: 'app_parcours', subject: this.ficheMatiere.parcours}))  and
+                                is_granted('MANAGE', {route: 'app_fiche_matiere_hd', subject: 'etablissement'}) or (this.ficheMatiere.parcours is not null and (
+                                is_granted('MANAGE', {route: 'app_parcours', subject: this.ficheMatiere.parcours}) or
+                                is_granted('MANAGE', {route: 'app_formation', subject: this.ficheMatiere.parcours.formation }))))  and
                                 (this.process[this.place].transition == 'en_cours_redaction' )) or is_granted('ROLE_ADMIN') %}
                                 <div class="col-6">
                                     <div class="row">

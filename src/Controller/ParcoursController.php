@@ -33,7 +33,6 @@ use App\Repository\ProfilRepository;
 use App\Service\LheoXML;
 use App\Service\VersioningFormation;
 use App\Service\VersioningParcours;
-use App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException;
 use App\Utils\JsonRequest;
 use DateTimeImmutable;
 use Doctrine\Common\Annotations\AnnotationReader;
@@ -273,12 +272,24 @@ class ParcoursController extends BaseController
 
         $typeD = $this->typeDiplomeResolver->fromTypeDiplome($typeDiplome);
 
+        // Entre versions JSON
         $textDifferencesParcours = $versioningParcours->getDifferencesBetweenParcoursAndLastVersion($parcours);
         $textDifferencesFormation = $versioningFormation->getDifferencesBetweenFormationAndLastVersion($formation);
+        // Entre N et N+1
+        $textDiffParcoursCampagne = $versioningParcours->getDifferencesBetweenParcoursAndLastVersion($parcours, true);
+        $textDiffFormationCampagne = $versioningFormation->getDifferencesBetweenFormationAndLastVersion($formation, true);
+        $hasLastVersionCampagne = count($textDiffParcoursCampagne) > 0 || count($textDiffFormationCampagne) > 0;
+        // Si l'utilisateur peut voir les différences
+        $dpeParcours = GetDpeParcours::getFromParcours($parcours);
+        $canSeeDifferences = $this->isGranted('RELATED_TO_PARCOURS', $parcours);
+
         $version = $versioningParcours->hasLastVersion($parcours);
 
         $cssDiff = DiffHelper::getStyleSheet();
 
+        // Afficher les comparaisons directement
+        $request = Request::createFromGlobals();
+        $displayComparaison = $request->query->get('optionDisplay', 'false');
 
         // Ordre des semestres manquants
         $missingSemestre = [];
@@ -310,11 +321,15 @@ class ParcoursController extends BaseController
             'lheoXML' => $lheoXML,
             'stringDifferencesParcours' => $textDifferencesParcours,
             'stringDifferencesFormation' => $textDifferencesFormation,
-            'hasLastVersion' => $versioningParcours->hasLastVersion($parcours),
+            'stringDifferencesParcoursCampagne' => $textDiffParcoursCampagne,
+            'stringDifferencesFormationCampagne' => $textDiffFormationCampagne,
+            'hasLastVersion' => $versioningParcours->hasLastVersion($parcours) || $hasLastVersionCampagne,
             'cssDiff' => $cssDiff,
             'version' => $version,
             'parcoursDeBase' => $parcoursDeBase,
-            'missingSemestre' => $missingSemestre
+            'missingSemestre' => $missingSemestre,
+            'displayComparaison' => $displayComparaison,
+            'canSeeDifferences' => $canSeeDifferences
         ]);
     }
 
@@ -339,6 +354,8 @@ class ParcoursController extends BaseController
             throw $this->createNotFoundException();
         }
 
+        $canSeeDifferences = false;
+
         if (!(
             $this->isGranted('EDIT', ['route' => 'app_parcours', 'subject' => $dpeParcours->getParcours()]) ||
             $this->isGranted('EDIT', ['route' => 'app_formation', 'subject' => $dpeParcours])
@@ -346,6 +363,7 @@ class ParcoursController extends BaseController
             return $this->redirectToRoute('app_parcours_show', ['id' => $parcour->getId()]);
         }
 
+        $canSeeDifferences = true;
         $version = $versioningParcours->hasLastVersion($parcour);
 
         $parcoursState->setParcours($parcour);
@@ -365,6 +383,7 @@ class ParcoursController extends BaseController
             'parcoursState' => $parcoursState,
             'step' => $request->query->get('step') ?? 0,
             'version' => $version,
+            'canSeeDifferences' => $canSeeDifferences
         ]);
     }
 
@@ -620,8 +639,10 @@ class ParcoursController extends BaseController
             TypeParcoursEnum::TYPE_PARCOURS_LAS123
         ];
 
-        if ($parcours->getTypeParcours() === TypeParcoursEnum::TYPE_PARCOURS_CPI) {
-            $typeF[] = 'Diplômes d’ingénieur / CMI / CPI';
+        $isDiplomeInge = in_array($typeDiplome?->getLibelleCourt() ?? '-', ['DI', 'CMI', 'CPI'], true);
+
+        if ($parcours->getTypeParcours() === TypeParcoursEnum::TYPE_PARCOURS_CPI || $isDiplomeInge) {
+            $typeF[] = "Diplôme d’ingénieur / CMI / CPI";
         } elseif (in_array($parcours->getTypeParcours(), $lasTypeP, true)) {
             $typeF[] = 'Licence Accès Santé';
         }
@@ -911,8 +932,10 @@ class ParcoursController extends BaseController
             TypeParcoursEnum::TYPE_PARCOURS_LAS123
         ];
 
-        if ($typeParcours === TypeParcoursEnum::TYPE_PARCOURS_CPI) {
-            $typeF[] = 'Diplômes d’ingénieur / CMI / CPI';
+        $isDiplomeInge = in_array($typeDiplome?->getLibelleCourt() ?? '-', ['DI', 'CMI', 'CPI'], true);
+
+        if ($typeParcours === TypeParcoursEnum::TYPE_PARCOURS_CPI || $isDiplomeInge) {
+            $typeF[] = "Diplôme d’ingénieur / CMI / CPI";
         } elseif (in_array($typeParcours, $lasTypeP, true)) {
             $typeF[] = 'Licence Accès Santé';
         }
@@ -1034,8 +1057,10 @@ class ParcoursController extends BaseController
             TypeParcoursEnum::TYPE_PARCOURS_LAS123
         ];
 
-        if ($parcours->getTypeParcours() === TypeParcoursEnum::TYPE_PARCOURS_CPI) {
-            $typeF[] = 'Diplômes d’ingénieur / CMI / CPI';
+        $isDiplomeInge = in_array($typeDiplome?->getLibelleCourt() ?? '-', ['DI', 'CMI', 'CPI'], true);
+
+        if ($parcours->getTypeParcours() === TypeParcoursEnum::TYPE_PARCOURS_CPI || $isDiplomeInge) {
+            $typeF[] = "Diplôme d’ingénieur / CMI / CPI";
         } elseif (in_array($parcours->getTypeParcours(), $lasTypeP, true)) {
             $typeF[] = 'Licence Accès Santé';
         }

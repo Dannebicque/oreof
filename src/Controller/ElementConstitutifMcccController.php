@@ -21,6 +21,8 @@ use App\Entity\TypeDiplome;
 use App\Entity\TypeEpreuve;
 use App\Events\McccUpdateEvent;
 use App\Repository\TypeEpreuveRepository;
+use App\Service\McccCompletionChecker;
+// use App\Service\TypeDiplomeResolver;
 use App\Service\VersioningParcours;
 use App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException;
 use App\TypeDiplome\TypeDiplomeResolver;
@@ -32,7 +34,15 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor;
+use Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor;
+use Symfony\Component\PropertyInfo\PropertyInfoExtractor;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
+use Symfony\Component\Serializer\Mapping\Loader\AttributeLoader;
+use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 
 #[Route('/element/constitutif')]
 class ElementConstitutifMcccController extends AbstractController
@@ -42,10 +52,6 @@ class ElementConstitutifMcccController extends AbstractController
     {
     }
 
-
-    /**
-     * @throws TypeDiplomeNotFoundException
-     */
     #[Route('/{id}/mccc-ec/{parcours}', name: 'app_element_constitutif_mccc', methods: ['GET', 'POST'])]
     public function mcccEc(
         EventDispatcherInterface $eventDispatcher,
@@ -65,10 +71,6 @@ class ElementConstitutifMcccController extends AbstractController
         $formation = $parcours?->getFormation();
         if ($formation === null) {
             throw new RuntimeException('Formation non trouvée');
-        }
-        $typeDiplome = $formation->getTypeDiplome();
-        if ($typeDiplome === null) {
-            throw new RuntimeException('Type de diplome non trouvé');
         }
 
         $typeDiplome = $parcours->getFormation()->getTypeDiplome();
@@ -101,18 +103,29 @@ class ElementConstitutifMcccController extends AbstractController
 
         foreach ($request->request->all() as $fieldName => $fieldValue) {
             if (preg_match('/typeEpreuve_s([0-9])_ct([0-9])/', $fieldName, $matches) === 1) {
-                $hasJustification = array_values(
+//                $hasJustification = array_values(
+//                    array_filter(
+//                        $typeEpreuvesArray,
+//                        fn($type) => $type->getId() === (int)$fieldValue
+//                    )
+//                )[0]->hasJustification();
+
+                $filtered = array_values(
                     array_filter(
                         $typeEpreuvesArray,
                         fn($type) => $type->getId() === (int)$fieldValue
                     )
-                )[0]->hasJustification();
-                if ($hasJustification && mb_strlen($request->request->all()["justification_s{$matches[1]}_ct{$matches[2]}"]) < $minLengthJustification) {
-                    return $this->json(
-                        ['message' => "La justification d'un MCCC doit être supérieure à {$minLengthJustification} caractères."],
-                        500,
-                        ['Content-Type' => 'application/json']
-                    );
+                );
+                $hasJustification = false;
+                if (isset($filtered[0])) {
+                    $hasJustification = $filtered[0]->hasJustification();
+                    if ($hasJustification && mb_strlen($request->request->all()["justification_s{$matches[1]}_ct{$matches[2]}"]) < $minLengthJustification) {
+                        return $this->json(
+                            ['message' => "La justification d'un MCCC doit être supérieure à {$minLengthJustification} caractères."],
+                            500,
+                            ['Content-Type' => 'application/json']
+                        );
+                    }
                 }
             }
         }
@@ -173,7 +186,29 @@ class ElementConstitutifMcccController extends AbstractController
 
                         $typeD->saveMcccs($fm, $request->request);
                         $newMcccToText = $this->mcccToTexte($fm->getMcccs());
-                    }
+                    
+                    // } elseif ($elementConstitutif->getNatureUeEc()?->isLibre() || ($elementConstitutif->getNatureUeEc()?->isChoix())) {
+                    //     //todo: a refactor
+                    //     if ($request->request->has('ec_step4') && array_key_exists('quitus', $request->request->all()['ec_step4'])) {
+                    //         $elementConstitutif->setQuitus((bool)$request->request->all()['ec_step4']['quitus']);
+                    //         $elementConstitutif->setQuitusText($request->request->all()['ec_step4']['quitus_argument']);
+                    //     } // Si la checkbox est décochée, 'quitus' ne fait pas partie de la requête POST
+                    //     elseif ($request->request->has('ec_step4')
+                    //         && array_key_exists('quitus', $request->request->all()['ec_step4']) === false
+                    //         && $elementConstitutif->isQuitus() !== false
+                    //     ) {
+                    //         $elementConstitutif->setQuitus(false);
+                    //         $elementConstitutif->setQuitusText(null);
+                    //     }
+
+                    //     if ($request->request->has('choix_type_mccc') && $request->request->get('choix_type_mccc') !== $elementConstitutif->getTypeMccc()) {
+                    //         $elementConstitutif->setTypeMccc($request->request->get('choix_type_mccc'));
+                    //         $entityManager->flush();
+                    //         $typeD->clearMcccs($elementConstitutif);
+                    //     }
+                    //     $typeD->saveMcccs($elementConstitutif, $request->request);
+                    //     $newMcccToText = $this->mcccToTexte($elementConstitutif->getMcccs());
+                    // }
                 } else {
                     //MCCC sur EC
                     if ($elementConstitutif->isMcccSpecifiques() === true || $elementConstitutif->getNatureUeEc()?->isLibre() || ($elementConstitutif->getNatureUeEc()?->isChoix())) {
@@ -246,13 +281,36 @@ class ElementConstitutifMcccController extends AbstractController
         ]);
     }
 
+    #[Route('/{id}/mccc-ec/{parcours}/recompute-validity', name: 'app_element_constitutif_mccc_recompute', methods: ['POST'])]
+    public function recomputeMcccValidity(
+        ElementConstitutif     $elementConstitutif,
+        Parcours               $parcours,
+        McccCompletionChecker  $mcccCompletionChecker,
+        EntityManagerInterface $entityManager,
+    ): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
+        if ($elementConstitutif->getParcours()?->getId() !== $parcours->getId()) {
+            return JsonReponse::error('EC / parcours incohérents.');
+        }
+
+        $owner = $this->resolveMcccOwner($elementConstitutif);
+        $owner->setEtatMccc($mcccCompletionChecker->isCompletedForOwner($owner) ? 'Complet' : 'A saisir');
+
+        $entityManager->persist($owner);
+        $entityManager->flush();
+
+        return JsonReponse::success('Contrôle MCCC recalculé.');
+    }
+
     #[Route('/{id}/mccc-ec/{parcours}/non-editable', name: 'app_element_constitutif_mccc_non_editable', methods: ['GET', 'POST'])]
     public function mcccEcNonEditable(
         ElementConstitutif           $elementConstitutif,
         Parcours                     $parcours,
-        EntityManagerInterface       $entityManager
+        VersioningParcours           $versioningParcours
     ): Response {
-
+//todo: gérer par type de diplôme
         $dpeParcours = GetDpeParcours::getFromParcours($parcours);
 
         if ($dpeParcours === null) {
@@ -273,8 +331,7 @@ class ElementConstitutifMcccController extends AbstractController
         $typeMccc = $getElement->getTypeMcccFromFicheMatiere();
         $ects = $getElement->getFicheMatiereEcts();
 
-        $lastVersion = $entityManager->getRepository(ParcoursVersioning::class)->findLastCfvuVersion($parcours);
-        $lastVersion = $lastVersion[0] ?? null;
+        $lastVersion = $versioningParcours->getLastVersionOrLastYearCfvu($parcours);
 
         $typeMcccLibelle = [
             'ct' => 'Contrôle Terminal',
@@ -293,7 +350,7 @@ class ElementConstitutifMcccController extends AbstractController
             'ects' => $ects,
             'typeDiplome' => $typeD,
             'templateForm' => $typeD::TEMPLATE_FORM_MCCC,
-            'mcccs' => $typeD->getDisplayMccc($getElement->getMcccsFromFicheMatiere($typeD), $typeMccc),
+            'mcccs' => $typeD->getDisplayMccc($getElement->getMcccsFromFicheMatiere($typeD), $typeMccc ?? ''),
             'isFromVersioning' => 'false',
             'lastVersion' => $lastVersion,
             'libelleQuelleVersion' => 'Version actuellement saisie en attente de validation',
@@ -363,14 +420,19 @@ class ElementConstitutifMcccController extends AbstractController
         $ueArray = array_merge(...$ueArray);
 
         // Et on cherche le StructureEc de la version qui a le même Id
+        // ou l'ID de l'année dernière
         $structureEc = null;
         foreach ($ueArray as $structUe) {
             foreach ($structUe->elementConstitutifs as $structEc) {
-                if ($structEc->elementConstitutif->getDeserializedId() === $elementConstitutif->getId()) {
+                if (($structEc->elementConstitutif->getDeserializedId() === $elementConstitutif->getId())
+                    || ($structEc->elementConstitutif->getDeserializedId() === $elementConstitutif->getEcOrigineCopie()->getId())
+                ) {
                     $structureEc = $structEc;
                 }
                 foreach ($structEc->elementsConstitutifsEnfants as $structEcEnfant) {
-                    if ($structEcEnfant->elementConstitutif->getDeserializedId() === $elementConstitutif->getId()) {
+                    if (($structEcEnfant->elementConstitutif->getDeserializedId() === $elementConstitutif->getId())
+                        || ($structEcEnfant->elementConstitutif->getDeserializedId() === $elementConstitutif->getEcOrigineCopie()->getId())
+                    ) {
                         $structureEc = $structEcEnfant;
                     }
                 }
@@ -383,26 +445,37 @@ class ElementConstitutifMcccController extends AbstractController
             ]);
         }
 
+        // Denormalizer - récupération du bon type de MCCC
+        $classMetadataFactory = new ClassMetadataFactory(new AttributeLoader());
+        $extractors = new PropertyInfoExtractor([], [new PhpDocExtractor(), new ReflectionExtractor()]);
+        $serializer = new Serializer(
+            [new DateTimeNormalizer(), new ObjectNormalizer($classMetadataFactory, propertyTypeExtractor: $extractors)]
+        );
+        $restoreMcccType = function (array $mccc) use ($serializer) {
+            return $serializer->denormalize($mccc, Mccc::class);
+        };
         // Mise en forme du tableau des MCCC
         $tabMcccVersioning = [];
         if ($structureEc->typeMccc === 'cci') {
             foreach ($structureEc->mcccs as $mccc) {
-                $tabMcccVersioning[$mccc['numeroSession']] = $mccc;
+                $tabMcccVersioning[$mccc['numeroSession']] = $restoreMcccType($mccc);
             }
         } else {
             foreach ($structureEc->mcccs as $mccc) {
                 if ($mccc['secondeChance']) {
-                    $tabMcccVersioning[3]['chance'] = $mccc;
+                    $tabMcccVersioning[3]['chance'] = $restoreMcccType($mccc);
                 } elseif ($mccc['controleContinu'] === true && $mccc['examenTerminal'] === false) {
-                    $tabMcccVersioning[$mccc['numeroSession']]['cc'][$mccc['numeroEpreuve'] ?? 1] = $mccc;
+                    $tabMcccVersioning[$mccc['numeroSession']]['cc'][$mccc['numeroEpreuve'] ?? 1] = $restoreMcccType($mccc);
                 } elseif ($mccc['controleContinu'] === false && $mccc['examenTerminal'] === true) {
-                    $tabMcccVersioning[$mccc['numeroSession']]['et'][$mccc['numeroEpreuve'] ?? 1] = $mccc;
+                    $tabMcccVersioning[$mccc['numeroSession']]['et'][$mccc['numeroEpreuve'] ?? 1] = $restoreMcccType($mccc);
                 }
             }
         }
-
+        // Nouvelle mise en forme pour le template
+        $tabMcccVersioning = $typeD->getDisplayMccc($tabMcccVersioning, $structureEc->typeMccc);
+        // MCCC Actuels
         $getElement = new GetElementConstitutif($elementConstitutif, $parcoursVersioning->getParcours());
-        $tabMcccActuels = $getElement->getMcccsFromFicheMatiere($typeD);
+        $tabMcccActuels = $typeD->getDisplayMccc($getElement->getMcccsFromFicheMatiere($typeD), $typeMccc);
 
         $mcccsToDisplay = $tabMcccActuels;
         if ($isFromVersioning === 'true' || ($structureEc->typeMccc !== $typeMccc)) {
@@ -412,7 +485,7 @@ class ElementConstitutifMcccController extends AbstractController
         return $this->render('element_constitutif/_mcccEcNonEditable.html.twig', [
             'isMcccImpose' => $structureEc->elementConstitutif->getFicheMatiere()?->isMcccImpose(),
             'isEctsImpose' => $structureEc->elementConstitutif->getFicheMatiere()?->isEctsImpose(),
-            'typeMccc' => $typeMccc, //Versioning
+            'typeMccc' => $structureEc->typeMccc, //Versioning
             'typeMcccActuel' => $typeMccc, // Actuel
             'typeEpreuves' => $typeEpreuveDiplome,
             'typeMcccLibelle' => $typeMcccLibelle,
@@ -421,7 +494,7 @@ class ElementConstitutifMcccController extends AbstractController
             'typeDiplome' => $typeD,
             'ectsVersioning' => $structureEc->heuresEctsEc->ects, // Versioning
             'templateForm' => $templateForm,
-            'mcccVersioning' => $tabMcccVersioning,
+            'mcccVersioning' => $tabMcccVersioning, // Versioning
             'mcccs' => $mcccsToDisplay,
             'isMcccFromVersion' => true,
             'parcoursId' => $parcoursVersioning->getParcours()?->getId(),
@@ -513,4 +586,23 @@ class ElementConstitutifMcccController extends AbstractController
         }
     }
 
+
+    private function resolveMcccOwner(ElementConstitutif $elementConstitutif): FicheMatiere|ElementConstitutif
+    {
+        $isMcccImpose = $elementConstitutif->getFicheMatiere()?->isMcccImpose() ?? false;
+
+        if ($elementConstitutif->isMcccSpecifiques() && !$isMcccImpose) {
+            return $elementConstitutif;
+        }
+
+        if ($elementConstitutif->getEcParent()?->isMcccEnfantsIdentique() && !$isMcccImpose) {
+            return $elementConstitutif->getEcParent();
+        }
+
+        if ($elementConstitutif->getFicheMatiere() !== null) {
+            return $elementConstitutif->getFicheMatiere();
+        }
+
+        return $elementConstitutif;
+    }
 }

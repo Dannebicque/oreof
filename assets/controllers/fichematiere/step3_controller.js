@@ -16,6 +16,8 @@ import JsonResponse from '../../js/JsonResponse'
 export default class extends Controller {
   static targets = [
     'content',
+    // Ajout d'une cible pour les boutons de sélection groupée
+    'selectAllBtn'
   ]
 
   static values = {
@@ -28,6 +30,7 @@ export default class extends Controller {
     // if (document.getElementById('fiche_matiere_step3_objectifs')) {
     //   document.getElementById('fiche_matiere_step3_objectifs').addEventListener('trix-blur', this.saveObjectifs.bind(this))
     // }
+    this.updateAllSelectAllBtns()
   }
 
   changeBcc(event) {
@@ -42,8 +45,55 @@ export default class extends Controller {
     }
   }
 
+  // Nouvelle méthode pour sélectionner/désélectionner toutes les compétences d'un BCC
+  toggleAllCompetences (event) {
+    const bccId = event.params.id
+    const checkboxes = document.querySelectorAll(`.bcc_${bccId}`)
+    const bccCheckbox = document.getElementById(`bcc_${bccId}`)
+    // Vérifie si toutes sont cochées
+    const allChecked = Array.from(checkboxes).every(cb => cb.checked)
+    // On veut inverser l'état : si tout est coché, on décoche tout (et le BCC), sinon on coche tout (et le BCC)
+    const newState = !allChecked
+    checkboxes.forEach(cb => {
+      if (!cb.disabled) {
+        cb.checked = newState
+        cb.dispatchEvent(new Event('change', { bubbles: true }))
+      }
+    })
+    // Met à jour la case BCC parent
+    if (bccCheckbox && !bccCheckbox.disabled) {
+      bccCheckbox.checked = newState
+      bccCheckbox.dispatchEvent(new Event('change', { bubbles: true }))
+    }
+    this.updateSelectAllBtn(bccId)
+  }
+
+  // Met à jour le texte du bouton selon l'état
+  updateSelectAllBtn (bccId) {
+    const checkboxes = document.querySelectorAll(`.bcc_${bccId}`)
+    const btn = document.getElementById(`selectAllBtn_${bccId}`)
+    if (!btn) return
+    const allChecked = Array.from(checkboxes).every(cb => cb.checked)
+    btn.innerText = allChecked ? 'Tout désélectionner' : 'Tout sélectionner'
+  }
+
+  // Appelée à l'ouverture ou après changement manuel
+  updateAllSelectAllBtns () {
+    document.querySelectorAll('[id^="selectAllBtn_"]').forEach(btn => {
+      const bccId = btn.dataset.bccId
+      this.updateSelectAllBtn(bccId)
+    })
+  }
+
   changeCompetence(event) {
     this._save({ action: 'addCompetence', value: event.params.id, checked: event.target.checked })
+    // Met à jour le bouton du BCC parent
+    const classes = event.target.className.split(' ')
+    const bccClass = classes.find(c => c.startsWith('bcc_'))
+    if (bccClass) {
+      const bccId = bccClass.replace('bcc_', '')
+      this.updateSelectAllBtn(bccId)
+    }
   }
 
   etatStep(event) {

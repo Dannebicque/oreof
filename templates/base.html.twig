@@ -89,6 +89,40 @@
                                 <li>
                                     <a href="{{ path('app_user_mes_notifications') }}">Mes notifications</a>
                                 </li>
+                                <li>
+                                    <a href="#"
+                                            {{ stimulus_controller('modal', {
+                                                size: 'large',
+                                                modalTitle: 'Paramètres & Accessibilité',
+                                                right: true,
+                                                modalUrl: path('app_settings') }) }}
+                                       data-action="click->modal#openModal"
+                                       data-size="lg"
+                                       data-bs-toggle="tooltip"
+                                       data-bs-placement="bottom"
+                                       title="Paramètres & Accessibilité"
+                                    >
+
+                                        <i class="fas fa-gears"></i> Paramètres & Accessibilité
+                                    </a>
+                                </li>
+                                <li>
+                                    <a
+                                            href="#"
+                                            {{ stimulus_controller('modal', {
+                                                size: 'lg',
+                                                modalTitle: 'Signaler un bug',
+                                                modalUrl: path('app_bug_report_modal', {
+                                                    formation: formation is defined and formation != null ? formation.id : '',
+                                                    parcours: parcours is defined and parcours != null ? parcours.id : '',
+                                                    page: app.request.uri
+                                                })
+                                            }) }}
+                                            data-action="click->modal#openModal"
+                                    >
+                                        Signaler un bug
+                                    </a>
+                                </li>
                             </ul>
                         </div>
                     </div>
@@ -143,11 +177,11 @@
                                     <span class="label">{{ 'menu.detail_fiches_hd'|trans({}, 'menu') }}</span>
                                 </a>
                             </li>
-                            <li>
-                                <a href="{{ path('app_mutualise_index') }}">
-                                    <span class="label">{{ 'menu.detail_elts_mutualises'|trans({}, 'menu') }}</span>
-                                </a>
-                            </li>
+                            {#                            <li> #}
+                            {#                                <a href="{{ path('app_mutualise_index') }}"> #}
+                            {#                                    <span class="label">{{ 'menu.detail_elts_mutualises'|trans({}, 'menu') }}</span> #}
+                            {#                                </a> #}
+                            {#                            </li> #}
                             <li>
                                 <a href="{{ path('app_export_index') }}">
                                     <span class="label">{{ 'menu.exports'|trans({}, 'menu') }}</span>
@@ -210,6 +244,11 @@
                                 <li>
                                     <a href="{{ path('app_export_index') }}">
                                         <span class="label">{{ 'menu.admin.exports'|trans({}, 'menu') }}</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ path('app_log_viewer_index') }}">
+                                        <span class="label">Logs applicatifs</span>
                                     </a>
                                 </li>
                             </ul>
@@ -578,12 +617,15 @@
                                     Lang-Lannoy -
                                     version {{ user_data.version }}</p>
                             </li>
-                            <li class="breadcrumb-item mb-0 text-medium">
-                                <a href="{{ asset('docs/guide.pdf') }}" target="_blank" class="btn-link">Docs</a>
-                            </li>
+
                             <li class="breadcrumb-item mb-0 text-medium">
                                 <a href="#" class="btn-link" data-bs-toggle="modal"
                                    data-bs-target="#modalUsageDonnees">Usage des données</a>
+                            </li>
+                            <li class="breadcrumb-item mb-0 text-medium">
+                                <a href="{{ path('app_document') }}" target="_blank">
+                                    <i class="fal fa-question-circle"></i> Aides & documents
+                                </a>
                             </li>
                         </ul>
                     </div>

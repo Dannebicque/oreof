@@ -1,0 +1,30 @@
+{% extends 'mails/base_mail.html.twig' %}
+
+{% block content %}
+    <p>Bonjour{% if user is defined and user.display is defined %} {{ user.display }}{% endif %},</p>
+
+    <p>
+        La fiche matière « {{ ficheMatiere.libelle }} » n'est plus mutualisée.
+    </p>
+
+    <p>
+        Les liaisons avec les parcours suivants ont été supprimées :
+    </p>
+
+    <ul>
+        {% for parcours in parcoursImpactes %}
+            <li>
+                {{ parcours.display }}
+                {% if parcours.formation is not null %}
+                    — {{ parcours.formation.display }}
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+
+    <p>
+        Nous vous invitons à vérifier les éléments constitutifs et la cohérence de votre maquette pour les parcours
+        concernés.
+    </p>
+{% endblock %}
+

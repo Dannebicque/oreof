@@ -418,7 +418,11 @@ class LicenceMccc extends AbstractLicenceMccc
         ?DateTimeInterface $dateConseil = null,
         bool               $versionFull = true,
     ): string {
-        $this->genereExcelLicenceMccc($anneeUniversitaire, $parcours, $dateCfvu, $dateConseil, $versionFull);
+        try {
+            $this->genereExcelLicenceMccc($anneeUniversitaire, $parcours, $dateCfvu, $dateConseil, $versionFull);
+        } catch (\Exception $e) {
+            throw new \RuntimeException($e->getMessage());
+        }
         $this->excelWriter->saveFichier($this->fileName, $dir);
         return $this->fileName . '.xlsx';
     }

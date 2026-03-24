@@ -14,6 +14,15 @@
                     ) 
                 }}
             {% endif %}
+            {% if stringDifferencesFormationCampagne.localisationMention is defined %}
+                {{ include('communs/_comparaison_versioning_no_button.html.twig',
+                        {
+                            textDifferences: stringDifferencesFormationCampagne.localisationMention,
+                            idCollapse: 'diffGlobalParcoursCampagne'
+                        }
+                    ) 
+                }}
+            {% endif %}
             <dt>Régime(s) d'inscription</dt>
             <dd>
                 <ul>
@@ -27,6 +36,15 @@
                             textDifferences: stringDifferencesFormation.regimeInscriptionFormation,
                             idCollapse: 'diffGlobalParcours'
                         })
+                    }}
+                {% endif %}
+                {% if stringDifferencesFormationCampagne.regimeInscriptionFormation is defined %}
+                    {{ include('communs/_comparaison_versioning_no_button.html.twig',
+                            {
+                                textDifferences: stringDifferencesFormationCampagne.regimeInscriptionFormation,
+                                idCollapse: 'diffGlobalParcoursCampagne'
+                            }
+                        ) 
                     }}
                 {% endif %}
             </dd>
@@ -43,6 +61,15 @@
                     textDifferences: stringDifferencesFormation.composanteInscriptionFormation,
                     idCollapse: 'diffGlobalParcours'
                 }) 
+            }}
+        {% endif %}
+        {% if stringDifferencesFormationCampagne.composanteInscriptionFormation is defined %}
+            {{ include('communs/_comparaison_versioning_no_button.html.twig',
+                    {
+                        textDifferences: stringDifferencesFormationCampagne.composanteInscriptionFormation,
+                        idCollapse: 'diffGlobalParcoursCampagne'
+                    }
+                ) 
             }}
         {% endif %}
         {% for composante in formation.composantesInscription %}

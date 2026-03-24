@@ -73,7 +73,25 @@
                         }
                     ) }}
                 {% endif %}
+            {% if stringDifferencesFormationCampagne.responsableDeFormation is defined %}
+                {{ include('communs/_comparaison_versioning_no_button.html.twig',
+                        {
+                            textDifferences: stringDifferencesFormationCampagne.responsableDeFormation,
+                            idCollapse: 'diffGlobalParcoursCampagne'
+                        }
+                    ) 
+                }}
+            {% endif %}
 
+            {% if stringDifferencesFormationCampagne.emailResponsableFormation is defined %}
+                {{ include('communs/_comparaison_versioning_no_button.html.twig',
+                        {
+                            textDifferences: stringDifferencesFormationCampagne.emailResponsableFormation,
+                            idCollapse: 'diffGlobalParcoursCampagne'
+                        }
+                    )
+                }}
+            {% endif %}
                 {% if formation.coResponsable != null %}
                     <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Co-Responsable de la formation
                     </dt>
@@ -87,11 +105,41 @@
                                 textDifferences: stringDifferencesFormation.coResponsableDeFormation,
                                 idCollapse: 'diffGlobalParcours'
                             }
-                        ) }}
-                    {% endif %}
+                        )
+                    }}
                 {% endif %}
-            </dl>
-        </div>
+                {% if stringDifferencesFormationCampagne.coResponsableDeFormation is defined %}
+                    {{ include('communs/_comparaison_versioning_no_button.html.twig',
+                            {
+                                textDifferences: stringDifferencesFormationCampagne.coResponsableDeFormation,
+                                idCollapse: 'diffGlobalParcoursCampagne'
+                            }
+                        )
+                    }}
+                {% endif %}
+                <dt>Email</dt>
+                <dd>{{ formation.coResponsable != null ? formation.coResponsable.email : 'erreur' }}</dd>
+                {% if stringDifferencesFormation.emailCoResponsable is defined %}
+                    {{ include('communs/_comparaison_versioning_no_button.html.twig',
+                            {
+                                textDifferences: stringDifferencesFormation.emailCoResponsable,
+                                idCollapse: 'diffGlobalParcours'
+                            }
+                        )
+                    }}
+                {% endif %}
+                {% if stringDifferencesFormationCampagne.emailCoResponsable is defined %}
+                    {{ include('communs/_comparaison_versioning_no_button.html.twig',
+                            {
+                                textDifferences: stringDifferencesFormationCampagne.emailCoResponsable,
+                                idCollapse: 'diffGlobalParcoursCampagne'
+                            }
+                        )
+                    }}
+                {% endif %}
+            {% endif %}
+        </dl>
     </div>
+</div>
 
 

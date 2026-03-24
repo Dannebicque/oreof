@@ -36,10 +36,8 @@ use App\Repository\TypeDiplomeRepository;
 use App\Repository\UserRepository;
 use App\Service\VersioningFormation;
 use App\Service\VersioningParcours;
-use App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException;
 use App\Utils\Access;
 use App\Utils\JsonRequest;
-use App\Utils\Tools;
 use DateTime;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
@@ -177,7 +175,7 @@ class FormationController extends BaseController
 
                 $stats[$formation->getId()][$parcours->getId()] = $typeD->calculStructureParcours($parcours, false, false);
                 $stats[$formation->getId()]['stats']->addStatsParcours(
-                    $stats[$formation->getId()][$parcours->getId()]->statsFichesMatieresParcours
+                    $stats[$formation->getId()][$parcours->getId()]?->statsFichesMatieresParcours
                 );
             }
         }
@@ -296,6 +294,18 @@ class FormationController extends BaseController
             $uc->setProfil($profil);
             $this->entityManager->persist($uc);
 
+
+            if ($formation->getCoResponsable() !== null) {
+                $profil = $profilRepository->findOneBy(['code' => 'ROLE_CO_RESP_FORMATION']);
+                $ucCo = new UserProfil();
+                $ucCo->setUser($formation->getCoResponsable());
+                $ucCo->setCampagneCollecte($this->getCampagneCollecte());
+                $ucCo->setFormation($formation);
+                $ucCo->setProfil($profil);
+                $this->entityManager->persist($ucCo);
+            }
+
+
             $this->entityManager->flush();
             $dpeParcoursWorkflow->apply($dpeParcours, 'initialiser');
             $dpeParcoursWorkflow->apply($dpeParcours, 'autoriser');
@@ -363,9 +373,6 @@ class FormationController extends BaseController
         ]);
     }
 
-    /**
-     * @throws TypeDiplomeNotFoundException
-     */
     #[Route('/api', name: 'app_formation_api', methods: ['GET'])]
     public function api(
         MentionRepository     $mentionRepository,
@@ -389,9 +396,6 @@ class FormationController extends BaseController
         ]);
     }
 
-    /**
-     * @throws TypeDiplomeNotFoundException
-     */
     #[Route('/{slug}', name: 'app_formation_show', methods: ['GET'])]
     public function show(
         Formation               $formation,
@@ -412,6 +416,7 @@ class FormationController extends BaseController
         $cssDiff = DiffHelper::getStyleSheet();
         if ($formation->isHasParcours() === false && count($formation->getParcours()) === 1) {
             $textDifferencesParcours = $versioningParcours->getDifferencesBetweenParcoursAndLastVersion($formation->getParcours()[0]);
+            $textDifferencesParcoursCampagne = $versioningParcours->getDifferencesBetweenParcoursAndLastVersion($formation->getParcours()[0], true);
             $hasLastVersion = $versioningParcours->hasLastVersion($formation->getParcours()[0]);
         }
 
@@ -419,22 +424,31 @@ class FormationController extends BaseController
          * VERSIONING FORMATION
          */
         $formationStringDifferences = $versioningFormation->getDifferencesBetweenFormationAndLastVersion($formation);
+        $formationCampagneStringDifferences = $versioningFormation->getDifferencesBetweenFormationAndLastVersion($formation, true);
+
+        //Si l'utilisateur peut voir les différences
+        $canSeeDifferences = $this->isGranted('RELATED_TO_PARCOURS', $formation);
+
+        // Afficher les comparaisons directement
+        $request = Request::createFromGlobals();
+        $displayComparaison = $request->query->get('optionDisplay', 'false');
 
         return $this->render('formation/show.html.twig', [
             'formation' => $formation,
             'typeDiplome' => $typeDiplome,
             'typeD' => $typeD,
             'cssDiff' => $cssDiff,
-            'stringDifferencesParcours' => $textDifferencesParcours ?? [],
+            'stringDifferencesParcoursDefautCampagne' => $textDifferencesParcoursCampagne ?? [],
+            'stringDifferencesParcoursDefaut' => $textDifferencesParcours ?? [],
             'stringDifferencesFormation' => $formationStringDifferences ?? [],
+            'stringDifferencesFormationCampagne' => $formationCampagneStringDifferences ?? [],
             'versioningParcours' => $versioningParcours,
             'hasLastVersion' => $hasLastVersion,
+            'displayComparaison' => $displayComparaison,
+            'canSeeDifferences' => $canSeeDifferences
         ]);
     }
 
-    /**
-     * @throws TypeDiplomeNotFoundException
-     */
     #[Route('/{slug}/edit', name: 'app_formation_edit', methods: ['GET', 'POST'])]
     public function edit(
         VersioningParcours $versioningParcours,

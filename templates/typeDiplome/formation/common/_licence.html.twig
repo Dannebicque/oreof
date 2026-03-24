@@ -35,6 +35,9 @@
 
 
     {% if formation.isHasParcours == false and formation.parcours|length == 1 %}
+        {% set stringDifferencesParcours = stringDifferencesParcoursDefaut %}
+        {% set stringDifferencesParcoursCampagne = stringDifferencesParcoursDefautCampagne %}
+
         <section class="scroll-section" id="presentation">
             <h3 class="small-title">Présentation</h3>
             <div class="card mb-5">
@@ -162,6 +165,9 @@
             </div>
         </section>
         {% for parcours in formation.parcours %}
+            {% set stringDifferencesParcours = versioningParcours.getDifferencesBetweenParcoursAndLastVersion(parcours) ?? [] %}
+            {% set stringDifferencesParcoursCampagne = versioningParcours.getDifferencesBetweenParcoursAndLastVersion(parcours, true) ?? [] %}
+
             <div>
                 <h2>Parcours {{ parcours.libelle }}</h2>
             </div>
@@ -179,14 +185,7 @@
                                 zone: 'presentation_'~ parcours.id,
                             }) }}
                             {% endif %}
-                            {{ include('typeDiplome/formation/_presentationParcours.html.twig',
-                                    {
-                                        parcours:parcours,
-                                        stringDifferencesParcours: versioningParcours.getDifferencesBetweenParcoursAndLastVersion(parcours) ?? []
-                                    }
-                                )
-                            }}
-
+                            {{ include('typeDiplome/formation/_presentationParcours.html.twig', { parcours:parcours } ) }}
                         </div>
                     </div>
                 </section>
@@ -203,11 +202,7 @@
                                 zone: 'descriptif_'~ parcours.id,
                             }) }}
                             {% endif %}
-                            {{ include('typeDiplome/formation/_descriptifParcours.html.twig', {
-                                    parcours:parcours,
-                                    stringDifferencesParcours: versioningParcours.getDifferencesBetweenParcoursAndLastVersion(parcours) ?? []
-                                })
-                            }}
+                            {{ include('typeDiplome/formation/_descriptifParcours.html.twig', { parcours:parcours } ) }}
                         </div>
                     </div>
                 </section>
@@ -224,11 +219,7 @@
                                 zone: 'localisation_'~ parcours.id,
                             }) }}
                             {% endif %}
-                            {{ include('typeDiplome/formation/_localisationParcours.html.twig', {
-                                parcours:parcours,
-                                stringDifferencesParcours: versioningParcours.getDifferencesBetweenParcoursAndLastVersion(parcours) ?? []
-                                })
-                            }}
+                            {{ include('typeDiplome/formation/_localisationParcours.html.twig', { parcours:parcours }) }}
                         </div>
                     </div>
                 </section>
@@ -283,11 +274,7 @@
                                 zone: 'admission_'~ parcours.id,
                             }) }}
                             {% endif %}
-                            {{ include('typeDiplome/formation/_admission.html.twig', {
-                                    parcours:parcours,
-                                    stringDifferencesParcours: versioningParcours.getDifferencesBetweenParcoursAndLastVersion(parcours) ?? []
-                                })
-                            }}
+                            {{ include('typeDiplome/formation/_admission.html.twig', { parcours:parcours } ) }}
                         </div>
                     </div>
                 </section>
@@ -321,11 +308,7 @@
                                 zone: 'et_apres_'~ parcours.id,
                             }) }}
                             {% endif %}
-                            {{ include('typeDiplome/formation/_etApres.html.twig', {
-                                    parcours:parcours,
-                                    stringDifferencesParcours: versioningParcours.getDifferencesBetweenParcoursAndLastVersion(parcours) ?? []
-                                })
-                            }}
+                            {{ include('typeDiplome/formation/_etApres.html.twig', { parcours:parcours } ) }}
                         </div>
                     </div>
                 </section>
@@ -342,13 +325,7 @@
                                 zone: 'contacts_'~ parcours.id,
                             }) }}
                             {% endif %}
-                            {{ include('typeDiplome/formation/_contacts.html.twig',
-                                    {
-                                        parcours:parcours,
-                                        stringDifferencesParcours: versioningParcours.getDifferencesBetweenParcoursAndLastVersion(parcours) ?? []
-                                    }
-                                )
-                            }}
+                            {{ include('typeDiplome/formation/_contacts.html.twig', { parcours:parcours } ) }}
                         </div>
                     </div>
                 </section>

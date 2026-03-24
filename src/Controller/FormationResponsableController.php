@@ -144,11 +144,18 @@ class FormationResponsableController extends BaseController
             $tDemandes[$demande->getFormation()?->getComposantePorteuse()?->getId()][$demande->getFormation()?->getId()]['demandes'][] = $demande;
         }
 
+        foreach ($this->getCampagneCollecte()->getTimelineDates() as $date) {
+            if ($date->isCfvu()) {
+                $dateCfvu = $date->getDate();
+                break;
+            }
+        }
 
 
         return $myGotenbergPdf->render('pdf/formation_responsable_liste.html.twig', [
             'titre' => 'Demandes de modification de responsable de formation',
             'demandes' => $tDemandes,
+            'dateCfvu' => $dateCfvu ?? null,
             'composantes' => $composantes,
             'dpe' => $this->getCampagneCollecte()
         ], 'synthese_changement_rf_'.(new DateTime())->format('d-m-Y_H-i-s'));

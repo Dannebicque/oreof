@@ -22,10 +22,37 @@
                     })
                 }}
             {% endif %}
+            {% if stringDifferencesParcoursCampagne.regimeInscriptionParcours is defined %}
+                {{ include('communs/_comparaison_versioning_no_button.html.twig',
+                        {
+                            textDifferences: stringDifferencesParcoursCampagne.regimeInscriptionParcours,
+                            idCollapse: 'diffGlobalParcoursCampagne'
+                        }
+                    )
+                }}
+            {% endif %}
             <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Modalités de l'alternance</dt>
             <dd>
                 {{ parcours.modalitesAlternance|raw }}
             </dd>
+            {% if stringDifferencesParcours.modaliteAlternanceParcours is defined %}
+                {{ include('communs/_comparaison_versioning_no_button.html.twig',
+                        {
+                            textDifferences: stringDifferencesParcours.modaliteAlternanceParcours,
+                            idCollapse: 'diffGlobalParcours'
+                        }
+                    )
+                }}
+            {% endif %}
+            {% if stringDifferencesParcoursCampagne.modaliteAlternanceParcours is defined %}
+                {{ include('communs/_comparaison_versioning_no_button.html.twig', 
+                        {
+                            textDifferences: stringDifferencesParcoursCampagne.modaliteAlternanceParcours,
+                            idCollapse: 'diffGlobalParcoursCampagne'
+                        }
+                    ) 
+                }}
+            {% endif %}
 
             {% if parcours.composanteInscription != null %}
                 <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Composante d'inscription</dt>

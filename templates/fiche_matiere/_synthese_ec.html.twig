@@ -19,6 +19,24 @@
                             {% else %}
                                 <span class="badge bg-warning">Sans parcours</span>
                             {% endif %}
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <div class="mt-2">
+                                    <a
+                                            href="#"
+                                            class="btn btn-sm btn-outline-warning"
+                                            {{ stimulus_controller('modal', {
+                                                size: 'lg',
+                                                modalTitle: ficheMatiere.parcours != null ? 'Modifier le parcours porteur' : 'Définir le parcours porteur',
+                                                nomEvenement: 'refreshStep',
+                                                modalUrl: path('app_fiche_matiere_wizard_change_parcours_porteur', {ficheMatiere: ficheMatiere.id})
+                                            }) }}
+                                            data-action="click->modal#openModal"
+                                    >
+                                        <i class="{{ iconEdit }}"></i>
+                                        <span>{{ ficheMatiere.parcours != null ? 'Modifier le parcours porteur' : 'Définir le parcours porteur' }}</span>
+                                    </a>
+                                </div>
+                        {% endif %}
                         {% endif %}
                     </dd>
                 </dl>

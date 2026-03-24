@@ -22,7 +22,35 @@
                     }
                 ) }}
             {% endif %}
-
+            {% if stringDifferencesParcoursCampagne.contactsParcoursResponsableParcours is defined %}
+                {{ include('communs/_comparaison_versioning_no_button.html.twig',
+                        {
+                            textDifferences: stringDifferencesParcoursCampagne.contactsParcoursResponsableParcours,
+                            idCollapse: 'diffGlobalParcoursCampagne'
+                        }
+                    )
+                }}
+            {% endif %}
+            <dt>Email</dt>
+            <dd>{{ parcours.respParcours != null ? parcours.respParcours.email : 'Non concerné' }}</dd>
+            {% if stringDifferencesParcours.emailParcoursResponsableParcours is defined %}
+                {{ include('communs/_comparaison_versioning_no_button.html.twig', 
+                        {
+                            textDifferences: stringDifferencesParcours.emailParcoursResponsableParcours,
+                            idCollapse: 'diffGlobalParcours'
+                        }
+                    ) 
+                }}
+            {% endif %}
+            {% if stringDifferencesParcoursCampagne.emailParcoursResponsableParcours is defined %}
+                {{ include('communs/_comparaison_versioning_no_button.html.twig',
+                        {
+                            textDifferences: stringDifferencesParcoursCampagne.emailParcoursResponsableParcours,
+                            idCollapse: 'diffGlobalParcoursCampagne'
+                        }
+                    )
+                }}
+            {% endif %}
             {% if parcours.coResponsable != null %}
                 <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Co-responsable du parcours</dt>
                 <dd>{{ parcours.coResponsable != null ? parcours.coResponsable.display : 'Non concerné' }}
@@ -34,12 +62,42 @@
                     </a>
                 </dd>
                 {% if stringDifferencesParcours.contactsParcoursCoResponsableDuParcours is defined %}
+                    {{ include('communs/_comparaison_versioning_no_button.html.twig', 
+                            {
+                                textDifferences: stringDifferencesParcours.contactsParcoursCoResponsableDuParcours,
+                                idCollapse: 'diffGlobalParcours'
+                            }
+                        ) 
+                    }}
+                {% endif %}
+                {% if stringDifferencesParcoursCampagne.contactsParcoursCoResponsableDuParcours is defined %}
                     {{ include('communs/_comparaison_versioning_no_button.html.twig',
-                        {
-                            textDifferences: stringDifferencesParcours.contactsParcoursCoResponsableDuParcours,
-                            idCollapse: 'diffGlobalParcours'
-                        }
-                    ) }}
+                            {
+                                textDifferences: stringDifferencesParcoursCampagne.contactsParcoursCoResponsableDuParcours,
+                                idCollapse: 'diffGlobalParcoursCampagne'
+                            }
+                        )
+                    }}
+                {% endif %}
+                <dt>Email</dt>
+                <dd>{{ parcours.coResponsable != null ? parcours.coResponsable.email : 'Non concerné' }}</dd>
+                {% if stringDifferencesParcours.emailParcoursCoResponsableDuParcours is defined %}
+                    {{ include('communs/_comparaison_versioning_no_button.html.twig', 
+                            {
+                                textDifferences: stringDifferencesParcours.emailParcoursCoResponsableDuParcours,
+                                idCollapse: 'diffGlobalParcours'
+                            }
+                        ) 
+                    }}
+                {% endif %}
+                {% if stringDifferencesParcoursCampagne.emailParcoursCoResponsableDuParcours is defined %}
+                    {{ include('communs/_comparaison_versioning_no_button.html.twig',
+                            {
+                                textDifferences: stringDifferencesParcoursCampagne.emailParcoursCoResponsableDuParcours,
+                                idCollapse: 'diffGlobalParcoursCampagne'
+                            }
+                        )
+                    }}
                 {% endif %}
             {% endif %}
         {% endif %}

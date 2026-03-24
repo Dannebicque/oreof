@@ -1,0 +1,26 @@
+{% extends 'mails/base_mail.html.twig' %}
+
+{% block content %}
+    <p>Un nouveau signalement de bug a été envoyé depuis ORéOF.</p>
+
+    <h3>Emetteur</h3>
+    <ul>
+        <li><strong>Nom :</strong> {{ reporter.display }}</li>
+        <li><strong>Email :</strong> {{ reporter.email ?: 'Non renseigné' }}</li>
+        <li><strong>Date :</strong> {{ submittedAt|date('d/m/Y H:i') }}</li>
+    </ul>
+
+    <h3>Contexte</h3>
+    <ul>
+        <li><strong>Formation :</strong> {{ context.formationLabel }}</li>
+        <li><strong>Parcours :</strong> {{ context.parcoursLabel }}</li>
+        <li><strong>Page :</strong> {{ context.page is not empty ? context.page : 'Non définie' }}</li>
+    </ul>
+
+    <h3>Contenu</h3>
+    <p><strong>Titre :</strong> {{ title }}</p>
+    <p><strong>Message :</strong><br>
+        {{ message|nl2br }}
+    </p>
+{% endblock %}
+

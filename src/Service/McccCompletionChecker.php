@@ -21,10 +21,9 @@ final class McccCompletionChecker
      */
     public function isCompletedForOwner(FicheMatiere|ElementConstitutif $owner): bool
     {
-        if ($owner->isHorsDiplome()) {
+        if ($owner instanceof FicheMatiere && $owner->isHorsDiplome()) {
             return true;
         }
-
         if ($owner instanceof FicheMatiere) {
             $parcours = $owner->getParcours();
         } elseif ($owner instanceof ElementConstitutif) {

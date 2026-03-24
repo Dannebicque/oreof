@@ -130,12 +130,43 @@ class VersioningParcours
         return count($lastVersion) > 0 ? $lastVersion[0] : null;
     }
 
-    public function getDifferencesBetweenParcoursAndLastVersion(Parcours $parcours): array
+    public function getLastCfvuVersion(Parcours $parcours) : ParcoursVersioning|null {
+        $lastCfvu = $this->entityManager->getRepository(ParcoursVersioning::class)->findLastCfvuVersion($parcours);
+        return $lastCfvu[0] ?? null;
+    }
+
+    public function getLastVersionOrLastYearCfvu(Parcours $parcours) { 
+        // Dernière version CFVU
+        $lastVersion = $this->entityManager->getRepository(ParcoursVersioning::class)->findLastCfvuVersion($parcours);
+        if(count($lastVersion) === 0 && $parcours->getParcoursOrigineCopie() !== null){
+            // Sinon, on prend la plus récente de l'année dernière
+            $lastVersion = $this->entityManager->getRepository(ParcoursVersioning::class)
+                ->findLastCfvuVersion($parcours->getParcoursOrigineCopie());
+        }
+
+        return $lastVersion[0] ?? null;
+    }
+
+    public function getDifferencesBetweenParcoursAndLastVersion(Parcours $parcours, bool $fromLastYear = false): array
     {
         $this->textDifferences = [];
 
-        if($this->hasLastVersion($parcours)) {
-            $lastVersion = $this->getLastVersion($parcours);
+        if( ($this->hasLastVersion($parcours) && $fromLastYear === false) 
+            || ($fromLastYear && $parcours->getParcoursOrigineCopie() !== null)
+        ) {
+            if($fromLastYear){
+                $lastVersion = $parcours->getParcoursOrigineCopie();
+            }
+            else {
+                // Données du parcours en JSON
+                $lastVersion = $this->getLastVersion($parcours);
+                $fileParcours = file_get_contents(
+                    __DIR__ . "/../../versioning_json/parcours/"
+                    . "{$lastVersion->getParcours()?->getId()}/"
+                    . "{$lastVersion->getParcoursFileName()}.json"
+                );
+                $lastVersion = $this->serializer->deserialize($fileParcours, Parcours::class, 'json');
+            }
             // Configuration du calcul des différences
             $rendererName = 'Combined';
             $differOptions = [
@@ -152,13 +183,7 @@ class VersioningParcours
                 'separateBlock' => false,
                 'wordGlues' => [' ', '.']
             ];
-            // Données du parcours en JSON
-            $fileParcours = file_get_contents(
-                __DIR__ . "/../../versioning_json/parcours/"
-                . "{$lastVersion->getParcours()?->getId()}/"
-                                            . "{$lastVersion->getParcoursFileName()}.json"
-            );
-            $lastVersion = $this->serializer->deserialize($fileParcours, Parcours::class, 'json');
+            
             $this->textDifferences = [
                 'presentationParcoursContenuFormation' =>
                 self::cleanUpComparison(
@@ -323,6 +348,30 @@ class VersioningParcours
                         DiffHelper::calculate(
                             self::cleanUpHtmlTextForComparison($lastVersion->getPoursuitesEtudes() ?? ""),
                             self::cleanUpHtmlTextForComparison($parcours->getPoursuitesEtudes() ?? ""),
+                            $rendererName,
+                            $differOptions,
+                            $rendererOptions
+                        )
+                    )
+                ),
+                "modaliteAlternanceParcours" =>
+                self::cleanUpComparison(
+                    html_entity_decode(
+                        DiffHelper::calculate(
+                            self::cleanUpHtmlTextForComparison($lastVersion->getModalitesAlternance() ?? ""),                        
+                            self::cleanUpHtmlTextForComparison($parcours->getModalitesAlternance() ?? ""),
+                            $rendererName,
+                            $differOptions,
+                            $rendererOptions
+                        )
+                    )
+                ),
+                "rythmeFormationTexteParcours" => 
+                self::cleanUpComparison(
+                    html_entity_decode(
+                        DiffHelper::calculate(
+                            self::cleanUpHtmlTextForComparison($lastVersion->getRythmeFormationTexte() ?? ""),
+                            self::cleanUpHtmlTextForComparison($parcours->getRythmeFormationTexte() ?? ""),
                             $rendererName,
                             $differOptions,
                             $rendererOptions

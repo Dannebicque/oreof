@@ -1039,6 +1039,7 @@ framework:
             process: true
             label: 'validation.demande_initialisee'
             color: 'info'
+            icon: 'fa-people-line'
         soumis_conseil:
           metadata:
             process: true
@@ -1062,16 +1063,19 @@ framework:
             process: false
             label: 'validation.attente_pv'
             color: 'warning'
+            icon: 'fa-hourglass'
         effectuee:
           metadata:
             process: false
             label: 'validation.effectuee'
             color: 'success'
+            icon: 'fa-check'
         verification_pv:
           metadata:
             process: false
             label: 'validation.verification_pv'
             color: 'warning'
+            icon: 'fa-check'
       transitions:
         effectuer_demande:
           from: 'demande_initialisee'

@@ -5,7 +5,7 @@
     "prefer-stable": true,
     "name": "dannebicque/oreof",
     "author": "David Annebicque",
-    "version": "1.49.0",
+    "version": "1.52.0",
     "description": "Outil de Rédaction de l'offre de formation de l'université",
     "require": {
         "php": ">=8.2",
@@ -57,6 +57,7 @@
         "symfony/workflow": "7.3.*",
         "symfony/yaml": "7.3.*",
         "twig/extra-bundle": "^2.12|^3.0",
+        "twig/string-extra": "^3.24",
         "twig/twig": "^2.12|^3.0"
     },
     "config": {

@@ -56,8 +56,20 @@
                     {{ stimulus_action('fichematiere--step3', 'changeBcc', 'change', {id:bcc.id}) }}
             >
             <label for="bcc_{{ bcc.id }}"><strong>{{ bcc.display }}</strong></label>
-            <div id="bcc_{{ bcc.id }}_competence" class="{% if ecBccs[bcc.id] is not defined %}d-none {%
-                endif %} mb-2 ms-3">
+            {# Bouton tout sélectionner/désélectionner #}
+            {% if bcc.competences|length > 0 %}
+                <button type="button"
+                        class="btn btn-link btn-sm p-0 ms-2 align-baseline"
+                        id="selectAllBtn_{{ bcc.id }}"
+                        data-bcc-id="{{ bcc.id }}"
+                        {{ stimulus_action('fichematiere--step3', 'toggleAllCompetences', 'click', {id:bcc.id}) }}
+                        tabindex="0"
+                        title="Sélectionner ou désélectionner toutes les compétences de ce bloc">
+                    Tout sélectionner
+                </button>
+            {% endif %}
+            <div id="bcc_{{ bcc.id }}_competence"
+                 class="{% if ecBccs[bcc.id] is not defined %}d-none {% endif %} mb-2 ms-3">
                 {% for competence in bcc.competences %}
                     <div>
                         <input type="checkbox" name="ec[competences][]"

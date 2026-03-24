@@ -1,3 +1,10 @@
+{% import "typeDiplome/mccc-non-editable/licence/_compareMcccVersioning.macro.html.twig" as compareMccc %}
+
+{% set hasDisplayComparaison = (isFromVersioning ?? 'false' != 'true' )
+    and (isMcccFromVersion ?? false == true)
+    and (hasChangedTypeMccc ?? false == false)
+%}
+
 <h3>1ᵉ Session</h3>
 <div>
     <table class="table table-bordered">
@@ -10,9 +17,42 @@
         </thead>
         <tbody>
         <tr>
-            <td class="text-center">{{ mcccs.COL_MCCC_CCI is defined ? mcccs.COL_MCCC_CCI : "" }}</td>
-            <td class="text-center">{{ mcccs.COL_MCCC_CC is defined ? mcccs.COL_MCCC_CC : "" }}</td>
-            <td class="text-center">{{ mcccs.COL_MCCC_CT is defined ? mcccs.COL_MCCC_CT : "" }}</td>
+            {% if hasDisplayComparaison %}
+                <td class="text-center">
+                    {{ compareMccc.displayMccc(
+                        mcccs.COL_MCCC_CCI ?? "",
+                        mcccVersioning.COL_MCCC_CCI ?? "",
+                        "",
+                        hasDisplayComparaison,
+                        isFromVersioning ?? 'false'
+                        )
+                    }}
+                </td>
+                <td class="text-center">
+                    {{ compareMccc.displayMccc(
+                        mcccs.COL_MCCC_CC ?? "",
+                        mcccVersioning.COL_MCCC_CC ?? "",
+                        "",
+                        hasDisplayComparaison,
+                        isFromVersioning ?? 'false'
+                        )
+                    }}
+                </td>
+                <td class="text-center">
+                    {{ compareMccc.displayMccc(
+                        mcccs.COL_MCCC_CT ?? "",
+                        mcccVersioning.COL_MCCC_CT ?? "",
+                        "",
+                        hasDisplayComparaison,
+                        isFromVersioning ?? 'false'
+                        )
+                    }}
+                </td>
+            {% else %}
+                <td class="text-center">{{ mcccs.COL_MCCC_CCI is defined ? mcccs.COL_MCCC_CCI : "" }}</td>
+                <td class="text-center">{{ mcccs.COL_MCCC_CC is defined ? mcccs.COL_MCCC_CC : "" }}</td>
+                <td class="text-center">{{ mcccs.COL_MCCC_CT is defined ? mcccs.COL_MCCC_CT : "" }}</td>
+            {% endif %}
         </tr>
         </tbody>
     </table>
@@ -34,10 +74,53 @@
         </thead>
         <tbody>
         <tr>
-            <td class="text-center">{{ mcccs.COL_MCCC_SECONDE_CHANCE_CC_SANS_TP is defined ? mcccs.COL_MCCC_SECONDE_CHANCE_CC_SANS_TP : "" }}</td>
-            <td class="text-center">{{ mcccs.COL_MCCC_SECONDE_CHANCE_CC_AVEC_TP is defined ? mcccs.COL_MCCC_SECONDE_CHANCE_CC_AVEC_TP : "" }}</td>
-            <td class="text-center">{{ mcccs.COL_MCCC_SECONDE_CHANCE_CC_SUP_10 is defined ? mcccs.COL_MCCC_SECONDE_CHANCE_CC_SUP_10 : "" }}</td>
-            <td class="text-center">{{ mcccs.COL_MCCC_SECONDE_CHANCE_CT is defined ? mcccs.COL_MCCC_SECONDE_CHANCE_CT : "" }}</td>
+            {% if hasDisplayComparaison %}
+                <td class="text-center">
+                    {{ compareMccc.displayMccc(
+                        mcccs.COL_MCCC_SECONDE_CHANCE_CC_SANS_TP ?? "",
+                        mcccVersioning.COL_MCCC_SECONDE_CHANCE_CC_SANS_TP ?? "",
+                        "",
+                        hasDisplayComparaison,
+                        isFromVersioning ?? 'false'
+                        )
+                    }}
+                </td>
+                <td class="text-center">
+                    {{ compareMccc.displayMccc(
+                        mcccs.COL_MCCC_SECONDE_CHANCE_CC_AVEC_TP ?? "",
+                        mcccVersioning.COL_MCCC_SECONDE_CHANCE_CC_AVEC_TP ?? "",
+                        "",
+                        hasDisplayComparaison,
+                        isFromVersioning ?? 'false'
+                        )
+                    }}
+                </td>
+                <td class="text-center">
+                    {{ compareMccc.displayMccc(
+                        mcccs.COL_MCCC_SECONDE_CHANCE_CC_SUP_10 ?? "",
+                        mcccVersioning.COL_MCCC_SECONDE_CHANCE_CC_SUP_10 ?? "",
+                        "",
+                        hasDisplayComparaison,
+                        isFromVersioning ?? 'false'
+                        )
+                    }}
+                </td>
+                <td class="text-center">
+                    {{ compareMccc.displayMccc(
+                        mcccs.COL_MCCC_SECONDE_CHANCE_CT ?? "",
+                        mcccVersioning.COL_MCCC_SECONDE_CHANCE_CT ?? "",
+                        "",
+                        hasDisplayComparaison,
+                        isFromVersioning ?? 'false'
+                        )
+                    }}
+                </td>
+            {% else %}
+                <td class="text-center">{{ mcccs.COL_MCCC_SECONDE_CHANCE_CC_SANS_TP is defined ? mcccs.COL_MCCC_SECONDE_CHANCE_CC_SANS_TP : "" }}</td>
+                <td class="text-center">{{ mcccs.COL_MCCC_SECONDE_CHANCE_CC_AVEC_TP is defined ? mcccs.COL_MCCC_SECONDE_CHANCE_CC_AVEC_TP : "" }}</td>
+                <td class="text-center">{{ mcccs.COL_MCCC_SECONDE_CHANCE_CC_SUP_10 is defined ? mcccs.COL_MCCC_SECONDE_CHANCE_CC_SUP_10 : "" }}</td>
+                <td class="text-center">{{ mcccs.COL_MCCC_SECONDE_CHANCE_CT is defined ? mcccs.COL_MCCC_SECONDE_CHANCE_CT : "" }}</td>
+            {% endif %}
         </tr>
         </tbody>
     </table>

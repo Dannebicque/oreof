@@ -14,6 +14,15 @@
                 )
             }}
             {% endif %}
+            {% if stringDifferencesParcoursCampagne.presentationParcoursContenuFormation is defined %}
+                {{ include('communs/_comparaison_versioning_no_button.html.twig',
+                        {
+                            textDifferences: stringDifferencesParcoursCampagne.presentationParcoursContenuFormation,
+                            idCollapse: 'diffGlobalParcoursCampagne'
+                        }
+                    )
+                }}
+            {% endif %}
             <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Objectifs du parcours</dt>
             <dd>
                 {{ parcours.objectifsParcours|printTexte }}
@@ -31,6 +40,24 @@
                 )
             }}
             {% endif %}
+            {% if stringDifferencesParcoursCampagne.presentationParcoursObjectifsParcours is defined %}
+                {{ include('communs/_comparaison_versioning_no_button.html.twig',
+                        {
+                            textDifferences: stringDifferencesParcoursCampagne.presentationParcoursObjectifsParcours,
+                            idCollapse: 'diffGlobalParcoursCampagne'
+                        }
+                    )
+                }}
+            {% endif %}
+            {% if stringDifferencesParcoursCampagne.presentationParcoursObjectifsParcours is defined %}
+                {{ include('communs/_comparaison_versioning_no_button.html.twig',
+                        {
+                            textDifferences: stringDifferencesParcoursCampagne.presentationParcoursObjectifsParcours,
+                            idCollapse: 'diffGlobalParcoursCampagne'
+                        }
+                    )
+                }}
+            {% endif %}
             <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Résultats attendus du parcours</dt>
             <dd>
                 {{ parcours.resultatsAttendus|printTexte }}
@@ -43,6 +70,15 @@
                     }
                 )
             }}
+            {% endif %}
+            {% if stringDifferencesParcoursCampagne.presentationParcoursResultatsAttendus is defined %}
+                {{ include('communs/_comparaison_versioning_no_button.html.twig',
+                        {
+                            textDifferences: stringDifferencesParcoursCampagne.presentationParcoursResultatsAttendus,
+                            idCollapse: 'diffGlobalParcoursCampagne'
+                        }
+                    )
+                }}
             {% endif %}
             <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Rythme de formation</dt>
             <dd>
@@ -63,6 +99,15 @@
                 })
                 }}
             {% endif %}
+            {% if stringDifferencesParcoursCampagne.rythmeFormationParcours is defined %}
+                {{ include('communs/_comparaison_versioning_no_button.html.twig',
+                        {
+                            textDifferences: stringDifferencesParcoursCampagne.rythmeFormationParcours,
+                            idCollapse: 'diffGlobalParcoursCampagne'
+                        }
+                    )
+                }}
+            {% endif %}
             <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Précisions sur le rythme de formation</dt>
             <dd>
                 {% if parcours.rythmeFormationTexte != null and parcours.rythmeFormationTexte != '' %}
@@ -73,6 +118,24 @@
                 </span>
                 {% endif %}
             </dd>
+            {% if stringDifferencesParcours.rythmeFormationTexteParcours is defined %}
+                {{ include('communs/_comparaison_versioning_no_button.html.twig',
+                        {
+                            textDifferences: stringDifferencesParcours.rythmeFormationTexteParcours,
+                            idCollapse: 'diffGlobalParcours'
+                        }
+                    )
+                }}
+            {% endif %}
+            {% if stringDifferencesParcoursCampagne.rythmeFormationTexteParcours is defined %}
+                {{ include('communs/_comparaison_versioning_no_button.html.twig',
+                        {
+                            textDifferences: stringDifferencesParcoursCampagne.rythmeFormationTexteParcours,
+                            idCollapse: 'diffGlobalParcoursCampagne'
+                        }
+                    )
+                }}
+            {% endif %}
         </dl>
     </div>
 </div>
