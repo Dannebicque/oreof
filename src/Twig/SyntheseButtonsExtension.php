@@ -43,6 +43,7 @@ final class SyntheseButtonsExtension extends AbstractExtension
             $isVersion,
             $this->authorizationChecker->isGranted('ROLE_ADMIN'),
             $etat === ['valide_a_publier' => 1] || $etat === ['publie' => 1],
+            $parcours->getParcoursOrigine() === null
         );
 
         return $this->resolver->resolve($parcours, $context);

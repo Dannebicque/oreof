@@ -51,9 +51,16 @@ final class DefaultSyntheseButtonsProvider implements SyntheseButtonsProviderInt
             return new SyntheseButtonSet($checks, $exports, [], true);
         }
 
-        $exports = [
-            new SyntheseButton('Export MCCC Version (xlsx)', 'app_parcours_mccc_export_versionning', ['parcours' => $id, '_format' => 'xlsx'], 'btn btn-warning d-block mt-1'),
-        ];
+        if (!$context->isNewParcoursForCampaign()) {
+            $exports = [
+                new SyntheseButton('Export MCCC Version (xlsx)', 'app_parcours_mccc_export_versionning', ['parcours' => $id, '_format' => 'xlsx'], 'btn btn-warning d-block mt-1'),
+            ];
+        } else {
+            $exports = [
+                new SyntheseButton('Export MCCC (xlsx)', 'app_parcours_mccc_export', ['parcours' => $id, '_format' => 'xlsx'], 'btn btn-outline-primary d-block mt-1'),
+                new SyntheseButton('Export simplifié des MCCC (xlsx)', 'app_parcours_mccc_export_light', ['parcours' => $id, '_format' => 'xlsx'], 'btn btn-outline-primary d-block mt-1'),
+            ];
+        }
 
         return new SyntheseButtonSet($checks, $exports);
     }
