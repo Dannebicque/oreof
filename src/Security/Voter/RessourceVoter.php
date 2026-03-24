@@ -184,14 +184,16 @@ class RessourceVoter extends Voter
     private function checkFormation(UserProfil $userProfil, mixed $object, string $attribute): bool
     {
         if ($object instanceof Formation) {
-            $isProprietaire = (($userProfil->getFormation() === $object && ($object->getCoResponsable()?->getId() === $userProfil->getUser()?->getId() || $object->getResponsableMention()?->getId() === $userProfil->getUser()?->getId())) || ($userProfil->getComposante() === $object->getComposantePorteuse() && $object->getComposantePorteuse()?->getResponsableDpe()?->getId() === $userProfil->getUser()?->getId()));
-
+            // if ($attribute === 'show') {
+            $isProprietaire = ($userProfil->getFormation() === $object);
+            /* } else {
+                 $isProprietaire = (($userProfil->getFormation() === $object && ($object->getCoResponsable()?->getId() === $userProfil->getUser()?->getId() || $object->getResponsableMention()?->getId() === $userProfil->getUser()?->getId())) || ($userProfil->getComposante() === $object->getComposantePorteuse() && $object->getComposantePorteuse()?->getResponsableDpe()?->getId() === $userProfil->getUser()?->getId()));
+           }*/
 //todo: gérer le workflow?
             $canAccess =
                 $object->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_TEXTE ||
                 $object->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_MCCC_TEXTE ||
                 $object->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_MCCC ||
-                $object->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_PARCOURS ||
                 $object->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_PARCOURS ||
                 $object->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION;
 
@@ -209,6 +211,7 @@ class RessourceVoter extends Voter
             if ($attribute === 'manage') {
                 $canAccess = $canAccess || $object->getEtatReconduction() === TypeModificationDpeEnum::OUVERT;
             }
+
 
             return $canAccess && $isProprietaire;
         }
