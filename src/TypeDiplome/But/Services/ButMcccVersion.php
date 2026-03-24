@@ -201,11 +201,9 @@ class ButMcccVersion extends AbstractButMccc
 
                     $totalCoeffAvant[$ue->getOrdre()] = ['Ressource' => 0, 'Sae' => 0];
                     $totalCoeffApres[$ue->getOrdre()] = ['Ressource' => 0, 'Sae' => 0];
-
                     foreach ($ue->getElementConstitutifs() as $keyEc => $ec) {
                         $fiche = $ec->getFicheMatiere();
                         $diffFiche = $diffUe['elementConstitutifs'][$keyEc];
-
                         if ($fiche !== null) {
                             if ($fiche->getTypeMatiere() === FicheMatiere::TYPE_MATIERE_RESSOURCE) {
                                 $tabFichesRessources[$fiche->getSigle()]['ec'] = $ec;

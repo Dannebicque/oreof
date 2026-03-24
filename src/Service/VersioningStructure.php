@@ -313,10 +313,13 @@ class VersioningStructure
         if ($this->isBut) {
             if ($ecOriginal === null && $ecNouveau !== null) {
                 $diff['mcccs'] = $this->compareMcccsBUT(null, $ecNouveau->elementConstitutif->getFicheMatiere()->getMcccs());
+                $diff['ects'] = new DiffObject(null, $ecNouveau->elementConstitutif->getEcts());
             } elseif ($ecOriginal !== null && $ecNouveau === null) {
                 $diff['mcccs'] = $this->compareMcccsBUT($ecOriginal->elementConstitutif->getFicheMatiere()->getMcccs(), null);
+                $diff['ects'] = new DiffObject($ecOriginal->heuresEctsEc->ects, null);
             } else {
                 $diff['mcccs'] = $this->compareMcccsBUT($ecOriginal->elementConstitutif->getFicheMatiere()->getMcccs(), $ecNouveau->elementConstitutif->getFicheMatiere()->getMcccs());
+                $diff['ects'] = new DiffObject($ecOriginal->heuresEctsEc->ects, $ecNouveau->elementConstitutif->getEcts());
             }
 
         } else {
@@ -573,14 +576,12 @@ class VersioningStructure
                 if (is_array($mcccNouveau)) {
                     $mcccNouveau = $this->createMcccFromArray($mcccNouveau);
                 }
-//                dump($mcccNouveau);
                 $cleUnique = $mcccNouveau->getCleUnique();
                 $diff[$cleUnique]['pourcentage'] = new DiffObject($mcccNouveau->getPourcentage() !== 0.0 ? $mcccNouveau->getPourcentage() : '', $t[$cleUnique]['pourcentage'] ?? null);
                 $diff[$cleUnique]['nbEpreuves'] = new DiffObject($mcccNouveau->getNbEpreuves() !== 0 ? $mcccNouveau->getNbEpreuves() : '', $t[$cleUnique]['nbEpreuves'] ?? null);
                 $diff[$cleUnique]['libelle'] = new DiffObject($mcccNouveau->getLibelle(), $t[$cleUnique]['libelle'] ?? null);
 
             }
-//            dump($diff);
         } else {
             foreach ($mcccsNouveau as $mcccNouveau) {
                 $t[$mcccNouveau->getCleUnique()]['pourcentage'] = $mcccNouveau->getPourcentage() !== 0.0 ? $mcccNouveau->getPourcentage() : '';
