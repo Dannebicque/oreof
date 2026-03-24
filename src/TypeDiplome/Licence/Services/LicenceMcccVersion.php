@@ -41,6 +41,7 @@ class LicenceMcccVersion extends AbstractLicenceMccc
     //todo: gérer la date de vote
 
     public function __construct(
+        private LicenceMccc $licenceMccc,
         KernelInterface                   $kernel,
         protected ClientInterface         $client,
         protected CalculStructureParcoursLicence $calculStructureParcours,
@@ -64,7 +65,14 @@ class LicenceMcccVersion extends AbstractLicenceMccc
     {
         $rep = $this->genereExcelLicenceMccc($anneeUniversitaire, $parcours, $dateCfvu, $dateConseil, $versionFull);
         if ($rep === false) {
-            return false;
+            //fallback, on revient sur la version sans version
+            return $this->licenceMccc->genereExcelLicenceMccc(
+                $anneeUniversitaire,
+                $parcours,
+                $dateCfvu,
+                $dateConseil,
+                $versionFull
+            );
         }
         return $this->excelWriter->genereFichier($this->fileName);
     }
