@@ -65,14 +65,7 @@ class LicenceMcccVersion extends AbstractLicenceMccc
     {
         $rep = $this->genereExcelLicenceMccc($anneeUniversitaire, $parcours, $dateCfvu, $dateConseil, $versionFull);
         if ($rep === false) {
-            //fallback, on revient sur la version sans version
-            $this->licenceMccc->genereExcelLicenceMccc(
-                $anneeUniversitaire,
-                $parcours,
-                $dateCfvu,
-                $dateConseil,
-                $versionFull
-            );
+            return false;
         }
         return $this->excelWriter->genereFichier($this->fileName);
     }
