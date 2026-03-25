@@ -162,6 +162,7 @@ class ParcoursDupliquer
                     $newFiche = clone $ec->getFicheMatiere();
                     $newFiche->setFicheMatiereOrigineCopie(null);
                     $date = new DateTime();
+                    $newFiche->setResponsableFicheMatiere(null);
                     $newFiche->setSlug($newFiche->getSlug() . '-' . $date->format('YmdHis'));
                     $newFiche->setParcours($newParcours);
 
