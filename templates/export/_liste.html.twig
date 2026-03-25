@@ -41,19 +41,17 @@
                                     class="check-all"
                                     name="dpes[]"
                                     value="{{ dpe.id }}"
-                            > {{ dpe.id }}
+                            >
                         </label>
                     </div>
                 </td>
                 <td>
                     {{ formation.typeDiplome != null ? formation.typeDiplome.libelle : 'Non défini' }}
-
                 </td>
                 <td>
-                    {{ formation.display }} {{ formation.id }}
+                    {{ formation.display }}
                 </td>
                 <td>
-                    {{ parcours.id }}
                     {% if parcours.isParcoursDefaut %}
                         Sans parcours
                     {% else %}

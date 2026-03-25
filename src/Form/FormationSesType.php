@@ -153,7 +153,11 @@ class FormationSesType extends AbstractType
 //                'autocomplete' => true,
 //                'attr' => ['data-action' => 'change->formation#changeResponsableMention']
 //            ])
-
+            // ->add('coResponsable', EntityType::class, [
+            //     'class' => User::class,
+            //     'choice_label' => 'display',
+            //     'autocomplete' => true,
+            // ])
             ->addEventListener(
                 FormEvents::POST_SUBMIT,
                 static function (FormEvent $event) use ($mentionRepository) {

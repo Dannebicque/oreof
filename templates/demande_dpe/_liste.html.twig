@@ -157,6 +157,20 @@
                     <i class="{{ iconEdit }}"></i>
                     <span> modifier</span>
                 </button>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <button
+                            data-action="click->crud#delete"
+                            data-crud-url-param="{{ path('app_demande_dpe_delete', {'id': demande.id}) }}"
+                            data-crud-csrf-param="{{ csrf_token('delete' ~ demande.id) }}"
+                            class="btn btn-sm text-danger"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="bottom"
+                            title="Supprimer la demande DPE"
+                    >
+                        <i class="{{ iconDelete }}"></i>
+                        <span> supprimer</span>
+                    </button>
+                {% endif %}
             </td>
         </tr>
     {% else %}

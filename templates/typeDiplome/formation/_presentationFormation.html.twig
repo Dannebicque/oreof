@@ -16,6 +16,15 @@
                         }
                     ) }}
                 {% endif %}
+                {% if stringDifferencesFormationCampagne.presentationFormationContenuFormation is defined %}
+                    {{ include('communs/_comparaison_versioning_no_button.html.twig',
+                            {
+                                textDifferences: stringDifferencesFormationCampagne.presentationFormationContenuFormation,
+                                idCollapse: 'diffGlobalParcoursCampagne'
+                            }
+                        )
+                    }}
+                {% endif %}
                 <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Résultats attendus de la formation
                 </dt>
                 <dd>{{ formation.resultatsAttendus|raw }}</dd>
@@ -26,6 +35,15 @@
                             idCollapse: 'diffGlobalParcours'
                         }
                     ) }}
+                {% endif %}
+                {% if stringDifferencesFormationCampagne.presentationFormationResultatsAttendus is defined %}
+                    {{ include('communs/_comparaison_versioning_no_button.html.twig',
+                            {
+                                textDifferences: stringDifferencesFormationCampagne.presentationFormationResultatsAttendus,
+                                idCollapse: 'diffGlobalParcoursCampagne'
+                            }
+                        )
+                    }}
                 {% endif %}
                 <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Rythme de formation</dt>
                 <dd>
@@ -59,6 +77,15 @@
                             idCollapse: 'diffGlobalParcours'
                         }
                     ) }}
+                {% endif %}
+                {% if stringDifferencesFormationCampagne.presentationFormationObjectifsFormation is defined %}
+                    {{ include('communs/_comparaison_versioning_no_button.html.twig',
+                            {
+                                textDifferences: stringDifferencesFormationCampagne.presentationFormationObjectifsFormation,
+                                idCollapse: 'diffGlobalParcoursCampagne'
+                            }
+                        )
+                    }}
                 {% endif %}
             </dl>
         </div>

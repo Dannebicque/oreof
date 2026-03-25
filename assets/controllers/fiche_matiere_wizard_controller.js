@@ -14,6 +14,10 @@ export default class extends Controller {
     'synthese',
   ]
 
+  currentStep = 1
+
+  currentType = ''
+
   static values = {
     url: String,
     urlSynthese: String,
@@ -21,12 +25,15 @@ export default class extends Controller {
   }
 
   connect() {
+    this.currentStep = 1
+    this.currentType = ''
     this._loadSynthese()
-    this._loadStep(1)
+    this._loadStep(this.currentStep, this.currentType)
   }
 
   refreshStep() {
-    this._loadStep(2)
+    this._loadSynthese()
+    this._loadStep(this.currentStep, this.currentType)
   }
 
   async _loadSynthese() {
@@ -39,6 +46,8 @@ export default class extends Controller {
   }
 
   async _loadStep(step, type = '') {
+    this.currentStep = step
+    this.currentType = type
     if (type !== '') {
       const response = await fetch(`${this.urlValue + this.ficheMatiereValue}/${step}/${type}`)
       this.contentTarget.innerHTML = await response.text()

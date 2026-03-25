@@ -58,9 +58,10 @@ class UniversityHandler implements TypeDiplomeHandlerInterface
     public const TEMPLATE_FOLDER = 'licence';
     public const SOURCE = 'licence';
     public const TEMPLATE_FORM_MCCC = 'licence.html.twig';
+    public const NB_ANNEE = 3;
 
     /**
-     * @var TypeEpreuve[]|array|object[]
+     * @var TypeEpreuve[]|array
      */
     private array $typeEpreuves;
 
@@ -321,7 +322,19 @@ class UniversityHandler implements TypeDiplomeHandlerInterface
 
     public function getMcccs(ElementConstitutif|FicheMatiere $elementConstitutif): array|Collection
     {
-        $mcccs = $elementConstitutif->getMcccs();
+        // Source canonique: évite les collections inverses potentiellement vides/stales après remove+add.
+        if ($elementConstitutif->getId() !== null) {
+            $criteria = $elementConstitutif instanceof FicheMatiere
+                ? ['ficheMatiere' => $elementConstitutif]
+                : ['ec' => $elementConstitutif];
+
+            $mcccs = $this->entityManager
+                ->getRepository(Mccc::class)
+                ->findBy($criteria, ['numeroSession' => 'ASC', 'numeroEpreuve' => 'ASC', 'id' => 'ASC']);
+        } else {
+            $mcccs = $elementConstitutif->getMcccs()->toArray();
+        }
+
         $tabMcccs = [];
 
         if ($elementConstitutif->getTypeMccc() === 'cci') {
@@ -525,7 +538,7 @@ class UniversityHandler implements TypeDiplomeHandlerInterface
                 return false;
             }
 
-            $totPourcentage += $mccc->getPourcentage();
+            $totPourcentage += $mccc->getPourcentage() * $mccc->getNbEpreuves();
 
             if ($this->typeEpreuveHasDuree($mccc->getTypeEpreuve()[0]) && $mccc->getDuree() === null) {
                 return false;
@@ -567,19 +580,12 @@ class UniversityHandler implements TypeDiplomeHandlerInterface
 
         switch ($owner->getTypeMccc()) {
             case 'cc':
-                if (isset($mcccs[2]) && !isset($mcccs[2]['et']) && !is_array($mcccs[2]['et'])) {
+
+            if (isset($mcccs[2]) && !isset($mcccs[2]['et']) && !is_array($mcccs[2]['et'])) {
                     return false;
                 }
 
                 if (!$this->verificationEt($mcccs[2]['et'])) {
-                    return false;
-                }
-
-                if (isset($mcccs[1]) && !isset($mcccs[1]['cc']) && count($mcccs[1]['cc']) !== 1) {
-                    return false;
-                }
-
-                if ($mcccs[1]['cc'][1]->getPourcentage() === null || $mcccs[1]['cc'][1]->getPourcentage() !== 50.0) {
                     return false;
                 }
 
@@ -592,21 +598,17 @@ class UniversityHandler implements TypeDiplomeHandlerInterface
                     if ($mccc->getPourcentage() === null || $mccc->getPourcentage() === 0.0) {
                         return false;
                     }
-                    $totPourcentage += $mccc->getPourcentage();
+                    $totPourcentage += $mccc->getPourcentage() * $mccc->getNbEpreuves();
                 }
                 return $totPourcentage === 100.0;
             case 'cci':
-                if (isset($mcccs[1]) && !isset($mcccs[1]['cc'])) {
-                    return false;
-                }
-
-                if (count($mcccs[1]['cc']) < 3) {
+                if (count($mcccs) < 3) {
                     return false;
                 }
 
                 $totPourcentage = 0.0;
-                foreach ($mcccs[1]['cc'] as $mccc) {
-                    if ($mccc->getPourcentage() === null || $mccc->getPourcentage() === 0.0) {
+                foreach ($mcccs as $mccc) {
+                    if ($mccc->getPourcentage() === null || $mccc->getPourcentage() === 0.0 || $mccc->getPourcentage() > 50) {
                         return false;
                     }
                     $totPourcentage += $mccc->getPourcentage();
@@ -683,7 +685,7 @@ class UniversityHandler implements TypeDiplomeHandlerInterface
         return false;
     }
 
-    public function getDisplayMccc(array $mcccs, string $typeMccc): array
+    public function getDisplayMccc(array $mcccs, string $typeMccc = ''): array
     {
         $mccc = new Dto\Mccc($mcccs, $typeMccc, $this->typeEpreuves);
         $mccc->calculDisplayMccc();

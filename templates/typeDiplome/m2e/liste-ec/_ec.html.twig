@@ -1,0 +1,118 @@
+<tr style="{% if enfant %}border-left: 2px solid dodgerblue{% endif %}">
+    <th style="padding-left: 20px" scope="row">
+        {{ ec.elementConstitutif.code }} {{ ec.elementConstitutif.display }} {% if raccrocheUe == true %}<i
+                class="fa fa-link"></i>{% endif %}
+        {% if is_granted('ROLE_ADMIN') %}<span style="font-weight: normal">
+            (#{{ ec.elementConstitutif.id }})</span>{% endif %}
+    </th>
+    <td>
+        {% if ec.elementConstitutif.natureUeEc != null and ec.elementConstitutif.natureUeEc.isLibre == true %}
+            <span class="badge bg-info">EC Libre</span>
+        {% elseif ec.elementConstitutif.ecParent == null and ec.elementConstitutif.natureUeEc != null and ec.elementConstitutif.natureUeEc.isChoix == true %}
+            <span class="badge bg-info">EC à choix</span>
+        {% elseif ec.elementConstitutif.ficheMatiere != null %}
+            {# todo: isGranted ? #}
+            {% if
+                isAccessible(dpeParcours, 'cfvu') and
+                ec.elementConstitutif.ficheMatiere.parcours != null and ec.elementConstitutif.ficheMatiere.parcours.id == parcours.id and isSemestreRaccroche == false and raccrocheUe == false %}
+                <a
+                        href="{{ path('app_fiche_matiere_edit',{slug: ec.elementConstitutif.ficheMatiere.slug}) }}"
+                        class="btn btn-sm btn-outline-info"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="bottom"
+                        title="Modifier la fiche EC/matière"
+                >
+                    <i class="fal fa-file"></i>
+                    {% if ec.elementConstitutif.ficheMatiere.remplissage.isFull() == true %}
+                        <span class="badge bg-success"> Complet</span>
+                    {% else %}
+                        <span class="badge bg-warning"> À compléter</span>
+                    {% endif %}
+                </a>
+            {% else %}
+                <a
+                        href="{{ path('app_fiche_matiere_show',{slug: ec.elementConstitutif.ficheMatiere.slug}) }}"
+                        class="btn btn-sm btn-outline-info"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="bottom"
+                        target="_blank"
+                        title="Voir la fiche EC/matière"
+                >
+                    <span class="badge bg-info"> Voir la fiche</span>
+                </a>
+            {% endif %}
+        {% else %}
+            <span class="badge bg-danger"> Erreur</span>
+        {% endif %}
+    </td>
+    <td>
+        <label for="typeEc_{{ ec.elementConstitutif.id }}" class="sr-only">Type EC</label>
+        {% if isAccessible(dpeParcours, 'cfvu') %} {# todo: isGranted ? #}
+            <select
+                    class="form-select"
+                    name="typeEc_{{ ec.elementConstitutif.id }}"
+                    id="typeEc_{{ ec.elementConstitutif.id }}"
+                    data-bs-toggle="tooltip"
+                    {% if raccrocheUe %}disabled{% endif %}
+                    data-bs-placement="bottom"
+                    title="Type EC"
+                    {{ stimulus_action('parcours--ec', 'changeTypeEc', 'change', {
+                        ec:ec.elementConstitutif.id
+                    }) }}
+            >
+                <option value="">Choisir dans la liste</option>
+                {% for typeEc in typesEc %}
+                    <option
+                            value="{{ typeEc.id }}"
+                            {% if ec.elementConstitutif.typeEc != null and ec.elementConstitutif.typeEc.id == typeEc.id %}selected{% endif %}>
+                        {{ typeEc.libelle }}
+                    </option>
+                {% endfor %}
+            </select>
+        {% else %}
+            {% if ec.elementConstitutif.typeEc != null %}{{ ec.elementConstitutif.typeEc.libelle }}{% else %}<span
+                    class="text-danger">Non défini</span>{% endif %}
+        {% endif %}
+    </td>
+    <td>
+        {{ component('badge_ects', {
+            elementConstitutif: ec.elementConstitutif,
+            parcours: parcours,
+        }) }}
+    </td>
+    <td>
+        {% if ec.elementsConstitutifsEnfants|length == 0 %}
+            {{ component('badge_bcc', {
+                elementConstitutif: ec.elementConstitutif,
+                parcours: parcours,
+                dpeParcours: dpeParcours,
+                ue: ue.ue,
+                editable: not raccrocheUe,
+                deplacer: true,
+                texte: true
+            }) }}
+        {% endif %}
+    </td>
+    <td>
+        {{ component('badge_heures', {
+            elementConstitutif: ec.elementConstitutif,
+            parcours: parcours,
+            dpeParcours: dpeParcours,
+            ue: ue.ue,
+            editable: not raccrocheUe,
+            deplacer: true,
+            texte: true
+        }) }}
+    </td>
+    <td>
+        {{ component('badge_mccc', {
+            elementConstitutif: ec.elementConstitutif,
+            parcours: parcours,
+            dpeParcours: dpeParcours,
+            ue: ue.ue,
+            editable: not raccrocheUe,
+            deplacer: true,
+            texte: true
+        }) }}
+    </td>
+</tr>

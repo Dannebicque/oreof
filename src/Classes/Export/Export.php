@@ -89,6 +89,7 @@ class Export
                 return $this->exportCap();
             case 'fiabilisation':
                 return $this->exportFiabilisation();
+            case 'fiches':
             case 'fiches_matieres':
                 return $this->exportFicheMatiere();
             case 'seip':

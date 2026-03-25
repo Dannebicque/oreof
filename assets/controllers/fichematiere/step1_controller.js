@@ -22,6 +22,8 @@ export default class extends Controller {
   static values = {
     url: String,
     urlMutualise: String,
+    urlImpacts: String,
+    urlRemoveAll: String,
   }
 
   connect() {
@@ -129,18 +131,81 @@ export default class extends Controller {
     })
   }
 
-  changeEnseignementMutualise(event) {
+  async changeEnseignementMutualise (event) {
+    const newValue = parseInt(event.target.value, 10)
+
+    if (newValue === 0) {
+      // Récupérer la liste des impacts
+      const response = await fetch(this.urlImpactsValue)
+      const impactsHtml = await response.text()
+
+      // Configurer et afficher la modale de confirmation
+      const modal = new Modal(document.getElementById('modal-confirm'))
+      document.getElementById('modal-confirm-title').innerHTML = 'Désactiver la mutualisation'
+      document.getElementById('modal-confirm-body').innerHTML = impactsHtml
+
+      // Mettre à jour le libellé du bouton de confirmation
+      const btnConfirm = document.getElementById('btn-confirm-valide')
+      btnConfirm.replaceWith(btnConfirm.cloneNode(true))
+      const freshBtn = document.getElementById('btn-confirm-valide')
+      freshBtn.textContent = 'Confirmer et supprimer les liaisons'
+      freshBtn.classList.remove('btn-danger')
+      freshBtn.classList.add('btn-warning')
+
+      let confirmed = false
+
+      freshBtn.addEventListener('click', async () => {
+        confirmed = true
+        // Appel DELETE pour supprimer toutes les liaisons et notifier
+        const res = await fetch(this.urlRemoveAllValue, { method: 'DELETE' })
+        if (res.status === 200) {
+          const data = await res.json()
+          if (data.mailErrors > 0) {
+            callOut('Mutualisation désactivée. Les notifications in-app ont été créées, mais certains emails n\'ont pas pu être envoyés.', 'warning')
+          } else {
+            callOut('Mutualisation désactivée. Les responsables de parcours ont été notifiés par email et dans l’application.', 'success')
+          }
+          document.getElementById('coursMutualises').style.display = 'none'
+          // La mise à false est déjà effectuée côté serveur dans remove-all
+        } else {
+          confirmed = false
+          callOut('Erreur lors de la désactivation de la mutualisation', 'danger')
+          const ouiRadio = document.querySelector(`input[name="${event.target.name}"][value="1"]`)
+          if (ouiRadio) {
+            ouiRadio.checked = true
+          }
+        }
+      }, { once: true })
+
+      // Si l'utilisateur ferme la modale sans confirmer, remettre le radio sur "Oui"
+      document.getElementById('modal-confirm').addEventListener('hidden.bs.modal', () => {
+        if (!confirmed) {
+          const ouiRadio = document.querySelector(`input[name="${event.target.name}"][value="1"]`)
+          if (ouiRadio) {
+            ouiRadio.checked = true
+          }
+        }
+        // Remettre le bouton dans son état d'origine
+        const btn = document.getElementById('btn-confirm-valide')
+        if (btn) {
+          btn.textContent = 'Confirmer'
+          btn.classList.remove('btn-warning')
+          btn.classList.add('btn-danger')
+        }
+      }, { once: true })
+
+      modal.show()
+      return
+    }
+
+    // Passage à true : comportement normal
     this._save({
       field: 'enseignementMutualise',
       action: 'yesNo',
       value: event.target.value,
     })
-    if (parseInt(event.target.value, 10) === 1) {
-      document.getElementById('coursMutualises').style.display = 'block'
-      this._loadMutualise()
-    } else {
-      document.getElementById('coursMutualises').style.display = 'none'
-    }
+    document.getElementById('coursMutualises').style.display = 'block'
+    this._loadMutualise()
   }
 
   isMutualise(event) {

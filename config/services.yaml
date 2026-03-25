@@ -1,3 +1,4 @@
+# yaml-language-server: $schema=../vendor/symfony/dependency-injection/Loader/schema/services.schema.json
 # This file is the entry point to configure your own services.
 # Files in the packages/ subdirectory configure your dependencies.
 
@@ -52,12 +53,22 @@ services:
     _instanceof:
       App\Workflow\Validator\StepValidatorInterface:
         tags: [ 'workflow.validator' ]
+      App\TypeDiplome\TypeDiplomeHandlerInterface:
+        tags: [ 'app.type_diplome_handler' ]
+      App\Service\Synthese\SyntheseButtonsProviderInterface:
+        tags: [ 'app.synthese_buttons_provider' ]
+  #      App\Workflow\StepCheckInterface:
+  #        tags: [ 'app.workflow.step_check' ]
       App\Email\Vars\VariableProviderInterface:
         tags: [ 'app.variable_provider' ]
 
     App\TypeDiplome\TypeDiplomeResolver:
       arguments:
         $handlersByCode: !tagged_locator { tag: 'app.type_diplome_handler', index_by: 'code' }
+
+    App\Service\Synthese\SyntheseButtonsResolver:
+      arguments:
+        $providers: !tagged app.synthese_buttons_provider
 
     App\Service\TranslationFileManager:
         arguments:

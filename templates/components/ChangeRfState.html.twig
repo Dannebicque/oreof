@@ -42,8 +42,8 @@
                                     {% set place = this.getPlace(demande) %}
                                     {% if this.process[place] is defined %}
                                         {% if
-                                            is_granted('MANAGE', {route: 'app_composante', subject: this.formation})  or
-                                            is_granted('MANAGE', {route: 'app_formation', subject: this.formation}) or is_granted('ROLE_ADMIN') %}
+                                            (is_granted('MANAGE', {route: 'app_composante', subject: this.formation}) and place != 'soumis_ses' and place != 'soumis_cfvu')  or
+                                            (is_granted('MANAGE', {route: 'app_formation', subject: this.formation}) and place != 'soumis_ses' and place != 'soumis_cfvu') or is_granted('ROLE_ADMIN') %}
                                         {% for key, state in hasTransitions(demande, 'changeRf') %}
                                             {% for keyTrans, transition in state %}
                                                 <div class="col-{{ 6 / state|length }} d-grid">
@@ -104,15 +104,15 @@
                                         <i class="fal {{ etape.icon }}"></i>
                                     </button>
                                 {% endfor %}
-                                {# todo: uniquement si pas encore CFVU? #}
-                                <a href="{{ path('app_formation_change_rf_suppression', {demande:demande.id}) }}"
-                                   data-controller="tooltip" data-tooltip-placement-value="bottom"
-                                   data-bs-original-title="Supprimer la demande"
-                                   class="btn btn-sm btn-icon btn-icon-only btn-danger ms-4"><i
-                                            class="{{ iconDelete }}"></i>
-                                </a>
+                                {% if (place != 'soumis_ses' and place != 'soumis_cfvu') or is_granted('ROLE_ADMIN') %}
+                                    <a href="{{ path('app_formation_change_rf_suppression', {demande:demande.id}) }}"
+                                       data-controller="tooltip" data-tooltip-placement-value="bottom"
+                                       data-bs-original-title="Supprimer la demande"
+                                       class="btn btn-sm btn-icon btn-icon-only btn-danger ms-4"><i
+                                                class="{{ iconDelete }}"></i>
+                                    </a>
+                                {% endif %}
                             </div>
-
                         </div>
                     {% endfor %}
                 </div>

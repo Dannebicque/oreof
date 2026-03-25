@@ -17,7 +17,8 @@ abstract class GetUeEcts
 {
     public static function getEcts(Ue $ue, Parcours $parcours, TypeDiplome $typeDiplome): ?float
     {
-        if ($typeDiplome->getLibelleCourt() === 'BUT') {
+        //todo: gérer sur type diplome le fait que les ECTS soit sur les UE ou EC
+        if ($typeDiplome->getLibelleCourt() === 'BUT' || $typeDiplome->getLibelleCourt() === 'M2E') {
             return $ue->getEcts() ?? 0.0;
         }
 

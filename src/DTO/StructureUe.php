@@ -106,9 +106,15 @@ class StructureUe
             //parcourir le tableau, comparer les objets et retourner celui dont la somme des heures est la plus grande
             foreach ($this->heuresEctsUeEnfants as $heuresEctsUeEnfant) {
                 $this->heuresEctsUe->sommeUeEcts = max($this->heuresEctsUe->sommeUeEcts, $heuresEctsUeEnfant->sommeUeEcts);
-                if ($heuresEctsUeEnfant->sommeUeTotalPres() > $this->heuresEctsUe->sommeUeTotalPres()) {
+                if ($heuresEctsUeEnfant->sommeUeTotalPresDist() > $this->heuresEctsUe->sommeUeTotalPresDist()) {
                     $this->heuresEctsUe = $heuresEctsUeEnfant;
                 }
+//
+//                if (($heuresEctsUeEnfant->sommeUeTotalPres() === 0 && $heuresEctsUeEnfant->sommeUeTotalDist() > 0)) {
+//                    if ($heuresEctsUeEnfant->sommeUeTotalDist() > $this->heuresEctsUe->sommeUeTotalDist()) {
+//                        $this->heuresEctsUe = $heuresEctsUeEnfant;
+//                    }
+//                }
 
                 if ($heuresEctsUeEnfant->sommeUeTePres > $this->heuresEctsUe->sommeUeTePres) {
                     $this->heuresEctsUe->sommeUeTePres = $heuresEctsUeEnfant->sommeUeTePres;

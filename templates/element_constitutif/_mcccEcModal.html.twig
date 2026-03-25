@@ -2,8 +2,9 @@
 <form method="post"
         {{ stimulus_controller('ec--mccc', {
             urlUpdate: path('app_parcours_ec_update'),
+            urlRecompute: path('app_element_constitutif_mccc_recompute', {id: ec.id, parcours: parcours.id}),
         }) }}
-      action="{{ path('app_element_constitutif_mccc', {id:ec.id, parcours:parcours.id}) }}" {{ stimulus_controller('ec--mccc') }}>
+      action="{{ path('app_element_constitutif_mccc', {id:ec.id, parcours:parcours.id}) }}">
     {% if typeDiplome.libelleCourt != 'BUT' %}
         {% if isParcoursProprietaire == false %}
             <div class="alert alert-info">
@@ -107,9 +108,9 @@
 
         {% if isMcccImpose == false %}
             {% set quitusDisabled = isParcoursProprietaire == false and ec.ectsSpecifiques == false %}
-            {% set quitusChecked = 
-                (ec.quitus == true and ec.mcccSpecifiques == true) 
-                or (ec.ficheMatiere.quitus == true and ec.mcccSpecifiques == false)
+            {% set quitusChecked =
+                (ec.quitus == true and ec.mcccSpecifiques == true)
+                or (ec.ficheMatiere != null and ec.ficheMatiere.quitus == true and ec.mcccSpecifiques == false)
             %}
             {% set minimumLengthTextArea = 15 %}
             <div {{ stimulus_controller('required_text_area') }}
@@ -133,26 +134,26 @@
                     <label for="quitusArgumentaire" class="form-label">
                         Argumentaire du quitus<span class="required"></span>
                     </label>
-                    {% set quitusText = ec.mcccSpecifiques and ec.quitus 
-                        ? ec.quitusText 
-                        : ec.ficheMatiere.quitus and ec.mcccSpecifiques == false
+                    {% set quitusText = ec.mcccSpecifiques and ec.quitus
+                        ? ec.quitusText
+                        : ec.ficheMatiere != null and ec.ficheMatiere.quitus and ec.mcccSpecifiques == false
                         ? ec.ficheMatiere.quitusText
-                        : '' 
+                        : ''
                     %}
-                    <textarea 
+                    <textarea
                         class="form-control mb-2"
-                        name="ec_step4[quitus_argument]" 
+                        name="ec_step4[quitus_argument]"
                         id="quitusArgumentaire"
                         {{ stimulus_target('required_text_area', 'textarea') }}
                         {{ stimulus_action('required_text_area', 'checkTextAreaLength', 'input') }}
                         {{ quitusChecked ? 'required' : '' }}
                         {{ quitusDisabled ? 'disabled' : '' }}
-                    >{{ quitusText }}</textarea>  
+                    >{{ quitusText }}</textarea>
                     <div class="text-danger small my-2 {{ quitusText|length > minimumLengthTextArea ? 'd-none' : ''}}"
                         {{ stimulus_target('required_text_area', 'invalidFieldText') }}
                     >
                         L'argumentaire doit faire au moins 15 caractères.
-                    </div>          
+                    </div>
                 </div>
             </div>
         {% endif %}
@@ -215,6 +216,15 @@
         <i class="fal fa-floppy-disk"></i>
         Enregistrer
     </button>
+
+    {% if is_granted('ROLE_ADMIN') %}
+        <button type="button" class="btn btn-outline-warning ms-2"
+                {{ stimulus_action('ec--mccc', 'forceRecompute', 'click') }}
+        >
+            <i class="fal fa-rotate-right"></i>
+            Forcer le recalcul MCCC
+        </button>
+    {% endif %}
 
     {{ component('alerte', {type:"info", message:'tous les champs avec un <span class="text-red">*</span> sont
 obligatoires'}) }}

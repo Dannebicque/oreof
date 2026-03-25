@@ -219,7 +219,7 @@ class ParcoursRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findWithKeyword(string $keyword) {
+    public function findWithKeyword(string $keyword, CampagneCollecte $campagne) {
         $qb = $this->createQueryBuilder('p');
 
         $parcoursParDefaut = Parcours::PARCOURS_DEFAUT;
@@ -230,10 +230,12 @@ class ParcoursRepository extends ServiceEntityRepository
                     'p.id AS parcours_id', 'p.libelle AS parcours_libelle',
                     'p.sigle AS parcours_sigle', 'p.objectifsParcours',
                     'p.poursuitesEtudes', 'p.contenuFormation',
-                    'p.resultatsAttendus', 'f.id AS formation_id'
+                    'p.resultatsAttendus', 'f.id AS formation_id',
+                    'p.typeParcours AS type_parcours'
                 ]
             )
             ->join('p.formation', 'f', 'WITH', 'p.formation = f.id')
+            ->join('p.dpeParcours', 'dpe')
             ->where(
                 $qb->expr()->like('UPPER(p.objectifsParcours)', 'UPPER(:keyword)')
             )
@@ -247,24 +249,28 @@ class ParcoursRepository extends ServiceEntityRepository
                 $qb->expr()->like('UPPER(p.resultatsAttendus)', 'UPPER(:keyword)')
             )
             ->andWhere("p.libelle != :parcoursParDefaut")
+            ->andWhere('dpe.campagneCollecte = :campagne')
             ->setParameter('parcoursParDefaut', $parcoursParDefaut)
-            ->setParameter('keyword', '%' . $keyword . '%');
+            ->setParameter('keyword', '%' . $keyword . '%')
+            ->setParameter(':campagne', $campagne);
 
         return $qb->getQuery()->getResult();
     }
 
-    public function findWithKeywordForDefaultParcours(string $keyword){
+    public function findWithKeywordForDefaultParcours(string $keyword, CampagneCollecte $campagne){
         $qb = $this->createQueryBuilder('p');
 
         $parcoursParDefaut = Parcours::PARCOURS_DEFAUT;
 
         $qb = $qb
             ->join('p.formation', 'f', 'WITH', 'f.id = p.formation')
+            ->join('p.dpeParcours', 'dpe')
             ->select(
                 [
                     'f.id AS formation_id', 'f.slug AS formation_slug', 'p.id AS parcours_id',
                     'f.contenuFormation', 'f.resultatsAttendus', 'f.objectifsFormation',
-                    'p.poursuitesEtudes', 'p.libelle AS parcours_libelle', 'f.sigle AS formation_sigle'
+                    'p.poursuitesEtudes', 'p.libelle AS parcours_libelle', 'f.sigle AS formation_sigle',
+                    'p.typeParcours AS type_parcours'
                 ]
             )
             ->where(
@@ -279,8 +285,10 @@ class ParcoursRepository extends ServiceEntityRepository
                 $qb->expr()->like('UPPER(p.poursuitesEtudes)', 'UPPER(:keyword)')
             )
             ->andWhere('p.libelle = :parcoursParDefaut')
+            ->andWhere('dpe.campagneCollecte = :campagne')
             ->setParameter('parcoursParDefaut', $parcoursParDefaut)
-            ->setParameter('keyword', '%' . $keyword . '%');
+            ->setParameter('keyword', '%' . $keyword . '%')
+            ->setParameter(':campagne', $campagne);
 
             return $qb->getQuery()->getResult();
     }

@@ -59,6 +59,7 @@ class ParcoursState
     public function isEmptyOnglet1(): bool
     {
         return ($this->parcours->getContenuFormation() === null || trim($this->parcours->getContenuFormation()) === '') &&
+            ($this->parcours->getMotsCles() === null || trim($this->parcours->getMotsCles()) === '') &&
             ($this->parcours->getResultatsAttendus() === null || trim($this->parcours->getResultatsAttendus()) === '') &&
             ($this->parcours->getRespParcours() === null) &&
             ($this->parcours->getRythmeFormation() === null || trim($this->parcours->getRythmeFormationTexte()) === '');
@@ -115,6 +116,10 @@ class ParcoursState
 
         if ($this->parcours->getContenuFormation() === null || trim($this->parcours->getContenuFormation()) === '') {
             $tab['error'][] = 'Vous devez ajouter le contenu de la formation.';
+        }
+
+        if ($this->parcours->getMotsCles() === null || trim($this->parcours->getMotsCles()) === '') {
+            $tab['error'][] = 'Vous devez ajouter au moins un mot clé pour le parcours.';
         }
 
         if ($this->parcours->getResultatsAttendus() === null || trim($this->parcours->getResultatsAttendus()) === '') {

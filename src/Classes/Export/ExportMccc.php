@@ -54,7 +54,9 @@ class ExportMccc
             if ($formation !== null) {
                 $typeDiplome = $this->typeDiplomeResolver->fromFormation($formation);
                 if (null !== $typeDiplome) {
-                    foreach ($formation->getParcours() as $parcours) {
+                    $formation = $dpe->getParcours()->getFormation();
+                    $parcours = $dpe->getParcours();
+                    {
                         if ($this->format === 'xlsx') {
                             $fichier = $typeDiplome->exportAndSaveExcelMccc(
                                 $dir,

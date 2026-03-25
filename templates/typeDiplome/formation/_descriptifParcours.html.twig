@@ -27,6 +27,15 @@
                             })
                             }}
                         {% endif %}
+                        {% if stringDifferencesParcoursCampagne.stageTextParcours is defined %}
+                            {{ include('communs/_comparaison_versioning_no_button.html.twig',
+                                    {
+                                        textDifferences: stringDifferencesParcoursCampagne.stageTextParcours,
+                                        idCollapse: 'diffGlobalParcoursCampagne'
+                                    }
+                                )
+                            }}
+                        {% endif %}
                     {% else %}
                         <span class="px-2 py-1 bg-orange-50 rounded-lg text-xs font-bold text-orange-600 mt-1">Non</span>
                     {% endif %}
@@ -54,6 +63,15 @@
                                     textDifferences: stringDifferencesParcours.memoireTextParcours,
                                     idCollapse: 'diffGlobalParcours'
                             })
+                            }}
+                        {% endif %}
+                        {% if stringDifferencesParcoursCampagne.memoireTextParcours is defined %}
+                            {{ include('communs/_comparaison_versioning_no_button.html.twig',
+                                    {
+                                        textDifferences: stringDifferencesParcoursCampagne.memoireTextParcours,
+                                        idCollapse: 'diffGlobalParcoursCampagne'
+                                    }
+                                )
                             }}
                         {% endif %}
                     {% else %}

@@ -22,8 +22,10 @@ class StatsFichesMatieres
     public int $nbFichesPubliees = 0;
     public int $nbEnCoursRedaction = 0;
 
-    public function addStatsParcours(StatsFichesMatieresParcours $statsFichesMatieresParcours): void
+    public function addStatsParcours(?StatsFichesMatieresParcours $statsFichesMatieresParcours): void
     {
+        if ($statsFichesMatieresParcours !== null) {
+
         $this->nbFiches += $statsFichesMatieresParcours->nbFiches;
         $this->nbFichesValidees += $statsFichesMatieresParcours->nbFichesValidees;
         $this->nbFichesNonValideesSes += $statsFichesMatieresParcours->nbFichesNonValideesSes;
@@ -31,5 +33,6 @@ class StatsFichesMatieres
         $this->nbFichesNonValidees += $statsFichesMatieresParcours->nbFichesNonValidees;
         $this->nbFichesPubliees += $statsFichesMatieresParcours->nbFichesPubliees;
         $this->nbEnCoursRedaction += $statsFichesMatieresParcours->nbEnCoursRedaction;
+    }
     }
 }

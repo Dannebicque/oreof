@@ -1,6 +1,6 @@
 {% set formation = parcours.formation %}
 
-{{ component('parcours_manage', {parcours:parcours, id:'parcours_manage'}) }}
+{{ component('parcours_manage', {parcours:parcours, id:'parcours_manage', canSeeDifferences: canSeeDifferences ?? false }) }}
 
 <div class="card">
     <div class="card-body">

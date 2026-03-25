@@ -132,7 +132,10 @@ final class UserProfilsController extends BaseController
             };
 
             if ($event) {
-                $entityManager->remove($existingCentre);
+                if ($existingCentre instanceof UserProfil) {
+                    $entityManager->remove($existingCentre);
+                }
+
                 $eventDispatcher->dispatch($event, $event::NOTIF_REMOVE_CENTRE);
             }
         }
