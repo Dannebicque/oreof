@@ -114,6 +114,7 @@ class WorkflowExtension extends AbstractExtension
         if (array_key_exists($key, $historique)) {
             return match ($historique[$key]->getEtat()) {
                 'valide' => 'btn-success',
+                'force_admin' => 'btn-warning',
                 'reserve', 'laisserPasser' => 'btn-warning',
                 'refuse' => 'btn-danger',
                 default => 'btn-muted',

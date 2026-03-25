@@ -49,4 +49,50 @@ class ValidationProcess extends AbstractValidationProcess
 
         return [];
     }
+
+    public function getNextStepFromPlace(string $currentPlace): ?array
+    {
+        $transitions = $this->dpeParcoursWorkflow->getDefinition()->getTransitions();
+
+        // On privilégie le flux "normal" de validation quand il existe.
+        foreach ($transitions as $transition) {
+            if (!in_array($currentPlace, (array)$transition->getFroms(), true)) {
+                continue;
+            }
+
+            $meta = $this->dpeParcoursWorkflow->getMetadataStore()->getTransitionMetadata($transition);
+            if (($meta['type'] ?? null) !== 'valider') {
+                continue;
+            }
+
+            $to = (array)$transition->getTos();
+            if ($to === []) {
+                continue;
+            }
+
+            return [
+                'transition' => $transition->getName(),
+                'to' => $to[0],
+            ];
+        }
+
+        // Fallback: première transition disponible dans la définition.
+        foreach ($transitions as $transition) {
+            if (!in_array($currentPlace, (array)$transition->getFroms(), true)) {
+                continue;
+            }
+
+            $to = (array)$transition->getTos();
+            if ($to === []) {
+                continue;
+            }
+
+            return [
+                'transition' => $transition->getName(),
+                'to' => $to[0],
+            ];
+        }
+
+        return null;
+    }
 }

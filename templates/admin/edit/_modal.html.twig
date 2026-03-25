@@ -26,6 +26,30 @@
             </button>
         </div>
     </form>
+
+    {% if is_granted('ROLE_ADMIN') %}
+        <form action="{{ path('app_admin_edit_force_next', {type:type, id:id}) }}" method="post" class="mt-3">
+            <input type="hidden" name="_token" value="{{ csrf_token('admin_force_next_' ~ type ~ '_' ~ id) }}">
+            <div class="form-check">
+                <input type="hidden" name="with_history" value="0">
+                <input class="form-check-input" type="checkbox" id="with_history_{{ id }}" name="with_history" value="1"
+                       checked>
+                <label class="form-check-label" for="with_history_{{ id }}">
+                    Mettre à jour l'historique
+                </label>
+            </div>
+            <div class="mt-2">
+                <button type="submit" class="btn btn-outline-warning"
+                        {{ stimulus_action('base','sauvegardeFormModal', 'click') }}
+                        data-action="live#emit"
+                        data-event="edit"
+                >
+                    <i class="fal fa-forward"></i>
+                    Forcer l'étape suivante
+                </button>
+            </div>
+        </form>
+    {% endif %}
 </div>
 <div>
     <h3 class="modal-section-title">
