@@ -10,11 +10,10 @@
 namespace App\Classes\Export;
 
 use App\Classes\Excel\ExcelWriter;
-use App\Classes\GetElementConstitutif;
 use App\Entity\CampagneCollecte;
 use App\Entity\Parcours;
 use App\Repository\FormationRepository;
-use App\Service\ProjectDirProvider;
+use App\Service\TypeDiplomeResolver;
 use App\Utils\Tools;
 use DateTime;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -22,14 +21,12 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 class ExportBcc implements ExportInterface
 {
     private string $fileName;
-    private string $dir;
 
     public function __construct(
+        protected TypeDiplomeResolver $typeDiplomeResolver,
         protected ExcelWriter         $excelWriter,
-        ProjectDirProvider $projectDirProvider,
         protected FormationRepository $formationRepository,
     ) {
-        $this->dir = $projectDirProvider->getProjectDir() . '/public/temp/';
     }
 
     private function prepareExport(
@@ -63,122 +60,107 @@ class ExportBcc implements ExportInterface
         $this->excelWriter->getColumnDimension('A', 30);
         $this->excelWriter->getColumnDimension('B', 50);
 
-        foreach ($parcours->getSemestreParcours() as $semParc) {
+        $typeD = $this->typeDiplomeResolver->getFromParcours($parcours);
+        $dto = $typeD->calculStructureParcours($parcours, false);
+
+        foreach ($dto->semestres as $semestre) {
             $ligne = 7;
             $debutCol = $col;
-            if ($semParc->getSemestre() !== null && !$semParc->getSemestre()->isNonDispense()) {
-                if ($semParc->getSemestre()->getSemestreRaccroche() !== null) {
-                    $semestre = $semParc->getSemestre()->getSemestreRaccroche();
-                } else {
-                    $semestre = $semParc->getSemestre();
-                }
-                $nbCols = 0;
+            $ueGroups = $this->buildUeGroups($semestre);
+            $nbCols = 0;
+            foreach ($ueGroups as $group) {
+                $nbCols += $group['width'];
+            }
 
-                foreach ($semestre->getUes() as $ue) {
-                    if ($ue->getUeParent() === null) {
-                        if ($ue->getUeEnfants()->count() == 0) {
-                            $nbCols += $ue->getElementConstitutifs()->count();
-                        } else {
-                            foreach ($ue->getUeEnfants() as $uee) {
-                                $nbCols += $uee->getElementConstitutifs()->count();
-                            }
-                        }
-                    }
-                }
-                $this->excelWriter->writeCellXY($col, $ligne, 'Semestre ' . $semParc->display(), [
+            if ($nbCols === 0) {
+                continue;
+            }
+
+            $this->excelWriter->writeCellXY($col, $ligne, 'Semestre ' . $semestre->semestre->display(), [
+                'style' => 'HORIZONTAL_CENTER',
+            ]);
+            $this->excelWriter->mergeCellsCaR($col, $ligne, $col + $nbCols - 1, $ligne);
+
+            // Ligne 2: UE / UE enfant
+            $ligne++;
+            $col = $debutCol;
+            foreach ($ueGroups as $group) {
+                $this->excelWriter->writeCellXY($col, $ligne, $group['label'], [
                     'style' => 'HORIZONTAL_CENTER',
                 ]);
-                $this->excelWriter->mergeCellsCaR($col, $ligne, $col + $nbCols - 1, $ligne);
-                $ligne++;
-                $col = $debutCol;
+                $this->excelWriter->mergeCellsCaR($col, $ligne, $col + $group['width'] - 1, $ligne);
+                $col += $group['width'];
+            }
 
-                foreach ($semestre->getUes() as $ue) {
-                    if ($ue->getUeParent() === null) {
-                        if ($ue->getUeEnfants()->count() == 0) {
-                            $this->excelWriter->writeCellXY($col, $ligne, $ue->display($parcours), [
+            // Ligne 3: EC (avec fusion quand EC choix)
+            $ligne++;
+            $col = $debutCol;
+            foreach ($ueGroups as $group) {
+                foreach ($group['ecs'] as $ec) {
+                    $ecWidth = $this->getEcDisplayWidth($ec);
+                    $this->excelWriter->writeCellXY($col, $ligne, $ec->elementConstitutif->getCode(), [
+                        'style' => 'HORIZONTAL_CENTER',
+                    ]);
+                    if ($ecWidth > 1) {
+                        $this->excelWriter->mergeCellsCaR($col, $ligne, $col + $ecWidth - 1, $ligne);
+                    }
+                    $col += $ecWidth;
+                }
+            }
+
+            // Ligne 4: EC enfants (uniquement pour les EC de choix)
+            $ligne++;
+            $col = $debutCol;
+            foreach ($ueGroups as $group) {
+                foreach ($group['ecs'] as $ec) {
+                    $ecChildren = $this->getEcChildren($ec);
+                    if ($this->isChoixEc($ec) && count($ecChildren) > 0) {
+                        foreach ($ecChildren as $ecChild) {
+                            $this->excelWriter->writeCellXY($col, $ligne, $ecChild->elementConstitutif->getCode(), [
                                 'style' => 'HORIZONTAL_CENTER',
                             ]);
-                            $this->excelWriter->mergeCellsCaR($col, $ligne, $col + $ue->getElementConstitutifs()->count() - 1, $ligne);
-                            $col += $ue->getElementConstitutifs()->count();
-                        } else {
-                            foreach ($ue->getUeEnfants() as $uee) {
-                                $this->excelWriter->writeCellXY($col, $ligne, $uee->display($parcours), [
-                                    'style' => 'HORIZONTAL_CENTER',
-                                ]);
-                                $this->excelWriter->mergeCellsCaR($col, $ligne, $col + $uee->getElementConstitutifs()->count() - 1, $ligne);
-                                $col += $uee->getElementConstitutifs()->count();
-                            }
+                            $col++;
                         }
-                    }
-                }
-
-                $ligne++;
-                $col = $debutCol;
-                foreach ($semestre->getUes() as $ue) {
-                    if ($ue->getUeParent() === null) {
-                        if ($ue->getUeEnfants()->count() == 0) {
-                            foreach ($ue->getElementConstitutifs() as $ec) {
-                                $this->excelWriter->writeCellXY($col, $ligne, $ec->getCode(), [
-                                    'style' => 'HORIZONTAL_CENTER',
-                                ]);
-                                $col++;
-                            }
-                        } else {
-                            foreach ($ue->getUeEnfants() as $uee) {
-                                foreach ($uee->getElementConstitutifs() as $ec) {
-                                    $this->excelWriter->writeCellXY($col, $ligne, $ec->getCode(), [
-                                        'style' => 'HORIZONTAL_CENTER',
-                                    ]);
-                                    $col++;
-                                }
-                            }
-                        }
-                    }
-                }
-
-                $ligne++;
-
-                foreach ($parcours->getBlocCompetences() as $bcc) {
-                    foreach ($bcc->getCompetences() as $competence) {
-                        $this->excelWriter->writeCellXY(1, $ligne, $bcc->display(), ['wrap' => true]);
-                        $this->excelWriter->writeCellXY(2, $ligne, $competence->display(), ['wrap' => true]);
-                        $col = $debutCol;
-
-                        foreach ($semestre->getUes() as $ue) {
-                            if ($ue->getUeParent() === null) {
-                                if ($ue->getUeEnfants()->count() == 0) {
-                                    foreach ($ue->getElementConstitutifs() as $ec) {
-                                        $raccroche = $ec->getFicheMatiere()?->getParcours() !== $parcours;
-                                        if ($raccroche) {
-                                            $getElement = new GetElementConstitutif($ec, $parcours);
-                                            $getElement->setIsRaccroche($raccroche);
-                                            $competences = $getElement->getBccs();
-                                        } else {
-                                            $competences = $ec->getFicheMatiere()?->getCompetences();
-                                        }
-                                        $this->excelWriter->writeCellXY($col, $ligne, $competences?->contains($competence) ? 'X' : '', [
-                                            'style' => 'HORIZONTAL_CENTER',
-                                            'valign' => 'VERTICAL_CENTER'
-                                        ]);
-                                        $col++;
-                                    }
-                                } else {
-                                    foreach ($ue->getUeEnfants() as $uee) {
-                                        foreach ($uee->getElementConstitutifs() as $ec) {
-                                            $this->excelWriter->writeCellXY($col, $ligne, $competence->getFicheMatieres()->contains($ec->getFicheMatiere()) ? 'X' : '', [
-                                                'style' => 'HORIZONTAL_CENTER',
-                                                'valign' => 'VERTICAL_CENTER'
-                                            ]);
-                                            $col++;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        $ligne++;
+                    } else {
+                        $col++;
                     }
                 }
             }
+
+            // Lignes compétences
+            $ligne++;
+            foreach ($parcours->getBlocCompetences() as $bcc) {
+                foreach ($bcc->getCompetences() as $competence) {
+                    $this->excelWriter->writeCellXY(1, $ligne, $bcc->display(), ['wrap' => true]);
+                    $this->excelWriter->writeCellXY(2, $ligne, $competence->display(), ['wrap' => true]);
+                    $col = $debutCol;
+
+                    foreach ($ueGroups as $group) {
+                        foreach ($group['ecs'] as $ec) {
+                            $ecChildren = $this->getEcChildren($ec);
+                            if ($this->isChoixEc($ec) && count($ecChildren) > 0) {
+                                foreach ($ecChildren as $ecChild) {
+                                    $this->excelWriter->writeCellXY($col, $ligne, $this->isCompetenceMobilisee($ecChild, $competence->getCode()) ? 'X' : '', [
+                                        'style' => 'HORIZONTAL_CENTER',
+                                        'valign' => 'VERTICAL_CENTER',
+                                    ]);
+                                    $col++;
+                                }
+                            } else {
+                                $this->excelWriter->writeCellXY($col, $ligne, $this->isCompetenceMobilisee($ec, $competence->getCode()) ? 'X' : '', [
+                                    'style' => 'HORIZONTAL_CENTER',
+                                    'valign' => 'VERTICAL_CENTER',
+                                ]);
+                                $col++;
+                            }
+                        }
+                    }
+                    $ligne++;
+                }
+            }
+
+            $col = $debutCol + $nbCols;
+
         }
 
         $this->excelWriter->borderOutsiteInside(1, 7, $col-1, $ligne-1);
@@ -200,6 +182,125 @@ class ExportBcc implements ExportInterface
 
     public function exportLink(CampagneCollecte $campagneCollecte): string
     {
-        // TODO: Implement exportLink() method.
+        return '';
+    }
+
+    private function buildUeGroups(object $semestre): array
+    {
+        $groups = [];
+
+        foreach ($semestre->ues as $ue) {
+            if ($ue->ue->getUeParent() !== null) {
+                continue;
+            }
+
+            $uesEnfants = $this->getUesEnfants($ue);
+            if (count($uesEnfants) === 0) {
+                $groups[] = [
+                    'label' => $ue->display,
+                    'ecs' => $ue->elementConstitutifs,
+                    'width' => $this->getEcListDisplayWidth($ue->elementConstitutifs),
+                ];
+                continue;
+            }
+
+            foreach ($uesEnfants as $ueEnfant) {
+                $groups[] = [
+                    'label' => $ueEnfant->display,
+                    'ecs' => $ueEnfant->elementConstitutifs,
+                    'width' => $this->getEcListDisplayWidth($ueEnfant->elementConstitutifs),
+                ];
+            }
+        }
+
+        return $groups;
+    }
+
+    private function getUesEnfants(object $ue): array
+    {
+        if (property_exists($ue, 'uesEnfants')) {
+            return is_array($ue->uesEnfants) ? $ue->uesEnfants : iterator_to_array($ue->uesEnfants);
+        }
+
+        if (method_exists($ue, 'uesEnfants')) {
+            $children = $ue->uesEnfants();
+            return is_array($children) ? $children : iterator_to_array($children);
+        }
+
+        return [];
+    }
+
+    private function getEcChildren(object $ec): array
+    {
+        if (!property_exists($ec, 'elementsConstitutifsEnfants')) {
+            return [];
+        }
+
+        return is_array($ec->elementsConstitutifsEnfants)
+            ? $ec->elementsConstitutifsEnfants
+            : iterator_to_array($ec->elementsConstitutifsEnfants);
+    }
+
+    private function isChoixEc(object $ec): bool
+    {
+        return $ec->elementConstitutif->getNatureUeEc()?->isChoix() === true;
+    }
+
+    private function getEcDisplayWidth(object $ec): int
+    {
+        $ecChildren = $this->getEcChildren($ec);
+        if ($this->isChoixEc($ec) && count($ecChildren) > 0) {
+            return count($ecChildren);
+        }
+
+        return 1;
+    }
+
+    private function getEcListDisplayWidth(iterable $ecs): int
+    {
+        $width = 0;
+        foreach ($ecs as $ec) {
+            $width += $this->getEcDisplayWidth($ec);
+        }
+
+        return $width;
+    }
+
+    private function isCompetenceMobilisee(object $ecStructure, string $competenceCode): bool
+    {
+        if (!property_exists($ecStructure, 'bccs')) {
+            return false;
+        }
+
+        $bccs = $ecStructure->bccs;
+        if (is_array($bccs)) {
+            if (array_key_exists($competenceCode, $bccs)) {
+                return true;
+            }
+
+            foreach ($bccs as $bcc) {
+                if (is_object($bcc) && method_exists($bcc, 'getCode') && $bcc->getCode() === $competenceCode) {
+                    return true;
+                }
+
+                if (is_string($bcc) && $bcc === $competenceCode) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        foreach ($bccs as $bcc) {
+            if (is_object($bcc) && method_exists($bcc, 'getCode') && $bcc->getCode() === $competenceCode) {
+                return true;
+            }
+
+            if (is_string($bcc) && $bcc === $competenceCode) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
