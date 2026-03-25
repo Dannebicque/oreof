@@ -10,6 +10,8 @@
 namespace App\Repository;
 
 use App\Entity\Notification;
+use App\Entity\Parcours;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -44,5 +46,28 @@ class NotificationRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+    /**
+     * @return Notification[]
+     */
+    public function findMutualisationPendingForUser(User $user, ?Parcours $parcours = null): array
+    {
+        $notifications = $this->findBy([
+            'destinataire' => $user,
+            'isRead' => false,
+        ], [
+            'created' => 'DESC',
+        ]);
+
+        return array_values(array_filter(
+            $notifications,
+            static fn(Notification $notification): bool => $notification->isPendingForParcours($parcours?->getId())
+        ));
+    }
+
+    public function countMutualisationPendingForUser(User $user, ?Parcours $parcours = null): int
+    {
+        return count($this->findMutualisationPendingForUser($user, $parcours));
     }
 }

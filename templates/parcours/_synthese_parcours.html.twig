@@ -1,6 +1,7 @@
 {% set formation = parcours.formation %}
 
 {{ component('parcours_manage', {parcours:parcours, id:'parcours_manage', canSeeDifferences: canSeeDifferences ?? false }) }}
+{{ component('mutualisation_alerts', { user: app.user, parcours: parcours }) }}
 
 <div class="card">
     <div class="card-body">

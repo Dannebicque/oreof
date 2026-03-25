@@ -1,0 +1,33 @@
+{% if computed.count > 0 %}
+    <div class="card border-warning mb-3">
+        <div class="card-body">
+            <h3 class="small-title mb-2">Elements mutualisés modifiés a valider ({{ computed.count }})</h3>
+            <p class="text-muted mb-3">Ces notifications doivent être validées comme lues.</p>
+            <div class="list-group">
+                {% for notif in computed.notifications %}
+                    {% set payload = notif.payload ?? {} %}
+                    <div class="list-group-item d-flex justify-content-between align-items-start gap-3">
+                        <div>
+                            <div class="fw-bold">{{ payload.sourceLabel ?? notif.title }}</div>
+                            <div class="small text-muted">Parcours impacte: {{ payload.parcoursLabel ?? '-' }}</div>
+                            {% if payload.sourceUeLabel is defined and payload.sourceUeLabel %}
+                                <div class="small text-muted">UE porteuse: {{ payload.sourceUeLabel }}</div>
+                            {% endif %}
+                            {% if payload.sourceSemestreLabel is defined and payload.sourceSemestreLabel %}
+                                <div class="small text-muted">Semestre porteur: {{ payload.sourceSemestreLabel }}</div>
+                            {% endif %}
+                            {% if payload.changedFields is defined and payload.changedFields|length > 0 %}
+                                <div class="small mt-1">Champs modifiés: {{ payload.changedFields|join(', ') }}</div>
+                            {% endif %}
+                        </div>
+                        <a class="btn btn-sm btn-warning"
+                           href="{{ path('app_notification_mutualisation_valider', {id: notif.id}) }}">
+                            Valider comme lu
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endif %}
+

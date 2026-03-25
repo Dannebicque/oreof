@@ -1,0 +1,36 @@
+{% extends 'mails/base_mail.html.twig' %}
+
+{% block content %}
+    <p>Bonjour,</p>
+
+    <p>
+        Un élément mutualisé utilisé dans votre parcours <strong>{{ parcours.libelle }}
+            ({{ parcours.formation.displayLong }})</strong> a été modifié.
+    </p>
+
+    <ul>
+        <li>Type: {{ sourceType }}</li>
+        <li>Elément: {{ sourceLabel }}</li>
+        {% if sourceParcours is not null %}
+            <li>Parcours porteur: {{ sourceParcours.libelle }} ({{ sourceParcours.formation.displayLong }})</li>
+        {% endif %}
+        {% if sourceUeLabel is defined and sourceUeLabel %}
+            <li>UE porteuse: {{ sourceUeLabel }}</li>
+        {% endif %}
+        {% if sourceSemestreLabel is defined and sourceSemestreLabel %}
+            <li>Semestre porteur: {{ sourceSemestreLabel }}</li>
+        {% endif %}
+        {% if actor is not null %}
+            <li>Modification par: {{ actor.display }}</li>
+        {% endif %}
+    </ul>
+
+    {% if changedFields is defined and changedFields|length > 0 %}
+        <p>Champs modifiés: {{ changedFields|join(', ') }}</p>
+    {% endif %}
+
+    <p>
+        Merci de vous connecter à <a href="{{ product_url }}" target="_blank">ORéOF</a> pour évaluer l'impact sur votre
+        parcours et valider la prise en compte de cette modification.
+    </p>
+{% endblock %}
