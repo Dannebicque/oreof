@@ -43,11 +43,7 @@
                 </dl>
             </div>
             <div class="col-3 d-grid">
-                {% if version is defined and version != null %}
-                    {{ include('communs/_boutonSynthese_version.html.twig', {parcours: parcours, col:3}) }}
-                {% else %}
                     {{ include('communs/_boutonSynthese.html.twig', {parcours: parcours, col:3}) }}
-                {% endif %}
             </div>
         </div>
     </div>
