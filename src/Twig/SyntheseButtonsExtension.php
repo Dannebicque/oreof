@@ -44,7 +44,7 @@ final class SyntheseButtonsExtension extends AbstractExtension
             $lastDpe?->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_MCCC_TEXTE, //si modif de maquette alors version,
             $this->authorizationChecker->isGranted('ROLE_ADMIN'),
             $etat === ['valide_a_publier' => 1] || $etat === ['publie' => 1],
-            $parcours->getParcoursOrigine() === null
+            $parcours->getParcoursOrigineCopie() === null
         );
 
         return $this->resolver->resolve($parcours, $context);
