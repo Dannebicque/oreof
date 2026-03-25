@@ -18,6 +18,7 @@ final class HistoriquePvComponent
     public bool $hasHistorique = false;
     public bool $hasPv = false;
     public ?string $fichier = null;
+    public ?string $fichierOriginal = null;
 
     public function __construct(private GetHistorique $getHistorique)
     {
@@ -53,6 +54,7 @@ final class HistoriquePvComponent
             if (array_key_exists('fichier', $historique->getComplements())) {
                 $this->hasPv = true;
                 $this->fichier = $historique->getComplements()['fichier'];
+                $this->fichierOriginal = $historique->getComplements()['fichier_original'] ?? null;
             }
         }
     }

@@ -22,11 +22,11 @@ use App\Repository\DpeDemandeRepository;
 use App\Utils\Tools;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
-use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Workflow\WorkflowInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ParcoursProcess extends AbstractProcess
@@ -46,7 +46,7 @@ class ParcoursProcess extends AbstractProcess
         $parcours = $dpeParcours->getParcours();
 
         if ($parcours === null) {
-            throw new RuntimeException('Parcours non trouvé');
+            throw new \RuntimeException('Parcours non trouvé');
         }
 
         $formation = $parcours->getFormation();
@@ -66,7 +66,16 @@ class ParcoursProcess extends AbstractProcess
         return $processData;
     }
 
-    public function valideParcours(DpeParcours $dpeParcours, UserInterface $user, string|array $transition, $request, ?string $fileName = null): Response
+    public function valideParcours(
+        DpeParcours   $dpeParcours,
+        UserInterface $user,
+        string|array  $transition,
+                      $request,
+        ?string       $fileName = null,
+        ?string       $fileNameNote = null,
+        ?string       $originalFileName = null,
+        ?string       $originalFileNameNote = null,
+    ): Response
     {
         $valid = $transition;
         $motifs = [];
@@ -76,7 +85,17 @@ class ParcoursProcess extends AbstractProcess
             $dpeParcours->setEtatReconduction(TypeModificationDpeEnum::OUVERT);
         }
 
-        $reponse = $this->dispatchEventParcours($dpeParcours, $user, $place, $request, 'valide', $fileName);
+        $reponse = $this->dispatchEventParcours(
+            $dpeParcours,
+            $user,
+            $place,
+            $request,
+            'valide',
+            $fileName,
+            $fileNameNote,
+            $originalFileName,
+            $originalFileNameNote,
+        );
 
         if ($request->request->has('date')) {
             $motifs['date'] = Tools::convertDate($request->request->get('date'));
@@ -171,9 +190,29 @@ class ParcoursProcess extends AbstractProcess
         return $this->dispatchEventParcours($dpeParcours, $user, $place, $request, 'reserve');
     }
 
-    private function dispatchEventParcours(DpeParcours $dpeParcours, UserInterface $user, string $place, Request $request, string $etat, ?string $fileName = null): Response
+    private function dispatchEventParcours(
+        DpeParcours   $dpeParcours,
+        UserInterface $user,
+        string        $place,
+        Request       $request,
+        string        $etat,
+        ?string       $fileName = null,
+        ?string       $fileNameNote = null,
+        ?string       $originalFileName = null,
+        ?string       $originalFileNameNote = null,
+    ): Response
     {
-        $histoEvent = new HistoriqueParcoursEvent($dpeParcours->getParcours(), $user, $place, $etat, $request, $fileName);
+        $histoEvent = new HistoriqueParcoursEvent(
+            $dpeParcours->getParcours(),
+            $user,
+            $place,
+            $etat,
+            $request,
+            $fileName,
+            $fileNameNote,
+            $originalFileName,
+            $originalFileNameNote,
+        );
         $this->eventDispatcher->dispatch($histoEvent, HistoriqueParcoursEvent::ADD_HISTORIQUE_PARCOURS);
         return JsonReponse::success($this->translator->trans('parcours.'.$etat.'.' . $place . '.flash.success', [], 'process'));
     }

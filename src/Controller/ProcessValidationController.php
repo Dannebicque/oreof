@@ -17,22 +17,21 @@ use App\Classes\ValidationProcess;
 use App\Classes\ValidationProcessFicheMatiere;
 use App\Events\HistoriqueFormationEvent;
 use App\Events\HistoriqueParcoursEvent;
+use App\Exception\FileUploadException;
 use App\Repository\DpeParcoursRepository;
 use App\Repository\FicheMatiereRepository;
 use App\Repository\FormationRepository;
 use App\Repository\ParcoursRepository;
 use App\Service\LheoXML;
+use App\Service\SecureUploadService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class ProcessValidationController extends BaseController
 {
-    private string $dir;
-
     public function __construct(
         private readonly EventDispatcherInterface      $eventDispatcher,
         private readonly EntityManagerInterface        $entityManager,
@@ -40,9 +39,8 @@ class ProcessValidationController extends BaseController
         private readonly ValidationProcessFicheMatiere $validationProcessFicheMatiere,
         private readonly ParcoursProcess               $parcoursProcess,
         private readonly FicheMatiereProcess           $ficheMatiereProcess,
-        KernelInterface                                $kernel
+        private readonly SecureUploadService $secureUploadService,
     ) {
-        $this->dir = $kernel->getProjectDir() . '/public/uploads/conseils/';
     }
 
     #[Route('/validation/valide/{etape}', name: 'app_validation_valider')]
@@ -66,15 +64,25 @@ class ProcessValidationController extends BaseController
         $laisserPasser = false;
         switch ($type) {
             case 'parcours':
-                //upload
                 $fileName = '';
-                if ($request->files->has('file') && $request->files->get('file') !== null) {
-                    $file = $request->files->get('file');
-                    $fileName = md5(uniqid('', true)) . '.' . $file->guessExtension();
-                    $file->move(
-                        $this->dir,
-                        $fileName
-                    );
+                $fileNameNote = '';
+                $fileOriginalName = null;
+                $fileNoteOriginalName = null;
+
+                try {
+                    $uploadedFile = $this->secureUploadService->uploadFromRequest($request, 'file', 'conseils');
+                    if ($uploadedFile !== null) {
+                        $fileName = $uploadedFile->getStoredFilename();
+                        $fileOriginalName = $uploadedFile->getOriginalFilename();
+                    }
+
+                    $uploadedFileNote = $this->secureUploadService->uploadFromRequest($request, 'fileNote', 'conseils');
+                    if ($uploadedFileNote !== null) {
+                        $fileNameNote = $uploadedFileNote->getStoredFilename();
+                        $fileNoteOriginalName = $uploadedFileNote->getOriginalFilename();
+                    }
+                } catch (FileUploadException $exception) {
+                    return JsonReponse::error($exception->getPublicMessage());
                 }
 
                 $process = $this->validationProcess->getEtape($etape);
@@ -109,7 +117,16 @@ class ProcessValidationController extends BaseController
                 $processData = $this->parcoursProcess->etatParcours($parcours, $process);//todo: process??
 
                 if ($request->isMethod('POST')) {
-                    return $this->parcoursProcess->valideParcours($parcours, $this->getUser(), $transition, $request, $fileName);
+                    return $this->parcoursProcess->valideParcours(
+                        $parcours,
+                        $this->getUser(),
+                        $transition,
+                        $request,
+                        $fileName,
+                        $fileNameNote,
+                        $fileOriginalName,
+                        $fileNoteOriginalName,
+                    );
                 }
 
                 break;
@@ -361,18 +378,27 @@ class ProcessValidationController extends BaseController
         Request               $request
     ): Response {
         $fileName = null;
+        $fileNameNote = null;
+        $fileOriginalName = null;
+        $fileNoteOriginalName = null;
         if ($request->isMethod('POST')) {
             $sParcours = $request->request->get('parcours');
 
-            if ($request->files->has('file') && $request->files->get('file') !== null) {
-                $file = $request->files->get('file');
-                $fileName = md5(uniqid('', true)) . '.' . $file->guessExtension();
-                $file->move(
-                    $this->dir,
-                    $fileName
-                );
-            }
+            try {
+                $uploadedFile = $this->secureUploadService->uploadFromRequest($request, 'file', 'conseils');
+                if ($uploadedFile !== null) {
+                    $fileName = $uploadedFile->getStoredFilename();
+                    $fileOriginalName = $uploadedFile->getOriginalFilename();
+                }
 
+                $uploadedFileNote = $this->secureUploadService->uploadFromRequest($request, 'fileNote', 'conseils');
+                if ($uploadedFileNote !== null) {
+                    $fileNameNote = $uploadedFileNote->getStoredFilename();
+                    $fileNoteOriginalName = $uploadedFileNote->getOriginalFilename();
+                }
+            } catch (FileUploadException $exception) {
+                return JsonReponse::error($exception->getPublicMessage());
+            }
         } else {
             $sParcours = $request->query->get('parcours');
         }
@@ -406,7 +432,16 @@ class ProcessValidationController extends BaseController
             $processData = $this->parcoursProcess->etatParcours($dpe, $process);
 
             if ($request->isMethod('POST')) {
-                $this->parcoursProcess->valideParcours($dpe, $this->getUser(), $transition, $request, $fileName);
+                $this->parcoursProcess->valideParcours(
+                    $dpe,
+                    $this->getUser(),
+                    $transition,
+                    $request,
+                    $fileName,
+                    $fileNameNote,
+                    $fileOriginalName,
+                    $fileNoteOriginalName,
+                );
             }
         }
 

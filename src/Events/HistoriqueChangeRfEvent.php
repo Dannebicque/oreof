@@ -19,13 +19,15 @@ class HistoriqueChangeRfEvent extends AbstractHistoriqueEvent
 
     private ChangeRf $changeRf;
     private ?string $fileName;
+    private ?string $originalFileName;
 
-    public function __construct(ChangeRf $changeRf, UserInterface $user, string $etape, string $etat, Request $request, ?string $fileName = null)
+    public function __construct(ChangeRf $changeRf, UserInterface $user, string $etape, string $etat, Request $request, ?string $fileName = null, ?string $originalFileName = null)
     {
         parent::__construct($user, $etape, $etat, $request);
 
         $this->changeRf = $changeRf;
         $this->fileName = $fileName;
+        $this->originalFileName = $originalFileName;
     }
 
     public function getChangeRf(): ChangeRf
@@ -36,5 +38,10 @@ class HistoriqueChangeRfEvent extends AbstractHistoriqueEvent
     public function getFileName(): ?string
     {
         return $this->fileName;
+    }
+
+    public function getOriginalFileName(): ?string
+    {
+        return $this->originalFileName;
     }
 }

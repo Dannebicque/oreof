@@ -10,29 +10,28 @@ use App\DTO\ChangeRf;
 use App\Entity\Formation;
 use App\Enums\EtatChangeRfEnum;
 use App\Enums\TypeRfEnum;
+use App\Exception\FileUploadException;
 use App\Form\ChangeRfFormationType;
 use App\Repository\ChangeRfRepository;
 use App\Repository\ComposanteRepository;
+use App\Service\SecureUploadService;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Workflow\WorkflowInterface;
 
 class FormationResponsableController extends BaseController
 {
-    private string $dir;
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
         private readonly WorkflowInterface $changeRfWorkflow,
         private readonly ValidationProcessChangeRf $validationProcess,
         private readonly ChangeRfProcess $changeRfProcess,
-        KernelInterface $kernel,
+        private readonly SecureUploadService $secureUploadService,
     ) {
-        $this->dir = $kernel->getProjectDir() . '/public/uploads/conseils/';
     }
 
     #[Route('/formation/change-responsable/ajout/{formation}', name: 'app_formation_change_rf')]
@@ -140,8 +139,16 @@ class FormationResponsableController extends BaseController
         }
 
         foreach ($demandes as $demande) {
-            $tDemandes[$demande->getFormation()?->getComposantePorteuse()?->getId()][$demande->getFormation()?->getId()]['formation'] = $demande->getFormation();
-            $tDemandes[$demande->getFormation()?->getComposantePorteuse()?->getId()][$demande->getFormation()?->getId()]['demandes'][] = $demande;
+            $formation = $demande->getFormation();
+            if ($formation === null || $formation->getComposantePorteuse() === null) {
+                continue;
+            }
+
+            $composanteId = $formation->getComposantePorteuse()->getId();
+            $formationId = $formation->getId();
+
+            $tDemandes[$composanteId][$formationId]['formation'] = $formation;
+            $tDemandes[$composanteId][$formationId]['demandes'][] = $demande;
         }
 
         foreach ($this->getCampagneCollecte()->getTimelineDates() as $date) {
@@ -179,13 +186,18 @@ class FormationResponsableController extends BaseController
 
         //upload
         $fileName = '';
+        $originalFileName = null;
         if ($request->files->has('file') && $request->files->get('file') !== null) {
-            $file = $request->files->get('file');
-            $fileName = md5(uniqid('', true)) . '.' . $file->guessExtension();
-            $file->move(
-                $this->dir,
-                $fileName
-            );
+            try {
+                $upload = $this->secureUploadService->uploadFromRequest($request, 'file', 'conseils');
+            } catch (FileUploadException $exception) {
+                return JsonReponse::error($exception->getPublicMessage());
+            }
+
+            if ($upload !== null) {
+                $fileName = $upload->getStoredFilename();
+                $originalFileName = $upload->getOriginalFilename();
+            }
         }
 
         $process = $this->validationProcess->getEtape($etape);
@@ -193,7 +205,7 @@ class FormationResponsableController extends BaseController
 
         if ($request->isMethod('POST')) {
             //todo: gérer le cas du PV en attente post CFVU => Etat intermédiaire dans l'historique ? ou dans le process ?
-            return $this->changeRfProcess->valideChangeRf($demande, $this->getUser(), $transition, $request, $fileName);
+            return $this->changeRfProcess->valideChangeRf($demande, $this->getUser(), $transition, $request, $fileName, $originalFileName);
         }
 
         return $this->render('formation_responsable/_valide.html.twig', [

@@ -10,7 +10,9 @@
     "require": {
         "php": ">=8.2",
         "ext-ctype": "*",
+        "ext-fileinfo": "*",
         "ext-iconv": "*",
+        "ext-libxml": "*",
         "ext-zip": "*",
         "apereo/phpcas": "^1.6",
         "doctrine/annotations": "*",

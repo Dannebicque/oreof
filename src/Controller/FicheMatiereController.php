@@ -36,6 +36,7 @@ use Exception;
 use Jfcherng\Diff\DiffHelper;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -175,23 +176,31 @@ class FicheMatiereController extends BaseController
         FicheMatiereState $ficheMatiereState,
     ): Response {
         //todo: a revoir...
-        if (!($this->isGranted('EDIT',
+        if (!($this->isGranted(
+                'EDIT',
             [
                 'route' => 'app_fiche_matiere',
                 'subject' => $ficheMatiere,
-            ]) || $this->isGranted('EDIT',
+            ]
+            ) || $this->isGranted(
+                'EDIT',
                 [
                     'route' => 'app_fiche_matiere',
                     'subject' => 'formation',
-                ]) || $this->isGranted('EDIT',
+                ]
+            ) || $this->isGranted(
+                'EDIT',
                 [
                     'route' => 'app_fiche_matiere',
                     'subject' => 'parcours',
-                ]) || $this->isGranted('EDIT',
+                ]
+            ) || $this->isGranted(
+                'EDIT',
                 [
                     'route' => 'app_fiche_matiere_hd',
                     'subject' => 'etablissement',
-                ]) || $this->isGranted('ROLE_ADMIN'))) {
+                ]
+            ) || $this->isGranted('ROLE_ADMIN'))) {
             return $this->redirectToRoute('app_fiche_matiere_show', ['slug' => $ficheMatiere->getSlug()]);
         }
 
@@ -233,7 +242,7 @@ class FicheMatiereController extends BaseController
         $entityManager->persist($newFicheMatiere);
         $entityManager->flush();
 
-        foreach($ficheMatiere->getFicheMatiereParcours() as $parcours) {
+        foreach ($ficheMatiere->getFicheMatiereParcours() as $parcours) {
             //on duplique les parcours de mutualisation
             $newFicheMatiereParcours = clone $parcours;
             $newFicheMatiereParcours->setFicheMatiere($newFicheMatiere);
@@ -344,7 +353,7 @@ class FicheMatiereController extends BaseController
         EntityManagerInterface $entityManager,
         Filesystem $fileSystem,
         VersioningFicheMatiere $ficheMatiereVersioningService
-    ): \Symfony\Component\HttpFoundation\RedirectResponse
+    ): RedirectResponse
     {
         try {
             // Date / Heure
@@ -392,7 +401,7 @@ class FicheMatiereController extends BaseController
         LicenceTypeDiplome $licenceTypeD,
         ButTypeDiplome $butTypeD,
         MeefTypeDiplome $meefTypeD
-    ): \Symfony\Component\HttpFoundation\RedirectResponse|Response
+    ): RedirectResponse|Response
     {
         try {
             $version = $ficheMatiereVersioningService->loadFicheMatiereVersion($ficheMatiereVersioning);
