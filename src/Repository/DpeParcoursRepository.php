@@ -259,4 +259,124 @@ class DpeParcoursRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    /**
+     * @return array{
+     *     nbFormations:int,
+     *     nbParcours:int,
+     *     nbParcoursOuverts:int,
+     *     nbParcoursValides:int,
+     *     nbParcoursNonOuverts:int,
+     *     nbFormationsNonOuvertes:int,
+     *     nbParcoursAutres:int,
+     *     workflowCounts:array<string,int>
+     * }
+     */
+    public function getPilotageStatsByComposanteAndCampagne(Composante $composante, CampagneCollecte $campagneCollecte): array
+    {
+        $rows = $this->createQueryBuilder('d')
+            ->select('IDENTITY(d.formation) AS formationId', 'd.etatReconduction AS etatReconduction', 'd.etatValidation AS etatValidation')
+            ->innerJoin('d.formation', 'f')
+            ->where('d.campagneCollecte = :campagneCollecte')
+            ->andWhere('f.composantePorteuse = :composante')
+            ->setParameter('campagneCollecte', $campagneCollecte)
+            ->setParameter('composante', $composante)
+            ->getQuery()
+            ->getArrayResult();
+
+        $etatsOuverts = [
+            TypeModificationDpeEnum::OUVERT->value,
+            TypeModificationDpeEnum::CREATION->value,
+            TypeModificationDpeEnum::OUVERTURE_SES->value,
+            TypeModificationDpeEnum::OUVERTURE_CFVU->value,
+        ];
+
+        $etatsNonOuverts = [
+            TypeModificationDpeEnum::NON_OUVERTURE->value,
+            TypeModificationDpeEnum::NON_OUVERTURE_SES->value,
+            TypeModificationDpeEnum::NON_OUVERTURE_CFVU->value,
+            TypeModificationDpeEnum::FERMETURE_DEFINITIVE->value,
+        ];
+
+        $etatsValides = [
+            'soumis_conseil',
+            'soumis_central',
+            'soumis_cfvu',
+            'valide_cfvu',
+            'valide_a_publier',
+            'publie',
+        ];
+
+        $formationIds = [];
+        $formationIdsNonOuvertes = [];
+        $workflowCounts = [];
+
+        $stats = [
+            'nbParcours' => 0,
+            'nbParcoursOuverts' => 0,
+            'nbParcoursValides' => 0,
+            'nbParcoursNonOuverts' => 0,
+        ];
+
+        foreach ($rows as $row) {
+            $stats['nbParcours']++;
+
+            $formationId = (int)($row['formationId'] ?? 0);
+            if ($formationId > 0) {
+                $formationIds[$formationId] = true;
+            }
+
+            $etatReconduction = $row['etatReconduction'] ?? null;
+            if ($etatReconduction instanceof TypeModificationDpeEnum) {
+                $etatReconduction = $etatReconduction->value;
+            }
+
+            if (is_string($etatReconduction) && in_array($etatReconduction, $etatsOuverts, true)) {
+                $stats['nbParcoursOuverts']++;
+            }
+
+            if (is_string($etatReconduction) && in_array($etatReconduction, $etatsNonOuverts, true)) {
+                $stats['nbParcoursNonOuverts']++;
+                if ($formationId > 0) {
+                    $formationIdsNonOuvertes[$formationId] = true;
+                }
+            }
+
+            $etatValidation = $row['etatValidation'] ?? [];
+            if (!is_array($etatValidation)) {
+                $decoded = json_decode((string)$etatValidation, true);
+                $etatValidation = is_array($decoded) ? $decoded : [];
+            }
+
+            foreach ($etatsValides as $etatValide) {
+                if (($etatValidation[$etatValide] ?? 0) == 1) {
+                    $stats['nbParcoursValides']++;
+                    break;
+                }
+            }
+
+            $workflowCourant = 'inconnu';
+            foreach ($etatValidation as $etat => $actif) {
+                if ((int)$actif === 1) {
+                    $workflowCourant = (string)$etat;
+                    break;
+                }
+            }
+
+            $workflowCounts[$workflowCourant] = ($workflowCounts[$workflowCourant] ?? 0) + 1;
+        }
+
+        arsort($workflowCounts);
+
+        return [
+            'nbFormations' => count($formationIds),
+            'nbParcours' => $stats['nbParcours'],
+            'nbParcoursOuverts' => $stats['nbParcoursOuverts'],
+            'nbParcoursValides' => $stats['nbParcoursValides'],
+            'nbParcoursNonOuverts' => $stats['nbParcoursNonOuverts'],
+            'nbFormationsNonOuvertes' => count($formationIdsNonOuvertes),
+            'nbParcoursAutres' => max(0, $stats['nbParcours'] - $stats['nbParcoursOuverts'] - $stats['nbParcoursNonOuverts']),
+            'workflowCounts' => $workflowCounts,
+        ];
+    }
 }
