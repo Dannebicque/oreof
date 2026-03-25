@@ -397,6 +397,11 @@ framework:
         relancer_annee:
           from: 'publie'
           to: 'tacite_reconduction'
+        valider_tacite_composante:
+          from: 'tacite_reconduction'
+          to: 'soumis_central'
+          metadata:
+            recipients: [ 'RF', 'CoRF', 'RP', 'CoRP' ]
         reouvrir_tacite:
           from: 'tacite_reconduction'
           to: 'en_cours_redaction'
@@ -667,6 +672,7 @@ framework:
             icon: fa-check
             hasDate: true
             hasUpload: true
+            hasUploadNote: true
         valider_ses:
           from: 'soumis_ses'
           to: 'soumis_cfvu'
