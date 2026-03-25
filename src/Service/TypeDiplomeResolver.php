@@ -17,6 +17,7 @@ use App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException;
 use App\TypeDiplome\TypeDiplomeHandlerInterface;
 use LogicException;
 
+/** @deprecated('Utiliser TypeDiplome/TypeDiplomeResolver.php') */
 final class TypeDiplomeResolver
 {
 

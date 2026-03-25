@@ -9,7 +9,7 @@
 
 declare(strict_types=1);
 
-namespace App\TypeDiplome\M2E\Synthese;
+namespace App\TypeDiplome\Diplomes\M2E\Synthese;
 
 use App\Entity\Parcours;
 use App\Service\Synthese\Dto\SyntheseButton;

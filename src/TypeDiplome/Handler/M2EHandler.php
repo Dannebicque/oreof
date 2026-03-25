@@ -4,7 +4,7 @@
  * @file /Users/davidannebicque/Sites/oreof/src/TypeDiplome/Handler/M2EHandler.php
  * @author davidannebicque
  * @project oreof
- * @lastUpdate 08/12/2025 20:01
+ * @lastUpdate 25/03/2026 15:05
  */
 
 namespace App\TypeDiplome\Handler;
@@ -17,21 +17,22 @@ use App\Entity\FicheMatiere;
 use App\Entity\Mccc;
 use App\Entity\Parcours;
 use App\Entity\SemestreParcours;
-use App\TypeDiplome\Dto\OptionsCalculStructure;
 use App\Entity\TypeEpreuve;
 use App\Repository\BlocCompetenceRepository;
 use App\Repository\TypeDiplomeRepository;
+use App\TypeDiplome\Diplomes\M2E\Services\M2eMccc;
+use App\TypeDiplome\Diplomes\M2E\Services\M2eMcccVersion;
+use App\TypeDiplome\Diplomes\M2E\StructureParcoursM2e;
+use App\TypeDiplome\Dto\OptionsCalculStructure;
 use App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException;
-use App\TypeDiplome\M2E\Services\M2eMccc;
-use App\TypeDiplome\M2E\Services\M2eMcccVersion;
 use App\TypeDiplome\TypeDiplomeHandlerInterface;
 use App\TypeDiplome\ValideParcoursInterface;
 use App\Utils\Tools;
 use DateTimeInterface;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use Symfony\Component\Form\FormInterface;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;

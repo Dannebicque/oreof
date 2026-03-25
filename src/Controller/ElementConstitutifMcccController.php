@@ -22,9 +22,7 @@ use App\Entity\TypeEpreuve;
 use App\Events\McccUpdateEvent;
 use App\Repository\TypeEpreuveRepository;
 use App\Service\McccCompletionChecker;
-// use App\Service\TypeDiplomeResolver;
 use App\Service\VersioningParcours;
-use App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException;
 use App\TypeDiplome\TypeDiplomeResolver;
 use App\Utils\Access;
 use Doctrine\Common\Collections\Collection;
@@ -43,6 +41,8 @@ use Symfony\Component\Serializer\Mapping\Loader\AttributeLoader;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
+
+// use App\Service\TypeDiplomeResolver;
 
 #[Route('/element/constitutif')]
 class ElementConstitutifMcccController extends AbstractController
@@ -186,7 +186,7 @@ class ElementConstitutifMcccController extends AbstractController
 
                         $typeD->saveMcccs($fm, $request->request);
                         $newMcccToText = $this->mcccToTexte($fm->getMcccs());
-                    
+
                     // } elseif ($elementConstitutif->getNatureUeEc()?->isLibre() || ($elementConstitutif->getNatureUeEc()?->isChoix())) {
                     //     //todo: a refactor
                     //     if ($request->request->has('ec_step4') && array_key_exists('quitus', $request->request->all()['ec_step4'])) {
@@ -269,16 +269,17 @@ class ElementConstitutifMcccController extends AbstractController
         // réutilisation de l'instance GetElementConstitutif existante
         $ects = $getElement->getFicheMatiereEcts();
 
-        return $this->render('element_constitutif/_mcccEcNonEditable.html.twig', ['isMcccImpose' => $elementConstitutif->getFicheMatiere()?->isMcccImpose(),
-        'isEctsImpose' => $elementConstitutif->getFicheMatiere()?->isEctsImpose(),
-            'typeMccc' => $typeMccc,
-            'typeEpreuves' => $typeD->getTypeEpreuves(),
-        'ec' => $elementConstitutif,
-        'ects' => $ects,
-            'mcccs' => $typeD->getDisplayMccc($getElement->getMcccsFromFicheMatiere($typeD), $typeMccc),
-            'typeDiplome' => $typeD,
-            'templateForm' => $typeD::TEMPLATE_FORM_MCCC
+            return $this->render('element_constitutif/_mcccEcNonEditable.html.twig', ['isMcccImpose' => $elementConstitutif->getFicheMatiere()?->isMcccImpose(),
+                'isEctsImpose' => $elementConstitutif->getFicheMatiere()?->isEctsImpose(),
+                'typeMccc' => $typeMccc,
+                'typeEpreuves' => $typeD->getTypeEpreuves(),
+                'ec' => $elementConstitutif,
+                'ects' => $ects,
+                'mcccs' => $typeD->getDisplayMccc($getElement->getMcccsFromFicheMatiere($typeD), $typeMccc),
+                'typeDiplome' => $typeD,
+                'templateForm' => $typeD::TEMPLATE_FORM_MCCC
         ]);
+    }
     }
 
     #[Route('/{id}/mccc-ec/{parcours}/recompute-validity', name: 'app_element_constitutif_mccc_recompute', methods: ['POST'])]

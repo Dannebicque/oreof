@@ -29,7 +29,6 @@ class ExportMccc
 
     public function __construct(
         protected FormationRepository $formationRepository,
-        private readonly DpeParcoursRepository $dpeParcoursRepository
     ) {
     }
 
@@ -54,8 +53,7 @@ class ExportMccc
             if ($formation !== null) {
                 $typeDiplome = $this->typeDiplomeResolver->fromFormation($formation);
                 if (null !== $typeDiplome) {
-                    $formation = $dpe->getParcours()->getFormation();
-                    $parcours = $dpe->getParcours();
+                    foreach ($formation->getParcours() as $parcours)
                     {
                         if ($this->format === 'xlsx') {
                             $fichier = $typeDiplome->exportAndSaveExcelMccc(

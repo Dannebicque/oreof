@@ -7,7 +7,7 @@
  * @lastUpdate 19/10/2025 16:24
  */
 
-namespace App\TypeDiplome\M2E\Dto;
+namespace App\TypeDiplome\Diplomes\M2E\Dto;
 
 use DateTimeInterface;
 

@@ -7,7 +7,7 @@
  * @lastUpdate 18/10/2023 13:19
  */
 
-namespace App\TypeDiplome\M2E\Services;
+namespace App\TypeDiplome\Diplomes\M2E\Services;
 
 use App\DTO\StructureEc;
 use App\DTO\StructureEcVersioning;

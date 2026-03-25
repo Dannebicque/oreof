@@ -7,7 +7,7 @@
  * @lastUpdate 19/05/2024 20:35
  */
 
-namespace App\TypeDiplome\M2E\Services;
+namespace App\TypeDiplome\Diplomes\M2E\Services;
 
 use App\Classes\Excel\ExcelWriter;
 use App\DTO\StructureEc;
