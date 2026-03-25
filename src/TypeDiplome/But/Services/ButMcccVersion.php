@@ -208,15 +208,16 @@ class ButMcccVersion extends AbstractButMccc
                             if ($fiche->getTypeMatiere() === FicheMatiere::TYPE_MATIERE_RESSOURCE) {
                                 $tabFichesRessources[$fiche->getSigle()]['ec'] = $ec;
                                 $tabFichesRessources[$fiche->getSigle()]['diff'] = $diffFiche;
-                                $tabFichesUes[$fiche->getSigle()][$ue->getOrdre()] = new DiffObject($diffFiche['heuresEctsEc']['ects']?->getOriginalFloat() ?? 0, $ec->getEcts() ?? 0);
+                                $tabFichesUes[$fiche->getSigle()][$ue->getOrdre()] = new DiffObject($diffFiche['ects']?->getOriginalFloat() ?? 0, $ec->getEcts() ?? 0);
+                                $totalCoeffAvant[$ue->getOrdre()]['Ressource'] += $diffFiche['ects']?->getOriginalFloat() ?? 0;
                                 $totalCoeffApres[$ue->getOrdre()]['Ressource'] += $ec->getEcts() ?? 0;
                             }
 
                             if ($fiche->getTypeMatiere() === FicheMatiere::TYPE_MATIERE_SAE) {
                                 $tabFichesSaes[$fiche->getSigle()]['ec'] = $ec;
                                 $tabFichesSaes[$fiche->getSigle()]['diff'] = $diffFiche;
-                                $tabFichesUes[$fiche->getSigle()][$ue->getOrdre()] = new DiffObject($diffFiche['heuresEctsEc']['ects']?->getOriginalFloat() ?? 0, $ec->getEcts() ?? 0);
-                                $totalCoeffAvant[$ue->getOrdre()]['Sae'] += $diffFiche['heuresEctsEc']['ects']?->getOriginalFloat() ?? 0;
+                                $tabFichesUes[$fiche->getSigle()][$ue->getOrdre()] = new DiffObject($diffFiche['ects']?->getOriginalFloat() ?? 0, $ec->getEcts() ?? 0);
+                                $totalCoeffAvant[$ue->getOrdre()]['Sae'] += $diffFiche['ects']?->getOriginalFloat() ?? 0;
                                 $totalCoeffApres[$ue->getOrdre()]['Sae'] += $ec->getEcts() ?? 0;
                             }
                         }
@@ -322,7 +323,6 @@ class ButMcccVersion extends AbstractButMccc
 
                     $this->excelWriter->writeCellXYDiff($colUe, $ligne + 5, new DiffObject($pourcentageSaeAvant, $pourcentageSaeApres), ['style' => 'numerique']);
                 }
-
                 // affichage des "totaux"
                 $this->excelWriter->writeCellXYDiff(self::COL_CM, $ligne + 2, new DiffObject($totalHeuresAvant['CM'], $totalHeuresApres['CM']), ['style' => 'HORIZONTAL_CENTER']);
                 $this->excelWriter->writeCellXYDiff(self::COL_TD, $ligne + 2,
