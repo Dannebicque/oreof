@@ -2,6 +2,50 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.53.0](https://github.com/Dannebicque/oreof/compare/v1.52.0...v1.53.0) (2026-03-26)
+
+
+### Features
+
+* add co-responsable field and update formation handling in forms ([c2f646c](https://github.com/Dannebicque/oreof/commit/c2f646c5fa3fcd3d14172750d4529218d60e9a3d))
+* add delete functionality for DPE requests with admin access ([6c9974d](https://github.com/Dannebicque/oreof/commit/6c9974dfd6182ec7e67fe9ddbdd525152a33adc7))
+* add force next step functionality for parcours and formation with history option ([bbd6485](https://github.com/Dannebicque/oreof/commit/bbd64858262bf13a69cd98b98223c79af9f47a03))
+* add handling for new parcours in campaign with conditional export options ([2ef0c50](https://github.com/Dannebicque/oreof/commit/2ef0c502b90099edb57e7b3cc2ad66b72cf704c6))
+* add handling for new parcours in campaign with conditional export options ([060b764](https://github.com/Dannebicque/oreof/commit/060b7647fec28718da5c38e40d61ca6664fc9ee8))
+* add log viewer functionality with log file listing and parsing ([593f234](https://github.com/Dannebicque/oreof/commit/593f234f62f96468eed87ed189e54a551530141e))
+* add pilotage feature for composante with statistics and visual representation ([bb56088](https://github.com/Dannebicque/oreof/commit/bb5608892d501575f08d96b982763239ebdd261d))
+* add recompute functionality for MCCC validity and update form handling ([d330b0c](https://github.com/Dannebicque/oreof/commit/d330b0c92e15fdb876b0339d35306a81b45546eb))
+* add validation step for tacite reconduction with metadata for recipients ([018d3bb](https://github.com/Dannebicque/oreof/commit/018d3bbd1374b88cbad89c3b40e084fc7c373566))
+* conditionally add export version button for non-new parcours in synthese button provider ([47927c9](https://github.com/Dannebicque/oreof/commit/47927c934f17c6cdefe24a88a59dc047e694dd8b))
+* enhance file upload handling with original filename support and secure upload service integration ([fa1f217](https://github.com/Dannebicque/oreof/commit/fa1f217cc80ba47addb403bfce8215fc7161caa9))
+* enhance table rendering logic to support nested elements and improve display of child competencies ([30c435a](https://github.com/Dannebicque/oreof/commit/30c435aeeb8388f4b95d049c7bcd7216eeced781))
+* implement mutualisation notification system with acknowledgment handling ([4474ff8](https://github.com/Dannebicque/oreof/commit/4474ff8fbe86688069242b0cf17b6bd52b2c4307))
+* integrate TypeDiplomeResolver for improved structure calculation in competence export ([0186f2c](https://github.com/Dannebicque/oreof/commit/0186f2c7378d296ce11a9041b2e92adb28c6210f))
+* refactor button rendering logic to conditionally include version button based on DPE state ([c7e9dab](https://github.com/Dannebicque/oreof/commit/c7e9dab7750669dac06942859d037771ba226beb))
+* refactor button rendering logic to conditionally include version button based on DPE state ([7397d3b](https://github.com/Dannebicque/oreof/commit/7397d3b7856dc73be020ae13a7b5d3c22adbabd4))
+* refactor button rendering logic to conditionally include version button based on DPE state ([de42427](https://github.com/Dannebicque/oreof/commit/de424279bd4d2072713d0eb1176c3e2b6d1cba4a))
+* refactor export logic to enhance structure and improve BCC export functionality ([63ad815](https://github.com/Dannebicque/oreof/commit/63ad8156bcf348e746a40a703e09f2beba5dbd66))
+* reset responsible for duplicated fiche matière in parcours duplication process ([0a69aa9](https://github.com/Dannebicque/oreof/commit/0a69aa9564ac4c70a978aac23c60c51a63566c53))
+* simplify button rendering logic by removing version check for parcours ([b918819](https://github.com/Dannebicque/oreof/commit/b918819364b18f8ccc926c4c7c3b7dd351f4f76d))
+* update DiffObject calculations to use 'ects' field for resource and SAE types ([f75bf29](https://github.com/Dannebicque/oreof/commit/f75bf29b70b0938d4f46a3858f7a864ca7399011))
+
+
+### Bug Fixes
+
+* add fallback mechanism for Excel generation in LicenceMcccVersion ([4027b64](https://github.com/Dannebicque/oreof/commit/4027b6454a003a543e4ed84caed92c4a8307b1c9))
+* add fallback mechanism for Excel generation in LicenceMcccVersion ([efbbfe9](https://github.com/Dannebicque/oreof/commit/efbbfe9adebeb1aa236202010555be06e92740f6))
+* add fiches export case to enhance export functionality ([dfd7112](https://github.com/Dannebicque/oreof/commit/dfd71126ae04e77a561207360b1906a7347c5d97))
+* bugs dans les logs ([9481724](https://github.com/Dannebicque/oreof/commit/94817246d49733083280017d407d8772abe66af5))
+* bugs dans les logs ([dde7676](https://github.com/Dannebicque/oreof/commit/dde76762fcf5b3fb811d8122a7b8d6378556a86d))
+* enhance ECTS handling and improve MCCCs comparison logic in structure management ([9215c62](https://github.com/Dannebicque/oreof/commit/9215c6246be09f7ca5b3108abc607db21fe9765b))
+* handle potential null values in localisation mentions ([47ca136](https://github.com/Dannebicque/oreof/commit/47ca136783c5b3cc426811f03e38551657c8ef67))
+* handle potential null values in localisation mentions ([917cfe3](https://github.com/Dannebicque/oreof/commit/917cfe31635db052875edc7dbf306b12bc959a16))
+* handle potential null values in localisation mentions ([861b32a](https://github.com/Dannebicque/oreof/commit/861b32aa6b90fb4203cf61c50a7320de7b5a3931))
+* handle potential null values in localisation mentions ([28b8737](https://github.com/Dannebicque/oreof/commit/28b873784199b87fa7fcb496b0b339ec397c56da))
+* indentation ([f9eb83b](https://github.com/Dannebicque/oreof/commit/f9eb83bbdf61148ed8e5646f54fa8632c4927c30))
+* Services Versioning - comparaisons ([5a7c4b2](https://github.com/Dannebicque/oreof/commit/5a7c4b252e54c197b828b92c5592b0089d09eaa5))
+* update email contact in breadcrumb links to reflect new address ([16297ec](https://github.com/Dannebicque/oreof/commit/16297ec7c9f444221218097d824ba38b15fb2ac6))
+
 ## [1.52.0](https://github.com/Dannebicque/oreof/compare/v1.51.0...v1.52.0) (2026-03-18)
 
 
