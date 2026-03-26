@@ -7,18 +7,28 @@
  */
 
 import { Controller } from '@hotwired/stimulus'
-import { saveData } from '../../js/saveData'
-import { updateEtatOnglet } from '../../js/updateEtatOnglet'
-import { calculEtatStep } from '../../js/calculEtatStep'
 import JsonResponse from '../../js/JsonResponse'
 
 export default class extends Controller {
   static values = {
     urlUpdate: String,
+    urlRecompute: String,
+  }
+
+  async forceRecompute (event) {
+    event.preventDefault()
+
+    if (!this.hasUrlRecomputeValue) {
+      return
+    }
+
+    await fetch(this.urlRecomputeValue, {
+      method: 'POST',
+    }).then((response) => JsonResponse(response))
   }
 
   async ectsSpecifiques(event) {
-    const body = new FormData()
+    const body = new window.FormData()
     body.append('value', event.target.checked)
     body.append('field', 'ectsSpecifiques')
     body.append('ec', event.params.ec)
@@ -41,7 +51,7 @@ export default class extends Controller {
   }
 
   async controleAssiduite(event) {
-    const body = new FormData()
+    const body = new window.FormData()
     body.append('value', event.target.checked)
     body.append('field', 'controleAssiduite')
     body.append('ec', event.params.ec)
@@ -71,7 +81,7 @@ export default class extends Controller {
   }
 
   async mcccSpecifiques(event) {
-    const body = new FormData()
+    const body = new window.FormData()
     body.append('value', event.target.checked)
     body.append('field', 'mcccSpecifiques')
     body.append('ec', event.params.ec)
@@ -94,7 +104,7 @@ export default class extends Controller {
   }
 
   async synchroMccc(event) {
-    const body = new FormData()
+    const body = new window.FormData()
     body.append('value', event.target.checked)
     body.append('field', 'synchroMccc')
     body.append('ec', event.params.ec)

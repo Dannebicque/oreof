@@ -1,0 +1,117 @@
+{% extends 'base.html.twig' %}
+
+{% set header_title %}
+    Pilotage de l'offre : {{ composante.libelle }}
+{% endset %}
+
+{% block breadcrumb %}
+    {{ include('communs/_breadcrumb.html.twig', {liens:[
+        {
+            href: path('app_validation_composante_dpe_index', {composante: composante.id}),
+            title: 'Validation DPE'
+        }
+    ]}) }}
+{% endblock %}
+
+{% block content %}
+    <div class="card mt-2">
+        <div class="card-body">
+            <form method="get"
+                  action="{{ path('app_validation_composante_pilotage_campagne', {composante: composante.id, campagneCollecte: campagne.id}) }}"
+                  class="row g-2 align-items-end">
+                <div class="col-md-8">
+                    <label for="campagne" class="form-label">Campagne de collecte</label>
+                    <select id="campagne" class="form-select" onchange="window.location.href = this.value">
+                        {% for campagneItem in campagnes %}
+                            <option value="{{ path('app_validation_composante_pilotage_campagne', {composante: composante.id, campagneCollecte: campagneItem.id}) }}"
+                                    {% if campagneItem.id == campagne.id %}selected{% endif %}
+                            >
+                                {{ campagneItem.libelle }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <div class="alert alert-info mb-0 py-2">
+                        Donnees de la composante sur la campagne <strong>{{ campagne.libelle }}</strong>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="row mt-2 g-2">
+        <div class="col-md-2 col-6">
+            <div class="card h-100">
+                <div class="card-body">
+                    <div class="text-muted small">Formations</div>
+                    <div class="display-6">{{ stats.nbFormations }}</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2 col-6">
+            <div class="card h-100">
+                <div class="card-body">
+                    <div class="text-muted small">Parcours</div>
+                    <div class="display-6">{{ stats.nbParcours }}</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2 col-6">
+            <div class="card h-100">
+                <div class="card-body">
+                    <div class="text-muted small">Parcours ouverts</div>
+                    <div class="display-6 text-primary">{{ stats.nbParcoursOuverts }}</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2 col-6">
+            <div class="card h-100">
+                <div class="card-body">
+                    <div class="text-muted small">Parcours valides</div>
+                    <div class="display-6 text-success">{{ stats.nbParcoursValides }}</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2 col-6">
+            <div class="card h-100">
+                <div class="card-body">
+                    <div class="text-muted small">Parcours non ouverts</div>
+                    <div class="display-6 text-danger">{{ stats.nbParcoursNonOuverts }}</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2 col-6">
+            <div class="card h-100">
+                <div class="card-body">
+                    <div class="text-muted small">Formations avec non-ouverture</div>
+                    <div class="display-6 text-warning">{{ stats.nbFormationsNonOuvertes }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-2 g-2">
+        <div class="col-lg-6">
+            <div class="card h-100">
+                <div class="card-header">
+                    <h5 class="mb-0">Repartition globale des parcours</h5>
+                </div>
+                <div class="card-body" style="min-height: 360px;">
+                    {{ render_chart(chartRepartition) }}
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card h-100">
+                <div class="card-header">
+                    <h5 class="mb-0">Parcours par etape du workflow</h5>
+                </div>
+                <div class="card-body" style="min-height: 360px;">
+                    {{ render_chart(chartWorkflow) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

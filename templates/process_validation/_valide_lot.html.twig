@@ -133,6 +133,20 @@
         </div>
     {% endif %}
 
+    {% if meta.hasUploadNote is defined and meta.hasUploadNote == true %}
+        <div>
+            <label for="fileNote"
+                   class="form-label">{{ ('valide.'~process.label~'.note_explicative.label')|trans({}, 'process') }}
+                <i class="fal fa-question-circle ms-1"
+                   data-controller="tooltip"
+                   data-tooltip-placement-value="bottom"
+                   aria-label="{{ ('valide.'~process.label~'.helps.note_explicative.help')|trans({}, 'process') }}"
+                   data-bs-original-title="{{ ('valide.'~process.label~'.helps.note_explicative.help')|trans({}, 'process') }}"></i></label>
+            <input type="file" name="fileNote" id="fileNote" accept="application/pdf" class="form-control" required>
+            <p>Un modèle de note explicative est disponible ici <a href="{{ asset('modeles/note_explicative.docx') }}"
+                                                                   target="_blank">Récupérer le modèle</a></p>
+        </div>
+    {% endif %}
 
 {#    {% if (process.check is defined and process.check == true) %}#}
 {#        {% if processData.valid == true %}#}

@@ -20,7 +20,7 @@
             </button>
         {% else %}
             <a
-                    href="{{ asset('uploads/conseils/'~this.fichier) }}"
+                    href="{{ path('app_upload_download', {context: 'conseils', filename: this.fichier, originalName: this.fichierOriginal|default(this.fichier)}) }}"
                     target="_blank"
                     class="btn btn-outline-info btn-sm ms-1"
                     data-bs-toggle="tooltip"
@@ -51,7 +51,7 @@
             </button>
         {% elseif this.hasPv == true and this.hasHistorique == true %}
             <a
-                    href="{{ asset('uploads/conseils/'~this.fichier) }}"
+                    href="{{ path('app_upload_download', {context: 'conseils', filename: this.fichier, originalName: this.fichierOriginal|default(this.fichier)}) }}"
                     target="_blank"
                     class="btn btn-outline-info btn-sm ms-1"
                     data-bs-toggle="tooltip"

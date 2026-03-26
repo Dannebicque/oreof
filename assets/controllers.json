@@ -11,12 +11,12 @@
                 }
             }
         },
-      "@symfony/ux-chartjs": {
-        "chart": {
-          "enabled": true,
-          "fetch": "eager"
-        }
-      },
+        "@symfony/ux-chartjs": {
+            "chart": {
+                "enabled": true,
+                "fetch": "eager"
+            }
+        },
         "@symfony/ux-live-component": {
             "live": {
                 "enabled": true,
@@ -26,15 +26,15 @@
                 }
             }
         },
-      "@symfony/ux-turbo": {
-        "turbo-core": {
-          "enabled": true,
-          "fetch": "eager"
-        },
-        "mercure-turbo-stream": {
-          "enabled": false,
-          "fetch": "eager"
-        }
+        "@symfony/ux-turbo": {
+            "turbo-core": {
+                "enabled": true,
+                "fetch": "eager"
+            },
+            "mercure-turbo-stream": {
+                "enabled": false,
+                "fetch": "eager"
+            }
         }
     },
     "entrypoints": []

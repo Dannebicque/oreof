@@ -58,6 +58,7 @@ final class ParcoursManageComponent extends AbstractController
         'non_ouverture_ses' => 'ses',
         'non_ouverture_cfvu' => 'cfvu',
         'non_ouverture' => 'publication',
+        'tacite_reconduction' => 'conseil',
     ];
 
     public const TAB_PROCESS = [

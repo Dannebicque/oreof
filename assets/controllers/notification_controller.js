@@ -48,7 +48,9 @@ export default class extends Controller {
     }
     await fetch(`${event.params.url}`).then((e) => {
       callOut(e.status === 200 ? 'Suppression effectuée' : 'Erreur lors de la suppression', e.status === 200 ? 'success' : 'error')
-      this.listeTarget.innerHTML = e.status === 200 ? '' : this.listeTarget.innerHTML
+      if (e.status === 200) {
+        window.location.reload()
+      }
     })
   }
 

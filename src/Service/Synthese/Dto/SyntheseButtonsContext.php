@@ -17,6 +17,7 @@ final class SyntheseButtonsContext
         private readonly bool $version,
         private readonly bool $admin,
         private readonly bool $publishedOrValidToPublish,
+        private readonly bool $isNewParcoursForCampaign,
     )
     {
     }
@@ -34,6 +35,11 @@ final class SyntheseButtonsContext
     public function isPublishedOrValidToPublish(): bool
     {
         return $this->publishedOrValidToPublish;
+    }
+
+    public function isNewParcoursForCampaign()
+    {
+        return $this->isNewParcoursForCampaign;
     }
 }
 

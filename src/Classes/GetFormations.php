@@ -39,9 +39,11 @@ class GetFormations
             $this->authorizationChecker->isGranted('SHOW', ['route' => 'app_etablissement', 'subject' => 'etablissement'])) {
             $formations = $this->formationRepository->findBySearch($q, $campagneCollecte, $options);
         } else {
+
             $formations = [];
             //gérer le cas ou l'utilisateur dispose des droits pour lire la composante
             $centres = $user?->getUserProfils();
+            $tempFormation = [];
             /** @var UserProfil $centre */
             foreach ($centres as $centre) {
                 if (
@@ -54,13 +56,15 @@ class GetFormations
                     );
                 }
 
-//                if ($centre->getFormation() !== null &&
-//                    $this->authorizationChecker->isGranted('SHOW', ['route' => 'app_formation', 'subject' => $centre->getFormation()])
-//                ) {
-//                    //dump('ok');
-//                    //$formations[] = [$centre->getFormation()];
-//                }
+                if ($centre->getFormation() !== null) {
+                    $formation = $centre->getFormation();
+                    if ($formation->getDpe()->getId() === $campagneCollecte->getId()) {
+                        $tempFormation[] = $formation;
+                    }
+                }
             }
+
+            $formations[] = $tempFormation;
 
             $formations[] = $this->formationRepository->findByComposanteDpe(
                 $user,

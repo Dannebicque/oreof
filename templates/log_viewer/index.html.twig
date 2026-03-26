@@ -1,0 +1,270 @@
+{% extends 'base.html.twig' %}
+
+{% set header_title %}Visualiseur de logs{% endset %}
+
+{% block breadcrumb %}
+    {{ include('communs/_breadcrumb.html.twig', {liens: []}) }}
+{% endblock %}
+
+{% block content %}
+    <div class="row g-3">
+
+        {# ── Colonne gauche : liste des fichiers ── #}
+        <div class="col-12 col-xl-3">
+            <div class="card h-100">
+                <div class="card-body p-3">
+                    <h5 class="card-title mb-3">
+                        <i class="fas fa-folder-open me-1 text-primary"></i>
+                        Fichiers disponibles
+                    </h5>
+
+                    {% if files is empty %}
+                        <p class="text-muted small">Aucun fichier de log trouvé.</p>
+                    {% else %}
+                        {# Grouper par date #}
+                        {% set dates = [] %}
+                        {% for file in files %}
+                            {% if file.date not in dates %}
+                                {% set dates = dates|merge([file.date]) %}
+                            {% endif %}
+                        {% endfor %}
+
+                        {% for date in dates %}
+                            <div class="mb-3">
+                                <div class="text-extra-small text-muted fw-bold mb-1">
+                                    {{ date|date('d/m/Y', timezone='Europe/Paris') }}
+                                </div>
+                                {% for key, file in files %}
+                                    {% if file.date == date %}
+                                        <a href="{{ path('app_log_viewer_index', {file: key, level: levelFilter}) }}"
+                                           class="d-flex align-items-center text-decoration-none p-2 rounded mb-1
+                                               {% if selectedFile == key %}
+                                                   bg-primary text-white
+                                               {% else %}
+                                                   log-file-item
+                                               {% endif %}"
+                                        >
+                                            <span class="badge me-2
+                                                {% if file.level == 'ERROR' %}
+                                                    bg-warning text-dark
+                                                {% else %}
+                                                    bg-danger
+                                                {% endif %}
+                                            ">
+                                                {{ file.level }}
+                                            </span>
+                                            <span class="small text-truncate">
+                                                {{ file.filename }}
+                                            </span>
+                                            <span class="ms-auto text-extra-small opacity-75">
+                                                {{ (file.size / 1024)|round(1) }} Ko
+                                            </span>
+                                        </a>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        {# ── Colonne droite : contenu du fichier sélectionné ── #}
+        <div class="col-12 col-xl-9">
+            {% if selectedFile is null %}
+                <div class="card">
+                    <div class="card-body text-center py-5">
+                        <i class="fas fa-file-alt fa-3x text-muted mb-3"></i>
+                        <p class="text-muted">Sélectionnez un fichier dans la liste pour afficher son contenu.</p>
+                    </div>
+                </div>
+            {% else %}
+                {# En-tête avec stats et filtres #}
+                <div class="card mb-3">
+                    <div class="card-body p-3">
+                        <div class="d-flex flex-wrap align-items-center gap-3">
+                            <div>
+                                <h6 class="mb-0">
+                                    <i class="fas fa-file-code me-1"></i>
+                                    {{ selectedFileInfo.filename }}
+                                </h6>
+                                <small class="text-muted">{{ selectedFileInfo.date }}</small>
+                            </div>
+
+                            {# Stats rapides #}
+                            <div class="d-flex gap-2 ms-auto">
+                                <span class="badge bg-secondary fs-xs">
+                                    <i class="fas fa-list me-1"></i>{{ stats.total }} entrée{{ stats.total > 1 ? 's' : '' }}
+                                </span>
+                                <span class="badge bg-warning text-dark fs-xs">
+                                    <i class="fas fa-exclamation-triangle me-1"></i>{{ stats.error }} ERROR
+                                </span>
+                                <span class="badge bg-danger fs-xs">
+                                    <i class="fas fa-skull-crossbones me-1"></i>{{ stats.critical }} CRITICAL
+                                </span>
+                            </div>
+
+                            {# Filtres #}
+                            <div class="d-flex gap-1">
+                                <a href="{{ path('app_log_viewer_index', {file: selectedFile, level: 'all'}) }}"
+                                   class="btn btn-sm {{ levelFilter == 'all' ? 'btn-primary' : 'btn-outline-secondary' }}">
+                                    Tous
+                                </a>
+                                <a href="{{ path('app_log_viewer_index', {file: selectedFile, level: 'error'}) }}"
+                                   class="btn btn-sm {{ levelFilter == 'error' ? 'btn-warning text-dark' : 'btn-outline-warning' }}">
+                                    <i class="fas fa-exclamation-triangle me-1"></i>ERROR
+                                </a>
+                                <a href="{{ path('app_log_viewer_index', {file: selectedFile, level: 'critical'}) }}"
+                                   class="btn btn-sm {{ levelFilter == 'critical' ? 'btn-danger' : 'btn-outline-danger' }}">
+                                    <i class="fas fa-skull-crossbones me-1"></i>CRITICAL
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {# Liste des entrées #}
+                {% if entries is empty %}
+                    <div class="card">
+                        <div class="card-body text-center py-4">
+                            <i class="fas fa-check-circle fa-2x text-success mb-2"></i>
+                            <p class="text-muted mb-0">Aucune entrée pour ce filtre.</p>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="log-entries-container">
+                        {% for entry in entries %}
+                            <div class="log-entry log-entry--{{ entry.level|lower }} mb-2">
+                                <div class="log-entry__header d-flex align-items-start gap-2 p-2">
+                                    {# Badge niveau #}
+                                    <span class="badge flex-shrink-0
+                                        {% if entry.level == 'CRITICAL' %}bg-danger
+                                        {% elseif entry.level == 'ERROR' %}bg-warning text-dark
+                                        {% else %}bg-secondary{% endif %}
+                                    ">
+                                        {{ entry.level }}
+                                    </span>
+
+                                    {# Channel #}
+                                    {% if entry.channel %}
+                                        <span class="badge bg-light text-dark border flex-shrink-0">{{ entry.channel }}</span>
+                                    {% endif %}
+
+                                    {# Timestamp #}
+                                    {% if entry.timestamp %}
+                                        <span class="text-muted small flex-shrink-0">
+                                            <i class="fas fa-clock me-1"></i>
+                                            {{ entry.timestamp|slice(0, 19)|replace({'T': ' '}) }}
+                                        </span>
+                                    {% endif %}
+
+                                    {# Message (résumé) – toggle #}
+                                    <span class="log-entry__message small flex-grow-1 text-truncate font-monospace"
+                                          title="{{ entry.message|e('html_attr') }}">
+                                        {{ entry.message|split("\n")|first|u.truncate(200, '…') }}
+                                    </span>
+
+                                    {# Bouton expand si multilignes ou contexte #}
+                                    {% if '\n' in entry.message or entry.context %}
+                                        <button class="btn btn-xs btn-outline-secondary flex-shrink-0 log-toggle-btn"
+                                                type="button"
+                                                data-bs-toggle="collapse"
+                                                data-bs-target="#log-detail-{{ loop.index }}"
+                                                aria-expanded="false">
+                                            <i class="fas fa-chevron-down"></i>
+                                        </button>
+                                    {% endif %}
+                                </div>
+
+                                {# Détail dépliable #}
+                                {% if '\n' in entry.message or entry.context %}
+                                    <div class="collapse" id="log-detail-{{ loop.index }}">
+                                        <div class="log-entry__detail p-2 pt-0">
+                                            <pre class="log-pre mb-0"><code>{{ entry.message }}</code></pre>
+                                            {% if entry.context %}
+                                                <hr class="my-1">
+                                                <div class="text-extra-small text-muted mb-1">Contexte</div>
+                                                <pre class="log-pre log-pre--context mb-0"><code>{{ entry.context }}</code></pre>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .log-file-item {
+            color: var(--bs-body-color);
+            transition: background-color .15s;
+        }
+
+        .log-file-item:hover {
+            background-color: var(--bs-light);
+        }
+
+        .log-entry {
+            border-radius: .375rem;
+            border-left: 4px solid transparent;
+            background: var(--bs-body-bg);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, .06);
+        }
+
+        .log-entry--error {
+            border-left-color: #ffc107;
+            background-color: #fffbf0;
+        }
+
+        .log-entry--critical {
+            border-left-color: #dc3545;
+            background-color: #fff5f5;
+        }
+
+        .log-pre {
+            font-size: .75rem;
+            white-space: pre-wrap;
+            word-break: break-all;
+            background: rgba(0, 0, 0, .04);
+            border-radius: .25rem;
+            padding: .5rem;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .log-pre--context {
+            background: rgba(0, 0, 0, .02);
+            color: #6c757d;
+        }
+
+        .btn-xs {
+            padding: .1rem .35rem;
+            font-size: .7rem;
+        }
+
+        .log-toggle-btn i {
+            transition: transform .2s;
+        }
+
+        .log-toggle-btn[aria-expanded="true"] i {
+            transform: rotate(180deg);
+        }
+
+        .font-monospace {
+            font-family: var(--bs-font-monospace);
+        }
+
+        .log-entries-container {
+            max-height: calc(100vh - 260px);
+            overflow-y: auto;
+            padding-right: .25rem;
+        }
+    </style>
+{% endblock %}
+

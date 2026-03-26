@@ -41,6 +41,7 @@ class LicenceMcccVersion extends AbstractLicenceMccc
     //todo: gérer la date de vote
 
     public function __construct(
+        private LicenceMccc $licenceMccc,
         KernelInterface                   $kernel,
         protected ClientInterface         $client,
         protected CalculStructureParcoursLicence $calculStructureParcours,

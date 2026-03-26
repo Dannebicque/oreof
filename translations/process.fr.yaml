@@ -377,6 +377,7 @@ btn.deposer.valide: 'Déposer la pièce'
 deposer.pv.flash.success: 'Pièce déposée'
 deposer.pv.flash.error: "Erreur de dépôt. La pièce n'a pas pu être déposée."
 historique.laisserPasser.soumis_conseil: 'Laissez-passer demandé.'
+historique.force_admin.badge: 'Forçage administrateur'
 valide.validation.soumis_conseil.helps.date.help: ' '
 refuse.validation.soumis_conseil.helps.date.help: ' '
 refuse.validation.soumis_conseil.helps.argumentaire.help: ' '

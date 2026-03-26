@@ -2,8 +2,9 @@
 <form method="post"
         {{ stimulus_controller('ec--mccc', {
             urlUpdate: path('app_parcours_ec_update'),
+            urlRecompute: path('app_element_constitutif_mccc_recompute', {id: ec.id, parcours: parcours.id}),
         }) }}
-      action="{{ path('app_element_constitutif_mccc', {id:ec.id, parcours:parcours.id}) }}" {{ stimulus_controller('ec--mccc') }}>
+      action="{{ path('app_element_constitutif_mccc', {id:ec.id, parcours:parcours.id}) }}">
     {% if typeDiplome.libelleCourt != 'BUT' %}
         {% if isParcoursProprietaire == false %}
             <div class="alert alert-info">
@@ -215,6 +216,15 @@
         <i class="fal fa-floppy-disk"></i>
         Enregistrer
     </button>
+
+    {% if is_granted('ROLE_ADMIN') %}
+        <button type="button" class="btn btn-outline-warning ms-2"
+                {{ stimulus_action('ec--mccc', 'forceRecompute', 'click') }}
+        >
+            <i class="fal fa-rotate-right"></i>
+            Forcer le recalcul MCCC
+        </button>
+    {% endif %}
 
     {{ component('alerte', {type:"info", message:'tous les champs avec un <span class="text-red">*</span> sont
 obligatoires'}) }}

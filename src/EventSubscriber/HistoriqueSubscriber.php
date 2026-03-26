@@ -9,6 +9,7 @@
 
 namespace App\EventSubscriber;
 
+use App\Entity\User;
 use App\Entity\HistoriqueFicheMatiere;
 use App\Entity\HistoriqueFormation;
 use App\Entity\HistoriqueParcours;
@@ -21,13 +22,14 @@ use App\Events\HistoriqueParcoursEvent;
 use App\Repository\ComposanteRepository;
 use App\Repository\FormationRepository;
 use App\Repository\UserRepository;
+use App\Exception\FileUploadException;
+use App\Service\SecureUploadService;
 use App\Utils\Tools;
 use DateTimeInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\KernelInterface;
 
 class HistoriqueSubscriber implements EventSubscriberInterface
 {
@@ -39,16 +41,13 @@ class HistoriqueSubscriber implements EventSubscriberInterface
         'projetARevoir'
     ];
 
-    private string $dir;
-
     public function __construct(
-        KernelInterface              $kernel,
         protected UserRepository         $userRepository,
         protected ComposanteRepository   $composanteRepository,
         protected FormationRepository    $formationRepository,
-        protected EntityManagerInterface $entityManager
+        protected EntityManagerInterface     $entityManager,
+        private readonly SecureUploadService $secureUploadService,
     ) {
-        $this->dir = $kernel->getProjectDir().'/public/uploads/conseils/';
     }
 
     public static function getSubscribedEvents(): array
@@ -88,15 +87,15 @@ class HistoriqueSubscriber implements EventSubscriberInterface
             }
         }
 
-        //upload
-        if ($request->files->has('file') && $request->files->get('file') !== null) {
-            $file = $request->files->get('file');
-            $fileName = md5(uniqid('', true)) . '.' . $file->guessExtension();
-            $file->move(
-                $this->dir,
-                $fileName
-            );
-            $tab['fichier'] = $fileName;
+        try {
+            $upload = $this->secureUploadService->uploadFromRequest($request, 'file', 'conseils');
+        } catch (FileUploadException) {
+            throw new Exception('Fichier de validation invalide.');
+        }
+
+        if ($upload !== null) {
+            $tab['fichier'] = $upload->getStoredFilename();
+            $tab['fichier_original'] = $upload->getOriginalFilename();
         }
 
         $histo->setComplements($tab ?? []);
@@ -130,15 +129,15 @@ class HistoriqueSubscriber implements EventSubscriberInterface
             }
         }
 
-        //upload
-        if ($request->files->has('file') && $request->files->get('file') !== null) {
-            $file = $request->files->get('file');
-            $fileName = md5(uniqid('', true)) . '.' . $file->guessExtension();
-            $file->move(
-                $this->dir,
-                $fileName
-            );
-            $tab['fichier'] = $fileName;
+        try {
+            $upload = $this->secureUploadService->uploadFromRequest($request, 'file', 'conseils');
+        } catch (FileUploadException) {
+            throw new Exception('Fichier de validation invalide.');
+        }
+
+        if ($upload !== null) {
+            $tab['fichier'] = $upload->getStoredFilename();
+            $tab['fichier_original'] = $upload->getOriginalFilename();
         }
 
         $histo->setComplements($tab ?? []);
@@ -158,7 +157,7 @@ class HistoriqueSubscriber implements EventSubscriberInterface
         $histo = new HistoriqueFormation();
         $histo->setFormation($event->getFormation());
         $histo->setDate($this->getDateTime($request));
-        $histo->setUser($event->getUser());
+        $histo->setUser($this->resolveUser($event->getUser()));
         $histo->setEtape($event->getEtape());
         $histo->setCommentaire($this->getCommentaire($request));
         $histo->setEtat($event->getEtat());
@@ -176,15 +175,15 @@ class HistoriqueSubscriber implements EventSubscriberInterface
             }
         }
 
-        //upload
-        if ($request->files->has('file') && $request->files->get('file') !== null) {
-            $file = $request->files->get('file');
-            $fileName = md5(uniqid('', true)) . '.' . $file->guessExtension();
-            $file->move(
-                $this->dir,
-                $fileName
-            );
-            $tab['fichier'] = $fileName;
+        try {
+            $upload = $this->secureUploadService->uploadFromRequest($request, 'file', 'conseils');
+        } catch (FileUploadException) {
+            throw new Exception('Fichier de validation invalide.');
+        }
+
+        if ($upload !== null) {
+            $tab['fichier'] = $upload->getStoredFilename();
+            $tab['fichier_original'] = $upload->getOriginalFilename();
         }
 
         $histo->setComplements($tab ?? []);
@@ -196,6 +195,7 @@ class HistoriqueSubscriber implements EventSubscriberInterface
     {
         $request = $event->getRequest();
         $fileName = $event->getFileName();
+        $originalFileName = $event->getOriginalFileName();
         $demande = $event->getChangeRf();
         $formation = $demande->getFormation();
 
@@ -207,7 +207,7 @@ class HistoriqueSubscriber implements EventSubscriberInterface
         $histo->setFormation($formation);
         $histo->setChangeRf($demande);
         $histo->setDate($this->getDateTime($request));
-        $histo->setUser($event->getUser());
+        $histo->setUser($this->resolveUser($event->getUser()));
         $histo->setEtape('changeRf.'.$event->getEtape());
         $histo->setCommentaire($this->getCommentaire($request));
         $histo->setEtat($event->getEtat());
@@ -228,6 +228,9 @@ class HistoriqueSubscriber implements EventSubscriberInterface
         //upload
         if ($fileName !== null && $fileName !== '') {
             $tab['fichier'] = $fileName;
+            if ($originalFileName !== null && $originalFileName !== '') {
+                $tab['fichier_original'] = $originalFileName;
+            }
         }
 
         $histo->setComplements($tab ?? []);
@@ -240,6 +243,9 @@ class HistoriqueSubscriber implements EventSubscriberInterface
     {
         $request = $event->getRequest();
         $fileName = $event->getFileName();
+        $fileNameNote = $event->getFileNameNote();
+        $originalFileName = $event->getOriginalFileName();
+        $originalFileNameNote = $event->getOriginalFileNameNote();
 
         if ($request === null) {
             throw new Exception('Pas de requete');
@@ -248,7 +254,7 @@ class HistoriqueSubscriber implements EventSubscriberInterface
         $histo = new HistoriqueParcours();
         $histo->setParcours($event->getParcours());
         $histo->setDate($this->getDateTime($request));
-        $histo->setUser($event->getUser());
+        $histo->setUser($this->resolveUser($event->getUser()));
         $histo->setEtape($event->getEtape());
         $histo->setCommentaire($this->getCommentaire($request));
         $histo->setEtat($event->getEtat());
@@ -268,6 +274,16 @@ class HistoriqueSubscriber implements EventSubscriberInterface
 
         if ($fileName !== null && $fileName !== '') {
             $tab['fichier'] = $fileName;
+            if ($originalFileName !== null && $originalFileName !== '') {
+                $tab['fichier_original'] = $originalFileName;
+            }
+        }
+
+        if ($fileNameNote !== null && $fileNameNote !== '') {
+            $tab['fichier_note'] = $fileNameNote;
+            if ($originalFileNameNote !== null && $originalFileNameNote !== '') {
+                $tab['fichier_note_original'] = $originalFileNameNote;
+            }
         }
 
         $histo->setComplements($tab ?? []);
@@ -287,7 +303,7 @@ class HistoriqueSubscriber implements EventSubscriberInterface
         $histo = new HistoriqueFicheMatiere();
         $histo->setFicheMatiere($event->getFicheMatiere());
         $histo->setDate($this->getDateTime($request));
-        $histo->setUser($event->getUser());
+        $histo->setUser($this->resolveUser($event->getUser()));
         $histo->setEtape($event->getEtape());
         $histo->setCommentaire($this->getCommentaire($request));
         $histo->setEtat($event->getEtat());
@@ -315,5 +331,10 @@ class HistoriqueSubscriber implements EventSubscriberInterface
             $commentaire = '';
         }
         return $commentaire;
+    }
+
+    private function resolveUser(mixed $user): ?User
+    {
+        return $user instanceof User ? $user : null;
     }
 }

@@ -10,6 +10,7 @@ use App\Form\DpeDemandeTexteType;
 use App\Repository\ComposanteRepository;
 use App\Repository\DpeDemandeRepository;
 use App\Repository\MentionRepository;
+use App\Utils\JsonRequest;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -208,5 +209,26 @@ class DemandeDpeController extends BaseController
         $excelWriter->getColumnsAutoSize('A', 'L');
 
         return $excelWriter->genereFichier($filename);
+    }
+
+    #[Route('/demande/dpe/{id}', name: 'app_demande_dpe_delete', methods: ['DELETE'])]
+    #[IsGranted('ROLE_ADMIN')]
+    public function delete(
+        EntityManagerInterface $entityManager,
+        Request                $request,
+        DpeDemande             $dpeDemande
+    ): Response
+    {
+        if ($this->isCsrfTokenValid(
+            'delete' . $dpeDemande->getId(),
+            JsonRequest::getValueFromRequest($request, 'csrf')
+        )) {
+            $entityManager->remove($dpeDemande);
+            $entityManager->flush();
+
+            return $this->json(true);
+        }
+
+        return $this->json(false, 400);
     }
 }

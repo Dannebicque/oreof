@@ -134,7 +134,8 @@ class VersioningParcours
         return $lastCfvu[0] ?? null;
     }
 
-    public function getLastVersionOrLastYearCfvu(Parcours $parcours) { 
+    public function getLastVersionOrLastYearCfvu(Parcours $parcours)
+    {
         // Dernière version CFVU
         $lastVersion = $this->entityManager->getRepository(ParcoursVersioning::class)->findLastCfvuVersion($parcours);
         if(count($lastVersion) === 0 && $parcours->getParcoursOrigineCopie() !== null){
@@ -150,7 +151,7 @@ class VersioningParcours
     {
         $this->textDifferences = [];
 
-        if( ($this->hasLastVersion($parcours) && $fromLastYear === false) 
+        if (($this->hasLastVersion($parcours) && $fromLastYear === false)
             || ($fromLastYear && $parcours->getParcoursOrigineCopie() !== null)
         ) {
             if($fromLastYear){
@@ -182,7 +183,7 @@ class VersioningParcours
                 'separateBlock' => false,
                 'wordGlues' => [' ', '.']
             ];
-            
+
             $this->textDifferences = [
                 'presentationParcoursContenuFormation' =>
                 self::cleanUpComparison(
@@ -357,7 +358,7 @@ class VersioningParcours
                 self::cleanUpComparison(
                     html_entity_decode(
                         DiffHelper::calculate(
-                            self::cleanUpHtmlTextForComparison($lastVersion->getModalitesAlternance() ?? ""),                        
+                            self::cleanUpHtmlTextForComparison($lastVersion->getModalitesAlternance() ?? ""),
                             self::cleanUpHtmlTextForComparison($parcours->getModalitesAlternance() ?? ""),
                             $rendererName,
                             $differOptions,
@@ -365,7 +366,7 @@ class VersioningParcours
                         )
                     )
                 ),
-                "rythmeFormationTexteParcours" => 
+                "rythmeFormationTexteParcours" =>
                 self::cleanUpComparison(
                     html_entity_decode(
                         DiffHelper::calculate(

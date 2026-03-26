@@ -5,6 +5,7 @@
 >
 <div {{ stimulus_target('notification', 'liste') }}>
     {% for notif in notifications %}
+        {% set payload = notif.payload ?? {} %}
         {% if notif.isRead == false %}
             {% set color='warning' %}
             {% set icon='fa-exclamation' %}
@@ -23,7 +24,22 @@
                     <div class="col">
                         <div class="sh-5 d-flex align-items-center lh-1-25">
                             {{ notif.title|trans({},'notif') }}
+                            {% if payload.mustAck is defined and payload.mustAck == true %}
+                                <span class="badge bg-warning text-dark ms-2">Validation obligatoire</span>
+                            {% endif %}
                         </div>
+                        {% if notif.body %}
+                            <div class="small text-muted">{{ notif.body }}</div>
+                        {% endif %}
+                        {% if payload.changedFields is defined and payload.changedFields|length > 0 %}
+                            <div class="small">Champs modifiés: {{ payload.changedFields|join(', ') }}</div>
+                        {% endif %}
+                        {% if payload.sourceUeLabel is defined and payload.sourceUeLabel %}
+                            <div class="small text-muted">UE porteuse: {{ payload.sourceUeLabel }}</div>
+                        {% endif %}
+                        {% if payload.sourceSemestreLabel is defined and payload.sourceSemestreLabel %}
+                            <div class="small text-muted">Semestre porteur: {{ payload.sourceSemestreLabel }}</div>
+                        {% endif %}
                     </div>
                     <div class="col-auto">
                         <div class="sh-5 d-flex align-items-center">{{ notif.created|date('d/m/Y') }}</div>

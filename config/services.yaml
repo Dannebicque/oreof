@@ -118,3 +118,13 @@ services:
     App\EventSubscriber\CreateUserSubscriber:
       tags:
         - { name: doctrine.event_subscriber }
+
+    App\Service\SecureUploadService:
+      arguments:
+        $uploadContexts:
+          conseils:
+            target_dir: '%kernel.project_dir%/public/uploads/conseils'
+            allowed_extensions: [ 'pdf' ]
+            allowed_mime_types: [ 'application/pdf' ]
+            max_size: 10485760
+

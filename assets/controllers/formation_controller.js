@@ -9,9 +9,6 @@
 import { Controller } from '@hotwired/stimulus'
 
 export default class extends Controller {
-  static targets = [
-    'user',
-  ]
 
   static values = {
     url: String,
@@ -58,15 +55,6 @@ export default class extends Controller {
     this._updateListeMention(document.getElementById('formation_ses_typeDiplome').value, event.target.value)
   }
 
-  changeResponsableMention(event) {
-    this._updatePersonnel(event.target.value)
-  }
-
-  async _updatePersonnel (id) {
-    const responsableMention = id
-    const reponse = await fetch(`${this.urlUserValue}?id=${responsableMention}`)
-    this.userTarget.innerHTML = await reponse.text()
-  }
 
   changeMention(event) {
     if (event.target.value === 'autre' || event.target.value.trim() === 'null') {

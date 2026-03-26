@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Classes\Export\ExportBcc;
 use App\Classes\MyGotenbergPdf;
 use App\Entity\Parcours;
+use App\Service\TypeDiplomeResolver;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -27,13 +28,14 @@ class CompetenceExportController extends AbstractController
 
     #[Route('/competence/export/croise/{parcours}', name: 'app_competence_export_croise')]
     public function croise(
-        CalculStructureParcours $calculStructureParcours,
+        TypeDiplomeResolver $typeDiplomeResolver,
         MyGotenbergPdf $myGotenbergPdf,
         Parcours       $parcours
     ): Response
     {
         $formation = $parcours->getFormation();
-        $dto = $calculStructureParcours->calcul($parcours, false, true);
+        $typeD = $typeDiplomeResolver->getFromFormation($formation);
+        $dto = $typeD->calculStructureParcours($parcours, false, true);
         return $myGotenbergPdf->render('pdf/bcc_export_croise.html.twig', [
             'formation' => $formation,
             'parcours' => $parcours,

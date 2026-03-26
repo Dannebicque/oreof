@@ -48,7 +48,14 @@ class ChangeRfProcess extends AbstractProcess
         return $processData;
     }
 
-    public function valideChangeRf(ChangeRf $changeRf, UserInterface $user, string|array $transition, $request, ?string $fileName = null): Response
+    public function valideChangeRf(
+        ChangeRf      $changeRf,
+        UserInterface $user,
+        string|array  $transition,
+                      $request,
+        ?string       $fileName = null,
+        ?string       $originalFileName = null,
+    ): Response
     {
         $valid = $transition;
         $motifs = [];
@@ -82,7 +89,7 @@ class ChangeRfProcess extends AbstractProcess
 
         $this->entityManager->flush();
 
-        return $this->dispatchEventChangeRf($changeRf, $user, $place, $request, 'valide', $fileName);
+        return $this->dispatchEventChangeRf($changeRf, $user, $place, $request, 'valide', $fileName, $originalFileName);
     }
 
     public function reserveChangeRf(ChangeRf $changeRf, UserInterface $user, string|array $transition, $request): Response
@@ -94,9 +101,17 @@ class ChangeRfProcess extends AbstractProcess
         return $this->dispatchEventChangeRf($changeRf, $user, $place, $request, 'reserve');
     }
 
-    private function dispatchEventChangeRf(ChangeRf $changeRf, UserInterface $user, string $place, Request $request, string $etat, ?string $fileName = null): Response
+    private function dispatchEventChangeRf(
+        ChangeRf      $changeRf,
+        UserInterface $user,
+        string        $place,
+        Request       $request,
+        string        $etat,
+        ?string       $fileName = null,
+        ?string       $originalFileName = null,
+    ): Response
     {
-        $histoEvent = new HistoriqueChangeRfEvent($changeRf, $user, $place, $etat, $request, $fileName);
+        $histoEvent = new HistoriqueChangeRfEvent($changeRf, $user, $place, $etat, $request, $fileName, $originalFileName);
         $this->eventDispatcher->dispatch($histoEvent, HistoriqueChangeRfEvent::ADD_HISTORIQUE_CHANGE_RF);
         return JsonReponse::success($this->translator->trans('changeRf.'.$etat.'.' . $place . '.flash.success', [], 'process'));
     }

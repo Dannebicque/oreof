@@ -14,6 +14,8 @@ use App\Classes\ValidationProcess;
 use App\Classes\ValidationProcessChangeRf;
 use App\Classes\ValidationProcessFicheMatiere;
 use App\Entity\Composante;
+use App\Entity\CampagneCollecte;
+use App\Repository\CampagneCollecteRepository;
 use App\Repository\ChangeRfRepository;
 use App\Repository\ComposanteRepository;
 use App\Repository\DpeParcoursRepository;
@@ -23,6 +25,8 @@ use DateTime;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\UX\Chartjs\Builder\ChartBuilderInterface;
+use Symfony\UX\Chartjs\Model\Chart;
 
 #[Route('/validation/composante/', name: 'app_validation_composante_')]
 class ValidationComposanteController extends BaseController
@@ -88,6 +92,75 @@ class ValidationComposanteController extends BaseController
             'composante' => $composante,
             'types_validation' => $validationProcess->getProcessAll(),
             'typeValidation' => $typeValidation,
+        ]);
+    }
+
+    #[Route('{composante}/pilotage', name: 'pilotage')]
+    #[Route('{composante}/pilotage/{campagneCollecte}', name: 'pilotage_campagne')]
+    public function pilotage(
+        Composante                 $composante,
+        DpeParcoursRepository      $dpeParcoursRepository,
+        CampagneCollecteRepository $campagneCollecteRepository,
+        ChartBuilderInterface      $chartBuilder,
+        ?CampagneCollecte          $campagneCollecte = null,
+    ): Response
+    {
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            $this->denyAccessUnlessGranted('SHOW', [
+                'route' => 'app_composante',
+                'subject' => $composante,
+            ]);
+        }
+
+        $campagne = $campagneCollecte ?? $this->getCampagneCollecte();
+        $stats = $dpeParcoursRepository->getPilotageStatsByComposanteAndCampagne($composante, $campagne);
+
+        $chartRepartition = $chartBuilder->createChart(Chart::TYPE_DOUGHNUT);
+        $chartRepartition->setData([
+            'labels' => ['Parcours ouverts', 'Parcours validés', 'Parcours non ouverts', 'Autres statuts'],
+            'datasets' => [[
+                'label' => 'Repartition des parcours',
+                'backgroundColor' => ['#3B82F6', '#10B981', '#EF4444', '#94A3B8'],
+                'data' => [
+                    $stats['nbParcoursOuverts'],
+                    $stats['nbParcoursValides'],
+                    $stats['nbParcoursNonOuverts'],
+                    $stats['nbParcoursAutres'],
+                ],
+            ]],
+        ]);
+
+        $workflowLabels = array_keys($stats['workflowCounts']);
+        $workflowData = array_values($stats['workflowCounts']);
+        if (count($workflowLabels) === 0) {
+            $workflowLabels = ['Aucune donnee'];
+            $workflowData = [0];
+        }
+
+        $chartWorkflow = $chartBuilder->createChart(Chart::TYPE_BAR);
+        $chartWorkflow->setData([
+            'labels' => $workflowLabels,
+            'datasets' => [[
+                'label' => 'Parcours par etape workflow',
+                'backgroundColor' => '#6366F1',
+                'data' => $workflowData,
+            ]],
+        ]);
+
+        $chartWorkflow->setOptions([
+            'indexAxis' => 'y',
+            'plugins' => [
+                'legend' => ['display' => false],
+            ],
+        ]);
+
+        return $this->render('validation-composante/pilotage.html.twig', [
+            'composante' => $composante,
+            'campagne' => $campagne,
+            'campagnes' => $campagneCollecteRepository->findBy([], ['annee' => 'DESC']),
+            'stats' => $stats,
+            'chartRepartition' => $chartRepartition,
+            'chartWorkflow' => $chartWorkflow,
         ]);
     }
 
