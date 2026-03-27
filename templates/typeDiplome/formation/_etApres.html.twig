@@ -46,5 +46,23 @@
             <li>{{ code.code }}</li>
         {% endfor %}
         </ul>
+        {% if stringDifferencesParcours.codesROMEParcours is defined %}
+            {{ include('communs/_comparaison_versioning_no_button.html.twig',
+                    {
+                        textDifferences: stringDifferencesParcours.codesROMEParcours,
+                        idCollapse: 'diffGlobalParcours' 
+                    }
+                )
+            }}
+        {% endif %}
+        {% if stringDifferencesParcoursCampagne.codesROMEParcours is defined %}
+            {{ include('communs/_comparaison_versioning_no_button.html.twig',
+                    {
+                        textDifferences: stringDifferencesParcoursCampagne.codesROMEParcours,
+                        idCollapse: 'diffGlobalParcoursCampagne'
+                    }
+                )
+            }}
+        {% endif %}
     </div>
 </div>
