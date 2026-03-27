@@ -425,6 +425,30 @@ class VersioningParcours
                             $rendererOptions
                         )
                     )
+                ),
+                'responsableMentionParcoursParDefaut' =>
+                self::cleanUpComparison(
+                    html_entity_decode(
+                        DiffHelper::calculate(
+                            $lastVersion->getFormation()?->getResponsableMention()?->getDisplay() ?? '',
+                            $parcours->getFormation()?->getResponsableMention()?->getDisplay() ?? '',
+                            $rendererName,
+                            $differOptions,
+                            $rendererOptions
+                        )
+                    )
+                ),
+                'coResponsableMentionParcoursParDefaut' => 
+                self::cleanUpComparison(
+                    html_entity_decode(
+                        DiffHelper::calculate(
+                            $lastVersion->getFormation()?->getCoResponsable()?->getDisplay() ?? '',
+                            $parcours->getFormation()?->getCoResponsable()?->getDisplay() ?? '',
+                            $rendererName,
+                            $differOptions,
+                            $rendererOptions
+                        )
+                    )
                 )
             ];
         }
