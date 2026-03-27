@@ -449,6 +449,24 @@ class VersioningParcours
                             $rendererOptions
                         )
                     )
+                ),
+                'parcoursHasStage' =>
+                self::cleanUpComparison(
+                    html_entity_decode(
+                        DiffHelper::calculate(
+                            $this->decodeBooleanWithHours(
+                                $lastVersion->hasStage() ?? false, 
+                                $lastVersion->getNbHeuresStages() ?? 0.0
+                            ),
+                            $this->decodeBooleanWithHours(
+                                $parcours->hasStage() ?? false, 
+                                $parcours->getNbHeuresStages() ?? 0.0
+                            ),
+                            $rendererName,
+                            $differOptions,
+                            $rendererOptions
+                        )
+                    )
                 )
             ];
         }
@@ -607,5 +625,13 @@ class VersioningParcours
         }
 
         return "";
+    }
+
+    private function decodeBooleanWithHours(bool $hasStage, int $nbHeures) {
+        if($hasStage){
+            return "Oui ({$nbHeures} heures).";
+        }
+
+        return 'Non';
     }
 }
