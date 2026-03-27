@@ -413,6 +413,18 @@ class VersioningParcours
                             $rendererOptions
                         )
                     )
+                ),
+                'codesROMEParcours' => 
+                self::cleanUpComparison(
+                    html_entity_decode(
+                        DiffHelper::calculate(
+                            $this->getArrayAsHtmlDiffList($lastVersion->getCodesRome() ?? [], 'code'),
+                            $this->getArrayAsHtmlDiffList($parcours->getCodesRome() ?? [], 'code'),
+                            $rendererName,
+                            $differOptions,
+                            $rendererOptions
+                        )
+                    )
                 )
             ];
         }
@@ -554,5 +566,22 @@ class VersioningParcours
             $parcours->setPoursuitesEtudes($this->textDifferences['poursuiteEtudesParcours']);
         }
 
+    }
+
+    private function getArrayAsHtmlDiffList(array $array, ?string $key) : string {
+        if(count($array) > 0){
+            $html = "";
+            foreach($array as $element){
+                $value = $element;
+                if($key !== null){
+                    $value = $element[$key];
+                }
+                $html .= '<p class="list-item">' . $value . '</p>';
+           }
+
+           return $html;
+        }
+
+        return "";
     }
 }
