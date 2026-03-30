@@ -499,7 +499,7 @@ class Parcours
 
     public function getNbHeuresProjet(): ?float
     {
-        return $this->nbHeuresProjet;
+        return $this->nbHeuresProjet ?? null;
     }
 
     public function setNbHeuresProjet(float $nbHeuresProjet): self
