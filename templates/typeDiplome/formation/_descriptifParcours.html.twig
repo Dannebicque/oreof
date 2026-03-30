@@ -77,6 +77,42 @@
                         Non
                     {% endif %}
                 </dd>
+                {% if stringDifferencesParcours.parcoursHasProjet is defined %}
+                    {{ include('communs/_comparaison_versioning_no_button.html.twig',
+                            {
+                                textDifferences: stringDifferencesParcours.parcoursHasProjet,
+                                idCollapse: 'diffGlobalParcours'
+                            }
+                        ) 
+                    }}
+                {% endif %}
+                {% if stringDifferencesParcoursCampagne.parcoursHasProjet is defined %}
+                    {{ include('communs/_comparaison_versioning_no_button.html.twig',
+                            {
+                                textDifferences: stringDifferencesParcoursCampagne.parcoursHasProjet,
+                                idCollapse: 'diffGlobalParcoursCampagne'
+                            }
+                        ) 
+                    }}
+                {% endif %}
+                {% if stringDifferencesParcours.projetTexteParcours is defined %}
+                    {{ include('communs/_comparaison_versioning_no_button.html.twig',
+                            {
+                                textDifferences: stringDifferencesParcours.projetTexteParcours,
+                                idCollapse: 'diffGlobalParcours'
+                            }
+                        ) 
+                    }}
+                {% endif %}
+                {% if stringDifferencesParcoursCampagne.projetTexteParcours is defined %}
+                    {{ include('communs/_comparaison_versioning_no_button.html.twig',
+                            {
+                                textDifferences: stringDifferencesParcoursCampagne.projetTexteParcours,
+                                idCollapse: 'diffGlobalParcoursCampagne'
+                            }
+                        ) 
+                    }}
+                {% endif %}
             {% endif %}
             {% if typeDiplome.hasMemoire %}
                 <dt>TER/Mémoire</dt>
