@@ -122,6 +122,26 @@
                     {% else %}
                         Non
                     {% endif %}
+
+                    {% if stringDifferencesParcours.hasMemoireParcours is defined %}
+                        {{ include('communs/_comparaison_versioning_no_button.html.twig', 
+                                {
+                                    textDifferences: stringDifferencesParcours.hasMemoireParcours,
+                                    idCollapse: 'diffGlobalParcours'
+                                }
+                            )
+                        }}
+                    {% endif %}
+                    {% if stringDifferencesParcoursCampagne.hasMemoireParcours is defined %}
+                        {{ include('communs/_comparaison_versioning_no_button.html.twig', 
+                                {
+                                    textDifferences: stringDifferencesParcoursCampagne.hasMemoireParcours,
+                                    idCollapse: 'diffGlobalParcoursCampagne'
+                                }
+                            )
+                        }}
+                    {% endif %}
+
                     {% if stringDifferencesParcours.memoireTextParcours is defined %}
                         {{ include('communs/_comparaison_versioning_no_button.html.twig', {
                                 textDifferences: stringDifferencesParcours.memoireTextParcours,
