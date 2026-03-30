@@ -169,6 +169,24 @@
                         Non
                     {% endif %}
                 </dd>
+                {% if stringDifferencesParcours.hasSituationProHeures is defined %}
+                    {{ include('communs/_comparaison_versioning_no_button.html.twig',
+                            {
+                                textDifferences: stringDifferencesParcours.hasSituationProHeures,
+                                idCollapse: 'diffGlobalParcours'
+                            }
+                        ) 
+                    }}
+                {% endif %}
+                {% if stringDifferencesParcoursCampagne.hasSituationProHeures is defined %}
+                    {{ include('communs/_comparaison_versioning_no_button.html.twig',
+                            {
+                                textDifferences: stringDifferencesParcoursCampagne.hasSituationProHeures,
+                                idCollapse: 'diffGlobalParcoursCampagne'
+                            }
+                        ) 
+                    }}
+                {% endif %}
             {% endif %}
         </dl>
     </div>
