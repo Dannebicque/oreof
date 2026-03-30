@@ -479,6 +479,36 @@ class VersioningParcours
                             $rendererOptions
                         )
                     )
+                ),
+                'parcoursHasProjet' => 
+                self::cleanUpComparison(
+                    html_entity_decode(
+                        DiffHelper::calculate(
+                            $this->decodeBooleanWithHours(
+                                $lastVersion->hasProjet() ?? false,
+                                $lastVersion->getNbHeuresProjet() ?? 0.0,
+                            ),
+                            $this->decodeBooleanWithHours(
+                                $parcours->hasProjet() ?? false, 
+                                $parcours->getNbHeuresProjet() ?? 0.0
+                            ),
+                            $rendererName,
+                            $differOptions,
+                            $rendererOptions
+                        )
+                    )
+                ),
+                'projetTexteParcours' =>
+                self::cleanUpComparison(
+                    html_entity_decode(
+                        DiffHelper::calculate(
+                            $lastVersion->getProjetText() ?? "",
+                            $parcours->getProjetText() ?? "",
+                            $rendererName,
+                            $differOptions,
+                            $rendererOptions
+                        )
+                    )
                 )
             ];
         }
@@ -639,8 +669,8 @@ class VersioningParcours
         return "";
     }
 
-    private function decodeBooleanWithHours(bool $hasStage, int $nbHeures) {
-        if($hasStage){
+    private function decodeBooleanWithHours(bool $isTrue, int $nbHeures) {
+        if($isTrue){
             return "Oui ({$nbHeures} heures).";
         }
 
