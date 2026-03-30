@@ -4,6 +4,26 @@
             <dt>Modalités d'enseignement</dt>
             <dd>{{ parcours.modalitesEnseignement != null ? parcours.modalitesEnseignement.libelle : 'Erreur' }}</dd>
 
+            {% if stringDifferencesParcours.modaliteEnseignementParcours is defined %}
+                {{ include('communs/_comparaison_versioning_no_button.html.twig', 
+                        {
+                            textDifferences: stringDifferencesParcours.modaliteEnseignementParcours,
+                            idCollapse: 'diffGlobalParcours'
+                        }
+                    )
+                }}
+            {% endif %}
+            {% if stringDifferencesParcoursCampagne.modaliteEnseignementParcours is defined %}
+                {{ include('communs/_comparaison_versioning_no_button.html.twig', 
+                        {
+                            textDifferences: stringDifferencesParcoursCampagne.modaliteEnseignementParcours,
+                            idCollapse: 'diffGlobalParcoursCampagne'
+                        }
+                    )
+                }}
+            {% endif %}
+
+
             {% if typeDiplome.hasStage %}
                 <dt>Stage(s)</dt>
                 <dd>
