@@ -72,8 +72,48 @@
             <dd>
                 {% if formation.hasParcours %}
                     {{ parcours.modalitesAlternance|raw }}
+                        {% if stringDifferencesParcours.modaliteAlternanceParcours is defined %}
+                            {{ include('communs/_comparaison_versioning_no_button.html.twig', 
+                                    {
+                                        textDifferences: stringDifferencesParcours.modaliteAlternanceParcours,
+                                        idCollapse: 'diffGlobalParcours'
+                                    }
+                                )
+
+                            }}
+                        {% endif %}
+                        {% if stringDifferencesParcoursCampagne.modaliteAlternanceParcours is defined %}
+                            {{ include('communs/_comparaison_versioning_no_button.html.twig', 
+                                    {
+                                        textDifferences: stringDifferencesParcoursCampagne.modaliteAlternanceParcours,
+                                        idCollapse: 'diffGlobalParcoursCampagne'
+                                    }
+                                )
+
+                            }}
+                        {% endif %}
                 {% else %}
                     {{ formation.modalitesAlternance|raw }}
+                        {% if stringDifferencesFormation.modaliteAlternanceFormation is defined %}
+                            {{ include('communs/_comparaison_versioning_no_button.html.twig', 
+                                    {
+                                        textDifferences: stringDifferencesFormation.modaliteAlternanceFormation,
+                                        idCollapse: 'diffGlobalParcours'
+                                    }
+                                )
+
+                            }}
+                        {% endif %}
+                        {% if stringDifferencesFormationCampagne.modaliteAlternanceFormation is defined %}
+                            {{ include('communs/_comparaison_versioning_no_button.html.twig', 
+                                    {
+                                        textDifferences: stringDifferencesFormationCampagne.modaliteAlternanceFormation,
+                                        idCollapse: 'diffGlobalParcoursCampagne'
+                                    }
+                                )
+
+                            }}
+                        {% endif %}
                 {% endif %}
 
             </dd>
