@@ -305,6 +305,17 @@ class VersioningFormation
                             $rendererOptions
                         )
                     )
+                ),
+                'modaliteAlternanceFormation' =>
+                VersioningParcours::cleanUpComparison(
+                    html_entity_decode(DiffHelper::calculate(
+                            $lastVersion?->getModalitesAlternance() ?? "",
+                            $formation->getModalitesAlternance() ?? "",
+                            $rendererName,
+                            $differOptions,
+                            $rendererOptions
+                        )
+                    )
                 )
             ];
         }
