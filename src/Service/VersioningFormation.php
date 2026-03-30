@@ -294,6 +294,17 @@ class VersioningFormation
                             $rendererOptions
                         )
                     )
+                ),
+                'regimeInscriptionTexte' =>
+                VersioningParcours::cleanUpComparison(
+                    html_entity_decode(DiffHelper::calculate(
+                            $lastVersion?->getRegimeInscriptionTexte() ?? "",
+                            $formation->getRegimeInscriptionTexte() ?? "",
+                            $rendererName,
+                            $differOptions,
+                            $rendererOptions
+                        )
+                    )
                 )
             ];
         }
