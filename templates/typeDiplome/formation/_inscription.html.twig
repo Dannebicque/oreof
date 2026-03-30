@@ -6,6 +6,24 @@
             <dd>
                 {% for ville in formation.localisationMention %}{{ ville.libelle }}{% if not loop.last %}, {% endif %}{% endfor %}
             </dd>
+            {% if stringDifferencesFormation.localisationMention is defined %}
+                {{ include('communs/_comparaison_versioning_no_button.html.twig', 
+                        {
+                            textDifferences: stringDifferencesFormation.localisationMention,
+                            idCollapse: 'diffGlobalParcours'
+                        }
+                    )
+                }}
+            {% endif %}
+            {% if stringDifferencesFormationCampagne.localisationMention is defined %}
+                {{ include('communs/_comparaison_versioning_no_button.html.twig', 
+                        {
+                            textDifferences: stringDifferencesFormationCampagne.localisationMention,
+                            idCollapse: 'diffGlobalParcoursCampagne'
+                        }
+                    )
+                }}
+            {% endif %}
             <dt>Régime(s) d'inscription</dt>
             <dd>
                 {% if formation.hasParcours %}
