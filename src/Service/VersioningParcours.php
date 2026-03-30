@@ -467,6 +467,18 @@ class VersioningParcours
                             $rendererOptions
                         )
                     )
+                ),
+                'modaliteEnseignementParcours' => 
+                self::cleanUpComparison(
+                    html_entity_decode(
+                        DiffHelper::calculate(
+                            $lastVersion->getModalitesEnseignement()?->libelle() ?? "",
+                            $parcours->getModalitesEnseignement()?->libelle() ?? "",
+                            $rendererName,
+                            $differOptions,
+                            $rendererOptions
+                        )
+                    )
                 )
             ];
         }
