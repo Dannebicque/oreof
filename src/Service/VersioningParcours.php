@@ -521,6 +521,24 @@ class VersioningParcours
                             $rendererOptions
                         )
                     )
+                ),
+                'hasSituationProHeures' =>
+                self::cleanUpComparison(
+                    html_entity_decode(
+                        DiffHelper::calculate(
+                            $this->decodeBooleanWithHours(
+                                $lastVersion->isHasSituationPro() ?? false,
+                                $lastVersion->getNbHeuresSituationPro() ?? 0.0
+                            ),
+                            $this->decodeBooleanWithHours(
+                                $parcours->isHasSituationPro() ?? false, 
+                                $parcours->getNbHeuresSituationPro() ?? 0.0
+                            ),
+                            $rendererName,
+                            $differOptions,
+                            $rendererOptions
+                        )
+                    )
                 )
             ];
         }
