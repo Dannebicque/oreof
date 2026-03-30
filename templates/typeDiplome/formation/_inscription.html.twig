@@ -77,5 +77,23 @@
                 <dd>{{ composante.urlSite|open_url }}</dd>
             </dl>
         {% endfor %}
+        {% if stringDifferencesFormation.composanteInscriptionFormation is defined %}
+            {{ include('communs/_comparaison_versioning_no_button.html.twig',
+                    {
+                        textDifferences: stringDifferencesFormation.composanteInscriptionFormation,
+                        idCollapse: 'diffGlobalParcours'
+                    }
+                )
+            }}
+        {% endif %}
+        {% if stringDifferencesFormationCampagne.composanteInscriptionFormation is defined %}
+            {{ include('communs/_comparaison_versioning_no_button.html.twig',
+                    {
+                        textDifferences: stringDifferencesFormationCampagne.composanteInscriptionFormation,
+                        idCollapse: 'diffGlobalParcoursCampagne'
+                    }
+                )
+            }}
+        {% endif %}
     </div>
 </div>
