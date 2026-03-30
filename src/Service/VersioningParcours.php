@@ -616,7 +616,7 @@ class VersioningParcours
             foreach($array as $element){
                 $value = $element;
                 if($key !== null){
-                    $value = $element[$key];
+                    $value = $element[$key] ?? "";
                 }
                 $html .= '<p class="list-item">' . $value . '</p>';
            }
