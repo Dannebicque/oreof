@@ -509,6 +509,18 @@ class VersioningParcours
                             $rendererOptions
                         )
                     )
+                ),
+                'hasMemoireParcours' =>
+                self::cleanUpComparison(
+                    html_entity_decode(
+                        DiffHelper::calculate(
+                            ($lastVersion->isHasMemoire() ?? false) ? 'Oui' : 'Non',
+                            ($parcours->isHasMemoire() ?? false) ? 'Oui' : 'Non',
+                            $rendererName,
+                            $differOptions,
+                            $rendererOptions
+                        )
+                    )
                 )
             ];
         }
