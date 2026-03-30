@@ -10,8 +10,44 @@
             <dd>
                 {% if formation.hasParcours %}
                     {{ parcours.displayRegimeInscription|raw }}
+                        {% if stringDifferencesParcours.regimeInscriptionParcours is defined %}
+                            {{ include('communs/_comparaison_versioning_no_button.html.twig', 
+                                    {
+                                        textDifferences: stringDifferencesParcours.regimeInscriptionParcours,
+                                        idCollapse: 'diffGlobalParcours'
+                                    }
+                                )
+                            }}
+                        {% endif %}
+                        {% if stringDifferencesParcoursCampagne.regimeInscriptionParcours is defined %}
+                            {{ include('communs/_comparaison_versioning_no_button.html.twig', 
+                                    {
+                                        textDifferences: stringDifferencesParcoursCampagne.regimeInscriptionParcours,
+                                        idCollapse: 'diffGlobalParcoursCampagne'
+                                    }
+                                )
+                            }}
+                        {% endif %}
                 {% else %}
                     {{ formation.regimeInscriptionTexte|raw }}
+                        {% if stringDifferencesFormation.regimeInscriptionTexte is defined %}
+                            {{ include('communs/_comparaison_versioning_no_button.html.twig', 
+                                    {
+                                        textDifferences: stringDifferencesFormation.regimeInscriptionTexte,
+                                        idCollapse: 'diffGlobalParcours'
+                                    }
+                                )
+                            }}
+                        {% endif %}
+                        {% if stringDifferencesFormationCampagne.regimeInscriptionTexte is defined %}
+                        {{ include('communs/_comparaison_versioning_no_button.html.twig', 
+                                    {
+                                        textDifferences: stringDifferencesFormationCampagne.regimeInscriptionTexte,
+                                        idCollapse: 'diffGlobalParcoursCampagne'
+                                    }
+                                )
+                            }}
+                        {% endif %}
                 {% endif %}
             </dd>
             <dt>Modalités de l'alternance</dt>
