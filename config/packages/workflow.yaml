@@ -253,6 +253,7 @@ framework:
             btn: success
             hasDate: true
             hasUpload: true
+            hasUploadNote: true
             icon: fa-check
         reserver_conseil:
           from: 'soumis_conseil'
@@ -672,7 +673,6 @@ framework:
             icon: fa-check
             hasDate: true
             hasUpload: true
-            hasUploadNote: true
         valider_ses:
           from: 'soumis_ses'
           to: 'soumis_cfvu'
