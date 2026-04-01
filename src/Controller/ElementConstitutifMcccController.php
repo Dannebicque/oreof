@@ -145,6 +145,9 @@ class ElementConstitutifMcccController extends AbstractController
                         $elementConstitutif->getFicheMatiere()?->isEctsImpose() === false) {
                         $elementConstitutif->setEcts((float)$request->request->all()['ec_step4']['ects']);
                         $newEcts = $elementConstitutif->getEcts();
+                    } elseif ($elementConstitutif->getNatureUeEc()?->isLibre() && $elementConstitutif->getEcParent() === null) {
+                        $elementConstitutif->setEcts((float)$request->request->all()['ec_step4']['ects']);
+                        $newEcts = $elementConstitutif->getEcts();
                     } elseif ($elementConstitutif->getNatureUeEc()?->isChoix() && $elementConstitutif->getEcParent() === null) {
                         //cas de l'EC parent d'un choix. ECTS géré par le choix
                         $elementConstitutif->setEcts((float)$request->request->all()['ec_step4']['ects']);
