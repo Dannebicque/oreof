@@ -69,13 +69,13 @@
             <tbody>
             {% for annee in parcours.annees %}
                 <tr>
-                    <td>{{ annee }}</td>
+                    <td>Année {{ annee.ordre }}</td>
                     <td>{{ parcours.localisation != null ? parcours.localisation.libelle : '' }}</td>
                     <td>{{ parcours.codeMentionApogee }}</td>
-                    <td>{{ parcours.codeDiplome(annee) }}</td>
-                    <td>{{ parcours.codeVersionDiplome(annee) }}</td>
-                    <td>{{ parcours.codeEtape(annee) }}</td>
-                    <td>{{ parcours.codeVersionEtape(annee) }}</td>
+                    <td>{{ parcours.codeDiplome(annee.ordre) }}</td>
+                    <td>{{ parcours.codeVersionDiplome(annee.ordre) }}</td>
+                    <td>{{ parcours.codeEtape(annee.ordre) }}</td>
+                    <td>{{ parcours.codeVersionEtape(annee.ordre) }}</td>
                     <td>
                         {% if is_granted('ROLE_ADMIN') %}
                             <a href="#"
@@ -83,7 +83,7 @@
                                     {{ stimulus_controller('modal', {
                                         size: 'lg',
                                         modalTitle: 'Modifier la codification haute',
-                                        modalUrl: path('app_codification_edit', {parcours:parcours.id, annee:annee}) }) }}
+                                        modalUrl: path('app_codification_edit', {parcours:parcours.id, annee:annee.ordre}) }) }}
                                data-action="click->modal#openModal"
                                data-size="lg"
                                data-bs-toggle="tooltip"

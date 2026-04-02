@@ -31,7 +31,7 @@ final class BadgeMcccComponent
     #[PostMount]
     public function mounted(): void
     {
-        $this->isParcoursProprietaire = $this->elementConstitutif->getFicheMatiere()?->getParcours()?->getId() === $this->parcours->getId() || $this->elementConstitutif->getNatureUeEc()?->isChoix();
+        $this->isParcoursProprietaire = $this->elementConstitutif->getFicheMatiere()?->getParcours()?->getId() === $this->parcours->getId() || $this->elementConstitutif->getNatureUeEc()?->isChoix() || $this->elementConstitutif->getNatureUeEc()?->isLibre();
 
         $this->isMcccSpecifiques = $this->elementConstitutif->isMcccSpecifiques();
         if ($this->elementConstitutif !== null) {

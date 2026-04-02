@@ -36,6 +36,7 @@ class FormationResponsableController extends BaseController
 
     #[Route('/formation/change-responsable/ajout/{formation}', name: 'app_formation_change_rf')]
     public function index(
+        ChangeRfRepository $changeRfRepository,
         Formation $formation,
         Request $request
     ): Response {
@@ -56,6 +57,24 @@ class FormationResponsableController extends BaseController
             $user = $datas->getUser();
             $commentaire = $datas->getCommentaire();
 
+            if ($datas->getTypeRf() === TypeRfEnum::RF) {
+                $oldResp = $formation->getResponsableMention();
+            } else {
+                $oldResp = $formation->getCoResponsable();
+            }
+
+            $exist = $changeRfRepository->findBy([
+                'formation' => $formation,
+                'campagneCollecte' => $this->getCampagneCollecte(),
+                'nouveauResponsable' => $user,
+                'typeRf' => $datas->getTypeRf(),
+                'ancienResponsable' => $oldResp
+            ]);
+
+            if (count($exist) !== 0) {
+                return JsonReponse::error('Une demande de changement de responsable de formation existe déjà pour ce (co-)responsable, cette formation et ce type de (co-)responsable.');
+            }
+
             $newRf = new \App\Entity\ChangeRf();
             $newRf->setCampagneCollecte($this->getCampagneCollecte());
             $newRf->setFormation($formation);
@@ -65,12 +84,7 @@ class FormationResponsableController extends BaseController
             $newRf->setDateDemande(new DateTime());
             //initialiser le marking du workflow
             $this->changeRfWorkflow->apply($newRf, 'effectuer_demande');
-
-            if ($newRf->getTypeRf() === TypeRfEnum::RF) {
-                $newRf->setAncienResponsable($formation->getResponsableMention());
-            } else {
-                $newRf->setAncienResponsable($formation->getCoResponsable());
-            }
+            $newRf->setAncienResponsable($oldResp);
 
             $this->entityManager->persist($newRf);
             $this->entityManager->flush();

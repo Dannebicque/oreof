@@ -6,7 +6,7 @@
                 class="form-control"
                 id="commentaire"
                 data-model="commentaire"
-                rows="10">{{ this.commentaire|raw }}</textarea>
+                rows="10">{{ this.commentaire }}</textarea>
 
         <div class="col-sm-offset-2 col-sm-10">
             <button class="btn btn-success"
@@ -18,7 +18,7 @@
             </button>
         </div>
     {% else %}
-        {{ this.commentaire|raw }}
+        {{ this.commentaire|nl2br }}
         <button
                 class="btn btn-warning"
                 data-action="live#action"

@@ -5,7 +5,9 @@ namespace App\Controller;
 use App\Entity\Parcours;
 use App\Repository\ElementConstitutifRepository;
 use App\Repository\SemestreRepository;
+use App\Repository\TypeDiplomeRepository;
 use App\Repository\UeRepository;
+use App\Service\TypeDiplomeResolver;
 use App\TypeDiplome\Source\LicenceTypeDiplome;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -17,11 +19,11 @@ class CodificationParcoursController extends AbstractController
 {
     #[Route('/codification/parcours/modifier/{parcours}', name: 'app_codification_parcours_modifier')]
     public function modifier(
+        TypeDiplomeResolver $typeDiplomeResolver,
         EntityManagerInterface $em,
         ElementConstitutifRepository $ecRepository,
         UeRepository $ueRepository,
         SemestreRepository $semestreRepository,
-        LicenceTypeDiplome $typeD,
         Parcours $parcours,
         Request $request
     ): Response {
@@ -70,6 +72,7 @@ class CodificationParcoursController extends AbstractController
 
         }
 
+        $typeD = $typeDiplomeResolver->getFromParcours($parcours);
         $dto = $typeD->calculStructureParcours($parcours, true, false);
 
         return $this->render('codification_parcours/modifier.html.twig', [
