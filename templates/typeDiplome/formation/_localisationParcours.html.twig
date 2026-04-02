@@ -5,6 +5,24 @@
             <dd>
                 {{ parcours != null and parcours.localisation != null ? parcours.localisation.libelle : 'Erreur' }}
             </dd>
+            {% if stringDifferencesParcours.localisationParcours is defined %}
+                {{ include('communs/_comparaison_versioning_no_button.html.twig',
+                        {
+                            textDifferences: stringDifferencesParcours.localisationParcours,
+                            idCollapse: 'diffGlobalParcours'
+                        }
+                    ) 
+                }}
+            {% endif %}
+            {% if stringDifferencesParcoursCampagne.localisationParcours is defined %}
+                {{ include('communs/_comparaison_versioning_no_button.html.twig',
+                        {
+                            textDifferences: stringDifferencesParcoursCampagne.localisationParcours,
+                            idCollapse: 'diffGlobalParcoursCampagne'
+                        }
+                    ) 
+                }}
+            {% endif %}
             <dt>Régime(s) d'inscription</dt>
             <dd>
                 <ul>
@@ -67,6 +85,28 @@
                 <dd>{{ parcours.composanteInscription.mailContact|mailto }}</dd>
                 <dt>Site web</dt>
                 <dd>{{ parcours.composanteInscription.urlSite|open_url }}</dd>
+
+                {% if stringDifferencesParcours.composanteInscriptionParcours is defined %}
+                    {{ include('communs/_comparaison_versioning_no_button.html.twig', 
+                            {
+                                textDifferences: stringDifferencesParcours.composanteInscriptionParcours,
+                                idCollapse: 'diffGlobalParcours'
+                            }
+                        )
+
+                    }}
+                {% endif %}
+                {% if stringDifferencesParcoursCampagne.composanteInscriptionParcours is defined %}
+                    {{ include('communs/_comparaison_versioning_no_button.html.twig', 
+                            {
+                                textDifferences: stringDifferencesParcoursCampagne.composanteInscriptionParcours,
+                                idCollapse: 'diffGlobalParcoursCampagne'
+                            }
+                        )
+
+                    }}
+                {% endif %}
+
         {% else %}
             Non précisé
         {% endif %}

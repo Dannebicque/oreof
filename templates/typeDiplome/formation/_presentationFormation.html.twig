@@ -45,8 +45,44 @@
                 <dd>
                     {{ formation.rythmeFormation != null ? formation.rythmeFormation.libelle : 'Non précisé' }}
                 </dd>
+                {% if stringDifferencesFormation.rythmeDeFormation is defined %}
+                    {{ include("communs/_comparaison_versioning_no_button.html.twig", 
+                            {
+                                textDifferences: stringDifferencesFormation.rythmeDeFormation,
+                                idCollapse: "diffGlobalParcours"
+                            }
+                        )
+                    }}
+                {% endif %}
+                {% if stringDifferencesFormationCampagne.rythmeDeFormation is defined %}
+                    {{ include("communs/_comparaison_versioning_no_button.html.twig", 
+                            {
+                                textDifferences: stringDifferencesFormationCampagne.rythmeDeFormation,
+                                idCollapse: "diffGlobalParcoursCampagne"
+                            }
+                        )
+                    }}
+                {% endif %}
                 <dt>Précisions sur le rythme de formation</dt>
                 <dd>{{ formation.rythmeFormationTexte|raw }}</dd>
+                {% if stringDifferencesFormation.rythmeDeFormationTexte is defined %}
+                    {{ include("communs/_comparaison_versioning_no_button.html.twig",
+                            {
+                                textDifferences: stringDifferencesFormation.rythmeDeFormationTexte,
+                                idCollapse: "diffGlobalParcours"  
+                            }
+                        )
+                    }}
+                {% endif %}
+                {% if stringDifferencesFormationCampagne.rythmeDeFormationTexte is defined %}
+                    {{ include("communs/_comparaison_versioning_no_button.html.twig",
+                            {
+                                textDifferences: stringDifferencesFormationCampagne.rythmeDeFormationTexte,
+                                idCollapse: "diffGlobalParcoursCampagne"
+                            }
+                        )
+                    }}
+                {% endif %}
             </dl>
         </div>
     </div>

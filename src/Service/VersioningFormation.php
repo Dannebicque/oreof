@@ -272,6 +272,50 @@ class VersioningFormation
                         $differOptions,
                         $rendererOptions
                     ))
+                ),
+                'rythmeDeFormation' =>
+                VersioningParcours::cleanUpComparison(
+                    html_entity_decode(DiffHelper::calculate(
+                            $lastVersion?->getRythmeFormation()?->getLibelle() ?? "",
+                            $formation->getRythmeFormation()?->getLibelle() ?? "",
+                            $rendererName,
+                            $differOptions,
+                            $rendererOptions
+                        )
+                    )
+                ),
+                'rythmeDeFormationTexte' =>
+                VersioningParcours::cleanUpComparison(
+                    html_entity_decode(DiffHelper::calculate(
+                            $lastVersion?->getRythmeFormationTexte() ?? "",
+                            $formation->getRythmeFormationTexte() ?? "",
+                            $rendererName,
+                            $differOptions,
+                            $rendererOptions
+                        )
+                    )
+                ),
+                'regimeInscriptionTexte' =>
+                VersioningParcours::cleanUpComparison(
+                    html_entity_decode(DiffHelper::calculate(
+                            $lastVersion?->getRegimeInscriptionTexte() ?? "",
+                            $formation->getRegimeInscriptionTexte() ?? "",
+                            $rendererName,
+                            $differOptions,
+                            $rendererOptions
+                        )
+                    )
+                ),
+                'modaliteAlternanceFormation' =>
+                VersioningParcours::cleanUpComparison(
+                    html_entity_decode(DiffHelper::calculate(
+                            $lastVersion?->getModalitesAlternance() ?? "",
+                            $formation->getModalitesAlternance() ?? "",
+                            $rendererName,
+                            $differOptions,
+                            $rendererOptions
+                        )
+                    )
                 )
             ];
         }

@@ -377,6 +377,168 @@ class VersioningParcours
                             $rendererOptions
                         )
                     )
+                ),
+                "niveauFrancaisParcours" => 
+                self::cleanUpComparison(
+                    html_entity_decode(
+                        DiffHelper::calculate(
+                            $lastVersion->getNiveauFrancais()?->libelle() ?? "",
+                            $parcours->getNiveauFrancais()?->libelle() ?? "",
+                            $rendererName,
+                            $differOptions,
+                            $rendererOptions
+                        )
+                    )
+                ),
+                'composanteInscriptionParcours' =>
+                self::cleanUpComparison(
+                    html_entity_decode(
+                        DiffHelper::calculate(
+                            $lastVersion->getComposanteInscription()?->getLibelle() ?? "",
+                            $parcours->getComposanteInscription()?->getLibelle() ?? "",
+                            $rendererName,
+                            $differOptions,
+                            $rendererOptions
+                        )
+                    )
+                ),
+                'localisationParcours' =>
+                self::cleanUpComparison(
+                    html_entity_decode(
+                        DiffHelper::calculate(
+                            $lastVersion->getLocalisation()?->getLibelle() ?? "",
+                            $parcours->getLocalisation()?->getLibelle() ?? "",
+                            $rendererName,
+                            $differOptions,
+                            $rendererOptions
+                        )
+                    )
+                ),
+                'codesROMEParcours' => 
+                self::cleanUpComparison(
+                    html_entity_decode(
+                        DiffHelper::calculate(
+                            $this->getArrayAsHtmlDiffList($lastVersion->getCodesRome() ?? [], 'code'),
+                            $this->getArrayAsHtmlDiffList($parcours->getCodesRome() ?? [], 'code'),
+                            $rendererName,
+                            $differOptions,
+                            $rendererOptions
+                        )
+                    )
+                ),
+                'responsableMentionParcoursParDefaut' =>
+                self::cleanUpComparison(
+                    html_entity_decode(
+                        DiffHelper::calculate(
+                            $lastVersion->getFormation()?->getResponsableMention()?->getDisplay() ?? '',
+                            $parcours->getFormation()?->getResponsableMention()?->getDisplay() ?? '',
+                            $rendererName,
+                            $differOptions,
+                            $rendererOptions
+                        )
+                    )
+                ),
+                'coResponsableMentionParcoursParDefaut' => 
+                self::cleanUpComparison(
+                    html_entity_decode(
+                        DiffHelper::calculate(
+                            $lastVersion->getFormation()?->getCoResponsable()?->getDisplay() ?? '',
+                            $parcours->getFormation()?->getCoResponsable()?->getDisplay() ?? '',
+                            $rendererName,
+                            $differOptions,
+                            $rendererOptions
+                        )
+                    )
+                ),
+                'parcoursHasStage' =>
+                self::cleanUpComparison(
+                    html_entity_decode(
+                        DiffHelper::calculate(
+                            $this->decodeBooleanWithHours(
+                                $lastVersion->hasStage() ?? false, 
+                                $lastVersion->getNbHeuresStages() ?? 0.0
+                            ),
+                            $this->decodeBooleanWithHours(
+                                $parcours->hasStage() ?? false, 
+                                $parcours->getNbHeuresStages() ?? 0.0
+                            ),
+                            $rendererName,
+                            $differOptions,
+                            $rendererOptions
+                        )
+                    )
+                ),
+                'modaliteEnseignementParcours' => 
+                self::cleanUpComparison(
+                    html_entity_decode(
+                        DiffHelper::calculate(
+                            $lastVersion->getModalitesEnseignement()?->libelle() ?? "",
+                            $parcours->getModalitesEnseignement()?->libelle() ?? "",
+                            $rendererName,
+                            $differOptions,
+                            $rendererOptions
+                        )
+                    )
+                ),
+                'parcoursHasProjet' => 
+                self::cleanUpComparison(
+                    html_entity_decode(
+                        DiffHelper::calculate(
+                            $this->decodeBooleanWithHours(
+                                $lastVersion->hasProjet() ?? false,
+                                $lastVersion->getNbHeuresProjet() ?? 0.0,
+                            ),
+                            $this->decodeBooleanWithHours(
+                                $parcours->hasProjet() ?? false, 
+                                $parcours->getNbHeuresProjet() ?? 0.0
+                            ),
+                            $rendererName,
+                            $differOptions,
+                            $rendererOptions
+                        )
+                    )
+                ),
+                'projetTexteParcours' =>
+                self::cleanUpComparison(
+                    html_entity_decode(
+                        DiffHelper::calculate(
+                            $lastVersion->getProjetText() ?? "",
+                            $parcours->getProjetText() ?? "",
+                            $rendererName,
+                            $differOptions,
+                            $rendererOptions
+                        )
+                    )
+                ),
+                'hasMemoireParcours' =>
+                self::cleanUpComparison(
+                    html_entity_decode(
+                        DiffHelper::calculate(
+                            ($lastVersion->isHasMemoire() ?? false) ? 'Oui' : 'Non',
+                            ($parcours->isHasMemoire() ?? false) ? 'Oui' : 'Non',
+                            $rendererName,
+                            $differOptions,
+                            $rendererOptions
+                        )
+                    )
+                ),
+                'hasSituationProHeures' =>
+                self::cleanUpComparison(
+                    html_entity_decode(
+                        DiffHelper::calculate(
+                            $this->decodeBooleanWithHours(
+                                $lastVersion->isHasSituationPro() ?? false,
+                                $lastVersion->getNbHeuresSituationPro() ?? 0.0
+                            ),
+                            $this->decodeBooleanWithHours(
+                                $parcours->isHasSituationPro() ?? false, 
+                                $parcours->getNbHeuresSituationPro() ?? 0.0
+                            ),
+                            $rendererName,
+                            $differOptions,
+                            $rendererOptions
+                        )
+                    )
                 )
             ];
         }
@@ -518,5 +680,30 @@ class VersioningParcours
             $parcours->setPoursuitesEtudes($this->textDifferences['poursuiteEtudesParcours']);
         }
 
+    }
+
+    private function getArrayAsHtmlDiffList(array $array, ?string $key) : string {
+        if(count($array) > 0){
+            $html = "";
+            foreach($array as $element){
+                $value = $element;
+                if($key !== null){
+                    $value = $element[$key] ?? "";
+                }
+                $html .= '<p class="list-item">' . $value . '</p>';
+           }
+
+           return $html;
+        }
+
+        return "";
+    }
+
+    private function decodeBooleanWithHours(bool $isTrue, int $nbHeures) {
+        if($isTrue){
+            return "Oui ({$nbHeures} heures).";
+        }
+
+        return 'Non';
     }
 }
