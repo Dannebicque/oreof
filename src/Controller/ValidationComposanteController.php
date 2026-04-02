@@ -32,6 +32,20 @@ use Symfony\UX\Chartjs\Model\Chart;
 class ValidationComposanteController extends BaseController
 {
 
+    private const ETAPES_SANS_ACTIONS = [
+        'soumis_cfvu',
+        'refuse_central',
+        'soumis_cfvu',
+        'refuse_definitif_cfvu',
+        'valide_cfvu',
+        'valide_a_publier',
+        'publie',
+        'soumis_central_sans_cfvu',
+        'soumis_central_reserve_cfvu',
+        'non_ouverture_ses',
+        'non_ouverture',
+    ];
+
     #[Route('/validation/fiche/export', name: 'app_validation_verification_fiche_export')]
     //todo: gérer la composante
     public function ficheExportVerification(
@@ -80,18 +94,35 @@ class ValidationComposanteController extends BaseController
 
     #[Route('{composante}/dpe', name: 'dpe_index')]
     public function composante(
+        DpeParcoursRepository $dpeParcoursRepository,
         Request           $request,
         Composante        $composante,
         ValidationProcess $validationProcess,
     ): Response
     {
 
-        $typeValidation = $request->query->get('typeValidation');
+        $steps = $validationProcess->getProcessAll();
+
+        //statstics
+        // parcourir tous les parcours et compter les états
+        $statistiques = [];
+        $allParcours = $dpeParcoursRepository->findByComposanteAndCampagne($composante, $this->getCampagneCollecte());
+        foreach ($allParcours as $parcours) {
+            $etat = array_keys($parcours->getEtatValidation())[0];
+            if (!isset($statistiques[$etat])) {
+                $statistiques[$etat]['nbParcours'] = 0;
+                $statistiques[$etat]['formations'] = [];
+            }
+            $statistiques[$etat]['nbParcours']++;
+            if (!in_array($parcours->getParcours()?->getFormation()?->getId(), $statistiques[$etat]['formations'], true)) {
+                $statistiques[$etat]['formations'][] = $parcours->getParcours()?->getFormation()?->getId();
+            }
+        }
 
         return $this->render('validation-composante/dpe.html.twig', [
             'composante' => $composante,
-            'types_validation' => $validationProcess->getProcessAll(),
-            'typeValidation' => $typeValidation,
+            'steps' => $steps,
+            'statistiques' => $statistiques,
         ]);
     }
 
@@ -221,6 +252,8 @@ class ValidationComposanteController extends BaseController
             $tFormations[] = $parcours->getParcours()?->getFormation()?->getId();
         }
 
+        $hideLotButtons = !$this->isGranted('ROLE_ADMIN') && in_array($typeValidation, self::ETAPES_SANS_ACTIONS, true);
+
         // valeurs uniques dans tFormations
         $nbFormations = count(array_unique($tFormations));
 
@@ -230,6 +263,7 @@ class ValidationComposanteController extends BaseController
             'process' => $process,
             'allparcours' => $allparcours,
             'etape' => $typeValidation ?? null,
+            'hideLotButtons' => $hideLotButtons,
         ]);
     }
 
