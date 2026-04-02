@@ -18,6 +18,7 @@ use App\DTO\StructureParcours;
 use App\DTO\StructureSemestre;
 use App\DTO\StructureUe;
 use App\Entity\Mccc;
+use App\Entity\Parcours;
 use App\Utils\Tools;
 use DateTime;
 use Doctrine\Common\Collections\Collection;
@@ -631,5 +632,38 @@ class VersioningStructure
         }
 
         return $mccc;
+    }
+
+    /**
+     * Compare les données d'origine et les actuelles, 
+     * autres que celles présentes dans la maquette
+     *  - Resp. / Co-Resp de parcours et de formation
+     *  - Modalités d'enseignement
+     *  - ...
+     * @param Parcours $old Données originales 
+     * @param Parcours $new Nouvelles données
+     */
+    public static function calculDiffDescriptifs(Parcours $old, Parcours $new) {
+        $diff = [];
+        // Origine
+        $oldData = [
+            'respParcours' => $old->getRespParcours()?->getDisplay() ?? "",
+            'coRespParcours' => $old->getCoResponsable()?->getDisplay() ?? "",
+            'respFormation' => $old->getFormation()?->getResponsableMention()?->getDisplay() ?? "",
+            'modalitesEns' => $old->getModalitesEnseignement()?->libelle() ?? ""
+        ];
+        // Nouveau
+        $newData = [
+            'respParcours' => $new->getRespParcours()?->getDisplay() ?? "",
+            'coRespParcours' => $new->getCoResponsable()?->getDisplay() ?? "",
+            'respFormation' => $new->getFormation()?->getResponsableMention()?->getDisplay() ?? "",
+            'modalitesEns' => $new->getModalitesEnseignement()?->libelle() ?? ""
+        ];
+
+        foreach($oldData as $key => $value){
+            $diff[$key] = new DiffObject($value, $newData[$key]);
+        }   
+
+        return $diff;
     }
 }
