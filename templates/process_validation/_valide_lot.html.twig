@@ -10,7 +10,7 @@
     {% if meta.hasDate is defined and meta.hasDate == true %}
         <div>
             <label for="date" class="form-label">{{ ('valide.'~process.label~'.date.label')|trans({}, 'process') }}
-                <span class="required"></span> <i
+                {% if etape == 'cfvu' or etape == 'soumis_cfvu' %} <span class="required"></span> {% endif %}<i
                         class="fal fa-question-circle ms-1"
                         data-controller="tooltip"
                         data-tooltip-placement-value="bottom"
