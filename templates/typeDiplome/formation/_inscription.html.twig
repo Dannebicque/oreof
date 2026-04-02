@@ -6,20 +6,114 @@
             <dd>
                 {% for ville in formation.localisationMention %}{{ ville.libelle }}{% if not loop.last %}, {% endif %}{% endfor %}
             </dd>
+            {% if stringDifferencesFormation.localisationMention is defined %}
+                {{ include('communs/_comparaison_versioning_no_button.html.twig', 
+                        {
+                            textDifferences: stringDifferencesFormation.localisationMention,
+                            idCollapse: 'diffGlobalParcours'
+                        }
+                    )
+                }}
+            {% endif %}
+            {% if stringDifferencesFormationCampagne.localisationMention is defined %}
+                {{ include('communs/_comparaison_versioning_no_button.html.twig', 
+                        {
+                            textDifferences: stringDifferencesFormationCampagne.localisationMention,
+                            idCollapse: 'diffGlobalParcoursCampagne'
+                        }
+                    )
+                }}
+            {% endif %}
             <dt>Régime(s) d'inscription</dt>
             <dd>
                 {% if formation.hasParcours %}
                     {{ parcours.displayRegimeInscription|raw }}
+                        {% if stringDifferencesParcours.regimeInscriptionParcours is defined %}
+                            {{ include('communs/_comparaison_versioning_no_button.html.twig', 
+                                    {
+                                        textDifferences: stringDifferencesParcours.regimeInscriptionParcours,
+                                        idCollapse: 'diffGlobalParcours'
+                                    }
+                                )
+                            }}
+                        {% endif %}
+                        {% if stringDifferencesParcoursCampagne.regimeInscriptionParcours is defined %}
+                            {{ include('communs/_comparaison_versioning_no_button.html.twig', 
+                                    {
+                                        textDifferences: stringDifferencesParcoursCampagne.regimeInscriptionParcours,
+                                        idCollapse: 'diffGlobalParcoursCampagne'
+                                    }
+                                )
+                            }}
+                        {% endif %}
                 {% else %}
                     {{ formation.regimeInscriptionTexte|raw }}
+                        {% if stringDifferencesFormation.regimeInscriptionTexte is defined %}
+                            {{ include('communs/_comparaison_versioning_no_button.html.twig', 
+                                    {
+                                        textDifferences: stringDifferencesFormation.regimeInscriptionTexte,
+                                        idCollapse: 'diffGlobalParcours'
+                                    }
+                                )
+                            }}
+                        {% endif %}
+                        {% if stringDifferencesFormationCampagne.regimeInscriptionTexte is defined %}
+                        {{ include('communs/_comparaison_versioning_no_button.html.twig', 
+                                    {
+                                        textDifferences: stringDifferencesFormationCampagne.regimeInscriptionTexte,
+                                        idCollapse: 'diffGlobalParcoursCampagne'
+                                    }
+                                )
+                            }}
+                        {% endif %}
                 {% endif %}
             </dd>
             <dt>Modalités de l'alternance</dt>
             <dd>
                 {% if formation.hasParcours %}
                     {{ parcours.modalitesAlternance|raw }}
+                        {% if stringDifferencesParcours.modaliteAlternanceParcours is defined %}
+                            {{ include('communs/_comparaison_versioning_no_button.html.twig', 
+                                    {
+                                        textDifferences: stringDifferencesParcours.modaliteAlternanceParcours,
+                                        idCollapse: 'diffGlobalParcours'
+                                    }
+                                )
+
+                            }}
+                        {% endif %}
+                        {% if stringDifferencesParcoursCampagne.modaliteAlternanceParcours is defined %}
+                            {{ include('communs/_comparaison_versioning_no_button.html.twig', 
+                                    {
+                                        textDifferences: stringDifferencesParcoursCampagne.modaliteAlternanceParcours,
+                                        idCollapse: 'diffGlobalParcoursCampagne'
+                                    }
+                                )
+
+                            }}
+                        {% endif %}
                 {% else %}
                     {{ formation.modalitesAlternance|raw }}
+                        {% if stringDifferencesFormation.modaliteAlternanceFormation is defined %}
+                            {{ include('communs/_comparaison_versioning_no_button.html.twig', 
+                                    {
+                                        textDifferences: stringDifferencesFormation.modaliteAlternanceFormation,
+                                        idCollapse: 'diffGlobalParcours'
+                                    }
+                                )
+
+                            }}
+                        {% endif %}
+                        {% if stringDifferencesFormationCampagne.modaliteAlternanceFormation is defined %}
+                            {{ include('communs/_comparaison_versioning_no_button.html.twig', 
+                                    {
+                                        textDifferences: stringDifferencesFormationCampagne.modaliteAlternanceFormation,
+                                        idCollapse: 'diffGlobalParcoursCampagne'
+                                    }
+                                )
+
+                            }}
+                        {% endif %}
                 {% endif %}
 
             </dd>
@@ -41,5 +135,23 @@
                 <dd>{{ composante.urlSite|open_url }}</dd>
             </dl>
         {% endfor %}
+        {% if stringDifferencesFormation.composanteInscriptionFormation is defined %}
+            {{ include('communs/_comparaison_versioning_no_button.html.twig',
+                    {
+                        textDifferences: stringDifferencesFormation.composanteInscriptionFormation,
+                        idCollapse: 'diffGlobalParcours'
+                    }
+                )
+            }}
+        {% endif %}
+        {% if stringDifferencesFormationCampagne.composanteInscriptionFormation is defined %}
+            {{ include('communs/_comparaison_versioning_no_button.html.twig',
+                    {
+                        textDifferences: stringDifferencesFormationCampagne.composanteInscriptionFormation,
+                        idCollapse: 'diffGlobalParcoursCampagne'
+                    }
+                )
+            }}
+        {% endif %}
     </div>
 </div>

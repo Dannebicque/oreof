@@ -3,8 +3,44 @@
         {% if formation.isHasParcours == false and formation.parcours|length == 1 %}
             <dt>Responsable de formation</dt>
             <dd>{{ parcours.formation.responsableMention != null ? parcours.formation.responsableMention.display : 'Non concerné' }}</dd>
+            {% if stringDifferencesParcours.responsableMentionParcoursParDefaut is defined %}
+                {{ include('communs/_comparaison_versioning_no_button.html.twig',
+                       {
+                            textDifferences: stringDifferencesParcours.responsableMentionParcoursParDefaut,
+                            idCollapse: 'diffGlobalParcours'
+                       } 
+                    )
+                }}
+            {% endif %}
+            {% if stringDifferencesParcoursCampagne.responsableMentionParcoursParDefaut is defined %}
+                {{ include('communs/_comparaison_versioning_no_button.html.twig',
+                       {
+                            textDifferences: stringDifferencesParcoursCampagne.responsableMentionParcoursParDefaut,
+                            idCollapse: 'diffGlobalParcoursCampagne'
+                       } 
+                    )
+                }}
+            {% endif %}
             <dt>Co-responsable de formation</dt>
             <dd>{{ parcours.formation.coResponsable != null ? parcours.formation.coResponsable.display : 'Non concerné' }}</dd>
+            {% if stringDifferencesParcours.coResponsableMentionParcoursParDefaut is defined %}
+                {{ include('communs/_comparaison_versioning_no_button.html.twig',
+                       {
+                            textDifferences: stringDifferencesParcours.coResponsableMentionParcoursParDefaut,
+                            idCollapse: 'diffGlobalParcours'
+                       } 
+                    )
+                }}
+            {% endif %}
+            {% if stringDifferencesParcoursCampagne.coResponsableMentionParcoursParDefaut is defined %}
+                {{ include('communs/_comparaison_versioning_no_button.html.twig',
+                       {
+                            textDifferences: stringDifferencesParcoursCampagne.coResponsableMentionParcoursParDefaut,
+                            idCollapse: 'diffGlobalParcoursCampagne'
+                       } 
+                    )
+                }}
+            {% endif %}
         {% else %}
             <dt>Responsable du parcours</dt>
             <dd>{{ parcours.respParcours != null ? parcours.respParcours.display : 'Non concerné' }}</dd>

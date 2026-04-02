@@ -52,6 +52,24 @@
             <dd>
                 {{ formation.modalitesAlternance|raw }}
             </dd>
+            {% if stringDifferencesFormation.modaliteAlternanceFormation is defined %}
+                {{ include('communs/_comparaison_versioning_no_button.html.twig', 
+                        {
+                            textDifferences: stringDifferencesFormation.modaliteAlternanceFormation,
+                            idCollapse: 'diffGlobalParcours'
+                        }
+                    )                 
+                }}
+            {% endif %}
+            {% if stringDifferencesFormationCampagne.modaliteAlternanceFormation is defined %}
+                {{ include('communs/_comparaison_versioning_no_button.html.twig', 
+                        {
+                            textDifferences: stringDifferencesFormationCampagne.modaliteAlternanceFormation,
+                            idCollapse: 'diffGlobalParcoursCampagne'
+                        }
+                    )                 
+                }}
+            {% endif %}
         </dl>
     </div>
     <div class="col-6">

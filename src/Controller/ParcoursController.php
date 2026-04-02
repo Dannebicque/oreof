@@ -724,6 +724,7 @@ class ParcoursController extends BaseController
                 'dateVersion' => $loadedVersion['dateVersion'],
                 'isVersioning' => true,
                 'parcoursVersioning' => $parcours_versioning,
+                'diffStructureCampagne' => null
             ]);
         } catch (Exception $e) {
             $now = new DateTimeImmutable('now');
