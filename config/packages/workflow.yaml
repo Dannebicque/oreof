@@ -403,6 +403,9 @@ framework:
           to: 'soumis_central'
           metadata:
             recipients: [ 'RF', 'CoRF', 'RP', 'CoRP' ]
+            type: valider
+            btn: success
+            icon: fa-check
         reouvrir_tacite:
           from: 'tacite_reconduction'
           to: 'en_cours_redaction'

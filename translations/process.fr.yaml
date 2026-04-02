@@ -806,3 +806,8 @@ title.validation.parcours.reserver_conseil: 'Emettre des réserves sur le parcou
 title.validation.parcours.refuser_conseil: 'Refuser les modifications'
 valide.validation.conseil.note_explicative.label: 'Note explicative de la décision du conseil de composante'
 valide.validation.conseil.helps.note_explicative.help: 'La note explicative est un champ obligatoire qui doit être renseigné pour justifier la décision du conseil de composante.'
+tacite_reconduction.parcours.valide.alerte: 'La validation de la tacite reconduction du parcours permet sa transmission au SES.'
+btn.tacite_reconduction.parcours.valide: 'Valider la tacite reconduction du parcours'
+title.validation.parcours.valider_tacite_composante: 'Valider la tacite reconduction du parcours'
+btn.validation.parcours.valider_tacite_composante: 'Valider la tacite reconduction du parcours'
+btn.validation.parcours_rf.valide: 'Valider les parcours selectionnés'
