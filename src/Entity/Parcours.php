@@ -157,6 +157,7 @@ class Parcours
     #[ORM\Column(nullable: true)]
     private ?bool $hasSituationPro = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $situationProText = null;
 
@@ -242,6 +243,7 @@ class Parcours
     #[Groups('parcours_json_versioning')]
     private ?string $codeRNCP = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(length: 20, nullable: true, enumType: TypeParcoursEnum::class)]
     private ?TypeParcoursEnum $typeParcours = null;
 
@@ -286,6 +288,7 @@ class Parcours
     #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: DpeDemande::class, cascade: ['persist'])]
     private Collection $dpeDemandes;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $motsCles = null;
 
@@ -295,6 +298,7 @@ class Parcours
     #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: Annee::class)]
     private Collection $annees;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column]
     private ?int $capaciteAccueil = 0;
 
