@@ -50,7 +50,7 @@ class VersioningParcoursCommand extends Command
         $this->addOption(
             name: 'dpe-full-valid-database',
             mode: InputOption::VALUE_NONE,
-            description: 'Sauvegarde tous les parcours de la base de données en JSON'
+            description: "Sauvegarde tous les parcours de la base de données en JSON - Préciser l'ID de la campagne de collecte (with-campagne-id)"
         )
         ->addOption(
             name: 'dpe-today-cfvu-valid',
@@ -65,6 +65,10 @@ class VersioningParcoursCommand extends Command
             name: 'single-parcours',
             mode: InputOption::VALUE_REQUIRED,
             description: "Sauvegarde un seul parcours qui est à l'état validé. Préciser l'ID"
+        )->addOption(
+            name: 'with-campagne-id',
+            mode: InputOption::VALUE_REQUIRED,
+            description: "Précise une campagne de collecte pour effectuer une sauvegarde"
         );
     }
 
@@ -80,11 +84,27 @@ class VersioningParcoursCommand extends Command
         $singleParcours = $input->getOption('single-parcours');
 
         $withSkipOption = $input->getOption('with-skip-option');
+        $withCampagneId = $input->getOption('with-campagne-id');
 
         if($dpeFullValidDatabase){
+            if(!isset($withCampagneId)) {
+                $io->warning("Il faut préciser l'ID de la campagne de collecte (option --with-campagne-id).");
+                return Command::INVALID;
+            }
+
+            $dpe = $this->entityManager->getRepository(CampagneCollecte::class)->find($withCampagneId);
+
+            if(!($dpe instanceof CampagneCollecte)){
+                $io->warning("Aucune campagne de collecte trouvée pour cet ID. ({$withCampagneId})");
+                return Command::INVALID;
+            }
+            $io->writeln("Année récupérée : [{$dpe->getLibelle()}]");
+            if($io->ask("Souhaitez-vous continuer ? [Y/n]", 'n') !== "Y") {
+                $io->writeln("Interruption utilisateur. La commande s'est arrêtée.");
+                return Command::SUCCESS;
+            }
+
             $io->writeln("Sauvegarde de tous les parcours valides en cours...");
-//            $dpe = $this->entityManager->getRepository(CampagneCollecte::class)->findOneBy(['defaut' => true]);
-            $dpe = $this->entityManager->getRepository(CampagneCollecte::class)->find(2);
             $parcoursArray = $this->entityManager->getRepository(Parcours::class)->findAllParcoursForDpe($dpe);
             $parcoursArray = array_filter(
                 $parcoursArray,
