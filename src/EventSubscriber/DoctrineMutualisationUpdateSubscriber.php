@@ -25,8 +25,8 @@ use Doctrine\ORM\Event\PostFlushEventArgs;
 use Doctrine\ORM\Events;
 use Symfony\Bundle\SecurityBundle\Security;
 
-#[AsDoctrineListener(event: Events::onFlush)]
-#[AsDoctrineListener(event: Events::postFlush)]
+//#[AsDoctrineListener(event: Events::onFlush)]
+//#[AsDoctrineListener(event: Events::postFlush)]
 class DoctrineMutualisationUpdateSubscriber
 {
     private const EC_HEURES_FIELDS = [
