@@ -115,6 +115,7 @@ class LicenceMcccVersion extends AbstractLicenceMccc
             throw new \Exception('Le modèle n\'existe pas');
         }
 
+        $this->excelWriter->setSheet($modele);
         //récupération des données
         // récupération des semestres du parcours puis classement par année et par ordre
         $tabSemestresAnnee = $dto->getTabAnnee();
@@ -122,8 +123,18 @@ class LicenceMcccVersion extends AbstractLicenceMccc
         //en-tête du fichier
         $modele->setCellValue(self::CEL_ANNEE_UNIVERSITAIRE, 'Année Universitaire ' . $anneeUniversitaire->getAnneeUniversitaire()?->getLibelle());
         $modele->setCellValue(self::CEL_TYPE_FORMATION, $formation->getTypeDiplome()?->getLibelle());
-        $modele->setCellValue(self::CEL_INTITULE_FORMATION, $formation->getDisplay());
-        $modele->setCellValue(self::CEL_INTITULE_PARCOURS, $parcours->isParcoursDefaut() === false ? $parcours->getDisplay() : '');
+        // $modele->setCellValue(self::CEL_INTITULE_FORMATION, $formation->getDisplay());
+        // $modele->setCellValue(self::CEL_INTITULE_PARCOURS, $parcours->isParcoursDefaut() === false ? $parcours->getDisplay() : '');
+        $this->excelWriter->writeCellXYDiff(
+            substr(self::CEL_INTITULE_FORMATION, 0, 1),
+            substr(self::CEL_INTITULE_FORMATION, 1, 1),
+            $diffDescriptifs['libelleMention']
+        );
+        $this->excelWriter->writeCellXYDiff(
+            substr(self::CEL_INTITULE_PARCOURS, 0, 1),
+            substr(self::CEL_INTITULE_PARCOURS, 1, 1),
+            $diffDescriptifs['libelleParcours']
+        );
         $modele->setCellValue(self::CEL_COMPOSANTE, $formation->getComposantePorteuse()?->getLibelle());
         if ($formation->isHasParcours() === false) {
             $modele->setCellValue(self::CEL_SITE_FORMATION, $formation->getLocalisationMention()[0]?->getLibelle());
@@ -132,7 +143,6 @@ class LicenceMcccVersion extends AbstractLicenceMccc
         }
         // $modele->setCellValue(self::CEL_RESPONSABLE_MENTION, $formation->getResponsableMention()?->getDisplay());
         // $modele->setCellValue(self::CEL_RESPONSABLE_PARCOURS, $parcours->getRespParcours()?->getDisplay());
-        $this->excelWriter->setSheet($modele);
         $this->excelWriter->writeCellXYDiff(
             substr(self::CEL_RESPONSABLE_MENTION, 0, 1),
             substr(self::CEL_RESPONSABLE_MENTION, 1, 2),
