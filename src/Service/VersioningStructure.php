@@ -647,6 +647,8 @@ class VersioningStructure
         $diff = [];
         // Origine
         $oldData = [
+            'libelleMention' => $old->getFormation()?->getDisplay() ?? '',
+            'libelleParcours' => $old->isParcoursDefaut() ? '' : ($old->getDisplay()),
             'respParcours' => $old->getRespParcours()?->getDisplay() ?? "",
             'coRespParcours' => $old->getCoResponsable()?->getDisplay() ?? "",
             'respFormation' => $old->getFormation()?->getResponsableMention()?->getDisplay() ?? "",
@@ -654,6 +656,8 @@ class VersioningStructure
         ];
         // Nouveau
         $newData = [
+            'libelleMention' => $new->getFormation()?->getDisplay() ?? '',
+            'libelleParcours' => $new->isParcoursDefaut() ? '' : ($new->getDisplay()),
             'respParcours' => $new->getRespParcours()?->getDisplay() ?? "",
             'coRespParcours' => $new->getCoResponsable()?->getDisplay() ?? "",
             'respFormation' => $new->getFormation()?->getResponsableMention()?->getDisplay() ?? "",
