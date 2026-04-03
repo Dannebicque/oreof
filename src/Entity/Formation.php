@@ -56,7 +56,7 @@ class Formation
     private ?Mention $mention = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['formation:read', 'fiche_matiere_versioning', 'formation_json_versioning'])]
+    #[Groups(['formation:read', 'fiche_matiere_versioning', 'formation_json_versioning', 'parcours_json_versioning'])]
     private ?string $mentionTexte = null;
 
     #[Groups(['parcours_json_versioning', 'formation_json_versioning'])]
