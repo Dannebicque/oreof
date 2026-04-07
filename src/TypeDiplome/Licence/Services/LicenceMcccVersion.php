@@ -168,6 +168,7 @@ class LicenceMcccVersion extends AbstractLicenceMccc
                 );
         }
 
+        /*
         foreach ($parcours->getRegimeInscription() as $regimeInscription) {
             if ($regimeInscription === RegimeInscriptionEnum::FI) {
                 $modele->setCellValue(self::CEL_REGIME_FI, 'X');
@@ -182,6 +183,31 @@ class LicenceMcccVersion extends AbstractLicenceMccc
                 $modele->setCellValue(self::CEL_REGIME_FC_CONTRAT_PRO, 'X');
             }
         }
+        */
+
+        // Différences Régimes d'Inscription
+        $this->excelWriter->writeCellXYDiff(
+            substr(self::CEL_REGIME_FI, 0, 1),
+            substr(self::CEL_REGIME_FI, 1, 1),
+            $diffDescriptifs['regimeInscription']['FI']
+        );
+        $this->excelWriter->writeCellXYDiff(
+            substr(self::CEL_REGIME_FC, 0, 1),
+            substr(self::CEL_REGIME_FC, 1, 1),
+            $diffDescriptifs['regimeInscription']['FC']
+        );
+        $this->excelWriter->writeCellXYDiff(
+            substr(self::CEL_REGIME_FI_APPRENTISSAGE, 0, 1),
+            substr(self::CEL_REGIME_FI_APPRENTISSAGE, 1, 2),
+            $diffDescriptifs['regimeInscription']['FIA']                        
+
+        );
+        $this->excelWriter->writeCellXYDiff(
+            substr(self::CEL_REGIME_FC_CONTRAT_PRO, 0, 1),
+            substr(self::CEL_REGIME_FC_CONTRAT_PRO, 1, 2),
+            $diffDescriptifs['regimeInscription']['FCCP']    
+        );
+
         //ajoute les sigles
         $texte = '';
         foreach ($this->typeEpreuves as $typeEpreuve) {
