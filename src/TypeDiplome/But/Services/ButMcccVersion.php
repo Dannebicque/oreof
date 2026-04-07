@@ -162,6 +162,7 @@ class ButMcccVersion extends AbstractButMccc
                 );
         }
 
+        /*
         foreach ($parcours->getRegimeInscription() as $regimeInscription) {
             if ($regimeInscription === RegimeInscriptionEnum::FI) {
                 $modele->setCellValue(self::CEL_REGIME_FI, 'X');
@@ -176,6 +177,29 @@ class ButMcccVersion extends AbstractButMccc
                 $modele->setCellValue(self::CEL_REGIME_FC_CONTRAT_PRO, 'X');
             }
         }
+        */
+
+        // Régimes d'inscription avec différences
+        $this->excelWriter->writeCellXYDiff(
+            substr(self::CEL_REGIME_FI, 0, 1),
+            substr(self::CEL_REGIME_FI, 1, 1),
+            $diffDescriptifs['regimeInscription']['FI']
+        );
+        $this->excelWriter->writeCellXYDiff(
+            substr(self::CEL_REGIME_FC, 0, 1),
+            substr(self::CEL_REGIME_FC, 1, 2),
+            $diffDescriptifs['regimeInscription']['FC']
+        );
+        $this->excelWriter->writeCellXYDiff(
+            substr(self::CEL_REGIME_FI_APPRENTISSAGE, 0, 1),
+            substr(self::CEL_REGIME_FI_APPRENTISSAGE, 1, 2),
+            $diffDescriptifs['regimeInscription']['FIA']
+        );
+        $this->excelWriter->writeCellXYDiff(
+            substr(self::CEL_REGIME_FC_CONTRAT_PRO, 0, 1),
+            substr(self::CEL_REGIME_FC_CONTRAT_PRO, 1, 2),
+            $diffDescriptifs['regimeInscription']['FCCP']
+        );
 
         $index = 1;
 
