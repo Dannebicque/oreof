@@ -175,11 +175,18 @@ class ProcessReouvertureController extends BaseController
 
         $demande = $dpeDemandeRepository->findLastOpenedDemande($parcours, EtatDpeEnum::en_cours_redaction, TypeModificationDpeEnum::MODIFICATION_TEXTE);
 
-        if ($demande === null) {
-            return JsonReponse::error('Demande non trouvée');
-        }
-
         if ($request->isMethod('POST')) {
+            if ($demande === null) {
+                // on créé une demande pour switcher vers modification MCCC + texte
+                $demande = new DpeDemande();
+                $demande->setFormation($parcours->getFormation());
+                $demande->setParcours($parcours);
+                $demande->setCampagneCollecte($this->getCampagneCollecte());
+                $demande->setAuteur($this->getUser());
+                $demande->setNiveauDemande('P');
+                $this->entityManager->persist($demande);
+            }
+
             $data = $request->request->all();
 
             $dpe = GetDpeParcours::getFromParcours($parcours);
@@ -201,12 +208,20 @@ class ProcessReouvertureController extends BaseController
 
             $this->entityManager->flush();
 
+            $histoEvent = new HistoriqueParcoursEvent($parcours, $this->getUser(), 'en_cours_redaction', 'valide', $request);
+            $this->eventDispatcher->dispatch($histoEvent, HistoriqueParcoursEvent::ADD_HISTORIQUE_PARCOURS);
+
+            //mail au SES
+            $dpeDemandeEvent = new DpeDemandeEvent($demande, $this->getUser());
+            $this->eventDispatcher->dispatch($dpeDemandeEvent, DpeDemandeEvent::DPE_DEMANDE_OPENED);
+
+
             return JsonReponse::success('DPE ouvert avec modification de la structure');
         }
 
         return $this->render('process_validation/_demande_switch.html.twig', [
             'parcours' => $parcours,
-            'demande' => $demande
+            'demande' => $demande ?? null,
         ]);
     }
 
