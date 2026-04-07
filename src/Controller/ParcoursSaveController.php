@@ -149,10 +149,11 @@ class ParcoursSaveController extends BaseController
 
                 if ($data['value'] !== null || $data['value'] !== '') {
                     $user = $userRepository->find($data['value']);
-                    $rep = $updateEntity->saveField($parcours, 'respParcours', $user);
-                    $event = new AddCentreParcoursEvent($parcours, $user, $profil, $this->getCampagneCollecte());
-                    $eventDispatcher->dispatch($event, AddCentreParcoursEvent::ADD_CENTRE_PARCOURS);
-
+                    if ($user !== null) {
+                        $rep = $updateEntity->saveField($parcours, 'respParcours', $user);
+                        $event = new AddCentreParcoursEvent($parcours, $user, $profil, $this->getCampagneCollecte());
+                        $eventDispatcher->dispatch($event, AddCentreParcoursEvent::ADD_CENTRE_PARCOURS);
+                    }
                 } else {
                     $rep = $updateEntity->saveField($parcours, 'respParcours', null);
                 }
