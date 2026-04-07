@@ -42,7 +42,7 @@ class GenereSynthese
             $dto = $typeD->calculStructureParcours($parc, true, false);
             $structureDifferencesParcours = $this->versioningParcours->getStructureDifferencesBetweenParcoursAndLastVersion($parc);
             if ($structureDifferencesParcours !== null) {
-                $diffStructure = (VersioningStructure::setDto($structureDifferencesParcours, $dto))->calculDiff();
+                $diffStructure = ($this->versioningStructure->setDto($structureDifferencesParcours, $dto))->calculDiff();
             } else {
                 $diffStructure = null;
             }
@@ -59,7 +59,7 @@ class GenereSynthese
         $dto = $typeD->calculStructureParcours($parcours, true, false);
         $structureDifferencesParcours = $this->versioningParcours->getStructureDifferencesBetweenParcoursAndLastVersion($parcours);
         if ($structureDifferencesParcours !== null) {
-            $diffStructure = (VersioningStructure::setDto($structureDifferencesParcours, $dto))->calculDiff();
+            $diffStructure = ($this->versioningStructure->setDto($structureDifferencesParcours, $dto))->calculDiff();
         } else {
             $diffStructure = null;
         }

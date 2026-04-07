@@ -25,19 +25,19 @@ use Doctrine\Common\Collections\Collection;
 class VersioningStructure
 {
     private bool $isBut = false;
-    private StructureParcours $dtoOrigine;
+    private ?StructureParcours $dtoOrigine = null;
     private StructureParcours $dtoNouveau;
 
     public function __construct(
     ) {
     }
 
-    public static function setDto(StructureParcours $dtoOrigine, StructureParcours $dtoNouveau): self
+    public function setDto(StructureParcours $dtoOrigine, StructureParcours $dtoNouveau): self
     {
-        $versioning = new VersioningStructure();
-        $versioning->dtoOrigine = $dtoOrigine;
-        $versioning->dtoNouveau = $dtoNouveau;
-        return $versioning;
+        //$versioning = new VersioningStructure();
+        $this->dtoOrigine = $dtoOrigine;
+        $this->dtoNouveau = $dtoNouveau;
+        return $this;
 
     }
 

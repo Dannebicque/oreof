@@ -46,6 +46,7 @@ class LicenceMcccVersion extends AbstractLicenceMccc
         KernelInterface                   $kernel,
         protected ClientInterface         $client,
         protected CalculStructureParcoursLicence $calculStructureParcours,
+        protected VersioningStructure $versioningStructure,
         protected VersioningParcours      $versioningParcours,
         protected ExcelWriter             $excelWriter,
         protected TypeEpreuveRepository   $typeEpreuveRepository
@@ -95,7 +96,7 @@ class LicenceMcccVersion extends AbstractLicenceMccc
 
         $structureDifferencesParcours = $this->versioningParcours->getStructureDifferencesBetweenParcoursAndLastCfvu($parcours);
         if ($structureDifferencesParcours !== null) {
-            $diffStructure = (VersioningStructure::setDto($structureDifferencesParcours, $dto))->calculDiff();
+            $diffStructure = $this->versioningStructure->setDto($structureDifferencesParcours, $dto)->calculDiff();
         } else {
             return false;
         }

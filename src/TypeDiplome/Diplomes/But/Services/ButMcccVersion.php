@@ -42,6 +42,7 @@ class ButMcccVersion extends AbstractButMccc
         KernelInterface                  $kernel,
         protected ClientInterface        $client,
         protected CalculStructureParcoursBut $calculStructureParcours,
+        protected VersioningStructure $versioningStructure,
         protected VersioningParcours      $versioningParcours,
         protected FicheMatiereRepository $ficheMatiereRepository,
         protected ExcelWriter            $excelWriter,
@@ -89,7 +90,7 @@ class ButMcccVersion extends AbstractButMccc
 
         $structureDifferencesParcours = $this->versioningParcours->getStructureDifferencesBetweenParcoursAndLastCfvu($parcours);
         if ($structureDifferencesParcours !== null) {
-            $diffStructure = (VersioningStructure::setDto($structureDifferencesParcours, $dto))->calculDiff(true);
+            $diffStructure = $this->versioningStructure->setDto($structureDifferencesParcours, $dto)->calculDiff(true);
         } else {
             return false;
         }

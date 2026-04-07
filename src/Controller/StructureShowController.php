@@ -18,6 +18,7 @@ class StructureShowController extends AbstractController
 
     #[Route('/structure/parcours/show/', name: 'app_structure_parcours_show')]
     public function parcoursShow(
+        Versioningstructure $versioningStructure,
         VersioningParcours $versioningParcours,
         Parcours $parcours,
         bool $hasLastVersion = false
@@ -28,7 +29,7 @@ class StructureShowController extends AbstractController
 
         $structureDifferencesParcours = $versioningParcours->getStructureDifferencesBetweenParcoursAndLastCfvu($parcours);
         if ($structureDifferencesParcours !== null) {
-            $diffStructure = (VersioningStructure::setDto($structureDifferencesParcours, $dto))->calculDiff();
+            $diffStructure = $versioningStructure->setDto($structureDifferencesParcours, $dto)->calculDiff();
         }
 
         $diffStructureCampagnePrecedente = null;
@@ -59,6 +60,7 @@ class StructureShowController extends AbstractController
 
     #[Route('/structure/parcours/show/v2/', name: 'app_structure_parcours_show_v2')]
     public function parcoursShowV2(
+        Versioningstructure $versioningStructure,
         VersioningParcours $versioningParcours,
         Parcours           $parcours,
         bool               $hasLastVersion = false
@@ -70,7 +72,7 @@ class StructureShowController extends AbstractController
 
         $structureDifferencesParcours = $versioningParcours->getStructureDifferencesBetweenParcoursAndLastVersion($parcours);
         if ($structureDifferencesParcours !== null) {
-            $diffStructure = (VersioningStructure::setDto($structureDifferencesParcours, $dto))->calculDiff();
+            $diffStructure = $versioningStructure->setDto($structureDifferencesParcours, $dto)->calculDiff();
         }
 
         if ($dto === null) {

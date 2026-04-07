@@ -97,8 +97,8 @@ class ParcoursController extends BaseController
 
         $typeD = $this->typeDiplomeResolver->fromTypeDiplome($typeDiplome);
 
-//        $textDifferencesParcours = $versioningParcours->getDifferencesBetweenParcoursAndLastVersion($parcours);
-//        $textDifferencesFormation = $versioningFormation->getDifferencesBetweenFormationAndLastVersion($formation);
+        $textDifferencesParcours = $versioningParcours->getDifferencesBetweenParcoursAndLastVersion($parcours);
+        $textDifferencesFormation = $versioningFormation->getDifferencesBetweenFormationAndLastVersion($formation);
 //        $version = $versioningParcours->hasLastVersion($parcours);
 //
 //        $cssDiff = DiffHelper::getStyleSheet();
@@ -131,8 +131,8 @@ class ParcoursController extends BaseController
             'hasParcours' => $formation->isHasParcours(),
             'typeD' => $typeD,
             'lheoXML' => $lheoXML,
-//            'stringDifferencesParcours' => $textDifferencesParcours,
-//            'stringDifferencesFormation' => $textDifferencesFormation,
+            'stringDifferencesParcours' => $textDifferencesParcours,
+            'stringDifferencesFormation' => $textDifferencesFormation,
 //            'hasLastVersion' => $versioningParcours->hasLastVersion($parcours),
 //            'cssDiff' => $cssDiff,
 //            'version' => $version,
