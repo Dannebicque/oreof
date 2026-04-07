@@ -20,13 +20,19 @@ class HistoriqueParcoursEvent extends AbstractHistoriqueEvent
 
     private Parcours $parcours;
     private ?string $fileName;
+    private ?string $fileNameNote;
+    private ?string $originalFileName;
+    private ?string $originalFileNameNote;
 
-    public function __construct(Parcours $parcours, UserInterface $user, string $etape, string $etat, Request $request, ?string $fileName = null)
+    public function __construct(Parcours $parcours, UserInterface $user, string $etape, string $etat, Request $request, ?string $fileName = null, ?string $fileNameNote = null, ?string $originalFileName = null, ?string $originalFileNameNote = null)
     {
         parent::__construct($user, $etape, $etat, $request);
 
         $this->parcours = $parcours;
         $this->fileName = $fileName;
+        $this->fileNameNote = $fileNameNote;
+        $this->originalFileName = $originalFileName;
+        $this->originalFileNameNote = $originalFileNameNote;
     }
 
     public function getParcours(): Parcours
@@ -37,5 +43,20 @@ class HistoriqueParcoursEvent extends AbstractHistoriqueEvent
     public function getFileName(): ?string
     {
         return $this->fileName;
+    }
+
+    public function getFileNameNote(): ?string
+    {
+        return $this->fileNameNote;
+    }
+
+    public function getOriginalFileName(): ?string
+    {
+        return $this->originalFileName;
+    }
+
+    public function getOriginalFileNameNote(): ?string
+    {
+        return $this->originalFileNameNote;
     }
 }

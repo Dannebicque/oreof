@@ -1,6 +1,9 @@
 <div class="row"
         {{ stimulus_controller('structure--affichage') }}
 >
+    {% if diffStructureCampagne is not defined %}
+        {% set diffStructureCampagne = null %}
+    {% endif %}
     {% if isVersioning is not defined or isVersioning == false %}
         {% if (print is not defined or print == false) %}
             <div class="col-sm-12 text-end mb-2 pe-40px">
@@ -12,7 +15,7 @@
                        class="btn btn-sm btn-outline-info mx-2"
                     >Export codification parcours</a>
                 {% endif %}
-                    {# 
+                {#
                     {% if hasLastVersion is defined and hasLastVersion == true %}
                         <button type="button"
                                 class="btn btn-sm btn-outline-success btn-icon w-sm-auto mx-2 mb-1"
@@ -22,8 +25,8 @@
                         </button>
                     {% endif %}
                     #}
-                    
-                    {# Indication pour la comparaison de la maquette (versioning) #}
+
+                {# Indication pour la comparaison de la maquette (versioning) #}
                     <p class="show_versioning d-inline d-none">
                         <span>Mode de comparaison : </span>
                         <span class="text-info fst-italic fw-bold">Dernières saisies validées</span>
@@ -32,8 +35,8 @@
                         <span>Mode de comparaison : </span>
                         <span class="text-info fst-italic fw-bold">Saisies de l'année précédente</span>
                     </p>
-                    
-                    <button type="button"
+
+                <button type="button"
                             class="btn btn-sm btn-outline-info btn-icon w-sm-auto mx-2 mb-1"
                             {{ stimulus_action('structure--affichage', 'toggleEc') }}
                     >

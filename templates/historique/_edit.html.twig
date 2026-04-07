@@ -30,7 +30,7 @@
                 {{ component('alerte', {type:'warning', message: 'Un laissez-passer a été demandé le '~laisserPasser.created|date('d/m/Y')~'.'}) }}
             {% else %}
                 <a
-                        href="{{ asset('uploads/conseils/'~laisserPasser.complements.fichier) }}"
+                        href="{{ path('app_upload_download', {context: 'conseils', filename: laisserPasser.complements.fichier, originalName: laisserPasser.complements.fichier_original|default(laisserPasser.complements.fichier)}) }}"
                         target="_blank"
                         class="mt-1"
                         data-bs-toggle="tooltip"
@@ -57,7 +57,7 @@
 
         {% if historique.complements is defined and historique.complements.fichier is defined %}
             <a
-                    href="{{ asset('uploads/conseils/'~historique.complements.fichier) }}"
+                    href="{{ path('app_upload_download', {context: 'conseils', filename: historique.complements.fichier, originalName: historique.complements.fichier_original|default(historique.complements.fichier)}) }}"
                     target="_blank"
                     class="mt-1 btn btn-outline-primary"
                     data-bs-toggle="tooltip"

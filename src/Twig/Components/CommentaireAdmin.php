@@ -4,7 +4,9 @@ namespace App\Twig\Components;
 
 use App\Entity\Formation;
 use App\Entity\Parcours;
+use App\Utils\CleanTexte;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\UX\LiveComponent\Attribute\AsLiveComponent;
 use Symfony\UX\LiveComponent\Attribute\LiveAction;
 use Symfony\UX\LiveComponent\Attribute\LiveProp;
@@ -12,6 +14,7 @@ use Symfony\UX\LiveComponent\DefaultActionTrait;
 use Symfony\UX\TwigComponent\Attribute\PostMount;
 
 #[AsLiveComponent]
+#[IsGranted('ROLE_ADMIN')]
 final class CommentaireAdmin
 {
     use DefaultActionTrait;
@@ -57,11 +60,17 @@ final class CommentaireAdmin
     public function sauvegarde(): void
     {
         $this->isEditable = false;
+        $commentaire = CleanTexte::cleanTextArea($this->commentaire, true);
+        $commentaire = $commentaire !== null ? trim($commentaire) : null;
+        $commentaire = $commentaire === '' ? null : $commentaire;
+
         if ($this->parcours !== null) {
-            $this->parcours->setCommentaire($this->commentaire);
+            $this->parcours->setCommentaire($commentaire);
         } else {
-            $this->formation->setCommentaire($this->commentaire);
+            $this->formation->setCommentaire($commentaire);
         }
+
+        $this->commentaire = $commentaire;
         $this->entityManager->flush();
     }
 }

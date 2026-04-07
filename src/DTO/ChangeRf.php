@@ -16,6 +16,8 @@ class ChangeRf {
     private ?User $user = null;
     private ?string $commentaire = '';
 
+    private ?\DateTimeInterface $datePriseFonction = null;
+
     private ?TypeRfEnum $typeRf = TypeRfEnum::RF;
 
     public function getUser(): ?User
@@ -36,6 +38,16 @@ class ChangeRf {
     public function setCommentaire(?string $commentaire = ''): void
     {
         $this->commentaire = $commentaire;
+    }
+
+    public function getDatePriseFonction(): ?\DateTimeInterface
+    {
+        return $this->datePriseFonction;
+    }
+
+    public function setDatePriseFonction(?\DateTimeInterface $datePriseFonction): void
+    {
+        $this->datePriseFonction = $datePriseFonction;
     }
 
     public function getTypeRf(): ?TypeRfEnum

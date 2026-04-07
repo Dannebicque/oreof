@@ -1,9 +1,3 @@
-// Copyright (c) 2024. | David Annebicque | IUT de Troyes  - All Rights Reserved
-// @file /Users/davidannebicque/Sites/intranetV3/assets/controllers/load_content_controller.js
-// @author davidannebicque
-// @project intranetV3
-// @lastUpdate 16/02/2024 10:12
-
 import { Controller } from '@hotwired/stimulus'
 
 export default class extends Controller {
@@ -20,19 +14,26 @@ export default class extends Controller {
   }
 
   isOpen = false
-
   static targets = ['content']
 
   connect() {
     if (this.initialValue !== '') {
       if (this.loadOnConnectValue === true) {
-        this._loadContent(this.initialValue)
+        this._loadContent(this._normalizeValue(this.initialValue))
       }
     }
   }
 
   change(event) {
-    const value = event.target.value !== '' ? event.target.value : event.params.value
+    const targetValue = event?.target?.value
+    const fallbackValue = event?.params?.value
+
+    const rawValue = targetValue !== '' && targetValue !== undefined
+      ? targetValue
+      : fallbackValue
+
+    const value = this._normalizeValue(rawValue)
+
     if (this.isOpen) {
       this.contentTarget.innerHTML = ''
       this.isOpen = false
@@ -42,12 +43,38 @@ export default class extends Controller {
     }
   }
 
+  _normalizeValue (rawValue) {
+    if (rawValue === null || rawValue === undefined) {
+      return null
+    }
+
+    if (typeof rawValue === 'string') {
+      const cleaned = rawValue.trim()
+      if (cleaned === '' || cleaned === '[object Object]') {
+        return null
+      }
+      return cleaned
+    }
+
+    if (typeof rawValue === 'number' || typeof rawValue === 'boolean') {
+      return String(rawValue)
+    }
+
+    // Objet, tableau, fonction => on ignore
+    return null
+  }
+
   async _loadContent(value) {
-    const param = new URLSearchParams({
-      value,
-    })
+    const url = new URL(this.urlValue, window.location.origin)
+
+    if (value === null) {
+      url.searchParams.delete('value')
+    } else {
+      url.searchParams.set('value', value)
+    }
+
     this.contentTarget.innerHTML = window.da.loaderStimulus
-    const response = await fetch(`${this.urlValue}?${param.toString()}`)
+    const response = await fetch(url.toString())
     this.contentTarget.innerHTML = await response.text()
   }
 }

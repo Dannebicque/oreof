@@ -42,6 +42,7 @@ security:
         - { path: ^/parcours/.+/versioning/maquette_iframe, roles: PUBLIC_ACCESS }
         - { path: ^/fiche/matiere/.+/maquette_iframe, roles: PUBLIC_ACCESS }
         - { path: ^/parcours/mccc/export/cfvu_valid/[0-9]+/(complet|simplifie), roles: PUBLIC_ACCESS }
+        - { path: ^/administration/, roles: ROLE_ADMIN }
         - { path: ^/, roles: IS_AUTHENTICATED_FULLY }
 when@test:
     security:

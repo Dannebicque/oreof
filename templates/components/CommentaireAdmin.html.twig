@@ -6,8 +6,7 @@
                 class="w-full p-2 bg-slate-50 border border-slate-200 rounded-sm font-medium text-slate-700 focus:ring-4 focus:ring-indigo-50 focus:border-indigo-500 outline-none transition-all shadow-sm min-h-[150px]"
                 id="commentaire"
                 data-model="commentaire"
-                rows="10">{{ this.commentaire|raw }}
-        </textarea>
+                rows="10">{{ this.commentaire }}</textarea>
 
         <div class="col-sm-offset-2 col-sm-10">
             <button class="rounded-lg bg-green-600 text-white px-4 py-2 font-semibold"
@@ -22,7 +21,7 @@
         {% if this.commentaire == null %}
             <p>Pas de commentaire pour ce parcours</p>
         {% else %}
-            <p>{{ this.commentaire|raw }}</p>
+            <p>{{ this.commentaire|nl2br }}</p>
         {% endif %}
         <button
                 class="rounded-lg bg-amber-600 text-white px-4 py-2"

@@ -11,6 +11,7 @@ namespace App\Entity;
 
 use App\Entity\Traits\LifeCycleTrait;
 use App\Repository\NotificationRepository;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: NotificationRepository::class)]
@@ -88,6 +89,13 @@ class Notification
     public function markAsRead(): self
     {
         $this->isRead = true;
+
+        if ($this->requiresAck()) {
+            $payload = $this->payload ?? [];
+            $payload['ackAt'] = (new DateTimeImmutable())->format(DATE_ATOM);
+            $this->payload = $payload;
+        }
+
         return $this;
     }
 
@@ -115,37 +123,94 @@ class Notification
 
     public function getCodeNotification(): ?string
     {
-        return $this->codeNotification;
+        return $this->payload['codeNotification'] ?? $this->title ?? null;
     }
 
     public function setCodeNotification(string $codeNotification): self
     {
-        $this->codeNotification = $codeNotification;
+        $payload = $this->payload ?? [];
+        $payload['codeNotification'] = $codeNotification;
+        $this->payload = $payload;
+
+        if (!isset($this->title) || trim($this->title) === '') {
+            $this->title = $codeNotification;
+        }
 
         return $this;
     }
 
     public function getOptions(): ?string
     {
-        return $this->options;
+        return $this->payload['options'] ?? null;
     }
 
     public function setOptions(?string $options): self
     {
-        $this->options = $options;
+        $payload = $this->payload ?? [];
+        $payload['options'] = $options;
+        $this->payload = $payload;
 
         return $this;
     }
 
     public function isLu(): ?bool
     {
-        return $this->lu;
+        return $this->isRead;
     }
 
     public function setLu(bool $lu): self
     {
-        $this->lu = $lu;
+        if ($lu === true) {
+            return $this->markAsRead();
+        }
+
+        $this->isRead = false;
+
+        if ($this->requiresAck()) {
+            $payload = $this->payload ?? [];
+            $payload['ackAt'] = null;
+            $this->payload = $payload;
+        }
 
         return $this;
+    }
+
+    public function isMutualisationNotification(): bool
+    {
+        return ($this->payload['category'] ?? null) === 'mutualisation_update';
+    }
+
+    public function requiresAck(): bool
+    {
+        return ($this->payload['mustAck'] ?? false) === true;
+    }
+
+    public function isAckPending(): bool
+    {
+        if (!$this->isMutualisationNotification() || !$this->requiresAck()) {
+            return false;
+        }
+
+        return $this->isRead === false && empty($this->payload['ackAt']);
+    }
+
+    public function getMutualisationParcoursId(): ?int
+    {
+        $id = $this->payload['parcoursId'] ?? null;
+
+        return is_numeric($id) ? (int)$id : null;
+    }
+
+    public function isPendingForParcours(?int $parcoursId): bool
+    {
+        if (!$this->isAckPending()) {
+            return false;
+        }
+
+        if ($parcoursId === null) {
+            return true;
+        }
+
+        return $this->getMutualisationParcoursId() === $parcoursId;
     }
 }

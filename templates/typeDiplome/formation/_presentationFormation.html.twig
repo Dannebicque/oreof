@@ -1,4 +1,7 @@
 {% if formation.hasParcours == false %}
+    <div class="row">
+        {# todo: ne doit pas être là? #}
+        <div class="col-sm-12">
             <dl>
                 <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Contenu de la formation</dt>
                 <dd>
@@ -52,7 +55,43 @@
                 <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Précisions sur le rythme de
                     formation
                 </dt>
+                {% if stringDifferencesFormation.rythmeDeFormation is defined %}
+                    {{ include("communs/_comparaison_versioning_no_button.html.twig",
+                        {
+                            textDifferences: stringDifferencesFormation.rythmeDeFormation,
+                            idCollapse: "diffGlobalParcours"
+                        }
+                    )
+                    }}
+                {% endif %}
+                {% if stringDifferencesFormationCampagne.rythmeDeFormation is defined %}
+                    {{ include("communs/_comparaison_versioning_no_button.html.twig",
+                        {
+                            textDifferences: stringDifferencesFormationCampagne.rythmeDeFormation,
+                            idCollapse: "diffGlobalParcoursCampagne"
+                        }
+                    )
+                    }}
+                {% endif %}
                 <dd>{{ formation.rythmeFormationTexte|raw }}</dd>
+                {% if stringDifferencesFormation.rythmeDeFormationTexte is defined %}
+                    {{ include("communs/_comparaison_versioning_no_button.html.twig",
+                            {
+                                textDifferences: stringDifferencesFormation.rythmeDeFormationTexte,
+                                idCollapse: "diffGlobalParcours"
+                            }
+                        )
+                    }}
+                {% endif %}
+                {% if stringDifferencesFormationCampagne.rythmeDeFormationTexte is defined %}
+                    {{ include("communs/_comparaison_versioning_no_button.html.twig",
+                            {
+                                textDifferences: stringDifferencesFormationCampagne.rythmeDeFormationTexte,
+                                idCollapse: "diffGlobalParcoursCampagne"
+                            }
+                        )
+                    }}
+                {% endif %}
             </dl>
         </div>
     </div>
@@ -107,7 +146,7 @@
                                 {{ parcours.dpeParcours[0].etatReconduction|badgeTypeModification }}
                             </td>
                             <td>
-                                <a href="{{ path('parcours_v2_voir', {parcours:parcours.id}) }}"
+                                <a href="{{ path('app_parcours_show', {id:parcours.id}) }}"
                                    class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2 mb-1">
                                     <i class="{{ iconShow }}"></i> Fiche Descriptive</a>
                             </td>

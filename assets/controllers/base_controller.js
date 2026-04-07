@@ -67,7 +67,7 @@ export default class extends Controller {
   sauvegardeFormModal(event) {
     event.preventDefault()
 
-    const form = this.element.getElementsByTagName('form')[0]
+    const form = event.currentTarget.closest('form') || this.element.getElementsByTagName('form')[0]
     if (!this._validForm(form)) {
       console.log('form invalide')
       return

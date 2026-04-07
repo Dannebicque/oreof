@@ -296,6 +296,11 @@
                                                         </a>
                                                     </li>
                                                     <li>
+                                                        <a href="{{ path('app_validation_composante_pilotage', {composante:composante.id}) }}">
+                                                            <span class="label">Pilotage visuel</span>
+                                                        </a>
+                                                    </li>
+                                                    <li>
                                                         <a href="{{ path('app_export_composante_index', {composante:composante.id}) }}">
                                                             <span class="label">{{ 'menu.compo.exports'|trans({}, 'menu') }}</span>
                                                         </a>
@@ -662,7 +667,7 @@
                     <div class="col-sm-6 d-none d-sm-block">
                         <ul class="breadcrumb pt-0 pe-0 mb-0 float-end">
                             <li class="breadcrumb-item mb-0 text-medium">
-                                <a href="mailto:david.annebicque@univ-reims.fr" target="_blank" class="btn-link"><i
+                                <a href="mailto:oreof@univ-reims.fr" target="_blank" class="btn-link"><i
                                             class="text-primary icon-14
                                     fal fa-envelope"></i></a>
                             </li>

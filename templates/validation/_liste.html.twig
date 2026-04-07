@@ -1,4 +1,18 @@
-<div class="card-body">
+<div class="card-body"
+        {% set hideLotButtons = hideLotButtons|default(false) %}
+        {% if composante is defined %}
+            {{ stimulus_controller('validation--index',
+                {
+                    urlListe: path('app_validation_composante_dpe_liste', {
+                    composante:composante.id}),
+                }) }}
+        {% else %}
+            {{ stimulus_controller('validation--index',
+                {
+                    urlListe: path('app_validation_dpe_liste',),
+                }) }}
+        {% endif %}
+>
     <div class="alert alert-info">
         <strong>{{ nbParcours }}</strong> parcours, pour <strong>{{ nbFormations }}</strong>
         formation{{ nbFormations > 1 ? 's' : '' }}
@@ -7,7 +21,7 @@
     <table class="table" {{ stimulus_controller('check_all') }}>
         <thead>
         <tr>
-            {% if isCfvu is not defined or not isCfvu %}
+            {% if (isCfvu is not defined or not isCfvu) and not hideLotButtons %}
                 <th>
                     <div class="checkbox">
                         <label>
@@ -46,7 +60,7 @@
             {% set parcours = dpeParcours.parcours %}
             {% set formation = parcours.formation %}
             <tr>
-                {% if isCfvu is not defined or not isCfvu %}
+                {% if (isCfvu is not defined or not isCfvu) and not hideLotButtons %}
                     <td>
                         <div class="checkbox">
                             <label>
@@ -197,7 +211,7 @@
         {% endfor %}
         </tbody>
     </table>
-    {% if isCfvu is not defined or not isCfvu %}
+    {% if (isCfvu is not defined or not isCfvu) and not hideLotButtons %}
         <div class="row mt-2">
             {% set prefix = 'parcours' %}
             {% if allparcours|length > 0 %}

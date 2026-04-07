@@ -11,12 +11,13 @@ use App\Entity\ChangeRf;
 use App\Entity\HistoriqueFormation;
 use App\Entity\HistoriqueParcours;
 use App\Entity\Parcours;
+use App\Exception\FileUploadException;
+use App\Service\SecureUploadService;
 use App\Utils\Tools;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -26,14 +27,13 @@ class PvConseilController extends BaseController
     public function index(
         GetHistorique $getHistorique,
         Mailer $myMailer,
-        KernelInterface $kernel,
+        SecureUploadService $secureUploadService,
         EntityManagerInterface $entityManager,
         TranslatorInterface $translator,
         Request $request,
         Parcours $parcours,
     ): Response {
         if ($request->isMethod('POST')) {
-            $dir = $kernel->getProjectDir().'/public/uploads/conseils/';
             $dpeParcours = GetDpeParcours::getFromParcours($parcours);
             if ($dpeParcours !== null) {
                 $conseilLaisserPasser = $getHistorique->getHistoriqueParcoursLastStep($dpeParcours, 'soumis_conseil');
@@ -53,13 +53,16 @@ class PvConseilController extends BaseController
 
                 //upload
                 if ($request->files->has('file') && $request->files->get('file') !== null) {
-                    $file = $request->files->get('file');
-                    $fileName = md5(uniqid('', true)) . '.' . $file->guessExtension();
-                    $file->move(
-                        $dir,
-                        $fileName
-                    );
-                    $tab['fichier'] = $fileName;
+                    try {
+                        $upload = $secureUploadService->uploadFromRequest($request, 'file', 'conseils');
+                    } catch (FileUploadException $exception) {
+                        return JsonReponse::error($exception->getPublicMessage());
+                    }
+
+                    if ($upload !== null) {
+                        $tab['fichier'] = $upload->getStoredFilename();
+                        $tab['fichier_original'] = $upload->getOriginalFilename();
+                    }
                 } else {
                     return JsonReponse::success($translator->trans('deposer.pv.flash.error', [], 'process'));
                 }
@@ -94,14 +97,13 @@ class PvConseilController extends BaseController
         ChangeRfProcess $changeRfProcess,
         GetHistorique $getHistorique,
         Mailer $myMailer,
-        KernelInterface $kernel,
+        SecureUploadService $secureUploadService,
         EntityManagerInterface $entityManager,
         TranslatorInterface $translator,
         Request $request,
         ChangeRf $changeRf,
     ): Response {
         if ($request->isMethod('POST')) {
-            $dir = $kernel->getProjectDir().'/public/uploads/conseils/';
             if ($changeRf !== null) {
                 $conseilLaisserPasser = $getHistorique->getHistoriqueChangeRfLastStep($changeRf, 'changeRf.soumis_conseil');
                 if ($conseilLaisserPasser !== null && $conseilLaisserPasser->getEtat() === 'laisserPasser') {
@@ -121,13 +123,16 @@ class PvConseilController extends BaseController
 
                 //upload
                 if ($request->files->has('file') && $request->files->get('file') !== null) {
-                    $file = $request->files->get('file');
-                    $fileName = md5(uniqid('', true)) . '.' . $file->guessExtension();
-                    $file->move(
-                        $dir,
-                        $fileName
-                    );
-                    $tab['fichier'] = $fileName;
+                    try {
+                        $upload = $secureUploadService->uploadFromRequest($request, 'file', 'conseils');
+                    } catch (FileUploadException $exception) {
+                        return JsonReponse::error($exception->getPublicMessage());
+                    }
+
+                    if ($upload !== null) {
+                        $tab['fichier'] = $upload->getStoredFilename();
+                        $tab['fichier_original'] = $upload->getOriginalFilename();
+                    }
                 } else {
                     return JsonReponse::error($translator->trans('deposer.pv.flash.error', [], 'process'));
                 }

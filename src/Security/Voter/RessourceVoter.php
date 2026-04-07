@@ -74,7 +74,6 @@ class RessourceVoter extends Voter
         $userProfils = $this->userProfilRepository->findBy(['user' => $user]);
 
         $attributesToCheck = $this->getAttributesIncludingStronger($attribute);
-
         foreach ($userProfils as $userProfil) {
             $profile = $userProfil->getProfil();
             foreach ($attributesToCheck as $attr) {
@@ -89,6 +88,7 @@ class RessourceVoter extends Voter
 
     private function checkScope(UserProfil $userProfil, mixed $object, string $attribute): bool
     {
+
         $centre = $userProfil->getProfil()?->getCentre();
         return match ($centre) {
             CentreGestionEnum::CENTRE_GESTION_ETABLISSEMENT => $this->checkEtablissement($userProfil, $object, $attribute) || $object === 'etablissement',
@@ -182,9 +182,12 @@ class RessourceVoter extends Voter
     private function checkFormation(UserProfil $userProfil, mixed $object, string $attribute): bool
     {
         if ($object instanceof Formation) {
-            $isProprietaire = (($userProfil->getFormation() === $object && ($object->getCoResponsable()?->getId() === $userProfil->getUser()?->getId() || $object->getResponsableMention()?->getId() === $userProfil->getUser()?->getId())) || ($userProfil->getComposante() === $object->getComposantePorteuse() && $object->getComposantePorteuse()?->getResponsableDpe()?->getId() === $userProfil->getUser()?->getId()));
-
-            //todo: gérer le workflow?
+            // if ($attribute === 'show') {
+            $isProprietaire = ($userProfil->getFormation() === $object);
+            /* } else {
+                 $isProprietaire = (($userProfil->getFormation() === $object && ($object->getCoResponsable()?->getId() === $userProfil->getUser()?->getId() || $object->getResponsableMention()?->getId() === $userProfil->getUser()?->getId())) || ($userProfil->getComposante() === $object->getComposantePorteuse() && $object->getComposantePorteuse()?->getResponsableDpe()?->getId() === $userProfil->getUser()?->getId()));
+           }*/
+//todo: gérer le workflow?
             $canAccess =
                 $object->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_TEXTE ||
                 $object->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_MCCC_TEXTE ||
@@ -207,6 +210,7 @@ class RessourceVoter extends Voter
                 $canAccess = $canAccess || $object->getEtatReconduction() === TypeModificationDpeEnum::OUVERT;
             }
 
+
             return $canAccess && $isProprietaire;
         }
         if ($object instanceof DpeParcours) {
@@ -220,7 +224,6 @@ class RessourceVoter extends Voter
     {
         $parcours = null;
         $dpeParcours = null;
-
         if ($object instanceof Parcours) {
             $parcours = $object;
             $dpeParcours = GetDpeParcours::getFromParcours($parcours);
@@ -246,14 +249,14 @@ class RessourceVoter extends Voter
         );
 
         if ($parcours->getCoResponsable()?->getId() === $userProfil->getUser()?->getId() || $parcours->getRespParcours()?->getId() === $userProfil->getUser()?->getId()) {
-            $canAccess = $this->dpeParcoursWorkflow->can($dpeParcours, 'autoriser') || $this->dpeParcoursWorkflow->can($dpeParcours, 'valider_parcours');
+            $canAccess = $this->dpeParcoursWorkflow->can($dpeParcours, 'autoriser') || $this->dpeParcoursWorkflow->can($dpeParcours, 'valider_parcours') ||
+                $this->dpeParcoursWorkflow->can($dpeParcours, 'valider_ouverture_sans_cfvu');
         }
 
         if ($parcours->getFormation()?->getCoResponsable()?->getId() === $userProfil->getUser()?->getId() || $parcours->getFormation()?->getResponsableMention()?->getId() === $userProfil->getUser()?->getId()) {
             $canAccess = $this->dpeParcoursWorkflow->can($dpeParcours, 'autoriser') ||
                 $this->dpeParcoursWorkflow->can($dpeParcours, 'valider_parcours') ||
                 $this->dpeParcoursWorkflow->can($dpeParcours, 'valider_ouverture_sans_cfvu') ||
-                //  $this->dpeParcoursWorkflow->can(subject, 'valider_ouverture_sans_cfvu') || todo: a mettre dès l'ouverture
                 $this->dpeParcoursWorkflow->can($dpeParcours, 'valider_publication') ||
                 $this->dpeParcoursWorkflow->can($dpeParcours, 'valider_rf');
         }

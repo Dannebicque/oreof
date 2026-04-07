@@ -76,9 +76,16 @@ class StructureEc
 //                $this->typeMccc = $getElement->getTypeMccc();
 //            } elseif ($dataFromFicheMatiere === true){
             $this->heuresEctsEc->addEc($getElement->getFicheMatiereHeures(), $isBut);
+
+            if ($isBut === false) {
                 $this->heuresEctsEc->addEcts($getElement->getFicheMatiereEcts());
-                $this->mcccs = $getElement->getMcccsFromFicheMatiereCollection()?->toArray();
-                $this->typeMccc = $getElement->getTypeMcccFromFicheMatiere();
+            } else {
+                //en BUT on force la lecture sur EC et pas sur la fiche
+                $this->heuresEctsEc->addEcts($elementConstitutif->getEcts());
+            }
+
+            $this->mcccs = $getElement->getMcccsFromFicheMatiereCollection()?->toArray();
+            $this->typeMccc = $getElement->getTypeMcccFromFicheMatiere();
             // }
         }
 

@@ -22,8 +22,10 @@ use DateTime;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/validation/administration/', name: 'app_validation_')]
+#[IsGranted('ROLE_ADMIN')]
 class ValidationAdminController extends BaseController
 {
     #[Route('/validation/fiche/export', name: 'verification_fiche_export')]

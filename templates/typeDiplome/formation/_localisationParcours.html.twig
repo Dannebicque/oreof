@@ -5,6 +5,24 @@
             <dd>
                 {{ parcours != null and parcours.localisation != null ? parcours.localisation.libelle : 'Erreur' }}
             </dd>
+            {% if stringDifferencesParcours.localisationParcours is defined %}
+                {{ include('communs/_comparaison_versioning_no_button.html.twig',
+                    {
+                        textDifferences: stringDifferencesParcours.localisationParcours,
+                        idCollapse: 'diffGlobalParcours'
+                    }
+                )
+                }}
+            {% endif %}
+            {% if stringDifferencesParcoursCampagne.localisationParcours is defined %}
+                {{ include('communs/_comparaison_versioning_no_button.html.twig',
+                    {
+                        textDifferences: stringDifferencesParcoursCampagne.localisationParcours,
+                        idCollapse: 'diffGlobalParcoursCampagne'
+                    }
+                )
+                }}
+            {% endif %}
             <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Régime(s) d'inscription</dt>
             <dd>
 
@@ -45,16 +63,36 @@
                 }}
             {% endif %}
             {% if stringDifferencesParcoursCampagne.modaliteAlternanceParcours is defined %}
-                {{ include('communs/_comparaison_versioning_no_button.html.twig', 
+                {{ include('communs/_comparaison_versioning_no_button.html.twig',
                         {
                             textDifferences: stringDifferencesParcoursCampagne.modaliteAlternanceParcours,
                             idCollapse: 'diffGlobalParcoursCampagne'
                         }
-                    ) 
+                    )
                 }}
             {% endif %}
 
             {% if parcours.composanteInscription != null %}
+                {% if stringDifferencesParcours.composanteInscriptionParcours is defined %}
+                    {{ include('communs/_comparaison_versioning_no_button.html.twig',
+                        {
+                            textDifferences: stringDifferencesParcours.composanteInscriptionParcours,
+                            idCollapse: 'diffGlobalParcours'
+                        }
+                    )
+
+                    }}
+                {% endif %}
+                {% if stringDifferencesParcoursCampagne.composanteInscriptionParcours is defined %}
+                    {{ include('communs/_comparaison_versioning_no_button.html.twig',
+                        {
+                            textDifferences: stringDifferencesParcoursCampagne.composanteInscriptionParcours,
+                            idCollapse: 'diffGlobalParcoursCampagne'
+                        }
+                    )
+
+                    }}
+                {% endif %}
                 <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Composante d'inscription</dt>
                 <dd>
                     <div class="not-prose bg-white border-l-4 border-indigo-500 p-8 rounded-r-sm shadow-sm mb-5 mt-3">

@@ -39,12 +39,7 @@
                 </dl>
             </div>
             {% if formation.hasParcours == false and formation.parcours[0] is defined %}
-                {% if hasLastVersion is defined and hasLastVersion != null %}
-                    {{ include('communs/_boutonSynthese_version.html.twig', {parcours: formation.parcours[0], col:'col-3'}) }}
-                {% else %}
                     {{ include('communs/_boutonSynthese.html.twig', {parcours: formation.parcours[0], col:'col-3'}) }}
-                {% endif %}
-
                 <twig:ParcoursOuvert :parcours="formation.parcours[0]" type="formation" />
             {% endif %}
 
@@ -79,14 +74,14 @@
                             <i class="fal fa-users-between-lines"></i>
                         </a>
 
-                        <a href="{{ path('app_formation_synchronisation',{'formation': formation.id}) }}"
-                           class="btn btn-sm btn-icon btn-icon-only btn-outline-danger ms-1"
-                           data-bs-toggle="tooltip"
-                           data-bs-placement="bottom"
-                           title="Initialiser la formation depuis ORéBUT"
-                        >
-                            <i class="fal fa-rotate"></i>
-                        </a>
+                        {#                        <a href="{{ path('app_formation_synchronisation',{'formation': formation.id}) }}" #}
+                        {#                           class="btn btn-sm btn-icon btn-icon-only btn-outline-danger ms-1" #}
+                        {#                           data-bs-toggle="tooltip" #}
+                        {#                           data-bs-placement="bottom" #}
+                        {#                           title="Initialiser la formation depuis ORéBUT" #}
+                        {#                        > #}
+                        {#                            <i class="fal fa-rotate"></i> #}
+                        {#                        </a> #}
                     {% endif %}
                 {% endif %}
             </div>

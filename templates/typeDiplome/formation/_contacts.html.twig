@@ -3,8 +3,44 @@
         {% if formation.isHasParcours == false and formation.parcours|length == 1 %}
             <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Responsable de formation</dt>
             <dd>{{ parcours.formation.responsableMention != null ? parcours.formation.responsableMention.display : 'Non concerné' }}</dd>
+            {% if stringDifferencesParcours.responsableMentionParcoursParDefaut is defined %}
+                {{ include('communs/_comparaison_versioning_no_button.html.twig',
+                    {
+                        textDifferences: stringDifferencesParcours.responsableMentionParcoursParDefaut,
+                        idCollapse: 'diffGlobalParcours'
+                    }
+                )
+                }}
+            {% endif %}
+            {% if stringDifferencesParcoursCampagne.responsableMentionParcoursParDefaut is defined %}
+                {{ include('communs/_comparaison_versioning_no_button.html.twig',
+                    {
+                        textDifferences: stringDifferencesParcoursCampagne.responsableMentionParcoursParDefaut,
+                        idCollapse: 'diffGlobalParcoursCampagne'
+                    }
+                )
+                }}
+            {% endif %}
             <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Co-responsable de formation</dt>
             <dd>{{ parcours.formation.coResponsable != null ? parcours.formation.coResponsable.display : 'Non concerné' }}</dd>
+            {% if stringDifferencesParcours.coResponsableMentionParcoursParDefaut is defined %}
+                {{ include('communs/_comparaison_versioning_no_button.html.twig',
+                       {
+                            textDifferences: stringDifferencesParcours.coResponsableMentionParcoursParDefaut,
+                            idCollapse: 'diffGlobalParcours'
+                       }
+                    )
+                }}
+            {% endif %}
+            {% if stringDifferencesParcoursCampagne.coResponsableMentionParcoursParDefaut is defined %}
+                {{ include('communs/_comparaison_versioning_no_button.html.twig',
+                       {
+                            textDifferences: stringDifferencesParcoursCampagne.coResponsableMentionParcoursParDefaut,
+                            idCollapse: 'diffGlobalParcoursCampagne'
+                       }
+                    )
+                }}
+            {% endif %}
         {% else %}
             <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Responsable du parcours</dt>
             <dd>{{ parcours.respParcours != null ? parcours.respParcours.display : 'Non concerné' }}<br>
@@ -34,12 +70,12 @@
             <dt>Email</dt>
             <dd>{{ parcours.respParcours != null ? parcours.respParcours.email : 'Non concerné' }}</dd>
             {% if stringDifferencesParcours.emailParcoursResponsableParcours is defined %}
-                {{ include('communs/_comparaison_versioning_no_button.html.twig', 
+                {{ include('communs/_comparaison_versioning_no_button.html.twig',
                         {
                             textDifferences: stringDifferencesParcours.emailParcoursResponsableParcours,
                             idCollapse: 'diffGlobalParcours'
                         }
-                    ) 
+                    )
                 }}
             {% endif %}
             {% if stringDifferencesParcoursCampagne.emailParcoursResponsableParcours is defined %}
@@ -62,12 +98,12 @@
                     </a>
                 </dd>
                 {% if stringDifferencesParcours.contactsParcoursCoResponsableDuParcours is defined %}
-                    {{ include('communs/_comparaison_versioning_no_button.html.twig', 
+                    {{ include('communs/_comparaison_versioning_no_button.html.twig',
                             {
                                 textDifferences: stringDifferencesParcours.contactsParcoursCoResponsableDuParcours,
                                 idCollapse: 'diffGlobalParcours'
                             }
-                        ) 
+                        )
                     }}
                 {% endif %}
                 {% if stringDifferencesParcoursCampagne.contactsParcoursCoResponsableDuParcours is defined %}
@@ -82,12 +118,12 @@
                 <dt>Email</dt>
                 <dd>{{ parcours.coResponsable != null ? parcours.coResponsable.email : 'Non concerné' }}</dd>
                 {% if stringDifferencesParcours.emailParcoursCoResponsableDuParcours is defined %}
-                    {{ include('communs/_comparaison_versioning_no_button.html.twig', 
+                    {{ include('communs/_comparaison_versioning_no_button.html.twig',
                             {
                                 textDifferences: stringDifferencesParcours.emailParcoursCoResponsableDuParcours,
                                 idCollapse: 'diffGlobalParcours'
                             }
-                        ) 
+                        )
                     }}
                 {% endif %}
                 {% if stringDifferencesParcoursCampagne.emailParcoursCoResponsableDuParcours is defined %}

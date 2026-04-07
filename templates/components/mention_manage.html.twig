@@ -214,7 +214,7 @@
                             {% endif %}
                         </div>
                         <div class="col-3 d-grid">
-                            {% if is_granted('MANAGE', {route: 'app_formation', subject: this.formation}) or is_granted('ROLE_ADMIN') %}
+                            {% if is_granted('MANAGE', {route: 'app_formation', subject: this.formation}) or is_granted('MANAGE', {route: 'app_composante', subject: this.formation.composantePorteuse}) or is_granted('ROLE_ADMIN') %}
                             <button
                                     href="#"
                                     {{ stimulus_controller('modal', {

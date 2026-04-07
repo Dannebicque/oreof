@@ -9,5 +9,5 @@
 
 {{ include('codification/_enteteParcours.html.twig') }}
 
-{{ include('typeDiplome/formation/_structure.html.twig', {parcours:parcours, source: 'codification'}) }}
+{{ include('typeDiplome/'~constant('TEMPLATE_FOLDER', typeD)~'/structure/_structure.html.twig', {parcours:parcours, source: 'codification'}) }}
 

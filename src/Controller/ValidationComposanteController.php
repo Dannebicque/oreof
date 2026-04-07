@@ -14,6 +14,8 @@ use App\Classes\ValidationProcess;
 use App\Classes\ValidationProcessChangeRf;
 use App\Classes\ValidationProcessFicheMatiere;
 use App\Entity\Composante;
+use App\Entity\CampagneCollecte;
+use App\Repository\CampagneCollecteRepository;
 use App\Repository\ChangeRfRepository;
 use App\Repository\ComposanteRepository;
 use App\Repository\DpeParcoursRepository;
@@ -23,10 +25,26 @@ use DateTime;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\UX\Chartjs\Builder\ChartBuilderInterface;
+use Symfony\UX\Chartjs\Model\Chart;
 
 #[Route('/validation/composante/', name: 'app_validation_composante_')]
 class ValidationComposanteController extends BaseController
 {
+
+    private const ETAPES_SANS_ACTIONS = [
+        'soumis_cfvu',
+        'refuse_central',
+        'soumis_cfvu',
+        'refuse_definitif_cfvu',
+        'valide_cfvu',
+        'valide_a_publier',
+        'publie',
+        'soumis_central_sans_cfvu',
+        'soumis_central_reserve_cfvu',
+        'non_ouverture_ses',
+        'non_ouverture',
+    ];
 
     #[Route('/validation/fiche/export', name: 'app_validation_verification_fiche_export')]
     //todo: gérer la composante
@@ -76,18 +94,104 @@ class ValidationComposanteController extends BaseController
 
     #[Route('{composante}/dpe', name: 'dpe_index')]
     public function composante(
+        DpeParcoursRepository $dpeParcoursRepository,
         Request           $request,
         Composante        $composante,
         ValidationProcess $validationProcess,
     ): Response
     {
 
-        $typeValidation = $request->query->get('typeValidation');
+        $steps = $validationProcess->getProcessAll();
+
+        //statstics
+        // parcourir tous les parcours et compter les états
+        $statistiques = [];
+        $allParcours = $dpeParcoursRepository->findByComposanteAndCampagne($composante, $this->getCampagneCollecte());
+        foreach ($allParcours as $parcours) {
+            $etat = array_keys($parcours->getEtatValidation())[0];
+            if (!isset($statistiques[$etat])) {
+                $statistiques[$etat]['nbParcours'] = 0;
+                $statistiques[$etat]['formations'] = [];
+            }
+            $statistiques[$etat]['nbParcours']++;
+            if (!in_array($parcours->getParcours()?->getFormation()?->getId(), $statistiques[$etat]['formations'], true)) {
+                $statistiques[$etat]['formations'][] = $parcours->getParcours()?->getFormation()?->getId();
+            }
+        }
 
         return $this->render('validation-composante/dpe.html.twig', [
             'composante' => $composante,
-            'types_validation' => $validationProcess->getProcessAll(),
-            'typeValidation' => $typeValidation,
+            'steps' => $steps,
+            'statistiques' => $statistiques,
+        ]);
+    }
+
+    #[Route('{composante}/pilotage', name: 'pilotage')]
+    #[Route('{composante}/pilotage/{campagneCollecte}', name: 'pilotage_campagne')]
+    public function pilotage(
+        Composante                 $composante,
+        DpeParcoursRepository      $dpeParcoursRepository,
+        CampagneCollecteRepository $campagneCollecteRepository,
+        ChartBuilderInterface      $chartBuilder,
+        ?CampagneCollecte          $campagneCollecte = null,
+    ): Response
+    {
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            $this->denyAccessUnlessGranted('SHOW', [
+                'route' => 'app_composante',
+                'subject' => $composante,
+            ]);
+        }
+
+        $campagne = $campagneCollecte ?? $this->getCampagneCollecte();
+        $stats = $dpeParcoursRepository->getPilotageStatsByComposanteAndCampagne($composante, $campagne);
+
+        $chartRepartition = $chartBuilder->createChart(Chart::TYPE_DOUGHNUT);
+        $chartRepartition->setData([
+            'labels' => ['Parcours ouverts', 'Parcours validés', 'Parcours non ouverts', 'Autres statuts'],
+            'datasets' => [[
+                'label' => 'Repartition des parcours',
+                'backgroundColor' => ['#3B82F6', '#10B981', '#EF4444', '#94A3B8'],
+                'data' => [
+                    $stats['nbParcoursOuverts'],
+                    $stats['nbParcoursValides'],
+                    $stats['nbParcoursNonOuverts'],
+                    $stats['nbParcoursAutres'],
+                ],
+            ]],
+        ]);
+
+        $workflowLabels = array_keys($stats['workflowCounts']);
+        $workflowData = array_values($stats['workflowCounts']);
+        if (count($workflowLabels) === 0) {
+            $workflowLabels = ['Aucune donnee'];
+            $workflowData = [0];
+        }
+
+        $chartWorkflow = $chartBuilder->createChart(Chart::TYPE_BAR);
+        $chartWorkflow->setData([
+            'labels' => $workflowLabels,
+            'datasets' => [[
+                'label' => 'Parcours par etape workflow',
+                'backgroundColor' => '#6366F1',
+                'data' => $workflowData,
+            ]],
+        ]);
+
+        $chartWorkflow->setOptions([
+            'indexAxis' => 'y',
+            'plugins' => [
+                'legend' => ['display' => false],
+            ],
+        ]);
+
+        return $this->render('validation-composante/pilotage.html.twig', [
+            'composante' => $composante,
+            'campagne' => $campagne,
+            'campagnes' => $campagneCollecteRepository->findBy([], ['annee' => 'DESC']),
+            'stats' => $stats,
+            'chartRepartition' => $chartRepartition,
+            'chartWorkflow' => $chartWorkflow,
         ]);
     }
 
@@ -148,6 +252,8 @@ class ValidationComposanteController extends BaseController
             $tFormations[] = $parcours->getParcours()?->getFormation()?->getId();
         }
 
+        $hideLotButtons = !$this->isGranted('ROLE_ADMIN') && in_array($typeValidation, self::ETAPES_SANS_ACTIONS, true);
+
         // valeurs uniques dans tFormations
         $nbFormations = count(array_unique($tFormations));
 
@@ -157,6 +263,7 @@ class ValidationComposanteController extends BaseController
             'process' => $process,
             'allparcours' => $allparcours,
             'etape' => $typeValidation ?? null,
+            'hideLotButtons' => $hideLotButtons,
         ]);
     }
 

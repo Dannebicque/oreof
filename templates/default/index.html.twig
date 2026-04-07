@@ -3,6 +3,8 @@
 {% set header_title %}Bienvenue sur ORéOF!{% endset %}
 
 {% block content %}
+    {{ component('mutualisation_alerts', { user: app.user }) }}
+
     {{ include('default/_timeLine.html.twig') }}
 
     {#    {% if is_granted('ROLE_ADMIN') %} #}

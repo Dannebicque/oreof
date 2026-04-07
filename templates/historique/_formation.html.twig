@@ -60,6 +60,9 @@
                     {% if histo.etat == 'laisserPasser' %}
                         <span class="badge bg-warning ms-2">Laissez-passer demandé</span>
                     {% endif %}
+                    {% if histo.etat == 'force_admin' %}
+                        <span class="badge bg-warning ms-2">{{ 'historique.force_admin.badge'|trans({}, 'process') }}</span>
+                    {% endif %}
                     <p class="text-small">par : {{ histo.user.display }}</p>
                 </div>
                 {% if is_granted('ROLE_ADMIN') %}
@@ -133,7 +136,9 @@
                             </div>
                         {% else %}
                             <div class="col-auto">
-                                <p><a href="{{ asset('uploads/conseils/'~histo.complements.fichier) }}" target="_blank">Voir
+                                <p>
+                                    <a href="{{ path('app_upload_download', {context: 'conseils', filename: histo.complements.fichier, originalName: histo.complements.fichier_original|default(histo.complements.fichier)}) }}"
+                                       target="_blank">Voir
                                         le PV du conseil</a></p>
                             </div>
                         {% endif %}

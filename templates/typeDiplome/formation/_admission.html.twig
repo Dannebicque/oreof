@@ -1,6 +1,24 @@
 <div class="row">
     <div class="col-12">
         <dl>
+            {% if stringDifferencesParcours.niveauFrancaisParcours is defined %}
+                {{ include("communs/_comparaison_versioning_no_button.html.twig",
+                    {
+                        textDifferences: stringDifferencesParcours.niveauFrancaisParcours,
+                        idCollapse: 'diffGlobalParcours'
+                    }
+                )
+                }}
+            {% endif %}
+            {% if stringDifferencesParcoursCampagne.niveauFrancaisParcours is defined %}
+                {{ include("communs/_comparaison_versioning_no_button.html.twig",
+                    {
+                        textDifferences: stringDifferencesParcoursCampagne.niveauFrancaisParcours,
+                        idCollapse: 'diffGlobalParcoursCampagne'
+                    }
+                )
+                }}
+            {% endif %}
             <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Niveau de français requis</dt>
             <dd>{{ parcours.niveauFrancais != null ? parcours.niveauFrancais.libelle : 'Non précisé' }}</dd>
             <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Prérequis recommandés</dt>

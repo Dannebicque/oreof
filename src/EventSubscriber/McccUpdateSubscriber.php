@@ -9,15 +9,15 @@
 
 namespace App\EventSubscriber;
 
-use App\Classes\Mailer;
 use App\Events\McccUpdateEvent;
+use App\Service\MutualisationChangeNotifier;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class McccUpdateSubscriber implements EventSubscriberInterface
 {
 
     public function __construct(
-        private Mailer $mailer,
+        private readonly MutualisationChangeNotifier $mutualisationChangeNotifier,
     ) {
     }
 
@@ -30,34 +30,8 @@ class McccUpdateSubscriber implements EventSubscriberInterface
 
     public function onMcccUpdate(McccUpdateEvent $event): void
     {
-        if ($event->hasDiff()) {
-            // mail au responsable de la formation/RP si réouverture
-            $ficheMatiere = $event->getElementConstitutif()->getFicheMatiere();
-            if ($ficheMatiere !== null) {
-                $ecs = $ficheMatiere->getElementConstitutifs();
-                foreach ($ecs as $ec) {
-                    $parcours = $ec->getParcours();
-                    if ($parcours !== null && $parcours->getId() !== $event->getParcours()->getId()) {
-                        //mail
-                        $this->mailer->initEmail();
-                        $this->mailer->setTemplate('mails/mutualisation/parcours_reouverture_mccc.html.twig', [
-                            'parcours' => $parcours,
-                            'formation' => $parcours->getFormation(),
-                            'ec' => $ec,
-                            'ficheMatiere' => $ficheMatiere
-                        ]);
-                        $this->mailer->sendMessage(
-                            [
-                                $parcours->getRespParcours()?->getEmail(),
-                                $parcours->getCoResponsable()?->getEmail(),
-                                $parcours->getFormation()?->getResponsableMention()?->getEmail(),
-                                $parcours->getFormation()?->getCoResponsable()?->getEmail(),
-                            ],
-                            '[ORéOF] Un élément mutualisé avec l\'un de vos parcours a été modifié'
-                        );
-                    }
-                }
-            }
-        }
+        // Les notifications sont gérées par DoctrineMutualisationUpdateSubscriber
+        // qui surveille les entités Mccc et ElementConstitutif lors du flush.
+        // Ce subscriber est conservé pour usage futur (ex: journalisation des diffs).
     }
 }

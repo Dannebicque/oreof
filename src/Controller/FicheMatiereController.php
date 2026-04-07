@@ -35,6 +35,7 @@ use Exception;
 use Jfcherng\Diff\DiffHelper;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -175,6 +176,7 @@ class FicheMatiereController extends BaseController
         FicheMatiere $ficheMatiere,
         FicheMatiereState $ficheMatiereState,
     ): Response {
+        //todo: a revoir...
         if (!($this->isGranted(
                 'EDIT',
             [
@@ -329,6 +331,7 @@ class FicheMatiereController extends BaseController
             'typeDiplome' => $ficheMatiere->getParcours()?->getFormation()?->getTypeDiplome(),
             'formation' => $ficheMatiere->getParcours()?->getFormation(),
             'maquetteOrigineURL' => $parcours ? $this->generateUrl('app_parcours_maquette_iframe', ['parcours' => $parcours->getId()]) : "#",
+            // $parcours ? $this->generateUrl('app_versioning_parcours_maquette_iframe', ['parcours' => $parcours->getId()]) : "#",
             'ects' => $ects,
             'heuresEctsEc' => [
                 'volCmPres' => $volCmPres,
@@ -350,7 +353,7 @@ class FicheMatiereController extends BaseController
         EntityManagerInterface $entityManager,
         Filesystem $fileSystem,
         VersioningFicheMatiere $ficheMatiereVersioningService
-    ): \Symfony\Component\HttpFoundation\RedirectResponse
+    ): RedirectResponse
     {
         try {
             // Date / Heure
@@ -398,7 +401,7 @@ class FicheMatiereController extends BaseController
         LicenceTypeDiplome $licenceTypeD,
         ButTypeDiplome $butTypeD,
         MeefTypeDiplome $meefTypeD
-    ): \Symfony\Component\HttpFoundation\RedirectResponse|Response
+    ): RedirectResponse|Response
     {
         try {
             $version = $ficheMatiereVersioningService->loadFicheMatiereVersion($ficheMatiereVersioning);

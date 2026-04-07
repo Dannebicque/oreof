@@ -6,6 +6,7 @@ use App\Classes\GetCommentaires;
 use App\Classes\JsonReponse;
 use App\Classes\MyGotenbergPdf;
 use App\Entity\Commentaire;
+use App\Utils\CleanTexte;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -48,7 +49,15 @@ class CommentaireController extends AbstractController
         $zone = $request->query->get('zone');
 
         if ($request->isMethod('POST')) {
-            $getCommentaires->ajoutCommentaire($id, $type, $zone, $request->request->get('message'), $this->getUser());
+            $message = $request->request->get('message');
+            $message = is_string($message) ? $message : '';
+            $message = trim(CleanTexte::cleanTextArea($message, true) ?? '');
+
+            if ($message === '') {
+                return JsonReponse::error('Le message est vide.');
+            }
+
+            $getCommentaires->ajoutCommentaire($id, $type, $zone, $message, $this->getUser());
 
             return JsonReponse::success('Commentaire ajouté');
         }

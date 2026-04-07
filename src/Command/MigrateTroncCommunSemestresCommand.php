@@ -4,7 +4,7 @@
  * @file /Users/davidannebicque/Sites/oreof/src/Command/MigrateTroncCommunSemestresCommand.php
  * @author davidannebicque
  * @project oreof
- * @lastUpdate 25/03/2026 18:03
+ * @lastUpdate 02/04/2026 22:30
  */
 
 declare(strict_types=1);
