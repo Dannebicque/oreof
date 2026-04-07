@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Enums\TypeRfEnum;
 use App\Form\Type\EntityWithAddType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -40,6 +41,12 @@ class ChangeRfFormationType extends AbstractType
                 'placeholder' => 'Choisir dans la liste ou choisir "+" pour ajouter un utilisateur',
                 'label' => 'Nouveau (co-)responsable de formation',
                 'required' => false,
+            ])
+            ->add('datePriseFonction', DateType::class, [
+                'label' => 'Date de prise de fonction',
+                'widget' => 'single_text',
+                'required' => true,
+                'help' => 'Attention : cette date pourra impacter l\'année en cours et/ou l\'année précédente selon les dates de la campagne.',
             ])
             ->add('commentaire', TextareaType::class, [
                 'label' => 'Commentaire sur le changement de (co-)responsable de formation',

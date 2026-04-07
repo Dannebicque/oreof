@@ -34,7 +34,8 @@
                                 <strong>{{ demande.ancienResponsable != null ?  demande.ancienResponsable.display : 'non défini' }}</strong>
                                 par
                                 <strong>{{ demande.nouveauResponsable != null ? demande.nouveauResponsable.display : 'non défini' }}</strong>
-                                ({{ demande.typeRf.value }})
+                                ({{ demande.typeRf.value }}) - Prise de fonction
+                                : {{ demande.datePriseFonction ? demande.datePriseFonction|date('d/m/Y') : 'non définie' }}
                             </div>
 
                             <div class="col-4">

@@ -57,6 +57,9 @@ class ChangeRf
     #[ORM\ManyToOne(inversedBy: 'changeRves')]
     private ?CampagneCollecte $campagneCollecte = null;
 
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    private ?\DateTimeInterface $datePriseFonction = null;
+
     public function __construct()
     {
         $this->typeRf = TypeRfEnum::RF;
@@ -214,6 +217,18 @@ class ChangeRf
                 $historiqueFormation->setChangeRf(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getDatePriseFonction(): ?\DateTimeInterface
+    {
+        return $this->datePriseFonction;
+    }
+
+    public function setDatePriseFonction(?\DateTimeInterface $datePriseFonction): static
+    {
+        $this->datePriseFonction = $datePriseFonction;
 
         return $this;
     }
