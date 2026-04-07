@@ -123,6 +123,26 @@ class ChangeRfProcess extends AbstractProcess
             return;
         }
 
+        $this->applyChangeToFormation($demande, $formation);
+
+        // Si la date de prise de fonction est antérieure ou égale à la date de fin de la campagne de l'année précédente
+        // on l'applique aussi sur la formation de l'année précédente si elle existe.
+        $campagne = $demande->getCampagneCollecte();
+        if ($campagne && $demande->getDatePriseFonction()) {
+            $formationPrecedente = $formation->getFormationOrigineCopie();
+            if ($formationPrecedente) {
+                $campagnePrecedente = $formationPrecedente->getDpe();
+                if ($campagnePrecedente && $campagnePrecedente->getDateClotureDpe()) {
+                    if ($demande->getDatePriseFonction() <= $campagnePrecedente->getDateClotureDpe()) {
+                        $this->applyChangeToFormation($demande, $formationPrecedente);
+                    }
+                }
+            }
+        }
+    }
+
+    private function applyChangeToFormation(ChangeRf $demande, \App\Entity\Formation $formation): void
+    {
         $isRf = $demande->getTypeRf() === TypeRfEnum::RF;
         $role = $isRf ? 'ROLE_RESP_FORMATION' : 'ROLE_CO_RESP_FORMATION';
         $setter = $isRf ? 'setResponsableMention' : 'setCoResponsable';
