@@ -107,7 +107,7 @@ class ExportVolumeHoraireParcours implements ExportInterface
             $this->excelWriter->writeCellXY(1, $ligne, $formation->getTypeDiplome()?->getLibelle() ?? '');
             $this->excelWriter->writeCellXY(2, $ligne, $formation->getDisplay());
             $this->excelWriter->writeCellXY(3, $ligne, $formation->getComposantePorteuse()?->getLibelle() ?? '');
-            $this->excelWriter->writeCellXY(4, $ligne, $parcours->isParcoursDefaut() ? 'Pas de parcours' : $parcours->getLibelle());
+            $this->excelWriter->writeCellXY(4, $ligne, $parcours->isParcoursDefaut() ? 'Pas de parcours' : $parcours->getDisplay());
             $this->excelWriter->writeCellXY(5, $ligne, $heuresPrecedentes !== null ? $this->formatHeures($heuresPrecedentes) : '');
             $this->excelWriter->writeCellXY(6, $ligne, $heuresCourantes);
             $this->excelWriter->writeCellXY(7, $ligne, $ecart);
