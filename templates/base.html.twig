@@ -29,6 +29,8 @@
 
 <!-- Content Container Start -->
 <div id="root">
+
+
     <!-- Nav Content Start -->
     <div id="nav" class="nav-container d-flex">
         <div class="nav-content d-flex">
@@ -249,6 +251,11 @@
                                 <li>
                                     <a href="{{ path('app_log_viewer_index') }}">
                                         <span class="label">Logs applicatifs</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ path('app_impersonation_list') }}">
+                                        <span class="label">👤 Impersonation utilisateur</span>
                                     </a>
                                 </li>
                             </ul>
@@ -526,11 +533,17 @@
     </div>
     <!-- Nav Content End -->
 
+
     <!-- Main Content Start -->
 
     <!-- Title and Top Buttons Start -->
     <div class="page-title-container fixed-title-container">
         <div class="row">
+            <div class="col-md-12 col-sm-6 mt-0">
+                <!-- Impersonation Badge Start -->
+                {% include 'components/impersonation_badge.html.twig' %}
+                <!-- Impersonation Badge End -->
+            </div>
             <div class="col-md-12 col-sm-6 mt-0">
                 {% if user_data.campagneCollecte.defaut == true %}
                     <twig:alerte type="warning"

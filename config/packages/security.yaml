@@ -7,7 +7,7 @@ security:
                 class: App\Entity\User
                 property: username
     role_hierarchy:
-        ROLE_ADMIN: [ROLE_SES]
+        ROLE_ADMIN: [ROLE_SES, ROLE_ALLOWED_TO_SWITCH]
         ROLE_SES: [ROLE_USER]
     firewalls:
         dev:
@@ -23,6 +23,10 @@ security:
             logout:
                 path: app_logout
                 target: app_login
+            switch_user:
+                role: ROLE_ALLOWED_TO_SWITCH
+                parameter: _switch_user
+                target_route: app_homepage
 
 
     access_control:
