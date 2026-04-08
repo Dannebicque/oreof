@@ -515,6 +515,13 @@ class ExcelWriter
                     $ancienneValeur->getFont()?->setColor(new Color(Color::COLOR_RED));
                 }
 
+                if(($options['withNewLine'] ?? false) === true){
+                    $richText->createTextRun("\n");
+                    $this->sheet->getCell([$col, $row])->getStyle()->getAlignment()->setWrapText(true);
+                    $currentSize = $this->sheet->getRowDimension($row)->getRowHeight();
+                    $this->getRowDimension($row, $currentSize * 2);
+                }   
+
                 if ($diffObject->new !== null && $diffObject->new !== '') {
                     $nouvelleValeur = $richText->createTextRun($diffObject->new);
                     $nouvelleValeur->getFont()?->setStrikethrough(false);
