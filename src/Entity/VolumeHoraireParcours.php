@@ -242,6 +242,12 @@ class VolumeHoraireParcours
             + $this->heuresCmDist + $this->heuresTdDist + $this->heuresTpDist;
     }
 
+    public function getHeuresTotalMajore(): float
+    {
+        return $this->heuresCmPres * 1.5 + $this->heuresTdPres + $this->heuresTpPres
+            + $this->heuresCmDist * 1.5 + $this->heuresTdDist + $this->heuresTpDist;
+    }
+
     /**
      * Volume horaire total présentiel (CM+TD+TP).
      */

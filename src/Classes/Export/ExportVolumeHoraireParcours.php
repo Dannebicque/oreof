@@ -11,7 +11,9 @@ namespace App\Classes\Export;
 
 use App\Classes\Excel\ExcelWriter;
 use App\Entity\CampagneCollecte;
+use App\Entity\DpeParcours;
 use App\Entity\Parcours;
+use App\Enums\TypeModificationDpeEnum;
 use App\Repository\CampagneCollecteRepository;
 use App\Repository\DpeParcoursRepository;
 use App\Repository\VolumeHoraireParcoursRepository;
@@ -58,16 +60,21 @@ class ExportVolumeHoraireParcours implements ExportInterface
             : 'Campagne précédente';
         $libelleCampagneCourante = $this->getLibelleCampagne($campagneCollecte);
 
-        $this->excelWriter->writeCellXY(1, 1, 'Type diplôme');
-        $this->excelWriter->writeCellXY(2, 1, 'Diplôme');
-        $this->excelWriter->writeCellXY(3, 1, 'Composante');
-        $this->excelWriter->writeCellXY(4, 1, 'Parcours');
-        $this->excelWriter->writeCellXY(5, 1, 'Heures ' . $libelleCampagnePrecedente);
-        $this->excelWriter->writeCellXY(6, 1, 'Heures ' . $libelleCampagneCourante);
-        $this->excelWriter->writeCellXY(7, 1, 'Ecart maquette');
-        $this->excelWriter->writeCellXY(8, 1, 'Commentaire');
+        $this->excelWriter->writeCellXYHeader(1, 1, 'Type diplôme');
+        $this->excelWriter->writeCellXYHeader(2, 1, 'Diplôme');
+        $this->excelWriter->writeCellXYHeader(3, 1, 'Composante');
+        $this->excelWriter->writeCellXYHeader(4, 1, 'Parcours ' . $libelleCampagnePrecedente);
+        $this->excelWriter->writeCellXYHeader(5, 1, 'Parcours ' . $libelleCampagneCourante);
+        $this->excelWriter->writeCellXYHeader(6, 1, 'Heures Etu.' . $libelleCampagnePrecedente);
+        $this->excelWriter->writeCellXYHeader(7, 1, 'Heures Etu. ' . $libelleCampagneCourante);
+        $this->excelWriter->writeCellXYHeader(8, 1, 'Ecart Etu.');
+        $this->excelWriter->writeCellXYHeader(9, 1, 'Heures EqTd maj.' . $libelleCampagnePrecedente);
+        $this->excelWriter->writeCellXYHeader(10, 1, 'Heures EqTd maj.' . $libelleCampagneCourante);
+        $this->excelWriter->writeCellXYHeader(11, 1, 'Ecart EqTd maj');
+        $this->excelWriter->writeCellXYHeader(12, 1, 'Commentaire');
 
         $ligne = 2;
+        /** @var DpeParcours $dpeParcours */
         foreach ($dpeParcoursList as $dpeParcours) {
             $parcours = $dpeParcours->getParcours();
             if (!$parcours instanceof Parcours) {
@@ -88,17 +95,22 @@ class ExportVolumeHoraireParcours implements ExportInterface
                 );
             }
 
-            $commentaire = $parcours->getCommentaire() ?? '';
+            $commentaire = ($dpeParcours->getEtatReconduction() === TypeModificationDpeEnum::NON_OUVERTURE || $dpeParcours->getEtatReconduction() === TypeModificationDpeEnum::NON_OUVERTURE_CFVU || $dpeParcours->getEtatReconduction() === TypeModificationDpeEnum::FERMETURE_DEFINITIVE)
+                ? 'Parcours non ouvert'
+                : '';
             $heuresCourantes = '';
             $heuresPrecedentes = $previousVolume?->getHeuresTotal();
+            $heuresPrecedentesMaj = $previousVolume?->getHeuresTotalMajore();
             $ecart = '';
 
             try {
                 $currentVolume = $this->volumeHoraireParcoursCalculator->calculate($parcours, $campagneCollecte);
                 $heuresCourantes = $this->formatHeures($currentVolume->getHeuresTotal());
+                $heuresCourantesMaj = $this->formatHeures($currentVolume->getHeuresTotalMajore());
 
                 if ($heuresPrecedentes !== null) {
-                    $ecart = $this->formatHeures($currentVolume->getHeuresTotal() - $heuresPrecedentes);
+                    $ecart = $this->formatHeures($heuresCourantes - $heuresPrecedentes);
+                    $ecartMaj = $this->formatHeures($heuresCourantesMaj - $heuresPrecedentesMaj);
                 }
             } catch (\Throwable $e) {
                 $commentaire = trim($commentaire . ' ' . 'Erreur calcul volume : ' . $e->getMessage());
@@ -107,11 +119,16 @@ class ExportVolumeHoraireParcours implements ExportInterface
             $this->excelWriter->writeCellXY(1, $ligne, $formation->getTypeDiplome()?->getLibelle() ?? '');
             $this->excelWriter->writeCellXY(2, $ligne, $formation->getDisplay());
             $this->excelWriter->writeCellXY(3, $ligne, $formation->getComposantePorteuse()?->getLibelle() ?? '');
-            $this->excelWriter->writeCellXY(4, $ligne, $parcours->isParcoursDefaut() ? 'Pas de parcours' : $parcours->getDisplay());
-            $this->excelWriter->writeCellXY(5, $ligne, $heuresPrecedentes !== null ? $this->formatHeures($heuresPrecedentes) : '');
-            $this->excelWriter->writeCellXY(6, $ligne, $heuresCourantes);
-            $this->excelWriter->writeCellXY(7, $ligne, $ecart);
-            $this->excelWriter->writeCellXY(8, $ligne, $commentaire);
+            $this->excelWriter->writeCellXY(4, $ligne, $parcours->getParcoursOrigineCopie() === null ? 'Pas de parcours N-1' : ($parcours->getParcoursOrigineCopie()->isParcoursDefaut() ? 'Pas de parcours' : $parcours->getParcoursOrigineCopie()->getDisplay()));
+            $this->excelWriter->writeCellXY(5, $ligne, $parcours->isParcoursDefaut() ? 'Pas de parcours' : $parcours->getDisplay());
+            $this->excelWriter->writeCellXY(6, $ligne, $heuresPrecedentes !== null ? $this->formatHeures($heuresPrecedentes) : '');
+            $this->excelWriter->writeCellXY(7, $ligne, $heuresCourantes);
+            $this->excelWriter->writeCellXY(8, $ligne, $ecart);
+
+            $this->excelWriter->writeCellXY(9, $ligne, $heuresPrecedentesMaj !== null ? $this->formatHeures($heuresPrecedentesMaj) : '');
+            $this->excelWriter->writeCellXY(10, $ligne, $heuresCourantesMaj);
+            $this->excelWriter->writeCellXY(11, $ligne, $ecartMaj);
+            $this->excelWriter->writeCellXY(12, $ligne, $commentaire);
             $ligne++;
         }
 

@@ -101,6 +101,9 @@ final readonly class VolumeHoraireParcoursCalculator
             'tp_dist' => $heures->sommeSemestreTpDist,
             'total' => $heures->sommeSemestreTotalPresDist(),
             'ects' => $heures->sommeSemestreEcts,
+            'totalCMMajore' => $heures->sommeSemestreCmPres * 1.5 + $heures->sommeSemestreTdPres + $heures->sommeSemestreTpPres,
+            'totalDist' => $heures->sommeSemestreTotalDist(),
+            'totalPres' => $heures->sommeSemestreTotalPres(),
         ];
     }
 
@@ -134,6 +137,10 @@ final readonly class VolumeHoraireParcoursCalculator
                     'tp_dist' => 0.0,
                     'total' => 0.0,
                     'ects' => 0.0,
+                    'totalCMMajore' => 0.0,
+                    'totalDist' => 0.0,
+                    'totalPres' => 0.0,
+
                 ];
             }
 
@@ -146,6 +153,9 @@ final readonly class VolumeHoraireParcoursCalculator
             $volumes[$annee]['td_dist'] += $heures->sommeSemestreTdDist;
             $volumes[$annee]['tp_dist'] += $heures->sommeSemestreTpDist;
             $volumes[$annee]['total'] += $heures->sommeSemestreTotalPresDist();
+            $volumes[$annee]['totalCMMajore'] += $volumes[$annee]['cm_pres'] * 1.5 + $volumes[$annee]['td_pres'] + $volumes[$annee]['tp_pres'];
+            $volumes[$annee]['totalDist'] += $heures->sommeSemestreTotalDist();
+            $volumes[$annee]['totalPres'] += $heures->sommeSemestreTotalPres();
             $volumes[$annee]['ects'] += $heures->sommeSemestreEcts;
         }
 
@@ -154,4 +164,3 @@ final readonly class VolumeHoraireParcoursCalculator
         return $volumes;
     }
 }
-

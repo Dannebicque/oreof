@@ -137,6 +137,28 @@ class ExcelWriter
         }
     }
 
+    /**
+     * Ecriture d'une cellule d'en-tete avec un style par defaut.
+     * Les options passees en argument surchargent les valeurs par defaut.
+     */
+    public function writeCellXYHeader(int|string $col, int $row, mixed $value = '', array $options = []): void
+    {
+        $headerOptions = array_merge([
+            'bgcolor' => '#D9E1F2',
+            'bold' => true,
+            'style' => 'HORIZONTAL_CENTER',
+            'valign' => 'VERTICAL_CENTER',
+            'wrap' => true,
+        ], $options);
+
+        $this->writeCellXY($col, $row, $value, $headerOptions);
+
+        if (($options['border'] ?? true) === true) {
+            $cell = (is_int($col) ? Coordinate::stringFromColumnIndex($col) : $col) . $row;
+            $this->borderCells($cell);
+        }
+    }
+
     public function writeCellName(string $adresse, mixed $value, array $options = []): void
     {
         $this->sheet->setCellValue($adresse, $value);
