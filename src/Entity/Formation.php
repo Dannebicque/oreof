@@ -1207,4 +1207,9 @@ class Formation
 
         return $this;
     }
+
+    public function isNonOuvert(): bool
+    {
+        return $this->etatReconduction === TypeModificationDpeEnum::FERMETURE_DEFINITIVE;
+    }
 }

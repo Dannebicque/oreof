@@ -189,4 +189,9 @@ class DpeParcours
 
         return $demandes[0];
     }
+
+    public function isNonOuvert(): bool
+    {
+        return $this->getEtatReconduction() === TypeModificationDpeEnum::NON_OUVERTURE || $this->getEtatReconduction() === TypeModificationDpeEnum::NON_OUVERTURE_CFVU || $this->getEtatReconduction() === TypeModificationDpeEnum::FERMETURE_DEFINITIVE;
+    }
 }
