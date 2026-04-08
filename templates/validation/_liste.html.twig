@@ -87,7 +87,7 @@
                 </td>
                 <td>
                     {% if formation.mention != null or formation.mentionTexte != null %}
-                        {{ formation.display }}
+                        {{ formation.display|raw }}
                     {% else %}
                         <span class="badge bg-danger">Non définie</span>
                     {% endif %}
