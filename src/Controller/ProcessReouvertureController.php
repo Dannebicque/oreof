@@ -184,6 +184,7 @@ class ProcessReouvertureController extends BaseController
                 $demande->setCampagneCollecte($this->getCampagneCollecte());
                 $demande->setAuteur($this->getUser());
                 $demande->setNiveauDemande('P');
+                $demande->setniveauModification(TypeModificationDpeEnum::MODIFICATION_MCCC_TEXTE);
                 $this->entityManager->persist($demande);
             }
 
@@ -196,15 +197,13 @@ class ProcessReouvertureController extends BaseController
 
             //réouverture directe sans sauvegarde ou avec sauvegarde selon le choix
 
-            $etatTypeModification = TypeModificationDpeEnum::MODIFICATION_MCCC_TEXTE;
             $dpe->setEtatValidation(['en_cours_redaction' => 1]);
-            $dpe->setEtatReconduction($etatTypeModification);
+            $dpe->setEtatReconduction(TypeModificationDpeEnum::MODIFICATION_MCCC_TEXTE);
             $this->entityManager->flush();
 
 
             $demande->setArgumentaireDemande(array_key_exists('argumentaire_demande_reouverture', $data) ? $data['argumentaire_demande_reouverture'] : '');
             $demande->setEtatDemande(EtatDpeEnum::en_cours_redaction);
-            $demande->setNiveauModification($etatTypeModification);
 
             $this->entityManager->flush();
 
