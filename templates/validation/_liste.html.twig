@@ -87,14 +87,14 @@
                 </td>
                 <td>
                     {% if formation.mention != null or formation.mentionTexte != null %}
-                        {{ formation.display|raw }}
+                        {{ formation.display }}
                     {% else %}
                         <span class="badge bg-danger">Non définie</span>
                     {% endif %}
                 </td>
                 <td>
                     {% if formation.hasParcours %}
-                        {{ parcours.display }}
+                        {{ parcours.display|raw }}
                     {% else %}
                         Sans parcours
                     {% endif %}
