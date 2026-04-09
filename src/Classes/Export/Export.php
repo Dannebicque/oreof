@@ -40,6 +40,7 @@ class Export
         protected ExportSeip                        $exportSeip,
         protected ExportEc                          $exportEc,
         protected ExportListeFicheMatiere           $exportListeFicheMatiere,
+        protected ExportVolumeHoraireParcours $exportVolumeHoraireParcours,
         protected ExportMccc                        $exportMccc,
         ProjectDirProvider $projectDirProvider,
         private readonly ExportSyntheseModification $exportSyntheseModification,
@@ -103,6 +104,8 @@ class Export
                 return $this->exportSynthese();
             case 'semestres_ouverts':
                 return $this->exportSemestresOuverts();
+            case 'volume_horaire':
+                return $this->exportVolumeHoraire();
             case 'synthese_modification':
                 return $this->exportSyntheseModifications();
         }
@@ -205,6 +208,11 @@ class Export
     private function exportSemestresOuverts(): string
     {
         return $this->exportSemestresOuverts->exportLink($this->campagneCollecte);
+    }
+
+    private function exportVolumeHoraire(): string
+    {
+        return $this->exportVolumeHoraireParcours->exportLink($this->campagneCollecte);
     }
 
     private function exportSyntheseModifications(): string

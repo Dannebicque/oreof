@@ -94,7 +94,7 @@
                 </td>
                 <td>
                     {% if formation.hasParcours %}
-                        {{ parcours.libelle }}
+                        {{ parcours.libelle }} {{ parcours.typeParcours|badgeTypeParcours }}
                     {% else %}
                         Sans parcours
                     {% endif %}
