@@ -523,10 +523,16 @@ class ExcelWriter
                 }   
 
                 if ($diffObject->new !== null && $diffObject->new !== '') {
+                    $colorNew = new Color(Color::COLOR_DARKGREEN);
+                    if(($options['withLighterGreen'] ?? false) === true){
+                        // vert clair
+                        $colorNew = new Color('34EB67');
+                    }
+
                     $nouvelleValeur = $richText->createTextRun($diffObject->new);
                     $nouvelleValeur->getFont()?->setStrikethrough(false);
                     $nouvelleValeur->getFont()?->setBold(true);
-                    $nouvelleValeur->getFont()?->setColor(new Color(Color::COLOR_DARKGREEN));
+                    $nouvelleValeur->getFont()?->setColor($colorNew);
                 }
 
                 $this->sheet->setCellValue([$col, $row], $richText);
