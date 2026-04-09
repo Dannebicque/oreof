@@ -96,6 +96,15 @@ class LicenceMcccVersion extends AbstractLicenceMccc
 
         $structureDifferencesParcours = $this->versioningParcours->getStructureDifferencesBetweenParcoursAndLastCfvu($parcours);
         if ($structureDifferencesParcours !== null) {
+            $diffStructure = (new VersioningStructure($structureDifferencesParcours, $dto))->calculDiff();
+
+            // Descriptifs Parcours
+            $lastParcoursCfvuDesc = $this->versioningParcours
+                ->loadParcoursFromVersion(
+                    $this->versioningParcours->getLastVersionOrLastYearCfvu($parcours)
+                )['parcours'];
+            $diffDescriptifs = VersioningStructure::calculDiffDescriptifs($lastParcoursCfvuDesc, $parcours);
+
             $diffStructure = $this->versioningStructure->setDto($structureDifferencesParcours, $dto)->calculDiff();
         } else {
             return false;
@@ -109,6 +118,7 @@ class LicenceMcccVersion extends AbstractLicenceMccc
             throw new \Exception('Le modèle n\'existe pas');
         }
 
+        $this->excelWriter->setSheet($modele);
         //récupération des données
         // récupération des semestres du parcours puis classement par année et par ordre
         $tabSemestresAnnee = $dto->getTabAnnee();
@@ -116,16 +126,36 @@ class LicenceMcccVersion extends AbstractLicenceMccc
         //en-tête du fichier
         $modele->setCellValue(self::CEL_ANNEE_UNIVERSITAIRE, 'Année Universitaire ' . $anneeUniversitaire->getAnneeUniversitaire()?->getLibelle());
         $modele->setCellValue(self::CEL_TYPE_FORMATION, $formation->getTypeDiplome()?->getLibelle());
-        $modele->setCellValue(self::CEL_INTITULE_FORMATION, $formation->getDisplay());
-        $modele->setCellValue(self::CEL_INTITULE_PARCOURS, $parcours->isParcoursDefaut() === false ? $parcours->getDisplay() : '');
+        // $modele->setCellValue(self::CEL_INTITULE_FORMATION, $formation->getDisplay());
+        // $modele->setCellValue(self::CEL_INTITULE_PARCOURS, $parcours->isParcoursDefaut() === false ? $parcours->getDisplay() : '');
+        $this->excelWriter->writeCellXYDiff(
+            substr(self::CEL_INTITULE_FORMATION, 0, 1),
+            substr(self::CEL_INTITULE_FORMATION, 1, 1),
+            $diffDescriptifs['libelleMention']
+        );
+        $this->excelWriter->writeCellXYDiff(
+            substr(self::CEL_INTITULE_PARCOURS, 0, 1),
+            substr(self::CEL_INTITULE_PARCOURS, 1, 1),
+            $diffDescriptifs['libelleParcours']
+        );
         $modele->setCellValue(self::CEL_COMPOSANTE, $formation->getComposantePorteuse()?->getLibelle());
         if ($formation->isHasParcours() === false) {
             $modele->setCellValue(self::CEL_SITE_FORMATION, $formation->getLocalisationMention()[0]?->getLibelle());
         } else {
             $modele->setCellValue(self::CEL_SITE_FORMATION, $parcours->getLocalisation()?->getLibelle());
         }
-        $modele->setCellValue(self::CEL_RESPONSABLE_MENTION, $formation->getResponsableMention()?->getDisplay());
-        $modele->setCellValue(self::CEL_RESPONSABLE_PARCOURS, $parcours->getRespParcours()?->getDisplay());
+        // $modele->setCellValue(self::CEL_RESPONSABLE_MENTION, $formation->getResponsableMention()?->getDisplay());
+        // $modele->setCellValue(self::CEL_RESPONSABLE_PARCOURS, $parcours->getRespParcours()?->getDisplay());
+        $this->excelWriter->writeCellXYDiff(
+            substr(self::CEL_RESPONSABLE_MENTION, 0, 1),
+            substr(self::CEL_RESPONSABLE_MENTION, 1, 2),
+            $diffDescriptifs['respFormation']
+        );
+        $this->excelWriter->writeCellXYDiff(
+            substr(self::CEL_RESPONSABLE_PARCOURS, 0, 1),
+            substr(self::CEL_RESPONSABLE_PARCOURS, 1, 2),
+            $diffDescriptifs['respParcours']
+        );
 
         // dates
         $modele->setCellValue(self::CEL_DATE_CONSEIL, $dateConseil?->format('d/m/Y'));
@@ -141,6 +171,7 @@ class LicenceMcccVersion extends AbstractLicenceMccc
                 );
         }
 
+        /*
         foreach ($parcours->getRegimeInscription() as $regimeInscription) {
             if ($regimeInscription === RegimeInscriptionEnum::FI) {
                 $modele->setCellValue(self::CEL_REGIME_FI, 'X');
@@ -155,6 +186,31 @@ class LicenceMcccVersion extends AbstractLicenceMccc
                 $modele->setCellValue(self::CEL_REGIME_FC_CONTRAT_PRO, 'X');
             }
         }
+        */
+
+        // Différences Régimes d'Inscription
+        $this->excelWriter->writeCellXYDiff(
+            substr(self::CEL_REGIME_FI, 0, 1),
+            substr(self::CEL_REGIME_FI, 1, 1),
+            $diffDescriptifs['regimeInscription']['FI']
+        );
+        $this->excelWriter->writeCellXYDiff(
+            substr(self::CEL_REGIME_FC, 0, 1),
+            substr(self::CEL_REGIME_FC, 1, 1),
+            $diffDescriptifs['regimeInscription']['FC']
+        );
+        $this->excelWriter->writeCellXYDiff(
+            substr(self::CEL_REGIME_FI_APPRENTISSAGE, 0, 1),
+            substr(self::CEL_REGIME_FI_APPRENTISSAGE, 1, 2),
+            $diffDescriptifs['regimeInscription']['FIA']
+
+        );
+        $this->excelWriter->writeCellXYDiff(
+            substr(self::CEL_REGIME_FC_CONTRAT_PRO, 0, 1),
+            substr(self::CEL_REGIME_FC_CONTRAT_PRO, 1, 2),
+            $diffDescriptifs['regimeInscription']['FCCP']
+        );
+
         //ajoute les sigles
         $texte = '';
         foreach ($this->typeEpreuves as $typeEpreuve) {

@@ -90,6 +90,11 @@ class ButMcccVersion extends AbstractButMccc
 
         $structureDifferencesParcours = $this->versioningParcours->getStructureDifferencesBetweenParcoursAndLastCfvu($parcours);
         if ($structureDifferencesParcours !== null) {
+            $diffStructure = (new VersioningStructure($structureDifferencesParcours, $dto))->calculDiff(true);
+            $lastCfvuDescriptifs = $this->versioningParcours->loadParcoursFromVersion(
+                $this->versioningParcours->getLastVersionOrLastYearCfvu($parcours)
+            )['parcours'];
+            $diffDescriptifs = VersioningStructure::calculDiffDescriptifs($lastCfvuDescriptifs, $parcours);
             $diffStructure = $this->versioningStructure->setDto($structureDifferencesParcours, $dto)->calculDiff(true);
         } else {
             return false;
@@ -99,6 +104,9 @@ class ButMcccVersion extends AbstractButMccc
 
         // Prépare le modèle avant de dupliquer
         $modele = $this->excelWriter->getSheetByName(self::PAGE_MODELE);
+
+        // Données différences
+        $this->excelWriter->setSheet($modele);
 
         //récupération des données
         // récupération des semestres du parcours puis classement par année et par ordre
@@ -118,13 +126,26 @@ class ButMcccVersion extends AbstractButMccc
         $modele->setCellValue(self::CEL_DOMAINE, $formation->getDomaine()?->getLibelle());
         $modele->setCellValue(self::CEL_COMPOSANTE, $formation->getComposantePorteuse()?->getLibelle());
         $modele->setCellValue(self::CEL_ANNEE_UNIVERSITAIRE, $anneeUniversitaire->getAnneeUniversitaire()?->getLibelle());
-        $modele->setCellValue(self::CEL_INTITULE_FORMATION, $formation->getDisplay());
+        // $modele->setCellValue(self::CEL_INTITULE_FORMATION, $formation->getDisplay());
+        $this->excelWriter->writeCellXYDiff(
+            substr(self::CEL_INTITULE_FORMATION, 0, 1),
+            substr(self::CEL_INTITULE_FORMATION, 1, 1),
+            $diffDescriptifs['libelleMention'],
+            ['withNewLine' => true]
+        );
 
         if ($formation->isHasParcours() === false) {
             $modele->setCellValue(self::CEL_SITE_FORMATION, $formation->getLocalisationMention()[0]?->getLibelle());
         } else {
             $modele->setCellValue(self::CEL_SITE_FORMATION, $parcours->getLocalisation()?->getLibelle());
-            $modele->setCellValue(self::CEL_INTITULE_PARCOURS, $parcours->getDisplay());
+            // $modele->setCellValue(self::CEL_INTITULE_PARCOURS, $parcours->getDisplay());
+            $this->excelWriter->writeCellXYDiff(
+                substr(self::CEL_INTITULE_PARCOURS, 0, 1),
+                substr(self::CEL_INTITULE_PARCOURS, 1, 1),
+                $diffDescriptifs['libelleParcours'],
+                ['withNewLine' => true]
+            );
+
             $modele->setCellValue(self::CEL_PARCOURS_ECTS, $parcours->getDisplay());
             $modele->setCellValue(self::CEL_PARCOURS, $parcours->getDisplay());
         }
@@ -143,6 +164,7 @@ class ButMcccVersion extends AbstractButMccc
                 );
         }
 
+        /*
         foreach ($parcours->getRegimeInscription() as $regimeInscription) {
             if ($regimeInscription === RegimeInscriptionEnum::FI) {
                 $modele->setCellValue(self::CEL_REGIME_FI, 'X');
@@ -157,6 +179,29 @@ class ButMcccVersion extends AbstractButMccc
                 $modele->setCellValue(self::CEL_REGIME_FC_CONTRAT_PRO, 'X');
             }
         }
+        */
+
+        // Régimes d'inscription avec différences
+        $this->excelWriter->writeCellXYDiff(
+            substr(self::CEL_REGIME_FI, 0, 1),
+            substr(self::CEL_REGIME_FI, 1, 1),
+            $diffDescriptifs['regimeInscription']['FI']
+        );
+        $this->excelWriter->writeCellXYDiff(
+            substr(self::CEL_REGIME_FC, 0, 1),
+            substr(self::CEL_REGIME_FC, 1, 2),
+            $diffDescriptifs['regimeInscription']['FC']
+        );
+        $this->excelWriter->writeCellXYDiff(
+            substr(self::CEL_REGIME_FI_APPRENTISSAGE, 0, 1),
+            substr(self::CEL_REGIME_FI_APPRENTISSAGE, 1, 2),
+            $diffDescriptifs['regimeInscription']['FIA']
+        );
+        $this->excelWriter->writeCellXYDiff(
+            substr(self::CEL_REGIME_FC_CONTRAT_PRO, 0, 1),
+            substr(self::CEL_REGIME_FC_CONTRAT_PRO, 1, 2),
+            $diffDescriptifs['regimeInscription']['FCCP']
+        );
 
         $index = 1;
 

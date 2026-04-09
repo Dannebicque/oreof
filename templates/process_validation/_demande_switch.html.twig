@@ -40,7 +40,7 @@
                   class="form-control"
                   required id="argumentaire_demande_reouverture"
                   rows="5"
-        >{{ demande.argumentaireDemande }}</textarea>
+        >{{ demande != null ? demande.argumentaireDemande : '' }}</textarea>
     </div>
 
 

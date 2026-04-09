@@ -121,25 +121,25 @@ class ExportMccc
             if ($formation !== null) {
                 $typeDiplome = $this->typeDiplomeResolver->fromFormation($formation);
                 if (null !== $typeDiplome) {
-                        if ($formation->isHasParcours() === true) {
-                            $texte = $formation->gettypeDiplome()?->getLibelleCourt(). ' ' . $formation->getSigle() . ' ' . $parcours->getSigle();
-                        } else {
-                            $texte = $formation->gettypeDiplome()?->getLibelleCourt() . ' ' . $formation->getSigle();
-                        }
+                    if ($formation->isHasParcours() === true) {
+                        $texte = $formation->gettypeDiplome()?->getLibelleCourt() . ' ' . $formation->getSigle() . ' ' . $parcours->getSigle();
+                    } else {
+                        $texte = $formation->gettypeDiplome()?->getLibelleCourt() . ' ' . $formation->getSigle();
+                    }
 
                     $fichierXlsx = Tools::FileName('MCCC - ' . $this->annee->getLibelle() . ' - ' . $texte);
-                        $fichier = $typeDiplome->exportExcelAndSaveVersionMccc(
-                            $this->annee,
-                            $parcours,
-                            $dir,
-                            $fichierXlsx
-                        );
+                    $fichier = $typeDiplome->exportExcelAndSaveVersionMccc(
+                        $this->annee,
+                        $parcours,
+                        $dir,
+                        $fichierXlsx
+                    );
 
-                        $tabFiles[] = $fichier;
-                        $zip->addFile(
-                            $dir . $fichier,
-                             $fichier
-                        );
+                    $tabFiles[] = $fichier;
+                    $zip->addFile(
+                        $dir . $fichier,
+                        $fichier
+                    );
 
                 }
             }

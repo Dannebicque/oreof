@@ -223,12 +223,6 @@ class Formation
     #[ORM\OneToMany(mappedBy: 'formation', targetEntity: ChangeParcours::class)]
     private Collection $changeParcours;
 
-    /**
-     * @var Collection<int, FormationTabState>
-     */
-    #[ORM\OneToMany(mappedBy: 'formation', targetEntity: FormationTabState::class)]
-    private Collection $formationTabStates;
-
     public function __construct(?CampagneCollecte $anneeUniversitaire)
     {
         $this->dpe = $anneeUniversitaire;
@@ -250,7 +244,6 @@ class Formation
         $this->changeRves = new ArrayCollection();
         $this->userProfils = new ArrayCollection();
         $this->changeParcours = new ArrayCollection();
-        $this->formationTabStates = new ArrayCollection();
     }
 
     #[ORM\PreFlush]

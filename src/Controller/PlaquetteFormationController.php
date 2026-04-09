@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Classes\CalculStructureParcours;
 use App\Classes\MyGotenbergPdf;
 use App\Entity\Formation;
+use App\Service\TypeDiplomeResolver;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -18,22 +19,24 @@ class PlaquetteFormationController extends AbstractController
 
     #[Route('/communication/plaquette/formation/{slug}', name: 'app_plaquette_formation_export')]
     public function index(
-        Formation               $formation,
-        CalculStructureParcours $calculStructureParcours
+        TypeDiplomeResolver $typeDiplomeResolver,
+        Formation           $formation
     ): Response {
         $rubriques = $formation->getComposantePorteuse()?->getPlaquetteRubriques();
         $typeDiplome = $formation->getTypeDiplome();
-//        $tParcours = [];
-//        foreach ($formation->getParcours() as $parcours) {
-//            $tParcours[$parcours->getId()] =  $calculStructureParcours->calcul($parcours);
-//        }
+        $tParcours = [];
+        $typeD = $typeDiplomeResolver->get($typeDiplome);
+        foreach ($formation->getParcours() as $parcours) {
+
+            $tParcours[$parcours->getId()] = $typeD->calculStructureParcours($parcours);
+        }
 
         return $this->myPdf->render('pdf/formation_plaquette.html.twig', [
             'composante' => $formation->getComposantePorteuse(),
             'formation' => $formation,
             'typeDiplome' => $typeDiplome,
             'titre' => 'Plaquette de la formation '.$formation->getDisplay(),
-            //'tParcours' => $tParcours,
+            'tParcours' => $tParcours,
             'rubriques' => $rubriques,
         ], 'Plaquette_formation_'.$formation->getDisplay().'.pdf', [
             'withTemplate' => true,
