@@ -1,0 +1,103 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <div class="card"
+            {{ stimulus_controller('type-diplome-prototype', {
+                listUrl: path('app_prototype_type_diplome_list'),
+                storageKey: 'prototype_type_diplome_index'
+            }) }}
+    >
+        <div class="card-body border-bottom">
+            <div class="row g-3 align-items-end">
+                <div class="col-md-4">
+                    <label for="prototype-type-diplome-search" class="form-label">Recherche</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fal fa-search"></i></span>
+                        <input
+                                id="prototype-type-diplome-search"
+                                type="search"
+                                class="form-control"
+                                placeholder="Libellé, libellé court, code Apogée"
+                                data-type-diplome-prototype-target="search"
+                                data-action="input->type-diplome-prototype#search"
+                        >
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <label for="prototype-type-diplome-stage" class="form-label">Stage</label>
+                    <select id="prototype-type-diplome-stage"
+                            class="form-select"
+                            data-field="hasStage"
+                            data-type-diplome-prototype-target="stage"
+                            data-action="change->type-diplome-prototype#filter">
+                        <option value="">Tous</option>
+                        <option value="1">Avec stage</option>
+                        <option value="0">Sans stage</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label for="prototype-type-diplome-memoire" class="form-label">Mémoire</label>
+                    <select id="prototype-type-diplome-memoire"
+                            class="form-select"
+                            data-field="hasMemoire"
+                            data-type-diplome-prototype-target="memoire"
+                            data-action="change->type-diplome-prototype#filter">
+                        <option value="">Tous</option>
+                        <option value="1">Avec mémoire</option>
+                        <option value="0">Sans mémoire</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label for="prototype-type-diplome-limit" class="form-label">Par page</label>
+                    <select id="prototype-type-diplome-limit"
+                            class="form-select"
+                            data-type-diplome-prototype-target="limit"
+                            data-action="change->type-diplome-prototype#changeLimit">
+                        <option value="10">10</option>
+                        <option value="25" selected>25</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                    </select>
+                </div>
+                <div class="col-md-2 text-end">
+                    <button type="button"
+                            class="btn btn-outline-secondary w-100"
+                            data-action="click->type-diplome-prototype#resetFilters">
+                        <i class="fal fa-rotate-left"></i> Réinitialiser
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-body" data-type-diplome-prototype-target="list"></div>
+    </div>
+{% endblock %}
+
+{% set header_title %}
+    Prototype CRUD moderne - TypeDiplome
+{% endset %}
+
+{% block breadcrumb %}
+    {{ include('communs/_breadcrumb.html.twig', {liens:[
+        {
+            href: '',
+            title: 'Administration'
+        }, {
+            href: '',
+            title: 'Prototype CRUD'
+        }
+    ]}) }}
+{% endblock %}
+
+{% block bouton_header %}
+    <a href="{{ path('app_prototype_type_diplome_new') }}"
+       class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2 text-dark"
+       data-bs-toggle="tooltip"
+       data-bs-placement="bottom"
+       title="Créer un type de diplôme"
+    >
+        <i class="{{ iconAdd }}"></i>
+        <span>Créer un type de diplôme</span>
+    </a>
+{% endblock %}
+
