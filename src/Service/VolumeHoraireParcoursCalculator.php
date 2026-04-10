@@ -15,6 +15,7 @@ use App\DTO\StructureSemestre;
 use App\Entity\CampagneCollecte;
 use App\Entity\Parcours;
 use App\Entity\VolumeHoraireParcours;
+use App\TypeDiplome\TypeDiplomeResolver;
 use LogicException;
 
 final readonly class VolumeHoraireParcoursCalculator
