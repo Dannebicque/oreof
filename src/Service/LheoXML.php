@@ -565,8 +565,8 @@ HTML;
             'admission' => $this->cleanString($admissionParcours),
             'formation-continue-et-apprentissage' => [],
             'is-parcours-par-defaut' => $parcours->isParcoursDefaut(),
-            'rythme-formation-texte' => $rythmeFormationTexteLibre,
-            'presentation-formation-texte' => $parcours->getFormation()->getObjectifsFormation() ?? '',
+            'rythme-formation-texte' => $this->cleanString($rythmeFormationTexteLibre),
+            'presentation-formation-texte' => $this->cleanString($parcours->getFormation()->getObjectifsFormation() ?? ''),
         ];
 
         // Description de la mention
