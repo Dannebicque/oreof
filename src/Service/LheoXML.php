@@ -550,6 +550,10 @@ HTML;
         $libelleMillesimeCatalogue = GetDpeParcours::getFromParcours($parcours)->getCampagneCollecte()->getLibelle();
         $libelleMillesimeCatalogue = "Rentrée " . $libelleMillesimeCatalogue;
 
+        $rythmeFormationTexteLibre = $parcours->isParcoursDefaut() 
+            ? ($parcours->getFormation()->getRythmeFormationTexte() ?? '') 
+            : ($parcours->getRythmeFormationTexte() ?? '');
+
         // EXTRAS
         $extraArray = [
             'description-haut' => $this->cleanString($libelleMillesimeCatalogue . " " . $parcours->getDescriptifHautPageAffichage()),
@@ -560,6 +564,9 @@ HTML;
             'informations-pratiques' => $this->cleanString($informationsPratiques),
             'admission' => $this->cleanString($admissionParcours),
             'formation-continue-et-apprentissage' => [],
+            'is-parcours-par-defaut' => $parcours->isParcoursDefaut(),
+            'rythme-formation-texte' => $rythmeFormationTexteLibre,
+            'presentation-formation-texte' => $parcours->getFormation()->getObjectifsFormation() ?? '',
         ];
 
         // Description de la mention
