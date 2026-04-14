@@ -379,7 +379,7 @@ class FicheMatiereRepository extends ServiceEntityRepository
 
         $qb = $qb->select('COUNT(fm.id) AS nombre_total')
             ->innerJoin('fm.parcours', 'p')
-            ->join('p.formation', 'f', 'WITH', 'p.formation = f.id')
+            ->join('p.formation', 'f')
             ->join('f.mention', 'm')
             ->join('f.typeDiplome', 'td')
             ->where(
@@ -422,7 +422,7 @@ class FicheMatiereRepository extends ServiceEntityRepository
             ]
         )
         ->innerJoin('fm.parcours', 'p')
-        ->join('p.formation', 'f', 'WITH', 'p.formation = f.id')
+        ->join('p.formation', 'f')
         ->join('f.mention', 'm')
         ->join('f.typeDiplome', 'td')
         ->where(
