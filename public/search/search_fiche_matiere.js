@@ -89,7 +89,7 @@ function updateDomWithResult(jsonResult, parcoursViewUrl, ficheMatiereViewUrl, k
 
   jsonResult.forEach((fiche) => {
     const row = document.createElement('div')
-    row.classList.add('row', 'my-3', 'py-3', 'px-2', 'border', 'border-primary', 'rounded')
+    row.classList.add('row', 'my-3', 'py-3', 'px-2', 'border', 'border-primary', 'rounded', 'shadow-result-node')
 
     const ficheMatiereTitle = document.createElement('div')
     ficheMatiereTitle.classList.add('col-4')
