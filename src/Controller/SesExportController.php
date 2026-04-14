@@ -9,6 +9,7 @@
 
 namespace App\Controller;
 
+use App\Classes\Export\ExportVolumeHoraireParcours;
 use App\Classes\Export\ExportSynthese;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -27,5 +28,13 @@ class SesExportController extends BaseController
         ExportSynthese $exportSynthese,
     ): Response {
         return $exportSynthese->exportBrut($this->getCampagneCollecte());
+    }
+
+    #[Route('/ses/export/volumes-horaires', name: 'ses_export_volumes_horaires')]
+    public function exportVolumesHoraires(
+        ExportVolumeHoraireParcours $exportVolumeHoraireParcours,
+    ): Response
+    {
+        return $exportVolumeHoraireParcours->export($this->getCampagneCollecte());
     }
 }

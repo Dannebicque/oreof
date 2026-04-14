@@ -21,12 +21,14 @@
                         <td>{{ parcours.libelle }} {{ parcours.typeParcours|badgeTypeParcours }}</td>
                         <td>{{ parcours.localisation != null ? parcours.localisation.libelle : 'Non défini' }}</td>
                         <td>{{ parcours.respParcours != null ? parcours.respParcours.display : 'Non défini' }}</td>
-                        {% if dpesParcours[parcours.id].etatReconduction.value == 'NON_OUVERTURE' %}
+                        {% if dpesParcours[parcours.id].isNonOuvert %}
                             <td colspan="5">
                                 <span class="badge bg-warning w-100">Parcours non ouvert</span>
                             </td>
                         {% else %}
-                            <td>{{ dpesParcours[parcours.id].etatValidation|badgeDpe }}</td>
+                            <td>
+                                {{ dpesParcours[parcours.id].etatValidation|badgeDpe }}
+                            </td>
                             <td>
                                 {{ parcours.etatStep(3)|badgeStep }}
                             </td>
@@ -103,7 +105,13 @@
                         <td>{{ formation.display }}</td>
                         <td>{{ formation.localisationMention != null and formation.localisationMention|length >= 1 ? formation.localisationMention[0].libelle : 'Non défini' }}</td>
                         <td>{{ formation.responsableMention != null ? formation.responsableMention.display : 'Non défini' }}</td>
-                        <td>{{ dpesParcours[parcours.id].etatValidation|badgeDpe }}</td>
+                        {% if dpesParcours[parcours.id].isNonOuvert or formation.isNonOuvert %}
+                            <td colspan="5">
+                                <span class="badge bg-warning w-100">Parcours non ouvert</span>
+                            </td>
+                        {% else %}
+                            <td>
+                                {{ dpesParcours[parcours.id].etatValidation|badgeDpe }}</td>
                         <td>
                             {{ parcours.etatStep(3)|badgeStep }}
                         </td>
@@ -116,6 +124,7 @@
                         <td>
                             {{ parcours.remplissage|remplissage }}
                         </td>
+                        {% endif %}
                         <td class="text-end">
                             <a href="{{ path('formation_v2_voir',{'slug': formation.slug}) }}"
                                class="btn btn-sm text-info"

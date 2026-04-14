@@ -1,0 +1,108 @@
+{% set start = meta.total > 0 ? ((meta.page - 1) * meta.limit) + 1 : 0 %}
+{% set end = meta.total > 0 ? min(meta.page * meta.limit, meta.total) : 0 %}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div class="text-muted">
+        {{ start }} - {{ end }} sur {{ meta.total }} résultat{{ meta.total > 1 ? 's' : '' }}
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-hover align-middle">
+        <thead>
+        <tr>
+            {% set columns = [
+                {field: 'libelle', label: 'Libellé'},
+                {field: 'libelle_court', label: 'Libellé court'},
+                {field: 'codeApogee', label: 'Code Apogée'},
+                {field: 'semestreDebut', label: 'Sem. début'},
+                {field: 'semestreFin', label: 'Sem. fin'},
+            ] %}
+
+            {% for column in columns %}
+                {% set nextDirection = meta.sort == column.field and meta.direction == 'asc' ? 'desc' : 'asc' %}
+                <th>
+                    <button
+                            type="button"
+                            class="btn btn-link p-0 text-decoration-none text-dark"
+                            data-action="click->type-diplome-prototype#sort"
+                            data-field="{{ column.field }}"
+                            data-direction="{{ nextDirection }}"
+                    >
+                        {{ column.label }}
+                        {% if meta.sort == column.field %}
+                            <i class="fal fa-arrow-{{ meta.direction == 'asc' ? 'up' : 'down' }}"></i>
+                        {% endif %}
+                    </button>
+                </th>
+            {% endfor %}
+            <th>Stage</th>
+            <th>Mémoire</th>
+            <th class="text-end">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for type_diplome in type_diplomes %}
+            <tr>
+                <td>{{ type_diplome.libelle }}</td>
+                <td>{{ type_diplome.libelleCourt|default('-') }}</td>
+                <td>{{ type_diplome.codeApogee|displayOrBadge }}</td>
+                <td>S{{ type_diplome.semestreDebut }}</td>
+                <td>S{{ type_diplome.semestreFin }}</td>
+                <td>{{ type_diplome.hasStage|badgeBoolean }}</td>
+                <td>{{ type_diplome.hasMemoire|badgeBoolean }}</td>
+                <td class="text-end">
+                    <a href="{{ path('app_prototype_type_diplome_edit', {id: type_diplome.id}) }}"
+                       class="btn btn-sm text-warning"
+                       title="Modifier">
+                        <i class="{{ iconEdit }}"></i>
+                        <span>Modifier</span>
+                    </a>
+
+                    <button type="button"
+                            class="btn btn-sm text-success"
+                            title="Dupliquer"
+                            data-action="click->type-diplome-prototype#duplicate"
+                            data-url="{{ path('app_prototype_type_diplome_duplicate', {id: type_diplome.id}) }}"
+                            data-csrf="{{ csrf_token('duplicate' ~ type_diplome.id) }}">
+                        <i class="{{ iconDuplicate }}"></i>
+                        <span>Dupliquer</span>
+                    </button>
+
+                    <button type="button"
+                            class="btn btn-sm text-danger"
+                            title="Supprimer"
+                            data-action="click->type-diplome-prototype#prepareDelete"
+                            data-url="{{ path('app_prototype_type_diplome_delete', {id: type_diplome.id}) }}"
+                            data-impact-url="{{ path('app_prototype_type_diplome_impact', {id: type_diplome.id}) }}"
+                            data-csrf="{{ csrf_token('delete' ~ type_diplome.id) }}"
+                            data-label="{{ type_diplome.libelle }}">
+                        <i class="{{ iconDelete }}"></i>
+                        <span>Supprimer</span>
+                    </button>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="9" class="text-center text-muted py-4">Aucun type de diplôme trouvé.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% if meta.pages > 1 %}
+    <nav aria-label="Pagination type diplôme">
+        <ul class="pagination justify-content-center mb-0">
+            {% for page in 1..meta.pages %}
+                <li class="page-item {{ page == meta.page ? 'active' : '' }}">
+                    <button type="button"
+                            class="page-link"
+                            data-action="click->type-diplome-prototype#goToPage"
+                            data-page="{{ page }}">{{ page }}</button>
+                </li>
+            {% endfor %}
+        </ul>
+    </nav>
+{% endif %}
+

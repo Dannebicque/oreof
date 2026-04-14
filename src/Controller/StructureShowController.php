@@ -41,7 +41,7 @@ class StructureShowController extends AbstractController
                 $dtoAnneePrecedente = $versioningParcours->loadParcoursFromVersion($version)['dto'] ?? null;
             }
             if($dtoAnneePrecedente !== null){
-                $diffStructureCampagnePrecedente = (new VersioningStructure($dtoAnneePrecedente, $dto))->calculDiff();
+                $diffStructureCampagnePrecedente = (new VersioningStructure())->setDto($dtoAnneePrecedente, $dto)->calculDiff();
             }
         }
 

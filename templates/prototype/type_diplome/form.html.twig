@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <div class="row g-3">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-body">
+                    {{ include('communs/_form.html.twig') }}
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="h5">Prototype UX</h3>
+                    <p class="text-muted mb-0">
+                        Cette page illustre un formulaire standard Symfony prêt à être dupliqué pour d'autres CRUD
+                        administratifs (création/édition, validation serveur et retour liste).
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% set header_title %}
+    {{ titre }}
+{% endset %}
+
+{% block breadcrumb %}
+    {{ include('communs/_breadcrumb.html.twig', {liens:[
+        {
+            href: '',
+            title: 'Administration'
+        }, {
+            href: path('app_prototype_type_diplome_index'),
+            title: 'Prototype CRUD TypeDiplome'
+        }
+    ]}) }}
+{% endblock %}
+
+{% block bouton_header %}
+    <a href="{{ path('app_prototype_type_diplome_index') }}"
+       class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2 text-dark"
+       data-bs-toggle="tooltip"
+       data-bs-placement="bottom"
+       title="Retour à la liste"
+    >
+        <i class="{{ iconBack }}"></i>
+        <span>Retour à la liste</span>
+    </a>
+{% endblock %}
+

@@ -508,7 +508,11 @@ class ProcessValidationController extends BaseController
 
         if ($request->isMethod('POST')) {
             $this->toast('success', 'Parcours validés');
-            return $this->redirectToRoute('app_validation_dpe_index');
+            if ($this->isGranted('ROLE_ADMIN')) {
+                return $this->redirectToRoute('app_validation_dpe_index');
+            } else {
+                return $this->redirectToRoute('app_validation_composante_dpe_index', ['composante' => $request->query->get('composante')]);
+            }
         }
 
         return $this->render('process_validation/_valide_lot.html.twig', [

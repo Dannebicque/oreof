@@ -56,7 +56,7 @@ class Formation
     private ?Mention $mention = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['formation:read', 'fiche_matiere_versioning', 'formation_json_versioning'])]
+    #[Groups(['formation:read', 'fiche_matiere_versioning', 'formation_json_versioning', 'parcours_json_versioning'])]
     private ?string $mentionTexte = null;
 
     #[Groups(['parcours_json_versioning', 'formation_json_versioning'])]
@@ -149,7 +149,7 @@ class Formation
     private ?TypeDiplome $typeDiplome = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['formation:read', 'fiche_matiere_versioning', 'formation_json_versioning'])]
+    #[Groups(['formation:read', 'fiche_matiere_versioning', 'formation_json_versioning', 'parcours_json_versioning'])]
     private ?string $sigle = null;
 
     #[Groups(['parcours_json_versioning', 'formation_json_versioning'])]
@@ -223,12 +223,6 @@ class Formation
     #[ORM\OneToMany(mappedBy: 'formation', targetEntity: ChangeParcours::class)]
     private Collection $changeParcours;
 
-    /**
-     * @var Collection<int, FormationTabState>
-     */
-    #[ORM\OneToMany(mappedBy: 'formation', targetEntity: FormationTabState::class)]
-    private Collection $formationTabStates;
-
     public function __construct(?CampagneCollecte $anneeUniversitaire)
     {
         $this->dpe = $anneeUniversitaire;
@@ -250,7 +244,6 @@ class Formation
         $this->changeRves = new ArrayCollection();
         $this->userProfils = new ArrayCollection();
         $this->changeParcours = new ArrayCollection();
-        $this->formationTabStates = new ArrayCollection();
     }
 
     #[ORM\PreFlush]
@@ -1270,5 +1263,10 @@ class Formation
         }
 
         return $this;
+    }
+
+    public function isNonOuvert(): bool
+    {
+        return $this->etatReconduction === TypeModificationDpeEnum::FERMETURE_DEFINITIVE;
     }
 }

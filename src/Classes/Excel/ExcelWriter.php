@@ -133,6 +133,28 @@ class ExcelWriter
 
     }
 
+    /**
+     * Ecriture d'une cellule d'en-tete avec un style par defaut.
+     * Les options passees en argument surchargent les valeurs par defaut.
+     */
+    public function writeCellXYHeader(int|string $col, int $row, mixed $value = '', array $options = []): void
+    {
+        $headerOptions = array_merge([
+            'bgcolor' => '#D9E1F2',
+            'bold' => true,
+            'style' => 'HORIZONTAL_CENTER',
+            'valign' => 'VERTICAL_CENTER',
+            'wrap' => true,
+        ], $options);
+
+        $this->writeCellXY($col, $row, $value, $headerOptions);
+
+        if (($options['border'] ?? true) === true) {
+            $cell = (is_int($col) ? Coordinate::stringFromColumnIndex($col) : $col) . $row;
+            $this->borderCells($cell);
+        }
+    }
+
     public function writeCellName(string $adresse, mixed $value, array $options = []): void
     {
         $this->sheet->setCellValue($adresse, $value);
@@ -488,6 +510,13 @@ class ExcelWriter
                     $ancienneValeur->getFont()?->setStrikethrough(true);
                     $ancienneValeur->getFont()?->setColor(new Color(Color::COLOR_RED));
                 }
+
+                if(($options['withNewLine'] ?? false) === true){
+                    $richText->createTextRun("\n");
+                    $this->sheet->getCell([$col, $row])->getStyle()->getAlignment()->setWrapText(true);
+                    $currentSize = $this->sheet->getRowDimension($row)->getRowHeight();
+                    $this->getRowDimension($row, $currentSize * 2);
+                }   
 
                 if ($diffObject->new !== null && $diffObject->new !== '') {
                     $nouvelleValeur = $richText->createTextRun((string)$diffObject->new);

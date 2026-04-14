@@ -1,0 +1,207 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Impersonation Admin - ORéOF{% endblock %}
+
+{% block content %}
+    <div class="container mt-4">
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <h1>👤 Impersonation utilisateur</h1>
+                <p class="text-muted">Sélectionnez un utilisateur pour voir l'application comme lui</p>
+            </div>
+            <div class="col-md-6 text-end">
+                {% if is_granted('IS_IMPERSONATOR') %}
+                    <div class="alert alert-warning d-inline-block">
+                        <strong>Impersonation active</strong><br>
+                        Utilisateur : {{ app.user.display }}
+                        <a href="{{ path('app_homepage', {'_switch_user': '_exit'}) }}"
+                           class="btn btn-sm btn-warning mt-2">
+                            <i class="bi bi-stop-circle"></i> Arrêter l'impersonation
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Search bar -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <form method="get" class="mb-3">
+                    <label for="userSearch" class="visually-hidden">Recherche utilisateur</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="search"
+                               placeholder="Chercher par nom, prénom, email ou login..."
+                               value="{{ search }}" id="userSearch">
+                        <button type="submit" class="btn btn-primary">Rechercher</button>
+                    </div>
+                </form>
+
+                <!-- Ajax search dropdown -->
+                <div id="searchResults" class="position-absolute w-100" style="display: none; z-index: 1000;">
+                    <div class="list-group" id="resultsList" style="max-height: 400px; overflow-y: auto;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Users list -->
+        <div class="card">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="table-light">
+                    <tr>
+                        <th>Login</th>
+                        <th>Nom</th>
+                        <th>Prénom</th>
+                        <th>Email</th>
+                        <th>Rôles</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for user in users %}
+                        <tr>
+                            <td><code>{{ user.username }}</code></td>
+                            <td>{{ user.nom }}</td>
+                            <td>{{ user.prenom }}</td>
+                            <td>{{ user.email }}</td>
+                            <td>
+                                {% for role in user.roles %}
+                                    <span class="badge bg-info">{{ role }}</span>
+                                {% endfor %}
+                            </td>
+                            <td>
+                                <a href="{{ path('app_homepage', {'_switch_user': user.username}) }}"
+                                   class="btn btn-sm btn-primary" title="Impersonner cet utilisateur">
+                                    <i class="bi bi-person-check"></i> Impersonner
+                                </a>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="6" class="text-center text-muted py-4">
+                                Aucun utilisateur trouvé
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Pagination -->
+        {% if totalPages > 1 %}
+            <nav aria-label="Pagination" class="mt-4">
+                <ul class="pagination justify-content-center">
+                    {% if page > 1 %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ path('app_impersonation_list', {page: 1, search: search}) }}">Première</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="{{ path('app_impersonation_list', {page: page - 1, search: search}) }}">Précédente</a>
+                        </li>
+                    {% endif %}
+
+                    {% for p in 1..totalPages %}
+                        {% if p == page %}
+                            <li class="page-item active">
+                                <span class="page-link">{{ p }}</span>
+                            </li>
+                        {% elseif (p >= page - 2 and p <= page + 2) or p == 1 or p == totalPages %}
+                            <li class="page-item">
+                                <a class="page-link"
+                                   href="{{ path('app_impersonation_list', {page: p, search: search}) }}">{{ p }}</a>
+                            </li>
+                        {% elseif p == page - 3 or p == page + 3 %}
+                            <li class="page-item disabled">
+                                <span class="page-link">...</span>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if page < totalPages %}
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="{{ path('app_impersonation_list', {page: page + 1, search: search}) }}">Suivante</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="{{ path('app_impersonation_list', {page: totalPages, search: search}) }}">Dernière</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        {% endif %}
+
+        <div class="mt-4 text-muted text-center">
+            Total : {{ total }} utilisateur(s)
+        </div>
+    </div>
+
+    <script>
+      // Auto-search functionality
+      const searchInput = document.getElementById('userSearch')
+      const searchResults = document.getElementById('searchResults')
+      const resultsList = document.getElementById('resultsList')
+      const homepageUrl = `{{ path('app_homepage') }}`
+      let impersonationUsers = []
+
+      searchInput.addEventListener('input', async function () {
+        const query = this.value.trim()
+
+        if (query.length < 2) {
+          searchResults.style.display = 'none'
+          return
+        }
+
+        try {
+          const response = await fetch(`{{ path('app_impersonation_api_search') }}?q=${encodeURIComponent(query)}`)
+          const users = await response.json()
+          impersonationUsers = users
+
+          if (users.length === 0) {
+            searchResults.style.display = 'none'
+            return
+          }
+
+          resultsList.innerHTML = users.map((user, index) => `
+                <button type="button" class="list-group-item list-group-item-action text-start" onclick="selectUser(${index})">
+                    <div><strong>${user.display}</strong></div>
+                    <small class="text-muted">${user.username} - ${user.email}</small>
+                    <br>
+                    <small>${user.roles}</small>
+                </button>
+            `).join('')
+
+          searchResults.style.display = 'block'
+        } catch (error) {
+          console.error('Search error:', error)
+          searchResults.style.display = 'none'
+        }
+      })
+
+      // Hide results when clicking outside
+      document.addEventListener('click', function (event) {
+        if (!event.target.closest('#userSearch') && !event.target.closest('#searchResults')) {
+          searchResults.style.display = 'none'
+        }
+      })
+
+      function selectUser (index) {
+        const user = impersonationUsers[index]
+        if (!user || !user.username) {
+          return
+        }
+
+        window.location.href = `${homepageUrl}?_switch_user=${encodeURIComponent(user.username)}`
+      }
+    </script>
+
+    <style>
+        #searchResults {
+            left: 0;
+            right: 0;
+        }
+    </style>
+{% endblock %}
+

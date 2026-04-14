@@ -60,4 +60,21 @@ final readonly class TypeDiplomeResolver
 
         return $handler;
     }
+
+    public function get($type): TypeDiplomeHandlerInterface
+    {
+        if ($type instanceof TypeDiplome) {
+            return $this->fromTypeDiplome($type);
+        }
+
+        if ($type instanceof Formation) {
+            return $this->fromFormation($type);
+        }
+
+        if ($type instanceof Parcours) {
+            return $this->fromParcours($type);
+        }
+
+        return throw new LogicException('Unsupported type for TypeDiplome resolution.');
+    }
 }
