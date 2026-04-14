@@ -234,7 +234,7 @@ class ParcoursRepository extends ServiceEntityRepository
                     'p.typeParcours AS type_parcours'
                 ]
             )
-            ->join('p.formation', 'f', 'WITH', 'p.formation = f.id')
+            ->join('p.formation', 'f')
             ->join('p.dpeParcours', 'dpe')
             ->where(
                 $qb->expr()->like('UPPER(p.objectifsParcours)', 'UPPER(:keyword)')
@@ -263,7 +263,7 @@ class ParcoursRepository extends ServiceEntityRepository
         $parcoursParDefaut = Parcours::PARCOURS_DEFAUT;
 
         $qb = $qb
-            ->join('p.formation', 'f', 'WITH', 'f.id = p.formation')
+            ->join('p.formation', 'f')
             ->join('p.dpeParcours', 'dpe')
             ->select(
                 [
