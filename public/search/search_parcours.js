@@ -36,6 +36,7 @@ document.addEventListener('DOMContentLoaded', (e) => {
           }
 
           const listParent = document.createElement('ul');
+          listParent.style.listStyle = 'revert';
           jsonArray.forEach((ficheMatiere) => {
             const listElement = document.createElement('li');
             listElement.className = 'my-2'
