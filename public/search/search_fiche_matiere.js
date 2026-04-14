@@ -130,18 +130,25 @@ function updateDomWithResult(jsonResult, parcoursViewUrl, ficheMatiereViewUrl, k
     parcoursTitle.classList.add('col-8')
 
     const parcoursLibelle = document.createElement('a')
-    parcoursLibelle.textContent = `
-            ${fiche.type_diplome_libelle ? `${fiche.type_diplome_libelle} - ` : ''}
-            ${fiche.mention_libelle} - 
-            ${isParcoursParDefaut(fiche.parcours_libelle) ? fiche.parcours_libelle : 'Parcours ' + fiche.parcours_libelle} 
-            `
+    if(fiche.parcours_id !== null){
+      parcoursLibelle.textContent = `
+              ${fiche.type_diplome_libelle ? `${fiche.type_diplome_libelle} - ` : ''}
+              ${fiche.mention_libelle} - 
+              ${isParcoursParDefaut(fiche.parcours_libelle) ? fiche.parcours_libelle : 'Parcours ' + fiche.parcours_libelle} 
+              `
+      parcoursLibelle.target = '_blank'
+      parcoursLibelle.classList.add('text-primary', 'font-weight-bold')
+      parcoursLibelle.setAttribute('href', parcoursViewUrl.replace('%C2%B5%25%24%C2%A3', fiche.parcours_id))
+      parcoursTitle.appendChild(parcoursLibelle)
+    }
+    else {
+      const sansParcoursLibelle = document.createElement('span')
+      sansParcoursLibelle.classList.add('fst-italic')
+      sansParcoursLibelle.textContent = 'Pas de parcours porteur'
+      parcoursTitle.appendChild(sansParcoursLibelle)
+    }
+
     // ${fiche.parcours_sigle ? `(${fiche.parcours_sigle})` : ''}
-
-    parcoursLibelle.target = '_blank'
-    parcoursLibelle.classList.add('text-primary', 'font-weight-bold')
-    parcoursLibelle.setAttribute('href', parcoursViewUrl.replace('%C2%B5%25%24%C2%A3', fiche.parcours_id))
-
-    parcoursTitle.appendChild(parcoursLibelle)
 
     row.appendChild(parcoursTitle)
     row.appendChild(ficheMatiereTitle)
