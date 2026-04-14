@@ -7,7 +7,7 @@ i.button-page {
 }
 
 i.button-page:hover {
-    background: var(--alternate);
+    background: lightseagreen;
 }
 
 .numero-page {
