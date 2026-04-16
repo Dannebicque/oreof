@@ -1,3 +1,18 @@
+{% if parcoursArray|length > 1 %}
+    <div class="row justify-content-center">
+        <div class="col-6 col-md-4 col-lg-3 col-xl-2 text-center my-3">
+            <a href="{{ path('app_search_parcours_export_excel', {mot_cle: keyword_1}) }}">
+                <button 
+                    class="btn btn-sm btn-primary"
+                    type="button"
+                >
+                    Télécharger les résultats
+                </button>
+            </a>
+        </div>
+    </div>
+{% endif %}
+
 <div class="row justify-content-center" id="rootListElement"
      data-fiche-matiere-url="{{ absolute_url(path('app_fiche_matiere_show', {slug: 'µ#+'})) }}"
 >
