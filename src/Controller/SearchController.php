@@ -182,14 +182,85 @@ class SearchController extends AbstractController
     private function isStringContainingText(string $needle, string|null $haystack) : bool {
         if($haystack !== null){
             return
-                mb_strstr(
-                    mb_strtoupper(Tools::removeAccent($haystack)),
-                    mb_strtoupper(Tools::removeAccent($needle))
+                is_string(
+                    mb_strstr(
+                        mb_strtoupper(Tools::removeAccent($haystack)),
+                        mb_strtoupper(Tools::removeAccent($needle))
+                    )
                 );
         }
         else {
             return false;
         }
+    }
+
+    #[Route('/recherche/parcours/export/excel/{mot_cle}', name: 'app_search_parcours_export_excel')]
+    public function exportParcoursRecherche(
+        string $mot_cle,
+        EntityManagerInterface $entityManager,
+        Filesystem $fs
+    ) : Response {
+        $campagneDefaut = $entityManager->getRepository(CampagneCollecte::class)
+            ->findOneBy(['defaut' => true]);
+
+        $parcoursArray = array_merge(
+            $entityManager->getRepository(Parcours::class)
+                ->findWithKeyword($mot_cle, $campagneDefaut),
+            $entityManager->getRepository(Parcours::class)
+                ->findWithKeywordForDefaultParcours($mot_cle, $campagneDefaut)
+        );
+
+        $parcoursArray = array_map(function($p) use ($entityManager, $mot_cle) {
+            $result = [];
+            $parcoursDB = $entityManager->getRepository(Parcours::class)->findOneById($p['parcours_id']);
+            $result['typeDiplome'] = $parcoursDB->getFormation()?->getTypeDiplome()?->getLibelle() ?? "";
+            $result['formationDisplay'] = $parcoursDB->getFormation()?->getDisplay() ?? "";
+            $result['parcoursDisplay'] = $parcoursDB->getDisplay() ?? "";
+            $result['matches'] = [];
+            $fields = [
+                'objectifsParcours' => 'Objectifs du Parcours',
+                'objectifsFormation' => 'Objectifs de la Formation' ,
+                'poursuitesEtudes' => "Poursuite d'études", 
+                'contenuFormation' => 'Contenu de la Formation', 
+                'resultatsAttendus' => 'Résultats Attendus'
+            ];
+            foreach($fields as $key => $txt){
+                if($this->isStringContainingText($mot_cle, $p[$key] ?? "")){
+                    $result['matches'][] = $txt;
+                }
+            }
+            $result['matches'] = implode(", ", $result['matches']);
+
+            return array_values($result);
+        }, $parcoursArray);
+
+        $excelHeaders = ["Type du Diplôme", 'Nom de la formation', 'Nom du Parcours', 'Présence du mot-clé recherché'];
+        $excelData = [$excelHeaders, ...$parcoursArray];
+
+        $spreadsheet = new Spreadsheet();
+        $activeWS = $spreadsheet->getActiveSheet();
+        $activeWS->fromArray($excelData);
+
+        foreach(['A', 'B', 'C', 'D'] as $column){
+            $activeWS->getColumnDimension($column)->setAutoSize(true);
+        }
+
+        $now = new DateTime();
+        $dateFormat = $now->format('d-m-Y');
+        $path = __DIR__ . "/../../public/temp/";
+        $filename = 'Export-recherche-parcours.xlsx';
+        if($fs->exists($path . $filename)){
+            $fs->remove($path . $filename);
+        }
+        $fs->appendToFile($path . $filename, "");
+        $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
+        $writer->save($path . $filename);
+        $dataResponse = file_get_contents($path . $filename);
+
+        return new Response($dataResponse, 200, [
+            'Content-Type' => 'application/vnd.ms-excel',
+            'Content-Disposition' => "attachment;filename=\"{$dateFormat}-{$mot_cle}-{$filename}\""
+        ]);
     }
 
     #[Route('/recherche/fiche_matiere/{page}/{mot_cle}', name: 'app_search_fiche_matiere_pagination')]
