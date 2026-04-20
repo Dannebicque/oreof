@@ -107,7 +107,7 @@
                 </div>
 
             </div>
-            {% if histo.commentaire is defined or histo.complements.fichier is defined or (histo.changeRf is defined and histo.changeRf != null) %}
+            {% if histo.commentaire is defined or histo.complements.fichier_note is defined or histo.complements.fichier is defined or (histo.changeRf is defined and histo.changeRf != null) %}
                 <div class="row">
                     {% if histo.changeRf is defined and histo.changeRf != null %}
                         <div class="col-auto">
@@ -142,6 +142,15 @@
                                         le PV du conseil</a></p>
                             </div>
                         {% endif %}
+                    {% endif %}
+
+                    {% if histo.complements.fichier_note is defined %}
+                        <div class="col-auto">
+                            <p>
+                                <a href="{{ path('app_upload_download', {context: 'conseils', filename: histo.complements.fichier_note, originalName: histo.complements.fichier_note_original|default(histo.complements.fichier_note)}) }}"
+                                   target="_blank">Voir
+                                    la note explicative</a></p>
+                        </div>
                     {% endif %}
                 </div>
             {% endif %}
