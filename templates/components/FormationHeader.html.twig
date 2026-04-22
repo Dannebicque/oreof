@@ -108,23 +108,18 @@
                 {# Validation Dropdown #}
 
                 {% if is_granted('MANAGE', {route: 'app_formation', subject: this.formation}) or is_granted('ROLE_ADMIN') %}
-                    <button
-                            href="#"
-                            {{ stimulus_controller('modal', {
-                                size: 'lg',
-                                modalTitle: 'formation.change_rf.title'|trans({}, 'form'),
-                                nomEvenement: 'refreshPage',
-                                modalUrl: path('app_formation_change_rf', {formation: formation.id}) }) }}
-                            data-action="click->modal#openModal"
-                            data-size="lg"
+                    <a
                             class="btn btn-sm btn-outline-warning w-100"
                             data-bs-toggle="tooltip"
                             data-bs-placement="bottom"
+                            href="{{ path('app_formation_change_rf', {formation: formation.id}) }}"
+                            data-turbo="true"
+                            data-action="click->modalturbo#open"
                             title="{{ 'formation.change_rf.title'|trans({}, 'form') }}"
                     >
                         <i class="fal fa-repeat"></i>
                         <span> {{ 'formation.change_rf.label'|trans({}, 'form') }}</span>
-                    </button>
+                    </a>
                 {% endif %}
 
                 {#                <button class="btn btn-sm btn-outline-secondary w-100"> #}

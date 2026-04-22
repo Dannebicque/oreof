@@ -2,22 +2,6 @@
 
 {% block content %}
     {{ component('DataTable', { config: table }) }}
-
-    {#    ---- #}
-    {#    <div class="card" #}
-    {#            {{ stimulus_controller('crud', { #}
-    {#                url: path('app_mention_liste'), #}
-    {#                storageKey: 'mention_liste', #}
-    {#            }) }} #}
-    {#         data-action="base:refreshListe@window->crud#refreshListe" #}
-    {#    > #}
-    {#        <div class="card-body"> #}
-    {#            {{ include('communs/_recherche.html.twig') }} #}
-    {#            <div {{ stimulus_target('crud', 'liste') }}> #}
-
-    {#            </div> #}
-    {#        </div> #}
-    {#    </div> #}
 {% endblock %}
 
 {% set header_title %}

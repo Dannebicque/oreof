@@ -5,6 +5,8 @@ namespace App\Form;
 use App\Entity\User;
 use App\Enums\TypeRfEnum;
 use App\Form\Type\EntityWithAddType;
+use App\Form\Type\InlineCreateEntitySelectType;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
@@ -26,21 +28,36 @@ class ChangeRfFormationType extends AbstractType
                     return $choice->getLibelle();
                 },
             ])
-            ->add('user', EntityWithAddType::class, [
+            ->add('user', InlineCreateEntitySelectType::class, [
+                'help' => '',
                 'class' => User::class,
                 'choice_label' => 'display',
-                'multiple' => false,
-                'autocomplete' => true,
-                'expanded' => false,
-                'query_builder' => static function ($er) {
-                    return $er->createQueryBuilder('t')
-                        ->orderBy('t.nom', 'ASC')
-                        ->addOrderBy('t.prenom', 'ASC');
+                'query_builder' => function ($er) {
+                    return $er->createQueryBuilder('u')
+                        ->orderBy('u.nom', 'ASC')
+                        ->addOrderBy('u.prenom', 'ASC');
                 },
-                'help_to_add' => 'Saisir l\'email urca de la personne à ajouter.',
+                'new_placeholder' => 'Email du responsable de la mention',
+                'required' => true,
+                'ldap_check' => true,
                 'placeholder' => 'Choisir dans la liste ou choisir "+" pour ajouter un utilisateur',
                 'label' => 'Nouveau (co-)responsable de formation',
-                'required' => false,
+                // évite doublons (optionnel)
+                'find_existing' => function (string $label, $scope, EntityManagerInterface $em) {
+                    return $em->getRepository(User::class)->createQueryBuilder('t')
+                        ->andWhere('LOWER(t.email) = LOWER(:l)')
+                        ->setParameter('l', $label)
+                        ->getQuery()
+                        ->getOneOrNullResult();
+                },
+
+                // création (obligatoire)
+                'create' => function (string $label, EntityManagerInterface $em) {
+                    $e = new User();
+                    $e->setEmail($label);
+                    return $e; // persist/flush gérés par le type (ou tu peux le faire ici)
+                },
+
             ])
             ->add('datePriseFonction', DateType::class, [
                 'label' => 'Date de prise de fonction',

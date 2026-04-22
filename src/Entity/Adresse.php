@@ -41,6 +41,11 @@ class Adresse
     #[ORM\OneToOne(targetEntity: self::class, cascade: ['persist', 'remove'])]
     private ?self $adresseOrigineCopie = null;
 
+    public function __toString(): string
+    {
+        return $this->display();
+    }
+
     public function getId(): ?int
     {
         return $this->id;

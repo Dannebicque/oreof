@@ -9,10 +9,14 @@
 
 namespace App\Controller\Config;
 
+use App\DTO\TranslatableKey;
 use App\Entity\RythmeFormation;
 use App\Form\RythmeFormationType;
 use App\Repository\RythmeFormationRepository;
+use App\Service\DataTableBuilder;
+use App\Service\DetailBuilder;
 use App\Utils\JsonRequest;
+use App\Utils\TurboStreamResponseFactory;
 use JsonException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,16 +27,37 @@ use Symfony\Component\Routing\Attribute\Route;
 class RythmeFormationController extends AbstractController
 {
     #[Route('/', name: 'app_rythme_formation_index', methods: ['GET'])]
-    public function index(): Response
+    public function index(
+        DataTableBuilder $builder
+    ): Response
     {
-        return $this->render('config/rythme_formation/index.html.twig');
-    }
 
-    #[Route('/liste', name: 'app_rythme_formation_liste', methods: ['GET'])]
-    public function liste(RythmeFormationRepository $rythmeFormationRepository): Response
-    {
-        return $this->render('config/rythme_formation/_liste.html.twig', [
-            'rythme_formations' => $rythmeFormationRepository->findAll(),
+        $table = $builder
+            ->setEntity(RythmeFormation::class)
+            ->setPerPage(20)
+            ->setDefaultSort('libelle')
+
+            // Colonne simple avec tri et recherche
+            ->addColumn('libelle', [
+                'label' => 'Libellé du rythme de formation',
+                'sortable' => true,
+                'filterable' => true,
+            ])
+            ->addShowAction('app_rythme_formation_show', [
+                'modal' => true,
+                'modal_size' => 'lg',
+                'modal_title' => 'Voir un rythme de formation',
+            ])
+            ->addEditAction('app_rythme_formation_edit', [
+                'modal' => true,
+                'modal_size' => 'lg',
+                'modal_title' => 'Modifier un rythme de formation',
+            ])
+            ->addDuplicateAction('app_rythme_formation_duplicate')
+            ->addDeleteAction('app_rythme_formation_delete')
+            ->build();
+        return $this->render('config/rythme_formation/index.html.twig', [
+            'table' => $table,
         ]);
     }
 
@@ -58,11 +83,25 @@ class RythmeFormationController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_rythme_formation_show', methods: ['GET'])]
-    public function show(RythmeFormation $rythmeFormation): Response
+    public function show(
+        TurboStreamResponseFactory $turboStream,
+        DetailBuilder              $builder,
+        RythmeFormation            $rythmeFormation
+    ): Response
     {
-        return $this->render('config/rythme_formation/show.html.twig', [
-            'rythme_formation' => $rythmeFormation,
-        ]);
+        $detail = $builder
+            ->setEntity(RythmeFormation::class)
+            ->addField('libelle', ['label' => 'Libellé du rythme de formation'])
+            ->build();
+
+        return $turboStream->streamOpenModalFromTemplates(
+            new TranslatableKey('rythme_formation.show.title', [], 'modal'),
+            'Rythme de formation : ' . $rythmeFormation->getLibelle(),
+            '_ui/_modal_show_generic.html.twig',
+            ['entity' => $rythmeFormation, 'detail' => $detail],
+            '_ui/_footer_cancel.html.twig',
+            []
+        );
     }
 
     #[Route('/{id}/edit', name: 'app_rythme_formation_edit', methods: ['GET', 'POST'])]

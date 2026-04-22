@@ -1,13 +1,22 @@
 <!-- component html -->
-<div class="language-switch-container" {{ attributes }}>
-    <button class="btn btn-empty language-button dropdown-toggle" data-bs-toggle="dropdown"
-            aria-haspopup="true" aria-expanded="false">{{ user_data.campagneCollecte != null ? user_data.campagneCollecte.libelle|trim|replace({'-':'<br>'})|raw : 'erreur' }}
-    </button>
-    <div class="dropdown-menu">
-        {% for dpe in this.dpes %}
-            <a
-                    {{ live_action('changeDpe', {'id': dpe.id}) }}
-                    href="#" class="dropdown-item">{{ dpe.libelle }}</a>
-        {% endfor %}
+<div class="language-switch-container relative" {{ attributes }}>
+    <div
+            data-controller="navbar-dropdown"
+            data-action="click@window->navbar-dropdown#closeOnOutside keydown.escape@window->navbar-dropdown#closeOnEscape">
+        <button type="button"
+                class="btn btn-empty language-button dropdown-toggle"
+                data-navbar-dropdown-target="button"
+                data-action="click->navbar-dropdown#toggle"
+                aria-haspopup="true"
+                aria-expanded="false">{{ user_data.campagneCollecte != null ? user_data.campagneCollecte.libelle|trim|replace({'-':'<br>'})|raw : 'erreur' }}
+        </button>
+        <div class="dropdown-menu hidden absolute right-0 top-full z-50 mt-2 min-w-56 rounded-lg bg-white shadow-lg ring-1 ring-slate-900/10"
+             data-navbar-dropdown-target="menu">
+            {% for dpe in this.dpes %}
+                <a
+                        {{ live_action('changeDpe', {'id': dpe.id}) }}
+                        href="#" class="dropdown-item">{{ dpe.libelle }}</a>
+            {% endfor %}
+        </div>
     </div>
 </div>

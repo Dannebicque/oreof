@@ -1,0 +1,104 @@
+{# <div class="card"> #}
+{#    <div class="card-body"> #}
+<table class="table table-borderless">
+    <tbody>
+    {% for field in config.fields %}
+        {% if not field.hidden %}
+            {% set value = this.getFieldValue(entity, field.field) %}
+            <tr>
+                <th style="width: 30%;">{{ field.label }}</th>
+                <td class="{{ field.class }}">
+                    {# Les formats entity_badge/enum_badge/enum gèrent eux-mêmes le cas null #}
+                    {% if field.format in ['entity_badge', 'enum_badge', 'enum'] or field.type == 'entity' %}
+
+                        {% if field.format == 'entity_badge' or (field.type == 'entity' and field.format == 'entity_badge') %}
+                            {% set entityLabel = this.getEntityDisplayLabel(value, field) %}
+                            {% set entityBadgeClass = value is null
+                                ? (field.null_badge_class|default('bg-secondary'))
+                                : (field.badge_class|default('bg-info')) %}
+                            <span class="badge {{ entityBadgeClass }}">
+                                        {{ entityLabel ?: field.empty_text }}
+                                    </span>
+
+                        {% elseif field.format == 'enum_badge' %}
+                            {% if value is null %}
+                                <span class="text-muted">{{ field.empty_text }}</span>
+                            {% else %}
+                                {% set enumLabel = this.getEnumLabel(value, field) %}
+                                {% set enumBadgeClass = this.getEnumBadgeClass(value, field) %}
+                                <span class="badge {{ enumBadgeClass }}">{{ enumLabel }}</span>
+                            {% endif %}
+
+                        {% elseif field.format == 'enum' %}
+                            {% if value is null %}
+                                <span class="text-muted">{{ field.empty_text }}</span>
+                            {% else %}
+                                {{ this.getEnumLabel(value, field) }}
+                            {% endif %}
+
+                        {% else %}
+                            {# type entity sans format spécial #}
+                            {{ this.getEntityDisplayLabel(value, field) ?: field.empty_text }}
+                        {% endif %}
+
+                    {% elseif value is null %}
+                        <span class="text-muted">{{ field.empty_text }}</span>
+
+                    {% elseif field.format == 'date' and value.date is defined %}
+                        {{ value|date('d/m/Y') }}
+
+                    {% elseif field.format == 'datetime' and value.date is defined %}
+                        {{ value|date('d/m/Y H:i') }}
+
+                    {% elseif field.format == 'currency' and (value ~ '') matches '/^-?\d+(?:[\.,]\d+)?$/' %}
+                        {{ (value ~ '')|replace({',': '.'})|number_format(2, ',', ' ') }} €
+
+                    {% elseif field.format == 'boolean' %}
+                        <span class="badge bg-{{ value ? 'success' : 'danger' }}">
+                                    {{ value ? 'Oui' : 'Non' }}
+                                </span>
+
+                    {% elseif field.format == 'html' %}
+                        {{ value|raw }}
+
+                    {% elseif field.format == 'badge' %}
+                        <span class="badge {{ field.badge_class }}">
+                                    {{ value }}
+                                </span>
+
+                    {% elseif field.type == 'collection' and value is iterable %}
+                        {% if field.format == 'badges' %}
+                            {% for item in value %}
+                                {% if field.collection_property == '__toString' %}
+                                    {% set itemValue = item %}
+                                {% else %}
+                                    {% set itemValue = this.getFieldValue(item, field.collection_property) %}
+                                {% endif %}
+                                <span class="badge {{ field.badge_class }} me-1">{{ itemValue }}</span>
+                            {% endfor %}
+                        {% else %}
+                            {% set items = [] %}
+                            {% for item in value %}
+                                {% if field.collection_property == '__toString' %}
+                                    {% set itemValue = item %}
+                                {% else %}
+                                    {% set itemValue = this.getFieldValue(item, field.collection_property) %}
+                                {% endif %}
+                                {% set items = items|merge([itemValue]) %}
+                            {% endfor %}
+                            {{ items|join(field.separator) }}
+                        {% endif %}
+
+                    {% else %}
+                        {{ value }}
+                    {% endif %}
+                </td>
+            </tr>
+        {% endif %}
+    {% endfor %}
+    </tbody>
+</table>
+{#    </div> #}
+{# </div> #}
+
+

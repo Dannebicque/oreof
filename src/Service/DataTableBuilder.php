@@ -26,16 +26,20 @@ class DataTableBuilder
      *   - sortable: bool - Colonne triable (défaut: false)
      *   - filterable: bool - Colonne filtrable (défaut: false)
      *   - searchable: bool - Incluse dans la recherche globale (défaut: true)
-     *   - type: string - Type de filtre: 'text', 'select', 'entity', 'date', 'boolean', 'collection' (défaut: 'text')
-     *   - format: string - Format d'affichage: 'date', 'datetime', 'currency', 'boolean', 'badge', 'badges' (défaut: null)
+     *   - type: string - Type de filtre/affichage: 'text', 'select', 'entity', 'date', 'boolean', 'collection' (défaut: 'text')
+     *   - format: string - Format d'affichage: 'date', 'datetime', 'currency', 'boolean', 'badge', 'badges', 'entity_badge' (défaut: null)
      *   - sort_expression: string - Expression SQL pour le tri (ex: 'SIZE(e.formations)' ou '(SELECT COUNT(f) FROM Formation f WHERE f.mention = e)')
      *   - filter_expression: string - Expression SQL pour le filtre
      *   - choices: array - Choix pour type 'select' (défaut: [])
      *   - entity: string - Classe d'entité pour type 'entity'
      *   - entity_label: string - Propriété à afficher pour type 'entity' ou 'collection' (défaut: '__toString')
-     *   - collection_property: string - Propriété à afficher dans une collection ManyToMany (défaut: '__toString')
+     *   - null_label: string - Texte affiché si une relation `entity` est nulle (ex: 'Commune')
+     *   - collection_property: string - Propriété à afficher dans une collection ManyToMany/OneToMany (défaut: '__toString')
+     *     Pour une collection filtrable, utiliser `field` = nom de l'association (ex: `typeDiplomes`),
+     *     `type` = `collection`, `filterable` = true, `entity` = classe liée, `entity_label` = libellé à afficher.
      *   - badge_map: array - Mapping valeur => classe CSS pour le format 'badge' (ex: ['active' => 'success', 'inactive' => 'danger'])
      *   - badge_class: string - Classe CSS par défaut pour les badges (défaut: 'bg-secondary')
+     *   - null_badge_class: string - Classe CSS du badge quand une relation `entity` est nulle (défaut: 'bg-secondary')
      *   - separator: string - Séparateur pour les collections (défaut: ', ')
      *   - template: string - Template Twig custom pour la cellule
      *   - class: string - Classes CSS pour la colonne
@@ -56,9 +60,11 @@ class DataTableBuilder
             'choices' => [],
             'entity' => null,
             'entity_label' => '__toString',
+            'null_label' => null,
             'collection_property' => '__toString',
             'badge_map' => [],
             'badge_class' => 'bg-secondary',
+            'null_badge_class' => 'bg-secondary',
             'separator' => ', ',
             'template' => null,
             'class' => '',

@@ -43,6 +43,9 @@ class DataTableComponent
     #[LiveProp(writable: true)]
     public string $globalSearch = '';
 
+    #[LiveProp(writable: true)]
+    public bool $filtersOpen = false;
+
     // Propriétés calculées à partir de config
     #[LiveProp]
     public string $entityClass = '';
@@ -72,18 +75,35 @@ class DataTableComponent
         $this->perPage = $this->config['perPage'] ?? 20;
         $this->sortField = $this->config['sortField'] ?? '';
         $this->sortDirection = $this->config['sortDirection'] ?? 'asc';
+        $this->filtersOpen = $this->config['filtersOpen'] ?? false;
 
-        // initialiser filters avec les colonnes filtrables
+        $this->initializeFilters();
+    }
+
+    private function initializeFilters(): void
+    {
+        $initializedFilters = [];
+
         foreach ($this->columns as $column) {
-            if ($column['filterable'] ?? false) {
-                // si date ajouter to et from
-                if ($column['type'] === 'date') {
-                    $this->filters[$column['field']] = ['from' => '', 'to' => ''];
-                } else {
-                    $this->filters[$column['field']] = '';
-                }
+            if (!($column['filterable'] ?? false)) {
+                continue;
             }
+
+            $columnId = $column['id'] ?? $column['field'];
+
+            if (($column['type'] ?? 'text') === 'date') {
+                $existingValue = $this->filters[$columnId] ?? null;
+                $initializedFilters[$columnId] = [
+                    'from' => is_array($existingValue) ? ($existingValue['from'] ?? '') : '',
+                    'to' => is_array($existingValue) ? ($existingValue['to'] ?? '') : '',
+                ];
+                continue;
+            }
+
+            $initializedFilters[$columnId] = (string)($this->filters[$columnId] ?? '');
         }
+
+        $this->filters = $initializedFilters;
     }
 
     #[ExposeInTemplate]
@@ -137,17 +157,19 @@ class DataTableComponent
 
     private function applyFilters(QueryBuilder $qb): void
     {
-        foreach ($this->filters as $field => $value) {
+        foreach ($this->filters as $filterKey => $value) {
             if (empty($value)) {
                 continue;
             }
 
-            $column = $this->findColumn($field);
+            $column = $this->findColumnById($filterKey) ?? $this->findColumn($filterKey);
             if (!$column || !($column['filterable'] ?? false)) {
                 continue;
             }
 
-            $paramName = str_replace('.', '_', $field);
+            $field = $column['field'];
+
+            $paramName = 'f_' . str_replace('-', '_', (string)$filterKey);
 
             // Si une expression de filtre personnalisée est définie
             if (!empty($column['filter_expression'])) {
@@ -160,8 +182,17 @@ class DataTableComponent
                         break;
 
                     case 'select':
-                    case 'entity':
                     case 'boolean':
+                        $qb->andWhere($expression . ' = :' . $paramName)
+                            ->setParameter($paramName, $value);
+                        break;
+
+                    case 'entity':
+                        $qb->andWhere($expression . ' = :' . $paramName)
+                            ->setParameter($paramName, $value);
+                        break;
+
+                    case 'collection':
                         $qb->andWhere($expression . ' = :' . $paramName)
                             ->setParameter($paramName, $value);
                         break;
@@ -176,9 +207,37 @@ class DataTableComponent
                         break;
 
                     case 'select':
-                    case 'entity':
                         $qb->andWhere($fieldPath . ' = :' . $paramName)
                             ->setParameter($paramName, $value);
+                        break;
+
+                    case 'boolean':
+                        $qb->andWhere($fieldPath . ' = :' . $paramName)
+                            ->setParameter($paramName, '1' === (string)$value);
+                        break;
+
+                    case 'entity':
+                        $associationPath = $this->getEntityAssociationPath($field);
+                        if (null === $associationPath) {
+                            continue 2;
+                        }
+
+                        $qb->andWhere('IDENTITY(' . $associationPath . ') = :' . $paramName)
+                            ->setParameter($paramName, $value);
+                        break;
+
+                    case 'collection':
+                        if (empty($column['entity'])) {
+                            continue 2;
+                        }
+
+                        $entity = $this->resolveFilterEntity($column, $value);
+                        if (null === $entity) {
+                            continue 2;
+                        }
+
+                        $qb->andWhere(':' . $paramName . ' MEMBER OF ' . $fieldPath)
+                            ->setParameter($paramName, $entity);
                         break;
 
                     case 'date':
@@ -196,6 +255,97 @@ class DataTableComponent
         }
     }
 
+    public function getEntityChoices(array $column): array
+    {
+        $entityClass = $column['entity'] ?? null;
+        if (!is_string($entityClass) || '' === $entityClass) {
+            return [];
+        }
+
+        $entityLabel = $column['entity_label'] ?? '__toString';
+        $repository = $this->entityManager->getRepository($entityClass);
+
+        try {
+            $entities = '__toString' !== $entityLabel
+                ? $repository->findBy([], [$entityLabel => 'ASC'])
+                : $repository->findAll();
+        } catch (\Throwable) {
+            $entities = $repository->findAll();
+        }
+
+        $choices = [];
+        foreach ($entities as $entity) {
+            $id = $this->getEntityIdentifier($entity);
+            if (null === $id) {
+                continue;
+            }
+
+            $label = $this->getEntityChoiceLabel($entity, $entityLabel);
+            $choices[] = [
+                'value' => $id,
+                'label' => $label,
+            ];
+        }
+
+        return $choices;
+    }
+
+    public function getEntityDisplayLabel(?object $entity, array $column): string
+    {
+        if (null === $entity) {
+            return (string)($column['null_label'] ?? '');
+        }
+
+        return $this->getEntityChoiceLabel($entity, $column['entity_label'] ?? '__toString');
+    }
+
+    private function getEntityIdentifier(object $entity): int|string|null
+    {
+        $identifierValues = $this->entityManager->getClassMetadata($entity::class)->getIdentifierValues($entity);
+        if (1 !== count($identifierValues)) {
+            return null;
+        }
+
+        return array_values($identifierValues)[0];
+    }
+
+    private function getEntityChoiceLabel(object $entity, string $entityLabel): string
+    {
+        $fallbackLabel = sprintf('%s #%s', $entity::class, (string)($this->getEntityIdentifier($entity) ?? '?'));
+
+        if ('__toString' === $entityLabel && method_exists($entity, '__toString')) {
+            return (string)$entity;
+        }
+
+        $value = $this->getFieldValue($entity, $entityLabel);
+
+        if (null === $value) {
+            return $fallbackLabel;
+        }
+
+        if (is_scalar($value)) {
+            return (string)$value;
+        }
+
+        if (is_object($value) && method_exists($value, '__toString')) {
+            return (string)$value;
+        }
+
+        return $fallbackLabel;
+    }
+
+    private function resolveFilterEntity(array $column, int|string $value): ?object
+    {
+        $entityClass = $column['entity'] ?? null;
+        if (!is_string($entityClass) || '' === $entityClass) {
+            return null;
+        }
+
+        $entity = $this->entityManager->getRepository($entityClass)->find($value);
+
+        return is_object($entity) ? $entity : null;
+    }
+
     private function findColumn(string $field): ?array
     {
         foreach ($this->columns as $column) {
@@ -203,6 +353,17 @@ class DataTableComponent
                 return $column;
             }
         }
+        return null;
+    }
+
+    private function findColumnById(string $id): ?array
+    {
+        foreach ($this->columns as $column) {
+            if (($column['id'] ?? null) === $id) {
+                return $column;
+            }
+        }
+
         return null;
     }
 
@@ -214,6 +375,17 @@ class DataTableComponent
             return $alias . '.' . $parts[count($parts) - 1];
         }
         return 'e.' . $field;
+    }
+
+    private function getEntityAssociationPath(string $field): ?string
+    {
+        $parts = explode('.', $field);
+        if ([] === $parts) {
+            return null;
+        }
+
+        // Pour un affichage `relation.libelle`, on filtre sur l'association `e.relation`.
+        return 'e.' . $parts[0];
     }
 
     private function applyGlobalSearch(QueryBuilder $qb): void
@@ -353,8 +525,15 @@ class DataTableComponent
     public function resetFilters(): void
     {
         $this->filters = [];
+        $this->initializeFilters();
         $this->globalSearch = '';
         $this->page = 1;
+    }
+
+    #[LiveAction]
+    public function toggleFilters(): void
+    {
+        $this->filtersOpen = !$this->filtersOpen;
     }
 
     #[LiveAction]

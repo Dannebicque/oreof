@@ -9,7 +9,7 @@
     </template>
 </turbo-stream>
 
-{{ include('turbo/toast.stream.html.twig', { message: ('toast.'~transition~'.'~type~'.success')|trans({},'process'), undo: null, type: 'success' }) }}
+{{ include('_ui/_toast.stream.html.twig', { message: ('toast.'~transition~'.'~type~'.success')|trans({},'process'), undo: null, type: 'success' }) }}
 
 {{ include('_ui/_force_close_modal.html.twig') }}
 

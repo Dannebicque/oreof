@@ -9,10 +9,15 @@
 
 namespace App\Controller\Config;
 
+use App\DTO\TranslatableKey;
+use App\Entity\TypeDiplome;
 use App\Entity\TypeUe;
 use App\Form\TypeUeType;
 use App\Repository\TypeUeRepository;
+use App\Service\DataTableBuilder;
+use App\Service\DetailBuilder;
 use App\Utils\JsonRequest;
+use App\Utils\TurboStreamResponseFactory;
 use JsonException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,16 +28,50 @@ use Symfony\Component\Routing\Attribute\Route;
 class TypeUeController extends AbstractController
 {
     #[Route('/', name: 'app_type_ue_index', methods: ['GET'])]
-    public function index(): Response
+    public function index(
+        DataTableBuilder $builder
+    ): Response
     {
-        return $this->render('config/type_ue/index.html.twig');
-    }
+        $table = $builder
+            ->setEntity(TypeUe::class)
+            ->setPerPage(20)
+            ->setDefaultSort('libelle')
 
-    #[Route('/liste', name: 'app_type_ue_liste', methods: ['GET'])]
-    public function liste(TypeUeRepository $typeUeRepository): Response
-    {
-        return $this->render('config/type_ue/_liste.html.twig', [
-            'type_ues' => $typeUeRepository->findAll(),
+            // Colonne simple avec tri et recherche
+            ->addColumn('libelle', [
+                'label' => 'Libellé du type d\'UE',
+                'sortable' => true,
+                'filterable' => true,
+            ])
+
+            // Colonne avec collection de relations
+            ->addColumn('typeDiplomes', [
+                'label' => 'Type(s) de diplôme',
+                'filterable' => true,
+                'type' => 'collection',
+                'format' => 'badges',
+                'collection_property' => 'libelle',
+                'badge_class' => 'bg-primary',
+                'entity' => TypeDiplome::class,
+                'entity_label' => 'libelle',
+                'searchable' => false,
+            ])
+            ->addShowAction('app_type_ue_show', [
+                'modal' => true,
+                'modal_size' => 'lg',
+                'modal_title' => 'Voir un type d\'UE',
+            ])
+            ->addEditAction('app_type_ue_edit', [
+                'modal' => true,
+                'modal_size' => 'lg',
+                'modal_title' => 'Modifier un type d\'UE',
+            ])
+            ->addDuplicateAction('app_type_ue_duplicate')
+            ->addDeleteAction('app_type_ue_delete')
+            ->build();
+
+        return $this->render('config/type_ue/index.html.twig', [
+            'table' => $table,
         ]);
     }
 
@@ -61,11 +100,42 @@ class TypeUeController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_type_ue_show', methods: ['GET'])]
-    public function show(TypeUe $typeUe): Response
+    public function show(
+        TurboStreamResponseFactory $turboStream,
+        DetailBuilder              $builder,
+        TypeUe                     $typeUe): Response
     {
-        return $this->render('config/type_ue/show.html.twig', [
-            'type_ue' => $typeUe,
-        ]);
+        $detail = $builder
+            ->setEntity(TypeUe::class)
+            ->addField('libelle', [
+                'label' => 'Libellé du type d\'UE',
+            ])
+            ->addField('typeDiplomes', [
+                'label' => 'Type(s) de diplôme',
+                'type' => 'collection',
+                'format' => 'badges',
+                'collection_property' => 'libelle',
+            ])
+            ->addField('type', [
+                'label' => 'Type',
+                'format' => 'enum_badge',
+                'enum_label_method' => 'getLibelle',
+                'enum_color_method' => 'getBadge',
+            ])
+            ->build();
+
+
+        return $turboStream->streamOpenModalFromTemplates(
+            new TranslatableKey('type_ue.show.title', [], 'modal'),
+            'Dans : type d\'UE ' . $typeUe->getLibelle(),
+            '_ui/_modal_show_generic.html.twig',
+            [
+                'entity' => $typeUe,
+                'detail' => $detail,
+            ],
+            '_ui/_footer_cancel.html.twig',
+            []
+        );
     }
 
     #[Route('/{id}/edit', name: 'app_type_ue_edit', methods: ['GET', 'POST'])]

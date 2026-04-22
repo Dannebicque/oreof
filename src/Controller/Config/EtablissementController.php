@@ -10,9 +10,14 @@
 namespace App\Controller\Config;
 
 use App\Controller\BaseController;
+use App\DTO\TranslatableKey;
+use App\Entity\Adresse;
 use App\Entity\Etablissement;
 use App\Form\EtablissementType;
 use App\Repository\EtablissementRepository;
+use App\Service\DataTableBuilder;
+use App\Service\DetailBuilder;
+use App\Utils\TurboStreamResponseFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -21,16 +26,44 @@ use Symfony\Component\Routing\Attribute\Route;
 class EtablissementController extends BaseController
 {
     #[Route('/', name: 'app_etablissement_index', methods: ['GET'])]
-    public function index(): Response
+    public function index(
+        DataTableBuilder $builder
+    ): Response
     {
-        return $this->render('config/etablissement/index.html.twig');
-    }
+        $table = $builder
+            ->setEntity(Etablissement::class)
+            ->setPerPage(20)
+            ->setDefaultSort('libelle')
 
-    #[Route('/liste', name: 'app_etablissement_liste', methods: ['GET'])]
-    public function liste(EtablissementRepository $etablissementRepository): Response
-    {
-        return $this->render('config/etablissement/_liste.html.twig', [
-            'etablissements' => $etablissementRepository->findAll(),
+            // Colonne simple avec tri et recherche
+            ->addColumn('libelle', [
+                'label' => 'Libellé de la mention',
+                'sortable' => true,
+                'filterable' => true,
+            ])
+            ->addColumn('adresse', [
+                'label' => 'Adresse',
+                'sortable' => true,
+                'filterable' => true,
+                'type' => 'entity',
+                'entity' => Adresse::class,
+                'entity_label' => 'display',
+            ])
+            ->addShowAction('app_etablissement_show', [
+                'modal' => true,
+                'modal_size' => 'lg',
+                'modal_title' => 'Voir un établissement',
+            ])
+            ->addEditAction('app_etablissement_edit', [
+                'modal' => true,
+                'modal_size' => 'lg',
+                'modal_title' => 'Modifier un établissement',
+            ])
+            ->addDeleteAction('app_etablissement_delete')
+            ->build();
+
+        return $this->render('config/etablissement/index.html.twig', [
+            'table' => $table,
         ]);
     }
 
@@ -58,11 +91,66 @@ class EtablissementController extends BaseController
     }
 
     #[Route('/{id}', name: 'app_etablissement_show', methods: ['GET'])]
-    public function show(Etablissement $etablissement): Response
+    public function show(
+        TurboStreamResponseFactory $turboStream,
+        DetailBuilder              $builder,
+        Etablissement              $etablissement
+    ): Response
     {
-        return $this->render('config/etablissement/show.html.twig', [
-            'etablissement' => $etablissement,
-        ]);
+        $detail = $builder
+            ->setEntity(Etablissement::class)
+            ->addField('libelle', ['label' => 'Libellé'])
+            ->addField('adresse.display', [
+                'label' => 'Adresse',
+                'format' => 'html',
+                'empty_text' => 'Non définie',
+            ])
+            ->addField('numeroSIRET', ['label' => 'Numéro SIRET', 'empty_text' => 'Non renseigné'])
+            ->addField('numeroActivite', ['label' => 'Numéro d\'activité', 'empty_text' => 'Non renseigné'])
+            ->addField('emailCentral', ['label' => 'Email central', 'empty_text' => 'Non renseigné'])
+            ->addField('etablissementInformation.calendrierUniversitaire', [
+                'label' => 'Calendrier universitaire',
+                'format' => 'html',
+                'empty_text' => 'Non renseigné',
+            ])
+            ->addField('etablissementInformation.calendrierInscription', [
+                'label' => 'Calendrier d\'inscription',
+                'format' => 'html',
+                'empty_text' => 'Non renseigné',
+            ])
+            ->addField('etablissementInformation.informationsPratiques', [
+                'label' => 'Informations pratiques',
+                'format' => 'html',
+                'empty_text' => 'Non renseigné',
+            ])
+            ->addField('etablissementInformation.restauration', [
+                'label' => 'Restauration',
+                'format' => 'html',
+                'empty_text' => 'Non renseigné',
+            ])
+            ->addField('etablissementInformation.hebergement', [
+                'label' => 'Hébergement',
+                'format' => 'html',
+                'empty_text' => 'Non renseigné',
+            ])
+            ->addField('etablissementInformation.transport', [
+                'label' => 'Transport',
+                'format' => 'html',
+                'empty_text' => 'Non renseigné',
+            ])
+            ->build();
+
+        return $turboStream->streamOpenModalFromTemplates(
+            new TranslatableKey('etablissement.show.title', [], 'modal'),
+            'Établissement : ' . $etablissement->getLibelle(),
+            '_ui/_modal_show_generic.html.twig',
+            [
+                'entity' => $etablissement,
+                'detail' => $detail,
+            ],
+            '_ui/_footer_cancel.html.twig',
+            []
+        );
     }
 
     #[Route('/{id}/edit', name: 'app_etablissement_edit', methods: ['GET', 'POST'])]

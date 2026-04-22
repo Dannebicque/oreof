@@ -9,10 +9,14 @@
 
 namespace App\Controller\Config;
 
+use App\DTO\TranslatableKey;
 use App\Entity\Langue;
 use App\Form\LangueType;
 use App\Repository\LangueRepository;
+use App\Service\DataTableBuilder;
+use App\Service\DetailBuilder;
 use App\Utils\JsonRequest;
+use App\Utils\TurboStreamResponseFactory;
 use JsonException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,16 +27,40 @@ use Symfony\Component\Routing\Attribute\Route;
 class LangueController extends AbstractController
 {
     #[Route('/', name: 'app_langue_index', methods: ['GET'])]
-    public function index(): Response
+    public function index(DataTableBuilder $builder
+    ): Response
     {
-        return $this->render('config/langue/index.html.twig');
-    }
+        $table = $builder
+            ->setEntity(Langue::class)
+            ->setPerPage(20)
+            ->setDefaultSort('libelle')
 
-    #[Route('/liste', name: 'app_langue_liste', methods: ['GET'])]
-    public function liste(LangueRepository $langueRepository): Response
-    {
-        return $this->render('config/langue/_liste.html.twig', [
-            'langues' => $langueRepository->findAll(),
+            // Colonne simple avec tri et recherche
+            ->addColumn('libelle', [
+                'label' => 'Libellé de la langue',
+                'sortable' => true,
+                'filterable' => true,
+            ])
+            ->addColumn('codeIso', [
+                'label' => 'Code ISO',
+                'sortable' => true,
+                'filterable' => true,
+            ])
+            ->addShowAction('app_langue_show', [
+                'modal' => true,
+                'modal_size' => 'lg',
+                'modal_title' => 'Voir une langue',
+            ])
+            ->addEditAction('app_langue_edit', [
+                'modal' => true,
+                'modal_size' => 'lg',
+                'modal_title' => 'Modifier une langue',
+            ])
+            ->addDuplicateAction('app_langue_duplicate')
+            ->addDeleteAction('app_langue_delete')
+            ->build();
+        return $this->render('config/langue/index.html.twig', [
+            'table' => $table,
         ]);
     }
 
@@ -58,11 +86,29 @@ class LangueController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_langue_show', methods: ['GET'])]
-    public function show(Langue $langue): Response
+    public function show(
+        TurboStreamResponseFactory $turboStream,
+        DetailBuilder              $builder,
+        Langue                     $langue
+    ): Response
     {
-        return $this->render('config/langue/show.html.twig', [
-            'langue' => $langue,
-        ]);
+        $detail = $builder
+            ->setEntity(Langue::class)
+            ->addField('libelle', ['label' => 'Libellé de la langue'])
+            ->addField('codeIso', [
+                'label' => 'Code ISO',
+                'empty_text' => 'Non renseigné',
+            ])
+            ->build();
+
+        return $turboStream->streamOpenModalFromTemplates(
+            new TranslatableKey('langue.show.title', [], 'modal'),
+            'Langue : ' . $langue->getLibelle(),
+            '_ui/_modal_show_generic.html.twig',
+            ['entity' => $langue, 'detail' => $detail],
+            '_ui/_footer_cancel.html.twig',
+            []
+        );
     }
 
     #[Route('/{id}/edit', name: 'app_langue_edit', methods: ['GET', 'POST'])]

@@ -52,6 +52,11 @@ class Domaine
         $this->mentions = new ArrayCollection();
     }
 
+    public function nbMentions(): int
+    {
+        return $this->mentions->count();
+    }
+
     public function getId(): ?int
     {
         return $this->id;

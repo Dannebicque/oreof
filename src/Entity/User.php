@@ -170,6 +170,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->changeParcours = new ArrayCollection();
     }
 
+    public function __toString(): string
+    {
+        return $this->getDisplay();
+    }
+
     public function getId(): ?int
     {
         return $this->id;

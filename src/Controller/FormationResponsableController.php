@@ -15,6 +15,7 @@ use App\Form\ChangeRfFormationType;
 use App\Repository\ChangeRfRepository;
 use App\Repository\ComposanteRepository;
 use App\Service\SecureUploadService;
+use App\Utils\TurboStreamResponseFactory;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,6 +23,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Workflow\WorkflowInterface;
+use Symfony\UX\Turbo\Helper\TurboStream;
 
 class FormationResponsableController extends BaseController
 {
@@ -36,6 +38,7 @@ class FormationResponsableController extends BaseController
 
     #[Route('/formation/change-responsable/ajout/{formation}', name: 'app_formation_change_rf')]
     public function index(
+        TurboStreamResponseFactory $turboStream,
         ChangeRfRepository $changeRfRepository,
         Formation $formation,
         Request $request
@@ -73,6 +76,16 @@ class FormationResponsableController extends BaseController
 
             if (count($exist) !== 0) {
                 return JsonReponse::error('Une demande de changement de responsable de formation existe déjà pour ce (co-)responsable, cette formation et ce type de (co-)responsable.');
+                // Message de toast
+                $toastMessage = 'UE créée avec succès';
+
+                return $turboStream->stream('parcours_v2/turbo/add_ue_success.stream.html.twig', [
+                    'parcours' => $parcours,
+                    'semestreParcours' => $semestreParcours,
+                    'semestre' => $dtoSemestre,
+                    'toastMessage' => $toastMessage,
+                    'newUeId' => $ue->getId(),
+                ]);
             }
 
             $newRf = new \App\Entity\ChangeRf();
@@ -90,13 +103,33 @@ class FormationResponsableController extends BaseController
             $this->entityManager->persist($newRf);
             $this->entityManager->flush();
 
-            return JsonReponse::success('Le changement de responsable de formation a bien été enregistré.');
+
+            // Message de toast
+            $toastMessage = 'Le changement de responsable de formation a bien été enregistré.';
+
+            return $turboStream->stream('_ui/_modal_success.stream.html.twig', [
+                'toastMessage' => $toastMessage,
+            ]);
         }
 
-        return $this->render('formation_responsable/_index.html.twig', [
-            'form' => $form->createView(),
-            'formation' => $formation,
-        ]);
+//        return $this->render('formation_responsable/_index.html.twig', [
+//            'form' => $form->createView(),
+//            'formation' => $formation,
+//        ]);
+
+        return $turboStream->streamOpenModalFromTemplates(
+            'formation.change_rf.title',
+            'Dans : formation ' . $formation->getDisplay(),
+            'formation_v2/change_rf/_demande.html.twig',
+            [
+                'form' => $form->createView(),
+                'formation' => $formation,
+            ],
+            '_ui/_footer_submit_cancel.html.twig',
+            [
+                'submitLabel' => 'Valider la demande',
+            ]
+        );
     }
 
     #[Route('/formation/change-responsable/suppression/{demande}', name: 'app_formation_change_rf_suppression')]

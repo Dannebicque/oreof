@@ -9,12 +9,16 @@
 
 namespace App\Utils;
 
+use App\Dto\TranslatableKey;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 
 final class TurboStreamResponseFactory
 {
-    public function __construct(private Environment $twig)
+    public function __construct(
+        private TranslatorInterface $translator,
+        private Environment         $twig)
     {
     }
 
@@ -46,24 +50,24 @@ final class TurboStreamResponseFactory
      * $bodyHtml et $footerHtml sont attendus comme du HTML déjà rendu.
      */
     public function streamOpenModal(
-        string  $title,
-        ?string $subtitle,
+        string|TranslatableKey      $title,
+        string|TranslatableKey|null $subtitle,
         string  $bodyHtml,
         string  $footerHtml,
         int     $status = 200
     ): Response
     {
         return $this->stream('_ui/open.stream.html.twig', [
-            'title' => $title,
-            'subtitle' => $subtitle,
+            'title' => $this->translateText($title),
+            'subtitle' => $this->translateText($subtitle),
             'body' => $bodyHtml,
             'footer' => $footerHtml,
         ], $status);
     }
 
     public function streamOpenModalFromTemplates(
-        string  $title,
-        ?string $subtitle,
+        string|TranslatableKey      $title,
+        string|TranslatableKey|null $subtitle,
         string  $bodyTemplate,
         array   $bodyContext,
         string  $footerTemplate,
@@ -75,5 +79,14 @@ final class TurboStreamResponseFactory
         $footerHtml = $this->twig->render($footerTemplate, $footerContext);
 
         return $this->streamOpenModal($title, $subtitle, $bodyHtml, $footerHtml, $status);
+    }
+
+    private function translateText(TranslatableKey|string $title): string
+    {
+        if ($title instanceof TranslatableKey) {
+            return $this->translator->trans($title->key, $title->parameters, $title->domain);
+        }
+
+        return $title;
     }
 }

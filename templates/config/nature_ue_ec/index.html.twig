@@ -1,16 +1,8 @@
 {% extends 'base.html.twig' %}
 
 {% block content %}
-    <div class="card"
-            {{ stimulus_controller('crud', {
-                url: path('app_nature_ue_ec_liste'),
-                storageKey: 'nature_ue_ec_liste',
-            }) }}
-         data-action="base:refreshListe@window->crud#refreshListe"
-    >
-        <div class="card-body" {{ stimulus_target('crud', 'liste') }}>
-        </div>
-    </div>
+    {{ component('DataTable', { config: table }) }}
+
 {% endblock %}
 
 {% set header_title %}

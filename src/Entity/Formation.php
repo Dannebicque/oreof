@@ -246,6 +246,11 @@ class Formation
         $this->changeParcours = new ArrayCollection();
     }
 
+    public function __toString(): string
+    {
+        return $this->getDisplay() ?? '';
+    }
+
     #[ORM\PreFlush]
     public function updateSlug(): void
     {

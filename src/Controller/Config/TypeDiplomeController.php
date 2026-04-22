@@ -9,10 +9,14 @@
 
 namespace App\Controller\Config;
 
+use App\DTO\TranslatableKey;
 use App\Entity\TypeDiplome;
 use App\Form\TypeDiplomeType;
+use App\Service\DetailBuilder;
 use App\Repository\TypeDiplomeRepository;
+use App\Service\DataTableBuilder;
 use App\Utils\JsonRequest;
+use App\Utils\TurboStreamResponseFactory;
 use JsonException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,16 +27,81 @@ use Symfony\Component\Routing\Attribute\Route;
 class TypeDiplomeController extends AbstractController
 {
     #[Route('/', name: 'app_type_diplome_index', methods: ['GET'])]
-    public function index(): Response
+    public function index(
+        DataTableBuilder $builder
+    ): Response
     {
-        return $this->render('config/type_diplome/index.html.twig');
-    }
+        $table = $builder
+            ->setEntity(TypeDiplome::class)
+            ->setPerPage(20)
+            ->setDefaultSort('libelle')
 
-    #[Route('/liste', name: 'app_type_diplome_liste', methods: ['GET'])]
-    public function liste(TypeDiplomeRepository $typeDiplomeRepository): Response
-    {
-        return $this->render('config/type_diplome/_liste.html.twig', [
-            'type_diplomes' => $typeDiplomeRepository->findAll(),
+            // Colonne simple avec tri et recherche
+            ->addColumn('libelle', [
+                'label' => 'Libellé du type de diplôme',
+                'sortable' => true,
+                'filterable' => true,
+            ])
+            ->addColumn('libelleCourt', [
+                'label' => 'Sigle',
+                'sortable' => true,
+                'filterable' => true,
+            ])
+            ->addColumn('codeApogee', [
+                'label' => 'Code Apogée',
+                'sortable' => true,
+                'filterable' => true,
+            ])
+            ->addColumn('hasMemoire', [
+                'label' => 'Mémoire ?',
+                'sortable' => true,
+                'filterable' => true,
+                'type' => 'boolean',
+                'format' => 'boolean',
+            ])
+            ->addColumn('hasStage', [
+                'label' => 'Stage ?',
+                'sortable' => true,
+                'filterable' => true,
+                'type' => 'boolean',
+                'format' => 'boolean',
+            ])
+            ->addColumn('hasProjet', [
+                'label' => 'Projet ?',
+                'sortable' => true,
+                'filterable' => true,
+                'type' => 'boolean',
+                'format' => 'boolean',
+            ])
+            ->addColumn('hasSituationPro', [
+                'label' => 'Situation Pro. ?',
+                'sortable' => true,
+                'filterable' => true,
+                'type' => 'boolean',
+                'format' => 'boolean',
+            ])
+            ->addColumn('ectsObligatoireSurEc', [
+                'label' => 'ECTS Obli. ?',
+                'sortable' => true,
+                'filterable' => true,
+                'type' => 'boolean',
+                'format' => 'boolean',
+            ])
+            ->addShowAction('app_type_diplome_show', [
+                'modal' => true,
+                'modal_size' => 'lg',
+                'modal_title' => 'Voir un type de diplôme',
+            ])
+            ->addEditAction('app_type_diplome_edit', [
+                'modal' => true,
+                'modal_size' => 'lg',
+                'modal_title' => 'Modifier un type de diplôme',
+            ])
+            ->addDuplicateAction('app_type_diplome_duplicate')
+            ->addDeleteAction('app_type_diplome_delete')
+            ->build();
+        return $this->render('config/type_diplome/index.html.twig', [
+            'table' => $table,
         ]);
     }
 
@@ -69,11 +138,83 @@ class TypeDiplomeController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_type_diplome_show', methods: ['GET'])]
-    public function show(TypeDiplome $typeDiplome): Response
+    public function show(
+        TurboStreamResponseFactory $turboStream,
+        TypeDiplome                $typeDiplome,
+        DetailBuilder              $builder
+    ): Response
     {
-        return $this->render('config/type_diplome/show.html.twig', [
-            'type_diplome' => $typeDiplome,
-        ]);
+        $detail = $builder
+            ->setEntity(TypeDiplome::class)
+            ->addField('libelle', [
+                'label' => 'Libellé du type de diplôme',
+            ])
+            ->addField('libelleCourt', [
+                'label' => 'Sigle',
+            ])
+            ->addField('codeApogee', [
+                'label' => 'Code Apogée',
+                'empty_text' => 'Non renseigné',
+            ])
+            ->addField('hasMemoire', [
+                'label' => 'Mémoire ?',
+                'type' => 'boolean',
+                'format' => 'boolean',
+            ])
+            ->addField('hasStage', [
+                'label' => 'Stage ?',
+                'type' => 'boolean',
+                'format' => 'boolean',
+            ])
+            ->addField('hasProjet', [
+                'label' => 'Projet ?',
+                'type' => 'boolean',
+                'format' => 'boolean',
+            ])
+            ->addField('hasSituationPro', [
+                'label' => 'Situation Pro. ?',
+                'type' => 'boolean',
+                'format' => 'boolean',
+            ])
+            ->addField('ectsObligatoireSurEc', [
+                'label' => 'ECTS obligatoires sur EC ?',
+                'type' => 'boolean',
+                'format' => 'boolean',
+            ])
+            ->addField('modalitesAdmission', [
+                'label' => 'Modalités d’admission',
+                'format' => 'html',
+                'empty_text' => 'Non renseigné',
+            ])
+            ->addField('presentationFormation', [
+                'label' => 'Présentation des formations',
+                'format' => 'html',
+                'empty_text' => 'Non renseigné',
+            ])
+            ->addField('prerequisObligatoires', [
+                'label' => 'Prérequis obligatoires',
+                'format' => 'html',
+                'empty_text' => 'Non renseigné',
+            ])
+            ->addField('insertionProfessionnelle', [
+                'label' => 'Devenir des diplômés',
+                'format' => 'html',
+                'empty_text' => 'Non renseigné',
+            ])
+            ->build();
+
+
+        return $turboStream->streamOpenModalFromTemplates(
+            new TranslatableKey('type_diplome.show.title', [], 'modal'),
+            'Dans : type diplôme ' . $typeDiplome->getLibelle(),
+            '_ui/_modal_show_generic.html.twig',
+            [
+                'entity' => $typeDiplome,
+                'detail' => $detail,
+            ],
+            '_ui/_footer_cancel.html.twig',
+            []
+        );
     }
 
     #[Route('/{id}/edit', name: 'app_type_diplome_edit', methods: ['GET', 'POST'])]

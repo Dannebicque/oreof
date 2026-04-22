@@ -9,10 +9,14 @@
 
 namespace App\Controller\Config;
 
+use App\DTO\TranslatableKey;
 use App\Entity\Ville;
 use App\Form\VilleType;
 use App\Repository\VilleRepository;
+use App\Service\DataTableBuilder;
+use App\Service\DetailBuilder;
 use App\Utils\JsonRequest;
+use App\Utils\TurboStreamResponseFactory;
 use JsonException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,16 +27,41 @@ use Symfony\Component\Routing\Attribute\Route;
 class VilleController extends AbstractController
 {
     #[Route('/', name: 'app_ville_index', methods: ['GET'])]
-    public function index(): Response
+    public function index(
+        DataTableBuilder $builder
+    ): Response
     {
-        return $this->render('config/ville/index.html.twig');
-    }
+        $table = $builder
+            ->setEntity(Ville::class)
+            ->setPerPage(20)
+            ->setDefaultSort('libelle')
 
-    #[Route('/liste', name: 'app_ville_liste', methods: ['GET'])]
-    public function liste(VilleRepository $villeRepository): Response
-    {
-        return $this->render('config/ville/_liste.html.twig', [
-            'villes' => $villeRepository->findAll(),
+            // Colonne simple avec tri et recherche
+            ->addColumn('libelle', [
+                'label' => 'Libellé de la ville',
+                'sortable' => true,
+                'filterable' => true,
+            ])
+            ->addColumn('codeApogee', [
+                'label' => 'Code Apogée',
+                'sortable' => true,
+                'filterable' => true,
+            ])
+            ->addShowAction('app_ville_show', [
+                'modal' => true,
+                'modal_size' => 'lg',
+                'modal_title' => 'Voir une ville',
+            ])
+            ->addEditAction('app_ville_edit', [
+                'modal' => true,
+                'modal_size' => 'lg',
+                'modal_title' => 'Modifier une ville',
+            ])
+            ->addDuplicateAction('app_ville_duplicate')
+            ->addDeleteAction('app_ville_delete')
+            ->build();
+        return $this->render('config/ville/index.html.twig', [
+            'table' => $table,
         ]);
     }
 
@@ -57,11 +86,38 @@ class VilleController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_ville_show', methods: ['GET'])]
-    public function show(Ville $ville): Response
+    public function show(
+        TurboStreamResponseFactory $turboStream,
+        DetailBuilder              $builder,
+        Ville                      $ville
+    ): Response
     {
-        return $this->render('config/ville/show.html.twig', [
-            'ville' => $ville,
-        ]);
+        $detail = $builder
+            ->setEntity(Ville::class)
+            ->addField('libelle', ['label' => 'Libellé'])
+            ->addField('codeApogee', ['label' => 'Code Apogée', 'empty_text' => 'Non renseigné'])
+            ->addField('etablissement', [
+                'label' => 'Établissement',
+                'type' => 'entity',
+                'format' => 'entity_badge',
+                'entity_label' => 'libelle',
+                'badge_class' => 'bg-info',
+                'null_label' => 'Non défini',
+                'null_badge_class' => 'bg-secondary',
+            ])
+            ->build();
+
+        return $turboStream->streamOpenModalFromTemplates(
+            new TranslatableKey('ville.show.title', [], 'modal'),
+            'Ville : ' . $ville->getLibelle(),
+            '_ui/_modal_show_generic.html.twig',
+            [
+                'entity' => $ville,
+                'detail' => $detail,
+            ],
+            '_ui/_footer_cancel.html.twig',
+            []
+        );
     }
 
     #[Route('/{id}/edit', name: 'app_ville_edit', methods: ['GET', 'POST'])]

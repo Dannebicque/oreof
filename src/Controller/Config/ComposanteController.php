@@ -10,10 +10,15 @@
 namespace App\Controller\Config;
 
 use App\Classes\AddUser;
+use App\DTO\TranslatableKey;
 use App\Entity\Composante;
+use App\Entity\User;
 use App\Form\ComposanteType;
 use App\Repository\ComposanteRepository;
+use App\Service\DataTableBuilder;
+use App\Service\DetailBuilder;
 use App\Utils\JsonRequest;
+use App\Utils\TurboStreamResponseFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,16 +28,64 @@ use Symfony\Component\Routing\Attribute\Route;
 class ComposanteController extends AbstractController
 {
     #[Route('/', name: 'app_composante_index', methods: ['GET'])]
-    public function index(): Response
+    public function index(DataTableBuilder $builder
+    ): Response
     {
-        return $this->render('config/composante/index.html.twig');
-    }
+        $table = $builder
+            ->setEntity(Composante::class)
+            ->setPerPage(20)
+            ->setDefaultSort('libelle')
 
-    #[Route('/liste', name: 'app_composante_liste', methods: ['GET'])]
-    public function liste(ComposanteRepository $composanteRepository): Response
-    {
-        return $this->render('config/composante/_liste.html.twig', [
-            'composantes' => $composanteRepository->findAll(),
+            // Colonne simple avec tri et recherche
+            ->addColumn('libelle', [
+                'label' => 'Nom de la composante',
+                'sortable' => true,
+                'filterable' => true,
+            ])
+            ->addColumn('sigle', [
+                'label' => 'Sigle',
+                'sortable' => true,
+                'filterable' => true,
+            ])
+            ->addColumn('codeComposante', [
+                'label' => 'Code compo.',
+                'sortable' => true,
+                'filterable' => true,
+            ])
+            ->addColumn('codeApogee', [
+                'label' => 'Code CIP (Apogée)',
+                'sortable' => true,
+                'filterable' => true,
+            ])
+            ->addColumn('directeur', [
+                'label' => 'Directeur',
+                'sortable' => true,
+                'filterable' => true,
+                'type' => 'entity',
+                'entity' => User::class,
+            ])
+            ->addColumn('responsableDpe', [
+                'label' => 'Responsable DPE',
+                'sortable' => true,
+                'filterable' => true,
+                'type' => 'entity',
+                'entity' => User::class,
+            ])
+            ->addShowAction('app_composante_show', [
+                'modal' => true,
+                'modal_size' => 'lg',
+                'modal_title' => 'Voir une composante',
+            ])
+            ->addEditAction('app_composante_edit', [
+                'modal' => true,
+                'modal_size' => 'lg',
+                'modal_title' => 'Modifier une composante',
+            ])
+//            ->addDuplicateAction('app_composante_duplicate')
+            ->addDeleteAction('app_composante_delete')
+            ->build();
+        return $this->render('config/composante/index.html.twig', [
+            'table' => $table,
         ]);
     }
 
@@ -80,11 +133,58 @@ class ComposanteController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_composante_show', methods: ['GET'])]
-    public function show(Composante $composante): Response
+    public function show(
+        TurboStreamResponseFactory $turboStream,
+        DetailBuilder              $builder,
+        Composante                 $composante
+    ): Response
     {
-        return $this->render('config/composante/show.html.twig', [
-            'composante' => $composante,
-        ]);
+        $detail = $builder
+            ->setEntity(Composante::class)
+            ->addField('libelle', ['label' => 'Nom de la composante'])
+            ->addField('sigle', ['label' => 'Sigle', 'empty_text' => 'Non renseigné'])
+            ->addField('codeComposante', ['label' => 'Code composante', 'empty_text' => 'Non renseigné'])
+            ->addField('codeApogee', ['label' => 'Code CIP (Apogée)', 'empty_text' => 'Non renseigné'])
+            ->addField('directeur', [
+                'label' => 'Directeur',
+                'type' => 'entity',
+                'format' => 'entity_badge',
+                'entity_label' => 'display',
+                'badge_class' => 'bg-info',
+                'null_label' => 'Non défini',
+                'null_badge_class' => 'bg-secondary',
+            ])
+            ->addField('responsableDpe', [
+                'label' => 'Responsable DPE',
+                'type' => 'entity',
+                'format' => 'entity_badge',
+                'entity_label' => 'display',
+                'badge_class' => 'bg-info',
+                'null_label' => 'Non défini',
+                'null_badge_class' => 'bg-secondary',
+            ])
+            ->addField('adresse.display', [
+                'label' => 'Adresse',
+                'format' => 'html',
+                'empty_text' => 'Non définie',
+            ])
+            ->addField('telStandard', ['label' => 'Téléphone standard', 'empty_text' => 'Non renseigné'])
+            ->addField('telComplementaire', ['label' => 'Téléphone complémentaire', 'empty_text' => 'Non renseigné'])
+            ->addField('mailContact', ['label' => 'Email de contact', 'empty_text' => 'Non renseigné'])
+            ->addField('urlSite', ['label' => 'Site web', 'empty_text' => 'Non renseigné'])
+            ->build();
+
+        return $turboStream->streamOpenModalFromTemplates(
+            new TranslatableKey('composante.show.title', [], 'modal'),
+            'Composante : ' . $composante->getLibelle(),
+            '_ui/_modal_show_generic.html.twig',
+            [
+                'entity' => $composante,
+                'detail' => $detail,
+            ],
+            '_ui/_footer_cancel.html.twig',
+            []
+        );
     }
 
     #[Route('/{id}/edit', name: 'app_composante_edit', methods: ['GET', 'POST'])]

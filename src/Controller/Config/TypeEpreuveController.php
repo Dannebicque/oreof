@@ -9,10 +9,15 @@
 
 namespace App\Controller\Config;
 
+use App\DTO\TranslatableKey;
+use App\Entity\TypeDiplome;
 use App\Entity\TypeEpreuve;
 use App\Form\TypeEpreuveType;
 use App\Repository\TypeEpreuveRepository;
+use App\Service\DataTableBuilder;
+use App\Service\DetailBuilder;
 use App\Utils\JsonRequest;
+use App\Utils\TurboStreamResponseFactory;
 use JsonException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,25 +28,71 @@ use Symfony\Component\Routing\Attribute\Route;
 class TypeEpreuveController extends AbstractController
 {
     #[Route('/', name: 'app_type_epreuve_index', methods: ['GET'])]
-    public function index(): Response
+    public function index(
+        DataTableBuilder $builder
+    ): Response
     {
-        return $this->render('config/type_epreuve/index.html.twig');
-    }
+        $table = $builder
+            ->setEntity(TypeEpreuve::class)
+            ->setPerPage(20)
+            ->setDefaultSort('libelle')
 
-    #[Route('/liste', name: 'app_type_epreuve_liste', methods: ['GET'])]
-    public function liste(
-        Request $request,
-        TypeEpreuveRepository $typeEpreuveRepository): Response
-    {
-        $sort = $request->query->get('sort') ?? 'libelle';
-        $direction = $request->query->get('direction') ?? 'asc';
-        $q = $request->query->get('q') ?? '';
+            // Colonne simple avec tri et recherche
+            ->addColumn('libelle', [
+                'label' => 'Libellé du type d\'épreuve',
+                'sortable' => true,
+                'filterable' => true,
+            ])
+            ->addColumn('sigle', [
+                'label' => 'Code',
+                'sortable' => true,
+                'filterable' => true,
+            ])
+            ->addColumn('typeDiplomes', [
+                'label' => 'Type(s) de diplôme',
+                'filterable' => true,
+                'type' => 'collection',
+                'format' => 'badges',
+                'collection_property' => 'libelle',
+                'badge_class' => 'bg-primary',
+                'entity' => TypeDiplome::class,
+                'entity_label' => 'libelle',
+                'searchable' => false,
+            ])
+            ->addColumn('hasDuree', [
+                'label' => 'Avec durée ?',
+                'sortable' => true,
+                'filterable' => true,
+                'type' => 'boolean',
+                'format' => 'boolean',
+            ])
+            ->addColumn('hasJustification', [
+                'label' => 'Avec justification ?',
+                'sortable' => true,
+                'filterable' => true,
+                'type' => 'boolean',
+                'format' => 'boolean',
+            ])
+            ->addShowAction('app_type_epreuve_show', [
+                'modal' => true,
+                'modal_size' => 'lg',
+                'modal_title' => 'Voir un type d\'épreuve',
+            ])
+            ->addEditAction('app_type_epreuve_edit', [
+                'modal' => true,
+                'modal_size' => 'lg',
+                'modal_title' => 'Modifier un type d\épreuve',
+            ])
+            ->addDuplicateAction('app_type_epreuve_duplicate')
+            ->addDeleteAction('app_type_epreuve_delete')
+            ->build();
 
-        return $this->render('config/type_epreuve/_liste.html.twig', [
-            'type_epreuves' => $typeEpreuveRepository->findBySearchAndSort($sort, $direction, $q),
-            'sort' => $sort,
-            'direction' => $direction,
-        ]);
+        return $this->render(
+            'config/type_epreuve/index.html.twig',
+            [
+                'table' => $table,
+            ]
+        );
     }
 
     #[Route('/new', name: 'app_type_epreuve_new', methods: ['GET', 'POST'])]
@@ -69,11 +120,47 @@ class TypeEpreuveController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_type_epreuve_show', methods: ['GET'])]
-    public function show(TypeEpreuve $typeEpreuve): Response
+    #[Route('/{id}', name: 'app_type_epreuve_show', methods: ['GET'])]
+    public function show(
+        TurboStreamResponseFactory $turboStream,
+        DetailBuilder              $builder,
+        TypeEpreuve                $typeEpreuve
+    ): Response
     {
-        return $this->render('config/type_epreuve/show.html.twig', [
-            'type_epreuve' => $typeEpreuve,
-        ]);
+        $detail = $builder
+            ->setEntity(TypeEpreuve::class)
+            ->addField('libelle', ['label' => 'Libellé du type d\'épreuve'])
+            ->addField('sigle', [
+                'label' => 'Sigle',
+                'empty_text' => 'Non renseigné',
+            ])
+            ->addField('typeDiplomes', [
+                'label' => 'Type(s) de diplôme',
+                'type' => 'collection',
+                'format' => 'badges',
+                'collection_property' => 'libelle',
+                'badge_class' => 'bg-primary',
+            ])
+            ->addField('hasDuree', [
+                'label' => 'Durée ?',
+                'type' => 'boolean',
+                'format' => 'boolean',
+            ])
+            ->addField('hasJustification', [
+                'label' => 'Justification ?',
+                'type' => 'boolean',
+                'format' => 'boolean',
+            ])
+            ->build();
+
+        return $turboStream->streamOpenModalFromTemplates(
+            new TranslatableKey('type_epreuve.show.title', [], 'modal'),
+            'Type d\'épreuve : ' . $typeEpreuve->getLibelle(),
+            '_ui/_modal_show_generic.html.twig',
+            ['entity' => $typeEpreuve, 'detail' => $detail],
+            '_ui/_footer_cancel.html.twig',
+            []
+        );
     }
 
     #[Route('/{id}/edit', name: 'app_type_epreuve_edit', methods: ['GET', 'POST'])]

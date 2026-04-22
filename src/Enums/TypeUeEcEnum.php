@@ -9,12 +9,13 @@
 
 namespace App\Enums;
 
-enum TypeUeEcEnum: string
+enum TypeUeEcEnum: string implements BadgeEnumInterface
 {
     case STAGE = 'stage';
     case PROJET = 'projet';
     case NORMAL = 'normal';
 
+    /** @deprecated */
     public function libelle(): string
     {
         return match ($this) {
@@ -24,6 +25,7 @@ enum TypeUeEcEnum: string
         };
     }
 
+    /** @deprecated */
     public function getColor(): string
     {
         return match ($this) {
@@ -39,6 +41,24 @@ enum TypeUeEcEnum: string
             self::STAGE => 'Stage',
             self::PROJET => 'Projet',
             self::NORMAL => 'Normal',
+        };
+    }
+
+    public function getLibelle(): string
+    {
+        return match ($this) {
+            self::STAGE => 'Stage',
+            self::PROJET => 'Projet',
+            self::NORMAL => 'Normal',
+        };
+    }
+
+    public function getBadge(): string
+    {
+        return match ($this) {
+            self::STAGE => 'primary',
+            self::PROJET => 'info',
+            self::NORMAL => 'success',
         };
     }
 }

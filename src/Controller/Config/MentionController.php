@@ -10,14 +10,17 @@
 namespace App\Controller\Config;
 
 use App\DTO\MentionDto;
+use App\DTO\TranslatableKey;
 use App\Entity\Mention;
 use App\Entity\TypeDiplome;
 use App\Form\MentionDtoType;
 use App\Repository\DomaineRepository;
 use App\Repository\TypeDiplomeRepository;
 use App\Service\DataTableBuilder;
+use App\Service\DetailBuilder;
 use App\Service\MentionService;
 use App\Utils\JsonRequest;
+use App\Utils\TurboStreamResponseFactory;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -28,7 +31,6 @@ use Symfony\Component\Routing\Attribute\Route;
 
 /**
  * Contrôleur pour la gestion des mentions.
- * Utilise une architecture en couches avec DTO et service pour une meilleure séparation des responsabilités.
  */
 #[Route('/administration/mention')]
 class MentionController extends AbstractController
@@ -52,7 +54,7 @@ class MentionController extends AbstractController
         $table = $builder
             ->setEntity(Mention::class)
             ->setPerPage(20)
-            ->setDefaultSort('libelle', 'asc')
+            ->setDefaultSort('libelle')
 
             // Colonne simple avec tri et recherche
             ->addColumn('libelle', [
@@ -112,7 +114,8 @@ class MentionController extends AbstractController
             ->addDeleteAction('app_mention_delete')
             ->build();
 
-        return $this->render('config/mention/index.html.twig',
+        return $this->render(
+            'config/mention/index.html.twig',
             ['table' => $table]
         );
     }
@@ -145,37 +148,6 @@ class MentionController extends AbstractController
 
         return $this->redirectToRoute('app_mention_index');
     }
-
-    /**
-     * Affiche la liste des mentions avec possibilité de filtrage et tri.
-     */
-//    #[Route('/liste', name: 'app_mention_liste', methods: ['GET'])]
-//    public function liste(Request $request): Response
-//    {
-//        $sort = $request->query->get('sort') ?? 'type_diplome';
-//        $direction = $request->query->get('direction') ?? 'asc';
-//        $q = $request->query->get('q') ?? '';
-//        $page = $request->query->getInt('page', 1);
-//        $limit = $request->query->getInt('limit', 20);
-//        // Calcul de l'offset en tenant compte que la page commence à 1
-//        $offset = ($page) * $limit;
-//
-//        // Récupération des mentions pour la page courante
-//        $mentions = $this->mentionService->getAllMentions($q, $sort, $direction, $limit, $offset);
-//
-//        // Comptage du nombre total de mentions pour la pagination
-//        $total = $this->mentionService->countAllMentions($q);
-//
-//        return $this->render('config/mention/_liste.html.twig', [
-//            'mentions' => $mentions,
-//            'sort' => $sort,
-//            'direction' => $direction,
-//            'query' => $q,
-//            'page' => $page,
-//            'limit' => $limit,
-//            'total' => $total,
-//        ]);
-//    }
 
     /**
      * Affiche le formulaire de création d'une nouvelle mention.
@@ -212,13 +184,54 @@ class MentionController extends AbstractController
      * Affiche les détails d'une mention.
      */
     #[Route('/{id}', name: 'app_mention_show', methods: ['GET'])]
-    public function show(int $id): Response
+    public function show(
+        TurboStreamResponseFactory $turboStream,
+        DetailBuilder              $builder,
+        int                        $id): Response
     {
         try {
             $mention = $this->mentionService->getMentionById($id);
-            return $this->render('config/mention/show.html.twig', [
-                'mention' => $mention,
-            ]);
+
+            $detail = $builder->setEntity(Mention::class)
+                ->addField('libelle', [
+                    'label' => 'Libellé de la mention',
+                ])
+                ->addField('sigle', [
+                    'label' => 'Sigle',
+                ])
+                ->addField('codeApogee', [
+                    'label' => 'Code Apogée',
+                    'empty_text' => 'Non renseigné',
+                ])
+                ->addField('typeDiplome.libelle', [
+                    'label' => 'Type de diplôme',
+                ])
+                ->addField('domaines', [
+                    'label' => 'Domaine(s)',
+                    'type' => 'collection',
+                    'format' => 'badges',
+                    'collection_property' => 'libelle',
+                    'badge_class' => 'bg-primary',
+                ])
+                ->addField('utilise', [
+                    'label' => 'Utilisé ?',
+                    'type' => 'boolean',
+                    'format' => 'boolean',
+                ])
+                ->build();
+
+
+            return $turboStream->streamOpenModalFromTemplates(
+                new TranslatableKey('mention.show.title', [], 'modal'),
+                'Dans : mention ' . $mention->getLibelle(),
+                '_ui/_modal_show_generic.html.twig',
+                [
+                    'entity' => $mention,
+                    'detail' => $detail,
+                ],
+                '_ui/_footer_cancel.html.twig',
+                []
+            );
         } catch (NotFoundHttpException $e) {
             $this->addFlash('error', $e->getMessage());
             return $this->redirectToRoute('app_mention_index');
@@ -234,7 +247,7 @@ class MentionController extends AbstractController
         try {
             $mention = $this->mentionService->getMentionById($id);
             if (!$mention) {
-                throw new NotFoundHttpException(sprintf('Mention avec ID %d non trouvée', $id));
+                throw $this->createNotFoundException(sprintf('Mention avec ID %d non trouvée', $id));
             }
 
             $mentionDto = MentionDto::createFromEntity($mention);
