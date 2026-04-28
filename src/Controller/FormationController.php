@@ -35,6 +35,7 @@ use App\Repository\TypeDiplomeRepository;
 use App\Repository\UserRepository;
 use App\Service\VersioningFormation;
 use App\Service\VersioningParcours;
+use App\Service\SecureUploadService;
 use App\Utils\Access;
 use App\Utils\JsonRequest;
 use DateTime;
@@ -53,8 +54,10 @@ use Symfony\Component\Workflow\WorkflowInterface;
 #[Route('/formation')]
 class FormationController extends BaseController
 {
-    public function __construct(private readonly EntityManagerInterface $entityManager)
-    {
+    public function __construct(
+        private readonly EntityManagerInterface $entityManager,
+        private readonly SecureUploadService $secureUploadService
+    ){
     }
 
     #[Route('/', name: 'app_formation_index', methods: ['GET'])]
@@ -246,6 +249,18 @@ class FormationController extends BaseController
                 $formation->setMention($mention);
             }
 
+            $logoFiles = $form->get('logo')->getData();
+            if ($logoFiles) {
+                foreach ($logoFiles as $logoFile) {
+                    try {
+                        $uploaded = $this->secureUploadService->upload($logoFile, 'logos');
+                        $formation->addLogo($uploaded->getStoredFilename());
+                    } catch (FileUploadException $e) {
+                        $this->addFlash('error', 'Erreur upload logo : ' . $e->getMessage());
+                    }
+                }
+            }
+
             $formation->addComposantesInscription($formation->getComposantePorteuse());
             $formation->setHasParcours(true);
             $formation->setEtatReconduction(TypeModificationDpeEnum::MODIFICATION_PARCOURS);
@@ -285,7 +300,6 @@ class FormationController extends BaseController
                 $ucCo->setProfil($profil);
                 $this->entityManager->persist($ucCo);
             }
-
 
             $this->entityManager->flush();
             $dpeParcoursWorkflow->apply($dpeParcours, 'initialiser');
@@ -341,6 +355,18 @@ class FormationController extends BaseController
                 // ajouter le nouveau resp, ajouter centre et droits et envoyer mail
                 $event = new AddCentreFormationEvent($formation, $changeSet['responsableMention'][1], $profil, $this->getCampagneCollecte());
                 $eventDispatcher->dispatch($event, AddCentreFormationEvent::ADD_CENTRE_FORMATION);
+            }
+
+            $logoFiles = $form->get('logo')->getData();
+            if ($logoFiles) {
+                foreach ($logoFiles as $logoFile) {
+                    try {
+                        $uploaded = $this->secureUploadService->upload($logoFile, 'logos');
+                        $formation->addLogo($uploaded->getStoredFilename());
+                    } catch (FileUploadException $e) {
+                        $this->addFlash('error', 'Erreur upload logo : ' . $e->getMessage());
+                    }
+                }
             }
 
             $formationRepository->save($formation, true);
