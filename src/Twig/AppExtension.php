@@ -20,6 +20,7 @@ use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
 
+
 /**
  * Class AppExtension.
  */
@@ -133,6 +134,7 @@ class AppExtension extends AbstractExtension
         return [
             new TwigFunction('displaySort', $this->displaySort(...), ['is_safe' => ['html']]),
             new TwigFunction('getDirection', $this->getDirection(...), ['is_safe' => ['html']]),
+            new TwigFunction('get_page_help', [$this, 'getPageHelp']),
 
         ];
     }
@@ -257,5 +259,10 @@ class AppExtension extends AbstractExtension
     public function telFormat(?string $number): ?string
     {
         return Tools::telFormat($number);
+    }
+
+    public function getPageHelp(string $route)
+    {
+        return $this->helpRepository->findOneBy(['routeSlug' => $route, 'isActive' => true]);
     }
 }

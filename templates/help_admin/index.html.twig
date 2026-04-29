@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des Aides{% endblock %}
+
+{% block body %}
+    <div class="container-fluid py-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1><i class="fal fa-life-ring"></i> Gestion des Aides</h1>
+            <a href="{{ path('app_help_new') }}" class="btn btn-primary"><i class="fal fa-plus"></i> Ajouter une aide</a>
+        </div>
+
+        <table class="table table-striped table-hover bg-white shadow-sm rounded">
+            <thead class="table-dark">
+            <tr>
+                <th>Statut</th>
+                <th>Page (Route)</th>
+                <th>Titre</th>
+                <th>Vidéo</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for help in helps %}
+                <tr>
+                    <td>
+                        <span class="badge bg-{{ help.isActive ? 'success' : 'danger' }}">{{ help.isActive ? 'Actif' : 'Inactif' }}</span>
+                    </td>
+                    <td><code>{{ help.routeSlug }}</code></td>
+                    <td>{{ help.title }}</td>
+                    <td>{{ help.videoUrl ? '<i class="fal fa-video text-success"></i>' : '-' }}</td>
+                    <td>
+                        <a href="{{ path('app_help_edit', {'id': help.id}) }}" class="btn btn-sm btn-info text-white"><i class="fal fa-edit"></i></a>
+                        <form method="post" action="{{ path('app_help_delete', {'id': help.id}) }}" class="d-inline" onsubmit="return confirm('Vraiment supprimer cette aide ?');">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ help.id) }}">
+                            <button class="btn btn-sm btn-danger"><i class="fal fa-trash"></i></button>
+                        </form>
+                    </td>
+                </tr>
+            {% else %}
+                <tr><td colspan="5" class="text-center text-muted">Aucune aide configurée.</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

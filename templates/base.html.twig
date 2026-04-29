@@ -500,6 +500,11 @@
                                                 <span class="label">{{ 'menu.config.config_emails'|trans({}, 'menu') }}</span>
                                             </a>
                                         </li>
+                                        <li>
+                                            <a href="{{ path('app_help_index') }}">
+                                                <span class="label">{{ 'menu.config.help'|trans({}, 'menu') }}</span>
+                                            </a>
+                                        </li>
                                     </ul>
                                 </li>
                             </ul>
@@ -775,5 +780,40 @@
 </div>
 
 {% include '_ui/modal_wrapper.html.twig' with { open: false } %}
+
+<!-- Help Offcanvas Start -->
+
+{% set current_help = get_page_help(app.request.attributes.get('_route', '')) %}
+
+{% if current_help %}
+    <button class="btn btn-primary shadow rounded-circle position-fixed d-flex align-items-center justify-content-center"
+            style="bottom: 30px; right: 30px; z-index: 1050; width: 60px; height: 60px;"
+            type="button"
+            data-bs-toggle="offcanvas"
+            data-bs-target="#helpOffcanvas">
+        <i class="fal fa-question fa-2x"></i>
+    </button>
+
+    <div class="offcanvas offcanvas-end shadow-lg" tabindex="-1" id="helpOffcanvas" style="width: 550px;">
+        <div class="offcanvas-header bg-primary text-white">
+            <h4 class="offcanvas-title"><i class="fal fa-book-reader"></i> {{ current_help.title }}</h4>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
+        </div>
+        <div class="offcanvas-body">
+            <div class="markdown-body text-break mb-4">
+                {{ current_help.content|markdown_to_html }}
+            </div>
+
+            {% if current_help.videoUrl %}
+                <hr>
+                <h6 class="text-muted"><i class="fal fa-video"></i> Vidéo explicative :</h6>
+                <div class="ratio ratio-16x9 mt-2 shadow-sm rounded">
+                    <iframe src="{{ current_help.videoUrl|replace({'watch?v=': 'embed/', 'youtu.be/': 'youtube.com/embed/'}) }}" allowfullscreen></iframe>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endif %}
+
 </body>
 </html>

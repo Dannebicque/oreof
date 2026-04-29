@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ help.id ? 'Modifier' : 'Créer' }} une aide{% endblock %}
+
+{% block body %}
+    <div class="container-fluid py-4">
+        <h1 class="mb-4"><i class="fal fa-book-open"></i> {{ help.id ? 'Modifier l\'aide contextuelle' : 'Nouvelle aide contextuelle' }}</h1>
+
+        <div class="card shadow-sm">
+            <div class="card-body">
+                {{ component('help_editor', { initialFormData: help }) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

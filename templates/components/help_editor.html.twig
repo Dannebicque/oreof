@@ -1,0 +1,48 @@
+<div {{ attributes }}>
+    <div class="row">
+        <div class="col-md-6 border-end pe-4">
+            {{ form_start(form) }}
+            {{ form_row(form.title, { attr: { 'data-model': '*' } }) }}
+            {{ form_row(form.routeSlug, { attr: { 'data-model': '*' } }) }}
+
+            <div class="mb-3">
+                {{ form_label(form.content) }}
+                {{ form_widget(form.content, { attr: { 'data-model': '*' } }) }}
+                <small class="text-muted d-block mt-2">
+                    <i class="fab fa-markdown"></i> Markdown : <code>**Gras**</code>, <code>*Italique*</code>, <code># Titre</code>, <code>[Lien](url)</code>, <code>![Image](url)</code>
+                </small>
+            </div>
+
+            {{ form_row(form.videoUrl, { attr: { 'data-model': '*' } }) }}
+            {{ form_row(form.isActive) }}
+
+            <button type="submit" class="btn btn-success mt-3">
+                <i class="fal fa-save"></i> Enregistrer
+            </button>
+            <a href="{{ path('app_help_index') }}" class="btn btn-secondary mt-3">Retour</a>
+            {{ form_end(form) }}
+        </div>
+
+        <div class="col-md-6 ps-4">
+            <h5 class="text-info mb-4"><i class="fal fa-eye"></i> Aperçu utilisateur</h5>
+
+            <div class="bg-light p-4 rounded shadow-sm">
+                <h3 class="mb-3">{{ form.title.vars.value ?: 'Titre de l\'aide...' }}</h3>
+
+                <div class="markdown-body text-break">
+                    {% if form.content.vars.value %}
+                        {{ form.content.vars.value|markdown_to_html }}
+                    {% else %}
+                        <p class="text-muted fst-italic">Commencez à rédiger pour voir l'aperçu...</p>
+                    {% endif %}
+                </div>
+
+                {% if form.videoUrl.vars.value %}
+                    <div class="ratio ratio-16x9 mt-4 shadow-sm border">
+                        <iframe src="{{ form.videoUrl.vars.value|replace({'watch?v=': 'embed/', 'youtu.be/': 'youtube.com/embed/'}) }}" allowfullscreen></iframe>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
