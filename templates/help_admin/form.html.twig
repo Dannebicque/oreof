@@ -10,8 +10,74 @@
 
         <div class="card shadow-sm border-0">
             <div class="card-body">
+                {# Appel du composant Live #}
                 {{ component('help_editor', { initialFormData: help }) }}
             </div>
         </div>
     </div>
+
+    <script>
+        function getEditor() {
+            return document.querySelector('textarea[name="help[content]"]');
+        }
+
+        function insertMarkdown(prefix, suffix) {
+            const textarea = getEditor();
+            if (!textarea) return;
+
+            const start = textarea.selectionStart;
+            const end = textarea.selectionEnd;
+            const selectedText = textarea.value.substring(start, end);
+
+            let newText;
+            let newCursorPos;
+
+            if (selectedText.length > 0) {
+                newText = prefix + selectedText + suffix;
+                newCursorPos = start + newText.length;
+            } else {
+                newText = prefix + suffix;
+                newCursorPos = start + prefix.length;
+            }
+
+            updateTextarea(textarea, start, end, newText, newCursorPos);
+        }
+
+        function insertLink() {
+            const textarea = getEditor();
+            if (!textarea) return;
+
+            const url = prompt("Collez l'URL du lien (ex: https://...) :");
+            if (!url) return;
+
+            const start = textarea.selectionStart;
+            const end = textarea.selectionEnd;
+            const selectedText = textarea.value.substring(start, end) || "Texte du lien";
+
+            const newText = `[${selectedText}](${url})`;
+            updateTextarea(textarea, start, end, newText, start + newText.length);
+        }
+
+        function insertImage() {
+            const textarea = getEditor();
+            if (!textarea) return;
+
+            const url = prompt("Collez l'URL de l'image (ex: https://.../image.png) :");
+            if (!url) return;
+
+            const start = textarea.selectionStart;
+            const end = textarea.selectionEnd;
+
+            const newText = `![Description de l'image](${url})`;
+            updateTextarea(textarea, start, end, newText, start + newText.length);
+        }
+
+        function updateTextarea(textarea, start, end, newText, newCursorPos) {
+            textarea.focus();
+            textarea.setRangeText(newText, start, end, 'end');
+            textarea.selectionStart = newCursorPos;
+            textarea.selectionEnd = newCursorPos;
+            textarea.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+    </script>
 {% endblock %}

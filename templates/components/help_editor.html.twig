@@ -10,10 +10,33 @@
 
             <div class="mb-4 mt-3">
                 {{ form_label(form.content) }}
-                {{ form_widget(form.content) }}
-                <small class="text-muted d-block mt-2">
-                    <i class="fab fa-markdown"></i> Markdown : <code>**Gras**</code>, <code>*Italique*</code>, <code># Titre</code>, <code>[Lien](url)</code>
-                </small>
+
+                <!-- Barre d'outils Markdown -->
+                <div class="bg-light border border-bottom-0 rounded-top p-2 d-flex gap-2">
+                    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="insertMarkdown('**', '**')" data-bs-toggle="tooltip" title="Gras">
+                        <i class="fal fa-bold"></i>
+                    </button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="insertMarkdown('*', '*')" data-bs-toggle="tooltip" title="Italique">
+                        <i class="fal fa-italic"></i>
+                    </button>
+                    <div class="vr mx-1"></div>
+                    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="insertMarkdown('### ', '')" data-bs-toggle="tooltip" title="Titre">
+                        <i class="fal fa-heading"></i>
+                    </button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="insertMarkdown('- ', '')" data-bs-toggle="tooltip" title="Liste à puces">
+                        <i class="fal fa-list-ul"></i>
+                    </button>
+                    <div class="vr mx-1"></div>
+                    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="insertLink()" data-bs-toggle="tooltip" title="Insérer un lien">
+                        <i class="fal fa-link"></i>
+                    </button>
+                    <button type="button" class="btn btn-sm btn-outline-primary" onclick="insertImage()" data-bs-toggle="tooltip" title="Insérer une image">
+                        <i class="fal fa-image"></i> Image
+                    </button>
+                </div>
+
+                <!-- Le champ textarea de Symfony -->
+                {{ form_widget(form.content, { attr: { 'class': 'form-control rounded-bottom-only' } }) }}
             </div>
 
             {{ form_row(form.videoUrl) }}
