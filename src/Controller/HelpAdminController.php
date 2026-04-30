@@ -32,6 +32,12 @@ class HelpAdminController extends AbstractController
     public function new(Request $request, EntityManagerInterface $em): Response
     {
         $help = new Help();
+
+        $route = $request->query->get('route');
+        if ($route) {
+            $help->setRouteSlug($route);
+        }
+
         $form = $this->createForm(HelpType::class, $help);
         $form->handleRequest($request);
 
@@ -44,7 +50,7 @@ class HelpAdminController extends AbstractController
 
         return $this->render('help_admin/form.html.twig', [
             'help' => $help,
-            'form' => $form->createView(), // AJOUT TRÈS IMPORTANT ICI
+            'form' => $form->createView(),
         ]);
     }
 
