@@ -6,7 +6,12 @@
     <div class="container-fluid py-4">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h1><i class="fal fa-life-ring"></i> Gestion des Aides contextuelles</h1>
-            <a href="{{ path('app_help_new') }}" class="btn btn-primary"><i class="fal fa-plus"></i> Ajouter une aide</a>
+
+            <a href="{{ path('app_help_new') }}"
+               class="btn btn-sm btn-outline-primary"
+               data-bs-toggle="tooltip" data-bs-placement="bottom" title="Créer une nouvelle aide pour une page">
+                <i class="fal fa-plus"></i> <span>Ajouter une aide</span>
+            </a>
         </div>
 
         <div class="card shadow-sm border-0">
@@ -31,15 +36,27 @@
                                     <span class="badge bg-danger">Inactif</span>
                                 {% endif %}
                             </td>
-                            <td><code>{{ help.routeSlug }}</code></td>
-                            <td><strong>{{ help.title }}</strong></td>
-                            <td>{{ help.videoUrl ? '<i class="fal fa-video text-success"></i> Oui' : '-' }}</td>
+                            <td class="align-middle"><code>{{ help.routeSlug }}</code></td>
+                            <td class="align-middle"><strong>{{ help.title }}</strong></td>
+                            <td class="align-middle">{{ help.videoUrl ? '<i class="fal fa-video text-success"></i> Oui' : '-' }}</td>
                             <td class="text-end pe-4">
-                                <a href="{{ path('app_help_edit', {'id': help.id}) }}" class="btn btn-sm btn-info text-white" title="Modifier"><i class="fal fa-edit"></i></a>
-                                <form method="post" action="{{ path('app_help_delete', {'id': help.id}) }}" class="d-inline" onsubmit="return confirm('Vraiment supprimer cette aide ?');">
-                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ help.id) }}">
-                                    <button class="btn btn-sm btn-danger" title="Supprimer"><i class="fal fa-trash"></i></button>
-                                </form>
+                                {# Les boutons d'action avec le style ORéOF #}
+                                <div class="d-flex justify-content-end gap-2">
+                                    <a href="{{ path('app_help_edit', {'id': help.id}) }}"
+                                       class="btn btn-sm btn-outline-info"
+                                       data-bs-toggle="tooltip" data-bs-placement="bottom" title="Modifier le contenu de cette aide">
+                                        <i class="fal fa-edit"></i>
+                                    </a>
+
+                                    <form method="post" action="{{ path('app_help_delete', {'id': help.id}) }}" onsubmit="return confirm('Vraiment supprimer cette aide ?');">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ help.id) }}">
+                                        <button type="submit"
+                                                class="btn btn-sm btn-outline-danger"
+                                                data-bs-toggle="tooltip" data-bs-placement="bottom" title="Supprimer définitivement cette aide">
+                                            <i class="fal fa-trash-alt"></i>
+                                        </button>
+                                    </form>
+                                </div>
                             </td>
                         </tr>
                     {% else %}
