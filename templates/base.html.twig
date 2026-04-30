@@ -632,7 +632,8 @@
         <div class="footer-content">
             <div class="container">
                 <div class="row">
-                    <div class="col-12 col-sm-6">
+                    <!-- Passage en col-12 pour que tout tienne sur la même ligne -->
+                    <div class="col-12">
 
                         <ul class="breadcrumb pt-0 pe-0 mb-0">
                             <li class="breadcrumb-item mb-0 text-medium">
@@ -649,6 +650,17 @@
                                 <a href="{{ path('app_document') }}" target="_blank">
                                     <i class="fal fa-question-circle"></i> Aides & documents
                                 </a>
+                            </li>
+
+                            <li class="breadcrumb-item mb-0 text-medium">
+                                <a href="mailto:oreof@univ-reims.fr" target="_blank" class="btn-link"><i
+                                            class="text-primary icon-14
+                                fal fa-envelope"></i></a>
+                            </li>
+                            <li class="breadcrumb-item mb-0 text-medium">
+                                <a href="https://github.com/Dannebicque/oreof" target="_blank"
+                                   class="btn-link"><i class="text-primary icon-14
+                                fa-brands fa-github"></i></a>
                             </li>
                         </ul>
                     </div>
@@ -682,20 +694,6 @@
                         </div>
                     </div>
 
-                    <div class="col-sm-6 d-none d-sm-block">
-                        <ul class="breadcrumb pt-0 pe-0 mb-0 float-end">
-                            <li class="breadcrumb-item mb-0 text-medium">
-                                <a href="mailto:oreof@univ-reims.fr" target="_blank" class="btn-link"><i
-                                            class="text-primary icon-14
-                                    fal fa-envelope"></i></a>
-                            </li>
-                            <li class="breadcrumb-item mb-0 text-medium">
-                                <a href="https://github.com/Dannebicque/oreof" target="_blank"
-                                   class="btn-link"><i class="text-primary icon-14
-                                    fa-brands fa-github"></i></a>
-                            </li>
-                        </ul>
-                    </div>
                 </div>
             </div>
         </div>
@@ -786,28 +784,51 @@
 {% set current_help = get_page_help(current_route) %}
 
 <!-- Bouton flottant -->
-<div class="position-fixed" style="bottom: 2rem; right: 2rem; z-index: 1050;">
+<div id="help-fab-container" class="position-fixed" style="bottom: 2rem; right: 2rem; z-index: 1050;">
     <button class="btn btn-{{ current_help ? 'info' : 'secondary' }} shadow-lg rounded-circle d-flex align-items-center justify-content-center"
             style="width: 55px; height: 55px;"
             type="button"
             data-bs-toggle="offcanvas"
             data-bs-target="#helpOffcanvas"
             title="Aide de la page">
-        <i class="fal fa-life-ring fa-2x text-white"></i>
+        <i class="fal fa-question-circle fa-2x text-white"></i>
     </button>
 </div>
 
 <!-- Tiroir Latéral (Offcanvas) -->
 <div class="offcanvas offcanvas-end border-0 shadow" tabindex="-1" id="helpOffcanvas" style="width: 500px;">
 
-    <div class="offcanvas-header bg-{{ current_help ? 'info' : 'secondary' }} text-white">
-        <h5 class="offcanvas-title">
+    <!-- Header ajusté : Titre à gauche et Croix à droite -->
+    <div class="offcanvas-header bg-{{ current_help ? 'info' : 'secondary' }} text-white d-flex justify-content-between align-items-center">
+        <h5 class="offcanvas-title text-white mb-0">
             <i class="fal fa-info-circle"></i> {{ current_help ? current_help.title : 'Aide' }}
         </h5>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
     </div>
 
     <div class="offcanvas-body d-flex flex-column">
+
+        {# BOUTONS D'ADMINISTRATION ET SLUG (Placés en haut, en ligne) #}
+        {% if is_granted('ROLE_ADMIN') %}
+            <div class="d-flex flex-wrap align-items-center gap-2 mb-4 pb-3 border-bottom">
+                {% if current_help %}
+                    <a href="{{ path('app_help_edit', {'id': current_help.id}) }}" class="btn btn-sm btn-outline-info">
+                        <i class="fal fa-edit"></i> <span>Modifier</span>
+                    </a>
+                {% else %}
+                    <a href="{{ path('app_help_new', {'route': current_route}) }}" class="btn btn-sm btn-outline-success">
+                        <i class="fal fa-plus"></i> <span>Créer</span>
+                    </a>
+                {% endif %}
+
+                <a href="{{ path('app_help_index') }}" class="btn btn-sm btn-outline-warning">
+                    <i class="fal fa-list"></i> <span>Gérer</span>
+                </a>
+
+                {# Slug affiché à la suite des boutons (retrait de ms-auto) #}
+                <code class="bg-light text-dark px-2 py-1 rounded border shadow-sm" style="font-size: 0.8rem;">{{ current_route }}</code>
+            </div>
+        {% endif %}
 
         {# CONTENU DE L'AIDE POUR TOUS #}
         <div class="flex-grow-1">
@@ -825,43 +846,12 @@
                     </div>
                 {% endif %}
             {% else %}
-                <div class="alert alert-light text-center mt-4 border">
+                <div class="alert alert-light text-center mt-2 border">
                     <i class="fal fa-sad-tear fa-3x mb-3 text-muted"></i>
                     <p class="mb-0 text-muted">Aucune aide n'est actuellement disponible pour cette page.</p>
                 </div>
             {% endif %}
         </div>
-
-        {# PANNEAU D'ADMINISTRATION (Uniquement pour les Admins) #}
-        {% if is_granted('ROLE_ADMIN') %}
-            <div class="mt-4 p-3 bg-light rounded border border-warning shadow-sm">
-                <h6 class="text-warning text-uppercase fw-bold mb-3" style="font-size: 0.8rem;">
-                    <i class="fal fa-user-crown"></i> Mode Administrateur
-                </h6>
-
-                <p class="small text-muted mb-3">
-                    Slug de cette page : <br>
-                    <code class="user-select-all px-2 py-1 bg-white border rounded d-block mt-1">{{ current_route }}</code>
-                </p>
-
-                <div class="d-grid gap-2">
-                    {% if current_help %}
-                        <a href="{{ path('app_help_edit', {'id': current_help.id}) }}" class="btn btn-sm btn-outline-primary text-start">
-                            <i class="fal fa-edit fa-fw"></i> Modifier cette aide
-                        </a>
-                    {% else %}
-                        {# Le paramètre 'route' est envoyé au controller pour pré-remplir le champ #}
-                        <a href="{{ path('app_help_new', {'route': current_route}) }}" class="btn btn-sm btn-outline-success text-start">
-                            <i class="fal fa-plus fa-fw"></i> Créer l'aide pour cette page
-                        </a>
-                    {% endif %}
-
-                    <a href="{{ path('app_help_index') }}" class="btn btn-sm btn-outline-secondary text-start mt-2">
-                        <i class="fal fa-list fa-fw"></i> Gérer toutes les aides
-                    </a>
-                </div>
-            </div>
-        {% endif %}
 
     </div>
 </div>
