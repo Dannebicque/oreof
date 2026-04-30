@@ -1,5 +1,6 @@
 <div {{ attributes }}>
     <div class="row">
+        <!-- Zone d'édition (Formulaire) -->
         <div class="col-md-6 border-end pe-4">
             {{ form_start(form) }}
             {{ form_row(form.title, { attr: { 'data-model': '*' } }) }}
@@ -9,7 +10,7 @@
                 {{ form_label(form.content) }}
                 {{ form_widget(form.content, { attr: { 'data-model': '*' } }) }}
                 <small class="text-muted d-block mt-2">
-                    <i class="fab fa-markdown"></i> Markdown : <code>**Gras**</code>, <code>*Italique*</code>, <code># Titre</code>, <code>[Lien](url)</code>, <code>![Image](url)</code>
+                    <i class="fab fa-markdown"></i> Markdown : <code>**Gras**</code>, <code>*Italique*</code>, <code># Titre</code>, <code>[Lien](url)</code>
                 </small>
             </div>
 
@@ -23,6 +24,7 @@
             {{ form_end(form) }}
         </div>
 
+        <!-- Zone d'aperçu en direct -->
         <div class="col-md-6 ps-4">
             <h5 class="text-info mb-4"><i class="fal fa-eye"></i> Aperçu utilisateur</h5>
 
@@ -39,6 +41,7 @@
 
                 {% if form.videoUrl.vars.value %}
                     <div class="ratio ratio-16x9 mt-4 shadow-sm border">
+                        {# Gestion basique de l'URL pour l'embed Youtube/Vimeo #}
                         <iframe src="{{ form.videoUrl.vars.value|replace({'watch?v=': 'embed/', 'youtu.be/': 'youtube.com/embed/'}) }}" allowfullscreen></iframe>
                     </div>
                 {% endif %}

@@ -5,41 +5,51 @@
 {% block body %}
     <div class="container-fluid py-4">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1><i class="fal fa-life-ring"></i> Gestion des Aides</h1>
+            <h1><i class="fal fa-life-ring"></i> Gestion des Aides contextuelles</h1>
             <a href="{{ path('app_help_new') }}" class="btn btn-primary"><i class="fal fa-plus"></i> Ajouter une aide</a>
         </div>
 
-        <table class="table table-striped table-hover bg-white shadow-sm rounded">
-            <thead class="table-dark">
-            <tr>
-                <th>Statut</th>
-                <th>Page (Route)</th>
-                <th>Titre</th>
-                <th>Vidéo</th>
-                <th>Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for help in helps %}
-                <tr>
-                    <td>
-                        <span class="badge bg-{{ help.isActive ? 'success' : 'danger' }}">{{ help.isActive ? 'Actif' : 'Inactif' }}</span>
-                    </td>
-                    <td><code>{{ help.routeSlug }}</code></td>
-                    <td>{{ help.title }}</td>
-                    <td>{{ help.videoUrl ? '<i class="fal fa-video text-success"></i>' : '-' }}</td>
-                    <td>
-                        <a href="{{ path('app_help_edit', {'id': help.id}) }}" class="btn btn-sm btn-info text-white"><i class="fal fa-edit"></i></a>
-                        <form method="post" action="{{ path('app_help_delete', {'id': help.id}) }}" class="d-inline" onsubmit="return confirm('Vraiment supprimer cette aide ?');">
-                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ help.id) }}">
-                            <button class="btn btn-sm btn-danger"><i class="fal fa-trash"></i></button>
-                        </form>
-                    </td>
-                </tr>
-            {% else %}
-                <tr><td colspan="5" class="text-center text-muted">Aucune aide configurée.</td></tr>
-            {% endfor %}
-            </tbody>
-        </table>
+        <div class="card shadow-sm border-0">
+            <div class="card-body p-0">
+                <table class="table table-striped table-hover mb-0">
+                    <thead class="table-dark">
+                    <tr>
+                        <th class="ps-4">Statut</th>
+                        <th>Page (Route)</th>
+                        <th>Titre</th>
+                        <th>Vidéo</th>
+                        <th class="text-end pe-4">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for help in helps %}
+                        <tr>
+                            <td class="ps-4">
+                                {% if help.isActive %}
+                                    <span class="badge bg-success">Actif</span>
+                                {% else %}
+                                    <span class="badge bg-danger">Inactif</span>
+                                {% endif %}
+                            </td>
+                            <td><code>{{ help.routeSlug }}</code></td>
+                            <td><strong>{{ help.title }}</strong></td>
+                            <td>{{ help.videoUrl ? '<i class="fal fa-video text-success"></i> Oui' : '-' }}</td>
+                            <td class="text-end pe-4">
+                                <a href="{{ path('app_help_edit', {'id': help.id}) }}" class="btn btn-sm btn-info text-white" title="Modifier"><i class="fal fa-edit"></i></a>
+                                <form method="post" action="{{ path('app_help_delete', {'id': help.id}) }}" class="d-inline" onsubmit="return confirm('Vraiment supprimer cette aide ?');">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ help.id) }}">
+                                    <button class="btn btn-sm btn-danger" title="Supprimer"><i class="fal fa-trash"></i></button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="5" class="text-center text-muted py-4">Aucune aide configurée pour le moment.</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 {% endblock %}

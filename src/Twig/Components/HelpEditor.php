@@ -30,6 +30,7 @@ class HelpEditor extends AbstractController
 
     protected function instantiateForm(): FormInterface
     {
+        // On crée le formulaire en lui passant les données initiales
         return $this->createForm(HelpType::class, $this->initialFormData);
     }
 }

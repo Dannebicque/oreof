@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/administration/help')] // <-- Changement ici
+#[Route('/administration/help')]
 class HelpAdminController extends AbstractController
 {
     #[Route('/', name: 'app_help_index', methods: ['GET'])]
@@ -32,9 +32,7 @@ class HelpAdminController extends AbstractController
     public function new(Request $request, EntityManagerInterface $em): Response
     {
         $help = new Help();
-        // Le traitement du formulaire est fait via le Live Component,
-        // mais on réceptionne la requête classique ici lors du clic sur "Enregistrer"
-        $form = $this->createForm(\App\Form\HelpType::class, $help);
+        $form = $this->createForm(HelpType::class, $help);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -44,13 +42,16 @@ class HelpAdminController extends AbstractController
             return $this->redirectToRoute('app_help_index');
         }
 
-        return $this->render('help_admin/form.html.twig', ['help' => $help]);
+        return $this->render('help_admin/form.html.twig', [
+            'help' => $help,
+            'form' => $form->createView(), // AJOUT TRÈS IMPORTANT ICI
+        ]);
     }
 
     #[Route('/{id}/edit', name: 'app_help_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Help $help, EntityManagerInterface $em): Response
     {
-        $form = $this->createForm(\App\Form\HelpType::class, $help);
+        $form = $this->createForm(HelpType::class, $help);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -59,10 +60,14 @@ class HelpAdminController extends AbstractController
             return $this->redirectToRoute('app_help_index');
         }
 
-        return $this->render('help_admin/form.html.twig', ['help' => $help]);
+        // VÉRIFIE CETTE LIGNE :
+        return $this->render('help_admin/form.html.twig', [
+            'help' => $help,
+            'form' => $form->createView(),
+        ]);
     }
 
-    #[Route('/{id}', name: 'app_help_delete', methods: ['POST'])]
+    #[Route('/{id}/delete', name: 'app_help_delete', methods: ['POST'])]
     public function delete(Request $request, Help $help, EntityManagerInterface $em): Response
     {
         if ($this->isCsrfTokenValid('delete'.$help->getId(), $request->request->get('_token'))) {
