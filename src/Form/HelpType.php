@@ -28,11 +28,9 @@ class HelpType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        // Récupération dynamique de toutes les pages (routes)
         $routes = $this->router->getRouteCollection()->all();
         $routeChoices = [];
         foreach ($routes as $name => $route) {
-            // On exclut les routes techniques (commençant par _ ou api)
             if (!str_starts_with($name, '_') && !str_starts_with($name, 'api_')) {
                 $routeChoices[$name] = $name;
             }
@@ -40,25 +38,28 @@ class HelpType extends AbstractType
 
         $builder
             ->add('title', TextType::class, [
-                'label' => 'Titre de l\'aide'
+                'label' => 'Titre de l\'aide',
+                'attr' => ['class' => 'form-control mb-3']
             ])
             ->add('routeSlug', ChoiceType::class, [
                 'choices' => $routeChoices,
                 'label' => 'Page cible (Route)',
-                'attr' => ['class' => 'select2'] // Compatible avec tes select existants
+                'attr' => ['class' => 'form-select select2 mb-3']
             ])
             ->add('content', TextareaType::class, [
                 'label' => 'Contenu explicatif',
-                'attr' => ['rows' => 12]
+                'attr' => ['class' => 'form-control', 'rows' => 12]
             ])
             ->add('videoUrl', TextType::class, [
                 'label' => 'Lien de la vidéo (YouTube / Vimeo)',
                 'required' => false,
-                'help' => 'Copiez simplement l\'URL de la vidéo.'
+                'help' => 'Copiez simplement l\'URL de la vidéo.',
+                'attr' => ['class' => 'form-control mb-3']
             ])
             ->add('isActive', CheckboxType::class, [
-                'label' => 'Activer cette aide',
-                'required' => false
+                'label' => ' Activer cette aide',
+                'required' => false,
+                'attr' => ['class' => 'form-check-input']
             ]);
     }
 

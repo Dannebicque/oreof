@@ -1,21 +1,27 @@
 <div {{ attributes }}>
-    <div class="row">
+    <div class="row mt-4">
         <!-- Zone d'édition (Formulaire) -->
         <div class="col-md-6 border-end pe-4">
-            {{ form_start(form) }}
-            {{ form_row(form.title, { attr: { 'data-model': '*' } }) }}
-            {{ form_row(form.routeSlug, { attr: { 'data-model': '*' } }) }}
 
-            <div class="mb-3">
+            {{ form_start(form, { attr: { 'data-model': '*' } }) }}
+
+            {{ form_row(form.title) }}
+            {{ form_row(form.routeSlug) }}
+
+            <div class="mb-4 mt-3">
                 {{ form_label(form.content) }}
-                {{ form_widget(form.content, { attr: { 'data-model': '*' } }) }}
+                {{ form_widget(form.content) }}
                 <small class="text-muted d-block mt-2">
                     <i class="fab fa-markdown"></i> Markdown : <code>**Gras**</code>, <code>*Italique*</code>, <code># Titre</code>, <code>[Lien](url)</code>
                 </small>
             </div>
 
-            {{ form_row(form.videoUrl, { attr: { 'data-model': '*' } }) }}
-            {{ form_row(form.isActive) }}
+            {{ form_row(form.videoUrl) }}
+
+            <div class="form-check form-switch mb-3">
+                {{ form_widget(form.isActive) }}
+                {{ form_label(form.isActive) }}
+            </div>
 
             <button type="submit" class="btn btn-success mt-3">
                 <i class="fal fa-save"></i> Enregistrer
@@ -41,7 +47,6 @@
 
                 {% if form.videoUrl.vars.value %}
                     <div class="ratio ratio-16x9 mt-4 shadow-sm border">
-                        {# Gestion basique de l'URL pour l'embed Youtube/Vimeo #}
                         <iframe src="{{ form.videoUrl.vars.value|replace({'watch?v=': 'embed/', 'youtu.be/': 'youtube.com/embed/'}) }}" allowfullscreen></iframe>
                     </div>
                 {% endif %}
