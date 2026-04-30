@@ -564,9 +564,6 @@ HTML;
             'informations-pratiques' => $this->cleanString($informationsPratiques),
             'admission' => $this->cleanString($admissionParcours),
             'formation-continue-et-apprentissage' => [],
-            'is-parcours-par-defaut' => $parcours->isParcoursDefaut(),
-            'rythme-formation-texte' => $this->cleanString($rythmeFormationTexteLibre),
-            'presentation-formation-texte' => $this->cleanString($parcours->getFormation()->getObjectifsFormation() ?? ''),
         ];
 
         // Description de la mention
