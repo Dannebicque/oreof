@@ -74,4 +74,9 @@ class DataUserSession
 
         return $this->etablissement;
     }
+
+    public function dpes(): array
+    {
+        return $this->campagneCollecteRepository->findAll();
+    }
 }

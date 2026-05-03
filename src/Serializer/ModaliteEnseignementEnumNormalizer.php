@@ -7,12 +7,12 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 class ModaliteEnseignementEnumNormalizer implements DenormalizerInterface
 {
-    public function supportsDenormalization($data, string $type, string $format = null, array $context = []): bool
+    public function supportsDenormalization($data, string $type, ?string $format = null, array $context = []): bool
     {
         return $type === ModaliteEnseignementEnum::class;
     }
 
-    public function denormalize($data, string $type, string $format = null, array $context = []): mixed
+    public function denormalize($data, string $type, ?string $format = null, array $context = []): mixed
     {
         if (is_null($data)) {
             return ModaliteEnseignementEnum::NON_DEFINI;

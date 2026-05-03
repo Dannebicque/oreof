@@ -19,16 +19,12 @@
 {% endblock %}
 
 {% block bouton_header %}
-    <a href="{{ path('app_etablissement_new') }}">
-        <button class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
-            data-size="lg"
-            data-bs-toggle="tooltip"
-            data-bs-placement="bottom"
-            title="Ajouter un établissement"
-            type="button"
-        >
-            <i class="{{ iconAdd }}"></i>
-            <span> Ajouter un établissement</span>
-        </button>
+    <a href="{{ path('app_etablissement_new') }}"
+       class="btn border border-emerald-300 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 hover:text-emerald-800"
+       data-bs-toggle="tooltip"
+       data-bs-placement="bottom"
+       title="Ajouter un établissement">
+        <twig:UX:Icon name="icon:add" class="h-4 w-4"/>
+        <span>Ajouter un établissement</span>
     </a>
 {% endblock %}

@@ -9,7 +9,19 @@
 import { Controller } from '@hotwired/stimulus'
 
 export default class extends Controller {
+  static targets = ['toggleButton']
+
   showFormLogin() {
-    document.getElementById('formLogin').classList.toggle('d-none')
+    const form = document.getElementById('formLogin')
+    if (!form) {
+      return
+    }
+
+    const isHidden = form.classList.toggle('hidden')
+    if (this.hasToggleButtonTarget) {
+      this.toggleButtonTarget.textContent = isHidden
+        ? 'Se connecter avec login/mot de passe'
+        : 'Masquer le formulaire login/mot de passe'
+    }
   }
 }

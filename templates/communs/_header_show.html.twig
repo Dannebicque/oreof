@@ -1,11 +1,19 @@
 {% set color = color is defined ? color : 'indigo' %}
+{% set color_map = {
+    'indigo': 'app-section-header-icon--indigo',
+    'amber': 'app-section-header-icon--amber',
+    'red': 'app-section-header-icon--red',
+    'green': 'app-section-header-icon--green',
+    'teal': 'app-section-header-icon--teal'
+} %}
+{% set icon_color_class = color_map[color]|default(color_map['indigo']) %}
 
-<div class="flex items-center justify-between gap-4 mb-8 border-b border-slate-50 pb-6">
-    <div class="flex items-center gap-4">
-        <div class="w-12 h-12 bg-{{ color }}-600 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-{{ color }}-100">
-            <i class="{{ icon }} fa-lg"></i>
+<div class="app-section-header">
+    <div class="app-section-header-main">
+        <div class="app-section-header-icon {{ icon_color_class }}">
+            <twig:UX:Icon :name="icon" class="w-5 h-5"/>
         </div>
-        <h3 class="text-2xl font-black text-slate-800 tracking-tight italic uppercase">{{ title }}</h3>
+        <h3 class="app-section-header-title">{{ title }}</h3>
     </div>
     {% if (print is not defined or print == false) %}
         <div class="ml-4">

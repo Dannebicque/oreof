@@ -18,6 +18,7 @@ use Symfony\UX\LiveComponent\Attribute\LiveArg;
 use Symfony\UX\LiveComponent\DefaultActionTrait;
 
 #[AsLiveComponent('switch_dpe')]
+/** @deprecated */
 final class SwitchDpeComponent extends AbstractController
 {
     use DefaultActionTrait;

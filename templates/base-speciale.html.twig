@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="fr" data-footer="true">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}Welcome!{% endblock %}</title>
     <link rel="preconnect" href="https://fonts.gstatic.com"/>
     <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@100;500&display=swap" rel="stylesheet">
-    {#    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600&display=swap" rel="stylesheet"/> #}
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet"/>
     {% block stylesheets %}
         {{ encore_entry_link_tags('app') }}
@@ -17,137 +17,97 @@
         {{ encore_entry_script_tags('app') }}
     {% endblock %}
 </head>
-<body class="h-100">
-<div id="root" class="h-100">
-    <!-- Background Start -->
-    <div class="fixed-background"></div>
-    <div class="fixed-background-overlay"></div>
-    <!-- Background End -->
+<body class="min-h-dvh bg-slate-950 text-slate-900 antialiased">
+<div id="root" class="relative min-h-dvh overflow-hidden">
+    <div
+            class="pointer-events-none absolute inset-0 bg-contain bg-center bg-no-repeat opacity-35"
+            style="background-image: url('{{ asset('background-blue.jpg') }}'); "
+    ></div>
+    <div class="pointer-events-none absolute inset-0 bg-slate-950/45"></div>
+    <div class="pointer-events-none absolute inset-0 bg-gradient-to-br from-sky-900/35 via-cyan-900/25 to-indigo-950/45"></div>
+    <div class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_10%_20%,rgba(255,255,255,0.18),transparent_35%),radial-gradient(circle_at_80%_0%,rgba(125,211,252,0.25),transparent_25%)]"></div>
 
-    <div class="container-fluid p-0 h-100 position-relative">
-        <div class="row g-0 h-100">
-            <!-- Left Side Start -->
-            <div class="offset-0 col-12 d-none d-lg-flex offset-md-1 col-lg h-lg-100">
-                <div class="min-h-100 d-flex align-items-center">
-                    <div class="w-100">
-                        <div>
-                            <div>
-                                <h1 class="display-3 text-white">
-                                    <span class="titre_product">{{ product_name }}</span></h1>
-                                <h2 class="display-3 text-white titre">
-                                    <span class="titre_maj">O</span>util de<br>
-                                    <span class="titre_maj">Ré</span>daction de l'<br>
-                                    <span class="titre_maj">O</span>ffre de<br/>
-                                    <span class="titre_maj">F</span>ormation<br/>
-                                </h2>
-                            </div>
-                        </div>
+    <div class="relative mx-auto grid min-h-screen w-full max-w-7xl gap-8 px-4 py-6 lg:grid-cols-[minmax(0,1fr)_30rem] lg:px-8 lg:py-10">
+        <aside class="hidden lg:flex lg:flex-col lg:justify-between">
+            <div class="max-w-xl space-y-6 text-white">
+                <p class="text-sm font-semibold uppercase tracking-[0.25em] text-sky-200">Plateforme</p>
+                <h1 class="text-5xl font-black leading-tight tracking-tight">{{ product_name }}</h1>
+                <h2 class="text-2xl font-semibold leading-relaxed text-sky-100">
+                    Outil de Redaction de l'Offre de Formation
+                </h2>
+                <p class="max-w-lg text-base text-sky-100/85">
+                    Centralisez vos demandes, simplifiez les echanges et connectez-vous rapidement avec votre compte
+                    institutionnel.
+                </p>
+            </div>
+
+            <div class="flex items-center gap-5 text-sky-100/90">
+                <a href="mailto:oreof@univ-reims.fr" target="_blank" rel="noreferrer"
+                   class="transition hover:text-white" aria-label="Contacter l'equipe ORéOF">
+                    <i class="fal fa-envelope text-lg"></i>
+                </a>
+                <a href="https://github.com/Dannebicque/oreof" target="_blank" rel="noreferrer"
+                   class="transition hover:text-white" aria-label="Depôt GitHub ORéOF">
+                    <i class="fa-brands fa-github text-lg"></i>
+                </a>
+                <a href="https://twitter.com/davidannebicque" target="_blank" rel="noreferrer"
+                   class="transition hover:text-white" aria-label="Profil Twitter">
+                    <i class="fa-brands fa-twitter text-lg"></i>
+                </a>
+            </div>
+        </aside>
+
+        <main class="flex items-center">
+            <section class="w-full rounded-3xl border border-slate-200 bg-white p-6 shadow-2xl md:p-8">
+                <div class="mb-8 flex items-center justify-between gap-4">
+                    <img src="{{ asset('images/logo_urca.png') }}" alt="Logo URCA" class="h-14 w-auto" loading="lazy">
+                    <div class="inline-flex items-center gap-2 rounded-full bg-sky-50 px-4 py-2 text-sm font-semibold text-sky-700">
+                        <i class="fa-duotone fa-pencil-ruler"></i>
+                        <span>{{ product_name }}</span>
                     </div>
                 </div>
-            </div>
-            <!-- Left Side End -->
 
-            <!-- Right Side Start -->
-            <div class="col-12 col-lg-auto h-100 pb-4 px-4 pt-0 p-lg-0">
-                <div class="sw-lg-80 min-h-100 bg-foreground d-flex justify-content-center align-items-center
-                shadow-deep py-5 full-page-content-right-border">
-                    <div class="sw-lg-70 px-5">
-                        <div class="sh-11 ">
-                            <div class="row">
+                {% block content %}{% endblock %}
 
-                                <div class=" col-6"><img src="{{ asset('images/logo_urca.png') }}" alt="Logo URCA">
-                                </div>
-                                <div class=" col-6">
-                                    <div class="logo-special-but pt-2"><i class="fa-duotone fa-pencil-ruler fa-2x"
-                                                                          style="--fa-primary-color: var(--complementaire);
-"></i> {{ product_name }}
-                                    </div>
-                                </div>
+                <footer class="mt-10 border-t border-slate-200 pt-5 text-sm text-slate-600">
+                    <p>&copy; 2023 David Annebicque // Emeline Lang-Lannoy -
+                        version {{ user_data.version|default('n/a') }}</p>
+                    <div class="mt-3 flex flex-wrap items-center gap-x-3 gap-y-2">
+                        <a href="#"
+                           class="font-medium text-slate-700 underline decoration-slate-300 underline-offset-4 transition hover:text-slate-900">Docs</a>
+                        <span aria-hidden="true" class="text-slate-300">|</span>
+                        <details class="group inline-block">
+                            <summary
+                                    class="cursor-pointer list-none font-medium text-slate-700 underline decoration-slate-300 underline-offset-4 transition hover:text-slate-900">
+                                Usage des donnees
+                            </summary>
+                            <div class="mt-3 max-w-2xl space-y-2 rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-600">
+                                <p>Ce site n'enregistre aucune donnee sur votre utilisation de l'outil.</p>
+                                <p>Un seul cookie est utilise pour gerer la connexion lorsque vous activez l'option "se
+                                    souvenir de moi" sur la page de connexion.</p>
+                                <p>Les fichiers de log sont anonymes et ne contiennent pas d'informations personnelles
+                                    vous concernant.</p>
                             </div>
-                        </div>
-                        {% block content %}
-
-                        {% endblock %}
-                        <footer style="border-top:none" class="mt-4">
-                            <div class="footer-content">
-                                <div class="row">
-                                    <div class="col-12 text-medium">
-
-
-                                        <p class="mb-0 text-muted text-medium">&copy; 2023 David Annebicque // Emeline
-                                                                               Lang-Lannoy -
-                                                                               version {{ user_data.version }}</p>
-                                        <p>
-                                            <a href="#" class="btn-link">Docs</a>
-                                            |
-                                            <a href="#" class="btn-link" data-bs-toggle="modal"
-                                               data-bs-target="#modalUsageDonnees">Usage des données</a>
-                                        </p>
-                                    </div>
-
-                                    <!-- Modal -->
-                                    <div
-                                            class="modal fade modal-close-out"
-                                            id="modalUsageDonnees"
-                                            tabindex="-1"
-                                            role="dialog"
-                                            aria-labelledby="examplemodalUsageDonnees"
-                                            aria-hidden="true"
-                                    >
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="examplemodalUsageDonnees">Usage des
-                                                                                                          données</h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <p>Ce site n'enregistre aucune données sur votre utilisation de
-                                                       l'outil.</p>
-                                                    <p>Un seul cookie est utilisé permettant de gérer la connexion
-                                                       (lorsque vous activez
-                                                       l'option "se souvenir de moi" sur la page de connexion.</p>
-                                                    <p>Les fichiers de log (en cas d'erreur ou de problème) sont
-                                                       complètement
-                                                       anonymes et sans informations personnelles vous concernant.</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-12 d-none d-sm-block">
-                                        <ul class="breadcrumb pt-0 pe-0 mb-0 float-end">
-                                            <li class="breadcrumb-item mb-0 text-medium">
-                                                <a href="mailto:oreof@univ-reims.fr" target="_blank" class="btn-link"><i
-                                                            class="text-primary icon-14
-                                    fal fa-envelope"></i></a>
-                                            </li>
-                                            <li class="breadcrumb-item mb-0 text-medium">
-                                                <a href="https://github.com/Dannebicque/oreof" target="_blank"
-                                                   class="btn-link"><i class="text-primary icon-14
-                                    fa-brands fa-github"></i></a>
-                                            </li>
-                                            <li class="breadcrumb-item mb-0 text-medium">
-                                                <a href="https://twitter.com/davidannebicque" target="_blank" class="btn-link">
-                                                    <i class="text-primary icon-14 fa-brands fa-twitter"></i>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </footer>
-
+                        </details>
                     </div>
-
-                </div>
-                <!-- Footer Content Start -->
-                <!-- Footer Content End -->
-            </div>
-            <!-- Right Side End -->
-        </div>
+                    <div class="mt-4 flex items-center gap-4 text-slate-400 lg:hidden">
+                        <a href="mailto:oreof@univ-reims.fr" target="_blank" rel="noreferrer"
+                           class="transition hover:text-slate-700" aria-label="Contacter l'equipe ORéOF">
+                            <i class="fal fa-envelope text-lg"></i>
+                        </a>
+                        <a href="https://github.com/Dannebicque/oreof" target="_blank" rel="noreferrer"
+                           class="transition hover:text-slate-700" aria-label="Depôt GitHub ORéOF">
+                            <i class="fa-brands fa-github text-lg"></i>
+                        </a>
+                        <a href="https://twitter.com/davidannebicque" target="_blank" rel="noreferrer"
+                           class="transition hover:text-slate-700" aria-label="Profil Twitter">
+                            <i class="fa-brands fa-twitter text-lg"></i>
+                        </a>
+                    </div>
+                </footer>
+            </section>
+        </main>
     </div>
-
 </div>
 
 </body>

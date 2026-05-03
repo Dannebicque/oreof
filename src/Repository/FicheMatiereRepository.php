@@ -401,9 +401,9 @@ class FicheMatiereRepository extends ServiceEntityRepository
     }
 
     public function findFicheMatiereWithKeywordAndPagination(
-        string $keyword, 
-        int $pageNumber, 
-        bool $paginate = true,
+        string $keyword,
+        int    $pageNumber,
+        bool   $paginate,
         CampagneCollecte $campagne,
     ) : array
     {

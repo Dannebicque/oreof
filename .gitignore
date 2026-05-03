@@ -58,3 +58,9 @@ public/api_json/
 ### exclude sql ###
 /*.sql
 /pense-bete.md
+.npmrc
+
+###> symfony/asset-mapper ###
+/public/assets/
+/assets/vendor/
+###< symfony/asset-mapper ###

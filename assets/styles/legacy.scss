@@ -6,10 +6,11 @@
  * @lastUpdate 14/03/2023 21:21
  */
 
+@use "./but";
+@use "./timeline";
+@use "./main";
+
 @import "../../node_modules/bootstrap/dist/css/bootstrap.min.css";
-@import "./vendor/OverlayScrollbars.min.css";
-@import "tailwindcss";
-/*preflight(none);  Désactive le reset global */
 
 @import "@fortawesome/fontawesome-pro/css/fontawesome.min.css";
 @import "@fortawesome/fontawesome-pro/css/duotone.min.css";
@@ -37,10 +38,6 @@
 //@import 'themes/light.teal';
 //@import 'themes/light.lime';
 //@import 'themes/light.sky';
-
-@import "./_but.scss";
-@import "./_settings.scss";
-@import "./_timeline.scss";
 
 @import url('https://fonts.cdnfonts.com/css/open-dyslexic');
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
@@ -115,7 +112,6 @@ body {
 }
 
 @import "./styles.css";
-@import "./main.scss";
 
 
 

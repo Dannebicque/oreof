@@ -59,13 +59,13 @@
                 modalTitle: 'Ajouter un profil',
                 modalUrl: path('app_administration_profils_creer') }) }}
             data-action="click->modal#openModal"
-            class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+            class="btn border border-emerald-300 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 hover:text-emerald-800"
             data-size="lg"
             data-bs-toggle="tooltip"
             data-bs-placement="bottom"
             title="Ajouter un rôle"
     >
-        <i class="{{ iconAdd }}"></i>
+        <twig:UX:Icon name="icon:add" class="h-4 w-4"/>
         <span> Créer un profil</span>
     </button>
 {% endblock %}

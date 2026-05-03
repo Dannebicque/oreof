@@ -1,13 +1,13 @@
-<div class="flex justify-end gap-2">
+<div class="app-modal-footer-actions">
     <button type="button"
-            class="rounded-lg px-3 py-2 hover:bg-gray-100"
+            class="app-modal-footer-btn app-modal-footer-btn--secondary"
             data-action="modalturbo#close">
         Annuler
     </button>
 
     {# Soumet le premier form présent dans le body #}
     <button type="submit"
-            class="rounded-lg bg-green-600 text-white px-4 py-2 font-semibold"
+            class="app-modal-footer-btn app-modal-footer-btn--primary"
             form="modal_form">
         {{ submitLabel ? submitLabel|trans({},'modal') : 'Enregistrer' }}
     </button>

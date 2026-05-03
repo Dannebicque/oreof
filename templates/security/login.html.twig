@@ -3,56 +3,82 @@
 {% block title %}Log in! | {{ product_name }}{% endblock %}
 
 {% block content %}
-    <div {{ stimulus_controller('login') }}>
-        <div class="mb-2 mt-4">
-            <h2 class="cta-1 mb-0 text-primary">Bienvenue,</h2>
-            <h2 class="cta-1 text-primary">Connectez-vous</h2>
+    <div class="space-y-6" {{ stimulus_controller('login') }}>
+        <div class="space-y-2">
+            <p class="inline-flex items-center rounded-full bg-sky-100 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-sky-700">
+                Connexion</p>
+            <h2 class="text-3xl font-black leading-tight text-slate-900">Bienvenue, connectez-vous</h2>
+            <p class="text-sm text-slate-500">Choisissez la methode la plus rapide pour acceder a la plateforme.</p>
         </div>
 
-        <div class="d-grid mb-2">
-            <a href="{{ path('cas_return') }}" class="btn btn-lg btn-primary d-block" type="submit">
+        <div class="space-y-3">
+            <a href="{{ path('cas_return') }}"
+               class="inline-flex w-full items-center justify-center rounded-xl bg-sky-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-sky-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2"
+               type="submit">
                 Se connecter avec votre compte URCA
             </a>
-        </div>
-        <p class="text-center">OU</p>
+            <p class="text-center text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">ou</p>
 
-        {% if error %}
-            {{ component('alerte', {type:'danger', message: error.messageKey|trans(error.messageData, 'security') }) }}
-        {% endif %}
-        <div class="d-grid">
-            <button class="btn btn-lg text-primary d-block justify-content-center"
-            {{ stimulus_action('login', 'showFormLogin') }}
+            {% if error %}
+                {{ component('alerte', {type:'danger', message: error.messageKey|trans(error.messageData, 'security') }) }}
+            {% endif %}
+
+            <button
+                    class="inline-flex w-full items-center justify-center rounded-xl border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2"
+                    data-login-target="toggleButton"
+                    {{ stimulus_action('login', 'showFormLogin') }}
             >
                 Se connecter avec login/mot de passe
             </button>
         </div>
-        <form class="tooltip-end-bottom d-none" method="post" id="formLogin">
-            <div class="mb-3 filled form-group tooltip-end-top form-floating">
-                <input type="text" value="{{ last_username }}" name="username" id="inputUsername" class="form-control"
-                       required autofocus>
-                <label for="inputUsername">Login</label>
+
+        <form class="hidden space-y-4 rounded-2xl border border-slate-200 bg-slate-50 p-4" method="post" id="formLogin">
+            <div class="space-y-1">
+                <label for="inputUsername" class="block text-sm font-medium text-slate-700">Login</label>
+                <input
+                        type="text"
+                        value="{{ last_username }}"
+                        name="username"
+                        id="inputUsername"
+                        class="block w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-slate-900 placeholder-slate-400 shadow-sm focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-200"
+                        autocomplete="username"
+                        required
+                        autofocus
+                >
             </div>
-            <div class="mb-3 filled form-group tooltip-end-top form-floating">
-                <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
-                <label for="inputPassword">Mot de passe</label>
+            <div class="space-y-1">
+                <label for="inputPassword" class="block text-sm font-medium text-slate-700">Mot de passe</label>
+                <input
+                        type="password"
+                        name="password"
+                        id="inputPassword"
+                        class="block w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-slate-900 placeholder-slate-400 shadow-sm focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-200"
+                        autocomplete="current-password"
+                        required
+                >
             </div>
 
-            <div class="checkbox mb-3">
-                <label>
-                    <input type="checkbox" value="remember-me"> Se souvenir de moi
-                </label>
+            <div class="flex items-center gap-2">
+                <input id="rememberMe" type="checkbox" name="_remember_me" value="on"
+                       class="h-4 w-4 rounded border-slate-300 text-sky-600 focus:ring-sky-500">
+                <label for="rememberMe" class="text-sm text-slate-600">Se souvenir de moi</label>
             </div>
+
             <input type="hidden" name="_csrf_token"
                    value="{{ csrf_token('authenticate') }}"
             >
-            <div class="d-grid">
-                <button class="btn d-block btn-primary" type="submit">Se connecter</button>
-                {#            <a href="{{ path('app_forgot_password_request') }}">Mot de passe perdu ?</a><br> #}
+            <div class="space-y-2">
+                <button class="inline-flex w-full items-center justify-center rounded-xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 focus-visible:ring-offset-2"
+                        type="submit">Se connecter
+                </button>
             </div>
         </form>
-        <p class="text-center mt-3">OU</p>
-        <div class="d-grid">
-            <a href="{{ path('app_register') }}" class="btn d-block btn-secondary">Demander un accès</a>
+
+        <p class="pt-1 text-center text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">ou</p>
+        <div>
+            <a href="{{ path('app_register') }}"
+               class="inline-flex w-full items-center justify-center rounded-xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-emerald-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2">Demander
+                un acces</a>
         </div>
     </div>
 {% endblock %}

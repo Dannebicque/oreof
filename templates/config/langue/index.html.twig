@@ -24,13 +24,13 @@
                 modalTitle: 'Ajouter une langue',
                 modalUrl: path('app_langue_new') }) }}
             data-action="click->modal#openModal"
-            class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+            class="btn border border-emerald-300 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 hover:text-emerald-800"
             data-size="lg"
             data-bs-toggle="tooltip"
             data-bs-placement="bottom"
             title="Ajouter une langue"
     >
-        <i class="{{ iconAdd }}"></i>
+        <twig:UX:Icon name="icon:add" class="h-4 w-4"/>
         <span> Ajouter une langue</span>
     </button>
 {% endblock %}

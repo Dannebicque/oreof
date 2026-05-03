@@ -18,17 +18,12 @@
 {% endblock %}
 
 {% block bouton_header %}
-    <a href="{{ path('app_type_diplome_new') }}">
-        <button
-            class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2 text-dark"
-            data-size="lg"
-            data-bs-toggle="tooltip"
-            data-bs-placement="bottom"
-            title="Ajouter un type de diplôme"
-        >
-
-        <i class="{{ iconAdd }}"></i>
-                <span> Ajouter un type de diplôme</span>
-        </button>
+    <a href="{{ path('app_type_diplome_new') }}"
+       class="btn border border-emerald-300 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 hover:text-emerald-800"
+       data-bs-toggle="tooltip"
+       data-bs-placement="bottom"
+       title="Ajouter un type de diplôme">
+        <twig:UX:Icon name="icon:add" class="h-4 w-4"/>
+        <span>Ajouter un type de diplôme</span>
     </a>
 {% endblock %}

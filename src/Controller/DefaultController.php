@@ -10,8 +10,10 @@
 namespace App\Controller;
 
 use App\DTO\StatsFichesMatieres;
+use App\DTO\TranslatableKey;
 use App\Repository\ComposanteRepository;
 use App\Repository\FormationRepository;
+use App\Utils\TurboStreamResponseFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -27,6 +29,23 @@ class DefaultController extends BaseController
             [
                 'step' => $request->query->get('step', 'formation'),
             ]
+        );
+    }
+
+    #[Route('/usage-donnees', name: 'app_usage_donnees')]
+    public function usageDonnees(
+        TurboStreamResponseFactory $turboStream
+    ): Response
+    {
+
+        return $turboStream->streamOpenModalFromTemplates(
+            'Usage des données',
+            '',
+            'default/_usage_donnees.html.twig',
+            [
+            ],
+            '_ui/_footer_cancel.html.twig',
+            []
         );
     }
 

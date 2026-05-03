@@ -21,11 +21,11 @@ final class AlerteComponent extends AbstractController
     public function getIcone(): string
     {
         return match ($this->type) {
-            'info' => 'fa-info-circle',
-            'help' => 'fa-circle-question',
-            'success' => 'fa-check-circle',
-            'warning' => 'fa-exclamation-circle',
-            'danger' => 'fa-times-circle',
+            'info' => 'icon:info:bold',
+            'help' => 'icon:question:bold',
+            'success' => 'icon:success:bold',
+            'warning' => 'icon:warning:bold',
+            'danger' => 'fican:danger:bold',
         };
     }
 }

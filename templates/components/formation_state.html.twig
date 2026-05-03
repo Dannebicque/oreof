@@ -1,29 +1,50 @@
+{% set colorClasses = {
+    'muted': 'bg-slate-100 text-slate-400 dark:bg-slate-800 dark:text-slate-500',
+    'info': 'bg-cyan-100 text-cyan-700 dark:bg-cyan-500/15 dark:text-cyan-300',
+    'warning': 'bg-amber-100 text-amber-700 dark:bg-amber-500/15 dark:text-amber-300',
+    'success': 'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300'
+} %}
+{% set lineClasses = {
+    'muted': 'bg-slate-200 dark:bg-slate-700',
+    'info': 'bg-cyan-200 dark:bg-cyan-500/30',
+    'warning': 'bg-amber-200 dark:bg-amber-500/30',
+    'success': 'bg-emerald-200 dark:bg-emerald-500/30'
+} %}
+{% set iconMap = {
+    'muted': 'icon:close',
+    'info': 'icon:clock',
+    'warning': 'icon:warning',
+    'success': 'icon:check'
+} %}
+
 <div class="{{ this.class }}">
     {% for key, etape in this.process %}
         {% if (etape.showOn is defined and etape.showOn != false) or etape.showOn is not defined %}
-            {% set class =  this.stateProcess(key) %}
+            {% set state = this.stateProcess(key) %}
+            {% set colorClass = colorClasses[state.color]|default(colorClasses['muted']) %}
+            {% set lineClass = lineClasses[state.color]|default(lineClasses['muted']) %}
+            {% set iconName = iconMap[state.color]|default('icon:question') %}
+
             {% if mode == 'liste' %}
-                <button class="btn btn-sm btn-icon btn-icon-only btn-{{ class.color }} ms-1" type="button"
+                <button class="ml-1 inline-flex h-8 w-8 items-center justify-center rounded-full {{ colorClass }} transition hover:scale-105"
+                        type="button"
                         data-controller="tooltip" data-tooltip-placement-value="bottom"
                         aria-label="{{ etape.label|trans({}, 'process') }}"
-                        data-bs-original-title="{{ (etape.label~'.'~class.color)|trans({}, 'process') }}"
+                        data-bs-original-title="{{ (etape.label~'.'~state.color)|trans({}, 'process') }}"
                 >
-                    <i class="fal {{ etape.icon }}"></i>
+                    {{ ux_icon(iconName, {class: 'h-4 w-4'}) }}
                 </button>
             {% else %}
-                <div class="d-flex align-items-center">
-                    <div class="rounded-circle d-flex align-items-center justify-content-center
-                                bg-{{ class.color }}-subtle text-{{ class.color }} bubble-process"
+                <div class="flex items-center">
+                    <div class="flex h-10 w-10 items-center justify-center rounded-full ring-2 ring-white {{ colorClass }} dark:ring-slate-900"
                          data-controller="tooltip" data-tooltip-placement-value="bottom"
                          aria-label="{{ etape.label|trans({}, 'process') }}"
-                         data-bs-original-title="{{ (etape.label~'.'~class.color)|trans({}, 'process') }}"
+                         data-bs-original-title="{{ (etape.label~'.'~state.color)|trans({}, 'process') }}"
                     >
-                        <i class="fas {{ etape.icon }} small"></i>
+                        {{ ux_icon(iconName, {class: 'h-4 w-4'}) }}
                     </div>
                     {% if not loop.last %}
-                        <div class="bg-{{ class.color }} bg-opacity-25"
-                             style="width: 16px; height: 2px; margin: 0 4px;">
-                        </div>
+                        <div class="mx-1 h-0.5 w-5 rounded-full {{ lineClass }}"></div>
                     {% endif %}
                 </div>
             {% endif %}

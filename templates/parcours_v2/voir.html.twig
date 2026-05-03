@@ -16,14 +16,14 @@
 {% endblock %}
 
 {% block bouton_header %}
-    <div class="d-flex flex-wrap gap-2 justify-content-lg-end">
+    <div class="flex flex-wrap gap-2 justify-start lg:justify-end">
         {% if (is_granted('EDIT', {route: 'app_parcours', subject: dpeParcours})
             or is_granted('EDIT', {route: 'app_formation', subject: dpeParcours})
             or is_granted('EDIT', {route: 'app_composante', subject: dpeParcours})
             or is_granted('EDIT', {route: 'app_etbalissement', subject: dpeParcours})
             or is_granted('ROLE_ADMIN')) and isOuvert(dpeParcours) %}
             <a href="{{ path('parcours_v2_modifier', {parcours:parcours.id}) }}"
-               class="btn btn-sm btn-warning btn-icon btn-icon-end w-100 w-sm-auto"
+               class="inline-flex items-center gap-2 rounded-lg border border-amber-300 bg-amber-50 px-3 py-2 text-sm font-semibold text-amber-700 shadow-sm transition hover:border-amber-400 hover:bg-amber-100 hover:text-amber-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-2 dark:border-amber-700 dark:bg-amber-500/10 dark:text-amber-300 dark:hover:border-amber-600 dark:hover:bg-amber-500/20 dark:focus-visible:ring-amber-500 dark:focus-visible:ring-offset-slate-900"
                data-bs-toggle="tooltip"
                data-bs-placement="bottom"
                title="Modifier le parcours"
@@ -37,7 +37,6 @@
 
 {% block javascripts %}
     {{ parent() }}
-    {#    <script src="https://cdn.tailwindcss.com"></script> #}
     <script type="module">
       import { Application, Controller } from 'https://unpkg.com/@hotwired/stimulus/dist/stimulus.js'
 
@@ -68,11 +67,7 @@
         activateLink (id) {
           this.linkTargets.forEach(link => {
             const isActive = link.getAttribute('href') === `#${id}`
-            link.classList.toggle('text-indigo-600', isActive)
-            link.classList.toggle('bg-indigo-50', isActive)
-            link.classList.toggle('border-indigo-600', isActive)
-            link.classList.toggle('text-slate-400', !isActive)
-            link.classList.toggle('border-transparent', !isActive)
+            link.classList.toggle('app-scrollspy-link-active', isActive)
           })
         }
 
@@ -83,119 +78,74 @@
     </script>
 {% endblock %}
 
-{% block stylesheets %}
-    {{ parent() }}
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
-
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: #F8FAFC;
-            padding: 40px;
-        }
-    </style>
-{% endblock %}
-
 {% block content %}
 
     <div id="parcours_header_component">
         <twig:ParcoursHeader parcoursId="{{ parcours.id }}" formationId="{{ parcours.formation.id }}"/>
     </div>
-
-    {% if (parcours.descriptifHautPage != '' and parcours.descriptifHautPage != null)  or
-        (parcours.descriptifBasPage != '' and parcours.descriptifBasPage != null) or
-        (parcours.descriptifHautPageAutomatique != '' and parcours.descriptifHautPageAutomatique != null) %}
-        <section data-scroll-spy-target="section"
-                 class="bg-white rounded-sm p-4 mb-4 border border-slate-200 shadow-sm scroll-mt-32"
-                 id="presentation">
-            {{ include('communs/_header_show.html.twig', {
-                title: 'Informations complémentaires (affichées sur le site institutionnel)',
-                icon: 'fa-solid fa-book-open',
-                color: 'indigo'
-            }) }}
-
-            <dl>
-                {% if (parcours.descriptifHautPageAutomatique != '' and parcours.descriptifHautPageAutomatique != null) %}
-                    <dt>Texte haut de page (automatique)</dt>
-                    <dl>{{ parcours.descriptifHautPageAutomatique|raw }}</dl>
-                {% endif %}
-                {% if (parcours.descriptifHautPage != '' and parcours.descriptifHautPage != null) %}
-                    <dt>Texte haut de page</dt>
-                    <dl>{{ parcours.descriptifHautPage|raw }}</dl>
-                {% endif %}
-                {% if (parcours.descriptifBasPage != '' and parcours.descriptifBasPage != null) %}
-                    <dt>Texte base de page</dt>
-                    <dl>{{ parcours.descriptifBasPage|raw }}</dl>
-                {% endif %}
-            </dl>
-
-        </section>
-    {% endif %}
-
-
     <div class="flex" data-controller="scroll-spy">
-        <aside class="w-72 bg-white rounded-md shadow-md border-slate-200 flex flex-col p-3 space-y-8">
+        <aside class="app-scrollspy-aside w-72 flex flex-col p-3 space-y-8">
             <div class="sticky top-40 space-y-8">
                 <div>
-                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-6 px-4">Navigation</p>
+                    <p class="app-scrollspy-section-title">Navigation</p>
                     <nav class="space-y-1">
                         <a href="#identite_formation" data-scroll-spy-target="link"
-                           class="flex items-center gap-3 px-5 py-3 text-[11px] font-black uppercase tracking-widest rounded-md border-l-4 border-transparent transition-all duration-300">
+                           class="app-scrollspy-link">
                             Identité de la formation
                         </a>
 
                         <a href="#presentation" data-scroll-spy-target="link"
-                           class="flex items-center gap-3 px-5 py-3 text-[11px] font-black uppercase tracking-widest rounded-md border-l-4 border-transparent transition-all duration-300">
+                           class="app-scrollspy-link">
                             Présentation de la formation
                         </a>
 
                         <a href="#descriptif" data-scroll-spy-target="link"
-                           class="flex items-center gap-3 px-5 py-3 text-[11px] font-black uppercase tracking-widest rounded-md border-l-4 border-transparent transition-all duration-300">
+                           class="app-scrollspy-link">
                             Descriptif de la formation
                         </a>
 
                         <a href="#presentation_{{ parcours.id }}" data-scroll-spy-target="link"
-                           class="flex items-center gap-3 px-5 py-3 text-[11px] font-black uppercase tracking-widest rounded-md border-l-4 border-transparent transition-all duration-300">
+                           class="app-scrollspy-link">
                             Présentation du parcours
                         </a>
 
                         <a href="#descriptif_{{ parcours.id }}" data-scroll-spy-target="link"
-                           class="flex items-center gap-3 px-5 py-3 text-[11px] font-black uppercase tracking-widest rounded-md border-l-4 border-transparent transition-all duration-300">
+                           class="app-scrollspy-link">
                             Descriptif du parcours
                         </a>
 
 
                         <a href="#localisation_{{ parcours.id }}" data-scroll-spy-target="link"
-                           class="flex items-center gap-3 px-5 py-3 text-[11px] font-black uppercase tracking-widest rounded-md border-l-4 border-transparent transition-all duration-300">
+                           class="app-scrollspy-link">
                             Localisation
                         </a>
 
                         <a href="#competences_{{ parcours.id }}" data-scroll-spy-target="link"
-                           class="flex items-center gap-3 px-5 py-3 text-[11px] font-black uppercase tracking-widest rounded-md border-l-4 border-transparent transition-all duration-300">
+                           class="app-scrollspy-link">
                             Compétences Acquises
                         </a>
 
                         <a href="#structure_{{ parcours.id }}" data-scroll-spy-target="link"
-                           class="flex items-center gap-3 px-5 py-3 text-[11px] font-black uppercase tracking-widest rounded-md border-l-4 border-transparent transition-all duration-300">
+                           class="app-scrollspy-link">
                             Structure & maquette
                         </a>
                         <a href="#admission_{{ parcours.id }}" data-scroll-spy-target="link"
-                           class="flex items-center gap-3 px-5 py-3 text-[11px] font-black uppercase tracking-widest rounded-md border-l-4 border-transparent transition-all duration-300">
+                           class="app-scrollspy-link">
                             Admission
                         </a>
 
                         <a href="#inscription_{{ parcours.id }}" data-scroll-spy-target="link"
-                           class="flex items-center gap-3 px-5 py-3 text-[11px] font-black uppercase tracking-widest rounded-md border-l-4 border-transparent transition-all duration-300">
+                           class="app-scrollspy-link">
                             Inscription
                         </a>
 
                         <a href="#et_apres_{{ parcours.id }}" data-scroll-spy-target="link"
-                           class="flex items-center gap-3 px-5 py-3 text-[11px] font-black uppercase tracking-widest rounded-md border-l-4 border-transparent transition-all duration-300">
+                           class="app-scrollspy-link">
                             Et après...
                         </a>
 
                         <a href="#contacts_{{ parcours.id }}" data-scroll-spy-target="link"
-                           class="flex items-center gap-3 px-5 py-3 text-[11px] font-black uppercase tracking-widest rounded-md border-l-4 border-transparent transition-all duration-300">
+                           class="app-scrollspy-link">
                             Contacts pédagogiques
                         </a>
                     </nav>
@@ -206,7 +156,7 @@
                 {% set isFull = parcours.remplissage.isFull() == true %}
                 {% set color = isFull and valideLheo ? 'green' : 'orange' %}
 
-                <div class="p-6 bg-{{ color }}-600 rounded-sm text-white shadow-xl shadow-{{ color }}-100">
+                <div class="rounded-md p-6 text-white shadow-xl {% if color == 'green' %}bg-green-600 shadow-green-100 dark:shadow-green-950/30{% else %}bg-orange-600 shadow-orange-100 dark:shadow-orange-950/30{% endif %}">
                     <p class="text-[10px] font-black uppercase opacity-60 mb-2">Statut Global</p>
                     <p class="text-sm font-bold leading-tight">
                         {% if lheoXML.isValidLheo(parcours) %}
@@ -222,6 +172,47 @@
             </div>
         </aside>
         <div class="ps-3 flex-1 overflow-y-auto flex flex-col pt-0">
+            {% if (parcours.descriptifHautPage != '' and parcours.descriptifHautPage != null)  or
+                (parcours.descriptifBasPage != '' and parcours.descriptifBasPage != null) or
+                (parcours.descriptifHautPageAutomatique != '' and parcours.descriptifHautPageAutomatique != null) %}
+                <section data-scroll-spy-target="section"
+                         class="app-section-card"
+                         id="presentation_complementaire">
+                    {{ include('communs/_header_show.html.twig', {
+                        title: 'Informations complémentaires (affichées sur le site institutionnel)',
+                        icon: 'fa-solid fa-book-open',
+                        color: 'indigo'
+                    }) }}
+
+                    <dl class="space-y-4 text-sm text-slate-700 dark:text-slate-200">
+                        {% if (parcours.descriptifHautPageAutomatique != '' and parcours.descriptifHautPageAutomatique != null) %}
+                            <div class="space-y-2">
+                                <dt class="text-xs font-black uppercase tracking-[0.18em] text-slate-400 dark:text-slate-500">
+                                    Texte haut de page (automatique)
+                                </dt>
+                                <dd class="leading-7 text-slate-700 dark:text-slate-200">{{ parcours.descriptifHautPageAutomatique|raw }}</dd>
+                            </div>
+                        {% endif %}
+                        {% if (parcours.descriptifHautPage != '' and parcours.descriptifHautPage != null) %}
+                            <div class="space-y-2">
+                                <dt class="text-xs font-black uppercase tracking-[0.18em] text-slate-400 dark:text-slate-500">
+                                    Texte haut de page
+                                </dt>
+                                <dd class="leading-7 text-slate-700 dark:text-slate-200">{{ parcours.descriptifHautPage|raw }}</dd>
+                            </div>
+                        {% endif %}
+                        {% if (parcours.descriptifBasPage != '' and parcours.descriptifBasPage != null) %}
+                            <div class="space-y-2">
+                                <dt class="text-xs font-black uppercase tracking-[0.18em] text-slate-400 dark:text-slate-500">
+                                    Texte bas de page
+                                </dt>
+                                <dd class="leading-7 text-slate-700 dark:text-slate-200">{{ parcours.descriptifBasPage|raw }}</dd>
+                            </div>
+                        {% endif %}
+                    </dl>
+                </section>
+            {% endif %}
+
             {{ include('typeDiplome/'~constant('TEMPLATE_FOLDER', typeD)~'/_show_parcours.html.twig') }}
         </div>
     </div>

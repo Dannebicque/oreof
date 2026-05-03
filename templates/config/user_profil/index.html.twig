@@ -40,13 +40,13 @@
                     modalTitle: 'Ajouter un utilisateur hors URCA',
                     modalUrl: path('app_user_new_hors_urca') }) }}
                 data-action="click->modal#openModal"
-                class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+                class="btn border border-emerald-300 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 hover:text-emerald-800"
                 data-size="lg"
                 data-bs-toggle="tooltip"
                 data-bs-placement="bottom"
                 title="Ajouter un utilisateur hors URCA"
         >
-            <i class="{{ iconAdd }}"></i>
+            <twig:UX:Icon name="icon:add" class="h-4 w-4"/>
             <span> Ajouter un utilisateur hors URCA</span>
         </button>
         <button
@@ -55,13 +55,13 @@
                     modalTitle: 'Ajouter un utilisateur depuis le LDAP',
                     modalUrl: path('app_user_new_ldap') }) }}
                 data-action="click->modal#openModal"
-                class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+                class="btn border border-emerald-300 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 hover:text-emerald-800"
                 data-size="lg"
                 data-bs-toggle="tooltip"
                 data-bs-placement="bottom"
                 title="Ajouter un utilisateur depuis le LDAP"
         >
-            <i class="{{ iconAdd }}"></i>
+            <twig:UX:Icon name="icon:add" class="h-4 w-4"/>
             <span> Ajouter un utilisateur depuis le LDAP</span>
         </button>
     {% else %}
@@ -71,13 +71,13 @@
                     modalTitle: 'Ajouter un utilisateur depuis le LDAP',
                     modalUrl: path('app_user_new_ldap', {acces:'dpe'}) }) }}
                 data-action="click->modal#openModal"
-                class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+                class="btn border border-emerald-300 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 hover:text-emerald-800"
                 data-size="lg"
                 data-bs-toggle="tooltip"
                 data-bs-placement="bottom"
                 title="Ajouter un utilisateur depuis le LDAP"
         >
-            <i class="{{ iconAdd }}"></i>
+            <twig:UX:Icon name="icon:add" class="h-4 w-4"/>
             <span> Ajouter un utilisateur depuis le LDAP</span>
         </button>
     {% endif %}

@@ -298,7 +298,9 @@ framework:
                 - name: dateConseil
                   type: date
                   required: true
-                - name: upload
+                - name: uploadPv #todo: vérifier nom, notamment dans le json pour cohérence v1
+                  type: file
+                - name: uploadArgumentaire #todo: vérifier nom, notamment dans le json pour cohérence v1
                   type: file
                 - name: laissezPasser
                   type: checkbox

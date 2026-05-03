@@ -36,7 +36,7 @@ class DemandeDpeController extends BaseController
         ComposanteRepository $composanteRepository,
         DpeDemandeRepository $dpeDemandeRepository,
         Request $request,
-        string $type = null
+        ?string $type = null
     ): Response
     {
         if ($type === 'composante') {

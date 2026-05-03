@@ -88,7 +88,7 @@ class DataTableBuilder
             'label' => 'Dupliquer',
             'route' => $route,
             'icon' => 'fal fa-copy',
-            'class' => 'text-success',
+            'class' => 'inline-flex items-center gap-1 rounded-md border border-emerald-300 bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-700 transition hover:bg-emerald-100',
         ], $options));
     }
 
@@ -101,7 +101,7 @@ class DataTableBuilder
      *   - route: string - Nom de la route Symfony
      *   - route_params: array - Paramètres de route additionnels
      *   - icon: string - Classe d'icône Bootstrap/FontAwesome
-     *   - class: string - Classes CSS du bouton (défaut: 'btn-sm btn-primary')
+     *   - class: string - Classes CSS Tailwind du bouton
      *   - confirm: string - Message de confirmation
      *   - condition: callable - Fonction qui détermine si l'action est visible pour une ligne
      *   - modal: bool - Ouvrir dans une modal (défaut: false)
@@ -115,7 +115,7 @@ class DataTableBuilder
             'route' => null,
             'route_params' => [],
             'icon' => null,
-            'class' => 'btn-sm btn-primary',
+            'class' => 'inline-flex items-center gap-1 rounded-md border border-slate-300 bg-white px-2.5 py-1 text-xs font-semibold text-slate-700 transition hover:bg-slate-50',
             'confirm' => null,
             'condition' => null,
             'modal' => false,
@@ -140,7 +140,7 @@ class DataTableBuilder
             'label' => 'Activer/Désactiver',
             'route' => $route,
             'icon' => 'fal fa-toggle-on',
-            'class' => 'text-warning',
+            'class' => 'inline-flex items-center gap-1 rounded-md border border-amber-300 bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-700 transition hover:bg-amber-100',
         ], $options));
     }
 
@@ -176,8 +176,8 @@ class DataTableBuilder
         return $this->addAction('show', array_merge([
             'label' => 'Voir',
             'route' => $route,
-            'icon' => 'fal fa-eye',
-            'class' => 'text-info',
+            'icon' => 'icon:info',
+            'class' => 'inline-flex items-center gap-1 rounded-md border border-cyan-300 bg-cyan-50 px-2.5 py-1 text-xs font-semibold text-cyan-700 transition hover:bg-cyan-100',
         ], $options));
     }
 
@@ -190,7 +190,7 @@ class DataTableBuilder
             'label' => 'Modifier',
             'route' => $route,
             'icon' => 'fal fa-edit',
-            'class' => 'text-warning',
+            'class' => 'inline-flex items-center gap-1 rounded-md border border-amber-300 bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-700 transition hover:bg-amber-100',
             'modal' => false, // Peut être surchargé
         ], $options));
     }
@@ -204,7 +204,7 @@ class DataTableBuilder
             'label' => 'Supprimer',
             'route' => $route,
             'icon' => 'fal fa-trash-alt',
-            'class' => 'text-danger',
+            'class' => 'inline-flex items-center gap-1 rounded-md border border-rose-300 bg-rose-50 px-2.5 py-1 text-xs font-semibold text-rose-700 transition hover:bg-rose-100',
             'confirm' => 'Êtes-vous sûr de vouloir supprimer cet élément ?',
         ], $options));
     }

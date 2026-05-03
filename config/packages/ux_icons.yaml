@@ -1,0 +1,80 @@
+# Full configuration reference: https://symfony.com/bundles/ux-icons/current/index.html#configuration
+ux_icons:
+
+  # Default HTML attributes to add to all icons
+  default_icon_attributes:
+
+    # Use current text color to fill the icon
+    fill: currentColor
+
+  # Throw an exception if an icon is not
+  ignore_not_found: false
+
+  # Dossiers de recherche : d'abord les icônes locales (assets/icons/),
+  # puis les sets Phosphor et Simple Icons installés via npm
+  icon_dir: '%kernel.project_dir%/assets/icons'
+
+  # Alias sémantiques pour uniformiser l'usage dans Twig
+  # Exemple: <twig:UX:Icon name="icon:home" class="w-5 h-5" />
+  aliases:
+    # Navigation
+    icon:home: 'ph:house-light'
+    icon:menu: 'ph:list-light'
+    icon:search: 'ph:magnifying-glass-light'
+    icon:chevron-right: 'ph:caret-right-light'
+    icon:chevrons-right: 'ph:caret-double-right-light'
+    icon:chevron-left: 'ph:caret-left-light'
+    icon:chevrons-left: 'ph:caret-double-left-light'
+    icon:chevron-down: 'ph:caret-down-light'
+    icon:chevron-up: 'ph:caret-up-light'
+
+    # Actions
+    icon:save: 'ph:floppy-disk-light'
+    icon:add: 'ph:plus-bold'
+    icon:edit: 'ph:pencil-light'
+    icon:delete: 'ph:trash-light'
+    icon:print: 'ph:printer-light'
+    icon:download: 'ph:download-simple-light'
+    icon:filter: 'ph:funnel-light'
+    icon:sync: 'ph:arrows-clockwise-bold'
+
+    # Statut / feedback
+    icon:check: 'ph:check-bold'
+    icon:check-circle: 'ph:check-circle-bold'
+    icon:close: 'ph:x-light'
+    icon:warning: 'ph:warning-light'
+    icon:info: 'ph:info-light'
+    icon:success: 'ph:check-circle-light'
+    icon:danger: 'ph:x-circle-light'
+    icon:question: 'ph:question-light'
+    icon:timeline: 'ph:clock-light'
+
+    icon:warning:bold: 'ph:warning-bold'
+    icon:info:bold: 'ph:info-bold'
+    icon:success:bold: 'ph:check-circle-bold'
+    icon:danger:bold: 'ph:x-circle-bold'
+    icon:question:bold: 'ph:question-bold'
+    icon:clock: 'ph:clock-light'
+    icon:lock: 'ph:lock-bold'
+    icon:unlock: 'ph:lock-open-bold'
+    icon:eye: 'ph:eye-light'
+    icon:eye-slash: 'ph:eye-slash-light'
+
+    # Métier / navigation ORéOF
+    icon:school: 'ph:student-light'
+    icon:users: 'ph:users-light'
+    icon:graduation: 'ph:graduation-cap-bold'
+    icon:wrench: 'ph:wrench-light'
+    icon:gear: 'ph:gear-six-bold'
+    icon:bell: 'ph:bell-light'
+    icon:envelope: 'ph:envelope-light'
+    icon:pencil-ruler: 'ph:pencil-ruler-duotone'
+
+    # Marques
+    icon:github: 'simple-icons:github'
+    icon:twitter: 'simple-icons:twitter'
+
+when@prod:
+  ux_icons:
+    # Suppress exceptions for missing icons in production
+    ignore_not_found: true
