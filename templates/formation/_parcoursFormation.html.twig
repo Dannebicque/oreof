@@ -10,6 +10,7 @@
                 <th>BCC</th>
                 <th>MCCC</th>
                 <th>Conseil</th>
+                <th>Logos</th>
                 <th>Remplissage</th>
                 <th></th>
             </tr>
@@ -37,6 +38,30 @@
                             </td>
                             <td>
                                 {{ component('historique_pv', {parcours:parcours}) }}
+                            </td>
+                            <td>
+                                {% if parcours.logo %}
+                                    {% set logos = parcours.logo %}
+                                    <span
+                                        {{ stimulus_controller('modal', {
+                                            size: 'lg',
+                                            modalTitle: 'Logos du parcours',
+                                            modalUrl: path('app_parcours_logos', {id: parcours.id})
+                                        }) }}
+                                        data-action="click->modal#openModal"
+                                        style="cursor: pointer;"
+                                                                >
+                                        <img src="{{ asset('uploads/logos/' ~ logos[0]) }}"
+                                             alt="Logo"
+                                             style="max-height: 40px; max-width: 80px; object-fit: contain;"
+                                        >
+                                        {% if logos|length > 1 %}
+                                            <span class="badge bg-primary">+{{ logos|length - 1 }}</span>
+                                        {% endif %}
+                                    </span>
+                                {% else %}
+                                    <span class="badge bg-secondary">Aucun</span>
+                                {% endif %}
                             </td>
                             <td>
                                 {{ parcours.remplissage|remplissage }}
@@ -99,7 +124,7 @@
             {% else %}
                 {% if formation.parcours|length == 0 %}
                     <tr class="bg-warning text-white">
-                        <td colspan="9">Formation non initialisée, pas de parcours ou de parcours par défaut.</td>
+                        <td colspan="10">Formation non initialisée, pas de parcours ou de parcours par défaut.</td>
                     </tr>
                 {% else %}
                     {% set parcours = formation.parcours[0] %}
@@ -120,12 +145,36 @@
                         <td>
                             {{ parcours.etatStep(4)|badgeStep }}
                         </td>
-                        <td>
-                            {{ component('historique_pv', {parcours:parcours}) }}
-                        </td>
-                        <td>
-                            {{ parcours.remplissage|remplissage }}
-                        </td>
+                            <td>
+                                {{ component('historique_pv', {parcours:parcours}) }}
+                            </td>
+                            <td>
+                                {% if formation.logo %}
+                                    {% set logos = formation.logo %}
+                                    <span
+                                        {{ stimulus_controller('modal', {
+                                            size: 'lg',
+                                            modalTitle: 'Logos de la formation',
+                                            modalUrl: path('app_formation_logos', {slug: formation.slug})
+                                        }) }}
+                                        data-action="click->modal#openModal"
+                                        style="cursor: pointer;"
+                                                                >
+                                        <img src="{{ asset('uploads/logos/' ~ logos[0]) }}"
+                                             alt="Logo"
+                                             style="max-height: 40px; max-width: 80px; object-fit: contain;"
+                                        >
+                                        {% if logos|length > 1 %}
+                                            <span class="badge bg-primary">+{{ logos|length - 1 }}</span>
+                                        {% endif %}
+                                    </span>
+                                {% else %}
+                                    <span class="badge bg-secondary">Aucun</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {{ parcours.remplissage|remplissage }}
+                            </td>
                         {% endif %}
                         <td class="text-end">
                             <a href="{{ path('app_formation_show',{'slug': formation.slug}) }}"
