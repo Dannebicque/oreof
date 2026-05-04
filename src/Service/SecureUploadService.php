@@ -114,6 +114,8 @@ class SecureUploadService
     {
         return match ($extension) {
             'pdf' => ['application/pdf'],
+            'png' => ['image/png'],
+            'jpg', 'jpeg' => ['image/jpeg'],
             default => [],
         };
     }

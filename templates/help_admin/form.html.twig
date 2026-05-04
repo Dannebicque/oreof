@@ -86,6 +86,22 @@
             updateTextarea(textarea, start, end, newText, start + newText.length);
         }
 
+        function insertAccordion() {
+            const textarea = getEditor();
+            if (!textarea) return;
+
+            const title = prompt("Titre de la section déroulante :");
+            if (!title) return;
+
+            const start = textarea.selectionStart;
+            const end = textarea.selectionEnd;
+            const selectedText = textarea.value.substring(start, end) || "Contenu de la section ici...";
+
+            // Important : Les sauts de ligne (\n\n) permettent au parseur Markdown de continuer d'interpréter le contenu à l'intérieur de la balise HTML.
+            const newText = `\n<details>\n<summary><strong>${title}</strong></summary>\n\n${selectedText}\n\n</details>\n`;
+            updateTextarea(textarea, start, end, newText, start + newText.length);
+        }
+
         function updateTextarea(textarea, start, end, newText, newCursorPos) {
             textarea.focus();
             textarea.setRangeText(newText, start, end, 'end');

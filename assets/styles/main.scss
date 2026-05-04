@@ -561,3 +561,81 @@ table.fixed-table thead th:first-child {
   height: 3px;
   background-color: #4f46e5; /* Indigo-600 */
 }
+
+/* Styles pour les menus déroulants (accordéons) en Markdown */
+.markdown-body details {
+  background-color: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 0.375rem;
+  padding: 0.75rem 1.25rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+  transition: all 0.2s ease-in-out;
+
+  /* Menu déroulant imbriqué (details dans details) */
+  & details {
+    background-color: #ffffff;
+    /* Espace et barre verticale pour montrer l'imbrication */
+    border: none;
+    border-left: 4px solid var(--info, #17a2b8);
+    border-radius: 0;
+    margin-top: 1rem;
+    margin-left: 0.5rem;
+    padding: 0.5rem 1rem;
+    box-shadow: none;
+    background-color: rgba(23, 162, 184, 0.03); /* Léger fond coloré */
+  }
+
+  /* Style du titre cliquable */
+  & > summary {
+    font-weight: 600;
+    cursor: pointer;
+    list-style: none; /* Cache la flèche native des navigateurs récents */
+    position: relative;
+    padding-left: 1.5rem;
+    outline: none;
+    color: var(--alternate, #112A46);
+    margin: -0.75rem -1.25rem; /* Etendre la zone de clic */
+    padding: 0.75rem 1.25rem 0.75rem 2.75rem;
+  }
+
+  & > summary::-webkit-details-marker {
+    display: none; /* Cache la flèche native sur Safari */
+  }
+
+  /* Flèche personnalisée CSS */
+  & > summary::before {
+    content: '';
+    position: absolute;
+    left: 1.25rem;
+    top: 50%;
+    width: 0;
+    height: 0;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    border-left: 6px solid var(--primary, #187BB9);
+    transform: translateY(-50%);
+    transition: transform 0.2s ease-in-out;
+  }
+
+  /* Animation flèche quand ouvert */
+  &[open] > summary::before {
+    transform: translateY(-50%) rotate(90deg);
+  }
+
+  /* Style du contenu déroulé */
+  &[open] > summary ~ * {
+    animation: fadeInAccordion 0.3s ease-in-out;
+  }
+
+  /* Ligne séparatrice entre titre et contenu */
+  &[open] > summary {
+    border-bottom: 1px solid #e9ecef;
+    margin-bottom: 1rem;
+  }
+}
+
+@keyframes fadeInAccordion {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
