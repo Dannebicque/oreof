@@ -89,7 +89,7 @@ class SecureUploadService
         $targetDir = rtrim($config['target_dir'], '/');
         $this->filesystem->mkdir($targetDir, 0750);
 
-        $storedFilename = bin2hex(random_bytes(24)) . '.' . $extension;
+        $storedFilename = date('Ymd_His') . '_' . bin2hex(random_bytes(6)) . '.' . $extension;
 
         try {
             $file->move($targetDir, $storedFilename);
@@ -129,6 +129,25 @@ class SecureUploadService
         return $safe !== '' ? $safe : 'document';
     }
 
+    private function doUpload(string $context, UploadedFile $file, array $config): string
+    {
+        $this->validateFile($file, $config['max_size'], $config['allowed_extensions'], $config['allowed_mime_types']);
+
+        $extension = $file->guessExtension() ?? $file->getClientOriginalExtension();
+        $targetDir = rtrim($config['target_dir'], '/');
+        $this->filesystem->mkdir($targetDir, 0750);
+
+        $storedFilename = date('Ymd_His') . '_' . bin2hex(random_bytes(6)) . '.' . $extension;
+
+        try {
+            $file->move($targetDir, $storedFilename);
+        } catch (\Exception $e) {
+            throw FileUploadException::uploadFailed($e->getMessage());
+        }
+
+        return $storedFilename;
+    }
+
     public function resolveStoredFilePath(string $context, string $storedFilename): string
     {
         $config = $this->uploadContexts[$context] ?? null;
@@ -137,7 +156,7 @@ class SecureUploadService
         }
 
         $safeFilename = basename($storedFilename);
-        if ($safeFilename !== $storedFilename || !preg_match('/^[a-f0-9]{48}\.[a-z0-9]+$/', $safeFilename)) {
+        if ($safeFilename !== $storedFilename || !preg_match('/^(\d{8}_\d{6}_[a-f0-9]{12}|[a-f0-9]{48})\.[a-z0-9]+$/', $safeFilename)) {
             throw FileUploadException::invalidFile();
         }
 

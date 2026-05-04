@@ -16,7 +16,109 @@
         </div>
     </div>
 
+    <!-- Bouton caché pour ouvrir la modale sans erreur JS -->
+    <button type="button" id="hiddenOpenModalBtn" class="d-none" data-bs-toggle="modal" data-bs-target="#imageModal"></button>
+
+    <!-- Modal de sélection et d'upload d'image -->
+    <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="imageModalLabel">Gérer les images d'aide</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                </div>
+                <div class="modal-body">
+
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs mb-3" id="imageModalTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="gallery-tab" data-bs-toggle="tab" data-bs-target="#gallery-tab-pane" type="button" role="tab" aria-controls="gallery-tab-pane" aria-selected="true"><i class="fal fa-images"></i> Galerie d'images</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="upload-tab" data-bs-toggle="tab" data-bs-target="#upload-tab-pane" type="button" role="tab" aria-controls="upload-tab-pane" aria-selected="false"><i class="fal fa-plus-circle"></i> Ajouter une nouvelle image</button>
+                        </li>
+                    </ul>
+
+                    <!-- Tab panes -->
+                    <div class="tab-content" id="imageModalTabContent">
+
+                        <!-- Onglet Galerie -->
+                        <div class="tab-pane fade show active" id="gallery-tab-pane" role="tabpanel" aria-labelledby="gallery-tab" tabindex="0">
+                            <div class="mb-3">
+                                <input type="text" id="imageSearchInput" class="form-control" placeholder="Rechercher une image..." onkeyup="searchImages()">
+                            </div>
+                            <!-- Conteneur grille pour les images -->
+                            <div id="imageGallery" class="row row-cols-2 row-cols-md-4 g-3 overflow-auto" style="min-height: 300px; max-height: 60vh;">
+                                <!-- Les images apparaîtront ici -->
+                            </div>
+                        </div>
+
+                        <!-- Onglet Upload -->
+                        <div class="tab-pane fade" id="upload-tab-pane" role="tabpanel" aria-labelledby="upload-tab" tabindex="0">
+                            <div class="row mt-3 align-items-start">
+                                <div class="col-md-7">
+                                    <div class="alert alert-info">
+                                        <i class="fal fa-info-circle"></i> L'image sera sauvegardée sur le serveur et pourra être utilisée plus tard dans d'autres aides.
+                                    </div>
+                                    <form id="uploadImageForm" onsubmit="uploadImage(event)">
+                                        <div class="mb-3">
+                                            <label for="uploadName" class="form-label">Nom sous lequel enregistrer l'image <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" id="uploadName" placeholder="Ex: accueil_timeline" required>
+                                        </div>
+                                        <div class="mb-4">
+                                            <label for="uploadFile" class="form-label">Fichier (.png, .jpg, .jpeg) <span class="text-danger">*</span></label>
+                                            <input type="file" class="form-control" id="uploadFile" accept=".png, .jpg, .jpeg" required>
+                                            <div class="form-text">Taille maximale : 10 Mo.</div>
+                                        </div>
+                                        <button type="submit" class="btn btn-success">
+                                            <i class="fal fa-upload"></i> Uploader et insérer l'image
+                                        </button>
+                                    </form>
+                                </div>
+                                <div class="col-md-5">
+                                    <div id="imagePreviewContainer" class="w-100 d-flex flex-column justify-content-center align-items-center text-muted" style="background-color: #f8f9fa; border-radius: 8px; border: 2px dashed #dee2e6; min-height: 250px; padding: 1rem;">
+                                        <i class="fal fa-image fa-3x mb-2" id="previewIcon"></i>
+                                        <span id="previewText">Aperçu de l'image</span>
+                                        <img id="imagePreview" src="" alt="Aperçu" class="img-fluid d-none rounded shadow-sm" style="max-height: 250px; object-fit: contain;">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const uploadFileInput = document.getElementById('uploadFile');
+            if (uploadFileInput) {
+                uploadFileInput.addEventListener('change', function(e) {
+                    const file = e.target.files[0];
+                    const preview = document.getElementById('imagePreview');
+                    const icon = document.getElementById('previewIcon');
+                    const text = document.getElementById('previewText');
+
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            preview.src = e.target.result;
+                            preview.classList.remove('d-none');
+                            if(icon) icon.classList.add('d-none');
+                            if(text) text.classList.add('d-none');
+                        }
+                        reader.readAsDataURL(file);
+                    } else {
+                        preview.src = '';
+                        preview.classList.add('d-none');
+                        if(icon) icon.classList.remove('d-none');
+                        if(text) text.classList.remove('d-none');
+                    }
+                });
+            }
+        });
+
         function getEditor() {
             return document.querySelector('textarea[name="help[content]"]');
         }
@@ -58,6 +160,8 @@
             updateTextarea(textarea, start, end, newText, start + newText.length);
         }
 
+        // Ancienne fonction conservée par sécurité au cas où,
+        // mais désormais remplacée par le Modal et selectImage()
         function insertImage() {
             const textarea = getEditor();
             if (!textarea) return;
@@ -70,6 +174,158 @@
 
             const newText = `![Description de l'image](${url})`;
             updateTextarea(textarea, start, end, newText, start + newText.length);
+        }
+
+        function openImageModal() {
+            loadImages(); // Charge la galerie
+            const btn = document.getElementById('hiddenOpenModalBtn');
+            if (btn) btn.click();
+        }
+
+        function loadImages(query = '') {
+            const gallery = document.getElementById('imageGallery');
+            gallery.innerHTML = '<div class="text-center py-4 w-100"><i class="fal fa-spinner fa-spin fa-2x text-primary"></i> <p>Chargement...</p></div>';
+
+            fetch('/admin/help/images?q=' + encodeURIComponent(query))
+                .then(response => response.json())
+                .then(data => {
+                    gallery.innerHTML = '';
+                    if (data.length === 0) {
+                        gallery.innerHTML = '<div class="alert alert-light text-center w-100">Aucune image trouvée.</div>';
+                        return;
+                    }
+                    data.forEach(img => {
+                        const url = '/uploads/help_images/' + img.fichier;
+                        const col = document.createElement('div');
+                        col.className = 'col';
+                        col.innerHTML = `
+                            <div class="card shadow-sm border-0 bg-light role-button cursor-pointer hoverable-card mb-3 position-relative" style="cursor: pointer;">
+                                <div class="card-body p-2 d-flex align-items-center justify-content-center" style="height: 140px; background-color: #fff; border-radius: 4px 4px 0 0;" onclick="selectImage('${url}', '${img.nom}')">
+                                    <img src="${url}" alt="${img.nom}" class="img-fluid rounded" style="max-height: 100%; max-width: 100%; object-fit: contain;">
+                                </div>
+                                <div class="card-footer p-2 text-truncate small bg-white text-center border-top m-0" title="${img.nom}">
+                                    ${img.nom}
+                                </div>
+                                <button type="button" class="btn btn-sm btn-danger position-absolute" style="top: 5px; right: 5px; opacity: 0.8;" onclick="deleteImage(event, ${img.id})" title="Supprimer cette image" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.8">
+                                    <i class="fal fa-trash-alt"></i>
+                                </button>
+                            </div>
+                        `;
+                        gallery.appendChild(col);
+                    });
+                })
+                .catch(err => {
+                    console.error(err);
+                    gallery.innerHTML = '<div class="alert alert-danger w-100">Erreur lors du chargement des images.</div>';
+                });
+        }
+
+        let searchTimeout = null;
+        function searchImages() {
+            const input = document.getElementById('imageSearchInput');
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                loadImages(input.value);
+            }, 400); // 400ms de debounce
+        }
+
+        function uploadImage(e) {
+            e.preventDefault();
+            const btn = e.target.querySelector('button[type="submit"]');
+            const originalHtml = btn.innerHTML;
+            btn.innerHTML = '<i class="fal fa-spinner fa-spin"></i> Traitement en cours...';
+            btn.disabled = true;
+
+            const nom = document.getElementById('uploadName').value;
+            const fileInput = document.getElementById('uploadFile');
+
+            const formData = new FormData();
+            formData.append('nom', nom);
+            if (fileInput.files.length > 0) {
+                formData.append('image', fileInput.files[0]);
+            }
+
+            fetch('/admin/help/images/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(res => res.json())
+            .then(data => {
+                btn.innerHTML = originalHtml;
+                btn.disabled = false;
+
+                if (data.error) {
+                    alert('Erreur : ' + data.error);
+                } else {
+                    document.getElementById('uploadImageForm').reset();
+
+                    // Reset preview
+                    document.getElementById('imagePreview').classList.add('d-none');
+                    document.getElementById('previewIcon').classList.remove('d-none');
+                    document.getElementById('previewText').classList.remove('d-none');
+                    document.getElementById('imagePreview').src = '';
+
+                    // On bascule visuellement sur l'onglet galerie
+                    const galleryTab = document.getElementById('gallery-tab');
+                    if (galleryTab) galleryTab.click();
+
+                    // On recharge les images
+                    loadImages();
+                    // Et on sélectionne et insère directement la nouvelle image
+                    selectImage('/uploads/help_images/' + data.fichier, data.nom);
+                }
+            })
+            .catch(err => {
+                btn.innerHTML = originalHtml;
+                btn.disabled = false;
+                alert('Erreur système lors de l\'upload.');
+                console.error(err);
+            });
+        }
+
+        function selectImage(url, altName) {
+            const textarea = getEditor();
+            if (!textarea) return;
+
+            const start = textarea.selectionStart;
+            const end = textarea.selectionEnd;
+
+            // Construit la syntaxe markdown
+            const newText = `![${altName}](${url})`;
+            updateTextarea(textarea, start, end, newText, start + newText.length);
+
+            // Ferme la modal en simulant un clic sur le bouton de fermeture
+            const closeBtn = document.querySelector('#imageModal .btn-close');
+            if (closeBtn) closeBtn.click();
+        }
+
+        function deleteImage(e, id) {
+            e.stopPropagation(); // Évite de sélectionner l'image
+            if (!confirm('Êtes-vous sûr de vouloir supprimer cette image définitivement ?')) return;
+
+            const btn = e.currentTarget;
+            const originalIcon = btn.innerHTML;
+            btn.innerHTML = '<i class="fal fa-spinner fa-spin"></i>';
+            btn.disabled = true;
+
+            fetch('/admin/help/images/' + id + '/delete', {
+                method: 'DELETE'
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    loadImages(document.getElementById('imageSearchInput').value); // Recharge la galerie
+                } else {
+                    alert('Erreur : ' + (data.error || 'Impossible de supprimer.'));
+                    btn.innerHTML = originalIcon;
+                    btn.disabled = false;
+                }
+            })
+            .catch(err => {
+                alert('Erreur système lors de la suppression.');
+                btn.innerHTML = originalIcon;
+                btn.disabled = false;
+            });
         }
 
         function insertVideo() {
