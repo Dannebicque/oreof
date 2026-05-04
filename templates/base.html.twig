@@ -782,6 +782,50 @@
     </div>
 </div>
 
+<button type="button" id="hiddenOpenFullscreenModalBtn" class="d-none" data-bs-toggle="modal" data-bs-target="#imageFullscreenModal"></button>
+
+<!-- Modal Image Fullscreen -->
+<div class="modal fade" id="imageFullscreenModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content bg-transparent border-0 shadow-none">
+            <div class="modal-header border-0 pb-0">
+                <button type="button" class="btn-close btn-close-white ms-auto" data-bs-dismiss="modal" aria-label="Fermer" style="filter: invert(1) grayscale(100%) brightness(200%); width: 2em; height: 2em; opacity: 1; z-index: 1060; position: relative;"></button>
+            </div>
+            <div class="modal-body text-center p-0 position-relative" style="cursor: zoom-out;" data-bs-dismiss="modal">
+                <img id="fullscreenModalImage" src="" alt="Plein écran" class="img-fluid rounded" style="max-height: 90vh;">
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    document.body.addEventListener('click', function(e) {
+        if (e.target.tagName === 'IMG' && e.target.closest('.markdown-body')) {
+            const src = e.target.src;
+            const modalImg = document.getElementById('fullscreenModalImage');
+            if (modalImg) {
+                modalImg.src = src;
+
+                const btn = document.getElementById('hiddenOpenFullscreenModalBtn');
+                if (btn) btn.click();
+            }
+        }
+    });
+
+    // Rendre le curseur zoom-in sur les images
+    const observer = new MutationObserver((mutations) => {
+        const imgs = document.querySelectorAll('.markdown-body img:not(.zoom-ready)');
+        imgs.forEach(img => {
+            img.classList.add('zoom-ready');
+            img.style.cursor = 'zoom-in';
+            img.title = "Cliquez pour agrandir";
+        });
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+});
+</script>
+
 {% include '_ui/modal_wrapper.html.twig' with { open: false } %}
 
 {# Check de l'existant de la route pour l'aide #}
