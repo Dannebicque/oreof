@@ -834,17 +834,8 @@
         <div class="flex-grow-1">
             {% if current_help %}
                 <div class="markdown-body px-2">
-                    {{ current_help.content|markdown_to_html }}
+                    {{ current_help.content|markdown_to_html|parse_embeds }}
                 </div>
-
-                {% if current_help.videoUrl %}
-                    <div class="mt-4 pt-3 border-top">
-                        <label class="form-label text-muted"><i class="fal fa-video"></i> Guide Vidéo :</label>
-                        <div class="ratio ratio-16x9 rounded overflow-hidden shadow-sm">
-                            <iframe src="{{ current_help.videoUrl|replace({'watch?v=': 'embed/', 'youtu.be/': 'youtube.com/embed/'}) }}" allowfullscreen></iframe>
-                        </div>
-                    </div>
-                {% endif %}
             {% else %}
                 <div class="alert alert-light text-center mt-2 border">
                     <i class="fal fa-sad-tear fa-3x mb-3 text-muted"></i>

@@ -50,12 +50,6 @@ class HelpType extends AbstractType
                 'label' => 'Contenu explicatif',
                 'attr' => ['class' => 'form-control', 'rows' => 12]
             ])
-            ->add('videoUrl', TextType::class, [
-                'label' => 'Lien de la vidéo (YouTube / Vimeo)',
-                'required' => false,
-                'help' => 'Copiez simplement l\'URL de la vidéo.',
-                'attr' => ['class' => 'form-control mb-3']
-            ])
             ->add('isActive', CheckboxType::class, [
                 'label' => ' Activer cette aide',
                 'required' => false,

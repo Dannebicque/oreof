@@ -23,9 +23,6 @@ class Help
     #[ORM\Column(length: 255)]
     private ?string $routeSlug = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $videoUrl = null;
-
     #[ORM\Column]
     private ?bool $isActive = null;
 
@@ -66,18 +63,6 @@ class Help
     public function setRouteSlug(string $routeSlug): static
     {
         $this->routeSlug = $routeSlug;
-
-        return $this;
-    }
-
-    public function getVideoUrl(): ?string
-    {
-        return $this->videoUrl;
-    }
-
-    public function setVideoUrl(?string $videoUrl): static
-    {
-        $this->videoUrl = $videoUrl;
 
         return $this;
     }

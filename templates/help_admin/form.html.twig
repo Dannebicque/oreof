@@ -72,6 +72,20 @@
             updateTextarea(textarea, start, end, newText, start + newText.length);
         }
 
+        function insertVideo() {
+            const textarea = getEditor();
+            if (!textarea) return;
+
+            const url = prompt("Collez l'URL de la vidéo (ex: https://youtube.com/...) :");
+            if (!url) return;
+
+            const start = textarea.selectionStart;
+            const end = textarea.selectionEnd;
+
+            const newText = `[embed](${url})`;
+            updateTextarea(textarea, start, end, newText, start + newText.length);
+        }
+
         function updateTextarea(textarea, start, end, newText, newCursorPos) {
             textarea.focus();
             textarea.setRangeText(newText, start, end, 'end');

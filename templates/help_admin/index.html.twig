@@ -22,7 +22,6 @@
                         <th class="ps-4">Statut</th>
                         <th>Page (Route)</th>
                         <th>Titre</th>
-                        <th>Vidéo</th>
                         <th class="text-end pe-4">Actions</th>
                     </tr>
                     </thead>
@@ -38,7 +37,6 @@
                             </td>
                             <td class="align-middle"><code>{{ help.routeSlug }}</code></td>
                             <td class="align-middle"><strong>{{ help.title }}</strong></td>
-                            <td class="align-middle">{{ help.videoUrl ? '<i class="fal fa-video text-success"></i> Oui' : '-' }}</td>
                             <td class="text-end pe-4">
                                 {# Les boutons d'action avec le style ORéOF #}
                                 <div class="d-flex justify-content-end gap-2">
@@ -61,7 +59,7 @@
                         </tr>
                     {% else %}
                         <tr>
-                            <td colspan="5" class="text-center text-muted py-4">Aucune aide configurée pour le moment.</td>
+                            <td colspan="4" class="text-center text-muted py-4">Aucune aide configurée pour le moment.</td>
                         </tr>
                     {% endfor %}
                     </tbody>

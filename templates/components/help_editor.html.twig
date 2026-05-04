@@ -33,13 +33,14 @@
                     <button type="button" class="btn btn-sm btn-outline-primary" onclick="insertImage()" data-bs-toggle="tooltip" title="Insérer une image">
                         <i class="fal fa-image"></i> Image
                     </button>
+                    <button type="button" class="btn btn-sm btn-outline-danger" onclick="insertVideo()" data-bs-toggle="tooltip" title="Insérer une vidéo YouTube/Vimeo">
+                        <i class="fal fa-video"></i> Vidéo
+                    </button>
                 </div>
 
                 <!-- Le champ textarea de Symfony -->
                 {{ form_widget(form.content, { attr: { 'class': 'form-control rounded-bottom-only' } }) }}
             </div>
-
-            {{ form_row(form.videoUrl) }}
 
             <div class="form-check form-switch mb-3">
                 {{ form_widget(form.isActive) }}
@@ -62,17 +63,11 @@
 
                 <div class="markdown-body text-break">
                     {% if form.content.vars.value %}
-                        {{ form.content.vars.value|markdown_to_html }}
+                        {{ form.content.vars.value|markdown_to_html|parse_embeds }}
                     {% else %}
                         <p class="text-muted fst-italic">Commencez à rédiger pour voir l'aperçu...</p>
                     {% endif %}
                 </div>
-
-                {% if form.videoUrl.vars.value %}
-                    <div class="ratio ratio-16x9 mt-4 shadow-sm border">
-                        <iframe src="{{ form.videoUrl.vars.value|replace({'watch?v=': 'embed/', 'youtu.be/': 'youtube.com/embed/'}) }}" allowfullscreen></iframe>
-                    </div>
-                {% endif %}
             </div>
         </div>
     </div>
