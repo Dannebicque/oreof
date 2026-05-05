@@ -350,41 +350,34 @@
             or is_granted('EDIT', {route: 'app_composante', subject: formation})
             or is_granted('EDIT', {route: 'app_etablissement', subject: formation})
             or is_granted('ROLE_ADMIN')) and isOuvert(formation) %}
-            <a href="{{ path('formation_v2_modifier', {slug:formation.slug}) }}"
-               class="btn btn-sm btn-outline-warning btn-icon btn-icon-end w-100 w-sm-auto mx-2"
-               data-bs-toggle="tooltip"
-               data-bs-placement="bottom"
-               title="Modifier le DPE"
-            >
-                <i class="{{ iconEdit }}"></i>
-                <span> Modifier le DPE</span>
-            </a>
+            <twig:Button
+                    href="{{ path('formation_v2_modifier', {slug:formation.slug}) }}"
+                    variant="warning"
+                    icon="icon:edit"
+                    label="Modifier le DPE"
+                    tooltip="Modifier le DPE"
+            />
         {% endif %}
-
     {% else %}
         {% if (is_granted('EDIT', {route: 'app_formation', subject: formation})
             or is_granted('EDIT', {route: 'app_composante', subject: formation})
             or is_granted('EDIT', {route: 'app_etablissement', subject: formation})
             or is_granted('ROLE_ADMIN')) and isOuvert(formation.parcours[0].dpeParcours[0]) %}
-            <a href="{{ path('formation_v2_modifier', {slug:formation.slug}) }}"
-               class="btn btn-sm btn-outline-warning btn-icon btn-icon-end w-100 w-sm-auto mx-2"
-               data-bs-toggle="tooltip"
-               data-bs-placement="bottom"
-               title="Modifier le DPE"
-            >
-                <i class="{{ iconEdit }}"></i>
-                <span> Modifier le DPE</span>
-            </a>
+            <twig:Button
+                    href="{{ path('formation_v2_modifier', {slug:formation.slug}) }}"
+                    variant="warning"
+                    icon="icon:edit"
+                    label="Modifier le DPE"
+                    tooltip="Modifier le DPE"
+            />
         {% endif %}
     {% endif %}
 
-    <a href="{{ path('app_formation_index') }}"
-       class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
-       data-bs-toggle="tooltip"
-       data-bs-placement="bottom"
-       title="Retour à la liste des formations"
-    >
-        <i class="{{ iconBack }}"></i>
-        <span> Retour à la liste des formations</span>
-    </a>
+    <twig:Button
+            href="{{ path('app_formation_index') }}"
+            variant="success"
+            icon="icon:arrow-left"
+            label="Retour à la liste des formations"
+            tooltip="Retour à la liste des formations"
+    />
 {% endblock %}

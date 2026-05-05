@@ -32,7 +32,15 @@ export default class extends Controller {
 
   async afficherParcours(event) {
     const idFormation = event.params.formation
-    const icone = event.target.firstElementChild.classList
+    const button = event.currentTarget || event.target
+    const iconElement = button.querySelector('i')
+
+    if (!iconElement) {
+      return
+    }
+
+    const icone = iconElement.classList
+
     if (icone.contains('fa-caret-right')) {
       const zone = document.getElementById(`detailParcours_${idFormation}`)
 

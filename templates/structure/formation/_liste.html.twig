@@ -61,7 +61,7 @@
                                     </div>
                                     <div class="col-6 col-md-2 d-flex flex-column mb-1 mb-md-0 justify-content-center">
                                         <div class="text-muted text-small d-md-none">% Remplissage</div>
-                                            {{ formation.remplissage|remplissage }}
+                                        {{ component('remplissage_progress', { value: formation.remplissage }) }}
                                     </div>
                                     <div class="col-6 col-md-1 d-flex flex-column
                                             mb-1 mb-md-0 justify-content-center">

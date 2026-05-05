@@ -38,6 +38,7 @@ use App\Service\VersioningFicheMatiere;
 use App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException;
 use App\TypeDiplome\TypeDiplomeResolver;
 use Jfcherng\Diff\DiffHelper;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -50,6 +51,7 @@ class FicheMatiereController extends BaseController
     public function modifier(
         Request                        $request,
         FicheMatiereTabStateRepository $statesRepo,
+        #[MapEntity(mapping: ['slug' => 'slug'])]
         FicheMatiere                   $ficheMatiere
     ): Response
     {
@@ -90,6 +92,7 @@ class FicheMatiereController extends BaseController
 
     #[Route('/{slug}', name: 'voir', methods: ['GET'])]
     public function show(
+        #[MapEntity(mapping: ['slug' => 'slug'])]
         FicheMatiere                       $ficheMatiere,
         ElementConstitutifRepository       $elementConstitutifRepository,
         FicheMatiereMutualisableRepository $ficheMatiereMutualisableRepository,

@@ -1,18 +1,18 @@
 <?php
 /*
- * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
- * @file /Users/davidannebicque/Sites/oreof/src/Twig/Components/AlerteComponent.php
+ * Copyright (c) 2026. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/oreofv2/src/Twig/Components/UI/AlerteComponent.php
  * @author davidannebicque
- * @project oreof
- * @lastUpdate 11/03/2023 23:10
+ * @project oreofv2
+ * @lastUpdate 03/05/2026 08:10
  */
 
-namespace App\Twig\Components;
+namespace App\Twig\Components\UI;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\UX\TwigComponent\Attribute\AsTwigComponent;
 
-#[AsTwigComponent('alerte')]
+#[AsTwigComponent('alerte', template: 'components/_ui/alerte.html.twig')]
 final class AlerteComponent extends AbstractController
 {
     public string $type = 'info';

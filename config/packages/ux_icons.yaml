@@ -23,6 +23,7 @@ ux_icons:
     icon:search: 'ph:magnifying-glass-light'
     icon:chevron-right: 'ph:caret-right-light'
     icon:chevrons-right: 'ph:caret-double-right-light'
+    icon:arrow-left: 'ph:arrow-left-light'
     icon:chevron-left: 'ph:caret-left-light'
     icon:chevrons-left: 'ph:caret-double-left-light'
     icon:chevron-down: 'ph:caret-down-light'

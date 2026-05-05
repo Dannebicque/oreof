@@ -117,7 +117,7 @@
                     </td>
                 {% endif %}
                 <td>
-                    {{ parcours.remplissage|remplissage }}
+                    {{ component('remplissage_progress', { value: parcours.remplissage }) }}
                 </td>
                 <td class="text-end">
                     {% if formation.hasParcours and formation.parcours|length > 0 %}

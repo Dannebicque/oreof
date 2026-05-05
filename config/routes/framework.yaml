@@ -2,4 +2,4 @@ when@dev:
     _errors:
       resource: '@FrameworkBundle/Resources/config/routing/errors.php'
       type: php
-        prefix: /_error
+      prefix: /_error

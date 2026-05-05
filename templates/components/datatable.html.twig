@@ -124,7 +124,7 @@
     </div>
 
     {# ── Table ───────────────────────────────────────────────────────────────── #}
-    <div class="rounded-xl border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-900">
+    <div class="rounded-xl border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-900 p-4">
 
         {# Méta-barre : résultats + per page #}
         <div class="flex flex-col gap-2 border-b border-slate-100 px-4 py-3 sm:flex-row sm:items-center sm:justify-between dark:border-slate-700">
@@ -146,12 +146,13 @@
         </div>
 
         {# Tableau principal #}
+        <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-900">
         <div class="overflow-x-auto">
-            <table class="min-w-full text-sm">
-                <thead>
-                <tr class="border-b border-slate-100 bg-slate-50/70 dark:border-slate-700 dark:bg-slate-800/50">
+            <table class="min-w-full text-sm text-slate-700 dark:text-slate-200">
+                <thead class="bg-slate-50 text-left text-xs font-black uppercase tracking-wider text-slate-500 dark:bg-slate-800/70 dark:text-slate-300">
+                <tr>
                         {% for column in columns %}
-                            <th class="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 {{ column.class }}">
+                            <th class="px-4 py-3 {{ column.class }}">
                                 {% if column.sortable %}
                                     <button
                                             type="button"
@@ -175,17 +176,17 @@
                             </th>
                         {% endfor %}
                         {% if actions is not empty %}
-                            <th class="px-4 py-3 text-right text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                            <th class="px-4 py-3 text-right">
                                 Actions
                             </th>
                         {% endif %}
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-100 dark:divide-slate-700">
+                <tbody class="divide-y divide-slate-200 dark:divide-slate-700">
                     {% for item in this.getData %}
-                        <tr class="transition hover:bg-slate-50/80 dark:hover:bg-slate-800/50">
+                        <tr class="align-top hover:bg-slate-50/70 dark:hover:bg-slate-800/40">
                             {% for column in columns %}
-                                <td class="px-4 py-3 text-slate-700 dark:text-slate-300 {{ column.class }}">
+                                <td class="px-4 py-3 {{ column.class }}">
                                     {% if column.template %}
                                         {% include column.template with {item: item, value: this.getFieldValue(item, column.field)} %}
                                     {% else %}
@@ -308,6 +309,7 @@
                     {% endfor %}
                 </tbody>
             </table>
+        </div>
         </div>
 
         {# ── Pagination ──────────────────────────────────────────────────────── #}

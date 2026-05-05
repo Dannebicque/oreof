@@ -50,7 +50,7 @@
                                     </div>
                                     <div class="col-6 col-md-2 d-flex flex-column justify-content-center mb-1 mb-md-0">
                                         <div class="text-muted d-md-none">Remplissage</div>
-                                        {{ composante.remplissage|remplissage }}
+                                        {{ component('remplissage_progress', { value: composante.remplissage }) }}
                                     </div>
                                     <div class="col-6 col-md-1 d-flex flex-column justify-content-center
                                             mb-1 mb-md-0">

@@ -1,185 +1,163 @@
-<tr id="parcours_{{ formation.id }}">
-    <td colspan="9">
-        <table class="table" style="border-left: 2px solid var(--secondary)">
-            <thead>
-            <tr>
-                <th>Parcours</th>
-                <th>Lieu</th>
-                <th>Responsable</th>
-                <th>Etat</th>
-                <th>BCC</th>
-                <th>MCCC</th>
-                <th>Conseil</th>
-                <th>Remplissage</th>
-                <th></th>
-            </tr>
-            </thead>
-            <tbody>
-            {% if formation.hasParcours %}
-                {% for parcours in formation.parcours|filter(parcours => parcours.formation.hasParcours) %}
-                    <tr>
-                        <td>{{ parcours.libelle }} {{ parcours.typeParcours|badgeTypeParcours }}</td>
-                        <td>{{ parcours.localisation != null ? parcours.localisation.libelle : 'Non défini' }}</td>
-                        <td>{{ parcours.respParcours != null ? parcours.respParcours.display : 'Non défini' }}</td>
-                        {% if dpesParcours[parcours.id].isNonOuvert %}
-                            <td colspan="5">
-                                <span class="badge bg-warning w-100">Parcours non ouvert</span>
-                            </td>
+<tr id="parcours_{{ formation.id }}" class="bg-slate-50/60 dark:bg-slate-900/40">
+    <td colspan="8" class="p-0">
+        <div class="border-l-4 border-cyan-500/70 bg-slate-50/80 p-4 dark:border-cyan-600/70 dark:bg-slate-900/60">
+            <div class="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-900">
+                <div class="overflow-x-auto">
+                    <table class="min-w-full text-sm text-slate-700 dark:text-slate-200">
+                        <thead class="bg-slate-50 text-left text-xs font-black uppercase tracking-wider text-slate-500 dark:bg-slate-800/70 dark:text-slate-300">
+                        <tr>
+                            <th class="px-4 py-3">Parcours</th>
+                            <th class="px-4 py-3">Lieu</th>
+                            <th class="px-4 py-3">Responsable</th>
+                            <th class="px-4 py-3">Etat</th>
+                            <th class="px-4 py-3">BCC</th>
+                            <th class="px-4 py-3">MCCC</th>
+                            <th class="px-4 py-3">Conseil</th>
+                            <th class="px-4 py-3">Remplissage</th>
+                            <th class="px-4 py-3 text-right">Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-200 dark:divide-slate-700">
+                        {% if formation.hasParcours %}
+                            {% for parcours in formation.parcours|filter(parcours => parcours.formation.hasParcours) %}
+                                <tr class="align-top hover:bg-slate-50/70 dark:hover:bg-slate-800/40">
+                                    <td class="px-4 py-3">{{ parcours.libelle }} {{ parcours.typeParcours|badgeTypeParcours }}</td>
+                                    <td class="px-4 py-3">{{ parcours.localisation != null ? parcours.localisation.libelle : 'Non défini' }}</td>
+                                    <td class="px-4 py-3">{{ parcours.respParcours != null ? parcours.respParcours.display : 'Non défini' }}</td>
+                                    {% if dpesParcours[parcours.id].isNonOuvert %}
+                                        <td colspan="5" class="px-4 py-3">
+                                            <span class="inline-flex w-full items-center justify-center rounded-lg border border-amber-300 bg-amber-50 px-3 py-2 text-xs font-semibold text-amber-800 dark:border-amber-700 dark:bg-amber-950/30 dark:text-amber-300">Parcours non ouvert</span>
+                                        </td>
+                                    {% else %}
+                                        <td class="px-4 py-3">{{ dpesParcours[parcours.id].etatValidation|badgeDpe }}</td>
+                                        <td class="px-4 py-3">{{ parcours.etatStep(3)|badgeStep }}</td>
+                                        <td class="px-4 py-3">{{ parcours.etatStep(4)|badgeStep }}</td>
+                                        <td class="px-4 py-3">{{ component('historique_pv', {parcours:parcours}) }}</td>
+                                        <td class="px-4 py-3">{{ component('remplissage_progress', { value: parcours.remplissage }) }}</td>
+                                    {% endif %}
+                                    <td class="px-4 py-3 text-right">
+                                        <div class="flex flex-wrap justify-end gap-2">
+                                            <a href="{{ path('parcours_v2_voir',{'parcours': parcours.id}) }}"
+                                               class="app-btn app-btn-info"
+                                               target="_blank"
+                                               title="Voir une formation">
+                                                <i class="{{ iconShow }}"></i>
+                                                <span>Voir</span>
+                                            </a>
+
+                                            <a href="#"
+                                               class="app-btn app-btn-success"
+                                                    {{ stimulus_controller('modal', {
+                                                        size: 'lg',
+                                                        modalTitle: 'Vérifier la saisie',
+                                                        modalUrl: path('app_parcours_state', {parcours:parcours.id}) }) }}
+                                               data-action="click->modal#openModal"
+                                               data-size="lg"
+                                               title="Vérifier la saisie">
+                                                <i class="fal fa-binoculars"></i>
+                                                <span>Vérifier</span>
+                                            </a>
+
+                                            {% if is_granted('EDIT', {route: 'app_parcours', subject:  dpesParcours[parcours.id]}) %}
+                                                <a href="{{ path('parcours_v2_modifier',{'parcours': parcours.id}) }}"
+                                                   class="app-btn app-btn-warning"
+                                                   target="_blank"
+                                                   title="Modifier la fiche d'identité du parcours">
+                                                    <i class="{{ iconEdit }}"></i>
+                                                    <span>Modifier</span>
+                                                </a>
+                                            {% endif %}
+
+                                            {% if is_granted('ROLE_ADMIN') %}
+                                                <a href="{{ path('app_parcours_delete',{'id': parcours.id, csrf: csrf_token('delete' ~ parcours.id)}) }}"
+                                                   class="app-btn app-btn-danger">
+                                                    <i class="{{ iconDelete }}"></i>
+                                                    <span>Supprimer</span>
+                                                </a>
+                                            {% endif %}
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
                         {% else %}
-                            <td>
-                                {{ dpesParcours[parcours.id].etatValidation|badgeDpe }}
-                            </td>
-                            <td>
-                                {{ parcours.etatStep(3)|badgeStep }}
-                            </td>
-                            <td>
-                                {{ parcours.etatStep(4)|badgeStep }}
-                            </td>
-                            <td>
-                                {{ component('historique_pv', {parcours:parcours}) }}
-                            </td>
-                            <td>
-                                {{ parcours.remplissage|remplissage }}
-                            </td>
+                            {% if formation.parcours|length == 0 %}
+                                <tr>
+                                    <td colspan="9" class="px-4 py-4">
+                                        <span class="inline-flex w-full items-center justify-center rounded-lg border border-amber-300 bg-amber-50 px-3 py-2 text-sm font-semibold text-amber-800 dark:border-amber-700 dark:bg-amber-950/30 dark:text-amber-300">
+                                            Formation non initialisée, pas de parcours ou de parcours par défaut.
+                                        </span>
+                                    </td>
+                                </tr>
+                            {% else %}
+                                {% set parcours = formation.parcours[0] %}
+                                <tr class="align-top hover:bg-slate-50/70 dark:hover:bg-slate-800/40">
+                                    <td class="px-4 py-3">{{ formation.display }}</td>
+                                    <td class="px-4 py-3">{{ formation.localisationMention != null and formation.localisationMention|length >= 1 ? formation.localisationMention[0].libelle : 'Non défini' }}</td>
+                                    <td class="px-4 py-3">{{ formation.responsableMention != null ? formation.responsableMention.display : 'Non défini' }}</td>
+                                    {% if dpesParcours[parcours.id].isNonOuvert or formation.isNonOuvert %}
+                                        <td colspan="5" class="px-4 py-3">
+                                            <span class="inline-flex w-full items-center justify-center rounded-lg border border-amber-300 bg-amber-50 px-3 py-2 text-xs font-semibold text-amber-800 dark:border-amber-700 dark:bg-amber-950/30 dark:text-amber-300">Parcours non ouvert</span>
+                                        </td>
+                                    {% else %}
+                                        <td class="px-4 py-3">{{ dpesParcours[parcours.id].etatValidation|badgeDpe }}</td>
+                                        <td class="px-4 py-3">{{ parcours.etatStep(3)|badgeStep }}</td>
+                                        <td class="px-4 py-3">{{ parcours.etatStep(4)|badgeStep }}</td>
+                                        <td class="px-4 py-3">{{ component('historique_pv', {parcours:parcours}) }}</td>
+                                        <td class="px-4 py-3">{{ component('remplissage_progress', { value: parcours.remplissage }) }}</td>
+                                    {% endif %}
+                                    <td class="px-4 py-3 text-right">
+                                        <div class="flex flex-wrap justify-end gap-2">
+                                            <a href="{{ path('formation_v2_voir',{'slug': formation.slug}) }}"
+                                               class="app-btn app-btn-info"
+                                               title="Voir une formation"
+                                               target="_blank">
+                                                <i class="{{ iconShow }}"></i>
+                                                <span>Voir</span>
+                                            </a>
+
+                                            <a href="#"
+                                               class="app-btn app-btn-success"
+                                                    {{ stimulus_controller('modal', {
+                                                        size: 'lg',
+                                                        modalTitle: 'Vérifier la saisie',
+                                                        modalUrl: path('app_formation_state', {formation:formation.id}) }) }}
+                                               data-action="click->modal#openModal"
+                                               data-size="lg"
+                                               title="Vérifier la saisie">
+                                                <i class="fal fa-binoculars"></i>
+                                                <span>Vérifier</span>
+                                            </a>
+
+                                            {% if is_granted('EDIT', {route: 'app_formation', subject: formation}) or is_granted('EDIT', {route: 'app_parcours', subject: formation.parcours[0]}) %}
+                                                <a href="{{ path('formation_v2_modifier',{'slug':  formation.slug}) }}"
+                                                   class="app-btn app-btn-warning"
+                                                   target="_blank"
+                                                   title="Modifier la fiche d'identité du parcours">
+                                                    <i class="{{ iconEdit }}"></i>
+                                                    <span>Modifier</span>
+                                                </a>
+                                            {% endif %}
+
+                                            {% if is_granted('CAN_FORMATION_DELETE_MY') or is_granted('ROLE_ADMIN') %}
+                                                {# todo manque formation sur le isgranted #}
+                                                <button class="app-btn app-btn-danger"
+                                                        {{ stimulus_action('crud', 'delete', 'click', {
+                                                            url:path('app_formation_delete',{'id': formation.id}),
+                                                            csrf: csrf_token('delete' ~ formation.id)
+                                                        }) }}>
+                                                    <i class="{{ iconDelete }}"></i>
+                                                    <span>Supprimer</span>
+                                                </button>
+                                            {% endif %}
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endif %}
                         {% endif %}
-                        <td class="text-end">
-                            <a href="{{ path('parcours_v2_voir',{'parcours': parcours.id}) }}"
-                               class="btn btn-sm text-info"
-                               data-bs-toggle="tooltip"
-                               data-bs-placement="bottom"
-                               target="_blank"
-                               title="Voir une formation"
-                            >
-                                <i class="{{ iconShow }}"></i>
-                                <span> voir</span>
-                            </a>
-
-                            <a href="#"
-                               class="btn btn-sm text-success"
-                                    {{ stimulus_controller('modal', {
-                                        size: 'lg',
-                                        modalTitle: 'Vérifier la saisie',
-                                        modalUrl: path('app_parcours_state', {parcours:parcours.id}) }) }}
-                               data-action="click->modal#openModal"
-                               data-size="lg"
-                               data-bs-toggle="tooltip"
-                               data-bs-placement="bottom"
-                               title="Vérifier la saisie"
-                            >
-                                <i class="fal fa-binoculars"></i>
-                                <span> vérifier</span>
-                            </a><br>
-
-                            {% if
-                                is_granted('EDIT', {route: 'app_parcours', subject:  dpesParcours[parcours.id]}) %}
-                                <a href="{{ path('parcours_v2_modifier',{'parcours': parcours.id}) }}"
-                                   class="btn btn-sm text-warning"
-                                   data-bs-toggle="tooltip"
-                                   data-bs-placement="bottom"
-                                   target="_blank"
-                                   title="Modifier la fiche d'identité du parcours"
-                                >
-                                    <i class="{{ iconEdit }}"></i>
-                                    <span> modifier</span>
-                                </a>
-                            {% endif %}
-
-                            {% if is_granted('ROLE_ADMIN') %}
-                                <a href="{{ path('app_parcours_delete',{'id': parcours.id,
-                                    csrf: csrf_token('delete' ~ parcours.id)
-                                }) }}" class="btn btn-sm text-danger">
-                                    <i class="{{ iconDelete }}"></i> Supprimer
-                                </a>
-                            {% endif %}
-                        </td>
-                    </tr>
-                {% endfor %}
-            {% else %}
-                {% if formation.parcours|length == 0 %}
-                    <tr class="bg-warning text-white">
-                        <td colspan="9">Formation non initialisée, pas de parcours ou de parcours par défaut.</td>
-                    </tr>
-                {% else %}
-                    {% set parcours = formation.parcours[0] %}
-                    <tr>
-                        <td>{{ formation.display }}</td>
-                        <td>{{ formation.localisationMention != null and formation.localisationMention|length >= 1 ? formation.localisationMention[0].libelle : 'Non défini' }}</td>
-                        <td>{{ formation.responsableMention != null ? formation.responsableMention.display : 'Non défini' }}</td>
-                        {% if dpesParcours[parcours.id].isNonOuvert or formation.isNonOuvert %}
-                            <td colspan="5">
-                                <span class="badge bg-warning w-100">Parcours non ouvert</span>
-                            </td>
-                        {% else %}
-                            <td>
-                                {{ dpesParcours[parcours.id].etatValidation|badgeDpe }}</td>
-                        <td>
-                            {{ parcours.etatStep(3)|badgeStep }}
-                        </td>
-                        <td>
-                            {{ parcours.etatStep(4)|badgeStep }}
-                        </td>
-                        <td>
-                            {{ component('historique_pv', {parcours:parcours}) }}
-                        </td>
-                        <td>
-                            {{ parcours.remplissage|remplissage }}
-                        </td>
-                        {% endif %}
-                        <td class="text-end">
-                            <a href="{{ path('formation_v2_voir',{'slug': formation.slug}) }}"
-                               class="btn btn-sm text-info"
-                               data-bs-toggle="tooltip"
-                               data-bs-placement="bottom"
-                               title="Voir une formation"
-                               target="_blank"
-                            >
-                                <i class="{{ iconShow }}"></i>
-                                <span> voir</span>
-                            </a>
-
-                            <a href="#"
-                               class="btn btn-sm text-success"
-                                    {{ stimulus_controller('modal', {
-                                        size: 'lg',
-                                        modalTitle: 'Vérifier la saisie',
-                                        modalUrl: path('app_formation_state', {formation:formation.id}) }) }}
-                               data-action="click->modal#openModal"
-                               data-size="lg"
-                               data-bs-toggle="tooltip"
-                               data-bs-placement="bottom"
-                               title="Vérifier la saisie"
-                            >
-                                <i class="fal fa-binoculars"></i>
-                                <span> vérifier</span>
-                            </a><br>
-
-                            {% if is_granted('EDIT', {route: 'app_formation', subject: formation}) or is_granted('EDIT', {route: 'app_parcours', subject: formation.parcours[0]}) %}
-                                <a href="{{ path('formation_v2_modifier',{'slug':  formation.slug}) }}"
-                                   class="btn btn-sm text-warning"
-                                   data-bs-toggle="tooltip"
-                                   data-bs-placement="bottom"
-                                   target="_blank"
-                                   title="Modifier la fiche d'identité du parcours"
-                                >
-                                    <i class="{{ iconEdit }}"></i>
-                                    <span> modifier</span>
-                                </a>
-                            {% endif %}
-
-                            {% if is_granted('CAN_FORMATION_DELETE_MY') or is_granted('ROLE_ADMIN') %}
-                                {# todo manque formation sur le isgranted #}
-                                <button {{ stimulus_action('crud', 'delete', 'click', {
-                                    url:path('app_formation_delete',{'id': formation.id}),
-                                    csrf: csrf_token('delete' ~ formation.id)
-                                }) }} class="btn btn-sm text-danger">
-                                    <i class="{{ iconDelete }}"></i> Supprimer
-                                </button>
-                            {% endif %}
-                        </td>
-                    </tr>
-                {% endif %}
-            {% endif %}
-            </tbody>
-        </table>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </td>
 </tr>

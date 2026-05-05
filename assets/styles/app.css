@@ -688,4 +688,562 @@ html[data-theme="dark"] {
   html[data-theme="dark"] #nav .user-menu button {
     color: #cbd5e1;
   }
+
+  /* ── Boutons sémantiques app-btn (utilisés avec stimulus_controller()) ── */
+  .app-btn {
+    @apply inline-flex items-center gap-1.5 rounded-md font-medium transition-colors
+    focus:outline-none focus:ring-2 focus:ring-offset-1
+    px-3 py-1.5 text-sm h-8
+    disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .app-btn-success {
+    @apply border border-emerald-600 text-emerald-700
+    hover:bg-emerald-600 hover:text-white focus:ring-emerald-500;
+  }
+
+  html[data-theme="dark"] .app-btn-success {
+    @apply border-emerald-400 text-emerald-300 hover:bg-emerald-500;
+  }
+
+  .app-btn-warning {
+    @apply border border-amber-500 text-amber-700
+    hover:bg-amber-500 hover:text-slate-900 focus:ring-amber-400;
+  }
+
+  html[data-theme="dark"] .app-btn-warning {
+    @apply border-amber-400 text-amber-300 hover:bg-amber-400 hover:text-slate-900;
+  }
+
+  .app-btn-danger {
+    @apply border border-red-600 text-red-700
+    hover:bg-red-600 hover:text-white focus:ring-red-500;
+  }
+
+  html[data-theme="dark"] .app-btn-danger {
+    @apply border-red-400 text-red-300 hover:bg-red-500;
+  }
+
+  .app-btn-info {
+    @apply border border-cyan-600 text-cyan-700
+    hover:bg-cyan-600 hover:text-white focus:ring-cyan-500;
+  }
+
+  html[data-theme="dark"] .app-btn-info {
+    @apply border-cyan-400 text-cyan-300 hover:bg-cyan-500;
+  }
+
+  .app-btn-primary {
+    @apply border border-blue-600 text-blue-700
+    hover:bg-blue-600 hover:text-white focus:ring-blue-500;
+  }
+
+  html[data-theme="dark"] .app-btn-primary {
+    @apply border-blue-400 text-blue-300 hover:bg-blue-500;
+  }
+
+  .app-btn-secondary {
+    @apply border border-slate-400 text-slate-600
+    hover:bg-slate-500 hover:text-white focus:ring-slate-400;
+  }
+
+  html[data-theme="dark"] .app-btn-secondary {
+    @apply border-slate-500 text-slate-200 hover:bg-slate-600;
+  }
+
+  /* Progress bar de remplissage */
+  .app-progress {
+    @apply min-w-28 space-y-1.5;
+  }
+
+  .app-progress-header {
+    @apply flex items-center justify-between gap-2 text-[11px] font-semibold;
+  }
+
+  .app-progress-label {
+    @apply truncate text-slate-600;
+  }
+
+  .app-progress-value {
+    @apply shrink-0 tabular-nums text-slate-500;
+  }
+
+  .app-progress-track {
+    @apply h-2.5 overflow-hidden rounded-full bg-slate-200;
+  }
+
+  .app-progress-track--danger {
+    @apply bg-rose-100;
+  }
+
+  .app-progress-track--success {
+    @apply bg-emerald-100;
+  }
+
+  .app-progress-track--info {
+    @apply bg-indigo-100;
+  }
+
+  .app-progress-bar {
+    @apply block h-full rounded-full transition-all duration-300 ease-out;
+  }
+
+  .app-progress-bar--danger {
+    @apply bg-rose-500;
+  }
+
+  .app-progress-bar--success {
+    @apply bg-emerald-500;
+  }
+
+  .app-progress-bar--info {
+    @apply bg-indigo-500;
+  }
+
+  html[data-theme="dark"] .app-progress-label {
+    @apply text-slate-300;
+  }
+
+  html[data-theme="dark"] .app-progress-value {
+    @apply text-slate-400;
+  }
+
+  html[data-theme="dark"] .app-progress-track {
+    @apply bg-slate-700;
+  }
+
+  html[data-theme="dark"] .app-progress-track--danger {
+    @apply bg-rose-950/50;
+  }
+
+  html[data-theme="dark"] .app-progress-track--success {
+    @apply bg-emerald-950/50;
+  }
+
+  html[data-theme="dark"] .app-progress-track--info {
+    @apply bg-indigo-950/50;
+  }
+
+  html[data-theme="dark"] .app-progress-bar--danger {
+    @apply bg-rose-400;
+  }
+
+  html[data-theme="dark"] .app-progress-bar--success {
+    @apply bg-emerald-400;
+  }
+
+  html[data-theme="dark"] .app-progress-bar--info {
+    @apply bg-indigo-400;
+  }
+
+  /* Onglets applicatifs (homepage/codification) */
+  .app-tabs {
+    @apply mt-3;
+  }
+
+  .app-tabs-list {
+    @apply inline-flex max-w-full items-center gap-1 overflow-x-auto rounded-2xl border border-slate-200 bg-white p-1.5 shadow-sm;
+  }
+
+  .app-tab {
+    @apply inline-flex items-center whitespace-nowrap rounded-xl px-4 py-2 text-sm font-semibold text-slate-600 transition-colors duration-200;
+  }
+
+  .app-tab:hover {
+    @apply bg-slate-100 text-slate-800;
+  }
+
+  .app-tab:focus-visible {
+    @apply outline-none ring-2 ring-indigo-400 ring-offset-2;
+  }
+
+  .app-tab-active {
+    @apply bg-indigo-600 text-white shadow-sm;
+  }
+
+  .app-tab-active:hover {
+    @apply bg-indigo-600 text-white;
+  }
+
+  .app-tab-panel {
+    @apply mt-4 rounded-2xl border border-slate-200 bg-white shadow-sm;
+  }
+
+  html[data-theme="dark"] .app-tabs-list {
+    @apply border-slate-700 bg-slate-900;
+  }
+
+  html[data-theme="dark"] .app-tab {
+    @apply text-slate-300;
+  }
+
+  html[data-theme="dark"] .app-tab:hover {
+    @apply bg-slate-800 text-slate-100;
+  }
+
+  html[data-theme="dark"] .app-tab:focus-visible {
+    @apply ring-indigo-500 ring-offset-slate-900;
+  }
+
+  html[data-theme="dark"] .app-tab-active {
+    @apply bg-indigo-500 text-white;
+  }
+
+  html[data-theme="dark"] .app-tab-active:hover {
+    @apply bg-indigo-500 text-white;
+  }
+
+  html[data-theme="dark"] .app-tab-panel {
+    @apply border-slate-700 bg-slate-900;
+  }
+
+  /* Tooltips Bootstrap (timeline) */
+  .tooltip.app-tooltip .tooltip-inner {
+    @apply max-w-xs rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-medium text-slate-700 shadow-lg;
+  }
+
+  .tooltip.app-tooltip .tooltip-arrow::before {
+    @apply border-slate-200;
+  }
+
+  .tooltip.app-tooltip[data-popper-placement^="top"] .tooltip-arrow::before {
+    border-top-color: rgb(226 232 240 / 1);
+  }
+
+  .tooltip.app-tooltip[data-popper-placement^="bottom"] .tooltip-arrow::before {
+    border-bottom-color: rgb(226 232 240 / 1);
+  }
+
+  .tooltip.app-tooltip[data-popper-placement^="left"] .tooltip-arrow::before {
+    border-left-color: rgb(226 232 240 / 1);
+  }
+
+  .tooltip.app-tooltip[data-popper-placement^="right"] .tooltip-arrow::before {
+    border-right-color: rgb(226 232 240 / 1);
+  }
+
+  .tooltip.app-tooltip--timeline .tooltip-inner {
+    @apply border-indigo-100 bg-indigo-50 text-indigo-900;
+  }
+
+  .tooltip.app-tooltip--timeline[data-popper-placement^="top"] .tooltip-arrow::before {
+    border-top-color: rgb(224 231 255 / 1);
+  }
+
+  .tooltip.app-tooltip--timeline[data-popper-placement^="bottom"] .tooltip-arrow::before {
+    border-bottom-color: rgb(224 231 255 / 1);
+  }
+
+  .tooltip.app-tooltip--timeline[data-popper-placement^="left"] .tooltip-arrow::before {
+    border-left-color: rgb(224 231 255 / 1);
+  }
+
+  .tooltip.app-tooltip--timeline[data-popper-placement^="right"] .tooltip-arrow::before {
+    border-right-color: rgb(224 231 255 / 1);
+  }
+
+  html[data-theme="dark"] .tooltip.app-tooltip .tooltip-inner {
+    @apply border-slate-700 bg-slate-900 text-slate-100 shadow-black/50;
+  }
+
+  html[data-theme="dark"] .tooltip.app-tooltip[data-popper-placement^="top"] .tooltip-arrow::before {
+    border-top-color: rgb(51 65 85 / 1);
+  }
+
+  html[data-theme="dark"] .tooltip.app-tooltip[data-popper-placement^="bottom"] .tooltip-arrow::before {
+    border-bottom-color: rgb(51 65 85 / 1);
+  }
+
+  html[data-theme="dark"] .tooltip.app-tooltip[data-popper-placement^="left"] .tooltip-arrow::before {
+    border-left-color: rgb(51 65 85 / 1);
+  }
+
+  html[data-theme="dark"] .tooltip.app-tooltip[data-popper-placement^="right"] .tooltip-arrow::before {
+    border-right-color: rgb(51 65 85 / 1);
+  }
+
+  html[data-theme="dark"] .tooltip.app-tooltip--timeline .tooltip-inner {
+    @apply border-indigo-800 bg-indigo-950/80 text-indigo-100;
+  }
+
+  html[data-theme="dark"] .tooltip.app-tooltip--timeline[data-popper-placement^="top"] .tooltip-arrow::before {
+    border-top-color: rgb(55 48 163 / 1);
+  }
+
+  html[data-theme="dark"] .tooltip.app-tooltip--timeline[data-popper-placement^="bottom"] .tooltip-arrow::before {
+    border-bottom-color: rgb(55 48 163 / 1);
+  }
+
+  html[data-theme="dark"] .tooltip.app-tooltip--timeline[data-popper-placement^="left"] .tooltip-arrow::before {
+    border-left-color: rgb(55 48 163 / 1);
+  }
+
+  html[data-theme="dark"] .tooltip.app-tooltip--timeline[data-popper-placement^="right"] .tooltip-arrow::before {
+    border-right-color: rgb(55 48 163 / 1);
+  }
+
+  /* ========================================================
+   * Tom Select / Symfony UX Autocomplete — thème Tailwind
+   * Surcharge complète du CSS par défaut de tom-select
+   * ======================================================== */
+  /* Variables CSS Tom Select */
+  :root {
+    --ts-pr-clear-button: 0px;
+    --ts-pr-caret: 1.5rem;
+    --ts-pr-min: 0.75rem;
+  }
+
+  /* Wrapper principal */
+  .ts-wrapper {
+    @apply relative w-full;
+  }
+
+  /* Élément de saisie (le "faux input") */
+  .ts-control {
+    @apply flex flex-wrap items-center w-full bg-white
+    px-2 py-2 text-sm text-slate-700 shadow-none outline-none
+    transition duration-150 cursor-text;
+    padding-right: max(var(--ts-pr-min), var(--ts-pr-clear-button) + var(--ts-pr-caret)) !important;
+  }
+
+  /* Focus du wrapper (classe .focus) */
+  .ts-wrapper.focus .ts-control {
+    @apply border-indigo-400 ring-2 ring-indigo-200;
+  }
+
+  /* Disabled */
+  .ts-wrapper.disabled .ts-control,
+  .ts-wrapper.disabled .ts-control * {
+    @apply cursor-not-allowed opacity-50;
+  }
+
+  /* Input natif caché à l'intérieur du control */
+  .ts-control > input {
+    flex: 1 1 auto;
+    min-width: 7rem;
+    display: inline-block !important;
+    padding: 0 !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    border: 0 none !important;
+    background: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    line-height: inherit !important;
+    color: inherit !important;
+  }
+
+  .ts-control > input:focus {
+    outline: none !important;
+  }
+
+  .has-items .ts-control > input {
+    margin: 0 4px !important;
+  }
+
+  /* Single — apparence flèche déroulante */
+  .ts-wrapper.single .ts-control,
+  .ts-wrapper.single .ts-control input {
+    @apply cursor-pointer;
+  }
+
+  /* Tags multi-select */
+  .ts-wrapper.multi .ts-control > div {
+    @apply inline-flex items-center rounded-full border border-indigo-200 bg-indigo-50
+    px-2.5 py-0.5 text-xs font-medium text-indigo-700 cursor-pointer
+    mr-1 mb-0.5;
+  }
+
+  .ts-wrapper.multi .ts-control > div.active {
+    @apply border-indigo-400 bg-indigo-100 text-indigo-800;
+  }
+
+  .ts-wrapper.multi.has-items .ts-control {
+    padding-top: calc(0.5rem - 2px);
+    padding-bottom: calc(0.5rem - 2px);
+  }
+
+  /* Remove button sur les tags */
+  .ts-wrapper.plugin-remove_button .item {
+    @apply inline-flex items-center;
+  }
+
+  .ts-wrapper.plugin-remove_button .item .remove {
+    @apply ml-1 inline-flex items-center justify-center w-4 h-4 rounded-full
+    text-indigo-500 hover:bg-indigo-200 hover:text-indigo-700
+    text-xs no-underline transition;
+  }
+
+  .ts-wrapper.plugin-remove_button:not(.rtl) .item {
+    padding-right: 0 !important;
+  }
+
+  .ts-wrapper.plugin-remove_button:not(.rtl) .item .remove {
+    @apply border-l border-indigo-200;
+    margin-left: 6px;
+  }
+
+  /* Dropdown container */
+  .ts-dropdown {
+    @apply absolute left-0 top-full z-50 w-full mt-1 rounded-lg border border-slate-200
+    bg-white shadow-lg text-sm text-slate-700 box-border;
+  }
+
+  /* Contenu scrollable du dropdown */
+  .ts-dropdown-content {
+    @apply max-h-52 overflow-y-auto overflow-x-hidden;
+    scroll-behavior: smooth;
+  }
+
+  /* Options */
+  .ts-dropdown .option,
+  .ts-dropdown .optgroup-header,
+  .ts-dropdown .no-results,
+  .ts-dropdown .create {
+    @apply px-3 py-2 cursor-pointer;
+  }
+
+  .ts-dropdown [data-selectable] {
+    @apply cursor-pointer overflow-hidden;
+  }
+
+  .ts-dropdown [data-selectable].option {
+    @apply opacity-100;
+  }
+
+  .ts-dropdown .option,
+  .ts-dropdown [data-disabled],
+  .ts-dropdown [data-disabled] [data-selectable].option {
+    @apply cursor-default opacity-50;
+  }
+
+  /* Option survolée / active */
+  .ts-dropdown .active {
+    @apply bg-indigo-50 text-indigo-800;
+  }
+
+  .ts-dropdown .active.create {
+    @apply text-indigo-700;
+  }
+
+  /* Highlight de recherche */
+  .ts-dropdown [data-selectable] .highlight {
+    @apply bg-indigo-100 rounded-sm;
+  }
+
+  /* Groupe option */
+  .ts-dropdown .optgroup-header {
+    @apply text-xs font-semibold uppercase tracking-wider text-slate-400
+    bg-slate-50 cursor-default py-1.5 px-3;
+  }
+
+  .ts-dropdown .optgroup:first-child .optgroup-header {
+    @apply border-t-0;
+  }
+
+  /* Aucun résultat / création */
+  .ts-dropdown .no-results {
+    @apply text-slate-400 italic;
+  }
+
+  .ts-dropdown .create {
+    @apply text-indigo-600;
+  }
+
+  /* Spinner de chargement */
+  .ts-dropdown .spinner {
+    @apply inline-block w-8 h-8 m-2;
+  }
+
+  .ts-dropdown .spinner::after {
+    content: " ";
+    @apply block w-6 h-6 m-0.5 rounded-full;
+    border: 3px solid theme(colors.indigo.300);
+    border-color: theme(colors.indigo.400) transparent theme(colors.indigo.400) transparent;
+    animation: ts-spin 0.8s linear infinite;
+  }
+
+  @keyframes ts-spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  /* Bouton "clear" (plugin clear_button) */
+  .plugin-clear_button {
+    --ts-pr-clear-button: 1.5rem;
+  }
+
+  .plugin-clear_button .clear-button {
+    @apply absolute top-1/2 -translate-y-1/2 opacity-0 bg-transparent
+    text-slate-400 hover:text-slate-600 transition-opacity cursor-pointer;
+    right: calc(0.75rem - 6px);
+  }
+
+  .plugin-clear_button.focus.has-items .clear-button,
+  .plugin-clear_button:not(.disabled):hover.has-items .clear-button {
+    @apply opacity-100;
+  }
+
+  /* Accessibilité — element caché visuellement */
+  .ts-hidden-accessible {
+    border: 0 !important;
+    clip: rect(0 0 0 0) !important;
+    clip-path: inset(50%) !important;
+    overflow: hidden !important;
+    padding: 0 !important;
+    position: absolute !important;
+    width: 1px !important;
+    white-space: nowrap !important;
+  }
+
+  /* ── Dark mode ─────────────────────────── */
+  html[data-theme="dark"] .ts-control {
+    @apply border-slate-600 bg-slate-800 text-slate-100;
+  }
+
+  html[data-theme="dark"] .ts-wrapper.focus .ts-control {
+    @apply border-indigo-500 ring-indigo-500/30;
+  }
+
+  html[data-theme="dark"] .ts-wrapper.multi .ts-control > div {
+    @apply border-indigo-700 bg-indigo-900/50 text-indigo-300;
+  }
+
+  html[data-theme="dark"] .ts-wrapper.multi .ts-control > div.active {
+    @apply border-indigo-500 bg-indigo-800 text-indigo-200;
+  }
+
+  html[data-theme="dark"] .ts-dropdown {
+    @apply border-slate-700 bg-slate-800 text-slate-100 shadow-slate-900/50;
+  }
+
+  html[data-theme="dark"] .ts-dropdown .optgroup-header {
+    @apply bg-slate-900 text-slate-400;
+  }
+
+  html[data-theme="dark"] .ts-dropdown .active {
+    @apply bg-indigo-900/60 text-indigo-200;
+  }
+
+  html[data-theme="dark"] .ts-dropdown [data-selectable] .highlight {
+    @apply bg-indigo-800/60;
+  }
+
+  html[data-theme="dark"] .ts-dropdown .no-results {
+    @apply text-slate-500;
+  }
+
+  html[data-theme="dark"] .ts-dropdown .create {
+    @apply text-indigo-400;
+  }
+
+  html[data-theme="dark"] .ts-dropdown .spinner::after {
+    border-color: theme(colors.indigo.500) transparent theme(colors.indigo.500) transparent;
+  }
 }

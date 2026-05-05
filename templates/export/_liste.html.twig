@@ -59,7 +59,7 @@
                     {% endif %}
                 </td>
                 <td>
-                    {{ parcours.remplissage|remplissage }}
+                    {{ component('remplissage_progress', { value: parcours.remplissage }) }}
                 </td>
                 <td>
                     {{ dpe.etatValidation|badgeDpe }}

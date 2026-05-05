@@ -540,7 +540,7 @@
 
     <!-- Title and Top Buttons Start -->
     <div class="page-title-container fixed-title-container">
-        <div class="mx-auto w-full max-w-[1400px] space-y-4 px-4 sm:px-6 lg:px-8">
+        <div class="mx-auto w-full space-y-4 px-4 sm:px-6 lg:px-8">
             <div>
                 {% include 'components/impersonation_badge.html.twig' %}
             </div>
@@ -618,7 +618,7 @@
         {% endfor %}
 
         <!-- fin messages flash -->
-        <div class="mx-auto w-full max-w-[1400px] px-4 sm:px-6 lg:px-8">
+        <div class="mx-auto w-full px-4 sm:px-6 lg:px-8">
             <!-- Title and Top Buttons End -->
             {% block content %}
 
@@ -628,12 +628,12 @@
     <!-- Main Content End -->
 
     <!-- Footer Content Start -->
-    <footer>
+    <footer class="mt-2">
         <div class="footer-content border-t border-slate-200/80 bg-white/90 backdrop-blur-sm dark:border-slate-700 dark:bg-slate-900/90">
-            <div class="mx-auto w-full max-w-[1400px] px-4 py-4 sm:px-6 lg:px-8">
+            <div class="mx-auto w-full px-4 py-4 sm:px-6 lg:px-8">
                 <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                     <div class="space-y-1">
-                        <p class="text-sm font-semibold text-slate-700 dark:text-slate-200">OReOF</p>
+                        <p class="text-sm font-semibold text-slate-700 dark:text-slate-200">ORéOF</p>
                         <p class="text-xs text-slate-500 dark:text-slate-400">&copy; 2023 David Annebicque // Emeline
                             Lang-Lannoy - version {{ user_data.version }}</p>
                     </div>

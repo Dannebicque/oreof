@@ -1,0 +1,17 @@
+<div {{ attributes }} class="app-progress">
+    <div class="app-progress-header">
+        <span class="app-progress-label">{{ label }}</span>
+        <span class="app-progress-value">{{ percent }}%</span>
+    </div>
+
+    <div class="app-progress-track app-progress-track--{{ tone }}"
+         role="progressbar"
+         aria-label="Remplissage"
+         aria-valuenow="{{ percent }}"
+         aria-valuemin="0"
+         aria-valuemax="100"
+         aria-valuetext="{{ label }}">
+        <span class="app-progress-bar app-progress-bar--{{ tone }}" style="width: {{ percent }}%;"></span>
+    </div>
+</div>
+

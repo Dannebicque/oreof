@@ -17,6 +17,7 @@ import 'trix'
 import callOut from './js/callOut'
 // import './styles/legacy.scss';
 import './styles/app.css'
+import './styles/_timeline.scss'
 
 import './bootstrap'
 

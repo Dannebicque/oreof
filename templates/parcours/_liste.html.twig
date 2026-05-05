@@ -94,7 +94,7 @@
                 {{ component('historique_pv', {parcours:parcour}) }}
             </td>
             <td>
-                {{ parcour.remplissage|remplissage }}
+                {{ component('remplissage_progress', { value: parcour.remplissage }) }}
             </td>
             <td>
                 <a href="{{ path('parcours_v2_voir', {parcours: parcour.id}) }} }}"

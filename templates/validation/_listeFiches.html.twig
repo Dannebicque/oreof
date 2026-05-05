@@ -76,7 +76,7 @@
                     {{ fiche.etatFiche|badgeFiche }}
                 </td>
                 <td>
-                    {{ fiche.remplissage|remplissage }}
+                    {{ component('remplissage_progress', { value: fiche.remplissage }) }}
                 </td>
                 <td class="text-end">
 
