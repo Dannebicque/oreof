@@ -58,3 +58,42 @@ public/api_json/
 ### exclude sql ###
 /*.sql
 /pense-bete.md
+### exclude sql ###
+
+###> IDE & Local Configuration ###
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+.npmrc
+.yarnrc.yaml
+
+###> Dependency files ###
+composer.lock
+package-lock.json
+yarn.lock
+
+###> Docker & Compose ###
+compose.yaml
+compose.override.yaml
+
+###> Symfony Config (environment-specific) ###
+config/packages/csrf.yaml
+config/packages/debug.yaml
+config/packages/mercure.yaml
+config/packages/notifier.yaml
+config/packages/property_info.yaml
+
+###> Generated & Build files ###
+versioning_json.zip
+AGENTS.md
+git
+
+###> Database Migrations (auto-generated) ###
+migrations/Version*.php
+
+###> Uploads & Temporary Files ###
+/public/uploads/help_images/
+/public/uploads/
