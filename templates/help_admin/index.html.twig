@@ -40,6 +40,12 @@
                             <td class="text-end pe-4">
                                 {# Les boutons d'action avec le style ORéOF #}
                                 <div class="d-flex justify-content-end gap-2">
+                                    <a href="{{ path(help.routeSlug) }}"
+                                       class="btn btn-sm btn-outline-secondary"
+                                       data-bs-toggle="tooltip" data-bs-placement="bottom" title="Voir la page (peut nécessiter des paramètres dans l'URL)">
+                                        <i class="fal fa-arrow-up-right-from-square"></i>
+                                    </a>
+
                                     <a href="{{ path('app_help_edit', {'id': help.id}) }}"
                                        class="btn btn-sm btn-outline-info"
                                        data-bs-toggle="tooltip" data-bs-placement="bottom" title="Modifier le contenu de cette aide">

@@ -28,6 +28,14 @@
                                         <div>
                                             <i class="fal fa-info-circle text-info me-2"></i>
                                             <strong>{{ help.title|default(help.routeSlug) }}</strong>
+                                            {% if is_granted('ROLE_ADMIN') %}
+                                                <a href="{{ path('app_help_edit', {'id': help.id}) }}" class="btn btn-sm btn-outline-info ms-2" onclick="event.stopPropagation();" title="Modifier">
+                                                    <i class="fal fa-edit pt-1 pb-1"></i>
+                                                </a>
+                                                <a href="{{ path(help.routeSlug) }}" class="btn btn-sm btn-outline-secondary ms-1" onclick="event.stopPropagation();" title="Voir la page">
+                                                    <i class="fal fa-arrow-up-right-from-square pt-1 pb-1"></i>
+                                                </a>
+                                            {% endif %}
                                         </div>
                                         <i class="fal fa-chevron-down text-muted chevron-icon"></i>
                                     </div>
