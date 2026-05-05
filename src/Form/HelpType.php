@@ -11,6 +11,8 @@
 namespace App\Form;
 
 use App\Entity\Help;
+use App\Entity\Profil;
+use App\Repository\ProfilRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -19,6 +21,7 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 class HelpType extends AbstractType
 {
@@ -49,6 +52,18 @@ class HelpType extends AbstractType
             ->add('content', TextareaType::class, [
                 'label' => 'Contenu explicatif',
                 'attr' => ['class' => 'form-control', 'rows' => 12]
+            ])
+            ->add('profilsAutorises', EntityType::class, [
+                'class' => Profil::class,
+                'query_builder' => fn (ProfilRepository $profilRepository) => $profilRepository->createQueryBuilder('p')->orderBy('p.libelle', 'ASC'),
+                'choice_label' => fn (Profil $profil) => sprintf('%s (%s)', $profil->getLibelle(), $profil->getCentre()?->getLibelle() ?? 'centre non précisé'),
+                'label' => 'Profils autorisés à voir cette aide',
+                'help' => 'Laisser vide pour rendre cette aide visible à tous les utilisateurs.',
+                'required' => false,
+                'multiple' => true,
+                'expanded' => true,
+                'by_reference' => false,
+                'row_attr' => ['class' => 'mb-3']
             ])
             ->add('isActive', CheckboxType::class, [
                 'label' => ' Activer cette aide',

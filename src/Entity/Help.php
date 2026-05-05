@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\HelpRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -25,6 +27,18 @@ class Help
 
     #[ORM\Column]
     private ?bool $isActive = null;
+
+    /**
+     * @var Collection<int, Profil>
+     */
+    #[ORM\ManyToMany(targetEntity: Profil::class)]
+    #[ORM\JoinTable(name: 'help_profil_access')]
+    private Collection $profilsAutorises;
+
+    public function __construct()
+    {
+        $this->profilsAutorises = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -75,6 +89,37 @@ class Help
     public function setIsActive(bool $isActive): static
     {
         $this->isActive = $isActive;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Profil>
+     */
+    public function getProfilsAutorises(): Collection
+    {
+        return $this->profilsAutorises;
+    }
+
+    public function setProfilsAutorises(Collection $profilsAutorises): static
+    {
+        $this->profilsAutorises = $profilsAutorises;
+
+        return $this;
+    }
+
+    public function addProfilAutorise(Profil $profil): static
+    {
+        if (!$this->profilsAutorises->contains($profil)) {
+            $this->profilsAutorises->add($profil);
+        }
+
+        return $this;
+    }
+
+    public function removeProfilAutorise(Profil $profil): static
+    {
+        $this->profilsAutorises->removeElement($profil);
 
         return $this;
     }

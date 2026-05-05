@@ -260,9 +260,4 @@ class AppExtension extends AbstractExtension
     {
         return Tools::telFormat($number);
     }
-
-    public function getPageHelp(string $route)
-    {
-        return $this->helpRepository->findOneBy(['routeSlug' => $route, 'isActive' => true]);
-    }
 }

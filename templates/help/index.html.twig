@@ -29,11 +29,11 @@
                                             <i class="fal fa-info-circle text-info me-2"></i>
                                             <strong>{{ help.title|default(help.routeSlug) }}</strong>
                                             {% if is_granted('ROLE_ADMIN') %}
-                                                <a href="{{ path('app_help_edit', {'id': help.id}) }}" class="btn btn-sm btn-outline-info ms-2" onclick="event.stopPropagation();" title="Modifier">
-                                                    <i class="fal fa-edit pt-1 pb-1"></i>
+                                                <a href="{{ path('app_help_edit', {'id': help.id}) }}" class="btn btn-sm btn-outline-info ms-2 d-inline-flex align-items-center justify-content-center" onclick="event.stopPropagation();" title="Modifier">
+                                                    <i class="fal fa-edit"></i>
                                                 </a>
-                                                <a href="{{ path(help.routeSlug) }}" class="btn btn-sm btn-outline-secondary ms-1" onclick="event.stopPropagation();" title="Voir la page">
-                                                    <i class="fal fa-arrow-up-right-from-square pt-1 pb-1"></i>
+                                                <a href="{{ path(help.routeSlug) }}" class="btn btn-sm btn-outline-secondary ms-1 d-inline-flex align-items-center justify-content-center" onclick="event.stopPropagation();" title="Voir la page">
+                                                    <i class="fal fa-arrow-up-right-from-square"></i>
                                                 </a>
                                             {% endif %}
                                         </div>

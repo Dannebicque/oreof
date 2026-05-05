@@ -11,14 +11,19 @@
 namespace App\Twig;
 
 use App\Entity\Help;
+use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
 
 class HelpExtension extends AbstractExtension
 {
-    public function __construct(private EntityManagerInterface $em)
+    public function __construct(
+        private EntityManagerInterface $em,
+        private Security $security,
+    )
     {
     }
 
@@ -36,8 +41,39 @@ class HelpExtension extends AbstractExtension
 
     public function getPageHelp(string $routeSlug = null): ?Help
     {
-        if (!$routeSlug) return null;
-        return $this->em->getRepository(Help::class)->findOneBy(['routeSlug' => $routeSlug, 'isActive' => true]);
+        if (!$routeSlug) {
+            return null;
+        }
+
+        $help = $this->em->getRepository(Help::class)->findOneBy(['routeSlug' => $routeSlug, 'isActive' => true]);
+        if (!$help) {
+            return null;
+        }
+
+        if ($help->getProfilsAutorises()->isEmpty() || $this->security->isGranted('ROLE_ADMIN')) {
+            return $help;
+        }
+
+        $user = $this->security->getUser();
+        if (!$user instanceof User) {
+            return null;
+        }
+
+        $userProfilIds = [];
+        foreach ($user->getUserProfils() as $userProfil) {
+            $profil = $userProfil->getProfil();
+            if ($profil !== null && $profil->getId() !== null) {
+                $userProfilIds[$profil->getId()] = true;
+            }
+        }
+
+        foreach ($help->getProfilsAutorises() as $profilAutorise) {
+            if ($profilAutorise->getId() !== null && isset($userProfilIds[$profilAutorise->getId()])) {
+                return $help;
+            }
+        }
+
+        return null;
     }
 
     public function parseEmbeds(string $content): string

@@ -8,6 +8,36 @@
             {{ form_row(form.title) }}
             {{ form_row(form.routeSlug) }}
 
+            <div class="mb-3 help-profils-selector">
+                {{ form_label(form.profilsAutorises) }}
+                <div class="d-flex gap-2 mb-2">
+                    <button
+                        type="button"
+                        class="btn btn-sm btn-outline-primary"
+                        onclick="const container = this.closest('.help-profils-selector'); container.querySelectorAll('input[type=checkbox]').forEach((cb) => { if (!cb.checked) { cb.checked = true; cb.dispatchEvent(new Event('change', { bubbles: true })); } });"
+                    >
+                        Tout cocher
+                    </button>
+                    <button
+                        type="button"
+                        class="btn btn-sm btn-outline-secondary"
+                        onclick="const container = this.closest('.help-profils-selector'); container.querySelectorAll('input[type=checkbox]').forEach((cb) => { if (cb.checked) { cb.checked = false; cb.dispatchEvent(new Event('change', { bubbles: true })); } });"
+                    >
+                        Tout decocher
+                    </button>
+                </div>
+                <div class="border rounded p-3 bg-light" style="max-height: 220px; overflow-y: auto;">
+                    {% for profilField in form.profilsAutorises %}
+                        <div class="form-check mb-2">
+                            {{ form_widget(profilField, { attr: { class: 'form-check-input' } }) }}
+                            {{ form_label(profilField, null, { label_attr: { class: 'form-check-label' } }) }}
+                        </div>
+                    {% endfor %}
+                </div>
+                {{ form_help(form.profilsAutorises) }}
+                {{ form_errors(form.profilsAutorises) }}
+            </div>
+
             <div class="mb-4 mt-3">
                 {{ form_label(form.content) }}
 

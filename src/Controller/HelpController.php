@@ -9,6 +9,8 @@
 
 namespace App\Controller;
 
+use App\Entity\Help;
+use App\Entity\User;
 use App\Repository\HelpRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,10 +22,43 @@ class HelpController extends AbstractController
     public function index(HelpRepository $helpRepository): Response
     {
         $helps = $helpRepository->findBy(['isActive' => true], ['title' => 'ASC']);
+        $helps = array_values(array_filter($helps, fn (Help $help) => $this->canAccessHelp($help)));
 
         return $this->render('help/index.html.twig', [
             'helps' => $helps,
         ]);
+    }
+
+    private function canAccessHelp(Help $help): bool
+    {
+        if ($this->isGranted('ROLE_ADMIN')) {
+            return true;
+        }
+
+        if ($help->getProfilsAutorises()->isEmpty()) {
+            return true;
+        }
+
+        $user = $this->getUser();
+        if (!$user instanceof User) {
+            return false;
+        }
+
+        $userProfilIds = [];
+        foreach ($user->getUserProfils() as $userProfil) {
+            $profil = $userProfil->getProfil();
+            if ($profil !== null && $profil->getId() !== null) {
+                $userProfilIds[$profil->getId()] = true;
+            }
+        }
+
+        foreach ($help->getProfilsAutorises() as $profilAutorise) {
+            if ($profilAutorise->getId() !== null && isset($userProfilIds[$profilAutorise->getId()])) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
 
