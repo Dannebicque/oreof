@@ -32,6 +32,7 @@ class HelpAdminController extends AbstractController
     public function new(Request $request, EntityManagerInterface $em): Response
     {
         $help = new Help();
+        $help->setIsActive(true);
 
         $route = $request->query->get('route');
         if ($route) {

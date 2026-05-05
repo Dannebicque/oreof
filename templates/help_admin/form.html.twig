@@ -56,7 +56,6 @@
                         <!-- Onglet Upload -->
                         <div class="tab-pane fade" id="upload-tab-pane" role="tabpanel" aria-labelledby="upload-tab" tabindex="0">
                             <div class="row mt-3 align-items-start">
-                                <div class="col-md-7">
                                     <div class="alert alert-info">
                                         <i class="fal fa-info-circle"></i> L'image sera sauvegardée sur le serveur et pourra être utilisée plus tard dans d'autres aides.
                                     </div>
@@ -74,14 +73,6 @@
                                             <i class="fal fa-upload"></i> Uploader et insérer l'image
                                         </button>
                                     </form>
-                                </div>
-                                <div class="col-md-5">
-                                    <div id="imagePreviewContainer" class="w-100 d-flex flex-column justify-content-center align-items-center text-muted" style="background-color: #f8f9fa; border-radius: 8px; border: 2px dashed #dee2e6; min-height: 250px; padding: 1rem;">
-                                        <i class="fal fa-image fa-3x mb-2" id="previewIcon"></i>
-                                        <span id="previewText">Aperçu de l'image</span>
-                                        <img id="imagePreview" src="" alt="Aperçu" class="img-fluid d-none rounded shadow-sm" style="max-height: 250px; object-fit: contain;">
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -92,31 +83,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const uploadFileInput = document.getElementById('uploadFile');
-            if (uploadFileInput) {
-                uploadFileInput.addEventListener('change', function(e) {
-                    const file = e.target.files[0];
-                    const preview = document.getElementById('imagePreview');
-                    const icon = document.getElementById('previewIcon');
-                    const text = document.getElementById('previewText');
-
-                    if (file) {
-                        const reader = new FileReader();
-                        reader.onload = function(e) {
-                            preview.src = e.target.result;
-                            preview.classList.remove('d-none');
-                            if(icon) icon.classList.add('d-none');
-                            if(text) text.classList.add('d-none');
-                        }
-                        reader.readAsDataURL(file);
-                    } else {
-                        preview.src = '';
-                        preview.classList.add('d-none');
-                        if(icon) icon.classList.remove('d-none');
-                        if(text) text.classList.remove('d-none');
-                    }
-                });
-            }
+            // Event listeners et fonctions d'édition
         });
 
         function getEditor() {
@@ -258,12 +225,6 @@
                     alert('Erreur : ' + data.error);
                 } else {
                     document.getElementById('uploadImageForm').reset();
-
-                    // Reset preview
-                    document.getElementById('imagePreview').classList.add('d-none');
-                    document.getElementById('previewIcon').classList.remove('d-none');
-                    document.getElementById('previewText').classList.remove('d-none');
-                    document.getElementById('imagePreview').src = '';
 
                     // On bascule visuellement sur l'onglet galerie
                     const galleryTab = document.getElementById('gallery-tab');
