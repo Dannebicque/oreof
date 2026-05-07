@@ -58,3 +58,5 @@ public/api_json/
 ### exclude sql ###
 /*.sql
 /pense-bete.md
+
+public/uploads/
