@@ -153,7 +153,7 @@ class MentionController extends AbstractController
      * Affiche le formulaire de création d'une nouvelle mention.
      */
     #[Route('/new', name: 'app_mention_new', methods: ['GET', 'POST'])]
-    public function new(Request $request): Response
+    public function new(TurboStreamResponseFactory $turboStream, Request $request): Response
     {
         $mentionDto = MentionDto::createEmpty();
         $form = $this->createForm(MentionDtoType::class, $mentionDto, [
@@ -175,9 +175,16 @@ class MentionController extends AbstractController
             }
         }
 
-        return $this->render('config/mention/new.html.twig', [
-            'form' => $form->createView(),
-        ]);
+        return $turboStream->streamOpenModalFromTemplates(
+            new TranslatableKey('mention.new.title', [], 'modal'),
+            '',
+            '_ui/_modal_new_generic.html.twig',
+            [
+                'form' => $form->createView(),
+            ],
+            '_ui/_footer_submit_cancel.html.twig',
+            []
+        );
     }
 
     /**
@@ -242,7 +249,7 @@ class MentionController extends AbstractController
      * Affiche le formulaire d'édition d'une mention existante.
      */
     #[Route('/{id}/edit', name: 'app_mention_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, int $id): Response
+    public function edit(TurboStreamResponseFactory $turboStream, Request $request, int $id): Response
     {
         try {
             $mention = $this->mentionService->getMentionById($id);
@@ -271,10 +278,17 @@ class MentionController extends AbstractController
                 }
             }
 
-            return $this->render('config/mention/new.html.twig', [
-                'mention' => $mention,
-                'form' => $form->createView(),
-            ]);
+            return $turboStream->streamOpenModalFromTemplates(
+                new TranslatableKey('mention.edit.title', [], 'modal'),
+                'Mention : ' . $mention->getLibelle(),
+                '_ui/_modal_new_generic.html.twig',
+                [
+                    'mention' => $mention,
+                    'form' => $form->createView(),
+                ],
+                '_ui/_footer_submit_cancel.html.twig',
+                []
+            );
         } catch (NotFoundHttpException $e) {
             $this->addFlash('error', $e->getMessage());
             return $this->redirectToRoute('app_mention_index');

@@ -274,12 +274,37 @@
 
                             {% if actions is not empty %}
                                 <td class="px-4 py-3 text-right">
-                                    <div class="flex items-center justify-end gap-1">
+                                    <div class="flex items-center justify-end gap-1 flex-wrap">
                                         {% for name, action in actions %}
                                             {% set show = action.condition is null or action.condition(item) %}
                                             {% if show %}
                                                 {% set routeUrl = path(action.route, {id: item.id}|merge(action.route_params)) %}
-                                                {% if action.modal %}
+                                                {% if action.method == 'delete' %}
+                                                    <button
+                                                            {{ stimulus_action('crud', 'delete', 'click', {
+                                                                url: routeUrl,
+                                                                csrf: csrf_token('delete' ~ item.id)
+                                                            }) }}
+                                                            class="{{ action.class }}"
+                                                            title="{{ action.label }}"
+                                                            type="button"
+                                                    >
+                                                        {% if action.icon %}<i class="{{ action.icon }}"></i>{% endif %}
+                                                        {{ action.label }}
+                                                    </button>
+                                                {% elseif action.method == 'duplicate' %}
+                                                    <button
+                                                            {{ stimulus_action('crud', 'duplicate', 'click', {
+                                                                url: routeUrl
+                                                            }) }}
+                                                            class="{{ action.class }}"
+                                                            title="{{ action.label }}"
+                                                            type="button"
+                                                    >
+                                                        {% if action.icon %}<i class="{{ action.icon }}"></i>{% endif %}
+                                                        {{ action.label }}
+                                                    </button>
+                                                {% elseif action.modal %}
                                                     <a href="{{ routeUrl }}" data-turbo="true"
                                                        data-action="click->modalturbo#open" title="{{ action.label }}"
                                                        class="{{ action.class }}">

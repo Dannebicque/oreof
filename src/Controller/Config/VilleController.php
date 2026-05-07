@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * Copyright (c) 2023. | David Annebicque | ORéOF - All Rights Reserved
  * @file /Users/davidannebicque/Sites/oreof/src/Controller/Config/VilleController.php
  * @author davidannebicque
  * @project oreof
@@ -66,7 +66,11 @@ class VilleController extends AbstractController
     }
 
     #[Route('/new', name: 'app_ville_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, VilleRepository $villeRepository): Response
+    public function new(
+        TurboStreamResponseFactory $turboStream,
+        Request                    $request,
+        VilleRepository            $villeRepository
+    ): Response
     {
         $ville = new Ville();
         $form = $this->createForm(VilleType::class, $ville, [
@@ -79,10 +83,17 @@ class VilleController extends AbstractController
             return $this->json(true);
         }
 
-        return $this->render('config/ville/new.html.twig', [
-            'ville' => $ville,
-            'form' => $form->createView(),
-        ]);
+        return $turboStream->streamOpenModalFromTemplates(
+            new TranslatableKey('ville.new.title', [], 'modal'),
+            '',
+            '_ui/_modal_new_generic.html.twig',
+            [
+                'ville' => $ville,
+                'form' => $form->createView(),
+            ],
+            '_ui/_footer_submit_cancel.html.twig',
+            []
+        );
     }
 
     #[Route('/{id}', name: 'app_ville_show', methods: ['GET'])]
@@ -121,7 +132,12 @@ class VilleController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_ville_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Ville $ville, VilleRepository $villeRepository): Response
+    public function edit(
+        TurboStreamResponseFactory $turboStream,
+        Request                    $request,
+        Ville                      $ville,
+        VilleRepository            $villeRepository
+    ): Response
     {
         $form = $this->createForm(VilleType::class, $ville, [
             'action' => $this->generateUrl('app_ville_edit', ['id' => $ville->getId()]),
@@ -133,10 +149,17 @@ class VilleController extends AbstractController
             return $this->json(true);
         }
 
-        return $this->render('config/ville/new.html.twig', [
-            'ville' => $ville,
-            'form' => $form->createView(),
-        ]);
+        return $turboStream->streamOpenModalFromTemplates(
+            new TranslatableKey('ville.edit.title', [], 'modal'),
+            'Ville : ' . $ville->getLibelle(),
+            '_ui/_modal_new_generic.html.twig',
+            [
+                'ville' => $ville,
+                'form' => $form->createView(),
+            ],
+            '_ui/_footer_submit_cancel.html.twig',
+            []
+        );
     }
 
     #[Route('/{id}/duplicate', name: 'app_ville_duplicate', methods: ['GET'])]

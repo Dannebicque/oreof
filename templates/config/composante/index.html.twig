@@ -14,24 +14,27 @@
         {
             href:'',
             title: 'Administration',
+        },
+        {
+            href:'',
+            title: 'Gestion des composantes',
         }
     ]}) }}
 {% endblock %}
 
 {% block bouton_header %}
-    <button
-            {{ stimulus_controller('modal', {
-                size: 'lg',
-                modalTitle: 'Ajouter une composante',
-                modalUrl: path('app_composante_new') }) }}
-            data-action="click->modal#openModal"
+    <a
+            data-action="click->modalturbo#open"
+            data-turbo="true"
+            href="{{ path('app_composante_new') }}"
             class="btn border border-emerald-300 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 hover:text-emerald-800"
-            data-size="lg"
-            data-bs-toggle="tooltip"
-            data-bs-placement="bottom"
-            title="Ajouter une composante"
+            {{ stimulus_controller('tooltip', {
+                placement: 'bottom',
+                customClass: 'app-tooltip',
+                title: "Ajouter une composante"
+            }) }}
     >
         <twig:UX:Icon name="icon:add" class="h-4 w-4"/>
         <span> Ajouter une composante</span>
-    </button>
+    </a>
 {% endblock %}

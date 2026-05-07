@@ -14,13 +14,13 @@
 {% block breadcrumb %}
     {{ include('communs/_breadcrumb.html.twig', {liens:[
         { title: 'Administration' },
-        { title: 'Etablissements' }
+        { title: titre }
     ]}) }}
 {% endblock %}
 
 {% block bouton_header %}
     <twig:Button
-            href="{{ path('app_type_diplome_index') }}"
+            href="{{ path('app_etablissement_index') }}"
             variant="success"
             :outline="true"
             :soft="false"

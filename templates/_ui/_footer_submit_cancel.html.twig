@@ -9,6 +9,6 @@
     <button type="submit"
             class="app-modal-footer-btn app-modal-footer-btn--primary"
             form="modal_form">
-        {{ submitLabel ? submitLabel|trans({},'modal') : 'Enregistrer' }}
+        {{ submitLabel is defined ? submitLabel|trans({},'modal') : 'Enregistrer' }}
     </button>
 </div>

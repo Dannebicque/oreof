@@ -1,0 +1,11 @@
+{# Template partiel pour la colonne des dates de la timeline #}
+{% if value is not null and value|length > 0 %}
+    <ul class="list-unstyled mb-0 ps-0">
+        {% for event in value %}
+            <li class="text-nowrap">{{ event.libelle }} : {{ event.date|dateFr }}</li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <span class="text-slate-300">–</span>
+{% endif %}
+

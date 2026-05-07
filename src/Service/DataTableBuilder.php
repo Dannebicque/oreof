@@ -89,6 +89,7 @@ class DataTableBuilder
             'label' => 'Dupliquer',
             'route' => $route,
             'icon' => 'fal fa-copy',
+            'method' => 'duplicate',
             'class' => 'inline-flex items-center gap-1 rounded-md border border-emerald-300 bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-700 transition hover:bg-emerald-100',
         ], $options));
     }
@@ -108,6 +109,7 @@ class DataTableBuilder
      *   - modal: bool - Ouvrir dans une modal (défaut: false)
      *   - modal_size: string - Taille de la modal: 'sm', 'lg', 'xl' (défaut: 'lg')
      *   - modal_title: string - Titre de la modal (défaut: label de l'action)
+     *   - method: string - Méthode HTTP spéciale: 'delete' (stimulus crud#delete), 'duplicate' (stimulus crud#duplicate), null = lien standard
      */
     public function addAction(string $name, array $options = []): self
     {
@@ -122,6 +124,7 @@ class DataTableBuilder
             'modal' => false,
             'modal_size' => 'lg',
             'modal_title' => null,
+            'method' => null,
         ], $options);
 
         // Si modal_title n'est pas défini, utiliser le label
@@ -205,6 +208,7 @@ class DataTableBuilder
             'label' => 'Supprimer',
             'route' => $route,
             'icon' => 'fal fa-trash-alt',
+            'method' => 'delete',
             'class' => 'inline-flex items-center gap-1 rounded-md border border-rose-300 bg-rose-50 px-2.5 py-1 text-xs font-semibold text-rose-700 transition hover:bg-rose-100',
             'confirm' => 'Êtes-vous sûr de vouloir supprimer cet élément ?',
         ], $options));

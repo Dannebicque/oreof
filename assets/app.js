@@ -13,6 +13,7 @@ window.da = {
 
 import * as bootstrap from 'bootstrap'
 import 'trix'
+import 'trix/dist/trix.css'
 
 import callOut from './js/callOut'
 // import './styles/legacy.scss';

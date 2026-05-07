@@ -62,7 +62,11 @@ class RythmeFormationController extends AbstractController
     }
 
     #[Route('/new', name: 'app_rythme_formation_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, RythmeFormationRepository $rythmeFormationRepository): Response
+    public function new(
+        TurboStreamResponseFactory $turboStream,
+        Request                    $request,
+        RythmeFormationRepository  $rythmeFormationRepository
+    ): Response
     {
         $rythmeFormation = new RythmeFormation();
         $form = $this->createForm(RythmeFormationType::class, $rythmeFormation, [
@@ -76,10 +80,17 @@ class RythmeFormationController extends AbstractController
             return $this->json(true);
         }
 
-        return $this->render('config/rythme_formation/new.html.twig', [
-            'rythme_formation' => $rythmeFormation,
-            'form' => $form->createView(),
-        ]);
+        return $turboStream->streamOpenModalFromTemplates(
+            new TranslatableKey('rythme_formation.new.title', [], 'modal'),
+            '',
+            '_ui/_modal_new_generic.html.twig',
+            [
+                'rythme_formation' => $rythmeFormation,
+                'form' => $form->createView(),
+            ],
+            '_ui/_footer_submit_cancel.html.twig',
+            []
+        );
     }
 
     #[Route('/{id}', name: 'app_rythme_formation_show', methods: ['GET'])]
@@ -106,6 +117,7 @@ class RythmeFormationController extends AbstractController
 
     #[Route('/{id}/edit', name: 'app_rythme_formation_edit', methods: ['GET', 'POST'])]
     public function edit(
+        TurboStreamResponseFactory $turboStream,
         Request $request,
         RythmeFormation $rythmeFormation,
         RythmeFormationRepository $rythmeFormationRepository
@@ -121,10 +133,18 @@ class RythmeFormationController extends AbstractController
             return $this->json(true);
         }
 
-        return $this->render('config/rythme_formation/new.html.twig', [
-            'rythme_formation' => $rythmeFormation,
-            'form' => $form->createView(),
-        ]);
+
+        return $turboStream->streamOpenModalFromTemplates(
+            new TranslatableKey('rythme_formation.edit.title', [], 'modal'),
+            'Rythme de formation : ' . $rythmeFormation->getLibelle(),
+            '_ui/_modal_new_generic.html.twig',
+            [
+                'rythme_formation' => $rythmeFormation,
+                'form' => $form->createView(),
+            ],
+            '_ui/_footer_submit_cancel.html.twig',
+            []
+        );
     }
 
     #[Route('/{id}/duplicate', name: 'app_rythme_formation_duplicate', methods: ['GET'])]

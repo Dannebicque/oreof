@@ -13,24 +13,27 @@
         {
             href:'',
             title: 'Administration',
+        },
+        {
+            href:'',
+            title: 'Gestion des domaines',
         }
     ]}) }}
 {% endblock %}
 
 {% block bouton_header %}
-    <button
-            {{ stimulus_controller('modal', {
-                size: 'lg',
-                modalTitle: 'Ajouter un domaine',
-                modalUrl: path('app_domaine_new') }) }}
-            data-action="click->modal#openModal"
+    <a
+            data-action="click->modalturbo#open"
+            data-turbo="true"
+            href="{{ path('app_domaine_new') }}"
             class="btn border border-emerald-300 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 hover:text-emerald-800"
-            data-size="lg"
-            data-bs-toggle="tooltip"
-            data-bs-placement="bottom"
-            title="Ajouter un domaine"
+            {{ stimulus_controller('tooltip', {
+                placement: 'bottom',
+                customClass: 'app-tooltip',
+                title: "Ajouter un domaine"
+            }) }}
     >
         <twig:UX:Icon name="icon:add" class="h-4 w-4"/>
         <span> Ajouter un domaine</span>
-    </button>
+    </a>
 {% endblock %}

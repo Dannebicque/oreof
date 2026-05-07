@@ -27,7 +27,8 @@ use Symfony\Component\Routing\Attribute\Route;
 class LangueController extends AbstractController
 {
     #[Route('/', name: 'app_langue_index', methods: ['GET'])]
-    public function index(DataTableBuilder $builder
+    public function index(
+        DataTableBuilder $builder
     ): Response
     {
         $table = $builder
@@ -65,7 +66,9 @@ class LangueController extends AbstractController
     }
 
     #[Route('/new', name: 'app_langue_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, LangueRepository $langueRepository): Response
+    public function new(
+        TurboStreamResponseFactory $turboStream,
+        Request                    $request, LangueRepository $langueRepository): Response
     {
         $langue = new Langue();
         $form = $this->createForm(LangueType::class, $langue, [
@@ -79,10 +82,17 @@ class LangueController extends AbstractController
             return $this->json(true);
         }
 
-        return $this->render('config/langue/new.html.twig', [
-            'langue' => $langue,
-            'form' => $form->createView(),
-        ]);
+        return $turboStream->streamOpenModalFromTemplates(
+            new TranslatableKey('langue.new.title', [], 'modal'),
+            '',
+            '_ui/_modal_new_generic.html.twig',
+            [
+                'langue' => $langue,
+                'form' => $form->createView(),
+            ],
+            '_ui/_footer_submit_cancel.html.twig',
+            []
+        );
     }
 
     #[Route('/{id}', name: 'app_langue_show', methods: ['GET'])]
@@ -112,7 +122,9 @@ class LangueController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_langue_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Langue $langue, LangueRepository $langueRepository): Response
+    public function edit(
+        TurboStreamResponseFactory $turboStream,
+        Request                    $request, Langue $langue, LangueRepository $langueRepository): Response
     {
         $form = $this->createForm(LangueType::class, $langue, [
             'action' => $this->generateUrl('app_langue_edit', ['id' => $langue->getId()]),
@@ -125,10 +137,18 @@ class LangueController extends AbstractController
             return $this->json(true);
         }
 
-        return $this->render('config/langue/new.html.twig', [
-            'langue' => $langue,
-            'form' => $form->createView(),
-        ]);
+
+        return $turboStream->streamOpenModalFromTemplates(
+            new TranslatableKey('composante.edit.title', [], 'modal'),
+            'Langue : ' . $langue->getLibelle(),
+            '_ui/_modal_new_generic.html.twig',
+            [
+                'langue' => $langue,
+                'form' => $form->createView(),
+            ],
+            '_ui/_footer_submit_cancel.html.twig',
+            []
+        );
     }
 
     #[Route('/{id}/duplicate', name: 'app_langue_duplicate', methods: ['GET'])]
