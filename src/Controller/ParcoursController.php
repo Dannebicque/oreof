@@ -30,6 +30,7 @@ use App\Form\ParcoursType;
 use App\Repository\ElementConstitutifRepository;
 use App\Repository\ParcoursRepository;
 use App\Repository\ProfilRepository;
+use App\Service\AntivirusClamAv;
 use App\Service\LheoXML;
 use App\Service\VersioningFormation;
 use App\Service\VersioningParcours;
@@ -40,6 +41,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Jfcherng\Diff\DiffHelper;
 use JsonException;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -1053,5 +1055,16 @@ class ParcoursController extends BaseController
         ];
 
         return new JsonResponse($data);
+    }
+
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route('/antivirus/scanner/status', name: 'app_parcours_antivirus_scanner_status')]
+    public function getAntivirusScan(ParameterBagInterface $envParams) : Response {
+        $clamAV = AntivirusClamAv::getInstance($envParams);
+        $version = $clamAV->getVersion();
+        $txt = $clamAV->isServerAlive() ? "<p>Server is online.</p>" : "<p>Server seems offline.</p>";
+        $txt .=  $version !== false ? "<p>Version is : " . $version . "</p>" : "<p>Unable to retrieve version.</p>";
+
+        return new Response($txt, 200, ['Content-Type' => 'text/html']);
     }
 }
