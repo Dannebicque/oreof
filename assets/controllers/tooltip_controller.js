@@ -12,13 +12,53 @@ import { Tooltip } from 'bootstrap'
 export default class extends Controller {
   static values = {
     placement: String,
+    trigger: String,
+    customClass: String,
+    title: String,
+    container: String,
+    html: Boolean,
   }
 
   connect() {
-    const tooltip = new Tooltip(this.element, {
-      trigger: 'hover',
-      html: true,
-      placement: this.placementValue,
-    })
+    const title = this.hasTitleValue
+      ? this.titleValue
+      : this.element.getAttribute('data-bs-title') || this.element.getAttribute('title')
+
+    const customClass = this.hasCustomClassValue
+      ? this.customClassValue
+      : this.element.getAttribute('data-bs-custom-class')
+
+    const container = this.hasContainerValue
+      ? this.containerValue
+      : this.element.getAttribute('data-bs-container')
+
+    const options = {
+      trigger: this.hasTriggerValue ? this.triggerValue : (this.element.getAttribute('data-bs-trigger') || 'hover focus'),
+      html: this.hasHtmlValue ? this.htmlValue : this.element.getAttribute('data-bs-html') === 'true',
+      placement: this.hasPlacementValue ? this.placementValue : (this.element.getAttribute('data-bs-placement') || 'top'),
+    }
+
+    if (customClass && customClass.trim() !== '') {
+      options.customClass = customClass
+    }
+
+    if (container && container.trim() !== '') {
+      options.container = container
+    } else {
+      options.container = 'body'
+    }
+
+    if (title && title.trim() !== '') {
+      options.title = title
+    }
+
+    this.tooltip = Tooltip.getOrCreateInstance(this.element, options)
+  }
+
+  disconnect () {
+    if (this.tooltip) {
+      this.tooltip.dispose()
+      this.tooltip = null
+    }
   }
 }

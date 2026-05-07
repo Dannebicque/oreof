@@ -26,8 +26,21 @@ import './js/base/init'
 import './js/toggle'
 
 document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(
-  el => new bootstrap.Tooltip(el)
+  el => bootstrap.Tooltip.getOrCreateInstance(el)
 )
+
+const initBootstrapTooltips = (root = document) => {
+  const tooltipElements = root.querySelectorAll('[data-bs-toggle="tooltip"]')
+  tooltipElements.forEach((el) => {
+    bootstrap.Tooltip.getOrCreateInstance(el)
+  })
+}
+
+document.addEventListener('turbo:load', () => initBootstrapTooltips(document))
+document.addEventListener('turbo:render', () => initBootstrapTooltips(document))
+document.addEventListener('turbo:frame-load', (event) => {
+  initBootstrapTooltips(event.target)
+})
 
 
 window.addEventListener('load', () => { // le dom est chargé

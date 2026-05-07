@@ -7,9 +7,29 @@
     <script>
       (function () {
         const savedTheme = localStorage.getItem('oreof-theme')
+        let accessibility = null
+
+        try {
+          accessibility = JSON.parse(localStorage.getItem('oreof-a11y') || 'null')
+        } catch (e) {
+          accessibility = null
+        }
+
+        const preferredTheme = accessibility && accessibility.theme ? accessibility.theme : null
         const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
-        const theme = (savedTheme === 'dark' || savedTheme === 'light') ? savedTheme : (prefersDark ? 'dark' : 'light')
+        const themeFromPref = preferredTheme === 'system' ? null : preferredTheme
+        const theme = (themeFromPref === 'dark' || themeFromPref === 'light')
+          ? themeFromPref
+          : ((savedTheme === 'dark' || savedTheme === 'light') ? savedTheme : (prefersDark ? 'dark' : 'light'))
+
         document.documentElement.setAttribute('data-theme', theme)
+
+        if (accessibility) {
+          document.documentElement.setAttribute('data-a11y-font', accessibility.font || 'default')
+          document.documentElement.setAttribute('data-a11y-size', accessibility.size || 'normal')
+          document.documentElement.setAttribute('data-a11y-contrast', accessibility.contrast ? 'high' : 'normal')
+          document.documentElement.setAttribute('data-a11y-motion', accessibility.motion ? 'reduced' : 'normal')
+        }
       })()
     </script>
     <link rel="preconnect" href="https://fonts.gstatic.com"/>
@@ -462,13 +482,16 @@
                             {#                                        </a> #}
                             {#                                    </li> #}
                             {#                                {% endif %} #}
-                            <a href="#" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">
+                            <a href="{{ path('app_accessibilite') }}"
+                               class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50"
+                               data-turbo="true"
+                               data-action="click->modalturbo#open">
                                 <svg class="w-4 h-4 mr-3 text-gray-400" fill="none" stroke="currentColor"
                                      viewBox="0 0 24 24">
                                     <path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
                                     <circle cx="12" cy="12" r="3"></circle>
                                 </svg>
-                                Paramètres
+                                Parametres & accessibilite
                             </a>
                             {#                                    <a #}
                             {#                                            href="#" #}

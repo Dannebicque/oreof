@@ -55,6 +55,58 @@ html[data-theme="dark"] {
     background-color: var(--color-bg);
     color: var(--color-text);
   }
+
+    html[data-a11y-size="large"] {
+        font-size: 112.5%;
+    }
+
+    html[data-a11y-size="xlarge"] {
+        font-size: 125%;
+    }
+
+    html[data-a11y-font="dys"] body {
+        font-family: OpenDyslexic, Atkinson Hyperlegible, Arial, Helvetica, sans-serif;
+        letter-spacing: 0.01em;
+    }
+
+    html[data-a11y-contrast="high"] {
+        --color-bg: #ffffff;
+        --color-surface: #ffffff;
+        --color-text: #0b0b0b;
+        --color-text-muted: #111827;
+        --color-border: #0f172a;
+        --color-primary: #0f172a;
+        --color-success: #14532d;
+        --color-info: #0c4a6e;
+        --color-warning: #92400e;
+        --color-danger: #7f1d1d;
+    }
+
+    html[data-theme="dark"][data-a11y-contrast="high"] {
+        --color-bg: #020617;
+        --color-surface: #020617;
+        --color-text: #ffffff;
+        --color-text-muted: #f1f5f9;
+        --color-border: #ffffff;
+        --color-primary: #e2e8f0;
+        --color-success: #86efac;
+        --color-info: #7dd3fc;
+        --color-warning: #fcd34d;
+        --color-danger: #fca5a5;
+    }
+
+    html[data-a11y-contrast="high"] *:focus-visible {
+        outline: 3px solid #f59e0b !important;
+        outline-offset: 2px;
+    }
+
+    html[data-a11y-motion="reduced"] *,
+    html[data-a11y-motion="reduced"] *::before,
+    html[data-a11y-motion="reduced"] *::after {
+        animation: none !important;
+        transition-duration: 0s !important;
+        scroll-behavior: auto !important;
+    }
 }
 
 @layer components {
@@ -896,6 +948,19 @@ html[data-theme="dark"] {
   html[data-theme="dark"] .app-tab-panel {
     @apply border-slate-700 bg-slate-900;
   }
+
+    /* Base Tooltip (fallback sans bootstrap.css) */
+    .tooltip {
+        @apply pointer-events-none absolute z-[1080] block text-xs opacity-0;
+    }
+
+    .tooltip.show {
+        @apply opacity-100;
+    }
+
+    .tooltip .tooltip-inner {
+        @apply max-w-xs rounded-md bg-slate-900 px-2 py-1 text-white;
+    }
 
   /* Tooltips Bootstrap (timeline) */
   .tooltip.app-tooltip .tooltip-inner {

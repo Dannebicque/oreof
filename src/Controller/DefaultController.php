@@ -50,9 +50,25 @@ class DefaultController extends BaseController
         );
     }
 
+    #[Route('/accessibilite', name: 'app_accessibilite')]
+    public function accessibilite(
+        TurboStreamResponseFactory $turboStream
+    ): Response
+    {
+        return $turboStream->streamOpenModalFromTemplates(
+            'Accessibilite',
+            'Adapter l affichage et les interactions selon vos besoins',
+            'default/_accessibilite.html.twig',
+            [],
+            '_ui/_footer_cancel.html.twig',
+            []
+        );
+    }
+
     #[Route('/wizard', name: 'app_homepage_wizard')]
     public function wizard(
         ComposanteRepository $composanteRepository,
+        FormationRepository $formationRepository,
         Request                    $request,
         TurboStreamResponseFactory $turboStream
     ): Response {
@@ -71,6 +87,7 @@ class DefaultController extends BaseController
                 if ($this->isGranted('ROLE_ADMIN')) {
                     $template = 'default/_fichesSes.html.twig';
                     $context['composantes'] = $composanteRepository->findPorteuse();
+                    $context['composanteFormationCounts'] = $formationRepository->countByComposanteForCampagne($this->getCampagneCollecte());
                     break;
                 }
 

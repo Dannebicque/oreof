@@ -20,10 +20,13 @@
                     {% endif %}
                 {% endif %}" data-end-date="{{ event.date|date('Y-m-d') }}">
                 <div class="step-icon"
-                     data-bs-toggle="tooltip"
-                     data-bs-placement="bottom"
-                     data-bs-custom-class="app-tooltip app-tooltip--timeline"
-                     title="{{ event.description }}"
+                        {{ stimulus_controller('tooltip', {
+                            placement: 'bottom',
+                            customClass: 'app-tooltip app-tooltip--timeline',
+                            container: 'body',
+                            title: event.description is not empty ? event.description : event.libelle
+                        }) }}
+                     tabindex="0"
                 >
                     <span class="fal {{ event.icone }}"></span>
                 </div>
