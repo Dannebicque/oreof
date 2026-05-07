@@ -194,6 +194,7 @@ class FormationController extends BaseController
 
     #[Route('/liste/{composante}', name: 'app_formation_liste_composante', methods: ['GET'])]
     public function listeComposante(
+        UserRepository $userRepository,
         MentionProcess        $validationProcess,
         MentionRepository     $mentionRepository,
         TypeDiplomeRepository $typeDiplomeRepository,
@@ -211,14 +212,22 @@ class FormationController extends BaseController
             $composante
         );
 
+        $nbParcours = 0;
+        foreach ($formations as $formation) {
+            $nbParcours += count($formation->getParcours());
+        }
+
         return $this->render('formation/_liste.html.twig', [
             'formations' => $formations,
+            'nbFormations' => count($formations),
+            'nbParcours' => $nbParcours,
             'params' => $request->query->all(),
             'isCfvu' => false,
             'composantes' => $composanteRepository->findPorteuse(),
             'typeDiplomes' => $typeDiplomeRepository->findAll(),
             'mentions' => $mentionRepository->findAll(),
-            'process' => $validationProcess->getProcess()
+            'process' => $validationProcess->getProcess(),
+            'responsables' => $userRepository->findAll()
         ]);
     }
 

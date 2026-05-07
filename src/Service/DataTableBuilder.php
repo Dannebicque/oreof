@@ -68,6 +68,7 @@ class DataTableBuilder
             'separator' => ', ',
             'template' => null,
             'class' => '',
+            'is_html' => false,
         ], $options);
 
         return $this;

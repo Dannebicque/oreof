@@ -1,50 +1,79 @@
 {% extends 'base-speciale.html.twig' %}
 
-{% block title %}Demande d'accès{% endblock %}
+{% block title %}Demande d'acces | {{ product_name }}{% endblock %}
 
 {% block content %}
-    <div class="mb-2 mt-4">
-        <h2 class="cta-1 mb-0 text-primary">Bienvenue,</h2>
-        <h2 class="cta-1 text-primary">Complétez votre demande d'accès</h2>
-    </div>
-    <div class="d-grid mb-2">
-        <a href="{{ path('app_login') }}" class="btn d-block btn-primary" type="submit">
-            Déjà un compte ? Connectez vous
-        </a>
-    </div>
-    <div {{ stimulus_controller('register', {
+    <div class="space-y-6" {{ stimulus_controller('register', {
         urlComposante: path('api_composante'),
-        urlDroits: path('api_droits'),
+        urlDroits: path('api_droits')
     }) }}>
-        {% form_theme form 'communs/form_theme.html.twig' %}
-        {{ form_start(form) }}
-        <div class="row">
-            <div class="col-6">
-                {{ form_row(form.prenom) }}
-            </div>
-            <div class="col-6">
-                {{ form_row(form.nom) }}
-            </div>
-            <div class="col-12">
-                {{ form_row(form.email) }}
-            </div>
-            <div class="col-12">
-                {{ form_row(form.centreDemande) }}
-            </div>
-            <div class="col-12">
-                <label for="selectListe" class="form-label">Si composante, précisez</label>
-                <select class="form-select" name="selectListe" id="selectListe">
-                    <option value="">Choisissez un centre</option>
-                </select>
-            </div>
-            <div class="col-12">
-                {{ form_row(form.serviceDemande) }}
-            </div>
+        <div class="space-y-2">
+            <p class="inline-flex items-center rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-emerald-700">
+                Demande d'acces
+            </p>
+            <h2 class="text-3xl font-black leading-tight text-slate-900">Bienvenue, completez votre demande</h2>
+            <p class="text-sm text-slate-500">Renseignez vos informations institutionnelles pour ouvrir un acces a la
+                plateforme.</p>
         </div>
 
-        <div class="d-grid mt-2">
-            <button class="btn d-block btn-primary" type="submit">Valider la demande</button>
+        <div class="space-y-3">
+            <twig:Button
+                    href="{{ path('app_login') }}"
+                    variant="secondary"
+                    :outline="true"
+                    :soft="false"
+                    icon="icon:arrow-left"
+                    label="Deja un compte ? Connectez-vous"
+                    extraClass="w-full justify-center"
+            />
+
+            {% for type, messages in app.flashes %}
+                {% for message in messages %}
+                    {% set normalizedType = type|lower %}
+                    {% if normalizedType in ['error', 'erreur'] %}
+                        {% set normalizedType = 'danger' %}
+                    {% elseif normalizedType not in ['success', 'danger', 'warning', 'info'] %}
+                        {% set normalizedType = 'info' %}
+                    {% endif %}
+                    {{ component('alerte', { type: normalizedType, message: message }) }}
+                {% endfor %}
+            {% endfor %}
         </div>
-        {{ form_end(form) }}
+
+        <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-900/50">
+            {% form_theme form 'communs/form_theme_v2.html.twig' %}
+            {{ form_start(form, { attr: { class: 'space-y-1' } }) }}
+
+            <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                <div>{{ form_row(form.prenom) }}</div>
+                <div>{{ form_row(form.nom) }}</div>
+            </div>
+            <div>
+                <div class="sm:col-span-2">{{ form_row(form.email) }}</div>
+                <div class="sm:col-span-2">{{ form_row(form.centreDemande) }}</div>
+
+                <div class="sm:col-span-2 space-y-2">
+                    <label for="selectListe" class="block text-[12px] font-black uppercase text-slate-500">Si
+                        composante, precisez</label>
+                    <select class="w-full rounded-sm border border-slate-200 bg-slate-50 p-2 font-bold text-slate-700"
+                            name="selectListe" id="selectListe">
+                        <option value="">Choisissez un centre</option>
+                    </select>
+                </div>
+
+                <div class="sm:col-span-2">{{ form_row(form.serviceDemande) }}</div>
+            </div>
+
+            <twig:Button
+                    type="submit"
+                    variant="primary"
+                    :soft="false"
+                    :outline="false"
+                    icon="icon:save"
+                    label="Valider la demande"
+                    extraClass="mt-2 w-full justify-center"
+            />
+            {{ form_end(form) }}
+        </div>
     </div>
 {% endblock %}

@@ -1,114 +1,124 @@
 {% set disabled = user_data.campagneCollecte.isFinished and not is_granted('ROLE_ADMIN') %}
---{{ user_data.campagneCollecte.isFinished == true ? 1 : 0 }}--
---{{ (not is_granted('ROLE_ADMIN')) == true ? 1 : 0 }}--
---{{ disabled == true ? 1 : 0 }}--
-<div data-turbo-frame="offre_table">
-    <div class="row g-3 mb-3">
-        <div class="col-6 col-md-3">
-            <div class="card h-100 shadow-sm">
-                <div class="card-body d-flex align-items-center">
-                    <div class="me-3 fs-3 text-primary"><i class="fas fa-graduation-cap"></i></div>
-                    <div>
-                        <div class="h5 mb-0"><strong>{{ tabStatistiques.nbFormations }}</strong></div>
-                        <small class="text-muted">Formations</small>
+<div data-turbo-frame="offre_table" class="space-y-4">
+    <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
+        <article
+                class="rounded-xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-900">
+            <div class="flex items-center gap-3">
+                <div class="text-xl text-cyan-600 dark:text-cyan-400"><i class="fas fa-graduation-cap"></i></div>
+                <div>
+                    <div class="text-lg font-bold text-slate-900 dark:text-slate-100">{{ tabStatistiques.nbFormations }}</div>
+                    <div class="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                        Formations
                     </div>
                 </div>
             </div>
-        </div>
+        </article>
 
-        <div class="col-6 col-md-3">
-            <div class="card h-100 shadow-sm">
-                <div class="card-body d-flex align-items-center">
-                    <div class="me-3 fs-3 text-success"><i class="fas fa-project-diagram"></i></div>
-                    <div>
-                        <div class="h5 mb-0"><strong>{{ tabStatistiques.nbParcours }}</strong></div>
-                        <small class="text-muted">Parcours</small>
+        <article
+                class="rounded-xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-900">
+            <div class="flex items-center gap-3">
+                <div class="text-xl text-emerald-600 dark:text-emerald-400"><i class="fas fa-project-diagram"></i></div>
+                <div>
+                    <div class="text-lg font-bold text-slate-900 dark:text-slate-100">{{ tabStatistiques.nbParcours }}</div>
+                    <div class="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                        Parcours
                     </div>
                 </div>
             </div>
-        </div>
+        </article>
 
-        <div class="col-6 col-md-3">
-            <div class="card h-100 shadow-sm">
-                <div class="card-body d-flex align-items-center">
-                    <div class="me-3 fs-3 text-warning"><i class="fas fa-user-check"></i></div>
-                    <div>
-                        <div class="h5 mb-0"><strong>{{ tabStatistiques.capacite }}</strong></div>
-                        <small class="text-muted">Places disponibles (sélection)</small>
+        <article
+                class="rounded-xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-900">
+            <div class="flex items-center gap-3">
+                <div class="text-xl text-amber-600 dark:text-amber-400"><i class="fas fa-user-check"></i></div>
+                <div>
+                    <div class="text-lg font-bold text-slate-900 dark:text-slate-100">{{ tabStatistiques.capacite }}</div>
+                    <div class="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">Places
+                        selection
                     </div>
                 </div>
             </div>
-        </div>
+        </article>
 
-        <div class="col-6 col-md-3">
-            <div class="card h-100 shadow-sm">
-                <div class="card-body d-flex align-items-center">
-                    <div class="me-3 fs-3 text-info"><i class="fas fa-users"></i></div>
-                    <div>
-                        <div class="h5 mb-0"><strong>{{ tabStatistiques.capaciteTotale }}</strong></div>
-                        <small class="text-muted">Places au total</small>
+        <article
+                class="rounded-xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-900">
+            <div class="flex items-center gap-3">
+                <div class="text-xl text-sky-600 dark:text-sky-400"><i class="fas fa-users"></i></div>
+                <div>
+                    <div class="text-lg font-bold text-slate-900 dark:text-slate-100">{{ tabStatistiques.capaciteTotale }}</div>
+                    <div class="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">Places
+                        total
                     </div>
                 </div>
             </div>
-        </div>
+        </article>
     </div>
 
-    <div class="card">
-        <div class="card-body">
-            <form method="get" action="{{ path('app_offre') }}" class="mb-2">
-                <div class="row g-2 align-items-end">
-                    <div class="col-md-3">
-                        <label class="form-label mb-1" for="libelle">Libellé</label>
-                        <input id="libelle" type="text" name="q" value="{{ filters.q|default('') }}"
-                               class="form-control"
-                               placeholder="Rechercher..." oninput="this.form.requestSubmit()">
-                    </div>
-                    <div class="col-md-3">
-                        <label class="form-label mb-1" for="type_diplome">Type diplôme</label>
-                        <select id="type_diplome" name="type" class="form-select" onchange="this.form.requestSubmit()">
-                            <option value="">Tous</option>
-                            {% for t in choices.types %}
-                                <option value="{{ t }}"
-                                        {% if filters.type|default('') == t %}selected{% endif %}>{{ t }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <div class="col-md-3">
-                        <label class="form-label mb-1" for="composante">Composante</label>
-                        <select id="composante" name="comp" class="form-select" onchange="this.form.requestSubmit()">
-                            <option value="">Toutes</option>
-                            {% for c in choices.composantes %}
-                                <option value="{{ c }}"
-                                        {% if filters.comp|default('') == c %}selected{% endif %}>{{ c }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <div class="col-md-2">
-                        <label class="form-label mb-1" for="ville">Ville</label>
-                        <select id="ville" name="ville" class="form-select" onchange="this.form.requestSubmit()">
-                            <option value="">Toutes</option>
-                            {% for v in choices.villes %}
-                                <option value="{{ v }}"
-                                        {% if filters.ville|default('') == v %}selected{% endif %}>{{ v }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <div class="col-md-1 d-grid">
-                        <a class="btn btn-danger d-block"
-                           href="{{ path('app_offre') }}"
-                           data-turbo-frame="offre_table">Effacer</a>
-                    </div>
+    <section class="rounded-xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-900">
+        <form method="get" action="{{ path('app_offre') }}" class="mb-4">
+            <div class="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-12 xl:items-end">
+                <div class="xl:col-span-3">
+                    <label class="mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-500"
+                           for="libelle">Libelle</label>
+                    <input id="libelle" type="text" name="q" value="{{ filters.q|default('') }}"
+                           class="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 shadow-sm outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-100 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100"
+                           placeholder="Rechercher..." oninput="this.form.requestSubmit()">
                 </div>
-            </form>
+                <div class="xl:col-span-3">
+                    <label class="mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-500"
+                           for="type_diplome">Type diplome</label>
+                    <select id="type_diplome" name="type"
+                            class="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 shadow-sm outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-100 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100"
+                            onchange="this.form.requestSubmit()">
+                        <option value="">Tous</option>
+                        {% for t in choices.types %}
+                            <option value="{{ t }}"
+                                    {% if filters.type|default('') == t %}selected{% endif %}>{{ t }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="xl:col-span-3">
+                    <label class="mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-500"
+                           for="composante">Composante</label>
+                    <select id="composante" name="comp"
+                            class="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 shadow-sm outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-100 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100"
+                            onchange="this.form.requestSubmit()">
+                        <option value="">Toutes</option>
+                        {% for c in choices.composantes %}
+                            <option value="{{ c }}"
+                                    {% if filters.comp|default('') == c %}selected{% endif %}>{{ c }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="xl:col-span-2">
+                    <label class="mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-500" for="ville">Ville</label>
+                    <select id="ville" name="ville"
+                            class="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 shadow-sm outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-100 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100"
+                            onchange="this.form.requestSubmit()">
+                        <option value="">Toutes</option>
+                        {% for v in choices.villes %}
+                            <option value="{{ v }}"
+                                    {% if filters.ville|default('') == v %}selected{% endif %}>{{ v }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="xl:col-span-1">
+                    <a class="app-btn app-btn-danger w-full justify-center"
+                       href="{{ path('app_offre') }}"
+                       data-turbo-frame="offre_table">Effacer</a>
+                </div>
+            </div>
+        </form>
 
 
-            <table class="table"
+        <div class="overflow-x-auto rounded-lg border border-slate-200 dark:border-slate-700">
+            <table class="min-w-300 w-full text-sm"
                     {{ stimulus_controller('offre', {
                         url: path('app_offre_update')
                     }) }}
             >
-                <thead>
-                <tr>
+                <thead class="bg-slate-50 dark:bg-slate-800/60">
+                <tr class="text-left text-[11px] font-black uppercase tracking-[0.16em] text-slate-500 dark:text-slate-400">
                     <th>Composante</th>
                     <th>Type diplôme</th>
                     <th>Libellé Mention <br> parcours</th>
@@ -120,9 +130,9 @@
                     <th>actions</th>
                 </tr>
                 </thead>
-                <tbody>
+                <tbody class="divide-y divide-slate-200 dark:divide-slate-700">
                 {% for formation in tFormations %}
-                    <tr class="{% if formation.formation.hasParcours == true %}bg-info-pale{% else %}bg-warning-pale{% endif %}"
+                    <tr class="{{ formation.formation.hasParcours ? 'bg-cyan-50/60 dark:bg-cyan-950/20' : 'bg-amber-50/60 dark:bg-amber-950/20' }}"
                         data-formation-open="{{ formation.formation.etatReconduction.value }}"
                         data-formation-id="{{ formation.formation.id }}"
 
@@ -156,31 +166,33 @@
                             {% if formation.formation.hasParcours == false %}
                                 <label for="capacite_{{ parc.id }}" class="sr-only">Capacité accueil pour le
                                     parcours</label>
-                                <input type="text" class="form-control" id="capacite_{{ parc.id }}"
+                                <input type="text"
+                                       class="w-24 rounded-lg border border-slate-200 bg-white px-2 py-1 text-sm text-slate-700 shadow-sm outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-100 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100"
+                                       id="capacite_{{ parc.id }}"
                                        value="{{ parc.capaciteAccueil }}"
                                         {{ stimulus_action('offre', 'changeCapaciteParcours', 'change', {
                                             id:parc.id
                                         }) }}
-                                       value="{{ parc.capaciteAccueil }}"
                                         {% if disabled %}disabled{% endif %}
                                 >
                             {% else %}
                                 <label for="capacitef_{{ formation.formation.id }}" class="sr-only">Capacité accueil
                                     pour la
                                     mention</label>
-                                <input type="text" class="form-control" id="capacitef_{{ formation.formation.id }}"
+                                <input type="text"
+                                       class="w-24 rounded-lg border border-slate-200 bg-white px-2 py-1 text-sm text-slate-700 shadow-sm outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-100 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100"
+                                       id="capacitef_{{ formation.formation.id }}"
                                        value="{{ formation.formation.capaciteAccueil }}"
                                         {{ stimulus_action('offre', 'changeCapaciteMention', 'change', {
                                             id:formation.formation.id
                                         }) }}
-                                       value="{{ formation.formation.capaciteAccueil }}"
                                         {% if disabled %}disabled{% endif %}
                                 >
                             {% endif %}
                         </td>
                         <td>
                             <a
-                                    class="btn btn-info btn-sm"
+                                    class="app-btn app-btn-info"
                                     target="_blank"
                                     href="{{ path('formation_v2_voir', { 'slug': formation.formation.slug }) }}">
                                 <i class="{{ iconShow }}"></i>
@@ -190,21 +202,21 @@
                                         {{ stimulus_action('offre', 'ouvreAnnee', 'click', {
                                             parcours: formation.formation.dpeParcours[0].id
                                         }) }}
-                                        class="btn btn-success btn-sm"
+                                        class="app-btn app-btn-success"
                                 >
-                                    <i class="fas fa-chevron-circle-down"></i>
+                                    <twig:UX:Icon name="icon:chevron-down"/>
                                 </button>
                             {% endif %}
                         </td>
                     </tr>
                     {% if formation.formation.hasParcours == true %}
                         {% for parcours in formation.dpeParcours %}
-                            <tr style="border-left: 2px solid dodgerblue"
+                            <tr class="border-l-2 border-cyan-500"
                                 data-parcours-open="{{ parcours.etatReconduction.value }}"
                                 data-parcours-id="{{ parcours.id }}"
                                 data-formation-id="{{ formation.formation.id }}"
                             >
-                                <td style="padding-left: 20px"
+                                <td class="pl-5"
                                     colspan="3">{{ parcours.parcours.libelle }} {{ parcours.parcours.typeParcours|badgeTypeParcours }}</td>
                                 <td>{{ parcours.parcours.localisation != null ? parcours.parcours.localisation.libelle : 'erreur ville' }}</td>
                                 <td>{{ parcours.etatReconduction|badgeTypeModification }}</td>
@@ -219,13 +231,14 @@
                                     <label for="capacite_{{ parcours.parcours.id }}" class="sr-only">Capacité accueil
                                         pour le
                                         parcours</label>
-                                    <input type="text" class="form-control" id="capacite_{{ parcours.parcours.id }}"
+                                    <input type="text"
+                                           class="w-24 rounded-lg border border-slate-200 bg-white px-2 py-1 text-sm text-slate-700 shadow-sm outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-100 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100"
+                                           id="capacite_{{ parcours.parcours.id }}"
                                            value="{{ parcours.parcours.capaciteAccueil }}"
                                             {{ stimulus_action('offre', 'changeCapaciteParcours', 'change', {
                                                 id:parcours.parcours.id
                                             }) }}
                                             {% if disabled %}disabled{% endif %}
-                                           value="{{ parcours.parcours.capaciteAccueil }}"
                                     >
                                 </td>
                                 <td>
@@ -237,7 +250,7 @@
                                                     modalTitle: 'Modifier un parcours',
                                                     modalUrl: path('app_parcours_edit_modal', {parcours:parcours.parcours.id}) }) }}
                                                 data-action="click->modal#openModal"
-                                                class="btn btn-sm btn-outline-warning mb-1"
+                                                class="app-btn app-btn-warning mb-1"
                                                 data-size="lg"
                                                 data-bs-toggle="tooltip"
                                                 data-bs-placement="bottom"
@@ -252,7 +265,7 @@
                                                         modalTitle: 'Dupliquer le parcours ' ~ parcours.parcours.display,
                                                         modalUrl: path('app_parcours_dupliquer_modal', {'id': parcours.parcours.id}) }) }}
                                                     data-action="click->modal#openModal"
-                                                    class="btn btn-sm text-primary"
+                                                    class="app-btn app-btn-primary"
                                                     data-size="lg"
                                                     data-bs-toggle="tooltip"
                                                     data-bs-placement="bottom"
@@ -262,7 +275,7 @@
                                             </button>
                                         {% endif %}
                                     {% endif %}
-                                    <a class="btn btn-info btn-sm mb-1" target="_blank"
+                                    <a class="app-btn app-btn-info mb-1" target="_blank"
                                        href="{{ path('parcours_v2_voir', {parcours: parcours.parcours.id }) }}">
                                         <i class="{{ iconShow }}"></i>
                                     </a>
@@ -270,7 +283,7 @@
                                             {{ stimulus_action('offre', 'ouvreAnnee', 'click', {
                                                 parcours: parcours.id
                                             }) }}
-                                            class="btn btn-success btn-sm"
+                                            class="app-btn app-btn-success"
                                     >
                                         <i class="fas fa-chevron-circle-down"></i>
                                     </button>
@@ -290,7 +303,7 @@
                                                 modalTitle: 'Ajouter un parcours',
                                                 modalUrl: path('app_parcours_new', {formation:formation.formation.id}) }) }}
                                             data-action="click->modal#openModal"
-                                            class="btn btn-sm btn-outline-success btn-icon btn-icon-end"
+                                            class="app-btn app-btn-success"
                                             data-size="lg"
                                             data-bs-toggle="tooltip"
                                             data-bs-placement="bottom"
@@ -310,5 +323,5 @@
                 </tbody>
             </table>
         </div>
-    </div>
+    </section>
 </div>

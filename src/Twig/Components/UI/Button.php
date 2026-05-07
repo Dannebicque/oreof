@@ -52,4 +52,7 @@ final class Button
 
     /** Classes CSS supplémentaires */
     public string $extraClass = '';
+
+    /** data-action Stimulus optionnel */
+    public string $dataAction = '';
 }

@@ -72,6 +72,7 @@ Composant Button — exemples d'usage :
     <a href="{{ href }}"
        class="{{ allClasses }}"
        {% if tooltip %}title="{{ tooltip }}"{% endif %}
+            {% if dataAction != '' %}data-action="{{ dataAction }}"{% endif %}
             {% if disabled %}aria-disabled="true" tabindex="-1"{% endif %}
             {{- attributes -}}
     >
@@ -86,6 +87,7 @@ Composant Button — exemples d'usage :
             class="{{ allClasses }}"
             {% if form != '' %}form="{{ form }}"{% endif %}
             {% if tooltip %}title="{{ tooltip }}"{% endif %}
+            {% if dataAction != '' %}data-action="{{ dataAction }}"{% endif %}
             {% if disabled %}disabled{% endif %}
             {{- attributes -}}
     >

@@ -7,7 +7,6 @@
  */
 
 import { Controller } from '@hotwired/stimulus'
-import callOut from '../js/callOut'
 import JsonResponse from '../js/JsonResponse'
 
 export default class extends Controller {
@@ -206,11 +205,14 @@ export default class extends Controller {
     const idParcours = event.params.parcours
     const trs = document.querySelectorAll(`tr.parc_${idParcours}`)
     trs.forEach(tr => {
-      //si la classe d-none présente, retirer, sinon ajouter
-      if (tr.classList.contains('d-none')) {
+      const isHidden = tr.classList.contains('d-none') || tr.classList.contains('hidden')
+
+      if (isHidden) {
         tr.classList.remove('d-none')
+        tr.classList.remove('hidden')
       } else {
         tr.classList.add('d-none')
+        tr.classList.add('hidden')
       }
     })
   }

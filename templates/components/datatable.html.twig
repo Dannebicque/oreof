@@ -147,10 +147,10 @@
 
         {# Tableau principal #}
         <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-900">
-        <div class="overflow-x-auto">
-            <table class="min-w-full text-sm text-slate-700 dark:text-slate-200">
-                <thead class="bg-slate-50 text-left text-xs font-black uppercase tracking-wider text-slate-500 dark:bg-slate-800/70 dark:text-slate-300">
-                <tr>
+            <div class="overflow-x-auto">
+                <table class="min-w-full text-sm text-slate-700 dark:text-slate-200">
+                    <thead class="bg-slate-50 text-left text-xs font-black uppercase tracking-wider text-slate-500 dark:bg-slate-800/70 dark:text-slate-300">
+                    <tr>
                         {% for column in columns %}
                             <th class="px-4 py-3 {{ column.class }}">
                                 {% if column.sortable %}
@@ -181,8 +181,8 @@
                             </th>
                         {% endif %}
                     </tr>
-                </thead>
-                <tbody class="divide-y divide-slate-200 dark:divide-slate-700">
+                    </thead>
+                    <tbody class="divide-y divide-slate-200 dark:divide-slate-700">
                     {% for item in this.getData %}
                         <tr class="align-top hover:bg-slate-50/70 dark:hover:bg-slate-800/40">
                             {% for column in columns %}
@@ -260,7 +260,11 @@
                                             {% endif %}
 
                                         {% elseif value is not null and value is not same as '' %}
-                                            {{ value }}
+                                            {% if column.is_html %}
+                                                {{ value|raw }}
+                                            {% else %}
+                                                {{ value }}
+                                            {% endif %}
                                         {% else %}
                                             <span class="text-slate-300 dark:text-slate-600">–</span>
                                         {% endif %}
@@ -307,9 +311,9 @@
                             </td>
                         </tr>
                     {% endfor %}
-                </tbody>
-            </table>
-        </div>
+                    </tbody>
+                </table>
+            </div>
         </div>
 
         {# ── Pagination ──────────────────────────────────────────────────────── #}

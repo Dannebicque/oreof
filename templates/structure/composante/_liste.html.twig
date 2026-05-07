@@ -97,11 +97,13 @@
                         </button>
 
                         {# Lien fiche composante #}
-                        <a href="{{ path('app_composante', {composante: composante.id}) }}"
-                           class="app-btn app-btn-neutral">
-                            <twig:UX:Icon name="icon:eye" class="h-4 w-4"/>
-                            <span>Voir</span>
-                        </a>
+                        <twig:Button
+                                href="{{ path('app_composante', {composante: composante.id}) }}"
+                                variant="info"
+                                icon="icon:eye"
+                                label="Voir"
+                                tooltip="Voir la fiche de la composante"
+                        />
                     </div>
                 </div>
 
