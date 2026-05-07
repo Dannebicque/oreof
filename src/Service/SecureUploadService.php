@@ -12,7 +12,9 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\DTO\UploadedFileMetadata;
+use App\Exception\AntivirusException;
 use App\Exception\FileUploadException;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -26,21 +28,30 @@ class SecureUploadService
     public function __construct(
         private readonly Filesystem $filesystem,
         private readonly array      $uploadContexts,
+        private ParameterBagInterface $envParams
     )
     {
     }
 
-    public function uploadFromRequest(Request $request, string $field, string $context): ?UploadedFileMetadata
+    public function uploadFromRequest(
+        Request $request, 
+        string $field, 
+        string $context,
+        bool $withVirusAnalysis = false
+    ): ?UploadedFileMetadata
     {
         $file = $request->files->get($field);
         if (!$file instanceof UploadedFile) {
             return null;
         }
 
-        return $this->upload($file, $context);
+        return $this->upload($file, $context, $withVirusAnalysis);
     }
 
-    public function upload(UploadedFile $file, string $context): UploadedFileMetadata
+    public function upload(UploadedFile $file, 
+        string $context, 
+        bool $withVirusAnalysis = false
+    ): UploadedFileMetadata
     {
         $config = $this->uploadContexts[$context] ?? null;
         if ($config === null) {
@@ -95,6 +106,13 @@ class SecureUploadService
             $file->move($targetDir, $storedFilename);
         } catch (FileException) {
             throw FileUploadException::uploadMoveFailed();
+        }
+
+        if($withVirusAnalysis){
+            $antivirusClamAv = AntivirusClamAv::getInstance($this->envParams);
+            if($antivirusClamAv->scanFileStream($targetDir . DIRECTORY_SEPARATOR . $storedFilename) === false) {
+                throw AntivirusException::virusHasBeenDetectedInFile();
+            }
         }
 
         return new UploadedFileMetadata(
