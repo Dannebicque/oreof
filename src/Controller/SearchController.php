@@ -6,6 +6,7 @@ use App\Entity\CampagneCollecte;
 use App\Entity\FicheMatiere;
 use App\Entity\Formation;
 use App\Entity\Parcours;
+use App\Enums\TypeModificationDpeEnum;
 use App\Enums\TypeParcoursEnum;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -213,6 +214,7 @@ class SearchController extends AbstractController
         $parcoursArray = array_map(function($p) use ($entityManager, $mot_cle) {
             $result = [];
             $parcoursDB = $entityManager->getRepository(Parcours::class)->findOneById($p['parcours_id']);
+            $result['composantePorteuse'] = $parcoursDB->getFormation()?->getComposantePorteuse()?->getLibelle();
             $result['typeDiplome'] = $parcoursDB->getFormation()?->getTypeDiplome()?->getLibelle() ?? "";
             $result['formationDisplay'] = $parcoursDB->getFormation()?->getDisplay() ?? "";
             $result['parcoursDisplay'] = $parcoursDB->getDisplay() ?? "";
@@ -231,19 +233,49 @@ class SearchController extends AbstractController
             }
             $result['matches'] = implode(", ", $result['matches']);
 
+            $etatOuverture = [
+                TypeModificationDpeEnum::NON_OUVERTURE,
+                TypeModificationDpeEnum::NON_OUVERTURE_CFVU,
+                TypeModificationDpeEnum::NON_OUVERTURE_SES,
+                TypeModificationDpeEnum::FERMETURE_DEFINITIVE
+
+            ];
+            $result['etatOuverture'] = in_array(
+                $parcoursDB->getDpeParcours()?->last()?->getEtatReconduction(), 
+                $etatOuverture,
+                true
+            ) ? 'Fermé' : 'Ouvert';
+            $result['lienNavigateur'] = $this->generateUrl(
+                'app_parcours_show', 
+                ['id' => $parcoursDB->getId()], 
+                UrlGeneratorInterface::ABSOLUTE_URL
+            );
+
             return array_values($result);
         }, $parcoursArray);
 
-        $excelHeaders = ["Type du Diplôme", 'Nom de la formation', 'Nom du Parcours', 'Présence du mot-clé recherché'];
+        $excelHeaders = [
+            'Composante Porteuse', 'Type du Diplôme', 'Nom de la formation', 'Nom du Parcours', 
+            'Présence du mot-clé recherché', 'État ouverture parcours', 'Lien vers ORéOF'
+        ];
         $excelData = [$excelHeaders, ...$parcoursArray];
 
         $spreadsheet = new Spreadsheet();
         $activeWS = $spreadsheet->getActiveSheet();
         $activeWS->fromArray($excelData);
 
-        foreach(['A', 'B', 'C', 'D'] as $column){
+        foreach(['A', 'B', 'C', 'D', 'E', 'F', 'G'] as $column){
             $activeWS->getColumnDimension($column)->setAutoSize(true);
         }
+
+        // Mise en place du lien cliquable
+        foreach($activeWS->getRowIterator(2, count($excelData)) as $sheetRow){
+            foreach($sheetRow->getCellIterator('G') as $linkColumn) {
+                $linkColumn->getHyperlink()->setUrl($linkColumn->getValue());
+                $linkColumn->getStyle()->getFont()->setHyperlinkTheme();
+            }
+        }
+
 
         $now = new DateTime();
         $dateFormat = $now->format('d-m-Y');
