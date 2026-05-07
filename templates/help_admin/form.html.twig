@@ -139,6 +139,23 @@
             }
         });
 
+        // Écouteur délégué : gère #uploadFile inséré dynamiquement
+        document.addEventListener('change', function(e) {
+            if (!e.target) return;
+            if (e.target.id !== 'uploadFile') return;
+
+            const file = e.target.files ? e.target.files[0] : null;
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(ev) {
+                    updateImagePreview(ev.target.result, file.name);
+                };
+                reader.readAsDataURL(file);
+            } else {
+                updateImagePreview('');
+            }
+        });
+
         function getEditor() {
             return document.querySelector('textarea[name="help[content]"]');
         }
