@@ -418,10 +418,11 @@ class FicheMatiereRepository extends ServiceEntityRepository
                 'fm.libelle AS fiche_matiere_libelle', 'p.id AS parcours_id',
                 'fm.sigle AS formation_sigle', 'm.libelle AS mention_libelle',
                 'p.libelle AS parcours_libelle', 'td.libelle AS type_diplome_libelle',
-                'p.sigle AS parcours_sigle'
+                'p.sigle AS parcours_sigle', 'COUNT(ec.id) AS nb_utilisations'
             ]
         )
         ->leftJoin('fm.parcours', 'p')
+        ->leftJoin('fm.elementConstitutifs', 'ec')
         ->leftJoin('p.formation', 'f')
         ->leftJoin('f.mention', 'm')
         ->leftJoin('f.typeDiplome', 'td')
@@ -435,8 +436,8 @@ class FicheMatiereRepository extends ServiceEntityRepository
             )
         )
         ->setParameter('keyword', '%' . $keyword . '%')
-        ->setParameter(':campagne', $campagne);
-
+        ->setParameter(':campagne', $campagne)
+        ->addGroupBy('fm.id');
 
         if($paginate) {
             $qb = $qb->setFirstResult($firstResults)
