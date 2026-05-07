@@ -26,6 +26,9 @@ class Help
     #[ORM\Column]
     private ?bool $isActive = null;
 
+    #[ORM\Column(type: Types::JSON)]
+    private array $centresShow = [];
+
     public function getId(): ?int
     {
         return $this->id;
@@ -75,6 +78,18 @@ class Help
     public function setIsActive(bool $isActive): static
     {
         $this->isActive = $isActive;
+
+        return $this;
+    }
+
+    public function getCentresShow(): array
+    {
+        return $this->centresShow;
+    }
+
+    public function setCentresShow(?array $centres): static
+    {
+        $this->centresShow = $centres ?? [];
 
         return $this;
     }

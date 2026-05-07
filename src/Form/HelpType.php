@@ -11,6 +11,7 @@
 namespace App\Form;
 
 use App\Entity\Help;
+use App\Enums\CentreGestionEnum;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -30,10 +31,20 @@ class HelpType extends AbstractType
     {
         $routes = $this->router->getRouteCollection()->all();
         $routeChoices = [];
+        $centreChoices = [];
+
         foreach ($routes as $name => $route) {
             if (!str_starts_with($name, '_') && !str_starts_with($name, 'api_')) {
                 $routeChoices[$name] = $name;
             }
+        }
+
+        foreach (CentreGestionEnum::cases() as $centre) {
+            if ($centre === CentreGestionEnum::CENTRE_GESTION_NULL) {
+                continue;
+            }
+
+            $centreChoices[$centre->getLibelle()] = $centre->value;
         }
 
         $builder
@@ -50,6 +61,17 @@ class HelpType extends AbstractType
                 'label' => 'Contenu explicatif',
                 'attr' => ['class' => 'form-control', 'rows' => 12]
             ])
+            ->add('centresShow', ChoiceType::class, [
+                'choices' => $centreChoices,
+                'label' => 'Centres autorisés',
+                'help' => 'Sélectionnez les centres qui auront la visibilité "SHOW" pour cette aide. Laisser vide = pas de restriction par centre.',
+                'required' => false,
+                'multiple' => true,
+                'expanded' => true,
+                'empty_data' => [],
+                'attr' => ['class' => 'mb-3']
+            ])
+            
             ->add('isActive', CheckboxType::class, [
                 'label' => ' Activer cette aide',
                 'required' => false,

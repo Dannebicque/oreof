@@ -11,14 +11,21 @@
 namespace App\Twig;
 
 use App\Entity\Help;
+use App\Entity\User;
+use App\Service\HelpGrantService;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
 
 class HelpExtension extends AbstractExtension
 {
-    public function __construct(private EntityManagerInterface $em)
+    public function __construct(
+        private EntityManagerInterface $em,
+        private Security $security,
+        private HelpGrantService $helpGrantService,
+    )
     {
     }
 
@@ -36,8 +43,21 @@ class HelpExtension extends AbstractExtension
 
     public function getPageHelp(string $routeSlug = null): ?Help
     {
-        if (!$routeSlug) return null;
-        return $this->em->getRepository(Help::class)->findOneBy(['routeSlug' => $routeSlug, 'isActive' => true]);
+        if (!$routeSlug) {
+            return null;
+        }
+
+        $help = $this->em->getRepository(Help::class)->findOneBy(['routeSlug' => $routeSlug, 'isActive' => true]);
+        if (!$help) {
+            return null;
+        }
+
+        $user = $this->security->getUser();
+        if ($this->helpGrantService->isAllowed($help, $user instanceof User ? $user : null)) {
+            return $help;
+        }
+
+        return null;
     }
 
     public function parseEmbeds(string $content): string

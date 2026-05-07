@@ -7,6 +7,23 @@
 
             {{ form_row(form.title) }}
             {{ form_row(form.routeSlug) }}
+            <div class="mb-3">
+                {{ form_label(form.centresShow) }}
+                <div class="row g-2 mt-1">
+                    {% for centreChoice in form.centresShow %}
+                        <div class="col-12 col-md-6">
+                            <label class="border rounded px-3 py-2 d-flex align-items-center gap-2 w-100">
+                                {{ form_widget(centreChoice, { attr: { class: 'form-check-input m-0' } }) }}
+                                <span>{{ centreChoice.vars.label }}</span>
+                            </label>
+                        </div>
+                    {% endfor %}
+                </div>
+                {{ form_help(form.centresShow) }}
+                {{ form_errors(form.centresShow) }}
+            </div>
+
+            {# profils selector removed: visibility is now driven by centres only #}
 
             <div class="mb-4 mt-3">
                 {{ form_label(form.content) }}

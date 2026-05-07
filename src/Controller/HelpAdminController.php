@@ -14,24 +14,58 @@ use App\Entity\Help;
 use App\Form\HelpType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Exception\RouteNotFoundException;
+use Symfony\Component\Routing\RouterInterface;
 
 #[Route('/administration/help')]
+#[IsGranted('ROLE_ADMIN')]
 class HelpAdminController extends AbstractController
 {
     #[Route('/', name: 'app_help_index', methods: ['GET'])]
-    public function index(EntityManagerInterface $em): Response
+    public function index(EntityManagerInterface $em, RouterInterface $router): Response
     {
         $helps = $em->getRepository(Help::class)->findAll();
-        return $this->render('help_admin/index.html.twig', ['helps' => $helps]);
+        $previewUrls = [];
+
+        foreach ($helps as $help) {
+            $routeName = $help->getRouteSlug();
+            $previewUrls[$help->getId()] = null;
+
+            if (!$routeName) {
+                continue;
+            }
+
+            $route = $router->getRouteCollection()->get($routeName);
+            if (!$route) {
+                continue;
+            }
+
+            if (count($route->compile()->getPathVariables()) > 0) {
+                continue;
+            }
+
+            try {
+                $previewUrls[$help->getId()] = $router->generate($routeName);
+            } catch (RouteNotFoundException) {
+                $previewUrls[$help->getId()] = null;
+            }
+        }
+
+        return $this->render('help_admin/index.html.twig', [
+            'helps' => $helps,
+            'previewUrls' => $previewUrls,
+        ]);
     }
 
     #[Route('/new', name: 'app_help_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $em): Response
     {
         $help = new Help();
+        $help->setIsActive(true);
 
         $route = $request->query->get('route');
         if ($route) {
