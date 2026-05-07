@@ -11,6 +11,7 @@
 namespace App\Controller;
 
 use App\Entity\Help;
+use App\Enums\CentreGestionEnum;
 use App\Form\HelpType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -70,6 +71,10 @@ class HelpAdminController extends AbstractController
         $route = $request->query->get('route');
         if ($route) {
             $help->setRouteSlug($route);
+            $centre = $this->inferCentreFromRoute($route);
+            if ($centre !== null) {
+                $help->setCentresShow([$centre]);
+            }
         }
 
         $form = $this->createForm(HelpType::class, $help);
@@ -116,5 +121,21 @@ class HelpAdminController extends AbstractController
             $this->addFlash('success', 'Aide supprimée.');
         }
         return $this->redirectToRoute('app_help_index');
+    }
+
+    /**
+     * Déduit un centre à partir de la ressource métier de la page.
+     *
+     * On suit les mêmes ressources que les contrôles de droits basés sur le voter.
+     */
+    private function inferCentreFromRoute(string $routeName): ?string
+    {
+        return match (true) {
+            str_starts_with($routeName, 'app_etablissement') => CentreGestionEnum::CENTRE_GESTION_ETABLISSEMENT->value,
+            str_starts_with($routeName, 'app_composante') => CentreGestionEnum::CENTRE_GESTION_COMPOSANTE->value,
+            str_starts_with($routeName, 'app_formation') => CentreGestionEnum::CENTRE_GESTION_FORMATION->value,
+            str_starts_with($routeName, 'app_parcours') => CentreGestionEnum::CENTRE_GESTION_PARCOURS->value,
+            default => null,
+        };
     }
 }

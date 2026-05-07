@@ -858,6 +858,9 @@ document.addEventListener('DOMContentLoaded', () => {
 {% set current_route = app.request.attributes.get('_route', '') %}
 {% set current_help = get_page_help(current_route) %}
 
+{# N'affiche le FAB / offcanvas que si une aide existe pour la page ou si l'utilisateur est admin #}
+{% if current_help or is_granted('ROLE_ADMIN') %}
+
 <!-- Bouton flottant -->
 <div id="help-fab-container" class="position-fixed" style="bottom: 2rem; right: 2rem; z-index: 1050;">
     <button class="btn btn-{{ current_help ? 'info' : 'secondary' }} shadow-lg rounded-circle d-flex align-items-center justify-content-center"
@@ -922,5 +925,6 @@ document.addEventListener('DOMContentLoaded', () => {
     </div>
 </div>
 
+{% endif %}
 </body>
 </html>

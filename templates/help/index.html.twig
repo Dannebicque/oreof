@@ -32,16 +32,16 @@
                                                 <a href="{{ path('app_help_edit', {'id': help.id}) }}" class="btn btn-sm btn-outline-info ms-2 d-inline-flex align-items-center justify-content-center" onclick="event.stopPropagation();" title="Modifier">
                                                     <i class="fal fa-edit"></i>
                                                 </a>
-                                                {% set previewUrl = previewUrls[help.id] ?? null %}
-                                                {% if previewUrl %}
-                                                    <a href="{{ previewUrl }}" class="btn btn-sm btn-outline-secondary ms-1 d-inline-flex align-items-center justify-content-center" onclick="event.stopPropagation();" title="Voir la page">
-                                                        <i class="fal fa-arrow-up-right-from-square"></i>
-                                                    </a>
-                                                {% else %}
-                                                    <button type="button" class="btn btn-sm btn-outline-secondary ms-1 d-inline-flex align-items-center justify-content-center" onclick="event.stopPropagation();" title="Route avec paramètres obligatoires : aperçu direct indisponible" disabled>
-                                                        <i class="fal fa-arrow-up-right-from-square"></i>
-                                                    </button>
-                                                {% endif %}
+                                            {% endif %}
+                                            {% set previewUrl = previewUrls[help.id] ?? null %}
+                                            {% if previewUrl %}
+                                                <a href="{{ previewUrl }}" class="btn btn-sm btn-outline-secondary ms-1 d-inline-flex align-items-center justify-content-center" onclick="event.stopPropagation();" title="Voir la page">
+                                                    <i class="fal fa-arrow-up-right-from-square"></i>
+                                                </a>
+                                            {% else %}
+                                                <button type="button" class="btn btn-sm btn-outline-secondary ms-1 d-inline-flex align-items-center justify-content-center" onclick="event.stopPropagation();" title="Route avec paramètres obligatoires : aperçu direct indisponible" disabled>
+                                                    <i class="fal fa-arrow-up-right-from-square"></i>
+                                                </button>
                                             {% endif %}
                                         </div>
                                         <i class="fal fa-chevron-down text-muted chevron-icon"></i>
