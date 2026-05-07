@@ -333,13 +333,17 @@ class SearchController extends AbstractController
                 $libelleMention,
                 $ficheMatiere['fiche_matiere_libelle'],
                 $ficheMatiere['fiche_matiere_sigle'],
+                "{$ficheMatiere['nb_utilisations']}",
                 $ficheMatiere['fiche_matiere_slug'],
             ];
 
         }, $data);
 
         $excelData = [
-            ['Libellé du Parcours', 'Libellé de la fiche matière', 'Sigle de la fiche matière', 'Lien vers Oréof'],
+            [
+                'Libellé du Parcours', 'Libellé de la fiche matière', 
+                'Sigle de la fiche matière', 'Nb. Utilisations', 'Lien vers Oréof'
+            ],
             ...$data
         ];
 
@@ -348,21 +352,20 @@ class SearchController extends AbstractController
         $activeWorksheet->fromArray($excelData);
 
         foreach($activeWorksheet->getRowIterator(2, count($data)) as $row){
-            foreach($row->getCellIterator('D') as $cell){
+            foreach($row->getCellIterator('E') as $cell){
                 $cell->getHyperlink()->setUrl(
                     $this->generateUrl('app_fiche_matiere_show',
                         ['slug' => $cell->getValue()],
                         UrlGeneratorInterface::ABSOLUTE_URL
                     )
                 );
+                $cell->getStyle()->getFont()->setHyperlinkTheme();
             }
         }
 
-        $activeWorksheet->getColumnDimension('A')->setAutoSize(true);
-        $activeWorksheet->getColumnDimension('B')->setAutoSize(true);
-        $activeWorksheet->getColumnDimension('C')->setAutoSize(true);
-        $activeWorksheet->getColumnDimension('D')->setAutoSize(true);
-
+        foreach(['A', 'B', 'C', 'D', 'E'] as $col) {
+            $activeWorksheet->getColumnDimension($col)->setAutoSize(true);
+        }
 
         $now = (new DateTime())->format('d-m-Y');
         $path = __DIR__ . "/../../public/temp/";
