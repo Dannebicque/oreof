@@ -20,6 +20,8 @@ parameters:
     WSDL_APOGEE_PRODUCTION: '%env(resolve:WSDL_APOGEE_PRODUCTION)%'
     APP_HOSTNAME: '%env(APP_HOSTNAME)%'
     export_api_key: '%env(resolve:EXPORT_API_KEY)%'
+    CLAMAV_HOST: '%env(resolve:CLAMAV_HOST)%'
+    CLAMAV_PORT: '%env(resolve:CLAMAV_PORT)%'
 
 services:
     # default configuration for services in *this* file
