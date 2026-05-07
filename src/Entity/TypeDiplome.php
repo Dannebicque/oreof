@@ -115,8 +115,8 @@ class TypeDiplome
     #[ORM\Column(nullable: true)]
     private ?bool $controleAssiduite = null;
 
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private ?string $logo = '';
+    #[ORM\Column(nullable: true)]
+    private ?array $logo = [];
 
     public function __construct()
     {
@@ -616,15 +616,20 @@ class TypeDiplome
         return $this;
     }
 
-    public function getLogo(): ?string
+    public function getLogo(): ?array
     {
         return $this->logo;
     }
 
-    public function setLogo(?string $logo): static
+    public function setLogo(?array $logo): static
     {
         $this->logo = $logo;
+        return $this;
+    }
 
+    public function addLogo(string $filename): static
+    {
+        $this->logo[] = $filename;
         return $this;
     }
 
