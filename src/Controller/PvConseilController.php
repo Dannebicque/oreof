@@ -11,6 +11,7 @@ use App\Entity\ChangeRf;
 use App\Entity\HistoriqueFormation;
 use App\Entity\HistoriqueParcours;
 use App\Entity\Parcours;
+use App\Exception\AntivirusException;
 use App\Exception\FileUploadException;
 use App\Service\SecureUploadService;
 use App\Utils\Tools;
@@ -54,9 +55,18 @@ class PvConseilController extends BaseController
                 //upload
                 if ($request->files->has('file') && $request->files->get('file') !== null) {
                     try {
-                        $upload = $secureUploadService->uploadFromRequest($request, 'file', 'conseils');
+                        $upload = $secureUploadService->uploadFromRequest($request, 'file', 'conseils', withVirusAnalysis: true);
                     } catch (FileUploadException $exception) {
                         return JsonReponse::error($exception->getPublicMessage());
+                    } catch (AntivirusException $antivirusE) {
+                        switch ($antivirusE->getCode()) {
+                            case AntivirusException::ANTIVIRUS_UNREACHABLE:
+                                return JsonReponse::error("Le scan antivirus est inaccessible pour le moment. Réessayez plus tard.");
+                                break;
+                            case AntivirusException::VIRUS_DETECTED:
+                                return JsonReponse::error("Un virus a été détecté dans votre fichier. Dépôt refusé.");
+                                break;
+                        }
                     }
 
                     if ($upload !== null) {
