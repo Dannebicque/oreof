@@ -91,29 +91,49 @@
     </div>
 
     <script>
+        function updateImagePreview(url, label = '') {
+            const preview = document.getElementById('imagePreview');
+            const icon = document.getElementById('previewIcon');
+            const text = document.getElementById('previewText');
+
+            if (!preview) {
+                return;
+            }
+
+            if (url) {
+                preview.src = url;
+                preview.classList.remove('d-none');
+                if (icon) icon.classList.add('d-none');
+                if (text) {
+                    text.textContent = label || 'Aperçu de l\'image';
+                    text.classList.add('d-none');
+                }
+                return;
+            }
+
+            preview.src = '';
+            preview.classList.add('d-none');
+            if (icon) icon.classList.remove('d-none');
+            if (text) {
+                text.textContent = 'Aperçu de l\'image';
+                text.classList.remove('d-none');
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
             const uploadFileInput = document.getElementById('uploadFile');
             if (uploadFileInput) {
                 uploadFileInput.addEventListener('change', function(e) {
                     const file = e.target.files[0];
-                    const preview = document.getElementById('imagePreview');
-                    const icon = document.getElementById('previewIcon');
-                    const text = document.getElementById('previewText');
 
                     if (file) {
                         const reader = new FileReader();
                         reader.onload = function(e) {
-                            preview.src = e.target.result;
-                            preview.classList.remove('d-none');
-                            if(icon) icon.classList.add('d-none');
-                            if(text) text.classList.add('d-none');
+                            updateImagePreview(e.target.result, file.name);
                         }
                         reader.readAsDataURL(file);
                     } else {
-                        preview.src = '';
-                        preview.classList.add('d-none');
-                        if(icon) icon.classList.remove('d-none');
-                        if(text) text.classList.remove('d-none');
+                        updateImagePreview('');
                     }
                 });
             }
@@ -258,12 +278,7 @@
                     alert('Erreur : ' + data.error);
                 } else {
                     document.getElementById('uploadImageForm').reset();
-
-                    // Reset preview
-                    document.getElementById('imagePreview').classList.add('d-none');
-                    document.getElementById('previewIcon').classList.remove('d-none');
-                    document.getElementById('previewText').classList.remove('d-none');
-                    document.getElementById('imagePreview').src = '';
+                    updateImagePreview('/uploads/help_images/' + data.fichier, data.nom);
 
                     // On bascule visuellement sur l'onglet galerie
                     const galleryTab = document.getElementById('gallery-tab');
