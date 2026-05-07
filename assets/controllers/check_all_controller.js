@@ -20,15 +20,17 @@ export default class extends Controller {
   }
 
   connect() {
-    // vérifie s'il y a des checkbox à cocher
     const total = document.getElementById(this.idCheckAllValue)
+    if (!total) return
+
     const checkboxes = document.querySelectorAll(this.classCheckAllValue)
     if (checkboxes.length === 0) {
-      // ajouter le total après le checkbox
-      total.parentNode.querySelector('.total').innerText = 'Aucun élément à sélectionner'
-      const checkAll = document.getElementById(this.idCheckAllValue)
-      checkAll.disabled = true
+      this._updateCountersById(this.idCheckAllValue, 'Aucun élément à sélectionner')
+      total.disabled = true
+      return
     }
+
+    this.updateCount(this.classCheckAllValue, this.idCheckAllValue)
   }
 
   checkAll(event) {
@@ -68,24 +70,36 @@ export default class extends Controller {
   }
 
   updateCount(classCheckAll, idCheckAll) {
-    const total = document.getElementById(idCheckAll)
-    if (total.parentNode.querySelector('.total')) {
-      // compte le nombre de checkbox cochées
-      const checkboxes = document.querySelectorAll(classCheckAll)
-      let checked = 0
-      let totalChecked = checkboxes.length
-      checkboxes.forEach((checkbox) => {
-        if (checkbox.checked) {
-          checked += 1
-        }
-        if (checkbox.disabled === true) {
-          totalChecked -= 1
-        }
-      })
+    const checkboxes = document.querySelectorAll(classCheckAll)
+    let checked = 0
+    let totalChecked = checkboxes.length
 
-      // ajouter le total après le checkbox
-      // accéder au parent de total pour injecter le texte
-      total.parentNode.querySelector('.total').innerText = ` ${checked} / ${totalChecked} élément(s) sélectionné(s)`
+    checkboxes.forEach((checkbox) => {
+      if (checkbox.checked) {
+        checked += 1
+      }
+      if (checkbox.disabled === true) {
+        totalChecked -= 1
+      }
+    })
+
+    this._updateCountersById(idCheckAll, ` ${checked} / ${totalChecked} élément(s) sélectionné(s)`)
+  }
+
+  _updateCountersById (idCheckAll, text) {
+    // Nouveau mode: synchronise tous les compteurs marqués pour un même check-all.
+    const syncedCounters = document.querySelectorAll(`[data-check-all-counter="${idCheckAll}"]`)
+    if (syncedCounters.length > 0) {
+      syncedCounters.forEach((counter) => {
+        counter.innerText = text
+      })
+      return
+    }
+
+    // Fallback legacy: ancien comportement (compteur frère du checkbox maître).
+    const total = document.getElementById(idCheckAll)
+    if (total && total.parentNode.querySelector('.total')) {
+      total.parentNode.querySelector('.total').innerText = text
     }
   }
 }

@@ -1,169 +1,294 @@
 {% extends 'base.html.twig' %}
 
 {% block content %}
-    <div {{ stimulus_controller('composante--gestion') }}>
-        <div class="row">
-            <div class="col-6">
-                <h2 class="small-title mt-3">Identité de la composante</h2>
-                <div class="card">
-                    <div class="card-title"></div>
-                    <div class="card-body">
-                        <table class="table">
-                            <tbody>
-                            <tr>
-                                <th>Libellé</th>
-                                <td>{{ composante.libelle }}</td>
-                            </tr>
-                            <tr>
-                                <th>Sigle</th>
-                                <td>{{ composante.sigle }}</td>
-                            </tr>
-                            <tr>
-                                <th>Directeur</th>
-                                <td>{{ composante.directeur ? composante.directeur.display : 'Non défini' }}</td>
-                            </tr>
-                            <tr>
-                                <th>Responsable DPE</th>
-                                <td>{{ composante.responsableDpe ? composante.responsableDpe.display : 'Non défini' }}</td>
-                            </tr>
-                            <tr>
-                                <th>Adresse</th>
-                                <td>{{ composante.adresse ? composante.adresse.display|raw : 'Non définie' }}</td>
-                            </tr>
-                            <tr>
-                                <th>Téléphone standard de la composante</th>
-                                <td>{{ composante.telStandard|tel_format }}</td>
-                            </tr>
-                            <tr>
-                                <th>Autre téléphone de la composante</th>
-                                <td>{{ composante.telComplementaire|tel_format }}</td>
-                            </tr>
-                            <tr>
-                                <th>Adresse mail de contact de la composante</th>
-                                <td>{{ composante.mailContact|mailto }}</td>
-                            </tr>
-                            <tr>
-                                <th>URL du site de la composante</th>
-                                <td>
-                                        {{ composante.urlSite|open_url }}
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
+    <div {{ stimulus_controller('composante--gestion') }} class="space-y-6">
+
+        {# ── Bandeau identité composante ─────────────────────────────────────────── #}
+        <section
+                class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-700 dark:bg-slate-900">
+            <div class="flex flex-wrap items-start gap-4 lg:flex-nowrap">
+
+                {# Icône / initiales #}
+                <div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-cyan-100 text-xl font-black text-cyan-700 dark:bg-cyan-900/40 dark:text-cyan-300">
+                    {{ composante.sigle|upper|slice(0,2) }}
                 </div>
 
-                <h2 class="small-title mt-3">Validation d'un conseil de composante et/ou Transmission d'un PV</h2>
-                <div class="card">
-                    <div class="card-title"></div>
-                    <div class="card-body">
-                        <div>
-                            <label for="date"
-                                   class="form-label">{{ ('valide.conseil.date.label')|trans({}, 'process') }}
-                                <span class="required"></span> <i
-                                        class="fal fa-question-circle ms-1"
-                                        data-controller="tooltip"
-                                        data-tooltip-placement-value="bottom"
-                                        aria-label="{{ ('valide.conseil.helps.date.help')|trans({}, 'process') }}"
-                                        data-bs-original-title="{{ ('valide.conseil.helps.date.help')|trans({}, 'process') }}"></i></label>
-                            <input type="date" name="date"
-                                   class="form-control"
-                                   id="date"
-                            >
-                        </div>
-                        <div>
-                            <label for="file"
-                                   class="form-label">{{ ('valide.conseil.fichier.label')|trans({}, 'process') }}
-                                <i class="fal fa-question-circle ms-1"
-                                   data-controller="tooltip"
-                                   data-tooltip-placement-value="bottom"
-                                   aria-label="{{ ('valide.conseil.helps.fichier.help')|trans({}, 'process') }}"
-                                   data-bs-original-title="{{ ('valide.conseil.helps.fichier.help')|trans({}, 'process') }}"></i></label>
-                            <input type="file" name="file" id="file" accept="application/pdf" class="form-control">
-                        </div>
-                        <div class="mt-2">
-                            <button type="submit" class="btn btn-success"
-                                    {{ stimulus_action('composante--gestion', 'valideConseil') }}
-                            >
-                                <i class="fal fa-floppy-disk"></i>
-                                Valider post-conseil et/ou Transmettre le PV
-                            </button>
-                        </div>
-                    </div>
+                <div class="flex-1 space-y-1">
+                    <h1 class="text-lg font-bold text-slate-900 dark:text-slate-100">
+                        {{ composante.libelle }}
+                    </h1>
+                    <p class="text-sm text-slate-500 dark:text-slate-400">
+                        Sigle : <span
+                                class="font-semibold text-slate-700 dark:text-slate-300">{{ composante.sigle }}</span>
+                    </p>
+                </div>
+
+                {# Remplissage global #}
+                <div class="shrink-0">
+                    {{ component('remplissage_progress', { value: composante.remplissage }) }}
                 </div>
             </div>
-            <div class="col-6">
-                <h2 class="small-title mt-3">Vos formations concernées par cette validation</h2>
-                <div class="card">
-                    <div class="card-title"></div>
-                    <div class="card-body">
-                        <table class="table table-striped" {{ stimulus_controller('check_all') }}>
+        </section>
+
+        {# ── Corps principal : identité + formulaire | formations ──────────────── #}
+        <div class="grid grid-cols-1 gap-6 xl:grid-cols-3">
+
+            {# ════════════ Colonne gauche (1/3) ════════════ #}
+            <div class="space-y-6">
+
+                {# Identité #}
+                <section
+                        class="rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-900">
+                    <div class="flex items-center gap-2 border-b border-slate-100 px-5 py-4 dark:border-slate-800">
+                        <twig:UX:Icon name="icon:info" class="h-4 w-4 text-cyan-600 dark:text-cyan-400"/>
+                        <h2 class="text-sm font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">
+                            Identité
+                        </h2>
+                    </div>
+                    <dl class="divide-y divide-slate-100 dark:divide-slate-800">
+                        {% set items = [
+                            { label: 'Directeur',          value: composante.directeur ? composante.directeur.display : null, empty: 'Non défini' },
+                            { label: 'Responsable DPE',    value: composante.responsableDpe ? composante.responsableDpe.display : null, empty: 'Non défini' },
+                        ] %}
+                        {% for item in items %}
+                            <div class="flex flex-col gap-0.5 px-5 py-3 sm:flex-row sm:items-start sm:gap-4">
+                                <dt class="w-40 shrink-0 text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500 sm:pt-0.5">
+                                    {{ item.label }}
+                                </dt>
+                                <dd class="text-sm font-medium text-slate-800 dark:text-slate-200">
+                                    {{ item.value ?? item.empty }}
+                                </dd>
+                            </div>
+                        {% endfor %}
+                    </dl>
+                </section>
+
+                {# Contact #}
+                <section
+                        class="rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-900">
+                    <div class="flex items-center gap-2 border-b border-slate-100 px-5 py-4 dark:border-slate-800">
+                        <twig:UX:Icon name="icon:phone" class="h-4 w-4 text-cyan-600 dark:text-cyan-400"/>
+                        <h2 class="text-sm font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">
+                            Contact
+                        </h2>
+                    </div>
+                    <dl class="divide-y divide-slate-100 dark:divide-slate-800">
+                        {% if composante.adresse %}
+                            <div class="px-5 py-3">
+                                <dt class="mb-0.5 text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500">
+                                    Adresse
+                                </dt>
+                                <dd class="text-sm text-slate-700 dark:text-slate-300">{{ composante.adresse.display|raw }}</dd>
+                            </div>
+                        {% endif %}
+                        {% if composante.telStandard %}
+                            <div class="flex items-center gap-3 px-5 py-3">
+                                <twig:UX:Icon name="icon:phone" class="h-4 w-4 shrink-0 text-slate-400"/>
+                                <span class="text-sm text-slate-700 dark:text-slate-300">{{ composante.telStandard|tel_format }}</span>
+                            </div>
+                        {% endif %}
+                        {% if composante.telComplementaire %}
+                            <div class="flex items-center gap-3 px-5 py-3">
+                                <twig:UX:Icon name="icon:phone" class="h-4 w-4 shrink-0 text-slate-400"/>
+                                <span class="text-sm text-slate-500 dark:text-slate-400">{{ composante.telComplementaire|tel_format }}</span>
+                            </div>
+                        {% endif %}
+                        {% if composante.mailContact %}
+                            <div class="flex items-center gap-3 px-5 py-3">
+                                <twig:UX:Icon name="icon:mail" class="h-4 w-4 shrink-0 text-slate-400"/>
+                                <span class="text-sm text-slate-700 dark:text-slate-300">{{ composante.mailContact|mailto }}</span>
+                            </div>
+                        {% endif %}
+                        {% if composante.urlSite %}
+                            <div class="flex items-center gap-3 px-5 py-3">
+                                <twig:UX:Icon name="icon:link" class="h-4 w-4 shrink-0 text-slate-400"/>
+                                <span class="text-sm text-slate-700 dark:text-slate-300">{{ composante.urlSite|open_url }}</span>
+                            </div>
+                        {% endif %}
+                    </dl>
+                </section>
+
+                {# ── Formulaire validation post-conseil + dépôt PV ─────────────── #}
+                <section
+                        class="rounded-2xl border border-indigo-200 bg-indigo-50/60 shadow-sm dark:border-indigo-800 dark:bg-indigo-950/20">
+                    <div class="flex items-center gap-2 border-b border-indigo-200 px-5 py-4 dark:border-indigo-800">
+                        <twig:UX:Icon name="icon:check-circle" class="h-4 w-4 text-indigo-600 dark:text-indigo-400"/>
+                        <h2 class="text-sm font-black uppercase tracking-widest text-indigo-700 dark:text-indigo-300">
+                            Validation post-conseil
+                        </h2>
+                    </div>
+                    <div class="space-y-4 p-5">
+                        <p class="text-xs text-slate-600 dark:text-slate-400">
+                            Sélectionnez les formations concernées dans le tableau, renseignez la date du conseil,
+                            puis déposez éventuellement le procès-verbal avant de valider.
+                        </p>
+
+                        {# Compteur de sélection #}
+                        <div class="flex items-center gap-2 rounded-xl border border-indigo-200 bg-white px-3 py-2 text-sm dark:border-indigo-700 dark:bg-slate-900">
+                            <twig:UX:Icon name="icon:check" class="h-4 w-4 text-indigo-500"/>
+                            <span class="text-slate-500 dark:text-slate-400">Sélection :</span>
+                            <span class="total font-semibold text-indigo-700 dark:text-indigo-300"
+                                  data-check-all-counter="check-all">0 / {{ composante.formations|length }} formation(s)</span>
+                        </div>
+
+                        {# Date du conseil #}
+                        <div class="space-y-1.5">
+                            <label for="date"
+                                   class="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-slate-600 dark:text-slate-400">
+                                {{ ('valide.conseil.date.label')|trans({}, 'process') }}
+                                <span class="text-red-500">*</span>
+                                <i class="fal fa-question-circle text-slate-400"
+                                   data-controller="tooltip"
+                                   data-tooltip-placement-value="bottom"
+                                   aria-label="{{ ('valide.conseil.helps.date.help')|trans({}, 'process') }}"></i>
+                            </label>
+                            <input type="date" name="date" id="date"
+                                   class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-800 shadow-sm transition focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-200 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:focus:border-indigo-600">
+                        </div>
+
+                        {# Dépôt PV (PDF) #}
+                        <div class="space-y-1.5">
+                            <label for="file"
+                                   class="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-slate-600 dark:text-slate-400">
+                                {{ ('valide.conseil.fichier.label')|trans({}, 'process') }}
+                                <i class="fal fa-question-circle text-slate-400"
+                                   data-controller="tooltip"
+                                   data-tooltip-placement-value="bottom"
+                                   aria-label="{{ ('valide.conseil.helps.fichier.help')|trans({}, 'process') }}"></i>
+                            </label>
+                            <label for="file"
+                                   class="flex cursor-pointer flex-col items-center gap-2 rounded-xl border-2 border-dashed border-indigo-200 bg-white px-4 py-4 text-center text-sm text-slate-500 transition hover:border-indigo-400 hover:bg-indigo-50/50 dark:border-indigo-800 dark:bg-slate-900 dark:hover:bg-indigo-950/30">
+                                <twig:UX:Icon name="icon:upload" class="h-6 w-6 text-indigo-400"/>
+                                <span>Déposer ou sélectionner un PDF</span>
+                                <input type="file" name="file" id="file" accept="application/pdf" class="sr-only">
+                            </label>
+                        </div>
+
+                        {# Bouton submit #}
+                        <button type="button"
+                                class="app-btn app-btn-success w-full justify-center"
+                                {{ stimulus_action('composante--gestion', 'valideConseil') }}>
+                            <twig:UX:Icon name="icon:save" class="h-4 w-4"/>
+                            <span>Valider post-conseil et transmettre le PV</span>
+                        </button>
+                    </div>
+                </section>
+            </div>{# fin colonne gauche #}
+
+            {# ════════════ Colonne droite (2/3) ════════════ #}
+            <div class="xl:col-span-2">
+                <section
+                        class="rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-900">
+                    <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 px-5 py-4 dark:border-slate-800">
+                        <div class="flex items-center gap-2">
+                            <twig:UX:Icon name="icon:graduation" class="h-4 w-4 text-cyan-600 dark:text-cyan-400"/>
+                            <h2 class="text-sm font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">
+                                Formations concernées
+                            </h2>
+                    </div>
+                        <span class="rounded-full border border-slate-200 bg-slate-50 px-2.5 py-0.5 text-xs font-semibold text-slate-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300">
+                        {{ composante.formations|length }} formation{{ composante.formations|length > 1 ? 's' : '' }}
+                    </span>
+                </div>
+
+                    {# Tableau des formations #}
+                    <div class="overflow-x-auto"
+                            {{ stimulus_controller('check_all') }}>
+
+                        {# Toolbar de sélection #}
+                        <div class="flex items-center gap-3 border-b border-slate-100 bg-slate-50/80 px-5 py-2.5 text-sm dark:border-slate-800 dark:bg-slate-950/30">
+                            <label class="flex cursor-pointer items-center gap-2 font-medium text-slate-600 dark:text-slate-400">
+                                <input type="checkbox"
+                                       id="check-all"
+                                        {{ stimulus_action('check_all', 'checkAll') }}
+                                       class="h-4 w-4 rounded border-slate-300 text-indigo-600 accent-indigo-600 focus:ring-indigo-500 dark:border-slate-600">
+                                <span>Tout sélectionner</span>
+                            </label>
+                            <span class="total text-xs text-slate-400 dark:text-slate-500"
+                                  data-check-all-counter="check-all"></span>
+                        </div>
+
+                        <table class="w-full min-w-[600px] text-sm">
                             <thead>
-                            <tr>
-                                <th>
-                                    <div class="checkbox">
-                                        <label>
-                                            <input type="checkbox"
-                                                   id="check-all" {{ stimulus_action('check_all', 'checkAll') }}>
-                                        </label>
-                                    </div>
-                                </th>
-                                <th>Type de formation</th>
-                                <th>Mention</th>
-                                <th>Etat</th>
-                                <th>Parcours</th>
-                                <th></th>
+                            <tr class="border-b border-slate-100 bg-slate-50/50 text-[11px] font-black uppercase tracking-[0.16em] text-slate-400 dark:border-slate-800 dark:bg-slate-950/20 dark:text-slate-500">
+                                <th class="w-10 px-4 py-3 text-center"></th>
+                                <th class="px-4 py-3 text-left">Type</th>
+                                <th class="px-4 py-3 text-left">Mention</th>
+                                <th class="px-4 py-3 text-center">État</th>
+                                <th class="px-4 py-3 text-center">Parcours</th>
+                                <th class="px-4 py-3 text-right">Actions</th>
                             </tr>
                             </thead>
-                            <tbody>
+                            <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
                             {% for formation in composante.formations %}
-                                <tr>
-                                    <td>
-                                        <div class="checkbox">
-                                            <label>
-                                                <input
-                                                        {{ stimulus_action('check_all', 'check') }}
-                                                        type="checkbox"
-                                                        class="check-all"
-                                                        name="formations[]"
-                                                        value="{{ formation.id }}"
-                                                >
-                                            </label>
+                                <tr class="group transition hover:bg-slate-50/80 dark:hover:bg-slate-800/50">
+                                    {# Checkbox #}
+                                    <td class="px-4 py-3 text-center">
+                                        <input
+                                                {{ stimulus_action('check_all', 'check') }}
+                                                type="checkbox"
+                                                class="check-all h-4 w-4 rounded border-slate-300 text-indigo-600 accent-indigo-600 focus:ring-indigo-500 dark:border-slate-600"
+                                                name="formations[]"
+                                                value="{{ formation.id }}"
+                                        >
+                                    </td>
+                                    {# Type diplôme #}
+                                    <td class="px-4 py-3">
+                                    <span class="inline-flex rounded-lg bg-slate-100 px-2 py-0.5 text-xs font-semibold text-slate-600 dark:bg-slate-800 dark:text-slate-300">
+                                        {{ formation.typeDiplome.libelle }}
+                                    </span>
+                                    </td>
+                                    {# Mention #}
+                                    <td class="px-4 py-3 font-medium text-slate-800 dark:text-slate-200">
+                                        {{ formation.mention.libelle }}
+                                    </td>
+                                    {# État DPE #}
+                                    <td class="px-4 py-3 text-center">
+                                        <div class="flex flex-wrap justify-center gap-1 [&_.badge]:inline-flex [&_.badge]:rounded-full [&_.badge]:px-2 [&_.badge]:py-0.5 [&_.badge]:text-xs [&_.badge]:font-semibold">
+                                            {{ formation.etatDpe|badgeDpe }}
                                         </div>
                                     </td>
-                                    <td>{{ formation.typeDiplome.libelle }}</td>
-                                    <td>{{ formation.mention.libelle }}</td>
-                                    <td>{{ formation.etatDpe|badgeDpe }}</td>
-                                    <td>{{ formation.parcours|length }}</td>
-                                    <td>
-                                        {#                                <a href="{{ path('structure_formation_show', {'id': formation.id}) }}" class="btn btn-sm btn-primary">Voir</a> #}
-                                        {#                                <a href="{{ path('structure_formation_edit', {'id': formation.id}) }}" class="btn btn-sm btn-primary">Modifier</a> #}
+                                    {# Nb parcours #}
+                                    <td class="px-4 py-3 text-center">
+                                    <span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-slate-100 text-xs font-bold text-slate-600 dark:bg-slate-800 dark:text-slate-300">
+                                        {{ formation.parcours|length }}
+                                    </span>
+                                    </td>
+                                    {# Actions #}
+                                    <td class="px-4 py-3 text-right">
+                                        <a href="{{ path('app_formation_show', {slug: formation.slug}) }}"
+                                           class="app-btn app-btn-neutral text-xs">
+                                            <twig:UX:Icon name="icon:eye" class="h-3.5 w-3.5"/>
+                                            <span>Voir</span>
+                                        </a>
                                     </td>
                                 </tr>
                             {% else %}
                                 <tr>
-                                    <td colspan="6">Aucune formation n'est rattachée à cette composante</td>
+                                    <td colspan="6"
+                                        class="px-5 py-8 text-center text-sm text-slate-400 dark:text-slate-500">
+                                        <twig:UX:Icon name="icon:inbox" class="mx-auto mb-2 h-8 w-8 opacity-40"/>
+                                        <p>Aucune formation n'est rattachée à cette composante.</p>
+                                    </td>
                                 </tr>
                             {% endfor %}
                             </tbody>
                         </table>
                     </div>
-                </div>
-            </div>
-        </div>
+                </section>
+            </div>{# fin colonne droite #}
+
+        </div>{# fin grille principale #}
     </div>
 {% endblock %}
 
-{% set header_title %}
-    Détails de la composante {{ composante.libelle }}
-{% endset %}
+{% set header_title %}Détails de la composante {{ composante.libelle }}{% endset %}
 
 {% block breadcrumb %}
     {{ include('communs/_breadcrumb.html.twig', {liens:[
         {href: path('structure_composante_index'), title: 'Gestion de l\'offre de formation'},
+        {title: composante.libelle}
     ]}) }}
 {% endblock %}
 
-{% block bouton_header %}
-
-{% endblock %}
+{% block bouton_header %}{% endblock %}

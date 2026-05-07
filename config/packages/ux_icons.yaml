@@ -36,6 +36,7 @@ ux_icons:
     icon:delete: 'ph:trash-light'
     icon:print: 'ph:printer-light'
     icon:download: 'ph:download-simple-light'
+    icon:upload: 'ph:upload-light'
     icon:filter: 'ph:funnel-light'
     icon:sync: 'ph:arrows-clockwise-bold'
 
@@ -60,6 +61,9 @@ ux_icons:
     icon:unlock: 'ph:lock-open-bold'
     icon:eye: 'ph:eye-light'
     icon:eye-slash: 'ph:eye-slash-light'
+    icon:phone: 'ph:phone-light'
+    icon:mail: 'ph:envelope-light'
+    icon:link: 'ph:link-light'
 
     # Métier / navigation ORéOF
     icon:school: 'ph:student-light'
