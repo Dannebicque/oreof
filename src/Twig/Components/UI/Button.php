@@ -38,6 +38,12 @@ final class Button
     /** Si renseigné, rend un <a>, sinon un <button> */
     public string $href = '';
 
+    /** target du lien (<a>) */
+    public string $target = '';
+
+    /** rel du lien (<a>) */
+    public string $rel = '';
+
     /** Attribut form (pour les boutons hors formulaire) */
     public string $form = '';
 
@@ -47,6 +53,12 @@ final class Button
     /** Titre tooltip */
     public string $tooltip = '';
 
+    /** Position du tooltip Stimulus */
+    public string $tooltipPlacement = 'bottom';
+
+    /** Classe custom du tooltip Stimulus */
+    public string $tooltipCustomClass = 'app-tooltip';
+
     /** Désactivé */
     public bool $disabled = false;
 
@@ -55,4 +67,10 @@ final class Button
 
     /** data-action Stimulus optionnel */
     public string $dataAction = '';
+
+    /** Bouton pleine largeur */
+    public bool $fullWidth = false;
+
+    /** Centre le contenu du bouton */
+    public bool $centered = true;
 }

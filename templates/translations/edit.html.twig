@@ -1,53 +1,80 @@
 {% extends 'base.html.twig' %}
 
 {% block content %}
-    <div class="card">
-        <div class="card-body">
-            <form method="post">
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th>Clé</th>
-                        <th>Texte</th>
-                        <th></th>
-                    </tr>
-                    </thead>
-                    <tbody data-controller="translations">
-                    {% for key, value in translations %}
-                        <tr>
-                            <td><input name="translations[{{ key }}]" value="{{ key }}" hidden/>{{ key }}</td>
-                            <td><input class="form-control" name="translations[{{ key }}]"
-                                       value="{{ value|e('html_attr') }}"/>
-                            </td>
-                            <td></td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
+    <section class="space-y-5">
+        <div class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-700 dark:bg-slate-900 sm:p-6">
+            <div class="mb-4 flex flex-col gap-1">
+                <h2 class="text-base font-semibold text-slate-900 dark:text-slate-100">Edition du fichier</h2>
+                <p class="text-sm text-slate-500 dark:text-slate-400">Modifiez les valeurs, puis enregistrez les
+                    changements.</p>
+            </div>
 
-                <button data-action="translations#addRow" type="button" class="btn btn-secondary">+ Ajouter une ligne
-                </button>
-                <button type="submit" class="btn btn-primary">Enregistrer</button>
+            <form method="post" class="space-y-4">
+                <div class="overflow-hidden rounded-lg border border-slate-200 dark:border-slate-700">
+                    <table class="min-w-full divide-y divide-slate-200 text-sm dark:divide-slate-700">
+                        <thead class="bg-slate-50 dark:bg-slate-800">
+                        <tr>
+                            <th class="px-4 py-3 text-left font-semibold text-slate-700 dark:text-slate-200">Cle</th>
+                            <th class="px-4 py-3 text-left font-semibold text-slate-700 dark:text-slate-200">Texte</th>
+                            <th class="w-8 px-4 py-3"></th>
+                        </tr>
+                        </thead>
+                        <tbody data-controller="translations"
+                               class="divide-y divide-slate-200 bg-white dark:divide-slate-700 dark:bg-slate-900">
+                        {% for key, value in translations %}
+                            <tr>
+                                <td class="whitespace-nowrap px-4 py-2 align-top font-mono text-xs text-slate-700 dark:text-slate-200">
+                                    <input type="hidden" name="translations[{{ key }}]" value="{{ key }}"/>
+                                    {{ key }}
+                                </td>
+                                <td class="px-4 py-2">
+                                    <input
+                                            class="block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-800 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:focus:border-blue-400 dark:focus:ring-blue-900"
+                                            name="translations[{{ key }}]"
+                                            value="{{ value|e('html_attr') }}"
+                                            aria-label="Valeur pour la cle {{ key }}"
+                                    />
+                                </td>
+                                <td class="px-4 py-2"></td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="flex flex-wrap gap-2">
+                    <twig:Button
+                            label="Ajouter une ligne"
+                            variant="secondary"
+                            icon="icon:add"
+                            dataAction="translations#addRow"
+                    />
+                    <twig:Button
+                            label="Enregistrer"
+                            variant="primary"
+                            icon="icon:save"
+                            type="submit"
+                    />
+                </div>
             </form>
         </div>
-    </div>
+    </section>
 
 {% endblock %}
 
 {% set header_title %}
-    <h1>Fichier : {{ filename }}</h1>
+    Fichier : {{ filename }}
 {% endset %}
 
 {% block bouton_header %}
-    <a href="{{ path('translations_index') }}"
-       class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
-       data-bs-toggle="tooltip"
-       data-bs-placement="bottom"
-       title="Retour aux fichiers de traduction"
-    >
-        <i class="{{ iconBack }}"></i>
-        <span> Retour aux fichiers de traduction</span>
-    </a>
+    <twig:Button
+            label="Retour aux fichiers de traduction"
+            variant="success"
+            icon="icon:arrow-left"
+            href="{{ path('translations_index') }}"
+            tooltip="Retour aux fichiers de traduction"
+            :centered="false"
+    />
 {% endblock %}
 
 {% block breadcrumb %}

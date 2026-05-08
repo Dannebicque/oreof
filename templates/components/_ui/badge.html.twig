@@ -1,0 +1,46 @@
+{#
+Composant Badge — exemples :
+  <twig:Badge label="Publie" variant="success" />
+  <twig:Badge label="Brouillon" variant="secondary" icon="icon:edit" />
+  <twig:Badge :label="value ? 'Oui' : 'Non'" :variant="value ? 'success' : 'danger'" />
+#}
+
+{% set sizeClass = {
+    'sm': 'px-2 py-0.5 text-xs gap-1',
+    'md': 'px-2.5 py-1 text-sm gap-1.5',
+}[size] ?? 'px-2 py-0.5 text-xs gap-1' %}
+
+{% set iconSizeClass = {
+    'sm': 'h-3 w-3',
+    'md': 'h-3.5 w-3.5',
+}[size] ?? 'h-3 w-3' %}
+
+{% set softColors = {
+    'primary':   'border border-blue-300 bg-blue-50 text-blue-700 dark:border-blue-700 dark:bg-blue-900/30 dark:text-blue-300',
+    'success':   'border border-emerald-300 bg-emerald-50 text-emerald-700 dark:border-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300',
+    'warning':   'border border-amber-300 bg-amber-50 text-amber-700 dark:border-amber-700 dark:bg-amber-900/30 dark:text-amber-300',
+    'danger':    'border border-rose-300 bg-rose-50 text-rose-700 dark:border-rose-700 dark:bg-rose-900/30 dark:text-rose-300',
+    'info':      'border border-cyan-300 bg-cyan-50 text-cyan-700 dark:border-cyan-700 dark:bg-cyan-900/30 dark:text-cyan-300',
+    'secondary': 'border border-slate-300 bg-slate-100 text-slate-700 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-300',
+} %}
+
+{% set solidColors = {
+    'primary':   'border border-transparent bg-blue-600 text-white',
+    'success':   'border border-transparent bg-emerald-600 text-white',
+    'warning':   'border border-transparent bg-amber-500 text-slate-900',
+    'danger':    'border border-transparent bg-rose-600 text-white',
+    'info':      'border border-transparent bg-cyan-600 text-white',
+    'secondary': 'border border-transparent bg-slate-500 text-white',
+} %}
+
+{% set colorClass = soft ? (softColors[variant] ?? softColors['secondary']) : (solidColors[variant] ?? solidColors['secondary']) %}
+{% set radiusClass = pill ? 'rounded-full' : 'rounded-md' %}
+{% set classes = 'inline-flex items-center font-semibold ' ~ radiusClass ~ ' ' ~ sizeClass ~ ' ' ~ colorClass ~ (extraClass ? ' ' ~ extraClass : '') %}
+
+<span class="{{ classes }}" {{- attributes -}}>
+    {% if icon != '' and not iconEnd %}{{ ux_icon(icon, {class: iconSizeClass}) }}{% endif %}
+    {% if label != '' %}<span>{{ label }}</span>{% endif %}
+    {% block content %}{% endblock %}
+    {% if icon != '' and iconEnd %}{{ ux_icon(icon, {class: iconSizeClass}) }}{% endif %}
+</span>
+

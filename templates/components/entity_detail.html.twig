@@ -50,7 +50,7 @@
                             {{ (value ~ '')|replace({',': '.'})|number_format(2, ',', ' ') }} €
 
                         {% elseif field.format == 'boolean' %}
-                            <span class="badge bg-{{ value ? 'success' : 'danger' }}">{{ value ? 'Oui' : 'Non' }}</span>
+                            <twig:Badge :label="value ? 'Oui' : 'Non'" :variant="value ? 'success' : 'danger'"/>
 
                         {% elseif field.format == 'html' %}
                             {{ value|raw }}

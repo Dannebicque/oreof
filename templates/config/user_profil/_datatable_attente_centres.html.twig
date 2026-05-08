@@ -1,0 +1,8 @@
+<div class="flex flex-wrap gap-1.5">
+    {% for centre in item.userProfils %}
+        {{ centre|badgeTypeCentre }}
+    {% else %}
+        <twig:Badge label="Aucun profil" variant="secondary"/>
+    {% endfor %}
+</div>
+

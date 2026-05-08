@@ -203,13 +203,9 @@
 
                                         {% elseif column.format == 'boolean' %}
                                             {% if value %}
-                                                <span class="inline-flex items-center gap-1 rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-semibold text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300">
-                                                    <twig:UX:Icon name="icon:check" class="h-3 w-3"/> Oui
-                                                </span>
+                                                <twig:Badge label="Oui" variant="success" icon="icon:check"/>
                                             {% else %}
-                                                <span class="inline-flex items-center rounded-full bg-slate-100 px-2 py-0.5 text-xs font-semibold text-slate-500 dark:bg-slate-700 dark:text-slate-400">
-                                                    Non
-                                                </span>
+                                                <twig:Badge label="Non" variant="secondary"/>
                                             {% endif %}
 
                                         {% elseif column.format == 'badge' %}

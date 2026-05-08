@@ -12,6 +12,7 @@ namespace App\Controller\Config;
 use App\Classes\Ldap;
 use App\Classes\Mailer;
 use App\Controller\BaseController;
+use App\DTO\TranslatableKey;
 use App\Entity\User;
 use App\Entity\UserProfil;
 use App\Enums\CentreGestionEnum;
@@ -21,7 +22,10 @@ use App\Form\UserType;
 use App\Repository\ProfilRepository;
 use App\Repository\UserProfilRepository;
 use App\Repository\UserRepository;
+use App\Service\DataTableBuilder;
+use App\Service\DetailBuilder;
 use App\Utils\JsonRequest;
+use App\Utils\TurboStreamResponseFactory;
 use DateTime;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -33,9 +37,72 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class UserController extends BaseController
 {
     #[Route('/repertoire', name: 'app_user_repertoire', methods: ['GET'])]
-    public function repertoire(): Response
+    public function repertoire(DataTableBuilder $builder): Response
     {
-        return $this->render('config/user/repertoire.html.twig');
+        $composanteId = null;
+        if ($this->isGranted('MANAGE', ['route' => 'app_composante', 'subject' => 'composante'])) {
+            foreach ($this->getUser()?->getUserProfils() as $centre) {
+                if ($centre->getComposante() !== null) {
+                    $composanteId = $centre->getComposante()->getId();
+                    break;
+                }
+            }
+        }
+
+        $table = $builder
+            ->setEntity(User::class)
+            ->setPerPage(20)
+            ->setDefaultSort('nom')
+            ->addBaseWhere('e.isEnable = :isEnable')
+            ->addBaseWhere('e.isDeleted = :isDeleted')
+            ->addBaseWhere('e.userProfils IS EMPTY')
+            ->addBaseParameter('isEnable', true)
+            ->addBaseParameter('isDeleted', false)
+            ->addColumn('nom', [
+                'label' => 'Nom',
+                'sortable' => true,
+                'filterable' => true,
+            ])
+            ->addColumn('prenom', [
+                'label' => 'Prénom',
+                'sortable' => true,
+                'filterable' => true,
+            ])
+            ->addColumn('email', [
+                'label' => 'Email',
+                'sortable' => true,
+                'filterable' => true,
+            ])
+            ->addColumn('username', [
+                'label' => 'Login URCA',
+                'sortable' => true,
+                'filterable' => true,
+            ])
+            ->addColumn('id', [
+                'label' => 'Actions',
+                'sortable' => false,
+                'filterable' => false,
+                'searchable' => false,
+                'template' => 'config/user/_datatable_repertoire_actions.html.twig',
+            ]);
+
+        if ($composanteId !== null) {
+            $table
+                ->addBaseJoin('left', 'e.userProfils', 'up_filter')
+                ->addBaseJoin('left', 'up_filter.formation', 'uf_f')
+                ->addBaseJoin('left', 'up_filter.parcours', 'uf_pa')
+                ->addBaseJoin('left', 'uf_pa.formation', 'uf_pf')
+                ->addBaseWhere('(
+                    IDENTITY(up_filter.composante) = :composanteId
+                    OR IDENTITY(uf_f.composantePorteuse) = :composanteId
+                    OR IDENTITY(uf_pf.composantePorteuse) = :composanteId
+                )')
+                ->addBaseParameter('composanteId', $composanteId);
+        }
+
+        return $this->render('config/user/repertoire.html.twig', [
+            'table' => $table->build(),
+        ]);
     }
 
     #[Route('/repertoire/liste', name: 'app_user_repertoire_liste', methods: ['GET'])]
@@ -84,6 +151,7 @@ class UserController extends BaseController
 
     #[Route('/ajouter-ldap', name: 'app_user_new_ldap', methods: ['GET'])]
     public function newLdap(
+        TurboStreamResponseFactory $turboStream,
         Request $request
     ): Response {
         $dpe = false;
@@ -98,23 +166,37 @@ class UserController extends BaseController
             'action' => $dpe ? $this->generateUrl('app_user_new_ldap', ['access' => 'dpe']) : $this->generateUrl('app_user_new_ldap'),
         ]);
 
-        return $this->render('config/user/new-ldap.html.twig', [
-            'form' => $form->createView(),
-        ]);
+        return $turboStream->streamOpenModalFromTemplates(
+            new TranslatableKey('user_new_ldap.new.title', [], 'modal'),
+            '',
+            'config/user/new-ldap.html.twig',
+            [
+                'form' => $form->createView(),
+            ],
+            '_ui/_footer_submit_cancel.html.twig',
+            []
+        );
     }
 
     #[Route('/ajouter-hors-urca', name: 'app_user_new_hors_urca', methods: ['GET'])]
     public function horsUrca(
-        Request $request
+        TurboStreamResponseFactory $turboStream,
     ): Response {
         $user = new User();
         $form = $this->createForm(UserHorsUrcaType::class, $user, [
             'action' => $this->generateUrl('app_user_new_hors_urca'),
         ]);
 
-        return $this->render('config/user/new-hors-urca.html.twig', [
-            'form' => $form->createView(),
-        ]);
+        return $turboStream->streamOpenModalFromTemplates(
+            new TranslatableKey('user_new_hors_urca.new.title', [], 'modal'),
+            '',
+            'config/user/new-hors-urca.html.twig',
+            [
+                'form' => $form->createView(),
+            ],
+            '_ui/_footer_submit_cancel.html.twig',
+            []
+        );
     }
 
     #[Route('/ajouter-ldap', name: 'app_user_new_ldap_valide', methods: ['POST'])]
@@ -259,15 +341,40 @@ class UserController extends BaseController
 
     #[Route('/{id}', name: 'app_user_show', methods: ['GET'])]
     public function show(
+        TurboStreamResponseFactory $turboStream,
+        DetailBuilder              $builder,
         User           $user
     ): Response {
-        return $this->render('config/user/show.html.twig', [
-            'user' => $user
-        ]);
+
+        $detail = $builder
+            ->setEntity(User::class)
+            ->addField('nom', ['label' => 'Nom'])
+            ->addField('prenom', ['label' => 'Prénom'])
+            ->addField('email', ['label' => 'Email'])
+            ->addField('username', ['label' => 'Login URCA'])
+            ->addField('dateCreation', ['label' => 'Date d\'inscription'])
+            ->addField('telFixe', ['label' => 'Téléphone fixe'])
+            ->addField('telPortable', ['label' => 'Téléphone portable'])
+            ->build();
+
+        return $turboStream->streamOpenModalFromTemplates(
+            new TranslatableKey('user.show.title', [], 'modal'),
+            'Utilisateur : ' . $user->getDisplay(),
+            '_ui/_modal_show_generic.html.twig',
+            [
+                'entity' => $user,
+                'detail' => $detail,
+            ],
+            '_ui/_footer_cancel.html.twig',
+            []
+        );
+
+
     }
 
     #[Route('/show-attente/{id}', name: 'app_user_show_attente', methods: ['GET'])]
     public function showAttente(
+        TurboStreamResponseFactory $turboStream,
         Request        $request,
         ProfilRepository $profilRepository,
         User           $user
@@ -279,41 +386,59 @@ class UserController extends BaseController
             $profils = $profilRepository->findAll();
         }
 
-        return $this->render('config/user_profil/_show_attente.html.twig', [
-            'user' => $user,
-            'typeCentres' => CentreGestionEnum::cases(),
-            'centresUser' => $user->getUserProfils(),
-            'profils' => $profils,
-            'dpe' => $dpe
-        ]);
+        return $turboStream->streamOpenModalFromTemplates(
+            new TranslatableKey('validation.user.attente.title', [], 'modal'),
+            'Utilisateur : ' . $user->getDisplay(),
+            'config/user_profil/_show_attente.html.twig',
+            [
+                'user' => $user,
+                'typeCentres' => CentreGestionEnum::cases(),
+                'centresUser' => $user->getUserProfils(),
+                'profils' => $profils,
+                'dpe' => $dpe
+            ],
+            '_ui/_footer_cancel.html.twig',
+            []
+        );
+
+
+        //        return $this->render('config/user_profil/_show_attente.html.twig', [
+        //            'user' => $user,
+        //            'typeCentres' => CentreGestionEnum::cases(),
+        //            'centresUser' => $user->getUserProfils(),
+        //            'profils' => $profils,
+        //            'dpe' => $dpe
+        //        ]);
     }
-//
-//    /**
-//     * @throws JsonException
-//     */
-//    #[Route('/change-role/{id}', name: 'app_user_roles', methods: ['POST'])]
-//    public function changeRole(
-//        Request        $request,
-//        UserRepository $userRepository,
-//        User           $user
-//    ): Response {
-//        $data = JsonRequest::getFromRequest($request);
-//        $roles = $user->getRoles();
-//
-//        if ($data['checked']) {
-//            $roles[] = $data['role'];
-//        } else {
-//            $roles = array_diff($roles, [$data['role']]);
-//        }
-//        $user->setRoles($roles);
-//        $userRepository->save($user, true);
-//
-//        return $this->json(true);
-//    }
-//
+    //
+    //    /**
+    //     * @throws JsonException
+    //     */
+    //    #[Route('/change-role/{id}', name: 'app_user_roles', methods: ['POST'])]
+    //    public function changeRole(
+    //        Request        $request,
+    //        UserRepository $userRepository,
+    //        User           $user
+    //    ): Response {
+    //        $data = JsonRequest::getFromRequest($request);
+    //        $roles = $user->getRoles();
+    //
+    //        if ($data['checked']) {
+    //            $roles[] = $data['role'];
+    //        } else {
+    //            $roles = array_diff($roles, [$data['role']]);
+    //        }
+    //        $user->setRoles($roles);
+    //        $userRepository->save($user, true);
+    //
+    //        return $this->json(true);
+    //    }
+    //
     #[Route('/{id}/edit', name: 'app_user_edit', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_ADMIN')]
-    public function edit(Request $request, User $user, UserRepository $userRepository): Response
+    public function edit(
+        TurboStreamResponseFactory $turboStream,
+        Request                    $request, User $user, UserRepository $userRepository): Response
     {
         $form = $this->createForm(
             UserType::class,
@@ -331,10 +456,17 @@ class UserController extends BaseController
             return $this->json(true);
         }
 
-        return $this->render('config/user/new.html.twig', [
-            'user' => $user,
-            'form' => $form->createView(),
-        ]);
+        return $turboStream->streamOpenModalFromTemplates(
+            new TranslatableKey('user.edit.title', [], 'modal'),
+            'Utilisateur : ' . $user->getDisplay(),
+            '_ui/_modal_new_generic.html.twig',
+            [
+                'user' => $user,
+                'form' => $form->createView(),
+            ],
+            '_ui/_footer_submit_cancel.html.twig',
+            []
+        );
     }
 
     /**

@@ -10,6 +10,9 @@ class DataTableBuilder
     private int $perPage = 20;
     private string $defaultSort = '';
     private string $defaultSortDirection = 'asc';
+    private array $baseJoins = [];
+    private array $baseWheres = [];
+    private array $baseParameters = [];
 
     public function setEntity(string $entityClass): self
     {
@@ -220,6 +223,38 @@ class DataTableBuilder
         return $this;
     }
 
+    /**
+     * Ajoute un join de base appliqué à toutes les requêtes du DataTable.
+     */
+    public function addBaseJoin(string $type, string $path, string $alias): self
+    {
+        $this->baseJoins[] = [
+            'type' => strtolower($type),
+            'path' => $path,
+            'alias' => $alias,
+        ];
+
+        return $this;
+    }
+
+    /**
+     * Ajoute une clause WHERE de base (en plus des filtres UI).
+     */
+    public function addBaseWhere(string $expression): self
+    {
+        $this->baseWheres[] = $expression;
+        return $this;
+    }
+
+    /**
+     * Ajoute un paramètre de base pour les clauses WHERE.
+     */
+    public function addBaseParameter(string $name, mixed $value): self
+    {
+        $this->baseParameters[$name] = $value;
+        return $this;
+    }
+
     public function setDefaultSort(string $field, string $direction = 'asc'): self
     {
         $this->defaultSort = $field;
@@ -236,6 +271,9 @@ class DataTableBuilder
             'perPage' => $this->perPage,
             'sortField' => $this->defaultSort,
             'sortDirection' => $this->defaultSortDirection,
+            'baseJoins' => $this->baseJoins,
+            'baseWheres' => $this->baseWheres,
+            'baseParameters' => $this->baseParameters,
         ];
     }
 }

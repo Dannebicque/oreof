@@ -8,10 +8,10 @@ Composant Button — exemples d'usage :
 
 {# ── Taille ───────────────────────────────────────────────────── #}
 {% set sizeClass = {
-    'sm': 'px-3 py-1.5 text-sm h-8',
-    'md': 'px-4 py-2 text-sm h-10',
-    'lg': 'px-5 py-2.5 text-base h-11',
-}[size] ?? 'px-3 py-1.5 text-sm h-8' %}
+    'sm': 'px-3 py-1.5 text-sm h-8 whitespace-nowrap',
+    'md': 'px-4 py-2 text-sm h-10 whitespace-nowrap',
+    'lg': 'px-5 py-2.5 text-base h-11 whitespace-nowrap',
+}[size] ?? 'px-3 py-1.5 text-sm h-8 whitespace-nowrap' %}
 
 {% set iconSizeClass = {
     'sm': 'h-4 w-4',
@@ -60,7 +60,11 @@ Composant Button — exemples d'usage :
 {# ── Classes de base ──────────────────────────────────────────── #}
 {% set baseClass = 'inline-flex items-center gap-1.5 rounded-md font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-1 disabled:opacity-50 disabled:cursor-not-allowed' %}
 {% set disabledClass = disabled ? ' pointer-events-none opacity-50' : '' %}
-{% set allClasses = baseClass ~ ' ' ~ sizeClass ~ ' ' ~ colorClass ~ disabledClass ~ (extraClass ? ' ' ~ extraClass : '') %}
+{% set widthClass = fullWidth ? ' w-full' : '' %}
+{% set justifyClass = centered ? ' justify-center' : '' %}
+{% set allClasses = baseClass ~ justifyClass ~ widthClass ~ ' ' ~ sizeClass ~ ' ' ~ colorClass ~ disabledClass ~ (extraClass ? ' ' ~ extraClass : '') %}
+{% set isLink = href|trim != '' %}
+{% set isModalLink = isLink and dataAction|trim != '' %}
 
 {# ── Slot unique du composant ─────────────────────────────────── #}
 {% set slotContent %}
@@ -68,10 +72,17 @@ Composant Button — exemples d'usage :
 {% endset %}
 
 {# ── Rendu ────────────────────────────────────────────────────── #}
-{% if href != '' %}
+{% if isLink %}
     <a href="{{ href }}"
        class="{{ allClasses }}"
-       {% if tooltip %}title="{{ tooltip }}"{% endif %}
+            {% if tooltip %}{{ stimulus_controller('tooltip', {
+                placement: tooltipPlacement,
+                customClass: tooltipCustomClass,
+                title: tooltip
+            }) }}{% endif %}
+            {% if not isModalLink and target != '' %}target="{{ target }}"{% endif %}
+            {% if not isModalLink and rel != '' %}rel="{{ rel }}"{% endif %}
+            {% if isModalLink %}data-turbo="true" aria-haspopup="dialog"{% endif %}
             {% if dataAction != '' %}data-action="{{ dataAction }}"{% endif %}
             {% if disabled %}aria-disabled="true" tabindex="-1"{% endif %}
             {{- attributes -}}
@@ -86,7 +97,11 @@ Composant Button — exemples d'usage :
             type="{{ type }}"
             class="{{ allClasses }}"
             {% if form != '' %}form="{{ form }}"{% endif %}
-            {% if tooltip %}title="{{ tooltip }}"{% endif %}
+            {% if tooltip %}{{ stimulus_controller('tooltip', {
+                placement: tooltipPlacement,
+                customClass: tooltipCustomClass,
+                title: tooltip
+            }) }}{% endif %}
             {% if dataAction != '' %}data-action="{{ dataAction }}"{% endif %}
             {% if disabled %}disabled{% endif %}
             {{- attributes -}}

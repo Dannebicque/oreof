@@ -1,0 +1,31 @@
+<div class="flex flex-wrap items-center justify-end gap-1.5">
+    <twig:Button
+            label="Voir"
+            variant="info"
+            icon="icon:info"
+            href="{{ path('app_user_show', {'id': item.user.id}) }}"
+            dataAction="click->modalturbo#open"
+            tooltip="Voir un utilisateur"
+    />
+
+    <twig:Button
+            label="Gestion des profils"
+            variant="warning"
+            icon="icon:edit"
+            href="{{ path('app_user_profils_gestion', {'user': item.user.id}) }}"
+            dataAction="click->modalturbo#open"
+            tooltip="Gestion des centres de {{ item.user.display }}"
+    />
+
+    {% if is_granted('ROLE_ADMIN') %}
+        <twig:Button
+                label="Modifier"
+                variant="warning"
+                icon="icon:edit"
+                href="{{ path('app_user_edit', {'id': item.user.id}) }}"
+                dataAction="click->modalturbo#open"
+                tooltip="Modifier un utilisateur"
+        />
+    {% endif %}
+</div>
+

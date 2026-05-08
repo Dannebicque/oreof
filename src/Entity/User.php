@@ -17,8 +17,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-
-use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
@@ -42,13 +41,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToOne(inversedBy: 'users')]
     private ?Etablissement $etablissement = null;
 
-    #[ORM\OneToMany(mappedBy: 'directeur', targetEntity: Composante::class)]
+    #[ORM\OneToMany(targetEntity: Composante::class, mappedBy: 'directeur')]
     private Collection $composantes;
 
-    #[ORM\OneToMany(mappedBy: 'responsableDpe', targetEntity: Composante::class)]
+    #[ORM\OneToMany(targetEntity: Composante::class, mappedBy: 'responsableDpe')]
     private Collection $composanteResponsableDpe;
 
-    #[ORM\OneToMany(mappedBy: 'responsableMention', targetEntity: Formation::class)]
+    #[ORM\OneToMany(targetEntity: Formation::class, mappedBy: 'responsableMention')]
     private Collection $formationsResponsableMention;
 
     #[ORM\Column(length: 50)]
@@ -96,13 +95,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 10, nullable: true)]
     private ?string $telPortable = null;
 
-    #[ORM\OneToMany(mappedBy: 'destinataire', targetEntity: Notification::class)]
+    #[ORM\OneToMany(targetEntity: Notification::class, mappedBy: 'destinataire')]
     private Collection $notifications;
 
-    #[ORM\OneToMany(mappedBy: 'coResponsable', targetEntity: Parcours::class)]
+    #[ORM\OneToMany(targetEntity: Parcours::class, mappedBy: 'coResponsable')]
     private Collection $coParcours;
 
-    #[ORM\OneToMany(mappedBy: 'coResponsable', targetEntity: Formation::class)]
+    #[ORM\OneToMany(targetEntity: Formation::class, mappedBy: 'coResponsable')]
     private Collection $coFormations;
 
     #[ORM\ManyToOne]
@@ -111,46 +110,46 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToOne]
     private ?Etablissement $etablissementDemande = null;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Historique::class)]
+    #[ORM\OneToMany(targetEntity: Historique::class, mappedBy: 'user')]
     private Collection $historiques;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Commentaire::class)]
+    #[ORM\OneToMany(targetEntity: Commentaire::class, mappedBy: 'user')]
     private Collection $commentaires;
 
     /**
      * @var Collection<int, DpeDemande>
      */
-    #[ORM\OneToMany(mappedBy: 'auteur', targetEntity: DpeDemande::class)]
+    #[ORM\OneToMany(targetEntity: DpeDemande::class, mappedBy: 'auteur')]
     private Collection $dpeDemandes;
 
     /**
      * @var Collection<int, UserProfil>
      */
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: UserProfil::class)]
+    #[ORM\OneToMany(targetEntity: UserProfil::class, mappedBy: 'user')]
     private Collection $userProfils;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $serviceDemande = null;
 
-    #[ORM\OneToOne(mappedBy: 'user', targetEntity: UserNotificationPreference::class, cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(targetEntity: UserNotificationPreference::class, mappedBy: 'user', cascade: ['persist', 'remove'])]
     private ?UserNotificationPreference $notificationPreference = null;
 
     /**
      * @var Collection<int, UserWorkflowNotificationSetting>
      */
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: UserWorkflowNotificationSetting::class)]
+    #[ORM\OneToMany(targetEntity: UserWorkflowNotificationSetting::class, mappedBy: 'user')]
     private Collection $userWorkflowNotificationSettings;
 
     /**
      * @var Collection<int, UserCategoryNotificationSetting>
      */
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: UserCategoryNotificationSetting::class)]
+    #[ORM\OneToMany(targetEntity: UserCategoryNotificationSetting::class, mappedBy: 'user')]
     private Collection $userCategoryNotificationSettings;
 
     /**
      * @var Collection<int, ChangeParcours>
      */
-    #[ORM\OneToMany(mappedBy: 'auteur', targetEntity: ChangeParcours::class)]
+    #[ORM\OneToMany(targetEntity: ChangeParcours::class, mappedBy: 'auteur')]
     private Collection $changeParcours;
 
     public function __construct()
