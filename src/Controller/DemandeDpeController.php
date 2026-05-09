@@ -49,7 +49,6 @@ class DemandeDpeController extends BaseController
             if ($composante === null) {
                 throw $this->createNotFoundException('Composante non trouvée');
             }
-
             return $this->render('demande_dpe/_liste.html.twig', [
                 'is_admin' => false,
                 'params' => $request->query->all(),

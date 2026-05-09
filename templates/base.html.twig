@@ -508,22 +508,6 @@
                             {#                                    > #}
                             {#                                        Signaler un bug #}
                             {#                                    </a> #}
-                            {# todo: ajouter accessibitité #}
-                            {#                                    <a href="#" #}
-                            {#                                            {{ stimulus_controller('modal', { #}
-                            {#                                                size: 'large', #}
-                            {#                                                modalTitle: 'Paramètres & Accessibilité', #}
-                            {#                                                right: true, #}
-                            {#                                                modalUrl: path('app_settings') }) }} #}
-                            {#                                       data-action="click->modal#openModal" #}
-                            {#                                       data-size="lg" #}
-                            {#                                       data-bs-toggle="tooltip" #}
-                            {#                                       data-bs-placement="bottom" #}
-                            {#                                       title="Paramètres & Accessibilité" #}
-                            {#                                    > #}
-
-                            {#                                        <i class="fas fa-gears"></i> Paramètres & Accessibilité #}
-                            {#                                    </a> #}
                             <hr class="my-1 border-gray-100">
                             <a href="{{ path('app_logout') }}"
                                class="flex items-center px-4 py-2 text-sm text-red-600 hover:bg-red-50">
@@ -582,7 +566,7 @@
                     class="mb-8 rounded-2xl border border-slate-200 bg-white/90 p-4 shadow-sm backdrop-blur-sm dark:border-slate-700 dark:bg-slate-900/80 sm:mb-10 sm:p-5">
                 <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                     <div class="min-w-0 lg:basis-1/2 lg:pr-6">
-                        <h1 class="text-2xl font-black leading-tight tracking-tight text-slate-900 sm:text-3xl lg:overflow-hidden lg:text-ellipsis lg:whitespace-nowrap dark:text-slate-100"
+                        <h1 class="text-xl font-black leading-tight tracking-tight text-slate-900 sm:text-3xl lg:overflow-hidden lg:text-ellipsis lg:whitespace-nowrap dark:text-slate-100"
                             id="title">{% block header %}
                                 {{ header_title|default('Titre par défaut') }}
                             {% endblock %}</h1>
@@ -605,23 +589,6 @@
             </section>
         </div>
     </div>
-
-    {#            <button #}
-    {#                    {{ stimulus_controller('modal', { #}
-    {#                        size: 'large', #}
-    {#                        modalTitle: 'Ajouter un domaine', #}
-    {#                        right: true, #}
-    {#                        modalUrl: path('app_domaine_new') }) }} #}
-    {#                    data-action="click->modal#openModal" #}
-    {#                    class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2" #}
-    {#                    data-size="lg" #}
-    {#                    data-bs-toggle="tooltip" #}
-    {#                    data-bs-placement="bottom" #}
-    {#                    title="Ajouter un domaine" #}
-    {#            > #}
-    {#                <i class="{{ iconAdd }}"></i> #}
-    {#                <span> Ajouter un domaine</span> #}
-    {#            </button> #}
     <main>
         <!-- messages flash -->
         {# read and display all flash messages #}

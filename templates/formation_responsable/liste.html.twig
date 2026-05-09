@@ -1,57 +1,30 @@
 {% extends 'base.html.twig' %}
 
 {% block content %}
-    <div class="card">
-        <div class="card-body">
-            <table class="table">
-                <thead>
-                <tr>
-                    <th>Composante</th>
-                    <th>Formation</th>
-                    <th>CO-RF / RF</th>
-                    <th>Ancien Co/RF</th>
-                    <th>Nouveau Co/RF</th>
-                    <th>Date demande</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for demande in demandes %}
-                    <tr>
-                        <td>{{ demande.formation.composantePorteuse.libelle }}</td>
-                        <td>{{ demande.formation.display }}</td>
-                        <td>{{ demande.typeRf.value == 'RF' ? 'Responsable' : 'Co-Responsable' }}</td>
-                        <td>{{ demande.ancienResponsable.display }}</td>
-                        <td>{{ demande.nouveauResponsable.display }}</td>
-                        <td>{{ demande.dateDemande|date('d/m/Y') }}</td>
-                    </tr>
-                    <tr>
-                        <td class="text-end">Commentaire :</td>
-                        <td colspan="5">{{ demande.commentaire }}</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </div>
+    {{ component('DataTable', { config: table }) }}
 {% endblock %}
 
 {% set header_title %}
-    Détails des mentions/spécialités
+    Demandes de changement de responsable de formation
 {% endset %}
 
 {% block breadcrumb %}
     {{ include('communs/_breadcrumb.html.twig', {liens:[
+        {title: 'Conseils'},
+        {title: 'Demandes de changement de responsable de formation'}
     ]}) }}
 {% endblock %}
 
 {% block bouton_header %}
     <a href="{{ path('app_formation_responsable_liste_export') }}"
-       class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2"
-       data-bs-toggle="tooltip"
-       data-bs-placement="bottom"
-       title="Exporter les données en PDF"
+       class="inline-flex items-center gap-2 rounded-md border border-cyan-300 bg-cyan-50 px-3 py-2 text-sm font-medium text-cyan-700 transition hover:bg-cyan-100 hover:text-cyan-800"
+            {{ stimulus_controller('tooltip', {
+                placement: 'bottom',
+                customClass: 'app-tooltip',
+                title: 'Exporter les données en PDF'
+            }) }}
     >
-        <i class="{{ iconDownload }}"></i>
+        {{ ux_icon('icon:download', {class: 'h-4 w-4'}) }}
         <span> Exporter les données en PDF</span>
     </a>
 

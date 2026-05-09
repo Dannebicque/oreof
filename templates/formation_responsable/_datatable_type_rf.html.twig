@@ -1,0 +1,10 @@
+{% set typeRf = item.typeRf %}
+
+{% if typeRf is null %}
+    <twig:Badge label="Non défini" variant="secondary"/>
+{% elseif typeRf.value == 'RF' %}
+    <twig:Badge label="Responsable" variant="success"/>
+{% else %}
+    <twig:Badge label="Co-responsable" variant="info"/>
+{% endif %}
+

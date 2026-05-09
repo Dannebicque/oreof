@@ -1,204 +1,131 @@
-<div class="card-body">
-    <div class="alert alert-info">
-        {% set nbDemandes = demandes|length %}
-        <strong>{{ nbDemandes }}</strong> demande{{ nbDemandes > 1 ? 's' : '' }} de changement de RF/CoRf
+<div class="space-y-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-900 sm:p-6">
+    {% set nbDemandes = demandes|length %}
+    <div class="rounded-xl border border-cyan-200 bg-cyan-50 px-4 py-3 text-sm text-cyan-900 dark:border-cyan-800 dark:bg-cyan-950/30 dark:text-cyan-100">
+        <strong>{{ nbDemandes }}</strong> demande{{ nbDemandes > 1 ? 's' : '' }} de changement de RF/CoRF
         trouvée{{ nbDemandes > 1 ? 's' : '' }}.
     </div>
-    <table class="table" {{ stimulus_controller('check_all') }}>
-        <thead>
-        <tr>
-            <th>
-                <div class="checkbox">
-                    <label>
-                        <input type="checkbox" id="check-all" {{ stimulus_action('check_all', 'checkAll') }}>
-                        <span class="total"></span>
-                    </label>
-                </div>
-            </th>
-            <th>
-                Formation
-            </th>
-            <th>
-                Co/RF
-            </th>
-            <th>
-                Actuel Co/RF
-            </th>
-            <th>
-                Nouveau Co/RF
-            </th>
-            <th>
-                Date demande
-            </th>
-            <th>
-                Date Validation CFVU
-            </th>
-            <th>
-                Etat
-            </th>
-            <th>
-                PV ?
-            </th>
-            <th>
-                Actions
-            </th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for demande in demandes %}
+
+    <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700" {{ stimulus_controller('check_all') }}>
+        <table class="min-w-full text-left text-sm text-slate-700 dark:text-slate-200">
+            <thead class="bg-slate-50 text-xs font-semibold uppercase tracking-wide text-slate-500 dark:bg-slate-800/70 dark:text-slate-300">
             <tr>
-                <td>
-                    <div class="checkbox">
-                        <label>
+                <th class="w-10 px-4 py-3">
+                    <label class="inline-flex cursor-pointer items-center">
+                        <input type="checkbox" id="check-all"
+                               class="h-4 w-4 rounded border-slate-300 text-cyan-600 focus:ring-cyan-500" {{ stimulus_action('check_all', 'checkAll') }}>
+                        <span class="sr-only">Tout sélectionner</span>
+                    </label>
+                </th>
+                <th class="px-4 py-3">Formation</th>
+                <th class="px-4 py-3">Co/RF</th>
+                <th class="px-4 py-3">Actuel Co/RF</th>
+                <th class="px-4 py-3">Nouveau Co/RF</th>
+                <th class="px-4 py-3">Date demande</th>
+                <th class="px-4 py-3">Date Validation CFVU</th>
+                <th class="px-4 py-3">Etat</th>
+                <th class="px-4 py-3">PV ?</th>
+                <th class="px-4 py-3 text-right">Actions</th>
+            </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200 dark:divide-slate-700">
+            {% for demande in demandes %}
+                <tr class="align-top hover:bg-slate-50/70 dark:hover:bg-slate-800/40">
+                    <td class="px-4 py-3">
+                        <label class="inline-flex cursor-pointer items-center">
                             <input
                                     {{ stimulus_action('check_all', 'check') }}
                                     type="checkbox"
-                                    class="check-all"
+                                    class="check-all h-4 w-4 rounded border-slate-300 text-cyan-600 focus:ring-cyan-500"
                                     name="demandes[]"
                                     value="{{ demande.id }}"
                             >
+                            <span class="sr-only">Selectionner la demande {{ demande.id }}</span>
                         </label>
-                    </div>
-                </td>
-                <td>
-                    {{ demande.formation.displayLong }}
-                </td>
-                <td>
-                    {{ demande.typeRf.value }}
-                </td>
-                <td>
-                    {{ demande.ancienResponsable != null ? demande.ancienResponsable.display : 'Non défini' }}
-                </td>
-                <td>
-                    {{ demande.nouveauResponsable != null ? demande.nouveauResponsable.display : 'Non défini' }}
-                </td>
-                <td>
-                    {{ demande.dateDemande|date('d/m/Y H:i') }}
-                </td>
-                <td>
-                    {{ component('historique_date', {changeRf:demande, type:'change_rf', step:'soumis_cfvu'}) }}
-                </td>
-                <td>
-                    {{ demande.etatDemande|badgeChangeRf }}
-                </td>
-                <td>
-                    {{ component('historique_pv', {changeRf:demande, type:'change_rf'}) }}
-                </td>
-                <td>
-                    <a href="{{ path('formation_v2_voir',{'slug': demande.formation.slug}) }}"
-                       class="btn btn-sm text-info"
-                       data-bs-toggle="tooltip"
-                       data-bs-placement="bottom"
-                       title="Voir la formation"
-                       target="_blank"
-                    >
-                        <i class="{{ iconShow }}"></i>
-                        <span> Voir</span>
-                    </a>
-                    {% if is_granted('ROLE_ADMIN') %}
-                        <a href="{{ path('app_formation_change_rf_suppression', {demande:demande.id}) }}"
-                           data-controller="tooltip" data-tooltip-placement-value="bottom"
-                           data-bs-original-title="Supprimer la demande"
-                           class="btn btn-sm btn-icon btn-icon-only btn-danger ms-4"><i
-                                    class="{{ iconDelete }}"></i>
-                        </a>
-                    {% endif %}
-                </td>
-            </tr>
-            <tr>
-                <td colspan="3" class="text-end"> Commentaire :</td>
-                <td colspan="6">
-                    {{ demande.commentaire }}
-                </td>
-                <td>
+                    </td>
+                    <td class="px-4 py-3 font-medium text-slate-800 dark:text-slate-100">
+                        {{ demande.formation.displayLong }}
+                    </td>
+                    <td class="px-4 py-3">{{ demande.typeRf.value }}</td>
+                    <td class="px-4 py-3">{{ demande.ancienResponsable != null ? demande.ancienResponsable.display : 'Non défini' }}</td>
+                    <td class="px-4 py-3">{{ demande.nouveauResponsable != null ? demande.nouveauResponsable.display : 'Non défini' }}</td>
+                    <td class="px-4 py-3 whitespace-nowrap">{{ demande.dateDemande|date('d/m/Y H:i') }}</td>
+                    <td class="px-4 py-3">{{ component('historique_date', {changeRf:demande, type:'change_rf', step:'soumis_cfvu'}) }}</td>
+                    <td class="px-4 py-3">{{ demande.etatDemande|badgeChangeRf }}</td>
+                    <td class="px-4 py-3">{{ component('historique_pv', {changeRf:demande, type:'change_rf'}) }}</td>
+                    <td class="px-4 py-3">
+                        <div class="flex flex-wrap justify-end gap-2">
+                            <twig:Button
+                                    label="Voir"
+                                    variant="info"
+                                    size="sm"
+                                    icon="icon:info"
+                                    href="{{ path('formation_v2_voir',{'slug': demande.formation.slug}) }}"
+                                    target="_blank"
+                                    tooltip="Voir la formation"
+                            />
 
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="10">
-                    <div class="alert alert-info">Aucune demande de changement de Co/RF dans cette état de demande</div>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <twig:Button
+                                        label="Supprimer"
+                                        variant="danger"
+                                        size="sm"
+                                        icon="icon:delete"
+                                        href="{{ path('app_formation_change_rf_suppression', {demande:demande.id}) }}"
+                                        tooltip="Supprimer la demande"
+                                />
+                            {% endif %}
+                        </div>
+                    </td>
+                </tr>
+                <tr class="border-b border-slate-200 bg-slate-50/50 dark:border-slate-700 dark:bg-slate-950/20">
+                    <td class="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-400">
+                        Commentaire
+                    </td>
+                    <td class="px-4 py-3 text-slate-700 dark:text-slate-200" colspan="9">
+                        {{ demande.commentaire }}
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="10"
+                        class="px-4 py-6 text-center text-sm font-medium text-slate-500 dark:text-slate-400">
+                        Aucune demande de changement de Co/RF dans cet etat de demande
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
-    <div class="row mt-2">
+    <div class="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-4">
         {% set prefix = 'changeRf' %}
         {% if demandes|length > 0 %}
             {% set oneDemande = demandes|first %}
 
             {% for key, state in hasTransitions(oneDemande, 'changeRf') %}
                 {% for keyTrans, transition in state %}
-                    <div class="col-{{ 4 / state|length }} d-grid">
-                        <button class="btn btn-sm d-block btn-outline-{{ transition.meta.btn }}"
-                                type="button"
-                                data-action="validation--index#{{ key }}"
-                                data-validation--index-url-param="{{ path('app_validation_change_rf_lot', {etape:etape, transition:keyTrans, key:key}) }}"
-                                data-controller="tooltip"
-                                data-tooltip-placement-value="bottom"
-                                aria-label="{{ ('title.validation.'~prefix~'.'~keyTrans)|trans({}, 'process') }}"
-                                data-bs-original-title="{{ ('title.validation.'~prefix~'.'~keyTrans)|trans({}, 'process') }}"
-                        >
-                            <i class="fal {{ transition.meta.icon }}"></i> {{ ('btn.validation.'~prefix~'.'~keyTrans)|trans({}, 'process') }}
-                        </button>
-                    </div>
+                    <twig:Button
+                            label="{{ ('btn.validation.'~prefix~'.'~keyTrans)|trans({}, 'process') }}"
+                            variant="{{ transition.meta.btn }}"
+                            size="sm"
+                            icon="icon:chevron-right"
+                            dataAction="click->validation--index#{{ key }}"
+                            extraClass="data-validation--index-url-param='{{ path('app_validation_change_rf_lot', {etape:etape, transition:keyTrans, key:key}) }}'"
+                            tooltip="{{ ('title.validation.'~prefix~'.'~keyTrans)|trans({}, 'process') }}"
+                    />
                 {% else %}
-                    <div class="col-2 d-grid">
-                    </div>
+                    <div></div>
                 {% endfor %}
             {% else %}
-                <div class="col-6 d-grid">
-                    <button class="btn btn-sm btn-muted d-block">
-                        {{ 'validation.formation.indisponible'|trans({}, 'process') }}
-                    </button>
-                </div>
+                <twig:Button
+                        label="{{ 'validation.formation.indisponible'|trans({}, 'process') }}"
+                        variant="secondary"
+                        size="sm"
+                        disabled="disabled"
+                />
             {% endfor %}
         {% endif %}
     </div>
-    <div class="row mt-2" {{ stimulus_target('validation--index', 'action') }}>
 
-            </div>
-    {#    #}
-    {#    {% if etape == 'soumis_cfvu' %} #}
-    {#        <div> #}
-    {#            <label for="date" class="form-label">{{ ('valide.soumis_cfvu.date.label')|trans({}, 'process') }} #}
-    {#                <span class="required"></span> <i #}
-    {#                        class="fal fa-question-circle ms-1" #}
-    {#                        data-controller="tooltip" #}
-    {#                        data-tooltip-placement-value="bottom" #}
-    {#                        aria-label="{{ ('valide.soumis_cfvu.helps.date.help')|trans({}, 'process') }}" #}
-    {#                        data-bs-original-title="{{ ('valide.soumis_cfvu.helps.date.help')|trans({}, 'process') }}"></i></label> #}
-    {#            <input type="date" name="date" #}
-    {#                   class="form-control" #}
-    {#                   id="date" #}
-    {#            > #}
-    {#        </div> #}
-    {#    {% endif %} #}
-
-    {#    {% if etape == 'soumis_ses' or etape == 'soumis_cfvu' %} #}
-    {#        <div class="row mt-2"> #}
-    {#            <div class="col-3 d-grid"> #}
-    {#                <button class="btn btn-sm d-block btn-outline-success" #}
-    {#                        type="button" #}
-    {#                        data-action="validation--index#valide_rf" #}
-    {#                        data-validation--index-url-param="{{ path('app_validation_change_rf_valider_lot', {transition:transition}) }}" #}
-    {#                        data-controller="tooltip" #}
-    {#                        data-tooltip-placement-value="bottom" #}
-    {#                        aria-label="{{ ('validation.valider.'~etape)|trans({}, 'process') }}" #}
-    {#                        data-bs-original-title="{{ ('validation.valider.'~etape)|trans({}, 'process') }}" #}
-    {#                > #}
-    {#                    <i class="fal fa-check"></i> {{ ('validation.valider.'~etape)|trans({}, 'process') }} #}
-    {#                </button> #}
-    {#            </div> #}
-
-
-    {#            <div class="col-3 d-grid"> #}
-    {#            </div> #}
-
-    {#           #}
-    {#        </div> #}
-
-    {#    {% endif %} #}
+    <div class="grid grid-cols-1 gap-2" {{ stimulus_target('validation--index', 'action') }}></div>
 </div>

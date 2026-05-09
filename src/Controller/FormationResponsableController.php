@@ -14,6 +14,7 @@ use App\Exception\FileUploadException;
 use App\Form\ChangeRfFormationType;
 use App\Repository\ChangeRfRepository;
 use App\Repository\ComposanteRepository;
+use App\Service\DataTableBuilder;
 use App\Service\SecureUploadService;
 use App\Utils\TurboStreamResponseFactory;
 use DateTime;
@@ -76,16 +77,6 @@ class FormationResponsableController extends BaseController
 
             if (count($exist) !== 0) {
                 return JsonReponse::error('Une demande de changement de responsable de formation existe déjà pour ce (co-)responsable, cette formation et ce type de (co-)responsable.');
-                // Message de toast
-                $toastMessage = 'UE créée avec succès';
-
-                return $turboStream->stream('parcours_v2/turbo/add_ue_success.stream.html.twig', [
-                    'parcours' => $parcours,
-                    'semestreParcours' => $semestreParcours,
-                    'semestre' => $dtoSemestre,
-                    'toastMessage' => $toastMessage,
-                    'newUeId' => $ue->getId(),
-                ]);
             }
 
             $newRf = new \App\Entity\ChangeRf();
@@ -111,11 +102,6 @@ class FormationResponsableController extends BaseController
                 'toastMessage' => $toastMessage,
             ]);
         }
-
-//        return $this->render('formation_responsable/_index.html.twig', [
-//            'form' => $form->createView(),
-//            'formation' => $formation,
-//        ]);
 
         return $turboStream->streamOpenModalFromTemplates(
             'formation.change_rf.title',
@@ -150,15 +136,74 @@ class FormationResponsableController extends BaseController
 
     #[Route('/formation/change-responsable/liste', name: 'app_formation_responsable_liste')]
     public function listeDemande(
-        ChangeRfRepository $changeRfRepository
+        DataTableBuilder $builder
     ): Response {
+        $campagneCollecte = $this->getCampagneCollecte();
 
-        $demandes = $changeRfRepository->findBy([
-            'etatDemande' => EtatChangeRfEnum::soumis_cfvu,
-        ], ['dateDemande' => 'DESC']);
+        if ($campagneCollecte === null) {
+            $builder->addBaseWhere('1 = 0');
+        } else {
+            $builder
+                ->addBaseWhere('IDENTITY(e.campagneCollecte) = :campagneCollecteId')
+                ->addBaseParameter('campagneCollecteId', $campagneCollecte->getId());
+        }
 
         return $this->render('formation_responsable/liste.html.twig', [
-            'demandes' => $demandes
+            'table' => $builder
+                ->setEntity(\App\Entity\ChangeRf::class)
+                ->setPerPage(20)
+                ->setDefaultSort('dateDemande', 'desc')
+                ->addBaseWhere('JSON_CONTAINS(e.etatDemande, :etatDemande) = 1')
+                ->addBaseParameter('etatDemande', json_encode([EtatChangeRfEnum::soumis_cfvu->value => 1]))
+                ->addColumn('formation.composantePorteuse.libelle', [
+                    'label' => 'Composante',
+                    'sortable' => true,
+                    'filterable' => true,
+                    'searchable' => false,
+                    'sort_expression' => 'composantePorteuse_1.libelle',
+                    'filter_expression' => 'composantePorteuse_1.libelle',
+                ])
+                ->addColumn('formation.id', [
+                    'label' => 'Formation',
+                    'sortable' => false,
+                    'filterable' => false,
+                    'searchable' => false,
+                    'template' => 'formation_responsable/_datatable_formation.html.twig',
+                    'class' => 'min-w-[18rem]',
+                ])
+                ->addColumn('typeRf', [
+                    'label' => 'CO-RF / RF',
+                    'sortable' => true,
+                    'filterable' => true,
+                    'searchable' => false,
+                    'type' => 'select',
+                    'choices' => [
+                        TypeRfEnum::RF->value => 'Responsable',
+                        TypeRfEnum::CORF->value => 'Co-responsable',
+                    ],
+                    'template' => 'formation_responsable/_datatable_type_rf.html.twig',
+                ])
+                ->addColumn('ancienResponsable.display', [
+                    'label' => 'Ancien Co/RF',
+                    'sortable' => false,
+                    'filterable' => false,
+                    'searchable' => false,
+                ])
+                ->addColumn('nouveauResponsable.display', [
+                    'label' => 'Nouveau Co/RF',
+                    'sortable' => false,
+                    'filterable' => false,
+                    'searchable' => false,
+                ])
+                ->addColumn('dateDemande', [
+                    'label' => 'Date demande',
+                    'sortable' => true,
+                    'filterable' => true,
+                    'searchable' => false,
+                    'type' => 'date',
+                    'format' => 'date',
+                ])
+                ->build(),
         ]);
     }
 

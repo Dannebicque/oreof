@@ -11,23 +11,37 @@ namespace App\Classes;
 
 use App\Entity\FicheMatiere;
 use Symfony\Component\DependencyInjection\Attribute\Target;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Workflow\WorkflowInterface;
 
 class ValidationProcessFicheMatiere extends AbstractValidationProcess
 {
+    private readonly OptionsResolver $placeMetaResolver;
+    private readonly OptionsResolver $transitionMetaResolver;
+
     public function __construct(
         #[Target('fiche')]
         protected WorkflowInterface $ficheWorkflow
     )
     {
+        $this->placeMetaResolver = $this->createPlaceMetaResolver();
+        $this->transitionMetaResolver = $this->createTransitionMetaResolver();
+
         $places = $ficheWorkflow->getDefinition()->getPlaces();
         $data = [];
+        $dataAll = [];
         foreach ($places as $place) {
-            $meta = $ficheWorkflow->getMetadataStore()->getPlaceMetadata($place);
-            $this->processAll[$place] = $meta;
+            $meta = $this->normalizePlaceMeta(
+                $ficheWorkflow->getMetadataStore()->getPlaceMetadata($place),
+                $place,
+                $this->placeMetaResolver
+            );
+
             if (array_key_exists('process', $meta) && (bool)$meta['process'] === true) {
                 $data[$place] = $meta;
             }
+
+            $dataAll[$place] = $meta;
         }
 
         $this->transitionsAll = [];
@@ -36,6 +50,7 @@ class ValidationProcessFicheMatiere extends AbstractValidationProcess
             $this->transitionsAll[$trans->getName()] = $trans;
         }
 
+        $this->processAll = $dataAll;
         $this->process = $data;
     }
 
@@ -44,7 +59,11 @@ class ValidationProcessFicheMatiere extends AbstractValidationProcess
         $transitions = $this->ficheWorkflow->getDefinition()->getTransitions();
         foreach ($transitions as $trans) {
             if ($trans->getName() === $transition) {
-                return $this->ficheWorkflow->getMetadataStore()->getTransitionMetadata($trans);
+                return $this->normalizeTransitionMeta(
+                    $this->ficheWorkflow->getMetadataStore()->getTransitionMetadata($trans),
+                    $trans->getName(),
+                    $this->transitionMetaResolver
+                );
             }
         }
 
@@ -64,10 +83,14 @@ class ValidationProcessFicheMatiere extends AbstractValidationProcess
 
         $options = [];
         foreach ($enabled as $trans) {
-            $meta = $this->ficheWorkflow->getMetadataStore()->getTransitionMetadata($trans);
+            $meta = $this->normalizeTransitionMeta(
+                $this->ficheWorkflow->getMetadataStore()->getTransitionMetadata($trans),
+                $trans->getName(),
+                $this->transitionMetaResolver
+            );
             $name = $trans->getName();
             $options[$name] = [
-                'label' => $meta['label'] ?? $name,
+                'label' => $meta['label'],
                 'metadata' => $meta,
             ];
         }

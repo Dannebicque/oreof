@@ -1,164 +1,117 @@
-<div class="card-body">
-    <div class="alert alert-info">
-        {% set nbFiches = fiches|length %}
+<div class="space-y-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-900 sm:p-6">
+    {% set nbFiches = fiches|length %}
+    <div class="rounded-xl border border-cyan-200 bg-cyan-50 px-4 py-3 text-sm text-cyan-900 dark:border-cyan-800 dark:bg-cyan-950/30 dark:text-cyan-100">
         <strong>{{ nbFiches }}</strong> fiche{{ nbFiches > 1 ? 's' : '' }} matière{{ nbFiches > 1 ? 's' : '' }}
         trouvée{{ nbFiches > 1 ? 's' : '' }}.
     </div>
-    <table class="table" {{ stimulus_controller('check_all') }}>
-        <thead>
-        <tr>
-            <th>
-                <div class="checkbox">
-                    <label>
-                        <input type="checkbox" id="check-all" {{ stimulus_action('check_all', 'checkAll') }}>
-                    </label>
-                </div>
-            </th>
-            <th>
-                Fiche matière
-            </th>
-            <th>
-                Composante
-            </th>
-            <th>
-                Mention/spécialité
-            </th>
-            <th>
-                Parcours
-            </th>
-            <th>Etat</th>
-            <th>Remplissage</th>
-            <th></th>
-        </tr>
 
-        </thead>
-        <tbody>
-        {% for fiche in fiches %}
+    <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700" {{ stimulus_controller('check_all') }}>
+        <table class="min-w-full text-left text-sm text-slate-700 dark:text-slate-200">
+            <thead class="bg-slate-50 text-xs font-semibold uppercase tracking-wide text-slate-500 dark:bg-slate-800/70 dark:text-slate-300">
             <tr>
-                <td>
-                    <div class="checkbox">
-                        <label>
+                <th class="w-10 px-4 py-3">
+                    <label class="inline-flex cursor-pointer items-center">
+                        <input type="checkbox" id="check-all"
+                               class="h-4 w-4 rounded border-slate-300 text-cyan-600 focus:ring-cyan-500" {{ stimulus_action('check_all', 'checkAll') }}>
+                        <span class="sr-only">Tout sélectionner</span>
+                    </label>
+                </th>
+                <th class="px-4 py-3">Fiche matière</th>
+                <th class="px-4 py-3">Composante</th>
+                <th class="px-4 py-3">Mention/spécialité</th>
+                <th class="px-4 py-3">Parcours</th>
+                <th class="px-4 py-3">Etat</th>
+                <th class="px-4 py-3">Remplissage</th>
+                <th class="px-4 py-3 text-right"></th>
+            </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200 dark:divide-slate-700">
+            {% for fiche in fiches %}
+                <tr class="align-top hover:bg-slate-50/70 dark:hover:bg-slate-800/40">
+                    <td class="px-4 py-3">
+                        <label class="inline-flex cursor-pointer items-center">
                             <input
                                     {{ stimulus_action('check_all', 'check') }}
                                     type="checkbox"
-                                    class="check-all"
+                                    class="check-all h-4 w-4 rounded border-slate-300 text-cyan-600 focus:ring-cyan-500"
                                     name="fiches[]"
                                     value="{{ fiche.id }}"
                             >
+                            <span class="sr-only">Selectionner la fiche {{ fiche.id }}</span>
                         </label>
-                    </div>
-                </td>
-                <td>
-                    {{ fiche.libelle }}
-                </td>
-
-                {% if
-                    fiche.parcours !=null and
-                    fiche.parcours.formation != null and
-                    fiche.parcours.formation.composantePorteuse != null %}
-                    <td>
-                        {{ fiche.parcours.formation.composantePorteuse.libelle }}
                     </td>
-                    <td>
-                        {{ fiche.parcours.formation.display }}
+                    <td class="px-4 py-3 font-medium text-slate-800 dark:text-slate-100">{{ fiche.libelle }}</td>
+
+                    {% if fiche.parcours != null and fiche.parcours.formation != null and fiche.parcours.formation.composantePorteuse != null %}
+                        <td class="px-4 py-3">{{ fiche.parcours.formation.composantePorteuse.libelle }}</td>
+                        <td class="px-4 py-3">{{ fiche.parcours.formation.display }}</td>
+                        <td class="px-4 py-3">{{ fiche.parcours.libelle }}</td>
+                    {% else %}
+                        <td class="px-4 py-3"><span
+                                    class="inline-flex rounded-full border border-rose-200 bg-rose-50 px-2.5 py-1 text-xs font-semibold text-rose-700 dark:border-rose-700 dark:bg-rose-950/30 dark:text-rose-200">Non définie</span>
+                        </td>
+                        <td class="px-4 py-3"><span
+                                    class="inline-flex rounded-full border border-rose-200 bg-rose-50 px-2.5 py-1 text-xs font-semibold text-rose-700 dark:border-rose-700 dark:bg-rose-950/30 dark:text-rose-200">Non définie</span>
+                        </td>
+                        <td class="px-4 py-3"><span
+                                    class="inline-flex rounded-full border border-rose-200 bg-rose-50 px-2.5 py-1 text-xs font-semibold text-rose-700 dark:border-rose-700 dark:bg-rose-950/30 dark:text-rose-200">Non définie</span>
+                        </td>
+                    {% endif %}
+
+                    <td class="px-4 py-3">{{ fiche.etatFiche|badgeFiche }}</td>
+                    <td class="px-4 py-3">{{ component('remplissage_progress', { value: fiche.remplissage }) }}</td>
+                    <td class="px-4 py-3 text-right">
+                        <twig:Button
+                                label="Voir"
+                                variant="info"
+                                size="sm"
+                                icon="icon:info"
+                                href="{{ path('fiche_matiere_v2_voir',{'slug': fiche.slug}) }}"
+                                target="_blank"
+                                tooltip="Voir la fiche EC/matiere"
+                        />
                     </td>
-                    <td>
-                        {{ fiche.parcours.libelle }}
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="8"
+                        class="px-4 py-6 text-center text-sm font-medium text-slate-500 dark:text-slate-400">
+                        Aucun enregistrement trouvé
                     </td>
-                {% else %}
-                    <td><span class="badge bg-danger">Non définie</span></td>
-                    <td><span class="badge bg-danger">Non définie</span></td>
-                    <td><span class="badge bg-danger">Non définie</span></td>
-                {% endif %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
-
-                <td>
-                    {{ fiche.etatFiche|badgeFiche }}
-                </td>
-                <td>
-                    {{ component('remplissage_progress', { value: fiche.remplissage }) }}
-                </td>
-                <td class="text-end">
-
-                    <a href="{{ path('fiche_matiere_v2_voir',{'slug': fiche.slug}) }}"
-                       class="btn btn-sm text-info"
-                       data-bs-toggle="tooltip"
-                       target="_blank"
-                       data-bs-placement="bottom"
-                       title="Voir la fiche EC/matière"
-                    >
-                        <i class="{{ iconShow }}"></i>
-                        <span> Voir</span>
-                    </a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="8" class="bg-warning">Aucun enregistrement trouvé</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-    <div class="row mt-2">
+    <div class="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-4">
         {% if process.hasValid %}
-            <div class="col-3 d-grid">
-                <button class="btn btn-sm d-block btn-outline-success"
-                        type="button"
-                        data-action="validation--index#valide_fiche"
-                        data-validation--index-url-param="{{ path('app_validation_valide_fiche_lot', {etape:etape}) }}"
-                        data-controller="tooltip"
-                        data-tooltip-placement-value="bottom"
-                        aria-label="{{ ('validation.valider.'~etape)|trans({}, 'process') }}"
-                        data-bs-original-title="{{ ('validation.valider.'~etape)|trans({}, 'process') }}"
-                >
-                    <i class="fal fa-check"></i> {{ ('validation.valider.'~etape)|trans({}, 'process') }}
-                </button>
-            </div>
-        {% else %}
-            <div class="col-3 d-grid">
-            </div>
+            <twig:Button
+                    label="{{ ('validation.valider.'~etape)|trans({}, 'process') }}"
+                    variant="success"
+                    size="sm"
+                    icon="icon:check"
+                    dataAction="click->validation--index#valide_fiche"
+                    extraClass="data-validation--index-url-param='{{ path('app_validation_valide_fiche_lot', {etape:etape}) }}'"
+                    tooltip="{{ ('validation.valider.'~etape)|trans({}, 'process') }}"
+            />
         {% endif %}
 
         {% if process.hasReserve %}
-            <div class="col-3 d-grid">
-                <button
-                        class="btn btn-sm d-block btn-outline-warning"
-                        data-action="validation--index#reserve_fiche"
-                        data-validation--index-url-param="{{ path('app_validation_reserve_fiche_lot', {etape:etape}) }}"
-                        data-controller="tooltip"
-                        data-tooltip-placement-value="bottom"
-                        aria-label="{{ ('validation.reserve.'~etape)|trans({}, 'process') }}"
-                        data-bs-original-title="{{ ('validation.reserve.'~etape)|trans({}, 'process') }}"
-                        type="button">
-                    <i class="fal fa-circle-exclamation-check"></i> {{ ('validation.reserve.'~etape)|trans({}, 'process') }}
-                </button>
-            </div>
-        {% else %}
-            <div class="col-3 d-grid">
-            </div>
+            <twig:Button
+                    label="{{ ('validation.reserve.'~etape)|trans({}, 'process') }}"
+                    variant="warning"
+                    size="sm"
+                    icon="icon:edit"
+                    dataAction="click->validation--index#reserve_fiche"
+                    extraClass="data-validation--index-url-param='{{ path('app_validation_reserve_fiche_lot', {etape:etape}) }}'"
+                    tooltip="{{ ('validation.reserve.'~etape)|trans({}, 'process') }}"
+            />
         {% endif %}
 
-{#        {% if process.hasRefuse %}#}
-{#            <div class="col-3 d-grid">#}
-{#                <button class="btn btn-sm d-block btn-outline-danger"#}
-{#                        type="button"#}
-{#                        data-action="validation--index#refuse_fiche"#}
-{#                        data-validation--index-url-param="{{ path('app_validation_refuse_fiche_lot', {etape:etape}) }}"#}
-{#                        data-controller="tooltip"#}
-{#                        data-tooltip-placement-value="bottom"#}
-{#                        aria-label="{{ ('validation.refuser.'~etape)|trans({}, 'process') }}"#}
-{#                        data-bs-original-title="{{ ('validation.refuser.'~etape)|trans({}, 'process') }}"#}
-{#                >#}
-{#                    <i class="fal fa-ban"></i> {{ ('validation.refuser.'~etape)|trans({}, 'process') }}#}
-{#                </button>#}
-{#            </div>#}
-{#        {% else %}#}
-{#            <div class="col-3 d-grid">#}
-{#            </div>#}
-{#        {% endif %}#}
+        {# ...existing code... #}
     </div>
-    <div class="row mt-2" {{ stimulus_target('validation--index', 'action') }}>
 
-    </div>
+    <div class="grid grid-cols-1 gap-2" {{ stimulus_target('validation--index', 'action') }}></div>
 </div>
 

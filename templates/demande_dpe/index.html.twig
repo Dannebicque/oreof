@@ -5,7 +5,9 @@
 {% endset %}
 
 {% block content %}
-    <div class="card"
+    {# todo: passer sur datatable ? #}
+    <section
+            class="space-y-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-900 sm:p-6"
             {% if composante is defined %}
                 {{ stimulus_controller('crud', {
                     url: path('app_dpe_demande_liste', {
@@ -22,9 +24,24 @@
             {% endif %}
          data-action="base:refreshListe@window->crud#refreshListe"
     >
-        <div class="card-body" {{ stimulus_target('crud', 'liste') }}>
+        <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+            <div class="space-y-1">
+                <h2 class="text-sm font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">
+                    Pilotage des demandes DPE
+                </h2>
+                <p class="max-w-3xl text-sm text-slate-600 dark:text-slate-300">
+                    Consultez les demandes de modifications ouvertes et suivez leur etat de validation.
+                </p>
+            </div>
+
+            <div class="inline-flex items-center rounded-full border border-cyan-200 bg-cyan-50 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-cyan-800 dark:border-cyan-800 dark:bg-cyan-950/30 dark:text-cyan-200">
+                {{ type == 'composante' and composante is defined ? composante.libelle : 'Toutes composantes' }}
+            </div>
         </div>
-    </div>
+
+        <div class="rounded-xl border border-slate-200 bg-slate-50/60 p-3 dark:border-slate-700 dark:bg-slate-950/30 sm:p-4" {{ stimulus_target('crud', 'liste') }}>
+        </div>
+    </section>
 {% endblock %}
 
 {% block breadcrumb %}
@@ -41,15 +58,13 @@
 {% endblock %}
 
 {% block bouton_header %}
-    <a
+    <twig:Button
             href="{{ path('app_demande_dpe_export', {type:type, composante: composante is defined ? composante.id:0}) }}"
-            class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2"
-            data-bs-toggle="tooltip"
-            data-bs-placement="bottom"
-            title="Exporter les demandes DPE"
-    >
-        <i class="{{ iconDownload }}"></i>
-        <span> Exporter</span>
-    </a>
+            variant="info"
+            size="sm"
+            icon="icon:download"
+            label="Exporter"
+            tooltip="Exporter les demandes DPE"
+    />
 {% endblock %}
 
