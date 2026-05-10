@@ -29,35 +29,52 @@
 
     <span class="text-indigo-600 font-black whitespace-nowrap">
         {% if ue.ue.natureUeEc is defined and ue.ue.natureUeEc != null and ue.ue.natureUeEc.libre == true %}
-            <span class="badge bg-secondary">
-            UE à choix libre</span>
+            <twig:Badge label="UE a choix libre" variant="secondary"/>
         {% endif %}
         {% if ue.uesEnfants|length > 0 %}
-            <span class="badge bg-primary">UE à choix restreint : {{ ue.uesEnfants|length }} choix possibles</span>
+            <twig:Badge label="UE a choix restreint : {{ ue.uesEnfants|length }} choix possibles" variant="info"/>
         {% endif %}
     </span>
 </div>
 
-<table class="w-full text-xs">
-    {% if ue.ue.natureUeEc is defined and ue.ue.natureUeEc != null and ue.ue.natureUeEc.libre == true %}
-    {% if presentiel %}
-        {% set colspan = 4 %}
-    {% elseif distanciel %}
-        {% set colspan=8 %}
-    {% endif %}
-    <tr class="ec">
-        <td colspan="{{ colspan+5 }}">
-            {{ ue.ue.descriptionUeLibre }}
-        </td>
-    </tr>
-    {% else %}
-    {% if ue.uesEnfants|length == 0 %}
+{% if ue.ue.natureUeEc is defined and ue.ue.natureUeEc != null and ue.ue.natureUeEc.libre == true %}
+
+    {# ---- Cas 1 : UE à choix libre ---- #}
+    {% if presentiel %}{% set colspan = 4 %}{% elseif distanciel %}{% set colspan = 8 %}{% else %}{% set colspan = 0 %}{% endif %}
+    <table class="w-full text-xs">
+        <tbody>
+        <tr class="ec">
+            <td colspan="{{ colspan + 5 }}">{{ ue.ue.descriptionUeLibre }}</td>
+        </tr>
+        </tbody>
+        <tfoot class="text-[10px] font-black uppercase tracking-tighter text-slate-600 bg-slate-50/30 border-b border-slate-100 text-center">
+        {% include 'typeDiplome/licence/structure/v2/_structure_ue_tfoot.html.twig' %}
+        </tfoot>
+    </table>
+
+{% elseif ue.uesEnfants|length > 0 %}
+
+    {# ---- Cas 2 : UE à choix restreint — les sous-UEs sont des blocs autonomes ---- #}
+    {% for ueE in ue.uesEnfants %}
+        {{ include('typeDiplome/licence/structure/v2/_structure_ue.html.twig', {ue: ueE, enfant: true, diffUe: diffUe.uesEnfants[loop.index0] ?? null}) }}
+    {% endfor %}
+
+    {# Total de l'UE parente dans son propre tableau (hors des sous-tables) #}
+    <table class="w-full text-xs">
+        <tfoot class="text-[10px] font-black uppercase tracking-tighter text-slate-600 bg-slate-50/30 border-b border-slate-100 text-center">
+        {% include 'typeDiplome/licence/structure/v2/_structure_ue_tfoot.html.twig' %}
+        </tfoot>
+    </table>
+
+{% else %}
+
+    {# ---- Cas 3 : UE normale avec ECs ---- #}
+    <table class="w-full text-xs">
         <thead class="text-[10px] font-black uppercase tracking-tighter text-slate-400 bg-slate-50/30 border-b border-slate-100 text-center">
         <tr class="ec">
             <th class="px-5 py-3 text-left w-2/5 font-bold">Fiche EC/Matière</th>
             <th class="py-3">MCCC</th>
             <th class="py-3">ECTS</th>
-
             {% if presentiel %}
                 <th class="w-14 py-3 bg-blue-50/30 text-blue-500">CM</th>
                 <th class="w-14 py-3 bg-blue-50/30 text-blue-500">TD</th>
@@ -65,110 +82,47 @@
                 <th class="w-14 py-3 bg-blue-50/30 text-blue-500">Total Prés.</th>
                 <th class="w-14 py-3 bg-blue-50/30 text-blue-500 border-r border-slate-100">TE</th>
             {% endif %}
-
             {% if distanciel %}
                 <th class="w-14 py-3 bg-orange-50/30 text-orange-400">CM</th>
                 <th class="w-14 py-3 bg-orange-50/30 text-orange-400">TD</th>
                 <th class="w-14 py-3 bg-orange-50/30 text-orange-400">TP</th>
                 <th class="w-14 py-3 bg-orange-50/30 text-orange-400 border-r border-slate-100">Total Dis.</th>
             {% endif %}
-
-            {% if parcours.modalitesEnseignement != null and (parcours.modalitesEnseignement.value == 1) %}
+            {% if parcours.modalitesEnseignement != null and parcours.modalitesEnseignement.value == 1 %}
                 <th class="px-5 py-3 text-right text-slate-900">Total</th>
             {% endif %}
         </tr>
         </thead>
-    {% endif %}
-    <tbody class="divide-y divide-slate-100">
-
-    {% for ordEc, ec in ue.elementConstitutifs %}
-        {% set indexEc = loop.index0 %}
-        {{ include('typeDiplome/licence/structure/v2/_structure_ec.html.twig', {
-            ec:ec,
-            semestreOrdre:semestreOrdre,
-            ecEnfant:false,
-            diffEc: diffUe.elementConstitutifs[ordEc] ?? null,
-            indexEc: indexEc,
-            indexEcEnfant: -1,
-            UeDisplay: ue.display
-        }) }}
-        {% for ordEce, ece in ec.elementsConstitutifsEnfants %}
-            {% set indexEcEnfant = loop.index0 %}
+        <tbody class="divide-y divide-slate-100">
+        {% for ordEc, ec in ue.elementConstitutifs %}
+            {% set indexEc = loop.index0 %}
             {{ include('typeDiplome/licence/structure/v2/_structure_ec.html.twig', {
-                ec:ece,
-                semestreOrdre:semestreOrdre,
-                ecEnfant:true,
-                diffEc: diffUe.elementConstitutifs[ordEc].ecEnfants[ordEce] ?? null,
+                ec: ec,
+                semestreOrdre: semestreOrdre,
+                ecEnfant: false,
+                diffEc: diffUe.elementConstitutifs[ordEc] ?? null,
                 indexEc: indexEc,
-                indexEcEnfant: indexEcEnfant,
+                indexEcEnfant: -1,
                 UeDisplay: ue.display
             }) }}
+            {% for ordEce, ece in ec.elementsConstitutifsEnfants %}
+                {% set indexEcEnfant = loop.index0 %}
+                {{ include('typeDiplome/licence/structure/v2/_structure_ec.html.twig', {
+                    ec: ece,
+                    semestreOrdre: semestreOrdre,
+                    ecEnfant: true,
+                    diffEc: diffUe.elementConstitutifs[ordEc].ecEnfants[ordEce] ?? null,
+                    indexEc: indexEc,
+                    indexEcEnfant: indexEcEnfant,
+                    UeDisplay: ue.display
+                }) }}
+            {% endfor %}
         {% endfor %}
-    {% endfor %}
-    {% endif %}
+        </tbody>
+        <tfoot class="text-[10px] font-black uppercase tracking-tighter text-slate-600 bg-slate-50/30 border-b border-slate-100 text-center">
+        {% include 'typeDiplome/licence/structure/v2/_structure_ue_tfoot.html.twig' %}
+        </tfoot>
+    </table>
 
-    {% for ueE in ue.uesEnfants %}
-        {{ include('typeDiplome/licence/structure/v2/_structure_ue.html.twig', {ue:ueE, enfant: true}) }}
-    {% endfor %}
+{% endif %}
 
-    </tbody>
-    <tfoot class="text-[10px] font-black uppercase tracking-tighter text-slate-600 bg-slate-50/30 border-b border-slate-100 text-center">
-    <tr>
-        <th class="text-end" colspan="2">
-            Total {{ ue.display }} {% if enfant == false and ue.ue.ueEnfants|length > 0 %}(Total max.){% endif %}</th>
-
-        <th>
-            <span class="show_versioning d-none d-print-none">{{ diffUe ? diffUe.heuresEctsUe.sommeUeEcts|displayDiff : '' }} ECTS</span>
-            <p class="show_current">{{ ue.heuresEctsUe.sommeUeEcts|badgeEcts('primary') }}</p>
-        </th>
-        {% if presentiel %}
-            <th class="text-center bg-blue-50/10 font-bold">
-                <span class="show_versioning d-none d-print-none">{{ diffUe ? diffUe.heuresEctsUe.sommeUeCmPres|displayDiff : '' }} </span>
-                <span class="show_current">{{ ue.heuresEctsUe.sommeUeCmPres|filtreHeures }}</span>
-            </th>
-            <th class="text-center bg-blue-50/10 font-bold">
-                <span class="show_versioning d-none d-print-none">{{ diffUe ? diffUe.heuresEctsUe.sommeUeTdPres|displayDiff : '' }}</span>
-                <span class="show_current">{{ ue.heuresEctsUe.sommeUeTdPres|filtreHeures }}</span>
-            </th>
-            <th class="text-center bg-blue-50/10 font-bold">
-                <span class="show_versioning d-none d-print-none">{{ diffUe ? diffUe.heuresEctsUe.sommeUeTpPres|displayDiff : '' }}</span>
-                <span class="show_current">{{ ue.heuresEctsUe.sommeUeTpPres|filtreHeures }}</span>
-            </th>
-            <th class="text-center bg-blue-50/10 font-bold">
-                <span class="show_versioning d-none d-print-none">{{ diffUe ? diffUe.heuresEctsUe.sommeUeTotalPres|displayDiff : '' }}</span>
-                <span class="show_current">{{ ue.heuresEctsUe.sommeUeTotalPres|filtreHeures }}</span>
-            </th>
-            <th class="text-center bg-blue-50/10 empty-cell border-r border-slate-100">
-                <span class="show_versioning d-none d-print-none">{{ diffUe ? diffUe.heuresEctsUe.sommeUeTePres|displayDiff : '' }}</span>
-                <span class="show_current">{{ ue.heuresEctsUe.sommeUeTePres|filtreHeures }}</span>
-            </th>
-        {% endif %}
-
-        {% if distanciel %}
-            <th class="text-center bg-orange-50/10 font-bold text-orange-600">
-                <span class="show_versioning d-none d-print-none">{{ diffUe ? diffUe.heuresEctsUe.sommeUeCmDist|displayDiff : '' }}</span>
-                <span class="show_current">{{ ue.heuresEctsUe.sommeUeCmDist|filtreHeures }}</span>
-            </th>
-            <th class="text-center bg-orange-50/10 font-bold text-orange-600">
-                <span class="show_versioning d-none d-print-none">{{ diffUe ? diffUe.heuresEctsUe.sommeUeTdDist|displayDiff : '' }}</span>
-                <span class="show_current">{{ ue.heuresEctsUe.sommeUeTdDist|filtreHeures }}</span>
-            </th>
-            <th class="text-center bg-orange-50/10 font-bold text-orange-600">
-                <span class="show_versioning d-none d-print-none">{{ diffUe ? diffUe.heuresEctsUe.sommeUeTpDist|displayDiff : '' }}</span>
-                <span class="show_current">{{ ue.heuresEctsUe.sommeUeTpDist|filtreHeures }}</span>
-            </th>
-            <th class="text-center bg-orange-50/10 empty-cell border-r border-slate-100">
-                <span class="show_versioning d-none d-print-none">{{ diffUe ? diffUe.heuresEctsUe.sommeUeTotalDist|displayDiff : '' }}</span>
-                <span class="show_current">{{ ue.heuresEctsUe.sommeUeTotalDist|filtreHeures }}</span>
-            </th>
-        {% endif %}
-
-        {% if parcours.modalitesEnseignement != null and (parcours.modalitesEnseignement.value == 1) %}
-            <th class="px-5 py-4 text-right font-black">
-                <span class="show_versioning d-none d-print-none">{{ diffUe ? diffUe.heuresEctsUe.sommeUeTotalPresDist|displayDiff : '' }}</span>
-                <span class="show_current">{{ ue.heuresEctsUe.sommeUeTotalPresDist|filtreHeures }}</span>
-            </th>
-        {% endif %}
-    </tr>
-    </tfoot>
-</table>

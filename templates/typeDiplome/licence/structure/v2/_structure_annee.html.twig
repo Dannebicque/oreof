@@ -1,6 +1,6 @@
-<section id="L1" class="mb-24">
+<section id="annee{{ annee.annee.ordre }}" class="mb-24">
     <div class="sticky-year bg-slate-50/95 backdrop-blur-sm py-4 border-b border-slate-200 mb-8 flex items-center justify-between">
-        <h2 class="text-xl font-black text-slate-800 uppercase tracking-tighter">Licence 1</h2>
+        <h2 class="text-xl font-black text-slate-800 uppercase tracking-tighter">{{ typeDiplome.libelleCourt }} {{ annee.annee.ordre }}</h2>
         <div class="flex gap-4">
             <div class="flex items-center gap-2 px-3 py-1 bg-blue-50 border border-blue-100 rounded-md">
                 <div class="w-2 h-2 bg-blue-500 rounded-full"></div>
@@ -12,7 +12,7 @@
             </div>
         </div>
     </div>
-    {% for ordre, semestre in dto.semestres|filter(semestre => (semestre.semestre.nonDispense == false)) %}
+    {% for ordre, semestre in annee.semestres|filter(semestre => (semestre.semestre.nonDispense == false)) %}
         {% set diffSemestre = diffStructure is defined and diffStructure != null ? diffStructure.semestres[ordre] : null %}
         {{ include('typeDiplome/licence/structure/v2/_structure_semestre.html.twig') }}
     {% endfor %}

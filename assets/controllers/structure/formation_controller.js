@@ -31,35 +31,54 @@ export default class extends Controller {
   }
 
   async afficherParcours(event) {
+    event.preventDefault()
     const idFormation = event.params.formation
-    const button = event.currentTarget || event.target
-    const iconElement = button.querySelector('i')
+    const isOpen = document.getElementById(`parcours_${idFormation}`) !== null
 
-    if (!iconElement) {
-      return
-    }
-
-    const icone = iconElement.classList
-
-    if (icone.contains('fa-caret-right')) {
+    if (!isOpen) {
       const zone = document.getElementById(`detailParcours_${idFormation}`)
-
-      icone.remove('fa-caret-right')
-      icone.add('fa-caret-down')
+      if (!zone) {
+        return
+      }
 
       zone.innerHTML = window.da.loaderStimulus
       const response = await fetch(`${this.urlValue}?formation=${idFormation}`)
       zone.innerHTML = await response.text()
       const clone = document.importNode(zone.content, true)
       zone.replaceWith(clone)
-    } else {
-      const zone = document.getElementById(`parcours_${idFormation}`)
-      icone.remove('fa-caret-down')
-      icone.add('fa-caret-right')
-      zone.innerHTML = ''
-      const template = document.createElement('template')
-      template.setAttribute('id', `detailParcours_${idFormation}`)
-      zone.replaceWith(template)
+      this._updateToggleState(idFormation, true)
+      return
     }
+
+    const zone = document.getElementById(`parcours_${idFormation}`)
+    if (!zone) {
+      return
+    }
+
+    zone.innerHTML = ''
+    const template = document.createElement('template')
+    template.setAttribute('id', `detailParcours_${idFormation}`)
+    zone.replaceWith(template)
+    this._updateToggleState(idFormation, false)
+  }
+
+  _updateToggleState (idFormation, isOpen) {
+    const toggles = document.querySelectorAll(`[data-formation-toggle-id="${idFormation}"]`)
+
+    toggles.forEach((toggle) => {
+      toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false')
+
+      const label = toggle.querySelector('[data-formation-toggle-label]')
+      if (label) {
+        const openLabel = toggle.dataset.openLabel || 'Masquer les parcours'
+        const closedLabel = toggle.dataset.closedLabel || 'Voir les parcours'
+        label.textContent = isOpen ? openLabel : closedLabel
+      }
+
+      const iconWrappers = toggle.querySelectorAll('[data-formation-toggle-icon]')
+      iconWrappers.forEach((iconWrapper) => {
+        iconWrapper.classList.toggle('rotate-90', isOpen)
+      })
+    })
   }
 }

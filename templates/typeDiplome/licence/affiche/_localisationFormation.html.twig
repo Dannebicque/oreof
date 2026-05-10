@@ -1,10 +1,12 @@
-<div class="row">
-    <div class="col-6">
-        <dl>
-            <dt>Localisation(s) de la mention/spécialité</dt>
-            <dd>
-                {% for ville in formation.localisationMention %}{{ ville.libelle }}{% if not loop.last %}, {% endif %}{% endfor %}
-            </dd>
+<div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+    <div>
+        <dl class="space-y-4">
+            <div>
+                <dt class="text-[10px] font-black uppercase tracking-widest text-indigo-400">Localisation(s) de la
+                    mention/specialite
+                </dt>
+                <dd class="mt-1 text-sm text-slate-700 dark:text-slate-200">{% for ville in formation.localisationMention %}{{ ville.libelle }}{% if not loop.last %}, {% endif %}{% endfor %}</dd>
+            </div>
             {% if stringDifferencesFormation.localisationMention is defined %}
                 {{ include('communs/_comparaison_versioning_no_button.html.twig',
                     {
@@ -13,49 +15,55 @@
                     }
                 ) }}
             {% endif %}
-            <dt>Régime(s) d'inscription</dt>
-            <dd>
-                <ul>
-                    {% for regime in formation.regimeInscription %}
-                        <li>{{ regime.value }}</li>
-                    {% endfor %}
-                </ul>
-                {{ formation.regimeInscriptionTexte }}
-                {% if stringDifferencesFormation.regimeInscriptionFormation is defined %}
-                    {{ include("communs/_comparaison_versioning_no_button.html.twig", {
-                        textDifferences: stringDifferencesFormation.regimeInscriptionFormation,
-                        idCollapse: 'diffGlobalParcours'
-                    }) }}
-                {% endif %}
-            </dd>
-            <dt>Modalités de l'alternance</dt>
-            <dd>
-                {{ formation.modalitesAlternance|raw }}
-            </dd>
+            <div>
+                <dt class="text-[10px] font-black uppercase tracking-widest text-indigo-400">Regime(s) d'inscription
+                </dt>
+                <dd class="mt-1 text-sm text-slate-700 dark:text-slate-200">
+                    <ul class="list-disc pl-5">
+                        {% for regime in formation.regimeInscription %}
+                            <li>{{ regime.value }}</li>
+                        {% endfor %}
+                    </ul>
+                    {{ formation.regimeInscriptionTexte }}
+                    {% if stringDifferencesFormation.regimeInscriptionFormation is defined %}
+                        {{ include('communs/_comparaison_versioning_no_button.html.twig', {
+                            textDifferences: stringDifferencesFormation.regimeInscriptionFormation,
+                            idCollapse: 'diffGlobalParcours'
+                        }) }}
+                    {% endif %}
+                </dd>
+            </div>
+            <div>
+                <dt class="text-[10px] font-black uppercase tracking-widest text-indigo-400">Modalites de l'alternance
+                </dt>
+                <dd class="mt-1 text-sm text-slate-700 dark:text-slate-200">{{ formation.modalitesAlternance|raw }}</dd>
+            </div>
         </dl>
     </div>
-    <div class="col-6">
-        <strong>Composante(s) d'inscription</strong>
+
+    <div>
+        <p class="text-[10px] font-black uppercase tracking-widest text-indigo-400">Composante(s) d'inscription</p>
         {% if stringDifferencesFormation.composanteInscriptionFormation is defined %}
             {{ include("communs/_comparaison_versioning_no_button.html.twig", {
                 textDifferences: stringDifferencesFormation.composanteInscriptionFormation,
                 idCollapse: 'diffGlobalParcours'
             }) }}
         {% endif %}
-        {% for composante in formation.composantesInscription %}
-            <dl>
-                <dt>Composante</dt>
-                <dd>{{ composante.libelle }}</dd>
-                <dt>Adresse</dt>
-                <dd>{{ composante.adresse != null ? composante.adresse.display|raw : 'Erreur' }}</dd>
-                <dt>Téléphone</dt>
-                <dd>{{ composante.telStandard|tel_format }} {% if composante.telComplementaire != null %}ou {{ composante
-                    .telComplementaire|tel_format }}{% endif %}</dd>
-                <dt>Email</dt>
-                <dd>{{ composante.mailContact|mailto }}</dd>
-                <dt>Site web</dt>
-                <dd>{{ composante.urlSite|open_url }}</dd>
-            </dl>
-        {% endfor %}
+        <div class="mt-3 space-y-4">
+            {% for composante in formation.composantesInscription %}
+                <article
+                        class="rounded-xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-900">
+                    <p class="text-sm font-semibold text-slate-800 dark:text-slate-100">{{ composante.libelle }}</p>
+                    <div class="mt-2 space-y-1 text-sm text-slate-600 dark:text-slate-300">
+                        <p>{{ composante.adresse != null ? composante.adresse.display|raw : 'Erreur' }}</p>
+                        <p>{{ composante.telStandard|tel_format }} {% if composante.telComplementaire != null %}ou {{ composante.telComplementaire|tel_format }}{% endif %}</p>
+                        <p>{{ composante.mailContact|mailto }}</p>
+                        <p>{{ composante.urlSite|open_url }}</p>
+                    </div>
+                </article>
+            {% else %}
+                <p class="text-sm text-slate-500 dark:text-slate-400">Aucune composante d'inscription renseignee.</p>
+            {% endfor %}
+        </div>
     </div>
 </div>

@@ -18,6 +18,10 @@
             type="button"
             class="inline-flex items-center justify-center w-9 h-9 p-2 rounded-xl bg-white text-slate-700 border border-slate-100 shadow-sm hover:shadow-md transition z-10"
     >
-        <i class="fal {% if this.hasComments %}fa-comment-lines{% else %}fa-comment{% endif %}"></i>
+        {% if this.hasComments %}
+            <twig:UX:Icon name="mdi:comment" class="text-indigo-500"/>
+        {% else %}
+            <twig:UX:Icon name="mdi:comment-outline" class="text-slate-400"/>
+        {% endif %}
     </button>
 </div>

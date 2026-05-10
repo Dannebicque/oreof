@@ -145,10 +145,15 @@ class AppExtension extends AbstractExtension
     public function displaySort(string $field, ?string $sort, ?string $direction): ?string
     {
         if ($field === $sort) {
-            return '<i class="fal fa-caret-' . ($direction === 'asc' ? 'up' : 'down') . ' fa-lg"></i>';
+            if ($direction === 'asc') {
+                return '<twig:UX:Icon name="icon:sort-up" class="h-4 w-4" />';
+            }
+            if ($direction === 'desc') {
+                return '<twig:UX:Icon name="icon:sort-down" class="h-4 w-4" />';
+            }
         }
 
-        return '<i class="fal fa-sort fa-lg"></i>';
+        return '<twig:UX:Icon name="icon:sort" class="h-4 w-4" />';
     }
 
     public function url(string $url): string

@@ -28,6 +28,7 @@ ux_icons:
     icon:chevrons-left: 'ph:caret-double-left-light'
     icon:chevron-down: 'ph:caret-down-light'
     icon:chevron-up: 'ph:caret-up-light'
+    icon:ellipsis-vertical: 'ph:dots-three-vertical-light'
 
     # Actions
     icon:save: 'ph:floppy-disk-light'
@@ -78,6 +79,11 @@ ux_icons:
     # Marques
     icon:github: 'simple-icons:github'
     icon:twitter: 'simple-icons:twitter'
+
+    # tris
+    icon:sort: 'ph:arrows-up-down-bold'
+    icon:sort-up: 'ph:arrow-up-bold'
+    icon:sort-down: 'ph:arrow-down-bold'
 
 when@prod:
   ux_icons:

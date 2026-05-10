@@ -1,51 +1,59 @@
 {# todo: par parcours uniquement ? #}
-<div class="row">
-    <div class="col-6">
-        <dl>
-            <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Localisation(s) de la mention/spécialité
-            </dt>
-            <dd>
-                {% for ville in formation.localisationMention %}{{ ville.libelle }}{% if not loop.last %}, {% endif %}{% endfor %}
-            </dd>
-            <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Régime(s) d'inscription</dt>
-            <dd>
-                {% if formation.hasParcours %}
-                    {% for regime in parcours.regimeInscription %}
-                        <span class="px-2 py-1 bg-indigo-50 rounded-lg text-xs font-bold text-indigo-600 mt-1">{{ regime.value }}</span>
-                    {% endfor %}
-                {% else %}
-                    {{ formation.regimeInscriptionTexte|raw }}
-                {% endif %}
-            </dd>
-            <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Modalités de l'alternance</dt>
-            <dd>
-                {% if formation.hasParcours %}
-                    {{ parcours.modalitesAlternance|raw }}
-                {% else %}
-                    {{ formation.modalitesAlternance|raw }}
-                {% endif %}
+<div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+    <div>
+        <dl class="space-y-4">
+            <div>
+                <dt class="text-[10px] font-black uppercase tracking-widest text-indigo-400">Localisation(s) de la
+                    mention/specialite
+                </dt>
+                <dd class="mt-1 text-sm text-slate-700 dark:text-slate-200">{% for ville in formation.localisationMention %}{{ ville.libelle }}{% if not loop.last %}, {% endif %}{% endfor %}</dd>
+            </div>
 
-            </dd>
+            <div>
+                <dt class="text-[10px] font-black uppercase tracking-widest text-indigo-400">Regime(s) d'inscription
+                </dt>
+                <dd class="mt-1 text-sm text-slate-700 dark:text-slate-200">
+                    {% if formation.hasParcours %}
+                        <div class="flex flex-wrap gap-2">
+                            {% for regime in parcours.regimeInscription %}
+                                <span class="rounded-lg bg-indigo-50 px-2 py-1 text-xs font-bold text-indigo-600">{{ regime.value }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ formation.regimeInscriptionTexte|raw }}
+                    {% endif %}
+                </dd>
+            </div>
+
+            <div>
+                <dt class="text-[10px] font-black uppercase tracking-widest text-indigo-400">Modalites de l'alternance
+                </dt>
+                <dd class="mt-1 text-sm text-slate-700 dark:text-slate-200">
+                    {% if formation.hasParcours %}
+                        {{ parcours.modalitesAlternance|raw }}
+                    {% else %}
+                        {{ formation.modalitesAlternance|raw }}
+                    {% endif %}
+                </dd>
+            </div>
         </dl>
     </div>
-    <div class="col-6">
+
+    <div class="space-y-4">
         {% for composante in formation.composantesInscription %}
-            <dl>
-                <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Composante d'inscription</dt>
-                <dd>
-                    <div class="not-prose bg-white border-l-4 border-indigo-500 p-8 rounded-r-sm shadow-sm mb-5 mt-3">
-                        <p class="text-slate-600 leading-relaxed font-medium">
-                            {{ composante.libelle }}<br>
-                            {{ composante.adresse != null ? composante.adresse.display|raw :
-                            'Erreur' }}<br>
-                            {{ composante.telStandard|tel_format }} {% if composante.telComplementaire != null %}ou {{ composante
-                            .telComplementaire|tel_format }}{% endif %}<br>
-                            {{ composante.mailContact|mailto }}<br>
-                            {{ composante.urlSite|open_url }}<br>
-                        </p>
-                    </div>
-                </dd>
-            </dl>
+            <article
+                    class="rounded-xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-900">
+                <p class="text-[10px] font-black uppercase tracking-widest text-indigo-400">Composante d'inscription</p>
+                <p class="mt-2 text-sm font-semibold text-slate-800 dark:text-slate-100">{{ composante.libelle }}</p>
+                <div class="mt-2 space-y-1 text-sm text-slate-600 dark:text-slate-300">
+                    <p>{{ composante.adresse != null ? composante.adresse.display|raw : 'Erreur' }}</p>
+                    <p>{{ composante.telStandard|tel_format }} {% if composante.telComplementaire != null %}ou {{ composante.telComplementaire|tel_format }}{% endif %}</p>
+                    <p>{{ composante.mailContact|mailto }}</p>
+                    <p>{{ composante.urlSite|open_url }}</p>
+                </div>
+            </article>
+        {% else %}
+            <p class="text-sm text-slate-500 dark:text-slate-400">Aucune composante d'inscription renseignee.</p>
         {% endfor %}
     </div>
 </div>
