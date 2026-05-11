@@ -7,11 +7,21 @@
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h1><i class="fal fa-circle-question"></i> Gestion de la FAQ</h1>
 
-            <a href="{{ path('app_faq_new') }}"
-               class="btn btn-sm btn-outline-primary"
-               data-bs-toggle="tooltip" data-bs-placement="bottom" title="Créer une nouvelle question FAQ">
-                <i class="fal fa-plus"></i> <span>Ajouter une question</span>
-            </a>
+            <div class="d-flex gap-2">
+                <button type="button"
+                        class="btn btn-sm btn-outline-secondary"
+                        data-bs-toggle="modal"
+                        data-bs-target="#helpImagesModal"
+                        onclick="loadImages()"
+                        title="Gérer la galerie d'images pour la FAQ">
+                    <i class="fal fa-images"></i> <span>Galerie d'images</span>
+                </button>
+                <a href="{{ path('app_faq_new') }}"
+                   class="btn btn-sm btn-outline-primary"
+                   data-bs-toggle="tooltip" data-bs-placement="bottom" title="Créer une nouvelle question FAQ">
+                    <i class="fal fa-plus"></i> <span>Ajouter une question</span>
+                </a>
+            </div>
         </div>
 
         {% if faqs|length == 0 %}
@@ -86,6 +96,21 @@
                 </div>
             </div>
         {% endif %}
+    </div>
+
+    <!-- Modal pour la galerie d'images -->
+    <div class="modal fade" id="helpImagesModal" tabindex="-1" aria-labelledby="helpImagesModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="helpImagesModalLabel"><i class="fal fa-images"></i> Galerie d'images</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                </div>
+                <div class="modal-body">
+                    {{ component('help_image_manager', { showModal: false, editorTextarea: '' }) }}
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock %}
 
