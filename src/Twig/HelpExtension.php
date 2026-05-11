@@ -14,6 +14,7 @@ use App\Entity\Help;
 use App\Entity\User;
 use App\Service\HelpGrantService;
 use Doctrine\ORM\EntityManagerInterface;
+use League\CommonMark\CommonMarkConverter;
 use Symfony\Bundle\SecurityBundle\Security;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
@@ -21,12 +22,18 @@ use Twig\TwigFunction;
 
 class HelpExtension extends AbstractExtension
 {
+    private CommonMarkConverter $converter;
+
     public function __construct(
         private EntityManagerInterface $em,
         private Security $security,
         private HelpGrantService $helpGrantService,
     )
     {
+        $this->converter = new CommonMarkConverter([
+            'html_input' => 'strip',
+            'allow_unsafe_links' => false,
+        ]);
     }
 
     public function getFunctions(): array
@@ -38,6 +45,7 @@ class HelpExtension extends AbstractExtension
     {
         return [
             new TwigFilter('parse_embeds', [$this, 'parseEmbeds'], ['is_safe' => ['html']]),
+            new TwigFilter('markdown_to_html', [$this, 'markdownToHtml'], ['is_safe' => ['html']]),
         ];
     }
 
@@ -58,6 +66,11 @@ class HelpExtension extends AbstractExtension
         }
 
         return null;
+    }
+
+    public function markdownToHtml(string $content): string
+    {
+        return $this->converter->convert($content)->getContent();
     }
 
     public function parseEmbeds(string $content): string

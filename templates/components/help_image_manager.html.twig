@@ -160,7 +160,7 @@
     });
 
     function getEditor() {
-        const textareaSelector = '{{ editorTextarea }}';
+        const textareaSelector = '{{ editorTextarea|e('js') }}';
         if (!textareaSelector) {
             return document.querySelector('textarea[name="help[content]"]');
         }
@@ -185,7 +185,7 @@
                     col.className = 'col';
                     col.innerHTML = `
                         <div class="card shadow-sm border-0 bg-light role-button cursor-pointer hoverable-card mb-3 position-relative" style="cursor: pointer;">
-                            <div class="card-body p-2 d-flex align-items-center justify-content-center" style="height: 140px; background-color: #fff; border-radius: 4px 4px 0 0;" onclick="selectImage('${url}', '${img.nom}')">
+                            <div class="card-body p-2 d-flex align-items-center justify-content-center js-select-image" data-image-url="${url}" data-image-name="${String(img.nom).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;')}" style="height: 140px; background-color: #fff; border-radius: 4px 4px 0 0;">
                                 <img src="${url}" alt="${img.nom}" class="img-fluid rounded" style="max-height: 100%; max-width: 100%; object-fit: contain;">
                             </div>
                             <div class="card-footer p-2 text-truncate small bg-white text-center border-top m-0" title="${img.nom}">
@@ -263,20 +263,20 @@
         });
     }
 
+    document.addEventListener('click', function(e) {
+        const target = e.target.closest('.js-select-image');
+        if (!target) return;
+        const url = target.getAttribute('data-image-url');
+        const name = target.getAttribute('data-image-name') || '';
+        if (typeof window.insertSelectedImage === 'function') {
+            window.insertSelectedImage(url, name, '{{ editorTextarea|e('js') }}');
+        }
+    });
+
     function selectImage(url, altName) {
-        const textarea = getEditor();
-        if (!textarea) return;
-
-        const start = textarea.selectionStart;
-        const end = textarea.selectionEnd;
-
-        // Construit la syntaxe markdown
-        const newText = `![${altName}](${url})`;
-        updateTextarea(textarea, start, end, newText, start + newText.length);
-
-        // Ferme la modal en simulant un clic sur le bouton de fermeture
-        const closeBtn = document.querySelector('#imageModal .btn-close');
-        if (closeBtn) closeBtn.click();
+        if (typeof window.insertSelectedImage === 'function') {
+            window.insertSelectedImage(url, altName, '{{ editorTextarea|e('js') }}');
+        }
     }
 
     function deleteImage(e, id) {

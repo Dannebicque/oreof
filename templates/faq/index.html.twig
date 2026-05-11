@@ -1,0 +1,114 @@
+{# templates/faq/index.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block header %}Centre des Questions Fréquemment Posées{% endblock %}
+
+{% block breadcrumb %}
+    <ul class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('app_homepage') }}">Accueil</a></li>
+        <li class="breadcrumb-item active" aria-current="page">FAQ</li>
+    </ul>
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-body">
+                    <div class="mb-4 input-group">
+                        <span class="input-group-text bg-white"><i class="fal fa-search text-muted"></i></span>
+                        <input type="text" id="faqSearch" class="form-control form-control-lg" placeholder="Rechercher une question..." onkeyup="filterFaqs()">
+                    </div>
+
+                    {% if faqs|length == 0 %}
+                        <div class="alert alert-info" role="alert">
+                            <i class="fal fa-info-circle"></i> Aucune question FAQ disponible pour le moment.
+                        </div>
+                    {% else %}
+                        <div class="faqs-container d-flex flex-column" id="faqsList">
+                            {% for faq in faqs %}
+                                <details class="faq-item mb-3 bg-light border rounded" data-question="{{ faq.question|default('')|lower }}" style="transition: all 0.2s ease;">
+                                    <summary class="h5 mb-0 p-3" style="cursor: pointer; list-style: none;">
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <div>
+                                                <i class="fal fa-question-circle text-primary me-2"></i>
+                                                <strong>{{ faq.question }}</strong>
+                                                {% if is_granted('ROLE_ADMIN') %}
+                                                    <a href="{{ path('app_faq_edit', {'id': faq.id}) }}" class="btn btn-sm btn-outline-info ms-2 d-inline-flex align-items-center justify-content-center" onclick="event.stopPropagation();" title="Modifier">
+                                                        <i class="fal fa-edit"></i>
+                                                    </a>
+                                                {% endif %}
+                                            </div>
+                                            <i class="fal fa-chevron-down text-muted chevron-icon"></i>
+                                        </div>
+                                    </summary>
+                                    <div class="p-4 bg-white border-top markdown-body">
+                                        {{ faq.reponse|markdown_to_html|parse_embeds }}
+                                    </div>
+                                </details>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    details > summary::-webkit-details-marker {
+        display: none;
+    }
+
+    details[open] .chevron-icon {
+        transform: rotate(180deg);
+    }
+
+    .markdown-body {
+        font-size: 0.95rem;
+        line-height: 1.6;
+    }
+
+    .markdown-body h1, .markdown-body h2, .markdown-body h3 {
+        margin-top: 1rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .markdown-body ul, .markdown-body ol {
+        padding-left: 1.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .markdown-body code {
+        background-color: #f5f5f5;
+        padding: 0.2em 0.4em;
+        border-radius: 3px;
+        font-family: 'Courier New', monospace;
+    }
+
+    .faq-item {
+        transition: background-color 0.3s ease;
+    }
+
+    .faq-item:hover {
+        background-color: #f8f9fa;
+    }
+</style>
+
+<script>
+    function filterFaqs() {
+        const searchInput = document.getElementById('faqSearch').value.toLowerCase();
+        const faqItems = document.querySelectorAll('.faq-item');
+
+        faqItems.forEach(item => {
+            const question = item.getAttribute('data-question');
+            if (question.includes(searchInput)) {
+                item.style.display = '';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    }
+</script>
+{% endblock %}

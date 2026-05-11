@@ -7,7 +7,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: HelpRepository::class)]
-class Help
+class Help implements CentreRestrictedInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]

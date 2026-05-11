@@ -1,0 +1,99 @@
+{% extends 'base.html.twig' %}
+
+{% block header %}Gestion de la FAQ{% endblock %}
+
+{% block content %}
+    <div class="container-fluid py-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1><i class="fal fa-circle-question"></i> Gestion de la FAQ</h1>
+
+            <a href="{{ path('app_faq_new') }}"
+               class="btn btn-sm btn-outline-primary"
+               data-bs-toggle="tooltip" data-bs-placement="bottom" title="Créer une nouvelle question FAQ">
+                <i class="fal fa-plus"></i> <span>Ajouter une question</span>
+            </a>
+        </div>
+
+        {% if faqs|length == 0 %}
+            <div class="alert alert-info" role="alert">
+                <i class="fal fa-info-circle"></i> Aucune question FAQ pour le moment. 
+                <a href="{{ path('app_faq_new') }}">Créez la première !</a>
+            </div>
+        {% else %}
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-0">
+                    <table class="table table-striped table-hover mb-0">
+                        <thead class="table-dark">
+                        <tr>
+                            <th class="ps-4" style="width: 30px;">Statut</th>
+                            <th style="width: 40%;">Question</th>
+                            <th style="width: 20%;">Centres</th>
+                            <th style="width: 80px;">Ordre</th>
+                            <th class="text-end pe-4" style="width: 150px;">Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for faq in faqs %}
+                            <tr>
+                                <td class="ps-4">
+                                    {% if faq.isActive %}
+                                        <span class="badge bg-success">Actif</span>
+                                    {% else %}
+                                        <span class="badge bg-danger">Inactif</span>
+                                    {% endif %}
+                                </td>
+                                <td class="align-middle"><strong>{{ faq.question }}</strong></td>
+                                <td class="align-middle">
+                                    {% if faq.centresShow|length > 0 %}
+                                        {% for centre in faq.centresShow %}
+                                            {% if centre == 'cg_composante' %}
+                                                <span class="badge bg-quaternary me-1 text-wrap">Composante</span>
+                                            {% elseif centre == 'cg_etablissement' %}
+                                                <span class="badge bg-info me-1 text-wrap">Établissement</span>
+                                            {% elseif centre == 'cg_formation' %}
+                                                <span class="badge bg-success me-1 text-wrap">Formation</span>
+                                            {% elseif centre == 'cg_parcours' %}
+                                                <span class="badge bg-secondary me-1 text-wrap">Parcours</span>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% else %}
+                                        <span class="text-muted"><em>Tous les centres</em></span>
+                                    {% endif %}
+                                </td>
+                                <td class="align-middle">{{ faq.ordre }}</td>
+                                <td class="text-end pe-4">
+                                    <div class="d-flex justify-content-end gap-2">
+                                        <a href="{{ path('app_faq_edit', {'id': faq.id}) }}"
+                                           class="btn btn-sm btn-outline-info"
+                                           data-bs-toggle="tooltip" data-bs-placement="bottom" title="Modifier">
+                                            <i class="fal fa-edit"></i>
+                                        </a>
+
+                                        <form method="post" action="{{ path('app_faq_delete', {'id': faq.id}) }}" style="display: inline;" onsubmit="return confirm('Vraiment supprimer cette question FAQ ?');">
+                                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ faq.id) }}">
+                                            <button type="submit"
+                                                    class="btn btn-sm btn-outline-danger"
+                                                    data-bs-toggle="tooltip" data-bs-placement="bottom" title="Supprimer">
+                                                <i class="fal fa-trash-alt"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block breadcrumb %}
+    {{ include('communs/_breadcrumb.html.twig', {liens:[
+        {
+            href:'',
+            title: 'Administration',
+        }
+    ]}) }}
+{% endblock %}

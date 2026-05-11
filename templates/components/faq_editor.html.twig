@@ -3,10 +3,9 @@
         <!-- Zone d'édition (Formulaire) -->
         <div class="col-md-6 border-end pe-4">
 
-            {{ form_start(form, { attr: { 'data-model': '*' } }) }}
+            {{ form_start(form) }}
 
-            {{ form_row(form.title) }}
-            {{ form_row(form.routeSlug) }}
+            {{ form_row(form.question) }}
             <div class="mb-3">
                 {{ form_label(form.centresShow) }}
                 <div class="row g-2 mt-1">
@@ -23,27 +22,32 @@
                 {{ form_errors(form.centresShow) }}
             </div>
 
-            {# profils selector removed: visibility is now driven by centres only #}
-
             <div class="mb-4 mt-3">
-                {{ form_label(form.content) }}
+                {{ form_label(form.reponse) }}
 
                 <!-- Barre d'outils Markdown -->
                 {{ component('markdown_toolbar') }}
 
                 <!-- Le champ textarea de Symfony -->
-                {{ form_widget(form.content, { attr: { 'class': 'form-control rounded-bottom-only' } }) }}
+                {{ form_widget(form.reponse, { attr: { 'class': 'form-control rounded-bottom-only' } }) }}
             </div>
 
-            <div class="form-check form-switch mb-3">
-                {{ form_widget(form.isActive) }}
-                {{ form_label(form.isActive) }}
+            <div class="row">
+                <div class="col-12">
+                    {{ form_row(form.ordre) }}
+                </div>
+                <div class="col-12">
+                    <div class="form-check form-switch mb-3">
+                        {{ form_widget(form.isActive) }}
+                        {{ form_label(form.isActive) }}
+                    </div>
+                </div>
             </div>
 
             <button type="submit" class="btn btn-success mt-3">
                 <i class="fal fa-save"></i> Enregistrer
             </button>
-            <a href="{{ path('app_help_index') }}" class="btn btn-secondary mt-3">Retour</a>
+            <a href="{{ path('app_faq_index') }}" class="btn btn-secondary mt-3">Retour</a>
             {{ form_end(form) }}
         </div>
 
@@ -52,13 +56,13 @@
             <h5 class="text-info mb-4"><i class="fal fa-eye"></i> Aperçu utilisateur</h5>
 
             <div class="bg-light p-4 rounded shadow-sm">
-                <h3 class="mb-3">{{ form.title.vars.value ?: 'Titre de l\'aide...' }}</h3>
+                <h3 class="mb-3">{{ form.question.vars.value ?: 'Question...' }}</h3>
 
                 <div class="markdown-body text-break">
-                    {% if form.content.vars.value %}
-                        <div id="help-preview">{{ form.content.vars.value|markdown_to_html|parse_embeds }}</div>
+                    {% if form.reponse.vars.value %}
+                        <div id="faq-preview">{{ form.reponse.vars.value|markdown_to_html|parse_embeds }}</div>
                     {% else %}
-                        <div id="help-preview"><p class="text-muted fst-italic">Commencez à rédiger pour voir l'aperçu...</p></div>
+                        <div id="faq-preview"><p class="text-muted fst-italic">Commencez à rédiger pour voir l'aperçu...</p></div>
                     {% endif %}
                 </div>
             </div>

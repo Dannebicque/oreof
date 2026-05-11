@@ -2,14 +2,14 @@
 
 namespace App\Service;
 
-use App\Entity\Help;
+use App\Entity\CentreRestrictedInterface;
 use App\Entity\User;
 
 class HelpGrantService
 {
-    public function isAllowed(Help $help, ?User $user = null): bool
+    public function isAllowed(CentreRestrictedInterface $entity, ?User $user = null): bool
     {
-        $centres = $help->getCentresShow();
+        $centres = $entity->getCentresShow();
         if (!empty($centres)) {
             if (!$user) {
                 return false;

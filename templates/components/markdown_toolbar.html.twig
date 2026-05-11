@@ -1,0 +1,39 @@
+<div class="bg-light border border-bottom-0 rounded-top p-2 d-flex gap-2 flex-wrap">
+    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="editorHistoryUndo()" data-bs-toggle="tooltip" title="Retour arrière">
+        <i class="fal fa-undo"></i>
+    </button>
+    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="editorHistoryRedo()" data-bs-toggle="tooltip" title="Retour avant">
+        <i class="fal fa-redo"></i>
+    </button>
+    <div class="vr mx-1"></div>
+    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="insertMarkdown('**', '**')" data-bs-toggle="tooltip" title="Gras">
+        <i class="fal fa-bold"></i>
+    </button>
+    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="insertMarkdown('*', '*')" data-bs-toggle="tooltip" title="Italique">
+        <i class="fal fa-italic"></i>
+    </button>
+    <div class="vr mx-1"></div>
+    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="insertMarkdown('### ', '')" data-bs-toggle="tooltip" title="Titre">
+        <i class="fal fa-heading"></i>
+    </button>
+    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="insertMarkdown('- ', '')" data-bs-toggle="tooltip" title="Liste à puces">
+        <i class="fal fa-list-ul"></i>
+    </button>
+    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="insertMarkdown('\n\n---\n\n', '')" data-bs-toggle="tooltip" title="Ligne horizontale">
+        <i class="fal fa-minus"></i>
+    </button>
+    <div class="vr mx-1"></div>
+    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="insertLink()" data-bs-toggle="tooltip" title="Insérer un lien">
+        <i class="fal fa-link"></i>
+    </button>
+    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="insertAccordion()" data-bs-toggle="tooltip" title="Créer un sous-menu déroulant (accordéon)">
+        <i class="fal fa-caret-square-down"></i> Menu
+    </button>
+    <div class="vr mx-1"></div>
+    <button type="button" class="btn btn-sm btn-outline-primary" onclick="openImageModal()" data-bs-toggle="tooltip" title="Insérer une image">
+        <i class="fal fa-image"></i> Image
+    </button>
+    <button type="button" class="btn btn-sm btn-outline-danger" onclick="insertVideo()" data-bs-toggle="tooltip" title="Insérer une vidéo YouTube/Vimeo">
+        <i class="fal fa-video"></i> Vidéo
+    </button>
+</div>
