@@ -4,8 +4,10 @@ namespace App\Controller;
 
 use App\Entity\Faq;
 use App\Form\FaqType;
+use App\Repository\FaqRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -26,7 +28,7 @@ class FaqAdminController extends AbstractController
     }
 
     #[Route('/new', name: 'app_faq_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $em): Response
+    public function new(Request $request, EntityManagerInterface $em, FaqRepository $faqRepository): Response
     {
         $faq = new Faq();
         $faq->setIsActive(true);
@@ -35,6 +37,7 @@ class FaqAdminController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $faq->setOrdre($faqRepository->getNextOrdre());
             $em->persist($faq);
             $em->flush();
             $this->addFlash('success', 'FAQ créée avec succès !');
@@ -73,6 +76,33 @@ class FaqAdminController extends AbstractController
             $this->addFlash('success', 'FAQ supprimée.');
         }
         return $this->redirectToRoute('app_faq_index');
+    }
+
+    #[Route('/reorder', name: 'app_faq_reorder', methods: ['POST'])]
+    public function reorder(Request $request, FaqRepository $faqRepository, EntityManagerInterface $em): JsonResponse
+    {
+        if (!$this->isCsrfTokenValid('faq_reorder', (string) $request->request->get('_token'))) {
+            return $this->json(['success' => false, 'message' => 'Token CSRF invalide.'], Response::HTTP_FORBIDDEN);
+        }
+
+        $ids = $request->request->all('ids');
+        if (!is_array($ids) || count($ids) === 0) {
+            return $this->json(['success' => false, 'message' => 'Aucun ordre reçu.'], Response::HTTP_BAD_REQUEST);
+        }
+
+        foreach ($ids as $index => $id) {
+            $faq = $faqRepository->find((int) $id);
+            if ($faq === null) {
+                continue;
+            }
+
+            $faq->setOrdre($index + 1);
+            $faq->setUpdatedAt(new \DateTimeImmutable());
+        }
+
+        $em->flush();
+
+        return $this->json(['success' => true]);
     }
 }
 

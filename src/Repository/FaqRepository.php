@@ -52,4 +52,17 @@ class FaqRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    /**
+     * Retourne le prochain ordre pour placer une FAQ en fin de liste.
+     */
+    public function getNextOrdre(): int
+    {
+        $maxOrdre = $this->createQueryBuilder('f')
+            ->select('MAX(f.ordre)')
+            ->getQuery()
+            ->getSingleScalarResult();
+
+        return ((int) ($maxOrdre ?? 0)) + 1;
+    }
 }

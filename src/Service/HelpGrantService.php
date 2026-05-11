@@ -9,6 +9,10 @@ class HelpGrantService
 {
     public function isAllowed(CentreRestrictedInterface $entity, ?User $user = null): bool
     {
+        if ($user && in_array('ROLE_ADMIN', $user->getRoles(), true)) {
+            return true;
+        }
+
         $centres = $entity->getCentresShow();
         if (!empty($centres)) {
             if (!$user) {
