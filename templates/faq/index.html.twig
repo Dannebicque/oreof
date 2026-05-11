@@ -16,9 +16,16 @@
         <div class="col-12">
             <div class="card shadow-sm border-0 mb-4">
                 <div class="card-body">
-                    <div class="mb-4 input-group">
-                        <span class="input-group-text bg-white"><i class="fal fa-search text-muted"></i></span>
-                        <input type="text" id="faqSearch" class="form-control form-control-lg" placeholder="Rechercher une question..." onkeyup="filterFaqs()">
+                    <div class="mb-4 d-flex gap-3 align-items-center">
+                        <div class="input-group flex-grow-1">
+                            <span class="input-group-text bg-white"><i class="fal fa-search text-muted"></i></span>
+                            <input type="text" id="faqSearch" class="form-control form-control-lg" placeholder="Rechercher une question..." onkeyup="filterFaqs()">
+                        </div>
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <a href="{{ path('app_faq_index') }}" class="btn btn-outline-secondary text-nowrap" style="min-height: 48px; display: flex; align-items: center;">
+                                <i class="fal fa-cog me-2"></i> Gérer
+                            </a>
+                        {% endif %}
                     </div>
 
                     {% if faqs|length == 0 %}
