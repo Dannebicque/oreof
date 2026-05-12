@@ -308,6 +308,9 @@ class Parcours
     #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: ChangeParcours::class)]
     private Collection $changeParcours;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $isSoftDeleted = null;
+
     public function __construct(?Formation $formation)
     {
         $this->formation = $formation;
@@ -1783,6 +1786,18 @@ class Parcours
                 $changeParcour->setParcours(null);
             }
         }
+
+        return $this;
+    }
+
+    public function isSoftDeleted(): ?bool
+    {
+        return $this->isSoftDeleted;
+    }
+
+    public function setIsSoftDeleted(?bool $isSoftDeleted): static
+    {
+        $this->isSoftDeleted = $isSoftDeleted;
 
         return $this;
     }
