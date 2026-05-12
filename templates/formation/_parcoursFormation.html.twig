@@ -16,7 +16,7 @@
             </thead>
             <tbody>
             {% if formation.hasParcours %}
-                {% for parcours in formation.parcours|filter(parcours => parcours.formation.hasParcours) %}
+                {% for parcours in formation.parcours|filter(parcours => parcours.formation.hasParcours and (not parcours.isSoftDeleted)) %}
                     <tr>
                         <td>{{ parcours.libelle }} {{ parcours.typeParcours|badgeTypeParcours }}</td>
                         <td>{{ parcours.localisation != null ? parcours.localisation.libelle : 'Non défini' }}</td>
@@ -95,6 +95,10 @@
                             {% endif %}
                         </td>
                     </tr>
+                {% else %}
+                    <tr class="bg-warning text-white">
+                        <td colspan="9">Aucun parcours ou parcours par défaut lié à cette formation.</td>
+                    </tr>
                 {% endfor %}
             {% else %}
                 {% if formation.parcours|length == 0 %}
@@ -103,6 +107,7 @@
                     </tr>
                 {% else %}
                     {% set parcours = formation.parcours[0] %}
+                    {% if not (parcours.isSoftDeleted ?? false) %}
                     <tr>
                         <td>{{ formation.display }}</td>
                         <td>{{ formation.localisationMention != null and formation.localisationMention|length >= 1 ? formation.localisationMention[0].libelle : 'Non défini' }}</td>
@@ -179,6 +184,11 @@
                             {% endif %}
                         </td>
                     </tr>
+                    {% else %}
+                        <tr class="bg-warning text-white">
+                            <td colspan="9">Aucun parcours ou parcours par défaut lié à cette formation.</td>
+                        </tr>
+                    {% endif %}
                 {% endif %}
             {% endif %}
             </tbody>
