@@ -1,0 +1,18 @@
+<p class="text-center fw-bold my-3">
+    Voulez-vous vraiment supprimer ce parcours ?
+</p>
+
+<div class="row justify-content-center mt-5">
+    <div class="col-4 me-1 text-center">
+        <a href="{{ path('app_parcours_set_soft_delete', {'parcours': parcours_id}) }}">
+            <button class="btn btn-sm btn-success" type="button">
+                Oui
+            </button>
+        </a>
+    </div>
+    <div class="col-4 ms-1 text-center">
+        <button class="btn btn-sm btn-danger" data-bs-dismiss="modal">
+            Non
+        </button>
+    </div>
+</div>
