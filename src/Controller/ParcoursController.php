@@ -14,6 +14,7 @@ use App\Classes\JsonReponse;
 use App\Classes\ParcoursDupliquer;
 use App\Classes\verif\ParcoursState;
 use App\Entity\CampagneCollecte;
+use App\Entity\Constantes;
 use App\Entity\DpeDemande;
 use App\Entity\DpeParcours;
 use App\Entity\FicheMatiere;
@@ -1053,5 +1054,22 @@ class ParcoursController extends BaseController
         ];
 
         return new JsonResponse($data);
+    }
+
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route('/{parcours}/set/soft-delete', name: 'app_parcours_set_soft_delete')]
+    public function setParcoursAsSoftDeleted(Parcours $parcours, EntityManagerInterface $em) {
+        $parcours->setIsSoftDeleted(true);
+        $em->flush();
+        $this->addFlashBag(Constantes::FLASHBAG_SUCCESS, 'Le parcours a bien été supprimé.');
+        return $this->redirectToRoute('app_homepage');
+    }
+
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route('/{parcours}/soft-delete/confirm', name: 'app_parcours_soft_delete_confirm')]
+    public function confirmSoftDeleteParcours(Parcours $parcours) {
+        return $this->render('parcours/_confirm_soft_delete.html.twig', [
+            'parcours_id' => $parcours->getId()
+        ]);
     }
 }
