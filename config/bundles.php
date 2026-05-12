@@ -22,4 +22,5 @@ return [
     Symfony\Bundle\DebugBundle\DebugBundle::class => ['dev' => true],
     Symfony\Bundle\MercureBundle\MercureBundle::class => ['all' => true],
     Symfony\UX\Icons\UXIconsBundle::class => ['all' => true],
+    Sensiolabs\GotenbergBundle\SensiolabsGotenbergBundle::class => ['all' => true],
 ];
