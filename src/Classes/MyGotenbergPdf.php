@@ -11,13 +11,10 @@ namespace App\Classes;
 
 use App\Entity\Parcours;
 use App\Utils\Tools;
-use Gotenberg\Gotenberg;
-use Gotenberg\Stream;
-use Psr\Http\Client\ClientInterface;
+use Sensiolabs\GotenbergBundle\GotenbergPdfInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Twig\Environment;
 
 class MyGotenbergPdf
 {
@@ -31,8 +28,7 @@ class MyGotenbergPdf
     ];
 
     public function __construct(
-        protected Environment     $twig,
-        protected ClientInterface $client,
+        private readonly GotenbergPdfInterface $gotenberg,
         KernelInterface           $kernel
     ) {
         $this->basePath = $kernel->getProjectDir() . '/public';
@@ -40,30 +36,21 @@ class MyGotenbergPdf
 
     public function render(string $template, array $context = [], string $name = 'fichier', array $options = []): Response
     {
-        $request = $this->calculPdf($template, $context, $name, $options);
-        $reponse = $this->client->sendRequest($request);
+        return $this->buildBuilder($template, $context, $name, $options)
+            ->generate()
+            ->fileName($this->valideName($name))
+            ->stream()
+        ;
 
-        return new Response($reponse->getBody()->getContents(), 200, [
-            'Content-Type' => 'application/pdf',
-            'Content-Disposition' => 'attachment; filename="' . $name . '.pdf"',
-        ]);
     }
 
-    private function calculPdf(string $template, array $context = [], string $name = 'fichier', array $options = []): \Psr\Http\Message\RequestInterface
+    private function buildBuilder(string $template, array $context, string $name, array $options): \Sensiolabs\GotenbergBundle\Builder\Pdf\HtmlPdfBuilder
     {
         $resolver = new OptionsResolver();
         $this->configureOptions($resolver);
         $this->options = $resolver->resolve($options);
-        $html = $this->generateHtml($template, $context);
 
-        if (array_key_exists('parcours', $context) && $context['parcours'] instanceof Parcours) {
-            $parcours = $context['parcours'];
-            //formation + mention + parcours + intitulé parcours
-            $formation = $parcours->getFormation();
-            $title = $formation->getDisplayLong() . '<br> Parcours : ' . $parcours->getDisplay() . '<br>' . $context['titre'];
-        } else {
-            $title = $context['titre'];
-        }
+        $title = $this->resolveTitle($context);
 
         if ($this->options['withTemplate'] === true) {
             if (array_key_exists('composante', $context) && $context['composante'] !== null) {
@@ -71,34 +58,37 @@ class MyGotenbergPdf
             }
         }
 
+        [$width, $height] = $this->paperSizes[$this->options['paperSize']];
 
-        $request = Gotenberg::chromium('http://localhost:3000')
+        $builder = $this->gotenberg->html()
+            ->content($template, array_merge($context, $this->options))
+            ->header('pdf/header.html.twig', $this->getHeader($title, $context))
+            ->footer('pdf/footer.html.twig', $this->getFooter($context))
             ->emulatePrintMediaType()
             ->printBackground()
-            ->assets(
-                Stream::path($this->basePath . '/images/logo_urca.png'),
-                Stream::path($this->basePath . '/build/print.css'),
-            )
-            ->header(Stream::string('header.html', $this->getHeader($title, $context)))
-            ->footer(Stream::string('footer.html', $this->getFooter($context)))
-            ->paperSize($this->paperSizes[$this->options['paperSize']][0], $this->paperSizes[$this->options['paperSize']][1])
+            ->paperSize($width, $height)
             ->margins(1.3, 1.3, 0.8, 0.8)
-            ->outputFilename($name);
+        ;
 
         if ($this->options['landscape']) {
-            $request->landscape();
+            $builder->landscape();
         }
 
-        return $request->html(Stream::string('fichier.html', $html));
+        return $builder;
     }
 
     public function renderAndSave(string $template, string $dir, array $context = [], string $name = 'fichier', array $options = []): string
     {
-        $request = $this->calculPdf($template, $context, $name, $options);
+        $validName = $this->valideName($name);
+        $savePath = $this->basePath . '/' . $dir . $validName;
 
-        $filename = Gotenberg::save($request, $this->basePath . '/' . $dir, $this->client);
+        $this->buildBuilder($template, $context, $name, $options)
+            ->generate()
+            ->fileName($validName)
+            ->saveAs($savePath)
+        ;
 
-        return $filename;
+        return $validName;
     }
 
     private function generateHtml(string $template, array $context = []): string
@@ -129,43 +119,71 @@ class MyGotenbergPdf
         return Tools::FileName($name);
     }
 
-    private function getHeader(string $titre = '', array $context = []): string
+    private function resolveTitle(array $context): string
     {
-        if ($this->options['withTemplate']) {
-            if (array_key_exists('composante', $context) && $context['composante']->getHeaderPlaquette() !== null) {
-                $imageData = file_get_contents($this->options['baseUrl'] . '/images/'.$context['composante']->getHeaderPlaquette());
-            } else {
-                $imageData = file_get_contents($this->options['baseUrl'] . '/images/header.jpg');
-            }
-        } else {
-            $imageData = file_get_contents($this->options['baseUrl'] . '/images/logo_urca.png');
-        }
-        $base64Image = base64_encode($imageData);
+        if (array_key_exists('parcours', $context) && $context['parcours'] instanceof Parcours) {
+            $parcours  = $context['parcours'];
+            $formation = $parcours->getFormation();
 
-        return $this->twig->render('pdf/header.html.twig', [
-            'baseUrl' => $this->options['baseUrl'],
-            'titre' => $titre,
-            'image' => $base64Image,
-            'withTemplate' => $this->options['withTemplate'],
-        ]);
+            if (array_key_exists('titre', $context)) {
+                return $formation->getDisplayLong()
+                    . '<br> Parcours : ' . $parcours->getDisplay()
+                    . '<br>' . $context['titre'];
+            }
+
+            return $formation->getDisplayLong()
+                . '<br> Parcours : ' . $parcours->getDisplay();
+        }
+
+        if (array_key_exists('titre', $context)) {
+            return $context['titre'];
+        }
+
+        return '';
     }
 
-    private function getFooter(array $context = []): string
+    private function getHeader(string $titre = '', array $context = []): array // On récupère une liste des variables, et non plus la page en elle-même
     {
         if ($this->options['withTemplate']) {
-            if (array_key_exists('composante', $context) && $context['composante']->getFooterPlaquette() !== null) {
-                $imageData = file_get_contents($this->options['baseUrl'] . '/images/'.$context['composante']->getFooterPlaquette());
+            if (array_key_exists('composante', $context)
+                && $context['composante'] !== null
+                && $context['composante']->getHeaderPlaquette() !== null
+            ) {
+                $imagePath = $this->basePath . '/images/' . $context['composante']->getHeaderPlaquette();
             } else {
-                $imageData = file_get_contents($this->options['baseUrl'] . '/images/vague_urca.jpg');
+                $imagePath = $this->basePath . '/images/header.jpg';
             }
-
-            $base64Image = base64_encode($imageData);
-            return $this->twig->render('pdf/footer.html.twig', array_merge($this->options, ['image' => $base64Image]));
+        } else {
+            $imagePath = $this->basePath . '/images/logo_urca.png';
         }
 
-        return $this->twig->render(
-            'pdf/footer.html.twig',
-            $this->options,
-        );
+        return [
+            'baseUrl'      => $this->basePath,
+            'titre'        => $titre,
+            'image'        => base64_encode(file_get_contents($imagePath)),
+            'withTemplate' => $this->options['withTemplate'],
+        ];
+
+    }
+
+    private function getFooter(array $context = []): array // On récupère une liste des variables, et non plus la page en elle-même
+    {
+        if ($this->options['withTemplate']) {
+            if (array_key_exists('composante', $context)
+                && $context['composante'] !== null
+                && $context['composante']->getFooterPlaquette() !== null
+            ) {
+                $imagePath = $this->basePath . '/images/' . $context['composante']->getFooterPlaquette();
+            } else {
+                $imagePath = $this->basePath . '/images/vague_urca.jpg';
+            }
+
+            return array_merge($this->options, [
+                'image' => base64_encode(file_get_contents($imagePath)),
+            ]);
+        }
+
+        return $this->options;
+
     }
 }

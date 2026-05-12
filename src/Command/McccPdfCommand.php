@@ -105,30 +105,34 @@ class McccPdfCommand extends Command
                 $dateCfvu = $this->getHistorique->getHistoriqueParcoursLastStep($dpeParcours, 'soumis_cfvu')?->getDate();
 
                 if($typeDiplomeParcours !== "BUT"){
-                    $pdfFull = $this->licenceMccc->exportPdfLicenceMccc(
+                    $pdfFull = $this->licenceMccc->exportAndSavePdfLicenceMccc(
                         anneeUniversitaire: $anneeDpe,
-                        parcours : $parcours,
+                        parcours: $parcours,
+                        dir: __DIR__ . '/../../export/',
                         dateCfvu: $dateCfvu,
                         dateConseil: $dateConseil
                     );
-                    $pdfSimplifie = $this->licenceMccc->exportPdfLicenceMccc(
+                    $pdfSimplifie = $this->licenceMccc->exportAndSavePdfLicenceMccc(
                         anneeUniversitaire: $anneeDpe,
                         parcours: $parcours,
+                        dir: __DIR__ . '/../../export/',
                         dateCfvu: $dateCfvu,
                         dateConseil: $dateConseil,
                         versionFull: false
                     );
                 }
                 elseif($typeDiplomeParcours === "BUT"){
-                    $pdfFull = $this->butMccc->exportPdfbutMccc(
+                    $pdfFull = $this->butMccc->exportAndSavePdfbutMccc(
                         anneeUniversitaire: $anneeDpe,
                         parcours: $parcours,
+                        dir: __DIR__ . '/../../export/',
                         dateCfvu: $dateCfvu,
                         dateConseil: $dateConseil
                     );
-                    $pdfSimplifie = $this->butMccc->exportPdfbutMccc(
+                    $pdfSimplifie = $this->butMccc->exportAndSavePdfbutMccc(
                         anneeUniversitaire: $anneeDpe,
                         parcours: $parcours,
+                        dir: __DIR__ . '/../../export/',
                         dateCfvu: $dateCfvu,
                         dateConseil: $dateConseil,
                         versionFull: false
@@ -220,15 +224,17 @@ class McccPdfCommand extends Command
 
                 $typeDiplome = $parcours->getTypeDiplome()->getLibelleCourt();
                 if($typeDiplome !== "BUT"){
-                    $pdfFull = $this->licenceMccc->exportPdfLicenceMccc(
+                    $pdfFull = $this->licenceMccc->exportAndSavePdfLicenceMccc(
                         anneeUniversitaire: $anneeDpe,
                         parcours: $parcours,
+                        dir: $directoryPath,
                         dateCfvu: $dateCfvu,
                         dateConseil: $dateConseil
                     );
-                    $pdfSimplifie = $this->licenceMccc->exportPdfLicenceMccc(
+                    $pdfSimplifie = $this->licenceMccc->exportAndSavePdfLicenceMccc(
                         anneeUniversitaire: $anneeDpe,
                         parcours: $parcours,
+                        dir: $directoryPath,
                         dateCfvu: $dateCfvu,
                         dateConseil: $dateConseil,
                         versionFull: false
@@ -243,15 +249,17 @@ class McccPdfCommand extends Command
                     );
                 }
                 elseif($typeDiplome === "BUT"){
-                    $pdfFull = $this->butMccc->exportPdfbutMccc(
+                    $pdfFull = $this->butMccc->exportAndSavePdfbutMccc(
                         anneeUniversitaire: $anneeDpe,
                         parcours: $parcours,
+                        dir: $directoryPath,
                         dateCfvu: $dateCfvu,
                         dateConseil: $dateConseil
                     );
-                    $pdfSimplifie = $this->butMccc->exportPdfbutMccc(
+                    $pdfSimplifie = $this->butMccc->exportAndSavePdfbutMccc(
                         anneeUniversitaire: $anneeDpe,
                         parcours: $parcours,
+                        dir: $directoryPath,
                         dateCfvu: $dateCfvu,
                         dateConseil: $dateConseil,
                         versionFull: false
@@ -327,15 +335,17 @@ class McccPdfCommand extends Command
                     // Sauvegarde de la version actuelle en PDF
                     $typeDiplome = $p->getTypeDiplome()->getLibelleCourt();
                     if($typeDiplome === "BUT"){
-                        $pdfFull = $this->butMccc->exportPdfbutMccc(
+                        $pdfFull = $this->butMccc->exportAndSavePdfbutMccc(
                             anneeUniversitaire: $dpe,
                             parcours: $p,
+                            dir: $directoryPath,
                             dateCfvu: $dateCfvu,
                             dateConseil: $dateConseil
                         );
-                        $pdfSimplifie = $this->butMccc->exportPdfbutMccc(
+                        $pdfSimplifie = $this->butMccc->exportAndSavePdfbutMccc(
                             anneeUniversitaire: $dpe,
                             parcours: $p,
+                            dir: $directoryPath,
                             dateCfvu: $dateCfvu,
                             dateConseil: $dateConseil,
                             versionFull: false
@@ -344,15 +354,17 @@ class McccPdfCommand extends Command
                         $this->fs->appendToFile($directoryPath . "/" . $fileNameSimplifiePdf, $pdfSimplifie);
                     }
                     elseif($typeDiplome !== "BUT"){
-                        $pdfFull = $this->licenceMccc->exportPdfLicenceMccc(
+                        $pdfFull = $this->licenceMccc->exportAndSavePdfLicenceMccc(
                             anneeUniversitaire: $dpe,
                             parcours: $p,
+                            dir: $directoryPath,
                             dateCfvu: $dateCfvu,
                             dateConseil: $dateConseil
                         );
-                        $pdfSimplifie = $this->licenceMccc->exportPdfLicenceMccc(
+                        $pdfSimplifie = $this->licenceMccc->exportAndSavePdfLicenceMccc(
                             anneeUniversitaire: $dpe,
                             parcours: $p,
+                            dir: $directoryPath,
                             dateCfvu: $dateCfvu,
                             dateConseil: $dateConseil,
                             versionFull: false
