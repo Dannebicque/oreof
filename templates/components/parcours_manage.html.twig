@@ -338,6 +338,22 @@
                                     <i class="fal fa-percent"></i>
                                 </a>
                             {% endif %}
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <a {{ stimulus_controller('modal', {
+                                                modalTitle: 'Confirmer la suppression',
+                                                modalUrl: path('app_parcours_soft_delete_confirm', {parcours: this.parcours.id})
+                                            }
+                                        )
+                                    }}
+                                    class="btn btn-sm btn-icon btn-icon-only btn-outline-danger ms-1"
+                                    data-bs-toggle="tooltip"
+                                    data-bs-placement="bottom"
+                                    title="Supprimer le parcours"
+                                    data-action="click->modal#openModal"
+                                >   
+                                    <i class="fal fa-trash"></i>
+                                </a>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
