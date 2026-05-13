@@ -5,7 +5,7 @@ Ce document décrit une installation type d'ORéOF:
 - en **développement** avec **Docker + Makefile** (recommandé pour l'équipe),
 - en **production** (serveur classique PHP-FPM/Apache ou Nginx).
 
-> Note: le dépôt est actuellement en Symfony 7.x. Les principes ci-dessous restent valables pour Symfony 7.4/8.
+> Note: le dépôt est actuellement en Symfony 8.x.
 
 ## 1) Prérequis
 
@@ -124,13 +124,13 @@ make phpstan
 
 - Déployer le code applicatif (tag/release recommandé).
 - Définir les variables d'environnement système (pas dans `.env` versionné):
-    - `APP_ENV=prod`
-    - `APP_DEBUG=0`
-    - `APP_SECRET`
-    - `DATABASE_URL`
-    - `MAILER_DSN` (si utilisé)
-    - `LDAP_*` (si LDAP activé)
-    - `MERCURE_*` (si Turbo/Mercure activé)
+  - `APP_ENV=prod`
+  - `APP_DEBUG=0`
+  - `APP_SECRET`
+  - `DATABASE_URL`
+  - `MAILER_DSN` (si utilisé)
+  - `LDAP_*` (si LDAP activé)
+  - `MERCURE_*` (si Turbo/Mercure activé)
 
 ## 3.2. Installer les dépendances
 
@@ -218,4 +218,3 @@ npm run build
 - Utiliser un fichier `.env.local` en dev et des variables d'environnement système en prod.
 - Déployer avec un tag release et migrations versionnées.
 - Surveiller `var/log/` et les logs du serveur web.
-
