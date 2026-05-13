@@ -1300,6 +1300,36 @@ html[data-theme="dark"] {
     border-right-color: rgb(224 231 255 / 1);
   }
 
+  /* Help Drawer Dark Mode Support */
+  html[data-theme="dark"] #helpOffcanvas {
+    @apply bg-slate-900 border-slate-700;
+  }
+
+  html[data-theme="dark"] #helpOffcanvas [style*="color-primary"],
+  html[data-theme="dark"] #helpOffcanvas [style*="color-warning"] {
+    background-color: var(--color-primary) !important;
+  }
+
+  html[data-theme="dark"] #helpOffcanvas .border-b {
+    @apply border-slate-700;
+  }
+
+  html[data-theme="dark"] #helpOffcanvas code {
+    @apply bg-slate-800 text-slate-200 border-slate-600;
+  }
+
+  html[data-theme="dark"] #helpOffcanvas a {
+    @apply text-cyan-400;
+  }
+
+  html[data-theme="dark"] #helpOffcanvas a:hover {
+    @apply text-cyan-300;
+  }
+
+  html[data-theme="dark"] #helpOffcanvas .markdown-body {
+    @apply text-slate-300;
+  }
+
   html[data-theme="dark"] .tooltip.app-tooltip .tooltip-inner {
     @apply border-slate-700 bg-slate-900 text-slate-100 shadow-black/50;
   }
