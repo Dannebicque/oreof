@@ -60,6 +60,7 @@
     "symfony/yaml": "8.0.*",
     "twig/extra-bundle": "^2.12|^3.0",
     "twig/string-extra": "^3.24",
+   "twig/markdown-extra": "^3.24",
     "twig/twig": "^2.12|^3.0"
   },
   "config": {
