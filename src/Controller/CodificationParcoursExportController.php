@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Classes\Export\ExportCodification;
 use App\Entity\Formation;
 use App\Entity\Parcours;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -14,6 +15,7 @@ class CodificationParcoursExportController extends AbstractController
     #[Route('/codification/formation/{slug}/export', name: 'app_codification_export_formation')]
     public function exportFormation(
         ExportCodification  $export,
+        #[MapEntity(mapping: ['slug' => 'slug'])]
         Formation $formation): Response
     {
         return $export->exportFormation($formation);

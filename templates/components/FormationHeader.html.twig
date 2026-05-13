@@ -1,115 +1,95 @@
 {# templates/components/CourseHeader.html.twig #}
-<div {{ attributes }} class="card card-body mb-3">
-    {% set prefix = 'formation' %}
+{% set prefix = 'formation' %}
+{% set metaLabelClass = 'mb-1 text-[11px] font-black uppercase tracking-[0.18em] text-slate-400 dark:text-slate-500' %}
+{% set metaValueClass = 'text-sm font-medium text-slate-700 dark:text-slate-200' %}
+{% set emptyBadgeClass = 'inline-flex items-center rounded-full bg-rose-100 px-2 py-1 text-xs font-semibold text-rose-700 dark:bg-rose-500/15 dark:text-rose-300' %}
+{% set quickBtnBase = 'inline-flex items-center justify-center gap-2 rounded-xl border px-3 py-2 text-sm font-semibold shadow-sm transition focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2' %}
+{% set quickBtnSecondary = quickBtnBase ~ ' border-slate-300 bg-white text-slate-700 hover:border-slate-400 hover:bg-slate-50 hover:text-slate-900 focus-visible:ring-slate-400 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-200 dark:hover:border-slate-500 dark:hover:bg-slate-700 dark:hover:text-white dark:focus-visible:ring-slate-500 dark:focus-visible:ring-offset-slate-900' %}
+{% set quickBtnInfo = quickBtnBase ~ ' border-cyan-300 bg-cyan-50 text-cyan-700 hover:border-cyan-400 hover:bg-cyan-100 focus-visible:ring-cyan-400 dark:border-cyan-700 dark:bg-cyan-500/10 dark:text-cyan-300 dark:hover:border-cyan-600 dark:hover:bg-cyan-500/20 dark:focus-visible:ring-cyan-500 dark:focus-visible:ring-offset-slate-900' %}
+{% set quickBtnWarning = quickBtnBase ~ ' border-amber-300 bg-amber-50 text-amber-700 hover:border-amber-400 hover:bg-amber-100 focus-visible:ring-amber-400 dark:border-amber-700 dark:bg-amber-500/10 dark:text-amber-300 dark:hover:border-amber-600 dark:hover:bg-amber-500/20 dark:focus-visible:ring-amber-500 dark:focus-visible:ring-offset-slate-900' %}
+{% set quickBtnPrimary = quickBtnBase ~ ' border-indigo-300 bg-indigo-50 text-indigo-700 hover:border-indigo-400 hover:bg-indigo-100 focus-visible:ring-indigo-400 dark:border-indigo-700 dark:bg-indigo-500/10 dark:text-indigo-300 dark:hover:border-indigo-600 dark:hover:bg-indigo-500/20 dark:focus-visible:ring-indigo-500 dark:focus-visible:ring-offset-slate-900' %}
+{% set quickBtnSuccess = quickBtnBase ~ ' border-emerald-300 bg-emerald-50 text-emerald-700 hover:border-emerald-400 hover:bg-emerald-100 focus-visible:ring-emerald-400 dark:border-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-300 dark:hover:border-emerald-600 dark:hover:bg-emerald-500/20 dark:focus-visible:ring-emerald-500 dark:focus-visible:ring-offset-slate-900' %}
+{% set panelClass = 'mt-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm hidden dark:border-slate-700 dark:bg-slate-900' %}
+{% set panelGridClass = 'grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4' %}
 
-    <div class="container-fluid px-lg-4 pt-3">
-        <div class="mb-3 p-3 bg-light rounded border">
-            <div class="row g-3 small">
-                <div class="col-12 col-sm-6 col-lg-2">
-                    <dt class="fw-medium text-muted mb-1">Domaine</dt>
-                    <dd class="mb-0">{% for domaine in this.formation.domaines %}
+<div {{ attributes }}
+        class="mb-4 rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-900">
+    <div class="space-y-4 p-4 sm:p-5">
+        <section
+                class="rounded-2xl border border-slate-200 bg-slate-50/80 p-4 shadow-sm dark:border-slate-700 dark:bg-slate-800/50">
+            <dl class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-5">
+                <div>
+                    <dt class="{{ metaLabelClass }}">Domaine</dt>
+                    <dd class="{{ metaValueClass }}">
+                        {% for domaine in this.formation.domaines %}
                             {{ domaine.libelle }}{% if not loop.last %}, {% endif %}
                         {% else %}
-                            <span class="badge bg-danger">Non défini</span>
-                        {% endfor %}</dd>
-                </div>
-                <div class="col-12 col-sm-6 col-lg-2">
-                    <dt class="fw-medium text-muted mb-1">Type diplôme</dt>
-                    <dd class="mb-0">{{ formation.typeDiplome|typeDiplome }}</dd>
-                </div>
-                <div class="col-12 col-sm-6 col-lg-2">
-                    <dt class="fw-medium text-muted mb-1">Composante</dt>
-                    <dd class="mb-0">{{ formation.composantePorteuse != null ? formation.composantePorteuse.libelle : '<span class="badge bg-danger">Non définie</span>' }}</dd>
-                </div>
-                <div class="col-12 col-sm-6 col-lg-2">
-                    <dt class="fw-medium text-muted mb-1">Mention</dt>
-                    <dd class="mb-0">
-                        {{ formation.display }}
+                            <span class="{{ emptyBadgeClass }}">Non défini</span>
+                        {% endfor %}
                     </dd>
                 </div>
-                <div class="col-12 col-sm-6 col-lg-2">
-                    <dt class="fw-medium text-muted mb-1">Responsable mention</dt>
-                    <dd class="mb-0">
+                <div>
+                    <dt class="{{ metaLabelClass }}">Type diplôme</dt>
+                    <dd class="{{ metaValueClass }}">{{ formation.typeDiplome|typeDiplome }}</dd>
+                </div>
+                <div>
+                    <dt class="{{ metaLabelClass }}">Composante</dt>
+                    <dd class="{{ metaValueClass }}">
+                        {% if formation.composantePorteuse != null %}
+                            {{ formation.composantePorteuse.libelle }}
+                        {% else %}
+                            <span class="{{ emptyBadgeClass }}">Non définie</span>
+                        {% endif %}
+                    </dd>
+                </div>
+                <div>
+                    <dt class="{{ metaLabelClass }}">Mention</dt>
+                    <dd class="{{ metaValueClass }}">{{ formation.display }}</dd>
+                </div>
+                <div>
+                    <dt class="{{ metaLabelClass }}">Responsable mention</dt>
+                    <dd class="{{ metaValueClass }}">
                         {{ formation.responsableMention != null ? formation.responsableMention.display : 'Non défini' }}
                     </dd>
                 </div>
-                <div class="col-12 col-sm-6 col-lg-2">
+            </dl>
+        </section>
 
+        <section class="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
+            <div class="flex items-center gap-3 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-amber-800 dark:border-amber-800/70 dark:bg-amber-500/10 dark:text-amber-300">
+                <div class="flex h-10 w-10 items-center justify-center rounded-full bg-amber-100 text-amber-700 dark:bg-amber-500/15 dark:text-amber-300"
+                     data-controller="tooltip" data-tooltip-placement-value="bottom"
+                     aria-label="Formation verrouillée"
+                     data-bs-original-title="Formation verrouillée">
+                    {{ ux_icon('icon:lock', {class: 'h-4 w-4'}) }}
+                </div>
+                <div>
+                    <p class="text-sm font-semibold">Formation verrouillée</p>
+                    <p class="text-xs text-amber-700/80 dark:text-amber-300/80">Réouverture nécessaire pour permettre
+                        des modifications.</p>
                 </div>
             </div>
 
-            {# Compact Validation Timeline #}
-            {#            <div class="mt-3 pt-3 border-top"> #}
-            {#                <h4 class="small fw-medium mb-2">Dates de validation</h4> #}
-            {#                <div class="row g-2"> #}
-            {#                    {% for key, process in this.process %} #}
-            {#                        {% if process.isTimeline %} #}
-            {#                            <div class="col-12 col-sm-6 col-lg-3"> #}
-            {#                                <div class="d-flex align-items-center gap-2 p-2 bg-white rounded border"> #}
-            {#                                    {% if this.status(key) == 'completed' %} #}
-            {#                                        <i class="fas fa-check-circle text-success"></i> #}
-            {#                                    {% else %} #}
-            {#                                        <i class="fas fa-clock text-secondary"></i> #}
-            {#                                    {% endif %} #}
-            {#                                    <div class="flex-grow-1 text-truncate"> #}
-            {#                                        <p class="small fw-medium mb-0 text-truncate">{{ (process.label~'.timeline')|trans({}, 'process') }}</p> #}
-            {#                                        <p class="small mb-0 {% if this.status(key) == 'completed' %}text-success{% else %}text-muted{% endif %}"> #}
-            {#                                            {{ this.dateHistorique(key) }} #}
-            {#                                        </p> #}
-            {#                                    </div> #}
-            {#                                </div> #}
-            {#                            </div> #}
-            {#                        {% endif %} #}
-            {#                    {% endfor %} #}
-            {#                </div> #}
-            {#            </div> #}
-        </div>
+            <div class="rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm dark:border-slate-700 dark:bg-slate-800/70">
+                <p class="mb-2 text-[11px] font-black uppercase tracking-[0.18em] text-slate-400 dark:text-slate-500">
+                    Avancement du process</p>
+                {{ component('formation_state', {
+                    process: this.process,
+                    formation: this.formation,
+                    mode: 'process',
+                    class: 'flex flex-wrap items-center justify-center gap-2'}) }}
+            </div>
+        </section>
 
-
-        <div class="d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3">
-            {# Left: Title and Status #}
-            <div class="d-flex align-items-center gap-1 flex-wrap">
-                <div class="d-flex align-items-center gap-3">
-                    <div class="d-flex align-items-center gap-1 flex-wrap">
-                        <div class="rounded-circle d-flex align-items-center justify-content-center
-                                bg-warning-subtle text-warning bubble-process"
-                             data-controller="tooltip" data-tooltip-placement-value="bottom"
-                             aria-label="..."
-                             data-bs-original-title="..."
-                        >
-                            <i class="fas fa-lock small"></i>
-                            </div>
-                        Formation verrouillée. {# todo: a gérer avec ouverture/réouverture en modif #}
-                        </div>
-                </div>
+        <section class="flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
+            <div class="text-[11px] font-black uppercase tracking-[0.18em] text-slate-400 dark:text-slate-500">
+                Actions rapides
             </div>
 
-            <div class="d-flex align-items-center gap-1 flex-wrap">
-                <div class="mt-3 d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3">
-                    <div class="d-flex align-items-center gap-1 flex-wrap">
-                        {{ component('formation_state', {
-                            process: this.process,
-                            formation: this.formation,
-                            mode: 'process',
-                            class: 'col-6 d-flex align-items-center justify-content-center'}) }}
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        {# Compact Process Timeline #}
-        <div class="mt-3 mb-3 d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3">
-            <div class="d-flex align-items-center gap-1 flex-wrap">
-                {# place libre à gauche #}
-            </div>
-
-            {# Quick Actions #}
-            <div class="d-flex align-items-center gap-2">
-                {# Validation Dropdown #}
-
+            <div class="flex flex-wrap items-center gap-2">
                 {% if is_granted('MANAGE', {route: 'app_formation', subject: this.formation}) or is_granted('ROLE_ADMIN') %}
                     <a
-                            class="btn btn-sm btn-outline-warning w-100"
+                            class="{{ quickBtnWarning }}"
                             data-bs-toggle="tooltip"
                             data-bs-placement="bottom"
                             href="{{ path('app_formation_change_rf', {formation: formation.id}) }}"
@@ -117,124 +97,80 @@
                             data-action="click->modalturbo#open"
                             title="{{ 'formation.change_rf.title'|trans({}, 'form') }}"
                     >
-                        <i class="fal fa-repeat"></i>
-                        <span> {{ 'formation.change_rf.label'|trans({}, 'form') }}</span>
+                        {{ ux_icon('icon:sync', {class: 'h-4 w-4'}) }}
+                        <span>{{ 'formation.change_rf.label'|trans({}, 'form') }}</span>
                     </a>
                 {% endif %}
 
-                {#                <button class="btn btn-sm btn-outline-secondary w-100"> #}
-                {#                    <i class="fas fa-download"></i> Voir PV #}
-                {#                </button> #}
-
-                {#                <div class="dropdown"> #}
-                {#                    <button class="btn btn-sm btn-success dropdown-toggle" #}
-                {#                            type="button" #}
-                {#                            data-bs-toggle="dropdown" #}
-                {#                            aria-expanded="false" #}
-                {#                    > #}
-                {#                        <i class="fas fa-check"></i> Gestion du DPE #}
-                {#                    </button> #}
-                {#                    <ul class="dropdown-menu dropdown-menu-end"> #}
-                {#                        {% for key, option in validationOptions %} #}
-                {#                            <li> #}
-                {#                                <button class="dropdown-item d-flex align-items-center gap-2" #}
-                {#                                        data-action="live#action" #}
-                {#                                        data-live-action-param="validate:{{ key }}"> #}
-                {#                                        <span class="rounded-circle d-flex align-items-center justify-content-center #}
-                {#                                           bg-{{ option.metadata.button_class }} text-white" #}
-                {#                                              style="width: 24px; height: 24px; font-size: 0.75rem;"> #}
-                {#                                            <i class="fas {{ option.metadata.button_icon }}"></i> #}
-                {#                                        </span> #}
-                {#                                    <div> #}
-                {#                                        <div class="fw-medium">{{ option.label }}</div> #}
-                {#                                        <div class="small text-muted">{{ option.metadata.description }}</div> #}
-                {#                                    </div> #}
-                {#                                </button> #}
-                {#                            </li> #}
-                {#                        {% endfor %} #}
-                {#                    </ul> #}
-                {#                </div> #}
-
-                <button class="btn btn-sm btn-outline-secondary"
+                <button class="{{ quickBtnSecondary }}"
                         data-toggle-group="accordion-1"
-                        data-toggle="actions" data-target="#actions-panel">
-                    <i class="fas fa-gear-complex"></i>
-                    Actions complémentaires
-                    <i class="fas fa-chevron-up data-toggle-icon"></i>
+                        data-toggle="actions"
+                        data-target="#actions-panel"
+                        data-toggle-icon-open="rotate-0"
+                        data-toggle-icon-close="rotate-180">
+                    {{ ux_icon('icon:gear', {class: 'h-4 w-4'}) }}
+                    <span>Actions complémentaires</span>
+                    {{ ux_icon('icon:chevron-up', {class: 'h-4 w-4 data-toggle-icon rotate-180 transition-transform duration-200'}) }}
                 </button>
 
-                <button class="btn btn-sm btn-outline-info"
+                <button class="{{ quickBtnInfo }}"
                         data-toggle-group="accordion-1"
-                        data-toggle="actions" data-target="#exports-panel">
-                    <i class="fas fa-download"></i>
-                    Exports
-                    <i class="fas fa-chevron-up data-toggle-icon"></i>
+                        data-toggle="actions"
+                        data-target="#exports-panel"
+                        data-toggle-icon-open="rotate-0"
+                        data-toggle-icon-close="rotate-180">
+                    {{ ux_icon('icon:download', {class: 'h-4 w-4'}) }}
+                    <span>Exports</span>
+                    {{ ux_icon('icon:chevron-up', {class: 'h-4 w-4 data-toggle-icon rotate-180 transition-transform duration-200'}) }}
                 </button>
 
                 {% if is_granted('ROLE_ADMIN') %}
-                    <button class="btn btn-sm btn-outline-secondary"
+                    <button class="{{ quickBtnSecondary }}"
                             data-toggle-group="accordion-1"
-                            data-toggle="actions" data-target="#actions-panel-admin"
-                    >
-                        <i class="fas fa-wrench"></i>
-                        Gestion SES
-                        <i class="fas fa-chevron-up data-toggle-icon"></i>
+                            data-toggle="actions"
+                            data-target="#actions-panel-admin"
+                            data-toggle-icon-open="rotate-0"
+                            data-toggle-icon-close="rotate-180">
+                        {{ ux_icon('icon:wrench', {class: 'h-4 w-4'}) }}
+                        <span>Gestion SES</span>
+                        {{ ux_icon('icon:chevron-up', {class: 'h-4 w-4 data-toggle-icon rotate-180 transition-transform duration-200'}) }}
                     </button>
                 {% endif %}
             </div>
-        </div>
+        </section>
 
-        {# Expandable Actions Panel #}
-        <div class="mt-3 mb-3 p-3 bg-light rounded border hidden"
-             id="actions-panel"
-        >
-            <div class="row g-2">
-                {# todo: si parcours par défaut alors oui #}
-                {#                <div class="col-6 col-sm-4 col-lg-2"> #}
-                {#                    <a class="btn btn-sm btn-primary w-100" #}
-                {#                       href="{{ path('app_parcours_bcc', {parcours:parcours.id}) }}"> #}
-                {#                        <i class="fas fa-check"></i> #}
-                {#                        Contrôler les BCC #}
-                {#                    </a> #}
-                {#                </div> #}
-                {#                <div class="col-6 col-sm-4 col-lg-2"> #}
-                {#                    <a class="btn btn-sm btn-primary w-100" #}
-                {#                       href="{{ path('app_parcours_ec', {parcours:parcours.id}) }}"> #}
-                {#                        <i class="fas fa-check"></i> #}
-                {#                        Contrôler la maquette #}
-                {#                    </a> #}
-                {#                </div> #}
-                <div class="col-6 col-sm-4 col-lg-2">
+        <div class="{{ panelClass }}" id="actions-panel">
+            <div class="{{ panelGridClass }}">
+                <div>
                     <button
                             {{ stimulus_controller('modal', {
                                 size: 'lg',
                                 modalTitle: 'verifier.la.saisie.formation.title'|trans({}, 'process'),
                                 modalUrl: path('app_formation_state', {formation:formation.id}) }) }}
                             data-action="click->modal#openModal"
-                            class="btn btn-sm btn-outline-success w-100"
+                            class="{{ quickBtnSuccess }} w-full"
                             data-size="lg"
                             data-bs-toggle="tooltip"
                             data-bs-placement="bottom"
-                            title="{{ 'verifier.la.saisie.formation.infobulle'|trans({}, 'process') }}"
-                    >
-                        <i class="fas fa-check"></i>
-                        <span> Vérifier la saisie</span>
+                            title="{{ 'verifier.la.saisie.formation.infobulle'|trans({}, 'process') }}">
+                        {{ ux_icon('icon:check', {class: 'h-4 w-4'}) }}
+                        <span>Vérifier la saisie</span>
                     </button>
                 </div>
-                <div class="col-6 col-sm-4 col-lg-2">
-                    <a
-                            href="{{ path('fiche_matiere_valide_formation', {formation: formation.id}) }}"
-                            class="btn btn-outline-success btn-sm w-100"
-                            data-bs-toggle="tooltip"
-                            data-bs-placement="bottom"
-                            title="{{ 'verifier.fiches.ec.matieres.infobulle'|trans({}, 'process') }}"
-                    >
-                        <i class="fas fa-check"></i>
-                        <span> Valider les fiches EC/matières</span>
+
+                <div>
+                    <a href="{{ path('fiche_matiere_valide_formation', {formation: formation.id}) }}"
+                       class="{{ quickBtnSuccess }} w-full"
+                       data-bs-toggle="tooltip"
+                       data-bs-placement="bottom"
+                       title="{{ 'verifier.fiches.ec.matieres.infobulle'|trans({}, 'process') }}">
+                        {{ ux_icon('icon:check', {class: 'h-4 w-4'}) }}
+                        <span>Valider les fiches EC/matières</span>
                     </a>
                 </div>
-                <div class="col-6 col-sm-4 col-lg-2">
-                    <button class="btn btn-sm btn-outline-primary w-100" type="button"
+
+                <div>
+                    <button class="{{ quickBtnPrimary }} w-full" type="button"
                             {{ stimulus_controller('modal', {
                                 size: 'large',
                                 modalTitle: 'historique.de.validation.formation.title'|trans({}, 'process'),
@@ -244,126 +180,63 @@
                             data-size="lg"
                             data-bs-toggle="tooltip"
                             data-bs-placement="bottom"
-                            title="{{ 'historique.de.validation.formation.infobulle'|trans({}, 'process') }}"
-                    >
-                        <i class="fal fa-timeline"></i> Historique
+                            title="{{ 'historique.de.validation.formation.infobulle'|trans({}, 'process') }}">
+                        {{ ux_icon('icon:timeline', {class: 'h-4 w-4'}) }}
+                        <span>Historique</span>
                     </button>
                 </div>
-                <div class="col-6 col-sm-4 col-lg-2">
-                    {% if is_granted('ROLE_ADMIN')
-                        and hasLastVersion is defined
-                        and hasLastVersion == true %}
-                        <a class="btn btn-sm btn-outline-warning d-block"
-                           data-bs-toggle="collapse" data-bs-target="#diffGlobalParcours"
-                        >
-                            <i class="fa-light fa-not-equal"></i>
-                            Comparer les descriptifs
+
+                <div>
+                    {% if is_granted('ROLE_ADMIN') and hasLastVersion is defined and hasLastVersion == true %}
+                        <a class="{{ quickBtnWarning }} w-full"
+                           data-bs-toggle="collapse" data-bs-target="#diffGlobalParcours">
+                            {{ ux_icon('icon:wrench', {class: 'h-4 w-4'}) }}
+                            <span>Comparer les descriptifs</span>
                         </a>
                     {% endif %}
                 </div>
             </div>
         </div>
-        {# fin Expandable Actions Panel #}
 
-        {# Expandable Exports Panel #}
-        <div class="mt-3 mb-3 p-3 bg-light rounded border hidden"
-             id="exports-panel"
-        >
-            <div class="row g-2 mt-2">
-                <div class="col-6 col-sm-4 col-lg-2">
+        <div class="{{ panelClass }}" id="exports-panel">
+            <div class="{{ panelGridClass }}">
+                <div>
                     <a href="{{ path('app_formation_export', {slug:formation.slug}) }}"
-                       class="btn btn-primary btn-sm w-100"
+                       class="{{ quickBtnPrimary }} w-full"
                        data-bs-toggle="tooltip"
                        data-bs-placement="bottom"
-                       title="Télécharger en PDF"
-                    >
-                        <i class="{{ iconDownload }}"></i>
-                        <span> Fiche descriptive (PDF)</span>
+                       title="Télécharger en PDF">
+                        {{ ux_icon('icon:download', {class: 'h-4 w-4'}) }}
+                        <span>Fiche descriptive (PDF)</span>
                     </a>
                 </div>
-                <div class="col-6 col-sm-4 col-lg-2">
+                <div>
                     <a href="{{ path('app_plaquette_formation_export', {slug:formation.slug}) }}"
-                       class="btn btn-outline-primary btn-sm w-100"
+                       class="{{ quickBtnInfo }} w-full"
                        data-bs-toggle="tooltip"
                        data-bs-placement="bottom"
-                       title="Télécharger la plaquette en PDF"
-                    >
-                        <i class="{{ iconDownload }}"></i>
-                        <span> Plaquette (PDF)</span>
+                       title="Télécharger la plaquette en PDF">
+                        {{ ux_icon('icon:download', {class: 'h-4 w-4'}) }}
+                        <span>Plaquette (PDF)</span>
                     </a>
                 </div>
-                {#                {% if hasLastVersion is defined and hasLastVersion == true %} #}
-                {#                    <div class="col-6 col-sm-4 col-lg-2"> #}
-                {#                        <a class="btn btn-outline-primary btn-sm w-100" #}
-                {#                           href="{{ path('app_parcours_mccc_export_versionning', {parcours:parcours.id, _format:'xlsx'}) }}"> #}
-                {#                            Export MCCC Version (xlsx) #}
-                {#                        </a> #}
-                {#                    </div> #}
-                {#                    <div class="col-6 col-sm-4 col-lg-2"> #}
-                {#                        <a class="btn btn-outline-primarybtn-sm  w-100" #}
-                {#                           href="{{ path('app_parcours_mccc_export_cfvu_valid', {parcours:parcours.id, format:'complet'}) }}"> #}
-                {#                            Version complète (pdf) #}
-                {#                        </a> #}
-                {#                    </div> #}
-                {#                    <div class="col-6 col-sm-4 col-lg-2"> #}
-                {#                        <a class="btn btn-outline-primary btn-sm w-100" #}
-                {#                           href="{{ path('app_parcours_mccc_export_cfvu_valid', {parcours:parcours.id, format:'simplifie'}) }}"> #}
-                {#                            Version simplifiée (pdf) #}
-                {#                        </a> #}
-                {#                    </div> #}
-                {#                {% else %} #}
-                {#                    <div class="col-6 col-sm-4 col-lg-2"> #}
-                {#                        <a class="btn btn-outline-primary btn-sm w-100" #}
-                {#                           href="{{ path('app_parcours_mccc_export', {parcours:parcours.id, _format:'xlsx'}) }}"> #}
-                {#                            Version complète (xlsx) #}
-                {#                        </a> #}
-                {#                    </div> #}
-                {#                    <div class="col-6 col-sm-4 col-lg-2"> #}
-                {#                        <a class="btn btn-outline-primary btn-sm w-100" #}
-                {#                           href="{{ path('app_parcours_mccc_export_light', {parcours:parcours.id, _format:'xlsx'}) }}">Version #}
-                {#                            simplifiée (xlsx)</a> #}
-                {#                    </div> #}
-                {#                    <div class="col-6 col-sm-4 col-lg-2"> #}
-                {#                        <a class="btn btn-outline-primary btn-sm w-100" #}
-                {#                           href="{{ path('app_parcours_mccc_export_cfvu_valid', {parcours:parcours.id, format:'complet'}) }}"> #}
-                {#                            Version complète (pdf) #}
-                {#                        </a> #}
-                {#                    </div> #}
-                {#                    <div class="col-6 col-sm-4 col-lg-2"> #}
-                {#                        <a class="btn btn-outline-primary btn-sm w-100" #}
-                {#                           href="{{ path('app_parcours_mccc_export_cfvu_valid', {parcours:parcours.id, format:'simplifie'}) }}">Version #}
-                {#                            simplifiée (pdf)</a> #}
-                {#                    </div> #}
-                {#                {% endif %} #}
             </div>
         </div>
-        {# fin Expandable Exports Panel #}
 
         {% if is_granted('ROLE_ADMIN') %}
-            <div class="mt-3 mb-3 p-3 bg-light rounded border hidden"
-                 id="actions-panel-admin"
-            >
-                <div class="row g-2">
-                    <div class="col-6 col-sm-4 col-lg-2">
-                        <button class="btn btn-sm btn-outline-secondary w-100">
-                            <i class="fas fa-cog"></i> Gérer codification
+            <div class="{{ panelClass }}" id="actions-panel-admin">
+                <div class="{{ panelGridClass }}">
+                    <div>
+                        <button class="{{ quickBtnSecondary }} w-full">
+                            {{ ux_icon('icon:gear', {class: 'h-4 w-4'}) }}
+                            <span>Gérer codification</span>
                         </button>
                     </div>
-                    <div class="col-6 col-sm-4 col-lg-2">
-                        <button class="btn btn-sm btn-outline-secondary w-100">
-                            <i class="fas fa-cog"></i> Gérer la version
+                    <div>
+                        <button class="{{ quickBtnSecondary }} w-full">
+                            {{ ux_icon('icon:gear', {class: 'h-4 w-4'}) }}
+                            <span>Gérer la version</span>
                         </button>
-                    </div>
-                    <div class="col-6 col-sm-4 col-lg-2">
-
-                    </div>
-                    <div class="col-6 col-sm-4 col-lg-2">
-
-                    </div>
-                    <div class="col-6 col-sm-4 col-lg-2">
-
-                    </div>
-                    <div class="col-6 col-sm-4 col-lg-2">
 
                     </div>
                 </div>

@@ -10,23 +10,15 @@
             La demande sera validée par l'administration du site. L'utilisateur recevra un mail de confirmation dès l'activation complète de son accès.
         </div>
     {% endif %}
-    {% form_theme form 'communs/form_theme.html.twig' %}
-    {{ form_start(form) }}
+    {% form_theme form 'communs/form_theme_v2.html.twig' %}
+    {{ form_start(form, {
+        attr: {
+            id: 'modalForm',
+        }}) }}
     <div class="row">
         <div class="col-12">
             {{ form_row(form.email) }}
         </div>
-    </div>
-
-    <div class="d-grid">
-        <button class="btn btn-success"
-                {{ stimulus_action('register','sauvegardeFormModal', 'click', {
-                    url: path('app_user_new_ldap_valide')
-                }) }}
-        >
-            <i class="fal fa-floppy-disk"></i>
-            Ajouter l'utilisateur
-        </button>
     </div>
     {{ form_end(form) }}
 </div>

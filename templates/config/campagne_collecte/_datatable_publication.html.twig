@@ -1,0 +1,57 @@
+{# Template partiel pour la colonne "Configuration de la publication" #}
+{% set isPublished = item.enablePublication == true %}
+{% set publicationTagStyle = {
+    'annee_archivee': {
+        label: 'Année archivée',
+        badgeColor: 'bg-warning'
+    },
+    'annee_courante': {
+        label: 'Année courante (N)',
+        badgeColor: 'bg-primary'
+    },
+    'annee_suivante': {
+        label: 'Année suivante (N+1)',
+        badgeColor: 'bg-info'
+    }
+} %}
+{% set libelleConfigurationPublication = {
+    'publication_maquette': 'Maquette des enseignements',
+    'publication_mccc': 'MCCC (PDF)'
+} %}
+
+{% if item.publicationTag is not null and item.publicationTag not in ['none', ''] and item.publicationTag in publicationTagStyle|keys %}
+    <p class="my-0">
+        <span class="badge {{ publicationTagStyle[item.publicationTag].badgeColor }}">
+            {{ publicationTagStyle[item.publicationTag].label }}
+        </span>
+    </p>
+{% endif %}
+
+<p class="my-0">
+    <span class="badge {{ isPublished ? 'bg-success' : 'bg-danger' }}">
+        {{ isPublished ? 'Publié' : 'Non publié' }}
+    </span>
+</p>
+
+{% if item.publicationOptions is not null and item.publicationOptions|length > 0 %}
+    <ul class="list-unstyled my-0">
+        {% for optionKey, optionValue in item.publicationOptions %}
+            {% if optionKey in libelleConfigurationPublication|keys %}
+                <li>
+                    <span class="badge {{ optionValue == true ? 'bg-success' : 'bg-danger' }}">
+                        {{ libelleConfigurationPublication[optionKey] }}
+                    </span>
+                </li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+{% endif %}
+
+{% if item.isFinished %}
+    <p class="my-0">
+        <span class="badge bg-dark">
+            Campagne consolidation terminée
+        </span>
+    </p>
+{% endif %}
+

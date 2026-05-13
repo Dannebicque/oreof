@@ -22,7 +22,7 @@ class UpdateDpeCommand extends Command
     public function __construct(
         protected EntityManagerInterface $entityManager,
         protected FormationRepository $formationRepository,
-        string $name = null
+        ?string $name = null
     ) {
         parent::__construct($name);
     }

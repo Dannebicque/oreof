@@ -50,14 +50,23 @@ class Profil
     /**
      * @var Collection<int, NotificationListe>
      */
-    #[ORM\OneToMany(mappedBy: 'profil', targetEntity: NotificationListe::class)]
-    private Collection $notificationListes;
+    #[ORM\OneToMany(targetEntity: NotificationListe::class, mappedBy: 'profil')]
+    private Collection $notificationListes {
+        get {
+            return $this->notificationListes;
+        }
+    }
 
     public function __construct()
     {
         $this->profilDroits = new ArrayCollection();
         $this->userProfils = new ArrayCollection();
         $this->notificationListes = new ArrayCollection();
+    }
+
+    public function __toString(): string
+    {
+        return $this->getLibelle() ?? '';
     }
 
     public function getId(): ?int
@@ -195,14 +204,6 @@ class Profil
         $this->isMailing = $isMailing;
 
         return $this;
-    }
-
-    /**
-     * @return Collection<int, NotificationListe>
-     */
-    public function getNotificationListes(): Collection
-    {
-        return $this->notificationListes;
     }
 
     public function addNotificationListe(NotificationListe $notificationListe): static

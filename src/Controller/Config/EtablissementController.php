@@ -37,7 +37,7 @@ class EtablissementController extends BaseController
 
             // Colonne simple avec tri et recherche
             ->addColumn('libelle', [
-                'label' => 'Libellé de la mention',
+                'label' => 'Libellé de l\'établissement',
                 'sortable' => true,
                 'filterable' => true,
             ])
@@ -48,6 +48,7 @@ class EtablissementController extends BaseController
                 'type' => 'entity',
                 'entity' => Adresse::class,
                 'entity_label' => 'display',
+                'is_html' => true,
             ])
             ->addShowAction('app_etablissement_show', [
                 'modal' => true,

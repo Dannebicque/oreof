@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * Copyright (c) 2023. | David Annebicque | ORéOF - All Rights Reserved
  * @file /Users/davidannebicque/Sites/oreof/src/Controller/Config/TypeEcController.php
  * @author davidannebicque
  * @project oreof
@@ -89,6 +89,7 @@ class TypeEcController extends AbstractController
 
     #[Route('/new', name: 'app_type_ec_new', methods: ['GET', 'POST'])]
     public function new(
+        TurboStreamResponseFactory $turboStream,
         Request $request,
         TypeEcRepository $typeEcRepository
     ): Response
@@ -105,10 +106,17 @@ class TypeEcController extends AbstractController
             return $this->json(true);
         }
 
-        return $this->render('config/type_ec/new.html.twig', [
-            'type_ec' => $typeEc,
-            'form' => $form->createView(),
-        ]);
+        return $turboStream->streamOpenModalFromTemplates(
+            new TranslatableKey('type_ec.new.title', [], 'modal'),
+            '',
+            '_ui/_modal_new_generic.html.twig',
+            [
+                'type_ec' => $typeEc,
+                'form' => $form->createView(),
+            ],
+            '_ui/_footer_submit_cancel.html.twig',
+            []
+        );
     }
 
     #[Route('/{id}', name: 'app_type_ec_show', methods: ['GET'])]
@@ -162,6 +170,7 @@ class TypeEcController extends AbstractController
 
     #[Route('/{id}/edit', name: 'app_type_ec_edit', methods: ['GET', 'POST'])]
     public function edit(
+        TurboStreamResponseFactory $turboStream,
         Request $request,
         TypeEc $typeEc,
         TypeEcRepository $typeEcRepository
@@ -178,10 +187,17 @@ class TypeEcController extends AbstractController
             return $this->json(true);
         }
 
-        return $this->render('config/type_ec/new.html.twig', [
-            'type_ec' => $typeEc,
-            'form' => $form->createView(),
-        ]);
+        return $turboStream->streamOpenModalFromTemplates(
+            new TranslatableKey('type_ec.edit.title', [], 'modal'),
+            'Type d\'EC : ' . $typeEc->getLibelle(),
+            '_ui/_modal_new_generic.html.twig',
+            [
+                'type_ec' => $typeEc,
+                'form' => $form->createView(),
+            ],
+            '_ui/_footer_submit_cancel.html.twig',
+            []
+        );
     }
 
     #[Route('/{id}/duplicate', name: 'app_type_ec_duplicate', methods: ['GET'])]

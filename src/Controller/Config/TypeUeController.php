@@ -77,6 +77,7 @@ class TypeUeController extends AbstractController
 
     #[Route('/new', name: 'app_type_ue_new', methods: ['GET', 'POST'])]
     public function new(
+        TurboStreamResponseFactory $turboStream,
         Request $request,
         TypeUeRepository $typeUeRepository
     ): Response
@@ -93,10 +94,17 @@ class TypeUeController extends AbstractController
             return $this->json(true);
         }
 
-        return $this->render('config/type_ue/new.html.twig', [
-            'type_ue' => $typeUe,
-            'form' => $form->createView(),
-        ]);
+        return $turboStream->streamOpenModalFromTemplates(
+            new TranslatableKey('type_ue.new.title', [], 'modal'),
+            '',
+            '_ui/_modal_new_generic.html.twig',
+            [
+                'type_ue' => $typeUe,
+                'form' => $form->createView(),
+            ],
+            '_ui/_footer_submit_cancel.html.twig',
+            []
+        );
     }
 
     #[Route('/{id}', name: 'app_type_ue_show', methods: ['GET'])]
@@ -140,6 +148,7 @@ class TypeUeController extends AbstractController
 
     #[Route('/{id}/edit', name: 'app_type_ue_edit', methods: ['GET', 'POST'])]
     public function edit(
+        TurboStreamResponseFactory $turboStream,
         Request $request,
         TypeUe $typeUe,
         TypeUeRepository $typeUeRepository
@@ -156,10 +165,17 @@ class TypeUeController extends AbstractController
             return $this->json(true);
         }
 
-        return $this->render('config/type_ue/new.html.twig', [
-            'type_ue' => $typeUe,
-            'form' => $form->createView(),
-        ]);
+        return $turboStream->streamOpenModalFromTemplates(
+            new TranslatableKey('type_ue.edit.title', [], 'modal'),
+            'Type d\'UE : ' . $typeUe->getLibelle(),
+            '_ui/_modal_new_generic.html.twig',
+            [
+                'type_ue' => $typeUe,
+                'form' => $form->createView(),
+            ],
+            '_ui/_footer_submit_cancel.html.twig',
+            []
+        );
     }
 
     #[Route('/{id}/duplicate', name: 'app_type_ue_duplicate', methods: ['GET'])]

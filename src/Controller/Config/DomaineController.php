@@ -77,7 +77,8 @@ class DomaineController extends AbstractController
     }
 
     #[Route('/new', name: 'app_domaine_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, DomaineRepository $domaineRepository): Response
+    public function new(TurboStreamResponseFactory $turboStream,
+                        Request                    $request, DomaineRepository $domaineRepository): Response
     {
         $domaine = new Domaine();
         $form = $this->createForm(DomaineType::class, $domaine, [
@@ -90,10 +91,17 @@ class DomaineController extends AbstractController
             return $this->json(true);
         }
 
-        return $this->render('config/domaine/new.html.twig', [
-            'domaine' => $domaine,
-            'form' => $form->createView(),
-        ]);
+        return $turboStream->streamOpenModalFromTemplates(
+            new TranslatableKey('domaine.new.title', [], 'modal'),
+            '',
+            '_ui/_modal_new_generic.html.twig',
+            [
+                'domaine' => $domaine,
+                'form' => $form->createView(),
+            ],
+            '_ui/_footer_submit_cancel.html.twig',
+            []
+        );
     }
 
     #[Route('/{id}', name: 'app_domaine_show', methods: ['GET'])]
@@ -134,7 +142,9 @@ class DomaineController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_domaine_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Domaine $domaine, DomaineRepository $domaineRepository): Response
+    public function edit(
+        TurboStreamResponseFactory $turboStream,
+        Request                    $request, Domaine $domaine, DomaineRepository $domaineRepository): Response
     {
         $form = $this->createForm(DomaineType::class, $domaine, [
             'action' => $this->generateUrl('app_domaine_edit', ['id' => $domaine->getId()]),
@@ -146,10 +156,17 @@ class DomaineController extends AbstractController
             return $this->json(true);
         }
 
-        return $this->render('config/domaine/new.html.twig', [
-            'domaine' => $domaine,
-            'form' => $form->createView(),
-        ]);
+        return $turboStream->streamOpenModalFromTemplates(
+            new TranslatableKey('domaine.edit.title', [], 'modal'),
+            'Domaine : ' . $domaine->getLibelle(),
+            '_ui/_modal_new_generic.html.twig',
+            [
+                'domaine' => $domaine,
+                'form' => $form->createView(),
+            ],
+            '_ui/_footer_submit_cancel.html.twig',
+            []
+        );
     }
 
     #[Route('/{id}/duplicate', name: 'app_domaine_duplicate', methods: ['GET'])]

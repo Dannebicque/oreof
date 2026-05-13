@@ -489,6 +489,26 @@ class FormationRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function countByComposanteForCampagne(CampagneCollecte $campagneCollecte): array
+    {
+        $rows = $this->createQueryBuilder('f')
+            ->select('IDENTITY(f.composantePorteuse) AS composanteId, COUNT(DISTINCT f.id) AS nbFormations')
+            ->innerJoin('f.dpeParcours', 'dp')
+            ->where('f.composantePorteuse IS NOT NULL')
+            ->andWhere('dp.campagneCollecte = :campagneCollecte')
+            ->setParameter('campagneCollecte', $campagneCollecte)
+            ->groupBy('f.composantePorteuse')
+            ->getQuery()
+            ->getArrayResult();
+
+        $counts = [];
+        foreach ($rows as $row) {
+            $counts[(int)$row['composanteId']] = (int)$row['nbFormations'];
+        }
+
+        return $counts;
+    }
+
     public function findFromAnneeUniversitaire(int $idCampagneCollecte) : array {
         return $this->createQueryBuilder('formation')
             ->select('DISTINCT formation.id')

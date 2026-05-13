@@ -97,7 +97,17 @@ export default class extends Controller {
   effaceFiltre(event) {
     event.preventDefault()
     this.fields = {}
-    document.getElementById('filtre_crud').value = ''
+
+    const searchInput = document.getElementById('filtre_crud')
+    if (searchInput) {
+      searchInput.value = ''
+    }
+
+    const quickSearchInput = document.getElementById('filter-quick-search')
+    if (quickSearchInput) {
+      quickSearchInput.value = ''
+    }
+
     localStorage.removeItem(this.storageKeyValue)
     this._updateListe(this.fields)
   }

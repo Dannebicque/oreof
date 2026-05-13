@@ -13,24 +13,27 @@
         {
             href:'',
             title: 'Administration',
-        }
+        },
+        {
+            href:'',
+            title: 'Gestion des types d\'EC',}
     ]}) }}
 {% endblock %}
 
 {% block bouton_header %}
-    <button
-            {{ stimulus_controller('modal', {
-                size: 'lg',
-                modalTitle: 'Ajouter un type d\'EC',
-                modalUrl: path('app_type_ec_new') }) }}
-            data-action="click->modal#openModal"
-            class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
-            data-size="lg"
-            data-bs-toggle="tooltip"
-            data-bs-placement="bottom"
-            title="Ajouter un type d'EC"
+
+    <a
+            data-action="click->modalturbo#open"
+            data-turbo="true"
+            href="{{ path('app_type_ec_new') }}"
+            class="btn border border-emerald-300 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 hover:text-emerald-800"
+            {{ stimulus_controller('tooltip', {
+                placement: 'bottom',
+                customClass: 'app-tooltip',
+                title: "Ajouter un type d\'EC"
+            }) }}
     >
-        <i class="{{ iconAdd }}"></i>
+        <twig:UX:Icon name="icon:add" class="h-4 w-4"/>
         <span> Ajouter un type d'EC</span>
-    </button>
+    </a>
 {% endblock %}

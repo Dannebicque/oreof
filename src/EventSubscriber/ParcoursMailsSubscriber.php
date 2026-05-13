@@ -23,7 +23,7 @@ class ParcoursMailsSubscriber extends AbstractDpeMailSubscriber implements Event
     {
     }
 
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             ParcoursEvent::class => 'onCreated'

@@ -10,16 +10,28 @@
 namespace App\Classes;
 
 use App\Entity\DpeParcours;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Workflow\WorkflowInterface;
 
 class ValidationProcess extends AbstractValidationProcess
 {
+    private readonly OptionsResolver $placeMetaResolver;
+    private readonly OptionsResolver $transitionMetaResolver;
+
     public function __construct(protected WorkflowInterface $dpeParcoursWorkflow)
     {
+        $this->placeMetaResolver = $this->createPlaceMetaResolver();
+        $this->transitionMetaResolver = $this->createTransitionMetaResolver();
+
         $places = $dpeParcoursWorkflow->getDefinition()->getPlaces();
         $data = [];
+        $dataAll = [];
         foreach ($places as $place) {
-            $meta = $dpeParcoursWorkflow->getMetadataStore()->getPlaceMetadata($place);
+            $meta = $this->normalizePlaceMeta(
+                $dpeParcoursWorkflow->getMetadataStore()->getPlaceMetadata($place),
+                $place,
+                $this->placeMetaResolver
+            );
             if (array_key_exists('process', $meta) && (bool)$meta['process'] === true) {
                 $data[$place] = $meta;
             }
@@ -42,7 +54,11 @@ class ValidationProcess extends AbstractValidationProcess
         $transitions = $this->dpeParcoursWorkflow->getDefinition()->getTransitions();
         foreach ($transitions as $trans) {
             if ($trans->getName() === $transition) {
-                return $this->dpeParcoursWorkflow->getMetadataStore()->getTransitionMetadata($trans);
+                return $this->normalizeTransitionMeta(
+                    $this->dpeParcoursWorkflow->getMetadataStore()->getTransitionMetadata($trans),
+                    $trans->getName(),
+                    $this->transitionMetaResolver
+                );
             }
         }
 
@@ -62,10 +78,14 @@ class ValidationProcess extends AbstractValidationProcess
 
         $options = [];
         foreach ($enabled as $trans) {
-            $meta = $this->dpeParcoursWorkflow->getMetadataStore()->getTransitionMetadata($trans);
+            $meta = $this->normalizeTransitionMeta(
+                $this->dpeParcoursWorkflow->getMetadataStore()->getTransitionMetadata($trans),
+                $trans->getName(),
+                $this->transitionMetaResolver
+            );
             $name = $trans->getName();
             $options[$name] = [
-                'label' => $meta['label'] ?? $name,
+                'label' => $meta['label'],
                 'metadata' => $meta,
             ];
         }

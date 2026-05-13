@@ -22,7 +22,7 @@
                 {{ parcour.coResponsable != null ? parcour.coResponsable.display : 'Non défini' }}
             </td>
             <td style="width:20%">
-                {{ parcour.remplissage|remplissage }}
+                {{ component('remplissage_progress', { value: parcour.remplissage }) }}
             </td>
             <td>
                 {{ parcour.etatDpeParcours|badgeDpe }} {{ parcours.withCfvu is defined and parcours.withCfvu == true ? '<span class="badge bg-warning">CFVU</span>' : '' }}
@@ -131,7 +131,7 @@
                         {{ parc.coResponsable != null ? parc.coResponsable.display : 'Non défini' }}
                     </td>
                     <td style="width:20%">
-                        {{ parc.remplissage|remplissage }}
+                        {{ component('remplissage_progress', { value: parc.remplissage }) }}
                     </td>
                     <td class="text-end">
                         <button

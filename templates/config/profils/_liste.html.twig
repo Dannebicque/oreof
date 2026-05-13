@@ -1,60 +1,72 @@
-<div class="card mt-2">
-    <div class="card-body">
+<div class="rounded-lg border border-gray-200 bg-white shadow-sm">
+    <div class="p-6">
+        <h2 class="mb-4 text-base font-semibold text-gray-800">Paramètres du profil</h2>
 
-        {% form_theme form 'communs/form_theme.html.twig' %}
-        {{ form_start(form, ) }}
-        <div class="row">
-            <div class="col-sm-10">
-                <div class="row">
-                    <div class="col-sm-6">
-                        {{ form_row(form.libelle) }}
-                        {{ form_row(form.code) }}
-                        {{ form_row(form.onlyAdmin) }}
+        {% form_theme form 'communs/form_theme_v2.html.twig' %}
+        {{ form_start(form) }}
 
-                    </div>
-                    <div class="col-sm-6">
-                        {{ form_row(form.centre) }}
-                        {{ form_row(form.isExclusif) }}
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-2 d-grid">
-                <button class="btn btn-warning d-block">Modifier</button>
-                <button class="btn btn-outline-danger d-block mt-2">Supprimer</button>
-            </div>
+        <div class="grid grid-cols-1 gap-x-6 gap-y-2 md:grid-cols-2">
+            {{ form_row(form.libelle) }}
+            {{ form_row(form.centre) }}
+            {{ form_row(form.code) }}
+            {{ form_row(form.isExclusif) }}
+            {{ form_row(form.onlyAdmin) }}
+            {{ form_row(form.isMailing) }}
         </div>
-        {{ form_end(form) }}
 
+        <div class="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-2">
+            <button type="submit"
+                    class="inline-flex w-full items-center justify-center gap-1.5 rounded-md bg-yellow-400 px-4 py-2 text-sm font-medium text-yellow-900 shadow-sm hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-yellow-400">
+                <twig:UX:Icon name="icon:edit" class="h-4 w-4"/>
+                Modifier
+            </button>
+            <button type="button"
+                    class="inline-flex w-full items-center justify-center gap-1.5 rounded-md border border-red-300 bg-white px-4 py-2 text-sm font-medium text-red-600 shadow-sm hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-400">
+                <twig:UX:Icon name="icon:delete" class="h-4 w-4"/>
+                Supprimer
+            </button>
+        </div>
+
+        {{ form_end(form) }}
     </div>
 </div>
 
-<div class="card mt-2">
-    <div class="card-body">
-        <table class="table">
-            <thead>
+<div class="mt-4 rounded-lg border border-gray-200 bg-white shadow-sm">
+    <div class="px-6 py-4 border-b border-gray-100">
+        <h2 class="text-base font-semibold text-gray-800">Droits par ressource</h2>
+    </div>
+    <div class="overflow-x-auto">
+        <table class="w-full text-sm text-left text-gray-700">
+            <thead class="bg-gray-50 text-xs font-semibold uppercase tracking-wide text-gray-500">
             <tr>
-                <th>Ressource</th>
-                <th>Droits</th>
+                <th class="w-1/3 px-6 py-3">Ressource</th>
+                <th class="px-6 py-3">Droits</th>
             </tr>
             </thead>
-            <tbody>
-            {% for key,ress in ressources %}
-                <tr>
-                    <td>{{ ress|trans([], 'profil') }}</td>
-                    <td>
-                        {% for droit in droits %}
-                            <input type="radio"
-                                    {{ stimulus_action('profil--index', 'changeDroit', 'change', {
-                                        ressource: ress,
-                                        droit: droit.value,
-                                        profilId: profil.id
-                                    }) }}
-                                   name="droit_{{ ress }}"
-                                   id="droit_{{ ress }}_{{ droit.value }}"
-                                   value="{{ droit.value }}"
-                                    {% if ressourcesProfil[ress] is defined and ressourcesProfil[ress] == droit.value %}checked{% endif %}>
-                            <label for="droit_{{ ress }}_{{ droit.value }}">{{ droit.value|trans([], 'profil') }}</label>
-                        {% endfor %}
+            <tbody class="divide-y divide-gray-100">
+            {% for key, ress in ressources %}
+                <tr class="hover:bg-gray-50 transition-colors">
+                    <td class="px-6 py-3 font-medium text-gray-800">{{ ress|trans([], 'profil') }}</td>
+                    <td class="px-6 py-3">
+                        <div class="flex flex-wrap gap-3">
+                            {% for droit in droits %}
+                                <label class="group flex cursor-pointer items-center gap-2 rounded-full border border-gray-300 bg-white px-3 py-1.5 text-xs font-medium text-gray-700 transition-colors hover:border-indigo-300 hover:bg-indigo-50 focus-within:ring-2 focus-within:ring-indigo-300 has-checked:border-indigo-400 has-checked:bg-indigo-100 has-checked:text-indigo-800">
+                                    <input type="radio"
+                                            {{ stimulus_action('profil--index', 'changeDroit', 'change', {
+                                                ressource: ress,
+                                                droit: droit.value,
+                                                profilId: profil.id
+                                            }) }}
+                                           name="droit_{{ ress }}"
+                                           id="droit_{{ ress }}_{{ droit.value }}"
+                                           value="{{ droit.value }}"
+                                           class="peer sr-only"
+                                            {% if ressourcesProfil[ress] is defined and ressourcesProfil[ress] == droit.value %}checked{% endif %}>
+                                    <span class="font-semibold text-gray-700 transition-colors peer-checked:text-indigo-800">{{ droit.value|trans([], 'profil') }}</span>
+                                    <span class="hidden rounded-full bg-indigo-700 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white peer-checked:inline-flex">Selectionne</span>
+                                </label>
+                            {% endfor %}
+                        </div>
                     </td>
                 </tr>
             {% endfor %}

@@ -1,16 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block content %}
-    <div class="card"
-            {{ stimulus_controller('crud', {
-                url: path('app_campagne_collecte_liste'),
-                storageKey: 'campagne_collecte_liste',
-            }) }}
-         data-action="base:refreshListe@window->crud#refreshListe"
-    >
-        <div class="card-body" {{ stimulus_target('crud', 'liste') }}>
-        </div>
-    </div>
+    {{ component('DataTable', { config: table }) }}
 {% endblock %}
 
 {% set header_title %}
@@ -22,24 +13,27 @@
         {
             href:'',
             title: 'Administration',
+        },
+        {
+            href:'',
+            title: 'Gestion des campagnes de collecte'
         }
     ]}) }}
 {% endblock %}
 
 {% block bouton_header %}
-    <button
-            {{ stimulus_controller('modal', {
-                size: 'lg',
-                modalTitle: 'Ajouter une xampagne de collecte',
-                modalUrl: path('app_campagne_collecte_new') }) }}
-            data-action="click->modal#openModal"
-            class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
-            data-size="lg"
-            data-bs-toggle="tooltip"
-            data-bs-placement="bottom"
-            title="Ajouter une xampagne de collecte"
+    <a
+            data-action="click->modalturbo#open"
+            data-turbo="true"
+            href="{{ path('app_campagne_collecte_new') }}"
+            class="btn border border-emerald-300 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 hover:text-emerald-800"
+            {{ stimulus_controller('tooltip', {
+                placement: 'bottom',
+                customClass: 'app-tooltip',
+                title: "Ajouter une campagne de collecte"
+            }) }}
     >
-        <i class="{{ iconAdd }}"></i>
+        <twig:UX:Icon name="icon:add" class="h-4 w-4"/>
         <span> Ajouter une campagne de collecte</span>
-    </button>
+    </a>
 {% endblock %}

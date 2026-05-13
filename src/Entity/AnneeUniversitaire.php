@@ -29,6 +29,11 @@ class AnneeUniversitaire
         $this->dpes = new ArrayCollection();
     }
 
+    public function __toString(): string
+    {
+        return $this->getLibelle() ?? '';
+    }
+
     public function getId(): ?int
     {
         return $this->id;

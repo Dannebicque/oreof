@@ -97,6 +97,7 @@ class TypeEpreuveController extends AbstractController
 
     #[Route('/new', name: 'app_type_epreuve_new', methods: ['GET', 'POST'])]
     public function new(
+        TurboStreamResponseFactory $turboStream,
         Request $request,
         TypeEpreuveRepository $typeEpreuveRepository
     ): Response
@@ -113,13 +114,19 @@ class TypeEpreuveController extends AbstractController
             return $this->json(true);
         }
 
-        return $this->render('config/type_epreuve/new.html.twig', [
-            'type_epreuve' => $typeEpreuve,
-            'form' => $form->createView(),
-        ]);
+        return $turboStream->streamOpenModalFromTemplates(
+            new TranslatableKey('type_epreuve.new.title', [], 'modal'),
+            '',
+            '_ui/_modal_new_generic.html.twig',
+            [
+                'type_epreuve' => $typeEpreuve,
+                'form' => $form->createView(),
+            ],
+            '_ui/_footer_submit_cancel.html.twig',
+            []
+        );
     }
 
-    #[Route('/{id}', name: 'app_type_epreuve_show', methods: ['GET'])]
     #[Route('/{id}', name: 'app_type_epreuve_show', methods: ['GET'])]
     public function show(
         TurboStreamResponseFactory $turboStream,
@@ -165,6 +172,7 @@ class TypeEpreuveController extends AbstractController
 
     #[Route('/{id}/edit', name: 'app_type_epreuve_edit', methods: ['GET', 'POST'])]
     public function edit(
+        TurboStreamResponseFactory $turboStream,
         Request $request,
         TypeEpreuve $typeEpreuve,
         TypeEpreuveRepository $typeEpreuveRepository
@@ -181,10 +189,17 @@ class TypeEpreuveController extends AbstractController
             return $this->json(true);
         }
 
-        return $this->render('config/type_epreuve/new.html.twig', [
-            'type_epreuve' => $typeEpreuve,
-            'form' => $form->createView(),
-        ]);
+        return $turboStream->streamOpenModalFromTemplates(
+            new TranslatableKey('type_epreuve.edit.title', [], 'modal'),
+            'Type d\'épreuve : ' . $typeEpreuve->getLibelle(),
+            '_ui/_modal_new_generic.html.twig',
+            [
+                'type_epreuve' => $typeEpreuve,
+                'form' => $form->createView(),
+            ],
+            '_ui/_footer_submit_cancel.html.twig',
+            []
+        );
     }
 
     #[Route('/{id}/duplicate', name: 'app_type_epreuve_duplicate', methods: ['GET'])]

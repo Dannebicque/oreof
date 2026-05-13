@@ -1,7 +1,11 @@
 <!-- Stats Start -->
-<h2 class="small-title">Processus de la campagne de collecte des projets de DPE
-    ({{ user_data.campagneCollecte.libelle }})</h2>
-<div class="row gy-2">
+<section class="space-y-4">
+    <h2 class="text-xl font-black tracking-tight text-slate-900 dark:text-slate-100">
+        Processus de la campagne de collecte des projets de DPE
+        <span class="text-base font-semibold text-slate-600 dark:text-slate-300">({{ user_data.campagneCollecte.libelle }})</span>
+    </h2>
+
+    <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white px-2 py-3 shadow-sm dark:border-slate-700 dark:bg-slate-900">
 
     <div class="timeline">
         <div class="progress-line" id="progressLine"></div>
@@ -16,9 +20,13 @@
                     {% endif %}
                 {% endif %}" data-end-date="{{ event.date|date('Y-m-d') }}">
                 <div class="step-icon"
-                     data-bs-toggle="tooltip"
-                     data-bs-placement="bottom"
-                     title="{{ event.description }}"
+                        {{ stimulus_controller('tooltip', {
+                            placement: 'bottom',
+                            customClass: 'app-tooltip app-tooltip--timeline',
+                            container: 'body',
+                            title: event.description is not empty ? event.description : event.libelle
+                        }) }}
+                     tabindex="0"
                 >
                     <span class="fal {{ event.icone }}"></span>
                 </div>
@@ -247,5 +255,6 @@
     {#            </div> #}
     {#        </div> #}
     {#    </div> #}
-</div>
+    </div>
+</section>
 <!-- Stats Start -->

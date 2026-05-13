@@ -1,0 +1,13 @@
+<div class="space-y-1">
+    <p class="font-medium text-slate-900 dark:text-slate-100">
+        {{ item.formation ? item.formation.display : '–' }}
+    </p>
+
+    {% if item.commentaire %}
+        <p class="text-xs leading-5 text-slate-500 dark:text-slate-400">
+            <span class="font-semibold text-slate-600 dark:text-slate-300">Commentaire :</span>
+            {{ item.commentaire }}
+        </p>
+    {% endif %}
+</div>
+

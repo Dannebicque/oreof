@@ -1,0 +1,49 @@
+<div class="flex flex-wrap items-center justify-end gap-1.5">
+    <twig:Button
+            label="Voir"
+            variant="info"
+            icon="icon:info"
+            href="{{ path('app_user_show', {'id': item.id}) }}"
+            dataAction="click->modalturbo#open"
+            tooltip="Voir un utilisateur"
+    />
+
+    <twig:Button
+            label="Gestion des accès"
+            variant="warning"
+            icon="icon:edit"
+            href="{{ path('app_user_profils_gestion', {'user': item.id}) }}"
+            dataAction="click->modalturbo#open"
+            tooltip="Gestion des profils de {{ item.display }}"
+    />
+
+    {% if is_granted('ROLE_ADMIN') %}
+        <twig:Button
+                label="Modifier"
+                variant="warning"
+                icon="icon:edit"
+                href="{{ path('app_user_edit', {'id': item.id}) }}"
+                dataAction="click->modalturbo#open"
+                tooltip="Modifier l'utilisateur"
+        />
+
+        <twig:Button
+                label="Supprimer"
+                variant="danger"
+                icon="icon:delete"
+                dataAction="click->crud#delete"
+                extraClass="data-url='{{ path('app_user_delete', {'id': item.id}) }}' data-csrf='{{ csrf_token('delete' ~ item.id) }}'"
+                tooltip="Supprimer l'utilisateur"
+        />
+
+
+        <twig:Button
+                label="Désactiver l'accès"
+                variant="danger"
+                icon="icon:delete"
+                extraClass="data-url='{{ path('app_user_gestion_revoque_admin', {'user': item.id}) }}' data-csrf='{{ csrf_token('delete' ~ item.id) }}'"
+                tooltip="Désactiver l'accès"
+        />
+    {% endif %}
+</div>
+

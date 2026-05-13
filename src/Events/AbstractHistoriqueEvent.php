@@ -20,7 +20,7 @@ abstract class AbstractHistoriqueEvent
     protected string $etape = '';
 
 
-    public function __construct(UserInterface $user, string $etape, string $etat, Request $request = null)
+    public function __construct(UserInterface $user, string $etape, string $etat, ?Request $request = null)
     {
         $this->user = $user;
         $this->etat = $etat;

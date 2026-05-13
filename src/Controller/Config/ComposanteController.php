@@ -28,7 +28,8 @@ use Symfony\Component\Routing\Attribute\Route;
 class ComposanteController extends AbstractController
 {
     #[Route('/', name: 'app_composante_index', methods: ['GET'])]
-    public function index(DataTableBuilder $builder
+    public function index(
+        DataTableBuilder $builder
     ): Response
     {
         $table = $builder
@@ -73,12 +74,10 @@ class ComposanteController extends AbstractController
             ])
             ->addShowAction('app_composante_show', [
                 'modal' => true,
-                'modal_size' => 'lg',
                 'modal_title' => 'Voir une composante',
             ])
             ->addEditAction('app_composante_edit', [
                 'modal' => true,
-                'modal_size' => 'lg',
                 'modal_title' => 'Modifier une composante',
             ])
 //            ->addDuplicateAction('app_composante_duplicate')
@@ -91,6 +90,7 @@ class ComposanteController extends AbstractController
 
     #[Route('/new', name: 'app_composante_new', methods: ['GET', 'POST'])]
     public function new(
+        TurboStreamResponseFactory $turboStream,
         AddUser $addUser,
         Request $request,
         ComposanteRepository $composanteRepository
@@ -126,10 +126,17 @@ class ComposanteController extends AbstractController
             return $this->json(true);
         }
 
-        return $this->render('config/composante/new.html.twig', [
-            'composante' => $composante,
-            'form' => $form->createView(),
-        ]);
+        return $turboStream->streamOpenModalFromTemplates(
+            new TranslatableKey('composante.new.title', [], 'modal'),
+            '',
+            '_ui/_modal_new_generic.html.twig',
+            [
+                'composante' => $composante,
+                'form' => $form->createView(),
+            ],
+            '_ui/_footer_submit_cancel.html.twig',
+            []
+        );
     }
 
     #[Route('/{id}', name: 'app_composante_show', methods: ['GET'])]
@@ -188,7 +195,13 @@ class ComposanteController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_composante_edit', methods: ['GET', 'POST'])]
-    public function edit(AddUser $addUser, Request $request, Composante $composante, ComposanteRepository $composanteRepository): Response
+    public function edit(
+        TurboStreamResponseFactory $turboStream,
+        AddUser                    $addUser,
+        Request                    $request,
+        Composante                 $composante,
+        ComposanteRepository       $composanteRepository
+    ): Response
     {
         $form = $this->createForm(ComposanteType::class, $composante, [
             'action' => $this->generateUrl('app_composante_edit', ['id' => $composante->getId()]),
@@ -219,10 +232,17 @@ class ComposanteController extends AbstractController
             return $this->json(true);
         }
 
-        return $this->render('config/composante/new.html.twig', [
-            'composante' => $composante,
-            'form' => $form->createView(),
-        ]);
+        return $turboStream->streamOpenModalFromTemplates(
+            new TranslatableKey('composante.edit.title', [], 'modal'),
+            'Composante : ' . $composante->getLibelle(),
+            '_ui/_modal_new_generic.html.twig',
+            [
+                'composante' => $composante,
+                'form' => $form->createView(),
+            ],
+            '_ui/_footer_submit_cancel.html.twig',
+            []
+        );
     }
 
     #[Route('/{id}', name: 'app_composante_delete', methods: ['POST', 'DELETE'])]

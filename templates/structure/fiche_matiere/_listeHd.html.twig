@@ -124,7 +124,7 @@
                         <span class="badge bg-danger">Non</span>
                     {% endif %}
                 </td>
-                <td>{{ ficheMatiere.remplissage|remplissage }}</td>
+                <td>{{ component('remplissage_progress', { value: ficheMatiere.remplissage }) }}</td>
                 <td>{{ ficheMatiere.etatFiche|badgeFiche }}</td>
                 <td class="text-end">
                     <a

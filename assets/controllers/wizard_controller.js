@@ -9,9 +9,7 @@
 import { Controller } from '@hotwired/stimulus'
 
 export default class extends Controller {
-  static targets = [
-    'content',
-  ]
+  static targets = ['content', 'tab']
 
   static values = {
     url: String,
@@ -20,32 +18,79 @@ export default class extends Controller {
   }
 
   connect() {
-    // si stepValue est vide récupérer le step dans l'url
+    this._onPopState = this._handlePopState.bind(this)
+    window.addEventListener('popstate', this._onPopState)
+
     if (this.stepValue === '') {
       const urlParams = new URLSearchParams(window.location.search)
-
-      // si le paramètre step est présent dans l'url on prend, sinon StepDefault
       this.stepValue = urlParams.has('step') ? urlParams.get('step') : this.stepDefaultValue
     }
 
+    this._activateStep(this.stepValue)
     this._loadStep(this.stepValue)
   }
 
-  changeStep(event) {
-    const url = new URL(window.location);
-    const params = new URLSearchParams(url.search);
-    params.set('step', event.params.step);
-    window.history.pushState({}, '', `${url.pathname}?${params.toString()}`);
+  disconnect () {
+    window.removeEventListener('popstate', this._onPopState)
+  }
 
-    this._loadStep(event.params.step)
+  changeStep(event) {
+    event.preventDefault()
+
+    const step = event.params.step ?? event.currentTarget?.dataset.step
+    if (!step) {
+      return
+    }
+
+    const url = new window.URL(window.location)
+    const params = new URLSearchParams(url.search)
+    params.set('step', step)
+    window.history.pushState({}, '', `${url.pathname}?${params.toString()}`)
+
+    this.stepValue = step
+    this._activateStep(step)
+    this._loadStep(step)
+  }
+
+  _handlePopState () {
+    const urlParams = new URLSearchParams(window.location.search)
+    const step = urlParams.get('step') || this.stepDefaultValue
+
+    this.stepValue = step
+    this._activateStep(step)
+    this._loadStep(step)
+  }
+
+  _activateStep (step) {
+    if (!this.hasTabTarget) {
+      return
+    }
+
+    this.tabTargets.forEach((tab) => {
+      const tabStep = tab.dataset.step || tab.dataset.wizardStepParam
+      const isActive = String(tabStep) === String(step)
+
+      tab.classList.toggle('active', isActive)
+      tab.classList.toggle('app-tab-active', isActive)
+      tab.setAttribute('aria-selected', isActive ? 'true' : 'false')
+      tab.setAttribute('tabindex', isActive ? '0' : '-1')
+    })
   }
 
   async _loadStep(step) {
-    const url = new URL(window.location);
-    const params = new URLSearchParams(url.search);
-    params.set('step', step);
+    const url = new window.URL(this.urlValue, window.location.origin)
+    url.searchParams.set('step', step)
 
-    const response = await fetch(`${this.urlValue}?${params}`)
+    if (this.hasContentTarget && this.contentTarget.tagName === 'TURBO-FRAME') {
+      this.contentTarget.setAttribute('src', url.toString())
+      return
+    }
+
+    const response = await fetch(url.toString(), {
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest',
+      },
+    })
     this.contentTarget.innerHTML = await response.text()
   }
 }

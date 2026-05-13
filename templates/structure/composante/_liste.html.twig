@@ -1,90 +1,123 @@
-<div class="row">
-    <div class="col-12 mb-5">
-        <section class="scroll-section" id="labels">
-            <div class="card mb-2 bg-transparent no-shadow d-none d-md-block sh-3">
-                <div class="card-body pt-0 pb-0 h-100">
-                    <div class="row g-0 h-100 align-content-center">
-                        <div class="col-12 col-md-4 d-flex align-items-center mb-2 text-secondary mb-md-0">
+<section
+        class="space-y-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-900 sm:p-6">
+
+    {% set composantesAvecFormation = composantes|filter(composante => composante.formationsPortees|length > 0) %}
+
+    {# ── En-tête ─────────────────────────────────────────────────────────── #}
+    <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div class="space-y-1">
+            <h2 class="text-sm font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">
+                Composantes
+            </h2>
+            <p class="max-w-3xl text-sm text-slate-600 dark:text-slate-300">
+                Liste des composantes portant au moins une mention. Cliquez sur « Détails » pour charger
+                la liste des formations associées.
+            </p>
+        </div>
+
+        <div class="inline-flex items-center rounded-full border border-cyan-200 bg-cyan-50 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-cyan-800 dark:border-cyan-800 dark:bg-cyan-950/30 dark:text-cyan-200">
+            {{ composantesAvecFormation|length }}
+            composante{{ composantesAvecFormation|length > 1 ? 's' : '' }}
+        </div>
+    </div>
+
+    {# ── En-têtes de colonnes (desktop) ──────────────────────────────────── #}
+    <div class="hidden grid-cols-12 gap-4 px-4 text-[11px] font-black uppercase tracking-[0.18em] text-slate-400 dark:text-slate-500 lg:grid">
+        <div class="col-span-4">Composante</div>
+        <div class="col-span-2 text-center">Mentions</div>
+        <div class="col-span-2 text-center">État</div>
+        <div class="col-span-2">Remplissage</div>
+        <div class="col-span-2 text-right">Actions</div>
+    </div>
+
+    {# ── Liste des composantes ─────────────────────────────────────────────── #}
+    <div class="space-y-3">
+        {% for composante in composantesAvecFormation %}
+
+            <section
+                    class="overflow-hidden rounded-2xl border border-slate-200 bg-slate-50/80 shadow-sm transition hover:border-cyan-300 hover:bg-white dark:border-slate-700 dark:bg-slate-950/30 dark:hover:border-cyan-700 dark:hover:bg-slate-900"
+                    {{ stimulus_controller('load_content', {
+                        url: path('app_formation_liste_composante', {composante: composante.id})
+                    }) }}
+            >
+                {# ── Ligne principale ──────────────────────────────────────── #}
+                <div class="grid grid-cols-1 gap-4 px-4 py-4 sm:px-5 lg:grid-cols-12 lg:items-center">
+
+                    {# Nom de la composante #}
+                    <div class="lg:col-span-4">
+                        <div class="text-[11px] font-black uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500 lg:hidden">
                             Composante
                         </div>
-                        <div class="col-6 col-md-1 d-flex align-items-center
-                        text-secondary">
-                            Nb Mentions/spécialités
+                        <div class="mt-0.5 font-semibold text-slate-900 dark:text-slate-100">
+                            {{ composante.libelle }}
                         </div>
-                        <div class="col-6 col-md-1 d-flex align-items-center
-                        text-secondary">
-                            Etat
+                    </div>
+
+                    {# Nb mentions #}
+                    <div class="flex flex-col items-start lg:col-span-2 lg:items-center">
+                        <div class="text-[11px] font-black uppercase tracking-[0.16em] text-slate-400 dark:text-slate-500 lg:hidden">
+                            Mentions
                         </div>
-                        <div class="col-6 col-md-2 d-flex align-items-center
-                        text-medium text-secondary">
+                        <span class="mt-0.5 inline-flex items-center rounded-full border border-slate-200 bg-white px-2.5 py-1 text-sm font-semibold text-slate-800 shadow-sm dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100">
+                            {% set nbMentions = composante.formationsPortees|length %}
+                            {{ nbMentions }} mention{{ nbMentions > 1 ? 's' : '' }}
+                        </span>
+                    </div>
+
+                    {# État #}
+                    <div class="lg:col-span-2">
+                        <div class="text-[11px] font-black uppercase tracking-[0.16em] text-slate-400 dark:text-slate-500 lg:hidden">
+                            État
+                        </div>
+                        <div class="mt-0.5 flex flex-wrap gap-1 [&_.badge]:inline-flex [&_.badge]:rounded-full [&_.badge]:px-2.5 [&_.badge]:py-0.5 [&_.badge]:text-xs [&_.badge]:font-semibold">
+                            {{ composante.etatComposante|badgeEtatComposante }}
+                        </div>
+                    </div>
+
+                    {# Remplissage #}
+                    <div class="lg:col-span-2">
+                        <div class="text-[11px] font-black uppercase tracking-[0.16em] text-slate-400 dark:text-slate-500 lg:hidden">
                             Remplissage
                         </div>
-                        <div class="col-6 col-md-1 d-flex align-items-center text-medium
-                         text-secondary">
-                            Détails
+                        <div class="mt-0.5">
+                            {{ component('remplissage_progress', { value: composante.remplissage }) }}
                         </div>
-                        <div class="col-6 col-md-3 d-flex align-items-center text-medium
-                        justify-content-end text-secondary">
-                            Actions
-                        </div>
+                    </div>
+
+                    {# Actions #}
+                    <div class="flex flex-wrap items-center gap-2 lg:col-span-2 lg:justify-end">
+                        {# Bouton toggle détails #}
+                        <button
+                                type="button"
+                                class="app-btn app-btn-primary"
+                                {{ stimulus_action('load_content', 'change', 'click') }}
+                        >
+                            <twig:UX:Icon name="icon:chevron-right" class="h-4 w-4"/>
+                            <span>Détails</span>
+                        </button>
+
+                        {# Lien fiche composante #}
+                        <twig:Button
+                                href="{{ path('app_composante', {composante: composante.id}) }}"
+                                variant="info"
+                                icon="icon:eye"
+                                label="Voir"
+                                tooltip="Voir la fiche de la composante"
+                        />
                     </div>
                 </div>
-            </div>
-            <div>{# class="scroll-out" #}
-                {% for composante in composantes|filter(composante => composante.formationsPortees|length > 0) %}
-                    <div {{ stimulus_controller('structure--composante') }}>
-                        <div class="card mb-2 sh-19 sh-md-8">
-                            <div class="card-body pt-0 pb-0 h-100">
-                                <div class="row g-0 h-100 align-content-center">
-                                    <div class="col-12 col-md-4 d-flex flex-column justify-content-center mb-1 mb-md-0">
-                                        <div class="text-muted d-md-none">Composante</div>
-                                        {{ composante.libelle }}
-                                    </div>
-                                    <div class="col-6 col-md-1 d-flex flex-column justify-content-center mb-1 mb-md-0">
-                                        <div class="text-muted d-md-none">Nb Mentions</div>
-                                        {{ composante.formationsPortees|length }} mentions
-                                    </div>
-                                    <div class="col-6 col-md-1 d-flex flex-column justify-content-center mb-1 mb-md-0">
-                                        <div class="text-muted d-md-none">Etat</div>
-                                        {{ composante.etatComposante|badgeEtatComposante }}
-                                    </div>
-                                    <div class="col-6 col-md-2 d-flex flex-column justify-content-center mb-1 mb-md-0">
-                                        <div class="text-muted d-md-none">Remplissage</div>
-                                        {{ composante.remplissage|remplissage }}
-                                    </div>
-                                    <div class="col-6 col-md-1 d-flex flex-column justify-content-center
-                                            mb-1 mb-md-0">
-                                        <div class="text-muted d-md-none">Détails</div>
 
-                                        <button class="ms-2 btn btn-sm btn-outline-primary"
-                                                {{ stimulus_action('structure--composante', 'detail', 'click',
-                                                    {composante:composante.id, url: path
-                                                        ('app_formation_liste_composante',
-                                                        {composante:composante.id})}
-                                                ) }}
-                                        >
-                                            <i class="fal fa-caret-right"></i> Détails
-                                        </button>
-                                    </div>
-                                    <div class="col-6 col-md-3 d-flex flex-column justify-content-end
-                                    align-items-md-end mb-1 mb-md-0">
-                                        <div class="text-muted d-md-none">Actions</div>
-                                        <a href="{{ path('app_composante', {composante:composante.id}) }}" class="btn text-info btn-sm">
-                                            <i class="{{ iconShow }}"></i>
-                                            voir
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="detail_composante_{{ composante.id }}" class="d-none detail_composante ms-4">
-                            <div class="row">
-                                <div class="col-12 bg-white" {{ stimulus_target('structure--composante', 'detail') }}></div>
-                            </div>
-                        </div>
-                    </div>
-                {% endfor %}
+                {# ── Zone de détail dépliable ─────────────────────────────── #}
+                <div
+                        class="empty:hidden border-t border-slate-200 bg-white/80 px-4 py-4 dark:border-slate-700 dark:bg-slate-900/80 sm:px-5"
+                        {{ stimulus_target('load_content', 'content') }}
+                ></div>
+            </section>
+
+        {% else %}
+            <div class="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-6 text-center text-sm font-medium text-amber-800 dark:border-amber-800 dark:bg-amber-950/30 dark:text-amber-200">
+                Aucune composante avec formation n'est disponible pour cette campagne.
             </div>
-        </section>
+        {% endfor %}
     </div>
-</div>
+</section>

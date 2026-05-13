@@ -9,7 +9,7 @@
 
 namespace App\Controller;
 
-use App\Entity\Profil;
+use App\DTO\TranslatableKey;
 use App\Entity\User;
 use App\Entity\UserProfil;
 use App\Enums\CentreGestionEnum;
@@ -24,7 +24,9 @@ use App\Repository\ParcoursRepository;
 use App\Repository\ProfilRepository;
 use App\Repository\UserProfilRepository;
 use App\Utils\JsonRequest;
+use App\Utils\TurboStreamResponseFactory;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -35,14 +37,22 @@ final class UserProfilsController extends BaseController
 {
     #[Route('/{user}', name: 'gestion')]
     public function gestionUserProfils(
+        TurboStreamResponseFactory $turboStream,
         ProfilRepository $profilRepository,
         User             $user
     ): Response
     {
-        return $this->render('user_profils/_gestion_profils.html.twig', [
-            'user' => $user,
-            'profils' => $profilRepository->findAll()
-        ]);
+        return $turboStream->streamOpenModalFromTemplates(
+            new TranslatableKey('user.gestion_profil.title', [], 'modal'),
+            'Utilisateur : ' . $user->getDisplay(),
+            'user_profils/_gestion_profils.html.twig',
+            [
+                'user' => $user,
+                'profils' => $profilRepository->findAll(),
+            ],
+            '_ui/_footer_submit_cancel.html.twig',
+            []
+        );
     }
 
     #[Route('/{user}/liste', name: 'liste')]
@@ -56,7 +66,7 @@ final class UserProfilsController extends BaseController
         ]);
     }
 
-    #[Route('/{user}/add', methods: ['GET'], name: 'add')]
+    #[Route('/{user}/add', name: 'add', methods: ['GET'])]
     public function addUserProfils(
         ProfilRepository $profilRepository,
         User             $user
@@ -69,7 +79,7 @@ final class UserProfilsController extends BaseController
         ]);
     }
 
-    #[Route('/{user}/add', methods: ['POST'], name: 'add_valide')]
+    #[Route('/{user}/add', name: 'add_valide', methods: ['POST'])]
     public function addCentre(
         EntityManagerInterface   $entityManager,
         EventDispatcherInterface $eventDispatcher,
@@ -90,7 +100,7 @@ final class UserProfilsController extends BaseController
             return $this->json(['error' => 'Ce rôle n\'existe pas'], 400);
         }
 
-        $nCentre = (new UserProfil())
+        $nCentre = new UserProfil()
             ->setUser($user)
             ->setCampagneCollecte($this->getCampagneCollecte())
             ->setProfil($profil);
@@ -117,6 +127,7 @@ final class UserProfilsController extends BaseController
             CentreGestionEnum::CENTRE_GESTION_ETABLISSEMENT => $userProfilRepository->findOneBy(['user' => $user, 'etablissement' => $centre]),
             CentreGestionEnum::CENTRE_GESTION_FORMATION => $userProfilRepository->findFormationWithSameRole($centre, $profil, $this->getCampagneCollecte()),
             CentreGestionEnum::CENTRE_GESTION_PARCOURS => $userProfilRepository->findParcoursWithSameRole($centre, $profil, $this->getCampagneCollecte()),
+            CentreGestionEnum::CENTRE_GESTION_NULL => throw new Exception('To be implemented'),
         };
 
         if ($existingCentre && $profil->isExclusif()) {
@@ -145,6 +156,7 @@ final class UserProfilsController extends BaseController
             CentreGestionEnum::CENTRE_GESTION_ETABLISSEMENT => $nCentre->setEtablissement($centre),
             CentreGestionEnum::CENTRE_GESTION_FORMATION => $nCentre->setFormation($centre),
             CentreGestionEnum::CENTRE_GESTION_PARCOURS => $nCentre->setParcours($centre),
+            CentreGestionEnum::CENTRE_GESTION_NULL => throw new Exception('To be implemented'),
         };
 
         $event = match ($centreType) {
@@ -152,6 +164,7 @@ final class UserProfilsController extends BaseController
             CentreGestionEnum::CENTRE_GESTION_ETABLISSEMENT => new NotifCentreEtablissementEvent($centre, $user, $profil),
             CentreGestionEnum::CENTRE_GESTION_FORMATION => new NotifCentreFormationEvent($centre, $user, $profil),
             CentreGestionEnum::CENTRE_GESTION_PARCOURS => new NotifCentreParcoursEvent($centre, $user, $profil),
+            CentreGestionEnum::CENTRE_GESTION_NULL => throw new Exception('To be implemented'),
         };
 
         if ($event) {

@@ -76,7 +76,9 @@ class NatureUeEcController extends AbstractController
     }
 
     #[Route('/new', name: 'app_nature_ue_ec_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, NatureUeEcRepository $natureUeEcRepository): Response
+    public function new(
+        TurboStreamResponseFactory $turboStream,
+        Request                    $request, NatureUeEcRepository $natureUeEcRepository): Response
     {
         $natureUeEc = new NatureUeEc();
         $form = $this->createForm(NatureUeEcType::class, $natureUeEc, [
@@ -90,10 +92,17 @@ class NatureUeEcController extends AbstractController
             return $this->json(true);
         }
 
-        return $this->render('config/nature_ue_ec/new.html.twig', [
-            'nature_ue_ec' => $natureUeEc,
-            'form' => $form->createView(),
-        ]);
+        return $turboStream->streamOpenModalFromTemplates(
+            new TranslatableKey('nature_ue_ec.new.title', [], 'modal'),
+            '',
+            '_ui/_modal_new_generic.html.twig',
+            [
+                'nature_ue_ec' => $natureUeEc,
+                'form' => $form->createView(),
+            ],
+            '_ui/_footer_submit_cancel.html.twig',
+            []
+        );
     }
 
     #[Route('/{id}', name: 'app_nature_ue_ec_show', methods: ['GET'])]
@@ -137,7 +146,9 @@ class NatureUeEcController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_nature_ue_ec_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, NatureUeEc $natureUeEc, NatureUeEcRepository $natureUeEcRepository): Response
+    public function edit(
+        TurboStreamResponseFactory $turboStream,
+        Request                    $request, NatureUeEc $natureUeEc, NatureUeEcRepository $natureUeEcRepository): Response
     {
         $form = $this->createForm(NatureUeEcType::class, $natureUeEc, [
             'action' => $this->generateUrl('app_nature_ue_ec_edit', ['id' => $natureUeEc->getId()]),
@@ -151,10 +162,17 @@ class NatureUeEcController extends AbstractController
             return $this->json(true);
         }
 
-        return $this->render('config/nature_ue_ec/new.html.twig', [
-            'nature_ue_ec' => $natureUeEc,
-            'form' => $form->createView(),
-        ]);
+        return $turboStream->streamOpenModalFromTemplates(
+            new TranslatableKey('nature_ue_ec.edit.title', [], 'modal'),
+            'Nature UE ou EC : ' . $natureUeEc->getLibelle(),
+            '_ui/_modal_new_generic.html.twig',
+            [
+                'nature_ue_ec' => $natureUeEc,
+                'form' => $form->createView(),
+            ],
+            '_ui/_footer_submit_cancel.html.twig',
+            []
+        );
     }
 
 

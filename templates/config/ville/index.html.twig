@@ -13,24 +13,28 @@
         {
             href:'',
             title: 'Administration',
+        },
+        {
+            href:'',
+            title: 'Gestion des villes de l\'établissement',
         }
     ]}) }}
 {% endblock %}
 
 {% block bouton_header %}
-    <button
-            {{ stimulus_controller('modal', {
-                size: 'lg',
-                modalTitle: 'Ajouter un ville',
-                modalUrl: path('app_ville_new') }) }}
-            data-action="click->modal#openModal"
-            class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
-            data-size="lg"
-            data-bs-toggle="tooltip"
-            data-bs-placement="bottom"
-            title="Ajouter une ville"
+
+    <a
+            data-action="click->modalturbo#open"
+            data-turbo="true"
+            href="{{ path('app_ville_new') }}"
+            class="btn border border-emerald-300 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 hover:text-emerald-800"
+            {{ stimulus_controller('tooltip', {
+                placement: 'bottom',
+                customClass: 'app-tooltip',
+                title: "Ajouter une ville"
+            }) }}
     >
-        <i class="{{ iconAdd }}"></i>
-        <span> Ajouter un ville</span>
-    </button>
+        <twig:UX:Icon name="icon:add" class="h-4 w-4"/>
+        <span> Ajouter une ville</span>
+    </a>
 {% endblock %}

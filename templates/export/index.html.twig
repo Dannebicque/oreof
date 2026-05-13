@@ -6,6 +6,8 @@
 
 {% block breadcrumb %}
     {{ include('communs/_breadcrumb.html.twig', {liens:[
+        {title: 'Pilotage'},
+        {title: 'Gestion des exports de fichier'},
     ]}) }}
 {% endblock %}
 
@@ -39,15 +41,34 @@
                         urlValide: path('app_export_valide', {composante:composante.id})
                     }) }}
             {% endif %}
+            class="space-y-4"
     >
-        <div class="card mt-2">
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-6">
+        <section
+                class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-900 sm:p-6">
+            <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                <div class="space-y-1">
+                    <h2 class="text-sm font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">
+                        Paramètres d'export
+                    </h2>
+                    <p class="max-w-3xl text-sm text-slate-600 dark:text-slate-300">
+                        Sélectionnez la composante et le type de document à générer. Le résultat sera envoyé par email.
+                    </p>
+                </div>
+
+                <div class="inline-flex items-center rounded-full border border-cyan-200 bg-cyan-50 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-cyan-800 dark:border-cyan-800 dark:bg-cyan-950/30 dark:text-cyan-200">
+                    {{ user_data.campagneCollecte.libelle }}
+                </div>
+            </div>
+
+            <div class="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
+                <div class="space-y-4">
                         {% if ses is defined and ses == true or isCfvu is defined and isCfvu == true %}
-                            <div>
-                                <label for="composante" class="required">Composante</label>
-                                <select name="composante" id="composante" class="form-select"
+                            <div class="space-y-1.5">
+                                <label for="composante"
+                                       class="block text-sm font-medium text-slate-700 dark:text-slate-200">Composante
+                                    <span class="text-rose-500">*</span></label>
+                                <select name="composante" id="composante"
+                                        class="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 shadow-sm outline-none transition focus:border-cyan-500 focus:ring-2 focus:ring-cyan-200 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:focus:border-cyan-400 dark:focus:ring-cyan-900"
                                         {{ stimulus_action('export', 'changeListe') }}
                                         {{ stimulus_controller('symfony/ux-autocomplete/autocomplete') }}
                                 >
@@ -58,9 +79,12 @@
                                 </select>
                             </div>
                         {% else %}
-                            <div>
-                                <label for="composante" class="required">Composante</label>
-                                <select name="composante" id="composante" class="form-select"
+                            <div class="space-y-1.5">
+                                <label for="composante"
+                                       class="block text-sm font-medium text-slate-700 dark:text-slate-200">Composante
+                                    <span class="text-rose-500">*</span></label>
+                                <select name="composante" id="composante"
+                                        class="block w-full rounded-lg border border-slate-300 bg-slate-100 px-3 py-2 text-sm text-slate-500 shadow-sm outline-none dark:border-slate-600 dark:bg-slate-800 dark:text-slate-400"
                                         disabled
                                         {{ stimulus_action('export', 'changeListe') }}
                                         {{ stimulus_controller('symfony/ux-autocomplete/autocomplete') }}
@@ -69,9 +93,12 @@
                                 </select>
                             </div>
                         {% endif %}
-                        <div>
-                            <label for="type_document" class="required">Type d'export</label>
-                            <select name="type_document" id="type_document" class="form-select">
+
+                    <div class="space-y-1.5">
+                        <label for="type_document" class="block text-sm font-medium text-slate-700 dark:text-slate-200">Type
+                            d'export <span class="text-rose-500">*</span></label>
+                        <select name="type_document" id="type_document"
+                                class="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 shadow-sm outline-none transition focus:border-cyan-500 focus:ring-2 focus:ring-cyan-200 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:focus:border-cyan-400 dark:focus:ring-cyan-900">
                                 <option value="">Choisir le format</option>
                                 {% for value, type in types_document %}
                                     <option value="{{ value }}">{{ type }}</option>
@@ -80,45 +107,55 @@
                         </div>
 
                         {% if isCfvu is defined and isCfvu != true %}
-                            <div>
-                                <label for="date">Préciser, si besoin, la date du conseil ou de la commission</label>
-                                <input type="date" name="date" id="date" class="form-control">
+                            <div class="space-y-1.5">
+                                <label for="date" class="block text-sm font-medium text-slate-700 dark:text-slate-200">Préciser,
+                                    si besoin, la date du conseil ou de la commission</label>
+                                <input type="date" name="date" id="date"
+                                       class="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 shadow-sm outline-none transition focus:border-cyan-500 focus:ring-2 focus:ring-cyan-200 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:focus:border-cyan-400 dark:focus:ring-cyan-900">
                             </div>
                         {% endif %}
-                    </div>
-                    <div class="col-6">
+                </div>
+
+                <div class="space-y-4">
                         {% if types_document_global is defined %}
-                        <div>
-                            <label for="type_document_global">Exports spécifiques (sans choix de composante)</label>
-                            <select name="type_document_global" id="type_document_global" class="form-select">
-                                <option value="">Choisir le format</option>
-                                {% for value, type in types_document_global %}
-                                    <option value="{{ value }}">{{ type }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
+                            <div class="space-y-1.5">
+                                <label for="type_document_global"
+                                       class="block text-sm font-medium text-slate-700 dark:text-slate-200">Exports
+                                    spécifiques (sans choix de composante)</label>
+                                <select name="type_document_global" id="type_document_global"
+                                        class="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 shadow-sm outline-none transition focus:border-cyan-500 focus:ring-2 focus:ring-cyan-200 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:focus:border-cyan-400 dark:focus:ring-cyan-900">
+                                    <option value="">Choisir le format</option>
+                                    {% for value, type in types_document_global %}
+                                        <option value="{{ value }}">{{ type }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
                         {% endif %}
+                </div>
+
+                <div class="lg:col-span-2 space-y-4">
+                    <div class="flex flex-wrap items-center gap-3">
+                        <twig:Button
+                                label="Générer les documents"
+                                variant="success"
+                                icon="icon:add"
+                                dataAction="click->export#valideExport"
+                        />
                     </div>
-                    <div class="col-12">
-                        <div class="mt-2">
-                            <button class="btn btn-outline-success" type="button"
-                                    {{ stimulus_action('export', 'valideExport') }}
-                            >Générer les documents
-                            </button>
-                        </div>
-                        {{ component('alerte', {
-                            type: 'info',
-                            message: 'Les documents seront générés et un lien de téléchargement sera envoyé par email',
-                            id: 'alerte-success'
-                        }) }}
-                    </div>
+
+                    {{ component('alerte', {
+                        type: 'info',
+                        message: 'Les documents seront générés et un lien de téléchargement sera envoyé par email',
+                        id: 'alerte-success'
+                    }) }}
                 </div>
             </div>
-        </div>
+        </section>
         {# todo: choix formation/parcours, mutliples, filtres, composante, type de diplôme #}
 
-        <div class="card mt-2" {{ stimulus_target('export', 'liste') }}>
-        </div>
+        <section
+                class="rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-900" {{ stimulus_target('export', 'liste') }}>
+        </section>
     </div>
 
 {% endblock %}

@@ -6,6 +6,7 @@ use App\Classes\CalculStructureParcours;
 use App\Classes\MyGotenbergPdf;
 use App\Entity\Formation;
 use App\Service\TypeDiplomeResolver;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -20,6 +21,7 @@ class PlaquetteFormationController extends AbstractController
     #[Route('/communication/plaquette/formation/{slug}', name: 'app_plaquette_formation_export')]
     public function index(
         TypeDiplomeResolver $typeDiplomeResolver,
+        #[MapEntity(mapping: ['slug' => 'slug'])]
         Formation           $formation
     ): Response {
         $rubriques = $formation->getComposantePorteuse()?->getPlaquetteRubriques();

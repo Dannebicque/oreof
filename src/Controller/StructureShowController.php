@@ -78,9 +78,10 @@ class StructureShowController extends AbstractController
         if ($dto === null) {
             return $this->render('typeDiplome/formation/_structure_empty.html.twig', []);
         }
-
+//dd($dto);
         return $this->render('typeDiplome/' . $typeD::TEMPLATE_FOLDER . '/structure/v2/_structure.html.twig', [
             'parcours' => $parcours,
+            'typeDiplome' => $parcours->getTypeDiplome(),
             'diffStructure' => $diffStructure ?? null,
             'dto' => $dto,
             'hasLastVersion' => $hasLastVersion,

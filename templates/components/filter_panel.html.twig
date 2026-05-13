@@ -1,0 +1,36 @@
+{% set panelTitle = title|default('Filtres') %}
+{% set filtersCount = activeFilters|default(0) %}
+{% set fieldsTitle = fieldsTitle|default('Filtres avances') %}
+{% set searchContent = block('search')|trim %}
+
+<div class="rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-900">
+    <div class="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between">
+        <div class="w-full sm:max-w-sm">
+            {% if searchContent != '' %}
+                {{ searchContent|raw }}
+            {% endif %}
+        </div>
+
+        <div class="flex shrink-0 items-center gap-2 self-end sm:self-auto">
+            {% block actions %}
+                <span class="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-600 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-200">
+                    {{ ux_icon('icon:filter', {class: 'h-4 w-4'}) }}
+                    {{ panelTitle }}
+                    {% if filtersCount > 0 %}
+                        <span class="inline-flex min-w-5 items-center justify-center rounded-full bg-indigo-600 px-1.5 py-0.5 text-[10px] font-bold text-white dark:bg-indigo-500">
+                            {{ filtersCount }}
+                        </span>
+                    {% endif %}
+                </span>
+            {% endblock %}
+        </div>
+    </div>
+
+    <div class="border-t border-slate-100 bg-slate-50/60 p-4 dark:border-slate-700 dark:bg-slate-800/40">
+        <p class="mb-3 text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">{{ fieldsTitle }}</p>
+        <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-6">
+            {% block fields %}{% endblock %}
+        </div>
+    </div>
+</div>
+

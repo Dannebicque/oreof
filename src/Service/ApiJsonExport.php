@@ -39,7 +39,7 @@ class ApiJsonExport {
 
     public function generateApiVersioning(
         string $hostname,
-        SymfonyStyle $io = null,
+        SymfonyStyle $io,
         LheoXML $lheoXmlService
     ): array
     {
@@ -47,7 +47,7 @@ class ApiJsonExport {
         $urlPrefix = "https://" . $hostname;
 
         $countParcoursCampagneActuelle = 0;
-        
+
         $countParcoursCampagneSuivante = 0;
 
         $campagneCourante = $this->entityManager->getRepository(CampagneCollecte::class)
@@ -149,9 +149,9 @@ class ApiJsonExport {
          */
         if($campagneSuivante && $campagneSuivante->isEnablePublication()){
             $formationArray = $this->entityManager->getRepository(Formation::class)->findAll();
-            $formationArray = array_filter($formationArray, 
+            $formationArray = array_filter($formationArray,
                 function($f) use ($campagneSuivante, $etatReconductionCampagneSuivante) {
-                    $parcoursCampagneSuivante = array_filter($f->getParcours()->toArray(), 
+                    $parcoursCampagneSuivante = array_filter($f->getParcours()->toArray(),
                         function($p) use ($campagneSuivante, $etatReconductionCampagneSuivante) {
                             $dpeParcours = $p->getDpeParcours()?->last();
                             if($dpeParcours instanceof DpeParcours){

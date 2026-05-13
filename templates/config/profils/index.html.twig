@@ -6,12 +6,15 @@
         urlListe: path('app_administration_profils_liste'),
         urlChangeDroit: path('app_administration_profils_change_droit'),
     }) }}>
-        <div class="card mt-2">
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-6">
-                        <label for="profil" class="required">Profil</label>
-                        <select name="profil" id="profil" class="form-select"
+        <div class="mt-2 rounded-lg border border-gray-200 bg-white shadow-sm">
+            <div class="p-4">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label for="profil" class="mb-1 block text-sm font-medium text-gray-700">
+                            Profil <span class="text-red-500">*</span>
+                        </label>
+                        <select name="profil" id="profil"
+                                class="block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
                                 {{ stimulus_action('profil--index', 'changeProfil') }}
                                 {{ stimulus_controller('symfony/ux-autocomplete/autocomplete') }}
                         >
@@ -23,15 +26,12 @@
                             {% endfor %}
                         </select>
                     </div>
-
-                    <div class="col-6">
-
-                    </div>
+                    <div></div>
                 </div>
             </div>
         </div>
 
-        <div {{ stimulus_target('profil--index', 'liste') }}></div>
+        <div {{ stimulus_target('profil--index', 'liste') }} class="mt-2"></div>
     </div>
 {% endblock %}
 
@@ -43,7 +43,7 @@
     {{ include('communs/_breadcrumb.html.twig', {liens:[
         {
             href:'',
-            title: 'Administration',
+            title: 'Gestion des utilisateurs',
         },
         {
             href:'',
@@ -59,13 +59,14 @@
                 modalTitle: 'Ajouter un profil',
                 modalUrl: path('app_administration_profils_creer') }) }}
             data-action="click->modal#openModal"
-            class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
-            data-size="lg"
-            data-bs-toggle="tooltip"
-            data-bs-placement="bottom"
-            title="Ajouter un rôle"
+            class="btn border border-emerald-300 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 hover:text-emerald-800"
+            {{ stimulus_controller('tooltip', {
+                placement: 'bottom',
+                customClass: 'app-tooltip',
+                title: 'Ajouter un rôle'
+            }) }}
     >
-        <i class="{{ iconAdd }}"></i>
+        <twig:UX:Icon name="icon:add" class="h-4 w-4"/>
         <span> Créer un profil</span>
     </button>
 {% endblock %}

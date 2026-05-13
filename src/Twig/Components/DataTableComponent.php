@@ -56,6 +56,15 @@ class DataTableComponent
     #[LiveProp]
     public array $actions = [];
 
+    #[LiveProp]
+    public array $baseJoins = [];
+
+    #[LiveProp]
+    public array $baseWheres = [];
+
+    #[LiveProp]
+    public array $baseParameters = [];
+
     #[LiveProp(writable: true)]
     public int $perPage = 20;
 
@@ -72,6 +81,9 @@ class DataTableComponent
         $this->entityClass = $this->config['entityClass'] ?? '';
         $this->columns = $this->config['columns'] ?? [];
         $this->actions = $this->config['actions'] ?? [];
+        $this->baseJoins = $this->config['baseJoins'] ?? [];
+        $this->baseWheres = $this->config['baseWheres'] ?? [];
+        $this->baseParameters = $this->config['baseParameters'] ?? [];
         $this->perPage = $this->config['perPage'] ?? 20;
         $this->sortField = $this->config['sortField'] ?? '';
         $this->sortDirection = $this->config['sortDirection'] ?? 'asc';
@@ -130,8 +142,40 @@ class DataTableComponent
         $qb = $this->entityManager->createQueryBuilder();
         $qb->select('e')->from($this->entityClass, 'e');
 
-        // Auto-join des relations utilisées dans les colonnes
         $joinedAliases = [];
+
+        foreach ($this->baseJoins as $join) {
+            $type = strtolower((string)($join['type'] ?? 'left'));
+            $path = (string)($join['path'] ?? '');
+            $alias = (string)($join['alias'] ?? '');
+
+            if ('' === $path || '' === $alias || in_array($alias, $joinedAliases, true)) {
+                continue;
+            }
+
+            if ('inner' === $type) {
+                $qb->innerJoin($path, $alias);
+            } else {
+                $qb->leftJoin($path, $alias);
+            }
+
+            $joinedAliases[] = $alias;
+        }
+
+        foreach ($this->baseWheres as $whereExpression) {
+            if (is_string($whereExpression) && '' !== trim($whereExpression)) {
+                $qb->andWhere($whereExpression);
+            }
+        }
+
+        foreach ($this->baseParameters as $name => $value) {
+            if (!is_string($name) || '' === $name) {
+                continue;
+            }
+            $qb->setParameter($name, $value);
+        }
+
+        // Auto-join des relations utilisées dans les colonnes
         foreach ($this->columns as $column) {
             $field = $column['field'];
             if (strpos($field, '.') !== false) {

@@ -38,8 +38,8 @@ class ParcoursExport {
     public function exportLastValidVersionMaquetteJson(
         StructureParcours $dto,
         Parcours $parcours,
-        int $parcours_id = null,
-        int $formation_id = null
+        ?int $parcours_id = null,
+        ?int $formation_id = null
     ): array
     {
         $typeDiplome = $parcours->getFormation()?->getTypeDiplome();
@@ -70,8 +70,8 @@ class ParcoursExport {
         Parcours $parcours,
         TypeDiplome $typeDiplome,
         bool $isVersioning = false,
-        int $parcours_id = null,
-        int $formation_id = null
+        ?int $parcours_id = null,
+        ?int $formation_id = null
     ): array
     {
         $data = [

@@ -1,0 +1,5 @@
+{# Template partiel pour la colonne "Collecte DPE active ?" #}
+<span class="badge {% if item.defaut %}bg-success{% else %}bg-warning{% endif %}">
+    {{ item.defaut ? 'Active' : 'Non' }}
+</span>
+

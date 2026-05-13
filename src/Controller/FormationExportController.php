@@ -13,6 +13,7 @@ use App\Classes\MyGotenbergPdf;
 use App\Entity\Formation;
 use App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException;
 use App\TypeDiplome\TypeDiplomeResolver;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -36,6 +37,7 @@ class FormationExportController extends AbstractController
      */
     #[Route('/formation/export/{slug}', name: 'app_formation_export')]
     public function export(
+        #[MapEntity(mapping: ['slug' => 'slug'])]
         Formation $formation,
         TypeDiplomeResolver $typeDiplomeResolver,
     ): Response

@@ -10,6 +10,9 @@ class DataTableBuilder
     private int $perPage = 20;
     private string $defaultSort = '';
     private string $defaultSortDirection = 'asc';
+    private array $baseJoins = [];
+    private array $baseWheres = [];
+    private array $baseParameters = [];
 
     public function setEntity(string $entityClass): self
     {
@@ -68,6 +71,7 @@ class DataTableBuilder
             'separator' => ', ',
             'template' => null,
             'class' => '',
+            'is_html' => false,
         ], $options);
 
         return $this;
@@ -88,7 +92,8 @@ class DataTableBuilder
             'label' => 'Dupliquer',
             'route' => $route,
             'icon' => 'fal fa-copy',
-            'class' => 'text-success',
+            'method' => 'duplicate',
+            'class' => 'inline-flex items-center gap-1 rounded-md border border-emerald-300 bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-700 transition hover:bg-emerald-100',
         ], $options));
     }
 
@@ -101,12 +106,13 @@ class DataTableBuilder
      *   - route: string - Nom de la route Symfony
      *   - route_params: array - Paramètres de route additionnels
      *   - icon: string - Classe d'icône Bootstrap/FontAwesome
-     *   - class: string - Classes CSS du bouton (défaut: 'btn-sm btn-primary')
+     *   - class: string - Classes CSS Tailwind du bouton
      *   - confirm: string - Message de confirmation
      *   - condition: callable - Fonction qui détermine si l'action est visible pour une ligne
      *   - modal: bool - Ouvrir dans une modal (défaut: false)
      *   - modal_size: string - Taille de la modal: 'sm', 'lg', 'xl' (défaut: 'lg')
      *   - modal_title: string - Titre de la modal (défaut: label de l'action)
+     *   - method: string - Méthode HTTP spéciale: 'delete' (stimulus crud#delete), 'duplicate' (stimulus crud#duplicate), null = lien standard
      */
     public function addAction(string $name, array $options = []): self
     {
@@ -115,12 +121,13 @@ class DataTableBuilder
             'route' => null,
             'route_params' => [],
             'icon' => null,
-            'class' => 'btn-sm btn-primary',
+            'class' => 'inline-flex items-center gap-1 rounded-md border border-slate-300 bg-white px-2.5 py-1 text-xs font-semibold text-slate-700 transition hover:bg-slate-50',
             'confirm' => null,
             'condition' => null,
             'modal' => false,
             'modal_size' => 'lg',
             'modal_title' => null,
+            'method' => null,
         ], $options);
 
         // Si modal_title n'est pas défini, utiliser le label
@@ -140,7 +147,7 @@ class DataTableBuilder
             'label' => 'Activer/Désactiver',
             'route' => $route,
             'icon' => 'fal fa-toggle-on',
-            'class' => 'text-warning',
+            'class' => 'inline-flex items-center gap-1 rounded-md border border-amber-300 bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-700 transition hover:bg-amber-100',
         ], $options));
     }
 
@@ -176,8 +183,8 @@ class DataTableBuilder
         return $this->addAction('show', array_merge([
             'label' => 'Voir',
             'route' => $route,
-            'icon' => 'fal fa-eye',
-            'class' => 'text-info',
+            'icon' => 'icon:info',
+            'class' => 'inline-flex items-center gap-1 rounded-md border border-cyan-300 bg-cyan-50 px-2.5 py-1 text-xs font-semibold text-cyan-700 transition hover:bg-cyan-100',
         ], $options));
     }
 
@@ -190,7 +197,7 @@ class DataTableBuilder
             'label' => 'Modifier',
             'route' => $route,
             'icon' => 'fal fa-edit',
-            'class' => 'text-warning',
+            'class' => 'inline-flex items-center gap-1 rounded-md border border-amber-300 bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-700 transition hover:bg-amber-100',
             'modal' => false, // Peut être surchargé
         ], $options));
     }
@@ -204,7 +211,8 @@ class DataTableBuilder
             'label' => 'Supprimer',
             'route' => $route,
             'icon' => 'fal fa-trash-alt',
-            'class' => 'text-danger',
+            'method' => 'delete',
+            'class' => 'inline-flex items-center gap-1 rounded-md border border-rose-300 bg-rose-50 px-2.5 py-1 text-xs font-semibold text-rose-700 transition hover:bg-rose-100',
             'confirm' => 'Êtes-vous sûr de vouloir supprimer cet élément ?',
         ], $options));
     }
@@ -212,6 +220,38 @@ class DataTableBuilder
     public function setPerPage(int $perPage): self
     {
         $this->perPage = $perPage;
+        return $this;
+    }
+
+    /**
+     * Ajoute un join de base appliqué à toutes les requêtes du DataTable.
+     */
+    public function addBaseJoin(string $type, string $path, string $alias): self
+    {
+        $this->baseJoins[] = [
+            'type' => strtolower($type),
+            'path' => $path,
+            'alias' => $alias,
+        ];
+
+        return $this;
+    }
+
+    /**
+     * Ajoute une clause WHERE de base (en plus des filtres UI).
+     */
+    public function addBaseWhere(string $expression): self
+    {
+        $this->baseWheres[] = $expression;
+        return $this;
+    }
+
+    /**
+     * Ajoute un paramètre de base pour les clauses WHERE.
+     */
+    public function addBaseParameter(string $name, mixed $value): self
+    {
+        $this->baseParameters[$name] = $value;
         return $this;
     }
 
@@ -231,6 +271,9 @@ class DataTableBuilder
             'perPage' => $this->perPage,
             'sortField' => $this->defaultSort,
             'sortDirection' => $this->defaultSortDirection,
+            'baseJoins' => $this->baseJoins,
+            'baseWheres' => $this->baseWheres,
+            'baseParameters' => $this->baseParameters,
         ];
     }
 }

@@ -67,8 +67,8 @@
   // }
 
   function findIconElement (trigger, target) {
-    // fallback: prefer an <i> inside the trigger, else an <i> inside the target
-    return trigger.querySelector('i.data-toggle-icon') || (target && target.querySelector('i.data-toggle-icon')) || null
+    // fallback: prefer any explicit toggle icon inside the trigger, else inside the target
+    return trigger.querySelector('.data-toggle-icon') || (target && target.querySelector('.data-toggle-icon')) || null
   }
 
   function collapseGroup (trigger) {

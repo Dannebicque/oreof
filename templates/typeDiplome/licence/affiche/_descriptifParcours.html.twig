@@ -1,22 +1,24 @@
-<div class="row">
-    <div class="col-sm-12">
-        <dl>
-            <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Modalités d'enseignement</dt>
-            <dd>
+<div class="space-y-4">
+    <dl class="space-y-4">
+        <div>
+            <dt class="text-[10px] font-black uppercase tracking-widest text-indigo-400">Modalites d'enseignement</dt>
+            <dd class="mt-1">
                 {% if parcours.modalitesEnseignement != null %}
                     <span class="px-2 py-1 bg-indigo-50 rounded-lg text-xs font-bold text-indigo-600 mt-1">
                     {{ parcours.modalitesEnseignement.libelle }}
                 </span>
                 {% else %}
                     <span class="px-2 py-1 bg-orange-50 rounded-lg text-xs font-bold text-orange-600 mt-1">
-                    Non précisé
+                    Non precise
                 </span>
                 {% endif %}
             </dd>
+        </div>
 
-            {% if typeDiplome.hasStage or parcours.hasStage == true %}
-                <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Stage(s)</dt>
-                <dd>
+        {% if typeDiplome.hasStage or parcours.hasStage == true %}
+            <div>
+                <dt class="text-[10px] font-black uppercase tracking-widest text-indigo-400">Stage(s)</dt>
+                <dd class="mt-1 text-sm text-slate-700 dark:text-slate-200">
                     {% if parcours.hasStage == true %}
                         <span class="px-2 py-1 bg-indigo-50 rounded-lg text-xs font-bold text-indigo-600 mt-1">Oui ({{ parcours.nbHeuresStages }} heures).</span>
                         <br> <p class="mt-1">{{ parcours.stageText|printTexte }}</p>
@@ -30,10 +32,13 @@
                         <span class="px-2 py-1 bg-orange-50 rounded-lg text-xs font-bold text-orange-600 mt-1">Non</span>
                     {% endif %}
                 </dd>
-            {% endif %}
-            {% if typeDiplome.hasProjet or parcours.hasProjet == true %}
-                <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Projet(s) tutoré(s)</dt>
-                <dd>
+            </div>
+        {% endif %}
+
+        {% if typeDiplome.hasProjet or parcours.hasProjet == true %}
+            <div>
+                <dt class="text-[10px] font-black uppercase tracking-widest text-indigo-400">Projet(s) tutore(s)</dt>
+                <dd class="mt-1 text-sm text-slate-700 dark:text-slate-200">
                     {% if parcours.hasProjet == true %}
                         <span class="px-2 py-1 bg-indigo-50 rounded-lg text-xs font-bold text-indigo-600 mt-1">Oui ({{ parcours.nbHeuresProjet }} heures).</span>
                         <br> <p class="mt-1"> {{ parcours.projetText|printTexte }}</p>
@@ -41,10 +46,13 @@
                         <span class="px-2 py-1 bg-orange-50 rounded-lg text-xs font-bold text-orange-600 mt-1">Non</span>
                     {% endif %}
                 </dd>
-            {% endif %}
-            {% if typeDiplome.hasMemoire or parcours.hasMemoire == true %}
-                <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">TER/Mémoire</dt>
-                <dd>
+            </div>
+        {% endif %}
+
+        {% if typeDiplome.hasMemoire or parcours.hasMemoire == true %}
+            <div>
+                <dt class="text-[10px] font-black uppercase tracking-widest text-indigo-400">TER/Memoire</dt>
+                <dd class="mt-1 text-sm text-slate-700 dark:text-slate-200">
                     {% if parcours.hasMemoire == true %}
                         <span class="px-2 py-1 bg-indigo-50 rounded-lg text-xs font-bold text-indigo-600 mt-1">Oui.</span>
                         <br> <p class="mt-1"> {{ parcours.memoireText|printTexte }}</p>
@@ -58,17 +66,21 @@
                         <span class="px-2 py-1 bg-orange-50 rounded-lg text-xs font-bold text-orange-600 mt-1">Non</span>
                     {% endif %}
                 </dd>
-            {% endif %}
-            {% if typeDiplome.hasSituationPro  or parcours.hasSituationPro == true %}
-                <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Situation professionnelle</dt>
-                <dd>
+            </div>
+        {% endif %}
+
+        {% if typeDiplome.hasSituationPro  or parcours.hasSituationPro == true %}
+            <div>
+                <dt class="text-[10px] font-black uppercase tracking-widest text-indigo-400">Situation professionnelle
+                </dt>
+                <dd class="mt-1 text-sm text-slate-700 dark:text-slate-200">
                     {% if parcours.hasSituationPro == true %}
                         <span class="px-2 py-1 bg-indigo-50 rounded-lg text-xs font-bold text-indigo-600 mt-1"> Oui ({{ parcours.nbHeuresSituationPro }} heures).</span>
                     {% else %}
                         <span class="px-2 py-1 bg-orange-50 rounded-lg text-xs font-bold text-orange-600 mt-1">Non</span>
                     {% endif %}
                 </dd>
-            {% endif %}
-        </dl>
-    </div>
+            </div>
+        {% endif %}
+    </dl>
 </div>

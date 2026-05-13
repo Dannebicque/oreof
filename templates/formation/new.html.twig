@@ -1,10 +1,5 @@
 {% extends 'base.html.twig' %}
 
-{% block javascripts %}
-    {{ parent() }}
-    <script src="https://cdn.tailwindcss.com" defer></script>
-{% endblock %}
-
 {% block content %}
     <div class="card"
             {{ stimulus_controller('formation', {

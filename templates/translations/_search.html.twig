@@ -1,29 +1,39 @@
-<table class="table">
-    <thead>
-    <tr>
-        <th>Clé</th>
-        <th>Valeur</th>
-    </tr>
-    </thead>
-    <tbody>
-    {% for key, translation in translations %}
+<div class="overflow-hidden rounded-lg border border-slate-200 dark:border-slate-700">
+    <table class="min-w-full divide-y divide-slate-200 text-sm dark:divide-slate-700">
+        <thead class="bg-slate-50 dark:bg-slate-800">
         <tr>
-            <td colspan="2">
-                <h4>{{ key }}</h4>
-            </td>
+            <th class="px-4 py-3 text-left font-semibold text-slate-700 dark:text-slate-200">Cle</th>
+            <th class="px-4 py-3 text-left font-semibold text-slate-700 dark:text-slate-200">Valeur</th>
         </tr>
-        {% for k, v in translation %}
+        </thead>
+        <tbody class="divide-y divide-slate-200 bg-white dark:divide-slate-700 dark:bg-slate-900">
+        {% for key, translation in translations %}
+            <tr class="bg-slate-50 dark:bg-slate-800/70">
+                <td colspan="2"
+                    class="px-4 py-2 text-xs font-semibold uppercase tracking-wide text-slate-600 dark:text-slate-300">
+                    {{ key }}
+                </td>
+            </tr>
+            {% for k, v in translation %}
+                <tr>
+                    <td class="whitespace-nowrap px-4 py-2 align-top font-mono text-xs text-slate-700 dark:text-slate-200">{{ k }}</td>
+                    <td class="px-4 py-2">
+                        <input
+                                class="block w-full rounded-md border border-slate-300 bg-white px-2.5 py-1.5 text-sm text-slate-800 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:focus:border-blue-400 dark:focus:ring-blue-900"
+                                name="translations[{{ k }}]"
+                                value="{{ v|e('html_attr') }}"
+                                aria-label="Valeur de traduction pour {{ k }}"
+                        />
+                    </td>
+                </tr>
+            {% endfor %}
+        {% else %}
             <tr>
-                <td><input name="translations[{{ k }}]" value="{{ k }}" hidden/>{{ k }}</td>
-                <td><input class="form-control" name="translations[{{ k }}]"
-                           value="{{ v|e('html_attr') }}"/>
+                <td colspan="2" class="px-4 py-6 text-center text-sm text-slate-500 dark:text-slate-400">Aucune
+                    traduction trouvee.
                 </td>
             </tr>
         {% endfor %}
-    {% else %}
-        <tr>
-            <td colspan="2">Aucune traduction trouvée.</td>
-        </tr>
-    {% endfor %}
-    </tbody>
-</table>
+        </tbody>
+    </table>
+</div>

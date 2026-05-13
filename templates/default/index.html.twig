@@ -17,65 +17,61 @@
 
     {{ component('actualites') }}
 
-    <div class="mt-3"
+    <div class="app-tabs"
             {{ stimulus_controller('wizard', {
                 url:  path('app_homepage_wizard'),
                 step: step
             }) }}
     >
 
-        <ul class="nav nav-tabs nav-tabs-title nav-tabs-line-title responsive-tabs" id="lineTitleTabsContainer"
-            role="tablist">
-            <li class="nav-item" role="presentation">
-                <a class="nav-link {% if step == 'formation' %}active{% endif %}" data-bs-toggle="tab" href="#"
-                   role="tab"
-                   aria-selected="false"
-                        {{ stimulus_action('wizard', 'changeStep', 'click', {step: 'formation'}) }}
-
-                >
-                    Vos formations (DPE: {{ user_data.campagneCollecte.libelle }})
-                </a>
-            </li>
-            <li class="nav-item" role="presentation">
-                <a class="nav-link {% if step == 'fiche' %}active{% endif %}" data-bs-toggle="tab" href="#" role="tab"
-                   aria-selected="false"
-                        {{ stimulus_action('wizard', 'changeStep', 'click', {step: 'fiche'}) }}
-                >
-                    Vos fiches EC/matières
-                </a>
-            </li>
+        <div class="app-tabs-list" role="tablist" aria-label="Tableau de bord">
+            <a id="tab-formation"
+               class="app-tab {% if step == 'formation' %}app-tab-active active{% endif %}"
+               href="{{ path('app_homepage', { step: 'formation' }) }}"
+               role="tab"
+               aria-selected="{{ step == 'formation' ? 'true' : 'false' }}"
+               aria-controls="step_1"
+               tabindex="{{ step == 'formation' ? '0' : '-1' }}"
+               data-step="formation"
+               data-wizard-target="tab"
+                    {{ stimulus_action('wizard', 'changeStep', 'click', {step: 'formation'}) }}
+            >
+                Vos formations (DPE: {{ user_data.campagneCollecte.libelle }})
+            </a>
+            <a id="tab-fiche"
+               class="app-tab {% if step == 'fiche' %}app-tab-active active{% endif %}"
+               href="{{ path('app_homepage', { step: 'fiche' }) }}" role="tab"
+               aria-selected="{{ step == 'fiche' ? 'true' : 'false' }}"
+               aria-controls="step_1"
+               tabindex="{{ step == 'fiche' ? '0' : '-1' }}"
+               data-step="fiche"
+               data-wizard-target="tab"
+                    {{ stimulus_action('wizard', 'changeStep', 'click', {step: 'fiche'}) }}
+            >
+                Vos fiches EC/matières
+            </a>
             {% if is_granted('MANAGE', {route: 'app_etablissement', subject: 'etablissement'}) %}
-                <li class="nav-item" role="presentation">
-                    <a class="nav-link {% if step == 'fiche' %}active{% endif %}" data-bs-toggle="tab" href="#" role="tab"
-                       aria-selected="false"
-                            {{ stimulus_action('wizard', 'changeStep', 'click', {step: 'cfvu'}) }}
-                    >
-                        Vos formations en tant que conseiller CFVU (DPE: {{ user_data.campagneCollecte.libelle }})
-                    </a>
-                </li>
-            {% endif %}
-
-            <!-- An empty list to put overflowed links -->
-            <li class="nav-item dropdown ms-auto pe-0 d-none responsive-tab-dropdown">
-                <a
-                        class="btn btn-icon btn-icon-only btn-background pt-0 bg-transparent pe-0"
-                        href="#"
-                        data-bs-toggle="dropdown"
-                        aria-haspopup="true"
-                        aria-expanded="false"
+                <a id="tab-cfvu"
+                   class="app-tab {% if step == 'cfvu' %}app-tab-active active{% endif %}"
+                   href="{{ path('app_homepage', { step: 'cfvu' }) }}" role="tab"
+                   aria-selected="{{ step == 'cfvu' ? 'true' : 'false' }}"
+                   aria-controls="step_1"
+                   tabindex="{{ step == 'cfvu' ? '0' : '-1' }}"
+                   data-step="cfvu"
+                   data-wizard-target="tab"
+                        {{ stimulus_action('wizard', 'changeStep', 'click', {step: 'cfvu'}) }}
                 >
-                    <i data-acorn-icon="more-horizontal"></i>
+                    Vos formations en tant que conseiller CFVU (DPE: {{ user_data.campagneCollecte.libelle }})
                 </a>
-                <ul class="dropdown-menu mt-2 dropdown-menu-end"></ul>
-            </li>
-        </ul>
+            {% endif %}
+        </div>
 
 
-        <div class="tab-content">
-            <div class="tab-pane fade active show" id="step_1" role="tabpanel" {{ stimulus_target
-                ('wizard', 'content') }}>
-
-            </div>
+        <div class="app-tab-panel">
+            <turbo-frame id="step_1" class="block min-h-24" role="tabpanel" aria-labelledby="tab-{{ step }}"
+                         src="{{ path('app_homepage_wizard', { step: step }) }}" {{ stimulus_target('wizard', 'content') }}>
+                <div class="px-3 py-4 text-sm text-slate-500">Chargement...</div>
+            </turbo-frame>
         </div>
     </div>
 

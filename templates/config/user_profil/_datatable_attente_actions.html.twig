@@ -1,0 +1,9 @@
+<twig:Button
+        label="Voir et gérer"
+        variant="info"
+        icon="icon:info"
+        href="{{ path('app_user_show_attente', {'id': item.id, 'dpe': dpe ?? false}) }}"
+        dataAction="click->modalturbo#open"
+        tooltip="Voir les détails de l'utilisateur"
+/>
+

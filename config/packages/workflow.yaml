@@ -13,34 +13,41 @@ framework:
         initialisation_dpe:
           metadata:
             process: false
+            label: 'validation.initialisation_dpe'
+            color: 'info'
         autorisation_saisie:
           metadata:
             process: false
             label: 'validation.autorisation_saisie'
+            color: 'info'
         en_cours_redaction:
           metadata:
             process: true
             icon: 'fa-pencil'
             label: 'en_cours_redaction.parcours'
             isTimeline: false
+            color: 'warning'
         tacite_reconduction:
           metadata:
             process: false
             icon: 'fa-pencil'
             label: 'tacite_reconduction.parcours'
             isTimeline: false
+            color: 'info'
         soumis_parcours:
           metadata:
             process: true
             icon: 'fa-memo-circle-check'
             label: 'validation.parcours_rf'
             isTimeline: false
+            color: 'success'
         soumis_dpe_composante:
           metadata:
             process: true
             icon: 'fa-check-to-slot'
             label: 'validation.dpe'
             isTimeline: true
+            color: 'success'
         refuse_rf:
           metadata:
             process: false
@@ -57,6 +64,7 @@ framework:
             icon: 'fa-people-line'
             label: 'validation.conseil'
             isTimeline: true
+            color: 'success'
         refuse_conseil:
           metadata:
             process: false
@@ -298,7 +306,9 @@ framework:
                 - name: dateConseil
                   type: date
                   required: true
-                - name: upload
+                - name: uploadPv #todo: vérifier nom, notamment dans le json pour cohérence v1
+                  type: file
+                - name: uploadArgumentaire #todo: vérifier nom, notamment dans le json pour cohérence v1
                   type: file
                 - name: laissezPasser
                   type: checkbox

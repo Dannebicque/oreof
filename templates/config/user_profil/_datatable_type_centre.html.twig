@@ -1,0 +1,16 @@
+{% set centre = item.profil.centre ?? null %}
+
+{% if centre is null or centre.value == '' %}
+    <twig:Badge label="Non défini" variant="secondary"/>
+{% elseif centre.value == 'cg_composante' %}
+    <twig:Badge label="Composante" variant="warning"/>
+{% elseif centre.value == 'cg_etablissement' %}
+    <twig:Badge label="Etablissement" variant="info"/>
+{% elseif centre.value == 'cg_formation' %}
+    <twig:Badge label="Formation" variant="success"/>
+{% elseif centre.value == 'cg_parcours' %}
+    <twig:Badge label="Parcours" variant="secondary"/>
+{% else %}
+    <twig:Badge label="Inconnu" variant="danger"/>
+{% endif %}
+

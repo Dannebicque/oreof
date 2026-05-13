@@ -19,7 +19,7 @@ class UpdateCodeBccCommand extends Command
     public function __construct(
         protected EntityManagerInterface $entityManager,
         protected BlocCompetenceRepository $blocCompetenceRepository,
-        string $name = null)
+        ?string $name = null)
     {
         parent::__construct($name);
     }

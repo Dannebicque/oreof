@@ -12,29 +12,47 @@ window.da = {
 }
 
 import * as bootstrap from 'bootstrap'
-import Trix from 'trix'
+import 'trix'
+import 'trix/dist/trix.css'
 
 import callOut from './js/callOut'
-import './styles/app.scss';
+// import './styles/legacy.scss';
+import './styles/app.css'
+import './styles/_timeline.scss'
 
 import './bootstrap'
 
-import './js/vendor/OverlayScrollbars.min'
-import './js/vendor/clamp.min'
 
 import './js/base/init'
-import './js/common'
-import './js/scripts'
 import './js/toggle'
 
-const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
-const tooltipList = [...tooltipTriggerList].map((tooltipTriggerEl) => new bootstrap.Tooltip(tooltipTriggerEl))
+document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(
+  el => bootstrap.Tooltip.getOrCreateInstance(el)
+)
+
+const initBootstrapTooltips = (root = document) => {
+  const tooltipElements = root.querySelectorAll('[data-bs-toggle="tooltip"]')
+  tooltipElements.forEach((el) => {
+    bootstrap.Tooltip.getOrCreateInstance(el)
+  })
+}
+
+document.addEventListener('turbo:load', () => initBootstrapTooltips(document))
+document.addEventListener('turbo:render', () => initBootstrapTooltips(document))
+document.addEventListener('turbo:frame-load', (event) => {
+  initBootstrapTooltips(event.target)
+})
 
 
 window.addEventListener('load', () => { // le dom est chargé
-  document.getElementsByTagName('html')[0].dataset.color = localStorage.getItem('acorn-standard-color') ?? 'light-blue'
+  const savedTheme = localStorage.getItem('oreof-theme')
+  if (savedTheme === 'dark' || savedTheme === 'light') {
+    document.documentElement.setAttribute('data-theme', savedTheme)
+  }
+
+  const toastQueue = Array.isArray(window.toasts) ? window.toasts : []
   // toast
-  toasts.forEach((toast) => {
+  toastQueue.forEach((toast) => {
     callOut(toast.text, toast.type)
   })
 

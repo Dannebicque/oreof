@@ -1,30 +1,45 @@
 {% extends 'base-speciale.html.twig' %}
 
+{% block title %}Compte deja existant | {{ product_name }}{% endblock %}
+
 {% block content %}
-    <div class="mb-2 mt-4">
-        <h2 class="cta-1 mb-0 text-primary">Bienvenue,</h2>
-        <h2 class="cta-1 text-primary">Un compte existe déjà</h2>
-    </div>
+    {% set contactMail = mail_contact|default('oreof@univ-reims.fr') %}
 
-    {% if user != null %}
-    <div>
-        <p><strong>{{ user.display }},</strong></p>
-        <p>Votre demande n'a pu aboutir, un compte semble déjà présent pour cet email : {{ user.email }}.</p>
-        <p>Si vous n'êtes pas à l'origine de la demande, merci de contacter l'administrateur : {{ mail_contact|mailto }}.</p>
-    </div>
-    {% else %}
-        <div>
-            <p>Votre demande n'a pu aboutir, car aucun compte ne correspond cet email : {{ email }}.</p>
-            <p>Merci de contacter l'administrateur : {{ mail_contact|mailto }}.</p>
+    <div class="space-y-6">
+        <div class="space-y-2">
+            <p class="inline-flex items-center rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-amber-700">
+                Demande d'acces
+            </p>
+            <h2 class="text-3xl font-black leading-tight text-slate-900">Un compte existe deja</h2>
+            <p class="text-sm text-slate-500">Nous avons detecte un compte associe a cet email, ou un email inconnu dans
+                l'annuaire.</p>
         </div>
-    {% endif %}
-    <p class="text-center mt-3">OU</p>
-    <div class="d-grid">
-        <a href="{{ path('app_login') }}" class="btn d-block btn-primary">Connectez vous</a>
+
+        {% if user != null %}
+            {{ component('alerte', {
+                type: 'warning',
+                message: '<strong>' ~ user.display ~ '</strong>, un compte semble deja present pour cet email : <strong>' ~ user.email ~ '</strong>.'
+            }) }}
+        {% else %}
+            {{ component('alerte', {
+                type: 'warning',
+                message: 'Aucun compte ne correspond a cet email : <strong>' ~ email ~ '</strong>.'
+            }) }}
+        {% endif %}
+
+        <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-700 dark:border-slate-700 dark:bg-slate-900/50 dark:text-slate-300">
+            <p>Si vous n'etes pas a l'origine de cette demande, merci de contacter l'administrateur
+                : {{ contactMail|mailto }}.</p>
+        </div>
+
+        <twig:Button
+                href="{{ path('app_login') }}"
+                variant="primary"
+                :soft="false"
+                :outline="false"
+                icon="icon:login"
+                label="Connectez-vous"
+                extraClass="w-full justify-center"
+        />
     </div>
 {% endblock %}
-
-{% block title %}
-Compte déjà existant
-{% endblock %}
-

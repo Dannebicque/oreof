@@ -1,0 +1,19 @@
+{% set type_classes = {
+  'success': 'app-alert--success',
+  'danger': 'app-alert--danger',
+  'info': 'app-alert--info',
+  'warning': 'app-alert--warning'
+} %}
+{% set type_class = type_classes[this.type]|default(type_classes['info']) %}
+
+<div class="app-alert {{ type_class }} mx-2 md:mx-0" role="alert">
+  <div class="app-alert-icon">
+    <twig:UX:Icon :name="this.icone"
+                  class="h-7 w-7"/>
+  </div>
+
+  <div class="app-alert-content">
+    {% block content %}{% endblock %}
+    <div class="mt-1">{{ this.message|raw }}</div>
+  </div>
+</div>

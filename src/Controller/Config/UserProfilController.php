@@ -22,6 +22,7 @@ use App\Repository\ParcoursRepository;
 use App\Repository\ProfilRepository;
 use App\Repository\UserProfilRepository;
 use App\Repository\UserRepository;
+use App\Service\DataTableBuilder;
 use App\Utils\JsonRequest;
 use Doctrine\ORM\EntityManagerInterface;
 use JsonException;
@@ -38,40 +39,209 @@ class UserProfilController extends BaseController
     }
 
     #[Route('/', name: 'index', methods: ['GET'])]
-    public function index(): Response
+    public function index(
+        DataTableBuilder $builder
+    ): Response
     {
-        return $this->render('config/user_profil/index.html.twig');
+        $isAdmin = $this->isGranted('ROLE_ADMIN');
+
+        $composanteId = null;
+        if ($this->isGranted('MANAGE', [
+            'route' => 'app_composante',
+            'subject' => $this->getUser()?->getComposanteResponsableDpe()->first()
+        ])) {
+            foreach ($this->getUser()?->getUserProfils() as $centre) {
+                if ($centre->getComposante() !== null) {
+                    $composanteId = $centre->getComposante()->getId();
+                    break;
+                }
+            }
+        }
+
+        $typeCentreChoices = [];
+        foreach (CentreGestionEnum::cases() as $case) {
+            if ($case->value !== '') {
+                $typeCentreChoices[$case->value] = $case->getLibelle();
+            }
+        }
+
+        $table = $builder
+            ->setEntity(UserProfil::class)
+            ->setPerPage(20)
+            ->setDefaultSort('user.nom')
+            ->addBaseJoin('inner', 'e.user', 'u')
+            ->addBaseJoin('inner', 'e.profil', 'p')
+            ->addBaseWhere('u.isEnable = :isEnable')
+            ->addBaseWhere('u.isDeleted = :isDeleted')
+            ->addBaseWhere('(IDENTITY(e.campagneCollecte) = :campagneId OR e.campagneCollecte IS NULL)')
+            ->addBaseParameter('isEnable', true)
+            ->addBaseParameter('isDeleted', false)
+            ->addBaseParameter('campagneId', $this->getCampagneCollecte()?->getId())
+            ->addColumn('user.nom', [
+                'label' => 'Nom',
+                'sortable' => true,
+                'filterable' => true,
+            ])
+            ->addColumn('user.prenom', [
+                'label' => 'Prénom',
+                'sortable' => true,
+                'filterable' => true,
+            ])
+            ->addColumn('user.username', [
+                'label' => 'Login URCA',
+                'sortable' => true,
+                'filterable' => true,
+            ])
+            ->addColumn('profil', [
+                'label' => 'Profil',
+                'type' => 'entity',
+                'entity' => Profil::class,
+                'entity_label' => 'libelle',
+                'filterable' => $isAdmin,
+                'sortable' => true,
+            ])
+            ->addColumn('profil.centre', [
+                'label' => 'Type centre',
+                'sortable' => true,
+                'filterable' => $isAdmin,
+                'type' => 'select',
+                'choices' => $typeCentreChoices,
+                'template' => 'config/user_profil/_datatable_type_centre.html.twig',
+                'searchable' => false,
+            ])
+            ->addColumn('displayCentre()', [
+                'label' => 'Centre',
+                'sortable' => false,
+                'filterable' => false,
+                'searchable' => false,
+            ])
+            ->addColumn('id', [
+                'label' => 'Actions',
+                'sortable' => false,
+                'filterable' => false,
+                'searchable' => false,
+                'template' => 'config/user_profil/_datatable_actions.html.twig',
+                'class' => 'text-right',
+            ]);
+
+        if ($composanteId !== null) {
+            $table
+                ->addBaseJoin('left', 'e.formation', 'f')
+                ->addBaseJoin('left', 'e.parcours', 'pa')
+                ->addBaseJoin('left', 'pa.formation', 'pf')
+                ->addBaseWhere('(
+                    IDENTITY(e.composante) = :composanteId
+                    OR IDENTITY(f.composantePorteuse) = :composanteId
+                    OR IDENTITY(pf.composantePorteuse) = :composanteId
+                )')
+                ->addBaseParameter('composanteId', $composanteId);
+        }
+
+        return $this->render('config/user_profil/index.html.twig', [
+            'table' => $table->build(),
+        ]);
     }
 
     #[Route('/attente-validation', name: 'attente', methods: ['GET'])]
     public function attente(
-        UserRepository $userRepository
+        DataTableBuilder $builder
     ): Response
     {
-        //todo: gérer par le responsable de DPE ?? pour affecter les droits et "pré-valider" les utilisateurs
-        if ($this->isGranted('ROLE_ADMIN')) {
-            $users = $userRepository->findNotEnableAvecDemande();
-            $dpe = false;
-        } elseif (
-            $this->isGranted('MANAGE', [
-                'route' => 'app_composante',
-                'subject' => $this->getUser()?->getComposanteResponsableDpe()->first()
-            ])
-        ) {
-            $dpe = true;
-            $users = [];
-            /** @var UserProfil $userProfil */
+        $isDpe = false;
+        $composanteId = null;
+
+        if ($this->isGranted('MANAGE', [
+            'route' => 'app_composante',
+            'subject' => $this->getUser()?->getComposanteResponsableDpe()->first()
+        ])) {
+            $isDpe = true;
             foreach ($this->getUser()?->getUserProfils() as $userProfil) {
                 if ($userProfil->getComposante() !== null) {
-                    $users[] = $userRepository->findByComposanteNotEnableAvecDemande($userProfil->getComposante());
+                    $composanteId = $userProfil->getComposante()->getId();
+                    break;
                 }
             }
-            $users = array_merge(...$users);
+        }
+
+        $table = $builder
+            ->setEntity(User::class)
+            ->setPerPage(20)
+            ->setDefaultSort('nom')
+            ->addBaseWhere('e.isEnable = :isEnable')
+            ->addBaseWhere('e.dateDemande IS NOT NULL')
+            ->addBaseWhere('e.isDeleted = :isDeleted')
+            ->addBaseParameter('isEnable', false)
+            ->addBaseParameter('isDeleted', false)
+            ->addColumn('nom', [
+                'label' => 'Nom',
+                'sortable' => true,
+                'filterable' => true,
+            ])
+            ->addColumn('prenom', [
+                'label' => 'Prénom',
+                'sortable' => true,
+                'filterable' => true,
+            ])
+            ->addColumn('email', [
+                'label' => 'Email',
+                'sortable' => false,
+                'filterable' => true,
+            ])
+            ->addColumn('username', [
+                'label' => 'Login URCA',
+                'sortable' => true,
+                'filterable' => true,
+            ])
+            ->addColumn('userProfils', [
+                'label' => 'Centre(s) / Droits',
+                'sortable' => false,
+                'filterable' => false,
+                'searchable' => false,
+                'template' => 'config/user_profil/_datatable_attente_centres.html.twig',
+            ])
+            ->addColumn('dateDemande', [
+                'label' => 'Date demande',
+                'sortable' => true,
+                'filterable' => false,
+                'searchable' => false,
+                'format' => 'datetime',
+            ])
+            ->addColumn('serviceDemande', [
+                'label' => 'Service/fonction',
+                'sortable' => false,
+                'filterable' => false,
+            ])
+            ->addColumn('composanteDemande', [
+                'label' => 'Validé DPE ?',
+                'sortable' => false,
+                'filterable' => false,
+                'searchable' => false,
+                'template' => 'config/user_profil/_datatable_attente_dpe.html.twig',
+            ])
+            ->addColumn('id', [
+                'label' => 'Actions',
+                'sortable' => false,
+                'filterable' => false,
+                'searchable' => false,
+                'template' => 'config/user_profil/_datatable_attente_actions.html.twig',
+            ]);
+
+        if ($isDpe && $composanteId !== null) {
+            $table
+                ->addBaseWhere('IDENTITY(e.composanteDemande) = :composanteId')
+                ->addBaseParameter('composanteId', $composanteId);
+        } elseif ($isDpe) {
+            // DPE sans composante identifiée : on retourne rien
+            $table->addBaseWhere('1 = 0');
+        } else {
+            // Admin : restreindre aux non validés admin
+            $table->addBaseWhere('e.isValideAdministration = :isValideAdmin')
+                ->addBaseParameter('isValideAdmin', false);
         }
 
         return $this->render('config/user_profil/attente.html.twig', [
-            'users' => $users,
-            'dpe' => $dpe
+            'table' => $table->build(),
+            'dpe' => $isDpe,
         ]);
     }
 
@@ -216,44 +386,6 @@ class UserProfilController extends BaseController
 
         return $this->json(['success' => true, 'message' => 'Profil ajouté avec succès']);
     }
-
-    #[Route('/liste', name: 'liste', methods: ['GET'])]
-    public function liste(
-        Request              $request,
-        UserProfilRepository $userProfilRepository,
-        ProfilRepository     $profilRepository
-    ): Response
-    {
-        $sort = $request->query->get('sort') ?? 'nom';
-        $direction = $request->query->get('direction') ?? 'asc';
-        $params = $request->query->all();
-
-        $composante = null;
-        if ($this->isGranted('MANAGE', [
-            'route' => 'app_composante',
-            'subject' => $this->getUser()?->getComposanteResponsableDpe()->first()
-        ])) {
-            foreach ($this->getUser()?->getUserProfils() as $centre) {
-                if ($centre->getComposante() !== null) {
-                    $composante = $centre->getComposante(); // au moins une composante, todo: si plusieurs ?
-                    break;
-                }
-            }
-        }
-
-        $users = $userProfilRepository->findForListe($this->getCampagneCollecte(), $composante, $params);
-
-        return $this->render('config/user_profil/_liste.html.twig', [
-            'users' => $users,
-            'sort' => $sort,
-            'direction' => $direction,
-            'campagneCollecte' => $this->getCampagneCollecte(),
-            'profils' => $profilRepository->findAll(),
-            'centres' => CentreGestionEnum::cases(),
-            'params' => $params,
-        ]);
-    }
-
 
     /**
      * @throws JsonException

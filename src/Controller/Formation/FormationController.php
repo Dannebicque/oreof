@@ -33,6 +33,7 @@ use App\Service\VersioningFormation;
 use App\Service\VersioningParcours;
 use App\TypeDiplome\TypeDiplomeResolver;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -48,6 +49,7 @@ class FormationController extends BaseController
         ParcoursTabStateRepository $parcoursTabStateRepository,
         FormationTabStateRepository $statesRepo,
         TypeDiplomeResolver         $typeDiplomeResolver,
+        #[MapEntity(mapping: ['slug' => 'slug'])]
         Formation                   $formation
     ): Response
     {
@@ -91,6 +93,7 @@ class FormationController extends BaseController
 
     #[Route('/{slug}', name: 'voir', methods: ['GET'])]
     public function show(
+        #[MapEntity(mapping: ['slug' => 'slug'])]
         Formation $formation,
         LheoXML   $lheoXML,
     ): Response

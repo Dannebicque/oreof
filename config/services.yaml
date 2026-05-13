@@ -66,9 +66,13 @@ services:
       arguments:
         $handlersByCode: !tagged_locator { tag: 'app.type_diplome_handler', index_by: 'code' }
 
+    App\Form\TypeDiplomeType:
+      arguments:
+        $typeDiplomeHandlers: !tagged_iterator app.type_diplome_handler
+
     App\Service\Synthese\SyntheseButtonsResolver:
       arguments:
-        $providers: !tagged app.synthese_buttons_provider
+        $providers: !tagged_iterator app.synthese_buttons_provider
 
     App\Service\TranslationFileManager:
         arguments:

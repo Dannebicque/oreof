@@ -97,3 +97,9 @@ migrations/Version*.php
 ###> Uploads & Temporary Files ###
 /public/uploads/help_images/
 /public/uploads/
+.npmrc
+
+###> symfony/asset-mapper ###
+/public/assets/
+/assets/vendor/
+###< symfony/asset-mapper ###

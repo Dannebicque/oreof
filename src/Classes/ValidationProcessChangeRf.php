@@ -9,19 +9,31 @@
 
 namespace App\Classes;
 
-use App\Entity\ChangeRf;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Workflow\WorkflowInterface;
 
 class ValidationProcessChangeRf extends AbstractValidationProcess
 {
+    private readonly OptionsResolver $placeMetaResolver;
+    private readonly OptionsResolver $transitionMetaResolver;
+
     public function __construct(protected WorkflowInterface $changeRfWorkflow)
     {
+        $this->placeMetaResolver = $this->createPlaceMetaResolver();
+        $this->transitionMetaResolver = $this->createTransitionMetaResolver();
+
         $places = $changeRfWorkflow->getDefinition()->getPlaces();
         $data = [];
+        $dataAll = [];
         foreach ($places as $place) {
-            $meta = $changeRfWorkflow->getMetadataStore()->getPlaceMetadata($place);
+            $meta = $this->normalizePlaceMeta(
+                $changeRfWorkflow->getMetadataStore()->getPlaceMetadata($place),
+                $place,
+                $this->placeMetaResolver
+            );
+
             $data[$place] = $meta;
-            $this->processAll[$place] = $meta;
+            $dataAll[$place] = $meta;
         }
 
         $this->transitionsAll = [];
@@ -30,6 +42,7 @@ class ValidationProcessChangeRf extends AbstractValidationProcess
             $this->transitionsAll[$trans->getName()] = $trans;
         }
 
+        $this->processAll = $dataAll;
         $this->process = $data;
     }
 
@@ -38,7 +51,11 @@ class ValidationProcessChangeRf extends AbstractValidationProcess
         $transitions = $this->changeRfWorkflow->getDefinition()->getTransitions();
         foreach ($transitions as $trans) {
             if ($trans->getName() === $transition) {
-                return $this->changeRfWorkflow->getMetadataStore()->getTransitionMetadata($trans);
+                return $this->normalizeTransitionMeta(
+                    $this->changeRfWorkflow->getMetadataStore()->getTransitionMetadata($trans),
+                    $trans->getName(),
+                    $this->transitionMetaResolver
+                );
             }
         }
 

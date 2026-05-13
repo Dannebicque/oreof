@@ -1,0 +1,71 @@
+<tr class="border-t-2 border-indigo-100 bg-indigo-50/40 dark:border-indigo-800 dark:bg-indigo-950/20">
+
+    {# Label "Total UE" — aligné à gauche, lisible #}
+    <th class="px-4 py-2 text-left text-[11px] font-bold text-indigo-700 dark:text-indigo-300 whitespace-nowrap"
+        colspan="2">
+        <span class="inline-flex items-center gap-1.5">
+            <span>Total {{ ue.display }}</span>
+            {% if enfant == false and ue.ue.ueEnfants|length > 0 %}
+                <span class="text-[9px] font-medium text-indigo-400 dark:text-indigo-500 normal-case">(Total max.)</span>
+            {% endif %}
+        </span>
+    </th>
+
+    {# ECTS — badge proportionné #}
+    <th class="px-2 py-2 text-center">
+        <span class="show_versioning d-none d-print-none text-[10px] font-semibold text-slate-500">
+            {{ diffUe ? diffUe.heuresEctsUe.sommeUeEcts|displayDiff : '' }} ECTS
+        </span>
+        <span class="show_current">{{ ue.heuresEctsUe.sommeUeEcts|badgeEcts('primary') }}</span>
+    </th>
+
+    {% if presentiel %}
+        <th class="px-1 py-2 text-center text-[11px] font-semibold text-blue-700 dark:text-blue-300 bg-blue-50/30">
+            <span class="show_versioning d-none d-print-none text-slate-500">{{ diffUe ? diffUe.heuresEctsUe.sommeUeCmPres|displayDiff : '' }}</span>
+            <span class="show_current">{{ ue.heuresEctsUe.sommeUeCmPres|filtreHeures }}</span>
+        </th>
+        <th class="px-1 py-2 text-center text-[11px] font-semibold text-blue-700 dark:text-blue-300 bg-blue-50/30">
+            <span class="show_versioning d-none d-print-none text-slate-500">{{ diffUe ? diffUe.heuresEctsUe.sommeUeTdPres|displayDiff : '' }}</span>
+            <span class="show_current">{{ ue.heuresEctsUe.sommeUeTdPres|filtreHeures }}</span>
+        </th>
+        <th class="px-1 py-2 text-center text-[11px] font-semibold text-blue-700 dark:text-blue-300 bg-blue-50/30">
+            <span class="show_versioning d-none d-print-none text-slate-500">{{ diffUe ? diffUe.heuresEctsUe.sommeUeTpPres|displayDiff : '' }}</span>
+            <span class="show_current">{{ ue.heuresEctsUe.sommeUeTpPres|filtreHeures }}</span>
+        </th>
+        <th class="px-1 py-2 text-center text-[11px] font-bold text-blue-800 dark:text-blue-200 bg-blue-50/50">
+            <span class="show_versioning d-none d-print-none text-slate-500">{{ diffUe ? diffUe.heuresEctsUe.sommeUeTotalPres|displayDiff : '' }}</span>
+            <span class="show_current">{{ ue.heuresEctsUe.sommeUeTotalPres|filtreHeures }}</span>
+        </th>
+        <th class="px-1 py-2 text-center text-[11px] font-semibold text-blue-700 dark:text-blue-300 bg-blue-50/30 border-r border-slate-200">
+            <span class="show_versioning d-none d-print-none text-slate-500">{{ diffUe ? diffUe.heuresEctsUe.sommeUeTePres|displayDiff : '' }}</span>
+            <span class="show_current">{{ ue.heuresEctsUe.sommeUeTePres|filtreHeures }}</span>
+        </th>
+    {% endif %}
+
+    {% if distanciel %}
+        <th class="px-1 py-2 text-center text-[11px] font-semibold text-orange-600 dark:text-orange-300 bg-orange-50/30">
+            <span class="show_versioning d-none d-print-none text-slate-500">{{ diffUe ? diffUe.heuresEctsUe.sommeUeCmDist|displayDiff : '' }}</span>
+            <span class="show_current">{{ ue.heuresEctsUe.sommeUeCmDist|filtreHeures }}</span>
+        </th>
+        <th class="px-1 py-2 text-center text-[11px] font-semibold text-orange-600 dark:text-orange-300 bg-orange-50/30">
+            <span class="show_versioning d-none d-print-none text-slate-500">{{ diffUe ? diffUe.heuresEctsUe.sommeUeTdDist|displayDiff : '' }}</span>
+            <span class="show_current">{{ ue.heuresEctsUe.sommeUeTdDist|filtreHeures }}</span>
+        </th>
+        <th class="px-1 py-2 text-center text-[11px] font-semibold text-orange-600 dark:text-orange-300 bg-orange-50/30">
+            <span class="show_versioning d-none d-print-none text-slate-500">{{ diffUe ? diffUe.heuresEctsUe.sommeUeTpDist|displayDiff : '' }}</span>
+            <span class="show_current">{{ ue.heuresEctsUe.sommeUeTpDist|filtreHeures }}</span>
+        </th>
+        <th class="px-1 py-2 text-center text-[11px] font-bold text-orange-700 dark:text-orange-200 bg-orange-50/50 border-r border-slate-200">
+            <span class="show_versioning d-none d-print-none text-slate-500">{{ diffUe ? diffUe.heuresEctsUe.sommeUeTotalDist|displayDiff : '' }}</span>
+            <span class="show_current">{{ ue.heuresEctsUe.sommeUeTotalDist|filtreHeures }}</span>
+        </th>
+    {% endif %}
+
+    {% if parcours.modalitesEnseignement != null and parcours.modalitesEnseignement.value == 1 %}
+        <th class="px-4 py-2 text-right text-[11px] font-black text-slate-700 dark:text-slate-200">
+            <span class="show_versioning d-none d-print-none text-slate-500">{{ diffUe ? diffUe.heuresEctsUe.sommeUeTotalPresDist|displayDiff : '' }}</span>
+            <span class="show_current">{{ ue.heuresEctsUe.sommeUeTotalPresDist|filtreHeures }}</span>
+        </th>
+    {% endif %}
+</tr>
+

@@ -1,97 +1,102 @@
-<div class="row">
-    <div class="col-sm-12">
-        <dl>
-            {% if is_granted('ROLE_ADMIN') %}
-                <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Id formation</dt>
-                <dd>#{{ formation.id }}</dd>
-            {% endif %}
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                    <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Type de diplôme</dt>
-                    <dd>{{ typeDiplome|typeDiplome }}</dd>
-                </div>
-                <div>
-                    <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Mention/Spécialité</dt>
-                    <dd>{{ formation.display }}</dd>
-                </div>
+<div class="space-y-6">
+    <dl class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        {% if is_granted('ROLE_ADMIN') %}
+            <div class="sm:col-span-2">
+                <dt class="text-[10px] font-black uppercase tracking-widest text-indigo-400">Id formation</dt>
+                <dd class="mt-1 text-sm text-slate-700 dark:text-slate-200">#{{ formation.id }}</dd>
             </div>
-            {% if formation.isHasParcours == true and print is defined and print == true %}
-                <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Parcours</dt>
-                <dd>
-                    <ul>
+        {% endif %}
+
+        <div>
+            <dt class="text-[10px] font-black uppercase tracking-widest text-indigo-400">Type de diplome</dt>
+            <dd class="mt-1 text-sm text-slate-700 dark:text-slate-200">{{ typeDiplome|typeDiplome }}</dd>
+        </div>
+        <div>
+            <dt class="text-[10px] font-black uppercase tracking-widest text-indigo-400">Mention/Specialite</dt>
+            <dd class="mt-1 text-sm text-slate-700 dark:text-slate-200">{{ formation.display }}</dd>
+        </div>
+
+        {% if formation.isHasParcours == true and print is defined and print == true %}
+            <div class="sm:col-span-2">
+                <dt class="text-[10px] font-black uppercase tracking-widest text-indigo-400">Parcours</dt>
+                <dd class="mt-1 text-sm text-slate-700 dark:text-slate-200">
+                    <ul class="list-disc pl-5">
                         {% for parcours in formation.parcours %}
                             <li>{{ parcours.libelle }}</li>
                         {% endfor %}
                     </ul>
                 </dd>
-            {% endif %}
-            <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Domaine(s)</dt>
-            <dd>
+            </div>
+        {% endif %}
+
+        <div class="sm:col-span-2">
+            <dt class="text-[10px] font-black uppercase tracking-widest text-indigo-400">Domaine(s)</dt>
+            <dd class="mt-1 text-sm text-slate-700 dark:text-slate-200">
                 {% for domaine in formation.domaines %}
                     {{ domaine.libelle }}{% if not loop.last %}, {% endif %}
                 {% else %}
                     -erreur-
                 {% endfor %}
             </dd>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                    <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Composante porteuse</dt>
-                    <dd>{{ formation.composantePorteuse != null ? formation.composantePorteuse.libelle : 'erreur' }}</dd>
-                </div>
-                <div>
-                    <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Inscription au RNCP</dt>
-                    <dd>{{ formation.inRncp == true ? formation.codeRncp : 'Non inscrit' }}</dd>
-                </div>
-            </div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                    <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Niveau à l'entrée de la
-                        formation
-                    </dt>
-                    <dd>{{ formation.niveauEntree.libelle }}</dd>
-                </div>
-                <div>
-                    <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Niveau à la sortie de la
-                        formation
-                    </dt>
-                    <dd>{{ formation.niveauSortie.libelle }}</dd>
-                </div>
-            </div>
-        </dl>
-        <div class="col-12">
-            <dl>
-                <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Responsable de la formation</dt>
-                <dd>{{ formation.responsableMention != null ? formation.responsableMention.display : 'erreur' }}<br>
-                    <a href="mailto:{{ formation.responsableMention != null ? formation.responsableMention.email : 'erreur' }}"
-                       class="text-xs text-indigo-500 hover:underline">{{ formation.responsableMention != null ? formation.responsableMention.email : 'erreur' }}</a>
-                </dd>
-                {% if stringDifferencesFormation.responsableDeFormation is defined %}
-                    {{ include('communs/_comparaison_versioning_no_button.html.twig',
-                        {
-                            textDifferences: stringDifferencesFormation.responsableDeFormation,
-                            idCollapse: 'diffGlobalParcours'
-                        }
-                    ) }}
-                {% endif %}
-
-                {% if formation.coResponsable != null %}
-                    <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Co-Responsable de la formation
-                    </dt>
-                    <dd>{{ formation.coResponsable != null ? formation.coResponsable.display : 'erreur' }}<br>
-                        <a href="mailto:{{ formation.coResponsable != null ? formation.coResponsable.email : 'erreur' }}"
-                           class="text-xs text-indigo-500 hover:underline">{{ formation.coResponsable != null ? formation.coResponsable.email : 'erreur' }}</a>
-                    </dd>
-                    {% if stringDifferencesFormation.coResponsableDeFormation is defined %}
-                        {{ include('communs/_comparaison_versioning_no_button.html.twig',
-                            {
-                                textDifferences: stringDifferencesFormation.coResponsableDeFormation,
-                                idCollapse: 'diffGlobalParcours'
-                            }
-                        ) }}
-                    {% endif %}
-                {% endif %}
-            </dl>
         </div>
+
+        <div>
+            <dt class="text-[10px] font-black uppercase tracking-widest text-indigo-400">Composante porteuse</dt>
+            <dd class="mt-1 text-sm text-slate-700 dark:text-slate-200">{{ formation.composantePorteuse != null ? formation.composantePorteuse.libelle : 'erreur' }}</dd>
+        </div>
+        <div>
+            <dt class="text-[10px] font-black uppercase tracking-widest text-indigo-400">Inscription au RNCP</dt>
+            <dd class="mt-1 text-sm text-slate-700 dark:text-slate-200">{{ formation.inRncp == true ? formation.codeRncp : 'Non inscrit' }}</dd>
+        </div>
+
+        <div>
+            <dt class="text-[10px] font-black uppercase tracking-widest text-indigo-400">Niveau a l'entree de la
+                formation
+            </dt>
+            <dd class="mt-1 text-sm text-slate-700 dark:text-slate-200">{{ formation.niveauEntree.libelle }}</dd>
+        </div>
+        <div>
+            <dt class="text-[10px] font-black uppercase tracking-widest text-indigo-400">Niveau a la sortie de la
+                formation
+            </dt>
+            <dd class="mt-1 text-sm text-slate-700 dark:text-slate-200">{{ formation.niveauSortie.libelle }}</dd>
+        </div>
+    </dl>
+
+    <div class="space-y-4">
+        <div>
+            <dt class="text-[10px] font-black uppercase tracking-widest text-indigo-400">Responsable de la formation
+            </dt>
+            <dd class="mt-1 text-sm text-slate-700 dark:text-slate-200">
+                {{ formation.responsableMention != null ? formation.responsableMention.display : 'erreur' }}<br>
+                <a href="mailto:{{ formation.responsableMention != null ? formation.responsableMention.email : 'erreur' }}"
+                   class="text-xs text-indigo-500 hover:underline">{{ formation.responsableMention != null ? formation.responsableMention.email : 'erreur' }}</a>
+            </dd>
+        </div>
+        {% if stringDifferencesFormation.responsableDeFormation is defined %}
+            {{ include('communs/_comparaison_versioning_no_button.html.twig', {
+                textDifferences: stringDifferencesFormation.responsableDeFormation,
+                idCollapse: 'diffGlobalParcours'
+            }) }}
+        {% endif %}
+
+        {% if formation.coResponsable != null %}
+            <div>
+                <dt class="text-[10px] font-black uppercase tracking-widest text-indigo-400">Co-responsable de la
+                    formation
+                </dt>
+                <dd class="mt-1 text-sm text-slate-700 dark:text-slate-200">
+                    {{ formation.coResponsable != null ? formation.coResponsable.display : 'erreur' }}<br>
+                    <a href="mailto:{{ formation.coResponsable != null ? formation.coResponsable.email : 'erreur' }}"
+                       class="text-xs text-indigo-500 hover:underline">{{ formation.coResponsable != null ? formation.coResponsable.email : 'erreur' }}</a>
+                </dd>
+            </div>
+            {% if stringDifferencesFormation.coResponsableDeFormation is defined %}
+                {{ include('communs/_comparaison_versioning_no_button.html.twig', {
+                    textDifferences: stringDifferencesFormation.coResponsableDeFormation,
+                    idCollapse: 'diffGlobalParcours'
+                }) }}
+            {% endif %}
+        {% endif %}
     </div>
-
-
+</div>

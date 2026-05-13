@@ -1,10 +1,10 @@
-<div class="row">
-    <div class="col-sm-12">
-        <dl>
-            <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Organisation de la formation</dt>
-            <dd>
-                {{ parcours.contenuFormation|printTexte }}
-            </dd>
+<div class="space-y-4">
+    <dl class="space-y-4">
+        <div>
+            <dt class="text-[10px] font-black uppercase tracking-widest text-indigo-400">Organisation de la formation
+            </dt>
+            <dd class="mt-1 text-sm text-slate-700 dark:text-slate-200">{{ parcours.contenuFormation|printTexte }}</dd>
+        </div>
             {% if stringDifferencesParcours.presentationParcoursContenuFormation is defined %}
                 {{ include('communs/_comparaison_versioning_no_button.html.twig',
                     {
@@ -13,14 +13,15 @@
                     }
                 ) }}
             {% endif %}
-            <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Objectifs du parcours</dt>
-            <dd>
-                {{ parcours.objectifsParcours|printTexte }}
-            </dd>
-            <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Mots clés du parcours</dt>
-            <dd>
-                {{ parcours.motsCles|printTexte }}
-            </dd>
+
+        <div>
+            <dt class="text-[10px] font-black uppercase tracking-widest text-indigo-400">Objectifs du parcours</dt>
+            <dd class="mt-1 text-sm text-slate-700 dark:text-slate-200">{{ parcours.objectifsParcours|printTexte }}</dd>
+        </div>
+        <div>
+            <dt class="text-[10px] font-black uppercase tracking-widest text-indigo-400">Mots cles du parcours</dt>
+            <dd class="mt-1 text-sm text-slate-700 dark:text-slate-200">{{ parcours.motsCles|printTexte }}</dd>
+        </div>
             {% if stringDifferencesParcours.presentationParcoursObjectifsParcours is defined %}
                 {{ include('communs/_comparaison_versioning_no_button.html.twig',
                     {
@@ -29,10 +30,13 @@
                     }
                 ) }}
             {% endif %}
-            <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Résultats attendus du parcours</dt>
-            <dd>
-                {{ parcours.resultatsAttendus|printTexte }}
-            </dd>
+
+        <div>
+            <dt class="text-[10px] font-black uppercase tracking-widest text-indigo-400">Resultats attendus du
+                parcours
+            </dt>
+            <dd class="mt-1 text-sm text-slate-700 dark:text-slate-200">{{ parcours.resultatsAttendus|printTexte }}</dd>
+        </div>
             {% if stringDifferencesParcours.presentationParcoursResultatsAttendus is defined %}
                 {{ include('communs/_comparaison_versioning_no_button.html.twig',
                     {
@@ -41,34 +45,41 @@
                     }
                 ) }}
             {% endif %}
-            <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Rythme de formation</dt>
-            <dd>
+
+        <div>
+            <dt class="text-[10px] font-black uppercase tracking-widest text-indigo-400">Rythme de formation</dt>
+            <dd class="mt-1">
                 {% if parcours.rythmeFormation != null %}
                     <span class="px-2 py-1 bg-indigo-50 rounded-lg text-xs font-bold text-indigo-600">
                     {{ parcours.rythmeFormation.libelle }}
                 </span>
                 {% else %}
                     <span class="px-2 py-1 bg-orange-50 rounded-lg text-xs font-bold text-orange-600">
-                    Non précisé
+                    Non precise
                 </span>
                 {% endif %}
             </dd>
+        </div>
             {% if stringDifferencesParcours.rythmeFormationParcours is defined %}
                 {{ include('communs/_comparaison_versioning_no_button.html.twig', {
                     textDifferences: stringDifferencesParcours.rythmeFormationParcours,
                     idCollapse: 'diffGlobalParcours'
                 }) }}
             {% endif %}
-            <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Précisions sur le rythme de formation</dt>
-            <dd>
+
+        <div>
+            <dt class="text-[10px] font-black uppercase tracking-widest text-indigo-400">Precisions sur le rythme de
+                formation
+            </dt>
+            <dd class="mt-1 text-sm text-slate-700 dark:text-slate-200">
                 {% if parcours.rythmeFormationTexte != null and parcours.rythmeFormationTexte != '' %}
                     {{ parcours.rythmeFormationTexte|printTexte }}
                 {% else %}
                     <span class="px-2 py-1 bg-orange-50 rounded-lg text-xs font-bold text-orange-600">
-                    Non précisé
+                    Non precise
                 </span>
                 {% endif %}
             </dd>
-        </dl>
-    </div>
+        </div>
+    </dl>
 </div>

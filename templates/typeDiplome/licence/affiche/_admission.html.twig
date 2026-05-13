@@ -1,16 +1,20 @@
-<div class="row">
-    <div class="col-12">
-        <dl>
-            <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Niveau de français requis</dt>
-            <dd>{{ parcours.niveauFrancais != null ? parcours.niveauFrancais.libelle : 'Non précisé' }}</dd>
-            <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Prérequis recommandés</dt>
-            <dd>{{ parcours.prerequis|raw }}</dd>
-            {% if stringDifferencesParcours.prerequisRecommandesParcours is defined %}
-                {{ include("communs/_comparaison_versioning_no_button.html.twig", {
-                    textDifferences: stringDifferencesParcours.prerequisRecommandesParcours,
-                    idCollapse: "diffGlobalParcours"
-                }) }}
-            {% endif %}
-        </dl>
-    </div>
+<div class="space-y-4">
+    <dl class="space-y-4">
+        <div>
+            <dt class="text-[10px] font-black uppercase tracking-widest text-indigo-400">Niveau de français requis</dt>
+            <dd class="mt-1 text-sm text-slate-700 dark:text-slate-200">{{ parcours.niveauFrancais != null ? parcours.niveauFrancais.libelle : 'Non precise' }}</dd>
+        </div>
+
+        <div>
+            <dt class="text-[10px] font-black uppercase tracking-widest text-indigo-400">Prérequis recommandés</dt>
+            <dd class="mt-1 text-sm text-slate-700 dark:text-slate-200">{{ parcours.prerequis|raw }}</dd>
+        </div>
+
+        {% if stringDifferencesParcours.prerequisRecommandesParcours is defined %}
+            {{ include('communs/_comparaison_versioning_no_button.html.twig', {
+                textDifferences: stringDifferencesParcours.prerequisRecommandesParcours,
+                idCollapse: 'diffGlobalParcours'
+            }) }}
+        {% endif %}
+    </dl>
 </div>

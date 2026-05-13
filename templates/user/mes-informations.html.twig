@@ -1,37 +1,167 @@
 {% extends 'base.html.twig' %}
 
 {% block content %}
-    <h2 class="small-title">Vos centres et droits d'accès</h2>
-    <div class="card">
-        <div class="card-body">
-            <div class="row">
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th scope="col">Type de centre</th>
-                        <th scope="col">Centre</th>
-                        <th scope="col">Droits</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for centre in centres %}
-                        <tr>
-                            <td>{{ centre.typeCentre.libelle }}</td>
-                            <td>{{ centre.displaySimple }}</td>
-                            <td>
-                                {% for droit in centre.droits %}
-                                    {{ droit }}
-                                {% endfor %}
-                            </td>
-                        </tr>
-                        {% else %}
-                        <tr>
-                            <td colspan="3">Aucun centre</td>
-                        </tr>
-                    {% endfor %}
-                </table>
+    {% set profilsActifs = (user_data is defined and user_data.campagneCollecte is defined)
+        ? profils|filter(userProfil => userProfil.campagneCollecte and userProfil.campagneCollecte.id == user_data.campagneCollecte.id)
+        : profils %}
+
+    <div class="space-y-5">
+        <section
+                class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-900 sm:p-6">
+            <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                <div class="space-y-1">
+                    <h2 class="text-sm font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">
+                        Informations
+                    </h2>
+                    <p class="text-sm text-slate-600 dark:text-slate-300">
+                        Donnees de votre compte (lecture seule).
+                    </p>
+                </div>
             </div>
-        </div>
+
+            <div class="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 dark:border-slate-700 dark:bg-slate-800/40">
+                    <div class="text-[11px] font-black uppercase tracking-[0.16em] text-slate-400 dark:text-slate-500">
+                        Nom
+                    </div>
+                    <div class="mt-1 text-sm font-semibold text-slate-800 dark:text-slate-100">{{ app.user ? app.user.display : 'Non renseigne' }}</div>
+                </div>
+                <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 dark:border-slate-700 dark:bg-slate-800/40">
+                    <div class="text-[11px] font-black uppercase tracking-[0.16em] text-slate-400 dark:text-slate-500">
+                        Email
+                    </div>
+                    <div class="mt-1 text-sm font-semibold text-slate-800 dark:text-slate-100">{{ app.user and app.user.email ? app.user.email : 'Non renseigne' }}</div>
+                </div>
+                <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 dark:border-slate-700 dark:bg-slate-800/40">
+                    <div class="text-[11px] font-black uppercase tracking-[0.16em] text-slate-400 dark:text-slate-500">
+                        Identifiant
+                    </div>
+                    <div class="mt-1 text-sm font-semibold text-slate-800 dark:text-slate-100">{{ app.user and app.user.userIdentifier ? app.user.userIdentifier : 'Non renseigne' }}</div>
+                </div>
+                <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 dark:border-slate-700 dark:bg-slate-800/40">
+                    <div class="text-[11px] font-black uppercase tracking-[0.16em] text-slate-400 dark:text-slate-500">
+                        Etablissement
+                    </div>
+                    <div class="mt-1 text-sm font-semibold text-slate-800 dark:text-slate-100">{{ app.user and app.user.etablissement ? app.user.etablissement.libelle : 'Non renseigne' }}</div>
+                </div>
+            </div>
+        </section>
+
+        {% set centreTypes = [
+            { value: 'cg_etablissement', label: 'Etablissement' },
+            { value: 'cg_composante', label: 'Composante' },
+            { value: 'cg_formation', label: 'Formation' },
+            { value: 'cg_parcours', label: 'Parcours' }
+        ] %}
+
+        <section
+                class="space-y-4 rounded-2xl border mt-2 border-slate-200 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-900 sm:p-6">
+            <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                <div class="space-y-1">
+                    <h2 class="text-sm font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">
+                        Profils d'acces
+                    </h2>
+                    <p class="max-w-3xl text-sm text-slate-600 dark:text-slate-300">
+                        Une ligne correspond a un profil applique sur un centre cible (etablissement, composante,
+                        formation ou parcours).
+                    </p>
+                </div>
+
+                <div class="inline-flex items-center rounded-full border border-cyan-200 bg-cyan-50 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-cyan-800 dark:border-cyan-800 dark:bg-cyan-950/30 dark:text-cyan-200">
+                    {{ profilsActifs|length }} profil{{ profilsActifs|length > 1 ? 's' : '' }}
+                    actif{{ profilsActifs|length > 1 ? 's' : '' }}
+                </div>
+            </div>
+
+            {% for centreType in centreTypes %}
+                {% set profilsParType = profilsActifs|filter(userProfil => userProfil.profil and userProfil.profil.centre and userProfil.profil.centre.value == centreType.value) %}
+                {% if profilsParType|length > 0 %}
+                    <section class="overflow-hidden rounded-xl border border-slate-200 dark:border-slate-700">
+                        <div class="flex items-center justify-between border-b border-slate-200 bg-slate-50 px-4 py-2.5 dark:border-slate-700 dark:bg-slate-800/60">
+                            <h3 class="text-xs font-black uppercase tracking-[0.16em] text-slate-500 dark:text-slate-400">
+                                Centre {{ centreType.label }}
+                            </h3>
+                            <span class="inline-flex items-center rounded-full border border-slate-200 bg-white px-2 py-0.5 text-[11px] font-semibold text-slate-600 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-300">
+                                {{ profilsParType|length }}
+                            </span>
+                        </div>
+
+                        <div class="overflow-x-auto">
+                            <table class="w-full min-w-[760px] text-sm">
+                                <thead>
+                                <tr class="text-left text-[11px] font-black uppercase tracking-[0.16em] text-slate-500 dark:text-slate-400">
+                                    <th class="px-4 py-3">Campagne</th>
+                                    <th class="px-4 py-3">Centre cible</th>
+                                    <th class="px-4 py-3">Profil</th>
+                                    <th class="px-4 py-3">Droits</th>
+                                </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-200 dark:divide-slate-700">
+                                {% for userProfil in profilsParType %}
+                                    {% set profil = userProfil.profil %}
+                                    <tr class="align-top transition hover:bg-slate-50/80 dark:hover:bg-slate-800/30">
+                                        <td class="px-4 py-3 text-slate-600 dark:text-slate-300">
+                                            {{ userProfil.campagneCollecte ? userProfil.campagneCollecte.libelle : 'Toutes campagnes' }}
+                                        </td>
+                                        <td class="px-4 py-3 font-medium text-slate-800 dark:text-slate-100">
+                                            {{ userProfil.displayCentre ?: 'Non precise' }}
+                                        </td>
+                                        <td class="px-4 py-3">
+                                            <div class="font-semibold text-slate-800 dark:text-slate-100">{{ profil.libelle }}</div>
+                                            {% if profil.code %}
+                                                <div class="mt-0.5 text-xs text-slate-500 dark:text-slate-400">{{ profil.code }}</div>
+                                            {% endif %}
+                                        </td>
+                                        <td class="px-4 py-3">
+                                            {% if profil.profilDroits|length > 0 %}
+                                                <div class="space-y-1">
+                                                    {% for droit in profil.profilDroits %}
+                                                        <div class="inline-flex rounded-md border border-emerald-200 bg-emerald-50 px-2 py-0.5 text-xs font-semibold text-emerald-800 dark:border-emerald-800 dark:bg-emerald-950/30 dark:text-emerald-200">
+                                                            {{ droit.permission.value|upper }}
+                                                            / {{ droit.ressource.value }}
+                                                        </div>
+                                                    {% endfor %}
+                                                </div>
+                                            {% else %}
+                                                <span class="text-slate-500 dark:text-slate-400">Aucun droit explicite</span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+                {% endif %}
+            {% endfor %}
+
+            {% set profilsSansType = profilsActifs|filter(userProfil => userProfil.profil is empty or userProfil.profil.centre is empty) %}
+            {% if profilsSansType|length > 0 %}
+                <section class="overflow-hidden rounded-xl border border-amber-200 dark:border-amber-800">
+                    <div class="flex items-center justify-between border-b border-amber-200 bg-amber-50 px-4 py-2.5 dark:border-amber-800 dark:bg-amber-950/20">
+                        <h3 class="text-xs font-black uppercase tracking-[0.16em] text-amber-800 dark:text-amber-300">
+                            Non precise
+                        </h3>
+                        <span class="inline-flex items-center rounded-full border border-amber-300 bg-white px-2 py-0.5 text-[11px] font-semibold text-amber-700 dark:border-amber-700 dark:bg-slate-900 dark:text-amber-300">
+                            {{ profilsSansType|length }}
+                        </span>
+                    </div>
+                    <div class="divide-y divide-amber-200 dark:divide-amber-800">
+                        {% for userProfil in profilsSansType %}
+                            <div class="px-4 py-3 text-sm text-slate-700 dark:text-slate-300">
+                                {{ userProfil.displayCentre ?: 'Centre non precise' }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </section>
+            {% endif %}
+
+            {% if profilsActifs|length == 0 %}
+                <div class="rounded-xl border border-amber-200 bg-amber-50 px-4 py-8 text-center text-sm font-medium text-amber-700 dark:border-amber-800 dark:bg-amber-950/20 dark:text-amber-300">
+                    Aucun profil n'est configure pour votre compte.
+                </div>
+            {% endif %}
+        </section>
     </div>
 {% endblock %}
 
@@ -41,6 +171,7 @@
 
 {% block breadcrumb %}
     {{ include('communs/_breadcrumb.html.twig', {liens:[
+        { title: 'Mes informations' }
     ]}) }}
 {% endblock %}
 

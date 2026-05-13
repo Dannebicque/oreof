@@ -93,9 +93,7 @@ class TypeDiplomeController extends AbstractController
                 'modal_title' => 'Voir un type de diplôme',
             ])
             ->addEditAction('app_type_diplome_edit', [
-                'modal' => true,
-                'modal_size' => 'lg',
-                'modal_title' => 'Modifier un type de diplôme',
+                'modal' => false,
             ])
             ->addDuplicateAction('app_type_diplome_duplicate')
             ->addDeleteAction('app_type_diplome_delete')

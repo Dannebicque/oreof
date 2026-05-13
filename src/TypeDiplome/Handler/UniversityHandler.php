@@ -98,6 +98,7 @@ class UniversityHandler implements TypeDiplomeHandlerInterface
         return $this->typeEpreuves;
     }
 
+    /** @deprecated */
     public function calculStructureParcours(Parcours $parcours, OptionsCalculStructure $optionsCalculStructure = new OptionsCalculStructure()): StructureParcours
     {
         $optionsCalculStructure->dataFromFicheMatiere = true;
@@ -700,7 +701,8 @@ class UniversityHandler implements TypeDiplomeHandlerInterface
 
     public function calcul(Parcours $parcours, OptionsCalculStructure $optionsCalculStructure = new OptionsCalculStructure()): StructureParcours
     {
-        // TODO: Implement calcul() method.
+        $optionsCalculStructure->dataFromFicheMatiere = true;
+        return $this->structureParcoursLicence->calcul($parcours, $optionsCalculStructure);
     }
 
     public function calculVersioning(Parcours $parcours, OptionsCalculStructure $optionsCalculStructure = new OptionsCalculStructure()): StructureParcours
