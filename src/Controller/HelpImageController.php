@@ -17,7 +17,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/admin/help/images', name: 'app_admin_help_images_')]
@@ -40,7 +40,7 @@ class HelpImageController extends AbstractController
         EntityManagerInterface $em
     ): JsonResponse {
         $nom = $request->request->get('nom');
-        
+
         if (empty($nom)) {
             return $this->json(['error' => 'Le nom de l\'image est requis.'], Response::HTTP_BAD_REQUEST);
         }
@@ -54,7 +54,7 @@ class HelpImageController extends AbstractController
             $helpImage = new HelpImage();
             $helpImage->setNom($nom);
             $helpImage->setFichier($metadata->getStoredFilename());
-            
+
             $em->persist($helpImage);
             $em->flush();
 
