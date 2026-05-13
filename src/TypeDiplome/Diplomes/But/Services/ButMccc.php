@@ -343,23 +343,31 @@ class ButMccc extends AbstractButMccc
         string             $dir,
         ?DateTimeInterface $dateCfvu = null,
         ?DateTimeInterface $dateConseil = null,
-        bool               $versionFull = true
+        bool               $versionFull = true,
+        ?string            $customFileName = null,
     ): string {
         $this->genereExcelbutMccc($anneeUniversitaire, $parcours, $dateCfvu, $dateConseil, $versionFull);
 
-        $fichier = $this->excelWriter->saveFichier($this->fileName, $dir);
-        $outputPath = $dir . $this->fileName . '.pdf';
+        if ($customFileName !== null) {
+            $this->fileName = $customFileName;
+        }
 
+        $fichier = $this->excelWriter->saveFichier($this->fileName, $this->dir . '/temp/');
 
         $this->gotenberg
             ->pdf()
             ->office()
             ->files(new \SplFileInfo($fichier))
+            ->fileName($this->fileName)
             ->generate()
             ->processor(new FileProcessor(new Filesystem(), $dir))
             ->process();
 
-        return $outputPath;
+        if (file_exists($fichier)) {
+            unlink($fichier);
+        }
+
+        return $this->fileName . '.pdf';
     }
 
     private function writeMccc(mixed $fiche, array $tabColonnes, int $ligne): void

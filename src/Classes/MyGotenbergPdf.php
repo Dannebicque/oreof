@@ -12,6 +12,10 @@ namespace App\Classes;
 use App\Entity\Parcours;
 use App\Utils\Tools;
 use Sensiolabs\GotenbergBundle\GotenbergPdfInterface;
+use Sensiolabs\GotenbergBundle\Processor\FileProcessor;
+use Sensiolabs\GotenbergBundle\Builder\BuilderFileInterface;
+use Sensiolabs\GotenbergBundle\Enumeration\EmulatedMediaType;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -37,14 +41,14 @@ class MyGotenbergPdf
     public function render(string $template, array $context = [], string $name = 'fichier', array $options = []): Response
     {
         return $this->buildBuilder($template, $context, $name, $options)
-            ->generate()
             ->fileName($this->valideName($name))
+            ->generate()
             ->stream()
         ;
 
     }
 
-    private function buildBuilder(string $template, array $context, string $name, array $options): \Sensiolabs\GotenbergBundle\Builder\Pdf\HtmlPdfBuilder
+    private function buildBuilder(string $template, array $context, string $name, array $options): BuilderFileInterface
     {
         $resolver = new OptionsResolver();
         $this->configureOptions($resolver);
@@ -64,7 +68,7 @@ class MyGotenbergPdf
             ->content($template, array_merge($context, $this->options))
             ->header('pdf/header.html.twig', $this->getHeader($title, $context))
             ->footer('pdf/footer.html.twig', $this->getFooter($context))
-            ->emulatePrintMediaType()
+            ->emulatedMediaType(EmulatedMediaType::Print)
             ->printBackground()
             ->paperSize($width, $height)
             ->margins(1.3, 1.3, 0.8, 0.8)
@@ -80,22 +84,20 @@ class MyGotenbergPdf
     public function renderAndSave(string $template, string $dir, array $context = [], string $name = 'fichier', array $options = []): string
     {
         $validName = $this->valideName($name);
-        $savePath = $this->basePath . '/' . $dir . $validName;
 
         $this->buildBuilder($template, $context, $name, $options)
             ->generate()
-            ->fileName($validName)
-            ->saveAs($savePath)
-        ;
+            ->processor(new FileProcessor(new Filesystem(), $dir))
+            ->process();
 
         return $validName;
     }
 
-    private function generateHtml(string $template, array $context = []): string
-    {
-        $context = array_merge($context, $this->options);
-        return $this->twig->render($template, $context);
-    }
+//    private function generateHtml(string $template, array $context = []): string
+//    {
+//        $context = array_merge($context, $this->options);
+//        return $this->twig->render($template, $context);
+//    }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
