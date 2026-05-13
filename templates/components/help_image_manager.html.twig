@@ -4,81 +4,136 @@
    - editorTextarea: string (sélecteur CSS du textarea pour insérer l'image)
 #}
 
-<div {{ attributes.defaults({class: ''}) }}>
+<!-- Modal wrapper -->
+<div id="imageManagerModal" class="hidden fixed inset-0 z-50 overflow-y-auto">
+    <div class="flex items-center justify-center min-h-screen px-4">
+        <!-- Backdrop -->
+        <div class="fixed inset-0 bg-black/50 transition-opacity" onclick="closeImageManagerModal()"></div>
 
-    <!-- Bouton caché pour ouvrir la modale sans erreur JS -->
-    {% if showModal %}
-        <button type="button" id="hiddenOpenModalBtn" class="d-none" data-bs-toggle="modal" data-bs-target="#imageModal"></button>
-    {% endif %}
+        <!-- Modal content -->
+        <div class="relative bg-white dark:bg-slate-900 rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+            <!-- Modal header -->
+            <div class="sticky top-0 flex justify-between items-center px-6 py-4 border-b border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900">
+                <h2 class="text-xl font-bold text-slate-900 dark:text-slate-50 flex items-center gap-3">
+                    <twig:UX:Icon name="mdi:image-multiple-outline" class="h-6 w-6" />
+                    Galerie d'images
+                </h2>
+                <button type="button"
+                        class="text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-300"
+                        onclick="closeImageManagerModal()"
+                        aria-label="Fermer">
+                    <twig:UX:Icon name="basil:cross-solid" class="h-6 w-6" />
+                </button>
+            </div>
 
-    <!-- Modal de sélection et d'upload d'image -->
-    <div class="{% if showModal %}modal fade{% endif %}" id="imageModal" {% if showModal %}tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true"{% endif %}>
-        <div class="{% if showModal %}modal-dialog modal-xl modal-dialog-scrollable{% endif %}">
-            <div class="{% if showModal %}modal-content{% endif %}">
-                {% if showModal %}
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="imageModalLabel">Gérer les images d'aide</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+            <!-- Modal body -->
+            <div class="px-6 py-4">
+                <div {{ attributes.defaults({class: ''}) }}>
+                    <!-- Conteneur des onglets avec Tailwind -->
+                    <div class="space-y-6">
+                        <!-- Onglets (Galerie / Upload) -->
+        <div class="flex gap-2 border-b border-slate-200 dark:border-slate-700">
+            <button type="button"
+                    id="gallery-tab"
+                    data-tab="gallery"
+                    class="inline-flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 border-blue-600 text-blue-600 dark:text-blue-400 transition"
+                    onclick="switchTab('gallery')">
+                <twig:UX:Icon name="mdi:image-multiple-outline" class="h-5 w-5" />
+                Galerie d'images
+            </button>
+            <button type="button"
+                    id="upload-tab"
+                    data-tab="upload"
+                    class="inline-flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 border-transparent text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-200 transition"
+                    onclick="switchTab('upload')">
+                <twig:UX:Icon name="ic:round-plus" class="h-5 w-5" />
+                Ajouter une nouvelle image
+            </button>
+        </div>
+
+        <!-- Tab panes -->
+        <!-- Onglet Galerie -->
+        <div id="gallery-tab-pane" class="block">
+            <div class="space-y-4">
+                <!-- Barre de recherche -->
+                <div class="relative">
+                    <div class="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-slate-400 dark:text-slate-500">
+                        <twig:UX:Icon name="icon:search" class="h-5 w-5" />
                     </div>
-                {% endif %}
-                <div class="{% if showModal %}modal-body{% else %}card-body{% endif %}">
+                    <input type="text"
+                           id="imageSearchInput"
+                           class="w-full pl-10 pr-4 py-2.5 text-base border border-slate-300 rounded-lg bg-white text-slate-900 placeholder-slate-500 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-400 transition"
+                           placeholder="Rechercher une image..."
+                           onkeyup="searchImages()">
+                </div>
 
-                    <!-- Nav tabs -->
-                    <ul class="nav nav-tabs mb-3" id="imageModalTabs" role="tablist">
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link active" id="gallery-tab" data-bs-toggle="tab" data-bs-target="#gallery-tab-pane" type="button" role="tab" aria-controls="gallery-tab-pane" aria-selected="true"><i class="fal fa-images"></i> Galerie d'images</button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="upload-tab" data-bs-toggle="tab" data-bs-target="#upload-tab-pane" type="button" role="tab" aria-controls="upload-tab-pane" aria-selected="false"><i class="fal fa-plus-circle"></i> Ajouter une nouvelle image</button>
-                        </li>
-                    </ul>
+                <!-- Conteneur grille pour les images -->
+                <div id="imageGallery" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 overflow-auto min-h-[300px] max-h-[60vh]">
+                    <!-- État initial de chargement -->
+                    <div class="col-span-2 sm:col-span-3 md:col-span-4 flex flex-col items-center justify-center py-8">
+                        <twig:UX:Icon name="tabler:loader-2" class="h-8 w-8 animate-spin text-blue-600 dark:text-blue-400" />
+                        <p class="mt-2 text-slate-500 dark:text-slate-400">Chargement des images...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-                    <!-- Tab panes -->
-                    <div class="tab-content" id="imageModalTabContent">
+        <!-- Onglet Upload -->
+        <div id="upload-tab-pane" class="hidden">
+            <div class="grid grid-cols-1 md:grid-cols-7 gap-6">
+                <div class="md:col-span-4 space-y-4">
+                    <!-- Message d'information -->
+                    <div class="p-4 rounded-lg bg-cyan-50 border border-cyan-200 dark:bg-cyan-900/20 dark:border-cyan-700">
+                        <div class="flex gap-3">
+                            <twig:UX:Icon name="icon:info" class="h-5 w-5 text-cyan-600 dark:text-cyan-400 flex-shrink-0 mt-0.5" />
+                            <span class="text-sm text-cyan-800 dark:text-cyan-200">
+                                L'image sera sauvegardée sur le serveur et pourra être utilisée plus tard dans d'autres aides.
+                            </span>
+                        </div>
+                    </div>
 
-                        <!-- Onglet Galerie -->
-                        <div class="tab-pane fade show active" id="gallery-tab-pane" role="tabpanel" aria-labelledby="gallery-tab" tabindex="0">
-                            <div class="mb-3">
-                                <input type="text" id="imageSearchInput" class="form-control" placeholder="Rechercher une image..." onkeyup="searchImages()">
-                            </div>
-                            <!-- Conteneur grille pour les images -->
-                            <div id="imageGallery" class="row row-cols-2 row-cols-md-4 g-3 overflow-auto" style="min-height: 300px; max-height: 60vh;">
-                                <!-- État initial de chargement -->
-                                <div class="text-center py-4 w-100"><i class="fal fa-spinner fa-spin fa-2x text-primary"></i> <p class="mt-2">Chargement des images...</p></div>
-                            </div>
+                    <!-- Formulaire d'upload -->
+                    <form id="uploadImageForm" onsubmit="uploadImage(event)" class="space-y-4">
+                        <div>
+                            <label for="uploadName" class="block text-sm font-medium text-slate-900 dark:text-slate-100 mb-2">
+                                Nom sous lequel enregistrer l'image
+                                <span class="text-red-600 dark:text-red-400">*</span>
+                            </label>
+                            <input type="text"
+                                   id="uploadName"
+                                   class="w-full px-4 py-2.5 text-base border border-slate-300 rounded-lg bg-white text-slate-900 placeholder-slate-500 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-400 transition"
+                                   placeholder="Ex: accueil_timeline"
+                                   required>
                         </div>
 
-                        <!-- Onglet Upload -->
-                        <div class="tab-pane fade" id="upload-tab-pane" role="tabpanel" aria-labelledby="upload-tab" tabindex="0">
-                            <div class="row mt-3 align-items-start">
-                                <div class="col-md-7">
-                                    <div class="alert alert-info">
-                                        <i class="fal fa-info-circle"></i> L'image sera sauvegardée sur le serveur et pourra être utilisée plus tard dans d'autres aides.
-                                    </div>
-                                    <form id="uploadImageForm" onsubmit="uploadImage(event)">
-                                        <div class="mb-3">
-                                            <label for="uploadName" class="form-label">Nom sous lequel enregistrer l'image <span class="text-danger">*</span></label>
-                                            <input type="text" class="form-control" id="uploadName" placeholder="Ex: accueil_timeline" required>
-                                        </div>
-                                        <div class="mb-4">
-                                            <label for="uploadFile" class="form-label">Fichier (.png, .jpg, .jpeg) <span class="text-danger">*</span></label>
-                                            <input type="file" class="form-control" id="uploadFile" accept=".png, .jpg, .jpeg" required>
-                                            <div class="form-text">Taille maximale : 10 Mo.</div>
-                                        </div>
-                                        <button type="submit" class="btn btn-success">
-                                            <i class="fal fa-upload"></i> Uploader et insérer l'image
-                                        </button>
-                                    </form>
-                                </div>
-                                <div class="col-md-5">
-                                    <div id="imagePreviewContainer" class="w-100 d-flex flex-column justify-content-center align-items-center text-muted" style="background-color: #f8f9fa; border-radius: 8px; border: 2px dashed #dee2e6; min-height: 250px; padding: 1rem;">
-                                        <i class="fal fa-image fa-3x mb-2" id="previewIcon"></i>
-                                        <span id="previewText">Aperçu de l'image</span>
-                                        <img id="imagePreview" src="" alt="Aperçu" class="img-fluid d-none rounded shadow-sm" style="max-height: 250px; object-fit: contain;">
-                                    </div>
-                                </div>
-                            </div>
+                        <div>
+                            <label for="uploadFile" class="block text-sm font-medium text-slate-900 dark:text-slate-100 mb-2">
+                                Fichier (.png, .jpg, .jpeg)
+                                <span class="text-red-600 dark:text-red-400">*</span>
+                            </label>
+                            <input type="file"
+                                   id="uploadFile"
+                                   class="w-full px-4 py-2.5 text-base border border-slate-300 rounded-lg bg-white text-slate-900 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 dark:file:bg-blue-900/30 dark:file:text-blue-400 transition"
+                                   accept=".png, .jpg, .jpeg"
+                                   required>
+                            <p class="mt-2 text-sm text-slate-500 dark:text-slate-400">Taille maximale : 10 Mo.</p>
                         </div>
+
+                        <button type="submit" class="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-medium rounded-lg bg-green-600 text-white hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-600 transition">
+                            <twig:UX:Icon name="icon:upload" class="h-5 w-5" />
+                            Uploader et insérer l'image
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Aperçu de l'image -->
+                <div class="md:col-span-3">
+                    <div id="imagePreviewContainer" class="w-full h-[250px] flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-slate-300 bg-slate-50 text-slate-500 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-400 p-4">
+                        <div id="previewIcon" class="h-12 w-12 mb-2">
+                            <twig:UX:Icon name="material-symbols:image-outline" class="h-12 w-12" />
+                        </div>
+                        <span id="previewText" class="text-center">Aperçu de l'image</span>
+                        <img id="imagePreview" src="" alt="Aperçu" class="hidden rounded shadow-sm max-h-[250px] object-contain">
                     </div>
                 </div>
             </div>
@@ -87,6 +142,27 @@
 </div>
 
 <script>
+    function switchTab(tabName) {
+        // Cacher tous les onglets et retirer le style actif
+        document.getElementById('gallery-tab-pane').classList.add('hidden');
+        document.getElementById('upload-tab-pane').classList.add('hidden');
+        document.getElementById('gallery-tab').classList.remove('border-blue-600', 'text-blue-600', 'dark:text-blue-400');
+        document.getElementById('gallery-tab').classList.add('border-transparent', 'text-slate-600', 'hover:text-slate-900', 'dark:text-slate-400', 'dark:hover:text-slate-200');
+        document.getElementById('upload-tab').classList.remove('border-blue-600', 'text-blue-600', 'dark:text-blue-400');
+        document.getElementById('upload-tab').classList.add('border-transparent', 'text-slate-600', 'hover:text-slate-900', 'dark:text-slate-400', 'dark:hover:text-slate-200');
+
+        // Afficher l'onglet actif et le styler
+        if (tabName === 'gallery') {
+            document.getElementById('gallery-tab-pane').classList.remove('hidden');
+            document.getElementById('gallery-tab').classList.add('border-blue-600', 'text-blue-600', 'dark:text-blue-400');
+            document.getElementById('gallery-tab').classList.remove('border-transparent', 'text-slate-600', 'hover:text-slate-900', 'dark:text-slate-400', 'dark:hover:text-slate-200');
+        } else {
+            document.getElementById('upload-tab-pane').classList.remove('hidden');
+            document.getElementById('upload-tab').classList.add('border-blue-600', 'text-blue-600', 'dark:text-blue-400');
+            document.getElementById('upload-tab').classList.remove('border-transparent', 'text-slate-600', 'hover:text-slate-900', 'dark:text-slate-400', 'dark:hover:text-slate-200');
+        }
+    }
+
     function updateImagePreview(url, label = '') {
         const preview = document.getElementById('imagePreview');
         const icon = document.getElementById('previewIcon');
@@ -98,21 +174,21 @@
 
         if (url) {
             preview.src = url;
-            preview.classList.remove('d-none');
-            if (icon) icon.classList.add('d-none');
+            preview.classList.remove('hidden');
+            if (icon) icon.classList.add('hidden');
             if (text) {
                 text.textContent = label || 'Aperçu de l\'image';
-                text.classList.add('d-none');
+                text.classList.add('hidden');
             }
             return;
         }
 
         preview.src = '';
-        preview.classList.add('d-none');
-        if (icon) icon.classList.remove('d-none');
+        preview.classList.add('hidden');
+        if (icon) icon.classList.remove('hidden');
         if (text) {
             text.textContent = 'Aperçu de l\'image';
-            text.classList.remove('d-none');
+            text.classList.remove('hidden');
         }
     }
 
@@ -134,12 +210,8 @@
             });
         }
 
-        // Auto-load images en pleine page seulement (pas en modal)
-        const modalDiv = document.getElementById('imageModal');
-        const isModalView = modalDiv && modalDiv.classList.contains('modal');
-        if (!isModalView) {
-            loadImages();
-        }
+        // Auto-load images
+        loadImages();
     });
 
     // Écouteur délégué : gère #uploadFile inséré dynamiquement
@@ -169,39 +241,37 @@
 
     function loadImages(query = '') {
         const gallery = document.getElementById('imageGallery');
-        gallery.innerHTML = '<div class="text-center py-4 w-100"><i class="fal fa-spinner fa-spin fa-2x text-primary"></i> <p>Chargement...</p></div>';
+        gallery.innerHTML = '<div class="col-span-2 sm:col-span-3 md:col-span-4 flex flex-col items-center justify-center py-8"><svg class="animate-spin h-8 w-8 text-blue-600 dark:text-blue-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg><p class="mt-2 text-slate-500 dark:text-slate-400">Chargement...</p></div>';
 
         fetch('/admin/help/images?q=' + encodeURIComponent(query))
             .then(response => response.json())
             .then(data => {
                 gallery.innerHTML = '';
                 if (data.length === 0) {
-                    gallery.innerHTML = '<div class="alert alert-light text-center w-100">Aucune image trouvée.</div>';
+                    gallery.innerHTML = '<div class="col-span-2 sm:col-span-3 md:col-span-4 text-center py-8 text-slate-500 dark:text-slate-400">Aucune image trouvée.</div>';
                     return;
                 }
                 data.forEach(img => {
                     const url = '/uploads/help_images/' + img.fichier;
                     const col = document.createElement('div');
-                    col.className = 'col';
+                    col.className = 'relative group rounded-lg border border-slate-200 dark:border-slate-700 overflow-hidden cursor-pointer hover:shadow-md dark:hover:shadow-lg transition';
                     col.innerHTML = `
-                        <div class="card shadow-sm border-0 bg-light role-button cursor-pointer hoverable-card mb-3 position-relative" style="cursor: pointer;">
-                            <div class="card-body p-2 d-flex align-items-center justify-content-center js-select-image" data-image-url="${url}" data-image-name="${String(img.nom).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;')}" style="height: 140px; background-color: #fff; border-radius: 4px 4px 0 0;">
-                                <img src="${url}" alt="${img.nom}" class="img-fluid rounded" style="max-height: 100%; max-width: 100%; object-fit: contain;">
-                            </div>
-                            <div class="card-footer p-2 text-truncate small bg-white text-center border-top m-0" title="${img.nom}">
-                                ${img.nom}
-                            </div>
-                            <button type="button" class="btn btn-sm btn-danger position-absolute" style="top: 5px; right: 5px; opacity: 0.8;" onclick="deleteImage(event, ${img.id})" title="Supprimer cette image" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.8">
-                                <i class="fal fa-trash-alt"></i>
-                            </button>
+                        <div class="aspect-square bg-white dark:bg-slate-800 flex items-center justify-center overflow-hidden js-select-image" data-image-url="${url}" data-image-name="${String(img.nom).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;')}">
+                            <img src="${url}" alt="${img.nom}" class="w-full h-full object-cover">
                         </div>
+                        <div class="px-3 py-2 text-xs text-center text-slate-900 dark:text-slate-100 bg-slate-50 dark:bg-slate-700 truncate border-t border-slate-200 dark:border-slate-700" title="${img.nom}">
+                            ${img.nom}
+                        </div>
+                        <button type="button" class="absolute top-1 right-1 inline-flex items-center justify-center h-8 w-8 rounded-lg bg-red-600 text-white opacity-0 group-hover:opacity-100 transition" onclick="deleteImage(event, ${img.id})" title="Supprimer cette image">
+                            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                        </button>
                     `;
                     gallery.appendChild(col);
                 });
             })
             .catch(err => {
                 console.error(err);
-                gallery.innerHTML = '<div class="alert alert-danger w-100">Erreur lors du chargement des images.</div>';
+                gallery.innerHTML = '<div class="col-span-2 sm:col-span-3 md:col-span-4 p-4 rounded-lg bg-red-50 border border-red-200 text-red-800 dark:bg-red-900/20 dark:border-red-700 dark:text-red-400">Erreur lors du chargement des images.</div>';
             });
     }
 
@@ -218,7 +288,7 @@
         e.preventDefault();
         const btn = e.target.querySelector('button[type="submit"]');
         const originalHtml = btn.innerHTML;
-        btn.innerHTML = '<i class="fal fa-spinner fa-spin"></i> Traitement en cours...';
+        btn.innerHTML = '<svg class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Traitement en cours...';
         btn.disabled = true;
 
         const nom = document.getElementById('uploadName').value;
@@ -246,13 +316,13 @@
                 updateImagePreview('/uploads/help_images/' + data.fichier, data.nom);
 
                 // On bascule visuellement sur l'onglet galerie
-                const galleryTab = document.getElementById('gallery-tab');
-                if (galleryTab) galleryTab.click();
+                switchTab('gallery');
 
                 // On recharge les images
                 loadImages();
                 // Et on sélectionne et insère directement la nouvelle image
                 selectImage('/uploads/help_images/' + data.fichier, data.nom);
+                // Le modal se ferme via selectImage()
             }
         })
         .catch(err => {
@@ -270,12 +340,14 @@
         const name = target.getAttribute('data-image-name') || '';
         if (typeof window.insertSelectedImage === 'function') {
             window.insertSelectedImage(url, name, '{{ editorTextarea|e('js') }}');
+            closeImageManagerModal();
         }
     });
 
     function selectImage(url, altName) {
         if (typeof window.insertSelectedImage === 'function') {
             window.insertSelectedImage(url, altName, '{{ editorTextarea|e('js') }}');
+            closeImageManagerModal();
         }
     }
 
@@ -285,7 +357,7 @@
 
         const btn = e.currentTarget;
         const originalIcon = btn.innerHTML;
-        btn.innerHTML = '<i class="fal fa-spinner fa-spin"></i>';
+        btn.innerHTML = '<svg class="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>';
         btn.disabled = true;
 
         fetch('/admin/help/images/' + id + '/delete', {
@@ -318,7 +390,23 @@
 
     function openImageModal() {
         loadImages(); // Charge la galerie
-        const btn = document.getElementById('hiddenOpenModalBtn');
-        if (btn) btn.click();
+        document.getElementById('imageManagerModal').classList.remove('hidden');
     }
+
+    function closeImageManagerModal() {
+        document.getElementById('imageManagerModal').classList.add('hidden');
+    }
+
+    // Fermer le modal à la touche Escape
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+            closeImageManagerModal();
+        }
+    });
 </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
