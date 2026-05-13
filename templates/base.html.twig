@@ -33,6 +33,24 @@
       })()
     </script>
     <link rel="preconnect" href="https://fonts.gstatic.com"/>
+    <style>
+        .markdown-body img, .markdown-body .ratio {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+        }
+        @media (min-width: 992px) {
+            .markdown-body img, .markdown-body .ratio {
+                max-width: 60%;
+            }
+            .offcanvas .markdown-body img, .offcanvas .markdown-body .ratio {
+                max-width: 100%;
+            }
+        }
+        .markdown-body iframe {
+            border-radius: 4px;
+        }
+    </style>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap"
           rel="stylesheet"/>
     {% block stylesheets %}
@@ -387,6 +405,16 @@
                                                 <li><a href="{{ path('app_config_email') }}"
                                                        class="text-sm text-gray-700 hover:text-indigo-600">{{ 'menu.config.config_emails'|trans({}, 'menu') }}</a>
                                                 </li>
+                                                 <li>
+                                              <a href="{{ path('app_help_index') }}">
+                                                  <span class="label">{{ 'menu.config.help'|trans({}, 'menu') }}</span>
+                                              </a>
+                                          </li>
+                                          <li>
+                                              <a href="{{ path('app_faq_index') }}">
+                                                  <span class="label">{{ 'menu.config.faq'|trans({}, 'menu') }}</span>
+                                              </a>  
+                                        </li>
                                             </ul>
                                         </div>
                                         <div class="bg-gray-50 p-6 rounded-xl">
@@ -746,6 +774,131 @@
 {#    </div> #}
 {# </div> #}
 
+<button type="button" id="hiddenOpenFullscreenModalBtn" class="d-none" data-bs-toggle="modal" data-bs-target="#imageFullscreenModal"></button>
+
+<!-- Modal Image Fullscreen -->
+<div class="modal fade" id="imageFullscreenModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content bg-transparent border-0 shadow-none">
+            <div class="modal-header border-0 pb-0">
+                <button type="button" class="btn-close btn-close-white ms-auto" data-bs-dismiss="modal" aria-label="Fermer" style="filter: invert(1) grayscale(100%) brightness(200%); width: 2em; height: 2em; opacity: 1; z-index: 1060; position: relative;"></button>
+            </div>
+            <div class="modal-body text-center p-0 position-relative" style="cursor: zoom-out;" data-bs-dismiss="modal">
+                <img id="fullscreenModalImage" src="" alt="Plein écran" class="img-fluid rounded" style="max-height: 90vh;">
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    document.body.addEventListener('click', function(e) {
+        if (e.target.tagName === 'IMG' && e.target.closest('.markdown-body')) {
+            const src = e.target.src;
+            const modalImg = document.getElementById('fullscreenModalImage');
+            if (modalImg) {
+                modalImg.src = src;
+
+                const btn = document.getElementById('hiddenOpenFullscreenModalBtn');
+                if (btn) btn.click();
+            }
+        }
+    });
+
+    // Constuire une fonction pour appliquer le style "zoom"
+    const applyZoomReady = () => {
+        const imgs = document.querySelectorAll('.markdown-body img:not(.zoom-ready)');
+        imgs.forEach(img => {
+            img.classList.add('zoom-ready');
+            img.style.cursor = 'zoom-in';
+            img.title = "Cliquez pour agrandir";
+        });
+    };
+
+    // L'appliquer directement au chargement de la page (pour la page /aide)
+    applyZoomReady();
+
+    // Rendre le curseur zoom-in sur les images ajoutées dynamiquement (après requêtes ajax)
+    const observer = new MutationObserver((mutations) => {
+        applyZoomReady();
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+});
+</script>
+
 {% include '_ui/modal_wrapper.html.twig' with { open: false } %}
+
+{# Check de l'existant de la route pour l'aide #}
+{% set current_route = app.request.attributes.get('_route', '') %}
+{% set current_help = get_page_help(current_route) %}
+
+{# N'affiche le FAB / offcanvas que si une aide existe pour la page ou si l'utilisateur est admin #}
+{% if current_help or is_granted('ROLE_ADMIN') %}
+
+<!-- Bouton flottant -->
+<div id="help-fab-container" class="position-fixed" style="bottom: 2rem; right: 2rem; z-index: 1050;">
+    <button class="btn btn-{{ current_help ? 'info' : 'secondary' }} shadow-lg rounded-circle d-flex align-items-center justify-content-center"
+            style="width: 55px; height: 55px;"
+            type="button"
+            data-bs-toggle="offcanvas"
+            data-bs-target="#helpOffcanvas"
+            title="Aide de la page">
+        <i class="fal fa-question-circle fa-2x text-white"></i>
+    </button>
+</div>
+
+<!-- Tiroir Latéral (Offcanvas) -->
+<div class="offcanvas offcanvas-end border-0 shadow" tabindex="-1" id="helpOffcanvas" style="width: 500px;">
+
+    <!-- Header ajusté : Titre à gauche et Croix à droite -->
+    <div class="offcanvas-header bg-{{ current_help ? 'info' : 'secondary' }} text-white d-flex justify-content-between align-items-center">
+        <h5 class="offcanvas-title text-white mb-0">
+            <i class="fal fa-info-circle"></i> {{ current_help ? current_help.title : 'Aide' }}
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
+    </div>
+
+    <div class="offcanvas-body d-flex flex-column">
+
+        {# BOUTONS D'ADMINISTRATION ET SLUG (Placés en haut, en ligne) #}
+        {% if is_granted('ROLE_ADMIN') %}
+            <div class="d-flex flex-wrap align-items-center gap-2 mb-4 pb-3 border-bottom">
+                {% if current_help %}
+                    <a href="{{ path('app_help_edit', {'id': current_help.id}) }}" class="btn btn-sm btn-outline-info">
+                        <i class="fal fa-edit"></i> <span>Modifier</span>
+                    </a>
+                {% else %}
+                    <a href="{{ path('app_help_new', {'route': current_route}) }}" class="btn btn-sm btn-outline-success">
+                        <i class="fal fa-plus"></i> <span>Créer</span>
+                    </a>
+                {% endif %}
+
+                <a href="{{ path('app_help_index') }}" class="btn btn-sm btn-outline-warning">
+                    <i class="fal fa-list"></i> <span>Gérer</span>
+                </a>
+
+                {# Slug affiché à la suite des boutons (retrait de ms-auto) #}
+                <code class="bg-light text-dark px-2 py-1 rounded border shadow-sm" style="font-size: 0.8rem;">{{ current_route }}</code>
+            </div>
+        {% endif %}
+
+        {# CONTENU DE L'AIDE POUR TOUS #}
+        <div class="flex-grow-1">
+            {% if current_help %}
+                <div class="markdown-body px-2">
+                    {{ current_help.content|markdown_to_html|parse_embeds }}
+                </div>
+            {% else %}
+                <div class="alert alert-light text-center mt-2 border">
+                    <i class="fal fa-sad-tear fa-3x mb-3 text-muted"></i>
+                    <p class="mb-0 text-muted">Aucune aide n'est actuellement disponible pour cette page.</p>
+                </div>
+            {% endif %}
+        </div>
+
+    </div>
+</div>
+
+{% endif %}
 </body>
 </html>

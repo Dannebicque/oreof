@@ -1,0 +1,70 @@
+<div {{ attributes }}>
+    <div class="row mt-4">
+        <!-- Zone d'édition (Formulaire) -->
+        <div class="col-md-6 border-end pe-4">
+
+            {{ form_start(form) }}
+
+            {{ form_row(form.question) }}
+            <div class="mb-3">
+                {{ form_label(form.centresShow) }}
+                <div class="row g-2 mt-1">
+                    {% for centreChoice in form.centresShow %}
+                        <div class="col-12 col-md-6">
+                            <label class="border rounded px-3 py-2 d-flex align-items-center gap-2 w-100">
+                                {{ form_widget(centreChoice, { attr: { class: 'form-check-input m-0' } }) }}
+                                <span>{{ centreChoice.vars.label }}</span>
+                            </label>
+                        </div>
+                    {% endfor %}
+                </div>
+                {{ form_help(form.centresShow) }}
+                {{ form_errors(form.centresShow) }}
+            </div>
+
+            <div class="mb-4 mt-3">
+                {{ form_label(form.reponse) }}
+
+                <!-- Barre d'outils Markdown -->
+                {{ component('markdown_toolbar') }}
+
+                <!-- Le champ textarea de Symfony -->
+                {{ form_widget(form.reponse, { attr: { 'class': 'form-control rounded-bottom-only' } }) }}
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-check form-switch mb-3">
+                        {{ form_widget(form.isActive) }}
+                        {{ form_label(form.isActive) }}
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-success mt-3">
+                <i class="fal fa-save"></i> Enregistrer
+            </button>
+            <a href="{{ path('app_faq_index') }}" class="btn btn-secondary mt-3">Retour</a>
+            {{ form_end(form) }}
+        </div>
+
+        <!-- Zone d'aperçu en direct -->
+        <div class="col-md-6 ps-4">
+            <h5 class="text-info mb-4"><i class="fal fa-eye"></i> Aperçu utilisateur</h5>
+
+            <div class="bg-light p-4 rounded shadow-sm">
+                <h3 class="mb-3">{{ form.question.vars.value ?: 'Question...' }}</h3>
+
+                <div class="markdown-body text-break">
+                    {% if form.reponse.vars.value %}
+                        <div id="faq-preview">{{ form.reponse.vars.value|markdown_to_html|parse_embeds }}</div>
+                    {% else %}
+                        <div id="faq-preview"><p class="text-muted fst-italic">Commencez à rédiger pour voir l'aperçu...</p></div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/js/editor_helpers.js"></script>

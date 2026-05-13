@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block header %}{{ help.id ? 'Modifier' : 'Créer' }} une aide{% endblock %}
+
+{% block content %}
+    <div class="container-fluid py-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1><i class="fal fa-book-open"></i> {{ help.id ? 'Modifier l\'aide contextuelle' : 'Nouvelle aide contextuelle' }}</h1>
+        </div>
+
+        <div class="card shadow-sm border-0">
+            <div class="card-body">
+                {# Appel du composant Live #}
+                {{ component('help_editor', { initialFormData: help }) }}
+            </div>
+        </div>
+    </div>
+
+    {# Composant de gestion des images (modal) #}
+    {{ component('help_image_manager', { showModal: true, editorTextarea: 'textarea[name="help[content]"]' }) }}
+
+    <script src="/js/editor_helpers.js"></script>
+{% endblock %}
