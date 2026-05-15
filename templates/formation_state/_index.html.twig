@@ -1,93 +1,88 @@
-<table class="table table-striped">
-    <tr>
-        <th colspan="2">Localisation de la formation</th>
-    </tr>
-    <tr>
-        <td>{{ 'formation_step1.labels.responsableMention'|trans({}, 'form') }}</td>
-        <td>
-            {{ valide.etat.respFormation|badgeValide }}
-        </td>
-    </tr>
-    <tr>
-        <td>{{ 'formation_step1.labels.localisationMention.label'|trans({}, 'form') }}</td>
-        <td>
-            {{ valide.etat.localisations|badgeValide }}
-        </td>
-    </tr>
-    <tr>
-        <td>{{ 'formation_step1.labels.composantesInscription.label'|trans({}, 'form') }}</td>
-        <td>
-            {{ valide.etat.composantesInscriptions|badgeValide }}
-        </td>
-    </tr>
-    <tr>
-        <td>{{ 'formation_step1.labels.regimeInscription.label'|trans({}, 'form') }}</td>
-        <td>
-            {{ valide.etat.regimeInscription|badgeValide }}
-        </td>
-    </tr>
-    <tr>
-        <td>{{ 'formation_step1.labels.modalitesAlternance'|trans({}, 'form') }}</td>
-        <td>
-            {{ valide.etat.modaliteAlternance|badgeValide }}
-        </td>
-    </tr>
-    <tr>
-        <th colspan="2">Structure et organisation de la formation</th>
-    </tr>
-    <tr>
-        <td>{{ 'formation_step3.labels.hasParcours'|trans({}, 'form') }}</td>
-        <td>{{ valide.etat.hasParcours|badgeValide }}</td>
-    </tr>
-    <tr>
-        <td>{{ 'form.labels.objectifsFormation'|trans({}, 'form') }}</td>
-        <td>{{ valide.etat.objectifsFormation|badgeValide }}</td>
-    </tr>
-    {% if formation.isHasparcours == true %}
-        <tr>
-            <td>Parcours présent ?</td>
-            <td>{{ valide.etat.erreurHasParcours|badgeValide }}</td>
-        </tr>
-    {% else %}
-        <tr>
-            <td>Parcours unique présent ?</td>
-            <td>{{ valide.etat.erreurHasParcours|badgeValide }}</td>
-        </tr>
-        <tr>
-            <td>Etat du parcours unique de la formation</td>
-            <td>{{ valide.etat.valideParcours|badgeValide }}</td>
-        </tr>
-        {% if valide.etat.etatParcoursDefaut is defined %}
+{% set sectionTitleClass = 'border-y border-slate-200 bg-slate-100/90 px-4 py-3.5 text-left text-sm font-extrabold tracking-wide text-slate-700 dark:border-slate-700 dark:bg-slate-800/80 dark:text-slate-100' %}
+{% set dataRowClass = 'border-b border-slate-200 dark:border-slate-700' %}
+{% set labelCellClass = 'px-4 py-4 align-top font-medium leading-relaxed text-slate-700 dark:text-slate-200' %}
+{% set valueCellClass = 'px-4 py-4 align-top leading-relaxed text-slate-700 dark:text-slate-200' %}
+
+<div class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-900">
+    <div class="overflow-x-auto">
+        <table class="min-w-full text-sm text-slate-700 dark:text-slate-200">
+            <tbody>
             <tr>
-                <th colspan="2">Présentation de la formation</th>
+                <th colspan="2" class="{{ sectionTitleClass }}">Localisation de la formation</th>
             </tr>
-            <tr>
-                <td>Objectifs de la formation</td>
-                <td>
-                    {{ valide.etat.objectifsFormation|badgeValide }}
-                </td>
+            <tr class="{{ dataRowClass }}">
+                <td class="{{ labelCellClass }}">{{ 'formation_step1.labels.responsableMention'|trans({}, 'form') }}</td>
+                <td class="{{ valueCellClass }}">{{ valide.etat.respFormation|badgeValide }}</td>
             </tr>
-            <tr>
-                <td>Résultats attendus de la formation</td>
-                <td>
-                    {{ valide.etat.resultatsAttendus|badgeValide }}
-                </td>
+            <tr class="{{ dataRowClass }}">
+                <td class="{{ labelCellClass }}">{{ 'formation_step1.labels.localisationMention.label'|trans({}, 'form') }}</td>
+                <td class="{{ valueCellClass }}">{{ valide.etat.localisations|badgeValide }}</td>
             </tr>
-            <tr>
-                <td>Contenu de la formation</td>
-                <td>
-                    {{ valide.etat.contenuFormation|badgeValide }}
-                </td>
+            <tr class="{{ dataRowClass }}">
+                <td class="{{ labelCellClass }}">{{ 'formation_step1.labels.composantesInscription.label'|trans({}, 'form') }}</td>
+                <td class="{{ valueCellClass }}">{{ valide.etat.composantesInscriptions|badgeValide }}</td>
             </tr>
-            <tr>
-                <td>Rythme de la formation</td>
-                <td>
-                    {{ valide.etat.rythmeFormation|badgeValide }}
-                </td>
+            <tr class="{{ dataRowClass }}">
+                <td class="{{ labelCellClass }}">{{ 'formation_step1.labels.regimeInscription.label'|trans({}, 'form') }}</td>
+                <td class="{{ valueCellClass }}">{{ valide.etat.regimeInscription|badgeValide }}</td>
+            </tr>
+            <tr class="{{ dataRowClass }}">
+                <td class="{{ labelCellClass }}">{{ 'formation_step1.labels.modalitesAlternance'|trans({}, 'form') }}</td>
+                <td class="{{ valueCellClass }}">{{ valide.etat.modaliteAlternance|badgeValide }}</td>
             </tr>
 
-            {{ include('parcours_state/_commun.html.twig', {valide:valide.etat.etatParcoursDefaut, parcours: formation.parcours[0]}) }}
-        {% endif %}
-    {% endif %}
+            <tr>
+                <th colspan="2" class="{{ sectionTitleClass }}">Structure et organisation de la formation</th>
+            </tr>
+            <tr class="{{ dataRowClass }}">
+                <td class="{{ labelCellClass }}">{{ 'formation_step3.labels.hasParcours'|trans({}, 'form') }}</td>
+                <td class="{{ valueCellClass }}">{{ valide.etat.hasParcours|badgeValide }}</td>
+            </tr>
+            <tr class="{{ dataRowClass }}">
+                <td class="{{ labelCellClass }}">{{ 'form.labels.objectifsFormation'|trans({}, 'form') }}</td>
+                <td class="{{ valueCellClass }}">{{ valide.etat.objectifsFormation|badgeValide }}</td>
+            </tr>
 
-</table>
+            {% if formation.isHasparcours == true %}
+                <tr class="{{ dataRowClass }}">
+                    <td class="{{ labelCellClass }}">Parcours présent ?</td>
+                    <td class="{{ valueCellClass }}">{{ valide.etat.erreurHasParcours|badgeValide }}</td>
+                </tr>
+            {% else %}
+                <tr class="{{ dataRowClass }}">
+                    <td class="{{ labelCellClass }}">Parcours unique présent ?</td>
+                    <td class="{{ valueCellClass }}">{{ valide.etat.erreurHasParcours|badgeValide }}</td>
+                </tr>
+                <tr class="{{ dataRowClass }}">
+                    <td class="{{ labelCellClass }}">Etat du parcours unique de la formation</td>
+                    <td class="{{ valueCellClass }}">{{ valide.etat.valideParcours|badgeValide }}</td>
+                </tr>
+
+                {% if valide.etat.etatParcoursDefaut is defined %}
+                    <tr>
+                        <th colspan="2" class="{{ sectionTitleClass }}">Présentation de la formation</th>
+                    </tr>
+                    <tr class="{{ dataRowClass }}">
+                        <td class="{{ labelCellClass }}">Objectifs de la formation</td>
+                        <td class="{{ valueCellClass }}">{{ valide.etat.objectifsFormation|badgeValide }}</td>
+                    </tr>
+                    <tr class="{{ dataRowClass }}">
+                        <td class="{{ labelCellClass }}">Résultats attendus de la formation</td>
+                        <td class="{{ valueCellClass }}">{{ valide.etat.resultatsAttendus|badgeValide }}</td>
+                    </tr>
+                    <tr class="{{ dataRowClass }}">
+                        <td class="{{ labelCellClass }}">Contenu de la formation</td>
+                        <td class="{{ valueCellClass }}">{{ valide.etat.contenuFormation|badgeValide }}</td>
+                    </tr>
+                    <tr class="{{ dataRowClass }}">
+                        <td class="{{ labelCellClass }}">Rythme de la formation</td>
+                        <td class="{{ valueCellClass }}">{{ valide.etat.rythmeFormation|badgeValide }}</td>
+                    </tr>
+
+                    {{ include('parcours_state/_commun.html.twig', {valide: valide.etat.etatParcoursDefaut, parcours: formation.parcours[0]}) }}
+                {% endif %}
+            {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>

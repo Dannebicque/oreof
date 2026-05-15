@@ -3,32 +3,11 @@
     message: ('deposer.fichier.valide.alerte')|trans({}, 'process')|nl2br|raw
 }) }}
 
-<form action="{{ type is defined and type == 'change_rf' ? path('app_deposer_pv_conseil_change_rf', {changeRf:changeRf.id}) : path('app_deposer_pv_conseil', {parcours:parcours.id}) }}" method="post"
-      enctype="multipart/form-data">
-    <div>
-        <label for="dateconseil" class="form-label">{{ ('valide.date.conseil.label')|trans({}, 'process') }} <i
-                    class="fal fa-question-circle ms-1"
-                    data-controller="tooltip"
-                    data-tooltip-placement-value="bottom"
-                    aria-label="{{ ('valide.date.conseil.help')|trans({}, 'process') }}"
-                    data-bs-original-title="{{ ('valide.date.conseil.help')|trans({}, 'process') }}"></i></label>
-        <input type="date" name="dateconseil" id="dateconseil" class="form-control">
-    </div>
-    <div>
-        <label for="file" class="form-label">{{ ('valide.deposer.fichier.label')|trans({}, 'process') }} <i
-                    class="fal fa-question-circle ms-1"
-                    data-controller="tooltip"
-                    data-tooltip-placement-value="bottom"
-                    aria-label="{{ ('valide.deposer.helps.fichier.help')|trans({}, 'process') }}"
-                    data-bs-original-title="{{ ('valide.deposer.helps.fichier.help')|trans({}, 'process') }}"></i></label>
-        <input type="file" name="file" id="file" accept="application/pdf" class="form-control">
-    </div>
-    <div class="mt-2">
-        <button type="submit" class="btn btn-success"
-                {{ stimulus_action('base','sauvegardeFormModal', 'click') }}
-        >
-            <i class="fal fa-floppy-disk"></i>
-            {{ ('btn.deposer.valide')|trans({}, 'process') }}
-        </button>
-    </div>
-</form>
+{% form_theme form 'communs/form_theme_v2.html.twig' %}
+
+{{ form_start(form, {
+    attr: {
+        id: 'modal_form'
+    }
+}) }}
+{{ form_end(form) }}

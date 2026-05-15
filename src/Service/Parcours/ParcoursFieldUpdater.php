@@ -116,6 +116,7 @@ final class ParcoursFieldUpdater extends AbstractFieldUpdater
             // ----------------- STEP 6 (et_apres) -----------------
             'parcours_step6[poursuitesEtudes]' => fn(Parcours $p, $v) => $p->setPoursuitesEtudes($this->toString($v)),
             'parcours_step6[debouches]' => fn(Parcours $p, $v) => $p->setDebouches($this->toString($v)),
+            'parcours_step6[codesRome]' => fn(Parcours $p, $v) => $p->setCodesRome($this->toRomeCodes($v)),
 
             // ----------------- STEP 7 (configuration) -----------------
             'parcours_step7[descriptifHautPageAutomatique]' => fn(Parcours $p, $v) => $p->setDescriptifHautPageAutomatique($this->toString($v)),
@@ -172,6 +173,7 @@ final class ParcoursFieldUpdater extends AbstractFieldUpdater
             'et_apres' => [
                 'parcours_step6[poursuitesEtudes]',
                 'parcours_step6[debouches]',
+                'parcours_step6[codesRome]',
             ],
             'configuration' => [
                 'parcours_step7[descriptifHautPageAutomatique]',
@@ -239,5 +241,21 @@ final class ParcoursFieldUpdater extends AbstractFieldUpdater
 
                 break;
         }
+    }
+
+    private function toRomeCodes(mixed $v): array
+    {
+        $rawCodes = $this->toArray($v);
+        $unique = [];
+
+        foreach ($rawCodes as $rawCode) {
+            $code = strtoupper(trim((string)$rawCode));
+            if ($code === '' || preg_match('/^[A-Z]\d{4}$/', $code) !== 1) {
+                continue;
+            }
+            $unique[$code] = ['code' => $code];
+        }
+
+        return array_values($unique);
     }
 }

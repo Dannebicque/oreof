@@ -208,8 +208,6 @@
                                 </a>
                             {% endfor %}
                         {% endif %}
-
-
                     </nav>
                 </div>
             </div>
@@ -227,6 +225,7 @@
 {% block breadcrumb %}
     {{ include('communs/_breadcrumb.html.twig', {liens:[
         {href: path('app_formation_index'), title: 'Liste des formations'},
+        {title: header_title|raw }
     ]}) }}
 {% endblock %}
 

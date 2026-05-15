@@ -70,8 +70,8 @@ final class TurboStreamResponseFactory
         string|TranslatableKey|null $subtitle,
         string  $bodyTemplate,
         array   $bodyContext,
-        string  $footerTemplate,
-        array   $footerContext,
+        string $footerTemplate = '_ui/_footer_cancel.html.twig',
+        array  $footerContext = [],
         int     $status = 200
     ): Response
     {

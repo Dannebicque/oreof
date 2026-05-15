@@ -5,7 +5,7 @@
  * @project oreof
  * @lastUpdate 15/03/2023 21:11
  */
-/** @deprecated */
+
 import { Controller } from '@hotwired/stimulus'
 import callOut from '../../js/callOut'
 
@@ -23,7 +23,7 @@ export default class extends Controller {
     initialCodes: Array,
   }
 
-  connect() {
+  connect () {
     // Mode v2: collection locale synchronisee avec un champ texte unique (CSV)
     if (this.hasCodesTextTarget) {
       this.codes = this._readCodesFromField()
@@ -38,7 +38,7 @@ export default class extends Controller {
     this._loadRome()
   }
 
-  async removeCode(event) {
+  async removeCode (event) {
     event.preventDefault()
 
     if (this.hasCodesTextTarget) {
@@ -66,7 +66,7 @@ export default class extends Controller {
     })
   }
 
-  async addCode(event) {
+  async addCode (event) {
     event.preventDefault()
 
     const codeInput = this.hasCodeInputTarget
@@ -114,7 +114,7 @@ export default class extends Controller {
     })
   }
 
-  async _loadRome() {
+  async _loadRome () {
     this.listeCodesTarget.innerHTML = window.da.loaderStimulus
     const response = await fetch(this.urlCodeRomeValue)
     this.listeCodesTarget.innerHTML = await response.text()
@@ -175,8 +175,8 @@ export default class extends Controller {
         <button
           type="button"
           class="inline-flex h-5 w-5 items-center justify-center rounded-full text-slate-500 hover:bg-slate-200 hover:text-slate-800"
-          data-action="click->parcours--step6#removeCode"
-          data-parcours--step6-code-param="${code}"
+          data-action="click->parcours--rome#removeCode"
+          data-parcours--rome-code-param="${code}"
           aria-label="Supprimer ${code}"
         >
           &times;
@@ -186,30 +186,4 @@ export default class extends Controller {
 
     this.listeCodesTarget.innerHTML = `<div class="flex flex-wrap gap-2">${badges.join('')}</div>`
   }
-
-  // async _save(options) {
-  //   await saveData(this.urlValue, options).then(async () => {
-  //     await updateEtatOnglet(this.urlValue, 'onglet6', 'parcours')
-  //   })
-  // }
-
-  // savePoursuitesEtudes() {
-  //   this._save({
-  //     field: 'poursuitesEtudes',
-  //     action: 'textarea',
-  //     value: trixEditor('parcours_step6_poursuitesEtudes'),
-  //   })
-  // }
-  //
-  // saveDebouches() {
-  //   this._save({
-  //     field: 'debouches',
-  //     action: 'textarea',
-  //     value: trixEditor('parcours_step6_debouches'),
-  //   })
-  // }
-
-  // etatStep(event) {
-  //   calculEtatStep(this.urlValue, 6, event, 'parcours')
-  // }
 }

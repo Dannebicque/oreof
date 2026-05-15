@@ -4,18 +4,15 @@ namespace App\Controller\Parcours;
 
 use App\Entity\Parcours;
 use App\Repository\ParcoursTabStateRepository;
-use App\Repository\VilleRepository;
 use App\Service\Parcours\ParcoursFieldUpdater;
 use App\Service\Parcours\ParcoursTabCompletionChecker;
 use App\Service\Parcours\ParcoursTabRegistry;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/parcours/v2', name: 'parcours_v2_')]
 final class ParcoursTabController extends AbstractController
@@ -93,7 +90,6 @@ final class ParcoursTabController extends AbstractController
             'status' => $status,
             'done' => $done,
             'issues' => $issues,
-//            'form' => $form,
         ]);
         $response->headers->set('Content-Type', 'text/vnd.turbo-stream.html');
         return $response;

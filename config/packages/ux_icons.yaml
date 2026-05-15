@@ -34,6 +34,7 @@ ux_icons:
     icon:save: 'ph:floppy-disk-light'
     icon:add: 'ph:plus-bold'
     icon:edit: 'ph:pencil-light'
+    icon:duplicate: 'ph:copy-bold'
     icon:delete: 'ph:trash-light'
     icon:print: 'ph:printer-light'
     icon:download: 'ph:download-simple-light'

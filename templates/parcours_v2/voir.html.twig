@@ -12,6 +12,7 @@
     {{ include('communs/_breadcrumb.html.twig', {liens:[
         {href: path('app_formation_index'), title: 'Liste des formations'},
         {href: path('formation_v2_voir', {slug:formation.slug}), title:'Formation :  ' ~ formation.display},
+        {title: header_title|raw}
     ]}) }}
 {% endblock %}
 

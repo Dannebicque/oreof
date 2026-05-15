@@ -1,128 +1,114 @@
+{% set sectionTitleClass = sectionTitleClass|default('border-y border-slate-200 bg-slate-100/90 px-4 py-3.5 text-left text-sm font-extrabold tracking-wide text-slate-700 dark:border-slate-700 dark:bg-slate-800/80 dark:text-slate-100') %}
+{% set dataRowClass = dataRowClass|default('border-b border-slate-200 dark:border-slate-700') %}
+{% set labelCellClass = labelCellClass|default('px-4 py-4 align-top font-medium leading-relaxed text-slate-700 dark:text-slate-200') %}
+{% set valueCellClass = valueCellClass|default('px-4 py-4 align-top leading-relaxed text-slate-700 dark:text-slate-200') %}
+{% set subLabelCellClass = subLabelCellClass|default('px-4 py-3.5 pl-8 align-top leading-relaxed text-slate-600 dark:text-slate-300') %}
+{% set deepSubLabelCellClass = deepSubLabelCellClass|default('px-4 py-3.5 pl-12 align-top leading-relaxed text-slate-600 dark:text-slate-300') %}
+{% set choiceBadgeClass = choiceBadgeClass|default('ml-2 inline-flex items-center rounded-full bg-indigo-100 px-2 py-0.5 text-xs font-medium text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-200') %}
+
 <tr>
-    <th colspan="2">Descriptif</th>
+    <th colspan="2" class="{{ sectionTitleClass }}">Descriptif</th>
 </tr>
-<tr>
-    <td>Modalités d'enseignements</td>
-    <td>
-        {{ valide.etat.modalitesEnseignement|badgeValide }}
-    </td>
+<tr class="{{ dataRowClass }}">
+    <td class="{{ labelCellClass }}">Modalités d'enseignements</td>
+    <td class="{{ valueCellClass }}">{{ valide.etat.modalitesEnseignement|badgeValide }}</td>
 </tr>
-<tr>
-    <td>Stage</td>
-    <td>
-        {{ valide.etat.stage|badgeValide }}
-    </td>
+<tr class="{{ dataRowClass }}">
+    <td class="{{ labelCellClass }}">Stage</td>
+    <td class="{{ valueCellClass }}">{{ valide.etat.stage|badgeValide }}</td>
 </tr>
 {% if typeDiplome.hasStage %}
-    <tr>
-        <td class="ps-5">Modalités du stage</td>
-        <td>
-            {{ valide.etat.stageModalite|badgeValide }}
-        </td>
+    <tr class="{{ dataRowClass }}">
+        <td class="{{ subLabelCellClass }}">Modalités du stage</td>
+        <td class="{{ valueCellClass }}">{{ valide.etat.stageModalite|badgeValide }}</td>
     </tr>
-    <tr>
-        <td class="ps-5">Heures de stage</td>
-        <td>
-            {{ valide.etat.stageHeures|badgeValide }}
-        </td>
+    <tr class="{{ dataRowClass }}">
+        <td class="{{ subLabelCellClass }}">Heures de stage</td>
+        <td class="{{ valueCellClass }}">{{ valide.etat.stageHeures|badgeValide }}</td>
     </tr>
 {% endif %}
 
-<tr>
-    <td>Projet</td>
-    <td>
-        {{ valide.etat.projet|badgeValide }}
-    </td>
+<tr class="{{ dataRowClass }}">
+    <td class="{{ labelCellClass }}">Projet</td>
+    <td class="{{ valueCellClass }}">{{ valide.etat.projet|badgeValide }}</td>
 </tr>
 {% if typeDiplome.hasProjet %}
-    <tr>
-        <td class="ps-5">Modalités du projet</td>
-        <td>
-            {{ valide.etat.projetModalite|badgeValide }}
-        </td>
+    <tr class="{{ dataRowClass }}">
+        <td class="{{ subLabelCellClass }}">Modalités du projet</td>
+        <td class="{{ valueCellClass }}">{{ valide.etat.projetModalite|badgeValide }}</td>
     </tr>
-    <tr>
-        <td class="ps-5">Heures de projet</td>
-        <td>
-            {{ valide.etat.projetHeures|badgeValide }}
-        </td>
+    <tr class="{{ dataRowClass }}">
+        <td class="{{ subLabelCellClass }}">Heures de projet</td>
+        <td class="{{ valueCellClass }}">{{ valide.etat.projetHeures|badgeValide }}</td>
     </tr>
 {% endif %}
 
-<tr>
-    <td>Situation Professionnelle</td>
-    <td>
-        {{ valide.etat.situationPro|badgeValide }}
-    </td>
+<tr class="{{ dataRowClass }}">
+    <td class="{{ labelCellClass }}">Situation Professionnelle</td>
+    <td class="{{ valueCellClass }}">{{ valide.etat.situationPro|badgeValide }}</td>
 </tr>
 {% if typeDiplome.hasSituationPro %}
-    <tr>
-        <td class="ps-5">Modalités de la situation professionnelle</td>
-        <td>
-            {{ valide.etat.situationProModalite|badgeValide }}
-        </td>
+    <tr class="{{ dataRowClass }}">
+        <td class="{{ subLabelCellClass }}">Modalités de la situation professionnelle</td>
+        <td class="{{ valueCellClass }}">{{ valide.etat.situationProModalite|badgeValide }}</td>
     </tr>
-    <tr>
-        <td class="ps-5">Heures de la situation professionnelle</td>
-        <td>
-            {{ valide.etat.situationProHeures|badgeValide }}
-        </td>
+    <tr class="{{ dataRowClass }}">
+        <td class="{{ subLabelCellClass }}">Heures de la situation professionnelle</td>
+        <td class="{{ valueCellClass }}">{{ valide.etat.situationProHeures|badgeValide }}</td>
     </tr>
 {% endif %}
-<tr>
-    <td>Mémoire TER</td>
-    <td>
-        {{ valide.etat.memoire|badgeValide }}
-    </td>
+<tr class="{{ dataRowClass }}">
+    <td class="{{ labelCellClass }}">Mémoire TER</td>
+    <td class="{{ valueCellClass }}">{{ valide.etat.memoire|badgeValide }}</td>
 </tr>
 {% if typeDiplome.hasMemoire %}
-    <tr>
-        <td class="ps-5">Modalités du mémoire TER</td>
-        <td>
-            {{ valide.etat.memoireModalite|badgeValide }}
-        </td>
+    <tr class="{{ dataRowClass }}">
+        <td class="{{ subLabelCellClass }}">Modalités du mémoire TER</td>
+        <td class="{{ valueCellClass }}">{{ valide.etat.memoireModalite|badgeValide }}</td>
     </tr>
 {% endif %}
 <tr>
-    <th colspan="2">Compétences</th>
+    <th colspan="2" class="{{ sectionTitleClass }}">Compétences</th>
 </tr>
-<tr>
-    <td>Référentiel de compétences</td>
-    <td>{{ valide.etat.competences|badgeValide }}</td>
+<tr class="{{ dataRowClass }}">
+    <td class="{{ labelCellClass }}">Référentiel de compétences</td>
+    <td class="{{ valueCellClass }}">{{ valide.etat.competences|badgeValide }}</td>
 </tr>
 {% for bcc in valide.bccs %}
-    <tr>
-        <td class="ps-5">{{ bcc.texte }}</td>
-        <td>{{ bcc.etat|badgeValide }}</td>
+    <tr class="{{ dataRowClass }}">
+        <td class="{{ subLabelCellClass }}">{{ bcc.texte }}</td>
+        <td class="{{ valueCellClass }}">{{ bcc.etat|badgeValide }}</td>
     </tr>
 {% endfor %}
 <tr>
-    <th colspan="2">Structure de la maquette</th>
+    <th colspan="2" class="{{ sectionTitleClass }}">Structure de la maquette</th>
 </tr>
-<tr>
-    <td>Structure</td>
-    <td>{{ valide.etat.structure.global|badgeValide }}</td>
+<tr class="{{ dataRowClass }}">
+    <td class="{{ labelCellClass }}">Structure</td>
+    <td class="{{ valueCellClass }}">{{ valide.etat.structure.global|badgeValide }}</td>
 </tr>
 {% for key, semestre in valide.etat.structure.semestres %}
-    <tr>
-        <td class="ps-2"><strong>Semestre {{ key }}</strong></td>
-        <td>
+    <tr class="{{ dataRowClass }}">
+        <td class="px-4 py-3.5 pl-6 align-top font-semibold leading-relaxed text-slate-700 dark:text-slate-200">
+            Semestre {{ key }}</td>
+        <td class="{{ valueCellClass }}">
             {{ semestre.erreur|displayErreurs }}
             {{ semestre.global|badgeValide }}</td>
     </tr>
     {% for keyUe, ue in semestre.ues %}
         {% if ue.ue is defined %}
-            <tr>
-                <td class="ps-4">{{ ue.ue.display(parcours) }} {% if ue.enfants is defined %}<span
-                            class="badge bg-primary">UE à choix</span>{% endif %}</td>
-                <td>{{ ue.global|badgeValide }}</td>
+            <tr class="{{ dataRowClass }}">
+                <td class="{{ subLabelCellClass }}">{{ ue.ue.display(parcours) }} {% if ue.enfants is defined %}<span
+                        class="{{ choiceBadgeClass }}">UE à choix</span>{% endif %}</td>
+                <td class="{{ valueCellClass }}">{{ ue.global|badgeValide }}</td>
             </tr>
         {% endif %}
         {% if ue.enfants is defined %}
             {% for keyUee, uee in ue.enfants %}
-                <tr>
-                    <td class="ps-4"><span class="badge bg-primary">&nbsp;</span> {{ uee.ue.display(parcours) }} </td>
-                    <td>{{ uee.global|badgeValide }}</td>
+                <tr class="{{ dataRowClass }}">
+                    <td class="{{ deepSubLabelCellClass }}"><span
+                                class="{{ choiceBadgeClass }}">Choix</span> {{ uee.ue.display(parcours) }}</td>
+                    <td class="{{ valueCellClass }}">{{ uee.global|badgeValide }}</td>
                 </tr>
                 {{ include('parcours_state/_ec.html.twig', {ecs: uee.ecs}) }}
             {% endfor %}
@@ -134,58 +120,42 @@
     {% endfor %}
 {% endfor %}
 <tr>
-    <th colspan="2">Admission & inscription</th>
+    <th colspan="2" class="{{ sectionTitleClass }}">Admission & inscription</th>
 </tr>
-<tr>
-    <td>Prérequis recommandés</td>
-    <td>
-        {{ valide.etat.preRequis|badgeValide }}
-    </td>
+<tr class="{{ dataRowClass }}">
+    <td class="{{ labelCellClass }}">Prérequis recommandés</td>
+    <td class="{{ valueCellClass }}">{{ valide.etat.preRequis|badgeValide }}</td>
 </tr>
 {% if parcours.parcoursDefaut == false %}
-    <tr>
-        <td>Composante inscription</td>
-        <td>
-            {{ valide.etat.composanteInscription|badgeValide }}
-        </td>
+    <tr class="{{ dataRowClass }}">
+        <td class="{{ labelCellClass }}">Composante inscription</td>
+        <td class="{{ valueCellClass }}">{{ valide.etat.composanteInscription|badgeValide }}</td>
     </tr>
-    <tr>
-        <td>Régime d'inscription</td>
-        <td>
-            {{ valide.etat.regimeInscription|badgeValide }}
-        </td>
+    <tr class="{{ dataRowClass }}">
+        <td class="{{ labelCellClass }}">Régime d'inscription</td>
+        <td class="{{ valueCellClass }}">{{ valide.etat.regimeInscription|badgeValide }}</td>
     </tr>
-    <tr>
-        <td>Modalité de l'alternance (le cas échéant)</td>
-        <td>
-            {{ valide.etat.modaliteAlternance|badgeValide }}
-        </td>
+    <tr class="{{ dataRowClass }}">
+        <td class="{{ labelCellClass }}">Modalité de l'alternance (le cas échéant)</td>
+        <td class="{{ valueCellClass }}">{{ valide.etat.modaliteAlternance|badgeValide }}</td>
     </tr>
 {% endif %}
-<tr>
-    <td>Coordonnées du secrétariat pédagogique</td>
-    <td>
-        {{ valide.etat.coordSecretariat|badgeValide }}
-    </td>
+<tr class="{{ dataRowClass }}">
+    <td class="{{ labelCellClass }}">Coordonnées du secrétariat pédagogique</td>
+    <td class="{{ valueCellClass }}">{{ valide.etat.coordSecretariat|badgeValide }}</td>
 </tr>
 <tr>
-    <th colspan="2">Et après...</th>
+    <th colspan="2" class="{{ sectionTitleClass }}">Et après...</th>
 </tr>
-<tr>
-    <td>Poursuites d'études envisageables</td>
-    <td>
-        {{ valide.etat.poursuitesEtudes|badgeValide }}
-    </td>
+<tr class="{{ dataRowClass }}">
+    <td class="{{ labelCellClass }}">Poursuites d'études envisageables</td>
+    <td class="{{ valueCellClass }}">{{ valide.etat.poursuitesEtudes|badgeValide }}</td>
 </tr>
-<tr>
-    <td>Débouchés</td>
-    <td>
-        {{ valide.etat.debouches|badgeValide }}
-    </td>
+<tr class="{{ dataRowClass }}">
+    <td class="{{ labelCellClass }}">Débouchés</td>
+    <td class="{{ valueCellClass }}">{{ valide.etat.debouches|badgeValide }}</td>
 </tr>
-<tr>
-    <td>Codes romes</td>
-    <td>
-        {{ valide.etat.codeRome|badgeValide }}
-    </td>
+<tr class="{{ dataRowClass }}">
+    <td class="{{ labelCellClass }}">Codes romes</td>
+    <td class="{{ valueCellClass }}">{{ valide.etat.codeRome|badgeValide }}</td>
 </tr>

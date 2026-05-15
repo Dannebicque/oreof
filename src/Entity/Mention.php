@@ -47,24 +47,10 @@ class Mention
     #[ORM\ManyToMany(targetEntity: Domaine::class, inversedBy: 'mentions')]
     private Collection $domaines;
 
-//    /** @deprecated */
-//    #[Groups('parcours_json_versioning')]
-//    private ?Domaine $domaine = null;
-
     public function isUtilise(): bool
     {
         return $this->formations->count() > 0;
     }
-
-//    public function getDomaine(): ?Domaine
-//    {
-//        return $this->domaine;
-//    }
-//
-//    public function setDomaine(?Domaine $domaine): void
-//    {
-//        $this->domaine = $domaine;
-//    }
 
     public function __construct()
     {
@@ -183,9 +169,4 @@ class Mention
 
         return $this;
     }
-
-//    public function isUtilise(): bool
-//    {
-//        return $this->formations->count() > 0;
-//    }
 }

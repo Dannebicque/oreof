@@ -12,6 +12,8 @@ import { updateEtatOnglet } from '../../js/updateEtatOnglet'
 import callOut from '../../js/callOut'
 import { calculEtatStep } from '../../js/calculEtatStep'
 
+/** @deprecated */
+
 export default class extends Controller {
   static targets = ['detail']
 

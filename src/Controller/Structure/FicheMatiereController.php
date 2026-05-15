@@ -87,11 +87,13 @@ class FicheMatiereController extends BaseController
             'params' => $request->query->all(),
             'totalFiches' => $results['total'],
             'nbPages' =>$nbPages,
+            'hd' => false
         ]);
     }
 
     #[Route('/liste/hors-diplome', name: 'liste_hd')]
     public function listeHorsDiplome(
+        UserRepository $userRepository,
         Request                $request,
         FicheMatiereRepository $ficheMatiereRepository
     ): Response {
@@ -100,12 +102,15 @@ class FicheMatiereController extends BaseController
             $request->query->all(),
         );
 
+        $tUsers = $userRepository->findBy([], ['nom' => 'ASC', 'prenom' => 'ASC']);
+
         $nbPages = ceil($results['total'] / 50);
         if ($results['page'] > $nbPages) {
             $results['page'] = 1;
         }
 
-        return $this->render('structure/fiche_matiere/_listeHd.html.twig', [
+
+        return $this->render('structure/fiche_matiere/_liste.html.twig', [
             'ficheMatieres' => $results['data'],
             'page' => $results['page'],
             'deplacer' => false,
@@ -113,6 +118,8 @@ class FicheMatiereController extends BaseController
             'params' => $request->query->all(),
             'totalFiches' => $results['total'],
             'nbPages' =>$nbPages,
+            'hd' => true,
+            'users' => $tUsers,
         ]);
     }
 

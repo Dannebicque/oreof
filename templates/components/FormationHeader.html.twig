@@ -58,9 +58,9 @@
         <section class="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
             <div class="flex items-center gap-3 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-amber-800 dark:border-amber-800/70 dark:bg-amber-500/10 dark:text-amber-300">
                 <div class="flex h-10 w-10 items-center justify-center rounded-full bg-amber-100 text-amber-700 dark:bg-amber-500/15 dark:text-amber-300"
-                     data-controller="tooltip" data-tooltip-placement-value="bottom"
+                        {{ stimulus_controller('tooltip') }}
                      aria-label="Formation verrouillée"
-                     data-bs-original-title="Formation verrouillée">
+                     data-bs-title="Formation verrouillée">
                     {{ ux_icon('icon:lock', {class: 'h-4 w-4'}) }}
                 </div>
                 <div>
@@ -90,8 +90,7 @@
                 {% if is_granted('MANAGE', {route: 'app_formation', subject: this.formation}) or is_granted('ROLE_ADMIN') %}
                     <a
                             class="{{ quickBtnWarning }}"
-                            data-bs-toggle="tooltip"
-                            data-bs-placement="bottom"
+                            {{ stimulus_controller('tooltip') }}
                             href="{{ path('app_formation_change_rf', {formation: formation.id}) }}"
                             data-turbo="true"
                             data-action="click->modalturbo#open"
@@ -142,27 +141,22 @@
         <div class="{{ panelClass }}" id="actions-panel">
             <div class="{{ panelGridClass }}">
                 <div>
-                    <button
-                            {{ stimulus_controller('modal', {
-                                size: 'lg',
-                                modalTitle: 'verifier.la.saisie.formation.title'|trans({}, 'process'),
-                                modalUrl: path('app_formation_state', {formation:formation.id}) }) }}
-                            data-action="click->modal#openModal"
+                    <a
+                            href="{{ path('app_formation_state', {slug:formation.slug}) }}"
+                            data-action="click->modalturbo#open"
+                            data-turbo="true"
                             class="{{ quickBtnSuccess }} w-full"
-                            data-size="lg"
-                            data-bs-toggle="tooltip"
-                            data-bs-placement="bottom"
+                            {{ stimulus_controller('tooltip') }}
                             title="{{ 'verifier.la.saisie.formation.infobulle'|trans({}, 'process') }}">
                         {{ ux_icon('icon:check', {class: 'h-4 w-4'}) }}
                         <span>Vérifier la saisie</span>
-                    </button>
+                    </a>
                 </div>
 
                 <div>
                     <a href="{{ path('fiche_matiere_valide_formation', {formation: formation.id}) }}"
                        class="{{ quickBtnSuccess }} w-full"
-                       data-bs-toggle="tooltip"
-                       data-bs-placement="bottom"
+                            {{ stimulus_controller('tooltip') }}
                        title="{{ 'verifier.fiches.ec.matieres.infobulle'|trans({}, 'process') }}">
                         {{ ux_icon('icon:check', {class: 'h-4 w-4'}) }}
                         <span>Valider les fiches EC/matières</span>
@@ -170,20 +164,15 @@
                 </div>
 
                 <div>
-                    <button class="{{ quickBtnPrimary }} w-full" type="button"
-                            {{ stimulus_controller('modal', {
-                                size: 'large',
-                                modalTitle: 'historique.de.validation.formation.title'|trans({}, 'process'),
-                                right: true,
-                                modalUrl: path('app_historique_formation', {formation:formation.id}) }) }}
-                            data-action="click->modal#openModal"
-                            data-size="lg"
-                            data-bs-toggle="tooltip"
-                            data-bs-placement="bottom"
-                            title="{{ 'historique.de.validation.formation.infobulle'|trans({}, 'process') }}">
+                    <a class="{{ quickBtnPrimary }} w-full"
+                       href="{{ path('app_historique_formation', {formation:formation.id}) }}"
+                            {{ stimulus_controller('tooltip') }}
+                       data-action="click->modalturbo#open"
+                       data-turbo="true"
+                       title="{{ 'historique.de.validation.formation.infobulle'|trans({}, 'process') }}">
                         {{ ux_icon('icon:timeline', {class: 'h-4 w-4'}) }}
                         <span>Historique</span>
-                    </button>
+                    </a>
                 </div>
 
                 <div>
@@ -203,8 +192,7 @@
                 <div>
                     <a href="{{ path('app_formation_export', {slug:formation.slug}) }}"
                        class="{{ quickBtnPrimary }} w-full"
-                       data-bs-toggle="tooltip"
-                       data-bs-placement="bottom"
+                            {{ stimulus_controller('tooltip') }}
                        title="Télécharger en PDF">
                         {{ ux_icon('icon:download', {class: 'h-4 w-4'}) }}
                         <span>Fiche descriptive (PDF)</span>
@@ -213,8 +201,7 @@
                 <div>
                     <a href="{{ path('app_plaquette_formation_export', {slug:formation.slug}) }}"
                        class="{{ quickBtnInfo }} w-full"
-                       data-bs-toggle="tooltip"
-                       data-bs-placement="bottom"
+                            {{ stimulus_controller('tooltip') }}
                        title="Télécharger la plaquette en PDF">
                         {{ ux_icon('icon:download', {class: 'h-4 w-4'}) }}
                         <span>Plaquette (PDF)</span>

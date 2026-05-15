@@ -1,0 +1,151 @@
+/*!
+ * Copyright (c) 2026. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/oreofv2/assets/styles/_disabled-tooltip.scss
+ * @author davidannebicque
+ * @project oreofv2
+ * @lastUpdate 15/05/2026 08:56
+ */
+
+/**
+ * Styles optionnels pour les tooltips sur éléments disabled
+ * Fichier: assets/styles/_disabled-tooltip.scss
+ *
+ * À inclure dans votre fichier principal ou importer dans app.css
+ */
+
+/* Style du wrapper pour éléments disabled avec tooltip */
+[data-bs-toggle="tooltip"][data-bs-title]:not(button):not(a) {
+  display: inline-block;
+}
+
+/* Curseur visuel pour les éléments disabled */
+button[disabled],
+[disabled] {
+  cursor: not-allowed !important;
+}
+
+/* Améliore la visibilité du tooltip sur disabled */
+.tooltip.show {
+  opacity: 1;
+  z-index: 1071;
+}
+
+.tooltip-inner {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  max-width: 300px;
+  word-wrap: break-word;
+}
+
+/* Style sombre optionnel du tooltip (si vous utilisez dark-tooltip) */
+.dark-tooltip .tooltip-inner {
+  background-color: #222;
+  color: #fff;
+}
+
+.dark-tooltip .tooltip-arrow::before {
+  border-top-color: #222;
+}
+
+/* Améliore la lisibilité des tooltips pour les éléments disabled */
+.tooltip[data-popper-placement^="top"] > .tooltip-arrow::before {
+  border-top-color: #000;
+}
+
+.tooltip[data-popper-placement^="bottom"] > .tooltip-arrow::before {
+  border-bottom-color: #000;
+}
+
+.tooltip[data-popper-placement^="left"] > .tooltip-arrow::before {
+  border-left-color: #000;
+}
+
+.tooltip[data-popper-placement^="right"] > .tooltip-arrow::before {
+  border-right-color: #000;
+}
+
+/* Animation d'apparition smooth */
+.tooltip {
+  transition: opacity 0.2s ease-in-out;
+}
+
+/* Style pour le wrapper span autour de disabled buttons */
+.d-inline-block[data-bs-toggle="tooltip"] {
+  cursor: not-allowed;
+}
+
+/* Dégrade la couleur des boutons disabled avec tooltips */
+button:disabled[data-bs-toggle="tooltip"],
+button[disabled][data-bs-toggle="tooltip"] {
+  opacity: 0.7;
+}
+
+/* Petit indicateur visuel que le bouton a un tooltip */
+button[data-bs-toggle="tooltip"]::after {
+  display: none;
+}
+
+/* Version avec icône (optionnel) */
+button[disabled][data-bs-toggle="tooltip"] {
+  position: relative;
+}
+
+/* Améliore le contraste pour l'accessibilité */
+@media (prefers-contrast: more) {
+  .tooltip-inner {
+    border: 1px solid rgba(0, 0, 0, 0.2);
+  }
+}
+
+/* Mode sombre (si votre site le supporte) */
+@media (prefers-color-scheme: dark) {
+  .tooltip-inner {
+    background-color: #161616;
+    color: #ffffff;
+  }
+
+  .tooltip[data-popper-placement^="top"] > .tooltip-arrow::before {
+    border-top-color: #161616;
+  }
+
+  .tooltip[data-popper-placement^="bottom"] > .tooltip-arrow::before {
+    border-bottom-color: #161616;
+  }
+
+  .tooltip[data-popper-placement^="left"] > .tooltip-arrow::before {
+    border-left-color: #161616;
+  }
+
+  .tooltip[data-popper-placement^="right"] > .tooltip-arrow::before {
+    border-right-color: #161616;
+  }
+}
+
+/* Animation au hover pour indiquer qu'un tooltip est disponible */
+[data-bs-toggle="tooltip"]:hover {
+  filter: brightness(0.95);
+}
+
+/* Pour les éléments wrappés */
+.d-inline-block[data-bs-toggle="tooltip"]:hover {
+  filter: none;
+}
+
+.d-inline-block[data-bs-toggle="tooltip"] > button:disabled:hover,
+.d-inline-block[data-bs-toggle="tooltip"] > a:disabled:hover {
+  filter: brightness(0.95);
+}
+
+/* Responsive: Désactiver les tooltips sur mobile si nécessaire */
+@media (max-width: 768px) {
+  .tooltip {
+    max-width: 250px;
+  }
+
+  .tooltip-inner {
+    font-size: 0.8125rem;
+    padding: 0.375rem 0.5rem;
+  }
+}
+

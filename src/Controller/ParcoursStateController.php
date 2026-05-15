@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Classes\verif\ParcoursValide;
+use App\DTO\TranslatableKey;
 use App\Entity\Parcours;
+use App\Utils\TurboStreamResponseFactory;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -12,16 +14,23 @@ use Symfony\Component\Routing\Attribute\Route;
 class ParcoursStateController extends BaseController
 {
     #[Route('/parcours/state/{parcours}', name: 'app_parcours_state')]
-    public function index(Parcours $parcours): Response
+    public function index(
+        TurboStreamResponseFactory $turboStream,
+        Parcours                   $parcours): Response
     {
         $typeDiplome = $parcours->getFormation()?->getTypeDiplome();
         $valideParcours = new ParcoursValide($parcours, $typeDiplome);
 
-        return $this->render('parcours_state/_index.html.twig', [
-            'parcours' => $parcours,
-            'valide' => $valideParcours->valideParcours(),
-            'typeDiplome' => $typeDiplome,
-        ]);
+        return $turboStream->streamOpenModalFromTemplates(
+            new TranslatableKey('verifier.saisie.parcours.titre'),
+            new TranslatableKey('verifier.saisie.parcours.description'),
+            'parcours_state/_index.html.twig',
+            [
+                'parcours' => $parcours,
+                'valide' => $valideParcours->valideParcours(),
+                'typeDiplome' => $typeDiplome,
+            ]
+        );
     }
 
     #[Route('/parcours/update-remplissage/{parcours}', name: 'app_parcours_update_remplissage')]

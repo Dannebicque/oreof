@@ -11,11 +11,17 @@ import { Tooltip } from 'bootstrap'
 
 export default class extends Controller {
   static values = {
-    placement: String,
+    placement: {
+      type: String,
+      default: 'bottom',
+    },
     trigger: String,
     customClass: String,
     title: String,
-    container: String,
+    container: {
+      type: String,
+      default: 'body',
+    },
     html: Boolean,
   }
 

@@ -1,3 +1,5 @@
+{% deprecated 'Utiliser ParcoursHeader.' %}
+
 <div {{ attributes }}
         id="parcours_manage"
 >
@@ -212,12 +214,12 @@
                             {% endif %}
                         {% endif %}
                         <div class="col-6 d-flex justify-content-center">
-                            {{ include('communs/_bouton_difference_descriptifs.html.twig', 
+                            {{ include('communs/_bouton_difference_descriptifs.html.twig',
                                     {
-                                        withUrlLink: true, 
+                                        withUrlLink: true,
                                         parcours_id: this.parcours.id
                                     }
-                                ) 
+                            )
                             }}
                             {% if this.parcours.isParcoursDefaut == false %}
                                 <a

@@ -1,20 +1,32 @@
 {% extends 'base.html.twig' %}
 
 {% block content %}
-    <div class="card"
+    <section
+            class="space-y-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-900 sm:p-6"
             {{ stimulus_controller('crud', {
                 url: path('app_formation_liste'),
                 storageKey: 'formation_liste',
             }) }}
          data-action="base:refreshListe@window->crud#refreshListe"
     >
-        <div class="card-body">
-            {{ include('communs/_recherche.html.twig') }}
-            <div {{ stimulus_target('crud', 'liste') }}>
+        <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+            <div class="space-y-1">
+                <h2 class="text-sm font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">
+                    Catalogue des formations
+                </h2>
+                <p class="max-w-3xl text-sm text-slate-600 dark:text-slate-300">
+                    Consultez et administrez rapidement les mentions et specialites de l'offre de formation.
+                </p>
+            </div>
 
+            <div class="inline-flex items-center rounded-full border border-cyan-200 bg-cyan-50 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-cyan-800 dark:border-cyan-800 dark:bg-cyan-950/30 dark:text-cyan-200">
+                Details des mentions/specialites
             </div>
         </div>
-    </div>
+
+        <div class="rounded-xl border border-slate-200 bg-slate-50/60 p-3 dark:border-slate-700 dark:bg-slate-950/30 sm:p-4" {{ stimulus_target('crud', 'liste') }}>
+        </div>
+    </section>
 {% endblock %}
 
 {% set header_title %}
@@ -23,39 +35,32 @@
 
 {% block breadcrumb %}
     {{ include('communs/_breadcrumb.html.twig', {liens:[
+        {title: 'Offre de formation'},
+        {title: header_title}
     ]}) }}
 {% endblock %}
 
 {% block bouton_header %}
     {% if is_granted('ROLE_ADMIN') %}
-        <a href="{{ path('app_parcours_lheo_invalid_list') }}"
-           class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
-           data-bs-toggle="tooltip"
-           data-bs-placement="bottom"
-           title="Vérifier Export LHÉO"
-        >
-            <i class="fas fa-check"></i>
-            <span> Vérifier Export LHÉO</span>
-        </a>
+        <twig:Button
+                href="{{ path('app_parcours_lheo_invalid_list') }}"
+                variant="success"
+                size="sm"
+                icon="icon:check"
+                label="Verifier Export LHEO"
+                tooltip="Verifier Export LHEO"
+                class="mx-2"
+        />
 
-{#   todo: a reprendre     <a href="{{ path('app_formation_etat_send_ouverture') }}"#}
-{#           class="btn btn-sm btn-outline-warning btn-icon btn-icon-end w-100 w-sm-auto mx-2"#}
-{#           data-bs-toggle="tooltip"#}
-{#           data-bs-placement="bottom"#}
-{#           title="Ouvrir les formations"#}
-{#        >#}
-{#            <i class="{{ iconAdd }}"></i>#}
-{#            <span> Ouvrir les formations</span>#}
-{#        </a>#}
-        <a href="{{ path('app_formation_new') }}"
-           class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
-           data-bs-toggle="tooltip"
-           data-bs-placement="bottom"
-           title="Ajouter une formation"
-        >
-            <i class="{{ iconAdd }}"></i>
-            <span> Ajouter une formation</span>
-        </a>
+        <twig:Button
+                href="{{ path('app_formation_new') }}"
+                variant="success"
+                size="sm"
+                icon="icon:add"
+                label="Ajouter une formation"
+                tooltip="Ajouter une formation"
+                class="mx-2"
+        />
     {% endif %}
 
 {% endblock %}

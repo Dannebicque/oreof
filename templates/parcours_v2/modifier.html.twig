@@ -29,24 +29,21 @@
 {% endset %}
 
 {% block bouton_header %}
-    <a href="{{ path('parcours_v2_voir', {parcours:parcours.id}) }}"
-       class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2"
-       data-bs-toggle="tooltip"
-       data-bs-placement="bottom"
-       title="Voir le parcours"
-    >
-        <i class="{{ iconShow }}"></i>
-        <span> Voir la fiche descriptive</span>
-    </a>
-    <a href="{{ path('formation_v2_voir', {slug:formation.slug}) }}"
-       class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
-       data-bs-toggle="tooltip"
-       data-bs-placement="bottom"
-       title="Retour à la formation"
-    >
-        <i class="{{ iconBack }}"></i>
-        <span> Retour à la formation</span>
-    </a>
+    <twig:Button
+            href="{{ path('parcours_v2_voir', {parcours:parcours.id}) }}"
+            variant="info"
+            icon="icon:info"
+            label="Voir la fiche descriptive"
+            tooltip="Voir la fiche descriptive"
+    />
+
+    <twig:Button
+            href="{{ path('formation_v2_voir', {slug:formation.slug}) }}"
+            variant="success"
+            icon="icon:arrow-left"
+            label="Retour à la formation"
+            tooltip="Retour à la formation"
+    />
 {% endblock %}
 
 
@@ -54,6 +51,8 @@
     {{ include('communs/_breadcrumb.html.twig', {liens:[
         {href: path('app_formation_index'), title: 'Liste des formations'},
         {href: path('formation_v2_voir', {slug:formation.slug}), title:'Formation :  ' ~ formation.display},
+        {title: header_title|raw, href: path('parcours_v2_voir', {parcours: parcours.id})},
+        {title: 'Modifier'}
     ]}) }}
 {% endblock %}
 

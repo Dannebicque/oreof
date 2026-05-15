@@ -3,21 +3,17 @@
     {% if this.type == 'parcours' %}
         {% if this.hasPv == false %}
             {# todo: filtrer uniquement sur DPE pour la mise à jour #}
-            <button
-                    {{ stimulus_controller('modal', {
-                        size: 'lg',
-                        modalTitle: 'deposer.le.pv.title'|trans({}, 'process'),
-                        modalUrl: path('app_deposer_pv_conseil', {parcours:this.parcours.id}) }) }}
-                    data-action="click->modal#openModal"
+            <a
+                    href="{{ path('app_deposer_pv_conseil', {parcours:this.parcours.id}) }}"
                     class="btn btn-outline-warning btn-sm ms-1"
-                    data-size="lg"
-                    data-bs-toggle="tooltip"
-                    data-bs-placement="bottom"
+                    {{ stimulus_controller('tooltip') }}
+                    data-turbo="true"
+                    data-action="click->modalturbo#open"
                     title="{{ 'deposer.le.pv.infobulle'|trans({}, 'process') }}"
             >
                 <i class="{{ iconEdit }}"></i>
                 <span> {{ 'deposer.le.pv'|trans({}, 'process') }}</span>
-            </button>
+            </a>
         {% else %}
             <a
                     href="{{ path('app_upload_download', {context: 'conseils', filename: this.fichier, originalName: this.fichierOriginal|default(this.fichier)}) }}"

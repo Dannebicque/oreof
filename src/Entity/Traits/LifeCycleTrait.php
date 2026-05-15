@@ -9,6 +9,7 @@
 
 namespace App\Entity\Traits;
 
+use DateTime;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
@@ -27,7 +28,7 @@ trait LifeCycleTrait
 
     public function getCreated(): ?DateTimeInterface
     {
-        return $this->created ?? new DateTimeImmutable('now');
+        return $this->created ?? new DateTime('now');
     }
 
     public function setCreated(?DateTimeInterface $created): void
@@ -48,20 +49,20 @@ trait LifeCycleTrait
 
     public function setUpdatedValue(): void
     {
-        $this->updated = new DateTimeImmutable('now');
+        $this->updated = new DateTime('now');
     }
 
     #[ORM\PrePersist]
     #[ORM\PreUpdate]
     public function setUpdatedEntity(): void
     {
-        $this->updated = new DateTimeImmutable('now');
+        $this->updated = new DateTime('now');
     }
 
     #[ORM\PrePersist]
     public function setCreatedValue(): void
     {
-        $this->created = new DateTimeImmutable('now');
+        $this->created = new DateTime('now');
     }
 
     // Fix pour la serialization

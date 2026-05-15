@@ -7,15 +7,19 @@ use App\Classes\GetHistorique;
 use App\Classes\JsonReponse;
 use App\Classes\Mailer;
 use App\Classes\Process\ChangeRfProcess;
+use App\DTO\TranslatableKey;
 use App\Entity\ChangeRf;
 use App\Entity\HistoriqueFormation;
 use App\Entity\HistoriqueParcours;
 use App\Entity\Parcours;
 use App\Exception\FileUploadException;
 use App\Service\SecureUploadService;
-use App\Utils\Tools;
+use App\Utils\TurboStreamResponseFactory;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -25,6 +29,7 @@ class PvConseilController extends BaseController
 {
     #[Route('/pv/conseil/{parcours}', name: 'app_deposer_pv_conseil')]
     public function index(
+        TurboStreamResponseFactory $turboStreamResponseFactory,
         GetHistorique $getHistorique,
         Mailer $myMailer,
         SecureUploadService $secureUploadService,
@@ -33,7 +38,16 @@ class PvConseilController extends BaseController
         Request $request,
         Parcours $parcours,
     ): Response {
-        if ($request->isMethod('POST')) {
+        $form = $this->createPvConseilForm(
+            $this->generateUrl('app_deposer_pv_conseil', ['parcours' => $parcours->getId()])
+        );
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+            if (!$form->isValid()) {
+                return JsonReponse::error($translator->trans('deposer.pv.flash.error', [], 'process'));
+            }
+
             $dpeParcours = GetDpeParcours::getFromParcours($parcours);
             if ($dpeParcours !== null) {
                 $conseilLaisserPasser = $getHistorique->getHistoriqueParcoursLastStep($dpeParcours, 'soumis_conseil');
@@ -47,14 +61,16 @@ class PvConseilController extends BaseController
 
                 }
                 $histo->setEtat('valide');
-                if ($request->request->has('dateconseil') && $request->request->get('dateconseil') !== null) {
-                    $histo->setDate(Tools::convertDate($request->request->get('dateconseil')));
+                $dateConseil = $form->get('dateconseil')->getData();
+                if ($dateConseil instanceof \DateTimeInterface) {
+                    $histo->setDate($dateConseil);
                 }
 
                 //upload
-                if ($request->files->has('file') && $request->files->get('file') !== null) {
+                $uploadedFile = $form->get('file')->getData();
+                if ($uploadedFile !== null) {
                     try {
-                        $upload = $secureUploadService->uploadFromRequest($request, 'file', 'conseils');
+                        $upload = $secureUploadService->upload($uploadedFile, 'conseils');
                     } catch (FileUploadException $exception) {
                         return JsonReponse::error($exception->getPublicMessage());
                     }
@@ -87,9 +103,15 @@ class PvConseilController extends BaseController
 
             return JsonReponse::error('Pas de DPE associé au parcours');
         }
-        return $this->render('pv_conseil/_index.html.twig', [
-            'parcours' => $parcours,
-        ]);
+
+        return $turboStreamResponseFactory->streamOpenModalFromTemplates(
+            new TranslatableKey('deposer.pv.titre'),
+            new TranslatableKey('deposer.pv.description'),
+            'pv_conseil/_index.html.twig',
+            ['parcours' => $parcours, 'form' => $form->createView()],
+            '_ui/_footer_submit_cancel.html.twig',
+            ['submit_label' => new TranslatableKey('deposer.pv.submit')]
+        );
     }
 
     #[Route('/pv/conseil/change-rf/{changeRf}', name: 'app_deposer_pv_conseil_change_rf')]
@@ -103,7 +125,16 @@ class PvConseilController extends BaseController
         Request $request,
         ChangeRf $changeRf,
     ): Response {
-        if ($request->isMethod('POST')) {
+        $form = $this->createPvConseilForm(
+            $this->generateUrl('app_deposer_pv_conseil_change_rf', ['changeRf' => $changeRf->getId()])
+        );
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+            if (!$form->isValid()) {
+                return JsonReponse::error($translator->trans('deposer.pv.flash.error', [], 'process'));
+            }
+
             if ($changeRf !== null) {
                 $conseilLaisserPasser = $getHistorique->getHistoriqueChangeRfLastStep($changeRf, 'changeRf.soumis_conseil');
                 if ($conseilLaisserPasser !== null && $conseilLaisserPasser->getEtat() === 'laisserPasser') {
@@ -117,14 +148,16 @@ class PvConseilController extends BaseController
                 }
                 $histo->setEtat('valide');
                 $histo->setCreated(new DateTime());
-                if ($request->request->has('dateconseil') && $request->request->get('dateconseil') !== null) {
-                    $histo->setDate(Tools::convertDate($request->request->get('dateconseil')));
+                $dateConseil = $form->get('dateconseil')->getData();
+                if ($dateConseil instanceof \DateTimeInterface) {
+                    $histo->setDate($dateConseil);
                 }
 
                 //upload
-                if ($request->files->has('file') && $request->files->get('file') !== null) {
+                $uploadedFile = $form->get('file')->getData();
+                if ($uploadedFile !== null) {
                     try {
-                        $upload = $secureUploadService->uploadFromRequest($request, 'file', 'conseils');
+                        $upload = $secureUploadService->upload($uploadedFile, 'conseils');
                     } catch (FileUploadException $exception) {
                         return JsonReponse::error($exception->getPublicMessage());
                     }
@@ -165,6 +198,30 @@ class PvConseilController extends BaseController
         return $this->render('pv_conseil/_index.html.twig', [
             'changeRf' => $changeRf,
             'type' => 'change_rf',
+            'form' => $form->createView(),
         ]);
+    }
+
+    private function createPvConseilForm(string $action): FormInterface
+    {
+        return $this->createFormBuilder(null, [
+            'action' => $action,
+            'method' => 'POST',
+            'attr' => ['id' => 'modal_form'],
+        ])
+            ->add('dateconseil', DateType::class, [
+                'required' => false,
+                'widget' => 'single_text',
+                'label' => 'valide.date.conseil.label',
+                'translation_domain' => 'process',
+            ])
+            ->add('file', FileType::class, [
+                'mapped' => false,
+                'required' => true,
+                'label' => 'valide.deposer.fichier.label',
+                'translation_domain' => 'process',
+                'attr' => ['accept' => 'application/pdf'],
+            ])
+            ->getForm();
     }
 }

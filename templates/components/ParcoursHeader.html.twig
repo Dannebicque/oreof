@@ -120,7 +120,7 @@
                         <span>{{ parcours.respParcours != null ? parcours.respParcours.display : 'Non défini' }}</span>
                         {% if parcours.coResponsable != null %}
                             <span class="inline-flex items-center gap-1 rounded-full bg-slate-200 px-2 py-1 text-[11px] font-semibold text-slate-700 dark:bg-slate-700 dark:text-slate-200"
-                                  data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                  {{ stimulus_controller('tooltip') }}
                                   title="Co-responsable : {{ parcours.coResponsable.display }}">
                                 {{ ux_icon('icon:users', {class: 'h-3.5 w-3.5'}) }}
                                 Co-responsable
@@ -156,8 +156,8 @@
         <section class="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
             <div class="flex items-center gap-3 rounded-2xl border px-4 py-3 shadow-sm {{ hasDemande ? 'border-emerald-200 bg-emerald-50 text-emerald-800 dark:border-emerald-800/70 dark:bg-emerald-500/10 dark:text-emerald-300' : 'border-amber-200 bg-amber-50 text-amber-800 dark:border-amber-800/70 dark:bg-amber-500/10 dark:text-amber-300' }}">
                 <div class="flex h-10 w-10 items-center justify-center rounded-full {{ hasDemande ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300' : 'bg-amber-100 text-amber-700 dark:bg-amber-500/15 dark:text-amber-300' }}"
-                     data-controller="tooltip" data-tooltip-placement-value="bottom"
-                     data-bs-original-title="{{ hasDemande ? 'Parcours en cours de modification.' : 'Parcours verrouillé.' }}">
+                        {{ stimulus_controller('tooltip') }}
+                     data-bs-title="{{ hasDemande ? 'Parcours en cours de modification.' : 'Parcours verrouillé.' }}">
                     {{ ux_icon(hasDemande ? 'icon:unlock' : 'icon:lock', {class: 'h-4 w-4'}) }}
                 </div>
                 <div>
@@ -185,9 +185,9 @@
                         {% set stateConfig = statusBadgeMap[state] %}
                         <div class="flex items-center">
                             <div class="flex h-10 w-10 items-center justify-center rounded-full ring-2 ring-white {{ stateConfig.bubble }} dark:ring-slate-900"
-                                 data-controller="tooltip" data-tooltip-placement-value="bottom"
+                                    {{ stimulus_controller('tooltip') }}
                                  aria-label="{{ (prefix~'.'~step.label~'.btn-'~state)|trans({}, 'process') }}"
-                                 data-bs-original-title="{{ (prefix~'.'~step.label~'.btn-'~state)|trans({}, 'process') }}">
+                                 data-bs-title="{{ (prefix~'.'~step.label~'.btn-'~state)|trans({}, 'process') }}">
                                 {{ ux_icon(stateConfig.icon, {class: 'h-4 w-4'}) }}
                             </div>
                             {% if not loop.last %}
@@ -297,46 +297,36 @@
                     </a>
                 </div>
                 <div>
-                    <button
-                            {{ stimulus_controller('modal', {
-                                size: 'lg',
-                                modalTitle: 'verifier.la.saisie.parcours.title'|trans({}, 'process'),
-                                modalUrl: path('app_parcours_state', {parcours:parcours.id}) }) }}
-                            data-action="click->modal#openModal"
+                    <a
+                            href="{{ path('app_parcours_state', {parcours:parcours.id}) }}"
                             class="{{ quickBtnSuccess }} w-full"
-                            data-size="lg"
-                            data-bs-toggle="tooltip"
-                            data-bs-placement="bottom"
+                            {{ stimulus_controller('tooltip') }}
+                            data-turbo="true"
+                            data-action="click->modalturbo#open"
                             title="{{ 'verifier.la.saisie.parcours.infobulle'|trans({}, 'process') }}">
                         {{ ux_icon('icon:check', {class: 'h-4 w-4'}) }}
                         <span>Vérifier la saisie</span>
-                    </button>
+                    </a>
                 </div>
                 <div>
                     <a href="{{ path('fiche_matiere_valide_parcours', {parcours: this.parcours.id}) }}"
                        class="{{ quickBtnSuccess }} w-full"
-                       data-bs-toggle="tooltip"
-                       data-bs-placement="bottom"
+                            {{ stimulus_controller('tooltip') }}
                        title="{{ 'verifier.fiches.ec.matieres.infobulle'|trans({}, 'process') }}">
                         {{ ux_icon('icon:check', {class: 'h-4 w-4'}) }}
                         <span>Valider les fiches EC/matières</span>
                     </a>
                 </div>
                 <div>
-                    <button class="{{ quickBtnPrimary }} w-full" type="button"
-                            {{ stimulus_controller('modal', {
-                                size: 'large',
-                                modalTitle: 'historique.de.validation.parcours.title'|trans({}, 'process'),
-                                right: true,
-                                modalUrl: path('app_historique_parcours', {parcours:this.parcours.id}) }) }}
-                            data-action="click->modal#openModal"
-                            data-size="lg"
-                            data-bs-toggle="tooltip"
-                            data-bs-placement="bottom"
-                            title="{{ 'historique.de.validation.parcours.infobulle'|trans({}, 'process') }}">
+                    <a class="{{ quickBtnPrimary }} w-full"
+                       href="{{ path('app_historique_parcours', {parcours:this.parcours.id}) }}"
+                            {{ stimulus_controller('tooltip') }}
+                       data-turbo="true"
+                       data-action="click->modalturbo#open"
+                       title="{{ 'historique.de.validation.parcours.infobulle'|trans({}, 'process') }}">
                         {{ ux_icon('icon:timeline', {class: 'h-4 w-4'}) }}
                         <span>Historique</span>
-                    </button>
+                    </a>
                 </div>
                 <div>
                     {% if is_granted('ROLE_ADMIN') and hasLastVersion is defined and hasLastVersion == true %}
@@ -357,8 +347,7 @@
                     <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
                         <a class="{{ quickBtnPrimary }} w-full"
                            href="{{ path('app_parcours_export', {parcours:parcours.id}) }}"
-                           data-bs-toggle="tooltip"
-                           data-bs-placement="bottom"
+                                {{ stimulus_controller('tooltip') }}
                            title="Télécharger en PDF">
                             {{ ux_icon('icon:download', {class: 'h-4 w-4'}) }}
                             <span>Fiche descriptive (PDF)</span>
