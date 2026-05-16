@@ -1,50 +1,73 @@
-<div class="row">
-    <div class="col-6">
-        <dl>
+{% set dtClass = 'text-[11px] font-black uppercase tracking-wide text-indigo-500' %}
+{% set ddClass = 'mt-1 text-sm leading-relaxed text-slate-700' %}
+
+<div class="grid gap-4 lg:grid-cols-2">
+    <div class="rounded-xl border border-slate-200 bg-slate-50 p-4">
+        <dl class="space-y-4">
             {% if is_granted('ROLE_ADMIN') %}
-                <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Id Fiche</dt>
-                <dd>#{{ ficheMatiere.id }}</dd>
+                <div>
+                    <dt class="{{ dtClass }}">Id Fiche</dt>
+                    <dd class="{{ ddClass }}">#{{ ficheMatiere.id }}</dd>
+                </div>
             {% endif %}
 
             {% if ficheMatiere.horsDiplome == false %}
-                <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Type de diplôme</dt>
-                <dd>{{ typeDiplome != null ? typeDiplome|typeDiplome : 'N.C.' }}</dd>
-                <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Mention/Spécialité</dt>
-                <dd>{{ formation != null ? formation.display : '' }}</dd>
+                <div>
+                    <dt class="{{ dtClass }}">Type de diplôme</dt>
+                    <dd class="{{ ddClass }}">{{ typeDiplome != null ? typeDiplome|typeDiplome : 'N.C.' }}</dd>
+                </div>
+                <div>
+                    <dt class="{{ dtClass }}">Mention/Spécialité</dt>
+                    <dd class="{{ ddClass }}">{{ formation != null ? formation.display : 'Non renseignée' }}</dd>
+                </div>
             {% else %}
-                <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Type de diplôme</dt>
-                <dd>Fiche hors diplôme</dd>
+                <div>
+                    <dt class="{{ dtClass }}">Type de diplôme</dt>
+                    <dd class="{{ ddClass }}">Fiche hors diplôme</dd>
+                </div>
             {% endif %}
-            <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Parcours porteur</dt>
-            <dd>
-                {% if ficheMatiere.parcours != null %}
-                    {% if ficheMatiere.parcours.parcoursDefaut == false %}
-                        {{ ficheMatiere.parcours.libelle }}
+            <div>
+                <dt class="{{ dtClass }}">Parcours porteur</dt>
+                <dd class="{{ ddClass }}">
+                    {% if ficheMatiere.parcours != null %}
+                        {% if ficheMatiere.parcours.parcoursDefaut == false %}
+                            {{ ficheMatiere.parcours.libelle }}
+                        {% else %}
+                            Mention sans parcours
+                        {% endif %}
                     {% else %}
-                        Mention sans parcours
+                        Pas de parcours précisé
                     {% endif %}
-                {% else %}
-                    Pas de parcours précisé
-                {% endif %}
-            </dd>
+                </dd>
+            </div>
             {% if ficheMatiere.horsDiplome == false %}
-                <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Composante porteuse</dt>
-                <dd>{{ (formation != null and formation.composantePorteuse != null) ? formation.composantePorteuse.libelle : 'erreur' }}</dd>
+                <div>
+                    <dt class="{{ dtClass }}">Composante porteuse</dt>
+                    <dd class="{{ ddClass }}">{{ (formation != null and formation.composantePorteuse != null) ? formation.composantePorteuse.libelle : 'Non renseignée' }}</dd>
+                </div>
             {% endif %}
         </dl>
     </div>
-    <div class="col-6">
-        <dl>
-            <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Intitulé de l'EC</dt>
-            <dd>{{ ficheMatiere.libelle }}</dd>
-            <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Intitulé de l'EC en anglais</dt>
-            <dd>{{ ficheMatiere.libelleAnglais }}</dd>
-            <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Enseignement mutualisé ?</dt>
-            <dd>{{ ficheMatiere.enseignementMutualise == true or ficheMatiere.ficheMatiereParcours|length > 0 ? 'Oui' : 'Non' }}</dd>
+
+    <div class="rounded-xl border border-slate-200 bg-slate-50 p-4">
+        <dl class="space-y-4">
+            <div>
+                <dt class="{{ dtClass }}">Intitulé de l'EC</dt>
+                <dd class="{{ ddClass }}">{{ ficheMatiere.libelle }}</dd>
+            </div>
+            <div>
+                <dt class="{{ dtClass }}">Intitulé de l'EC en anglais</dt>
+                <dd class="{{ ddClass }}">{{ ficheMatiere.libelleAnglais ?: 'Non renseigné' }}</dd>
+            </div>
+            <div>
+                <dt class="{{ dtClass }}">Enseignement mutualisé ?</dt>
+                <dd class="{{ ddClass }}">{{ ficheMatiere.enseignementMutualise == true or ficheMatiere.ficheMatiereParcours|length > 0 ? 'Oui' : 'Non' }}</dd>
+            </div>
             {% if ficheMatiere.enseignementMutualise == true or ficheMatiereParcours|length > 0 %}
-                <dt>Parcours/formation avec lequel la fiche est mutualisée</dt>
-                <dd>
-                    <ul>
+                <div>
+                    <dt class="{{ dtClass }}">Parcours/formation avec lequel la fiche est mutualisée</dt>
+                    <dd class="{{ ddClass }}">
+                        <ul class="list-disc space-y-1 pl-5">
                         {% for parc in ficheMatiereParcours %}
                             {% if parc.parcours.formation is defined and parc.parcours.formation is not null %}
                                 {% if parc.parcours.isParcoursDefaut %}
@@ -55,10 +78,13 @@
                             {% endif %}
                         {% endfor %}
                     </ul>
-                </dd>
+                    </dd>
+                </div>
             {% endif %}
-            <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Code Apogée</dt>
-            <dd>{{ ficheMatiere.codeApogee ?? 'Non calculé' }}</dd>
+            <div>
+                <dt class="{{ dtClass }}">Code Apogée</dt>
+                <dd class="{{ ddClass }}">{{ ficheMatiere.codeApogee ?? 'Non calculé' }}</dd>
+            </div>
         </dl>
     </div>
 </div>

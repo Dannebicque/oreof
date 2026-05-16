@@ -3,14 +3,14 @@
         {% if currentValue != previousValue %}
             {% if previousValue != false %}
             <p>
-                <span class="text-danger text-decoration-line-through mx-2">
+                <span class="mx-2 text-red-500 line-through">
                     {{ previousValue }}{{ suffixString }}
                 </span>
             </p>
             {% endif %}
             {% if currentValue != false %}
             <p>
-                <span class="text-success mx-2">
+                <span class="mx-2 text-emerald-600 font-medium">
                     {{ currentValue }}{{ suffixString }}
                 </span>
             </p>

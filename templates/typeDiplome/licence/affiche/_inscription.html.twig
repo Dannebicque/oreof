@@ -1,22 +1,23 @@
 {# todo: par parcours uniquement ? #}
+{% set dtClass = 'text-[11px] font-black uppercase tracking-wide text-indigo-500' %}
+{% set ddClass = 'mt-2 text-sm leading-relaxed text-slate-700' %}
+{% set blockClass = 'rounded-xl border border-slate-200 bg-slate-50 p-4' %}
+
 <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
     <div>
         <dl class="space-y-4">
-            <div>
-                <dt class="text-[10px] font-black uppercase tracking-widest text-indigo-400">Localisation(s) de la
-                    mention/specialite
-                </dt>
-                <dd class="mt-1 text-sm text-slate-700 dark:text-slate-200">{% for ville in formation.localisationMention %}{{ ville.libelle }}{% if not loop.last %}, {% endif %}{% endfor %}</dd>
+            <div class="{{ blockClass }}">
+                <dt class="{{ dtClass }}">Localisation(s) de la mention/spécialité</dt>
+                <dd class="{{ ddClass }}">{% for ville in formation.localisationMention %}{{ ville.libelle }}{% if not loop.last %}, {% endif %}{% endfor %}</dd>
             </div>
 
-            <div>
-                <dt class="text-[10px] font-black uppercase tracking-widest text-indigo-400">Regime(s) d'inscription
-                </dt>
-                <dd class="mt-1 text-sm text-slate-700 dark:text-slate-200">
+            <div class="{{ blockClass }}">
+                <dt class="{{ dtClass }}">Régime(s) d'inscription</dt>
+                <dd class="{{ ddClass }}">
                     {% if formation.hasParcours %}
                         <div class="flex flex-wrap gap-2">
                             {% for regime in parcours.regimeInscription %}
-                                <span class="rounded-lg bg-indigo-50 px-2 py-1 text-xs font-bold text-indigo-600">{{ regime.value }}</span>
+                                <span class="inline-flex items-center rounded-full bg-indigo-100 px-2.5 py-1 text-xs font-bold text-indigo-700">{{ regime.value }}</span>
                             {% endfor %}
                         </div>
                     {% else %}
@@ -25,10 +26,9 @@
                 </dd>
             </div>
 
-            <div>
-                <dt class="text-[10px] font-black uppercase tracking-widest text-indigo-400">Modalites de l'alternance
-                </dt>
-                <dd class="mt-1 text-sm text-slate-700 dark:text-slate-200">
+            <div class="{{ blockClass }}">
+                <dt class="{{ dtClass }}">Modalités de l'alternance</dt>
+                <dd class="{{ ddClass }}">
                     {% if formation.hasParcours %}
                         {{ parcours.modalitesAlternance|raw }}
                     {% else %}
@@ -42,10 +42,10 @@
     <div class="space-y-4">
         {% for composante in formation.composantesInscription %}
             <article
-                    class="rounded-xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-900">
-                <p class="text-[10px] font-black uppercase tracking-widest text-indigo-400">Composante d'inscription</p>
-                <p class="mt-2 text-sm font-semibold text-slate-800 dark:text-slate-100">{{ composante.libelle }}</p>
-                <div class="mt-2 space-y-1 text-sm text-slate-600 dark:text-slate-300">
+                    class="rounded-xl border border-slate-200 bg-slate-50 p-4">
+                <p class="{{ dtClass }}">Composante d'inscription</p>
+                <p class="mt-2 text-sm font-semibold text-slate-800">{{ composante.libelle }}</p>
+                <div class="mt-2 space-y-1 text-sm text-slate-600">
                     <p>{{ composante.adresse != null ? composante.adresse.display|raw : 'Erreur' }}</p>
                     <p>{{ composante.telStandard|tel_format }} {% if composante.telComplementaire != null %}ou {{ composante.telComplementaire|tel_format }}{% endif %}</p>
                     <p>{{ composante.mailContact|mailto }}</p>
@@ -53,7 +53,7 @@
                 </div>
             </article>
         {% else %}
-            <p class="text-sm text-slate-500 dark:text-slate-400">Aucune composante d'inscription renseignee.</p>
+            <p class="text-sm text-slate-500">Aucune composante d'inscription renseignée.</p>
         {% endfor %}
     </div>
 </div>

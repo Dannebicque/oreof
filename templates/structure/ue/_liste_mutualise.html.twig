@@ -1,52 +1,57 @@
-{# todo: a custom tailwindcss #}
-
 {% if ue.ueParent != null and ue.ueParent.ueMutualisables|length %}
-<twig:alerte type="info">
-    <p>
-        Cette UE est mutualisée automatiquement parce que l'UE parente est mutualisée avec d'autres parcours. Les parcours suivants utilisent cette UE :
-    </p>
-    <ul>
-        {% for u in ue.ueParent.ueMutualisables %}
-            <li>
-                {{ u.parcours != null  and u.parcours.formation != null ? u.parcours.formation.display : 'Erreur formation' }}
-                - {{ u.parcours != null  and u.parcours.formation != null ? u.parcours.libelle : 'Erreur formation' }}
-            </li>
-        {% endfor %}
-    </ul>
-</twig:alerte>
+    <div class="mb-3 rounded-lg border border-blue-200 bg-blue-50 p-3 text-sm text-blue-900">
+        <p class="font-medium">Cette UE est mutualisee automatiquement via l'UE parente.</p>
+        <p class="mt-1 text-blue-800">Parcours concernes :</p>
+        <ul class="mt-1 list-disc pl-5 text-blue-800">
+            {% for u in ue.ueParent.ueMutualisables %}
+                <li>
+                    {{ u.parcours != null and u.parcours.formation != null ? u.parcours.formation.display : 'Erreur formation' }}
+                    - {{ u.parcours != null and u.parcours.formation != null ? u.parcours.libelle : 'Erreur formation' }}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
 {% endif %}
 
-<table class="table">
-    <thead>
-    <tr>
-        <th>Composante</th>
-        <th>Mention/Spécialité</th>
-        <th>Parcours</th>
-        <th>UE utilisé ?</th>
-        <th></th>
-    </tr>
-    </thead>
-    <tbody>
-    {% for u in ues %}
+<div class="rounded-lg border border-slate-200 bg-white overflow-hidden">
+    <table class="w-full text-sm">
+        <thead class="bg-slate-50 border-b border-slate-200">
         <tr>
-            <td>{{ u.parcours != null  and u.parcours.formation != null ? u.parcours.formation.composantePorteuse.libelle :
-                'Erreur formation' }}</td>
-            <td>{{ u.parcours != null  and u.parcours.formation != null ? u.parcours.formation.display : 'Erreur formation' }}</td>
-            <td>{{ u.parcours != null  and u.parcours.formation != null ? u.parcours.libelle : 'Erreur formation' }}</td>
-            <td>
-                {{ u|isUeUtilisee|badgeBoolean }}
-            </td>
-            <td class="text-end">
-                <button {{ stimulus_action('ue--mutualise', 'delete', 'click', {ue:u.id}) }} class="btn
-                    btn-sm text-danger">
-                    <i class="{{ iconDelete }}"></i> Supprimer
-                </button>
-            </td>
+            <th class="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Composante</th>
+            <th class="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
+                Mention/Specialite
+            </th>
+            <th class="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Parcours</th>
+            <th class="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">UE utilisee ?
+            </th>
+            <th class="px-3 py-2"></th>
         </tr>
-    {% else %}
-        <tr>
-            <td colspan="5" class="bg-warning-pale text-center">UE mutualisée avec aucun parcours</td>
-        </tr>
-    {% endfor %}
-    </tbody>
-</table>
+        </thead>
+        <tbody class="divide-y divide-slate-100">
+        {% for u in ues %}
+            <tr class="hover:bg-slate-50 transition-colors">
+                <td class="px-3 py-2 text-slate-700">{{ u.parcours != null and u.parcours.formation != null ? u.parcours.formation.composantePorteuse.libelle : 'Erreur formation' }}</td>
+                <td class="px-3 py-2 text-slate-700">{{ u.parcours != null and u.parcours.formation != null ? u.parcours.formation.display : 'Erreur formation' }}</td>
+                <td class="px-3 py-2 text-slate-700">{{ u.parcours != null and u.parcours.formation != null ? u.parcours.libelle : 'Erreur formation' }}</td>
+                <td class="px-3 py-2">{{ u|isUeUtilisee|badgeBoolean }}</td>
+                <td class="px-3 py-2 text-right">
+                    <button
+                            {{ stimulus_action('ue--mutualise', 'delete', 'click', {ue: u.id}) }}
+                            type="button"
+                            class="inline-flex items-center gap-1 rounded-md px-2.5 py-1.5 text-xs font-semibold text-red-600 hover:bg-red-50 transition-colors"
+                    >
+                        <twig:UX:icon name="icon:delete"/>
+                        Supprimer
+                    </button>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5" class="px-3 py-4 text-center text-sm text-slate-500">UE mutualisee avec aucun
+                    parcours.
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

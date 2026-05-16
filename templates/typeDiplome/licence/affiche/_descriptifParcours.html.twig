@@ -1,26 +1,32 @@
+{% set dtClass = 'text-[11px] font-black uppercase tracking-wide text-indigo-500' %}
+{% set ddClass = 'mt-2 text-sm leading-relaxed text-slate-700' %}
+{% set blockClass = 'rounded-xl border border-slate-200 bg-slate-50 p-4' %}
+{% set badgeOkClass = 'inline-flex items-center rounded-full bg-indigo-100 px-2.5 py-1 text-xs font-bold text-indigo-700' %}
+{% set badgeNoClass = 'inline-flex items-center rounded-full bg-amber-100 px-2.5 py-1 text-xs font-bold text-amber-700' %}
+
 <div class="space-y-4">
     <dl class="space-y-4">
-        <div>
-            <dt class="text-[10px] font-black uppercase tracking-widest text-indigo-400">Modalites d'enseignement</dt>
+        <div class="{{ blockClass }}">
+            <dt class="{{ dtClass }}">Modalités d'enseignement</dt>
             <dd class="mt-1">
                 {% if parcours.modalitesEnseignement != null %}
-                    <span class="px-2 py-1 bg-indigo-50 rounded-lg text-xs font-bold text-indigo-600 mt-1">
+                    <span class="{{ badgeOkClass }}">
                     {{ parcours.modalitesEnseignement.libelle }}
                 </span>
                 {% else %}
-                    <span class="px-2 py-1 bg-orange-50 rounded-lg text-xs font-bold text-orange-600 mt-1">
-                    Non precise
+                    <span class="{{ badgeNoClass }}">
+                    Non précisé
                 </span>
                 {% endif %}
             </dd>
         </div>
 
         {% if typeDiplome.hasStage or parcours.hasStage == true %}
-            <div>
-                <dt class="text-[10px] font-black uppercase tracking-widest text-indigo-400">Stage(s)</dt>
-                <dd class="mt-1 text-sm text-slate-700 dark:text-slate-200">
+            <div class="{{ blockClass }}">
+                <dt class="{{ dtClass }}">Stage(s)</dt>
+                <dd class="{{ ddClass }}">
                     {% if parcours.hasStage == true %}
-                        <span class="px-2 py-1 bg-indigo-50 rounded-lg text-xs font-bold text-indigo-600 mt-1">Oui ({{ parcours.nbHeuresStages }} heures).</span>
+                        <span class="{{ badgeOkClass }}">Oui ({{ parcours.nbHeuresStages }} heures).</span>
                         <br> <p class="mt-1">{{ parcours.stageText|printTexte }}</p>
                         {% if stringDifferencesParcours.stageTextParcours is defined %}
                             {{ include('communs/_comparaison_versioning_no_button.html.twig', {
@@ -29,32 +35,32 @@
                             }) }}
                         {% endif %}
                     {% else %}
-                        <span class="px-2 py-1 bg-orange-50 rounded-lg text-xs font-bold text-orange-600 mt-1">Non</span>
+                        <span class="{{ badgeNoClass }}">Non</span>
                     {% endif %}
                 </dd>
             </div>
         {% endif %}
 
         {% if typeDiplome.hasProjet or parcours.hasProjet == true %}
-            <div>
-                <dt class="text-[10px] font-black uppercase tracking-widest text-indigo-400">Projet(s) tutore(s)</dt>
-                <dd class="mt-1 text-sm text-slate-700 dark:text-slate-200">
+            <div class="{{ blockClass }}">
+                <dt class="{{ dtClass }}">Projet(s) tutoré(s)</dt>
+                <dd class="{{ ddClass }}">
                     {% if parcours.hasProjet == true %}
-                        <span class="px-2 py-1 bg-indigo-50 rounded-lg text-xs font-bold text-indigo-600 mt-1">Oui ({{ parcours.nbHeuresProjet }} heures).</span>
+                        <span class="{{ badgeOkClass }}">Oui ({{ parcours.nbHeuresProjet }} heures).</span>
                         <br> <p class="mt-1"> {{ parcours.projetText|printTexte }}</p>
                     {% else %}
-                        <span class="px-2 py-1 bg-orange-50 rounded-lg text-xs font-bold text-orange-600 mt-1">Non</span>
+                        <span class="{{ badgeNoClass }}">Non</span>
                     {% endif %}
                 </dd>
             </div>
         {% endif %}
 
         {% if typeDiplome.hasMemoire or parcours.hasMemoire == true %}
-            <div>
-                <dt class="text-[10px] font-black uppercase tracking-widest text-indigo-400">TER/Memoire</dt>
-                <dd class="mt-1 text-sm text-slate-700 dark:text-slate-200">
+            <div class="{{ blockClass }}">
+                <dt class="{{ dtClass }}">TER/Mémoire</dt>
+                <dd class="{{ ddClass }}">
                     {% if parcours.hasMemoire == true %}
-                        <span class="px-2 py-1 bg-indigo-50 rounded-lg text-xs font-bold text-indigo-600 mt-1">Oui.</span>
+                        <span class="{{ badgeOkClass }}">Oui.</span>
                         <br> <p class="mt-1"> {{ parcours.memoireText|printTexte }}</p>
                         {% if stringDifferencesParcours.memoireTextParcours is defined %}
                             {{ include('communs/_comparaison_versioning_no_button.html.twig', {
@@ -63,21 +69,20 @@
                             }) }}
                         {% endif %}
                     {% else %}
-                        <span class="px-2 py-1 bg-orange-50 rounded-lg text-xs font-bold text-orange-600 mt-1">Non</span>
+                        <span class="{{ badgeNoClass }}">Non</span>
                     {% endif %}
                 </dd>
             </div>
         {% endif %}
 
         {% if typeDiplome.hasSituationPro  or parcours.hasSituationPro == true %}
-            <div>
-                <dt class="text-[10px] font-black uppercase tracking-widest text-indigo-400">Situation professionnelle
-                </dt>
-                <dd class="mt-1 text-sm text-slate-700 dark:text-slate-200">
+            <div class="{{ blockClass }}">
+                <dt class="{{ dtClass }}">Situation professionnelle</dt>
+                <dd class="{{ ddClass }}">
                     {% if parcours.hasSituationPro == true %}
-                        <span class="px-2 py-1 bg-indigo-50 rounded-lg text-xs font-bold text-indigo-600 mt-1"> Oui ({{ parcours.nbHeuresSituationPro }} heures).</span>
+                        <span class="{{ badgeOkClass }}">Oui ({{ parcours.nbHeuresSituationPro }} heures).</span>
                     {% else %}
-                        <span class="px-2 py-1 bg-orange-50 rounded-lg text-xs font-bold text-orange-600 mt-1">Non</span>
+                        <span class="{{ badgeNoClass }}">Non</span>
                     {% endif %}
                 </dd>
             </div>

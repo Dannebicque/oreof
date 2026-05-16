@@ -14,7 +14,7 @@ export default class extends Controller {
     url: String,
   }
 
-  static targets = ['liste']
+  static targets = ['liste', 'composante', 'formation', 'parcours']
 
   connect() {
     this._updateListe()
@@ -32,12 +32,14 @@ export default class extends Controller {
   }
 
   changeComposante(event) {
+    this._resetSelect(this.formationTarget)
+    this._resetSelect(this.parcoursTarget)
     this._getData(event.target.value, 'formation')
   }
 
   async ajouter() {
-    const formation = document.getElementById('formation').value
-    const parcours = document.getElementById('parcours').value
+    const formation = this.formationTarget.value
+    const parcours = this.parcoursTarget.value
     await fetch(this.urlValue, {
       method: 'POST',
       headers: {
@@ -72,6 +74,7 @@ export default class extends Controller {
   }
 
   changeFormation(event) {
+    this._resetSelect(this.parcoursTarget)
     this._getData(event.target.value, 'parcours')
   }
 
@@ -91,7 +94,7 @@ export default class extends Controller {
   }
 
   _updateSelect(data, field) {
-    const select = document.getElementById(`${field}`)
+    const select = this[`${field}Target`]
     select.innerHTML = ''
     if (data.length === 0) {
       const option = document.createElement('option')
@@ -127,5 +130,18 @@ export default class extends Controller {
         this._getData(data[0].id, 'parcours')
       }
     }
+  }
+
+  _resetSelect (select) {
+    if (!select) {
+      return
+    }
+
+    select.innerHTML = ''
+    const option = document.createElement('option')
+    option.value = ''
+    option.text = 'Choisir dans la liste'
+    option.selected = true
+    select.add(option)
   }
 }

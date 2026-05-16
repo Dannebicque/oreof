@@ -21,6 +21,7 @@ use App\Entity\SemestreParcours;
 use App\Entity\Ue;
 use App\Entity\UeMutualisable;
 use App\Enums\TypeModificationDpeEnum;
+use App\Form\SemestreMutualiserType;
 use App\Repository\ComposanteRepository;
 use App\Repository\FicheMatiereMutualisableRepository;
 use App\Repository\FormationRepository;
@@ -562,29 +563,24 @@ class SemestreController extends BaseController
 
     #[Route('/mutualiser/{semestre}/{parcours}', name: 'mutualiser')]
     public function mutualiser(
+        TurboStreamResponseFactory $turboStreamResponseFactory,
         ComposanteRepository $composanteRepository,
         Semestre             $semestre,
         Parcours             $parcours
     ): Response {
-
-        $body = $this->renderView('structure/semestre/_mutualiser.html.twig', [
-            'semestre' => $semestre,
-            'parcours' => $parcours,
-            'composantes' => $composanteRepository->findAll()
+        $form = $this->createForm(SemestreMutualiserType::class, null, [
+            'composantes' => $composanteRepository->findAll(),
         ]);
 
-        $footer = $this->renderView('_ui/_footer_cancel.html.twig', [
-        ]);
-
-        return new Response(
-            $this->renderView('_ui/open.stream.html.twig', [
-                'title' => 'Gérer les mutualisations du semestre',
-                'subtitle' => 'Dans : semestre ' . $semestre->display(),
-                'body' => $body,
-                'footer' => $footer,
-            ]),
-            200,
-            ['Content-Type' => 'text/vnd.turbo-stream.html']
+        return $turboStreamResponseFactory->streamOpenModalFromTemplates(
+            'Gérer les mutualisations du semestre',
+            'Dans : semestre ' . $semestre->display(),
+            'structure/semestre/_mutualiser.html.twig',
+            [
+                'semestre' => $semestre,
+                'parcours' => $parcours,
+                'form' => $form->createView(),
+            ]
         );
     }
 
@@ -708,12 +704,14 @@ class SemestreController extends BaseController
         return $turboStreamResponseFactory->streamOpenModalFromTemplates(
             'Rattacher le semestre à un semestre mutualisé',
             'Dans : semestre ' . $semestre->display(),
-            'structure/semestre/_raccrocher.html.twig', [
+            'structure/semestre/_raccrocher.html.twig',
+            [
             'semestre' => $semestre,
             'form' => $form->createView(),
             'parcours' => $parcours
         ],
-            '_ui/_footer_submit_cancel.html.twig', [
+            '_ui/_footer_submit_cancel.html.twig',
+            [
                 'submitLabel' => 'Enregistrer le rattachement',
             ]
         );
@@ -731,7 +729,7 @@ class SemestreController extends BaseController
 
         $semestreTc = $semestreParcours->getSemestre();
 
-        if($semestreTc === null) {
+        if ($semestreTc === null) {
             return JsonReponse::error('Le semestre n\'existe pas');
         }
 

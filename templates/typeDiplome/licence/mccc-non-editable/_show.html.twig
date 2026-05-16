@@ -5,20 +5,28 @@
     and (hasChangedTypeMccc ?? false == false)
 %}
 
-<h3>1ᵉ Session</h3>
-<div>
-    <table class="table table-bordered">
-        <thead>
+<div class="space-y-6">
+    <section class="space-y-3">
+        <h3 class="text-sm font-black uppercase tracking-wide text-slate-500">1ᵉ Session</h3>
+        <div class="overflow-hidden rounded-xl border border-slate-200 bg-slate-50">
+            <table class="min-w-full divide-y divide-slate-200 text-sm text-slate-700">
+                <thead class="bg-slate-100">
         <tr>
-            <th class="text-center">Contrôle continu intégral (CCi)</th>
-            <th class="text-center">Contrôle continu (CC)</th>
-            <th class="text-center">Contrôle terminal (CT)</th>
+            <th class="px-4 py-3 text-center text-xs font-black uppercase tracking-wide text-slate-500">Contrôle continu
+                intégral (CCi)
+            </th>
+            <th class="px-4 py-3 text-center text-xs font-black uppercase tracking-wide text-slate-500">Contrôle continu
+                (CC)
+            </th>
+            <th class="px-4 py-3 text-center text-xs font-black uppercase tracking-wide text-slate-500">Contrôle
+                terminal (CT)
+            </th>
         </tr>
         </thead>
-        <tbody>
+                <tbody class="divide-y divide-slate-200 bg-white">
         <tr>
             {% if hasDisplayComparaison %}
-                <td class="text-center">
+                <td class="px-4 py-4 text-center align-top">
                     {{ compareMccc.displayMccc(
                         mcccs.COL_MCCC_CCI ?? "",
                         mcccVersioning.COL_MCCC_CCI ?? "",
@@ -28,7 +36,7 @@
                         )
                     }}
                 </td>
-                <td class="text-center">
+                <td class="px-4 py-4 text-center align-top">
                     {{ compareMccc.displayMccc(
                         mcccs.COL_MCCC_CC ?? "",
                         mcccVersioning.COL_MCCC_CC ?? "",
@@ -38,7 +46,7 @@
                         )
                     }}
                 </td>
-                <td class="text-center">
+                <td class="px-4 py-4 text-center align-top">
                     {{ compareMccc.displayMccc(
                         mcccs.COL_MCCC_CT ?? "",
                         mcccVersioning.COL_MCCC_CT ?? "",
@@ -49,33 +57,46 @@
                     }}
                 </td>
             {% else %}
-                <td class="text-center">{{ mcccs.COL_MCCC_CCI is defined ? mcccs.COL_MCCC_CCI : "" }}</td>
-                <td class="text-center">{{ mcccs.COL_MCCC_CC is defined ? mcccs.COL_MCCC_CC : "" }}</td>
-                <td class="text-center">{{ mcccs.COL_MCCC_CT is defined ? mcccs.COL_MCCC_CT : "" }}</td>
+                <td class="px-4 py-4 text-center align-top">{{ mcccs.COL_MCCC_CCI is defined ? mcccs.COL_MCCC_CCI : "" }}</td>
+                <td class="px-4 py-4 text-center align-top">{{ mcccs.COL_MCCC_CC is defined ? mcccs.COL_MCCC_CC : "" }}</td>
+                <td class="px-4 py-4 text-center align-top">{{ mcccs.COL_MCCC_CT is defined ? mcccs.COL_MCCC_CT : "" }}</td>
             {% endif %}
         </tr>
         </tbody>
     </table>
 </div>
 
-<h3>2nde chance (hors CCi)</h3>
-<div>
-    <table class="table table-bordered">
-        <thead>
+    </section>
+
+    <section class="space-y-3">
+        <h3 class="text-sm font-black uppercase tracking-wide text-slate-500">2nde chance (hors CCi)</h3>
+        <div class="overflow-hidden rounded-xl border border-slate-200 bg-slate-50">
+            <table class="min-w-full divide-y divide-slate-200 text-sm text-slate-700">
+                <thead class="bg-slate-100">
         <tr>
-            <th colspan="2" class="text-center">Si CC <10 en 1ère session</th>
-            <th rowspan="2" class="text-center">Si CC >= 10 en 1ère session</th>
-            <th rowspan="2" class="text-center">Cas 100%CT en 1ère session</th>
+            <th colspan="2" class="px-4 py-3 text-center text-xs font-black uppercase tracking-wide text-slate-500">Si
+                CC &lt; 10 en 1ère session
+            </th>
+            <th rowspan="2" class="px-4 py-3 text-center text-xs font-black uppercase tracking-wide text-slate-500">Si
+                CC &gt;= 10 en 1ère session
+            </th>
+            <th rowspan="2" class="px-4 py-3 text-center text-xs font-black uppercase tracking-wide text-slate-500">Cas
+                100% CT en 1ère session
+            </th>
         </tr>
         <tr>
-            <th class="text-center">Sans TP en 1ère session</th>
-            <th class="text-center">Avec TP en 1ère session</th>
+            <th class="px-4 py-3 text-center text-xs font-black uppercase tracking-wide text-slate-500">Sans TP en 1ère
+                session
+            </th>
+            <th class="px-4 py-3 text-center text-xs font-black uppercase tracking-wide text-slate-500">Avec TP en 1ère
+                session
+            </th>
         </tr>
         </thead>
-        <tbody>
+                <tbody class="divide-y divide-slate-200 bg-white">
         <tr>
             {% if hasDisplayComparaison %}
-                <td class="text-center">
+                <td class="px-4 py-4 text-center align-top">
                     {{ compareMccc.displayMccc(
                         mcccs.COL_MCCC_SECONDE_CHANCE_CC_SANS_TP ?? "",
                         mcccVersioning.COL_MCCC_SECONDE_CHANCE_CC_SANS_TP ?? "",
@@ -85,7 +106,7 @@
                         )
                     }}
                 </td>
-                <td class="text-center">
+                <td class="px-4 py-4 text-center align-top">
                     {{ compareMccc.displayMccc(
                         mcccs.COL_MCCC_SECONDE_CHANCE_CC_AVEC_TP ?? "",
                         mcccVersioning.COL_MCCC_SECONDE_CHANCE_CC_AVEC_TP ?? "",
@@ -95,7 +116,7 @@
                         )
                     }}
                 </td>
-                <td class="text-center">
+                <td class="px-4 py-4 text-center align-top">
                     {{ compareMccc.displayMccc(
                         mcccs.COL_MCCC_SECONDE_CHANCE_CC_SUP_10 ?? "",
                         mcccVersioning.COL_MCCC_SECONDE_CHANCE_CC_SUP_10 ?? "",
@@ -105,7 +126,7 @@
                         )
                     }}
                 </td>
-                <td class="text-center">
+                <td class="px-4 py-4 text-center align-top">
                     {{ compareMccc.displayMccc(
                         mcccs.COL_MCCC_SECONDE_CHANCE_CT ?? "",
                         mcccVersioning.COL_MCCC_SECONDE_CHANCE_CT ?? "",
@@ -116,13 +137,15 @@
                     }}
                 </td>
             {% else %}
-                <td class="text-center">{{ mcccs.COL_MCCC_SECONDE_CHANCE_CC_SANS_TP is defined ? mcccs.COL_MCCC_SECONDE_CHANCE_CC_SANS_TP : "" }}</td>
-                <td class="text-center">{{ mcccs.COL_MCCC_SECONDE_CHANCE_CC_AVEC_TP is defined ? mcccs.COL_MCCC_SECONDE_CHANCE_CC_AVEC_TP : "" }}</td>
-                <td class="text-center">{{ mcccs.COL_MCCC_SECONDE_CHANCE_CC_SUP_10 is defined ? mcccs.COL_MCCC_SECONDE_CHANCE_CC_SUP_10 : "" }}</td>
-                <td class="text-center">{{ mcccs.COL_MCCC_SECONDE_CHANCE_CT is defined ? mcccs.COL_MCCC_SECONDE_CHANCE_CT : "" }}</td>
+                <td class="px-4 py-4 text-center align-top">{{ mcccs.COL_MCCC_SECONDE_CHANCE_CC_SANS_TP is defined ? mcccs.COL_MCCC_SECONDE_CHANCE_CC_SANS_TP : "" }}</td>
+                <td class="px-4 py-4 text-center align-top">{{ mcccs.COL_MCCC_SECONDE_CHANCE_CC_AVEC_TP is defined ? mcccs.COL_MCCC_SECONDE_CHANCE_CC_AVEC_TP : "" }}</td>
+                <td class="px-4 py-4 text-center align-top">{{ mcccs.COL_MCCC_SECONDE_CHANCE_CC_SUP_10 is defined ? mcccs.COL_MCCC_SECONDE_CHANCE_CC_SUP_10 : "" }}</td>
+                <td class="px-4 py-4 text-center align-top">{{ mcccs.COL_MCCC_SECONDE_CHANCE_CT is defined ? mcccs.COL_MCCC_SECONDE_CHANCE_CT : "" }}</td>
             {% endif %}
         </tr>
         </tbody>
     </table>
+</div>
+    </section>
 </div>
 

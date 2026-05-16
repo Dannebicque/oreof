@@ -1,10 +1,12 @@
+{% set dtClass = 'text-[11px] font-black uppercase tracking-wide text-indigo-500' %}
+{% set ddClass = 'mt-2 text-sm leading-relaxed text-slate-700' %}
+{% set blockClass = 'rounded-xl border border-slate-200 bg-slate-50 p-4' %}
+
 <div class="space-y-4">
     <dl class="space-y-4">
-        <div>
-            <dt class="text-[10px] font-black uppercase tracking-widest text-indigo-400">Poursuites d'etudes
-                envisageables
-            </dt>
-            <dd class="mt-1 text-sm text-slate-700 dark:text-slate-200">{{ parcours.poursuitesEtudes|raw }}</dd>
+        <div class="{{ blockClass }}">
+            <dt class="{{ dtClass }}">Poursuites d'études envisageables</dt>
+            <dd class="{{ ddClass }}">{{ parcours.poursuitesEtudes|raw }}</dd>
         </div>
         {% if stringDifferencesParcours.poursuiteEtudesParcours is defined %}
             {{ include('communs/_comparaison_versioning_no_button.html.twig', {
@@ -13,9 +15,9 @@
             }) }}
         {% endif %}
 
-        <div>
-            <dt class="text-[10px] font-black uppercase tracking-widest text-indigo-400">Debouches</dt>
-            <dd class="mt-1 text-sm text-slate-700 dark:text-slate-200">{{ parcours.debouches|raw }}</dd>
+        <div class="{{ blockClass }}">
+            <dt class="{{ dtClass }}">Débouchés</dt>
+            <dd class="{{ ddClass }}">{{ parcours.debouches|raw }}</dd>
         </div>
         {% if stringDifferencesParcours.debouchesTextParcours is defined %}
             {{ include('communs/_comparaison_versioning_no_button.html.twig', {
@@ -24,13 +26,13 @@
             }) }}
         {% endif %}
 
-        <div>
-            <dt class="text-[10px] font-black uppercase tracking-widest text-indigo-400">Code ROME</dt>
+        <div class="{{ blockClass }}">
+            <dt class="{{ dtClass }}">Code ROME</dt>
             <dd class="mt-1 flex flex-wrap gap-2">
                 {% for code in parcours.codesRome %}
-                    <span class="rounded-lg bg-indigo-50 px-2 py-1 text-xs font-bold text-indigo-600">{{ code.code }}</span>
+                    <span class="inline-flex items-center rounded-full bg-indigo-100 px-2.5 py-1 text-xs font-bold text-indigo-700">{{ code.code }}</span>
                 {% else %}
-                    <span class="text-sm text-slate-500 dark:text-slate-400">Aucun code ROME.</span>
+                    <span class="text-sm text-slate-500">Aucun code ROME.</span>
                 {% endfor %}
             </dd>
         </div>

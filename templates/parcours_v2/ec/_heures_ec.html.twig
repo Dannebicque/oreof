@@ -4,51 +4,67 @@
         {% form_theme form 'communs/form_theme_v2.html.twig' %}
         {{ form_start(form, {
             'attr': {
-                id:"modal_form"
+                id:"modal_form",
+                class:"space-y-6"
             }}) }}
 
             {% if ec.ficheMatiere != null and ec.ficheMatiere.volumesHorairesImpose %}
-                <twig:alerte type="info">
-                    Les heures de cette fiche EC/matière sont imposées et ne sont pas
-                    modifiables
+                <twig:alerte type="info" class="rounded-lg">
+                    <div class="flex items-start gap-3">
+                        <i class="fas fa-lock-alt text-blue-600 mt-0.5 flex-shrink-0"></i>
+                        <div>
+                            <p class="font-medium text-blue-900">Volumes horaires imposés</p>
+                            <p class="text-sm text-blue-800 mt-1">Les heures de cette fiche EC/matière sont imposées et
+                                ne peuvent pas être modifiées.</p>
+                        </div>
+                    </div>
                 </twig:alerte>
             {% elseif isParcoursProprietaire == false %}
-                <div class="bg-yellow-50 border border-yellow-200 text-yellow-800 rounded-sm p-2">
-                    <p class="text-sm mb-3">
-                        Cet EC est raccroché, les données sont reprises par défaut de l'EC d'origine du parcours
-                        <strong>{{ ec.parcours != null ? ec.parcours.libelle : '-non défini-' }}</strong>.
-                        Mais vous pouvez définir des données spécifiques sur cet EC.
-                    </p>
+                <div class="bg-amber-50 border-2 border-amber-200 rounded-lg p-4">
+                    <div class="flex gap-3">
+                        <i class="fas fa-info-circle text-amber-600 mt-0.5 flex-shrink-0"></i>
+                        <div class="flex-1">
+                            <p class="font-medium text-amber-900 mb-3">
+                                EC raccroché
+                            </p>
+                            <p class="text-sm text-amber-800 mb-4">
+                                Les données sont reprises par défaut de l'EC d'origine du parcours
+                                <strong class="font-semibold">{{ ec.parcours != null ? ec.parcours.libelle : '-non défini-' }}</strong>.
+                                Vous pouvez définir des données spécifiques pour cet EC.
+                            </p>
 
-                    <div class="flex items-center gap-3">
-                        <label for="heuresSpecifiques" class="flex items-center cursor-pointer select-none">
-                            <input
-                                    id="heuresSpecifiques"
-                                    name="heuresSpecifiques"
-                                    type="checkbox"
-                                    class="sr-only"
-                                    {{ stimulus_action('ec--structure', 'heuresSpecifiques', 'change', { ec:ec.id }) }}
-                                    {% if ec.heuresSpecifiques == true %}checked{% endif %}
-                            />
-                            <span class="w-10 h-6 bg-gray-200 rounded-full relative transition-colors"
-                                  aria-hidden="true">
-                        <span class="block w-4 h-4 bg-white rounded-full shadow transform transition-transform
-                                     {% if ec.heuresSpecifiques == true %}translate-x-4{% else %}translate-x-0{% endif %}"></span>
-                    </span>
-                            <span class="ml-3 text-sm">Définir spécifiquement les heures pour cet EC.</span>
-                        </label>
-
-                        <i class="fal fa-question-circle text-gray-400" data-controller="tooltip"
-                           data-tooltip-placement-value="bottom"
-                           title="{{ 'parcours_ec.helps.heuresSpecifiques'|trans({}, 'help') }}"></i>
+                            <label for="heuresSpecifiques"
+                                   class="flex items-center gap-2 cursor-pointer group p-2 rounded-lg hover:bg-amber-50 transition-colors">
+                                <input
+                                        id="heuresSpecifiques"
+                                        name="heuresSpecifiques"
+                                        type="checkbox"
+                                        class="w-5 h-5 text-amber-600 border-2 border-gray-300 rounded transition-colors focus:ring-2 focus:ring-amber-500 focus:ring-offset-1 cursor-pointer accent-amber-600"
+                                        {{ stimulus_action('ec--structure', 'heuresSpecifiques', 'change', { ec:ec.id }) }}
+                                        {% if ec.heuresSpecifiques == true %}checked{% endif %}
+                                />
+                                <div class="flex-1">
+                                    <span class="text-sm font-medium text-amber-900 group-hover:text-amber-700">Utiliser des heures spécifiques</span>
+                                </div>
+                                <i class="fal fa-question-circle text-amber-500 flex-shrink-0" data-controller="tooltip"
+                                   data-tooltip-placement-value="right"
+                                   title="{{ 'parcours_ec.helps.heuresSpecifiques'|trans({}, 'help') }}"></i>
+                            </label>
+                        </div>
                     </div>
                 </div>
             {% elseif isMutualisee == true %}
                 {% if isMutualisee %}
-                    <twig:alerte type="warning">
-                        <p>Cette matière est <strong>partagée</strong>. Toute modification impactera les coûts et
-                            volumes des
-                            parcours SVT et Chimie.</p>
+                    <twig:alerte type="warning" class="rounded-lg">
+                        <div class="flex items-start gap-3">
+                            <i class="fas fa-share-alt text-orange-600 mt-0.5 flex-shrink-0"></i>
+                            <div>
+                                <p class="font-medium text-orange-900">Matière partagée</p>
+                                <p class="text-sm text-orange-800 mt-1">Cette matière est <strong>partagée</strong>
+                                    entre plusieurs parcours (SVT, Chimie, etc.). Toute modification impactera les coûts
+                                    et volumes de tous les parcours concernés.</p>
+                            </div>
+                        </div>
                     </twig:alerte>
                 {% endif %}
             {% endif %}
@@ -56,62 +72,100 @@
             {% set disabled = (ec.heuresSpecifiques == false and isParcoursProprietaire == false) or (ec.ficheMatiere != null and ec.ficheMatiere.volumesHorairesImpose) %}
 
             {% if ec.parcours.modalitesEnseignement == null %}
-                {{ component('alerte', {type:'warning', message:'Vous devez d\'abord définir les modalités d\'enseignement du parcours.'}) }}
+                <div class="bg-red-50 border-2 border-red-200 rounded-lg p-4">
+                    <div class="flex items-start gap-3">
+                        <i class="fas fa-exclamation-triangle text-red-600 mt-0.5 flex-shrink-0"></i>
+                        <div>
+                            <p class="font-medium text-red-900">Configuration incomplète</p>
+                            <p class="text-sm text-red-800 mt-1">Vous devez d'abord définir les modalités d'enseignement
+                                du parcours.</p>
+                        </div>
+                    </div>
+                </div>
             {% else %}
 
                 {% if (ec.parcours.modalitesEnseignement != null and ec.parcours.modalitesEnseignement.value == 1) or ec.modaliteEnseignement == null %}
-                    {{ form_row(form.modaliteEnseignement, {disabled: ec.heuresSpecifiques == false}) }}
+                    <div class="mb-1">
+                        {{ form_row(form.modaliteEnseignement, {disabled: ec.heuresSpecifiques == false}) }}
+                    </div>
                 {% endif %}
 
                 {% if parcours.modalitesEnseignement == null %}
-                    <div class="mb-4">
+                    <div class="mb-5">
                         {{ form_row(form.modaliteEnseignement) }}
                     </div>
                 {% endif %}
 
-                <div class="flex items-start gap-3 mb-4">
-                    <label for="sansHeure" class="flex items-center cursor-pointer">
+                <div class="border-t border-gray-200 pt-4">
+                    <label for="sansHeure"
+                           class="flex items-center gap-2 cursor-pointer group p-2 rounded-lg hover:bg-indigo-50 transition-colors">
                         <input id="sansHeure" name="sansHeure" type="checkbox"
-                               class="mr-2 h-4 w-4 text-indigo-600 border-gray-300 rounded"
+                               class="w-5 h-5 text-indigo-600 border-2 border-gray-300 rounded transition-colors focus:ring-2 focus:ring-indigo-500 focus:ring-offset-1 cursor-pointer accent-indigo-600"
                                {% if ec.sansHeure == true %}checked{% endif %}
                                 {% if disabled %}disabled{% endif %}
                         />
-                        <span class="text-sm">{{ 'mccc.ec.labels.sansHeures'|trans({}, 'form') }}</span>
+                        <div class="flex-1">
+                            <span class="text-sm font-medium text-gray-900 group-hover:text-indigo-600">{{ 'mccc.ec.labels.sansHeures'|trans({}, 'form') }}</span>
+                        </div>
+                        <i class="fal fa-question-circle text-indigo-400 flex-shrink-0" data-controller="tooltip"
+                           data-tooltip-placement-value="right"
+                           title="{{ 'mccc.ec.helps.sansHeures'|trans({}, 'help') }}"></i>
                     </label>
-
-                    <i class="fal fa-question-circle text-gray-400" data-controller="tooltip"
-                       data-tooltip-placement-value="bottom"
-                       title="{{ 'mccc.ec.helps.sansHeures'|trans({}, 'help') }}"></i>
                 </div>
 
                 {% set disabled = disabled or ec.sansHeure %}
 
                 <div id="bloc_presentiel"
-                     class="{% if modalite != null and modalite.value != 2 %}block{% else %}hidden{% endif %} mb-6"
+                     class="{% if modalite != null and modalite.value != 2 %}block{% else %}hidden{% endif %}"
                      aria-hidden="{% if modalite != null and modalite.value == 2 %}true{% else %}false{% endif %}">
-                    <h3 class="text-base font-semibold mb-3">Volume Présentiel</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
-                        <div>{{ form_row(form.volumeCmPresentiel, {'disabled': disabled}) }}</div>
-                        <div>{{ form_row(form.volumeTdPresentiel, {'disabled': disabled}) }}</div>
-                        <div>{{ form_row(form.volumeTpPresentiel, {'disabled': disabled}) }}</div>
+                    <div class="bg-white rounded-lg border border-gray-200 p-4 hover:border-indigo-300 transition-colors">
+                        <div class="flex items-center gap-2 mb-3">
+                            <div class="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-chalkboard text-blue-600 text-sm"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-gray-900 text-sm">Volume Présentiel</h3>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                            <div>{{ form_row(form.volumeCmPresentiel, {'disabled': disabled, 'label_attr': {'class': 'text-sm font-medium'}}) }}</div>
+                            <div>{{ form_row(form.volumeTdPresentiel, {'disabled': disabled, 'label_attr': {'class': 'text-sm font-medium'}}) }}</div>
+                            <div>{{ form_row(form.volumeTpPresentiel, {'disabled': disabled, 'label_attr': {'class': 'text-sm font-medium'}}) }}</div>
+                        </div>
                     </div>
                 </div>
 
                 <div id="bloc_distanciel"
-                     class="{% if modalite != null and modalite.value != 0 %}block{% else %}hidden{% endif %} mb-6"
+                     class="{% if modalite != null and modalite.value != 0 %}block{% else %}hidden{% endif %}"
                      aria-hidden="{% if modalite != null and modalite.value == 0 %}true{% else %}false{% endif %}">
-                    <h3 class="text-base font-semibold mb-3">Volume Distanciel</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
-                        <div>{{ form_row(form.volumeCmDistanciel, {'disabled': disabled}) }}</div>
-                        <div>{{ form_row(form.volumeTdDistanciel, {'disabled': disabled}) }}</div>
-                        <div>{{ form_row(form.volumeTpDistanciel, {'disabled': disabled}) }}</div>
+                    <div class="bg-white rounded-lg border border-gray-200 p-4 hover:border-indigo-300 transition-colors">
+                        <div class="flex items-center gap-2 mb-3">
+                            <div class="w-8 h-8 rounded-lg bg-purple-100 flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-video text-purple-600 text-sm"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-gray-900 text-sm">Volume À Distance</h3>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                            <div>{{ form_row(form.volumeCmDistanciel, {'disabled': disabled, 'label_attr': {'class': 'text-sm font-medium'}}) }}</div>
+                            <div>{{ form_row(form.volumeTdDistanciel, {'disabled': disabled, 'label_attr': {'class': 'text-sm font-medium'}}) }}</div>
+                            <div>{{ form_row(form.volumeTpDistanciel, {'disabled': disabled, 'label_attr': {'class': 'text-sm font-medium'}}) }}</div>
+                        </div>
                     </div>
                 </div>
 
-                <div class="mb-3">
-                    <h3 class="text-base font-semibold mb-3">Volume horaire Travail Etudiant (TE)</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
-                        <div>{{ form_row(form.volumeTe, {'disabled': disabled}) }}</div>
+                <div class="bg-white rounded-lg border border-gray-200 p-4 hover:border-indigo-300 transition-colors">
+                    <div class="flex items-center gap-2 mb-3">
+                        <div class="w-8 h-8 rounded-lg bg-green-100 flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-book text-green-600 text-sm"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-gray-900 text-sm">Volume de Travail Étudiant (TE)</h3>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                        <div>{{ form_row(form.volumeTe, {'disabled': disabled, 'label_attr': {'class': 'text-sm font-medium'}}) }}</div>
                         <div></div>
                         <div></div>
                     </div>
@@ -120,34 +174,48 @@
             {% endif %}
 
             {% if ec.ecEnfants|length > 0 %}
-                <div class="flex items-center gap-3 mb-3">
-                    <input class="h-4 w-4 text-indigo-600 border-gray-300 rounded" type="checkbox"
-                           id="ec_step4_heures_enfants_identiques"
-                           name="ec_step4[heuresEnfantsIdentiques]"
-                           {% if ec.heuresEnfantsIdentiques == true %}checked{% endif %}
-                    />
-                    <label for="ec_step4_heures_enfants_identiques" class="text-sm">
-                        {{ 'ec_step4.labels.heures_enfants_edentiques'|trans({}, 'form') }}
+                <div class="border-t border-gray-200 pt-4">
+                    <label for="ec_step4_heures_enfants_identiques"
+                           class="flex items-center gap-2 cursor-pointer group p-2 rounded-lg hover:bg-indigo-50 transition-colors">
+                        <input class="w-5 h-5 text-indigo-600 border-2 border-gray-300 rounded transition-colors focus:ring-2 focus:ring-indigo-500 focus:ring-offset-1 cursor-pointer accent-indigo-600"
+                               type="checkbox"
+                               id="ec_step4_heures_enfants_identiques"
+                               name="ec_step4[heuresEnfantsIdentiques]"
+                               {% if ec.heuresEnfantsIdentiques == true %}checked{% endif %}
+                        />
+                        <div class="flex-1">
+                            <span class="text-sm font-medium text-gray-900 group-hover:text-indigo-600">
+                                {{ 'ec_step4.labels.heures_enfants_edentiques'|trans({}, 'form') }}
+                            </span>
+                        </div>
+                        <i class="fal fa-question-circle text-indigo-400 flex-shrink-0" data-controller="tooltip"
+                           data-tooltip-placement-value="right"
+                           title="{{ 'ec_step4.helps.heures_enfants_edentiques'|trans({}, 'help') }}"></i>
                     </label>
-                    <i class="fal fa-question-circle text-gray-400" data-controller="tooltip"
-                       data-tooltip-placement-value="bottom"
-                       title="{{ 'ec_step4.helps.heures_enfants_edentiques'|trans({}, 'help') }}"></i>
                 </div>
             {% endif %}
 
             {% if ec.ecParent != null %}
-                <div class="flex items-center gap-3 mb-2">
-                    <input class="h-4 w-4 text-indigo-600 border-gray-300 rounded" type="checkbox"
-                           id="ec_step4_heures_enfants_identiques_parent"
-                           name="ec_step4[heuresEnfantsIdentiquesParent]"
-                           {% if ec.ecParent.heuresEnfantsIdentiques == true %}checked{% endif %}
-                    />
-                    <label for="ec_step4_heures_enfants_identiques_parent" class="text-sm">
-                        {{ 'ec_step4.labels.heures_enfants_edentiques_parent'|trans({}, 'form') }}
+                <div class="bg-blue-50 border-2 border-blue-200 rounded-lg p-3">
+                    <label for="ec_step4_heures_enfants_identiques_parent"
+                           class="flex items-center gap-2 cursor-pointer group">
+                        <input class="w-5 h-5 text-blue-600 border-2 border-blue-300 rounded transition-colors focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 cursor-pointer accent-blue-600"
+                               type="checkbox"
+                               id="ec_step4_heures_enfants_identiques_parent"
+                               name="ec_step4[heuresEnfantsIdentiquesParent]"
+                               {% if ec.ecParent.heuresEnfantsIdentiques == true %}checked{% endif %}
+                        />
+                        <div class="flex-1">
+                            <span class="text-sm font-medium text-blue-900 group-hover:text-blue-700">
+                                {{ 'ec_step4.labels.heures_enfants_edentiques_parent'|trans({}, 'form') }}
+                            </span>
+                            <p class="text-xs text-blue-700 mt-0.5">L'EC parent synchronisera ses heures avec cette
+                                configuration</p>
+                        </div>
+                        <i class="fal fa-question-circle text-blue-500 flex-shrink-0" data-controller="tooltip"
+                           data-tooltip-placement-value="right"
+                           title="{{ 'ec_step4.helps.heures_enfants_edentiques_parent'|trans({}, 'help') }}"></i>
                     </label>
-                    <i class="fal fa-question-circle text-gray-400" data-controller="tooltip"
-                       data-tooltip-placement-value="bottom"
-                       title="{{ 'ec_step4.helps.heures_enfants_edentiques_parent'|trans({}, 'help') }}"></i>
                 </div>
             {% endif %}
         {{ form_end(form) }}

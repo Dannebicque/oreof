@@ -69,7 +69,7 @@
             {% if ue.ue.natureUeEc.isChoix == true %}
                 {% set items =  [
                     { label: 'Ajouter une UE enfant à l\'UE',
-                        icon: 'fal fa-plus-circle',
+                        icon: 'icon:add',
                         modal: true,
                         disabled: isRaccrocher,
                         color: 'green',
@@ -78,7 +78,7 @@
             {% else %}
                 {% set items =  [
                     { label: 'Ajouter un EC à l\'UE',
-                        icon: 'fal fa-plus-circle',
+                        icon: 'icon:add',
                         modal: true,
                         disabled: isRaccrocher,
                         color: 'green',
@@ -88,7 +88,7 @@
 
             {% set items = items|merge([
                 { label: 'Modifier l\'UE',
-                    icon: 'fal fa-pencil',
+                    icon: 'icon:edit',
                     modal: true,
                     disabled: isRaccrocher,
                     color: 'orange',
@@ -97,24 +97,24 @@
                     semestreParcours:semestreParcours.id,
                     ue: ue.ue.id}) },
                 { label: 'Déplacer l\'UE',
-                    icon: 'fal fa-right-left',
+                    icon: 'icon:arrows-up-down-left-right',
                     modal: true,
                     disabled: isRaccrocher,
                     url: path('structure_ue_changer', {parcours:parcours.id, ue: ue.ue.id}) },
                 { label: 'Mutualiser l\'UE',
-                    icon: 'fal fa-share-nodes',
+                    icon: 'icon:share',
                     modal: true,
                     disabled: isRaccrocher,
                     url: path('structure_ue_mutualiser', {semestreParcours:semestreParcours.id, ue: ue.ue.id}) },
                 { label: 'Raccrocher une UE',
                     modal: true,
                     disabled: semestre.raccroche,
-                    icon: 'fal fa-link',
+                    icon: 'icon:link',
                     url: path('structure_ue_raccrocher', {ue:ue.ue.id, parcours: parcours.id})},
                 { label: 'Supprimer l\'UE',
                     modal: true,
                     disabled: semestre.raccroche,
-                    icon: 'fal fa-trash-alt',
+                    icon: 'icon:delete',
                     url: path('parcours_structure_pre_delete_ue_semestre', {
                     ue: ue.ue.id,
                     semestreParcours: semestreParcours.id,
@@ -127,7 +127,7 @@
             {{ component('dropdown_actions', {
                 label: 'Actions',
                 help: 'Actions disponibles pour cette UE',
-                icon: 'fal fa-ellipsis-vertical',
+                icon: 'icon:ellipsis-vertical',
                 items: items
             }) }}
             <span class="text-lg font-black text-slate-600">{{ ue.heuresEctsUe.sommeUeEcts }} ECTS</span>

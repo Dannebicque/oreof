@@ -9,7 +9,7 @@
 
 namespace App\DTO;
 
-use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 class HeuresEctsFormation
 {
@@ -33,7 +33,7 @@ class HeuresEctsFormation
 
     #[Groups(['DTO_json_versioning'])]
     public float $sommeFormationTdDist = 0;
-    
+
     #[Groups(['DTO_json_versioning'])]
     public float $sommeFormationTpDist = 0;
 

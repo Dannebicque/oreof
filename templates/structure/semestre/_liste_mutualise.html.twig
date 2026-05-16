@@ -1,34 +1,41 @@
-<table class="table">
-    <thead>
-    <tr>
-        <th>Composante</th>
-        <th>Mention/Spécialité</th>
-        <th>Parcours</th>
-        <th>Semestre utilisé ?</th>
-        <th></th>
-    </tr>
-    </thead>
-    <tbody>
-    {% for sem in semestres %}
+<div class="rounded-lg border border-slate-200 bg-white overflow-hidden">
+    <table class="w-full text-sm">
+        <thead class="bg-slate-50 border-b border-slate-200">
         <tr>
-            <td>{{ sem.parcours != null and sem.parcours.formation != null ? sem.parcours.formation.composantePorteuse
-                .libelle : 'Erreur
-            formation' }}</td>
-            <td>{{ sem.parcours != null and sem.parcours.formation != null ? sem.parcours.formation.display : 'Erreur
-            formation' }}</td>
-            <td>{{ sem.parcours != null ? sem.parcours.libelle : 'Erreur formation' }}</td>
-            <td></td>
-            <td class="text-end">
-                <button {{ stimulus_action('semestre--mutualise', 'delete', 'click', {sem:sem.id}) }} class="btn
-                    btn-sm text-danger">
-                    <i class="{{ iconDelete }}"></i> Supprimer
-                </button>
-            </td>
+            <th class="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Composante</th>
+            <th class="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
+                Mention/Specialite
+            </th>
+            <th class="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Parcours</th>
+            <th class="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Semestre
+                utilise ?
+            </th>
+            <th class="px-3 py-2"></th>
         </tr>
-    {% else %}
-        <tr>
-            <td colspan="5" class="text-center">Aucun semestre mutualisé</td>
-        </tr>
-    {% endfor %}
-    </tbody>
-</table>
+        </thead>
+        <tbody class="divide-y divide-slate-100">
+        {% for sem in semestres %}
+            <tr class="hover:bg-slate-50 transition-colors">
+                <td class="px-3 py-2 text-slate-700">{{ sem.parcours != null and sem.parcours.formation != null ? sem.parcours.formation.composantePorteuse.libelle : 'Erreur formation' }}</td>
+                <td class="px-3 py-2 text-slate-700">{{ sem.parcours != null and sem.parcours.formation != null ? sem.parcours.formation.display : 'Erreur formation' }}</td>
+                <td class="px-3 py-2 text-slate-700">{{ sem.parcours != null ? sem.parcours.libelle : 'Erreur formation' }}</td>
+                <td class="px-3 py-2 text-slate-400">-</td>
+                <td class="px-3 py-2 text-right">
+                    <button
+                            {{ stimulus_action('semestre--mutualise', 'delete', 'click', {sem: sem.id}) }}
+                            type="button"
+                            class="inline-flex items-center gap-1 rounded-md px-2.5 py-1.5 text-xs font-semibold text-red-600 hover:bg-red-50 transition-colors"
+                    >
+                        <twig:UX:icon name="icon:delete"/>
+                        Supprimer
+                    </button>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5" class="px-3 py-4 text-center text-sm text-slate-500">Aucun semestre mutualise.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

@@ -24,6 +24,7 @@ ux_icons:
     icon:chevron-right: 'ph:caret-right-light'
     icon:chevrons-right: 'ph:caret-double-right-light'
     icon:arrow-left: 'ph:arrow-left-light'
+    icon:arrows-up-down-left-right: 'ph:arrows-in-light'
     icon:chevron-left: 'ph:caret-left-light'
     icon:chevrons-left: 'ph:caret-double-left-light'
     icon:chevron-down: 'ph:caret-down-light'
@@ -41,6 +42,7 @@ ux_icons:
     icon:upload: 'ph:upload-light'
     icon:filter: 'ph:funnel-light'
     icon:sync: 'ph:arrows-clockwise-bold'
+    icon:share: 'ph:share-light'
 
     # Statut / feedback
     icon:check: 'ph:check-bold'

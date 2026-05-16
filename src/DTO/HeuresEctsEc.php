@@ -12,7 +12,7 @@ namespace App\DTO;
 use App\Entity\ElementConstitutif;
 use App\Entity\FicheMatiere;
 
-use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 class HeuresEctsEc
 {

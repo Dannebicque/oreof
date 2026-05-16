@@ -5,18 +5,22 @@
     {% else %}
         <header class="border-b border-slate-100 flex justify-between items-center bg-slate-50 p-2">
             <div>
-                <div class="flex items-baseline gap-3">
+                <div class="flex flex-wrap items-center gap-3">
                     <h2 class="text-xl font-black text-slate-800 tracking-tight">
                         Semestre {{ semestreParcours.ordre }}</h2>
-                    <span class="px-2 py-1 {% if semestreParcours.isOuvert == false %}bg-red-100 text-red-700{% else %}bg-green-100 text-green-700{% endif %} text-[10px] font-black rounded uppercase">{% if semestreParcours.isOuvert == false %}
-                            <i class="fal fa-do-not-enter"></i> Non ouvert{% else %}Ouvert{% endif %}
+                    <span class="inline-flex items-center gap-1 px-2 py-1 {% if semestreParcours.isOuvert == false %}bg-red-100 text-red-700{% else %}bg-green-100 text-green-700{% endif %} text-[10px] font-black rounded uppercase leading-none">{% if semestreParcours.isOuvert == false %}
+                            <i class="fal fa-do-not-enter shrink-0"></i><span>Non ouvert</span>{% else %}
+                            <span>Ouvert</span>{% endif %}
                     </span>
                     {% if semestre.raccroche == true %}
-                        <span class="px-2 py-1 bg-orange-100 text-orange-700 text-[10px] font-black rounded uppercase">
-                            <i class="fal fa-chain"></i> Raccroché de {{ semestre.parcoursRaccroche.displayCourt }}
-                    </span>
+                        <twig:Badge
+                                variant="warning"
+                                icon="icon:link"
+                                size="sm"
+                                class="inline-flex items-center text-[10px] font-black uppercase leading-none"
+                        >Raccroché de {{ semestre.parcoursRaccroche.displayCourt }}</twig:Badge>
                     {% elseif sem.semestreMutualisables|length > 0 %}
-                        <span class="px-2 py-0.5 bg-blue-100 text-blue-700 text-[9px] font-black rounded uppercase tracking-tighter italic">Mutualisé avec :
+                        <span class="inline-flex items-center px-2 py-1 bg-blue-100 text-blue-700 text-[9px] font-black rounded uppercase tracking-tighter italic leading-none">Mutualisé avec :
                     {% for l in sem.semestreMutualisables %}
                         {{ l.parcours.displayCourt }}{% if not loop.last %}, {% endif %}
                     {% endfor %}
@@ -34,33 +38,33 @@
                 {{ component('dropdown_actions', {
                     label: 'Actions',
                     help: 'Actions disponibles pour ce semestre',
-                    icon: 'fal fa-ellipsis-vertical',
+                    icon: 'icon:ellipsis-vertical',
                     items: [
                         { label: 'Ajouter une UE au semestre',
-                            icon: 'fal fa-plus-circle',
+                            icon: 'icon:add',
                             disabled: semestre.raccroche,
                             modal: true,
                             color: 'green',
                             url: path('parcours_structure_add_ue_semestre', {parcours:parcours.id, semestreParcours:semestre.semestreParcours.id}) },
                         { label: 'Vérifier le semestre',
-                            icon: 'fal fa-refresh',
+                            icon: 'icon:check',
                             url: path('parcours_v2_semestre_validation', {semestreParcours:semestreParcours.id, parcours: parcours.id}) },
                         { label: 'Déplacer le semestre',
-                            icon: 'fal fa-right-left',
+                            icon: 'icon:arrows-up-down-left-right',
                             modal: true,
                             disabled: semestre.raccroche,
                             url: path('structure_semestre_changer', {semestre:sem.id, parcours: parcours.id}) },
                         { label: 'Mutualiser le semestre',
                             modal: true,
                             disabled: semestre.raccroche,
-                            icon: 'fal fa-share-nodes',
+                            icon: 'icon:share',
                             url: path('structure_semestre_mutualiser', {semestre:sem.id, parcours: parcours.id}) },
                         { label: 'Raccrocher un semestre',
-                            icon: 'fal fa-link',
+                            icon: 'icon:link',
                             modal: true,
                             url: path('structure_semestre_raccrocher', {semestre:sem.id, parcours: parcours.id})},
                         { label: 'Réinitialiser le semestre',
-                            icon: 'fal fa-trash-alt',
+                            icon: 'icon:delete',
                             disabled: semestre.raccroche,
                             modal: true,
                             url: path('structure_semestre_reinitialiser', {

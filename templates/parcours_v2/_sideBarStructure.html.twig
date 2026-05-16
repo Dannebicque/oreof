@@ -1,14 +1,19 @@
 <div class="space-y-1">
     {% for annee in dto.annees %}
         <div class="flex items-center p-2 bg-gray-200 rounded-md text-[11px] font-black text-slate-500">
-                                <span>
+                                <span class="inline-flex items-center gap-1 whitespace-nowrap">
 {#                                    <a href="{{ path('parcours_v2_annee', { parcours: parcours.id, annee: annee.annee.id }) }}" #}
                                     {#                                       data-turbo-frame="tab-content" #}
                                     {#                                       data-turbo-action="advance" #}
                                     {#                                       data-tabs-target="tab" #}
                                     {#                                    > #}
-                                        Année {{ annee.annee.ordre }} {% if annee.annee.isOuvert == false %}<i
-                                            class="fal fa-do-not-enter"></i> Non ouvert{% endif %}
+                                        Année {{ annee.annee.ordre }}
+                                    {% if annee.annee.isOuvert == false %}
+                                        <span class="inline-flex items-center gap-1">
+                                            <twig:UX:icon name="mdi:do-not-enter-outline" class="h-4 w-4"/>
+                                            <span>Non ouvert</span>
+                                        </span>
+                                    {% endif %}
                                     {#                                    </a> #}
                                 </span>
             {#            <div class="flex items-center gap-2 ml-auto"> #}

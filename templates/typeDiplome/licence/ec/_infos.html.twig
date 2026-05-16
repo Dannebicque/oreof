@@ -1,8 +1,13 @@
-<div class="col-12">
-    <dl>
+{% set dtClass = 'text-[11px] font-black uppercase tracking-wide text-indigo-500' %}
+{% set ddClass = 'mt-1 text-sm leading-relaxed text-slate-700' %}
+
+<div class="rounded-xl border border-slate-200 bg-slate-50 p-4">
+    <dl class="space-y-4">
         {% if ficheMatiere.responsableFicheMatiere != null %}
-            <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Responsable de l'enseignement</dt>
-            <dd>{{ ficheMatiere.responsableFicheMatiere.display }}</dd>
+            <div>
+                <dt class="{{ dtClass }}">Responsable de l'enseignement</dt>
+                <dd class="{{ ddClass }}">{{ ficheMatiere.responsableFicheMatiere.display }}</dd>
+            </div>
             {% if
                 is_granted('ROLE_ADMIN')
                 and stringDifferences.responsableEnseignement is defined
@@ -13,8 +18,10 @@
                 }) }}
             {% endif %}
 
-            <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Email</dt>
-            <dd>{{ ficheMatiere.responsableFicheMatiere.email }}</dd>
+            <div>
+                <dt class="{{ dtClass }}">Email</dt>
+                <dd class="{{ ddClass }}">{{ ficheMatiere.responsableFicheMatiere.email }}</dd>
+            </div>
             {% if is_granted('ROLE_ADMIN')
                 and stringDifferences.emailResponsableEnseignement is defined
                 and stringDifferences.emailResponsableEnseignement|length > 0 %}
@@ -27,23 +34,29 @@
 
         {% elseif ficheMatiere.parcours != null %}
             {% if ficheMatiere.parcours.isParcoursDefaut == true and ficheMatiere.parcours.formation != null and ficheMatiere.parcours.formation.responsableMention != null %}
-                <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Responsable de l'enseignement
-                    (mention)
-                </dt>
-                <dd>{{ ficheMatiere.parcours.formation.responsableMention.display }}</dd>
-                <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Email</dt>
-                <dd>{{ ficheMatiere.parcours.formation.responsableMention.email }}</dd>
+                <div>
+                    <dt class="{{ dtClass }}">Responsable de l'enseignement (mention)</dt>
+                    <dd class="{{ ddClass }}">{{ ficheMatiere.parcours.formation.responsableMention.display }}</dd>
+                </div>
+                <div>
+                    <dt class="{{ dtClass }}">Email</dt>
+                    <dd class="{{ ddClass }}">{{ ficheMatiere.parcours.formation.responsableMention.email }}</dd>
+                </div>
             {% elseif ficheMatiere.parcours.respParcours != null %}
-                <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Responsable de l'enseignement
-                    (parcours)
-                </dt>
-                <dd>{{ ficheMatiere.parcours.respParcours.display }}</dd>
-                <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Email</dt>
-                <dd>{{ ficheMatiere.parcours.respParcours.email }}</dd>
+                <div>
+                    <dt class="{{ dtClass }}">Responsable de l'enseignement (parcours)</dt>
+                    <dd class="{{ ddClass }}">{{ ficheMatiere.parcours.respParcours.display }}</dd>
+                </div>
+                <div>
+                    <dt class="{{ dtClass }}">Email</dt>
+                    <dd class="{{ ddClass }}">{{ ficheMatiere.parcours.respParcours.email }}</dd>
+                </div>
             {% endif %}
         {% else %}
-            <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Responsable de l'enseignement</dt>
-            <dd>Non renseigné</dd>
+            <div>
+                <dt class="{{ dtClass }}">Responsable de l'enseignement</dt>
+                <dd class="{{ ddClass }}">Non renseigné</dd>
+            </div>
         {% endif %}
     </dl>
 </div>

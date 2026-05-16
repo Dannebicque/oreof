@@ -50,6 +50,7 @@ class StructureParcours
 
         /** @var Annee $annee */
         foreach ($parcours->getAnnees() as $annee) {
+            $self->annees[$annee->getOrdre()]['heuresEctsAnnee'] = new HeuresEctsAnnee();
             $self->annees[$annee->getOrdre()]['annee'] = $annee;
             $self->annees[$annee->getOrdre()]['semestres'] = [];
         }
@@ -71,6 +72,7 @@ class StructureParcours
     {
         $this->semestres[$ordre] = $structureSemestre;
         $this->annees[$structureSemestre->semestreParcours?->getAnnee()?->getOrdre()]['semestres'][$ordre] = $structureSemestre;
+        $this->annees[$structureSemestre->semestreParcours?->getAnnee()?->getOrdre()]['heuresEctsAnnee']->addSemestre($structureSemestre->heuresEctsSemestre);
         if ($this->withEcts) {
             $this->heuresEctsFormation->addSemestre($structureSemestre->heuresEctsSemestre);
         }

@@ -5,12 +5,15 @@
     </style>
 {% endblock %}
 
-<div class="row">
-    <div class="col-sm-12">
+{% set dtClass = 'text-[11px] font-black uppercase tracking-wide text-indigo-500' %}
+{% set textBoxClass = 'mt-2 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm leading-relaxed text-slate-700' %}
+
+<div class="space-y-4">
+    <div class="rounded-xl border border-slate-200 bg-white/70 p-4">
         <dl>
-            <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Description de l’enseignement</dt>
-            <dd>
-                <p>{{ ficheMatiere.description|raw }}</p>
+            <dt class="{{ dtClass }}">Description de l’enseignement</dt>
+            <dd class="{{ textBoxClass }}">
+                {{ ficheMatiere.description|raw }}
             </dd>
             {% if
                 is_granted('ROLE_ADMIN')
@@ -23,16 +26,20 @@
             {% endif %}
         </dl>
     </div>
-    <div class="col-md-6 col-sm-12">
-        <dl>
-            <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Enseignement dispensé en</dt>
-            <dd>
-                <ul>
+
+    <div class="grid gap-4 md:grid-cols-2">
+        <div class="rounded-xl border border-slate-200 bg-slate-50 p-4">
+            <dl>
+                <dt class="{{ dtClass }}">Enseignement dispensé en</dt>
+                <dd class="mt-2 text-sm text-slate-700">
+                    <ul class="list-disc space-y-1 pl-5">
                     {% for langue in ficheMatiere.langueDispense %}
                         <li>{{ langue.libelle }}</li>
+                    {% else %}
+                        <li>Non renseigné</li>
                     {% endfor %}
                 </ul>
-            </dd>
+                </dd>
             {% if is_granted('ROLE_ADMIN')
                 and stringDifferences.languesEnseignement is defined
                 and stringDifferences.languesEnseignement|length > 0 %}
@@ -42,17 +49,20 @@
                 }) }}
             {% endif %}
         </dl>
-    </div>
-    <div class="col-md-6 col-sm-12">
-        <dl>
-            <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Support de cours en</dt>
-            <dd>
-                <ul>
+        </div>
+
+        <div class="rounded-xl border border-slate-200 bg-slate-50 p-4">
+            <dl>
+                <dt class="{{ dtClass }}">Support de cours en</dt>
+                <dd class="mt-2 text-sm text-slate-700">
+                    <ul class="list-disc space-y-1 pl-5">
                     {% for langue in ficheMatiere.langueSupport %}
                         <li>{{ langue.libelle }}</li>
+                    {% else %}
+                        <li>Non renseigné</li>
                     {% endfor %}
                 </ul>
-            </dd>
+                </dd>
             {% if is_granted('ROLE_ADMIN')
                 and stringDifferences.supportDeCoursEn is defined
                 and stringDifferences.supportDeCoursEn|length > 0 %}
@@ -62,12 +72,14 @@
                 }) }}
             {% endif %}
         </dl>
+        </div>
     </div>
-    <div class="col-sm-12">
+
+    <div class="rounded-xl border border-slate-200 bg-white/70 p-4">
         <dl>
-            <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">Objectifs de l'enseignement</dt>
-            <dd>
-                <p>{{ ficheMatiere.objectifs|raw }}</p>
+            <dt class="{{ dtClass }}">Objectifs de l'enseignement</dt>
+            <dd class="{{ textBoxClass }}">
+                {{ ficheMatiere.objectifs|raw }}
             </dd>
             {% if is_granted('ROLE_ADMIN')
                 and stringDifferences.objectifsEnseignement is defined
@@ -79,15 +91,4 @@
             {% endif %}
         </dl>
     </div>
-    {#    <div class="col-sm-12"> #}
-    {#        <dl> #}
-    {#            <dt>Type d'enseignement</dt> #}
-    {#            <dd>{{ ficheMatiere.ues.typeUe != null ? ficheMatiere.ue.typeUe.libelle : #}
-    {#                'erreur' #}
-    {#                }}</dd> #}
-    {#            <dt>Enseignement Obligatoire / Optionnel</dt> #}
-    {#            <dd>{{ elementConstitutif.ecUes[0].ue.ueObligatoire != null ? elementConstitutif.ecUes[0].ue #}
-    {#                .ueObligatoire.libelle : 'erreur'}}</dd> #}
-    {#        </dl> #}
-    {#    </div> #}
 </div>

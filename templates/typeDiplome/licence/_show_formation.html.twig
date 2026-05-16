@@ -1,6 +1,7 @@
 {% set print = false %}
-<div class="col">
-    {% set section_card_class = 'app-section-card' %}
+{% set section_card_class = 'scroll-mt-32 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm' %}
+
+<div class="space-y-4">
     <section
             data-scroll-spy-target="section"
             class="{{ section_card_class }}"
@@ -10,7 +11,7 @@
             icon: 'ph:identification-card-light',
             color: 'indigo'
         }) }}
-        <div>
+        <div class="mt-4">
             {{ include('typeDiplome/licence/affiche/_identiteFormation.html.twig') }}
         </div>
     </section>
@@ -24,7 +25,7 @@
             icon: 'ph:map-pin-area-light',
             color: 'indigo'
         }) }}
-        <div>
+        <div class="mt-4">
             {{ include('typeDiplome/licence/affiche/_localisationFormation.html.twig') }}
         </div>
     </section>
@@ -38,7 +39,7 @@
             icon: 'ph:map-pin-area-light',
             color: 'indigo'
         }) }}
-        <div>
+        <div class="mt-4">
             {{ include('typeDiplome/licence/affiche/_presentationFormation.html.twig') }}
         </div>
     </section>
@@ -52,29 +53,32 @@
                 icon: 'ph:map-pin-area-light',
                 color: 'indigo'
             }) }}
-            <div>
+            <div class="mt-4">
                 {{ include('typeDiplome/licence/affiche/_competences.html.twig', {parcours:formation.parcours[0]}) }}
             </div>
         </section>
 
-        <section class="scroll-section" id="structure">
-            <h3 class="small-title">Structure</h3>
-            <div class="card mb-5">
-                <div class="card-body">
-                    {% if (print is not defined or print == false) %}
-                        {{ component('commentaire', {
-                            commentaires: formation.commentaires,
-                            id: formation.id,
-                            type: 'formation',
-                            zone: 'structure',
-                        }) }}
-                    {% endif %}
-                    {{ render(controller('App\\Controller\\StructureShowController::parcoursShow', {
-                        parcours: formation.parcours[0].id,
-                        hasLastVersion: hasLastVersion ?? false,
-                    })) }}
-
-                </div>
+        <section data-scroll-spy-target="section"
+                 class="{{ section_card_class }}"
+                 id="structure">
+            {{ include('communs/_header_show.html.twig', {
+                title: 'Structure',
+                icon: 'ph:map-trifold-thin',
+                color: 'orange'
+            }) }}
+            <div class="mt-4 space-y-4">
+                {% if (print is not defined or print == false) %}
+                    {{ component('commentaire', {
+                        commentaires: formation.commentaires,
+                        id: formation.id,
+                        type: 'formation',
+                        zone: 'structure',
+                    }) }}
+                {% endif %}
+                {{ render(controller('App\\Controller\\StructureShowController::parcoursShowV2', {
+                    parcours: formation.parcours[0].id,
+                    hasLastVersion: hasLastVersion ?? false,
+                })) }}
             </div>
         </section>
 
@@ -86,7 +90,7 @@
                 icon: 'ph:user-check-light',
                 color: 'indigo'
             }) }}
-            <div>
+            <div class="mt-4">
                 {{ include('typeDiplome/licence/affiche/_admission.html.twig', {parcours:formation.parcours[0]}) }}
             </div>
         </section>
@@ -100,7 +104,7 @@
                 color: 'indigo'
             }) }}
 
-            <div>
+            <div class="mt-4">
                 {{ include('typeDiplome/licence/affiche/_inscription.html.twig', {parcours:formation.parcours[0]}) }}
             </div>
         </section>
@@ -113,7 +117,7 @@
                 icon: 'ph:briefcase-light',
                 color: 'indigo'
             }) }}
-            <div>
+            <div class="mt-4">
                 {{ include('typeDiplome/formation/_etApres.html.twig', {parcours:formation.parcours[0]}) }}
             </div>
         </section>
@@ -126,7 +130,7 @@
                 icon: 'ph:address-book-light',
                 color: 'indigo'
             }) }}
-            <div>
+            <div class="mt-4">
                 {{ include('typeDiplome/formation/_contacts.html.twig', {parcours:formation.parcours[0]}) }}
             </div>
         </section>
@@ -154,7 +158,7 @@
                     icon: 'ph:book-open-text-thin',
                     color: color
                 }) }}
-                <div>
+                <div class="mt-4">
                     {{ include('typeDiplome/licence/affiche/_presentationParcours.html.twig', {parcours:parcours}) }}
                 </div>
             </section>
@@ -167,7 +171,7 @@
                     icon: 'ph:book-open-text-thin',
                     color: color
                 }) }}
-                <div>
+                <div class="mt-4">
                     {{ include('typeDiplome/licence/affiche/_descriptifParcours.html.twig', {parcours:parcours}) }}
                 </div>
             </section>
@@ -180,7 +184,7 @@
                     icon: 'ph:map-pin-area-light',
                     color: color
                 }) }}
-                <div>
+                <div class="mt-4">
                     {{ include('typeDiplome/licence/affiche/_localisationParcours.html.twig', {parcours:parcours}) }}
 
                 </div>
@@ -194,7 +198,7 @@
                     icon: 'ph:map-pin-area-light',
                     color: color
                 }) }}
-                <div>
+                <div class="mt-4">
                     {{ include('typeDiplome/licence/affiche/_competences.html.twig', {parcours:parcours}) }}
                 </div>
             </section>
@@ -209,8 +213,8 @@
                         color: color
                     }) }}
 
-                    <div>
-                        {{ render(controller('App\\Controller\\StructureShowController::parcoursShow', {
+                    <div class="mt-4">
+                        {{ render(controller('App\\Controller\\StructureShowController::parcoursShowV2', {
                             parcours: parcours.id,
                             hasLastVersion: hasLastVersion ?? false,
                         })) }}
@@ -226,7 +230,7 @@
                         icon: 'ph:map-trifold-thin',
                         color: color
                     }) }}
-                    <div>
+                    <div class="mt-4">
                         {{ include('typeDiplome/' ~ constant('TEMPLATE_FOLDER', typeD) ~ '/structure/_structure.html.twig',
                             {
                                 parcours: parcours,
@@ -246,7 +250,7 @@
                     icon: 'ph:user-check-light',
                     color: color
                 }) }}
-                <div>
+                <div class="mt-4">
                     {{ include('typeDiplome/licence/affiche/_admission.html.twig', {parcours:parcours}) }}
                 </div>
             </section>
@@ -260,7 +264,7 @@
                     color: color
                 }) }}
 
-                <div>
+                <div class="mt-4">
                     {{ include('typeDiplome/licence/affiche/_inscription.html.twig', {parcours:parcours}) }}
                 </div>
             </section>
@@ -273,7 +277,7 @@
                     icon: 'ph:briefcase-light',
                     color: color
                 }) }}
-                <div>
+                <div class="mt-4">
                     {{ include('typeDiplome/formation/_etApres.html.twig', {parcours:parcours}) }}
                 </div>
             </section>
@@ -286,7 +290,7 @@
                     icon: 'ph:address-book-light',
                     color: color
                 }) }}
-                <div>
+                <div class="mt-4">
                     {{ include('typeDiplome/formation/_contacts.html.twig', {parcours:parcours}) }}
                 </div>
             </section>

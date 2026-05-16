@@ -19,6 +19,7 @@ use App\Entity\SemestreParcours;
 use App\Entity\TypeUe;
 use App\Entity\Ue;
 use App\Entity\UeMutualisable;
+use App\Form\UeMutualiserType;
 use App\Form\UeType;
 use App\Repository\ComposanteRepository;
 use App\Repository\FicheMatiereMutualisableRepository;
@@ -375,6 +376,9 @@ class UeController extends BaseController
         Ue                   $ue,
         SemestreParcours $semestreParcours
     ): Response {
+        $form = $this->createForm(UeMutualiserType::class, null, [
+            'composantes' => $composanteRepository->findPorteuse(),
+        ]);
 
 
         return $turboStreamResponseFactory->streamOpenModalFromTemplates(
@@ -384,7 +388,7 @@ class UeController extends BaseController
             [
                 'semestre' => $semestreParcours,
                 'ue' => $ue,
-                'composantes' => $composanteRepository->findPorteuse()
+                'form' => $form->createView(),
             ],
             '_ui/_footer_cancel.html.twig',
             []

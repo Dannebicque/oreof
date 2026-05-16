@@ -1,102 +1,98 @@
-<div class="space-y-6">
-    <dl class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        {% if is_granted('ROLE_ADMIN') %}
-            <div class="sm:col-span-2">
-                <dt class="text-[10px] font-black uppercase tracking-widest text-indigo-400">Id formation</dt>
-                <dd class="mt-1 text-sm text-slate-700 dark:text-slate-200">#{{ formation.id }}</dd>
+{% set dtClass = 'text-[11px] font-black uppercase tracking-wide text-indigo-500' %}
+{% set ddClass = 'mt-2 text-sm leading-relaxed text-slate-700' %}
+{% set columnClass = 'rounded-xl border border-slate-200 bg-slate-50 p-4' %}
+
+<div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
+    <div class="{{ columnClass }}">
+        <dl class="space-y-4">
+            {% if is_granted('ROLE_ADMIN') %}
+                <div>
+                    <dt class="{{ dtClass }}">Id formation</dt>
+                    <dd class="{{ ddClass }}">#{{ formation.id }}</dd>
+                </div>
+            {% endif %}
+
+            <div>
+                <dt class="{{ dtClass }}">Type de diplôme</dt>
+                <dd class="{{ ddClass }}">{{ typeDiplome|typeDiplome }}</dd>
             </div>
-        {% endif %}
 
-        <div>
-            <dt class="text-[10px] font-black uppercase tracking-widest text-indigo-400">Type de diplome</dt>
-            <dd class="mt-1 text-sm text-slate-700 dark:text-slate-200">{{ typeDiplome|typeDiplome }}</dd>
-        </div>
-        <div>
-            <dt class="text-[10px] font-black uppercase tracking-widest text-indigo-400">Mention/Specialite</dt>
-            <dd class="mt-1 text-sm text-slate-700 dark:text-slate-200">{{ formation.display }}</dd>
-        </div>
+            <div>
+                <dt class="{{ dtClass }}">Mention/Spécialité</dt>
+                <dd class="{{ ddClass }}">{{ formation.display }}</dd>
+            </div>
 
-        {% if formation.isHasParcours == true and print is defined and print == true %}
-            <div class="sm:col-span-2">
-                <dt class="text-[10px] font-black uppercase tracking-widest text-indigo-400">Parcours</dt>
-                <dd class="mt-1 text-sm text-slate-700 dark:text-slate-200">
+            <div>
+                <dt class="{{ dtClass }}">Domaine(s)</dt>
+                <dd class="{{ ddClass }}">
+                    {% for domaine in formation.domaines %}
+                        {{ domaine.libelle }}{% if not loop.last %}, {% endif %}
+                    {% else %}
+                        -erreur-
+                    {% endfor %}
+                </dd>
+            </div>
+
+            <div>
+                <dt class="{{ dtClass }}">Composante porteuse</dt>
+                <dd class="{{ ddClass }}">{{ formation.composantePorteuse != null ? formation.composantePorteuse.libelle : 'erreur' }}</dd>
+            </div>
+        </dl>
+    </div>
+
+    <div class="{{ columnClass }}">
+        <dl class="space-y-4">
+            {% if formation.isHasParcours == true and print is defined and print == true %}
+                <dt class="{{ dtClass }}">Parcours</dt>
+                <dd class="{{ ddClass }}">
                     <ul class="list-disc pl-5">
                         {% for parcours in formation.parcours %}
                             <li>{{ parcours.libelle }}</li>
                         {% endfor %}
                     </ul>
                 </dd>
-            </div>
-        {% endif %}
+            {% endif %}
 
-        <div class="sm:col-span-2">
-            <dt class="text-[10px] font-black uppercase tracking-widest text-indigo-400">Domaine(s)</dt>
-            <dd class="mt-1 text-sm text-slate-700 dark:text-slate-200">
-                {% for domaine in formation.domaines %}
-                    {{ domaine.libelle }}{% if not loop.last %}, {% endif %}
-                {% else %}
-                    -erreur-
-                {% endfor %}
-            </dd>
-        </div>
-
-        <div>
-            <dt class="text-[10px] font-black uppercase tracking-widest text-indigo-400">Composante porteuse</dt>
-            <dd class="mt-1 text-sm text-slate-700 dark:text-slate-200">{{ formation.composantePorteuse != null ? formation.composantePorteuse.libelle : 'erreur' }}</dd>
-        </div>
-        <div>
-            <dt class="text-[10px] font-black uppercase tracking-widest text-indigo-400">Inscription au RNCP</dt>
-            <dd class="mt-1 text-sm text-slate-700 dark:text-slate-200">{{ formation.inRncp == true ? formation.codeRncp : 'Non inscrit' }}</dd>
-        </div>
-
-        <div>
-            <dt class="text-[10px] font-black uppercase tracking-widest text-indigo-400">Niveau a l'entree de la
-                formation
-            </dt>
-            <dd class="mt-1 text-sm text-slate-700 dark:text-slate-200">{{ formation.niveauEntree.libelle }}</dd>
-        </div>
-        <div>
-            <dt class="text-[10px] font-black uppercase tracking-widest text-indigo-400">Niveau a la sortie de la
-                formation
-            </dt>
-            <dd class="mt-1 text-sm text-slate-700 dark:text-slate-200">{{ formation.niveauSortie.libelle }}</dd>
-        </div>
-    </dl>
-
-    <div class="space-y-4">
-        <div>
-            <dt class="text-[10px] font-black uppercase tracking-widest text-indigo-400">Responsable de la formation
-            </dt>
-            <dd class="mt-1 text-sm text-slate-700 dark:text-slate-200">
+            <dt class="{{ dtClass }}">Responsable de la formation</dt>
+            <dd class="{{ ddClass }}">
                 {{ formation.responsableMention != null ? formation.responsableMention.display : 'erreur' }}<br>
                 <a href="mailto:{{ formation.responsableMention != null ? formation.responsableMention.email : 'erreur' }}"
                    class="text-xs text-indigo-500 hover:underline">{{ formation.responsableMention != null ? formation.responsableMention.email : 'erreur' }}</a>
             </dd>
-        </div>
-        {% if stringDifferencesFormation.responsableDeFormation is defined %}
-            {{ include('communs/_comparaison_versioning_no_button.html.twig', {
-                textDifferences: stringDifferencesFormation.responsableDeFormation,
-                idCollapse: 'diffGlobalParcours'
-            }) }}
-        {% endif %}
 
-        {% if formation.coResponsable != null %}
-            <div>
-                <dt class="text-[10px] font-black uppercase tracking-widest text-indigo-400">Co-responsable de la
-                    formation
-                </dt>
-                <dd class="mt-1 text-sm text-slate-700 dark:text-slate-200">
+
+            {% if formation.coResponsable != null %}
+                <dt class="{{ dtClass }}">Co-responsable de la formation</dt>
+                <dd class="{{ ddClass }}">
                     {{ formation.coResponsable != null ? formation.coResponsable.display : 'erreur' }}<br>
                     <a href="mailto:{{ formation.coResponsable != null ? formation.coResponsable.email : 'erreur' }}"
                        class="text-xs text-indigo-500 hover:underline">{{ formation.coResponsable != null ? formation.coResponsable.email : 'erreur' }}</a>
                 </dd>
-            </div>
+                {% if stringDifferencesFormation.responsableDeFormation is defined %}
+                    {{ include('communs/_comparaison_versioning_no_button.html.twig', {
+                        textDifferences: stringDifferencesFormation.responsableDeFormation,
+                        idCollapse: 'diffGlobalParcours'
+                    }) }}
+                {% endif %}
+            {% endif %}
+
             {% if stringDifferencesFormation.coResponsableDeFormation is defined %}
                 {{ include('communs/_comparaison_versioning_no_button.html.twig', {
                     textDifferences: stringDifferencesFormation.coResponsableDeFormation,
                     idCollapse: 'diffGlobalParcours'
                 }) }}
             {% endif %}
-        {% endif %}
+
+            <dt class="{{ dtClass }}">Inscription au RNCP</dt>
+            <dd class="{{ ddClass }}">{{ formation.inRncp == true ? formation.codeRncp : 'Non inscrit' }}</dd>
+
+            <dt class="{{ dtClass }}">Niveau à l'entrée de la formation</dt>
+            <dd class="{{ ddClass }}">{{ formation.niveauEntree.libelle }}</dd>
+
+            <dt class="{{ dtClass }}">Niveau à la sortie de la formation</dt>
+            <dd class="{{ ddClass }}">{{ formation.niveauSortie.libelle }}</dd>
+
+
+        </dl>
     </div>
 </div>

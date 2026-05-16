@@ -1,13 +1,17 @@
+{% set dtClass = 'text-[11px] font-black uppercase tracking-wide text-indigo-500' %}
+{% set ddClass = 'mt-2 text-sm leading-relaxed text-slate-700' %}
+{% set blockClass = 'rounded-xl border border-slate-200 bg-slate-50 p-4' %}
+
 <div class="space-y-4">
     <dl class="space-y-4">
-        <div>
-            <dt class="text-[10px] font-black uppercase tracking-widest text-indigo-400">Niveau de français requis</dt>
-            <dd class="mt-1 text-sm text-slate-700 dark:text-slate-200">{{ parcours.niveauFrancais != null ? parcours.niveauFrancais.libelle : 'Non precise' }}</dd>
+        <div class="{{ blockClass }}">
+            <dt class="{{ dtClass }}">Niveau de français requis</dt>
+            <dd class="{{ ddClass }}">{{ parcours.niveauFrancais != null ? parcours.niveauFrancais.libelle : 'Non précisé' }}</dd>
         </div>
 
-        <div>
-            <dt class="text-[10px] font-black uppercase tracking-widest text-indigo-400">Prérequis recommandés</dt>
-            <dd class="mt-1 text-sm text-slate-700 dark:text-slate-200">{{ parcours.prerequis|raw }}</dd>
+        <div class="{{ blockClass }}">
+            <dt class="{{ dtClass }}">Prérequis recommandés</dt>
+            <dd class="{{ ddClass }}">{{ parcours.prerequis|raw }}</dd>
         </div>
 
         {% if stringDifferencesParcours.prerequisRecommandesParcours is defined %}

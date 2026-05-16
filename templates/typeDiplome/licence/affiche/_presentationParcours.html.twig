@@ -1,9 +1,14 @@
+{% set dtClass = 'text-[11px] font-black uppercase tracking-wide text-indigo-500' %}
+{% set ddClass = 'mt-2 text-sm leading-relaxed text-slate-700' %}
+{% set blockClass = 'rounded-xl border border-slate-200 bg-slate-50 p-4' %}
+{% set badgeOkClass = 'inline-flex items-center rounded-full bg-indigo-100 px-2.5 py-1 text-xs font-bold text-indigo-700' %}
+{% set badgeWarnClass = 'inline-flex items-center rounded-full bg-amber-100 px-2.5 py-1 text-xs font-bold text-amber-700' %}
+
 <div class="space-y-4">
     <dl class="space-y-4">
-        <div>
-            <dt class="text-[10px] font-black uppercase tracking-widest text-indigo-400">Organisation de la formation
-            </dt>
-            <dd class="mt-1 text-sm text-slate-700 dark:text-slate-200">{{ parcours.contenuFormation|printTexte }}</dd>
+        <div class="{{ blockClass }}">
+            <dt class="{{ dtClass }}">Organisation de la formation</dt>
+            <dd class="{{ ddClass }}">{{ parcours.contenuFormation|printTexte }}</dd>
         </div>
             {% if stringDifferencesParcours.presentationParcoursContenuFormation is defined %}
                 {{ include('communs/_comparaison_versioning_no_button.html.twig',
@@ -14,13 +19,13 @@
                 ) }}
             {% endif %}
 
-        <div>
-            <dt class="text-[10px] font-black uppercase tracking-widest text-indigo-400">Objectifs du parcours</dt>
-            <dd class="mt-1 text-sm text-slate-700 dark:text-slate-200">{{ parcours.objectifsParcours|printTexte }}</dd>
+        <div class="{{ blockClass }}">
+            <dt class="{{ dtClass }}">Objectifs du parcours</dt>
+            <dd class="{{ ddClass }}">{{ parcours.objectifsParcours|printTexte }}</dd>
         </div>
-        <div>
-            <dt class="text-[10px] font-black uppercase tracking-widest text-indigo-400">Mots cles du parcours</dt>
-            <dd class="mt-1 text-sm text-slate-700 dark:text-slate-200">{{ parcours.motsCles|printTexte }}</dd>
+        <div class="{{ blockClass }}">
+            <dt class="{{ dtClass }}">Mots clés du parcours</dt>
+            <dd class="{{ ddClass }}">{{ parcours.motsCles|printTexte }}</dd>
         </div>
             {% if stringDifferencesParcours.presentationParcoursObjectifsParcours is defined %}
                 {{ include('communs/_comparaison_versioning_no_button.html.twig',
@@ -31,11 +36,9 @@
                 ) }}
             {% endif %}
 
-        <div>
-            <dt class="text-[10px] font-black uppercase tracking-widest text-indigo-400">Resultats attendus du
-                parcours
-            </dt>
-            <dd class="mt-1 text-sm text-slate-700 dark:text-slate-200">{{ parcours.resultatsAttendus|printTexte }}</dd>
+        <div class="{{ blockClass }}">
+            <dt class="{{ dtClass }}">Résultats attendus du parcours</dt>
+            <dd class="{{ ddClass }}">{{ parcours.resultatsAttendus|printTexte }}</dd>
         </div>
             {% if stringDifferencesParcours.presentationParcoursResultatsAttendus is defined %}
                 {{ include('communs/_comparaison_versioning_no_button.html.twig',
@@ -46,16 +49,16 @@
                 ) }}
             {% endif %}
 
-        <div>
-            <dt class="text-[10px] font-black uppercase tracking-widest text-indigo-400">Rythme de formation</dt>
+        <div class="{{ blockClass }}">
+            <dt class="{{ dtClass }}">Rythme de formation</dt>
             <dd class="mt-1">
                 {% if parcours.rythmeFormation != null %}
-                    <span class="px-2 py-1 bg-indigo-50 rounded-lg text-xs font-bold text-indigo-600">
+                    <span class="{{ badgeOkClass }}">
                     {{ parcours.rythmeFormation.libelle }}
                 </span>
                 {% else %}
-                    <span class="px-2 py-1 bg-orange-50 rounded-lg text-xs font-bold text-orange-600">
-                    Non precise
+                    <span class="{{ badgeWarnClass }}">
+                    Non précisé
                 </span>
                 {% endif %}
             </dd>
@@ -67,16 +70,14 @@
                 }) }}
             {% endif %}
 
-        <div>
-            <dt class="text-[10px] font-black uppercase tracking-widest text-indigo-400">Precisions sur le rythme de
-                formation
-            </dt>
-            <dd class="mt-1 text-sm text-slate-700 dark:text-slate-200">
+        <div class="{{ blockClass }}">
+            <dt class="{{ dtClass }}">Précisions sur le rythme de formation</dt>
+            <dd class="{{ ddClass }}">
                 {% if parcours.rythmeFormationTexte != null and parcours.rythmeFormationTexte != '' %}
                     {{ parcours.rythmeFormationTexte|printTexte }}
                 {% else %}
-                    <span class="px-2 py-1 bg-orange-50 rounded-lg text-xs font-bold text-orange-600">
-                    Non precise
+                    <span class="{{ badgeWarnClass }}">
+                    Non précisé
                 </span>
                 {% endif %}
             </dd>

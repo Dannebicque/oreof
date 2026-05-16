@@ -110,7 +110,7 @@
             {% if ec.elementsConstitutifsEnfants|length > 0 or ec.elementConstitutif.natureUeEc.isChoix %}
                 {% set items = [{
                     label: 'Ajouter un EC enfant',
-                    icon: 'fal fa-plus-circle',
+                    icon: 'icon:add',
                     color: 'green',
                     modal: true,
                     url: path('parcours_ec_ajouter_ec_ue',{semestreParcours: semestreParcours.id, ue: ue.ue.id, parent: ec.elementConstitutif.id}),
@@ -126,23 +126,22 @@
             {% set items =  items|merge([
                 { label: 'Modifier l\'EC',
                     modal: true,
-                    icon: 'fal fa-pencil-alt',
+                    icon: 'icon:edit',
                     color:'orange',
                     url: path('parcours_ec_modifier_ec_ue',{elementConstitutif: ec.elementConstitutif.id, semestreParcours:semestreParcours.id}) },
                 { label: 'Supprimer l\'EC',
-                    icon: 'fal fa-trash-alt',
+                    icon: 'icon:delete',
                     modal: true,
                     url: path('parcours_ec_pre_delete',{
                     ec: ec.elementConstitutif.id,
                     ue: ue.ue.id,
                     semestreParcours:semestreParcours.id}), danger: true}
             ]) %}
-            e
 
             {{ component('dropdown_actions', {
                 label: 'Actions',
                 help: 'Actions disponibles pour cet EC',
-                icon: 'fal fa-ellipsis-vertical',
+                icon: 'icon:ellipsis-vertical',
                 items: items
             }) }}
 

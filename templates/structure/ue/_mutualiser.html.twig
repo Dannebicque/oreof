@@ -1,60 +1,40 @@
-{# todo: a custom tailwindcss + form : https://gemini.google.com/share/0c9cf804b1cf #}
+{% form_theme form 'communs/form_theme_v2.html.twig' %}
 
-
-<div {{ stimulus_controller('ue--mutualise', {
-    url: path('structure_ue_mutualise_add_ajax', {ue:ue.id})
-}) }}>
-
-    <label class="form-label" for="mutualiser">
-        {{ 'ue.mutualiser.label'|trans({}, 'form') }}
-        <span class="required"></span>
-        <i class="fal fa-question-circle ms-1" data-controller="tooltip" data-tooltip-placement-value="bottom"
+<div
+        class="space-y-4"
+        {{ stimulus_controller('ue--mutualise', {
+            url: path('structure_ue_mutualise_add_ajax', {ue: ue.id})
+        }) }}
+>
+    <div class="flex items-start gap-2 rounded-lg bg-indigo-50 border border-indigo-100 px-3 py-2">
+        <i class="fal fa-question-circle text-indigo-600 mt-0.5" data-controller="tooltip"
+           data-tooltip-placement-value="bottom"
            title="{{ 'ue.mutualiser.helps'|trans({}, 'help') }}"></i>
-    </label>
-
-   <div {{ stimulus_target('ue--mutualise', 'liste') }}></div>
-
-    <div class="row">
-        <div class="col-12">
-            <label for="composante">Choisir une composante</label>
-            <select class="form-select" id="composante" name="composante"
-                    {{ stimulus_action('ue--mutualise', 'changeComposante') }}
-                    {{ stimulus_controller('symfony/ux-autocomplete/autocomplete') }}
-            >
-                <option value="0">Choisir une composante</option>
-                {% for composante in composantes %}
-                    <option value="{{ composante.id }}">{{ composante.libelle }}</option>
-                {% endfor %}
-            </select>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-12">
-            <label for="formation">Choisir une mention/spécialité</label>
-            <select class="form-select" id="formation" name="formation"
-                    {{ stimulus_controller('symfony/ux-autocomplete/autocomplete') }}
-                    {{ stimulus_action('ue--mutualise', 'changeFormation') }}>
-                <option value="0">Choisir d'abord une composante</option>
-            </select>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-12">
-            <label for="parcours">Choisir un parcours</label>
-            <select class="form-select" id="parcours" name="parcours"
-                    {{ stimulus_controller('symfony/ux-autocomplete/autocomplete') }}
-            >
-                <option value="0">Choisir d'abord une mention/spécialité</option>
-            </select>
-        </div>
+        <p class="text-sm font-medium text-indigo-900">{{ 'ue.mutualiser.label'|trans({}, 'form') }}</p>
     </div>
 
-    {{ component('alerte', {
-        type:'info',
-        message: 'Vous pouvez choisir "Mutualiser avec tous les parcours de la mention" pour mutualiser avec tous les parcours de la mention.'
+    <div {{ stimulus_target('ue--mutualise', 'liste') }}></div>
+
+    {{ form_start(form, {
+        attr: {
+            class: 'space-y-1',
+            novalidate: 'novalidate'
+        }
     }) }}
+    <div class="grid grid-cols-1 gap-1">
+        {{ form_row(form.composante) }}
+        {{ form_row(form.formation) }}
+        {{ form_row(form.parcours) }}
+        </div>
 
-    <button class="btn btn-success mt-2" data-action="ue--mutualise#ajouter">
-        Ajouter
-    </button>
+    <div class="pt-2 flex items-center justify-between gap-3">
+        <p class="text-xs text-slate-500">Vous pouvez mutualiser avec tous les parcours d'une mention.</p>
+        <button type="button"
+                class="inline-flex items-center gap-2 rounded-md bg-emerald-600 px-3 py-2 text-sm font-semibold text-white hover:bg-emerald-700 transition-colors"
+                data-action="ue--mutualise#ajouter">
+            <i class="far fa-plus"></i>
+            Ajouter
+        </button>
+    </div>
+    {{ form_end(form) }}
 </div>

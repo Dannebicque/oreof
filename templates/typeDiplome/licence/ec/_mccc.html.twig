@@ -1,6 +1,8 @@
-<dl>
-    <dt class="text-[10px] font-black text-indigo-400 uppercase mt-3">ECTS</dt>
-    <dd>{{ ficheMatiere.ects ?? 0 }}</dd>
-</dl>
+<div class="mb-4 rounded-xl border border-slate-200 bg-slate-50 p-4">
+    <dl>
+        <dt class="text-[11px] font-black uppercase tracking-wide text-indigo-500">ECTS</dt>
+        <dd class="mt-2 inline-flex items-center rounded-full bg-indigo-100 px-3 py-1 text-sm font-semibold text-indigo-700">{{ ficheMatiere.ects ?? 0 }}</dd>
+    </dl>
+</div>
 {{ include('typeDiplome/'~constant('TEMPLATE_FOLDER', typeD)~'/mccc-non-editable/'~constant('TEMPLATE_FORM_MCCC', typeD)) }}
 

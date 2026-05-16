@@ -13,9 +13,9 @@
         {% endif %}
 
         {% if ec.quitus ?? false or (ec.ficheMatiere.quitus ?? false and ec.isMcccSpecifiques() != true) %}
-            <div class="col">
+            <div class="mt-4 rounded-xl border border-sky-200 bg-sky-50 p-4 text-sm text-slate-700">
                 <p class="my-1">
-                    <span class="text-info">Cet EC donne lieu à un quitus</span>
+                    <span class="font-semibold text-sky-700">Cet EC donne lieu à un quitus</span>
                 </p>
                 <p class="my-1">
                     {{ quitusText }}
@@ -25,11 +25,11 @@
     {% endif %}
 
     {% if (isFromVersioning is defined and isFromVersioning != 'true') %}
-        <div class="row justify-content-start mt-5">
+        <div class="mt-5 flex flex-wrap justify-start gap-3">
             {% if (isMcccFromVersion is not defined or isMcccFromVersion == false)
                 and (lastVersion is defined and lastVersion != null) %}
-                <div class="col-4">
-                    <button class="btn btn-sm btn-primary"
+                <div>
+                    <button class="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white transition hover:bg-indigo-700"
                             {{ stimulus_action('modal', 'refreshModalWithUrl', 'click',
                                 {   url: path('app_element_constitutif_mccc_versioning', {
                                     parcoursVersioning: lastVersion.id,
@@ -42,8 +42,8 @@
                     </button>
                 </div>
             {% elseif ec.deserializedId is defined and ec.deserializedId != null %}
-                <div class="col-4">
-                    <button class="btn btn-sm btn-primary"
+                <div>
+                    <button class="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white transition hover:bg-indigo-700"
                             {{ stimulus_action('modal', 'refreshModalWithUrl', 'click',
                                 { url: path('app_element_constitutif_mccc_non_editable',
                                     {id: ec.deserializedId, parcours: parcoursId}
