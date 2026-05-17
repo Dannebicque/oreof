@@ -1,21 +1,23 @@
-<div class="card"
+<div class="rounded-xl border border-slate-200 bg-white overflow-hidden"
         {{ stimulus_controller('parcours--ec', {
             urlUpdate: path('app_parcours_ec_update',{parcours: parcours.id}),
         }) }}
 >
-    <div class="card-body">
-        <table class="table table-bordered table-hover">
+    <div class="overflow-x-auto">
+        <table class="w-full text-sm">
             <tbody>
             {% for ordre, semestre in dto.semestres|filter(semestre => (semestre.semestre.nonDispense == false)) %}
                 <tr>
-                    <th colspan="7" class="text-center font-weight-bold">
-                        {{ semestre.semestreParcours.display }} {% if semestre.raccroche == true %}<i
-                                class="fa fa-link"></i>{% endif %}
+                    <th colspan="7"
+                        class="px-4 py-3 text-center text-sm font-bold bg-slate-50 border-b border-slate-200 text-slate-800">
+                        {{ semestre.semestreParcours.display }} {% if semestre.raccroche == true %}
+                            <twig:UX:icon name="icon:link"/>{% endif %}
                     </th>
                 </tr>
                 {% if semestre.semestreParcours.isOuvert == false %}
                     <tr>
-                        <th colspan="7" class="text-center bg-warning">
+                        <th colspan="7"
+                            class="px-4 py-2 text-center text-sm font-semibold text-amber-900 bg-amber-100 border-b border-amber-200">
                             {{ semestre.semestreParcours.display }} non ouvert !
                         </th>
                     </tr>

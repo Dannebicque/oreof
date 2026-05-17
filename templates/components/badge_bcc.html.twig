@@ -1,6 +1,6 @@
 <div {{ attributes }}>
     {% if this.elementConstitutif.natureUeEc != null and this.elementConstitutif.natureUeEc.isLibre ==  true %}
-        <span class="badge bg-info ms-1 w-100">EC Libre</span>
+        <span class="inline-flex w-full items-center justify-center rounded-md bg-cyan-100 px-2 py-1 text-xs font-semibold text-cyan-800">EC libre</span>
     {% else %}
         <button
                 {% if this.editable == false %}
@@ -26,14 +26,14 @@
                     {% endif %}
                 {% endif %}
                 data-action="click->modal#openModal"
-                class="btn btn-sm btn-outline-info ms-1 px-1 w-100"
+                class="inline-flex w-full items-center justify-center gap-1 rounded-md border border-slate-300 bg-white px-2 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition-colors"
                 data-size="lg"
                 data-bs-toggle="tooltip"
                 data-bs-placement="bottom"
                 title="Blocs de compétences"
         >
             {% if this.texte == true %}<i class="fal fa-ballot-check"></i>{% endif %}
-            <span class="badge bg-{% if this.etatBccComplet == true %}success{% else %}warning{% endif %}">{% if this.texte == true %}{% if this.etatBccComplet == true %}Complet{% else %}A saisir{% endif %} {% else %}BCC{% endif %} {% if this.isParcoursProprietaire == false  %}
+            <span class="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-semibold {% if this.etatBccComplet == true %}bg-emerald-100 text-emerald-800{% else %}bg-amber-100 text-amber-800{% endif %}">{% if this.texte == true %}{% if this.etatBccComplet == true %}Complet{% else %}A saisir{% endif %} {% else %}BCC{% endif %} {% if this.isParcoursProprietaire == false %}
                     <i class="fal fa-link" title="BCC repris du parcours porteur"></i>{% endif %}</span>
         </button>
     {% endif %}

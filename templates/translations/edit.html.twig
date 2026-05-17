@@ -1,62 +1,140 @@
 {% extends 'base.html.twig' %}
 
 {% block content %}
-    <section class="space-y-5">
-        <div class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-700 dark:bg-slate-900 sm:p-6">
-            <div class="mb-4 flex flex-col gap-1">
-                <h2 class="text-base font-semibold text-slate-900 dark:text-slate-100">Edition du fichier</h2>
-                <p class="text-sm text-slate-500 dark:text-slate-400">Modifiez les valeurs, puis enregistrez les
-                    changements.</p>
+    <section class="space-y-5"
+             data-controller="translations"
+             data-translations-save-url-value="{{ path('translations_save_one', {filename: filename}) }}"
+             data-translations-delete-url-value="{{ path('translations_delete_one', {filename: filename}) }}"
+    >
+        <div class="rounded-xl border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-900">
+
+            {# ── En-tête ── #}
+            <div class="flex items-center justify-between border-b border-slate-200 px-5 py-4 dark:border-slate-700">
+                <div>
+                    <h2 class="text-base font-semibold text-slate-900 dark:text-slate-100">
+                        Edition du fichier
+                    </h2>
+                    <p class="mt-0.5 text-sm text-slate-500 dark:text-slate-400">
+                        Cliquez sur <span class="font-medium text-slate-700 dark:text-slate-300">Modifier</span>
+                        sur une ligne pour éditer la valeur, puis
+                        <span class="font-medium text-emerald-700">Enregistrer</span> pour sauvegarder
+                        individuellement sans recharger la page.
+                    </p>
+                </div>
+                <twig:Button
+                        label="Ajouter une ligne"
+                        variant="primary"
+                        icon="icon:add"
+                        dataAction="translations#addRow"
+                        size="sm"
+                />
             </div>
 
-            <form method="post" class="space-y-4">
-                <div class="overflow-hidden rounded-lg border border-slate-200 dark:border-slate-700">
-                    <table class="min-w-full divide-y divide-slate-200 text-sm dark:divide-slate-700">
-                        <thead class="bg-slate-50 dark:bg-slate-800">
-                        <tr>
-                            <th class="px-4 py-3 text-left font-semibold text-slate-700 dark:text-slate-200">Cle</th>
-                            <th class="px-4 py-3 text-left font-semibold text-slate-700 dark:text-slate-200">Texte</th>
-                            <th class="w-8 px-4 py-3"></th>
-                        </tr>
-                        </thead>
-                        <tbody data-controller="translations"
-                               class="divide-y divide-slate-200 bg-white dark:divide-slate-700 dark:bg-slate-900">
-                        {% for key, value in translations %}
-                            <tr>
-                                <td class="whitespace-nowrap px-4 py-2 align-top font-mono text-xs text-slate-700 dark:text-slate-200">
-                                    <input type="hidden" name="translations[{{ key }}]" value="{{ key }}"/>
-                                    {{ key }}
-                                </td>
-                                <td class="px-4 py-2">
-                                    <input
-                                            class="block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-800 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:focus:border-blue-400 dark:focus:ring-blue-900"
-                                            name="translations[{{ key }}]"
-                                            value="{{ value|e('html_attr') }}"
-                                            aria-label="Valeur pour la cle {{ key }}"
-                                    />
-                                </td>
-                                <td class="px-4 py-2"></td>
-                            </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
+            {# ── Tableau ── #}
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-slate-200 text-sm dark:divide-slate-700">
+                    <thead class="bg-slate-50 dark:bg-slate-800">
+                    <tr>
+                        <th class="w-2/5 px-4 py-3 text-left font-semibold text-slate-700 dark:text-slate-200">Clé</th>
+                        <th class="px-4 py-3 text-left font-semibold text-slate-700 dark:text-slate-200">Valeur</th>
+                        <th class="w-40 px-4 py-3 text-right font-semibold text-slate-700 dark:text-slate-200">Actions
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody data-translations-target="tbody"
+                           class="divide-y divide-slate-100 bg-white dark:divide-slate-700 dark:bg-slate-900">
+                    {% for key, value in translations %}
+                        <tr class="group hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-colors"
+                            data-translation-key="{{ key }}"
+                            data-original-value="{{ value|e('html_attr') }}"
+                            data-is-new="false"
+                        >
+                            {# Clé (lecture seule) #}
+                            <td class="px-4 py-2.5 align-top">
+                                <span data-role="key-display"
+                                      class="font-mono text-xs text-slate-600 dark:text-slate-400 select-all">{{ key }}</span>
+                            </td>
 
-                <div class="flex flex-wrap gap-2">
-                    <twig:Button
-                            label="Ajouter une ligne"
-                            variant="secondary"
-                            icon="icon:add"
-                            dataAction="translations#addRow"
-                    />
-                    <twig:Button
-                            label="Enregistrer"
-                            variant="primary"
-                            icon="icon:save"
-                            type="submit"
-                    />
-                </div>
-            </form>
+                            {# Valeur : display OU input #}
+                            <td class="px-4 py-2.5 align-middle">
+                                <div class="flex flex-col gap-1">
+                                    <span data-role="value-display"
+                                          class="text-sm text-slate-800 dark:text-slate-200 whitespace-pre-wrap wrap-break-word">{{ value }}</span>
+                                    <input
+                                            data-role="value-input"
+                                            type="text"
+                                            value="{{ value|e('html_attr') }}"
+                                            aria-label="Valeur pour la clé {{ key }}"
+                                            class="hidden w-full rounded-md border border-indigo-400 bg-white px-3 py-1.5 text-sm
+                                                   text-slate-800 focus:border-indigo-500 focus:outline-none focus:ring-2
+                                                   focus:ring-indigo-200 dark:border-indigo-600 dark:bg-slate-800 dark:text-slate-100"
+                                    />
+                                    <p data-role="error" class="hidden text-xs text-red-600"></p>
+                                </div>
+                            </td>
+
+                            {# Actions #}
+                            <td class="px-4 py-2.5 align-top text-right">
+                                {# Mode affichage #}
+                                <div data-role="view-actions"
+                                     class="flex gap-1 justify-end opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <button type="button"
+                                            data-action="translations#edit"
+                                            class="inline-flex items-center gap-1 rounded-md border border-indigo-300 bg-indigo-50
+                                                   px-2.5 py-1.5 text-xs font-medium text-indigo-700 hover:bg-indigo-100 transition-colors
+                                                   dark:border-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300"
+                                            title="Modifier cette traduction">
+                                        <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                  d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                        </svg>
+                                        Modifier
+                                    </button>
+                                </div>
+                                {# Mode édition #}
+                                <div data-role="edit-actions" class="hidden gap-1 justify-end">
+                                    <button type="button"
+                                            data-role="save-btn"
+                                            data-action="translations#save"
+                                            class="inline-flex items-center gap-1 rounded-md border border-emerald-300 bg-emerald-50
+                                                   px-2.5 py-1.5 text-xs font-medium text-emerald-700 hover:bg-emerald-100
+                                                   transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                                        <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                  d="M5 13l4 4L19 7"/>
+                                        </svg>
+                                        Enregistrer
+                                    </button>
+                                    <button type="button"
+                                            data-action="translations#cancel"
+                                            class="inline-flex items-center gap-1 rounded-md border border-slate-300 bg-white
+                                                   px-2.5 py-1.5 text-xs font-medium text-slate-600 hover:bg-slate-50 transition-colors">
+                                        Annuler
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="3" class="px-4 py-8 text-center text-sm text-slate-500">
+                                Aucune traduction dans ce fichier.
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            {# ── Pied : bouton Ajouter #}
+            <div class="border-t border-slate-200 px-5 py-3 dark:border-slate-700">
+                <twig:Button
+                        label="Ajouter une ligne"
+                        variant="secondary"
+                        icon="icon:add"
+                        dataAction="translations#addRow"
+                        size="sm"
+                />
+            </div>
         </div>
     </section>
 
@@ -79,18 +157,9 @@
 
 {% block breadcrumb %}
     {{ include('communs/_breadcrumb.html.twig', {liens:[
-        {
-            href:'',
-            title: 'Administration',
-        },
-        {
-            href:path('translations_index'),
-            title: 'Traductions',
-        },
-        {
-            href:'',
-            title: 'fichier : ' ~ filename,
-        }
+        {href:'', title: 'Administration'},
+        {href:path('translations_index'), title: 'Traductions'},
+        {href:'', title: 'fichier : ' ~ filename},
     ]}) }}
 {% endblock %}
 

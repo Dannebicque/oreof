@@ -1,232 +1,190 @@
-<table class="table table-striped">
+<table class="w-full border-collapse rounded-lg overflow-hidden border border-slate-200">
     <thead>
-    <tr>
-        <td {% if constant('SOURCE', typeDiplome) == 'meef' %}colspan="2"{% endif %}>Libellé du parcours</td>
-        <td>Responsable du parcours</td>
-        <td>Co Responsable du parcours</td>
-        <td>Remplissage</td>
-        <td>Etat</td>
-        <td></td>
+    <tr class="bg-slate-100 border-b border-slate-200">
+        <th class="px-4 py-3 text-left text-sm font-semibold text-slate-700"
+            {% if constant('SOURCE', typeDiplome) == 'meef' %}colspan="2"{% endif %}>Libellé du parcours
+        </th>
+        <th class="px-4 py-3 text-left text-sm font-semibold text-slate-700">Responsable du parcours</th>
+        <th class="px-4 py-3 text-left text-sm font-semibold text-slate-700">Co Responsable du parcours</th>
+        <th class="px-4 py-3 text-left text-sm font-semibold text-slate-700">Remplissage</th>
+        <th class="px-4 py-3 text-left text-sm font-semibold text-slate-700">Etat</th>
+        <th class="px-4 py-3 text-right text-sm font-semibold text-slate-700">Actions</th>
     </tr>
     </thead>
     <tbody>
     {% for parcour in parcours|filter(parcour => parcour.parcoursParent == null) %}
-        <tr>
-            <td {% if constant('SOURCE', typeDiplome) == 'meef' %}colspan="2"{% endif %}>
-                {{ parcour.libelle }} {{ parcour.typeParcours|badgeTypeParcours }}
+        <tr class="hover:bg-slate-50 border-b border-slate-200 transition-colors">
+            <td class="px-4 py-3 text-sm" {% if constant('SOURCE', typeDiplome) == 'meef' %}colspan="2"{% endif %}>
+                <div class="font-medium text-gray-900">{{ parcour.libelle }}</div>
+                <div class="text-xs text-gray-500 mt-0.5">{{ parcour.typeParcours|badgeTypeParcours }}</div>
             </td>
-            <td>
-                {{ parcour.respParcours != null ? parcour.respParcours.display : 'Non défini' }}
+            <td class="px-4 py-3 text-sm text-gray-600">
+                {{ parcour.respParcours != null ? parcour.respParcours.display : '<span class="text-gray-400">Non défini</span>' }}
             </td>
-            <td>
-                {{ parcour.coResponsable != null ? parcour.coResponsable.display : 'Non défini' }}
+            <td class="px-4 py-3 text-sm text-gray-600">
+                {{ parcour.coResponsable != null ? parcour.coResponsable.display : '<span class="text-gray-400">Non défini</span>' }}
             </td>
-            <td style="width:20%">
+            <td class="px-4 py-3 text-sm" style="width:15%">
                 {{ component('remplissage_progress', { value: parcour.remplissage }) }}
             </td>
-            <td>
-                {{ parcour.etatDpeParcours|badgeDpe }} {{ parcours.withCfvu is defined and parcours.withCfvu == true ? '<span class="badge bg-warning">CFVU</span>' : '' }}
+            <td class="px-4 py-3 text-sm">
+                <div class="flex items-center gap-2">
+                    {{ parcour.etatDpeParcours|badgeDpe }}
+                    {% if parcours.withCfvu is defined and parcours.withCfvu == true %}
+                        <twig:Badge label="CFVU" variant="warning" :soft="true" size="sm"/>
+                    {% endif %}
+                </div>
             </td>
-            <td class="text-end">
+            <td class="px-4 py-3 text-right space-y-2">
                 {% if not('non_ouverture' in parcour.etatDpeParcours|keys or 'non_ouverture_cfvu' in parcour.etatDpeParcours|keys or 'non_ouverture_ses' in parcour.etatDpeParcours|keys) %}
-                    {#                    <button #}
-                    {#                            {{ stimulus_controller('modal', { #}
-                    {#                                size: 'lg', #}
-                    {#                                nomEvenement: 'parcoursAdded', #}
-                    {#                                modalTitle: 'Modifier un parcours', #}
-                    {#                                modalUrl: path('app_parcours_edit_modal', {parcours:parcour.id}) }) }} #}
-                    {#                            data-action="click->modal#openModal" #}
-                    {#                            class="btn btn-sm text-warning btn-icon" #}
-                    {#                            data-size="lg" #}
-                    {#                            data-bs-toggle="tooltip" #}
-                    {#                            data-bs-placement="bottom" #}
-                    {#                            title="Modifier un parcours" #}
-                    {#                    > #}
-                    {#                        <i class="{{ iconEdit }}"></i> #}
-                    {#                        <span> Modifier le libellé/Responsable du parcours</span> #}
-                    {#                    </button> #}
-                    {% if constant('SOURCE', typeDiplome) != 'meef' %}
-                        <a href="{{ path('parcours_v2_modifier', {parcours:parcour.id}) }}"
-                           class="btn btn-sm text-warning btn-icon"
-                           target="_blank"
-                        >
-                            <i class="{{ iconEdit }}"></i>
-                            Modifier la fiche du parcours
-                        </a>
-                    {% endif %}
-                    <a href="#"
-                       class="btn btn-sm text-success"
-                            {{ stimulus_controller('modal', {
-                                size: 'lg',
-                                modalTitle: 'Vérifier la saisie',
-                                modalUrl: path('app_parcours_state', {parcours:parcour.id}) }) }}
-                       data-action="click->modal#openModal"
-                       data-size="lg"
-                       data-bs-toggle="tooltip"
-                       data-bs-placement="bottom"
-                       title="Vérifier la saisie"
-                    >
-                        <i class="fal fa-binoculars"></i>
-                        <span> vérifier</span>
-                    </a><br>
+                    <div class="flex flex-col sm:flex-row gap-2 justify-end flex-wrap">
+                        {% if constant('SOURCE', typeDiplome) != 'meef' %}
+                            <twig:Button
+                                    label="Modifier"
+                                    variant="warning"
+                                    icon="icon:edit"
+                                    href="{{ path('parcours_v2_modifier', {parcours:parcour.id}) }}"
+                                    target="_blank"
+                                    tooltip="Modifier la fiche du parcours"
+                                    size="sm"
+                            />
+                        {% endif %}
+                        <twig:Button
+                                label="Vérifier"
+                                variant="success"
+                                icon="icon:info"
+                                tooltip="Vérifier la saisie"
+                                size="sm"
+                                dataAction="click->modalturbo#open"
+                                href="{{ path('app_parcours_state', {parcours:parcour.id}) }}"
+                        />
 
-                    {#                    <button #}
-                    {#                            {{ stimulus_controller('modal', { #}
-                    {#                                size: 'lg', #}
-                    {#                                modalTitle: 'Dupliquer le parcours ' ~ parcour.display, #}
-                    {#                                modalUrl: path('app_parcours_dupliquer_modal', {'id': parcour.id}) }) }} #}
-                    {#                            data-action="click->modal#openModal" #}
-                    {#                            class="btn btn-sm text-primary" #}
-                    {#                            data-size="lg" #}
-                    {#                            data-bs-toggle="tooltip" #}
-                    {#                            data-bs-placement="bottom" #}
-                    {#                            title="Dupliquer le parcours {{ parcour.display }}" #}
-                    {#                    > #}
-                    {#                        <i class="{{ iconDuplicate }}"></i> Dupliquer #}
-                    {#                    </button> #}
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <twig:Button
+                                    label="Supprimer"
+                                    variant="danger"
+                                    icon="icon:delete"
+                                    href="{{ path('app_parcours_delete',{id: parcour.id,
+                                        csrf: csrf_token('delete' ~ parcour.id)
+                                    }) }}"
+                                    tooltip="Supprimer le parcours"
+                                    size="sm"
+                            />
+                        {% endif %}
 
-                    {% if is_granted('ROLE_ADMIN') %}
-                        <a href="{{ path('app_parcours_delete',{id: parcour.id,
-                            csrf: csrf_token('delete' ~ parcour.id)
-                        }) }}" class="btn btn-sm text-danger">
-                            <i class="{{ iconDelete }}"></i> Supprimer
-                        </a>
-                    {% endif %}
-
-                    <button
-                            {{ stimulus_controller('modal', {
-                                size: 'lg',
-                                modalTitle: 'Demande de non ouverture du parcours ' ~ parcour.display ~ ' pour ' ~ user_data.campagneCollecte.libelle,
-                                modalUrl: path('app_validation_demande_non_ouverture', {parcours: parcour.id}) }) }}
-                            data-action="click->modal#openModal"
-                            class="btn btn-sm text-danger"
-                            data-size="lg"
-                            data-bs-toggle="tooltip"
-                            data-bs-placement="bottom"
-                            title="Demande de non ouverture du parcours {{ parcour.display }} pour {{ user_data.campagneCollecte.libelle }}"
-                    >
-                        <i class="fas fa-close"></i> Demande de non ouverture du parcours
-                        pour {{ user_data.campagneCollecte.libelle }}
-                    </button>
+                        <twig:Button
+                                label="Non ouverture"
+                                variant="secondary"
+                                icon="icon:close"
+                                tooltip="Demande de non ouverture"
+                                size="sm"
+                                href="{{ path('app_validation_demande_non_ouverture', {parcours: parcour.id}) }}"
+                                dataAction="click->modalturbo#open"
+                        />
+                    </div>
                 {% else %}
                     {% if 'non_ouverture' in parcour.etatDpeParcours|keys %}
-                        <span class="text-info">Parcours non ouvert pour {{ user_data.campagneCollecte.libelle }}</span>
+                        <span class="text-sm text-blue-600">Parcours non ouvert pour {{ user_data.campagneCollecte.libelle }}</span>
                     {% else %}
-                        <span class="text-warning">Demande de non ouverture en cours</span>
+                        <span class="text-sm text-amber-600">Demande de non ouverture en cours</span>
                     {% endif %}
                 {% endif %}
             </td>
         </tr>
         {% if constant('SOURCE', typeDiplome) == 'meef' %}
             {% for parc in parcour.parcoursEnfants %}
-                <tr>
-                    <td>&nbsp;</td>
-                    <td>
-                        {{ parc.libelle }}
+                <tr class="hover:bg-slate-50 border-b border-slate-200 transition-colors border-l-2 border-l-blue-500">
+                    <td class="px-4 py-3 text-sm text-gray-500"></td>
+                    <td class="px-4 py-3 text-sm">
+                        <div class="font-medium text-gray-900">{{ parc.libelle }}</div>
                     </td>
-                    <td>
-                        {{ parc.respParcours != null ? parc.respParcours.display : 'Non défini' }}
+                    <td class="px-4 py-3 text-sm text-gray-600">
+                        {{ parc.respParcours != null ? parc.respParcours.display : '<span class="text-gray-400">Non défini</span>' }}
                     </td>
-                    <td>
-                        {{ parc.coResponsable != null ? parc.coResponsable.display : 'Non défini' }}
+                    <td class="px-4 py-3 text-sm text-gray-600">
+                        {{ parc.coResponsable != null ? parc.coResponsable.display : '<span class="text-gray-400">Non défini</span>' }}
                     </td>
-                    <td style="width:20%">
+                    <td class="px-4 py-3 text-sm" style="width:15%">
                         {{ component('remplissage_progress', { value: parc.remplissage }) }}
                     </td>
-                    <td class="text-end">
-                        <button
-                                {{ stimulus_controller('modal', {
-                                    size: 'lg',
-                                    nomEvenement: 'parcoursAdded',
-                                    modalTitle: 'Modifier une option',
-                                    modalUrl: path('app_parcours_edit_modal', {parcours:parc.id}) }) }}
-                                data-action="click->modal#openModal"
-                                class="btn btn-sm text-warning btn-icon"
-                                data-size="lg"
-                                data-bs-toggle="tooltip"
-                                data-bs-placement="bottom"
-                                title="Modifier une option"
-                        >
-                            <i class="{{ iconEdit }}"></i>
-                            <span> Modifier le libellé/Responsable de l'option</span>
-                        </button>
-                        <a href="{{ path('parcours_v2_modifier', {parcours:parc.id}) }}"
-                           class="btn btn-sm text-warning btn-icon"
-                        >
-                            <i class="{{ iconEdit }}"></i>
-                            Editer la fiche de l'option
-                        </a>
-                        {% if is_granted('ROLE_ADMIN') %}
-                            <button {{ stimulus_action('formation--step3', 'dupliquerParcours', 'click', {
-                                url:path('app_parcours_dupliquer',{'id': parc.id}),
-                                id: parc.id}) }} class="btn btn-sm text-primary">
-                                <i class="{{ iconDuplicate }}"></i> Dupliquer
-                            </button>
+                    <td class="px-4 py-3 text-right space-y-2">
+                        <div class="flex flex-col sm:flex-row gap-2 justify-end flex-wrap">
+                            <twig:Button
+                                    label="Modifier"
+                                    variant="warning"
+                                    icon="icon:pencil"
+                                    tooltip="Modifier une option"
+                                    size="sm"
+                                    href="{{ path('app_parcours_edit_modal', {parcours:parc.id}) }}"
+                                    dataAction="click->modalturbo#open"
+                            />
+                            <twig:Button
+                                    label="Fiche"
+                                    variant="secondary"
+                                    icon="icon:document"
+                                    href="{{ path('parcours_v2_modifier', {parcours:parc.id}) }}"
+                                    tooltip="Editer la fiche de l'option"
+                                    size="sm"
+                            />
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <twig:Button
+                                        label="Dupliquer"
+                                        variant="primary"
+                                        icon="icon:document-copy"
+                                        tooltip="Dupliquer l'option"
+                                        size="sm"
 
-                            <button {{ stimulus_action('formation--step3', 'deleteParcours', 'click', {
-                                url:path('app_parcours_delete',{'id': parc.id}),
-                                id: parc.id,
-                                csrf: csrf_token('delete' ~ parc.id)
-                            }) }} class="btn btn-sm text-danger">
-                                <i class="{{ iconDelete }}"></i> Supprimer
-                            </button>
-                        {% endif %}
+                                />
+                                {#                                    {{ stimulus_action('formation--step3', 'dupliquerParcours', 'click', { #}
+                                {#                                        url:path('app_parcours_dupliquer',{'id': parc.id}), #}
+                                {#                                        id: parc.id}) }} #}
+
+                                <twig:Button
+                                        label="Supprimer"
+                                        variant="danger"
+                                        icon="icon:delete"
+                                        tooltip="Supprimer l'option"
+                                        size="sm"
+
+                                />
+                                {#                                    {{ stimulus_action('formation--step3', 'deleteParcours', 'click', { #}
+                                {#                                        url:path('app_parcours_delete',{'id': parc.id}), #}
+                                {#                                        id: parc.id, #}
+                                {#                                        csrf: csrf_token('delete' ~ parc.id) #}
+                                {#                                    }) }} #}
+                            {% endif %}
+                        </div>
                     </td>
                 </tr>
             {% else %}
-                <tr>
-                    <td>&nbsp;</td>
-                    <td colspan="6" class="text-center bg-warning">Aucune option pour ce parcours.</td>
+                <tr class="bg-amber-50 border-b border-slate-200 border-l-2 border-l-blue-500">
+                    <td class="px-4 py-3 text-sm text-gray-500"></td>
+                    <td colspan="5" class="px-4 py-3 text-center text-sm text-amber-800 font-medium">Aucune option pour
+                        ce parcours.
+                    </td>
                 </tr>
             {% endfor %}
-            <tr>
-                <td>&nbsp;</td>
-                <td colspan="6">
-                    <button
-                            {{ stimulus_controller('modal', {
-                                size: 'lg',
-                                nomEvenement: 'parcoursAdded',
-                                modalTitle: 'Ajouter une option au parcours ' ~ parcour.display,
-                                modalUrl: path('app_parcours_new', {formation:formation.id, parent:parcour.id}) }) }}
-                            data-action="click->modal#openModal"
-                            class="btn btn-sm btn-outline-success btn-icon btn-icon-end"
-                            data-size="lg"
-                            data-bs-toggle="tooltip"
-                            data-bs-placement="bottom"
-                            title="Ajouter une option au parcours {{ parcour.display }}"
-                    >
-                        <i class="{{ iconAdd }}"></i>
-                        <span> Ajouter une option au parcours <strong>{{ parcour.display }}</strong></span>
-                    </button>
+            <tr class="hover:bg-slate-50 border-b border-slate-200 border-l-2 border-l-blue-500">
+                <td class="px-4 py-3 text-sm text-gray-500"></td>
+                <td colspan="5" class="px-4 py-3">
+                    <twig:Button
+                            label="Ajouter une option"
+                            variant="success"
+                            icon="icon:add"
+                            tooltip="Ajouter une option au parcours {{ parcour.display }}"
+                            href="{{ path('app_parcours_new', {formation:formation.id, parent:parcour.id}) }}"
+                            dataAction="click->modalturbo#open"
+                    />
                 </td>
             </tr>
         {% endif %}
     {% else %}
         <tr>
             <td colspan="{% if constant('SOURCE', typeDiplome) == 'meef' %}7{% else %}6{% endif %}"
-                class="text-center bg-warning">Aucun parcours, veuillez en ajouter au moins un.
+                class="px-4 py-6 text-center bg-amber-50 border-b border-slate-200">
+                <p class="text-sm text-amber-800 font-medium">Aucun parcours, veuillez en ajouter au moins un.</p>
             </td>
         </tr>
     {% endfor %}
-    {#    <tr> #}
-    {#        <td colspan="{% if constant('SOURCE', typeDiplome) == 'meef' %}7{% else %}6{% endif %}"> #}
-    {#            <button #}
-    {#                    {{ stimulus_controller('modal', { #}
-    {#                        size: 'lg', #}
-    {#                        nomEvenement: 'parcoursAdded', #}
-    {#                        modalTitle: 'Ajouter un parcours', #}
-    {#                        modalUrl: path('app_parcours_new', {formation:formation.id}) }) }} #}
-    {#                    data-action="click->modal#openModal" #}
-    {#                    class="btn btn-sm btn-outline-success btn-icon btn-icon-end" #}
-    {#                    data-size="lg" #}
-    {#                    data-bs-toggle="tooltip" #}
-    {#                    data-bs-placement="bottom" #}
-    {#                    title="Ajouter un parcours" #}
-    {#            > #}
-    {#                <i class="{{ iconAdd }}"></i> #}
-    {#                <span> Ajouter un parcours</span> #}
-    {#            </button> #}
-    {#        </td> #}
-    {#    </tr> #}
     </tbody>
 </table>

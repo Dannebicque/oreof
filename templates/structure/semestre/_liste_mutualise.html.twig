@@ -4,11 +4,11 @@
         <tr>
             <th class="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Composante</th>
             <th class="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
-                Mention/Specialite
+                Mention/Spécialité
             </th>
             <th class="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Parcours</th>
             <th class="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Semestre
-                utilise ?
+                utilisé ?
             </th>
             <th class="px-3 py-2"></th>
         </tr>
@@ -33,7 +33,9 @@
             </tr>
         {% else %}
             <tr>
-                <td colspan="5" class="px-3 py-4 text-center text-sm text-slate-500">Aucun semestre mutualise.</td>
+                <td colspan="5" class="px-3 py-4 text-center text-sm text-slate-500">Semestre mutualisé avec aucun
+                    parcours/mention.
+                </td>
             </tr>
         {% endfor %}
         </tbody>

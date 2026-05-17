@@ -1,15 +1,15 @@
-<tr style="{% if enfant %}border-left: 2px solid dodgerblue{% endif %}">
-    <th style="padding-left: 20px" scope="row">
-        {{ ec.elementConstitutif.code }} {{ ec.elementConstitutif.display }} {% if raccrocheUe == true %}<i
-                class="fa fa-link"></i>{% endif %}
-        {% if is_granted('ROLE_ADMIN') %}<span style="font-weight: normal">
+<tr class="{% if enfant %}border-l-2 border-blue-500{% endif %} hover:bg-slate-50 transition-colors">
+    <th class="px-4 py-2 text-left text-sm font-medium text-slate-800" scope="row">
+        {{ ec.elementConstitutif.code }} {{ ec.elementConstitutif.display }} {% if raccrocheUe == true %}
+            <twig:UX:icon name="icon:link"/>{% endif %}
+        {% if is_granted('ROLE_ADMIN') %}<span class="font-normal text-slate-500">
             (#{{ ec.elementConstitutif.id }})</span>{% endif %}
     </th>
-    <td>
+    <td class="px-4 py-2">
         {% if ec.elementConstitutif.natureUeEc != null and ec.elementConstitutif.natureUeEc.isLibre == true %}
-            <span class="badge bg-info">EC Libre</span>
+            <span class="inline-flex items-center rounded-full bg-cyan-100 px-2 py-0.5 text-xs font-semibold text-cyan-800">EC libre</span>
         {% elseif ec.elementConstitutif.ecParent == null and ec.elementConstitutif.natureUeEc != null and ec.elementConstitutif.natureUeEc.isChoix == true %}
-            <span class="badge bg-info">EC à choix</span>
+            <span class="inline-flex items-center rounded-full bg-indigo-100 px-2 py-0.5 text-xs font-semibold text-indigo-800">EC a choix</span>
         {% elseif ec.elementConstitutif.ficheMatiere != null %}
             {# todo: isGranted ? #}
             {% if
@@ -17,39 +17,41 @@
                 ec.elementConstitutif.ficheMatiere.parcours != null and ec.elementConstitutif.ficheMatiere.parcours.id == parcours.id and isSemestreRaccroche == false and raccrocheUe == false %}
                 <a
                         href="{{ path('fiche_matiere_v2_modifier',{slug: ec.elementConstitutif.ficheMatiere.slug}) }}"
-                        class="btn btn-sm btn-outline-info"
+                        class="inline-flex items-center gap-2 rounded-md border border-indigo-300 bg-indigo-50 px-2.5 py-1.5 text-xs font-semibold text-indigo-700 hover:bg-indigo-100 transition-colors"
                         data-bs-toggle="tooltip"
                         data-bs-placement="bottom"
                         title="Modifier la fiche EC/matière"
                 >
                     <i class="fal fa-file"></i>
+                    <span>Modifier la fiche</span>
                     {% if ec.elementConstitutif.ficheMatiere.remplissage.isFull() == true %}
-                        <span class="badge bg-success"> Complet</span>
+                        <span class="inline-flex items-center rounded-full bg-emerald-100 px-2 py-0.5 text-[11px] font-semibold text-emerald-700">Complet</span>
                     {% else %}
-                        <span class="badge bg-warning"> À compléter</span>
+                        <span class="inline-flex items-center rounded-full bg-amber-100 px-2 py-0.5 text-[11px] font-semibold text-amber-700">A completer</span>
                     {% endif %}
                 </a>
             {% else %}
                 <a
                         href="{{ path('fiche_matiere_v2_voir',{slug: ec.elementConstitutif.ficheMatiere.slug}) }}"
-                        class="btn btn-sm btn-outline-info"
+                        class="inline-flex items-center gap-2 rounded-md border border-slate-300 bg-white px-2.5 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition-colors"
                         data-bs-toggle="tooltip"
                         data-bs-placement="bottom"
                         target="_blank"
                         title="Voir la fiche EC/matière"
                 >
-                    <span class="badge bg-info"> Voir la fiche</span>
+                    <i class="fal fa-eye"></i>
+                    <span>Voir la fiche</span>
                 </a>
             {% endif %}
         {% else %}
-            <span class="badge bg-danger"> Erreur</span>
+            <span class="inline-flex items-center rounded-full bg-red-100 px-2 py-0.5 text-[11px] font-semibold text-red-700">Erreur</span>
         {% endif %}
     </td>
-    <td>
+    <td class="px-4 py-2">
         <label for="typeEc_{{ ec.elementConstitutif.id }}" class="sr-only">Type EC</label>
         {% if isAccessible(dpeParcours, 'cfvu') %} {# todo: isGranted ? #}
             <select
-                    class="form-select"
+                    class="w-full rounded-md border border-slate-300 bg-white px-2 py-1.5 text-sm text-slate-700 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-100"
                     name="typeEc_{{ ec.elementConstitutif.id }}"
                     id="typeEc_{{ ec.elementConstitutif.id }}"
                     data-bs-toggle="tooltip"
@@ -71,16 +73,16 @@
             </select>
         {% else %}
             {% if ec.elementConstitutif.typeEc != null %}{{ ec.elementConstitutif.typeEc.libelle }}{% else %}<span
-                    class="text-danger">Non défini</span>{% endif %}
+                    class="text-red-600">Non defini</span>{% endif %}
         {% endif %}
     </td>
-    <td>
+    <td class="px-4 py-2">
         {{ component('badge_ects', {
             elementConstitutif: ec.elementConstitutif,
             parcours: parcours,
         }) }}
     </td>
-    <td>
+    <td class="px-4 py-2">
         {% if ec.elementsConstitutifsEnfants|length == 0 %}
             {{ component('badge_bcc', {
                 elementConstitutif: ec.elementConstitutif,
@@ -93,7 +95,7 @@
             }) }}
         {% endif %}
     </td>
-    <td>
+    <td class="px-4 py-2">
         {{ component('badge_heures', {
             elementConstitutif: ec.elementConstitutif,
             parcours: parcours,
@@ -104,7 +106,7 @@
             texte: true
         }) }}
     </td>
-    <td>
+    <td class="px-4 py-2">
         {{ component('badge_mccc', {
             elementConstitutif: ec.elementConstitutif,
             parcours: parcours,

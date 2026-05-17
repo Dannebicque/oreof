@@ -11,14 +11,14 @@
 
     <p>Bonjour {{ user.display }},</p>
 
-    {% if context.acceptationDirecte is defined and context.acceptationDirecte  == true %}
+    {% if acceptationDirecte is defined and acceptationDirecte  == true %}
         <p>La CFVU du {{ date|date('d/m/Y') }} a validé {{ texteFormation|raw }}.</p>
     {% else %}
         <p>La CFVU du {{ date|date('d/m/Y') }} a validé {{ texteFormation|raw }} avec les réserves ci-dessous :
         </p>
         <ul>
             {# todo: géré au parcours ?? A tester #}
-            {% if context.sousReserveConseil is defined and context.sousReserveConseil  == true %}
+            {% if sousReserveConseil is defined and sousReserveConseil  == true %}
                 <p>- Sous réserve du dépôt du PV du conseil de composante. Vous pouvez retourner sur la fiche
                     descriptive de cette formation ou du parcours (<a
                             href="{{ url('formation_v2_voir', {'slug': formation.slug}) }}">{{ url('formation_v2_voir', {'slug': formation.slug}) }}</a>)

@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Service\TranslationFileManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Finder\SplFileInfo;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -64,5 +65,44 @@ class TranslationController extends AbstractController
             'filename' => $filename,
             'translations' => $this->tm->read($filename),
         ]);
+    }
+
+    #[Route('/save-one/{filename}', name: 'translations_save_one', methods: ['POST'])]
+    public function saveOne(string $filename, Request $request): JsonResponse
+    {
+        try {
+            $data = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
+            $key = trim($data['key'] ?? '');
+            $value = $data['value'] ?? '';
+
+            if ($key === '') {
+                return $this->json(['success' => false, 'error' => 'La clé ne peut pas être vide.'], 422);
+            }
+
+            $this->tm->writeSingle($filename, $key, $value);
+
+            return $this->json(['success' => true]);
+        } catch (\Throwable $e) {
+            return $this->json(['success' => false, 'error' => $e->getMessage()], 500);
+        }
+    }
+
+    #[Route('/delete-one/{filename}', name: 'translations_delete_one', methods: ['DELETE'])]
+    public function deleteOne(string $filename, Request $request): JsonResponse
+    {
+        try {
+            $data = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
+            $key = trim($data['key'] ?? '');
+
+            if ($key === '') {
+                return $this->json(['success' => false, 'error' => 'Clé manquante.'], 422);
+            }
+
+            $this->tm->deleteKey($filename, $key);
+
+            return $this->json(['success' => true]);
+        } catch (\Throwable $e) {
+            return $this->json(['success' => false, 'error' => $e->getMessage()], 500);
+        }
     }
 }

@@ -7,12 +7,14 @@ use App\Classes\GetHistorique;
 use App\Classes\JsonReponse;
 use App\Classes\Process\ParcoursProcess;
 use App\Classes\ValidationProcess;
+use App\DTO\TranslatableKey;
 use App\Entity\FicheMatiere;
 use App\Entity\Formation;
 use App\Entity\Historique;
 use App\Entity\HistoriqueParcours;
 use App\Entity\Parcours;
 use App\Twig\HistoriqueExtension;
+use App\Utils\TurboStreamResponseFactory;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -51,7 +53,10 @@ class HistoriqueController extends BaseController
     }
 
     #[Route('/historique/parcours/{parcours}', name: 'app_historique_parcours')]
-    public function parcours(Parcours $parcours): Response
+    public function parcours(
+        TurboStreamResponseFactory $turboStream,
+        Parcours                   $parcours
+    ): Response
     {
         $historiques = [];
         $histo = $parcours->getHistoriqueParcours();
@@ -65,7 +70,11 @@ class HistoriqueController extends BaseController
         }
         krsort($historiques);
 
-        return $this->render('historique/_formation.html.twig', [
+        return $turboStream->streamOpenModalFromTemplates(
+            new TranslatableKey('parcours.historique.title'),
+            new TranslatableKey('parcours.historique.description'),
+            'historique/_formation.html.twig',
+            [
             'historiques' => $historiques,
             'parcours' => $parcours,
             'formation' => $parcours->getFormation(),
@@ -127,23 +136,23 @@ class HistoriqueController extends BaseController
             }
         }
 
-//        elseif ($historique instanceof HistoriqueFormation) {
-//            //todo: a supprimer dès bascule full parcours
-//            $objet = $historique->getFormation();
-//            if ($objet === null) {
-//                return JsonReponse::error('Formation non trouvée');
-//            }
-//            $processData = $this->formationProcess->etatFormation($objet, $process);
-//
-//            if ($etape === 'cfvu') {
-//                $laisserPasser = $getHistorique->getHistoriqueFormationLastStep($objet, 'conseil');
-//            }
-//
-//
-//            if ($request->isMethod('POST')) {
-//                return $this->formationProcess->editFormation($historique, $this->getUser(), $etape, $request);
-//            }
-//        }
+        //        elseif ($historique instanceof HistoriqueFormation) {
+        //            //todo: a supprimer dès bascule full parcours
+        //            $objet = $historique->getFormation();
+        //            if ($objet === null) {
+        //                return JsonReponse::error('Formation non trouvée');
+        //            }
+        //            $processData = $this->formationProcess->etatFormation($objet, $process);
+        //
+        //            if ($etape === 'cfvu') {
+        //                $laisserPasser = $getHistorique->getHistoriqueFormationLastStep($objet, 'conseil');
+        //            }
+        //
+        //
+        //            if ($request->isMethod('POST')) {
+        //                return $this->formationProcess->editFormation($historique, $this->getUser(), $etape, $request);
+        //            }
+        //        }
 
         return $this->render('historique/_edit.html.twig', [
             'process' => $process,
@@ -159,7 +168,8 @@ class HistoriqueController extends BaseController
     public function delete(
         EntityManagerInterface $entityManager,
         Request $request,
-        Historique $historique): Response
+        Historique $historique
+    ): Response
     {
         if ($this->isCsrfTokenValid('delete' . $historique->getId(), $request->request->get('_token'))) {
             $entityManager->remove($historique);

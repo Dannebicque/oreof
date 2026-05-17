@@ -51,6 +51,20 @@ final class TranslationFileManager
         return $result;
     }
 
+    public function writeSingle(string $filename, string $key, string $value): void
+    {
+        $data = $this->read($filename);
+        $data[$key] = $value;
+        $this->write($filename, $data);
+    }
+
+    public function deleteKey(string $filename, string $key): void
+    {
+        $data = $this->read($filename);
+        unset($data[$key]);
+        $this->write($filename, $data);
+    }
+
     public function write(string $filename, array $translations): void
     {
         $full = $this->path . '/' . $filename;
