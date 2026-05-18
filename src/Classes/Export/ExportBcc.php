@@ -15,6 +15,8 @@ use App\Entity\CampagneCollecte;
 use App\Entity\Parcours;
 use App\Repository\FormationRepository;
 use App\Service\ProjectDirProvider;
+use App\TypeDiplome\TypeDiplomeResolver;
+use App\TypeDiplome\Dto\OptionsCalculStructure;
 use App\Utils\Tools;
 use DateTime;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -68,8 +70,8 @@ class ExportBcc implements ExportInterface
         $this->excelWriter->getColumnDimension('A', 30);
         $this->excelWriter->getColumnDimension('B', 50);
 
-        $typeD = $this->typeDiplomeResolver->getFromParcours($parcours);
-        $dto = $typeD->calculStructureParcours($parcours, false);
+        $typeD = $this->typeDiplomeResolver->fromParcours($parcours);
+        $dto = $typeD->calculStructureParcours($parcours, new OptionsCalculStructure(dataFromFicheMatiere: true));
 
         foreach ($dto->semestres as $semestre) {
             $ligne = 7;
@@ -118,19 +120,19 @@ class ExportBcc implements ExportInterface
 
                 $ligne++;
                 $col = $debutCol;
-                foreach ($semestre->getUes() as $ue) {
-                    if ($ue->getUeParent() === null) {
-                        if ($ue->getUeEnfants()->count() == 0) {
-                            foreach ($ue->getElementConstitutifs() as $ec) {
-                                $this->excelWriter->writeCellXY($col, $ligne, $ec->getCode(), [
+                foreach ($semestre->ues as $ue) {
+                    if ($ue->ue->getUeParent() === null) {
+                        if (count($ue->uesEnfants()) == 0) {
+                            foreach ($ue->elementConstitutifs as $ec) {
+                                $this->excelWriter->writeCellXY($col, $ligne, $ec->elementConstitutif->getCode(), [
                                     'style' => 'HORIZONTAL_CENTER',
                                 ]);
                                 $col++;
                             }
                         } else {
-                            foreach ($ue->getUeEnfants() as $uee) {
-                                foreach ($uee->getElementConstitutifs() as $ec) {
-                                    $this->excelWriter->writeCellXY($col, $ligne, $ec->getCode(), [
+                            foreach ($ue->uesEnfants() as $uee) {
+                                foreach ($uee->elementConstitutifs as $ec) {
+                                    $this->excelWriter->writeCellXY($col, $ligne, $ec->elementConstitutif->getCode(), [
                                         'style' => 'HORIZONTAL_CENTER',
                                     ]);
                                     $col++;

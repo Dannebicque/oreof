@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Classes\Export\ExportBcc;
 use App\Classes\MyGotenbergPdf;
 use App\Entity\Parcours;
+use App\TypeDiplome\Dto\OptionsCalculStructure;
 use App\TypeDiplome\TypeDiplomeResolver;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -35,7 +36,7 @@ class CompetenceExportController extends AbstractController
     {
         $formation = $parcours->getFormation();
         $typeD = $typeDiplomeResolver->fromFormation($formation);
-        $dto = $typeD->calculStructureParcours($parcours, false, true);
+        $dto = $typeD->calculStructureParcours($parcours, new OptionsCalculStructure(dataFromFicheMatiere: true));
         return $myGotenbergPdf->render('pdf/bcc_export_croise.html.twig', [
             'formation' => $formation,
             'parcours' => $parcours,

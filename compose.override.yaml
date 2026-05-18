@@ -1,0 +1,13 @@
+
+services:
+###> symfony/mercure-bundle ###
+  mercure:
+    ports:
+      - "80"
+###< symfony/mercure-bundle ###
+
+###> sensiolabs/gotenberg-bundle ###
+  gotenberg:
+    ports:
+      - "3000"
+###< sensiolabs/gotenberg-bundle ###

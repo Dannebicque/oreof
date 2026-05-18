@@ -56,20 +56,8 @@
             "migrations/.gitignore"
         ]
     },
-    "knplabs/knp-snappy-bundle": {
-        "version": "1.9",
-        "recipe": {
-            "repo": "github.com/symfony/recipes-contrib",
-            "branch": "main",
-            "version": "1.5",
-            "ref": "c81bdcf4a9d4e7b1959071457f9608631865d381"
-        },
-        "files": [
-            "config/packages/knp_snappy.yaml"
-        ]
-    },
     "php-http/discovery": {
-        "version": "1.19",
+        "version": "1.20",
         "recipe": {
             "repo": "github.com/symfony/recipes",
             "branch": "main",
@@ -77,7 +65,7 @@
             "ref": "f45b5dd173a27873ab19f5e3180b2f661c21de02"
         },
         "files": [
-            "./config/packages/http_discovery.yaml"
+            "config/packages/http_discovery.yaml"
         ]
     },
     "php-translation/symfony-bundle": {
@@ -133,6 +121,18 @@
             "config/packages/sensio_framework_extra.yaml"
         ]
     },
+    "sensiolabs/gotenberg-bundle": {
+        "version": "1.2",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "main",
+            "version": "0.1",
+            "ref": "4b40c14df89ba85902d42b112fee818843af6530"
+        },
+        "files": [
+            "config/packages/gotenberg.yaml"
+        ]
+    },
     "stof/doctrine-extensions-bundle": {
         "version": "1.9",
         "recipe": {
@@ -182,7 +182,7 @@
         ]
     },
     "symfony/form": {
-        "version": "7.3",
+        "version": "8.0",
         "recipe": {
             "repo": "github.com/symfony/recipes",
             "branch": "main",
@@ -270,7 +270,7 @@
         ]
     },
     "symfony/notifier": {
-        "version": "7.3",
+        "version": "8.0",
         "recipe": {
             "repo": "github.com/symfony/recipes",
             "branch": "main",
@@ -297,7 +297,7 @@
         ]
     },
     "symfony/property-info": {
-        "version": "7.3",
+        "version": "8.0",
         "recipe": {
             "repo": "github.com/symfony/recipes",
             "branch": "main",
@@ -381,7 +381,20 @@
         ]
     },
     "symfony/ux-chartjs": {
-        "version": "v2.35.0"
+        "version": "v3.0.0"
+    },
+    "symfony/ux-icons": {
+        "version": "3.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "2.19",
+            "ref": "c965ca0bf8a40e03420d57e08cff0bf6045e4ae7"
+        },
+        "files": [
+            "assets/icons/symfony.svg",
+            "config/packages/ux_icons.yaml"
+        ]
     },
     "symfony/ux-live-component": {
         "version": "2.7",
@@ -396,7 +409,7 @@
         ]
     },
     "symfony/ux-turbo": {
-        "version": "2.35",
+        "version": "3.0",
         "recipe": {
             "repo": "github.com/symfony/recipes",
             "branch": "main",

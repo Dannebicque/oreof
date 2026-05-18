@@ -17,15 +17,15 @@ use App\Enums\RegimeInscriptionEnum;
 use App\Repository\FicheMatiereRepository;
 use App\Utils\Tools;
 use DateTimeInterface;
-use Gotenberg\Gotenberg;
-use Gotenberg\Stream;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Exception;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
-use Psr\Http\Client\ClientInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\Filesystem\Filesystem;
+use Sensiolabs\GotenbergBundle\GotenbergInterface;
+use Sensiolabs\GotenbergBundle\Processor\FileProcessor;
 
 class ButMccc extends AbstractButMccc
 {
@@ -41,7 +41,7 @@ class ButMccc extends AbstractButMccc
 
     public function __construct(
         KernelInterface                  $kernel,
-        protected ClientInterface        $client,
+        protected GotenbergInterface     $gotenberg,
         protected FicheMatiereRepository $ficheMatiereRepository,
         protected ExcelWriter            $excelWriter,
     ) {
@@ -312,16 +312,16 @@ class ButMccc extends AbstractButMccc
 
         $fichier = $this->excelWriter->saveFichier($this->fileName, $this->dir . '/temp/');
 
-        $request = Gotenberg::libreOffice('http://localhost:3000')
-            ->convert(Stream::path($fichier));
+        $response = $this->gotenberg
+            ->pdf()
+            ->office()
+            ->files(new \SplFileInfo($fichier))
+            ->generate()
+            ->stream($this->fileName . '.pdf');
 
-        $reponse = $this->client->sendRequest($request);
+        unlink($fichier);
 
-        // retourner une réponse avec le contenu du PDF
-        return new Response($reponse->getBody()->getContents(), 200, [
-            'Content-Type' => 'application/pdf',
-            'Content-Disposition' => 'attachment; filename="' . $this->fileName . '.pdf"',
-        ]);
+        return $response;
     }
 
     public function exportAndSaveExcelbutMccc(
@@ -335,6 +335,39 @@ class ButMccc extends AbstractButMccc
         $this->genereExcelbutMccc($anneeUniversitaire, $parcours, $dateCfvu, $dateConseil, $versionFull);
         $this->excelWriter->saveFichier($this->fileName, $dir);
         return $this->fileName . '.xlsx';
+    }
+
+    public function exportAndSavePdfbutMccc(
+        CampagneCollecte   $anneeUniversitaire,
+        Parcours           $parcours,
+        string             $dir,
+        ?DateTimeInterface $dateCfvu = null,
+        ?DateTimeInterface $dateConseil = null,
+        bool               $versionFull = true,
+        ?string            $customFileName = null,
+    ): string {
+        $this->genereExcelbutMccc($anneeUniversitaire, $parcours, $dateCfvu, $dateConseil, $versionFull);
+
+        if ($customFileName !== null) {
+            $this->fileName = $customFileName;
+        }
+
+        $fichier = $this->excelWriter->saveFichier($this->fileName, $this->dir . '/temp/');
+
+        $this->gotenberg
+            ->pdf()
+            ->office()
+            ->files(new \SplFileInfo($fichier))
+            ->fileName($this->fileName)
+            ->generate()
+            ->processor(new FileProcessor(new Filesystem(), $dir))
+            ->process();
+
+        if (file_exists($fichier)) {
+            unlink($fichier);
+        }
+
+        return $this->fileName . '.pdf';
     }
 
     private function writeMccc(mixed $fiche, array $tabColonnes, int $ligne): void

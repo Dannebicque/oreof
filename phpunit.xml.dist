@@ -25,6 +25,10 @@
         <!-- The secret used to sign the JWTs -->
         <env name="MERCURE_JWT_SECRET" value="!ChangeThisMercureHubJWTSecretKey!"/>
         <!-- ###- symfony/mercure-bundle ### -->
+
+        <!-- ###+ sensiolabs/gotenberg-bundle ### -->
+        <env name="GOTENBERG_DSN" value="http://gotenberg:3000"/>
+        <!-- ###- sensiolabs/gotenberg-bundle ### -->
     </php>
 
     <testsuites>
