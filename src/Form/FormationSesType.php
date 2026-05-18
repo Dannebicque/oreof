@@ -27,6 +27,7 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use UnitEnum;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 
 class FormationSesType extends AbstractType
 {
@@ -123,6 +124,7 @@ class FormationSesType extends AbstractType
                 'choice_label' => 'display',
                 'autocomplete' => true,
             ])
+
             ->addEventListener(
                 FormEvents::POST_SUBMIT,
                 static function (FormEvent $event) use ($mentionRepository) {
@@ -162,8 +164,17 @@ class FormationSesType extends AbstractType
                         ]);
                     }
                 }
-            )
-;
+            );
+
+        if ($options['with_logo']) {
+            $builder->add('logo', FileType::class, [
+                'label' => 'Logo',
+                'multiple' => true,
+                'mapped' => false,
+                'required' => false,
+                'attr' => ['accept' => 'image/png, image/jpeg'],
+            ]);
+        }
     }
 
     public function configureOptions(OptionsResolver $resolver): void
@@ -171,7 +182,8 @@ class FormationSesType extends AbstractType
         $resolver->setDefaults([
             'data_class' => Formation::class,
             'typesDiplomes' => [],
-            'translation_domain' => 'form'
+            'translation_domain' => 'form',
+            'with_logo' => false
         ]);
     }
 }
