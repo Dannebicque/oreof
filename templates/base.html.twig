@@ -431,13 +431,12 @@
                 {# Menu aligné droite #}
                 <div class="flex items-center space-x-6">
 
-                    <div class="hidden lg:flex items-center bg-gray-100 rounded-full px-3 py-1.5 focus-within:ring-2 focus-within:ring-indigo-500 focus-within:bg-white transition-all">
-                        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                        </svg>
-                        <input type="text" placeholder="Rechercher..."
-                               class="bg-transparent border-none focus:ring-0 text-sm ml-2 w-40 outline-none">
-                    </div>
+                    {# Replaced legacy inline search with notifications / action icons component (Tailwind) #}
+                    {{ component('notifications', {
+                        user: app.user,
+                        formation: formation is defined ? formation : null,
+                        parcours: parcours is defined ? parcours : null
+                    }) }}
 
                     {# Menu Campagne collecte #}
                     <div class="relative" data-controller="navbar-dropdown"
@@ -705,13 +704,13 @@
 </div>
 <!-- Content Container End -->
 
-{# <div {{ stimulus_controller('base') }} #}
-{#        data-action="modal:openModal@window->base#openModal #}
-{#        base:refreshPage@window->base#refreshPage #}
-{#        base:redirectEdit@window->base#redirectEdit #}
-{# "> #}
-{#    {{ include('communs/_modal.html.twig') }} #}
-{# </div> #}
+<div {{ stimulus_controller('base') }}
+     data-action="modal:openModal@window->base#openModal
+     base:refreshPage@window->base#refreshPage
+     base:redirectEdit@window->base#redirectEdit
+ ">
+    {{ include('communs/_modal.html.twig') }}
+</div>
 
 
 <!-- modal delete -->
