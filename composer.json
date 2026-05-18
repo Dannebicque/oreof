@@ -1,148 +1,148 @@
 {
-    "type": "project",
-    "license": "MPL-2.0",
-    "minimum-stability": "stable",
-    "prefer-stable": true,
-    "name": "dannebicque/oreof",
-    "author": "David Annebicque",
-    "version": "1.52.0",
-    "description": "Outil de Rédaction de l'offre de formation de l'université",
-    "require": {
-        "php": ">=8.2",
-        "ext-ctype": "*",
-        "ext-fileinfo": "*",
-        "ext-iconv": "*",
-        "ext-libxml": "*",
-        "ext-zip": "*",
-        "apereo/phpcas": "^1.6",
-        "doctrine/doctrine-bundle": "^3.2",
-        "doctrine/doctrine-migrations-bundle": "^4.0.0",
-        "doctrine/orm": "^3.6",
-        "dompdf/dompdf": "^3.1.5",
-        "jfcherng/php-diff": "^7.0.0",
-        "mpdf/mpdf": "^8.1",
-        "nyholm/psr7": "^1.8",
-        "php-http/discovery": "^1.20",
-        "phpdocumentor/reflection-docblock": "^6.0.3",
-        "phpoffice/phpspreadsheet": "^5.1",
-        "psr/http-client": "*",
-        "psr/http-factory-implementation": "*",
-        "scienta/doctrine-json-functions": "^6.5.0",
-        "sensiolabs/gotenberg-bundle": "^1.2",
-        "stof/doctrine-extensions-bundle": "*",
-        "swaggest/json-diff": "*",
-        "symfony/console": "8.0.*",
-        "symfony/doctrine-messenger": "8.0.*",
-        "symfony/dotenv": "8.0.*",
-        "symfony/expression-language": "8.0.*",
-        "symfony/filesystem": "8.0.*",
-        "symfony/flex": "^2",
-        "symfony/form": "8.0.*",
-        "symfony/framework-bundle": "8.0.*",
-        "symfony/http-client": "8.0.*",
-        "symfony/ldap": "8.0.*",
-        "symfony/mailer": "8.0.*",
-        "symfony/mercure-bundle": "^0.4.2",
-        "symfony/messenger": "8.0.*",
-        "symfony/monolog-bundle": "^4.0",
-        "symfony/notifier": "8.0.*",
-        "symfony/runtime": "8.0.*",
-        "symfony/security-bundle": "8.0.*",
-        "symfony/serializer": "8.0.*",
-        "symfony/string": "8.0.*",
-        "symfony/translation": "8.0.*",
-        "symfony/twig-bundle": "8.0.*",
-        "symfony/ux-autocomplete": "^3.0.0",
-        "symfony/ux-chartjs": "*",
-        "symfony/ux-icons": "*",
-        "symfony/ux-live-component": "^3.0.0",
-        "symfony/ux-turbo": "^3.0.0",
-        "symfony/validator": "8.0.*",
-        "symfony/webpack-encore-bundle": "^2.3",
-        "symfony/workflow": "8.0.*",
-        "symfony/yaml": "8.0.*",
-        "twig/extra-bundle": "^2.12|^3.0",
-        "twig/string-extra": "^3.24",
-        "twig/twig": "^2.12|^3.0"
+  "type": "project",
+  "license": "MPL-2.0",
+  "minimum-stability": "stable",
+  "prefer-stable": true,
+  "name": "dannebicque/oreof",
+  "author": "David Annebicque",
+  "version": "1.52.0",
+  "description": "Outil de Rédaction de l'offre de formation de l'université",
+  "require": {
+    "php": ">=8.2",
+    "ext-ctype": "*",
+    "ext-fileinfo": "*",
+    "ext-iconv": "*",
+    "ext-libxml": "*",
+    "ext-zip": "*",
+    "apereo/phpcas": "^1.6",
+    "doctrine/doctrine-bundle": "^3.2",
+    "doctrine/doctrine-migrations-bundle": "^4.0.0",
+    "doctrine/orm": "^3.6",
+    "dompdf/dompdf": "^3.1.5",
+    "gotenberg/gotenberg-php": "^2.21.0",
+    "jfcherng/php-diff": "^7.0.0",
+    "mpdf/mpdf": "^8.1",
+    "league/commonmark": "^2.8",
+    "phpdocumentor/reflection-docblock": "^6.0.3",
+    "phpoffice/phpspreadsheet": "^5.1",
+    "psr/http-client": "*",
+    "scienta/doctrine-json-functions": "^6.5.0",
+    "stof/doctrine-extensions-bundle": "*",
+    "swaggest/json-diff": "*",
+    "symfony/console": "8.0.*",
+    "symfony/doctrine-messenger": "8.0.*",
+    "symfony/dotenv": "8.0.*",
+    "symfony/expression-language": "8.0.*",
+    "symfony/filesystem": "8.0.*",
+    "symfony/flex": "^2",
+    "symfony/form": "8.0.*",
+    "symfony/framework-bundle": "8.0.*",
+    "symfony/http-client": "8.0.*",
+    "symfony/ldap": "8.0.*",
+    "symfony/mailer": "8.0.*",
+    "symfony/mercure-bundle": "^0.4.2",
+    "symfony/messenger": "8.0.*",
+    "symfony/monolog-bundle": "^4.0",
+    "symfony/notifier": "8.0.*",
+    "symfony/runtime": "8.0.*",
+    "symfony/security-bundle": "8.0.*",
+    "symfony/serializer": "8.0.*",
+    "symfony/string": "8.0.*",
+    "symfony/translation": "8.0.*",
+    "symfony/twig-bundle": "8.0.*",
+    "symfony/ux-autocomplete": "^3.0.0",
+    "symfony/ux-chartjs": "*",
+    "symfony/ux-icons": "*",
+    "symfony/ux-live-component": "^3.0.0",
+    "symfony/ux-turbo": "^3.0.0",
+    "symfony/validator": "8.0.*",
+    "symfony/webpack-encore-bundle": "^2.3",
+    "symfony/workflow": "8.0.*",
+    "symfony/yaml": "8.0.*",
+    "twig/extra-bundle": "^2.12|^3.0",
+    "twig/string-extra": "^3.24",
+   "twig/markdown-extra": "^3.24",
+    "twig/twig": "^2.12|^3.0"
+  },
+  "config": {
+    "allow-plugins": {
+      "symfony/flex": true,
+      "symfony/runtime": true,
+      "phpstan/extension-installer": true,
+      "php-http/discovery": true
     },
-    "config": {
-        "allow-plugins": {
-            "symfony/flex": true,
-            "symfony/runtime": true,
-            "phpstan/extension-installer": true,
-            "php-http/discovery": true
-        },
-        "sort-packages": true
-    },
-    "autoload": {
-        "psr-4": {
-            "App\\": "src/"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "App\\Tests\\": "tests/"
-        }
-    },
-    "replace": {
-        "symfony/polyfill-ctype": "*",
-        "symfony/polyfill-iconv": "*",
-        "symfony/polyfill-php72": "*",
-        "symfony/polyfill-php73": "*",
-        "symfony/polyfill-php74": "*",
-        "symfony/polyfill-php80": "*",
-        "symfony/polyfill-php81": "*"
-    },
-    "scripts": {
-        "auto-scripts": {
-            "cache:clear": "symfony-cmd",
-          "assets:install %PUBLIC_DIR%": "symfony-cmd"
-        },
-        "post-install-cmd": [
-            "@auto-scripts"
-        ],
-        "post-update-cmd": [
-            "@auto-scripts"
-        ],
-        "server:start": [
-            "Composer\\Config::disableProcessTimeout",
-            "symfony server:start --port=8001"
-        ],
-        "server:stop": "symfony server:stop",
-        "full-codification:basse": [
-            "Composer\\Config::disableProcessTimeout",
-            "php bin/console app:update-codification L basse",
-            "php bin/console app:update-codification LP basse",
-            "php bin/console app:update-codification M basse",
-            "php bin/console app:update-codification DNO basse",
-            "php bin/console app:update-codification DFG basse",
-            "php bin/console app:update-codification DFA basse",
-            "php bin/console app:update-codification DE basse",
-            "php bin/console app:update-codification DEUST basse"
-        ]
-    },
-    "conflict": {
-        "symfony/symfony": "*"
-    },
-    "extra": {
-        "symfony": {
-            "allow-contrib": false,
-          "require": "8.0.*",
-            "docker": true
-        }
-    },
-    "require-dev": {
-      "doctrine/doctrine-fixtures-bundle": "^4.3.1",
-        "phpstan/extension-installer": "^1.2",
-      "phpstan/phpstan": "^2.1.54",
-      "phpstan/phpstan-symfony": "^2.0.15",
-      "phpunit/phpunit": "^13.1.8",
-      "symfony/browser-kit": "8.0.*",
-      "symfony/css-selector": "8.0.*",
-      "symfony/debug-bundle": "8.0.*",
-        "symfony/maker-bundle": "^1.48",
-        "symfony/phpunit-bridge": "^7.1",
-      "symfony/stopwatch": "8.0.*",
-      "symfony/web-profiler-bundle": "8.0.*"
+    "sort-packages": true
+  },
+  "autoload": {
+    "psr-4": {
+      "App\\": "src/"
     }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "App\\Tests\\": "tests/"
+    }
+  },
+  "replace": {
+    "symfony/polyfill-ctype": "*",
+    "symfony/polyfill-iconv": "*",
+    "symfony/polyfill-php72": "*",
+    "symfony/polyfill-php73": "*",
+    "symfony/polyfill-php74": "*",
+    "symfony/polyfill-php80": "*",
+    "symfony/polyfill-php81": "*"
+  },
+  "scripts": {
+    "auto-scripts": {
+      "cache:clear": "symfony-cmd",
+      "assets:install %PUBLIC_DIR%": "symfony-cmd",
+      "importmap:install": "symfony-cmd"
+    },
+    "post-install-cmd": [
+      "@auto-scripts"
+    ],
+    "post-update-cmd": [
+      "@auto-scripts"
+    ],
+    "server:start": [
+      "Composer\\Config::disableProcessTimeout",
+      "symfony server:start --port=8001"
+    ],
+    "server:stop": "symfony server:stop",
+    "full-codification:basse": [
+      "Composer\\Config::disableProcessTimeout",
+      "php bin/console app:update-codification L basse",
+      "php bin/console app:update-codification LP basse",
+      "php bin/console app:update-codification M basse",
+      "php bin/console app:update-codification DNO basse",
+      "php bin/console app:update-codification DFG basse",
+      "php bin/console app:update-codification DFA basse",
+      "php bin/console app:update-codification DE basse",
+      "php bin/console app:update-codification DEUST basse"
+    ]
+  },
+  "conflict": {
+    "symfony/symfony": "*"
+  },
+  "extra": {
+    "symfony": {
+      "allow-contrib": false,
+      "require": "8.0.*",
+      "docker": true
+    }
+  },
+  "require-dev": {
+    "doctrine/doctrine-fixtures-bundle": "^4.3.1",
+    "phpstan/extension-installer": "^1.2",
+    "phpstan/phpstan": "^2.1.54",
+    "phpstan/phpstan-symfony": "^2.0.15",
+    "phpunit/phpunit": "^13.1.8",
+    "symfony/browser-kit": "8.0.*",
+    "symfony/css-selector": "8.0.*",
+    "symfony/debug-bundle": "8.0.*",
+    "symfony/maker-bundle": "^1.48",
+    "symfony/phpunit-bridge": "^7.1",
+    "symfony/stopwatch": "8.0.*",
+    "symfony/web-profiler-bundle": "8.0.*"
+  }
 }

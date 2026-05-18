@@ -16,7 +16,7 @@ class PlaquetteController extends BaseController
     {
         /** @var User $user */
         $user = $this->getUser();
-        $composante = $user->getUserCentres()->first()->getComposante();//todo: faire un filtre sur les droits ?
+        $composante = $user->getUserProfils()->first()->getComposante();//todo: faire un filtre sur les droits ?
         return $this->render('plaquette/index.html.twig', [
             'composante' => $composante,
         ]);

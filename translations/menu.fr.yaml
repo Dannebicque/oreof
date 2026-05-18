@@ -16,6 +16,8 @@ menu:
     validation_rf: Validation RF/co-RF
     exports: Exports
     controle_lheo: Controle LHEO
+    logs.applicatifs: Logs de l'application
+    impersonation.user: Impersonation d'un utilisateur
   compo:
     pilotage: Pilotage
     consulter_offre: Consulter l'offre de formation
@@ -57,4 +59,6 @@ menu:
     notifications: Notifications et mails
     traductions: Traductions et textes
     config_emails: Configurations des emails
+    help: Configurations des aides
+    faq: Configurations de la FAQ
   menu_configuration: Configuration générale

@@ -1,0 +1,182 @@
+{% extends 'base.html.twig' %}
+
+{# CACHE INVALIDATION: 2026-05-07 11:34:00 - FIXED ROUTE GENERATION - TAILWIND MIGRATION #}
+
+{% block header %}Gestion des Aides{% endblock %}
+
+{% block content %}
+    {{ include('communs/_breadcrumb.html.twig', {liens: [{title: 'Gestion des Aides'}]}) }}
+
+    <div class="w-full">
+        <div class="space-y-6">
+            <!-- Header avec titre et actions -->
+            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
+                <h1 class="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-slate-50 flex items-center gap-3">
+                    <twig:UX:Icon name="icon:question" class="h-8 w-8 text-cyan-600 dark:text-cyan-400" />
+                    Gestion des Aides contextuelles
+                </h1>
+
+                <div class="flex flex-col sm:flex-row gap-2">
+                    <button type="button"
+                            class="inline-flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-medium rounded-lg border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 transition"
+                            onclick="toggleHelpImagesModal()"
+                            title="Gérer la galerie d'images pour les aides">
+                        <twig:UX:Icon name="mdi:image-multiple-outline" class="h-5 w-5" />
+                        <span>Galerie d'images</span>
+                    </button>
+
+                    <a href="{{ path('app_help_new') }}"
+                       class="inline-flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-medium rounded-lg bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600 transition"
+                       title="Créer une nouvelle aide pour une page">
+                        <twig:UX:Icon name="ic:round-plus" class="h-5 w-5" />
+                        <span>Ajouter une aide</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Tableau de gestion des aides -->
+            <div class="rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-900 overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr class="border-b border-slate-200 bg-slate-50 dark:border-slate-700 dark:bg-slate-800">
+                                <th class="px-4 py-3 text-left font-semibold text-slate-900 dark:text-slate-50">Statut</th>
+                                <th class="px-4 py-3 text-left font-semibold text-slate-900 dark:text-slate-50">Page (Route)</th>
+                                <th class="px-4 py-3 text-left font-semibold text-slate-900 dark:text-slate-50">Titre</th>
+                                <th class="px-4 py-3 text-left font-semibold text-slate-900 dark:text-slate-50">Centres</th>
+                                <th class="px-4 py-3 text-right font-semibold text-slate-900 dark:text-slate-50">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-200 dark:divide-slate-700">
+                            {% for help in helps %}
+                                <tr class="hover:bg-slate-50 dark:hover:bg-slate-800 transition">
+                                    <td class="px-4 py-3">
+                                        {% if help.isActive %}
+                                            <span class="inline-block px-2.5 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">Actif</span>
+                                        {% else %}
+                                            <span class="inline-block px-2.5 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400">Inactif</span>
+                                        {% endif %}
+                                    </td>
+                                    <td class="px-4 py-3 align-middle">
+                                        <code class="px-2.5 py-1 rounded bg-slate-100 text-slate-900 font-mono text-xs dark:bg-slate-800 dark:text-slate-100">{{ help.routeSlug }}</code>
+                                    </td>
+                                    <td class="px-4 py-3 align-middle font-semibold text-slate-900 dark:text-slate-50">{{ help.title }}</td>
+                                    <td class="px-4 py-3 align-middle">
+                                        {% if help.centresShow|length > 0 %}
+                                            <div class="flex flex-wrap gap-1">
+                                                {% for centre in help.centresShow %}
+                                                    {% if centre == 'cg_composante' %}
+                                                        <span class="inline-block px-2.5 py-1 text-xs font-semibold rounded-full bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400">Composante</span>
+                                                    {% elseif centre == 'cg_etablissement' %}
+                                                        <span class="inline-block px-2.5 py-1 text-xs font-semibold rounded-full bg-cyan-100 text-cyan-800 dark:bg-cyan-900/30 dark:text-cyan-400">Établissement</span>
+                                                    {% elseif centre == 'cg_formation' %}
+                                                        <span class="inline-block px-2.5 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">Formation</span>
+                                                    {% elseif centre == 'cg_parcours' %}
+                                                        <span class="inline-block px-2.5 py-1 text-xs font-semibold rounded-full bg-slate-200 text-slate-800 dark:bg-slate-700 dark:text-slate-200">Parcours</span>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </div>
+                                        {% else %}
+                                            <span class="text-slate-500 dark:text-slate-400 italic">Tous les centres</span>
+                                        {% endif %}
+                                    </td>
+                                    <td class="px-4 py-3 align-middle">
+                                        <div class="flex justify-end gap-2">
+                                            {% set previewUrl = previewUrls[help.id] ?? null %}
+                                            {% if previewUrl %}
+                                                <a href="{{ previewUrl }}"
+                                                   class="inline-flex items-center justify-center h-9 w-9 rounded-lg border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 transition"
+                                                   title="Voir la page">
+                                                    <twig:UX:Icon name="wordpress:external" class="h-5 w-5" />
+                                                </a>
+                                            {% else %}
+                                                <button type="button"
+                                                        class="inline-flex items-center justify-center h-9 w-9 rounded-lg border border-slate-300 bg-slate-100 text-slate-400 cursor-not-allowed dark:border-slate-600 dark:bg-slate-700 dark:text-slate-500"
+                                                        title="Route avec paramètres obligatoires : aperçu direct indisponible"
+                                                        disabled>
+                                                    <twig:UX:Icon name="wordpress:external" class="h-5 w-5" />
+                                                </button>
+                                            {% endif %}
+
+                                            <a href="{{ path('app_help_edit', {'id': help.id}) }}"
+                                               class="inline-flex items-center justify-center h-9 w-9 rounded-lg border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 transition"
+                                               title="Modifier le contenu de cette aide">
+                                                <twig:UX:Icon name="icon:edit" class="h-5 w-5" />
+                                            </a>
+
+                                            <form method="post" action="{{ path('app_help_delete', {'id': help.id}) }}" onsubmit="return confirm('Vraiment supprimer cette aide ?');" class="inline">
+                                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ help.id) }}">
+                                                <button type="submit"
+                                                        class="inline-flex items-center justify-center h-9 w-9 rounded-lg border border-slate-300 bg-white text-red-700 hover:bg-red-50 dark:border-slate-600 dark:bg-slate-800 dark:text-red-400 dark:hover:bg-red-900/20 transition"
+                                                        title="Supprimer définitivement cette aide">
+                                                    <twig:UX:Icon name="boxicons:trash" class="h-5 w-5" />
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td colspan="5" class="px-4 py-8 text-center text-slate-500 dark:text-slate-400">Aucune aide configurée pour le moment.</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal pour la galerie d'images -->
+    <div id="helpImagesModal" class="hidden fixed inset-0 z-50 overflow-y-auto">
+        <div class="flex items-center justify-center min-h-screen px-4">
+            <!-- Backdrop -->
+            <div class="fixed inset-0 bg-black/50 transition-opacity" onclick="closeHelpImagesModal()"></div>
+
+            <!-- Modal content -->
+            <div class="relative bg-white dark:bg-slate-900 rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+                <!-- Modal header -->
+                <div class="sticky top-0 flex justify-between items-center px-6 py-4 border-b border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900">
+                    <h2 class="text-xl font-bold text-slate-900 dark:text-slate-50 flex items-center gap-3">
+                        <twig:UX:Icon name="mdi:image-multiple-outline" class="h-6 w-6" />
+                        Galerie d'images des aides
+                    </h2>
+                    <button type="button"
+                            class="text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-300"
+                            onclick="closeHelpImagesModal()"
+                            aria-label="Fermer">
+                        <twig:UX:Icon name="basil:cross-solid" class="h-6 w-6" />
+                    </button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="px-6 py-4">
+                    {# Composant de gestion des images #}
+                    {{ component('help_image_manager', { showModal: false, editorTextarea: '' }) }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleHelpImagesModal() {
+            const modal = document.getElementById('helpImagesModal');
+            modal.classList.toggle('hidden');
+            if (!modal.classList.contains('hidden')) {
+                loadImages();
+            }
+        }
+
+        function closeHelpImagesModal() {
+            const modal = document.getElementById('helpImagesModal');
+            modal.classList.add('hidden');
+        }
+
+        // Close modal on Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeHelpImagesModal();
+            }
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block header %}{{ faq.id ? 'Modifier' : 'Créer' }} une question FAQ{% endblock %}
+
+{% block content %}
+    <div class="py-4">
+        <div class="mb-6">
+            <h1 class="text-3xl font-bold text-slate-900 dark:text-slate-50 flex items-center gap-3">
+                <twig:UX:Icon name="icon:question" class="h-8 w-8 text-blue-600 dark:text-blue-400" />
+                {{ faq.id ? 'Modifier la question' : 'Nouvelle question' }}
+            </h1>
+        </div>
+
+        <div class="rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-900 p-6">
+            {{ component('faq_editor', { initialFormData: faq }) }}
+        </div>
+    </div>
+
+    <script src="/js/editor_helpers.js"></script>
+{% endblock %}
+
+{% block breadcrumb %}
+    {{ include('communs/_breadcrumb.html.twig', {liens:[
+        {
+            href:path('app_faq_index'),
+            title: 'FAQ',
+        },
+        {
+            href:'',
+            title: faq.id ? 'Modifier' : 'Créer',
+        }
+    ]}) }}
+{% endblock %}

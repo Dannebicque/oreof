@@ -33,13 +33,28 @@
       })()
     </script>
     <link rel="preconnect" href="https://fonts.gstatic.com"/>
+    <style>
+        .markdown-body img, .markdown-body .ratio {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+        }
+        @media (min-width: 992px) {
+            .markdown-body img, .markdown-body .ratio {
+                max-width: 60%;
+            }
+            #helpOffcanvas .markdown-body img, #helpOffcanvas .markdown-body .ratio {
+                max-width: 100%;
+            }
+        }
+        .markdown-body iframe {
+            border-radius: 4px;
+        }
+    </style>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap"
           rel="stylesheet"/>
     {% block stylesheets %}
         {{ encore_entry_link_tags('app') }}
-        {% block legacy_stylesheets %}
-            {#                        {{ encore_entry_link_tags('legacy') }} #}
-        {% endblock %}
     {% endblock %}
 
     {% block javascripts %}
@@ -51,7 +66,8 @@
     {% endblock %}
 </head>
 <body
-        data-controller="modalturbo"
+    class="min-h-screen"
+    data-controller="modalturbo"
 >
 <!-- toast Tailwindcss-->
 {# todo: peut être boucler sur les flashmessage à la fin ? #}
@@ -60,7 +76,7 @@
 
 
 <!-- Content Container Start -->
-<div id="root">
+<div id="root" class="flex min-h-screen flex-col">
 
 
     <!-- Nav Content Start -->
@@ -387,6 +403,12 @@
                                                 <li><a href="{{ path('app_config_email') }}"
                                                        class="text-sm text-gray-700 hover:text-indigo-600">{{ 'menu.config.config_emails'|trans({}, 'menu') }}</a>
                                                 </li>
+                                                <li><a href="{{ path('app_help_index') }}"
+                                                       class="text-sm text-gray-700 hover:text-indigo-600">{{ 'menu.config.help'|trans({}, 'menu') }}</a>
+                                                </li>      
+                                                <li><a href="{{ path('app_faq_index') }}"
+                                                       class="text-sm text-gray-700 hover:text-indigo-600">{{ 'menu.config.faq'|trans({}, 'menu') }}</a>
+                                                </li>                                                                                          
                                             </ul>
                                         </div>
                                         <div class="bg-gray-50 p-6 rounded-xl">
@@ -589,20 +611,15 @@
             </section>
         </div>
     </div>
-    <main>
-        <!-- messages flash -->
+    <main class="flex-1">
+        <!-- messages flash (Tailwind) -->
         {# read and display all flash messages #}
         {% for label, messages in app.flashes %}
             {% for message in messages %}
-                <div class="toast position-fixed align-items-center top-0 end-0 m-3 bg-{{ label }} border-0" style="z-index:
-                2000">
-                    <div class="d-flex">
-                        <div class="toast-body">
-                            <p class="text-white"> {{ message }}</p>
-                        </div>
-                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
-                                aria-label="Close"></button>
-                    </div>
+                {% set bgClass = label == 'info' ? 'bg-indigo-600' : label == 'success' ? 'bg-green-600' : label == 'warning' ? 'bg-yellow-500' : label == 'danger' ? 'bg-red-600' : 'bg-gray-600' %}
+                <div class="fixed top-4 right-4 z-50 max-w-[28rem] flex items-start space-x-3 p-3 rounded-lg shadow-lg text-white {{ bgClass }}" role="status">
+                    <div class="flex-1 text-sm">{{ message }}</div>
+                    <button type="button" class="ml-2 text-white opacity-80 hover:opacity-100" aria-label="Close" onclick="this.closest('[role=\'status\']').remove()">&times;</button>
                 </div>
             {% endfor %}
         {% endfor %}
@@ -618,47 +635,64 @@
     <!-- Main Content End -->
 
     <!-- Footer Content Start -->
-    <footer class="mt-2">
+    <footer class="mt-auto">
         <div class="footer-content border-t border-slate-200/80 bg-white/90 backdrop-blur-sm dark:border-slate-700 dark:bg-slate-900/90">
             <div class="mx-auto w-full px-4 py-4 sm:px-6 lg:px-8">
-                <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-                    <div class="space-y-1">
+                <div class="grid gap-4 lg:grid-cols-3 lg:items-center">
+                    <div class="space-y-1 lg:justify-self-start">
                         <p class="text-sm font-semibold text-slate-700 dark:text-slate-200">ORéOF</p>
-                        <p class="text-xs text-slate-500 dark:text-slate-400">&copy; 2023 David Annebicque // Emeline
+                        <p class="text-xs text-slate-500 dark:text-slate-400">&copy; {{ 'now'|date('Y') }} David Annebicque // Emeline
                             Lang-Lannoy - version {{ user_data.version }}</p>
                     </div>
 
-                    <div class="flex flex-wrap items-center gap-2">
-                        <a href="{{ path('app_usage_donnees') }}"
-                           class="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-600 transition hover:border-slate-300 hover:text-slate-900 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:border-slate-500"
-                           data-turbo="true" data-action="click->modalturbo#open" title="Usage des données">
-                            <twig:UX:Icon name="icon:question" class="h-4 w-4"/>
-                            Usage des données
-                        </a>
-                        {#                        <button type="button" #}
-                        {#                                class="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-600 transition hover:border-slate-300 hover:text-slate-900 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:border-slate-500" #}
-                        {#                                data-bs-toggle="modal" #}
-                        {#                                data-bs-target="#modalUsageDonnees"> #}
-                        {#                           #}
-                        {#                        </button> #}
-                        <a href="{{ path('app_document') }}"
-                           target="_blank"
-                           class="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-600 transition hover:border-slate-300 hover:text-slate-900 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:border-slate-500">
-                            <twig:UX:Icon name="icon:question" class="h-4 w-4"/>
-                            Aides & documents
-                        </a>
-                        <a href="mailto:oreof@univ-reims.fr"
-                           class="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-600 transition hover:border-slate-300 hover:text-slate-900 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:border-slate-500">
-                            <twig:UX:Icon name="icon:envelope" class="h-4 w-4"/>
-                            Contact
-                        </a>
-                        <a href="https://github.com/Dannebicque/oreof"
-                           target="_blank"
-                           class="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-600 transition hover:border-slate-300 hover:text-slate-900 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:border-slate-500">
-                            <twig:UX:Icon name="icon:github" class="h-4 w-4"/>
-                            GitHub
-                        </a>
+                    <div class="flex flex-col items-center gap-2 lg:justify-self-center">
+                        <div class="flex flex-wrap items-center justify-center gap-2">
+                            <a href="{{ path('app_document') }}"
+                               target="_blank"
+                               class="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-600 transition hover:border-slate-300 hover:text-slate-900 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:border-slate-500">
+                                <twig:UX:Icon name="icon:question" class="h-4 w-4"/>
+                                Documents
+                            </a>
+                            <a href="{{ path('app_help') }}"
+                               class="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-600 transition hover:border-slate-300 hover:text-slate-900 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:border-slate-500">
+                                <twig:UX:Icon name="icon:question" class="h-4 w-4"/>
+                                Aide
+                            </a>
+                            <a href="{{ path('app_faq') }}"
+                               class="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-600 transition hover:border-slate-300 hover:text-slate-900 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:border-slate-500">
+                                <twig:UX:Icon name="mynaui:chat-dots" class="h-4 w-4"/>
+                                FAQ
+                            </a>
+                        </div>
+
+                        <div class="flex flex-wrap items-center justify-center gap-2">
+                            <a href="{{ path('app_usage_donnees') }}"
+                               class="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-600 transition hover:border-slate-300 hover:text-slate-900 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:border-slate-500"
+                               data-turbo="true" data-action="click->modalturbo#open" title="Usage des données">
+                                <twig:UX:Icon name="icon:question" class="h-4 w-4"/>
+                                Usage des données
+                            </a>
+                            {#                        <button type="button" #}
+                            {#                                class="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-600 transition hover:border-slate-300 hover:text-slate-900 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:border-slate-500" #}
+                            {#                                data-bs-toggle="modal" #}
+                            {#                                data-bs-target="#modalUsageDonnees"> #}
+                            {#                           #}
+                            {#                        </button> #}
+                            <a href="mailto:oreof@univ-reims.fr"
+                               class="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-600 transition hover:border-slate-300 hover:text-slate-900 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:border-slate-500">
+                                <twig:UX:Icon name="icon:envelope" class="h-4 w-4"/>
+                                Contact
+                            </a>
+                            <a href="https://github.com/Dannebicque/oreof"
+                               target="_blank"
+                               class="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-600 transition hover:border-slate-300 hover:text-slate-900 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:border-slate-500">
+                                <twig:UX:Icon name="icon:github" class="h-4 w-4"/>
+                                GitHub
+                            </a>
+                        </div>
                     </div>
+
+                    <div class="hidden lg:block"></div>
                 </div>
             </div>
         </div>
@@ -746,6 +780,143 @@
 {#    </div> #}
 {# </div> #}
 
+<!-- Modal Image Fullscreen (Tailwind) -->
+<div id="imageFullscreenModal" class="hidden fixed inset-0 z-[100] items-center justify-center bg-black/70 p-4" aria-hidden="true" role="dialog">
+    <div class="relative max-w-[90vw] max-h-[90vh] w-full">
+        <button id="imageFullscreenModalCloseBtn" class="absolute top-4 right-4 text-white text-2xl leading-none" aria-label="Fermer">&times;</button>
+        <div class="flex items-center justify-center">
+            <img id="fullscreenModalImage" src="" alt="Plein écran" class="max-h-[90vh] max-w-full rounded" />
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // Click on markdown images -> open fullscreen modal
+    document.body.addEventListener('click', function(e) {
+        if (e.target.tagName === 'IMG' && e.target.closest('.markdown-body')) {
+            const src = e.target.src;
+            const modalImg = document.getElementById('fullscreenModalImage');
+            const modal = document.getElementById('imageFullscreenModal');
+            if (modalImg && modal) {
+                modalImg.src = src;
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            }
+        }
+    });
+
+    // Close modal handlers
+    const modal = document.getElementById('imageFullscreenModal');
+    const modalClose = document.getElementById('imageFullscreenModalCloseBtn');
+    if (modal) {
+        modal.addEventListener('click', (ev) => {
+            if (ev.target === modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+                const modalImg = document.getElementById('fullscreenModalImage');
+                if (modalImg) modalImg.src = '';
+            }
+        });
+    }
+    if (modalClose) {
+        modalClose.addEventListener('click', () => {
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+                const modalImg = document.getElementById('fullscreenModalImage');
+                if (modalImg) modalImg.src = '';
+            }
+        });
+    }
+
+    // Simple zoom-ready helper for markdown images
+    const applyZoomReady = () => {
+        const imgs = document.querySelectorAll('.markdown-body img:not(.zoom-ready)');
+        imgs.forEach(img => {
+            img.classList.add('zoom-ready');
+            img.style.cursor = 'zoom-in';
+            img.title = "Cliquez pour agrandir";
+        });
+    };
+    applyZoomReady();
+    const observer = new MutationObserver(() => applyZoomReady());
+    observer.observe(document.body, { childList: true, subtree: true });
+});
+</script>
+
 {% include '_ui/modal_wrapper.html.twig' with { open: false } %}
+
+{# Check de l'existant de la route pour l'aide #}
+{% set current_route = app.request.attributes.get('_route', '') %}
+{% set current_help = get_page_help(current_route) %}
+
+{# N'affiche le FAB / offcanvas que si une aide existe pour la page ou si l'utilisateur est admin #}
+{% if current_help or is_granted('ROLE_ADMIN') %}
+
+<div data-controller="help-drawer" data-action="keydown@window->help-drawer#onEscape">
+
+<!-- Bouton flottant -->
+<div id="help-fab-container" class="fixed bottom-6 right-6 sm:bottom-8 sm:right-8 w-fit z-[80]">
+    <button id="helpFabToggle" class="shadow-lg rounded-full flex items-center justify-center w-14 h-14 text-white focus:outline-none focus:ring-2 focus:ring-offset-2 hover:opacity-95 transition cursor-pointer" type="button" title="Aide de la page" aria-expanded="false" aria-controls="helpOffcanvas" aria-label="Ouvrir l'aide" data-action="click->help-drawer#toggle" style="background-color: {{ current_help ? 'var(--color-primary)' : 'var(--color-warning)' }};">
+        <twig:UX:Icon name="icon:question" class="w-7 h-7 text-white" />
+    </button>
+</div>
+
+<!-- Backdrop -->
+<div id="helpBackdrop" class="fixed inset-0 bg-black/40 hidden z-[60]" aria-hidden="true" data-action="click->help-drawer#onBackdropClick"></div>
+
+<!-- Drawer Latéral (Tailwind) -->
+<aside id="helpOffcanvas" class="fixed right-0 top-0 h-full w-80 sm:w-[28rem] transform translate-x-full transition-transform duration-300 ease-in-out bg-white border-l border-slate-200 shadow-lg z-[70] overflow-auto dark:bg-slate-900 dark:border-slate-700" aria-hidden="true" role="dialog" aria-labelledby="helpOffcanvasTitle">
+
+    <div class="p-4 flex items-center justify-between" style="background-color: {{ current_help ? 'var(--color-primary)' : 'var(--color-warning)' }}; color: white;">
+        <h5 id="helpOffcanvasTitle" class="mb-0 flex items-center gap-2 text-sm font-semibold">
+            <twig:UX:Icon name="icon:question" class="w-4 h-4" />
+            <span>{{ current_help ? current_help.title : 'Aide' }}</span>
+        </h5>
+        <button id="helpOffcanvasClose" class="text-white text-2xl leading-none focus:outline-none cursor-pointer" type="button" aria-label="Fermer l'aide" data-action="click->help-drawer#close">&times;</button>
+    </div>
+
+    <div class="p-4 text-slate-700 dark:text-slate-200">
+        {# BOUTONS D'ADMINISTRATION ET SLUG (Placés en haut, en ligne) #}
+        {% if is_granted('ROLE_ADMIN') %}
+            <div class="flex flex-wrap items-center gap-2 mb-4 pb-3 border-b border-slate-200 dark:border-slate-700">
+                {% if current_help %}
+                    <a href="{{ path('app_help_edit', {'id': current_help.id}) }}" class="inline-flex items-center gap-2 px-2 py-1.5 border rounded text-sm border-indigo-200 text-indigo-600 dark:border-indigo-800 dark:text-indigo-300">
+                        <twig:UX:Icon name="mingcute:pencil-line" class="w-4 h-4" /> <span>Modifier</span>
+                    </a>
+                {% else %}
+                    <a href="{{ path('app_help_new', {'route': current_route}) }}" class="inline-flex items-center gap-2 px-2 py-1.5 border rounded text-sm border-green-200 text-green-600 dark:border-green-800 dark:text-green-300">
+                        <twig:UX:Icon name="ph:plus-light" class="w-4 h-4" /> <span>Créer</span>
+                    </a>
+                {% endif %}
+
+                <a href="{{ path('app_help_index') }}" class="inline-flex items-center gap-2 px-2 py-1.5 border rounded text-sm border-amber-200 text-amber-600 dark:border-amber-800 dark:text-amber-300">
+                    <twig:UX:Icon name="material-symbols:list-rounded" class="w-4 h-4" /> <span>Gérer</span>
+                </a>
+
+                <code class="bg-gray-100 text-gray-800 px-2 py-1 rounded border shadow-sm ml-2 text-sm dark:bg-slate-800 dark:text-slate-200 dark:border-slate-600">{{ current_route }}</code>
+            </div>
+        {% endif %}
+
+        {# CONTENU DE L'AIDE POUR TOUS #}
+        <div>
+            {% if current_help %}
+                <div class="markdown-body app-help-markdown px-2">
+                    {{ current_help.content|markdown_to_html|parse_embeds }}
+                </div>
+            {% else %}
+                <div class="bg-white/60 border border-slate-200 p-4 rounded text-center mt-2 dark:bg-slate-800/70 dark:border-slate-700">
+                    <twig:UX:Icon name="ph:smiley-sad-light" class="w-10 h-10 mb-3 text-slate-500 mx-auto" />
+                    <p class="mb-0 text-slate-500 dark:text-slate-400">Aucune aide n'est actuellement disponible pour cette page.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</aside>
+
+</div>
+
+{% endif %}
 </body>
 </html>
