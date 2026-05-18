@@ -68,11 +68,10 @@ class BadgeDpeExtension extends AbstractExtension
             $texte .= '<li>' . $erreur . '</li>';
         }
         $texte .= '</ul>';
-        return '<i class="fal fa-question-circle ms-1"
+        return '<twig:UX:Icon name="icon:question:bold" class="h-4 w-4"
                    data-controller="tooltip"
-                   data-tooltip-placement-value="bottom"
                    aria-label="' . $texte . '"
-                   data-bs-original-title="' . $texte . '"></i>';
+                   title="' . $texte . '"></twig:UX:Icon>';
     }
 
     public function badgeEc(array $etatsEc): string

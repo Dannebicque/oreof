@@ -1,0 +1,65 @@
+{% import 'typeDiplome/licence/mccc/_form_fields.html.twig' as fields %}
+
+<h3 class="mb-3 text-lg font-semibold text-slate-900">1ᵉ Session</h3>
+<input type="hidden" value="cc" name="type_cc">
+<div class="space-y-3">
+    <div class="grid grid-cols-1 gap-3 md:grid-cols-12">
+        <div class="md:col-span-4">
+            <strong class="text-slate-800">Contrôle continu</strong>
+        </div>
+        <div class="md:col-span-4">
+            {{ fields.label('pourcentage_s1_cc', 'Pourcentage') }}
+            {{ fields.input_with_suffix('pourcentage_s1_cc', 'pourcentage_s1_cc', '50', '%', 'text', true, '', 'block w-full rounded-l-sm border-0 bg-slate-50 p-2 font-bold text-slate-700') }}
+            {{ fields.help('mccc_licence.helps.cc.pourcentage_s1_et.help') }}
+        </div>
+        <div class="md:col-span-4">
+            {{ fields.label('typeEpreuve_s1_cc', "Nb d'épreuve(s)") }}
+            {{ fields.input('typeEpreuve_s1_cc', 'typeEpreuve_s1_cc', '2 épreuves', 'text', true, '', 'block w-full rounded-sm border border-slate-200 bg-slate-50 p-2 font-bold text-slate-700') }}
+            {{ fields.help('mccc_licence.helps.cc.nbepreuve_s1_cc.help') }}
+
+        </div>
+        <div class="hidden md:col-span-4 md:block"></div>
+        <div class="md:col-span-4">
+            {{ fields.checkbox(
+                'cc_has_tp',
+                'cc_has_tp',
+                'mccc.licence.labels.cc_has_tp'|trans({}, 'form'),
+                mcccs[1]['cc'][1].options is defined and mcccs[1]['cc'][1].options.cc_has_tp is defined and mcccs[1]['cc'][1].options.cc_has_tp == 'on',
+                stimulus_action('mccc--licence', 'ccHasTp', 'change')
+            ) }}
+            {{ fields.help('mccc.licence.helps.cc_has_tp') }}
+        </div>
+        <div class="md:col-span-4">
+            <div id="ccHasTpBlock" class="{% if mcccs[1]['cc'][1].options is defined and mcccs[1]['cc'][1].options.cc_has_tp is defined and mcccs[1]['cc'][1].options.cc_has_tp == "on" %}d-block{% else %}d-none{% endif %}">
+                {{ fields.label('cc_has_tp_pourcentage', 'mccc_licence.labels.cc.cc_has_tp_pourcentage'|trans({}, 'form')) }}
+                {{ fields.input_with_suffix('cc_has_tp_pourcentage', 'cc_has_tp_pourcentage', '50', '%', 'text', true, '', 'block w-full rounded-l-sm border-0 bg-slate-50 p-2 font-bold text-slate-700') }}
+                {{ fields.help('mccc_licence.helps.cc.cc_has_tp_pourcentage.help') }}
+            </div>
+        </div>
+    </div>
+</div>
+<h3 class="mb-3 mt-4 text-lg font-semibold text-slate-900">2ᵉ Session</h3>
+<div id="epreuves_s2_ct" class="space-y-3">
+    {% if mcccs[2]['et'] is defined %}
+        {% for i in 1..mcccs[2]['et']|length %}
+            {{ include('typeDiplome/licence/mccc/_secondeChance.html.twig', {index:i}) }}
+        {% else %}
+            {{ include('typeDiplome/licence/mccc/_secondeChance.html.twig',{index:1}) }}
+        {% endfor %}
+    {% else %}
+        {{ include('typeDiplome/licence/mccc/_secondeChance.html.twig',{index:1}) }}
+    {% endif %}
+</div>
+
+<twig:Button
+        variant="info"
+        :soft="false"
+        icon="icon:add"
+        label="Ajouter une épreuve pour la 2e session"
+        extraClass="synchro-mccc mb-3"
+        dataAction="click->mccc--licence#addEpreuveSecondeSession"
+/>
+
+<div class="hidden mt-2 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700" {{ stimulus_target('mccc--licence', 'zoneErreur') }}>
+
+</div>

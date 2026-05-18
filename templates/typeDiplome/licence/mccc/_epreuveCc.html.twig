@@ -1,0 +1,39 @@
+{% import 'typeDiplome/licence/mccc/_form_fields.html.twig' as fields %}
+
+<div class="epreuve_cc_autre grid grid-cols-1 gap-3 rounded-lg border border-slate-200 bg-white p-4 md:grid-cols-12">
+    <div class="md:col-span-4">
+        <strong class="text-slate-800">Contrôle continu N°{{ index }}</strong>
+    </div>
+    <div class="md:col-span-4">
+        {{ fields.label('pourcentage_s1_cc' ~ index, 'Pourcentage') }}
+        {{ fields.input_with_suffix(
+            'pourcentage_s1_cc' ~ index,
+            'pourcentage_s1_cc' ~ index,
+            mcccs[1]['cc'][index] is defined ? (mcccs[1]['cc'][index].pourcentage is defined ? mcccs[1]['cc'][index].pourcentage : '--') : '50'
+        ) }}
+        {{ fields.help('mccc_licence.helps.cc.pourcentage_s1_et.help') }}
+    </div>
+    <div class="md:col-span-4">
+        {{ fields.checkbox(
+            'cc_has_tp_s1_cc' ~ index,
+            'cc_has_tp_s1_cc' ~ index,
+            'mccc.licence.labels.cc_has_tp'|trans({}, 'form'),
+            mcccs[1]['cc'][index].options is defined and mcccs[1]['cc'][index].options.cc_has_tp is defined and mcccs[1]['cc'][index].options.cc_has_tp == 'on',
+            ''
+        ) }}
+        {{ fields.help( 'mccc.licence.helps.cc_has_tp') }}
+    </div>
+    {% if btn == true %}
+        <div class="hidden md:col-span-8 md:block"></div>
+        <div class="md:col-span-4 md:pt-2">
+            <twig:Button
+                    variant="danger"
+                    :soft="false"
+                    icon="icon:delete"
+                    tooltip="Supprimer"
+                    extraClass="synchro-mccc h-9 w-9 px-0"
+                    dataAction="click->mccc--licence#removeEpreuveCcAutre"
+            />
+    </div>
+{% endif %}
+</div>

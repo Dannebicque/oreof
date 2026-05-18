@@ -28,6 +28,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
+//todo: a déplacer ou centraliser comme type de diplome pour les MCCC plus génériques
 class LicenceController extends BaseController
 {
 
@@ -139,8 +140,10 @@ class LicenceController extends BaseController
             $entityManager->refresh($elementConstitutif);
         }
 
+        $folderTypeDiplome = 'licence'; //$typeDiplomeHandler->getTemplateFolder();
         if ($disabled === true) {
             $folder = 'mccc-non-editable';
+
         } else {
             $folder = 'mccc';
         }
@@ -150,40 +153,40 @@ class LicenceController extends BaseController
                 if ($typeDiplome->getLibelleCourt() !== 'L') {
 
                     //seul cas particulier, pour les autres mêmes formulaires
-                    return $this->render('typeDiplome/'.$folder.'/licence/_cc_autres_diplomes.html.twig', [
+                    return $this->render('typeDiplome/' . $folderTypeDiplome . '/' . $folder . '/_cc_autres_diplomes.html.twig', [
                         'mcccs' => $getElement->getMcccsFromFicheMatiere($typeDiplomeHandler),
                         'typeEpreuves' => $typeEpreuves,
                         'elementConstitutif' => $elementConstitutif,
                     ]);
                 }
 
-                return $this->render('typeDiplome/'.$folder.'/licence/_cc.html.twig', [
+                return $this->render('typeDiplome/' . $folderTypeDiplome . '/' . $folder . '/_cc.html.twig', [
                     'mcccs' => $getElement->getMcccsFromFicheMatiere($typeDiplomeHandler),
                     'typeEpreuves' => $typeEpreuves,
                     'elementConstitutif' => $elementConstitutif,
                 ]);
 
             case 'cci':
-                return $this->render('typeDiplome/'.$folder.'/licence/_cci.html.twig', [
+                return $this->render('typeDiplome/' . $folderTypeDiplome . '/' . $folder . '/_cci.html.twig', [
                     'mcccs' => $getElement->getMcccsFromFicheMatiere($typeDiplomeHandler),
                     'typeEpreuves' => $typeEpreuves,
                     'elementConstitutif' => $elementConstitutif,
                 ]);
             case 'cc_ct':
-                return $this->render('typeDiplome/'.$folder.'/licence/_cc_ct.html.twig', [
+                return $this->render('typeDiplome/' . $folderTypeDiplome . '/' . $folder . '/_cc_ct.html.twig', [
                     'mcccs' => $getElement->getMcccsFromFicheMatiere($typeDiplomeHandler),
                     'typeEpreuves' => $typeEpreuves,
                     'elementConstitutif' => $elementConstitutif,
                 ]);
             case 'ct':
-                return $this->render('typeDiplome/'.$folder.'/licence/_ct.html.twig', [
+                return $this->render('typeDiplome/' . $folderTypeDiplome . '/' . $folder . '/_ct.html.twig', [
                     'mcccs' => $getElement->getMcccsFromFicheMatiere($typeDiplomeHandler),
                     'typeEpreuves' => $typeEpreuves,
                     'elementConstitutif' => $elementConstitutif,
                 ]);
         }
 
-        return $this->render('typeDiplome/mccc/licence/_vide.html.twig');
+        return $this->render('typeDiplome/' . $folderTypeDiplome . '/' . $folder . '/_vide.html.twig');
     }
 
 

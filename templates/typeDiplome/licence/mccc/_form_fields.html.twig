@@ -1,0 +1,73 @@
+{% macro label(id, text) %}
+    <label for="{{ id }}" class="mb-1 block text-[12px] font-black uppercase text-slate-500">
+        {{ text }}
+    </label>
+{% endmacro %}
+
+{% macro help(helpKey = '', helpDomain = 'help') %}
+    {% if helpKey is not empty %}
+        <p class="text-[11px] text-slate-400 italic mt-1 pl-1 flex items-start gap-2">
+            <span class="shrink-0 w-5 h-5 bg-slate-200 text-slate-500 flex items-center justify-center text-[10px] rounded-full">
+                <twig:UX:Icon name="icon:info"/>
+            </span>
+            <span>{{ helpKey|trans({}, helpDomain)|raw }}</span>
+        </p>
+    {% endif %}
+{% endmacro %}
+
+{% macro input_with_suffix(id, name, value = '', suffix = '%', type = 'text', disabled = false, actionAttr = '', inputClass = 'synchro-mccc block w-full rounded-l-sm border-0 bg-slate-50 p-2 font-bold text-slate-700') %}
+    <div class="flex rounded-sm border border-slate-200 bg-white">
+        <input type="{{ type }}"
+               id="{{ id }}"
+               name="{{ name }}"
+               class="{{ inputClass }}"
+               {% if disabled %}disabled{% endif %}
+                {% if value is not same as('') and value is not null %}value="{{ value }}"{% endif %}
+                {{ actionAttr|raw }}
+        >
+        <span class="inline-flex items-center rounded-r-sm border-l border-slate-200 bg-slate-100 px-3 text-sm text-slate-600">{{ suffix }}</span>
+    </div>
+{% endmacro %}
+
+{% macro input(id, name, value = '', type = 'text', disabled = false, actionAttr = '', inputClass = 'synchro-mccc block w-full rounded-sm border border-slate-200 bg-slate-50 p-2 font-bold text-slate-700') %}
+    <input type="{{ type }}"
+           id="{{ id }}"
+           name="{{ name }}"
+           class="{{ inputClass }}"
+           {% if disabled %}disabled{% endif %}
+            {% if value is not same as('') and value is not null %}value="{{ value }}"{% endif %}
+            {{ actionAttr|raw }}
+    >
+{% endmacro %}
+
+{% macro checkbox(id, name, label, checked = false, actionAttr = '', helpText = '') %}
+    <div class="mb-2 flex items-start gap-2">
+        <input class="synchro-mccc mt-0.5 h-4 w-4 rounded border-gray-300 text-cyan-600 focus:ring-cyan-500"
+               type="checkbox"
+               id="{{ id }}"
+               name="{{ name }}"
+               {% if checked %}checked{% endif %}
+                {{ actionAttr|raw }}
+        >
+        <label class="text-sm font-medium text-gray-700" for="{{ id }}">
+            {{ label }}
+        </label>
+    </div>
+{% endmacro %}
+
+{% macro type_epreuve_select(id, name, options, selectedId = null, actionAttr = '', selectClass = 'synchro-mccc block w-full appearance-none rounded-sm border border-slate-200 bg-slate-50 p-4 font-semibold text-slate-700') %}
+    <select id="{{ id }}"
+            name="{{ name }}"
+            class="{{ selectClass }}"
+            {{ actionAttr|raw }}>
+        <option value="" data-has-justification="false">Choisir</option>
+        {% for typeE in options %}
+            <option value="{{ typeE.id }}"
+                    {% if typeE.hasDuree is defined %}data-hasduree="{{ typeE.hasDuree }}"{% endif %}
+                    {% if typeE.hasJustification is defined %}data-has-justification="{{ typeE.hasJustification ? 'true' : 'false' }}"{% endif %}
+                    {% if selectedId is not null and selectedId == typeE.id %}selected{% endif %}
+            >{{ typeE.display }}</option>
+        {% endfor %}
+    </select>
+{% endmacro %}
+
