@@ -48,6 +48,7 @@ ux_icons:
     icon:check: 'ph:check-bold'
     icon:check-circle: 'ph:check-circle-bold'
     icon:close: 'ph:x-light'
+    icon:bug: 'ph:bug-light'
     icon:warning: 'ph:warning-light'
     icon:info: 'ph:info-light'
     icon:success: 'ph:check-circle-light'
@@ -68,6 +69,8 @@ ux_icons:
     icon:phone: 'ph:phone-light'
     icon:mail: 'ph:envelope-light'
     icon:link: 'ph:link-light'
+    icon:comment: 'ph:chat-light'
+    icon:comments: 'ph:chats-light'
 
     # Métier / navigation ORéOF
     icon:school: 'ph:student-light'

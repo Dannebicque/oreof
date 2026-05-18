@@ -1,75 +1,72 @@
-<ul class="list-unstyled list-inline text-center menu-icons">
-    <li class="list-inline-item">
+<ul class="flex items-center space-x-2">
+    <li>
         <a href="{{ path('app_search') }}"
            title="Effectuer une recherche"
+           data-bs-toggle="tooltip"
+           data-bs-placement="bottom"
+           aria-label="Rechercher"
+           class="p-2 rounded-full text-gray-600 hover:bg-gray-100 transition inline-flex items-center justify-center"
         >
-            <i class="fal fa-magnifying-glass icon"></i>
+            <twig:UX:Icon name="icon:search" class="w-5 h-5"/>
         </a>
     </li>
-    <li class="list-inline-item">
+
+    <li>
         <a href="{{ path('app_commentaire') }}"
            title="Mes commentaires"
+           data-bs-toggle="tooltip"
+           data-bs-placement="bottom"
+           aria-label="Mes commentaires"
+           class="p-2 rounded-full text-gray-600 hover:bg-gray-100 transition inline-flex items-center justify-center"
         >
-            <i class="fas fa-comment"></i>
+            <twig:UX:Icon name="icon:comment" class="w-5 h-5"/>
         </a>
     </li>
+
     {% if is_granted('ROLE_ADMIN') %}
-        <li class="list-inline-item">
-            {% block contact %}
-                <a href="#"
-                        {{ stimulus_controller('modal', {
-                            size: 'large',
-                            modalTitle: 'Contacter',
-                            right: true,
-                            modalUrl: path('app_ses_contact', {formation: this.formation != null ? this.formation.id : '', parcours: this.parcours != null ? this.parcours.id : ''}) }) }}
-                   data-action="click->modal#openModal"
-                   data-size="lg"
-                   data-bs-toggle="tooltip"
-                   data-bs-placement="bottom"
-                   title="Contacter"
-                >
-                    <i class="fas fa-comments"></i>
-                </a>
-            {% endblock %}
-        </li>
+        {# bouton contacter supprimé #}
     {% endif %}
-    <li class="list-inline-item">
-        <a
-                href="#"
-                {{ stimulus_controller('modal', {
-                    size: 'lg',
-                    modalTitle: 'Signaler un bug',
-                    modalUrl: path('app_bug_report_modal', {
-                        formation: formation is defined and formation != null ? formation.id : '',
-                        parcours: parcours is defined and parcours != null ? parcours.id : '',
-                        page: app.request.uri
-                    })
-                }) }}
-                data-action="click->modal#openModal"
-                data-bs-toggle="tooltip"
-                data-bs-placement="bottom"
-                title="Signaler un bug"
+
+    <li>
+        <a href="#"
+           {{ stimulus_controller('modal', {
+                size: 'lg',
+                modalTitle: 'Signaler un bug',
+                modalUrl: path('app_bug_report_modal', {
+                    formation: formation is defined and formation != null ? formation.id : '',
+                    parcours: parcours is defined and parcours != null ? parcours.id : '',
+                    page: app.request.uri
+                })
+           }) }}
+           data-action="click->modal#openModal"
+           title="Signaler un bug"
+           aria-label="Signaler un bug"
+           data-bs-toggle="tooltip"
+           data-bs-placement="bottom"
+           class="p-2 rounded-full text-gray-600 hover:bg-gray-100 transition inline-flex items-center justify-center"
         >
-            <i class="fal fa-bug"></i>
+            <twig:UX:Icon name="icon:bug" class="w-5 h-5"/>
         </a>
     </li>
-    <li class="list-inline-item {% if computed.notifsNonLu > 0 %}new-notif{% endif %}" id="indicNotifBtn">
-        <a
-                href="#"
-                class="notification-button"
-                {{ stimulus_controller('modal', {
-                    size: 'large',
-                    modalTitle: 'Notifications',
-                    right: true,
-                    modalUrl: path('app_notification_liste_user') }) }}
-                data-action="click->modal#openModal"
+
+    <li>
+        <a href="#"
+           class="relative p-2 rounded-full text-gray-600 hover:bg-gray-100 transition inline-flex items-center justify-center"
+           {{ stimulus_controller('modal', {
+                size: 'large',
+                modalTitle: 'Notifications',
+                right: true,
+                modalUrl: path('app_notification_liste_user') }) }}
+           data-action="click->modal#openModal"
+           aria-label="Notifications"
+           title="Notifications"
+           data-bs-toggle="tooltip"
+           data-bs-placement="bottom"
         >
-            <div class="position-relative d-inline-flex">
-                <i class="fal fa-bell icon"></i>
-                {% if computed.notifsNonLu > 0 %}
-                    <span class="position-absolute notification-dot rounded-xl" id="indicNotif"></span>
-                {% endif %}
-            </div>
+            <twig:UX:Icon name="icon:bell" class="w-5 h-5"/>
+            {% if computed is defined and computed.notifsNonLu is defined and computed.notifsNonLu > 0 %}
+                <span class="absolute -top-0.5 -right-0.5 inline-flex h-3 w-3 rounded-full bg-red-500 ring-2 ring-white"></span>
+            {% endif %}
         </a>
     </li>
 </ul>
