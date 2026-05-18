@@ -1,4 +1,4 @@
-<h2>
+<h2 class="text-2xl font-bold mb-6">
     {% if formation is defined %}
         {{ formation.display }}
     {% elseif ficheMatiere is defined %}
@@ -9,38 +9,35 @@
 </h2>
 
 {% for histo in historiques %}
-    {% if histo.etat == 'valide' %}
-        {% set color='success' %}
-    {% elseif histo.etat == 'refuse' %}
-        {% set color='danger' %}
-    {% elseif histo.etat == 'info' %}
-        {% set color='info' %}
-    {% else %}
-        {% set color='warning' %}
-    {% endif %}
+    {#    {% if #}
+    {#        histo.etape == 'laisserPasser' or #}
+    {#        histo.complements.sousReserveModifications is defined or #}
+    {#        histo.complements.sousReserveConseil is defined %} #}
+    {#        {% set color='amber' %} #}
+    {#        {% set borderColor='border-amber-500' %} #}
+    {#        {% set textColor='text-amber-600' %} #}
+    {#        {% set bgColor='bg-amber-100' %} #}
+    {#    {% endif %} #}
 
-    {% if
-        histo.etape == 'laisserPasser' or
-        histo.complements.sousReserveModifications is defined or
-        histo.complements.sousReserveConseil is defined %}
-        {% set color='warning' %}
-    {% endif %}
-    <div class="row g-0 align-items-center mb-2"
+    <div class="flex items-start gap-3 mb-4 p-4 rounded-lg border {{ borderColor|default('border-slate-200') }}"
             {{ stimulus_controller('historique') }}
             {{ stimulus_target('historique', 'entreeHistorique') }}
     >
-        <div class="col-auto">
-            <div class="border border-{{ color }} sw-5 sh-5 rounded-xl d-flex justify-content-center align-items-center">
-                <i class="fas {{ histo.etape|etapeIcone(type) }} text-{{ color }} fs-3"></i>
-            </div>
+        <div class="shrink-0">
+            <twig:IconBox
+                    :icon="histo.etape|etapeIcone(type)"
+                    :variant="histo|etapeVariant"
+            />
         </div>
-        <div class="col ps-3">
-            <div class="row g-0">
-                <div class="col">
+
+        <div class="grow min-w-0">
+            <div class="flex flex-col lg:flex-row lg:items-start gap-4">
+                <div class="grow">
                     {% if histo|isParcours and type=='formation' %}
-                        <span class="fw-bold">Parcours : {{ histo.parcours.libelle }}</span><br>
+                        <span class="font-bold block mb-2">Parcours : {{ histo.parcours.libelle }}</span>
                     {% endif %}
-                    <div class="d-flex align-items-center lh-1-25">
+
+                    <div class="flex items-center leading-relaxed mb-3">
                         {% if histo.etape == 'change_rf' %}
                             Changement du responsable de formation : {{ histo.complements.ancien }} &rarr; {{ histo.complements.nouveau }}
                         {% elseif histo.etape == 'change_rf_co' %}
@@ -51,101 +48,109 @@
                             {{ ('historique.'~histo.etape|etapeLabel(type))|trans(histo|etapeParams(type), 'process') }}
                         {% endif %}
                     </div>
-                    {% if histo.complements.sousReserveModifications is defined %}
-                        <span class="badge bg-warning ms-2">Sous réserve de modifications</span>
-                    {% endif %}
-                    {% if histo.complements.sousReserveConseil is defined %}
-                        <span class="badge bg-warning ms-2">Sous réserve de validation du conseil</span>
-                    {% endif %}
-                    {% if histo.etat == 'laisserPasser' %}
-                        <span class="badge bg-warning ms-2">Laissez-passer demandé</span>
-                    {% endif %}
-                    {% if histo.etat == 'force_admin' %}
-                        <span class="badge bg-warning ms-2">{{ 'historique.force_admin.badge'|trans({}, 'process') }}</span>
-                    {% endif %}
-                    <p class="text-small">par : {{ histo.user.display }}</p>
-                </div>
-                {% if is_granted('ROLE_ADMIN') %}
-                    <div class="col-auto">
-                        {% if
-                            (histo.etape == 'cfvu' or histo.etape=='conseil' or histo.etape == 'soumis_cfvu' or histo.etape=='soumis_conseil') %}
-                            <button class="btn text-warning"
-                                    type="button"
-                                    {{ stimulus_controller('modal', {
-                                        size: 'lg',
-                                        modalTitle: ('modification.historique.title')|trans({}, 'process'),
-                                        modalUrl: path('app_historique_edit', {
-                                            historique: histo.id
-                                        }) }) }}
-                                    data-action="click->modal#openModal"
-                                    data-controller="tooltip"
-                                    data-tooltip-placement-value="bottom"
 
-                                    aria-label="{{ 'modification.historique'|trans({}, 'process') }}"
-                                    data-bs-original-title="{{ 'modification.historique'|trans({}, 'process') }}"
-                            >
-                                <i class="{{ iconEdit }}"></i>
-                            </button>
+                    <div class="flex flex-wrap gap-2 mb-2">
+                        {% if histo.complements.sousReserveModifications is defined %}
+                            <span class="inline-block px-2.5 py-1 rounded-full text-xs font-medium bg-amber-200 text-amber-800">Sous réserve de modifications</span>
                         {% endif %}
-                        <button class="btn text-danger"
-                                type="button"
-                                data-controller="tooltip"
-                                data-tooltip-placement-value="bottom"
-                                {{ stimulus_action('historique', 'delete', 'click', {
-                                    url: path('app_historique_delete', {historique: histo.id}),
-                                    csrf: csrf_token('delete' ~ histo.id)
-                                }) }}
-                                aria-label="{{ 'supprimer.historique'|trans({}, 'process') }}"
-                                data-bs-original-title="{{ 'supprimer.historique'|trans({}, 'process') }}"
-                        >
-                            <i class="{{ iconDelete }}"></i>
-                        </button>
+                        {% if histo.complements.sousReserveConseil is defined %}
+                            <span class="inline-block px-2.5 py-1 rounded-full text-xs font-medium bg-amber-200 text-amber-800">Sous réserve de validation du conseil</span>
+                        {% endif %}
+                        {% if histo.etat == 'laisserPasser' %}
+                            <span class="inline-block px-2.5 py-1 rounded-full text-xs font-medium bg-amber-200 text-amber-800">Laissez-passer demandé</span>
+                        {% endif %}
+                        {% if histo.etat == 'force_admin' %}
+                            <span class="inline-block px-2.5 py-1 rounded-full text-xs font-medium bg-amber-200 text-amber-800">{{ 'historique.force_admin.badge'|trans({}, 'process') }}</span>
+                        {% endif %}
+                    </div>
+
+                    <p class="text-sm text-gray-600">par : {{ histo.user.display }}</p>
+                </div>
+
+                {% if is_granted('ROLE_ADMIN') %}
+                    <div class="flex gap-2 shrink-0">
+                        {% if histo.etape == 'cfvu' or histo.etape == 'conseil' or histo.etape == 'soumis_cfvu' or histo.etape == 'soumis_conseil' %}
+                            <twig:Button
+                                    variant="warning"
+                                    size="sm"
+                                    tooltip="Modifier l'historique"
+                                    extraClass="px-2"
+                                    dataAction="click->modalturbo#open"
+                                    href="{{ path('app_historique_edit', {
+                                        historique: histo.id
+                                    }) }}"
+                                    icon="icon:edit"
+                            >
+                            </twig:Button>
+                        {% endif %}
+                        {#                        {{ stimulus_action('historique', 'delete', 'click', { #}
+                        {#                            url: path('app_historique_delete', {historique: histo.id}), #}
+                        {#                            csrf: csrf_token('delete' ~ histo.id) #}
+                        {#                        }) }} #}
+                        <twig:Button
+                                variant="danger"
+                                href="{{ path('app_historique_delete', {historique: histo.id}) }}"
+                                size="sm"
+                                tooltip="{{ 'supprimer.historique'|trans({}, 'process') }}"
+                                extraClass="px-2"
+                                icon="icon:delete"
+                                dataAction="click->historique#delete"
+                        ></twig:Button>
                     </div>
                 {% endif %}
-                <div class="col-auto">
-                    <div class="sh-5 d-flex align-items-center">{{ histo.created|date('d/m/Y H:i') }}</div>
-                </div>
 
+                <div class="text-sm text-gray-500 shrink-0 whitespace-nowrap">{{ histo.created|date('d/m/Y H:i') }}</div>
             </div>
+
             {% if histo.commentaire is defined or histo.complements.fichier is defined or (histo.changeRf is defined and histo.changeRf != null) %}
-                <div class="row">
+                <div class="mt-3 pt-3 border-t border-gray-200 space-y-2">
                     {% if histo.changeRf is defined and histo.changeRf != null %}
-                        <div class="col-auto">
-                            <p class="small">
-                                {% if histo.changeRf.typeRf.value == 'RF' %}
-                                    Changement du responsable de formation : {{ histo.changeRf.ancienResponsable != null ? histo.changeRf.ancienResponsable.display : 'Pas de responsable' }} &rarr; {{ histo.changeRf.nouveauResponsable != null ? histo.changeRf.nouveauResponsable.display : 'Pas de responsable' }}
-                                {% elseif histo.changeRf.typeRf.value == 'CORF' %}
-                                    Changement du co-responsable de formation : {{ histo.changeRf.ancienResponsable != null ? histo.changeRf.ancienResponsable.display : 'Pas de co-responsable' }} &rarr; {{ histo.changeRf.nouveauResponsable != null ? histo.changeRf.nouveauResponsable.display : 'Pas de co-responsable' }}
-                                {% else %}
-                                    -
-                                {% endif %}
-                            </p>
-                        </div>
+                        <p class="text-xs text-gray-600">
+                            {% if histo.changeRf.typeRf.value == 'RF' %}
+                                Changement du responsable de formation : {{ histo.changeRf.ancienResponsable != null ? histo.changeRf.ancienResponsable.display : 'Pas de responsable' }} &rarr; {{ histo.changeRf.nouveauResponsable != null ? histo.changeRf.nouveauResponsable.display : 'Pas de responsable' }}
+                            {% elseif histo.changeRf.typeRf.value == 'CORF' %}
+                                Changement du co-responsable de formation : {{ histo.changeRf.ancienResponsable != null ? histo.changeRf.ancienResponsable.display : 'Pas de co-responsable' }} &rarr; {{ histo.changeRf.nouveauResponsable != null ? histo.changeRf.nouveauResponsable.display : 'Pas de co-responsable' }}
+                            {% else %}
+                                -
+                            {% endif %}
+                        </p>
                     {% endif %}
                     {% if histo.commentaire is defined %}
-                        <div class="col-auto">
-                            <p>{{ histo.commentaire|raw }}</p>
+                        <div class="text-sm text-gray-700">
+                            {{ histo.commentaire|raw }}
                         </div>
                     {% endif %}
                     {% if histo.complements.fichier is defined %}
                         {% if histo.etape == 'change_rf' or histo.etape == 'change_co_rf' %}
-                            <div class="col-auto">
-                                <p><a href="{{ asset('uploads/change_rf/pv/'~histo.complements.fichier) }}"
-                                      target="_blank">Voir
-                                        le PV du conseil</a></p>
-                            </div>
+                            <p>
+                                <twig:Button
+                                        href="{{ asset('uploads/change_rf/pv/'~histo.complements.fichier) }}"
+                                        variant="info"
+                                        size="sm"
+                                        icon="icon:download"
+                                        label="Voir le PV du conseil"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        :centered="false"
+                                />
+                            </p>
                         {% else %}
-                            <div class="col-auto">
-                                <p>
-                                    <a href="{{ path('app_upload_download', {context: 'conseils', filename: histo.complements.fichier, originalName: histo.complements.fichier_original|default(histo.complements.fichier)}) }}"
-                                       target="_blank">Voir
-                                        le PV du conseil</a></p>
-                            </div>
+                            <p>
+                                <twig:Button
+                                        href="{{ path('app_upload_download', {context: 'conseils', filename: histo.complements.fichier, originalName: histo.complements.fichier_original|default(histo.complements.fichier)}) }}"
+                                        variant="info"
+                                        size="sm"
+                                        icon="icon:download"
+                                        label="Voir le PV du conseil"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        :centered="false"
+                                />
+                            </p>
                         {% endif %}
                     {% endif %}
                 </div>
             {% endif %}
-
 
         </div>
     </div>

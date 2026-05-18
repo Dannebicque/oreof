@@ -1,42 +1,47 @@
 {% extends 'base.html.twig' %}
 
 {% block content %}
-    <div class="card"
+    <div class="space-y-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-900 sm:p-6"
             {{ stimulus_controller('formation', {
                 url: path('app_formation_api'),
             }) }}
     >
-        <div class="card-body">
+        {{ include('_layout/_section_shell.html.twig', {
+            title_card: 'Créer une nouvelle formation',
+            description_card: 'Renseignez les informations de base de la formation. Vous pourrez ensuite ajouter les parcours associés à cette formation.',
+        }) }}
+        <div>
             {% form_theme form 'communs/form_theme_v2.html.twig' %}
             {{ form_start(form) }}
-            <div class="row">
-                <div class="col-6">{{ form_row(form.typeDiplome) }}</div>
-                <div class="col-6">{{ form_row(form.domaine) }}</div>
-                <div class="col-12">{{ form_row(form.composantePorteuse) }}</div>
+            <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                <div>{{ form_row(form.typeDiplome) }}</div>
+                <div>{{ form_row(form.domaine) }}</div>
+                <div class="md:col-span-2">{{ form_row(form.composantePorteuse) }}</div>
 
-                <div class="col-6">{{ form_row(form.mention) }}</div>
-                <div class="col-6">{{ form_row(form.mentionTexte) }}</div>
+                <div>{{ form_row(form.mention) }}</div>
+                <div>{{ form_row(form.mentionTexte) }}</div>
 
-                <div class="col-6">{{ form_row(form.niveauEntree) }}</div>
-                <div class="col-6">{{ form_row(form.niveauSortie) }}</div>
+                <div>{{ form_row(form.niveauEntree) }}</div>
+                <div>{{ form_row(form.niveauSortie) }}</div>
 
-                <div class="col-4">{{ form_row(form.inRncp) }}</div>
-                <div class="col-4">{{ form_row(form.codeRNCP) }}</div>
-                <div class="col-4">{{ form_row(form.codeMentionApogee) }}</div>
+                <div>{{ form_row(form.inRncp) }}</div>
+                <div>{{ form_row(form.codeRNCP) }}</div>
+                <div class="md:col-span-2">{{ form_row(form.codeMentionApogee) }}</div>
 
-                <div class="col-6">{{ form_row(form.responsableMention) }}</div>
-                <div class="col-6">{{ form_row(form.coResponsable) }}</div>
+                <div>{{ form_row(form.responsableMention) }}</div>
+                <div>{{ form_row(form.coResponsable) }}</div>
 
             </div>
 
-            <twig:Button icon="fal fa-floppy-disk"/>
-            {#            <button class="btn btn-success"> #}
-            {#                <i class="fal fa-floppy-disk"></i> #}
-            {#                Enregistrer #}
-            {#            </button> #}
-
-            {{ component('alerte', {type:"info", message:'tous les champs avec un <span class="text-red">*</span> sont
-obligatoires'}) }}
+            <div class="mt-4">
+                <twig:Button
+                        type="submit"
+                        variant="success"
+                        :soft="false"
+                        icon="icon:save"
+                        label="Enregistrer"
+                />
+            </div>
             {{ form_end(form) }}
         </div>
     </div>
@@ -49,19 +54,20 @@ obligatoires'}) }}
 {% block breadcrumb %}
     {{ include('communs/_breadcrumb.html.twig', {liens:[
         {href: path('app_formation_index'), title: 'Liste des formations'},
+        {title: header_title}
     ]}) }}
 {% endblock %}
 
 {% block bouton_header %}
     {% if is_granted('ROLE_ADMIN') %}
-        <a href="{{ path('app_formation_index') }}"
-           class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
-           data-bs-toggle="tooltip"
-           data-bs-placement="bottom"
-           title="Retour à la liste des formations"
-        >
-            <i class="{{ iconBack }}"></i>
-            <span> Retour à la liste des formations</span>
-        </a>
+        <twig:Button
+                href="{{ path('app_formation_index') }}"
+                variant="success"
+                :outline="true"
+                :soft="false"
+                icon="icon:arrow-left"
+                label="Retour à la liste"
+                tooltip="Retour à la liste"
+        />
     {% endif %}
 {% endblock %}

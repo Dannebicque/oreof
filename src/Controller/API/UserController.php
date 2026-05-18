@@ -7,6 +7,7 @@
  * @lastUpdate 17/03/2023 22:08
  */
 
+/** @deprecated */
 namespace App\Controller\API;
 
 use App\Controller\BaseController;
@@ -18,22 +19,11 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[Route('/api/user')]
+//#[Route('/api/user')]
 class UserController extends BaseController
 {
-    public function __construct(
-        private readonly UserRepository $userRepository,
-    ) {
-    }
-
-    #[Route('/api/user', name: 'api_user_get_user', methods: ['GET'])]
-    #[IsGranted('ROLE_USER')]
-    public function user(Request $request): Response
-    {
-        $user = $this->userRepository->find($request->query->get('id'));
-
-        return $this->render('api/user/_user.html.twig', [
-            'user' => $user,
-        ]);
-    }
+//    public function __construct(
+//        private readonly UserRepository $userRepository,
+//    ) {
+//    }
 }

@@ -10,12 +10,14 @@
 namespace App\Controller;
 
 use App\Classes\Bcc;
+use App\DTO\TranslatableKey;
 use App\Entity\BlocCompetence;
 use App\Entity\Parcours;
 use App\Form\BlocCompetenceType;
 use App\Repository\BlocCompetenceRepository;
 use App\Repository\CompetenceRepository;
 use App\Utils\JsonRequest;
+use App\Utils\TurboStreamResponseFactory;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use JsonException;
@@ -85,6 +87,7 @@ class BlocCompetenceController extends BaseController
      */
     #[Route('/liste/transverse/{parcours}', name: 'app_bloc_competence_liste_transverse', methods: ['GET', 'POST'])]
     public function listeTransverse(
+        TurboStreamResponseFactory $turboStreamResponseFactory,
         Request                  $request,
         BlocCompetenceRepository $blocCompetenceRepository,
         CompetenceRepository     $competenceRepository,
@@ -144,11 +147,15 @@ class BlocCompetenceController extends BaseController
             return $this->json(true);
         }
 
-
-        return $this->render('bloc_competence/_listeTransverse.html.twig', [
-            'bccs' => $blocCompetenceRepository->findBy(['parcours' => null, 'campagneCollecte' => $this->getCampagneCollecte()], ['ordre' => 'ASC']),
-            'parcours' => $parcours,
-        ]);
+        return $turboStreamResponseFactory->streamOpenModalFromTemplates(
+            new TranslatableKey('bloc_competence.liste_transverse.titre'),
+            new TranslatableKey('bloc_competence.liste_transverse.description'),
+            'bloc_competence/_listeTransverse.html.twig',
+            [
+                'bccs' => $blocCompetenceRepository->findBy(['parcours' => null, 'campagneCollecte' => $this->getCampagneCollecte()], ['ordre' => 'ASC']),
+                'parcours' => $parcours,
+            ]
+        );
     }
 
     /**
@@ -157,6 +164,7 @@ class BlocCompetenceController extends BaseController
      */
     #[Route('/new/parcours/{parcours}', name: 'app_bloc_competence_new_parcours', methods: ['GET', 'POST'])]
     public function newParcours(
+        TurboStreamResponseFactory $turboStreamResponseFactory,
         Request                  $request,
         BlocCompetenceRepository $blocCompetenceRepository,
         CompetenceRepository     $competenceRepository,
@@ -205,17 +213,30 @@ class BlocCompetenceController extends BaseController
             $blocCompetence->genereCode();
             $blocCompetenceRepository->save($blocCompetence, true);
 
-            return $this->json(true);
+            return $turboStreamResponseFactory->stream('bloc_competence/turbo/add_bloc_competence_success.stream.html.twig', [
+                'parcours' => $parcours,
+                'toastMessage' => 'Bloc de Compétences créé avec succès',
+                'newEcId' => $blocCompetence->getId(),
+                'competences' => $parcours->getBlocCompetences(),
+            ]);
+
         }
 
-        return $this->render('bloc_competence/new.html.twig', [
-            'bloc_competence' => $blocCompetence,
-            'form' => $form->createView(),
-        ]);
+        return $turboStreamResponseFactory->streamOpenModalFromTemplates(
+            new TranslatableKey('bloc_competence.new.titre'),
+            new TranslatableKey('bloc_competence.new.description'),
+            '_ui/_modal_new_generic.html.twig',
+            [
+                'bloc_competence' => $blocCompetence,
+                'form' => $form->createView(),
+            ],
+            '_ui/_footer_submit_cancel.html.twig',
+        );
     }
 
     #[Route('/{id}/edit', name: 'app_bloc_competence_edit', methods: ['GET', 'POST'])]
     public function edit(
+        TurboStreamResponseFactory $turboStreamResponseFactory,
         Request                  $request,
         BlocCompetence           $blocCompetence,
         BlocCompetenceRepository $blocCompetenceRepository
@@ -231,14 +252,25 @@ class BlocCompetenceController extends BaseController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $blocCompetenceRepository->save($blocCompetence, true);
-
-            return $this->json(true);
+            $parcours = $blocCompetence->getParcours();
+            return $turboStreamResponseFactory->stream('bloc_competence/turbo/add_bloc_competence_success.stream.html.twig', [
+                'parcours' => $parcours,
+                'toastMessage' => 'Bloc de Compétences modifié avec succès',
+                'newEcId' => $blocCompetence->getId(),
+                'competences' => $parcours->getBlocCompetences(),
+            ]);
         }
 
-        return $this->render('bloc_competence/new.html.twig', [
-            'bloc_competence' => $blocCompetence,
-            'form' => $form->createView(),
-        ]);
+        return $turboStreamResponseFactory->streamOpenModalFromTemplates(
+            new TranslatableKey('bloc_competence.edit.titre'),
+            new TranslatableKey('bloc_competence.edit.description'),
+            '_ui/_modal_new_generic.html.twig',
+            [
+                'bloc_competence' => $blocCompetence,
+                'form' => $form->createView(),
+            ],
+            '_ui/_footer_submit_cancel.html.twig',
+        );
     }
 
     /**

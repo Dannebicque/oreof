@@ -1,14 +1,14 @@
 {% set elem = ec.elementConstitutif %}
 <section
         id="ec-{{ elem.id }}"
-        class="bg-white border border-slate-200 rounded-sm shadow-sm overflow-hidden border-l-8 border-indigo-500 mt-2">
+        class="bg-white border border-slate-200 rounded-sm shadow-sm overflow-hidden border-l-8 mt-2">
     <div class="p-2 flex items-center justify-between border-b border-slate-100">
         <div class="flex items-center gap-4">
             <div class="min-w-12 px-2 h-20 bg-indigo-600 text-white rounded-md flex items-center justify-center font-black shadow-lg shadow-indigo-100">
                 {{ elem.code }}
             </div>
             <div>
-                <h4 class="text-sm font-black text-slate-700 max-w-[60ch] break-words whitespace-normal">
+                <h4 class="text-sm font-black text-slate-700 max-w-[60ch] wrap-break-word whitespace-normal">
                     {{ elem.display }} {{ elem.validationStatus|badgeValidationShort(2) }}
                 </h4>
                 <div class="flex mt-2 gap-x-2">

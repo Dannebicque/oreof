@@ -1,0 +1,16 @@
+<div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+    <div class="space-y-1">
+        <h2 class="text-sm font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">
+            {{ title_card }}
+        </h2>
+        <p class="max-w-3xl text-sm text-slate-600 dark:text-slate-300">
+            {{ description_card }}
+        </p>
+    </div>
+
+    {% if badge_card is defined %}
+        <div class="inline-flex items-center rounded-full border border-cyan-200 bg-cyan-50 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-cyan-800 dark:border-cyan-800 dark:bg-cyan-950/30 dark:text-cyan-200">
+            {{ badge_card }}
+        </div>
+    {% endif %}
+</div>

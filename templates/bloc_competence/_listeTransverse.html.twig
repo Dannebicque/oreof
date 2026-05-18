@@ -1,3 +1,4 @@
+{# todo: repasser en tailwindcss + UX #}
 <div {{ stimulus_controller('parcours--bcc') }}
         data-action="parcours--bcc:modalClose@window->base#modalHide"
 >
@@ -32,12 +33,5 @@
                 message: 'fiche_matiere.alerte.no_bcc'|trans({}, 'form')
             }) }}
         {% endfor %}
-
-        <button class="btn btn-success"
-                {{ stimulus_action('parcours--bcc','sauvegardeFormModal', 'click') }}
-        >
-            <i class="fal fa-floppy-disk"></i>
-            Enregistrer
-        </button>
     </form>
 </div>

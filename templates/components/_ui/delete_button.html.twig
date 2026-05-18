@@ -1,0 +1,76 @@
+{% set modalId = id != '' ? 'delete-modal-' ~ id : 'delete-modal-' ~ random() %}
+{% set slotContent %}{% block content %}{% endblock %}{% endset %}
+
+<div class="inline-flex" {{ stimulus_controller('delete-confirm') }}>
+    <twig:Button
+            type="button"
+            :disabled="disabled"
+            :soft="soft"
+            :outline="outline"
+            variant="{{ variant }}"
+            size="{{ size }}"
+            icon="{{ icon }}"
+            label="{{ label }}"
+            tooltip="{{ tooltip }}"
+            dataAction="click->delete-confirm#open"
+            data-delete-confirm-modal-id-value="{{ modalId }}"
+    />
+
+    <div id="{{ modalId }}"
+         class="fixed inset-0 z-70 hidden"
+         data-delete-confirm-target="modal"
+         data-action="keydown.esc@window->delete-confirm#close"
+    >
+        <div class="absolute inset-0 bg-black/50" data-action="click->delete-confirm#close"></div>
+
+        <div class="absolute inset-0 flex items-center justify-center p-4">
+            <div class="w-full max-w-md rounded-xl border border-slate-200 bg-white p-5 shadow-xl">
+                <h3 class="text-base font-semibold text-slate-900">{{ title }}</h3>
+
+                <div class="mt-2 text-sm text-slate-600">
+                    {% if slotContent|trim != '' %}
+                        {{ slotContent|raw }}
+                    {% elseif bodyTemplate != '' %}
+                        {{ include(bodyTemplate, bodyContext) }}
+                    {% else %}
+                        <p>{{ message }}</p>
+                    {% endif %}
+                </div>
+
+                <form method="post" action="{{ url }}" class="mt-4 flex items-center justify-end gap-2">
+                    {% if csrfTokenId != '' %}
+                        <input type="hidden" name="_token" value="{{ csrf_token(csrfTokenId) }}">
+                    {% endif %}
+
+                    {% if method|upper != 'POST' %}
+                        <input type="hidden" name="_method" value="{{ method|upper }}">
+                    {% endif %}
+
+                    {% for key, value in hiddenFields %}
+                        <input type="hidden" name="{{ key }}" value="{{ value }}">
+                    {% endfor %}
+
+                    <twig:Button
+                            type="button"
+                            variant="secondary"
+                            :soft="true"
+                            size="sm"
+                            label="{{ cancelLabel }}"
+                            dataAction="click->delete-confirm#close"
+                    />
+
+                    <twig:Button
+                            type="submit"
+                            variant="danger"
+                            :soft="false"
+                            size="sm"
+                            icon="icon:delete"
+                            label="{{ confirmLabel }}"
+                    />
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+

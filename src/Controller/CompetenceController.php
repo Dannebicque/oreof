@@ -10,11 +10,12 @@
 namespace App\Controller;
 
 use App\Classes\Bcc;
+use App\DTO\TranslatableKey;
 use App\Entity\BlocCompetence;
 use App\Entity\Competence;
 use App\Form\CompetenceType;
 use App\Repository\CompetenceRepository;
-use App\Utils\JsonRequest;
+use App\Utils\TurboStreamResponseFactory;
 use JsonException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,7 +26,12 @@ use Symfony\Component\Routing\Attribute\Route;
 class CompetenceController extends AbstractController
 {
     #[Route('/new/{bcc}', name: 'app_competence_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, CompetenceRepository $competenceRepository, BlocCompetence $bcc): Response
+    public function new(
+        TurboStreamResponseFactory $turboStreamResponseFactory,
+        Request                    $request,
+        CompetenceRepository       $competenceRepository,
+        BlocCompetence             $bcc
+    ): Response
     {
         $competence = new Competence($bcc);
         $form = $this->createForm(
@@ -61,18 +67,34 @@ class CompetenceController extends AbstractController
             $competence->genereCode();
             $competenceRepository->save($competence, true);
 
-            return $this->json(true);
+            return $turboStreamResponseFactory->stream('bloc_competence/turbo/add_competence_success.stream.html.twig', [
+                'parcours' => $bcc->getParcours(),
+                'toastMessage' => 'Compétence ajoutée avec succès',
+                'newEcId' => $competence->getId(),
+                'blocCompetence' => $bcc,
+            ]);
         }
 
-        return $this->render('competence/new.html.twig', [
-            'competence' => $competence,
-            'bcc' => $bcc,
-            'form' => $form->createView(),
-        ]);
+        return $turboStreamResponseFactory->streamOpenModalFromTemplates(
+            new TranslatableKey('competence.new.titre'),
+            new TranslatableKey('competence.new.description'),
+            '_ui/_modal_new_generic.html.twig',
+            [
+                'competence' => $competence,
+                'bcc' => $bcc,
+                'form' => $form->createView(),
+            ],
+            '_ui/_footer_submit_cancel.html.twig',
+        );
     }
 
     #[Route('/{id}/edit', name: 'app_competence_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Competence $competence, CompetenceRepository $competenceRepository): Response
+    public function edit(
+        TurboStreamResponseFactory $turboStreamResponseFactory,
+        Request                    $request,
+        Competence                 $competence,
+        CompetenceRepository       $competenceRepository
+    ): Response
     {
         $form = $this->createForm(
             CompetenceType::class,
@@ -83,18 +105,32 @@ class CompetenceController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $competenceRepository->save($competence, true);
+            $bcc = $competence->getBlocCompetence();
 
-            return $this->json(true);
+            return $turboStreamResponseFactory->stream('bloc_competence/turbo/add_competence_success.stream.html.twig', [
+                'parcours' => $bcc->getParcours(),
+                'toastMessage' => 'Compétence modifiée avec succès',
+                'newEcId' => $competence->getId(),
+                'blocCompetence' => $bcc,
+            ]);
         }
 
-        return $this->render('competence/new.html.twig', [
-            'competence' => $competence,
-            'form' => $form->createView(),
-        ]);
+
+        return $turboStreamResponseFactory->streamOpenModalFromTemplates(
+            new TranslatableKey('competence.edit.titre'),
+            new TranslatableKey('competence.edit.description'),
+            '_ui/_modal_new_generic.html.twig',
+            [
+                'competence' => $competence,
+                'form' => $form->createView(),
+            ],
+            '_ui/_footer_submit_cancel.html.twig',
+        );
     }
 
     #[Route('/{id}/duplicate', name: 'app_competence_duplicate', methods: ['GET'])]
     public function duplicate(
+        TurboStreamResponseFactory $turboStreamResponseFactory,
         CompetenceRepository $competenceRepository,
         Competence $competence
     ): Response {
@@ -104,8 +140,13 @@ class CompetenceController extends AbstractController
         $competenceNew->setOrdre($ordre + 1);
         $competenceNew->genereCode();
         $competenceRepository->save($competenceNew, true);
-
-        return $this->json(true);
+        $bcc = $competence->getBlocCompetence();
+        return $turboStreamResponseFactory->stream('bloc_competence/turbo/add_competence_success.stream.html.twig', [
+            'parcours' => $bcc->getParcours(),
+            'toastMessage' => 'Compétence modifiée avec succès',
+            'newEcId' => $competence->getId(),
+            'blocCompetence' => $bcc,
+        ]);
     }
 
     #[Route('/{id}/deplacer/{sens}', name: 'app_competence_deplacer', methods: ['GET'])]
@@ -122,8 +163,9 @@ class CompetenceController extends AbstractController
     /**
      * @throws JsonException
      */
-    #[Route('/{id}', name: 'app_competence_delete', methods: ['DELETE'])]
+    #[Route('/{id}', name: 'app_competence_delete', methods: ['DELETE', 'POST'])]
     public function delete(
+        TurboStreamResponseFactory $turboStreamResponseFactory,
         Bcc $bcc,
         Request $request,
         Competence $competence,
@@ -131,14 +173,19 @@ class CompetenceController extends AbstractController
     ): Response {
         if ($this->isCsrfTokenValid(
             'delete' . $competence->getId(),
-            JsonRequest::getValueFromRequest($request, 'csrf')
+            $request->request->get('_token')
         )) {
             $bc = $competence->getBlocCompetence();
             $competenceRepository->remove($competence, true);
             $bcc->renumeroteCompetences($bc);
-            return $this->json(true);
+            return $turboStreamResponseFactory->stream('bloc_competence/turbo/add_competence_success.stream.html.twig', [
+                'parcours' => $bc->getParcours(),
+                'toastMessage' => 'Compétence modifiée avec succès',
+                'newEcId' => $competence->getId(),
+                'blocCompetence' => $bc,
+            ]);
         }
 
-        return $this->json(false);
+        return $turboStreamResponseFactory->streamToastError('Erreur lors de la suppression de la compétence');
     }
 }

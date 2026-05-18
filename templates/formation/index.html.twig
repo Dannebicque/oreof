@@ -9,20 +9,11 @@
             }) }}
          data-action="base:refreshListe@window->crud#refreshListe"
     >
-        <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-            <div class="space-y-1">
-                <h2 class="text-sm font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">
-                    Catalogue des formations
-                </h2>
-                <p class="max-w-3xl text-sm text-slate-600 dark:text-slate-300">
-                    Consultez et administrez rapidement les mentions et specialites de l'offre de formation.
-                </p>
-            </div>
-
-            <div class="inline-flex items-center rounded-full border border-cyan-200 bg-cyan-50 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-cyan-800 dark:border-cyan-800 dark:bg-cyan-950/30 dark:text-cyan-200">
-                Details des mentions/specialites
-            </div>
-        </div>
+        {{ include('_layout/_section_shell.html.twig', {
+            title_card: header_title,
+            description_card: 'Consultez et administrez rapidement les mentions et spécialités de l\'offre de formation.',
+            badge_card: 'Détails des mentions/specialites'
+        }) }}
 
         <div class="rounded-xl border border-slate-200 bg-slate-50/60 p-3 dark:border-slate-700 dark:bg-slate-950/30 sm:p-4" {{ stimulus_target('crud', 'liste') }}>
         </div>

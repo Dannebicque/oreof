@@ -371,9 +371,8 @@
                     </button>
                     <div data-navbar-dropdown-target="content"
                          class="hidden absolute right-0 mt-2 w-32 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
-                        {# todo: gérer le changement d'année #}
                         {% for dpe in user_data.dpes %}
-                            <a href="#"
+                            <a href="{{ path('app_switch_dpe', {id:dpe.id}) }}"
                                class="block px-4 py-2 text-xs {% if dpe.id == user_data.campagneCollecte.id %}text-indigo-600 bg-indigo-50 font-bold{% else %}hover:bg-gray-50{% endif %}">{{ dpe.libelle }}</a>
                         {% endfor %}
                     </div>

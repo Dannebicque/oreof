@@ -23,28 +23,28 @@ framework:
         en_cours_redaction:
           metadata:
             process: true
-            icon: 'fa-pencil'
+            icon: 'flowbite:edit-outline'
             label: 'en_cours_redaction.parcours'
             isTimeline: false
             color: 'warning'
         tacite_reconduction:
           metadata:
             process: false
-            icon: 'fa-pencil'
+            icon: 'flowbite:edit-outline'
             label: 'tacite_reconduction.parcours'
             isTimeline: false
             color: 'info'
         soumis_parcours:
           metadata:
             process: true
-            icon: 'fa-memo-circle-check'
+            icon: 'flowbite:file-check-outline'
             label: 'validation.parcours_rf'
             isTimeline: false
             color: 'success'
         soumis_dpe_composante:
           metadata:
             process: true
-            icon: 'fa-check-to-slot'
+            icon: 'ph:list-checks-fill'
             label: 'validation.dpe'
             isTimeline: true
             color: 'success'
@@ -61,7 +61,7 @@ framework:
         soumis_conseil:
           metadata:
             process: true
-            icon: 'fa-people-line'
+            icon: 'mdi:people-check'
             label: 'validation.conseil'
             isTimeline: true
             color: 'success'
@@ -76,13 +76,13 @@ framework:
         soumis_central:
           metadata:
             process: true
-            icon: 'fa-school-circle-check'
+            icon: 'flowbite:school-check-alt-outline'
             label: 'validation.ses'
             isTimeline: false
         soumis_cfvu:
           metadata:
             process: true
-            icon: 'fa-shield-check'
+            icon: 'flowbite:shield-check-outline'
             label: 'soumis.cfvu'
             isTimeline: true
         refuse_definitif_cfvu:
@@ -92,19 +92,19 @@ framework:
         valide_cfvu:
           metadata:
             process: true
-            icon: 'fa-stamp'
+            icon: 'mdi:stamper'
             label: 'relecture.avant_publication'
             isTimeline: true
         valide_a_publier: # Etape de saisie de la date pour publication post CFVU
           metadata:
             process: true
-            icon: 'fa-bullhorn'
+            icon: 'flowbite:bullhorn-outline'
             label: 'validation.publication'
             isTimeline: false
         publie:
           metadata:
             process: false
-            icon: 'fa-bullhorn'
+            icon: 'flowbite:bullhorn-outline'
             label: 'publie'
             isTimeline: false
         soumis_conseil_reserve:
@@ -114,13 +114,13 @@ framework:
         en_cours_redaction_ss_cfvu:
           metadata:
             process: true
-            icon: 'fa-paper-plane'
+            icon: 'mdi:paper-airplane-outline'
             isTimeline: false
             label: 'validation.en_cours_redaction_ss_cfvu'
         soumis_central_sans_cfvu:
           metadata:
             process: false
-            icon: 'fa-school-circle-check'
+            icon: 'flowbite:school-check-alt-outline'
             isTimeline: false
             label: 'validation.soumis_central_sans_cfvu'
         soumis_central_reserve_cfvu:
@@ -153,7 +153,7 @@ framework:
             recipients: [ 'DPE', 'RF' ]
             titre: 'Autorisation de saisie de la formation %%s'
             button_class: 'success'
-            button_icon: 'fa-play'
+            button_icon: 'ph:play'
             type: valider
             handler: "autoriser"
             form:
@@ -168,9 +168,9 @@ framework:
             titre: 'Un parcours de votre formation %%s a été soumis à validation'
             type: valider
             btn: success
-            icon: fa-check
+            icon: ph:check
             button_class: 'success'
-            button_icon: 'fa-paper-plane'
+            button_icon: 'mdi:paper-airplane-outline'
             handler: "valider"
             form:
               fields: [ ]
@@ -183,9 +183,9 @@ framework:
             titre: 'La formation %%s a été validée par son responsable'
             type: valider
             btn: success
-            icon: fa-check
+            icon: ph:check
             button_class: 'success'
-            button_icon: 'fa-check'
+            button_icon: 'ph:check'
             handler: "valider"
             form:
               fields: [ ]
@@ -198,9 +198,9 @@ framework:
             titre: 'Un parcours de la formation %%s a reçu des réserves par le responsable de formation'
             type: reserver
             btn: warning
-            icon: fa-circle-exclamation-check
+            icon: material-symbols:fact-check-outline-sharp
             button_class: 'warning'
-            button_icon: 'fa-exclamation-triangle'
+            button_icon: 'bi:exclamation-triangle'
             handler: "reserver_commentaire"
             form:
               fields:
@@ -218,10 +218,10 @@ framework:
             titre: 'La fiche de la formation %%s a été refusée par le DPE de votre composante'
             type: refuser
             btn: danger
-            icon: fa-ban
+            icon: flowbite:ban-outline
             label: 'Refuser'
             button_class: 'danger'
-            button_icon: 'fa-ban'
+            button_icon: 'flowbite:ban-outline'
             handler: "refuser_commentaire"
             form:
               fields:
@@ -238,9 +238,9 @@ framework:
             recipients: [ 'RF', 'CoRF', 'RP', 'CoRP' ]
             type: valider
             btn: success
-            icon: fa-check
+            icon: ph:check
             button_class: 'success'
-            button_icon: 'fa-check'
+            button_icon: 'ph:check'
             handler: "valider"
             form:
               fields: [ ]
@@ -253,9 +253,9 @@ framework:
             titre: 'La fiche de la formation %%s a reçu des réserves de la part du DPE de votre composante'
             type: reserver
             btn: warning
-            icon: fa-circle-exclamation-check
+            icon: material-symbols:fact-check-outline-sharp
             button_class: 'warning'
-            button_icon: 'fa-exclamation-triangle'
+            button_icon: 'bi:exclamation-triangle'
             handler: "reserver_commentaire"
             form:
               fields:
@@ -273,10 +273,10 @@ framework:
             titre: 'La fiche de la formation %%s a été refusée par le conseil de votre composante'
             type: refuser
             btn: danger
-            icon: fa-ban
+            icon: flowbite:ban-outline
             label: 'Refuser'
             button_class: 'danger'
-            button_icon: 'fa-ban'
+            button_icon: 'flowbite:ban-outline'
             handler: "refuser_conseil"
             form:
               fields:
@@ -297,9 +297,9 @@ framework:
             hasDate: true
             hasUpload: true
             hasUploadNote: true
-            icon: fa-check
+            icon: ph:check
             button_class: 'success'
-            button_icon: 'fa-check'
+            button_icon: 'ph:check'
             handler: "valider_conseil"
             form:
               fields:
@@ -322,9 +322,9 @@ framework:
             titre: 'La fiche de la formation %%s a recu des réserves par le conseil de la composante'
             type: reserver
             btn: warning
-            icon: fa-circle-exclamation-check
+            icon: material-symbols:fact-check-outline-sharp
             button_class: 'warning'
-            button_icon: 'fa-exclamation-triangle'
+            button_icon: 'bi:exclamation-triangle'
             handler: "reserver_conseil"
             form:
               fields:
@@ -344,10 +344,10 @@ framework:
             titre: 'La fiche de la formation %%s a été refusée par le SES'
             type: refuser
             btn: danger
-            icon: fa-ban
+            icon: flowbite:ban-outline
             label: 'Refuser'
             button_class: 'danger'
-            button_icon: 'fa-ban'
+            button_icon: 'flowbite:ban-outline'
             handler: "refuser_commentaire"
             form:
               fields:
@@ -366,9 +366,9 @@ framework:
             titre: 'La fiche de la formation %%s a été validée par le SES'
             type: valider
             btn: success
-            icon: fa-check
+            icon: ph:check
             button_class: 'success'
-            button_icon: 'fa-check'
+            button_icon: 'ph:check'
             handler: "valider"
             form:
               fields: [ ]
@@ -381,9 +381,9 @@ framework:
             titre: 'La fiche de la formation %%s a reçue des réserves par le SES'
             type: reserver
             btn: warning
-            icon: fa-circle-exclamation-check
+            icon: material-symbols:fact-check-outline-sharp
             button_class: 'warning'
-            button_icon: 'fa-exclamation-triangle'
+            button_icon: 'bi:exclamation-triangle'
             handler: "reserver_commentaire"
             form:
               fields:
@@ -399,9 +399,9 @@ framework:
             recipients: [ 'DPE', 'RF', 'CoRF', 'RP', 'CoRP' ]
             type: valider
             btn: success
-            icon: fa-check
+            icon: ph:check
             button_class: 'success'
-            button_icon: 'fa-rocket'
+            button_icon: 'flowbite:rocket-outline'
             handler: "valider"
             form:
               fields: [ ]
@@ -415,9 +415,9 @@ framework:
             hasDate: true
             type: refuser
             btn: danger
-            icon: fa-ban
+            icon: flowbite:ban-outline
             button_class: 'danger'
-            button_icon: 'fa-ban'
+            button_icon: 'flowbite:ban-outline'
             handler: "refuser_commentaire_date"
             form:
               fields:
@@ -438,9 +438,9 @@ framework:
             hasDate: true
             type: reserver
             btn: warning
-            icon: fa-circle-exclamation-check
+            icon: material-symbols:fact-check-outline-sharp
             button_class: 'warning'
-            button_icon: 'fa-exclamation-triangle'
+            button_icon: 'bi:exclamation-triangle'
             handler: "refuser_commentaire_date"
             form:
               fields:
@@ -460,10 +460,10 @@ framework:
             titre: 'Votre formation %%s a été validée par la CFVU'
             type: valider
             btn: success
-            icon: fa-check
+            icon: ph:check
             display: false
             button_class: 'success'
-            button_icon: 'fa-check'
+            button_icon: 'ph:check'
             handler: "valider_reserve_date"
             form:
               fields:
@@ -481,9 +481,9 @@ framework:
             recipients: [ 'DPE', 'RF', 'CoRF', 'RP', 'CoRP' ]
             type: valider
             btn: success
-            icon: fa-check
+            icon: ph:check
             button_class: 'success'
-            button_icon: 'fa-check'
+            button_icon: 'ph:check'
             handler: "valider_commentaire"
             form:
               fields:
@@ -501,10 +501,10 @@ framework:
             titre: 'Votre formation %%s a été validée par la CFVU'
             type: valider
             btn: success
-            icon: fa-check
+            icon: ph:check
             display: false
             button_class: 'success'
-            button_icon: 'fa-check'
+            button_icon: 'ph:check'
             handler: "valider"
             form:
               fields: [ ]
@@ -517,9 +517,9 @@ framework:
             titre: 'Votre formation %%s a été validée par la CFVU'
             type: valider
             btn: success
-            icon: fa-check
+            icon: ph:check
             button_class: 'success'
-            button_icon: 'fa-check'
+            button_icon: 'ph:check'
             description: '--'
             handler: "valider"
             form:
@@ -534,9 +534,9 @@ framework:
             type: valider
             btn: success
             hasDate: true
-            icon: fa-check
+            icon: ph:check
             button_class: 'success'
-            button_icon: 'fa-stamp'
+            button_icon: 'mdi:stamper'
             handler: "valider_date"
             form:
               fields:
@@ -549,9 +549,9 @@ framework:
             recipients: [ 'DPE', 'RF', 'CoRF', 'RP', 'CoRP' ]
             type: valider
             btn: success
-            icon: fa-check
+            icon: ph:check
             button_class: 'success'
-            button_icon: 'fa-bullhorn'
+            button_icon: 'flowbite:bullhorn-outline'
             handler: "valider_date"
             form:
               fields:
@@ -564,9 +564,9 @@ framework:
             recipients: [ 'DPE', 'RF', 'CoRF', 'RP', 'CoRP' ]
             type: valider
             btn: success
-            icon: fa-check
+            icon: ph:check
             button_class: 'success'
-            button_icon: 'fa-globe'
+            button_icon: 'ph:globe'
             handler: "valider"
             form:
               fields: [ ]
@@ -577,9 +577,9 @@ framework:
             recipients: [ 'RF', 'CoRF', 'RP', 'CoRP' ]
             type: valider
             btn: success
-            icon: fa-check
+            icon: ph:check
             button_class: 'success' #todo: a voir...
-            button_icon: 'fa-globe' #todo: a voir...
+            button_icon: 'ph:globe' #todo: a voir...
             handler: "valider" #todo: a voir...
             form:
               fields: [ ]
@@ -590,16 +590,16 @@ framework:
             recipients: [ 'RF', 'CoRF', 'RP', 'CoRP' ]
             type: valider
             btn: success
-            icon: fa-check
+            icon: ph:check
             button_class: 'success'
-            button_icon: 'fa-check'
+            button_icon: 'ph:check'
             handler: "valider"
         reouvrir_tacite:
           from: 'tacite_reconduction'
           metadata:
             type: reouvrir
             button_class: 'warning'
-            button_icon: 'fa-undo'
+            button_icon: 'flowbite:undo-outline'
             description: 'Relancer le parcours pour la nouvelle année'
             handler: "valider"
             form:
@@ -613,7 +613,7 @@ framework:
         #            type: 'reouvrir'
         #            description: 'Réouvrir le parcours reconduit pour modifications'
         #            button_class: 'info'
-        #            button_icon: 'fa-pencil'
+        #            button_icon: 'flowbite:edit-outline'
         #            handler: "valider_commentaire"
         #            form:
         #              fields:
@@ -633,7 +633,7 @@ framework:
             description: 'Réouvrir pour modification des MCCC'
             button_class: 'info'
             type: 'reouvrir'
-            button_icon: 'fa-pencil'
+            button_icon: 'flowbite:edit-outline'
             handler: "reouvrir_mccc"
             form:
               fields:
@@ -651,7 +651,7 @@ framework:
             label: 'Modification sans CFVU'
             description: 'Modifications mineures sans passage en CFVU'
             button_class: 'info'
-            button_icon: 'fa-edit'
+            button_icon: 'icon:edit'
             type: 'reouvrir'
             handler: "reouvrir_sans_cfvu"
             form:
@@ -675,7 +675,7 @@ framework:
             description: 'Réouvrir pour modification des MCCC'
             button_class: 'info'
             type: 'reouvrir'
-            button_icon: 'fa-pencil'
+            button_icon: 'flowbite:edit-outline'
             handler: "reouvrir_mccc"
             form:
               fields:
@@ -693,7 +693,7 @@ framework:
             label: 'Modification sans CFVU'
             description: 'Modifications mineures sans passage en CFVU'
             button_class: 'info'
-            button_icon: 'fa-edit'
+            button_icon: 'icon:edit'
             type: 'reouvrir'
             handler: "reouvrir_sans_cfvu"
             form:
@@ -715,7 +715,7 @@ framework:
             label: 'Réouvrir'
             description: 'Réouvrir pour modification avant publication'
             button_class: 'warning'
-            button_icon: 'fa-undo'
+            button_icon: 'flowbite:undo-outline'
             type: 'reouvrir'
             handler: "reouvrir_avant_publie"
             form:
@@ -738,11 +738,11 @@ framework:
             titre: 'Formation %%s a été modifiée sans passage en CFVU'
             type: valider
             btn: success
-            icon: fa-check
+            icon: ph:check
             label: 'Soumettre au SES'
             description: 'Transmettre les modifications au SES'
             button_class: 'success'
-            button_icon: 'fa-paper-plane'
+            button_icon: 'mdi:paper-airplane-outline'
         valider_transmettre_ouverture_sans_cfvu:
           from: 'soumis_central_sans_cfvu'
           to: 'valide_a_publier'
@@ -754,10 +754,10 @@ framework:
             btn: success
             hasDate: true
             hasValidLheo: true
-            icon: fa-check
+            icon: ph:check
             description: 'Approuver les modifications et republier'
             button_class: 'success'
-            button_icon: 'fa-check'
+            button_icon: 'ph:check'
             handler: "valider"
             form:
               fields: [ ]
@@ -770,11 +770,11 @@ framework:
             titre: 'La fiche de la formation %%s a reçue des réserves par le SES'
             type: reserver
             btn: warning
-            icon: fa-circle-exclamation-check
+            icon: material-symbols:fact-check-outline-sharp
             label: 'Émettre des réserves'
             description: 'Réserves du SES'
             button_class: 'warning'
-            button_icon: 'fa-exclamation-triangle'
+            button_icon: 'bi:exclamation-triangle'
             requires_comment: true
             comment_placeholder: 'Réserves du SES...'
         valider_transmettre_reserve_cfvu:
@@ -783,9 +783,9 @@ framework:
           metadata:
             type: valider
             btn: success
-            icon: fa-check
+            icon: ph:check
             button_class: 'success'
-            button_icon: 'fa-check'
+            button_icon: 'ph:check'
             description: '--'
         reserver_transmettre_reserve_cfvu:
           from: 'soumis_central_reserve_cfvu'
@@ -793,9 +793,9 @@ framework:
           metadata:
             type: reserver
             btn: warning
-            icon: fa-circle-exclamation-check
+            icon: material-symbols:fact-check-outline-sharp
             button_class: 'warning'
-            button_icon: 'fa-exclamation-triangle'
+            button_icon: 'bi:exclamation-triangle'
             description: '--'
         valider_non_ouverture_ses:
           from: 'non_ouverture_ses'
@@ -803,9 +803,9 @@ framework:
           metadata:
             type: valider
             btn: success
-            icon: fa-check
+            icon: ph:check
             button_class: 'success'
-            button_icon: 'fa-check'
+            button_icon: 'ph:check'
             description: '--'
     fiche:
       type: 'workflow'
@@ -819,7 +819,7 @@ framework:
         'en_cours_redaction':
           metadata:
             process: true
-            icon: 'fa-ballot-check'
+            icon: 'ph:list-checks-fill'
             label: 'validation.fiche_matiere'
         #            hasValid: true
         #            hasReserve: false
@@ -834,7 +834,7 @@ framework:
         'soumis_central':
           metadata:
             process: true
-            icon: 'fa-school-circle-check'
+            icon: 'flowbite:school-check-alt-outline'
             label: 'validation.fiche_matiere.ses'
         #            hasValid: true
         #            hasReserve: true
@@ -850,7 +850,7 @@ framework:
         'valide_pour_publication':
           metadata:
             process: true
-            icon: 'fa-stamp'
+            icon: 'mdi:stamper'
             label: 'validation.fiche_matiere.publication'
         #            hasValid: false
         #            hasReserve: false
@@ -865,7 +865,7 @@ framework:
           metadata:
             process: false
             #            showOn: false
-            icon: 'fa-pencil'
+            icon: 'flowbite:edit-outline'
             label: 'fiche_matiere.rouvrir_fiche_matiere'
       #            hasValid: false
       #            hasReserve: false
@@ -882,7 +882,7 @@ framework:
           to: 'soumis_central'
           metadata:
             button_class: 'success'
-            button_icon: 'fa-ballot-check'
+            button_icon: 'ph:list-checks-fill'
             type: valider
             handler: "autoriser_fiche"
             form:
@@ -892,7 +892,7 @@ framework:
           to: 'valide_pour_publication'
           metadata:
             button_class: 'success'
-            button_icon: 'fa-stamp'
+            button_icon: 'mdi:stamper'
             type: valider
             handler: "autoriser_fiche"
             form:
@@ -903,7 +903,7 @@ framework:
           metadata:
             type: reserver
             button_class: 'warning'
-            button_icon: 'fa-check'
+            button_icon: 'ph:check'
             handler: "reserver_argumentaire_fiche"
             form:
               fields:
@@ -919,7 +919,7 @@ framework:
           metadata:
             type: valider
             button_class: 'success'
-            button_icon: 'fa-stamp'
+            button_icon: 'mdi:stamper'
             handler: "valider" #todo : un handler ici ?
             form:
               fields: [ ]
@@ -929,7 +929,7 @@ framework:
           to: 'en_cours_redaction'
           metadata:
             button_class: 'warning'
-            button_icon: 'fa-pencil'
+            button_icon: 'flowbite:edit-outline'
             type: valider
             description: 'Rouvrir la fiche pour modification'
             handler: "rouvrir_fiche"
@@ -940,7 +940,7 @@ framework:
           to: 'en_cours_redaction'
           metadata:
             button_class: 'warning'
-            button_icon: 'fa-pencil'
+            button_icon: 'flowbite:edit-outline'
             handler: "valider" #todo : un handler ici ?
             form:
               fields: [ ]
@@ -958,23 +958,23 @@ framework:
             process: true
             label: 'validation.demande_initialisee'
             color: 'info'
-            icon: 'fa-people-line'
+            icon: 'mdi:people-check'
         soumis_conseil:
           metadata:
             process: true
-            icon: 'fa-people-line'
+            icon: 'mdi:people-check'
             label: 'validation.soumis_conseil'
             color: 'success'
         soumis_ses:
           metadata:
             process: true
-            icon: 'fa-school-circle-check'
+            icon: 'flowbite:school-check-alt-outline'
             label: 'validation.soumis_ses'
             color: 'success'
         soumis_cfvu:
           metadata:
             process: true
-            icon: 'fa-shield-check'
+            icon: 'flowbite:shield-check-outline'
             label: 'validation.soumis_cfvu'
             color: 'success'
         attente_pv:
@@ -982,19 +982,19 @@ framework:
             process: false
             label: 'validation.attente_pv'
             color: 'warning'
-            icon: 'fa-hourglass'
+            icon: 'ph:hourglass'
         effectuee:
           metadata:
             process: false
             label: 'validation.effectuee'
             color: 'success'
-            icon: 'fa-check'
+            icon: 'ph:check'
         verification_pv:
           metadata:
             process: false
             label: 'validation.verification_pv'
             color: 'warning'
-            icon: 'fa-check'
+            icon: 'ph:check'
       transitions:
         effectuer_demande:
           from: 'demande_initialisee'
@@ -1005,7 +1005,7 @@ framework:
           metadata:
             type: valider
             btn: success
-            icon: fa-check
+            icon: ph:check
             hasDate: true
             hasUpload: true
         valider_ses:
@@ -1014,21 +1014,21 @@ framework:
           metadata:
             type: valider
             btn: success
-            icon: fa-check
+            icon: ph:check
         reserver_ses:
           from: 'soumis_ses'
           to: 'demande_initialisee'
           metadata:
             type: reserver
             btn: warning
-            icon: fa-circle-exclamation-check
+            icon: material-symbols:fact-check-outline-sharp
         valider_cfvu_avec_pv:
           from: 'soumis_cfvu'
           to: 'effectuee'
           metadata:
             type: valider
             btn: success
-            icon: fa-check
+            icon: ph:check
             hasDate: true
         valider_cfvu_attente_pv:
           from: 'soumis_cfvu'
@@ -1036,7 +1036,7 @@ framework:
           metadata:
             type: valider
             btn: success
-            icon: fa-check
+            icon: ph:check
             hasDate: true
         reserver_cfvu:
           from: 'soumis_cfvu'
@@ -1044,14 +1044,14 @@ framework:
           metadata:
             type: reserver
             btn: warning
-            icon: fa-circle-exclamation-check
+            icon: material-symbols:fact-check-outline-sharp
         deposer_pv:
           from: 'attente_pv'
           to: 'verification_pv' #etape intermédiaire de contrôle
           metadata:
             type: valider
             btn: success
-            icon: fa-check
+            icon: ph:check
             hasUpload: true
         valider_pv:
           from: 'verification_pv'
@@ -1059,4 +1059,4 @@ framework:
           metadata:
             type: valider
             btn: success
-            icon: fa-check
+            icon: ph:check

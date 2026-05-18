@@ -1,0 +1,124 @@
+<div
+        id="bcc-{{ blocCompetence.id }}"
+        class="group rounded-lg border border-slate-200 bg-white shadow-sm hover:shadow-md transition-shadow"
+        data-bloc-id="{{ blocCompetence.id }}"
+        {{ stimulus_target('sortable-competences', 'bloc') }}>
+    {# En-tête du bloc #}
+    <div class="flex items-center justify-between p-4 bg-linear-to-r from-blue-50 to-blue-100 rounded-t-lg cursor-move hover:from-blue-100 hover:to-blue-150"
+            {{ stimulus_target('sortable-competences', 'blocHandle') }}>
+        <div class="flex items-center gap-2 flex-1">
+            <i class="fal fa-grip-vertical text-gray-400 group-hover:text-gray-600 opacity-0 group-hover:opacity-100 transition-opacity"></i>
+            <div>
+                <h3 class="font-semibold text-gray-800">{{ blocCompetence.code }}</h3>
+                <p class="text-sm text-gray-600">{{ blocCompetence.libelle }}</p>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+            <twig:Button
+                    variant="success"
+                    size="sm"
+                    :soft="true"
+                    icon="icon:add"
+                    title="Ajouter une compétence"
+                    href="{{ path('app_competence_new', {bcc:blocCompetence.id}) }}"
+                    dataAction="click->modalturbo#open"
+                    class="w-full"
+            />
+
+            {{ component('dropdown_actions', {
+                items: [
+                    {
+                        label: 'Modifier',
+                        url: path('app_bloc_competence_edit', {id: blocCompetence.id}),
+                        icon: 'icon:edit',
+                        modal: true,
+                        color: 'warning',
+                    },
+                    {
+                        label: 'Dupliquer',
+                        url: path('app_bloc_competence_duplicate', {id: blocCompetence.id}),
+                        icon: 'icon:duplicate',
+                        color: 'success',
+                    },
+                    {
+                        label: 'Supprimer',
+                        url: path('app_bloc_competence_delete', {id: blocCompetence.id}),
+                        icon: 'icon:delete',
+                        danger: true
+                    }
+                ],
+                label: 'Actions',
+                help: 'Plus d\'actions',
+                labelSrOnly: true,
+                id: 'bloc-actions-'~blocCompetence.id,
+                icon: 'icon:ellipsis-vertical',
+            }) }}
+        </div>
+    </div>
+
+    {# Contenu du bloc (compétences) #}
+    <div class="divide-y divide-gray-200"
+            {{ stimulus_target('sortable-competences-items', 'competence') }}>
+        {% for competence in blocCompetence.competences %}
+            <div class="group hover:bg-gray-50 p-4 flex items-center justify-between"
+                 data-competence-id="{{ competence.id }}">
+                <div class="flex items-center gap-3 flex-1">
+                    <i class="fal fa-grip-vertical text-gray-400 group-hover:text-gray-600 opacity-0 group-hover:opacity-100 transition-opacity cursor-move"></i>
+                    <div class="flex-1">
+                        <div class="font-medium text-gray-800">{{ competence.code }}</div>
+                        <div class="text-sm text-gray-600">{{ competence.libelle }}</div>
+                    </div>
+                </div>
+                <div class="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <twig:Button
+                            variant="warning"
+                            icon="icon:edit"
+                            size="sm"
+                            :soft="true"
+                            href="{{ path('app_competence_edit', {id:competence.id}) }}"
+                            dataAction="click->modalturbo#open"
+                            tooltip="Modifier"
+                    />
+                    <twig:Button
+                            variant="success"
+                            icon="icon:duplicate"
+                            size="sm"
+                            :soft="true"
+                            href="{{ path('app_competence_duplicate', {id:competence.id}) }}"
+                            tooltip="Dupliquer"
+                    />
+                    <twig:DeleteButton
+                            :soft="true"
+                            tooltip="Supprimer"
+                            url="{{ path('app_competence_delete', {id: competence.id}) }}"
+                            csrfTokenId="{{ 'delete' ~ competence.id }}"
+                            title="Supprimer la compétence {{ competence.code }} ?"
+                            message="Cette action supprimera définitivement cette compétence."
+                            confirmLabel="Supprimer"
+                            cancelLabel="Annuler"
+                            id="competence-{{ competence.id }}"
+                    />
+                </div>
+            </div>
+        {% else %}
+            <div class="p-4 text-center text-gray-400 italic">
+                Aucune compétence dans ce bloc
+            </div>
+        {% endfor %}
+    </div>
+
+    {# Bouton d'ajout au footer du bloc #}
+    <div class="bg-gray-50 px-4 py-3 rounded-b-lg border-t border-gray-200">
+        <twig:Button
+                variant="success"
+                size="sm"
+                :soft="true"
+                icon="icon:add"
+                label="Ajouter une compétence"
+                href="{{ path('app_competence_new', {bcc:blocCompetence.id}) }}"
+                dataAction="click->modalturbo#open"
+                class="w-full"
+        />
+    </div>
+</div>

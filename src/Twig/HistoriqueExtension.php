@@ -12,6 +12,7 @@ namespace App\Twig;
 use App\Classes\ValidationProcess;
 use App\Classes\ValidationProcessChangeRf;
 use App\Classes\ValidationProcessFicheMatiere;
+use App\Entity\Historique;
 use App\Entity\HistoriqueFicheMatiere;
 use App\Entity\HistoriqueFormation;
 use App\Entity\HistoriqueParcours;
@@ -44,6 +45,7 @@ class HistoriqueExtension extends AbstractExtension
             new TwigFilter('etapeLabel', $this->etapeLabel(...)),
             new TwigFilter('etapeParams', $this->etapeParams(...)),
             new TwigFilter('etapeIcone', $this->etapeIcone(...)),
+            new TwigFilter('etapeVariant', $this->etapeVariant(...)),
             new TwigFilter('isParcours', $this->isParcours(...)),
         ];
     }
@@ -104,24 +106,32 @@ class HistoriqueExtension extends AbstractExtension
         }
     }
 
+    public function etapeVariant(Historique $historique): string
+    {
+        return match ($historique->getEtat()) {
+            'valide' => 'success',
+            'refuse' => 'danger',
+            'info' => 'info',
+            'default' => 'warning', // dont laisser passer
+        };
+    }
+
     public function etapeIcone(string $etape, string $process = 'formation'): string
     {
         if (str_starts_with($etape, 'changeRf.')) {
-            //            $etape = str_replace('changeRf.', '', $etape);
-            return 'fal fa-repeat';
+            return 'flowbite:arrows-repeat-outline';
         }
 
         if ($etape === 'change_rf_co' || $etape === 'change_rf') {
-            return 'fal fa-repeat';
+            return 'flowbite:arrows-repeat-outline';
         }
 
         if ($etape === 'cloture') {
-            return 'fal fa-close';
+            return 'flowbite:close-outline';
         }
 
         if (str_starts_with($etape, 'publie')) {
-            //            $etape = str_replace('changeRf.', '', $etape);
-            return 'fal fa-bullhorn';
+            return 'flowbite:bullhorn-outline';
         }
 
         if ($process === 'formation' || $process === 'parcours') {
