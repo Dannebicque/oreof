@@ -1,0 +1,31 @@
+{% set backUrl = app.request.headers.get('referer') ?: path('app_homepage') %}
+
+<div class="space-y-6">
+    <p class="mb-2 inline-flex rounded-full px-3 py-1 text-xs font-semibold {{ badgeClass|default('bg-amber-100 text-amber-700') }}">
+        {{ badge|default('Erreur') }}
+    </p>
+
+    <h2 class="text-2xl font-bold text-slate-900 md:text-3xl">{{ title }}</h2>
+
+    <p class="mt-3 text-sm text-slate-600 md:text-base">
+        {{ message }}
+        {% if mail_contact is defined and mail_contact is not empty %}
+            <a class="font-medium text-cyan-700 underline hover:text-cyan-800"
+               href="mailto:{{ mail_contact }}">{{ mail_contact }}</a>.
+        {% endif %}
+    </p>
+
+    {% if showExceptionMessage|default(false) and exception is defined and exception.message is not empty %}
+        <div class="mt-5">
+            {{ component('alerte', {type: 'warning', message: exception.message}) }}
+        </div>
+    {% endif %}
+
+    <div class="mt-6">
+        <a href="{{ backUrl }}"
+           class="inline-flex items-center gap-2 rounded-lg bg-cyan-600 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-cyan-700">
+            <twig:UX:Icon name="icon:arrow-left" class="w-4 h-4"/>
+            Retour à la page précédente
+        </a>
+    </div>
+</div>
