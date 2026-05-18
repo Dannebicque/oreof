@@ -18,7 +18,8 @@ final class TurboStreamResponseFactory
 {
     public function __construct(
         private TranslatorInterface $translator,
-        private Environment         $twig)
+        private Environment $twig
+    )
     {
     }
 
@@ -31,9 +32,20 @@ final class TurboStreamResponseFactory
         );
     }
 
-    public function streamToastError(string $message): Response
+    public function streamToastError(string $message, bool $closeModal = false): Response
     {
-        return $this->stream('_ui/error.toast.stream.html.twig', ['toastMessage' => $message]);
+        return $this->stream('_ui/_toast.stream.html.twig', [
+            'message' => $message,
+            'closeModal' => $closeModal,
+            'toast_type' => 'danger',]);
+    }
+
+    public function streamToastSuccess(string $message, bool $closeModal = false): Response
+    {
+        return $this->stream('_ui/_toast.stream.html.twig', [
+            'message' => $message,
+            'closeModal' => $closeModal,
+            'toast_type' => 'success',]);
     }
 
     public function stream(string $template, array $context = [], int $status = 200): Response

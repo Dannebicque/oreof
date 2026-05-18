@@ -13,6 +13,7 @@ use App\Classes\JsonReponse;
 use App\Classes\Mailer;
 use App\DTO\TranslatableKey;
 use App\Entity\User;
+use App\Form\BugReportType;
 use App\Repository\FormationRepository;
 use App\Repository\ParcoursRepository;
 use App\Utils\TurboStreamResponseFactory;
@@ -40,23 +41,21 @@ class BugReportController extends AbstractController
 
         $context = $this->resolveContext($request, $formationRepository, $parcoursRepository);
 
-        if ($request->isMethod('POST')) {
-            if (!$this->isCsrfTokenValid('bug_report', (string)$request->request->get('_token'))) {
-                return JsonReponse::error('Jeton CSRF invalide. Merci de recharger la page.');
-            }
+        $form = $this->createForm(BugReportType::class, null, [
+            'formation_id' => $context['formationId'],
+            'parcours_id' => $context['parcoursId'],
+            'page' => $context['page'],
+            'action' => $this->generateUrl('app_bug_report_modal'),
+        ]);
 
-            $title = trim((string)$request->request->get('title'));
-            $message = trim((string)$request->request->get('message'));
+        $form->handleRequest($request);
 
-            if ($title === '') {
-                return JsonReponse::error('Le titre est obligatoire.');
-            }
-
-            if ($message === '') {
-                return JsonReponse::error('Le message est obligatoire.');
-            }
-
+        if ($form->isSubmitted() && $form->isValid()) {
             try {
+                $data = $form->getData();
+                $title = $data['title'] ?? '';
+                $message = $data['message'] ?? '';
+
                 $mailer->initEmail();
                 $mailer->setTemplate('mails/bug_report/report.html.twig', [
                     'reporter' => $user,
@@ -73,19 +72,29 @@ class BugReportController extends AbstractController
                     ]
                 );
 
-                return JsonReponse::success('Signalement envoyé. Merci pour votre retour.');
-            } catch (\Throwable) {
-                return JsonReponse::error('Le signalement n\'a pas pu être envoyé. Merci de réessayer.');
+                return $turboStreamResponseFactory->streamToastSuccess(
+                    'Signalement envoyé. Merci pour votre retour.',
+                    true
+                );
+            } catch (\Throwable $e) {
+
+                return $turboStreamResponseFactory->streamToastError(
+                    'Le signalement n\'a pas pu être envoyé. Merci de réessayer.',
+                    true
+                );
             }
         }
 
         return $turboStreamResponseFactory->streamOpenModalFromTemplates(
             new TranslatableKey('bug_report.titre'),
             new TranslatableKey('bug_report.description'),
-            'bug_report/_modal.html.twig', [
+            'bug_report/_modal.html.twig',
+            [
+                'form' => $form->createView(),
                 'context' => $context,
                 'user' => $user,
-            ]
+            ],
+            '_ui/_footer_submit_cancel.html.twig',
         );
     }
 

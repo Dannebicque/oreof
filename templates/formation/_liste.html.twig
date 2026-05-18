@@ -319,11 +319,12 @@
                                                     icon: 'icon:check',
                                                     help: 'Vérifie que la formation est complète et prête à être publiée.',
                                                     modal: true,
+                                                    color: 'green',
                                                     url:path('app_formation_state', {slug:formation.slug}) },
                                                 {
                                                     label: 'Modifier',
                                                     icon: 'icon:edit',
-                                                    color: 'primary',
+                                                    color: 'orange',
                                                     url: path('formation_v2_modifier', {slug:formation.slug}),
                                                     disabled: not (canEdit and canAccess),
                                                     help: not (canEdit and canAccess) ? 'Modification non autorisée : la formation doit être ouverte et avoir au moins un parcours avec un DPE ouvert.' : null
