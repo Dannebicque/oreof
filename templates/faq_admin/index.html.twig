@@ -3,141 +3,145 @@
 {% block header %}Gestion de la FAQ{% endblock %}
 
 {% block content %}
-    <style>
-        .faq-drag-handle {
-            width: 30px;
-            height: 30px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 6px;
-            cursor: grab;
-            user-select: none;
-        }
+    <div id="faq-reorder-feedback" class="hidden fixed top-4 right-4 px-6 py-3 rounded-lg shadow-lg z-50 transition" role="alert"></div>
 
-        .faq-drag-handle:hover {
-            background-color: rgba(0, 0, 0, 0.06);
-        }
+    <div class="py-4">
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-3xl font-bold text-slate-900 dark:text-slate-50 flex items-center gap-3">
+                <twig:UX:Icon name="icon:question" class="h-8 w-8 text-blue-600 dark:text-blue-400" />
+                Gestion de la FAQ
+            </h1>
 
-        .faq-drag-handle:active {
-            cursor: grabbing;
-        }
-    </style>
-
-    <div id="faq-reorder-feedback" class="alert d-none position-fixed top-0 end-0 m-3 shadow" style="z-index: 1080; min-width: 320px;" role="alert"></div>
-
-    <div class="container-fluid py-4">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1><i class="fal fa-circle-question"></i> Gestion de la FAQ</h1>
-
-            <div class="d-flex gap-2">
+            <div class="flex gap-3">
                 <button type="button"
-                        class="btn btn-sm btn-outline-secondary"
-                        data-bs-toggle="modal"
-                        data-bs-target="#helpImagesModal"
-                        onclick="loadImages()"
+                        class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700 transition"
+                        onclick="toggleFaqImagesModal()"
                         title="Gérer la galerie d'images pour la FAQ">
-                    <i class="fal fa-images"></i> <span>Galerie d'images</span>
+                    <twig:UX:Icon name="mdi:image-multiple-outline" class="h-5 w-5" />
+                    Galerie d'images
                 </button>
                 <a href="{{ path('app_faq_new') }}"
-                   class="btn btn-sm btn-outline-primary"
-                   data-bs-toggle="tooltip" data-bs-placement="bottom" title="Créer une nouvelle question FAQ">
-                    <i class="fal fa-plus"></i> <span>Ajouter une question</span>
+                   class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg border border-blue-300 bg-blue-50 text-blue-700 hover:bg-blue-100 dark:border-blue-700 dark:bg-blue-900/30 dark:text-blue-400 dark:hover:bg-blue-900/50 transition"
+                   title="Créer une nouvelle question FAQ">
+                    <twig:UX:Icon name="ic:round-plus" class="h-5 w-5" />
+                    Ajouter une question
                 </a>
             </div>
         </div>
 
         {% if faqs|length == 0 %}
-            <div class="alert alert-info" role="alert">
-                <i class="fal fa-info-circle"></i> Aucune question FAQ pour le moment. 
-                <a href="{{ path('app_faq_new') }}">Créez la première !</a>
+            <div class="rounded-lg border border-cyan-200 bg-cyan-50 p-4 text-cyan-900 dark:border-cyan-700 dark:bg-cyan-900/20 dark:text-cyan-200">
+                <div class="flex gap-3">
+                    <twig:UX:Icon name="icon:info" class="h-5 w-5 flex-shrink-0 mt-0.5" />
+                    <div>
+                        <p>Aucune question FAQ pour le moment.</p>
+                        <a href="{{ path('app_faq_new') }}" class="font-medium hover:underline">Créez la première !</a>
+                    </div>
+                </div>
             </div>
         {% else %}
-            <div class="card shadow-sm border-0">
-                <div class="card-body p-0">
-                    <table class="table table-striped table-hover mb-0">
-                        <thead class="table-dark">
-                        <tr>
-                            <th class="ps-3" style="width: 34px;"></th>
-                            <th class="ps-4" style="width: 30px;">Statut</th>
-                            <th style="width: 40%;">Question</th>
-                            <th style="width: 20%;">Centres</th>
-                            <th style="width: 80px;">Ordre</th>
-                            <th class="text-end pe-4" style="width: 150px;">Actions</th>
+            <div class="rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-900 overflow-hidden">
+                <table class="w-full">
+                    <thead>
+                        <tr class="border-b border-slate-200 bg-slate-50 dark:border-slate-700 dark:bg-slate-800">
+                            <th class="px-4 py-3 text-left text-sm font-semibold text-slate-900 dark:text-slate-100" style="width: 34px;"></th>
+                            <th class="px-4 py-3 text-left text-sm font-semibold text-slate-900 dark:text-slate-100" style="width: 30px;">Statut</th>
+                            <th class="px-4 py-3 text-left text-sm font-semibold text-slate-900 dark:text-slate-100" style="width: 40%;">Question</th>
+                            <th class="px-4 py-3 text-left text-sm font-semibold text-slate-900 dark:text-slate-100" style="width: 20%;">Centres</th>
+                            <th class="px-4 py-3 text-left text-sm font-semibold text-slate-900 dark:text-slate-100" style="width: 80px;">Ordre</th>
+                            <th class="px-4 py-3 text-right text-sm font-semibold text-slate-900 dark:text-slate-100" style="width: 150px;">Actions</th>
                         </tr>
-                        </thead>
-                        <tbody id="faq-sortable-body">
+                    </thead>
+                    <tbody id="faq-sortable-body" class="divide-y divide-slate-200 dark:divide-slate-700">
                         {% for faq in faqs %}
-                            <tr data-faq-id="{{ faq.id }}">
-                                <td class="ps-3 align-middle text-muted">
-                                    <span class="faq-drag-handle" title="Glisser pour réordonner">
-                                        <i class="fal fa-grip-vertical"></i>
-                                    </span>
+                            <tr data-faq-id="{{ faq.id }}" class="hover:bg-slate-50 dark:hover:bg-slate-800 transition">
+                                <td class="px-4 py-3 text-center">
+                                    <button type="button" class="faq-drag-handle inline-flex items-center justify-center h-8 w-8 rounded text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700 cursor-grab active:cursor-grabbing transition" title="Glisser pour réordonner">
+                                        <twig:UX:Icon name="fa7-solid:grip-vertical" class="h-5 w-5" />
+                                    </button>
                                 </td>
-                                <td class="ps-4">
+                                <td class="px-4 py-3">
                                     {% if faq.isActive %}
-                                        <span class="badge bg-success">Actif</span>
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">Actif</span>
                                     {% else %}
-                                        <span class="badge bg-danger">Inactif</span>
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400">Inactif</span>
                                     {% endif %}
                                 </td>
-                                <td class="align-middle"><strong>{{ faq.question }}</strong></td>
-                                <td class="align-middle">
+                                <td class="px-4 py-3">
+                                    <strong class="text-slate-900 dark:text-slate-100">{{ faq.question }}</strong>
+                                </td>
+                                <td class="px-4 py-3 text-sm">
                                     {% if faq.centresShow|length > 0 %}
-                                        {% for centre in faq.centresShow %}
-                                            {% if centre == 'cg_composante' %}
-                                                <span class="badge bg-quaternary me-1 text-wrap">Composante</span>
-                                            {% elseif centre == 'cg_etablissement' %}
-                                                <span class="badge bg-info me-1 text-wrap">Établissement</span>
-                                            {% elseif centre == 'cg_formation' %}
-                                                <span class="badge bg-success me-1 text-wrap">Formation</span>
-                                            {% elseif centre == 'cg_parcours' %}
-                                                <span class="badge bg-secondary me-1 text-wrap">Parcours</span>
-                                            {% endif %}
-                                        {% endfor %}
+                                        <div class="flex flex-wrap gap-1">
+                                            {% for centre in faq.centresShow %}
+                                                {% if centre == 'cg_composante' %}
+                                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400">Composante</span>
+                                                {% elseif centre == 'cg_etablissement' %}
+                                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-cyan-100 text-cyan-800 dark:bg-cyan-900/30 dark:text-cyan-400">Établissement</span>
+                                                {% elseif centre == 'cg_formation' %}
+                                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">Formation</span>
+                                                {% elseif centre == 'cg_parcours' %}
+                                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-200 text-slate-700 dark:bg-slate-700 dark:text-slate-300">Parcours</span>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </div>
                                     {% else %}
-                                        <span class="text-muted"><em>Tous les centres</em></span>
+                                        <span class="text-slate-500 dark:text-slate-400 italic">Tous les centres</span>
                                     {% endif %}
                                 </td>
-                                <td class="align-middle">{{ faq.ordre }}</td>
-                                <td class="text-end pe-4">
-                                    <div class="d-flex justify-content-end gap-2">
+                                <td class="px-4 py-3 text-sm text-slate-700 dark:text-slate-300">{{ faq.ordre }}</td>
+                                <td class="px-4 py-3 text-right">
+                                    <div class="flex justify-end gap-2">
                                         <a href="{{ path('app_faq_edit', {'id': faq.id}) }}"
-                                           class="btn btn-sm btn-outline-info"
-                                           data-bs-toggle="tooltip" data-bs-placement="bottom" title="Modifier">
-                                            <i class="fal fa-edit"></i>
+                                           class="inline-flex items-center justify-center h-9 w-9 rounded-lg border border-blue-300 bg-blue-50 text-blue-700 hover:bg-blue-100 dark:border-blue-700 dark:bg-blue-900/30 dark:text-blue-400 dark:hover:bg-blue-900/50 transition"
+                                           title="Modifier">
+                                            <twig:UX:Icon name="icon:edit" class="h-4 w-4" />
                                         </a>
 
                                         <form method="post" action="{{ path('app_faq_delete', {'id': faq.id}) }}" style="display: inline;" onsubmit="return confirm('Vraiment supprimer cette question FAQ ?');">
                                             <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ faq.id) }}">
                                             <button type="submit"
-                                                    class="btn btn-sm btn-outline-danger"
-                                                    data-bs-toggle="tooltip" data-bs-placement="bottom" title="Supprimer">
-                                                <i class="fal fa-trash-alt"></i>
+                                                    class="inline-flex items-center justify-center h-9 w-9 rounded-lg border border-red-300 bg-red-50 text-red-700 hover:bg-red-100 dark:border-red-700 dark:bg-red-900/30 dark:text-red-400 dark:hover:bg-red-900/50 transition"
+                                                    title="Supprimer">
+                                                <twig:UX:Icon name="boxicons:trash" class="h-4 w-4" />
                                             </button>
                                         </form>
                                     </div>
                                 </td>
                             </tr>
                         {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
+                    </tbody>
+                </table>
             </div>
         {% endif %}
 
     </div>
 
     <!-- Modal pour la galerie d'images -->
-    <div class="modal fade" id="helpImagesModal" tabindex="-1" aria-labelledby="helpImagesModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-xl modal-dialog-scrollable">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="helpImagesModalLabel"><i class="fal fa-images"></i> Galerie d'images</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+    <div id="faqImagesModal" class="hidden fixed inset-0 z-50 overflow-y-auto">
+        <div class="flex items-center justify-center min-h-screen px-4">
+            <!-- Backdrop -->
+            <div class="fixed inset-0 bg-black/50 transition-opacity" onclick="closeFaqImagesModal()"></div>
+
+            <!-- Modal content -->
+            <div class="relative bg-white dark:bg-slate-900 rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+                <!-- Modal header -->
+                <div class="sticky top-0 flex justify-between items-center px-6 py-4 border-b border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900">
+                    <h2 class="text-xl font-bold text-slate-900 dark:text-slate-50 flex items-center gap-3">
+                        <twig:UX:Icon name="mdi:image-multiple-outline" class="h-6 w-6" />
+                        Galerie d'images
+                    </h2>
+                    <button type="button"
+                            class="text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-300"
+                            onclick="closeFaqImagesModal()"
+                            aria-label="Fermer">
+                        <twig:UX:Icon name="basil:cross-solid" class="h-6 w-6" />
+                    </button>
                 </div>
-                <div class="modal-body">
-                    {{ component('help_image_manager', { showModal: false, editorTextarea: '' }) }}
+
+                <!-- Modal body -->
+                <div class="px-6 py-4">
+                    {{ component('help_image_manager', { showModal: false, editorTextarea: 'textarea[name="faq[reponse]"]' }) }}
                 </div>
             </div>
         </div>
@@ -145,6 +149,21 @@
 
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
     <script>
+        function toggleFaqImagesModal() {
+            document.getElementById('faqImagesModal').classList.remove('hidden');
+        }
+
+        function closeFaqImagesModal() {
+            document.getElementById('faqImagesModal').classList.add('hidden');
+        }
+
+        // Fermer le modal à la touche Escape
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeFaqImagesModal();
+            }
+        });
+
         (function () {
             const tbody = document.getElementById('faq-sortable-body');
             const feedback = document.getElementById('faq-reorder-feedback');
@@ -159,17 +178,23 @@
                     return;
                 }
 
-                feedback.className = 'alert position-fixed top-0 end-0 m-3 shadow';
-                feedback.classList.add(type === 'success' ? 'alert-success' : 'alert-danger');
+                feedback.className = 'fixed top-4 right-4 px-6 py-3 rounded-lg shadow-lg z-50 transition';
+                feedback.classList.remove('hidden', 'bg-green-100', 'text-green-800', 'dark:bg-green-900/30', 'dark:text-green-400', 'bg-red-100', 'text-red-800', 'dark:bg-red-900/30', 'dark:text-red-400');
+                
+                if (type === 'success') {
+                    feedback.classList.add('bg-green-100', 'text-green-800', 'dark:bg-green-900/30', 'dark:text-green-400');
+                } else {
+                    feedback.classList.add('bg-red-100', 'text-red-800', 'dark:bg-red-900/30', 'dark:text-red-400');
+                }
+                
                 feedback.textContent = message;
-                feedback.classList.remove('d-none');
 
                 if (feedbackTimer) {
                     clearTimeout(feedbackTimer);
                 }
 
                 feedbackTimer = setTimeout(() => {
-                    feedback.classList.add('d-none');
+                    feedback.classList.add('hidden');
                 }, 2500);
             }
 

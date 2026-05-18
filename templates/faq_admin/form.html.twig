@@ -3,17 +3,16 @@
 {% block header %}{{ faq.id ? 'Modifier' : 'Créer' }} une question FAQ{% endblock %}
 
 {% block content %}
-    <div class="container-fluid py-4">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1><i class="fal fa-circle-question"></i> {{ faq.id ? 'Modifier la question' : 'Nouvelle question' }}</h1>
+    <div class="py-4">
+        <div class="mb-6">
+            <h1 class="text-3xl font-bold text-slate-900 dark:text-slate-50 flex items-center gap-3">
+                <twig:UX:Icon name="icon:question" class="h-8 w-8 text-blue-600 dark:text-blue-400" />
+                {{ faq.id ? 'Modifier la question' : 'Nouvelle question' }}
+            </h1>
         </div>
 
-        <div class="card shadow-sm border-0">
-            <div class="card-body">
-                {{ component('faq_editor', { initialFormData: faq }) }}
-                    {# Composant de gestion des images (modal) partagé avec l'aide #}
-                    {{ component('help_image_manager', { showModal: true, editorTextarea: 'textarea[name="faq[reponse]"]' }) }}
-            </div>
+        <div class="rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-900 p-6">
+            {{ component('faq_editor', { initialFormData: faq }) }}
         </div>
     </div>
 

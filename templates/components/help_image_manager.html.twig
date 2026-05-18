@@ -4,6 +4,7 @@
    - editorTextarea: string (sélecteur CSS du textarea pour insérer l'image)
 #}
 
+{% if showModal %}
 <!-- Modal wrapper -->
 <div id="imageManagerModal" class="hidden fixed inset-0 z-50 overflow-y-auto">
     <div class="flex items-center justify-center min-h-screen px-4">
@@ -28,6 +29,7 @@
 
             <!-- Modal body -->
             <div class="px-6 py-4">
+{% endif %}
                 <div {{ attributes.defaults({class: ''}) }}>
                     <!-- Conteneur des onglets avec Tailwind -->
                     <div class="space-y-6">
@@ -68,7 +70,7 @@
                 </div>
 
                 <!-- Conteneur grille pour les images -->
-                <div id="imageGallery" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 overflow-auto min-h-[300px] max-h-[60vh]">
+                <div id="imageGallery" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 overflow-auto max-h-[60vh] content-start auto-rows-min">
                     <!-- État initial de chargement -->
                     <div class="col-span-2 sm:col-span-3 md:col-span-4 flex flex-col items-center justify-center py-8">
                         <twig:UX:Icon name="tabler:loader-2" class="h-8 w-8 animate-spin text-blue-600 dark:text-blue-400" />
@@ -82,16 +84,6 @@
         <div id="upload-tab-pane" class="hidden">
             <div class="grid grid-cols-1 md:grid-cols-7 gap-6">
                 <div class="md:col-span-4 space-y-4">
-                    <!-- Message d'information -->
-                    <div class="p-4 rounded-lg bg-cyan-50 border border-cyan-200 dark:bg-cyan-900/20 dark:border-cyan-700">
-                        <div class="flex gap-3">
-                            <twig:UX:Icon name="icon:info" class="h-5 w-5 text-cyan-600 dark:text-cyan-400 flex-shrink-0 mt-0.5" />
-                            <span class="text-sm text-cyan-800 dark:text-cyan-200">
-                                L'image sera sauvegardée sur le serveur et pourra être utilisée plus tard dans d'autres aides.
-                            </span>
-                        </div>
-                    </div>
-
                     <!-- Formulaire d'upload -->
                     <form id="uploadImageForm" onsubmit="uploadImage(event)" class="space-y-4">
                         <div>
@@ -254,10 +246,10 @@
                 data.forEach(img => {
                     const url = '/uploads/help_images/' + img.fichier;
                     const col = document.createElement('div');
-                    col.className = 'relative group rounded-lg border border-slate-200 dark:border-slate-700 overflow-hidden cursor-pointer hover:shadow-md dark:hover:shadow-lg transition';
+                    col.className = 'relative group rounded-lg border border-slate-200 dark:border-slate-700 overflow-hidden cursor-pointer hover:shadow-md dark:hover:shadow-lg transition bg-white dark:bg-slate-800';
                     col.innerHTML = `
-                        <div class="aspect-square bg-white dark:bg-slate-800 flex items-center justify-center overflow-hidden js-select-image" data-image-url="${url}" data-image-name="${String(img.nom).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;')}">
-                            <img src="${url}" alt="${img.nom}" class="w-full h-full object-cover">
+                        <div class="aspect-[4/3] bg-slate-100 dark:bg-slate-900 overflow-hidden js-select-image" data-image-url="${url}" data-image-name="${String(img.nom).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;')}">
+                            <img src="${url}" alt="${img.nom}" class="block w-full h-full object-cover object-center">
                         </div>
                         <div class="px-3 py-2 text-xs text-center text-slate-900 dark:text-slate-100 bg-slate-50 dark:bg-slate-700 truncate border-t border-slate-200 dark:border-slate-700" title="${img.nom}">
                             ${img.nom}
@@ -390,11 +382,17 @@
 
     function openImageModal() {
         loadImages(); // Charge la galerie
-        document.getElementById('imageManagerModal').classList.remove('hidden');
+        const modal = document.getElementById('imageManagerModal');
+        if (modal) {
+            modal.classList.remove('hidden');
+        }
     }
 
     function closeImageManagerModal() {
-        document.getElementById('imageManagerModal').classList.add('hidden');
+        const modal = document.getElementById('imageManagerModal');
+        if (modal) {
+            modal.classList.add('hidden');
+        }
     }
 
     // Fermer le modal à la touche Escape
@@ -404,9 +402,10 @@
         }
     });
 </script>
-                    </div>
                 </div>
+{% if showModal %}
             </div>
         </div>
     </div>
 </div>
+{% endif %}

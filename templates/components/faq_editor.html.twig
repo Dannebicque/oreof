@@ -1,70 +1,95 @@
 <div {{ attributes }}>
-    <div class="row mt-4">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <!-- Zone d'édition (Formulaire) -->
-        <div class="col-md-6 border-end pe-4">
+        <div>
 
             {{ form_start(form) }}
 
-            {{ form_row(form.question) }}
-            <div class="mb-3">
-                {{ form_label(form.centresShow) }}
-                <div class="row g-2 mt-1">
+            <div class="flex flex-col gap-6">
+                <!-- Question -->
+                <div>
+                {{ form_label(form.question, null, { label_attr: { class: 'block text-lg font-semibold text-slate-900 dark:text-slate-50 mb-4' } }) }}
+                {{ form_widget(form.question, { attr: { class: 'w-full px-4 py-2.5 text-base border border-slate-300 rounded-lg bg-white text-slate-900 placeholder-slate-500 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400' } }) }}
+                {{ form_errors(form.question) }}
+                </div>
+
+                <!-- Centres Show -->
+                <div>
+                {{ form_label(form.centresShow, null, { label_attr: { class: 'block text-lg font-semibold text-slate-900 dark:text-slate-50 mb-4' } }) }}
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     {% for centreChoice in form.centresShow %}
-                        <div class="col-12 col-md-6">
-                            <label class="border rounded px-3 py-2 d-flex align-items-center gap-2 w-100">
-                                {{ form_widget(centreChoice, { attr: { class: 'form-check-input m-0' } }) }}
-                                <span>{{ centreChoice.vars.label }}</span>
-                            </label>
-                        </div>
+                        <label class="flex items-center gap-3 px-3 py-2 border border-slate-300 rounded-lg bg-white hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-800 dark:hover:bg-slate-700 cursor-pointer transition">
+                            {{ form_widget(centreChoice, { attr: { class: 'h-4 w-4 rounded' } }) }}
+                            <span class="text-sm text-slate-900 dark:text-slate-100">{{ centreChoice.vars.label }}</span>
+                        </label>
                     {% endfor %}
                 </div>
                 {{ form_help(form.centresShow) }}
                 {{ form_errors(form.centresShow) }}
-            </div>
+                </div>
 
-            <div class="mb-4 mt-3">
-                {{ form_label(form.reponse) }}
+                <!-- Réponse -->
+                <div>
+                {{ form_label(form.reponse, null, { label_attr: { class: 'block text-lg font-semibold text-slate-900 dark:text-slate-50 mb-4' } }) }}
 
                 <!-- Barre d'outils Markdown -->
                 {{ component('markdown_toolbar') }}
 
                 <!-- Le champ textarea de Symfony -->
-                {{ form_widget(form.reponse, { attr: { 'class': 'form-control rounded-bottom-only' } }) }}
-            </div>
+                {{ form_widget(form.reponse, { attr: { 'class': 'w-full px-4 py-2.5 text-sm border border-slate-300 rounded-b-lg bg-white text-slate-900 placeholder-slate-500 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 font-mono' } }) }}
+                {{ form_errors(form.reponse) }}
+                </div>
 
-            <div class="row">
-                <div class="col-12">
-                    <div class="form-check form-switch mb-3">
-                        {{ form_widget(form.isActive) }}
-                        {{ form_label(form.isActive) }}
-                    </div>
+                <!-- Toggle Actif -->
+                <div>
+                    <label class="inline-flex items-center gap-3 cursor-pointer">
+                        {{ form_widget(form.isActive, { attr: { class: 'h-5 w-5 rounded border-slate-300 text-blue-600 focus:ring-blue-500 dark:border-slate-600 dark:bg-slate-800 dark:text-blue-500 dark:focus:ring-blue-400' } }) }}
+                        <span class="text-lg font-semibold text-slate-900 dark:text-slate-50">Afficher cette question</span>
+                    </label>
+                    {{ form_errors(form.isActive) }}
+                </div>
+
+                <!-- Boutons d'action -->
+                <div class="flex gap-3 pt-4">
+                    <button type="submit" class="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium rounded-lg bg-green-600 text-white hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-600 transition">
+                        <twig:UX:Icon name="icon:save" class="h-5 w-5" />
+                        Enregistrer
+                    </button>
+                    <a href="{{ path('app_faq_index') }}" class="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium rounded-lg border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700 transition">
+                        <twig:UX:Icon name="icon:arrow-left" class="h-5 w-5" />
+                        Retour
+                    </a>
                 </div>
             </div>
 
-            <button type="submit" class="btn btn-success mt-3">
-                <i class="fal fa-save"></i> Enregistrer
-            </button>
-            <a href="{{ path('app_faq_index') }}" class="btn btn-secondary mt-3">Retour</a>
             {{ form_end(form) }}
         </div>
 
         <!-- Zone d'aperçu en direct -->
-        <div class="col-md-6 ps-4">
-            <h5 class="text-info mb-4"><i class="fal fa-eye"></i> Aperçu utilisateur</h5>
+        <div class="space-y-4 flex flex-col">
+            <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-50 flex items-center gap-2">
+                <twig:UX:Icon name="icon:eye" class="h-5 w-5 text-cyan-600 dark:text-cyan-400" />
+                Aperçu utilisateur
+            </h3>
 
-            <div class="bg-light p-4 rounded shadow-sm">
-                <h3 class="mb-3">{{ form.question.vars.value ?: 'Question...' }}</h3>
+            <div class="rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-800 flex flex-col flex-1">
+                <div class="p-6 overflow-y-auto">
+                    <h4 class="mb-4 text-base font-semibold text-slate-900 dark:text-slate-50">{{ form.question.vars.value ?: 'Question...' }}</h4>
 
-                <div class="markdown-body text-break">
-                    {% if form.reponse.vars.value %}
-                        <div id="faq-preview">{{ form.reponse.vars.value|markdown_to_html|parse_embeds }}</div>
-                    {% else %}
-                        <div id="faq-preview"><p class="text-muted fst-italic">Commencez à rédiger pour voir l'aperçu...</p></div>
-                    {% endif %}
+                    <div class="app-help-markdown text-slate-700 dark:text-slate-300 break-words">
+                        {% if form.reponse.vars.value %}
+                            <div id="faq-preview">{{ form.reponse.vars.value|markdown_to_html|parse_embeds }}</div>
+                        {% else %}
+                            <div id="faq-preview"><p class="text-slate-500 dark:text-slate-400 italic">Commencez à rédiger pour voir l'aperçu...</p></div>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- Image manager modal (géré en Tailwind) -->
+    {{ component('help_image_manager', { showModal: true, editorTextarea: 'textarea[name="faq[reponse]"]' }) }}
 </div>
 
 <script src="/js/editor_helpers.js"></script>
