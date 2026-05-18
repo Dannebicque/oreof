@@ -22,15 +22,15 @@ use App\Enums\RegimeInscriptionEnum;
 use App\Repository\TypeEpreuveRepository;
 use App\Utils\Tools;
 use DateTimeInterface;
-use Gotenberg\Gotenberg;
-use Gotenberg\Stream;
 use PhpOffice\PhpSpreadsheet\Exception;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
-use Psr\Http\Client\ClientInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\Filesystem\Filesystem;
+use Sensiolabs\GotenbergBundle\GotenbergInterface;
+use Sensiolabs\GotenbergBundle\Processor\FileProcessor;
 
 class M2eMccc extends AbstractM2eMccc
 {
@@ -39,7 +39,7 @@ class M2eMccc extends AbstractM2eMccc
 
     public function __construct(
         KernelInterface                      $kernel,
-        protected ClientInterface            $client,
+        protected GotenbergInterface         $gotenberg,
         protected CalculStructureParcoursM2e $calculStructureParcours,
         protected ExcelWriter                $excelWriter,
         protected TypeEpreuveRepository      $typeEpreuveRepository
@@ -555,20 +555,16 @@ class M2eMccc extends AbstractM2eMccc
 
         $fichier = $this->excelWriter->saveFichier($this->fileName, $this->dir . '/temp/');
 
-        $request = Gotenberg::libreOffice('http://localhost:3000')
-            ->convert(Stream::path($fichier));
+        $response = $this->gotenberg
+            ->pdf()
+            ->office()
+            ->files(new \SplFileInfo($fichier))
+            ->generate()
+            ->stream($this->fileName . '.pdf');
 
-        $reponse = $this->client->sendRequest($request);
+        unlink($fichier);
 
-        if ($reponse) {
-            unlink($this->dir . '/temp/' . $this->fileName . '.xlsx');
-        }
-
-        // retourner une réponse avec le contenu du PDF
-        return new Response($reponse->getBody()->getContents(), 200, [
-            'Content-Type' => 'application/pdf',
-            'Content-Disposition' => 'attachment; filename="' . $this->fileName . '.pdf"',
-        ]);
+        return $response;
     }
 
     public function exportAndSaveExcelMccc(
@@ -617,17 +613,31 @@ class M2eMccc extends AbstractM2eMccc
         ?DateTimeInterface $dateCfvu = null,
         ?DateTimeInterface $dateConseil = null,
         bool               $versionFull = true,
+        ?string            $customFileName = null,
     ): string
     {
         $this->genereExcelMccc($anneeUniversitaire, $parcours, $dateCfvu, $dateConseil, $versionFull);
 
-        $fichier = $this->excelWriter->saveFichier($this->fileName, $dir);
+        if ($customFileName !== null) {
+            $this->fileName = $customFileName;
+        }
 
-        $request = Gotenberg::libreOffice('http://localhost:3000')
-            ->outputFilename($this->fileName)
-            ->convert(Stream::path($fichier));
+        $fichier = $this->excelWriter->saveFichier($this->fileName, $this->dir . '/temp/');
 
-        return Gotenberg::save($request, $dir);
+        $this->gotenberg
+            ->pdf()
+            ->office()
+            ->files(new \SplFileInfo($fichier))
+            ->fileName($this->fileName)
+            ->generate()
+            ->processor(new FileProcessor(new Filesystem(), $dir))
+            ->process();
+
+        if (file_exists($fichier)) {
+            unlink($fichier);
+        }
+
+        return $this->fileName . '.pdf';
     }
 
 

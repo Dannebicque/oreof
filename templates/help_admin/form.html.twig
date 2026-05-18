@@ -3,15 +3,20 @@
 {% block header %}{{ help.id ? 'Modifier' : 'Créer' }} une aide{% endblock %}
 
 {% block content %}
-    <div class="container-fluid py-4">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1><i class="fal fa-book-open"></i> {{ help.id ? 'Modifier l\'aide contextuelle' : 'Nouvelle aide contextuelle' }}</h1>
-        </div>
+    <div class="w-full">
+        <div class="space-y-6">
+            <!-- Header avec titre -->
+            <h1 class="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-slate-50 flex items-center gap-3">
+                <twig:UX:Icon name="mdi:book-open-outline" class="h-8 w-8 text-blue-600 dark:text-blue-400" />
+                {{ help.id ? 'Modifier l\'aide contextuelle' : 'Nouvelle aide contextuelle' }}
+            </h1>
 
-        <div class="card shadow-sm border-0">
-            <div class="card-body">
-                {# Appel du composant Live #}
-                {{ component('help_editor', { initialFormData: help }) }}
+            <!-- Formulaire dans une card -->
+            <div class="rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-900 overflow-hidden">
+                <div class="p-6">
+                    {# Appel du composant Live #}
+                    {{ component('help_editor', { initialFormData: help }) }}
+                </div>
             </div>
         </div>
     </div>
@@ -20,4 +25,17 @@
     {{ component('help_image_manager', { showModal: true, editorTextarea: 'textarea[name="help[content]"]' }) }}
 
     <script src="/js/editor_helpers.js"></script>
+{% endblock %}
+
+{% block breadcrumb %}
+    {{ include('communs/_breadcrumb.html.twig', {liens:[
+        {
+            href:path('app_help_index'),
+            title: 'Gestion des Aides',
+        },
+        {
+            href:'',
+            title: help.id ? 'Modifier' : 'Créer',
+        }
+    ]}) }}
 {% endblock %}

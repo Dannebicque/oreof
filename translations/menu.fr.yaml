@@ -16,6 +16,8 @@ menu:
     validation_rf: Validation RF/co-RF
     exports: Exports
     controle_lheo: Controle LHEO
+    logs.applicatifs: Logs de l'application
+    impersonation.user: Impersonation d'un utilisateur
   compo:
     pilotage: Pilotage
     consulter_offre: Consulter l'offre de formation

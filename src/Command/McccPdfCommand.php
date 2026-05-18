@@ -105,30 +105,34 @@ class McccPdfCommand extends Command
                 $dateCfvu = $this->getHistorique->getHistoriqueParcoursLastStep($dpeParcours, 'soumis_cfvu')?->getDate();
 
                 if($typeDiplomeParcours !== "BUT"){
-                    $pdfFull = $this->licenceMccc->exportPdfLicenceMccc(
+                    $pdfFull = $this->licenceMccc->exportAndSavePdfLicenceMccc(
                         anneeUniversitaire: $anneeDpe,
-                        parcours : $parcours,
+                        parcours: $parcours,
+                        dir: __DIR__ . '/../../export/',
                         dateCfvu: $dateCfvu,
                         dateConseil: $dateConseil
                     );
-                    $pdfSimplifie = $this->licenceMccc->exportPdfLicenceMccc(
+                    $pdfSimplifie = $this->licenceMccc->exportAndSavePdfLicenceMccc(
                         anneeUniversitaire: $anneeDpe,
                         parcours: $parcours,
+                        dir: __DIR__ . '/../../export/',
                         dateCfvu: $dateCfvu,
                         dateConseil: $dateConseil,
                         versionFull: false
                     );
                 }
                 elseif($typeDiplomeParcours === "BUT"){
-                    $pdfFull = $this->butMccc->exportPdfbutMccc(
+                    $pdfFull = $this->butMccc->exportAndSavePdfbutMccc(
                         anneeUniversitaire: $anneeDpe,
                         parcours: $parcours,
+                        dir: __DIR__ . '/../../export/',
                         dateCfvu: $dateCfvu,
                         dateConseil: $dateConseil
                     );
-                    $pdfSimplifie = $this->butMccc->exportPdfbutMccc(
+                    $pdfSimplifie = $this->butMccc->exportAndSavePdfbutMccc(
                         anneeUniversitaire: $anneeDpe,
                         parcours: $parcours,
+                        dir: __DIR__ . '/../../export/',
                         dateCfvu: $dateCfvu,
                         dateConseil: $dateConseil,
                         versionFull: false
@@ -220,50 +224,63 @@ class McccPdfCommand extends Command
 
                 $typeDiplome = $parcours->getTypeDiplome()->getLibelleCourt();
                 if($typeDiplome !== "BUT"){
-                    $pdfFull = $this->licenceMccc->exportPdfLicenceMccc(
+                    $this->licenceMccc->exportAndSavePdfLicenceMccc(
                         anneeUniversitaire: $anneeDpe,
                         parcours: $parcours,
-                        dateCfvu: $dateCfvu,
-                        dateConseil: $dateConseil
-                    );
-                    $pdfSimplifie = $this->licenceMccc->exportPdfLicenceMccc(
-                        anneeUniversitaire: $anneeDpe,
-                        parcours: $parcours,
+                        dir: $directoryPath,
                         dateCfvu: $dateCfvu,
                         dateConseil: $dateConseil,
-                        versionFull: false
+                        customFileName: pathinfo($fileNamePdf, PATHINFO_FILENAME)
                     );
-                    $this->fs->appendToFile(
-                        $directoryPath . "/" . $fileNamePdf,
-                        $pdfFull
+
+                    $this->licenceMccc->exportAndSavePdfLicenceMccc(
+                        anneeUniversitaire: $anneeDpe,
+                        parcours: $parcours,
+                        dir: $directoryPath,
+                        dateCfvu: $dateCfvu,
+                        dateConseil: $dateConseil,
+                        versionFull: false,
+                        customFileName: pathinfo($fileNameSimplifiePdf, PATHINFO_FILENAME)
                     );
-                    $this->fs->appendToFile(
-                        $directoryPath . "/" . $fileNameSimplifiePdf,
-                        $pdfSimplifie
-                    );
+
+//      Ne fonctionnent pas avec le bundle gotenberg
+//                    $this->fs->appendToFile(
+//                        $directoryPath . "/" . $fileNamePdf,
+//                        $pdfFull
+//                    );
+//                    $this->fs->appendToFile(
+//                        $directoryPath . "/" . $fileNameSimplifiePdf,
+//                        $pdfSimplifie
+//                    );
                 }
                 elseif($typeDiplome === "BUT"){
-                    $pdfFull = $this->butMccc->exportPdfbutMccc(
+                    $this->butMccc->exportAndSavePdfbutMccc(
                         anneeUniversitaire: $anneeDpe,
                         parcours: $parcours,
-                        dateCfvu: $dateCfvu,
-                        dateConseil: $dateConseil
-                    );
-                    $pdfSimplifie = $this->butMccc->exportPdfbutMccc(
-                        anneeUniversitaire: $anneeDpe,
-                        parcours: $parcours,
+                        dir: $directoryPath,
                         dateCfvu: $dateCfvu,
                         dateConseil: $dateConseil,
-                        versionFull: false
+                        customFileName: pathinfo($fileNamePdf, PATHINFO_FILENAME)
                     );
-                    $this->fs->appendToFile(
-                        $directoryPath . "/" . $fileNamePdf,
-                        $pdfFull
+
+                    $this->butMccc->exportAndSavePdfbutMccc(
+                        anneeUniversitaire: $anneeDpe,
+                        parcours: $parcours,
+                        dir: $directoryPath,
+                        dateCfvu: $dateCfvu,
+                        dateConseil: $dateConseil,
+                        versionFull: false,
+                        customFileName: pathinfo($fileNameSimplifiePdf, PATHINFO_FILENAME)
                     );
-                    $this->fs->appendToFile(
-                        $directoryPath . "/" . $fileNameSimplifiePdf,
-                        $pdfSimplifie
-                    );
+//      Ne fonctionnent pas avec le bundle gotenberg
+//                    $this->fs->appendToFile(
+//                        $directoryPath . "/" . $fileNamePdf,
+//                        $pdfFull
+//                    );
+//                    $this->fs->appendToFile(
+//                        $directoryPath . "/" . $fileNameSimplifiePdf,
+//                        $pdfSimplifie
+//                    );
                 }
                 $io->progressAdvance();
             }
@@ -327,38 +344,51 @@ class McccPdfCommand extends Command
                     // Sauvegarde de la version actuelle en PDF
                     $typeDiplome = $p->getTypeDiplome()->getLibelleCourt();
                     if($typeDiplome === "BUT"){
-                        $pdfFull = $this->butMccc->exportPdfbutMccc(
+                        $this->butMccc->exportAndSavePdfbutMccc(
                             anneeUniversitaire: $dpe,
                             parcours: $p,
-                            dateCfvu: $dateCfvu,
-                            dateConseil: $dateConseil
-                        );
-                        $pdfSimplifie = $this->butMccc->exportPdfbutMccc(
-                            anneeUniversitaire: $dpe,
-                            parcours: $p,
+                            dir: $directoryPath,
                             dateCfvu: $dateCfvu,
                             dateConseil: $dateConseil,
-                            versionFull: false
+                            customFileName: pathinfo($fileNamePdf, PATHINFO_FILENAME)
                         );
-                        $this->fs->appendToFile($directoryPath . "/" . $fileNamePdf, $pdfFull);
-                        $this->fs->appendToFile($directoryPath . "/" . $fileNameSimplifiePdf, $pdfSimplifie);
+
+                        $this->butMccc->exportAndSavePdfbutMccc(
+                            anneeUniversitaire: $dpe,
+                            parcours: $p,
+                            dir: $directoryPath,
+                            dateCfvu: $dateCfvu,
+                            dateConseil: $dateConseil,
+                            versionFull: false,
+                            customFileName: pathinfo($fileNameSimplifiePdf, PATHINFO_FILENAME)
+                        );
+
+                        // Ne fonctionnent pas avec le bundle gotenberg
+                        // $this->fs->appendToFile($directoryPath . "/" . $fileNamePdf, $pdfFull);
+                        // $this->fs->appendToFile($directoryPath . "/" . $fileNameSimplifiePdf, $pdfSimplifie);
                     }
                     elseif($typeDiplome !== "BUT"){
-                        $pdfFull = $this->licenceMccc->exportPdfLicenceMccc(
+                        $this->licenceMccc->exportAndSavePdfLicenceMccc(
                             anneeUniversitaire: $dpe,
                             parcours: $p,
-                            dateCfvu: $dateCfvu,
-                            dateConseil: $dateConseil
-                        );
-                        $pdfSimplifie = $this->licenceMccc->exportPdfLicenceMccc(
-                            anneeUniversitaire: $dpe,
-                            parcours: $p,
+                            dir: $directoryPath,
                             dateCfvu: $dateCfvu,
                             dateConseil: $dateConseil,
-                            versionFull: false
+                            customFileName: pathinfo($fileNamePdf, PATHINFO_FILENAME)
                         );
-                        $this->fs->appendToFile($directoryPath . "/" . $fileNamePdf, $pdfFull);
-                        $this->fs->appendToFile($directoryPath . "/" . $fileNameSimplifiePdf, $pdfSimplifie);
+
+                        $this->licenceMccc->exportAndSavePdfLicenceMccc(
+                            anneeUniversitaire: $dpe,
+                            parcours: $p,
+                            dir: $directoryPath,
+                            dateCfvu: $dateCfvu,
+                            dateConseil: $dateConseil,
+                            versionFull: false,
+                            customFileName: pathinfo($fileNameSimplifiePdf, PATHINFO_FILENAME)
+                        );
+                        //      Ne fonctionnent pas avec le bundle gotenberg
+                        // $this->fs->appendToFile($directoryPath . "/" . $fileNamePdf, $pdfFull);
+                        // $this->fs->appendToFile($directoryPath . "/" . $fileNameSimplifiePdf, $pdfSimplifie);
                     }
                     $io->progressAdvance();
                 }

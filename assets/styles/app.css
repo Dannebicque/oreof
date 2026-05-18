@@ -56,57 +56,78 @@ html[data-theme="dark"] {
     color: var(--color-text);
   }
 
-    html[data-a11y-size="large"] {
-        font-size: 112.5%;
-    }
+  html[data-a11y-size="large"] {
+    font-size: 112.5%;
+  }
 
-    html[data-a11y-size="xlarge"] {
-        font-size: 125%;
-    }
+  html[data-a11y-size="xlarge"] {
+    font-size: 125%;
+  }
 
-    html[data-a11y-font="dys"] body {
-        font-family: OpenDyslexic, Atkinson Hyperlegible, Arial, Helvetica, sans-serif;
-        letter-spacing: 0.01em;
-    }
+  html[data-a11y-font="dys"] body {
+    font-family:
+      OpenDyslexic,
+      Atkinson Hyperlegible,
+      Arial,
+      Helvetica,
+      sans-serif;
+    letter-spacing: 0.01em;
+  }
 
-    html[data-a11y-contrast="high"] {
-        --color-bg: #ffffff;
-        --color-surface: #ffffff;
-        --color-text: #0b0b0b;
-        --color-text-muted: #111827;
-        --color-border: #0f172a;
-        --color-primary: #0f172a;
-        --color-success: #14532d;
-        --color-info: #0c4a6e;
-        --color-warning: #92400e;
-        --color-danger: #7f1d1d;
-    }
+  html[data-a11y-contrast="high"] {
+    --color-bg: #ffffff;
+    --color-surface: #ffffff;
+    --color-text: #0b0b0b;
+    --color-text-muted: #111827;
+    --color-border: #0f172a;
+    --color-primary: #0f172a;
+    --color-success: #14532d;
+    --color-info: #0c4a6e;
+    --color-warning: #92400e;
+    --color-danger: #7f1d1d;
+  }
 
-    html[data-theme="dark"][data-a11y-contrast="high"] {
-        --color-bg: #020617;
-        --color-surface: #020617;
-        --color-text: #ffffff;
-        --color-text-muted: #f1f5f9;
-        --color-border: #ffffff;
-        --color-primary: #e2e8f0;
-        --color-success: #86efac;
-        --color-info: #7dd3fc;
-        --color-warning: #fcd34d;
-        --color-danger: #fca5a5;
-    }
+  html[data-theme="dark"][data-a11y-contrast="high"] {
+    --color-bg: #020617;
+    --color-surface: #020617;
+    --color-text: #ffffff;
+    --color-text-muted: #f1f5f9;
+    --color-border: #ffffff;
+    --color-primary: #e2e8f0;
+    --color-success: #86efac;
+    --color-info: #7dd3fc;
+    --color-warning: #fcd34d;
+    --color-danger: #fca5a5;
+  }
 
-    html[data-a11y-contrast="high"] *:focus-visible {
-        outline: 3px solid #f59e0b !important;
-        outline-offset: 2px;
-    }
+  html[data-a11y-contrast="high"] *:focus-visible {
+    outline: 3px solid #f59e0b !important;
+    outline-offset: 2px;
+  }
 
-    html[data-a11y-motion="reduced"] *,
-    html[data-a11y-motion="reduced"] *::before,
-    html[data-a11y-motion="reduced"] *::after {
-        animation: none !important;
-        transition-duration: 0s !important;
-        scroll-behavior: auto !important;
-    }
+  html[data-a11y-motion="reduced"] *,
+  html[data-a11y-motion="reduced"] *::before,
+  html[data-a11y-motion="reduced"] *::after {
+    animation: none !important;
+    transition-duration: 0s !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* The legacy footer layout adds bottom padding and absolute positioning.
+     Our base template now uses a flex column layout, so neutralize those rules. */
+  html[data-footer="true"] body {
+    padding-bottom: 0 !important;
+  }
+
+  html[data-footer="true"] #root > footer {
+    position: static !important;
+    bottom: auto !important;
+    width: 100% !important;
+    height: auto !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    display: block !important;
+  }
 }
 
 @layer components {
@@ -294,6 +315,236 @@ html[data-theme="dark"] {
     @apply bg-amber-500;
   }
 
+  /* Markdown in help drawer */
+  .app-help-markdown {
+    @apply text-[0.95rem] leading-7 text-slate-700;
+  }
+
+  html[data-theme="dark"] .app-help-markdown {
+    @apply text-slate-200;
+  }
+
+  .app-help-markdown h1,
+  .app-help-markdown h2,
+  .app-help-markdown h3,
+  .app-help-markdown h4 {
+    @apply mt-6 mb-3 font-extrabold tracking-tight text-slate-900;
+  }
+
+  html[data-theme="dark"] .app-help-markdown h1,
+  html[data-theme="dark"] .app-help-markdown h2,
+  html[data-theme="dark"] .app-help-markdown h3,
+  html[data-theme="dark"] .app-help-markdown h4 {
+    @apply text-slate-100;
+  }
+
+  .app-help-markdown h1 {
+    @apply text-2xl;
+  }
+
+  .app-help-markdown h2 {
+    @apply text-xl border-b border-slate-200 pb-1;
+  }
+
+  .app-help-markdown h3 {
+    @apply text-lg;
+  }
+
+  .app-help-markdown p,
+  .app-help-markdown ul,
+  .app-help-markdown ol,
+  .app-help-markdown blockquote,
+  .app-help-markdown pre,
+  .app-help-markdown table,
+  .app-help-markdown details {
+    @apply my-3;
+  }
+
+  .app-help-markdown ul,
+  .app-help-markdown ol {
+    @apply pl-6;
+  }
+
+  .app-help-markdown ul {
+    @apply list-disc;
+  }
+
+  .app-help-markdown ol {
+    @apply list-decimal;
+  }
+
+  .app-help-markdown li::marker {
+    color: var(--color-primary);
+  }
+
+  .app-help-markdown a {
+    color: var(--color-primary);
+    @apply underline decoration-2 underline-offset-2;
+  }
+
+  .app-help-markdown a:hover {
+    @apply opacity-85;
+  }
+
+  .app-help-markdown strong {
+    @apply font-semibold text-slate-900;
+  }
+
+  html[data-theme="dark"] .app-help-markdown strong {
+    @apply text-white;
+  }
+
+  .app-help-markdown code {
+    @apply rounded bg-slate-100 px-1.5 py-0.5 text-[0.85em] text-slate-800;
+  }
+
+  html[data-theme="dark"] .app-help-markdown code {
+    @apply bg-slate-800 text-slate-100;
+  }
+
+  .app-help-markdown pre {
+    @apply overflow-x-auto rounded-xl border border-slate-200 bg-slate-950 p-3 text-slate-100;
+  }
+
+  .app-help-markdown pre code {
+    @apply bg-transparent p-0 text-inherit;
+  }
+
+  .app-help-markdown blockquote {
+    @apply border-l-4 border-cyan-500 bg-cyan-50/70 px-4 py-2 text-slate-700;
+  }
+
+  html[data-theme="dark"] .app-help-markdown blockquote {
+    @apply border-cyan-400 bg-cyan-950/30 text-slate-200;
+  }
+
+  .app-help-markdown details {
+    @apply relative overflow-hidden rounded-xl border border-slate-200 bg-slate-50 py-3 pl-5 pr-4 shadow-sm transition-all duration-200 ease-out;
+    --accordion-accent: var(--color-primary);
+  }
+
+  html[data-theme="dark"] .app-help-markdown details {
+    @apply border-slate-700 bg-slate-800/60;
+  }
+
+  .app-help-markdown details details {
+    --accordion-accent: var(--color-info);
+    @apply mt-4 rounded-lg border border-slate-200 bg-white/80 pl-5;
+  }
+
+  html[data-theme="dark"] .app-help-markdown details details {
+    @apply border-slate-700 bg-slate-900/40;
+  }
+
+  .app-help-markdown details details::before {
+    content: "";
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 0.35rem;
+    background: linear-gradient(
+      180deg,
+      var(--accordion-accent),
+      color-mix(in srgb, var(--accordion-accent) 72%, white)
+    );
+    transition:
+      width 0.2s ease,
+      opacity 0.2s ease;
+  }
+
+  .app-help-markdown details details:hover::before,
+  .app-help-markdown details details[open]::before {
+    width: 0.45rem;
+  }
+
+  .app-help-markdown summary {
+    @apply relative z-[1] -mx-5 -my-3 flex cursor-pointer items-center gap-3 px-5 py-3 font-semibold text-slate-800 transition-colors duration-200 ease-out;
+  }
+
+  html[data-theme="dark"] .app-help-markdown summary {
+    @apply text-slate-100;
+  }
+
+  .app-help-markdown summary:hover {
+    @apply bg-slate-100/70;
+  }
+
+  html[data-theme="dark"] .app-help-markdown summary:hover {
+    @apply bg-slate-700/40;
+  }
+
+  .app-help-markdown summary::marker {
+    content: "";
+  }
+
+  .app-help-markdown summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .app-help-markdown summary::after {
+    content: "+";
+    @apply ml-auto text-base font-black text-slate-400 transition-all duration-200 ease-out;
+  }
+
+  .app-help-markdown details[open] > summary::after {
+    content: "−";
+    @apply text-[color:var(--color-primary)];
+  }
+
+  .app-help-markdown details[open] > summary {
+    @apply border-b border-slate-200;
+  }
+
+  html[data-theme="dark"] .app-help-markdown details[open] > summary {
+    @apply border-slate-700;
+  }
+
+  .app-help-markdown details[open] > :not(summary) {
+    animation: app-help-accordion-in 180ms ease-out;
+  }
+
+  @keyframes app-help-accordion-in {
+    from {
+      opacity: 0;
+      transform: translateY(-0.25rem);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .app-help-markdown table {
+    @apply w-full border-collapse overflow-hidden rounded-lg border border-slate-200;
+  }
+
+  .app-help-markdown thead {
+    @apply bg-slate-100;
+  }
+
+  .app-help-markdown th,
+  .app-help-markdown td {
+    @apply border border-slate-200 px-3 py-2 text-left align-top;
+  }
+
+  html[data-theme="dark"] .app-help-markdown table,
+  html[data-theme="dark"] .app-help-markdown th,
+  html[data-theme="dark"] .app-help-markdown td {
+    @apply border-slate-700;
+  }
+
+  html[data-theme="dark"] .app-help-markdown thead {
+    @apply bg-slate-800;
+  }
+
+  .app-help-markdown hr {
+    @apply my-4 border-0 border-t border-slate-200;
+  }
+
+  html[data-theme="dark"] .app-help-markdown hr {
+    @apply border-slate-700;
+  }
+
   /* Composants de transition: utilisés en double avec les classes Bootstrap */
   .app-modal-content {
     border-radius: 0.75rem;
@@ -475,7 +726,9 @@ html[data-theme="dark"] {
     @apply bg-slate-800/50;
   }
 
-  html[data-theme="dark"] #menu [data-navbar-dropdown-target="button"][aria-expanded="true"] {
+  html[data-theme="dark"]
+    #menu
+    [data-navbar-dropdown-target="button"][aria-expanded="true"] {
     @apply bg-slate-700/80 text-slate-50;
   }
 
@@ -488,7 +741,11 @@ html[data-theme="dark"] {
   }
 
   html[data-theme="dark"] #nav .nav-shadow {
-    background: linear-gradient(180deg, rgb(11 18 32 / 0%) 0%, rgb(11 18 32 / 90%) 100%);
+    background: linear-gradient(
+      180deg,
+      rgb(11 18 32 / 0%) 0%,
+      rgb(11 18 32 / 90%) 100%
+    );
   }
 
   html[data-theme="dark"] #menu > li > a,
@@ -941,6 +1198,38 @@ html[data-theme="dark"] {
     @apply bg-indigo-500 text-white;
   }
 
+  /* Responsive embeds: force 16/9 for YouTube / iframes in help markdown */
+  /* Use a wrapper `.responsive-embed` when possible; also provide a direct iframe fallback. */
+  .app-help-markdown .responsive-embed {
+    position: relative;
+    width: 100%;
+    padding-top: 56.25%; /* 16:9 */
+  }
+
+  .app-help-markdown .responsive-embed iframe,
+  .app-help-markdown .responsive-embed video,
+  .app-help-markdown .responsive-embed embed,
+  .app-help-markdown .responsive-embed object {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+
+  /* Fallback: force aspect-ratio on iframes directly when wrapper not present */
+  .app-help-markdown iframe,
+  .app-help-markdown video,
+  .app-help-markdown embed,
+  .app-help-markdown object {
+    width: 100% !important;
+    max-width: 100%;
+    aspect-ratio: 16/9;
+    height: auto !important;
+    display: block;
+    border: 0;
+  }
+
   html[data-theme="dark"] .app-tab-active:hover {
     @apply bg-indigo-500 text-white;
   }
@@ -949,18 +1238,18 @@ html[data-theme="dark"] {
     @apply border-slate-700 bg-slate-900;
   }
 
-    /* Base Tooltip (fallback sans bootstrap.css) */
-    .tooltip {
-        @apply pointer-events-none absolute z-[1080] block text-xs opacity-0;
-    }
+  /* Base Tooltip (fallback sans bootstrap.css) */
+  .tooltip {
+    @apply pointer-events-none absolute z-[1080] block text-xs opacity-0;
+  }
 
-    .tooltip.show {
-        @apply opacity-100;
-    }
+  .tooltip.show {
+    @apply opacity-100;
+  }
 
-    .tooltip .tooltip-inner {
-        @apply max-w-xs rounded-md bg-slate-900 px-2 py-1 text-white;
-    }
+  .tooltip .tooltip-inner {
+    @apply max-w-xs rounded-md bg-slate-900 px-2 py-1 text-white;
+  }
 
   /* Tooltips Bootstrap (timeline) */
   .tooltip.app-tooltip .tooltip-inner {
@@ -991,39 +1280,81 @@ html[data-theme="dark"] {
     @apply border-indigo-100 bg-indigo-50 text-indigo-900;
   }
 
-  .tooltip.app-tooltip--timeline[data-popper-placement^="top"] .tooltip-arrow::before {
+  .tooltip.app-tooltip--timeline[data-popper-placement^="top"]
+    .tooltip-arrow::before {
     border-top-color: rgb(224 231 255 / 1);
   }
 
-  .tooltip.app-tooltip--timeline[data-popper-placement^="bottom"] .tooltip-arrow::before {
+  .tooltip.app-tooltip--timeline[data-popper-placement^="bottom"]
+    .tooltip-arrow::before {
     border-bottom-color: rgb(224 231 255 / 1);
   }
 
-  .tooltip.app-tooltip--timeline[data-popper-placement^="left"] .tooltip-arrow::before {
+  .tooltip.app-tooltip--timeline[data-popper-placement^="left"]
+    .tooltip-arrow::before {
     border-left-color: rgb(224 231 255 / 1);
   }
 
-  .tooltip.app-tooltip--timeline[data-popper-placement^="right"] .tooltip-arrow::before {
+  .tooltip.app-tooltip--timeline[data-popper-placement^="right"]
+    .tooltip-arrow::before {
     border-right-color: rgb(224 231 255 / 1);
+  }
+
+  /* Help Drawer Dark Mode Support */
+  html[data-theme="dark"] #helpOffcanvas {
+    @apply bg-slate-900 border-slate-700;
+  }
+
+  html[data-theme="dark"] #helpOffcanvas [style*="color-primary"],
+  html[data-theme="dark"] #helpOffcanvas [style*="color-warning"] {
+    background-color: var(--color-primary) !important;
+  }
+
+  html[data-theme="dark"] #helpOffcanvas .border-b {
+    @apply border-slate-700;
+  }
+
+  html[data-theme="dark"] #helpOffcanvas code {
+    @apply bg-slate-800 text-slate-200 border-slate-600;
+  }
+
+  html[data-theme="dark"] #helpOffcanvas a {
+    @apply text-cyan-400;
+  }
+
+  html[data-theme="dark"] #helpOffcanvas a:hover {
+    @apply text-cyan-300;
+  }
+
+  html[data-theme="dark"] #helpOffcanvas .markdown-body {
+    @apply text-slate-300;
   }
 
   html[data-theme="dark"] .tooltip.app-tooltip .tooltip-inner {
     @apply border-slate-700 bg-slate-900 text-slate-100 shadow-black/50;
   }
 
-  html[data-theme="dark"] .tooltip.app-tooltip[data-popper-placement^="top"] .tooltip-arrow::before {
+  html[data-theme="dark"]
+    .tooltip.app-tooltip[data-popper-placement^="top"]
+    .tooltip-arrow::before {
     border-top-color: rgb(51 65 85 / 1);
   }
 
-  html[data-theme="dark"] .tooltip.app-tooltip[data-popper-placement^="bottom"] .tooltip-arrow::before {
+  html[data-theme="dark"]
+    .tooltip.app-tooltip[data-popper-placement^="bottom"]
+    .tooltip-arrow::before {
     border-bottom-color: rgb(51 65 85 / 1);
   }
 
-  html[data-theme="dark"] .tooltip.app-tooltip[data-popper-placement^="left"] .tooltip-arrow::before {
+  html[data-theme="dark"]
+    .tooltip.app-tooltip[data-popper-placement^="left"]
+    .tooltip-arrow::before {
     border-left-color: rgb(51 65 85 / 1);
   }
 
-  html[data-theme="dark"] .tooltip.app-tooltip[data-popper-placement^="right"] .tooltip-arrow::before {
+  html[data-theme="dark"]
+    .tooltip.app-tooltip[data-popper-placement^="right"]
+    .tooltip-arrow::before {
     border-right-color: rgb(51 65 85 / 1);
   }
 
@@ -1031,19 +1362,27 @@ html[data-theme="dark"] {
     @apply border-indigo-800 bg-indigo-950/80 text-indigo-100;
   }
 
-  html[data-theme="dark"] .tooltip.app-tooltip--timeline[data-popper-placement^="top"] .tooltip-arrow::before {
+  html[data-theme="dark"]
+    .tooltip.app-tooltip--timeline[data-popper-placement^="top"]
+    .tooltip-arrow::before {
     border-top-color: rgb(55 48 163 / 1);
   }
 
-  html[data-theme="dark"] .tooltip.app-tooltip--timeline[data-popper-placement^="bottom"] .tooltip-arrow::before {
+  html[data-theme="dark"]
+    .tooltip.app-tooltip--timeline[data-popper-placement^="bottom"]
+    .tooltip-arrow::before {
     border-bottom-color: rgb(55 48 163 / 1);
   }
 
-  html[data-theme="dark"] .tooltip.app-tooltip--timeline[data-popper-placement^="left"] .tooltip-arrow::before {
+  html[data-theme="dark"]
+    .tooltip.app-tooltip--timeline[data-popper-placement^="left"]
+    .tooltip-arrow::before {
     border-left-color: rgb(55 48 163 / 1);
   }
 
-  html[data-theme="dark"] .tooltip.app-tooltip--timeline[data-popper-placement^="right"] .tooltip-arrow::before {
+  html[data-theme="dark"]
+    .tooltip.app-tooltip--timeline[data-popper-placement^="right"]
+    .tooltip-arrow::before {
     border-right-color: rgb(55 48 163 / 1);
   }
 
@@ -1068,7 +1407,10 @@ html[data-theme="dark"] {
     @apply flex flex-wrap items-center w-full bg-white
     px-2 py-2 text-sm text-slate-700 shadow-none outline-none
     transition duration-150 cursor-text;
-    padding-right: max(var(--ts-pr-min), var(--ts-pr-clear-button) + var(--ts-pr-caret)) !important;
+    padding-right: max(
+      var(--ts-pr-min),
+      var(--ts-pr-clear-button) + var(--ts-pr-caret)
+    ) !important;
   }
 
   /* Focus du wrapper (classe .focus) */
@@ -1226,7 +1568,8 @@ html[data-theme="dark"] {
     content: " ";
     @apply block w-6 h-6 m-0.5 rounded-full;
     border: 3px solid theme(colors.indigo.300);
-    border-color: theme(colors.indigo.400) transparent theme(colors.indigo.400) transparent;
+    border-color: theme(colors.indigo.400) transparent theme(colors.indigo.400)
+      transparent;
     animation: ts-spin 0.8s linear infinite;
   }
 
@@ -1309,6 +1652,7 @@ html[data-theme="dark"] {
   }
 
   html[data-theme="dark"] .ts-dropdown .spinner::after {
-    border-color: theme(colors.indigo.500) transparent theme(colors.indigo.500) transparent;
+    border-color: theme(colors.indigo.500) transparent theme(colors.indigo.500)
+      transparent;
   }
 }

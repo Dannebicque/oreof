@@ -4,104 +4,78 @@
 {% block header %}Centre des Questions Fréquemment Posées{% endblock %}
 
 {% block breadcrumb %}
-    <ul class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{{ path('app_homepage') }}">Accueil</a></li>
-        <li class="breadcrumb-item active" aria-current="page">FAQ</li>
-    </ul>
+    {{ include('communs/_breadcrumb.html.twig', {liens: [
+        {title: 'FAQ'}
+    ]}) }}
 {% endblock %}
 
 {% block content %}
-<div class="container py-4">
-    <div class="row">
-        <div class="col-12">
-            <div class="card shadow-sm border-0 mb-4">
-                <div class="card-body">
-                    <div class="mb-4 d-flex gap-3 align-items-center">
-                        <div class="input-group flex-grow-1">
-                            <span class="input-group-text bg-white"><i class="fal fa-search text-muted"></i></span>
-                            <input type="text" id="faqSearch" class="form-control form-control-lg" placeholder="Rechercher une question..." onkeyup="filterFaqs()">
+<div class="w-full">
+    <div class="space-y-4">
+        <div class="rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-900">
+            <div class="p-6">
+                <!-- Search Bar -->
+                <div class="mb-6 flex flex-col gap-3 lg:flex-row lg:items-center lg:gap-4">
+                    <div class="relative flex-1">
+                        <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
+                            <twig:UX:Icon name="icon:search" class="h-5 w-5 text-slate-400" />
                         </div>
-                        {% if is_granted('ROLE_ADMIN') %}
-                            <a href="{{ path('app_faq_index') }}" class="btn btn-outline-secondary text-nowrap" style="min-height: 48px; display: flex; align-items: center;">
-                                <i class="fal fa-cog me-2"></i> Gérer
-                            </a>
-                        {% endif %}
+                        <input type="text"
+                               id="faqSearch"
+                               class="w-full rounded-lg border border-slate-200 bg-white py-2.5 pl-12 pr-4 text-base text-slate-900 placeholder-slate-500 transition focus:border-cyan-400 focus:ring-2 focus:ring-cyan-100 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-400 dark:focus:border-cyan-400 dark:focus:ring-cyan-100/20"
+                               placeholder="Rechercher une question..."
+                               onkeyup="filterFaqs()" />
                     </div>
-
-                    {% if faqs|length == 0 %}
-                        <div class="alert alert-info" role="alert">
-                            <i class="fal fa-info-circle"></i> Aucune question FAQ disponible pour le moment.
-                        </div>
-                    {% else %}
-                        <div class="faqs-container d-flex flex-column" id="faqsList">
-                            {% for faq in faqs %}
-                                <details class="faq-item mb-3 bg-light border rounded" data-question="{{ faq.question|default('')|lower }}" style="transition: all 0.2s ease;">
-                                    <summary class="h5 mb-0 p-3" style="cursor: pointer; list-style: none;">
-                                        <div class="d-flex align-items-center justify-content-between">
-                                            <div>
-                                                <i class="fal fa-question-circle text-primary me-2"></i>
-                                                <strong>{{ faq.question }}</strong>
-                                                {% if is_granted('ROLE_ADMIN') %}
-                                                    <a href="{{ path('app_faq_edit', {'id': faq.id}) }}" class="btn btn-sm btn-outline-info ms-2 d-inline-flex align-items-center justify-content-center" onclick="event.stopPropagation();" title="Modifier">
-                                                        <i class="fal fa-edit"></i>
-                                                    </a>
-                                                {% endif %}
-                                            </div>
-                                            <i class="fal fa-chevron-down text-muted chevron-icon"></i>
-                                        </div>
-                                    </summary>
-                                    <div class="p-4 bg-white border-top markdown-body">
-                                        {{ faq.reponse|markdown_to_html|parse_embeds }}
-                                    </div>
-                                </details>
-                            {% endfor %}
-                        </div>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <a href="{{ path('app_faq_index') }}"
+                           class="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-5 py-2.5 text-base font-semibold text-slate-600 transition hover:border-slate-300 hover:text-slate-900 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:border-slate-500">
+                            <twig:UX:Icon name="mdi:cog" class="h-6 w-6" />
+                            <span class="hidden sm:inline">Gérer</span>
+                        </a>
                     {% endif %}
                 </div>
+
+                <!-- FAQs List -->
+                {% if faqs|length == 0 %}
+                    <div class="rounded-lg border border-cyan-200 bg-cyan-50 p-6 text-center dark:border-cyan-800 dark:bg-cyan-950/30">
+                        <twig:UX:Icon name="icon:info-circle" class="mx-auto mb-3 h-14 w-14 text-cyan-600 dark:text-cyan-400" />
+                        <p class="text-sm text-cyan-900 dark:text-cyan-100">Aucune question FAQ disponible pour le moment.</p>
+                    </div>
+                {% else %}
+                    <div class="space-y-3" id="faqsList">
+                        {% for faq in faqs %}
+                            <details class="faq-item group rounded-lg border border-slate-200 bg-slate-50 transition hover:border-slate-300 dark:border-slate-700 dark:bg-slate-800/50 dark:hover:border-slate-600"
+                                     data-question="{{ faq.question|default('')|lower }}">
+                                <summary class="flex cursor-pointer select-none items-center justify-between p-5 hover:bg-slate-100 dark:hover:bg-slate-800" style="list-style: none;">
+                                    <div class="flex items-center gap-3">
+                                        <twig:UX:Icon name="material-symbols:help-outline-rounded" class="h-7 w-7 flex-shrink-0 text-cyan-600 dark:text-cyan-400" />
+                                        <div class="flex items-center gap-3">
+                                            <strong class="text-base text-slate-900 dark:text-slate-100">{{ faq.question }}</strong>
+                                            {% if is_granted('ROLE_ADMIN') %}
+                                                <a href="{{ path('app_faq_edit', {'id': faq.id}) }}"
+                                                   class="inline-flex items-center gap-1 rounded px-2.5 py-1.5 text-sm font-semibold text-cyan-600 hover:bg-cyan-50 dark:text-cyan-400 dark:hover:bg-cyan-500/20"
+                                                   onclick="event.stopPropagation();"
+                                                   title="Modifier">
+                                                    <twig:UX:Icon name="mingcute:pencil-line" class="h-5 w-5" />
+                                                </a>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <twig:UX:Icon name="icon:chevron-down" class="h-7 w-7 text-slate-400 transition group-open:rotate-180 dark:text-slate-500" />
+                                </summary>
+                                <div class="border-t border-slate-200 bg-white p-4 dark:border-slate-700 dark:bg-slate-900">
+                                    <div class="markdown-body app-help-markdown">
+                                        {{ faq.reponse|markdown_to_html|parse_embeds }}
+                                    </div>
+                                </div>
+                            </details>
+                        {% endfor %}
+                    </div>
+                {% endif %}
             </div>
         </div>
     </div>
 </div>
-
-<style>
-    details > summary::-webkit-details-marker {
-        display: none;
-    }
-
-    details[open] .chevron-icon {
-        transform: rotate(180deg);
-    }
-
-    .markdown-body {
-        font-size: 0.95rem;
-        line-height: 1.6;
-    }
-
-    .markdown-body h1, .markdown-body h2, .markdown-body h3 {
-        margin-top: 1rem;
-        margin-bottom: 0.5rem;
-    }
-
-    .markdown-body ul, .markdown-body ol {
-        padding-left: 1.5rem;
-        margin-bottom: 0.5rem;
-    }
-
-    .markdown-body code {
-        background-color: #f5f5f5;
-        padding: 0.2em 0.4em;
-        border-radius: 3px;
-        font-family: 'Courier New', monospace;
-    }
-
-    .faq-item {
-        transition: background-color 0.3s ease;
-    }
-
-    .faq-item:hover {
-        background-color: #f8f9fa;
-    }
-</style>
 
 <script>
     function filterFaqs() {

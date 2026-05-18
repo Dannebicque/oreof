@@ -88,7 +88,6 @@ config/packages/property_info.yaml
 
 ###> Generated & Build files ###
 versioning_json.zip
-AGENTS.md
 git
 
 ###> Database Migrations (auto-generated) ###
@@ -103,3 +102,7 @@ migrations/Version*.php
 /public/assets/
 /assets/vendor/
 ###< symfony/asset-mapper ###
+
+
+assets/icons/symfony.svg
+config/reference.php
