@@ -38,11 +38,10 @@
     <tr>
         <th>Tarif d'inscription</th>
         <td>
-            {% if etablissement.getEtablissementInformation.tarifInscription is not null %}
-                {{ etablissement.getEtablissementInformation.tarifInscription|number_format(2, ',', ' ') }} €
-            {% else %}
-                —
-            {% endif %}
+            {{ etablissement.getEtablissementInformation.tarifInscription
+            ? etablissement.getEtablissementInformation.tarifInscription|raw
+            : 'Non renseigné'
+            }}
         </td>
     </tr>
 
