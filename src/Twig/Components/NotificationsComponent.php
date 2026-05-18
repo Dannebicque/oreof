@@ -16,6 +16,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\UX\TwigComponent\Attribute\AsTwigComponent;
 
+/** @deprecated ? A remplacer par du turbo/mercure pour alimenter l'état lu/non lu des notifications */
 #[AsTwigComponent('notifications')]
 final class NotificationsComponent extends AbstractController
 {

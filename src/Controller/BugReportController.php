@@ -11,9 +11,11 @@ namespace App\Controller;
 
 use App\Classes\JsonReponse;
 use App\Classes\Mailer;
+use App\DTO\TranslatableKey;
 use App\Entity\User;
 use App\Repository\FormationRepository;
 use App\Repository\ParcoursRepository;
+use App\Utils\TurboStreamResponseFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,6 +26,7 @@ class BugReportController extends AbstractController
 {
     #[Route('/bug-report/modal', name: 'app_bug_report_modal', methods: ['GET', 'POST'])]
     public function modal(
+        TurboStreamResponseFactory $turboStreamResponseFactory,
         Request             $request,
         Mailer              $mailer,
         FormationRepository $formationRepository,
@@ -76,10 +79,14 @@ class BugReportController extends AbstractController
             }
         }
 
-        return $this->render('bug_report/_modal.html.twig', [
-            'context' => $context,
-            'user' => $user,
-        ]);
+        return $turboStreamResponseFactory->streamOpenModalFromTemplates(
+            new TranslatableKey('bug_report.titre'),
+            new TranslatableKey('bug_report.description'),
+            'bug_report/_modal.html.twig', [
+                'context' => $context,
+                'user' => $user,
+            ]
+        );
     }
 
     private function resolveContext(
@@ -91,8 +98,8 @@ class BugReportController extends AbstractController
         $formation = null;
         $parcours = null;
 
-        $formationId = $request->get('formation');
-        $parcoursId = $request->get('parcours');
+        $formationId = $request->query->get('formation');
+        $parcoursId = $request->query->get('parcours');
 
         if ($parcoursId !== null && $parcoursId !== '') {
             $parcours = $parcoursRepository->find((int)$parcoursId);
@@ -101,7 +108,7 @@ class BugReportController extends AbstractController
             $formation = $formationRepository->find((int)$formationId);
         }
 
-        $page = trim((string)$request->get('page', ''));
+        $page = trim((string)$request->query->get('page', ''));
         if ($page === '') {
             $page = (string)($request->headers->get('referer') ?? '');
         }

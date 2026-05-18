@@ -3,9 +3,11 @@
 namespace App\Controller;
 
 use App\Classes\JsonReponse;
+use App\DTO\TranslatableKey;
 use App\Entity\Notification;
 use App\Entity\User;
 use App\Repository\NotificationRepository;
+use App\Utils\TurboStreamResponseFactory;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -65,12 +67,15 @@ class NotificationController extends AbstractController
 
     #[Route('/notification/liste', name: 'app_notification_liste_user')]
     public function listeUser(
+        TurboStreamResponseFactory $turboStreamResponseFactory,
         NotificationRepository $notificationRepository,
-        Request                $request
     ): Response {
         $notifications = $notificationRepository->findBy(['destinataire' => $this->getUser()], ['created' => 'DESC']);
 
-        return $this->render('notification/_liste.html.twig', [
+        return $turboStreamResponseFactory->streamOpenModalFromTemplates(
+            new TranslatableKey('notification.liste.titre'),
+            new TranslatableKey('notification.liste.description'),
+            'notification/_liste.html.twig', [
             'notifications' => $notifications,
         ]);
     }
