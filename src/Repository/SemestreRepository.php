@@ -69,24 +69,44 @@ class SemestreRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findFromAnneeUniversitaire(int $idCampagneCollecte) : array {
+    public function findFromAnneeUniversitaire(int $idCampagneCollecte, array $exclusionEtatDpe) : array {
         $qb = $this->createQueryBuilder('semestre');
 
-        $subquerySemestreParcours = $this->createQueryBuilder('sem')
+        $qbSubSemestreParcours = $this->createQueryBuilder('sem');
+        $subquerySemestreParcours = $qbSubSemestreParcours
             ->select('sem.id')
             ->join('sem.semestreParcours', 'semP')
             ->join('semP.parcours', 'parcours')
             ->join('parcours.dpeParcours', 'dpe')
             ->join('dpe.campagneCollecte', 'campagne')
-            ->andWhere('campagne.id = :idCampagne');
+            ->andWhere('campagne.id = :idCampagne')
+            ->andWhere(
+                $qbSubSemestreParcours->expr()->andX(
+                    $qbSubSemestreParcours->expr()->orX(
+                        $qbSubSemestreParcours->expr()->isNull('parcours.isSoftDeleted'),
+                        $qbSubSemestreParcours->expr()->eq('parcours.isSoftDeleted', 0)
+                    ),
+                    $qbSubSemestreParcours->expr()->notIn('dpe.etatReconduction', ':exclusionEtatDpeFirst')
+                )
+            );
 
-        $subQuerySemestreMutualisable = $this->createQueryBuilder('semM')
+        $qbSubSemestreMutu = $this->createQueryBuilder('semM');
+        $subQuerySemestreMutualisable = $qbSubSemestreMutu
             ->select('semM.id')
             ->join('semM.semestreMutualisables', 'semMutu')
             ->join('semMutu.parcours', 'parcoursMutu')
             ->join('parcoursMutu.dpeParcours', 'dpeMutu')
             ->join('dpeMutu.campagneCollecte', 'campagneMutu')
-            ->andWhere('campagneMutu.id = :idCampagne');
+            ->andWhere('campagneMutu.id = :idCampagne')
+            ->andWhere(
+                $qbSubSemestreMutu->expr()->andX(
+                    $qbSubSemestreMutu->expr()->orX(
+                        $qbSubSemestreMutu->expr()->isNull('parcoursMutu.isSoftDeleted'),
+                        $qbSubSemestreMutu->expr()->eq('parcoursMutu.isSoftDeleted', 0)
+                    ),
+                    $qbSubSemestreMutu->expr()->notIn('dpeMutu.etatReconduction', ':exclusionEtatDpeSecond')
+                )
+            );
         
         return $qb
             ->select('DISTINCT semestre.id')
@@ -101,6 +121,8 @@ class SemestreRepository extends ServiceEntityRepository
                 )
             )
             ->setParameter(':idCampagne', $idCampagneCollecte)
+            ->setParameter(':exclusionEtatDpeFirst', $exclusionEtatDpe)
+            ->setParameter(':exclusionEtatDpeSecond', $exclusionEtatDpe)
             ->getQuery()
             ->getResult();
     }
