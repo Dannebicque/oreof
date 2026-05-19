@@ -254,14 +254,25 @@ class ElementConstitutifRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findFromAnneeUniversitaire(int $idCampagneCollecte) : array {
-        return $this->createQueryBuilder('ec')
+    public function findFromAnneeUniversitaire(int $idCampagneCollecte, array $exclusionEtatDpe) : array {
+        $qb = $this->createQueryBuilder('ec');
+        return $qb
             ->select('ec.id')
             ->join('ec.parcours', 'parcours')
             ->join('parcours.dpeParcours', 'dpe')
             ->join('dpe.campagneCollecte', 'campagne')
             ->andWhere('campagne.id = :idCampagne')
+            ->andWhere(
+                $qb->expr()->andX(
+                    $qb->expr()->orX(
+                        $qb->expr()->isNull('parcours.isSoftDeleted'),
+                        $qb->expr()->eq('parcours.isSoftDeleted', 0)
+                    ),
+                    $qb->expr()->notIn('dpe.etatReconduction', ':exclusionEtatDpe')
+                )
+            )
             ->setParameter(':idCampagne', $idCampagneCollecte)
+            ->setParameter(':exclusionEtatDpe', $exclusionEtatDpe)
             ->getQuery()
             ->getResult();
     }
