@@ -125,14 +125,25 @@ class BlocCompetenceRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findFromAnneeUniversitaire(int $idCampagneCollecte) : array {
-        return $this->createQueryBuilder('blocComp')
+    public function findFromAnneeUniversitaire(int $idCampagneCollecte, array $exclusionEtatDpe) : array {
+        $qb = $this->createQueryBuilder('blocComp');
+        return $qb
             ->select('blocComp.id')
             ->join('blocComp.parcours', 'parcours')
             ->join('parcours.dpeParcours', 'dpeParcours')
             ->join('dpeParcours.campagneCollecte', 'campC')
             ->andWhere('campC.id = :idCampagne')
+            ->andWhere(
+                $qb->expr()->orX(
+                    $qb->expr()->isNull('parcours.isSoftDeleted'),
+                    $qb->expr()->eq('parcours.isSoftDeleted', 0)
+                )
+            )
+            ->andWhere(
+                $qb->expr()->notIn('dpeParcours.etatReconduction', ':exclusionEtatDpe')
+            )
             ->setParameter(':idCampagne', $idCampagneCollecte)
+            ->setParameter(':exclusionEtatDpe', $exclusionEtatDpe)
             ->getQuery()
             ->getResult();
     }
