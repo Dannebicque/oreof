@@ -250,12 +250,24 @@ class DpeParcoursRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findFromAnneeUniversitaire(int $idCampagneCollecte) : array {
-        return $this->createQueryBuilder('dpeParcours')
+    public function findFromAnneeUniversitaire(int $idCampagneCollecte, array $exclusionEtatDpe) : array {
+        $qb = $this->createQueryBuilder('dpeParcours');
+        return $qb
             ->select('dpeParcours.id')
             ->join('dpeParcours.campagneCollecte', 'campC')
+            ->join('dpeParcours.parcours', 'p')
             ->andWhere('campC.id = :idCampagne')
+            ->andWhere(
+                $qb->expr()->andX(
+                    $qb->expr()->orX(
+                        $qb->expr()->isNull('p.isSoftDeleted'),
+                        $qb->expr()->eq('p.isSoftDeleted', 0)
+                    ),
+                    $qb->expr()->notIn('dpeParcours.etatReconduction', ':exclusionEtatDpe')
+                )
+            )
             ->setParameter(':idCampagne', $idCampagneCollecte)
+            ->setParameter(':exclusionEtatDpe', $exclusionEtatDpe)
             ->getQuery()
             ->getResult();
     }
