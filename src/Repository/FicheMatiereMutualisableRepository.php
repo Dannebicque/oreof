@@ -162,14 +162,25 @@ class FicheMatiereMutualisableRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findFromAnneeUniversitaire(int $idCampagneCollecte) : array {
-        return $this->createQueryBuilder('fmMutu')
+    public function findFromAnneeUniversitaire(int $idCampagneCollecte, array $exclusionEtatDpe) : array {
+        $qb = $this->createQueryBuilder('fmMutu');
+        return $qb
             ->select('fmMutu.id')
             ->join('fmMutu.parcours', 'parcours')
             ->join('parcours.dpeParcours', 'dpe')
             ->join('dpe.campagneCollecte', 'campagneC')
             ->andWhere('campagneC.id = :idCampagne')
+            ->andWhere(
+                $qb->expr()->andX(
+                    $qb->expr()->orX(
+                        $qb->expr()->isNull('parcours.isSoftDeleted'),
+                        $qb->expr()->eq('parcours.isSoftDeleted', 0)
+                    ),
+                    $qb->expr()->notIn('dpe.etatReconduction', ':exclusionEtatDpe')
+                )
+            )
             ->setParameter(':idCampagne', $idCampagneCollecte)
+            ->setParameter(':exclusionEtatDpe', $exclusionEtatDpe)
             ->getQuery()
             ->getResult();
     }
