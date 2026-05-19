@@ -151,10 +151,11 @@ class UeMutualisableRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
-    public function findFromAnneeUniversitaire(int $idCampagneCollecte) : array {
+    public function findFromAnneeUniversitaire(int $idCampagneCollecte, array $exclusionEtatDpe) : array {
         $qb = $this->createQueryBuilder('ueMutu');
 
-        $subQueryCheckUeSemestre = $this->createQueryBuilder('ueSemAnnee')
+        $qbSubUeSemestre = $this->createQueryBuilder('ueSemAnnee');
+        $subQueryCheckUeSemestre = $qbSubUeSemestre
             ->select('ueSemAnnee.id')
             ->join('ueSemAnnee.ue', 'firstUe')
             ->join('firstUe.semestre', 'firstSemestre')
@@ -162,14 +163,33 @@ class UeMutualisableRepository extends ServiceEntityRepository
             ->join('firstSemParcours.parcours', 'firstParc')
             ->join('firstParc.dpeParcours','firstDpe')
             ->join('firstDpe.campagneCollecte', 'firstCampagne')
-            ->andWhere('firstCampagne.id = :idCampagne');
+            ->andWhere('firstCampagne.id = :idCampagne')
+            ->andWhere(
+                $qbSubUeSemestre->expr()->andX(
+                    $qbSubUeSemestre->expr()->orX(
+                        $qbSubUeSemestre->expr()->isNull('firstParc.isSoftDeleted'),
+                        $qbSubUeSemestre->expr()->eq('firstParc.isSoftDeleted', 0)
+                    ),
+                    $qbSubUeSemestre->expr()->notIn('firstDpe.etatReconduction', ':exclusionEtatDpeFirst')
+                )
+            );
 
-        $subQueryCheckUeParcours = $this->createQueryBuilder('ueParcoursAnnee')
+        $qbSubUeParcours = $this->createQueryBuilder('ueParcoursAnnee');
+        $subQueryCheckUeParcours = $qbSubUeParcours
             ->select('ueParcoursAnnee.id')
             ->join('ueParcoursAnnee.parcours', 'secondParc')
             ->join('secondParc.dpeParcours', 'secondDpe')
             ->join('secondDpe.campagneCollecte', 'secondCampagne')
-            ->andWhere('secondCampagne.id = :idCampagne');
+            ->andWhere('secondCampagne.id = :idCampagne')
+            ->andWhere(
+                $qbSubUeParcours->expr()->andX(
+                    $qbSubUeParcours->expr()->orX(
+                        $qbSubUeParcours->expr()->isNull('secondParc.isSoftDeleted'),
+                        $qbSubUeParcours->expr()->eq('secondParc.isSoftDeleted', 0)
+                    ),
+                    $qbSubUeParcours->expr()->notIn('secondDpe.etatReconduction', ':exclusionEtatDpeSecond')
+                )
+            );
 
         return $qb->select('DISTINCT ueMutu.id')
             ->andWhere(
@@ -182,6 +202,8 @@ class UeMutualisableRepository extends ServiceEntityRepository
                     )
                 )
             )->setParameter(':idCampagne', $idCampagneCollecte)
+            ->setParameter(':exclusionEtatDpeFirst', $exclusionEtatDpe)
+            ->setParameter(':exclusionEtatDpeSecond', $exclusionEtatDpe)
             ->getQuery()
             ->getResult();
     }
