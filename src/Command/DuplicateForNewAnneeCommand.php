@@ -48,6 +48,13 @@ class DuplicateForNewAnneeCommand extends Command
 
     private const SLUG_YEAR_SUFFIX = '-2026';
 
+    private const EXCLUSION_STATE = [
+        TypeModificationDpeEnum::NON_OUVERTURE->value,
+        TypeModificationDpeEnum::NON_OUVERTURE_SES->value,
+        TypeModificationDpeEnum::NON_OUVERTURE_CFVU->value,
+        TypeModificationDpeEnum::FERMETURE_DEFINITIVE->value
+    ];
+
     /* ********** */
 
     private EntityManagerInterface $entityManager;
