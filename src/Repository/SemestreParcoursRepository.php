@@ -85,14 +85,25 @@ class SemestreParcoursRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findFromAnneeUniversitaire(int $idCampagneCollecte) : array {
-        return $this->createQueryBuilder('semestreParcours')
+    public function findFromAnneeUniversitaire(int $idCampagneCollecte, array $exclusionEtatDpe) : array {
+        $qb = $this->createQueryBuilder('semestreParcours');
+        return $qb
             ->select('semestreParcours.id')
             ->join('semestreParcours.parcours', 'parcours')
             ->join('parcours.dpeParcours', 'dpe')
             ->join('dpe.campagneCollecte', 'campagneCollecte')
             ->andWhere('campagneCollecte.id = :idCampagne')
+            ->andWhere(
+                $qb->expr()->andX(
+                    $qb->expr()->orX(
+                        $qb->expr()->isNull('parcours.isSoftDeleted'),
+                        $qb->expr()->eq('parcours.isSoftDeleted', 0)
+                    ),
+                    $qb->expr()->notIn('dpe.etatReconduction', ':exclusionEtatDpe')
+                )
+            )
             ->setParameter(':idCampagne', $idCampagneCollecte)
+            ->setParameter(':exclusionEtatDpe', $exclusionEtatDpe)
             ->addOrderBy('parcours.id', 'ASC')
             ->addOrderBy('semestreParcours.ordre', 'ASC')
             ->getQuery()
