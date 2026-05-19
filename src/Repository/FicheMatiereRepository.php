@@ -481,15 +481,25 @@ class FicheMatiereRepository extends ServiceEntityRepository
 
     }
 
-    public function findFromAnneeUniversitaire(int $idCampagneCollecte) : array {
+    public function findFromAnneeUniversitaire(int $idCampagneCollecte, array $exclusionEtatDpe) : array {
         $qb = $this->createQueryBuilder('ficheMatiere');
 
-        $subQueryParcoursAnnee = $this->createQueryBuilder('ficheMatiereAnnee')
+        $qbSubQueryFM = $this->createQueryBuilder('ficheMatiereAnnee');
+        $subQueryParcoursAnnee = $qbSubQueryFM
             ->select('ficheMatiereAnnee.id')
             ->join('ficheMatiereAnnee.parcours', 'parcoursAnnee')
             ->join('parcoursAnnee.dpeParcours', 'dpeAnnee')
             ->join('dpeAnnee.campagneCollecte', 'campagneAnnee')
-            ->andWhere('campagneAnnee.id = :idCampagne');
+            ->andWhere('campagneAnnee.id = :idCampagne')
+            ->andWhere(
+                $qbSubQueryFM->expr()->andX(
+                    $qbSubQueryFM->expr()->orX(
+                        $qbSubQueryFM->expr()->isNull('parcoursAnnee.isSoftDeleted'),
+                        $qbSubQueryFM->expr()->eq('parcoursAnnee.isSoftDeleted', 0)
+                    ),
+                    $qbSubQueryFM->expr()->notIn('dpeAnnee.etatReconduction', ':exclusionEtatDpe')
+                )
+            );
 
         $subQueryFicheHorsDiplomeAnnee = $this->createQueryBuilder('ficheHDAnnee')
             ->select('ficheHDAnnee.id')
@@ -529,6 +539,7 @@ class FicheMatiereRepository extends ServiceEntityRepository
                 $qb->expr()->notIn('ficheMatiere.id', $subQueryFicheNotAlreadyCopied->getDQL())
             )
             ->setParameter(':idCampagne', $idCampagneCollecte)
+            ->setParameter(':exclusionEtatDpe', $exclusionEtatDpe)
             ->getQuery()
             ->getResult();
     }
