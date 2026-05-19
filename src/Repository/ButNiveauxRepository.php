@@ -39,7 +39,7 @@ class ButNiveauxRepository extends ServiceEntityRepository
         }
     }
 
-    public function findFromAnneeUniversitaire(int $idCampagneCollecte) : array {
+    public function findFromAnneeUniversitaire(int $idCampagneCollecte, array $exclusionEtatDpe) : array {
         $qb = $this->createQueryBuilder('butNiveau');
 
         $subqueryCheck = $this->createQueryBuilder('butN')
@@ -49,7 +49,16 @@ class ButNiveauxRepository extends ServiceEntityRepository
             ->join('formation.parcours', 'parcours')
             ->join('parcours.dpeParcours', 'dpe')
             ->join('dpe.campagneCollecte', 'campagneCollecte')
-            ->andWhere('campagneCollecte.id = :idCampagne');
+            ->andWhere('campagneCollecte.id = :idCampagne')
+            ->andWhere(
+                $qb->expr()->orX(
+                    $qb->expr()->isNull('parcours.isSoftDeleted'),
+                    $qb->expr()->eq('parcours.isSoftDeleted', 0)
+                )
+            )
+            ->andWhere(
+                $qb->expr()->notIn('dpe.etatReconduction', ':exclusionEtatDpe')
+            );
 
         return $qb
             ->select('DISTINCT butNiveau.id')
@@ -59,6 +68,7 @@ class ButNiveauxRepository extends ServiceEntityRepository
                 )
             )
             ->setParameter(':idCampagne', $idCampagneCollecte)
+            ->setParameter(':exclusionEtatDpe', $exclusionEtatDpe)
             ->getQuery()
             ->getResult();
     }
