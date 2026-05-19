@@ -149,6 +149,63 @@
             </div>
         </section>
 
+        {# Section Composant : IconBox #}
+        <section class="bg-white p-6 rounded-lg border border-slate-200 shadow-sm">
+            <h2 class="text-xl font-semibold text-slate-800 mb-4 border-b pb-2">Composant : IconBox</h2>
+
+            <div class="mb-6 flex flex-col gap-6">
+                <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Variantes de style</h3>
+                <div class="flex items-center gap-4">
+                    {# Info Blue #}
+                    <twig:IconBox icon="fa-solid:info-circle" variant="info" />
+
+                    {# Success Emerald #}
+                    <twig:IconBox icon="fa-solid:check-circle" variant="success" />
+
+                    {# Danger Red #}
+                    <twig:IconBox icon="fa-solid:trash" variant="danger" />
+
+                    {# Warning Amber #}
+                    <twig:IconBox icon="fa-solid:exclamation-triangle" variant="warning" />
+                </div>
+
+                <div>
+                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Usage Twig</h3>
+                    <pre class="bg-slate-900 text-slate-200 p-4 rounded-md text-sm overflow-x-auto"><code>&lt;twig:IconBox icon="fa-solid:check-circle" variant="success" /&gt;
+
+&lt;twig:IconBox icon="fa-solid:trash" variant="danger" /&gt;
+
+&lt;twig:IconBox icon="fa-solid:exclamation-triangle" variant="warning" /&gt;</code></pre>
+                </div>
+            </div>
+        </section>
+
+        {# Section Composant : Progress #}
+        <section class="bg-white p-6 rounded-lg border border-slate-200 shadow-sm">
+            <h2 class="text-xl font-semibold text-slate-800 mb-4 border-b pb-2">Composant : Progress</h2>
+
+            <div class="mb-6 flex flex-col gap-6">
+                <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Tonalités et progression</h3>
+                <div class="flex flex-col gap-4 max-w-lg">
+                    <twig:remplissage_progress label="Progression globale" percent="25" tone="danger" />
+                    <twig:remplissage_progress label="Validation technique" percent="50" tone="info" />
+                    <twig:remplissage_progress label="Étapes critiques" percent="75" tone="info" />
+                    <twig:remplissage_progress label="Finalisation" percent="100" tone="success" />
+                </div>
+
+                <div>
+                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Usage Twig</h3>
+                    <pre class="bg-slate-900 text-slate-200 p-4 rounded-md text-sm overflow-x-auto"><code>&lt;twig:remplissage_progress label="Progression globale" percent="25" tone="danger" /&gt;
+
+&lt;twig:remplissage_progress label="Validation technique" percent="50" tone="info" /&gt;
+
+&lt;twig:remplissage_progress label="Étapes critiques" percent="75" tone="info" /&gt;
+
+&lt;twig:remplissage_progress label="Finalisation" percent="100" tone="success" /&gt;</code></pre>
+                </div>
+            </div>
+        </section>
+
         {# Répéter la structure pour les composants : Alerte, Badge, Card, Breadcrumb, etc. #}
 
     </div>
