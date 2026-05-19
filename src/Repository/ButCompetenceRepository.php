@@ -69,7 +69,7 @@ class ButCompetenceRepository extends ServiceEntityRepository
         return null;
     }
 
-    public function findFromAnneeUniversitaire(int $idCampagneCollecte) : array {
+    public function findFromAnneeUniversitaire(int $idCampagneCollecte, array $exclusionEtatDpe) : array {
         $qb = $this->createQueryBuilder('butComp');
 
         $subqueryCheck = $this->createQueryBuilder('butCompetence')
@@ -78,7 +78,15 @@ class ButCompetenceRepository extends ServiceEntityRepository
             ->join('f.parcours', 'p')
             ->join('p.dpeParcours', 'dpe')
             ->join('dpe.campagneCollecte', 'campagneC')
-            ->andWhere('campagneC.id = :idCampagne');
+            ->andWhere('campagneC.id = :idCampagne')
+            ->andWhere(
+                $qb->expr()->orX(
+                    $qb->expr()->isNull('p.isSoftDeleted'),
+                    $qb->expr()->eq('p.isSoftDeleted', 0)
+                )
+            )->andWhere(
+                $qb->expr()->notIn('dpe.etatReconduction', ':exclusionEtatDpe')
+            );
 
         return $qb
             ->select('DISTINCT butComp.id')
@@ -88,6 +96,7 @@ class ButCompetenceRepository extends ServiceEntityRepository
                 )
             )
             ->setParameter(':idCampagne', $idCampagneCollecte)
+            ->setParameter(':exclusionEtatDpe', $exclusionEtatDpe)
             ->getQuery()
             ->getResult();
     }
