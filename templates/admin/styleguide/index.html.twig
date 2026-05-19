@@ -1,0 +1,155 @@
+{% extends 'base.html.twig' %}
+
+{% set header_description %}
+    Liste des composants graphiques disponibles dans l'application, avec des exemples d'utilisation.
+{% endset %}
+
+{% block breadcrumb %}
+    {{ include('communs/_breadcrumb.html.twig', {liens:[
+        {
+            href:'',
+            title: 'Styleguide',
+        }
+    ]}) }}
+{% endblock %}
+
+{% block header %}
+    Styleguide - Composants graphiques
+{% endblock %}
+
+{% block content %}
+    <div class="space-y-12 pb-12">
+
+        {# Section Composant : Boutons #}
+        <section class="bg-white p-6 rounded-lg border border-slate-200 shadow-sm">
+            <h2 class="text-xl font-semibold text-slate-800 mb-4 border-b pb-2">Composant : Bouton</h2>
+
+            <div class="mb-6 flex flex-col gap-6">
+                <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Taille variable</h3>
+                <div class="flex items-center gap-2">
+                    <twig:Button label="Petit" size="sm" variant="primary"/>
+                    <twig:Button label="Moyen" size="md" variant="primary"/>
+                    <twig:Button label="Grand" size="lg" variant="primary"/>
+                </div>
+                <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Couleurs</h3>
+                <div class="flex flex-wrap gap-2">
+                    <twig:Button label="Primary" variant="primary" size="md"/>
+                    <twig:Button label="Success" variant="success" size="md"/>
+                    <twig:Button label="Warning" variant="warning" size="md"/>
+                    <twig:Button label="Danger" variant="danger" size="md"/>
+                    <twig:Button label="Info" variant="info" size="md"/>
+                    <twig:Button label="Secondary" variant="secondary" size="md"/>
+                </div>
+                <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Creux / pleins</h3>
+                <div class="flex flex-wrap gap-2">
+                    <twig:Button label="Primary" variant="primary" :outline="true" :soft="false"/>
+                    <twig:Button label="Success" variant="success" :outline="true" :soft="false"/>
+                    <twig:Button label="Danger" variant="danger" :outline="true" :soft="false"/>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                    <twig:Button label="Primary" variant="primary" :outline="false" :soft="false"/>
+                    <twig:Button label="Success" variant="success" :outline="false" :soft="false"/>
+                    <twig:Button label="Danger" variant="danger" :outline="false" :soft="false"/>
+                </div>
+                <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Présence d'icone</h3>
+                <div class="flex flex-wrap gap-2">
+                    <twig:Button label="Ajouter" variant="primary" icon="fa-solid:plus"/>
+
+                    <twig:Button label="Suivant" variant="secondary" icon="fa-solid:arrow-right" :iconEnd="true"/>
+
+                    <twig:Button variant="danger" icon="fa-solid:trash"/>
+                </div>
+                <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Désactivé</h3>
+                <div class="flex gap-2">
+                    <twig:Button label="Désactivé" variant="primary" :disabled="true"/>
+                    <twig:Button label="Lien désactivé" variant="secondary" :disabled="true" href="#"/>
+                </div>
+
+                <div>
+                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Usage Twig</h3>
+                    <pre class="bg-slate-900 text-slate-200 p-4 rounded-md text-sm overflow-x-auto"><code>{# Bouton standard (Soft) #}
+&lt;twig:Button label="Ajouter" variant="primary" icon="fa-solid:plus" /&gt;
+
+{# Bouton Outline #}
+&lt;twig:Button label="Supprimer" variant="danger" :outline="true" :soft="false" icon="fa-solid:trash" /&gt;
+
+{# Bouton taille large #}
+&lt;twig:Button label="Enregistrer" variant="success" size="lg" type="submit" /&gt;</code></pre>
+                </div>
+        </section>
+
+        {# Section Composant : DeleteButton #}
+        <section class="bg-white p-6 rounded-lg border border-slate-200 shadow-sm">
+            <h2 class="text-xl font-semibold text-slate-800 mb-4 border-b pb-2">Composant : DeleteButton</h2>
+
+            <div class="mb-6 flex flex-col gap-6">
+                <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Aperçu avec Confirmation</h3>
+                <div class="flex items-center gap-2">
+                    {# Exemple concret #}
+                    <twig:DeleteButton
+                            label="Supprimer cet élément"
+                            variant="danger"
+                            size="md"
+                            url="#"
+                            title="Confirmer la suppression"
+                            message="Êtes-vous sûr de vouloir supprimer cet élément ? Cette action est irréversible."
+                    />
+                </div>
+
+                <div>
+                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Usage Twig</h3>
+                    <pre class="bg-slate-900 text-slate-200 p-4 rounded-md text-sm overflow-x-auto"><code>{# DeleteButton standard avec message #}
+&lt;twig:DeleteButton
+    label="Supprimer"
+    variant="danger"
+    url="#"
+    title="Confirmation"
+    message="Voulez-vous vraiment supprimer ?"
+/&gt;
+
+{# Avec un template personnalisé pour le contenu du corps de la modale #}
+&lt;twig:DeleteButton
+    label="Supprimer"
+    variant="danger"
+    url="#"
+    title="Attention"
+    bodyTemplate="partials/_delete_warning.html.twig"
+    :bodyContext="{item: item}"
+/&gt;</code></pre>
+                </div>
+            </div>
+        </section>
+
+        {# Section Composant : alerte #}
+        <section class="bg-white p-6 rounded-lg border border-slate-200 shadow-sm">
+            <h2 class="text-xl font-semibold text-slate-800 mb-4 border-b pb-2">Composant : Alerte</h2>
+
+            <div class="mb-6 flex flex-col gap-6">
+                <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Alertes simples</h3>
+                <div class="flex flex-col gap-4">
+                    <twig:alerte type="success" icone="fa-solid:check-circle" message="Opération réussie avec succès." />
+                    <twig:alerte type="info" icone="fa-solid:info-circle" message="Ceci est une information importante pour l'utilisateur." />
+                    <twig:alerte type="warning" icone="fa-solid:exclamation-triangle" message="Attention, vérifie bien tes modifications." />
+                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Alerte personnalisé</h3>
+                    <twig:alerte type="danger" icone="fa-solid:times-circle" message="Erreur fatale">
+                        <p class="font-bold">Le système n'a pas pu traiter la demande.</p>
+                    </twig:alerte>
+                </div>
+
+                <div>
+                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Usage Twig</h3>
+                    <pre class="bg-slate-900 text-slate-200 p-4 rounded-md text-sm overflow-x-auto"><code>
+&lt;twig:alerte type="success" icone="fa-solid:check-circle" message="Fiche validée." /&gt;
+
+&lt;twig:alerte type="danger" icone="fa-solid:times-circle" message="Erreur fatale"&gt;
+    &lt;p class="font-bold"&gt;Le système n'a pas pu traiter la demande.&lt;/p&gt;
+&lt;/twig:alerte&gt;
+        </code></pre>
+                </div>
+            </div>
+        </section>
+
+        {# Répéter la structure pour les composants : Alerte, Badge, Card, Breadcrumb, etc. #}
+
+    </div>
+{% endblock %}

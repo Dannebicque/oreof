@@ -1,0 +1,47 @@
+{% extends '_layout/_section_shell.html.twig' %}
+
+{# 1. Alignement strict du fil d'Ariane #}
+{% block breadcrumb %}
+    {% include 'communs/_breadcrumb.html.twig' with {
+        'items': [
+            {'label': 'Administration', 'url': '#'},
+            {'label': 'Page Modèle Liste', 'active': true}
+        ]
+    } %}
+{% endblock %}
+
+{# 2. Titre de la page #}
+{% block page_title %}Gestion des Entités (Page Type){% endblock %}
+
+{# 3. Actions globales en haut à droite #}
+{% block page_actions %}
+    <twig:UI:Button color="primary" icon="fa-solid fa-plus">Ajouter un élément</twig:UI:Button>
+{% endblock %}
+
+{# 4. Grille de contenu unifiée #}
+{% block content %}
+    <div class="bg-white rounded-lg border border-slate-200 shadow-sm overflow-hidden">
+        {# Exemple d'intégration d'un composant de tableau unifié #}
+        <table class="min-w-full divide-y divide-slate-200">
+            <thead class="bg-slate-50">
+            <tr>
+                <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase">ID</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase">Libellé</th>
+                <th class="px-6 py-3 text-right text-xs font-medium text-slate-500 uppercase">Actions</th>
+            </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200">
+            {% for item in dummy_items %}
+                <tr class="hover:bg-slate-50 transition-colors">
+                    <td class="px-6 py-4 text-sm text-slate-900 font-mono">{{ item.id }}</td>
+                    <td class="px-6 py-4 text-sm text-slate-700">{{ item.label }}</td>
+                    <td class="px-6 py-4 text-sm text-right space-x-2">
+                        <twig:UI:Button color="secondary" size="sm" icon="fa-solid fa-pen" />
+                        <twig:UI:Button color="danger" size="sm" icon="fa-solid fa-trash" />
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
