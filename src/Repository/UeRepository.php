@@ -126,8 +126,9 @@ class UeRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findFromAnneeUniversitaire(int $idCampagneCollecte) : array {
-        return $this->createQueryBuilder('ue')
+    public function findFromAnneeUniversitaire(int $idCampagneCollecte, array $exclusionEtatDpe) : array {
+        $qb = $this->createQueryBuilder('ue');
+        return $qb
             ->select('DISTINCT ue.id')
             ->join('ue.semestre', 'semestre')
             ->join('semestre.semestreParcours', 'semP')
@@ -135,7 +136,17 @@ class UeRepository extends ServiceEntityRepository
             ->join('parcours.dpeParcours', 'dpe')
             ->join('dpe.campagneCollecte', 'campagne')
             ->andWhere('campagne.id = :idCampagne')
+            ->andWhere(
+                $qb->expr()->andX(
+                    $qb->expr()->orX(
+                        $qb->expr()->isNull('parcours.isSoftDeleted'),
+                        $qb->expr()->eq('parcours.isSoftDeleted', 0)
+                    ),
+                    $qb->expr()->notIn('dpe.etatReconduction', ':exclusionEtatDpe')
+                )
+            )
             ->setParameter(':idCampagne', $idCampagneCollecte)
+            ->setParameter(':exclusionEtatDpe', $exclusionEtatDpe)
             ->getQuery()
             ->getResult();
     }
