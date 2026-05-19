@@ -62,8 +62,9 @@ class ButApprentissageCritiqueRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findFromAnneeUniversitaire(int $idCampagneCollecte) : array {
-        return $this->createQueryBuilder('butAppCrit')
+    public function findFromAnneeUniversitaire(int $idCampagneCollecte, array $exclusionEtatDpe) : array {
+        $qb = $this->createQueryBuilder('butAppCrit');
+        return $qb
             ->select('DISTINCT butAppCrit.id')
             ->join('butAppCrit.niveau', 'butNiveau')
             ->join('butNiveau.competence', 'butCompetence')
@@ -72,7 +73,17 @@ class ButApprentissageCritiqueRepository extends ServiceEntityRepository
             ->join('parcours.dpeParcours', 'dpeP')
             ->join('dpeP.campagneCollecte', 'campagneC')
             ->andWhere('campagneC.id = :idCampagne')
+            ->andWhere(
+                $qb->expr()->orX(
+                    $qb->expr()->isNull('parcours.isSoftDeleted'),
+                    $qb->expr()->eq('parcours.isSoftDeleted', 0)
+                )
+            )
+            ->andWhere(
+                $qb->expr()->notIn('dpeP.etatReconduction', ':exclusionEtatDpe')
+            )
             ->setParameter(':idCampagne', $idCampagneCollecte)
+            ->setParameter(':exclusionEtatDpe', $exclusionEtatDpe)
             ->getQuery()
             ->getResult();
     }
