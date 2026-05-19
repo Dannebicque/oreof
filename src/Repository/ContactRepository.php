@@ -21,14 +21,25 @@ class ContactRepository extends ServiceEntityRepository
         parent::__construct($registry, Contact::class);
     }
 
-    public function findFromAnneeUniversitaire(int $idCampagneCollecte) : array {
-        return $this->createQueryBuilder('c')
+    public function findFromAnneeUniversitaire(int $idCampagneCollecte, array $exclusionEtatDpe) : array {
+        $qb = $this->createQueryBuilder('c');
+        return $qb
             ->select('c.id')
             ->join('c.parcours', 'p')
             ->join('p.dpeParcours', 'dpe')
             ->join('dpe.campagneCollecte', 'campagne')
             ->andWhere('campagne.id = :idCampagne')
+            ->andWhere(
+                $qb->expr()->andX(
+                    $qb->expr()->orX(
+                        $qb->expr()->isNull('p.isSoftDeleted'),
+                        $qb->expr()->eq('p.isSoftDeleted', 0)
+                    ),
+                    $qb->expr()->notIn('dpe.etatReconduction', ':exclusionEtatDpe')
+                )
+            )
             ->setParameter(':idCampagne', $idCampagneCollecte)
+            ->setParameter(':exclusionEtatDpe', $exclusionEtatDpe)
             ->getQuery()
             ->getResult();
     }
